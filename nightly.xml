@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.trade">
+  <project name="org.nightlabs.jfire.trade.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.trade" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.trade.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.trade/dist/org.nightlabs.jfire.trade_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.trade/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.trade.ui/dist/org.nightlabs.jfire.trade.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.trade.ui/src"/>
   </project>
 
 </nightlybuild>

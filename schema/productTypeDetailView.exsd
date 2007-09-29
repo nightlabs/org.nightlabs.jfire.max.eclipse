@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="productTypeDetailView" name="productTypeDetailView"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="productTypeDetailView" name="productTypeDetailView"/>
       </appInfo>
       <documentation>
          Register ProductTypeDetailViewFactories which create IProductTypeDetailViews to display details for ProductTypes
@@ -56,7 +56,7 @@
                   ProductTypeDetailViewFactory creates an IProductTypeDetailView to display details for a certian type (inheritant of) ProductType
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.detail.ProductTypeDetailViewFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewFactory"/>
                </appInfo>
             </annotation>
          </attribute>

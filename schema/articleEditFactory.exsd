@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="articleEditFactory" name="ArticleEditFactory Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleEditFactory" name="ArticleEditFactory Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -55,10 +55,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of the factory that creates a GUI element for editing an Article. This class must implement org.nightlabs.jfire.trade.articlecontainer.detail.ArticleEditFactory.
+                  The fully qualified class name of the factory that creates a GUI element for editing an Article. This class must implement org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEditFactory.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.articlecontainer.detail.ArticleEditFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEditFactory"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -68,7 +68,7 @@
                   The fully qualified class name of the SegmentType onto which the factory shall be registered.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.SegmentType"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.SegmentType"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -116,7 +116,7 @@
    <element name="articleEditActionDelegate">
       <annotation>
          <documentation>
-            An articleEditActionDelegate references a org.nightlabs.jfire.trade.articleEditAction. The action is only shown, if at least one ArticleEdit within the active SegmentEdit has a delegate. The delegates are responsible to apply to action onto the selected articles.
+            An articleEditActionDelegate references a org.nightlabs.jfire.trade.ui.articleEditAction. The action is only shown, if at least one ArticleEdit within the active SegmentEdit has a delegate. The delegates are responsible to apply to action onto the selected articles.
          </documentation>
       </annotation>
       <complexType>
@@ -130,10 +130,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of an implementation of org.nightlabs.jfire.trade.articlecontainer.detail.action.IArticleEditActionDelegate.
+                  The fully qualified class name of an implementation of org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.articlecontainer.detail.action.IArticleEditActionDelegate"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate"/>
                </appInfo>
             </annotation>
          </attribute>

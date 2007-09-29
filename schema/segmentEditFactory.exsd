@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="segmentEditFactory" name="SegmentEditFactory Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="segmentEditFactory" name="SegmentEditFactory Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -52,10 +52,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of the factory that creates a GUI element for editing a Segment. This class must implement org.nightlabs.jfire.trade.articlecontainer.detail.SegmentEditFactory.
+                  The fully qualified class name of the factory that creates a GUI element for editing a Segment. This class must implement org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.articlecontainer.detail.SegmentEditFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -65,7 +65,7 @@
                   The fully qualified class name of the SegmentType onto which the factory shall be registered.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.SegmentType"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.SegmentType"/>
                </appInfo>
             </annotation>
          </attribute>

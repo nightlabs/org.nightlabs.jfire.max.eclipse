@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="articleContainerAction" name="ArticleContainerAction Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleContainerAction" name="ArticleContainerAction Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -130,10 +130,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of an implementation of org.nightlabs.jfire.trade.articlecontainer.detail.action.IArticleContainerAction.
+                  The fully qualified class name of an implementation of org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerAction.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.articlecontainer.detail.action.IArticleContainerAction"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerAction"/>
                </appInfo>
             </annotation>
          </attribute>

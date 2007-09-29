@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="articleAdderFactory" name="ArticleAdderFactory Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleAdderFactory" name="ArticleAdderFactory Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -52,10 +52,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualified class name of the factory that creates a GUI element for adding a new Article to an Order or an Offer. This class must implement org.nightlabs.jfire.trade.articlecontainer.detail.ArticleAdderFactory.
+                  The fully qualified class name of the factory that creates a GUI element for adding a new Article to an Order or an Offer. This class must implement org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleAdderFactory.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.articlecontainer.detail.ArticleAdderFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleAdderFactory"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -65,7 +65,7 @@
                   The fully qualified class name of the SegmentType onto which the factory shall be registered.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.SegmentType"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.SegmentType"/>
                </appInfo>
             </annotation>
          </attribute>

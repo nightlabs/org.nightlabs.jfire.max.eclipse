@@ -14,193 +14,193 @@
    <extension
          point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
       <propDataFieldEditorFactory
-            class="org.nightlabs.jfire.trade.legalentity.search.LegalEntityEditorPersonDataFieldEditorFactory"
+            class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonDataFieldEditorFactory"
 		 />
       <propDataFieldEditorFactory
-            class="org.nightlabs.jfire.trade.legalentity.search.LegalEntityEditorPersonRegexDataFieldEditorFactory"/>
+            class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonRegexDataFieldEditorFactory"/>
 		   
    </extension>
    <extension
          name="TradeViews"
          point="org.eclipse.ui.views">
       <category
-            id="org.nightlabs.jfire.trade.TradeCategory"
+            id="org.nightlabs.jfire.trade.ui.TradeCategory"
             name="%TradeCategory.name"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.legalentity.view.LegalEntityEditorView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"
             icon="icons/legalentity/view/LegalEntityEditorView.16x16.png"
-            id="org.nightlabs.jfire.trade.legalentity.view.LegalEntityEditorView"
+            id="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"
             name="%LegalEntityEditorView.name"/>
             
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.articlecontainer.header.HeaderTreeView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView"
             icon="icons/articlecontainer/header/HeaderTreeView.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.header.HeaderTreeView"
-            name="%org.nightlabs.jfire.trade.articlecontainer.header.HeaderTreeView.name"/>
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView"
+            name="%org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView.name"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.producttype.quicklist.ProductTypeQuickListView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView"
             icon="icons/producttype/quicklist/ProductTypeQuickListView.16x16.png"
-            id="org.nightlabs.jfire.trade.producttype.quicklist.ProductTypeQuickListView"
+            id="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView"
             name="%ProductTypeQuickListView.name"/>
       <view
             allowMultiple="false"
-            category="org.nightlabs.jfire.trade.overview.TradeOverview"
-            class="org.nightlabs.jfire.trade.overview.TradeOverviewView"
+            category="org.nightlabs.jfire.trade.ui.overview.TradeOverview"
+            class="org.nightlabs.jfire.trade.ui.overview.TradeOverviewView"
             icon="icons/overview/TradeOverviewView.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.TradeOverviewView"
+            id="org.nightlabs.jfire.trade.ui.overview.TradeOverviewView"
             name="%views.overview.name">
       </view>
       <category
-            id="org.nightlabs.jfire.trade.overview.TradeOverview"
+            id="org.nightlabs.jfire.trade.ui.overview.TradeOverview"
             name="%views.overview.category.name">
       </category>            
 <!--
 gibt's nimmer - oder?! Marco.
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.invoice.InvoiceFilterView"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceFilterView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView"
             name="Invoice Filter"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.invoice.InvoiceListView"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceListView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListView"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListView"
             name="Invoice List"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteFilterView"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteFilterView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteFilterView"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteFilterView"
             name="DeliveryNote Filter"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteListView"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteListView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListView"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListView"
             name="DeliveryNote List"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.offer.OfferFilterView"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferFilterView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.OfferFilterView"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferFilterView"
             name="Offer Filter"/>
       <view
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.overview.offer.OfferListView"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferListView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.OfferListView"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferListView"
             name="Offer List"/>
 -->
       <view
             allowMultiple="false"
-            category="org.nightlabs.jfire.trade.TradeCategory"
-            class="org.nightlabs.jfire.trade.detail.ProductTypeDetailView"
+            category="org.nightlabs.jfire.trade.ui.TradeCategory"
+            class="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView"
             icon="icons/detail/ProductTypeDetailView.16x16.png"
-            id="org.nightlabs.jfire.trade.detail.ProductTypeDetailView"
+            id="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView"
             name="Product Detail"/>
       <view
             allowMultiple="false"
             category="Trade"
-            class="org.nightlabs.jfire.trade.transfer.deliver.DeliveryQueueBrowsingView"
-            id="org.nightlabs.jfire.trade.transfer.deliver.DeliveryQueueBrowsingView"
+            class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView"
+            id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView"
             name="DeliveryQueue Browsing"/>            
             
    </extension>
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
-            id="org.nightlabs.jfire.trade.legalentity.view.LegalEntityEditorViewContribution"
-            targetID="org.nightlabs.jfire.trade.legalentity.view.LegalEntityEditorView">
+            id="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorViewContribution"
+            targetID="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView">
          <action
-               class="org.nightlabs.jfire.trade.legalentity.view.SearchLegalEntityViewAction"
+               class="org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction"
                icon="icons/legalentity/view/SearchLegalEntityViewAction.16x16.png"
-               id="org.nightlabs.jfire.trade.legalentity.view.SearchLegalEntityViewAction"
+               id="org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction"
                label="%SearchLegalEntityViewAction.label"
                style="push"
                toolbarPath="additions"
                tooltip="%SearchLegalEntityViewAction.tooltip"/>
          <action
-               class="org.nightlabs.jfire.trade.legalentity.view.EditLegalEntityViewAction"
+               class="org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction"
                icon="icons/legalentity/view/EditLegalEntityViewAction.16x16.png"
-               id="org.nightlabs.jfire.trade.legalentity.view.EditLegalEntityViewAction"
+               id="org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction"
                label="%EditLegalEntityViewAction.label"
                style="push"
                toolbarPath="additions"
                tooltip="%EditLegalEntityViewAction.tooltip"/>
          <action
-               class="org.nightlabs.jfire.trade.legalentity.view.SelectAnonymousViewAction"
+               class="org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction"
                icon="icons/legalentity/view/SelectAnonymousViewAction.16x16.png"
-               id="org.nightlabs.jfire.trade.legalentity.view.SelectAnonymousViewAction"
+               id="org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction"
                label="%SelectAnonymousViewAction.label"
                style="push"
                toolbarPath="additions"
                tooltip="%SelectAnonymousViewAction.tooltip"/>
       </viewContribution>
       <viewContribution
-            id="org.nightlabs.jfire.trade.producttype.quicklist.ProductTypeQuickListViewContribution"
-            targetID="org.nightlabs.jfire.trade.producttype.quicklist.ProductTypeQuickListView">
+            id="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListViewContribution"
+            targetID="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView">
          <action
-               class="org.nightlabs.jfire.trade.producttype.quicklist.RefreshProductQuickListViewAction"
+               class="org.nightlabs.jfire.trade.ui.producttype.quicklist.RefreshProductQuickListViewAction"
                icon="icons/refresh_productquicklist.gif"
-               id="org.nightlabs.jfire.trade.producttype.quicklist.RefreshProductQuickListViewAction"
+               id="org.nightlabs.jfire.trade.ui.producttype.quicklist.RefreshProductQuickListViewAction"
                label="%RefreshProductQuickListViewAction.label"
                style="push"
                toolbarPath="additions"
                tooltip="%RefreshProductQuickListViewAction.tooltip"/>
          <action
-               class="org.nightlabs.jfire.trade.producttype.quicklist.FilterProductTypeQuickListViewAction"
+               class="org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction"
                icon="icons/filter_productquicklist.gif"
-               id="org.nightlabs.jfire.trade.producttype.quicklist.FilterProductTypeQuickListViewAction"
+               id="org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction"
                label="%FilterProductQuickListViewAction.label"
                style="push"
                toolbarPath="additions"
                tooltip="%FilterProductQuickListViewAction.tooltip"/>
       </viewContribution>
       <viewContribution
-            id="org.nightlabs.jfire.trade.articlecontainer.header.HeaderTreeViewContribution"
-            targetID="org.nightlabs.jfire.trade.articlecontainer.header.HeaderTreeView">
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeViewContribution"
+            targetID="org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView">
          <action
-               class="org.nightlabs.jfire.trade.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate"
+               class="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate"
                icon="icons/articlecontainer/header/CreateOfferAction.16x16.png"
-               id="org.nightlabs.jfire.trade.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate"
+               id="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction$CreateOfferViewActionDelegate"
                label="Create Offer"
                style="push"
                toolbarPath="additions"
                tooltip="Create a new Offer and open it."/>
          <action
-               class="org.nightlabs.jfire.trade.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
+               class="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
                icon="icons/articlecontainer/header/CreateOrderAction.16x16.png"
-               id="org.nightlabs.jfire.trade.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
+               id="org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction$CreateOrderViewActionDelegate"
                label="Create Order"
                style="push"
                toolbarPath="additions"
                tooltip="Create a new Order and open it."/>
       </viewContribution>
       <viewContribution
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceFilterView"
-            targetID="org.nightlabs.jfire.trade.overview.invoice.InvoiceFilterView">
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView"
+            targetID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView">
          <action
-               class="org.nightlabs.jfire.trade.overview.invoice.action.InvoiceFilterApplyAction"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.InvoiceFilterApplyAction"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.InvoiceFilterApplyAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.InvoiceFilterApplyAction"
                label="Apply"
                style="push"
                toolbarPath="additions"/>
       </viewContribution>
       <viewContribution
-            id="org.nightlabs.jfire.trade.transfer.deliver.DeliveryQueueBrowsingViewContribution"
-            targetID="org.nightlabs.jfire.trade.transfer.deliver.DeliveryQueueBrowsingView">
+            id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingViewContribution"
+            targetID="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView">
          <action
-               class="org.nightlabs.jfire.trade.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
+               class="org.nightlabs.jfire.trade.ui.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
                icon="icons/transfer/deliver/PrintQueueBrowsingView-refresh.16x16.gif"
-               id="org.nightlabs.jfire.trade.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
+               id="org.nightlabs.jfire.trade.ui.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
                label="Refresh queues"
                menubarPath="additions"
                state="true"
                style="push"
                toolbarPath="additions"/>
          <action
-               class="org.nightlabs.jfire.trade.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
+               class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
                icon="icons/transfer/deliver/PrintQueueBrowsingView-printDeliveries.16x16.png"
-               id="org.nightlabs.jfire.trade.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
+               id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
                label="Deliver checked deliveries"
                menubarPath="additions"
                state="true"
@@ -212,113 +212,113 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralEditor"
-            contributorClass="org.nightlabs.jfire.trade.articlecontainer.detail.action.GeneralEditorActionBarContributor"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor"
+            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
             icon="icons/generalOrderOfferInvoiceDeliveryEditor16.gif"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralEditor"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor"
             name="General Editor for Order, Offer, Invoice, Delivery"/>
       <editor
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralQuickSaleEditor"
-            contributorClass="org.nightlabs.jfire.trade.articlecontainer.detail.action.GeneralEditorActionBarContributor"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor"
+            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
             default="false"
             icon="icons/QuickSalePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralQuickSaleEditor"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor"
             name="QuickSaleEditor"/>
       <editor
-            class="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/overview/invoice/InvoiceListView.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor"
             name="Invoice">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor"
             name="DeliveryNote">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.order.OrderEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.order.OrderEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor"
             name="Order">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.offer.OfferEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor"
             name="Offer">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.account.AccountEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/overview/account/AccountEntryEditor.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.account.AccountEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor"
             name="Accounts">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/overview/repository/RepositoryEntryEditor.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryEditor"
             name="Repositories">
       </editor>
       <editor
-            class="org.nightlabs.jfire.trade.overview.receptionnote.ReceptionNoteEntryEditor"
+            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.receptionnote.ReceptionNoteEntryEditor"
+            id="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryEditor"
             name="Reception Note">
       </editor>
       <editor
-		    class="org.nightlabs.jfire.trade.account.editor.AccountEditor"
+		    class="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
 		    contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
 		    icon="icons/account/editor/AccountEditor.16x16.png"
 			default="true"
-		    id="org.nightlabs.jfire.trade.account.editor.AccountEditor"
+		    id="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
 		    name="Account"/>
       <editor
-            class="org.nightlabs.jfire.trade.repository.editor.RepositoryEditor"
+            class="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
             icon="icons/repository/editor/RepositoryEditor.16x16.png"
-            id="org.nightlabs.jfire.trade.repository.editor.RepositoryEditor"
+            id="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor"
             name="Repository">
       </editor>
    </extension>
    
    <extension point="org.nightlabs.base.ui.entityEditor">
         <pageFactory
-			class="org.nightlabs.jfire.trade.account.editor.MoneyTransferPage$Factory"
-			editorID="org.nightlabs.jfire.trade.account.editor.AccountEditor"
+			class="org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferPage$Factory"
+			editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
 			indexHint="20" />
   <pageFactory
-        class="org.nightlabs.jfire.trade.account.editor.AccountConfigurationPage$Factory"
-        editorID="org.nightlabs.jfire.trade.account.editor.AccountEditor"
+        class="org.nightlabs.jfire.trade.ui.account.editor.AccountConfigurationPage$Factory"
+        editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
         indexHint="15">
   </pageFactory>
 		<pageFactory
-			class="org.nightlabs.jfire.trade.account.editor.AccountGeneralPage$Factory"
-			editorID="org.nightlabs.jfire.trade.account.editor.AccountEditor"
+			class="org.nightlabs.jfire.trade.ui.account.editor.AccountGeneralPage$Factory"
+			editorID="org.nightlabs.jfire.trade.ui.account.editor.AccountEditor"
 			indexHint="10" />
   <pageFactory
-        class="org.nightlabs.jfire.trade.repository.editor.RepositoryGeneralPage$Factory"
-        editorID="org.nightlabs.jfire.trade.repository.editor.RepositoryEditor"
+        class="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryGeneralPage$Factory"
+        editorID="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor"
         indexHint="10">
   </pageFactory>
   <pageFactory
-        class="org.nightlabs.jfire.trade.repository.editor.ProductTransferPage$Factory"
-        editorID="org.nightlabs.jfire.trade.repository.editor.RepositoryEditor"
+        class="org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPage$Factory"
+        editorID="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor"
         indexHint="20">
   </pageFactory>
    </extension>     
@@ -326,106 +326,106 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.nightlabs.jfire.trade.TradePerspective"
+            class="org.nightlabs.jfire.trade.ui.TradePerspective"
             icon="icons/TradePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.TradePerspective"
+            id="org.nightlabs.jfire.trade.ui.TradePerspective"
             name="%Trade.perspective.name"/>
       <perspective
-            class="org.nightlabs.jfire.trade.QuickSalePerspective"
+            class="org.nightlabs.jfire.trade.ui.QuickSalePerspective"
             fixed="false"
             icon="icons/QuickSalePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.QuickSalePerspective"
+            id="org.nightlabs.jfire.trade.ui.QuickSalePerspective"
             name="%QuickSalePerspective.perspective.name"/>
       <perspective
-            class="org.nightlabs.jfire.trade.overview.TradeOverviewPerspective"
+            class="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective"
             fixed="false"
             icon="icons/overview/TradeOverviewPerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.overview.TradeOverviewPerspective"
+            id="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective"
             name="%perspectives.tradeOverview.name"/>            
    </extension>
    
    <extension
-         point="org.nightlabs.jfire.trade.segmentEditFactory">
+         point="org.nightlabs.jfire.trade.ui.segmentEditFactory">
       <segmentEditFactory
             segmentContext="Order"
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.order.OrderSegmentEditFactory"
-            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderSegmentEditFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"
             name="Standard - Order">
       </segmentEditFactory>
       <segmentEditFactory
             segmentContext="Offer"
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.offer.OfferSegmentEditFactory"
-            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferSegmentEditFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"
             name="Standard - Offer"/>
       <segmentEditFactory
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.invoice.InvoiceSegmentEditFactory"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceSegmentEditFactory"
             name="Standard - Invoice"
             segmentContext="Invoice"
-            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"/>
       <segmentEditFactory
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.deliverynote.DeliveryNoteSegmentEditFactory"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteSegmentEditFactory"
             name="Standard - DeliveryNote"
             segmentContext="DeliveryNote"
-            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"/>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.nightlabs.jfire.trade.legalentity.config.LegalEntityViewConfigPreferencePage"
-            id="org.nightlabs.jfire.trade.legalentity.config.LegalEntityViewConfigPreferencePage"
+            class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
+            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
             name="Customer view settings"
            />
    </extension>
    <extension
-         point="org.nightlabs.jfire.trade.clientPaymentProcessorFactory">
+         point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryCash"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCash"
             name="Cash"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryCash">
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCash">
          <modeOfPayment
                organisationID="devil.NightLabs.org"
                name="Cash"
                modeOfPaymentID="cash"/>
       </clientPaymentProcessorFactory>
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryCreditCardBackend"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCreditCardBackend"
             name="Credit Card Payment On Server"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryCreditCardBackend">
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCreditCardBackend">
          <modeOfPayment
                organisationID="devil.NightLabs.org"
                name="Credit Card"
                modeOfPaymentID="creditCard"/>
       </clientPaymentProcessorFactory>
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryECTerminal"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryECTerminal"
             name="Credit Card Payment via EC Terminal"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryECTerminal">
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryECTerminal">
          <modeOfPayment
                organisationID="devil.NightLabs.org"
                name="Credit Card"
                modeOfPaymentID="creditCard"/>
       </clientPaymentProcessorFactory>
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryBankTransferGermany"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryBankTransferGermany"
             name="Bank Transfer within Germany"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryBankTransferGermany">
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryBankTransferGermany">
          <modeOfPayment
                organisationID="devil.NightLabs.org"
                name="Bank Transfer"
                modeOfPaymentID="bankTransfer"/>
       </clientPaymentProcessorFactory>
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryDebitNoteGermany"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryDebitNoteGermany"
             name="Debit Note within Germany"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryDebitNoteGermany">
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryDebitNoteGermany">
          <modeOfPayment
                organisationID="devil.NightLabs.org"
                name="Debit Note"
                modeOfPaymentID="debitNote"/>
       </clientPaymentProcessorFactory>
       <clientPaymentProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryNonPayment"
-            id="org.nightlabs.jfire.trade.transfer.pay.ClientPaymentProcessorFactoryNonPayment"
+            class="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryNonPayment"
+            id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryNonPayment"
             name="Non Payment">
          <modeOfPayment
                modeOfPaymentID="nonPayment"
@@ -434,19 +434,19 @@ gibt's nimmer - oder?! Marco.
       </clientPaymentProcessorFactory>
    </extension>
    <extension
-         point="org.nightlabs.jfire.trade.clientDeliveryProcessorFactory">
+         point="org.nightlabs.jfire.trade.ui.clientDeliveryProcessorFactory">
       <clientDeliveryProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorFactoryManual"
+            class="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryManual"
             name="Manual"
-            id="org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorFactoryManual">
+            id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryManual">
          <modeOfDelivery
                organisationID="devil.NightLabs.org"
                modeOfDeliveryID="manual"
                name="Manual"/>
       </clientDeliveryProcessorFactory>
       <clientDeliveryProcessorFactory
-            class="org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorDeliveryQueue$Factory"
-            id="org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorDeliveryQueue$Factory"
+            class="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorDeliveryQueue$Factory"
+            id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorDeliveryQueue$Factory"
             name="Delivery to DeliveryQueue">
          <modeOfDelivery
                modeOfDeliveryID="deliverToDeliveryQueue"
@@ -456,371 +456,371 @@ gibt's nimmer - oder?! Marco.
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.TradePerspective">
-         <actionSet id="org.nightlabs.jfire.trade.actionSet1"/>
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+         <actionSet id="org.nightlabs.jfire.trade.ui.actionSet1"/>
       </perspectiveExtension>
    </extension>
    <extension
-         point="org.nightlabs.jfire.trade.articleContainerAction">
+         point="org.nightlabs.jfire.trade.ui.articleContainerAction">
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAllAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAllAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/reverse/ReverseAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseActionAll"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseActionAll"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.reverseAll.label"
             tooltip="%articleContainerAction.reverseAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/addtodeliverynote/AddAllToDeliveryNoteAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.addAllToDeliveryNode.label"
             tooltip="%articleContainerAction.addAllToDeliveryNode.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/addtoinvoice/AddAllToInvoiceAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.addAllToInvoice.label"
             tooltip="%articleContainerAction.addAllToInvoice.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAndDeliverAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.payAndDeliverAll.label"
             tooltip="%articleContainerAction.payAndDeliverAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAllAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverActionAll"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverActionAll"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.deliverAll.label"
             tooltip="%articleContainerAction.deliverAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAllAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayActionAll"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayActionAll"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.payAll.label"
             tooltip="%articleContainerAction.payAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintToAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintToAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/print/PrintToAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintActionTo"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintActionTo"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.printTo.label"
             tooltip="Open a dialog and select the printer to which this job shall be sent"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/print/PrintAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.print.label"
             tooltip="%articleContainerAction.print.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintPreviewAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/print/PrintPreviewAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintPreviewAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.printPreview.label"
             tooltip="%articleContainerAction.printPreview.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleContainerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/assigncustomer/AssignCustomerAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
-            menubarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="Assign Customer"
             tooltip="Assign the current Order to another customer"/>
-      <groupMarker name="org.nightlabs.jfire.trade.articleContainerAction"/>
+      <groupMarker name="org.nightlabs.jfire.trade.ui.articleContainerAction"/>
 
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAllAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAllAction"
             icon="icons/articlecontainer/detail/action/reverse/ReverseAllAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseActionAll#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseActionAll#toolbar"
             name="%articleContainerAction.reverseAll.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.reverseAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
             icon="icons/articlecontainer/detail/action/addtodeliverynote/AddAllToDeliveryNoteAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction#toolbar"
             name="%articleContainerAction.addAllToDeliveryNode.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.addAllToDeliveryNode.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
             icon="icons/articlecontainer/detail/action/addtoinvoice/AddAllToInvoiceAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction#toolbar"
             name="%articleContainerAction.addAllToInvoice.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.addAllToInvoice.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAndDeliverAllAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAllAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction#toolbar"
             name="%articleContainerAction.payAndDeliverAll.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.payAndDeliverAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAllAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAllAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverActionAll#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverActionAll#toolbar"
             name="%articleContainerAction.deliverAll.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.deliverAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAllAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAllAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAllAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction#toolbar"
             name="%articleContainerAction.payAll.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.payAll.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintToAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintToAction"
             icon="icons/articlecontainer/detail/action/print/PrintToAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintToAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintToAction#toolbar"
             name="%articleContainerAction.printTo.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="Open a dialog and select the printer to which this job shall be sent"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction"
             icon="icons/articlecontainer/detail/action/print/PrintAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction#toolbar"
             name="%articleContainerAction.print.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.print.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintPreviewAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
             icon="icons/articlecontainer/detail/action/print/PrintPreviewAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.print.PrintPreviewAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction#toolbar"
             name="%articleContainerAction.printPreview.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="%articleContainerAction.printPreview.tooltip"/>
       <articleContainerAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction"
             icon="icons/articlecontainer/detail/action/assigncustomer/AssignCustomerAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.assigncustomer.AssignCustomerAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction#toolbar"
             name="Assign Customer"
-            toolbarPath="org.nightlabs.jfire.trade.articleContainerAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             tooltip="Assign the current Order to another customer"/>
    </extension>
    <extension
-         point="org.nightlabs.jfire.trade.articleEditAction">
+         point="org.nightlabs.jfire.trade.ui.articleEditAction">
       <separator
-            name="org.nightlabs.jfire.trade.articleEditAction"
+            name="org.nightlabs.jfire.trade.ui.articleEditAction"
             />
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction.openRelatedMenu/additions"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
             disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
             hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
             icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedDeliveryNoteAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedDeliveryNoteAction"
             name="Delivery note"
             tooltip="Open related delivery note"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction.openRelatedMenu/additions"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
             disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
             hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
             icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedInvoiceAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction"
             name="Invoice"
             tooltip="Open related invoice"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction.openRelatedMenu/additions"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
             disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
             hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
             icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOfferAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction"
             name="Offer"
             tooltip="Open related offer"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction.openRelatedMenu/additions"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu/additions"
             disabledIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
             hoverIcon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
             icon="icons/articlecontainer/detail/action/openrelated/OpenRelatedOrderAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOrderAction"
             name="Order"
             tooltip="Open related order"/>
       <menu
-            id="org.nightlabs.jfire.trade.articleEditAction.openRelatedMenu"
+            id="org.nightlabs.jfire.trade.ui.articleEditAction.openRelatedMenu"
             label="%articleEditAction.openRelated.label"
-            path="org.nightlabs.jfire.trade.articleEditAction">
+            path="org.nightlabs.jfire.trade.ui.articleEditAction">
          <groupMarker
                name="additions">
          </groupMarker>
       </menu>
       <separator
             name="openRelatedSeaprator"
-            path="org.nightlabs.jfire.trade.articleEditAction">
+            path="org.nightlabs.jfire.trade.ui.articleEditAction">
       </separator>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.remove.RemoveAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/remove/RemoveAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.remove.RemoveAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.remove.label"
             tooltip="%articleEditAction.remove.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.release.ReleaseAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/release/ReleaseAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.release.ReleaseAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.release.label"
             tooltip="%articleEditAction.release.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/reverse/ReverseAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.reverse.label"
             tooltip="%articleEditAction.reverse.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/addtodeliverynote/AddToDeliveryNoteAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.addToDeliveryNode.label"
             tooltip="%articleEditAction.addToDeliveryNode.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/addtoinvoice/AddToInvoiceAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.addToInvoice.label"
             tooltip="%articleEditAction.addToInvoice.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAndDeliverAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.payAndDeliver.label"
             tooltip="%articleEditAction.payAndDeliver.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.deliver.label"
             tooltip="%articleEditAction.deliver.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAction"
-            contextmenuPath="org.nightlabs.jfire.trade.articleEditAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAction.16x16.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAction"
-            menubarPath="org.nightlabs.jfire.trade.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.pay.label"
             tooltip="%articleEditAction.pay.tooltip"/>
 
 
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.remove.RemoveAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
             icon="icons/articlecontainer/detail/action/remove/RemoveAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.remove.RemoveAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
             name="%articleEditAction.remove.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.remove.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.release.ReleaseAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
             icon="icons/articlecontainer/detail/action/release/ReleaseAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.release.ReleaseAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
             name="%articleEditAction.release.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.release.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction"
             icon="icons/articlecontainer/detail/action/reverse/ReverseAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.reverse.ReverseAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction#toolbar"
             name="%articleEditAction.reverse.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.reverse.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
             icon="icons/articlecontainer/detail/action/addtodeliverynote/AddToDeliveryNoteAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction#toolbar"
             name="%articleEditAction.addToDeliveryNode.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.addToDeliveryNode.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
             icon="icons/articlecontainer/detail/action/addtoinvoice/AddToInvoiceAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction#toolbar"
             name="%articleEditAction.addToInvoice.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.addToInvoice.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAndDeliverAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAndDeliverAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAction#toolbar"
             name="%articleEditAction.payAndDeliver.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.payAndDeliver.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.DeliverAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction#toolbar"
             name="%articleEditAction.deliver.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.deliver.tooltip"/>
       <articleEditAction
-            class="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAction"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAction.24x24.png"
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.transfer.PayAction#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction#toolbar"
             name="%articleEditAction.pay.label"
-            toolbarPath="org.nightlabs.jfire.trade.articleEditAction"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.pay.tooltip"/>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.reportUseCase">
       <reportUseCase
             description="%reportUseCase.invoice.description"
-            id="org.nightlabs.jfire.trade.reportUseCase.invoice"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.invoice"
             name="%reportUseCase.invoice.name"
             reportLayoutType="JFireReportingTrade-Reporting-Invoice"/>
       <reportUseCase
             description="%reportUseCase.offer.description"
-            id="org.nightlabs.jfire.trade.reportUseCase.offer"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.offer"
             name="%reportUseCase.offer.name"
             reportLayoutType="JFireReportingTrade-Reporting-Offer"/>
       <reportUseCase
             description="%reportUseCase.order.description"
-            id="org.nightlabs.jfire.trade.reportUseCase.order"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.order"
             name="%reportUseCase.order.name"
             reportLayoutType="JFireReportingTrade-Reporting-Order"/>
       <reportUseCase
             description="%reportUseCase.deliveryNote.description"
-            id="org.nightlabs.jfire.trade.reportUseCase.deliveryNote"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.deliveryNote"
             name="%reportUseCase.deliveryNote.name"
             reportLayoutType="JFireReportingTrade-Reporting-Delivery"/>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.valueProviderGUIFactory">
-      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.legalentity.search.report.ValueProviderGUIFactoryLegalEntitySearch"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.overview.invoice.report.ValueProviderGUIFactoryInvoiceByCustomer"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.overview.offer.report.ValueProviderGUIFactoryOfferByCustomer"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.overview.order.report.ValueProviderGUIFactoryOrderByCustomer"/>
-      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.overview.deliverynote.report.ValueProviderGUIFactoryDeliveryNoteByCustomer"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.report.ValueProviderGUIFactoryLegalEntitySearch"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.invoice.report.ValueProviderGUIFactoryInvoiceByCustomer"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.offer.report.ValueProviderGUIFactoryOfferByCustomer"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.order.report.ValueProviderGUIFactoryOrderByCustomer"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.deliverynote.report.ValueProviderGUIFactoryDeliveryNoteByCustomer"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.contributionItemSet">
@@ -833,10 +833,10 @@ gibt's nimmer - oder?! Marco.
    </extension>
    <extension
          point="org.nightlabs.base.ui.perspectiveExtension">
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.TradePerspective">
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
          <contributionItemSetID id="org.nightlabs.base.ui.search.SearchContributionItem"/>
       </perspectiveExtension>
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.QuickSalePerspective">
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
          <contributionItemSetID id="org.nightlabs.base.ui.search.SearchContributionItem"/>
       </perspectiveExtension>
    </extension>
@@ -844,321 +844,321 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.nightlabs.base.ui.searchResultProvider">
       <searchResultProviderFactory
-            class="org.nightlabs.jfire.trade.store.search.GenericProductTypeSearchResultProviderFactory"
+            class="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"
             decorator="icons/store/search/GenericProductTypeSearchResultProviderFactory.10x10.png"
             icon="icons/store/search/GenericProductTypeSearchResultProviderFactory.16x16.png"
-            id="org.nightlabs.jfire.trade.store.search.GenericProductTypeSearchResultProviderFactory"
+            id="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"
             name="%GenericProductTypeSearchResultProviderFactory.name"
             priority="1">
       </searchResultProviderFactory>
       <searchResultActionHandler
-            class="org.nightlabs.jfire.trade.store.search.ProductTypeSearchSelectionActionHandler"
-            searchResultProviderFactoryID="org.nightlabs.jfire.trade.store.search.GenericProductTypeSearchResultProviderFactory">
+            class="org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchSelectionActionHandler"
+            searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
 -->   
    <extension
-         point="org.nightlabs.jfire.trade.tradeOverview">
+         point="org.nightlabs.jfire.trade.ui.tradeOverview">
       <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.overview"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
             index="0"
             name="Trade Overview">
       </categoryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.deliveryNote"
-            categoryID="org.nightlabs.jfire.trade.overview"
-            class="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryFactory"
             icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
             index="0"
             name="DeliveryNote">
       </entryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.invoice"
-            categoryID="org.nightlabs.jfire.trade.overview"
-            class="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.invoice"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory"
             icon="icons/overview/invoice/InvoiceListView.16x16.png"
             index="1"
             name="Invoice">
       </entryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.offer"
-            categoryID="org.nightlabs.jfire.trade.overview"
-            class="org.nightlabs.jfire.trade.overview.offer.OfferEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.offer"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory"
             icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
             index="2"
             name="Offer">
       </entryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.order"
-            categoryID="org.nightlabs.jfire.trade.overview"
-            class="org.nightlabs.jfire.trade.overview.order.OrderEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.order"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
+            class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
             index="3"
             name="Order">
       </entryFactory>
       <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.overview.accounting"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
             index="1"
             name="Accounting">
       </categoryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.account.AccountEntryFactory"
-            categoryID="org.nightlabs.jfire.trade.overview.accounting"
-            class="org.nightlabs.jfire.trade.overview.account.AccountEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+            class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
             icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
             index="0"
             name="Accounts">
       </entryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.receptionnote"
-            categoryID="org.nightlabs.jfire.trade.overview"
-            class="org.nightlabs.jfire.trade.overview.receptionnote.ReceptionNoteEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.receptionnote"
+            categoryID="org.nightlabs.jfire.trade.ui.overview"
+            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory"
             icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
             index="4"
             name="Reception Note">
       </entryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryFactory"
-            categoryID="org.nightlabs.jfire.trade.overview.store"
-            class="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryFactory"
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.store"
+            class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
             name="Repositories"/>
       <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.overview.store"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.store"
             index="2"
             name="Store"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction"
                name="%overview.action.print.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction"
                name="%overview.action.show.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
                name="%overview.action.edit.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction"
                name="%overview.action.print.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction"
                name="%overview.action.show.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
                name="%overview.action.edit.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.order.OrderEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.PrintOrderAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.PrintOrderAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.order.PrintOrderAction"
+               id="org.nightlabs.jfire.trade.ui.overview.order.PrintOrderAction"
                name="%overview.action.print.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction"
+               id="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction"
                name="%overview.action.show.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
         <editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction"
-              contextmenuPath="org.nightlabs.jfire.trade.overview"
+              class="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
               icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-              id="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction"
+              id="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction"
               name="%overview.action.edit.name"
-              toolbarPath="org.nightlabs.jfire.trade.overview"
+              toolbarPath="org.nightlabs.jfire.trade.ui.overview"
               tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.offer.OfferEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.PrintOfferAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.offer.PrintOfferAction"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.PrintOfferAction"
                name="%overview.action.print.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction"
                name="%overview.action.show.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
         <editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction"
-              contextmenuPath="org.nightlabs.jfire.trade.overview"
+              class="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
               icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-              id="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction"
+              id="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction"
               name="%overview.action.edit.name"
-              toolbarPath="org.nightlabs.jfire.trade.overview"
+              toolbarPath="org.nightlabs.jfire.trade.ui.overview"
               tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.receptionnote.ReceptionNoteEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>  
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.account.AccountEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.account.action.EditAccountAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.account.action.EditAccountAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.accounting.action.EditAccountAction"
+               id="org.nightlabs.jfire.trade.ui.overview.accounting.action.EditAccountAction"
                name="%overview.action.edit.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.account.action.ManualMoneyTransferAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.account.action.ManualMoneyTransferAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
 			   icon="icons/overview/account/action/ManualMoneyTransferAction.16x16.png"               
-               id="org.nightlabs.jfire.trade.overview.account.action.ManualMoneyTransferAction"
+               id="org.nightlabs.jfire.trade.ui.overview.account.action.ManualMoneyTransferAction"
                name="Manual Money Transfer"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="Manually transfer money from or to the selected account.">
          </editorActionBarContribution>
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>         
       </editorActionBarContributionRegistry>
-      <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryEditor">
+      <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.repository.action.EditRepositoryAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.repository.action.EditRepositoryAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.repository.action.EditRepositoryAction"
+               id="org.nightlabs.jfire.trade.ui.overview.repository.action.EditRepositoryAction"
                name="%overview.action.edit.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
       </editorActionBarContributionRegistry>
    </extension>   
@@ -1166,10 +1166,10 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
@@ -1179,67 +1179,67 @@ gibt's nimmer - oder?! Marco.
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.search.name"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.PrintInvoiceAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.PrintInvoiceAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction"
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction"
                icon="icons/overview/action/AbstractShowArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.ShowInvoiceAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>         
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
                name="%overview.action.edit.name"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction"
+               class="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction"
                icon="icons/overview/action/AbstractEditArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.invoice.action.EditInvoiceAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.edit.name"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>         
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
@@ -1249,67 +1249,67 @@ gibt's nimmer - oder?! Marco.
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.search.name"
                tooltip="%overview.action.search.tooltip">               
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.PrintDeliveryNoteAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.PrintDeliveryNoteAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">               
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction"
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction"
                icon="icons/overview/action/AbstractShowArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.ShowDeliveryNoteAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">               
          </editorActionBarContribution>         
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
                name="%overview.action.edit.name"
                tooltip="%overview.action.edit.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction"
+               class="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction"
                icon="icons/overview/action/AbstractEditArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.deliverynote.action.EditDeliveryNoteAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.edit.name"
                tooltip="%overview.action.edit.tooltip">               
          </editorActionBarContribution>         
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.order.OrderEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"               
                name="%overview.action.search.name"               
@@ -1319,67 +1319,67 @@ gibt's nimmer - oder?! Marco.
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction#toolbar"               
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.search.name"               
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.PrintOrderAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.PrintOrderAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.order.PrintOrderAction"
+               id="org.nightlabs.jfire.trade.ui.overview.order.PrintOrderAction"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.PrintOrderAction"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.PrintOrderAction"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.order.PrintOrderAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.order.PrintOrderAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction"               
+               id="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction"               
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction"
+               class="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction"
                icon="icons/overview/action/AbstractShowArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.order.action.ShowOrderAction#toolbar"               
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction#toolbar"               
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.show.name"
                tooltip="%overview.action.show.tooltip">
          </editorActionBarContribution>         
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
         <editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction"
-              contextmenuPath="org.nightlabs.jfire.trade.overview"
+              class="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
               icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-              id="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction"
+              id="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction"
               name="%overview.action.edit.name"
               tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>
         <editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction"
+              class="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction"
               icon="icons/overview/action/AbstractEditArticleContainerAction.24x24.png"
-              id="org.nightlabs.jfire.trade.overview.order.action.EditOrderAction#toolbar"
-              toolbarPath="org.nightlabs.jfire.trade.overview"
+              id="org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction#toolbar"
+              toolbarPath="org.nightlabs.jfire.trade.ui.overview"
               name="%overview.action.edit.name"
               tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>                                
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.offer.OfferEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
@@ -1389,67 +1389,67 @@ gibt's nimmer - oder?! Marco.
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.search.name"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.PrintOfferAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.offer.PrintOfferAction"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.PrintOfferAction"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.PrintOfferAction"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction"
                icon="icons/overview/action/AbstractPrintArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.offer.PrintOfferAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.PrintOfferAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                name="%overview.action.print.name"
                tooltip="%overview.action.print.tooltip">
          </editorActionBarContribution>         
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
-               id="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction"
 			   name="%overview.action.search.name"
 			   tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction"
+               class="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction"
                icon="icons/overview/action/AbstractShowArticleContainerAction.24x24.png"
-               id="org.nightlabs.jfire.trade.overview.offer.action.ShowOfferAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               id="org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction#toolbar"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
 			   name="%overview.action.search.name"
 			   tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>         
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>
         <editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction"
-              contextmenuPath="org.nightlabs.jfire.trade.overview"
+              class="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
               icon="icons/overview/action/AbstractEditArticleContainerAction.16x16.png"
-              id="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction"
+              id="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction"
 			  name="%overview.action.edit.name"
 			  tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>
 		<editorActionBarContribution
-              class="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction"
+              class="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction"
               icon="icons/overview/action/AbstractEditArticleContainerAction.24x24.png"
-              id="org.nightlabs.jfire.trade.overview.offer.action.EditOfferAction#toolbar"
-              toolbarPath="org.nightlabs.jfire.trade.overview"
+              id="org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction#toolbar"
+              toolbarPath="org.nightlabs.jfire.trade.ui.overview"
 			  name="%overview.action.edit.name"
 			  tooltip="%overview.action.edit.tooltip">
         </editorActionBarContribution>                                  
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.receptionnote.ReceptionNoteEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
 			   name="%overview.action.search.name"
@@ -1459,19 +1459,19 @@ gibt's nimmer - oder?! Marco.
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction#toolbar"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
 			   name="%overview.action.search.name"
 			   tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>         
         <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>  
       </editorActionBarContributionRegistry>
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.overview.accounting.AccountEntryEditor">
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.accounting.AccountEntryEditor">
          <editorActionBarContribution
                class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
-               contextmenuPath="org.nightlabs.jfire.trade.overview"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                icon="icons/overview/action/ApplySearchAction.16x16.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
@@ -1482,11 +1482,11 @@ gibt's nimmer - oder?! Marco.
                icon="icons/overview/action/ApplySearchAction.24x24.png"
                id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
                name="%overview.action.search.name"
-               toolbarPath="org.nightlabs.jfire.trade.overview"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview"
                tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <groupMarker
-               name="org.nightlabs.jfire.trade.overview">
+               name="org.nightlabs.jfire.trade.ui.overview">
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension>
@@ -1494,34 +1494,34 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.nightlabs.base.ui.editor2perspective">
       <registry
-            editorID="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralEditor"
-            perspectiveID="org.nightlabs.jfire.trade.TradePerspective">
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor"
+            perspectiveID="org.nightlabs.jfire.trade.ui.TradePerspective">
       </registry>
       <registry
-            editorID="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryEditor"
+            editorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor"
             perspectiveID="org.nightlabs.jfire.base.ui.overview.OverviewPerspective">
       </registry>
       <registry
-            editorID="org.nightlabs.jfire.trade.articlecontainer.detail.GeneralQuickSaleEditor"
-            perspectiveID="org.nightlabs.jfire.trade.QuickSalePerspective"/>      
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor"
+            perspectiveID="org.nightlabs.jfire.trade.ui.QuickSalePerspective"/>      
    </extension>
    <extension
          point="org.nightlabs.base.ui.workbenchListener">
       <workbenchListener
-            class="org.nightlabs.jfire.trade.QuickSaleWorkbenchListener">
+            class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener">
       </workbenchListener>
    </extension>
    
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="org.nightlabs.jfire.trade.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
             label="Quick Sale Order"
             visible="false">
          <action
-               class="org.nightlabs.jfire.trade.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
+               class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
                icon="icons/articlecontainer/detail/action/quicksale/CreateQuickSaleOrder.24x24.png"
-               id="org.nightlabs.jfire.trade.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
+               id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"
                label="Create Quick Sale Order"
                style="push"
                toolbarPath="additions"
@@ -1531,90 +1531,90 @@ gibt's nimmer - oder?! Marco.
 
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.QuickSalePerspective">
-         <actionSet id="org.nightlabs.jfire.trade.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"/>
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
+         <actionSet id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"/>
       </perspectiveExtension>
    </extension>
    <extension
          point="org.nightlabs.jfire.base.ui.quickSearchEntry">
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.account.search.AccountNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.account.AccountEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.account.search.AccountNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer"
             name="Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.account.search.AccountOwnerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.account.AccountEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.account.search.AccountOwnerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer"
             name="Owner Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.deliverynote.search.DeliveryNoteIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.deliverynote.search.DeliveryNoteCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteCustomerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
             name="Customer Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.deliverynote.search.DeliveryNoteVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.deliverynote.DeliveryNoteEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteVendorNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
             name="Vendor Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.invoice.search.InvoiceIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.invoice.search.InvoiceCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceCustomerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
             name="Customer Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.invoice.search.InvoiceVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.invoice.InvoiceEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceVendorNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
             name="Vendor Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.offer.search.OfferIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.offer.search.OfferCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferCustomerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
             name="Customer Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.offer.search.OfferVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.offer.OfferEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferVendorNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
             name="Vendor Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.order.search.OrderIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.order.OrderEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderIDQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.order.search.OrderCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.order.OrderEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderCustomerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer"
             name="Customer Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.order.search.OrderVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.order.OrderEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderVendorNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer"
             name="Vendor Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.repository.search.RepositoryNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer"
             name="Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.overview.repository.RepositoryEntryViewer"
+            class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer"
             name="Owner Name">
       </quickSearchEntryFactory>
    </extension>
@@ -1624,11 +1624,11 @@ gibt's nimmer - oder?! Marco.
          point="org.eclipse.ui.activities">
       <activity
             description="hides overview editors from other perspectives than the the overview perspective"
-            id="org.nightlabs.jfire.trade.overviewEditorHidding"
+            id="org.nightlabs.jfire.trade.ui.overviewEditorHidding"
             name="OverviewEditorHidding">
       </activity>
       <activityPatternBinding
-            activityId="org.nightlabs.jfire.trade.overviewEditorHidding"
+            activityId="org.nightlabs.jfire.trade.ui.overviewEditorHidding"
             pattern="org\.nightlabs\.jfire\.trade\..*/.*">
       </activityPatternBinding>
    </extension>

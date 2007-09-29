@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="tradeOverview" name="tradeOverview"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="tradeOverview" name="tradeOverview"/>
       </appInfo>
       <documentation>
          Add categories and entries to the trade overview perspective

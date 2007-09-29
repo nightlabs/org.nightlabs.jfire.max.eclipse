@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade" id="clientDeliveryProcessorFactory" name="ClientDeliveryProcessorFactory Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="clientDeliveryProcessorFactory" name="ClientDeliveryProcessorFactory Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -58,10 +58,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  An implementation of &lt;tt&gt;org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorFactory&lt;/tt&gt;.
+                  An implementation of &lt;tt&gt;org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory&lt;/tt&gt;.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.transfer.deliver.ClientDeliveryProcessorFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory"/>
                </appInfo>
             </annotation>
          </attribute>
