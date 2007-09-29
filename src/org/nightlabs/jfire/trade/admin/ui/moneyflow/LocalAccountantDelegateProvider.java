@@ -32,7 +32,7 @@ import java.util.Set;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider;
-import org.nightlabs.jfire.trade.accounting.AccountingUtil;
+import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
 
 /**
  * Provider for LocalAccountantDelegates.

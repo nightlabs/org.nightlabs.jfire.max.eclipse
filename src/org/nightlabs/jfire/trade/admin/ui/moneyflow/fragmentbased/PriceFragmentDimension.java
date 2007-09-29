@@ -39,10 +39,10 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMoneyFlowMapping;
 import org.nightlabs.jfire.accounting.id.PriceFragmentTypeID;
-import org.nightlabs.jfire.trade.accounting.PriceFragmentTypeProvider;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimensionWizardPage;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeProvider;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

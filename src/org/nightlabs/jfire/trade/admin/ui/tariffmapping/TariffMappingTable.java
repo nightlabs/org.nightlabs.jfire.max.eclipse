@@ -41,7 +41,7 @@ import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.tariffmapping.TariffMappingDAO;
+import org.nightlabs.jfire.trade.ui.tariffmapping.TariffMappingDAO;
 
 public class TariffMappingTable
 extends AbstractTableComposite

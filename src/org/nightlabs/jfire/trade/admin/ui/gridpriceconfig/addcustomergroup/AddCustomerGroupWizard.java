@@ -43,7 +43,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
-import org.nightlabs.jfire.trade.customergroup.CustomerGroupDAO;
+import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupDAO;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de

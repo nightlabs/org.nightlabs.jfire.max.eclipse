@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.CustomerGroup;
-import org.nightlabs.jfire.trade.customergroup.CustomerGroupListComposite;
+import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupListComposite;
 
 public class CustomerGroupComposite extends AbstractCellReferenceComposite{
 

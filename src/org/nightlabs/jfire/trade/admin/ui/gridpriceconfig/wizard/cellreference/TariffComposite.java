@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Tariff;
-import org.nightlabs.jfire.trade.tariff.TariffListComposite;
+import org.nightlabs.jfire.trade.ui.tariff.TariffListComposite;
 
 public class TariffComposite extends AbstractCellReferenceComposite{
 

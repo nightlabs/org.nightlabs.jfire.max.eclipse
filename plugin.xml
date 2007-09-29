@@ -89,10 +89,10 @@
     </extension>
     <extension point="org.nightlabs.base.ui.entitymanagerview">
         <entityManagerView description="AccountConfiguration"
-            entityID="org.nightlabs.jfire.trade.accounting.NormalAccountEntityList"
+            entityID="org.nightlabs.jfire.trade.ui.accounting.NormalAccountEntityList"
             listViewID="org.nightlabs.jfire.trade.admin.ui.account.AccountListView" managerViewID="org.nightlabs.jfire.trade.admin.ui.account.AccountConfigurationView"/>
         <entityManagerView description="SummaryAccountConfiguration"
-            entityID="org.nightlabs.jfire.trade.accounting.SummaryAccountEntityList"
+            entityID="org.nightlabs.jfire.trade.ui.accounting.SummaryAccountEntityList"
             listViewID="org.nightlabs.jfire.trade.admin.ui.account.AccountListView" managerViewID="org.nightlabs.jfire.trade.admin.ui.account.AccountConfigurationView"/>
     </extension>
     <extension point="org.nightlabs.jfire.trade.admin.ui.moneyflowdimension">

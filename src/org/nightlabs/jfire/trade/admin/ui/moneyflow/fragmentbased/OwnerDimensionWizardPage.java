@@ -37,7 +37,7 @@ import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimensionWizardPage;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.legalentity.search.LegalEntitySearchComposite;
+import org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchComposite;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -78,7 +78,7 @@ implements MappingDimensionWizardPage
 
 
 	/**
-	 * @see org.nightlabs.jfire.trade.legalentity.search.LegalEntitySearchWizardPage#isPageComplete()
+	 * @see org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchWizardPage#isPageComplete()
 	 */
 	public boolean isPageComplete() {
 		return allOwnerButton != null && allOwnerButton.getSelection();

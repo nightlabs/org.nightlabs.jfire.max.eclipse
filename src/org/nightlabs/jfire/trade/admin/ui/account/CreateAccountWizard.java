@@ -40,8 +40,8 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
-import org.nightlabs.jfire.trade.account.editor.AbstractAccountPageController;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**

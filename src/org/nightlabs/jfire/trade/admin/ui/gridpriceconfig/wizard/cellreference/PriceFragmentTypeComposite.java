@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
-import org.nightlabs.jfire.trade.accounting.PriceFragmentTypeTable;
+import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeTable;
 
 public class PriceFragmentTypeComposite extends AbstractCellReferenceComposite{
 

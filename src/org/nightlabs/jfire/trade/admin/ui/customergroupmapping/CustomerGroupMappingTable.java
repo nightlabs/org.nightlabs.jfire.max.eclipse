@@ -39,9 +39,9 @@ import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.CustomerGroupMapping;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.customergroupmapping.CustomerGroupMappingDAO;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.CustomerGroupMappingID;
+import org.nightlabs.jfire.trade.ui.customergroupmapping.CustomerGroupMappingDAO;
 
 public class CustomerGroupMappingTable
 extends AbstractTableComposite

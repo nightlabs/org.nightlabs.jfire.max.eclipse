@@ -23,8 +23,8 @@ import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.CustomerGroupMapping;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.customergroup.CustomerGroupListComposite;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
+import org.nightlabs.jfire.trade.ui.customergroup.CustomerGroupListComposite;
 
 public class CustomerGroupMappingView
 extends LSDViewPart

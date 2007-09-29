@@ -66,10 +66,10 @@ import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDeleg
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.accounting.AccountCellEditor;
-import org.nightlabs.jfire.trade.accounting.AccountingUtil;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.store.ProductTypeDAO;
+import org.nightlabs.jfire.trade.ui.accounting.AccountCellEditor;
+import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
+import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**

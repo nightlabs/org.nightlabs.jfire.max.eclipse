@@ -75,8 +75,8 @@ import org.nightlabs.jfire.trade.CustomerGroupMapper;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.customergroupmapping.CustomerGroupMappingDAO;
-import org.nightlabs.jfire.trade.tariffmapping.TariffMappingDAO;
+import org.nightlabs.jfire.trade.ui.customergroupmapping.CustomerGroupMappingDAO;
+import org.nightlabs.jfire.trade.ui.tariffmapping.TariffMappingDAO;
 
 /**
  * This composite can be used to display and edit the whole grid-price-configuration

@@ -30,9 +30,9 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.trade.accounting.AccountingUtil;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateTree;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

@@ -57,9 +57,9 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.accounting.CurrencyLabelProvider;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.accounting.CurrencyLabelProvider;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

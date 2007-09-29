@@ -27,8 +27,8 @@
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased;
 
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jfire.trade.accounting.PriceFragmentTypeSelectionPage;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimensionWizardPage;
+import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeSelectionPage;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
