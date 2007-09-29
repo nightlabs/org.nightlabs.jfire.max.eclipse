@@ -3,27 +3,27 @@ Bundle-ManifestVersion: 2
 Bundle-Name: TradeAdmin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.admin.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.trade.admin.jar
-Bundle-Activator: org.nightlabs.jfire.trade.admin.TradeAdminPlugin
+Bundle-ClassPath: org.nightlabs.jfire.trade.admin.ui.jar
+Bundle-Activator: org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jfire.trade.admin,
- org.nightlabs.jfire.trade.admin.account,
- org.nightlabs.jfire.trade.admin.customergroupmapping,
- org.nightlabs.jfire.trade.admin.editor,
- org.nightlabs.jfire.trade.admin.gridpriceconfig,
- org.nightlabs.jfire.trade.admin.gridpriceconfig.addcurrency,
- org.nightlabs.jfire.trade.admin.gridpriceconfig.addcustomergroup,
- org.nightlabs.jfire.trade.admin.gridpriceconfig.addpricefragmenttype,
- org.nightlabs.jfire.trade.admin.gridpriceconfig.addtariff,
- org.nightlabs.jfire.trade.admin.gridpriceconfig.wizard,
- org.nightlabs.jfire.trade.admin.moneyflow,
- org.nightlabs.jfire.trade.admin.moneyflow.edit,
- org.nightlabs.jfire.trade.admin.moneyflow.fragmentbased,
- org.nightlabs.jfire.trade.admin.overview,
- org.nightlabs.jfire.trade.admin.producttype,
- org.nightlabs.jfire.trade.admin.tariff,
- org.nightlabs.jfire.trade.admin.tariffmapping
+Export-Package: org.nightlabs.jfire.trade.admin.ui,
+ org.nightlabs.jfire.trade.admin.ui.account,
+ org.nightlabs.jfire.trade.admin.ui.customergroupmapping,
+ org.nightlabs.jfire.trade.admin.ui.editor,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff,
+ org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard,
+ org.nightlabs.jfire.trade.admin.ui.moneyflow,
+ org.nightlabs.jfire.trade.admin.ui.moneyflow.edit,
+ org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased,
+ org.nightlabs.jfire.trade.admin.ui.overview,
+ org.nightlabs.jfire.trade.admin.ui.producttype,
+ org.nightlabs.jfire.trade.admin.ui.tariff,
+ org.nightlabs.jfire.trade.admin.ui.tariffmapping
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms,

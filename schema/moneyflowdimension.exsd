@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade.admin">
+<schema targetNamespace="org.nightlabs.jfire.trade.admin.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade.admin" id="moneyflowdimension" name="MoneyFlowDimension ExtensionPoint"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.admin.ui" id="moneyflowdimension" name="MoneyFlowDimension ExtensionPoint"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -50,7 +50,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.admin.moneyflow.Dimension"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.admin.ui.moneyflow.Dimension"/>
                </appInfo>
             </annotation>
          </attribute>

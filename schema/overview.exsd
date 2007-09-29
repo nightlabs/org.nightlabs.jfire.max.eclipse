@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade.admin">
+<schema targetNamespace="org.nightlabs.jfire.trade.admin.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.trade.admin" id="overview" name="overview"/>
+         <meta.schema plugin="org.nightlabs.jfire.trade.admin.ui" id="overview" name="overview"/>
       </appInfo>
       <documentation>
          Registers categories and the corresponding TradeAdminCategoryFactory for the Trade Administration Perspective
@@ -45,7 +45,7 @@
    <element name="category">
       <annotation>
          <documentation>
-            a category for the Trade Administration Perspective (implementation of the interface org.nightlabs.jfire.trade.admin.overview.TradeAdminCategoryFactory)
+            a category for the Trade Administration Perspective (implementation of the interface org.nightlabs.jfire.trade.admin.ui.overview.TradeAdminCategoryFactory)
          </documentation>
       </annotation>
       <complexType>
@@ -72,10 +72,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  An implementation of the interface org.nightlabs.jfire.trade.admin.overview.TradeAdminCategoryFactory, which is responsible for creating the composite which is displayed
+                  An implementation of the interface org.nightlabs.jfire.trade.admin.ui.overview.TradeAdminCategoryFactory, which is responsible for creating the composite which is displayed
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.admin.overview.TradeAdminCategoryViewFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.admin.ui.overview.TradeAdminCategoryViewFactory"/>
                </appInfo>
             </annotation>
          </attribute>
