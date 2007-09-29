@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2"/>
+	<classpathentry kind="var" path="WORKSPACE/JFireBase/dist/JFireBase.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireBaseBean/ejbsrc" kind="var" path="WORKSPACE/JFireBaseBean/dist/JFireBaseBean.jar"/>
+	<classpathentry sourcepath="WORKSPACE/NightLabsJDO/src" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireTrade" kind="var" path="WORKSPACE/JFireTrade/dist/JFireTrade.jar"/>
+	<classpathentry kind="var" path="WORKSPACE/JFireReporting/dist/JFireReporting.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireReportingTrade/src" kind="var" path="WORKSPACE/JFireReportingTrade/dist/JFireReportingTrade.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireServerManager/src" kind="var" path="WORKSPACE/JFireServerManager/dist/JFireServerManager.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireJbpm/src" kind="var" path="WORKSPACE/JFireJbpm/dist/JFireJbpm.jar"/>
+	<classpathentry kind="var" path="WORKSPACE/JFireJbpm/lib/jbpm/jbpm-3.1.4.jar"/>
+	<classpathentry kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar"/>
+	<classpathentry kind="var" path="WORKSPACE/JFireBaseDAO/dist/JFireBaseDAO.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

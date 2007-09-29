@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.nightlabs.jfire.trade">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.nightlabs.jfire.trade" id="productTypeDetailView" name="productTypeDetailView"/>
+      </appInfo>
+      <documentation>
+         Register ProductTypeDetailViewFactories which create IProductTypeDetailViews to display details for ProductTypes
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="productTypeDetailView" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="productTypeDetailView">
+      <annotation>
+         <documentation>
+            Register a ProductTypeDetailViewFactory which creates an IProductTypeDetailView to display details for a certian kind of ProductType
+ 
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="productTypeDetailViewFactory" type="string" use="required">
+            <annotation>
+               <documentation>
+                  ProductTypeDetailViewFactory creates an IProductTypeDetailView to display details for a certian type (inheritant of) ProductType
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.detail.ProductTypeDetailViewFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

@@ -1,0 +1,64 @@
+package org.nightlabs.jfire.trade.detail;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.composite.ReadOnlyLabeledText;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.resource.Messages;
+import org.nightlabs.jfire.trade.store.ProductTypeDAO;
+
+/**
+ * This is the Composite which is used by the {@link GenericProductTypeDetailView}
+ *  
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
+ *
+ */
+public class GenericProductTypeDetailViewComposite 
+extends XComposite 
+{
+
+	public GenericProductTypeDetailViewComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+		super(parent, style, layoutMode, layoutDataMode);
+		createComposite(this);
+	}
+
+	public GenericProductTypeDetailViewComposite(Composite parent, int style) {
+		super(parent, style);
+		createComposite(this);
+	}
+	
+	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
+		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, 
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS}; 
+	
+	public void setProductTypeID(final ProductTypeID productTypeID) {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.detail.GenericProductTypeDetailViewComposite.loadJob.name")) { //$NON-NLS-1$
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(productTypeID, 
+						FETCH_GROUP_PRODUCT_TYPE_DETAIL, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						productTypeName.setText(productType.getName().getText());		
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		loadJob.schedule();
+	}
+	
+	private ReadOnlyLabeledText productTypeName;	
+	protected void createComposite(Composite parent) 
+	{
+		productTypeName = new ReadOnlyLabeledText(parent, Messages.getString("org.nightlabs.jfire.trade.detail.GenericProductTypeDetailViewComposite.productTypeName.caption")); //$NON-NLS-1$
+	}
+}
