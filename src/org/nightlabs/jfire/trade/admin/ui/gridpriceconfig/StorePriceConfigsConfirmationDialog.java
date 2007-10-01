@@ -72,7 +72,8 @@ extends Dialog
 		productTypeList = new ListComposite<ProductType>(area, 
 				SWT.MULTI | ListComposite.getDefaultWidgetStyle(parent), 
 				(String) null, new ProductTypeListLabelProvider());
-		ProductType dummy = new ProductType("dummy", "dummy", null, new LegalEntity("", "", ""), ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		ProductType dummy = new ProductType("dummy", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
+			private static final long serialVersionUID = 1L; // get rid of the warning
 			private I18nTextBuffer name;
 			@Implement
 			public I18nText getName()
@@ -82,11 +83,6 @@ extends Dialog
 					name.setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.pseudoEntry_loading")); //$NON-NLS-1$
 				}
 				return name;
-			}
-			@Implement
-			protected boolean _checkProductAvailability()
-			{
-				return false;
 			}
 			@Implement
 			protected void calculatePrices()
