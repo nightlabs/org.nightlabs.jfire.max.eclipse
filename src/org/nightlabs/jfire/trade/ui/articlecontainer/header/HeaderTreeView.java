@@ -30,6 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.selection.SelectionProviderProxy;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 
 /**
@@ -41,6 +42,14 @@ extends LSDViewPart
 	public static final String ID_VIEW = HeaderTreeView.class.getName();
 
 	private HeaderTreeComposite headerTreeComposite;
+	private SelectionProviderProxy selectionProviderProxy = new SelectionProviderProxy();
+
+	@Override
+	public void createPartControl(Composite parent)
+	{
+		super.createPartControl(parent);
+		getSite().setSelectionProvider(selectionProviderProxy); // this *must* be done here, because it is too late in createPartContents(...)
+	}
 
 	public void createPartContents(Composite parent)
 	{
@@ -50,7 +59,7 @@ extends LSDViewPart
 //			parent.setLayout(new GridLayout(1, true));
 			headerTreeComposite = new HeaderTreeComposite(parent, SWT.NONE, getSite());
 			headerTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-			getSite().setSelectionProvider(headerTreeComposite);
+			selectionProviderProxy.addRealSelectionProvider(headerTreeComposite);
 		} catch (Exception x) {
 			ExceptionHandlerRegistry.asyncHandleException(x);
 		}
