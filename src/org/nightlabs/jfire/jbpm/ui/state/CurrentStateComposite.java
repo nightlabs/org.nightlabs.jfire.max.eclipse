@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm.state;
+package org.nightlabs.jfire.jbpm.ui.state;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -22,7 +22,7 @@ import org.nightlabs.jfire.jbpm.dao.StateDAO;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.jbpm.resource.Messages;
+import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.jfire.trade.state.id.StateID;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
@@ -70,7 +70,7 @@ public class CurrentStateComposite
 		Control[] children = composite.getChildren();
 		for (Control child : children) {
 			child.addMouseListener(mouseListenerForStateHistoryDialog);
-			child.setToolTipText(Messages.getString("org.nightlabs.jfire.jbpm.state.CurrentStateComposite.statableHistoryWidget.tooltip")); //$NON-NLS-1$
+			child.setToolTipText(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.statableHistoryWidget.tooltip")); //$NON-NLS-1$
 
 			if (child instanceof Composite)
 				addMouseListenerForStateHistoryDialog((Composite) child);
@@ -85,7 +85,7 @@ public class CurrentStateComposite
 	}
 	public void setStatable(final Statable _statable)
 	{
-		new Job(Messages.getString("org.nightlabs.jfire.jbpm.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
+		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{

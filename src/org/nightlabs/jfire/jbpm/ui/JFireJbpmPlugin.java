@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm;
+package org.nightlabs.jfire.jbpm.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class JFireJbpmPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.jbpm"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.jbpm.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static JFireJbpmPlugin plugin;

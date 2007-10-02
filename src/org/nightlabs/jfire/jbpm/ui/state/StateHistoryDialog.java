@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm.state;
+package org.nightlabs.jfire.jbpm.ui.state;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.jbpm.resource.Messages;
+import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 
 public class StateHistoryDialog
 extends Dialog
@@ -26,7 +26,7 @@ extends Dialog
 	{
 		newShell.setSize(600, 400);
 		newShell.setMinimumSize(300, 300);
-		newShell.setText(Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryDialog.shell.text")); //$NON-NLS-1$
+		newShell.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryDialog.shell.text")); //$NON-NLS-1$
 		super.configureShell(newShell);
 	}
 

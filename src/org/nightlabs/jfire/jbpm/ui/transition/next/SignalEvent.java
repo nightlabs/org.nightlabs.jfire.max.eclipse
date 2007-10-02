@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm.transition.next;
+package org.nightlabs.jfire.jbpm.ui.transition.next;
 
 import java.util.EventObject;
 

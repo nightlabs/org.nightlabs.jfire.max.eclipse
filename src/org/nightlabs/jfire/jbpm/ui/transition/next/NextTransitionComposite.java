@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm.transition.next;
+package org.nightlabs.jfire.jbpm.ui.transition.next;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +28,7 @@ import org.nightlabs.jfire.jbpm.dao.TransitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
-import org.nightlabs.jfire.jbpm.resource.Messages;
+import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.jfire.trade.state.id.StateID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -61,7 +61,7 @@ public class NextTransitionComposite
 			}
 		});
 		signalButton = new Button(this, SWT.PUSH);
-		signalButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.transition.next.NextTransitionComposite.signalButton.text")); //$NON-NLS-1$
+		signalButton.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.signalButton.text")); //$NON-NLS-1$
 		signalButton.setEnabled(false);
 		signalButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -91,7 +91,7 @@ public class NextTransitionComposite
 	}
 	public void setStatable(final Statable _statable)
 	{
-		new Job(Messages.getString("org.nightlabs.jfire.jbpm.transition.next.NextTransitionComposite.loadJob.name")) { //$NON-NLS-1$
+		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.loadJob.name")) { //$NON-NLS-1$
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{

@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.jbpm">
+  <project name="org.nightlabs.jfire.jbpm.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.jbpm" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.jbpm.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.jbpm/dist/org.nightlabs.jfire.jbpm_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.jbpm/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.jbpm.ui/dist/org.nightlabs.jfire.jbpm_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.jbpm.ui/src"/>
   </project>
 
 </nightlybuild>

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.jbpm.state;
+package org.nightlabs.jfire.jbpm.ui.state;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +26,7 @@ import org.nightlabs.jfire.jbpm.dao.StateDAO;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.jbpm.resource.Messages;
+import org.nightlabs.jfire.jbpm.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -70,13 +70,13 @@ extends AbstractTableComposite<State>
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryComposite.columnDateTime.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.columnDateTime.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryComposite.columnState.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.columnState.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryComposite.columnUser.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.columnUser.text")); //$NON-NLS-1$
 
 		table.setLayout(new WeightedTableLayout(
 			new int[] {-1, 30, 70},
@@ -105,11 +105,11 @@ extends AbstractTableComposite<State>
 		{
 			public void run()
 			{
-				setInput(new String[] {Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryComposite.loadingInput.text")}); //$NON-NLS-1$
+				setInput(new String[] {Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.loadingInput.text")}); //$NON-NLS-1$
 			}
 		});
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.jbpm.state.StateHistoryComposite.loadJob.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.loadJob.name")) { //$NON-NLS-1$
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
