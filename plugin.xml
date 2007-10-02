@@ -349,24 +349,24 @@ gibt's nimmer - oder?! Marco.
       <segmentEditFactory
             segmentContext="Order"
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderSegmentEditFactory"
-            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             name="Standard - Order">
       </segmentEditFactory>
       <segmentEditFactory
             segmentContext="Offer"
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferSegmentEditFactory"
-            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             name="Standard - Offer"/>
       <segmentEditFactory
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceSegmentEditFactory"
             name="Standard - Invoice"
             segmentContext="Invoice"
-            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"/>
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
       <segmentEditFactory
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteSegmentEditFactory"
             name="Standard - DeliveryNote"
             segmentContext="DeliveryNote"
-            segmentTypeClass="org.nightlabs.jfire.trade.ui.SegmentType"/>
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

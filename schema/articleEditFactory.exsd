@@ -68,7 +68,7 @@
                   The fully qualified class name of the SegmentType onto which the factory shall be registered.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.SegmentType"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.SegmentType"/>
                </appInfo>
             </annotation>
          </attribute>
