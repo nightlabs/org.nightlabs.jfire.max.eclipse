@@ -3,20 +3,20 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Scripting Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.admin.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.scripting.admin.jar
-Bundle-Activator: org.nightlabs.jfire.scripting.admin.ScriptingAdminPlugin
+Bundle-ClassPath: org.nightlabs.jfire.scripting.admin.ui.jar
+Bundle-Activator: org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jfire.scripting.admin,
- org.nightlabs.jfire.scripting.admin.parameter,
- org.nightlabs.jfire.scripting.admin.parameter.action,
- org.nightlabs.jfire.scripting.admin.parameter.action.add,
- org.nightlabs.jfire.scripting.admin.parameter.action.edit,
- org.nightlabs.jfire.scripting.admin.script,
- org.nightlabs.jfire.scripting.admin.script.action,
- org.nightlabs.jfire.scripting.admin.script.action.add,
- org.nightlabs.jfire.scripting.admin.script.action.edit,
- org.nightlabs.jfire.scripting.admin.script.jscript
+Export-Package: org.nightlabs.jfire.scripting.admin.ui,
+ org.nightlabs.jfire.scripting.admin.ui.parameter.action,
+ org.nightlabs.jfire.scripting.admin.ui.parameter.action.add,
+ org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit,
+ org.nightlabs.jfire.scripting.admin.ui.script,
+ org.nightlabs.jfire.scripting.admin.ui.script.action,
+ org.nightlabs.jfire.scripting.admin.ui.script.action.add,
+ org.nightlabs.jfire.scripting.admin.ui.script.action.edit,
+ org.nightlabs.jfire.scripting.admin.ui.script.jscript,
+ org.nightlabs.jfire.scripting.ui.admin.parameter
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.scripting.ui,

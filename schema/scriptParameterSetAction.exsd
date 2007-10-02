@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.scripting.admin">
+<schema targetNamespace="org.nightlabs.jfire.scripting.admin.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.scripting.admin" id="scriptParameterSetAction" name="ScriptParameterSetAction Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.scripting.admin.ui" id="scriptParameterSetAction" name="ScriptParameterSetAction Extension-Point"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -130,7 +130,7 @@
          <attribute name="class" type="string">
             <annotation>
                <documentation>
-                  The fully qualified class name of an implementation of org.nightlabs.jfire.scripting.admin.parameter.action.IScriptParameterSetAction.
+                  The fully qualified class name of an implementation of org.nightlabs.jfire.scripting.admin.ui.parameter.action.IScriptParameterSetAction.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction"/>

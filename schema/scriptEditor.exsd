@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.scripting.admin">
+<schema targetNamespace="org.nightlabs.jfire.scripting.admin.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.scripting.admin" id="scriptEditor" name="ScriptEditor ExtensionPoint"/>
+         <meta.schema plugin="org.nightlabs.jfire.scripting.admin.ui" id="scriptEditor" name="ScriptEditor ExtensionPoint"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
