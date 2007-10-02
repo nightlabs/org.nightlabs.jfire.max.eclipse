@@ -175,6 +175,7 @@ gibt's nimmer - oder?! Marco.
                toolbarPath="additions"
                tooltip="Create a new Order and open it."/>
       </viewContribution>
+<!-- This view seems non-existent and the class InvoiceFilterApplyAction doesn't exist either. Marco.
       <viewContribution
             id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView"
             targetID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceFilterView">
@@ -185,6 +186,7 @@ gibt's nimmer - oder?! Marco.
                style="push"
                toolbarPath="additions"/>
       </viewContribution>
+-->
       <viewContribution
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingViewContribution"
             targetID="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView">
