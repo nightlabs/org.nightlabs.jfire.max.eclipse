@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.scripting.editor2d">
+<schema targetNamespace="org.nightlabs.jfire.scripting.editor2d.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.scripting.editor2d" id="scriptConditionerContext" name="scriptConditionerContext"/>
+         <meta.schema plugin="org.nightlabs.jfire.scripting.editor2d.ui" id="scriptConditionerContext" name="scriptConditionerContext"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -50,7 +50,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.scripting.editor2d.ScriptDrawComponent"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.scripting.editor2d.ui.ScriptDrawComponent"/>
                </appInfo>
             </annotation>
          </attribute>

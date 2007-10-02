@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ScriptingEditor2d Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.editor2d.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.scripting.editor2d.jar
-Bundle-Activator: org.nightlabs.jfire.scripting.editor2d.ScriptingEditor2DPlugin
+Bundle-ClassPath: org.nightlabs.jfire.scripting.editor2d.ui.jar
+Bundle-Activator: org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditor2DPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -13,18 +13,18 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.base.j2ee,
  org.nightlabs.editor2d.ui;visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.scripting.editor2d,
- org.nightlabs.jfire.scripting.editor2d.action,
- org.nightlabs.jfire.scripting.editor2d.command,
- org.nightlabs.jfire.scripting.editor2d.decorators,
- org.nightlabs.jfire.scripting.editor2d.dialog,
- org.nightlabs.jfire.scripting.editor2d.editpart,
- org.nightlabs.jfire.scripting.editor2d.editpart.tree,
- org.nightlabs.jfire.scripting.editor2d.editpolicy,
- org.nightlabs.jfire.scripting.editor2d.model,
- org.nightlabs.jfire.scripting.editor2d.property,
- org.nightlabs.jfire.scripting.editor2d.request,
- org.nightlabs.jfire.scripting.editor2d.script,
- org.nightlabs.jfire.scripting.editor2d.tool
+Export-Package: org.nightlabs.jfire.scripting.editor2d.ui,
+ org.nightlabs.jfire.scripting.editor2d.ui.action,
+ org.nightlabs.jfire.scripting.editor2d.ui.command,
+ org.nightlabs.jfire.scripting.editor2d.ui.decorators,
+ org.nightlabs.jfire.scripting.editor2d.ui.dialog,
+ org.nightlabs.jfire.scripting.editor2d.ui.editpart,
+ org.nightlabs.jfire.scripting.editor2d.ui.editpart.tree,
+ org.nightlabs.jfire.scripting.editor2d.ui.editpolicy,
+ org.nightlabs.jfire.scripting.editor2d.ui.model,
+ org.nightlabs.jfire.scripting.editor2d.ui.property,
+ org.nightlabs.jfire.scripting.editor2d.ui.request,
+ org.nightlabs.jfire.scripting.editor2d.ui.script,
+ org.nightlabs.jfire.scripting.editor2d.ui.tool
 Eclipse-RegisterBuddy: org.nightlabs.base.ui,
  org.nightlabs.jfire.base.j2ee
