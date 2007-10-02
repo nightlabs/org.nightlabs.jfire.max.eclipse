@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.condition;
+package org.nightlabs.jfire.scripting.ui.condition;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

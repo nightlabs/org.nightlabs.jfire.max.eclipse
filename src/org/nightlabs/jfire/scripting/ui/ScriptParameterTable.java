@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -12,7 +12,9 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jfire.scripting.resource.Messages;
+import org.nightlabs.jfire.scripting.ScriptParameter;
+import org.nightlabs.jfire.scripting.ScriptParameterSet;
+import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * A table displaying ScriptParameters.
@@ -77,8 +79,8 @@ public class ScriptParameterTable extends AbstractTableComposite {
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ScriptParameterTable.columnParameterID.name")); //$NON-NLS-1$
-		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ScriptParameterTable.columnParameterType.name")); //$NON-NLS-1$
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptParameterTable.columnParameterID.name")); //$NON-NLS-1$
+		(new TableColumn(table, SWT.LEFT)).setText(Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptParameterTable.columnParameterType.name")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[]{1,1}));
 	}
 

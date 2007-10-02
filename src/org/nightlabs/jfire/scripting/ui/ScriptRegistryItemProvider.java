@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +45,11 @@ import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jdo.controller.JDOObjectController;
+import org.nightlabs.jfire.scripting.Script;
+import org.nightlabs.jfire.scripting.ScriptManager;
+import org.nightlabs.jfire.scripting.ScriptManagerUtil;
+import org.nightlabs.jfire.scripting.ScriptRegistryItem;
+import org.nightlabs.jfire.scripting.ScriptRegistryItemCarrier;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**

@@ -1,12 +1,10 @@
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.scripting.ScriptManager;
+import org.nightlabs.jfire.scripting.ScriptManagerUtil;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -53,7 +51,7 @@ public class ScriptingPlugin extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.scripting", path); //$NON-NLS-1$
+		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.scripting.ui", path); //$NON-NLS-1$
 	}
 	
 	

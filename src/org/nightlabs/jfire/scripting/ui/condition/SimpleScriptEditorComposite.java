@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.condition;
+package org.nightlabs.jfire.scripting.ui.condition;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,8 +34,18 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.scripting.ScriptExecutorJavaScript;
+import org.nightlabs.jfire.scripting.condition.CombineOperator;
+import org.nightlabs.jfire.scripting.condition.ConditionContainer;
+import org.nightlabs.jfire.scripting.condition.GeneratorRegistry;
+import org.nightlabs.jfire.scripting.condition.ICondition;
+import org.nightlabs.jfire.scripting.condition.IConditionContainer;
+import org.nightlabs.jfire.scripting.condition.IConditionGenerator;
+import org.nightlabs.jfire.scripting.condition.ISimpleCondition;
+import org.nightlabs.jfire.scripting.condition.Script;
+import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
+import org.nightlabs.jfire.scripting.condition.SimpleCondition;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.jfire.scripting.resource.Messages;
+import org.nightlabs.jfire.scripting.ui.resource.Messages;
 import org.nightlabs.util.CollectionUtil;
 
 /**
@@ -251,9 +261,9 @@ extends XComposite
 		simpleComp.setSimpleCondition(condition);		
 		simpleComp.addConditionChangedListener(conditionChangeListener);
 		Button addButton = new Button(parent, SWT.NONE);
-		addButton.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.addButton.text")); //$NON-NLS-1$
+		addButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.addButton.text")); //$NON-NLS-1$
 		Button deleteButton = new Button(parent, SWT.NONE);
-		deleteButton.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.deleteButton.text")); //$NON-NLS-1$
+		deleteButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteButton.text")); //$NON-NLS-1$
 		if (container == null)
 			deleteButton.setEnabled(false);
 				
@@ -355,7 +365,7 @@ extends XComposite
 		{
 			IConditionContainer container = (IConditionContainer) condition;
 			Group conditionsGroup = new Group(parent, SWT.NONE);
-			conditionsGroup.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.conditionsGroup.text")); //$NON-NLS-1$
+			conditionsGroup.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.conditionsGroup.text")); //$NON-NLS-1$
 			conditionsGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			conditionsGroup.setLayout(new GridLayout());
 			for (ICondition con : container.getConditions()) 
@@ -369,12 +379,12 @@ extends XComposite
 					XComposite containerComp = new XComposite(conditionsGroup, SWT.NONE);
 					containerComp.setLayout(new GridLayout(3, false));
 					Label label = new Label(containerComp, SWT.NONE);
-					label.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.containerCompLabel.text")); //$NON-NLS-1$
+					label.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.containerCompLabel.text")); //$NON-NLS-1$
 					Label spacer = new Label(containerComp, SWT.NONE);
 					spacer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 					
 					Button deleteContainer = new Button(containerComp, SWT.NONE);
-					deleteContainer.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
+					deleteContainer.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
 					deleteContainer.addSelectionListener(deleteContainerListener);
 					button2Condition.put(deleteContainer, (IConditionContainer)con);
 				} 
@@ -389,7 +399,7 @@ extends XComposite
 	private void createContainerDetailComp(Composite parent, IConditionContainer container) 
 	{
 		Group containerComp = new Group(parent, SWT.NONE);
-		containerComp.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.containerGroupCompLabel.text")); //$NON-NLS-1$
+		containerComp.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.containerGroupCompLabel.text")); //$NON-NLS-1$
 		containerComp.setLayout(new GridLayout(5, false));
 		containerComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComboComposite<CombineOperator> combineOperatorCombo = new XComboComposite<CombineOperator>(
@@ -398,15 +408,15 @@ extends XComposite
 		combineOperatorCombo.selectElement(container.getCombineOperator());
 		combineCombo2Container.put(combineOperatorCombo, container);
 		Label l = new Label(containerComp, SWT.NONE);
-		l.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.combineOperatorLabel.text")); //$NON-NLS-1$
+		l.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.combineOperatorLabel.text")); //$NON-NLS-1$
 		
 		Label spacer = new Label(containerComp, SWT.NONE);
 		spacer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Button addContainerButton = new Button(containerComp, SWT.NONE);
-		addContainerButton.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.accContainerButton.text")); //$NON-NLS-1$
+		addContainerButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.accContainerButton.text")); //$NON-NLS-1$
 		Button deleteContainerButton = new Button(containerComp, SWT.NONE);
-		deleteContainerButton.setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
+		deleteContainerButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
 
 		button2Condition.put(addContainerButton, condition);
 		button2Condition.put(deleteContainerButton, condition);
@@ -494,11 +504,11 @@ extends XComposite
 		public String getText(Object element) 
 		{
 			if (element instanceof ISimpleCondition) {
-				String label = Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.conditionNode.text"); //$NON-NLS-1$
+				String label = Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.conditionNode.text"); //$NON-NLS-1$
 				return label;
 			}
 			if (element instanceof IConditionContainer) {
-				return String.format(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorComposite.conditionContainerNode.text"), //$NON-NLS-1$
+				return String.format(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.conditionContainerNode.text"), //$NON-NLS-1$
 						((IConditionContainer)element).getConditions().size());
 			}
 

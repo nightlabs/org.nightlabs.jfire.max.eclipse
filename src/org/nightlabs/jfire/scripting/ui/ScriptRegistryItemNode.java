@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -37,8 +37,12 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.scripting.Script;
+import org.nightlabs.jfire.scripting.ScriptCategory;
+import org.nightlabs.jfire.scripting.ScriptRegistryItem;
+import org.nightlabs.jfire.scripting.ScriptRegistryItemCarrier;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.jfire.scripting.resource.Messages;
+import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * Node object to be used when displaying ScriptRegistryItems in trees.
@@ -137,7 +141,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		 */
 		@Override
 		public String getName() {
-			return Messages.getString("org.nightlabs.jfire.scripting.ScriptRegistryItemNode.fetchingCategoriesNode.name"); //$NON-NLS-1$
+			return Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode.fetchingCategoriesNode.name"); //$NON-NLS-1$
 		}
 
 		/* (non-Javadoc)

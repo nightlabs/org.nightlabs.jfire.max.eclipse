@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.scripting.ScriptParameterSet;
 
 /**
  * A table displaying a Collection ScriptParameterSets.

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.condition;
+package org.nightlabs.jfire.scripting.ui.condition;
 
 import java.util.Collection;
 
@@ -10,7 +10,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.jfire.scripting.resource.Messages;
+import org.nightlabs.jfire.scripting.condition.Script;
+import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
+import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 public class SimpleScriptEditorDialog 
 extends Dialog 
@@ -28,7 +30,7 @@ extends Dialog
 	@Override
 	public void create() {
 		super.create();		
-		getShell().setText(Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorDialog.shell.text")); //$NON-NLS-1$
+		getShell().setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog.shell.text")); //$NON-NLS-1$
 		getShell().setSize(500, 350);
 		getShell().setMinimumSize(400, 300);
 	}
@@ -55,7 +57,7 @@ extends Dialog
 		super.createButtonsForButtonBar(parent);
 		Button deleteScriptButton = createButton(
 				parent, ID_DELETE_SCRIPT, 
-				Messages.getString("org.nightlabs.jfire.scripting.condition.SimpleScriptEditorDialog.deleteScriptButton.text"),  //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog.deleteScriptButton.text"),  //$NON-NLS-1$
 				false);
 		deleteScriptButton.addSelectionListener(new SelectionListener() 
 		{		

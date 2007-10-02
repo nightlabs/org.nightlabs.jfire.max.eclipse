@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 /**
  * Simple interface to let listeners react on changes of the
  * ScriptRegistry (category structure). Register instances
- * of this class to {@link org.nightlabs.jfire.scripting.ScriptRegistryItemProvider}
+ * of this class to {@link org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider}
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *

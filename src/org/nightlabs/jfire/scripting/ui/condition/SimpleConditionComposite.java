@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.condition;
+package org.nightlabs.jfire.scripting.ui.condition;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jfire.scripting.condition.CompareOperator;
+import org.nightlabs.jfire.scripting.condition.ILabelProvider;
+import org.nightlabs.jfire.scripting.condition.ISimpleCondition;
+import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
+import org.nightlabs.jfire.scripting.condition.SimpleCondition;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**

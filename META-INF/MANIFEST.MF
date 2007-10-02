@@ -3,12 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Scripting Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.scripting.jar
-Bundle-Activator: org.nightlabs.jfire.scripting.ScriptingPlugin
+Bundle-ClassPath: org.nightlabs.jfire.scripting.ui.jar
+Bundle-Activator: org.nightlabs.jfire.scripting.ui.ScriptingPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jfire.scripting,
- org.nightlabs.jfire.scripting.condition
+Export-Package: org.nightlabs.jfire.scripting.ui,
+ org.nightlabs.jfire.scripting.ui.condition
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.base.ui;visibility:=reexport

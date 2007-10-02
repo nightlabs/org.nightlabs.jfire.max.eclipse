@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.scripting">
+  <project name="org.nightlabs.jfire.scripting.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.scripting" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.scripting.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.scripting/dist/org.nightlabs.jfire.scripting_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.scripting/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.scripting.ui/dist/org.nightlabs.jfire.scripting.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.scripting.ui/src"/>
   </project>
 
 </nightlybuild>

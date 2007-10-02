@@ -1,4 +1,6 @@
-package org.nightlabs.jfire.scripting.condition;
+package org.nightlabs.jfire.scripting.ui.condition;
+
+import org.nightlabs.jfire.scripting.condition.ICondition;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

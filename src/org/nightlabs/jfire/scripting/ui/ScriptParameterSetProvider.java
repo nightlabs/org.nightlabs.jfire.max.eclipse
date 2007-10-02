@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.scripting;
+package org.nightlabs.jfire.scripting.ui;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,6 +14,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jdo.controller.JDOObjectController;
+import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.id.ScriptParameterSetID;
 
 /**
