@@ -4,7 +4,7 @@
    <extension
          point="org.nightlabs.jfire.trade.admin.ui.overview">
       <category
-            class="org.nightlabs.jfire.simpletrade.admin.overview.SimpleProductTypeCategoryFactory"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.overview.SimpleProductTypeCategoryFactory"
             icon="icons/overview/SimpleProductTypeCategoryFactory.16x16.png"
             index="600"
             name="%SimpleProductCategory.name">
@@ -13,46 +13,46 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             contributorClass="org.nightlabs.base.ui.entity.editor.action.EntityEditorActionBarContributor"
             icon="icons/editor/SimpleProductTypeEditor.16x16.png"
-            id="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            id="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             name="%SimpleProductTypeEditor.name">
       </editor>
    </extension>
    <extension
          point="org.nightlabs.base.ui.entityEditor">
       <pageFactory
-            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeDetailPage$Factory"
-            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             indexHint="1">
       </pageFactory>
       <pageFactory
-            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypePriceConfigPage$Factory"
-            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             indexHint="2">
       </pageFactory>
       <pageFactory
-            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeMoneyFlowConfigPageFactory"
-            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             indexHint="3">
       </pageFactory>
       <pageFactory
-            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypePropertySetPage$Factory"
-            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             indexHint="4">
       </pageFactory>
    </extension>
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="org.nightlabs.jfire.simpletrade.admin"
-            label="org.nightlabs.jfire.simpletrade.admin"
+            id="org.nightlabs.jfire.simpletrade.admin.ui"
+            label="org.nightlabs.jfire.simpletrade.admin.ui"
             visible="false">
          <action
-               class="org.nightlabs.jfire.simpletrade.admin.producttype.subscribe.SubscribeAction"
+               class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
                icon="icons/producttype/subscribe/SubscribeAction.24x24.png"
-               id="org.nightlabs.jfire.simpletrade.admin.producttype.subscribe.SubscribeAction"
+               id="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
                label="Subscribe Simple Product Types"
                style="push"
                toolbarPath="additions"
@@ -62,15 +62,15 @@
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
-         <actionSet id="org.nightlabs.jfire.simpletrade.admin"/>
+         <actionSet id="org.nightlabs.jfire.simpletrade.admin.ui"/>
       </perspectiveExtension>
    </extension>
    <extension
          point="org.nightlabs.base.ui.searchResultProvider">
       <searchResultActionHandler
-            class="org.nightlabs.jfire.simpletrade.admin.store.search.SimpleProductTypeSearchAdminActionHandler"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.store.search.SimpleProductTypeSearchAdminActionHandler"
             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
-            searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeSearchResultProviderFactory">
+            searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
 </plugin>
