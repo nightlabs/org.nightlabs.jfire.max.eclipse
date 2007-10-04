@@ -3,16 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Simpletrade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.simpletrade.jar
-Bundle-Activator: org.nightlabs.jfire.simpletrade.SimpletradePlugin
+Bundle-ClassPath: org.nightlabs.jfire.simpletrade.ui.jar
+Bundle-Activator: org.nightlabs.jfire.simpletrade.ui.SimpletradePlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jfire.simpletrade,
- org.nightlabs.jfire.simpletrade.articlecontainer.detail,
- org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove,
- org.nightlabs.jfire.simpletrade.detail,
- org.nightlabs.jfire.simpletrade.producttype.quicklist,
- org.nightlabs.jfire.simpletrade.prop.edit.blockbased.special
+Export-Package: org.nightlabs.jfire.simpletrade.ui,
+ org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail,
+ org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.action.remove,
+ org.nightlabs.jfire.simpletrade.ui.detail,
+ org.nightlabs.jfire.simpletrade.ui.producttype.quicklist,
+ org.nightlabs.jfire.simpletrade.ui.prop.edit.blockbased.special
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport
