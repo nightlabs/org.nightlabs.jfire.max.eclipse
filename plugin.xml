@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.productTypeQuickListFilterFactory">
+      <productTypeQuickListFilterFactory
+            class="org.nightlabs.jfire.simpletrade.producttype.quicklist.SimpleProductTypeQuickListFilter$Factory"
+            id="org.nightlabs.jfire.simpletrade.product.quicklist.SimpleProductQuickListFilter$Factory"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleEditFactory">
+      <articleEditFactory
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleEditFactory"
+            name="Default - Order"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            segmentContext="Order"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
+         <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove"/>
+         <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove (#toolbar)"/>
+      </articleEditFactory>
+      <articleEditFactory
+            segmentContext="Offer"
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleEditFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            name="Default - Offer">
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove"/>
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove (#toolbar)"/>
+      </articleEditFactory>
+      <articleEditFactory
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleEditFactory"
+            name="Default - Invoice"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            segmentContext="Invoice"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove"/>
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove (#toolbar)"/>
+      </articleEditFactory>
+      <articleEditFactory
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleEditFactory"
+            name="Default - DeliveryNote"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            segmentContext="DeliveryNote"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove"/>
+            <articleEditActionDelegate
+               articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
+               class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.action.remove.RemoveActionDelegate"
+               name="remove (#toolbar)"/>
+      </articleEditFactory>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleAdderFactory">
+      <articleAdderFactory
+            segmentContext="Order"
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleAdderFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            name="Default - Order"/>
+      <articleAdderFactory
+            segmentContext="Offer"
+            class="org.nightlabs.jfire.simpletrade.articlecontainer.detail.ArticleAdderFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            name="Default - Offer"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.productTypeDetailView">
+      <productTypeDetailView productTypeDetailViewFactory="org.nightlabs.jfire.simpletrade.detail.SimpleProductTypeDetailViewFactory"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.specialisedDataBlockEditor">
+      <specialisedDataBlockEditor
+            class="org.nightlabs.jfire.simpletrade.prop.edit.blockbased.special.DescriptionDataBlockEditor$Factory">
+      </specialisedDataBlockEditor>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.searchResultProvider">
+      <searchResultProviderFactory
+            class="org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeSearchResultProviderFactory"
+            decorator="icons/store/SimpleProductTypeSearchResultProviderFactory.10x10.png"
+            icon="icons/store/SimpleProductTypeSearchResultProviderFactory.16x16.png"
+            id="org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeSearchResultProviderFactory"
+            name="%SimpleProductTypeSearchResultProviderFactory.name"
+            priority="300">
+      </searchResultProviderFactory>
+      <searchResultActionHandler
+            class="org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchSelectionActionHandler"
+            searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeSearchResultProviderFactory">
+      </searchResultActionHandler>
+   </extension>
+</plugin>
