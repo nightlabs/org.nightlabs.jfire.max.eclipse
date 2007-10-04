@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SimpleTradeAdmin Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.admin.ui;singleton:=true
+Bundle-Version: 0.9.1
+Bundle-ClassPath: org.nightlabs.jfire.simpletrade.admin.jar
+Bundle-Activator: org.nightlabs.jfire.simpletrade.admin.SimpleTradeAdminPlugin
+Bundle-Vendor: NightLabs.com
+Bundle-Localization: plugin
+Export-Package: org.nightlabs.jfire.simpletrade.admin,
+ org.nightlabs.jfire.simpletrade.admin.editor,
+ org.nightlabs.jfire.simpletrade.admin.gridpriceconfig,
+ org.nightlabs.jfire.simpletrade.admin.overview,
+ org.nightlabs.jfire.simpletrade.admin.producttype,
+ org.nightlabs.jfire.simpletrade.admin.producttype.create,
+ org.nightlabs.jfire.simpletrade.admin.producttype.nestedproducttype,
+ org.nightlabs.jfire.simpletrade.admin.producttype.subscribe,
+ org.nightlabs.jfire.simpletrade.admin.resource,
+ org.nightlabs.jfire.simpletrade.admin.store.search
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.simpletrade.ui,
+ org.nightlabs.jfire.trade.admin.ui
+Eclipse-LazyStart: true

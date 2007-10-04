@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.trade.admin.ui.overview">
+      <category
+            class="org.nightlabs.jfire.simpletrade.admin.overview.SimpleProductTypeCategoryFactory"
+            icon="icons/overview/SimpleProductTypeCategoryFactory.16x16.png"
+            index="600"
+            name="%SimpleProductCategory.name">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            contributorClass="org.nightlabs.base.ui.entity.editor.action.EntityEditorActionBarContributor"
+            icon="icons/editor/SimpleProductTypeEditor.16x16.png"
+            id="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            name="%SimpleProductTypeEditor.name">
+      </editor>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.entityEditor">
+      <pageFactory
+            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeDetailPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            indexHint="1">
+      </pageFactory>
+      <pageFactory
+            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypePriceConfigPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            indexHint="2">
+      </pageFactory>
+      <pageFactory
+            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeMoneyFlowConfigPageFactory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            indexHint="3">
+      </pageFactory>
+      <pageFactory
+            class="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypePropertySetPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.editor.SimpleProductTypeEditor"
+            indexHint="4">
+      </pageFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.nightlabs.jfire.simpletrade.admin"
+            label="org.nightlabs.jfire.simpletrade.admin"
+            visible="false">
+         <action
+               class="org.nightlabs.jfire.simpletrade.admin.producttype.subscribe.SubscribeAction"
+               icon="icons/producttype/subscribe/SubscribeAction.24x24.png"
+               id="org.nightlabs.jfire.simpletrade.admin.producttype.subscribe.SubscribeAction"
+               label="Subscribe Simple Product Types"
+               style="push"
+               toolbarPath="additions"
+               tooltip="%SubscribeAction.tooltip"/>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
+         <actionSet id="org.nightlabs.jfire.simpletrade.admin"/>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.searchResultProvider">
+      <searchResultActionHandler
+            class="org.nightlabs.jfire.simpletrade.admin.store.search.SimpleProductTypeSearchAdminActionHandler"
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
+            searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeSearchResultProviderFactory">
+      </searchResultActionHandler>
+   </extension>
+</plugin>
