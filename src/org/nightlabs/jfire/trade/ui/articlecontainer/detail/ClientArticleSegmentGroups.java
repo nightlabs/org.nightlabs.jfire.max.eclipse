@@ -42,10 +42,10 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleAdapterCallerThread;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
@@ -149,15 +149,15 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR
 	};
 
-//	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob("Loading new articles") {
-	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
+	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob("Loading new articles") {
+//	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
 		private ArticleLifecycleListenerFilter filter = null;
 
 		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 		{
 			if (filter == null) {
 				ArticleContainerID articleContainerID = getArticleContainerID();
-				if (articleContainerID instanceof Order || articleContainerID instanceof Offer)
+				if (articleContainerID instanceof OrderID || articleContainerID instanceof OfferID)
 					filter = new ArticleLifecycleListenerFilter(new JDOLifecycleState[] { JDOLifecycleState.NEW }, getArticleContainerID());
 				else {
 					// In this case, we need to use the DIRTY as well, because an Article is not freshly created when being added to an
