@@ -185,6 +185,9 @@ extends XComposite
 				if ((productType == null) || (productType.getProductTypeLocal().getLocalAccountantDelegate() == null)) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
+							if (stackWrapper.isDisposed())
+								return;
+
 							stackLayout.topControl = noDelegateComp;
 							stackWrapper.layout(true);
 						}
@@ -193,6 +196,9 @@ extends XComposite
 				else {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
+							if (stackWrapper.isDisposed())
+								return;
+
 							stackLayout.topControl = treeWrapper;
 							stackWrapper.layout(true);
 						}
