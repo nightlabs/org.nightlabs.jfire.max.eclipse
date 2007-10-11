@@ -31,7 +31,7 @@
             name="%org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer.name"
             renderer="org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer">
          <renderContext
-               renderContext="org.nightlabs.jfire.scripting.editor2d.ui.render.j2d.J2DBarcodeDefaultRenderer"
+               renderContext="org.nightlabs.jfire.scripting.editor2d.render.j2d.J2DBarcodeDefaultRenderer"
                renderContextType="Java2D"/>
       </registry>
    </extension>   
