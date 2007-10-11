@@ -12,7 +12,7 @@
       <articleEditFactory
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - Order"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             segmentContext="Order"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
          <articleEditActionDelegate
@@ -28,7 +28,7 @@
             segmentContext="Offer"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Offer">
             <articleEditActionDelegate
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
@@ -42,7 +42,7 @@
       <articleEditFactory
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - Invoice"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             segmentContext="Invoice"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
             <articleEditActionDelegate
@@ -57,7 +57,7 @@
       <articleEditFactory
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - DeliveryNote"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             segmentContext="DeliveryNote"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
             <articleEditActionDelegate
@@ -76,13 +76,13 @@
             segmentContext="Order"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Order"/>
       <articleAdderFactory
             segmentContext="Offer"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
-            productTypeClass="org.nightlabs.jfire.simpletrade.ui.store.SimpleProductType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Offer"/>
    </extension>
    <extension
