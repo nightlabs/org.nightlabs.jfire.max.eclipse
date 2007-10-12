@@ -37,7 +37,7 @@ import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.prop.edit.fieldbased.EditorStructFieldRegistry;
 import org.nightlabs.jfire.base.ui.prop.edit.fieldbased.FieldBasedEditor;
 import org.nightlabs.jfire.person.PersonStruct;
-import org.nightlabs.jfire.prop.AbstractDataField;
+import org.nightlabs.jfire.prop.DataField;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.id.StructFieldID;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -68,7 +68,7 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 	
 
 
-	protected GridData getGridDataForField(AbstractDataField field) {
+	protected GridData getGridDataForField(DataField field) {
 		GridData result = null;
 //		if (field.getPersonStructBlockID().equals(PersonStruct.PERSONALDATA.personStructBlockID)) {
 //			result = new GridData(GridData.FILL_HORIZONTAL);
