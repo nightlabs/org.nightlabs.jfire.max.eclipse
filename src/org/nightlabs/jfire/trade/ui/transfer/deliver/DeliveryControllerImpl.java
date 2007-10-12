@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.nightlabs.datastructure.Tuple;
+import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jfire.store.deliver.AbstractDeliveryController;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
@@ -42,18 +42,18 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 //		setTransferDatas(deliveryDatas);
 //	}
 	
-	public DeliveryControllerImpl(List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
+	public DeliveryControllerImpl(List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
 		super(getDeliveryDatas(deliveryTuples));
 		
 		deliveryProcessorMap = new HashMap<DeliveryData, ClientDeliveryProcessor>();
-		for (Tuple<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
+		for (Pair<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
 			deliveryProcessorMap.put(tuple.getFirst(), tuple.getSecond());
 		}
 	}
 	
-	private static List<DeliveryData> getDeliveryDatas(List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
+	private static List<DeliveryData> getDeliveryDatas(List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
 		List<DeliveryData> deliveryDatas = new LinkedList<DeliveryData>();
-		for (Tuple<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
+		for (Pair<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
 			DeliveryData data = tuple.getFirst();
 			deliveryDatas.add(data);
 		}		

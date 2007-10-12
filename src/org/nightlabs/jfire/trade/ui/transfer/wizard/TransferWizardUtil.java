@@ -46,7 +46,7 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.ModuleException;
-import org.nightlabs.datastructure.Tuple;
+import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
@@ -242,26 +242,26 @@ public class TransferWizardUtil
 //			}
 //		}
 		
-		List<Tuple<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
-		List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
+		List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
+		List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
 		
 		// prepare payment information
 		if (paymentWizard != null) {
-			paymentTuples = new ArrayList<Tuple<PaymentData,ClientPaymentProcessor>>();
+			paymentTuples = new ArrayList<Pair<PaymentData,ClientPaymentProcessor>>();
 			
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				PaymentData paymentData = paymentEntryPage.getPaymentWizardHop().getPaymentData();
-				paymentTuples.add(new Tuple<PaymentData, ClientPaymentProcessor>(paymentData, paymentEntryPage.getClientPaymentProcessor()));
+				paymentTuples.add(new Pair<PaymentData, ClientPaymentProcessor>(paymentData, paymentEntryPage.getClientPaymentProcessor()));
 			}
 		}
 		
 		// prepare delivery information
 		if (deliveryWizard != null) {
-			deliveryTuples = new ArrayList<Tuple<DeliveryData,ClientDeliveryProcessor>>();
+			deliveryTuples = new ArrayList<Pair<DeliveryData,ClientDeliveryProcessor>>();
 			
 			for (DeliveryEntryPage deliveryEntryPage : deliveryWizard.getDeliveryEntryPages()) {
 				DeliveryData deliveryData = deliveryEntryPage.getDeliveryWizardHop().getDeliveryData();
-				deliveryTuples.add(new Tuple<DeliveryData, ClientDeliveryProcessor>(deliveryData, deliveryEntryPage.getClientDeliveryProcessor()));
+				deliveryTuples.add(new Pair<DeliveryData, ClientDeliveryProcessor>(deliveryData, deliveryEntryPage.getClientDeliveryProcessor()));
 			}
 		}
 		
@@ -271,8 +271,8 @@ public class TransferWizardUtil
 	
 	private static boolean payAndDeliver(
 			Shell shell,
-			List<Tuple<PaymentData, ClientPaymentProcessor>> paymentTuples,
-			List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
+			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
+			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
 	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
 		TransferCoordinator transferCoordinator = new TransferCoordinator();
@@ -532,13 +532,13 @@ public class TransferWizardUtil
 		return delivery;
 	}
 	
-	public <T1, T2> List<Tuple<T1, T2>> createTupleList(List<T1> list1, List<T2> list2) {
+	public <T1, T2> List<Pair<T1, T2>> createTupleList(List<T1> list1, List<T2> list2) {
 		Assert.isLegal(list1.size() == list2.size());
 		
-		List<Tuple<T1, T2>> list = new ArrayList<Tuple<T1, T2>>(list1.size());
+		List<Pair<T1, T2>> list = new ArrayList<Pair<T1, T2>>(list1.size());
 		
 		for (Iterator<?> it1 = list1.iterator(), it2 = list2.iterator(); it1.hasNext(); )
-			list.add(new Tuple<T1, T2>((T1) it1.next(), (T2) it2.next()));
+			list.add(new Pair<T1, T2>((T1) it1.next(), (T2) it2.next()));
 		
 		return list;		
 	}

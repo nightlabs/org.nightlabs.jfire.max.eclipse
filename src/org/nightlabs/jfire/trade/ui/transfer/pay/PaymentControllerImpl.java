@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.nightlabs.datastructure.Tuple;
+import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jfire.accounting.pay.AbstractPaymentController;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
@@ -30,18 +30,18 @@ public class PaymentControllerImpl extends AbstractPaymentController {
 	 * will process all given {@link PaymentData}s using the respective {@link ClientPaymentProcessor} in the client stages.
 	 * @param paymentTuples A list of tuples of {@link PaymentData} and a corresponding {@link ClientPaymentProcessor}. 
 	 */
-	public PaymentControllerImpl(List<Tuple<PaymentData, ClientPaymentProcessor>> paymentTuples) {
+	public PaymentControllerImpl(List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples) {
 		super(getPaymentDatas(paymentTuples));
 		
 		paymentProcessorMap = new HashMap<PaymentData, ClientPaymentProcessor>();
-		for (Tuple<PaymentData, ClientPaymentProcessor> tuple : paymentTuples) {
+		for (Pair<PaymentData, ClientPaymentProcessor> tuple : paymentTuples) {
 			paymentProcessorMap.put(tuple.getFirst(), tuple.getSecond());
 		}
 	}
 	
-	private static List<PaymentData> getPaymentDatas(List<Tuple<PaymentData, ClientPaymentProcessor>> paymentTuples) {
+	private static List<PaymentData> getPaymentDatas(List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples) {
 		List<PaymentData> paymentDatas = new LinkedList<PaymentData>();
-		for (Tuple<PaymentData, ClientPaymentProcessor> tuple : paymentTuples) {
+		for (Pair<PaymentData, ClientPaymentProcessor> tuple : paymentTuples) {
 			PaymentData data = tuple.getFirst();
 			paymentDatas.add(data);
 		}		

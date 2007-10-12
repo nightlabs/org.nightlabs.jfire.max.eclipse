@@ -9,7 +9,7 @@ import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
 import org.nightlabs.ModuleException;
-import org.nightlabs.datastructure.Tuple;
+import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jfire.accounting.pay.PaymentController;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.store.deliver.DeliveryController;
@@ -30,8 +30,8 @@ public class TransferCoordinator {
 	}
 	
 	public boolean payAndDeliver(
-			List<Tuple<PaymentData, ClientPaymentProcessor>> paymentTuples,
-			List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
+			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
+			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
 	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
 		PaymentController paymentController = null;
