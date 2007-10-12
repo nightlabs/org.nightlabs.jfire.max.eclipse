@@ -11,7 +11,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorNotFoundException;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.AbstractDataBlockEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.ExpandableBlocksEditor;
-import org.nightlabs.jfire.prop.AbstractDataField;
+import org.nightlabs.jfire.prop.DataField;
 import org.nightlabs.jfire.prop.DataBlock;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.exception.DataFieldNotFoundException;
@@ -74,7 +74,7 @@ extends AbstractDataBlockEditor
 	
 	private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan) 
 	{
-		AbstractDataField field = null;
+		DataField field = null;
 		try {
 			field = dataBlock.getDataField(fieldID);
 		} catch (DataFieldNotFoundException e) {
