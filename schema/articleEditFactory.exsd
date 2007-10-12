@@ -50,7 +50,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="articleEditActionDelegate" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="articleEditActionDelegate" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="class" type="string" use="required">
             <annotation>
