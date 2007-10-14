@@ -5,9 +5,9 @@
          point="org.eclipse.birt.report.designer.ui.editors.multiPageEditorContributor">
       <targetEditor targetEditorId="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor">
       <formPage
-            class="org.nightlabs.jfire.reporting.admin.parameter.page.ParameterAcquisitionEditorPage"
-            displayName="%org.nightlabs.jfire.reporting.admin.parameter.page.ParameterAcquisitionEditorPage.displayName"
-            id="org.nightlabs.jfire.reporting.admin.parameter.page.ParameterAcquisitionEditorPage"
+            class="org.nightlabs.jfire.reporting.admin.parameter.ui.page.ParameterAcquisitionEditorPage"
+            displayName="%org.nightlabs.jfire.reporting.admin.parameter.ui.page.ParameterAcquisitionEditorPage.displayName"
+            id="org.nightlabs.jfire.reporting.admin.parameter.ui.page.ParameterAcquisitionEditorPage"
             position="right"
             relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             visible="true"/>
@@ -16,11 +16,11 @@
       <extension
             point="org.eclipse.ui.editors">
          <editor
-               class="org.nightlabs.jfire.reporting.admin.parameter.ReportParameterEditor"
-               contributorClass="org.nightlabs.jfire.reporting.admin.parameter.ReportActionBarContributor"
+               class="org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor"
+               contributorClass="org.nightlabs.jfire.reporting.admin.parameter.ui.ReportActionBarContributor"
                icon="icons/editpart/tree/ValueProviderConfigTreeEditPart.16x16.png"
-               id="org.nightlabs.jfire.reporting.admin.parameter.ReportParameterEditor"
-               name="%org.nightlabs.jfire.reporting.admin.parameter.ReportParameterEditor.name">
+               id="org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor"
+               name="%org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor.name">
          </editor>
       </extension>
 

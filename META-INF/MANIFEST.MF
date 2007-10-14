@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Reporting Parameter Editor Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.admin.parameter.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.reporting.admin.parameter.jar
-Bundle-Activator: org.nightlabs.jfire.reporting.admin.parameter.ReportingAdminParameterPlugin
+Bundle-ClassPath: org.nightlabs.jfire.reporting.admin.parameter.ui.jar
+Bundle-Activator: org.nightlabs.jfire.reporting.admin.parameter.ui.ReportingAdminParameterPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.gef,
@@ -41,13 +41,13 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.birt.report.engine.emitter.pdf,
  org.nightlabs.jfire.reporting.admin.ui
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.reporting.admin.parameter,
- org.nightlabs.jfire.reporting.admin.parameter.command,
- org.nightlabs.jfire.reporting.admin.parameter.editpart,
- org.nightlabs.jfire.reporting.admin.parameter.editpart.tree,
- org.nightlabs.jfire.reporting.admin.parameter.editpolicy,
- org.nightlabs.jfire.reporting.admin.parameter.figure,
- org.nightlabs.jfire.reporting.admin.parameter.notification,
- org.nightlabs.jfire.reporting.admin.parameter.page,
- org.nightlabs.jfire.reporting.admin.parameter.request,
- org.nightlabs.jfire.reporting.admin.parameter.tool
+Export-Package: org.nightlabs.jfire.reporting.admin.parameter.ui,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.command,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.editpart,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.editpart.tree,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.editpolicy,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.figure,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.notification,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.page,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.request,
+ org.nightlabs.jfire.reporting.admin.parameter.ui.tool

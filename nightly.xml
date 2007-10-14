@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.reporting.admin.parameter">
+  <project name="org.nightlabs.jfire.reporting.admin.parameter.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.reporting.admin.parameter" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.reporting.admin.parameter.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.parameter/dist/org.nightlabs.jfire.reporting.admin.parameter_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.reporting.admin.parameter/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.parameter.ui/dist/org.nightlabs.jfire.reporting.admin.parameter.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.reporting.admin.parameter.ui/src"/>
 	<ignore-requires path="org.eclipse.jdt.ui"/>
 	<ignore-requires path="org.apache.derby.core"/>
 	<ignore-requires path="org.eclipse.jdt.core"/>
