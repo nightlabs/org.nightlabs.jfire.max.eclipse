@@ -1,6 +1,7 @@
-package org.nightlabs.jfire.dynamictrade.store.search;
+package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.dynamictrade.store.search.DynamicProductTypeQuery;
 import org.nightlabs.jfire.store.search.ProductTypeQuery;
 import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite;
 

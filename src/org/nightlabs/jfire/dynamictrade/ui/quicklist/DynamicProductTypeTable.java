@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.dynamictrade.quicklist;
+package org.nightlabs.jfire.dynamictrade.ui.quicklist;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -46,8 +46,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
@@ -117,7 +117,7 @@ public class DynamicProductTypeTable extends AbstractTableComposite {
 
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.dynamictrade.quicklist.DynamicProductTypeTable.productTypeNameTableColumn.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeTable.productTypeNameTableColumn.text")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));	}
 
 	@Implement

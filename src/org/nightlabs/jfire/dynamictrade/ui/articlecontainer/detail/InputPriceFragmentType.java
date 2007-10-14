@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 

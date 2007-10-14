@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -17,7 +17,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
 
 public abstract class InputPriceFragmentTypeTable
@@ -96,10 +96,10 @@ extends AbstractTableComposite
 	{
 		TableColumn tc;
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.InputPriceFragmentTypeTable.inputTableColumn.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.InputPriceFragmentTypeTable.inputTableColumn.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.InputPriceFragmentTypeTable.amountTableColumn.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.InputPriceFragmentTypeTable.amountTableColumn.text")); //$NON-NLS-1$
 
 		TableLayout tl = new TableLayout();
 		tl.addColumnData(new ColumnWeightData(1));

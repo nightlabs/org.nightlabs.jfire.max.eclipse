@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.quicklist;
+package org.nightlabs.jfire.dynamictrade.ui.quicklist;
 
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilterFactory;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter;

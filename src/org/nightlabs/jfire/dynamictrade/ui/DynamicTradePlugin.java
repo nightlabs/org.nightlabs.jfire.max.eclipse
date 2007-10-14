@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade;
+package org.nightlabs.jfire.dynamictrade.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class DynamicTradePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.dynamictrade"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.dynamictrade.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static DynamicTradePlugin plugin;

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.quicklist;
+package org.nightlabs.jfire.dynamictrade.ui.quicklist;
 
 import java.util.Collection;
 
@@ -15,8 +15,8 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
@@ -50,11 +50,11 @@ extends AbstractProductTypeQuickListFilter
 	
 	public String getDisplayName()
 	{
-		return Messages.getString("org.nightlabs.jfire.dynamictrade.quicklist.DynamicProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
 	public void search(ProgressMonitor monitor) {
-		new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.quicklist.DynamicProductTypeQuickListFilter.searchJob.name")) { //$NON-NLS-1$
+		new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.searchJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {

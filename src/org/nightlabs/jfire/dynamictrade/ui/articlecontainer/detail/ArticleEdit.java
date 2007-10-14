@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.HashSet;
 import java.util.Iterator;

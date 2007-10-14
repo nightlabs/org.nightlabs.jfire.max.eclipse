@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,9 @@ import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.store.id.UnitID;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -62,7 +62,7 @@ extends ArticleBaseComposite
 		++comp1.getGridLayout().numColumns;
 		addArticle = new Button(comp1, SWT.PUSH);
 		addArticle.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		addArticle.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleAdderComposite.addArticleButton.text")); //$NON-NLS-1$
+		addArticle.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleAdderComposite.addArticleButton.text")); //$NON-NLS-1$
 		addArticle.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
@@ -98,7 +98,7 @@ extends ArticleBaseComposite
 			singlePrice.sumPrice(singlePriceOrig);
 			
 			
-			FadeableCompositeJob addJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleAdderComposite.addArticleJob.text"), this, this) { //$NON-NLS-1$
+			FadeableCompositeJob addJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleAdderComposite.addArticleJob.text"), this, this) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source) throws Exception {
 					SegmentEdit segmentEdit = articleAdder.getSegmentEdit();

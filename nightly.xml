@@ -2,12 +2,12 @@
 <!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.13//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_13.dtd">
 
 <nightlybuild>
-  <project name="org.nightlabs.jfire.dynamictrade">
+  <project name="org.nightlabs.jfire.dynamictrade.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.dynamictrade" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.dynamictrade.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.dynamictrade/dist/org.nightlabs.jfire.dynamictrade_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.dynamictrade/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.dynamictrade.ui/dist/org.nightlabs.jfire.dynamictrade.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.dynamictrade.ui/src"/>
   </project>
 </nightlybuild>

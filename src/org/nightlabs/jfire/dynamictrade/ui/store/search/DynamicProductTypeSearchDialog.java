@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.store.search;
+package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;

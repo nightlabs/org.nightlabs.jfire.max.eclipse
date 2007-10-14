@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,9 +37,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 
 /**
  * This implementation of {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEditFactory}
- * creates one instance of {@link org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleEdit}
+ * creates one instance of {@link org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleEdit}
  * to allow manipulation of articles which
- * wrap {@link org.nightlabs.jfire.dynamictrade.store.DynamicProductType}s.
+ * wrap {@link org.nightlabs.jfire.dynamictrade.ui.store.DynamicProductType}s.
  *
  * @author Marco Schulze - marco at nightlabs dot de
  */

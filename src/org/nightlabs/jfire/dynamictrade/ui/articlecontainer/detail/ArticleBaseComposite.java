@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,10 +56,10 @@ import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.UnitDAO;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.store.Unit;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -117,7 +117,7 @@ extends FadeableComposite
 			}
 		});
 		Tariff dummy = new Tariff("dummy", "_dummy_"); //$NON-NLS-1$ //$NON-NLS-2$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleBaseComposite.pseudoTariff_loading")); //$NON-NLS-1$
+		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.pseudoTariff_loading")); //$NON-NLS-1$
 		tariffCombo.addElement(dummy);
 		tariffCombo.selectElement(dummy);
 		tariffCombo.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -257,7 +257,7 @@ extends FadeableComposite
 
 	private void loadDynamicProductType()
 	{
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
@@ -379,7 +379,7 @@ extends FadeableComposite
 		PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
 		this.setEnabled(priceCell != null);
 		if (priceCell == null) {
-			MessageDialog.openError(getShell(), Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.title"), Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
+			MessageDialog.openError(getShell(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.title"), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.errorNoPriceCellDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -447,7 +447,7 @@ extends FadeableComposite
 			inputPriceFragmentTypeModified = false;
 		} catch (JDODetachedFieldAccessException x) {
 			setFaded(true);
-			Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleBaseComposite.loadArticleWithPriceFragmentsJob.name")) { //$NON-NLS-1$
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadArticleWithPriceFragmentsJob.name")) { //$NON-NLS-1$
 				protected IStatus run(ProgressMonitor monitor) throws Exception
 				{
 					try {

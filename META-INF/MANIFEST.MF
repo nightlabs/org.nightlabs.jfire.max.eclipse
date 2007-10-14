@@ -3,15 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DynamicTrade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.dynamictrade.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.dynamictrade.jar
-Bundle-Activator: org.nightlabs.jfire.dynamictrade.DynamicTradePlugin
+Bundle-ClassPath: org.nightlabs.jfire.dynamictrade.ui.jar
+Bundle-Activator: org.nightlabs.jfire.dynamictrade.ui.DynamicTradePlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.dynamictrade,
- org.nightlabs.jfire.dynamictrade.articlecontainer.detail,
- org.nightlabs.jfire.dynamictrade.quicklist,
- org.nightlabs.jfire.dynamictrade.store.search
+Export-Package: org.nightlabs.jfire.dynamictrade.ui,
+ org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail,
+ org.nightlabs.jfire.dynamictrade.ui.quicklist,
+ org.nightlabs.jfire.dynamictrade.ui.store.search

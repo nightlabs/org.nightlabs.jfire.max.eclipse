@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.Locale;
 
@@ -47,9 +47,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticlePrice;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -252,51 +252,51 @@ implements ISelectionProvider
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{		
 		TableColumn col = new TableColumn(table, SWT.LEFT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.productTypeNameTableColumn.text")); //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.productTypeNameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("ProductTypeName");
 
 		col = new TableColumn(table, SWT.LEFT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.productNameTableColumn.text")); //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.productNameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("ProductName");
 		
 		col = new TableColumn(table, SWT.RIGHT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.quantityTableColumn.text")); //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.quantityTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.unitTableColumn.text")); //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.unitTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.statusTableColumn.text"));		 //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.statusTableColumn.text"));		 //$NON-NLS-1$
 //		col.setToolTipText("Status");
 		
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
+			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
 //			col.setToolTipText("Order");
 		}
 
 		if (!articleEdit.isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
+			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
 //			col.setToolTipText("Offer");
 		}
 
 		if (!articleEdit.isInInvoice()) {
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
+			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 //			col.setToolTipText("Invoice");			
 		}
 
 		if (!articleEdit.isInDeliveryNote()) {
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
+			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
 //			col.setToolTipText("DeliveryNote");
 		}
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		col = new TableColumn(table, SWT.RIGHT);
-		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ArticleTable.articlePriceTableColumn.text"));		 //$NON-NLS-1$
+		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.articlePriceTableColumn.text"));		 //$NON-NLS-1$
 
 		if (articleEdit.isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
 			table.setLayout(

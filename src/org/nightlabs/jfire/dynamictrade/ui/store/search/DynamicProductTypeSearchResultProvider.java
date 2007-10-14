@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.store.search;
+package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.search.ISearchResultProviderFactory;

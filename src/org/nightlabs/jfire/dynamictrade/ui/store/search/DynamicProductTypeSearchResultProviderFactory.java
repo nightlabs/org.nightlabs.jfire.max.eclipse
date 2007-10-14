@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.store.search;
+package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.nightlabs.base.ui.search.AbstractSearchResultProviderFactory;
 import org.nightlabs.base.ui.search.ISearchResultProvider;

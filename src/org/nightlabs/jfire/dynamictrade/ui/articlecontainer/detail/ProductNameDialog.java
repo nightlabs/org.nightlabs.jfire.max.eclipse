@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.dynamictrade.articlecontainer.detail;
+package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nText;
-import org.nightlabs.jfire.dynamictrade.resource.Messages;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 
 public class ProductNameDialog
 extends CenteredDialog
@@ -34,7 +34,7 @@ extends CenteredDialog
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
-		getShell().setText(Messages.getString("org.nightlabs.jfire.dynamictrade.articlecontainer.detail.ProductNameDialog.title")); //$NON-NLS-1$
+		getShell().setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.title")); //$NON-NLS-1$
 		Composite area = (Composite) super.createDialogArea(parent);
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
 		this.productNameEditor.setI18nText(productName, EditMode.BUFFERED);
