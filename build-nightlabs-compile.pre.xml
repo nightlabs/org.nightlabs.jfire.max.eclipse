@@ -1,0 +1,11 @@
+<project>
+	<target name="compile.pre">
+<!--		<mkdir dir="${rcp.deploy.allplatforms.dir}/plugins"/>
+	    <copy todir="${rcp.deploy.allplatforms.dir}/plugins" failonerror="false" verbose="true">
+	    	<fileset dir="${project.dir}/${lib.dir}" includes="com.essiembre.eclipse.i18n.resourcebundle_0.7.7/**/*"/>
+	    </copy>
+-->
+		<mkdir dir="${rcp.deploy.allplatforms.dir}/plugins"/>
+		<unzip dest="${rcp.deploy.allplatforms.dir}/plugins" src="${project.dir}/${lib.dir}/com.essiembre.eclipse.i18n.resourcebundle_0.7.7.zip"/>
+	</target> 
+</project>
