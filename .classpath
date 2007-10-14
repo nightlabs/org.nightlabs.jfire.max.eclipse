@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2">
+		<attributes>
+			<attribute value="file:/home/tobias/java/jdo_javadoc/apidocs/" name="javadoc_location"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/WORKSPACE/JFireTrade" kind="var" path="WORKSPACE/JFireTrade/dist/JFireTrade.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireVoucher/src" kind="var" path="WORKSPACE/JFireVoucher/dist/JFireVoucher.jar"/>
+	<classpathentry sourcepath="WORKSPACE/JFireBase/src" kind="var" path="WORKSPACE/JFireBase/dist/JFireBase.jar"/>
+	<classpathentry sourcepath="WORKSPACE/NightLabsJDO/src" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
+	<classpathentry sourcepath="/WORKSPACE/JFireBaseClientLib/src" kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
