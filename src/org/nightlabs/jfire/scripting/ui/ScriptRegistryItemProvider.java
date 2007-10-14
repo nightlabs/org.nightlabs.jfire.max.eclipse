@@ -55,7 +55,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 /**
  * Provides accesses to cached versions of
  * <code>ReportRegistryItem</code>s and holds a representation 
- * of the ReportRegistry structure. Register a {@link org.nightlabs.jfire.reporting.layout.ScriptRegistryListener}
+ * of the ReportRegistry structure. Register a {@link ScriptRegistryListener}
  * to be notified on changes to the structure. 
  *
  *  

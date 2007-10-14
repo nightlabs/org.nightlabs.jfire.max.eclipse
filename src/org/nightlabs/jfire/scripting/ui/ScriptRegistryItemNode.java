@@ -136,25 +136,16 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	
 	public static final ScriptRegistryItemNode STATUS_FETCHING_NODE = new ScriptRegistryItemNode() {
 
-		/* (non-Javadoc)
-		 * @see org.nightlabs.jfire.reporting.layout.ReportRegistryItemNode#getName()
-		 */
 		@Override
 		public String getName() {
 			return Messages.getString("org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode.fetchingCategoriesNode.name"); //$NON-NLS-1$
 		}
 
-		/* (non-Javadoc)
-		 * @see org.nightlabs.jfire.reporting.layout.ScriptRegistryItemNode#getRegistryItem()
-		 */
 		@Override
 		public ScriptRegistryItem getRegistryItem() {
 			return null;
 		}
 
-		/* (non-Javadoc)
-		 * @see org.nightlabs.jfire.reporting.layout.ScriptRegistryItemNode#hasChildren()
-		 */
 		@Override
 		public boolean hasChildren() {
 			return false;
