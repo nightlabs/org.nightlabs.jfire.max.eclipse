@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.14//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_14.dtd">
+
+<nightlybuild>
+
+  <project name="org.nightlabs.jfire.reporting.admin.parameter">
+	<plugin/>
+    <ant path="org.nightlabs.jfire.reporting.admin.parameter" file="build-nightlabs.xml" target="deploy"/>
+    <requires/>
+    <provides/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.parameter/dist/org.nightlabs.jfire.reporting.admin.parameter_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.reporting.admin.parameter/src"/>
+	<ignore-requires path="org.eclipse.jdt.ui"/>
+	<ignore-requires path="org.apache.derby.core"/>
+	<ignore-requires path="org.eclipse.jdt.core"/>
+	<ignore-requires path="org.eclipse.pde.ui"/>
+	<ignore-requires path="org.eclipse.jdt.launching"/>
+	<ignore-requires path="org.junit"/>
+	<ignore-requires path="system.bundle"/>
+  </project>
+
+</nightlybuild>
