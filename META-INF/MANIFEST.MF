@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Report Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui;singleton:=true
+Bundle-Version: 0.9.1
+Bundle-ClassPath: org.nightlabs.jfire.reporting.jar,
+ lib/acrobat.jar,
+ lib/MRJToolkitStubs.jar
+Bundle-Activator: org.nightlabs.jfire.reporting.ReportingPlugin
+Bundle-Vendor: NightLabs.com
+Bundle-Localization: plugin
+Export-Package: org.nightlabs.jfire.reporting,
+ org.nightlabs.jfire.reporting.config,
+ org.nightlabs.jfire.reporting.layout,
+ org.nightlabs.jfire.reporting.layout.action,
+ org.nightlabs.jfire.reporting.layout.action.print,
+ org.nightlabs.jfire.reporting.layout.action.view,
+ org.nightlabs.jfire.reporting.parameter,
+ org.nightlabs.jfire.reporting.viewer,
+ org.nightlabs.jfire.reporting.viewer.editor,
+ org.nightlabs.jfire.reporting.viewer.editor.action
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.base.ui,
+ org.nightlabs.jfire.base.ui,
+ org.nightlabs.jfire.base.j2ee,
+ org.eclipse.ui.browser,
+ org.eclipse.datatools.connectivity.oda;visibility:=reexport
+Eclipse-LazyStart: true
+Eclipse-BuddyPolicy: registered
+Eclipse-RegisterBuddy: org.nightlabs.base.ui, org.nightlabs.jfire.base.j2ee

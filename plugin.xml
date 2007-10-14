@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension-point id="renderedReportHandler" name="RenderedReportHandler Extension Point" schema="schema/renderedReportHandler.exsd"/>
+   <extension-point id="reportRegistryItemAction" name="ReportRegistryItemAction Extension Point" schema="schema/reportRegistryItemAction.exsd"/>
+   <extension-point id="reportUseCase" name="ReportUseCase Extensioin-Poin" schema="schema/reportUseCase.exsd"/>
+   <extension-point id="reportViewer" name="ReportViewer Extension-Point" schema="schema/reportViewer.exsd"/>
+   <extension-point id="valueProviderGUIFactory" name="ValueProvider GUI Factory Extension Point" schema="schema/valueProviderGUIFactory.exsd"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.nightlabs.jfire.reporting.config.ReportLayoutConfigPreferencePage"
+            id="org.nightlabs.jfire.reporting.config.ReportLayoutConfigPreferencePage"
+            name="%preferencePage.reportLayouts"
+            category="org.nightlabs.jfire.reporting.config.ReportingPreferencePage"/>
+      <page
+            class="org.nightlabs.jfire.reporting.config.ReportingPreferencePage"
+            id="org.nightlabs.jfire.reporting.config.ReportingPreferencePage"
+            name="%preferencePage.reporting"/>
+      <page
+            class="org.nightlabs.jfire.reporting.config.ReportViewPrintPreferencePage"
+            id="org.nightlabs.jfire.reporting.config.ReportViewPrintPreferencePage"
+            name="%preferencePage.reportViewPrint"
+            category="org.nightlabs.jfire.reporting.config.ReportingPreferencePage"/>
+      <page
+            class="org.nightlabs.jfire.reporting.config.DefaultReportViewerPreferencePage"
+            id="org.nightlabs.jfire.reporting.config.DefaultReportViewerPreferencePage"
+            name="%preferencePage.defaultReportViewer"
+            category="org.nightlabs.jfire.reporting.config.ReportingPreferencePage"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.nightlabs.jfire.reporting.viewer.editor.DefaultReportViewerEditor"
+            contributorClass="org.nightlabs.jfire.reporting.viewer.editor.action.ReportViewerEditorActionBarContributor"
+            default="false"
+            icon="icons/layout/ReportRegistryItemTree-layout.16x16.png"
+            id="org.nightlabs.jfire.reporting.viewer.editor.DefaultReportViewerEditor"
+            name="ReportViewer"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.renderedReportHandler">
+      <renderedReportHandler
+            class="org.nightlabs.jfire.reporting.viewer.RenderedReportHandlerHTML"
+            format="html"/>
+      <renderedReportHandler
+            class="org.nightlabs.jfire.reporting.viewer.RenderedReportHandlerPDF"
+            format="pdf"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.nightlabs.jfire.reporting.ReportingPerspective"
+            icon="icons/ReportingPerspective.16x16.png"
+            id="org.nightlabs.jfire.reporting.ReportingPerspective"
+            name="%ReportingPerspective.name"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.nightlabs.jfire.reporting.viewCategory"
+            name="%viewCategory.reporting.name"/>
+      <view
+            category="org.nightlabs.jfire.reporting.viewCategory"
+            class="org.nightlabs.jfire.reporting.layout.ReportLayoutView"
+            icon="icons/layout/ReportLayoutView.16x16.png"
+            id="org.nightlabs.jfire.reporting.layout.ReportLayoutView"
+            name="Report Layouts"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.reportRegistryItemAction">
+      <separator name="reporting"/>
+      <reportRegistryItemAction
+            class="org.nightlabs.jfire.reporting.layout.action.print.PrintReportLayoutAction"
+            contextmenuPath="reporting"
+            icon="icons/layout/action/print/PrintReportLayoutAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.layout.action.print.PrintReportLayoutAction"
+            name="%reportRegistryItemAction.printReportLayout.name"
+            toolbarPath="reporting"
+            tooltip="%reportRegistryItemAction.printReportLayout.tooltip"/>
+      <reportRegistryItemAction
+            class="org.nightlabs.jfire.reporting.layout.action.view.ViewReportLayoutAction"
+            contextmenuPath="reporting"
+            icon="icons/layout/action/view/ViewReportLayoutAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.layout.action.view.ViewReportLayoutAction"
+            name="%reportRegistryItemAction.viewReportLayout.name"
+            toolbarPath="reporting"
+            tooltip="%reportRegistryItemAction.viewReportLayout.tooltip"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.reportViewer">
+      <reportViewerFactory
+            class="org.nightlabs.jfire.reporting.viewer.editor.DefaultReportViewer$Factory"
+            description="%reportViewer.default.description"
+            id="org.nightlabs.jfire.reporting.viewer.editor.DefaultReportViewer"
+            name="%reportViewer.default.name"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.reportUseCase">
+      <reportUseCase
+            description="%defaultReportUseCase.description"
+            id="org.nightlabs.jfire.reporting.defaultReportUseCase"
+            name="%defaultReportUseCase.name"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.reporting.valueProviderGUIFactory">
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUIBigDecimal$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUIDate$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUIDouble$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUIInteger$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUIString$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod$Factory"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.removeExtension">
+      <removeExtension
+            attributeName="class"
+            attributePattern="org.eclipse.birt.report.designer.ui.ReportRCPPerspective"
+            elementPath="perspective"
+            extensionPointID="org.eclipse.ui.perspectives"/>
+   </extension>
+   
+</plugin>
