@@ -82,7 +82,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,
  org.nightlabs.base.ui,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
- org.nightlabs.jfire.reporting;visibility:=reexport,
+ org.nightlabs.jfire.reporting.ui;visibility:=reexport,
  org.nightlabs.jfire.jbpm.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered

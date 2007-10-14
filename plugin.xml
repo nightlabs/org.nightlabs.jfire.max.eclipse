@@ -794,7 +794,7 @@ gibt's nimmer - oder?! Marco.
             tooltip="%articleEditAction.pay.tooltip"/>
    </extension>
    <extension
-         point="org.nightlabs.jfire.reporting.reportUseCase">
+         point="org.nightlabs.jfire.reporting.ui.reportUseCase">
       <reportUseCase
             description="%reportUseCase.invoice.description"
             id="org.nightlabs.jfire.trade.ui.reportUseCase.invoice"
@@ -817,7 +817,7 @@ gibt's nimmer - oder?! Marco.
             reportLayoutType="JFireReportingTrade-Reporting-Delivery"/>
    </extension>
    <extension
-         point="org.nightlabs.jfire.reporting.valueProviderGUIFactory">
+         point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
       <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.report.ValueProviderGUIFactoryLegalEntitySearch"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.invoice.report.ValueProviderGUIFactoryInvoiceByCustomer"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.offer.report.ValueProviderGUIFactoryOfferByCustomer"/>
