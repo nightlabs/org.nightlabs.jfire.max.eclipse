@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.13//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_13.dtd">
+
+<nightlybuild>
+  <project name="org.nightlabs.jfire.dynamictrade">
+	<plugin/>
+    <ant path="org.nightlabs.jfire.dynamictrade" file="build-nightlabs.xml" target="deploy"/>
+    <requires/>
+    <provides/>
+    <publishes description="..." location="org.nightlabs.jfire.dynamictrade/dist/org.nightlabs.jfire.dynamictrade_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.dynamictrade/src"/>
+  </project>
+</nightlybuild>
