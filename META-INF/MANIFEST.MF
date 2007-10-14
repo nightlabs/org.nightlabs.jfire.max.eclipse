@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DynamicTrade Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.dynamictrade.admin.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.dynamictrade.admin.jar
-Bundle-Activator: org.nightlabs.jfire.dynamictrade.admin.DynamicTradeAdminPlugin
+Bundle-ClassPath: org.nightlabs.jfire.dynamictrade.admin.ui.jar
+Bundle-Activator: org.nightlabs.jfire.dynamictrade.admin.ui.DynamicTradeAdminPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,11 +12,11 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.trade.admin.ui;visibility:=reexport,
  org.nightlabs.jfire.dynamictrade.ui;visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.dynamictrade.admin,
- org.nightlabs.jfire.dynamictrade.admin.createproducttype,
- org.nightlabs.jfire.dynamictrade.admin.editor,
- org.nightlabs.jfire.dynamictrade.admin.overview,
- org.nightlabs.jfire.dynamictrade.admin.priceconfig,
- org.nightlabs.jfire.dynamictrade.admin.resource,
- org.nightlabs.jfire.dynamictrade.admin.store.search,
- org.nightlabs.jfire.dynamictrade.admin.tree
+Export-Package: org.nightlabs.jfire.dynamictrade.admin.ui,
+ org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype,
+ org.nightlabs.jfire.dynamictrade.admin.ui.editor,
+ org.nightlabs.jfire.dynamictrade.admin.ui.overview,
+ org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig,
+ org.nightlabs.jfire.dynamictrade.admin.ui.resource,
+ org.nightlabs.jfire.dynamictrade.admin.ui.store.search,
+ org.nightlabs.jfire.dynamictrade.admin.ui.tree
