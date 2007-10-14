@@ -226,7 +226,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 					}
 				}
 
-				addArticles(articles);
+				addArticles(articles, true);
 
 				if (logger.isDebugEnabled())
 					logger.debug("JDOLifecycleAdapterJob.notify: end"); //$NON-NLS-1$
@@ -234,17 +234,36 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		}
 	};
 
+	/**
+	 * This is a convenience method calling {@link #addArticles(Collection, boolean)} with <code>filterExisting = true</code>.
+	 * @param articles The articles to be added.
+	 * @return All those ArticleCarriers that have been newly created for the given articles - i.e. Articles that have been existing before
+	 *		(due to double calls because of double notifications) will be ignored.
+	 */
+	public Collection<ArticleCarrier> addArticles(Collection<Article> articles)
+	{
+		return addArticles(articles, true);
+	}
+
 	@Override
-	public synchronized Collection<ArticleCarrier> addArticles(Collection<Article> articles)
+	public synchronized Collection<ArticleCarrier> addArticles(Collection<Article> articles, boolean filterExisting)
 	{
 		if (logger.isDebugEnabled())
 			logger.debug("JDOLifecycleAdapterJob.addArticles: adding " + articles.size() + " articles."); //$NON-NLS-1$ //$NON-NLS-2$
 
-		Collection<ArticleCarrier> articleCarriers = super.addArticles(articles);
+		Collection<ArticleCarrier> articleCarriers = super.addArticles(articles, filterExisting);
 
 		// if we have no listeners, we return
 		if (articleCreateListeners == null || articleCreateListeners.isEmpty())
 			return articleCarriers;
+
+		if (articleCarriers.size() != articles.size()) { // if they were filtered and some articles passed that already existed, this might happen
+			Collection<Article> nArticles = new ArrayList<Article>(articleCarriers.size());
+			for (ArticleCarrier articleCarrier : articleCarriers) {
+				nArticles.add(articleCarrier.getArticle());
+			}
+			articles = nArticles;
+		}
 
 		final ArticleCreateEvent articleCreateEvent = new ArticleCreateEvent(ClientArticleSegmentGroups.this, articles, articleCarriers);
 
