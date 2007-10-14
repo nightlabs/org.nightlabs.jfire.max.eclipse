@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.voucher.editor2d">
+  <project name="org.nightlabs.jfire.voucher.editor2d.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.voucher.editor2d" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.voucher.editor2d.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.voucher.editor2d/dist/org.nightlabs.jfire.voucher.editor2d_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.voucher.editor2d/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.voucher.editor2d.ui/dist/org.nightlabs.jfire.voucher.editor2d.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.voucher.editor2d.ui/src"/>
   </project>
 
 </nightlybuild>

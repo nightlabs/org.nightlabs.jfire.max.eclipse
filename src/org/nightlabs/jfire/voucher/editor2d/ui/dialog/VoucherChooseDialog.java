@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.dialog;
+package org.nightlabs.jfire.voucher.editor2d.ui.dialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -18,9 +18,9 @@ import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTreeNode;
-import org.nightlabs.jfire.voucher.editor2d.VoucherDetailComposite;
-import org.nightlabs.jfire.voucher.editor2d.resource.Messages;
-import org.nightlabs.jfire.voucher.editor2d.scripting.VoucherScriptResultProvider;
+import org.nightlabs.jfire.voucher.editor2d.ui.VoucherDetailComposite;
+import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 import org.nightlabs.jfire.voucher.scripting.PreviewParameterValuesResult;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
@@ -42,7 +42,7 @@ extends CenteredDialog
 	protected void configureShell(Shell newShell) 
 	{
 		super.configureShell(newShell);
-		newShell.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.dialog.VoucherChooseDialog.title")); //$NON-NLS-1$
+		newShell.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.title")); //$NON-NLS-1$
 		newShell.setSize(600, 400);
 	}
 
@@ -61,7 +61,7 @@ extends CenteredDialog
 		
 		// Voucher
 		Group voucherGroup = new Group(sash, SWT.NONE);
-		voucherGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.dialog.VoucherChooseDialog.group.voucher")); //$NON-NLS-1$
+		voucherGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.group.voucher")); //$NON-NLS-1$
 		voucherGroup.setLayout(new GridLayout());
 		voucherGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		voucherTypeTree = new VoucherTypeTree(voucherGroup, 
@@ -71,7 +71,7 @@ extends CenteredDialog
 		
 		// Voucher Details
 		detailGroup = new Group(sash, SWT.NONE);
-		detailGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.dialog.VoucherChooseDialog.group.details")); //$NON-NLS-1$
+		detailGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.group.details")); //$NON-NLS-1$
 		detailGroup.setLayout(new GridLayout());
 		detailGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
 

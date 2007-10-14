@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.dialog;
+package org.nightlabs.jfire.voucher.editor2d.ui.dialog;
 
 import java.util.Map;
 
@@ -10,8 +10,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptRegistryItemTreeC
 import org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.TextScriptCreateRequest;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.jfire.voucher.editor2d.scripting.ScriptRegistryItemTreeComposite;
-import org.nightlabs.jfire.voucher.editor2d.scripting.VoucherScriptResultProvider;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.ScriptRegistryItemTreeComposite;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

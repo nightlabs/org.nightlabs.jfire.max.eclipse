@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d;
+package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.nightlabs.editor2d.ui.EditorPerspective;
 

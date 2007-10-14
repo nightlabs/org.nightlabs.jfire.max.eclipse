@@ -1,10 +1,10 @@
-package org.nightlabs.jfire.voucher.editor2d.tool;
+package org.nightlabs.jfire.voucher.editor2d.ui.tool;
 
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.editor2d.ui.model.IModelCreationFactory;
 import org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog;
 import org.nightlabs.jfire.scripting.editor2d.ui.tool.BarcodeTool;
-import org.nightlabs.jfire.voucher.editor2d.dialog.CreateVoucherBarcodeDialog;
+import org.nightlabs.jfire.voucher.editor2d.ui.dialog.CreateVoucherBarcodeDialog;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

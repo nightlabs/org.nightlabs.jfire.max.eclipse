@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.tool;
+package org.nightlabs.jfire.voucher.editor2d.ui.tool;
 
 import org.eclipse.gef.Tool;
 import org.eclipse.jface.resource.ImageDescriptor;

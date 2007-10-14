@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.scripting;
+package org.nightlabs.jfire.voucher.editor2d.ui.scripting;
 
 import java.util.HashSet;
 import java.util.Set;

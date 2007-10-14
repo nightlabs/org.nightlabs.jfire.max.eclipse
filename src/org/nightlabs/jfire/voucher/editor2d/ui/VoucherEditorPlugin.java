@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d;
+package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -12,7 +12,7 @@ import org.osgi.framework.BundleContext;
 public class VoucherEditorPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.voucher.editor2d"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.voucher.editor2d.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static VoucherEditorPlugin plugin;

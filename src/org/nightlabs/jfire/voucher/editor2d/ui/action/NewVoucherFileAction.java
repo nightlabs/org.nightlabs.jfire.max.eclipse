@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.action;
+package org.nightlabs.jfire.voucher.editor2d.ui.action;
 
 import javax.security.auth.login.LoginException;
 
@@ -6,8 +6,8 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.action.NewFileAction;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.voucher.editor2d.dialog.VoucherChooseDialog;
-import org.nightlabs.jfire.voucher.editor2d.scripting.VoucherScriptResultProvider;
+import org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

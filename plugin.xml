@@ -4,33 +4,33 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.nightlabs.jfire.voucher.editor2d.VoucherEditor"
+            class="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditor"
             contributorClass="org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditorActionbarContributor"
             default="true"
             extensions="v2d"
             filenames="v2d"
             icon="icons/VoucherEditor.16x16.png"
-            id="org.nightlabs.jfire.voucher.editor2d.VoucherEditor"
+            id="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditor"
             name="%editor.name"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.nightlabs.jfire.voucher.editor2d.VoucherEditorPerspective"
+            class="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPerspective"
             icon="icons/VoucherEditor.16x16.png"
-            id="org.nightlabs.jfire.voucher.editor2d.VoucherEditorPerspective"
+            id="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPerspective"
             name="%perspective.name"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.editor2perspective">
       <registry
-            editorID="org.nightlabs.jfire.voucher.editor2d.VoucherEditor"
-            perspectiveID="org.nightlabs.jfire.voucher.editor2d.VoucherEditorPerspective"/>
+            editorID="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditor"
+            perspectiveID="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPerspective"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.newfileaction">
       <action
-            class="org.nightlabs.jfire.voucher.editor2d.action.NewVoucherFileAction"
+            class="org.nightlabs.jfire.voucher.editor2d.ui.action.NewVoucherFileAction"
             fileExtension="v2d"
             title="%action.new.text"
             tooltip="%action.new.tooltip"/>
@@ -38,7 +38,7 @@
    <extension
          point="org.nightlabs.base.ui.iofilter">
       <ioFilter
-            class="org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter"
+            class="org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter"
             description="%voucherIOFilter.description"
             name="%voucherIOFilter.name">
          <fileExtension
@@ -49,8 +49,8 @@
    <extension
          point="org.nightlabs.editor2d.ui.documentProperties">
       <documentProperties
-            editorClass="org.nightlabs.jfire.voucher.editor2d.VoucherEditor"
-            editorID="org.nightlabs.jfire.voucher.editor2d.VoucherEditor"
+            editorClass="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditor"
+            editorID="org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditor"
             orientation="vertical"
             predefinedPageID="A4"
             resolution="300"

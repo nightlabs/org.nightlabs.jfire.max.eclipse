@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.scripting;
+package org.nightlabs.jfire.voucher.editor2d.ui.scripting;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.AbstractScriptResultProvider;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.voucher.editor2d.VoucherEditorPlugin;
+import org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlugin;
 import org.nightlabs.jfire.voucher.scripting.PreviewParameterSet;
 import org.nightlabs.jfire.voucher.scripting.PreviewParameterValuesResult;
 import org.nightlabs.jfire.voucher.store.VoucherType;

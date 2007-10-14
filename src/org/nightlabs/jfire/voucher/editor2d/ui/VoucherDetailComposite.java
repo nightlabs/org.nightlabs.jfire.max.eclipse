@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d;
+package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.voucher.editor2d.resource.Messages;
+import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.scripting.PreviewParameterValuesResult;
 
 /**
@@ -67,9 +67,9 @@ extends XComposite
 		Composite comp = new XComposite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, false));
 		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		Label customerGroupLabel = toolkit.createLabel(comp, Messages.getString("org.nightlabs.jfire.voucher.editor2d.VoucherDetailComposite.label.currency")); //$NON-NLS-1$
+//		Label customerGroupLabel = toolkit.createLabel(comp, Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherDetailComposite.label.currency")); //$NON-NLS-1$
 		Label customerGroupLabel = new Label(comp, SWT.NONE);
-		customerGroupLabel.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.VoucherDetailComposite.label.currency")); //$NON-NLS-1$
+		customerGroupLabel.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherDetailComposite.label.currency")); //$NON-NLS-1$
 		GridData labelData = new GridData();
 		labelData.widthHint = 100; 
 		customerGroupLabel.setLayoutData(labelData);

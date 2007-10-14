@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d.dialog;
+package org.nightlabs.jfire.voucher.editor2d.ui.dialog;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.BarcodeCreateRequest;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.jfire.voucher.editor2d.scripting.VoucherScriptResultProvider;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 import org.nightlabs.jfire.voucher.scripting.VoucherScriptingConstants;
 
 /**

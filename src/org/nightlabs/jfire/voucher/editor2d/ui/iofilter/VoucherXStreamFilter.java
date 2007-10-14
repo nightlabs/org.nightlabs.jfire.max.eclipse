@@ -1,7 +1,7 @@
-package org.nightlabs.jfire.voucher.editor2d.iofilter;
+package org.nightlabs.jfire.voucher.editor2d.ui.iofilter;
 
 import org.nightlabs.editor2d.iofilter.XStreamFilter;
-import org.nightlabs.jfire.voucher.editor2d.resource.Messages;
+import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -14,7 +14,7 @@ extends XStreamFilter
 	
 	@Override
 	protected String initDescription() {
-		return Messages.getString("org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter.description"); //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter.description"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -24,6 +24,6 @@ extends XStreamFilter
 
 	@Override
 	protected String initName() {
-		return Messages.getString("org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter.name"); //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter.name"); //$NON-NLS-1$
 	}
 }

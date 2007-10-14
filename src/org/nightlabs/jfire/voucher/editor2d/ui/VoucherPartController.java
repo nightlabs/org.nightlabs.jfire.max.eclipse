@@ -1,11 +1,11 @@
-package org.nightlabs.jfire.voucher.editor2d;
+package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.part.PartController;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.IScriptResultChangedListener;
 import org.nightlabs.jfire.scripting.editor2d.ui.script.ScriptResultsChangedEvent;
-import org.nightlabs.jfire.voucher.editor2d.scripting.VoucherScriptResultProvider;
+import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProvider;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

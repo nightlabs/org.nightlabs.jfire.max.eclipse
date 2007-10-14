@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.editor2d;
+package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jfire.voucher.editor2d.dialog.VoucherChooseDialog;
-import org.nightlabs.jfire.voucher.editor2d.resource.Messages;
+import org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog;
+import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -36,11 +36,11 @@ extends XComposite
 		setLayoutData(new GridData(GridData.FILL_BOTH));;
 		
 		Label label = new Label(this, SWT.WRAP);
-		label.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.NeedVoucherComposite.label.needVoucher")); //$NON-NLS-1$
+		label.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.NeedVoucherComposite.label.needVoucher")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Button needVoucherButton = new Button(this, SWT.PUSH);
-		needVoucherButton.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.NeedVoucherComposite.button.selectVoucher")); //$NON-NLS-1$
+		needVoucherButton.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.NeedVoucherComposite.button.selectVoucher")); //$NON-NLS-1$
 		needVoucherButton.addSelectionListener(new SelectionListener() 
 		{
 			public void widgetSelected(SelectionEvent e) 
