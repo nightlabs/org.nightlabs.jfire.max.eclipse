@@ -4,32 +4,32 @@
    <extension
          point="org.nightlabs.base.ui.entityEditor">
       <pageFactory
-            class="org.nightlabs.jfire.voucher.admin.editor.VoucherTypeDetailPage$Factory"
-            editorID="org.nightlabs.jfire.voucher.admin.editor.VoucherTypeEditor"
+            class="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage$Factory"
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
             indexHint="1"/>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.nightlabs.jfire.voucher.admin.editor.VoucherTypeEditor"
+            class="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
             default="false"
             icon="icons/editor/VoucherTypeEditor.16x16.png"
-            id="org.nightlabs.jfire.voucher.admin.editor.VoucherTypeEditor"
+            id="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
             name="Voucher Type Editor"/>
    </extension>
    <extension
          point="org.nightlabs.jfire.trade.admin.ui.overview">
       <category
-            class="org.nightlabs.jfire.voucher.admin.overview.VoucherTypeCategoryFactory"
+            class="org.nightlabs.jfire.voucher.admin.ui.overview.VoucherTypeCategoryFactory"
             icon="icons/overview/VoucherTypeCategoryFactory.16x16.png"
             index="700"
-            name="%org.nightlabs.jfire.voucher.admin.overview.VoucherTypeCategoryFactory.name">
+            name="%org.nightlabs.jfire.voucher.admin.ui.overview.VoucherTypeCategoryFactory.name">
       </category>
    </extension>
    <extension
          point="org.nightlabs.base.ui.searchResultProvider">
       <searchResultActionHandler
-            class="org.nightlabs.jfire.voucher.admin.store.search.VoucherTypeSearchAdminActionHandler"
+            class="org.nightlabs.jfire.voucher.admin.ui.store.search.VoucherTypeSearchAdminActionHandler"
             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
             searchResultProviderFactoryID="org.nightlabs.jfire.voucher.ui.store.search.VoucherTypeSearchResultProviderFactory">
       </searchResultActionHandler>

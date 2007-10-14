@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Voucher Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.voucher.admin.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.voucher.admin.jar
-Bundle-Activator: org.nightlabs.jfire.voucher.admin.VoucherAdminPlugin
+Bundle-ClassPath: org.nightlabs.jfire.voucher.admin.ui.jar
+Bundle-Activator: org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,11 +12,11 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.voucher.ui;visibility:=reexport,
  org.nightlabs.jfire.trade.admin.ui;visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.voucher.admin,
- org.nightlabs.jfire.voucher.admin.createvouchertype,
- org.nightlabs.jfire.voucher.admin.editor,
- org.nightlabs.jfire.voucher.admin.localaccountantdelegate,
- org.nightlabs.jfire.voucher.admin.overview,
- org.nightlabs.jfire.voucher.admin.priceconfig,
- org.nightlabs.jfire.voucher.admin.store.search,
- org.nightlabs.jfire.voucher.admin.tree
+Export-Package: org.nightlabs.jfire.voucher.admin.ui,
+ org.nightlabs.jfire.voucher.admin.ui.createvouchertype,
+ org.nightlabs.jfire.voucher.admin.ui.editor,
+ org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate,
+ org.nightlabs.jfire.voucher.admin.ui.overview,
+ org.nightlabs.jfire.voucher.admin.ui.priceconfig,
+ org.nightlabs.jfire.voucher.admin.ui.store.search,
+ org.nightlabs.jfire.voucher.admin.ui.tree
