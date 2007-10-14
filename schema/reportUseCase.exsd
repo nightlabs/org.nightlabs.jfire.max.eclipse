@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.reporting">
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.reporting" id="reportUseCase" name="ReportUseCase Extensioin-Poin"/>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="reportUseCase" name="ReportUseCase Extensioin-Poin"/>
       </appInfo>
       <documentation>
          Extension-Point for the registration of &lt;code&gt;ReportUseCase&lt;code&gt;s. These are used to store separate configurations (output-format, viewer-type) for the RCP reporting client.

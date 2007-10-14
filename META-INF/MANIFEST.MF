@@ -3,22 +3,22 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Report Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.reporting.jar,
+Bundle-ClassPath: org.nightlabs.jfire.reporting.ui.jar,
  lib/acrobat.jar,
  lib/MRJToolkitStubs.jar
-Bundle-Activator: org.nightlabs.jfire.reporting.ReportingPlugin
+Bundle-Activator: org.nightlabs.jfire.reporting.ui.ReportingPlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
-Export-Package: org.nightlabs.jfire.reporting,
- org.nightlabs.jfire.reporting.config,
- org.nightlabs.jfire.reporting.layout,
- org.nightlabs.jfire.reporting.layout.action,
- org.nightlabs.jfire.reporting.layout.action.print,
- org.nightlabs.jfire.reporting.layout.action.view,
- org.nightlabs.jfire.reporting.parameter,
- org.nightlabs.jfire.reporting.viewer,
- org.nightlabs.jfire.reporting.viewer.editor,
- org.nightlabs.jfire.reporting.viewer.editor.action
+Export-Package: org.nightlabs.jfire.reporting.ui,
+ org.nightlabs.jfire.reporting.ui.config,
+ org.nightlabs.jfire.reporting.ui.layout,
+ org.nightlabs.jfire.reporting.ui.layout.action,
+ org.nightlabs.jfire.reporting.ui.layout.action.print,
+ org.nightlabs.jfire.reporting.ui.layout.action.view,
+ org.nightlabs.jfire.reporting.ui.parameter,
+ org.nightlabs.jfire.reporting.ui.viewer,
+ org.nightlabs.jfire.reporting.ui.viewer.editor,
+ org.nightlabs.jfire.reporting.ui.viewer.editor.action
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.base.ui,

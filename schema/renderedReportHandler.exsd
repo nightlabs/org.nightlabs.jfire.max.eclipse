@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.reporting">
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.reporting" id="renderedReportHandler" name="RenderedReportHandler Extension Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="renderedReportHandler" name="RenderedReportHandler Extension Point"/>
       </appInfo>
       <documentation>
          Extension point for hanlding rendered reports coming from the server. &lt;br/&gt;
@@ -66,10 +66,10 @@ to exist on the client that can manage the specialized content.
             <annotation>
                <documentation>
                   The fully qualified class name of an implementation of 
-&lt;code&gt;org.nightlabs.jfire.reporting.viewer.RenderedReportHandler&lt;/code&gt;
+&lt;code&gt;org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler&lt;/code&gt;
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.viewer.RenderedReportHandler"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler"/>
                </appInfo>
             </annotation>
          </attribute>

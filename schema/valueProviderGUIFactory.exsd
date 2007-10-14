@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.reporting">
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.reporting" id="valueProviderGUIFactory" name="ValueProvider GUI Factory Extension Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="valueProviderGUIFactory" name="ValueProvider GUI Factory Extension Point"/>
       </appInfo>
       <documentation>
          This extension point is used to register factories for the GUI that helps building report parameters.
@@ -55,7 +55,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.parameter.IValueProviderGUIFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory"/>
                </appInfo>
             </annotation>
          </attribute>

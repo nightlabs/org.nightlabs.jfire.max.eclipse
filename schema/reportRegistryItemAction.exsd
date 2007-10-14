@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.reporting">
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.reporting" id="reportRegistryItemAction" name="ReportRegistryItemAction Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="reportRegistryItemAction" name="ReportRegistryItemAction Extension-Point"/>
       </appInfo>
       <documentation>
          Extension Point for actions on ReportRegistryItems.

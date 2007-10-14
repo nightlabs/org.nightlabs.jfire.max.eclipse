@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.reporting">
+<schema targetNamespace="org.nightlabs.jfire.reporting.ui">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nightlabs.jfire.reporting" id="reportViewer" name="ReportViewer Extension-Point"/>
+         <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="reportViewer" name="ReportViewer Extension-Point"/>
       </appInfo>
       <documentation>
          Extension Point to register Viewers for JFire Reports. ReportViewer are passed a ReportLayoutID, parameters and the output-format and are responsible for the whole proccess of fetching the rendered report, and display it to the user. The registration accepts ReportViewerFactory that can create new ReportViewer.
@@ -54,10 +54,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The fully qualifed name of a java class implementing &lt;code&gt;org.nightlabs.jfire.reporting.viewer.ReportViewerFactory&lt;/code&gt;.
+                  The fully qualifed name of a java class implementing &lt;code&gt;org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory&lt;/code&gt;.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.viewer.ReportViewerFactory"/>
+                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory"/>
                </appInfo>
             </annotation>
          </attribute>

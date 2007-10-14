@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.reporting">
+  <project name="org.nightlabs.jfire.reporting.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.reporting" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.reporting.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting/dist/org.nightlabs.jfire.reporting_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.reporting/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.ui/dist/org.nightlabs.jfire.reporting.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.reporting.ui/src"/>
   </project>
 
 </nightlybuild>
