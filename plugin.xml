@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleEditFactory">
+      <articleEditFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleEditFactory"
+            name="Default - Order"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="Order"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleEditFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleEditFactory"
+            name="Default - Offer"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="Offer"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleEditFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleEditFactory"
+            name="Default - Invoice"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="Invoice"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleEditFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleEditFactory"
+            name="Default - DeliveryNote"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="DeliveryNote"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleAdderFactory">
+      <articleAdderFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleAdderFactory"
+            name="Default - Order"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="Order"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleAdderFactory
+            class="org.nightlabs.jfire.voucher.articlecontainer.detail.ArticleAdderFactory"
+            name="Default - Offer"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            segmentContext="Offer"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.productTypeQuickListFilterFactory">
+      <productTypeQuickListFilterFactory
+            class="org.nightlabs.jfire.voucher.quicklist.VoucherTypeQuickListFilterFactory"
+            id="org.nightlabs.jfire.voucher.productTypeQuickListFilterFactory1"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
+      <clientPaymentProcessorFactory
+            class="org.nightlabs.jfire.voucher.transfer.pay.ClientPaymentProcessorFactoryVoucher"
+            id="org.nightlabs.jfire.voucher.transfer.pay.ClientPaymentProcessorFactoryVoucher"
+            name="%org.nightlabs.jfire.voucher.transfer.pay.ClientPaymentProcessorFactoryVoucher.name">
+         <modeOfPayment
+               modeOfPaymentID="voucher"
+               name="Voucher"
+               organisationID="devil.NightLabs.org"/>
+      </clientPaymentProcessorFactory>
+   </extension>
+   <extension
+         point="org.nightlabs.keyreader.ui.keyReaderUseCase">
+      <keyReaderUseCase
+            description="Redeem Vouchers"
+            keyReaderID="org.nightlabs.jfire.voucher"
+            name="Voucher"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.searchResultProvider">
+      <searchResultProviderFactory
+            class="org.nightlabs.jfire.voucher.store.search.VoucherTypeSearchResultProviderFactory"
+            decorator="icons/store/search/VoucherTypeSearchResultProviderFactory.10x10.png"
+            icon="icons/store/search/VoucherTypeSearchResultProviderFactory.16x16.png"
+            id="org.nightlabs.jfire.voucher.store.search.VoucherTypeSearchResultProviderFactory"
+            name="%org.nightlabs.jfire.voucher.store.search.VoucherTypeSearchResultProviderFactory.name"
+            priority="400">
+      </searchResultProviderFactory>
+      <searchResultActionHandler
+            class="org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchSelectionActionHandler"
+            searchResultProviderFactoryID="org.nightlabs.jfire.voucher.store.search.VoucherTypeSearchResultProviderFactory">
+      </searchResultActionHandler>
+   </extension>
+
+</plugin>
