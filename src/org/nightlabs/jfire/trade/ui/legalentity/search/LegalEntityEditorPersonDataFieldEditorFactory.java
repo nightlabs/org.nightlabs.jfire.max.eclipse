@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.legalentity.search;
 
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory;
-import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorFactory;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 

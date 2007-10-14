@@ -5,11 +5,11 @@ package org.nightlabs.jfire.trade.ui.overview.order.report;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.nightlabs.jfire.reporting.parameter.IValueProviderGUI;
-import org.nightlabs.jfire.reporting.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
+import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
+import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 
 /**
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de

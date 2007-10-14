@@ -31,9 +31,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.nightlabs.jfire.reporting.config.ReportConfigUtil;
-import org.nightlabs.jfire.reporting.layout.action.view.AbstractViewReportLayoutAction;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
+import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 
 /**

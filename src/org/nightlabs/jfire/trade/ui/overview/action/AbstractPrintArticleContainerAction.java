@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jfire.reporting.config.ReportConfigUtil;
-import org.nightlabs.jfire.reporting.layout.action.print.AbstractPrintReportLayoutAction;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
+import org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 

@@ -27,8 +27,8 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.query.InvoiceQuery;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.reporting.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
+import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
@@ -60,7 +60,7 @@ extends AbstractValueProviderGUI
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
 	 */
 	public Control createGUI(Composite wrapper) {
 		invoiceListComposite = new InvoiceListComposite(wrapper, SWT.NONE);
@@ -73,7 +73,7 @@ extends AbstractValueProviderGUI
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#getOutputValue()
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public Object getOutputValue() {
 		if (invoiceListComposite.getSelectedElements().size() >= 1)
@@ -82,14 +82,14 @@ extends AbstractValueProviderGUI
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#isAcquisitionComplete()
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
 		return getOutputValue() != null;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
 	public void setInputParameterValue(String parameterID, final Object value) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.report.ValueProviderGUIInvoiceByCustomer.loadInvoicesJob.name")) { //$NON-NLS-1$

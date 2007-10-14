@@ -10,8 +10,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.jfire.reporting.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
+import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchComposite;
 
 /**
@@ -30,7 +30,7 @@ public class ValueProviderGUILegalEntitySearch extends AbstractValueProviderGUI 
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
 	 */
 	public Control createGUI(Composite wrapper) {
 		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, ""); //$NON-NLS-1$
@@ -43,21 +43,21 @@ public class ValueProviderGUILegalEntitySearch extends AbstractValueProviderGUI 
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#getOutputValue()
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public Object getOutputValue() {
 		return JDOHelper.getObjectId(searchComposite.getResultTable().getFirstSelectedElement());
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#isAcquisitionComplete()
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
 		return searchComposite.getResultTable().getFirstSelectedElement() != null;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
+	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
 	public void setInputParameterValue(String parameterID, Object value) {
 	}
