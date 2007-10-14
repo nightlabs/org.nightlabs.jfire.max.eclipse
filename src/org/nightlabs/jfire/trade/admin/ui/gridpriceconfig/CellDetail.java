@@ -57,7 +57,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.InsertCellReferenceAction;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jseditor.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de

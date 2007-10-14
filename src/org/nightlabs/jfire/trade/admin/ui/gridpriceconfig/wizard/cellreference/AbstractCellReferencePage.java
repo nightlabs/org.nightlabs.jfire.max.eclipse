@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -16,20 +15,17 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jseditor.editor.JSEditorComposite;
+import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
 
 public abstract class AbstractCellReferencePage 
-extends WizardHopPage{
-	private static final Logger logger = Logger.getLogger(AbstractCellReferencePage.class);
-
-//	private List scriptStringList = new ArrayList();
-	
+extends WizardHopPage
+{
 	private TabFolder tabFolder;
 	
 	private List<Composite> pageCompositeList;
 	
 	private SourceViewer sourceViewer;
-	protected PriceConfigComposite priceConfigComposite;
+	private PriceConfigComposite priceConfigComposite;
 	
 	private JSEditorComposite scriptPreviewComposite = null;
 	
@@ -43,8 +39,16 @@ extends WizardHopPage{
 	}
 	
 	protected abstract List<Composite> createDimensionTabItems(TabFolder tabFolder);
-	
-	
+
+	protected SourceViewer getSourceViewer()
+	{
+		return sourceViewer;
+	}
+	protected PriceConfigComposite getPriceConfigComposite()
+	{
+		return priceConfigComposite;
+	}
+
 	public List<Composite> getPageCompositeList() {
 		return pageCompositeList;
 	}
@@ -88,7 +92,7 @@ extends WizardHopPage{
 		return tabFolder;
 	}
 
-	public JSEditorComposite getSourcePreviewComposite(){
+	protected JSEditorComposite getSourcePreviewComposite(){
 		return scriptPreviewComposite;
 	}
 	

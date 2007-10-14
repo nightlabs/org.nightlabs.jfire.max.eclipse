@@ -9,19 +9,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jseditor.editor.JSEditorComposite;
 
 public abstract class AbstractCellReferenceComposite extends XComposite{
 	
 	private boolean enabledFlag = false;
 	private Button enabledButton = null;
 	
-	protected PriceConfigComposite priceConfigComposite = null;
+	private PriceConfigComposite priceConfigComposite = null;
 	
-	protected JSEditorComposite srcPreviewComposite = null;
+//	protected JSEditorComposite srcPreviewComposite = null;
 	
 	public AbstractCellReferenceComposite(Composite parent, int style) {
 		this(null, parent, style);
+	}
+
+	protected PriceConfigComposite getPriceConfigComposite()
+	{
+		return priceConfigComposite;
 	}
 	
 	public AbstractCellReferenceComposite(PriceConfigComposite priceConfigComposite, Composite parent, int style) {
