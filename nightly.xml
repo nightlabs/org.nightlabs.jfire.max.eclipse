@@ -3,14 +3,14 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.reporting.admin">
+  <project name="org.nightlabs.jfire.reporting.admin.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.reporting.admin" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.reporting.admin.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <requires path="org.w3c.dom.smil"/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting.admin/dist/org.nightlabs.jfire.reporting.admin_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.reporting.admin/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.ui/dist/org.nightlabs.jfire.reporting.admin.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.reporting.admin.ui/src"/>
 	<ignore-requires path="org.eclipse.jdt.ui"/>
 	<ignore-requires path="org.apache.derby.core"/>
 	<ignore-requires path="org.junit"/>

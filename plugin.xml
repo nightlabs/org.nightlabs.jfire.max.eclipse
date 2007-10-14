@@ -5,8 +5,8 @@
          point="org.eclipse.datatools.connectivity.oda.dataSource">
       <dataSource
             defaultDisplayName="JFire JDOQL Driver"
-            driverClass="org.nightlabs.jfire.reporting.ui.oda.jdoql.client.ClientJDOQLDriver"
-            id="org.nightlabs.jfire.reporting.admin.oda.jdoql.JDOQLDriver"
+            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jdoql.client.ClientJDOQLDriver"
+            id="org.nightlabs.jfire.reporting.admin.ui.oda.jdoql.JDOQLDriver"
             odaVersion="3.0"
             setThreadContextClassLoader="false">
       </dataSource>
@@ -51,7 +51,7 @@
          point="org.eclipse.datatools.connectivity.oda.dataSource">
       <dataSource
             defaultDisplayName="JFire JDO JavaScript Driver"
-            driverClass="org.nightlabs.jfire.reporting.admin.oda.jdojs.client.ClientJDOJSDriver"
+            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.client.ClientJDOJSDriver"
             id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDriver"
             odaVersion="3.0"
             setThreadContextClassLoader="false">
@@ -106,7 +106,7 @@
          point="org.eclipse.datatools.connectivity.oda.dataSource">
       <dataSource
             defaultDisplayName="JFire Server Side Script Driver"
-            driverClass="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ClientJFSDriver"
+            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ClientJFSDriver"
             id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDriver"
             odaVersion="3.0"
             setThreadContextClassLoader="false">
@@ -158,34 +158,34 @@
    <extension
          point="org.eclipse.birt.report.designer.ui.odadatasource">
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jdoql.JDOQLDriver">
-         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.oda.JDODriverConnectionWizard"/>
+         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDriver">
-         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.oda.JDODriverConnectionWizard"/>
+         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
       <odaDataSetUI id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDataSet">
          <dataSetEditorPage
-               class="org.nightlabs.jfire.reporting.admin.oda.jdojs.ui.PrepareScriptEditorPage"
+               class="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.PrepareScriptEditorPage"
                displayName="prepare script"
-               name="org.nightlabs.jfire.reporting.admin.oda.jdojs.ui.PrepareScriptEditorPage"
+               name="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.PrepareScriptEditorPage"
                path="/"/>
          <dataSetEditorPage
-               class="org.nightlabs.jfire.reporting.admin.oda.jdojs.ui.FetchScriptEditorPage"
+               class="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.FetchScriptEditorPage"
                displayName="fetch script"
-               name="org.nightlabs.jfire.reporting.admin.oda.jdojs.ui.FetchScriptEditorPage"
+               name="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.FetchScriptEditorPage"
                path="/"/>
       </odaDataSetUI>
    </extension>
 <!--   <extension
          point="org.eclipse.birt.report.designer.ui.odadatasource">
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDriver">
-         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.oda.JDODriverConnectionWizard"/>
+         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
       <odaDataSetUI id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDataSet">
          <dataSetEditorPage
-               class="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage2"
+               class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage2"
                displayName="JFire Script"
-               name="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
+               name="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
                path="/"/> 
       </odaDataSetUI>
    </extension>  -->
@@ -210,13 +210,13 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="org.nightlabs.jfire.reporting.admin.viewCategory"
-            class="org.nightlabs.jfire.reporting.admin.layout.ReportLayoutView"
+            category="org.nightlabs.jfire.reporting.admin.ui.viewCategory"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.ReportLayoutView"
             icon="icons/layout/ReportLayoutView.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.ReportLayoutView"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.ReportLayoutView"
             name="ReportLayouts"/>
       <category
-            id="org.nightlabs.jfire.reporting.admin.viewCategory"
+            id="org.nightlabs.jfire.reporting.admin.ui.viewCategory"
             name="%viewCategory.reporting.name"/>
    </extension>
    <extension
@@ -224,42 +224,42 @@
       <separator
             name="reporting.admin"/>
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.layout.action.delete.DeleteRegistryItemAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.DeleteRegistryItemAction"
             contextmenuPath="additions"
             icon="icons/layout/action/delete/DeleteRegistryItemAction.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.action.delete.DeleteRegistryItemAction"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.delete.DeleteRegistryItemAction"
             name="Delete RegistryItem"
             scope="reporting.admin"
             toolbarPath="reporting.admin"/>
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.layout.action.rename.RenameRegistryItemAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.rename.RenameRegistryItemAction"
             contextmenuPath="additions"
             icon="icons/layout/action/rename/RenameRegistryItemAction.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.action.rename.RenameRegistryItemAction"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.rename.RenameRegistryItemAction"
             name="Rename RegistryItem"
             scope="reporting.admin"
             toolbarPath="reporting.admin"/>
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.layout.action.add.AddReportLayoutAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutAction"
             contextmenuPath="reporting.admin"
             icon="icons/layout/action/add/AddReportLayoutAction.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.action.add.AddReportLayoutAction"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutAction"
             name="Add ReportLayout"
             scope="reporting.admin"
             toolbarPath="reporting.admin"/>
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.layout.action.add.AddReportCategoryAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportCategoryAction"
             contextmenuPath="reporting.admin"
             icon="icons/layout/action/add/AddReportCategoryAction.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.action.add.AddReportCategoryAction"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportCategoryAction"
             name="Add ReportCategory"
             scope="reporting.admin"
             toolbarPath="reporting.admin"/>
       <reportRegistryItemAction
-            class="org.nightlabs.jfire.reporting.admin.layout.action.edit.EditReportLayoutAction"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.edit.EditReportLayoutAction"
             contextmenuPath="reporting.admin"
             icon="icons/layout/action/edit/EditReportLayoutAction.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.action.edit.EditReportLayoutAction"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.edit.EditReportLayoutAction"
             name="Edit ReportLayout"
             scope="reporting.admin"
             tooltip="Edit ReportLayout"/>
@@ -268,9 +268,9 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.nightlabs.jfire.reporting.admin.ReportingAdminPerspective"
+            class="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective"
             icon="icons/ReportingAdminPerspective.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.ReportingAdminPerspective"
+            id="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective"
             scope="reporting.admin"
             name="%ReportingAdminPerspective.name"/>
    </extension>
@@ -280,17 +280,17 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.nightlabs.jfire.reporting.admin.layout.editor.JFireReportEditor"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor"
             extensions="rptdesign"
             icon="icons/layout/editor/JFireReportEditor.16x16.png"
-            id="org.nightlabs.jfire.reporting.admin.layout.editor.JFireReportEditor"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor"
             contributorClass="org.eclipse.birt.report.designer.internal.ui.editors.DesignerActionBarContributor"
             name="Report Editor"/>
    </extension>
    
       <extension
          point="org.eclipse.birt.report.designer.ui.editors.multiPageEditorContributor">
-      <targetEditor targetEditorId="org.nightlabs.jfire.reporting.admin.layout.editor.JFireReportEditor">
+      <targetEditor targetEditorId="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor">
       <formPage
             class="org.eclipse.birt.report.designer.ui.editors.pages.ReportLayoutEditorFormPage"
             displayName="%layout.editor.page.layout"
@@ -318,18 +318,18 @@
             relative="org.eclipse.birt.report.designer.ui.editors.design.script"
             visible="true"/>
       <formPage
-            class="org.nightlabs.jfire.reporting.admin.layout.editor.l10n.ReportLayoutL10nPage"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             displayName="Localisation"
-            id="org.nightlabs.jfire.reporting.admin.layout.editor.l10n.ReportLayoutL10nPage"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             position="right"
             relative="org.eclipse.birt.report.designer.ui.editors.design.xmlsource"
             visible="true"/>
       <formPage
-            class="org.nightlabs.jfire.reporting.admin.layout.editor.preview.ReportLayoutPreviewPage"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
             displayName="%layout.editor.page.preview"
-            id="org.nightlabs.jfire.reporting.admin.layout.editor.preview.ReportLayoutPreviewPage"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
             position="right"
-            relative="org.nightlabs.jfire.reporting.admin.layout.editor.l10n.ReportLayoutL10nPage"
+            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             visible="true"/>
       </targetEditor>
     </extension>
@@ -373,7 +373,7 @@
     	  <page
 	            id="%jfs.dataSource.id"
             	name="%jfs.propertyPage.name"
-        	    class="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSDataSourceEditorPage"
+        	    class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSDataSourceEditorPage"
     	        objectClass="org.eclipse.datatools.connectivity.IConnectionProfile">
 	         <filter
         	       name="org.eclipse.datatools.profile.property.id"
@@ -396,56 +396,56 @@
          <dataSourceUI id="%jfs.dataSource.id">
             <newDataSourceWizard
                   includesProgressMonitor="false"
-                  pageClass="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSDataSourceWizard"
+                  pageClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSDataSourceWizard"
                   pageTitle="JFS DataSource"
                   windowTitle="JFS DataSource"/>
          </dataSourceUI> 
          <dataSetUI
                id="%jfs.dataSet.id"
-               initialPageId="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
+               initialPageId="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
                supportsInParameters="false"
                supportsOutParameters="false">
             <dataSetWizard
-                  class="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSDataSetWizard"
+                  class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSDataSetWizard"
                   windowTitle="JFS DataSet"/>
             <dataSetPage
                   displayName="JFire Script"
                   icon="icons/ReportingAdminPerspective.16x16.png"
-                  id="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
+                  id="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
                   path="/"
-                  wizardPageClass="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSQueryPropertySetWizardPage"/>
+                  wizardPageClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSQueryPropertySetWizardPage"/>
 <!--            <dataSetPage
                   displayName="Parameters 2"
                   icon="icons/ReportingAdminPerspective.16x16.png"
-                  id="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSParameterWizardPage"
+                  id="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSParameterWizardPage"
                   path="/"
-                  wizardPageClass="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFSParameterWizardPage"/>
+                  wizardPageClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSParameterWizardPage"/>
                   -->
          </dataSetUI> 
       </extension>
     <extension
           point="org.eclipse.ui.editors">
        <editor
-             class="org.nightlabs.jfire.reporting.admin.jdoql.editor.JDOQLEditor"
+             class="org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLEditor"
              default="false"
              extensions="jdoql"
              icon="icons/layout/editor/JFireReportEditor.16x16.png"
-             id="org.nightlabs.jfire.reporting.admin.jdoql.editor.JDOQLEditor"
+             id="org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLEditor"
              name="JDOQLEditor"/>
     </extension>
     <extension
           point="org.eclipse.ui.actionSets">
        <actionSet
-             id="org.nightlabs.jfire.reporting.admin.actionSet1"
-             label="org.nightlabs.jfire.reporting.admin.actionSet1"
+             id="org.nightlabs.jfire.reporting.admin.ui.actionSet1"
+             label="org.nightlabs.jfire.reporting.admin.ui.actionSet1"
              visible="false">
           <menu
-                id="org.nightlabs.jfire.reporting.admin.menu1"
-                label="org.nightlabs.jfire.reporting.admin.menu1"/>
+                id="org.nightlabs.jfire.reporting.admin.ui.menu1"
+                label="org.nightlabs.jfire.reporting.admin.ui.menu1"/>
           <action
-                class="org.nightlabs.jfire.reporting.admin.jdoql.editor.OpenJDOQLEditorAction"
+                class="org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.OpenJDOQLEditorAction"
                 icon="icons/JDOQL-Editor.40x20.png"
-                id="org.nightlabs.jfire.reporting.admin.jdoql.editor.OpenJDOQLEditorAction"
+                id="org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.OpenJDOQLEditorAction"
                 label="JDOQLEditor"
                 style="push"
                 toolbarPath="additions"/>
@@ -455,19 +455,19 @@
           point="org.nightlabs.jfire.reporting.ui.reportUseCase">
        <reportUseCase
              description="%reportUseCase.previewReportUseCase.description"
-             id="org.nightlabs.jfire.reporting.admin.previewReportUseCase"
+             id="org.nightlabs.jfire.reporting.admin.ui.previewReportUseCase"
              minAdaptableClasses="org.eclipse.swt.widgets.Composite"
              name="%reportUseCase.previewReportUseCase.name"/>
     </extension>
     <extension
           point="org.eclipse.ui.perspectiveExtensions">
-       <perspectiveExtension targetID="org.nightlabs.jfire.reporting.admin.ReportingAdminPerspective">
-          <actionSet id="org.nightlabs.jfire.reporting.admin.actionSet1"/>
+       <perspectiveExtension targetID="org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPerspective">
+          <actionSet id="org.nightlabs.jfire.reporting.admin.ui.actionSet1"/>
        </perspectiveExtension>
     </extension>
      <extension point="org.eclipse.core.runtime.adapters">
         <factory 
-           class="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireReportingExpressionProvider$Factory" 
+           class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider$Factory" 
            adaptableType="org.eclipse.birt.report.designer.ui.dialogs.IExpressionProvider">
            <adapter type="org.eclipse.birt.report.designer.ui.dialogs.IExpressionProvider"/>
         </factory>
@@ -477,8 +477,8 @@
         <adaptable
               class="org.eclipse.birt.report.designer.ui.dialogs.IExpressionProvider">
            <adapter
-                 factory="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireReportingExpressionProvider$Factory"
-                 id="org.nightlabs.jfire.reporting.admin.oda.jfs.client.ui.JFireReportingExpressionProvider"
+                 factory="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider$Factory"
+                 id="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider"
                  priority="test"
                  type="org.eclipse.birt.report.designer.ui.dialogs.IExpressionProvider">
            </adapter>
