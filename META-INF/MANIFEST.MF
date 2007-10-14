@@ -31,5 +31,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.ui.workbench.texteditor,
- org.nightlabs.jseditor;visibility:=reexport
+ org.nightlabs.jseditor.ui;visibility:=reexport
 Eclipse-LazyStart: true
