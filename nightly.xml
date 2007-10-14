@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.voucher">
+  <project name="org.nightlabs.jfire.voucher.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.voucher" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.voucher.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.voucher/dist/org.nightlabs.jfire.voucher_0.9.1.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.voucher/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.voucher.ui/dist/org.nightlabs.jfire.voucher.ui_0.9.1.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.voucher.ui/src"/>
   </project>
 
 </nightlybuild>

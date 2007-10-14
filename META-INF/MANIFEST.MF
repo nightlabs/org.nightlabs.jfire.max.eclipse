@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Voucher Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.voucher.ui;singleton:=true
 Bundle-Version: 0.9.1
-Bundle-ClassPath: org.nightlabs.jfire.voucher.jar
-Bundle-Activator: org.nightlabs.jfire.voucher.VoucherPlugin
+Bundle-ClassPath: org.nightlabs.jfire.voucher.ui.jar
+Bundle-Activator: org.nightlabs.jfire.voucher.ui.VoucherPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -12,11 +12,11 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
  org.nightlabs.keyreader.ui
 Eclipse-LazyStart: true
-Export-Package: org.nightlabs.jfire.voucher,
- org.nightlabs.jfire.voucher.articlecontainer.detail,
- org.nightlabs.jfire.voucher.detail,
- org.nightlabs.jfire.voucher.quicklist,
- org.nightlabs.jfire.voucher.resource,
- org.nightlabs.jfire.voucher.store.search,
- org.nightlabs.jfire.voucher.transfer.pay,
- org.nightlabs.jfire.voucher.transfer.pay.wizard
+Export-Package: org.nightlabs.jfire.voucher.ui,
+ org.nightlabs.jfire.voucher.ui.articlecontainer.detail,
+ org.nightlabs.jfire.voucher.ui.detail,
+ org.nightlabs.jfire.voucher.ui.quicklist,
+ org.nightlabs.jfire.voucher.ui.resource,
+ org.nightlabs.jfire.voucher.ui.store.search,
+ org.nightlabs.jfire.voucher.ui.transfer.pay,
+ org.nightlabs.jfire.voucher.ui.transfer.pay.wizard
