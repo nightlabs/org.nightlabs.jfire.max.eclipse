@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.trade.admin.ui.overview">
+      <category
+            class="org.nightlabs.jfire.dynamictrade.admin.overview.DynamicProductTypeCategoryFactory"
+            icon="icons/overview/DynamicProductTypeCategoryFactory.16x16.png"
+            index="500"
+            name="%org.nightlabs.jfire.dynamictrade.admin.overview.DynamicProductTypeCategoryFactory.name"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor"
+            default="false"
+            icon="icons/editor/DynamicProductTypeEditor.16x16.png"
+            id="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor"
+            name="%org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor.name"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.entityEditor">
+      <pageFactory
+            class="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeDetailPage$Factory"
+            editorID="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor"
+            indexHint="0"/>
+      <pageFactory
+            class="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypePriceConfigPage$Factory"
+            editorID="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor"
+            indexHint="10"/>
+      <pageFactory
+            class="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeMoneyFlowConfigPageFactory"
+            editorID="org.nightlabs.jfire.dynamictrade.admin.editor.DynamicProductTypeEditor"
+            indexHint="20"/>
+   </extension>
+   <extension
+         point="org.nightlabs.base.ui.searchResultProvider">
+      <searchResultActionHandler
+            class="org.nightlabs.jfire.dynamictrade.admin.store.search.DynamicProductTypeSearchAdminActionHandler"
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
+            searchResultProviderFactoryID="org.nightlabs.jfire.dynamictrade.ui.store.search.DynamicProductTypeSearchResultProviderFactory">
+      </searchResultActionHandler>
+   </extension>
+
+</plugin>
