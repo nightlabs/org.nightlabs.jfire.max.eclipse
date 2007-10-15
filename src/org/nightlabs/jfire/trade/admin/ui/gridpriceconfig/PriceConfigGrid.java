@@ -62,6 +62,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IPriceCoordinate;
@@ -71,6 +72,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
 import org.nightlabs.jfire.store.NestedProductType;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.l10n.NumberFormatter;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -571,7 +573,9 @@ public class PriceConfigGrid extends XComposite
 						PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
 						if (priceCell != null) {
 							long amount = priceCell.getPrice().getAmount(priceFragmentType);
-							row.setText(tableX, Long.toString(amount));
+							Currency currency = priceCell.getPrice().getCurrency();
+//							row.setText(tableX, Long.toString(amount));
+							row.setText(tableX, NumberFormatter.formatCurrency(amount, currency, false));
 						}
 		
 						PriceConfigGridCell cell = cells[cellsY][cellsX];				

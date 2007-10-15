@@ -382,7 +382,7 @@ extends AbstractTreeComposite
 		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.contributingDelegateTreeColumn.text")); //$NON-NLS-1$
 		column.setResizable(true);
 		
-		tree.setLayout(new WeightedTableLayout(new int[] {20, 10, 10}));
+		tree.setLayout(new WeightedTableLayout(new int[] {20, 10, 10, 10, 10, 20}));
 	}
 	
 	protected ContentProvider getContentProvider() {
