@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<extension-point id="overview" name="Issue overview" schema="schema/overview.exsd"/>
+    <extension point="org.eclipse.ui.perspectives">
+        <perspective
+            class="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"
+            id="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective" name="Issue Tracking"/>
+    </extension>
+    <extension point="org.eclipse.ui.views">
+        <category
+            id="org.nightlabs.jfire.issuetracking" name="Issue"/>
+	    <view 
+	        category="org.nightlabs.jfire.issuetracking"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueView"
+            icon="icons/TradeAdminPerspective.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueView" name="Issue View"/>
+    </extension>
+
+	<extension
+         point="org.nightlabs.jfire.issuetracking.ui.overview">
+      <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            index="0"
+            name="Issue Overview">
+      </categoryFactory>
+      <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.deliveryNote"
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryFactory"
+            icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
+            index="0"
+            name="DeliveryNote">
+      </entryFactory>
+   </extension>
+</plugin>
