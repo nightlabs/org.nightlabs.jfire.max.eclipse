@@ -104,7 +104,7 @@ extends XComposite
 				} 
 				final PropertySet props = propertySets.get(productTypeID);
 				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, productType.getStructLocalScope(), monitor);
-				struct.explodePropertySet(props);
+				props.inflate(struct);
 				if (props != null) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
