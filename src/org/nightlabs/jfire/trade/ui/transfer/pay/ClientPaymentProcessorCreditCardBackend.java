@@ -129,8 +129,8 @@ public class ClientPaymentProcessorCreditCardBackend extends AbstractClientPayme
 				if (!entity.isAnonymous()) {
 					Person person = entity.getPerson();
 					if (person != null) {
-						IStruct struct = StructDAO.sharedInstance().getStruct(Person.class, new NullProgressMonitor()); 
-						struct.explodePropertySet(person);
+						IStruct struct = StructDAO.sharedInstance().getStruct(Person.class, new NullProgressMonitor());
+						person.inflate(struct);
 
 						String nameOnCard = ((TextDataField)person.getDataField(PersonStruct.CREDITCARD_CREDITCARDHOLDER)).getText();
 						if (nameOnCard == null) {
