@@ -8,13 +8,13 @@
 			<attribute name="javadoc_location" value="file:/home/tobias/java/jdo_javadoc/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="WORKSPACE/JFireTrade/dist/JFireTrade.jar" sourcepath="/WORKSPACE/JFireTrade"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireBase/dist/JFireBase.jar" sourcepath="WORKSPACE/JFireBase/src"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireBaseBean/dist/JFireBaseBean.jar" sourcepath="WORKSPACE/JFireBaseBean/src"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireServerManager/dist/JFireServerManager.jar" sourcepath="/WORKSPACE/JFireServerManager/src"/>
-	<classpathentry kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar" sourcepath="WORKSPACE/NightLabsJDO/src"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireBaseDAO/dist/JFireBaseDAO.jar"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar" sourcepath="/WORKSPACE/JFireBaseClientLib/src"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireDynamicTrade/dist/JFireDynamicTrade.jar" sourcepath="/WORKSPACE/JFireDynamicTrade/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseBean"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireServerManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireDynamicTrade"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
