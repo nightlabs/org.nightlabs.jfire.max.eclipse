@@ -194,7 +194,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, StructLocal.DEFAULT_SCOPE, subMonitor);
 						newProductType.getPropertySet().setStructLocalAttributes(struct);
 
-						getSimpleTradeManager().storeProductType(newProductType, false, null, 1);
+						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);
 //						newProductType = getSimpleTradeManager().storeProductType(
 //								newProductType, true,
 //								ProductTypeTreeNode.FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
