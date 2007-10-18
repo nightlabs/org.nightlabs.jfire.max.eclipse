@@ -8,11 +8,11 @@
 			<attribute value="file:/home/tobias/java/jdo_javadoc/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/WORKSPACE/JFireTrade" kind="var" path="WORKSPACE/JFireTrade/dist/JFireTrade.jar"/>
-	<classpathentry kind="var" path="WORKSPACE/JFireVoucher/dist/JFireVoucher.jar"/>
-	<classpathentry sourcepath="WORKSPACE/NightLabsJDO/src" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireJbpm/src" kind="var" path="WORKSPACE/JFireJbpm/dist/JFireJbpm.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/KeyReader/src" kind="var" path="WORKSPACE/KeyReader/dist/KeyReader.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireBaseClientLib/src" kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucher"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/KeyReader"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
