@@ -31,8 +31,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.jdo.spi.PersistenceCapable;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -58,7 +56,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		}
 		
 		@Override
-		protected PersistenceCapable getPersistenceCapable(Object selectionObject) {
+		protected Object getPersistenceCapable(Object selectionObject) {
 			if (selectionObject instanceof ScriptRegistryItemNode)
 				return ((ScriptRegistryItemNode)selectionObject).getRegistryItem();
 			return super.getPersistenceCapable(selectionObject);
