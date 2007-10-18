@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireScripting" kind="var" path="WORKSPACE/JFireScripting/dist/JFireScripting.jar"/>
-	<classpathentry sourcepath="WORKSPACE/NightLabsJDO/src" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
 	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireBaseClientLib/src" kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
