@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -8,6 +10,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.admin.ui.tree.DynamicProductTypeTree;
 import org.nightlabs.jfire.dynamictrade.admin.ui.tree.DynamicProductTypeTreeNode;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 
 public class CreateDynamicProductTypeAction
 		extends Action
@@ -41,7 +44,7 @@ public class CreateDynamicProductTypeAction
 			if (selectedNode == null)
 				throw new IllegalStateException("No node selected!"); //$NON-NLS-1$
 
-			CreateDynamicProductTypeWizard createProductWizard = new CreateDynamicProductTypeWizard(selectedNode);
+			CreateDynamicProductTypeWizard createProductWizard = new CreateDynamicProductTypeWizard((ProductTypeID) JDOHelper.getObjectId(selectedNode.getJdoObject()));
 			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
 					tree.getTreeViewer().getControl().getShell(),
 //					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 

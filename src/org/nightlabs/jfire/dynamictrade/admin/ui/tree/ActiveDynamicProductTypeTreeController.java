@@ -26,8 +26,9 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 		return new DynamicProductTypeTreeNode();
 	}
 
-	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = {
-		FetchPlan.DEFAULT, DynamicProductType.FETCH_GROUP_NAME, DynamicProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
+	public static final String[] FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE = {
+		FetchPlan.DEFAULT, DynamicProductType.FETCH_GROUP_NAME,
+		DynamicProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID,
 //		DynamicProductType.FETCH_GROUP_OWNER, DynamicProductType.FETCH_GROUP_DELIVERY_CONFIGURATION,
 //		DynamicProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE
 	};
@@ -36,7 +37,7 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	protected Collection<DynamicProductType> retrieveChildren(ProductTypeID parentID, DynamicProductType parent, IProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getChildDynamicProductTypes(
-				parentID, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				parentID, FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new ProgressMonitorWrapper(monitor));
 		return res;
 	}
@@ -45,7 +46,7 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	protected Collection<DynamicProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
-				objectIDs, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				objectIDs, FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new ProgressMonitorWrapper(monitor));
 		return res;
 	}

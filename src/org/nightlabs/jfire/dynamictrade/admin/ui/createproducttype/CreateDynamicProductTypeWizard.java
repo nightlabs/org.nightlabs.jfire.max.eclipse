@@ -10,6 +10,7 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
@@ -17,23 +18,32 @@ import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorInput;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.dynamictrade.admin.ui.tree.DynamicProductTypeTreeNode;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateDynamicProductTypeWizard
 extends DynamicPathWizard
 {
-	private DynamicProductTypeTreeNode parentNode;
+	private ProductTypeID parentProductTypeID;
+	
+	private static String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
+		FetchPlan.DEFAULT,
+		ProductType.FETCH_GROUP_NAME,
+		ProductType.FETCH_GROUP_OWNER,
+		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
+	};
 
-	public CreateDynamicProductTypeWizard(DynamicProductTypeTreeNode parentNode)
+	public CreateDynamicProductTypeWizard(ProductTypeID parentProductTypeID)
 	{
-		this.parentNode = parentNode;
-		if (parentNode == null)
-			throw new IllegalArgumentException("parentNode must not be null!"); //$NON-NLS-1$
+		if (parentProductTypeID == null)
+			throw new IllegalArgumentException("parentProductTypeID must not be null.");
+		
+		this.parentProductTypeID = parentProductTypeID;
 	}
 
 	private DynamicProductTypeNamePage dynamicProductTypeNamePage;
@@ -41,19 +51,20 @@ extends DynamicPathWizard
 	@Override
 	public void addPages()
 	{
-		ProductTypeID parentDynamicProductTypeID = (ProductTypeID) JDOHelper.getObjectId(parentNode.getJdoObject());
-
-		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentDynamicProductTypeID);
+		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentProductTypeID);
 		addPage(dynamicProductTypeNamePage);
 	}
 
 	@Override
 	public boolean performFinish()
 	{
+		ProductType parentProductType = ProductTypeDAO.sharedInstance().getProductType(
+				parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		
 		final DynamicProductType dynamicProductType = new DynamicProductType(
 				IDGenerator.getOrganisationID(),
 				ObjectIDUtil.makeValidIDString(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer().getText()) + '_' + ProductType.createProductTypeID(),
-				parentNode.getJdoObject(),
+				parentProductType,
 				dynamicProductTypeNamePage.getInheritanceNature(),
 				dynamicProductTypeNamePage.getPackageNature());
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
