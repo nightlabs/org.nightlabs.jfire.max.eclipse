@@ -52,7 +52,8 @@ implements IProductTypeDetailPageController
 		ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
-		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE
+		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
+		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
 	public void doLoad(IProgressMonitor monitor) 
