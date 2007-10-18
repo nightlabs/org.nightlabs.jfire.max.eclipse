@@ -2,8 +2,6 @@ package org.nightlabs.jfire.reporting.ui.layout;
 
 import java.util.Locale;
 
-import javax.jdo.spi.PersistenceCapable;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
@@ -36,7 +34,7 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 		}
 		
 		@Override
-		protected PersistenceCapable getPersistenceCapable(Object selectionObject) {
+		protected Object getPersistenceCapable(Object selectionObject) {
 			if (selectionObject instanceof ReportRegistryItemNode)
 				return ((ReportRegistryItemNode)selectionObject).getJdoObject();
 			return super.getPersistenceCapable(selectionObject);
