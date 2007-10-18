@@ -3,18 +3,18 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireScripting" kind="var" path="WORKSPACE/JFireScripting/dist/JFireScripting.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/NightLabsBase/src" kind="var" path="WORKSPACE/NightLabsBase/dist/NightLabsBase.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireScriptingEditor2D/src" kind="var" path="WORKSPACE/JFireScriptingEditor2D/dist/JFireScriptingEditor2D.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsBase"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireScriptingEditor2D"/>
 	<classpathentry sourcepath="/WORKSPACE/org.holongate.gef/src" kind="var" path="ECLIPSE_HOME/plugins/org.holongate.gef_2.3.0/holongate-gef.jar"/>
 	<classpathentry sourcepath="/WORKSPACE/org.holongate.draw2d/src" kind="var" path="ECLIPSE_HOME/plugins/org.holongate.draw2d_2.3.0/holongate-draw2d.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/NightLabsJDO" kind="var" path="WORKSPACE/NightLabsJDO/dist/NightLabsJDO.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/JFireBase/src" kind="var" path="WORKSPACE/JFireBase/dist/JFireBase.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
 	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2">
 		<attributes>
 			<attribute value="file:/home/tobias/java/jdo_javadoc/apidocs/" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/WORKSPACE/JFireBaseClientLib/src" kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
