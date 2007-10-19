@@ -34,4 +34,16 @@
             name="Issues">
       </entryFactory>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+   		<editor
+        	class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            default="true"
+            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            name="Issue">
+      </editor>
+   </extension>
 </plugin>
