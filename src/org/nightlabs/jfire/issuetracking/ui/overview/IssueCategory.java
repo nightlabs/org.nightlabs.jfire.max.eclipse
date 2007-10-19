@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public interface IssueCategory
 {
-	IssueCategoryFactory getTradeAdminCategoryFactory();
+	IssueCategoryFactory getIssueCategoryFactory();
 
 	/**
 	 * returns the Composite which will be displayed

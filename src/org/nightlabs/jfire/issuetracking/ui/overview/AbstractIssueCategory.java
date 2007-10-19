@@ -7,12 +7,12 @@ implements IssueCategory
 {
 	private IssueCategoryFactory issueCategoryFactory;
 
-	public AbstractIssueCategory(IssueCategoryFactory tradeAdminCategoryFactory)
+	public AbstractIssueCategory(IssueCategoryFactory issueCategoryFactory)
 	{
-		this.issueCategoryFactory = tradeAdminCategoryFactory;
+		this.issueCategoryFactory = issueCategoryFactory;
 	}
 
-	public IssueCategoryFactory getTradeAdminCategoryFactory()
+	public IssueCategoryFactory getIssueCategoryFactory()
 	{
 		return issueCategoryFactory;
 	}
