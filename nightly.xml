@@ -7,7 +7,7 @@
     <ant path="org.nightlabs.jfire.dynamictrade.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.dynamictrade.ui/dist/org.nightlabs.jfire.dynamictrade.ui_0.9.1.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.jfire.dynamictrade.ui/dist/org.nightlabs.jfire.dynamictrade.ui_0.9.1.jar"/>
     <javadoc path="org.nightlabs.jfire.dynamictrade.ui/src"/>
   </project>
 </nightlybuild>
