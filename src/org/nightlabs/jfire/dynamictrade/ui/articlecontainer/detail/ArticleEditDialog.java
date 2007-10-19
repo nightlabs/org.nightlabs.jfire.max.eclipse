@@ -19,7 +19,7 @@ extends CenteredDialog
 	public ArticleEditDialog(Shell parentShell, ArticleEdit articleEdit, Article article)
 	{
 		super(parentShell);
-		setShellStyle(getShellStyle() + SWT.RESIZE);
+		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.articleEdit = articleEdit;
 		this.article = article;
 	}
