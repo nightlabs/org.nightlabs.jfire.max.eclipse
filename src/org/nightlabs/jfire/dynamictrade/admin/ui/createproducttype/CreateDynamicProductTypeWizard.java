@@ -35,6 +35,7 @@ extends DynamicPathWizard
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_OWNER,
+		ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
