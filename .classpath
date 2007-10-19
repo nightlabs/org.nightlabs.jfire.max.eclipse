@@ -6,5 +6,6 @@
 	<classpathentry kind="var" path="WORKSPACE/JFireGeography/dist/JFireGeography.jar" sourcepath="/WORKSPACE/JFireGeography/src"/>
 	<classpathentry kind="var" path="WORKSPACE/JFireBaseClientLib/dist/JFireBaseClientLib.jar" sourcepath="/WORKSPACE/JFireBaseClientLib/src"/>
 	<classpathentry kind="var" path="WORKSPACE/JFireBase/dist/JFireBase.jar" sourcepath="WORKSPACE/JFireBase/src"/>
+	<classpathentry kind="lib" path="/NightLabsJDO/dist/NightLabsJDO.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

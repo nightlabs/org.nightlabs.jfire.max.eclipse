@@ -52,8 +52,6 @@ public class IssueTrackingPlugin extends AbstractUIPlugin
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-//		GeographyPlugin.getDefault(); // force start - needed for initialization of Geography
-//		GeographySystem.createSharedInstance(Login.getLogin().getInitialContextProperties());
 	}
 
 	/**
