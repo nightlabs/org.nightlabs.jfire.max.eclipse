@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Event;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 
 public class AssignCustomerAction
@@ -11,8 +12,11 @@ public class AssignCustomerAction
 {
 	public boolean calculateVisible()
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-		.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
+		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (editor == null)
+			return false;
+
+		ArticleContainerID articleContainerID = editor.getGeneralEditorComposite().getArticleContainerID();
 
 //		if (!(articleContainerID instanceof OrderID || articleContainerID instanceof OfferID))
 		if (!(articleContainerID instanceof OrderID))

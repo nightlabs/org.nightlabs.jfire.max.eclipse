@@ -29,15 +29,18 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 
 public class AddAllToInvoiceAction extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
-		return
-				!(getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-						.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID() instanceof Invoice);
+		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (editor == null)
+			return false;
+
+		return !(editor.getGeneralEditorComposite().getArticleContainerID() instanceof Invoice);
 	}
 
 	@Override

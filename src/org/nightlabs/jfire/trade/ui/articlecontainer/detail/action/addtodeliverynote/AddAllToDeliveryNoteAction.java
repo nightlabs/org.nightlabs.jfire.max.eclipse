@@ -29,22 +29,20 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliver
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 
 public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 {
-
-	public AddAllToDeliveryNoteAction()
-	{
-	}
-
 	public boolean calculateVisible()
 	{
-		return
-				!(getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-						.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNote);
+		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (editor == null)
+			return false;
+
+		return !(editor.getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNote);
 	}
-	
+
 	@Override
 	public boolean calculateEnabled() {
 		if (super.calculateEnabled()) {
