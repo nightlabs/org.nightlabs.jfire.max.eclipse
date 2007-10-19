@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.jfire.trade.admin.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.trade.admin.ui/dist/org.nightlabs.jfire.trade.admin.ui_0.9.1.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.jfire.trade.admin.ui/dist/org.nightlabs.jfire.trade.admin.ui_0.9.1.jar"/>
     <javadoc path="org.nightlabs.jfire.trade.admin.ui/src"/>
   </project>
 
