@@ -36,7 +36,7 @@ extends XComposite
 	}
 	
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
-		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, 
+		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS}; 
 	
 	public void setProductTypeID(final ProductTypeID productTypeID) {
