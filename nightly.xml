@@ -9,7 +9,7 @@
     <requires/>
     <requires path="org.w3c.dom.smil"/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.ui/dist/org.nightlabs.jfire.reporting.admin.ui_0.9.1.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.ui/dist/org.nightlabs.jfire.reporting.admin.ui_0.9.1.jar"/>
     <javadoc path="org.nightlabs.jfire.reporting.admin.ui/src"/>
 	<ignore-requires path="org.eclipse.jdt.ui"/>
 	<ignore-requires path="org.apache.derby.core"/>
