@@ -129,6 +129,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_OWNER,
+		ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
