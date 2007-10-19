@@ -41,7 +41,7 @@ extends Action
 			if (selectedNode == null)
 				throw new IllegalStateException("No node selected!"); //$NON-NLS-1$
 
-			CreateVoucherTypeWizard createProductWizard = new CreateVoucherTypeWizard(selectedNode);
+			CreateVoucherTypeWizard createProductWizard = new CreateVoucherTypeWizard(selectedNode.getJdoObject().getObjectId());
 			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
 					tree.getTreeViewer().getControl().getShell(),
 //					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
