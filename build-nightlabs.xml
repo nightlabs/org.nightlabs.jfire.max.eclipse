@@ -1,7 +1,8 @@
 <!--
-  Generic eclipse/rcp-plugin ant build file (version 2007-04-03)
+  Generic eclipse/rcp-plugin ant build file (version 2007-10-19)
   Author: marc [at] nightlabs [dot] de
   Author: marco [at] nightlabs [dot] de
+  Author: marius [at] nightlabs [dot] de
 
   Do NOT modify this file!!! It must be the same in all eclipse/rcp-plugins!
   Instead, you can create local ant build files:
@@ -11,6 +12,8 @@
     - build-nightlabs-compile.post.xml
     - build-nightlabs-dist.bin.pre.xml
     - build-nightlabs-dist.bin.post.xml
+    - build-nightlabs-dist.plugin.jar.pre.xml
+    - build-nightlabs-dist.plugin.jar.post.xml
     - build-nightlabs-dist.plugin.pre.xml
     - build-nightlabs-dist.plugin.post.xml
     - build-nightlabs-deploy.pre.xml
@@ -78,18 +81,21 @@
          jar filename from build.properties. The filename
          is given in the form "source.<filename> = <srcdir> -->
     <loadfile
-      property="project.jar"
+      property="project.fileName"
       srcFile="build.properties">
       <filterchain>
         <tokenfilter>
-          <containsregex
-              pattern="^source\.(.+)\.jar.*$"
-              replace="\1.jar"/>
+          <containsregex 
+          	pattern="^source\.(.+)\.jar.*$"
+          	replace="\1"
+          />
         </tokenfilter>
         <striplinebreaks/>
       </filterchain>
     </loadfile>
 
+  	<property name="project.jar" value="${project.fileName}.jar" />
+  	
     <!-- get src.dir from build.properties -->
     <loadfile
       property="src.dir"
@@ -335,20 +341,39 @@
   </target>
 
 	<!-- Create all available dist formats -->
-  <target name="dist" depends="dist.bin, dist.plugin">
+  <target name="dist" depends="dist.bin, dist.plugin.jar, dist.plugin">
   </target>
 
 	<!-- Create the plugins jar file -->
   <target name="dist.bin" depends="compile">
   	<dolocaliftrue boolean="true" target="dist.bin.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/" />
-    <delete file="${project.dir}/${dist.dir}/${project.jar}" failonerror="false" />
-    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}">
+    <delete file="${project.dir}/${dist.dir}/${project.name}" failonerror="false" />
+    <jar jarfile="${project.dir}/${dist.dir}/${project.jar}" index="true" duplicate="fail">
       <fileset dir="${project.dir}/${bin.dir}">
         <include name="**/*.*"/>
       </fileset>
     </jar>
   	<dolocaliftrue boolean="true" target="dist.bin.post"/>
+  </target>
+	
+	<!-- Create the plugins jar containing all files needed to run it as an RCP Plugin -->
+  <target name="dist.plugin.jar" depends="dist.plugin">
+  	<dolocaliftrue boolean="true" target="dist.plugin.jar.pre"/>
+    <mkdir dir="${project.dir}/${dist.dir}/" />
+    <delete file="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" failonerror="false" />
+<!-- isn't this too complicated? why not simply take the subdir which has been created by the dist.plugin task? => reusing code
+    <jar jarfile="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" 
+    	duplicate="fail" manifest="${project.dir}/META-INF/MANIFEST.MF">
+    	<fileset dir="${project.dir}" includes="${bin.includes}"></fileset>
+    	<fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"></fileset>
+    </jar>
+-->
+  	<jar jarfile="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" 
+  	  	duplicate="fail" manifest="${project.dir}/META-INF/MANIFEST.MF">
+  		<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*" />
+  	</jar>
+  	<dolocaliftrue boolean="true" target="dist.plugin.jar.post"/>
   </target>
 
 	<!-- Create a plugin distribution directory and archive -->
@@ -359,10 +384,12 @@
       <fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"/>
       <fileset dir="${project.dir}" includes="${bin.includes}"/>
     </copy>
+<!-- We create JAR files now, because they can directly be put into an update-site. The tar.gz-files aren't necessary anymore and only slow down the build process.
     <tar destfile="${project.dir}/${dist.dir}/${project.name}_${project.version}.tar.gz" compression="gzip">
       <tarfileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"
-        prefix="plugins/${project.name}_${project.version}" />
+        prefix="plugins/${project.name}_${project.version}"/>
     </tar>
+-->
   	<dolocaliftrue boolean="true" target="dist.plugin.post"/>
   </target>
 
