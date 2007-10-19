@@ -565,5 +565,6 @@ public abstract class PriceConfigComposite extends XComposite
 		}
 		stackWrapper.layout(true, true);
 		setPackageProductType(packageProductType);
+		dirtyStateManager.markDirty();
 	}
 }
