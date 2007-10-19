@@ -60,7 +60,7 @@ extends DynamicPathWizard
 	public boolean performFinish()
 	{
 		ProductType parentProductType = ProductTypeDAO.sharedInstance().getProductType(
-				parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // TODO async!
 		
 		final DynamicProductType dynamicProductType = new DynamicProductType(
 				IDGenerator.getOrganisationID(),
