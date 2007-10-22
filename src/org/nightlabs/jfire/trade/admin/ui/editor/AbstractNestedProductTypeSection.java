@@ -95,7 +95,7 @@ implements IProductTypeSectionPart
 	}
 	public void setProductType(ProductType productType)
 	{
-		if (productType == null)
+		if (productType == null || getSection() != null || getSection().isDisposed() || nestedProductTypeTable.isDisposed())
 			return;
 
 		this.productType = productType;
@@ -107,6 +107,7 @@ implements IProductTypeSectionPart
 				setInheritanceSelection(productType.getFieldMetaData("nestedProductTypes").isValueInherited()); //$NON-NLS-1$
 //			 TODO sort nestedProductTypes alphabetically
 		}
+		
 		nestedProductTypeTable.setInput(productType);
 	}
 
