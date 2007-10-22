@@ -46,4 +46,11 @@
             name="Issue">
       </editor>
    </extension>
+   
+   <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			indexHint="10" />
+  </extension>  
 </plugin>

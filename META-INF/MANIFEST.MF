@@ -4,14 +4,11 @@ Bundle-Name: Issue Tracking Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.ui;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms,
  org.nightlabs.jfire.trade.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
- org.eclipse.ui.workbench.texteditor,
- org.eclipse.core.runtime,
- org.nightlabs.jfire.base.ui;visibility:=reexport,
- org.nightlabs.jfire.base.j2ee;visibility:=reexport
+ org.eclipse.ui.workbench.texteditor
 Eclipse-LazyStart: true
