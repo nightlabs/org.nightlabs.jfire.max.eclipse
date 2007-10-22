@@ -1,5 +1,8 @@
 package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -21,6 +24,19 @@ public class SimpleProductTypeDetailPageController
 //extends AbstractSimpleProductTypePageController 
 extends AbstractProductTypeDetailPageController
 {
+	private static final String[] FETCH_GROUPS;
+	
+	static {
+		List<String> fetchGroups = new LinkedList<String>();
+		for (String fetchGroup : FETCH_GROUPS_DEFAULT)
+			fetchGroups.add(fetchGroup);
+		
+		fetchGroups.add(ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION);
+		fetchGroups.add(ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE);
+		
+		FETCH_GROUPS = fetchGroups.toArray(new String[fetchGroups.size()]);
+	}
+	
 	/**
 	 * @param editor
 	 */
@@ -43,7 +59,7 @@ extends AbstractProductTypeDetailPageController
 	@Override
 	protected ProductType retrieveProductType(IProgressMonitor monitor) {
 		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getProductTypeID(), 
-				FETCH_GROUPS_DEFAULT, 
+				FETCH_GROUPS, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new ProgressMonitorWrapper(monitor));
 	}
