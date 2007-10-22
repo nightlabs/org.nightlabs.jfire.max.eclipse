@@ -68,6 +68,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
+import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.editlock.id.EditLockTypeID;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.DeliveryNoteLocal;
@@ -278,13 +279,9 @@ extends XComposite
 		EditLockMan.sharedInstance().acquireEditLock(editLockTypeID, getArticleContainerID(), "TODO", // TODO description //$NON-NLS-1$
 //				null,
 				new EditLockCallback() {
-					public boolean canPopupDialog(EditLockCarrier editLockCarrier)
-					{
-						return false;
-					}
-					public boolean canReleaseEditLock(EditLockCarrier editLockCarrier)
-					{
-						return false;
+					@Override
+					public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
+						return InactivityAction.REFRESH_LOCK;
 					}
 				},
 				getShell(), new NullProgressMonitor());
