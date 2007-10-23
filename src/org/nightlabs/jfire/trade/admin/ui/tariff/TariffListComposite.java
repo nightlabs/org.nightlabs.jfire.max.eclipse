@@ -26,50 +26,88 @@
 
 package org.nightlabs.jfire.trade.admin.ui.tariff;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.jdo.FetchPlan;
+import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.ModuleException;
-import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableContentProvider;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Tariff;
+import org.nightlabs.jfire.accounting.dao.TariffDAO;
 import org.nightlabs.jfire.base.ui.JFireBasePlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
+ * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class TariffListComposite
-extends XComposite
-{
+public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
+	private class TariffNameEditingSupport extends EditingSupport {
+		private TextCellEditor editor;
+
+		public TariffNameEditingSupport() {
+			super(getTableViewer());
+			editor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return editor;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((TariffCarrier) element).getTariff().getName().getText();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			((TariffCarrier) element).getTariff().getName().setText(getLanguageID(), (String) value);
+			getTableViewer().refresh(true);
+		}
+	};
+
 	/**
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(TariffListComposite.class);
 
-	private TableViewer viewer;
-	private TariffTableContentProvider contentProvider;
-	private TariffTableLabelProvider labelProvider;
-
 	public static final String COLUMN_NAME = "name"; //$NON-NLS-1$
 
-	private static String getLocalOrganisationID()
-	{
+	private List<TariffCarrier> tariffCarriers;
+
+	public static final String[] FETCH_GROUPS_TARIFF = { FetchPlan.DEFAULT, Tariff.FETCH_GROUP_NAME };
+
+	private static String getLocalOrganisationID() {
 		try {
 			return Login.getLogin().getOrganisationID();
 		} catch (Exception x) {
@@ -77,25 +115,15 @@ extends XComposite
 		}
 	}
 
-	public TariffListComposite(Composite parent, int style)
-	{
-		this(parent, style, getLocalOrganisationID(), false);
-	}
-	public TariffListComposite(Composite parent, int style, String filterOrganisationID, boolean filterOrganisationIDInverse)
-	{
-		super(parent, style, LayoutMode.TIGHT_WRAPPER);
+	public TariffListComposite(Composite parent, int style) {
+		super(parent, style, false);
 
-//		WORKAROUND
+		//		WORKAROUND
 		JFireBasePlugin.class.getName();
 
-		contentProvider = new TariffTableContentProvider(filterOrganisationID, filterOrganisationIDInverse);
-		labelProvider = new TariffTableLabelProvider(this);
-		viewer = new TableViewer(this, SWT.BORDER | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.MULTI);
-		viewer.setContentProvider(contentProvider);
-		viewer.setLabelProvider(labelProvider);
+		Table t = getTable();
 
-		Table t = viewer.getTable();
-//		t.setHeaderVisible(true);
+		//		t.setHeaderVisible(true);
 		t.setLinesVisible(true);
 
 		GridData tgd = new GridData(GridData.FILL_BOTH);
@@ -103,33 +131,51 @@ extends XComposite
 		tgd.verticalSpan = 1;
 
 		t.setLayoutData(tgd);
-		t.setLayout(new WeightedTableLayout(new int[] {1}));
+		t.setLayout(new WeightedTableLayout(new int[] { 1 }));
 
-		// Add the columns to the table
-		new TableColumn(t, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariff.TariffListComposite.categorySetNameTableColumn.text")); //$NON-NLS-1$
+		initTable();
 
-		viewer.setColumnProperties(new String[]{COLUMN_NAME});
-		viewer.setCellEditors(
-				new CellEditor[] {new TextCellEditor(t)});
-		viewer.setCellModifier(new TariffTableCellModifier(this));
-
-		// This method MUST be called AFTER all columns are added - otherwise not all columns are shown!
-		viewer.setInput(contentProvider);
+		tariffCarriers = getTariffCarriers();
+		setInput(tariffCarriers);
 	}
 
-	public int getColumnIndex(String column)
-	{
-		int res = -1;
-		Object[] cols = viewer.getColumnProperties();
-		for (int i = 0; i < cols.length; ++i) {
-			if (((String)cols[i]).equals(column)) {
-				res = i;
-				break;
+	protected List<TariffCarrier> getTariffCarriers() {
+		Collection<Tariff> tariffCollection = TariffDAO.sharedInstance().getTariffs(getLocalOrganisationID(), false, FETCH_GROUPS_TARIFF,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // TODO use a job for non-blocking UI!
+
+		List<TariffCarrier> tariffCarriers = new ArrayList<TariffCarrier>();
+		for (Tariff tariff : tariffCollection)
+			tariffCarriers.add(new TariffCarrier(tariff));
+
+		Collections.sort(tariffCarriers, new Comparator<TariffCarrier>() {
+			public int compare(TariffCarrier o1, TariffCarrier o2) {
+				return new Integer(o1.getTariff().getTariffIndex()).compareTo(o2.getTariff().getTariffIndex());
 			}
-		}
-		if (res < 0)
-			throw new IllegalArgumentException("Column \""+column+"\" is not known!"); //$NON-NLS-1$ //$NON-NLS-2$
-		return res;
+		});
+		return tariffCarriers;
+	}
+
+	public void moveSelectedTariffOneUp() {
+		moveSelectedTariff(true);
+	}
+
+	public void moveSelectedTariffOneDown() {
+		moveSelectedTariff(false);
+	}
+
+	private void moveSelectedTariff(boolean up) {
+		TariffCarrier selectedCarrier = getFirstSelectedElement();
+
+		if (selectedCarrier == null)
+			return;
+
+		int index = tariffCarriers.indexOf(selectedCarrier);
+		if (up && index > 0)
+			Collections.swap(tariffCarriers, index, index - 1);
+		else if (index < tariffCarriers.size() - 1)
+			Collections.swap(tariffCarriers, index, index + 1);
+
+		refresh();
 	}
 
 	private String languageID = Locale.getDefault().getLanguage();
@@ -137,59 +183,80 @@ extends XComposite
 	/**
 	 * @return Returns the languageID.
 	 */
-	public String getLanguageID()
-	{
+	public String getLanguageID() {
 		return languageID;
 	}
+
 	/**
 	 * @param languageID The languageID to set.
 	 */
-	public void setLanguageID(String languageID)
-	{
+	public void setLanguageID(String languageID) {
 		this.languageID = languageID;
 		refresh();
 	}
 
-	public void refresh()
-	{
-		viewer.setInput(contentProvider);
-	}
-
-	public void createTariff()
-	{
-		contentProvider.createTariff();
-		refresh();
-//		setSelectedCategorySetCarrierIndex(contentProvider.tariffCarriers.size() - 1);
-	}
-
-	public void submit()
-	throws ModuleException
-	{
+	public void submit() throws ModuleException {
 		try {
 			AccountingManager accountingManager = null;
 			try {
 
-				for (Iterator it = contentProvider.tariffCarriers.iterator(); it.hasNext(); ) {
-					TariffCarrier tc = (TariffCarrier)it.next();
+				int tariffIndex = 0;
+				for (TariffCarrier tc : tariffCarriers) {
 					//				if (csc.isDirty()) { TODO
 					if (accountingManager == null)
 						accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 
-					Tariff tariff = accountingManager.storeTariff(tc.getTariff(), true, new String[]{FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // TODO Fetch Groups!!!
+					Tariff tariff = tc.getTariff();
+					tariff.setTariffIndex(tariffIndex++);
+
+					tariff = accountingManager.storeTariff(tc.getTariff(), true, new String[] { FetchPlan.ALL }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // TODO Fetch Groups!!!
 					tc.setTariff(tariff);
 					tc.setDirty(false);
 					//				}
 				}
 			} finally {
 				if (accountingManager != null)
-					try { accountingManager.remove(); } catch (Exception x) { logger.error("removing bean failed!", x); } //$NON-NLS-1$
+					try {
+						accountingManager.remove();
+					} catch (Exception x) {
+						logger.error("removing bean failed!", x);} //$NON-NLS-1$
 			}
 		} catch (Exception x) {
 			throw new ModuleException(x);
 		}
 	}
-	
-	public TableViewer getTableViewer(){
-		return viewer;
+
+	@Override
+	protected void createTableColumns(TableViewer tableViewer, Table table) {
+		// Add the columns to the table
+		TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.LEFT);
+		col.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariff.TariffListComposite.categorySetNameTableColumn.text")); //$NON-NLS-1$
+		col.setEditingSupport(new TariffNameEditingSupport());
+	}
+
+	@Override
+	protected void setTableProvider(TableViewer tableViewer) {
+		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setLabelProvider(new TableLabelProvider() {
+			public String getColumnText(Object element, int columnIndex) {
+				if (element instanceof TariffCarrier) {
+					TariffCarrier tariffCarrier = (TariffCarrier) element;
+					return tariffCarrier.getTariff().getName().getText();
+				}
+				return "";
+			}
+		});
+	}
+
+	public void createTariff() {
+		try {
+			Tariff tariff = new Tariff(Login.getLogin().getOrganisationID(), Tariff.createTariffID());
+			TariffCarrier tc = new TariffCarrier(tariff);
+			tc.setDirty(true);
+			tariffCarriers.add(tc);
+			refresh();
+		} catch (LoginException x) {
+			throw new RuntimeException(x);
+		}
 	}
 }

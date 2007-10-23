@@ -24,15 +24,15 @@ import org.nightlabs.jfire.accounting.TariffMapping;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.tariff.TariffListComposite;
+import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 
 public class TariffMappingView
 extends LSDViewPart
 {
 	public static final String ID_VIEW = TariffMappingView.class.getName();
 
-	private TariffListComposite partnerTariffList;
-	private TariffListComposite localTariffList;
+	private TariffList partnerTariffList;
+	private TariffList localTariffList;
 	private TariffMappingTable tariffMappingTable;
 
 	private Button createTariffMappingButton;
@@ -41,7 +41,7 @@ extends LSDViewPart
 	private Set<TariffID> partnerTariffIDs = null;
 	private Set<TariffID> localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
 
-	private TariffListComposite.TariffFilter partnerTariffFilter = new TariffListComposite.TariffFilter() {
+	private TariffList.TariffFilter partnerTariffFilter = new TariffList.TariffFilter() {
 		public boolean includeTariff(Tariff tariff)
 		{
 			if (partnerTariffIDs == null) {
@@ -57,7 +57,7 @@ extends LSDViewPart
 		}
 	};
 
-	private TariffListComposite.TariffFilter localTariffFilter = new TariffListComposite.TariffFilter() {
+	private TariffList.TariffFilter localTariffFilter = new TariffList.TariffFilter() {
 		public boolean includeTariff(Tariff tariff)
 		{
 			if (selectedPartnerTariff == null)
@@ -89,7 +89,7 @@ extends LSDViewPart
 		sfMainVert.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		SashForm sfTopHoriz = new SashForm(sfMainVert, SWT.HORIZONTAL);
-		partnerTariffList = new TariffListComposite(sfTopHoriz, SWT.NONE, false, partnerTariffFilter);
+		partnerTariffList = new TariffList(sfTopHoriz, SWT.NONE, false, partnerTariffFilter);
 		partnerTariffList.setOrganisationVisible(true);
 		partnerTariffList.setFilterOrganisationIDInverse(true);
 		partnerTariffList.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -97,13 +97,13 @@ extends LSDViewPart
 			{
 				selectedPartnerTariff = partnerTariffList.getSelectedTariff();
 				localTariffIDsInMappingsForSelectedPartnerOrganisationID = null; // we must nullify it, when the partner-organisationID changes, but currently, we nullify on every change - I'm too lazy ;-)
-				localTariffList.loadTariffs();
+				localTariffList.loadTariffs(null);
 
 				createTariffMappingButton.setEnabled(selectedPartnerTariff != null && selectedLocalTariff != null);
 			}
 		});
 
-		localTariffList = new TariffListComposite(sfTopHoriz, SWT.NONE, false, localTariffFilter);
+		localTariffList = new TariffList(sfTopHoriz, SWT.NONE, false, localTariffFilter);
 		localTariffList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
@@ -165,7 +165,7 @@ extends LSDViewPart
 			}
 		});		
 		
-		partnerTariffList.loadTariffs();
+		partnerTariffList.loadTariffs(null);
 	}
 
 	public void createTariffMapping()
@@ -178,8 +178,8 @@ extends LSDViewPart
 
 		partnerTariffIDs = null;
 		localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
-		partnerTariffList.loadTariffs();
-		localTariffList.loadTariffs();
+		partnerTariffList.loadTariffs(null);
+		localTariffList.loadTariffs(null);
 	}
 
 	public void removeTariffMappings()
@@ -198,8 +198,8 @@ extends LSDViewPart
 
 		partnerTariffIDs = null;
 		localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
-		partnerTariffList.loadTariffs();
-		localTariffList.loadTariffs();
+		partnerTariffList.loadTariffs(null);
+		localTariffList.loadTariffs(null);
 	}
 
 	public void storeClientOnlyTariffMappingsToServer()

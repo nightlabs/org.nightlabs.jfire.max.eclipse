@@ -79,7 +79,6 @@ public class AddTariffWizard extends DynamicPathWizard
 				tariff = new Tariff(Login.getLogin().getOrganisationID(), Tariff.createTariffID());
 //						BaseObjectID.makeValidIDString(
 //								priceFragmentTypeNameBuffer.getText(I18nText.DEFAULT_LANGUAGEID), true));
-
 				tariffNameBuffer.copyTo(tariff.getName());
 
 				AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

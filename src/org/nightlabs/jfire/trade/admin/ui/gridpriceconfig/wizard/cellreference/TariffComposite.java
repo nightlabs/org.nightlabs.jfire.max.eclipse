@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Tariff;
-import org.nightlabs.jfire.trade.ui.tariff.TariffListComposite;
+import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 
 public class TariffComposite extends AbstractCellReferenceComposite{
 
@@ -21,12 +21,12 @@ public class TariffComposite extends AbstractCellReferenceComposite{
 //		tariffListGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 //		tariffListGroup.setLayout(new GridLayout());
 
-		TariffListComposite tariffListComposite = new TariffListComposite(this, SWT.NONE, false, null);
-		tariffListComposite.getGridData().grabExcessHorizontalSpace = true;
-		tariffListComposite.loadTariffs();
-		tariffListComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+		TariffList tariffList = new TariffList(this, SWT.NONE, false, null);
+		tariffList.getGridData().grabExcessHorizontalSpace = true;
+		tariffList.loadTariffs(null);
+		tariffList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
-				TariffListComposite tc = (TariffListComposite)e.getSource();
+				TariffList tc = (TariffList)e.getSource();
 				Tariff t = tc.getSelectedTariff();
 				if(t != null){
 					selectedTariff = t;

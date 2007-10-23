@@ -69,7 +69,11 @@ extends LSDViewPart
 			}
 		});
 	}
-
+	
+	public TariffListComposite getTariffListComposite() {
+		return tariffListComposite;
+	}
+	
 	/**
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
