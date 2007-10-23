@@ -61,7 +61,7 @@ public class CreateIssueComposite extends XComposite{
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
-					List<IssueSeverityType> issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
+					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
 				} catch (Exception e) {
 					ExceptionHandlerRegistry.asyncHandleException(e);
 					throw new RuntimeException(e);
