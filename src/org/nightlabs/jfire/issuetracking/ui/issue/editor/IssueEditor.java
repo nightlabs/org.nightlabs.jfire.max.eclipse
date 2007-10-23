@@ -3,10 +3,10 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditor;
+import org.nightlabs.base.ui.entity.editor.EntityEditor;
 
 
-public class IssueEditor extends OverviewEntryEditor{
+public class IssueEditor extends EntityEditor{
 	public static final String EDITOR_ID = IssueEditor.class.getName();
 	
 	@Override

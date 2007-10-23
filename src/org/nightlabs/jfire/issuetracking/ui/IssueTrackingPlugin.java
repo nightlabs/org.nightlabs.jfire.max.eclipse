@@ -35,7 +35,7 @@ import org.osgi.framework.BundleContext;
  */
 public class IssueTrackingPlugin extends AbstractUIPlugin 
 {
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.ui"; //$NON-NLS-1$
 	
 	//The shared instance.
 	private static IssueTrackingPlugin plugin;

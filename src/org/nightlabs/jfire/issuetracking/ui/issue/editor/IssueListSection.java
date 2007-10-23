@@ -23,7 +23,7 @@ public class IssueListSection extends RestorableSectionPart{
 	public IssueListSection(FormPage page, Composite parent, IssuePageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
 		this.controller = controller;
-		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.sectionTitle"));
+		getSection().setText("Issue");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		

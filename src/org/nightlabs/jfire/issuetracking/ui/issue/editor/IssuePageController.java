@@ -23,8 +23,6 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -75,8 +73,8 @@ public class IssuePageController extends EntityEditorPageController
 //				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
 //
 //		this.issueList = issues;
-//		monitor.done();
-//		fireModifyEvent(null, issues);
+		monitor.done();
+		fireModifyEvent(null, null/*issues*/);
 	}
 
 	public void doSave(IProgressMonitor monitor)
@@ -114,33 +112,33 @@ public class IssuePageController extends EntityEditorPageController
 	}
 
 	
-	public static final String PROPERTY_MONEY_TRANSFER_QUERY = "issueQuery"; //$NON-NLS-1$
-
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-
-	/**
-	 * Add a {@link PropertyChangeListener} which will be triggered on the UI thread. Currently,
-	 * the only property available is {@link #PROPERTY_MONEY_TRANSFER_QUERY} which
-	 * references the object returned by {@link #getIssueQuery()}.
-	 *
-	 * @param listener The listener to be added.
-	 */
-	public void addPropertyChangeListener(PropertyChangeListener listener)
-	{
-		propertyChangeSupport.addPropertyChangeListener(listener);
-	}
-	public void addPropertyChangeListener(String propertyName,
-			PropertyChangeListener listener)
-	{
-		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-	}
-	public void removePropertyChangeListener(PropertyChangeListener listener)
-	{
-		propertyChangeSupport.removePropertyChangeListener(listener);
-	}
-	public void removePropertyChangeListener(String propertyName,
-			PropertyChangeListener listener)
-	{
-		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-	}
+//	public static final String PROPERTY_MONEY_TRANSFER_QUERY = "issueQuery"; //$NON-NLS-1$
+//
+//	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+//
+//	/**
+//	 * Add a {@link PropertyChangeListener} which will be triggered on the UI thread. Currently,
+//	 * the only property available is {@link #PROPERTY_MONEY_TRANSFER_QUERY} which
+//	 * references the object returned by {@link #getIssueQuery()}.
+//	 *
+//	 * @param listener The listener to be added.
+//	 */
+//	public void addPropertyChangeListener(PropertyChangeListener listener)
+//	{
+//		propertyChangeSupport.addPropertyChangeListener(listener);
+//	}
+//	public void addPropertyChangeListener(String propertyName,
+//			PropertyChangeListener listener)
+//	{
+//		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+//	}
+//	public void removePropertyChangeListener(PropertyChangeListener listener)
+//	{
+//		propertyChangeSupport.removePropertyChangeListener(listener);
+//	}
+//	public void removePropertyChangeListener(String propertyName,
+//			PropertyChangeListener listener)
+//	{
+//		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+//	}
 }

@@ -1,5 +1,5 @@
 <!--
-  Generic eclipse/rcp-plugin ant build file (version 2007-09-19)
+  Generic eclipse/rcp-plugin ant build file (version 2007-10-19)
   Author: marc [at] nightlabs [dot] de
   Author: marco [at] nightlabs [dot] de
   Author: marius [at] nightlabs [dot] de
@@ -358,15 +358,21 @@
   </target>
 	
 	<!-- Create the plugins jar containing all files needed to run it as an RCP Plugin -->
-  <target name="dist.plugin.jar" depends="dist.bin">
+  <target name="dist.plugin.jar" depends="dist.plugin">
   	<dolocaliftrue boolean="true" target="dist.plugin.jar.pre"/>
     <mkdir dir="${project.dir}/${dist.dir}/" />
     <delete file="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" failonerror="false" />
+<!-- isn't this too complicated? why not simply take the subdir which has been created by the dist.plugin task? => reusing code
     <jar jarfile="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" 
     	duplicate="fail" manifest="${project.dir}/META-INF/MANIFEST.MF">
     	<fileset dir="${project.dir}" includes="${bin.includes}"></fileset>
     	<fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"></fileset>
     </jar>
+-->
+  	<jar jarfile="${project.dir}/${dist.dir}/${project.fileName}_${project.version}.jar" 
+  	  	duplicate="fail" manifest="${project.dir}/META-INF/MANIFEST.MF">
+  		<fileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}" includes="**/*" />
+  	</jar>
   	<dolocaliftrue boolean="true" target="dist.plugin.jar.post"/>
   </target>
 
@@ -378,10 +384,12 @@
       <fileset dir="${project.dir}/${dist.dir}" includes="${project.jar}"/>
       <fileset dir="${project.dir}" includes="${bin.includes}"/>
     </copy>
+<!-- We create JAR files now, because they can directly be put into an update-site. The tar.gz-files aren't necessary anymore and only slow down the build process.
     <tar destfile="${project.dir}/${dist.dir}/${project.name}_${project.version}.tar.gz" compression="gzip">
       <tarfileset dir="${project.dir}/${dist.dir}/${project.name}_${project.version}"
         prefix="plugins/${project.name}_${project.version}"/>
     </tar>
+-->
   	<dolocaliftrue boolean="true" target="dist.plugin.post"/>
   </target>
 

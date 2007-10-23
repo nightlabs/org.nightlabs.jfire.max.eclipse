@@ -18,7 +18,6 @@ public class IssuePerspective implements IPerspectiveFactory{
 	 */
 	public void createInitialLayout(IPageLayout layout) {
 		createLayout(layout);
-		addShortCuts(layout);
 	}
 	
 	private void createLayout(IPageLayout layout) {
@@ -36,12 +35,6 @@ public class IssuePerspective implements IPerspectiveFactory{
 //	);
 		
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
-		layout.addShowViewShortcut(IssueOverviewView.VIEW_ID);
-		RCPUtil.addAllPerspectiveShortcuts(layout);
-		
-	}
-	
-	private void addShortCuts(IPageLayout layout) {
 		layout.addShowViewShortcut(IssueOverviewView.VIEW_ID);
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
