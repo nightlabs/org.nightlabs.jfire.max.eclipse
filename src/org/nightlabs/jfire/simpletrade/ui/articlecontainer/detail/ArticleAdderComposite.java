@@ -27,7 +27,10 @@
 package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.jdo.FetchPlan;
@@ -35,11 +38,13 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.QuantitySelector;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
@@ -47,8 +52,10 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
+import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
@@ -64,6 +71,7 @@ import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -74,12 +82,10 @@ public class ArticleAdderComposite extends FadeableComposite
 	private ArticleAdder articleAdder;
 	private Label productTypeNameLabel;
 
-	private Combo tariffCombo;
-	private Tariff[] tariffs;
-
+	private ComboComposite<TariffPricePair> tariffCombo;
 	private QuantitySelector quantitySelector;
 
-	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder, Collection tariffPricePairs)
+	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder, Collection<TariffPricePair> tariffPricePairsCollection)
 	{
 		super(parent, SWT.NONE); // , XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
 		this.articleAdder = articleAdder;
@@ -90,26 +96,37 @@ public class ArticleAdderComposite extends FadeableComposite
 		productTypeNameLabel.setText(
 				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
 
-		tariffs = new Tariff[tariffPricePairs.size()];
-
-		tariffCombo = new Combo(this, SWT.READ_ONLY);
-		int tariffIdx = 0;
-		for (Iterator it = tariffPricePairs.iterator(); it.hasNext(); ) {
-			TariffPricePair tpp = (TariffPricePair) it.next();
-			Tariff tariff = tpp.getTariff();
-			Price price = tpp.getPrice();
-			tariffCombo.add(
-					tariff.getName().getText(Locale.getDefault().getLanguage())
-					+ " - " + //$NON-NLS-1$
-					NumberFormatter.formatCurrency(price.getAmount(), price.getCurrency()));
-			tariffs[tariffIdx++] = tariff;
-		}
-		if (tariffCombo.getItemCount() > 0)
-			tariffCombo.select(0); // TODO later on we need to store a priority in the server
-		else {
-			tariffCombo.add(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderComposite.tariffComboPseudoEntry_noTariffAvailable")); //$NON-NLS-1$
-			tariffCombo.select(0);
-		}
+		tariffCombo = new ComboComposite<TariffPricePair>(this, SWT.NONE, new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				if (element instanceof TariffPricePair) {
+					Tariff tariff = ((TariffPricePair)element).getTariff();
+					Price price = ((TariffPricePair)element).getPrice();
+					return (tariff.getName().getText()	+ " - " +	NumberFormatter.formatCurrency(price.getAmount(), price.getCurrency()));  //$NON-NLS-1$
+				} else
+					return element.toString();
+			}
+		});
+		((Combo)tariffCombo.getControl()).setLayoutData(new GridData());		
+		List<TariffPricePair> tariffPricePairs = new LinkedList<TariffPricePair>(tariffPricePairsCollection);
+		
+		// TODO This should be done in a job :)
+		String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
+		TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
+				fetchGroups, -1, new NullProgressMonitor());
+		
+		final Comparator<Tariff> tariffComparator = cfMod.getTariffComparator();
+		
+		Collections.sort(tariffPricePairs, new Comparator<TariffPricePair>() {
+			public int compare(TariffPricePair o1, TariffPricePair o2) {
+				return tariffComparator.compare(o1.getTariff(), o2.getTariff());
+			}
+		});
+		
+		tariffCombo.setInput(tariffPricePairs);
+		
+		if (tariffPricePairs.size() > 0)
+			tariffCombo.setSelection(0); // TODO later on we need to store a priority in the server
 
 		quantitySelector = new QuantitySelector(this) {
 			protected void quantitySelected(int qty)
@@ -128,7 +145,7 @@ public class ArticleAdderComposite extends FadeableComposite
 
 	private void qtySelected(final int qty)
 	{
-		final Tariff tariff = tariffs[tariffCombo.getSelectionIndex()];
+		final Tariff tariff = tariffCombo.getSelectedElement().getTariff();
 		final TariffID tariffID = (TariffID) JDOHelper.getObjectId(tariff);
 		FadeableCompositeJob addJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderComposite.addArticlesJob.name"), this, this) { //$NON-NLS-1$
 			@Override
