@@ -28,22 +28,33 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateOfferAction extends Action
 {
@@ -59,24 +70,37 @@ public class CreateOfferAction extends Action
 
 	public void run()
 	{
-		try {
-			OrderTreeNode orderTreeNode = (OrderTreeNode) headerTreeComposite.getSelectedNode();
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//		 FIXME IDPREFIX (next line) should be asked from user if necessary!
-//			Offer offer = tradeManager.createOffer(
+		Job createOrderJob = new Job("Creating order...") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				try {
+					OrderTreeNode orderTreeNode = (OrderTreeNode) headerTreeComposite.getSelectedNode();
+					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					FIXME IDPREFIX (next line) should be asked from user if necessary!
+//					Offer offer = tradeManager.createOffer(
 //					(OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder()), null,
 //					OrderTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			OfferTreeNode offerTreeNode = new OfferTreeNode(orderTreeNode, OrderTreeNode.POSITION_FIRST_CHILD, offer);
-//			offerTreeNode.select();
+//					OfferTreeNode offerTreeNode = new OfferTreeNode(orderTreeNode, OrderTreeNode.POSITION_FIRST_CHILD, offer);
+//					offerTreeNode.select();
 
-			Offer offer = tradeManager.createOffer(
-					(OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder()), null,
-					null, 1);
+					final Offer offer = tradeManager.createOffer(
+							(OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder()), null,
+							null, 1);
 
-			HeaderTreeComposite.openEditor(new GeneralEditorInputOffer((OfferID)JDOHelper.getObjectId(offer)));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							HeaderTreeComposite.openEditor(new GeneralEditorInputOffer((OfferID)JDOHelper.getObjectId(offer)));
+						}
+					});
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+				
+				return Status.OK_STATUS;
+			}			
+		};
+		createOrderJob.schedule();
+		
 	}
 
 	public static class CreateOfferViewActionDelegate implements IViewActionDelegate
