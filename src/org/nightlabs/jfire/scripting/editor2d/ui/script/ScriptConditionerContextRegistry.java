@@ -74,7 +74,7 @@ extends AbstractEPProcessor
 		{
 			String organisationID = element.getAttribute(ATTRIBUTE_ORGANISATION_ID);
 			if (!checkString(organisationID))
-				throw new EPProcessorException("Attribute "+ATTRIBUTE_ORGANISATION_ID+" must not be empty!"); //$NON-NLS-2$
+				throw new EPProcessorException("Attribute "+ATTRIBUTE_ORGANISATION_ID+" must not be empty!");  //$NON-NLS-1$//$NON-NLS-2$
 			
 			String conditionContextProviderID = element.getAttribute(ATTRIBUTE_CONDITION_CONTEXT_PROVIDER_ID);
 			if (!checkString(conditionContextProviderID))
