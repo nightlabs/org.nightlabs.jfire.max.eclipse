@@ -87,12 +87,15 @@ public class ArticleAdderComposite extends FadeableComposite
 
 	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder, Collection<TariffPricePair> tariffPricePairsCollection)
 	{
-		super(parent, SWT.NONE); // , XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA, 2); // , XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+		this.getGridLayout().makeColumnsEqualWidth = false;
 		this.articleAdder = articleAdder;
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		productTypeNameLabel = new Label(this, SWT.NONE);
-		productTypeNameLabel.setLayoutData(new GridData());
+		GridData gd = new GridData();
+		gd.horizontalSpan = 2;
+		productTypeNameLabel.setLayoutData(gd);
 		productTypeNameLabel.setText(
 				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
 
@@ -107,7 +110,7 @@ public class ArticleAdderComposite extends FadeableComposite
 					return element.toString();
 			}
 		});
-		((Combo)tariffCombo.getControl()).setLayoutData(new GridData());		
+		tariffCombo.setLayoutData(new GridData());
 		List<TariffPricePair> tariffPricePairs = new LinkedList<TariffPricePair>(tariffPricePairsCollection);
 		
 		// TODO This should be done in a job :)
@@ -138,9 +141,6 @@ public class ArticleAdderComposite extends FadeableComposite
 				ArticleAdderComposite.this.layout(true, true);
 			}
 		};
-
-		this.getGridLayout().numColumns = this.getChildren().length - 1;
-		((GridData)productTypeNameLabel.getLayoutData()).horizontalSpan = this.getGridLayout().numColumns;
 	}
 
 	private void qtySelected(final int qty)
