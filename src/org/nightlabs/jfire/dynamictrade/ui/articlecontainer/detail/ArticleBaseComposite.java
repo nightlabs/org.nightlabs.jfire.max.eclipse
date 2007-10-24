@@ -43,6 +43,7 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.TariffMapper;
 import org.nightlabs.jfire.accounting.TariffMapping;
+import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
 import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IPriceCoordinate;
@@ -51,8 +52,10 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
+import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.UnitDAO;
@@ -74,6 +77,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Utils;
 
@@ -316,6 +320,13 @@ extends FadeableComposite
 							return u1.getName().getText().compareTo(u2.getName().getText());
 						}
 					});
+					
+				// Sort the tariffs according to the config module
+					String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
+					TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
+							fetchGroups, -1, new NullProgressMonitor());					
+					Collections.sort(tariffs, cfMod.getTariffComparator());
+					// Sorting done
 
 					Display.getDefault().asyncExec(new Runnable()
 					{
