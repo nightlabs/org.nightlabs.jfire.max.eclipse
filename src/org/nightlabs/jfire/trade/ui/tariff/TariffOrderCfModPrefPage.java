@@ -12,10 +12,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
-import org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage;
+import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 
-public class TariffOrderCfModPrefPage extends AbstractConfigModulePreferencePage {
+public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreferencePage {
 
 	public TariffOrderCfModPrefPage() {
 		super(TariffOrderCfModPrefPage.class.getName());
