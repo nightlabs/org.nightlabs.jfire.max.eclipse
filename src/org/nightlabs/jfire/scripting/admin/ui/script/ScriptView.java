@@ -54,6 +54,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.admin.ui.script.ScriptRegistryItemTreeMenuManager;
 import org.nightlabs.jfire.scripting.admin.ui.script.ScriptView;
 import org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin;
@@ -91,7 +92,7 @@ implements
 	private ScriptRegistryItemTree registryItemTree;
 	private ScriptRegistryItemTreeMenuManager contextMenuManager;
 	
-	private Job fetchTreeNodesJob = new Job("Fetching Reportlayouts ..."){
+	private Job fetchTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.fetchTreeNodesJob.name")){ //$NON-NLS-1$
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
@@ -107,7 +108,7 @@ implements
 		
 	};
 	
-	private Job refreshTreeNodesJob = new Job("Refreshing Reportlayouts ..."){
+	private Job refreshTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.refreshTreeNodesJob.name")){ //$NON-NLS-1$
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
@@ -191,7 +192,7 @@ implements
 	
 	private NotificationListener changeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
-			logger.info("changeListener got notified with event "+evt);
+			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			registryItemTree.refresh(true);
 		}		
 	};

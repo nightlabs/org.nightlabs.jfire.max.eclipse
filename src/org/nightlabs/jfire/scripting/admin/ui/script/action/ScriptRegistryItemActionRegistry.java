@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -39,7 +40,7 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
  */
 public class ScriptRegistryItemActionRegistry extends AbstractActionRegistry {
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.admin.ui.scriptRegistryItemAction";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.admin.ui.scriptRegistryItemAction"; //$NON-NLS-1$
 	
 	/**
 	 * 
@@ -48,7 +49,7 @@ public class ScriptRegistryItemActionRegistry extends AbstractActionRegistry {
 		super();
 	}
 
-	private static final String ATTRIBUTE_NAME_ACTION_CLASS = "class";
+	private static final String ATTRIBUTE_NAME_ACTION_CLASS = "class"; //$NON-NLS-1$
 	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.action.registry.AbstractActionRegistry#createActionOrContributionItem(org.eclipse.core.runtime.IExtension, org.eclipse.core.runtime.IConfigurationElement)
@@ -58,14 +59,14 @@ public class ScriptRegistryItemActionRegistry extends AbstractActionRegistry {
 			IConfigurationElement element) throws EPProcessorException {
 		
 		String className = element.getAttribute(ATTRIBUTE_NAME_ACTION_CLASS);
-		if (className == null || "".equals(className))
-			throw new IllegalArgumentException("There was no classname specified for reportRegistryItemAction with id "+element.getAttribute(ATTRIBUTE_NAME_ACTION_ID));
+		if (className == null || "".equals(className)) //$NON-NLS-1$
+			throw new IllegalArgumentException("There was no classname specified for reportRegistryItemAction with id "+element.getAttribute(ATTRIBUTE_NAME_ACTION_ID)); //$NON-NLS-1$
 
 		IScriptRegistryItemAction registryItemAction;
 		try {
 			registryItemAction = (IScriptRegistryItemAction) element.createExecutableExtension(ATTRIBUTE_NAME_ACTION_CLASS);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("The class specified for registryItemAction with id "+element.getAttribute(ATTRIBUTE_NAME_ACTION_ID)+" does not implement "+IScriptRegistryItemAction.class.getName()+". It was set to "+className+".");
+			throw new IllegalArgumentException("The class specified for registryItemAction with id "+element.getAttribute(ATTRIBUTE_NAME_ACTION_ID)+" does not implement "+IScriptRegistryItemAction.class.getName()+". It was set to "+className+"."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		} catch (CoreException e) {
 			throw new EPProcessorException(e);
 		}
@@ -90,7 +91,7 @@ public class ScriptRegistryItemActionRegistry extends AbstractActionRegistry {
 	@Override
 	protected String getActionElementName()
 	{
-		return "scriptRegistryItemAction";
+		return "scriptRegistryItemAction"; //$NON-NLS-1$
 	}
 	
 	private static ScriptRegistryItemActionRegistry sharedInstance;
@@ -99,7 +100,7 @@ public class ScriptRegistryItemActionRegistry extends AbstractActionRegistry {
 	throws EPProcessorException
 	{
 		if (initializingSharedInstance)
-			throw new IllegalStateException("Circular call to the method sharedInstance() during initialization!");
+			throw new IllegalStateException("Circular call to the method sharedInstance() during initialization!"); //$NON-NLS-1$
 
 		if (sharedInstance == null) {
 			initializingSharedInstance = true;

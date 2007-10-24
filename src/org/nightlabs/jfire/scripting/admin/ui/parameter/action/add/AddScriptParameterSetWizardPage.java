@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.scripting.admin.ui.parameter.action.add;
 
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -39,7 +40,7 @@ public class AddScriptParameterSetWizardPage extends I18nTextEditorWizardPage {
 	 * @param editorCaption
 	 */
 	public AddScriptParameterSetWizardPage() {
-		super(AddScriptParameterSetWizardPage.class.getName(), "Add a new ReportCategory", "Category name");
+		super(AddScriptParameterSetWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetWizardPage.title"), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetWizardPage.editorCaption")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

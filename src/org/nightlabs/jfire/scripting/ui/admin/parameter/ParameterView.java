@@ -50,6 +50,7 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.id.ScriptParameterSetID;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterSetProvider;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterSetTable;
@@ -82,7 +83,7 @@ implements
 	private ScriptParameterSetTable parameterSetTable;
 	private ScriptParameterSetTableMenuManager menuManager;
 	
-	private Job fetchParameterSetsJob = new Job("Fetching ParameterSets ..."){
+	private Job fetchParameterSetsJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ParameterView.fetchParameterSetsJob.name")){ //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final Collection<ScriptParameterSet> sets = ScriptParameterSetProvider.sharedInstance().getParameterSets();
@@ -130,12 +131,12 @@ implements
 		parameterSetTable = new ScriptParameterSetTable(wrapper, SWT.NONE, true);
 		fetchParameterSetsJob.schedule();
 		Collection<String> input = new ArrayList<String>();
-		input.add("Fetching ParameterSets ...");
+		input.add(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ParameterView.fetchParameterSets.loadingMessage")); //$NON-NLS-1$
 		parameterSetTable.setInput(input);
 		parameterSetTable.getTableViewer().addDoubleClickListener(tableDoubleClickListener);
 		// TODO: Still work to be done on ParameterSets
 		menuManager = new ScriptParameterSetTableMenuManager(
-				"#scriptParameterSetContextMenu",
+				"#scriptParameterSetContextMenu", //$NON-NLS-1$
 				parameterSetTable.getTableViewer().getControl(),
 				this,
 				parameterSetTable.getTableViewer()
@@ -145,7 +146,7 @@ implements
 	
 	private NotificationListener changeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
-			logger.info("changeListener got notified with event "+evt);
+			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			parameterSetTable.refresh(true);
 		}		
 	};

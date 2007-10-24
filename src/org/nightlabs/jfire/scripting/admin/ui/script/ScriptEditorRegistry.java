@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  * Accessor for the registration of editors to languages of JFireScripting scripts.
@@ -19,7 +20,7 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
  */
 public class ScriptEditorRegistry extends AbstractEPProcessor {
 
-	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.admin.ui.scriptEditor";
+	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.admin.ui.scriptEditor"; //$NON-NLS-1$
 	
 	/**
 	 * key: language
@@ -47,13 +48,13 @@ public class ScriptEditorRegistry extends AbstractEPProcessor {
 	 */
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element) throws Exception {
-		if (element.getName().equalsIgnoreCase("scriptEditor")) {
-			String language = element.getAttribute("scriptLanguage");
-			if (language == null || "".equals(language))
-				throw new EPProcessorException("scriptEditor extension has not defined the scriptLanugage attribute. Extension namespace: "+extension.getNamespace());
-			String editorID = element.getAttribute("editorID");
-			if (editorID == null || "".equals(editorID))
-				throw new EPProcessorException("scriptEditor extension has not defined the editorID attribute. Extension namespace: "+extension.getNamespace());
+		if (element.getName().equalsIgnoreCase("scriptEditor")) { //$NON-NLS-1$
+			String language = element.getAttribute("scriptLanguage"); //$NON-NLS-1$
+			if (language == null || "".equals(language)) //$NON-NLS-1$
+				throw new EPProcessorException("scriptEditor extension has not defined the scriptLanugage attribute. Extension namespace: "+extension.getNamespace()); //$NON-NLS-1$
+			String editorID = element.getAttribute("editorID"); //$NON-NLS-1$
+			if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
+				throw new EPProcessorException("scriptEditor extension has not defined the editorID attribute. Extension namespace: "+extension.getNamespace()); //$NON-NLS-1$
 			scriptEditors.put(language, editorID);
 		}
 	}
@@ -61,8 +62,8 @@ public class ScriptEditorRegistry extends AbstractEPProcessor {
 	public String getEditorID(String language) {
 		checkProcessing();
 		String editorID = scriptEditors.get(language);
-		if (editorID == null || "".equals(editorID))
-			throw new IllegalStateException("No scriptEditor was registered for the language: "+language);
+		if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
+			throw new IllegalStateException("No scriptEditor was registered for the language: "+language); //$NON-NLS-1$
 		return editorID;
 	}
 	

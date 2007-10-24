@@ -36,6 +36,7 @@ import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptCategory;
 import org.nightlabs.jfire.scripting.ScriptManager;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 
 /**
@@ -54,7 +55,7 @@ public class AddScriptWizard extends DynamicPathWizard {
 		super();
 		this.scriptRegistryItem = scriptRegistryItem;
 		if ((scriptRegistryItem == null) || (!(scriptRegistryItem instanceof ScriptCategory)))
-			throw new IllegalArgumentException("Can only add a Script to a ScriptCategory instance of ScriptRegistryItem. The given scriptRegistryItem is instanceof "+((scriptRegistryItem == null)?"null":scriptRegistryItem.getClass().getName()));
+			throw new IllegalArgumentException("Can only add a Script to a ScriptCategory instance of ScriptRegistryItem. The given scriptRegistryItem is instanceof "+((scriptRegistryItem == null)?"null":scriptRegistryItem.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
 		wizardPage = new AddScriptRegistryItemWizardPage(scriptRegistryItem.getScriptRegistryItemType());
 		addPage(wizardPage);
 	}
@@ -66,7 +67,7 @@ public class AddScriptWizard extends DynamicPathWizard {
 	public boolean performFinish() {
 		ScriptManager sm = ScriptingPlugin.getScriptManager();
 		if ((scriptRegistryItem == null) || (!(scriptRegistryItem instanceof ScriptCategory)))
-			throw new IllegalArgumentException("Can only add a Script to a ScriptCategory instance of ScriptRegistryItem. The given scriptRegistryItem is instanceof "+((scriptRegistryItem == null)?"null":scriptRegistryItem.getClass().getName()));
+			throw new IllegalArgumentException("Can only add a Script to a ScriptCategory instance of ScriptRegistryItem. The given scriptRegistryItem is instanceof "+((scriptRegistryItem == null)?"null":scriptRegistryItem.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
 		String scriptRegistryItemID = wizardPage.getRegistryItemID();
 		Script script;
 		try {

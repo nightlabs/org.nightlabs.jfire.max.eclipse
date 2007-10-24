@@ -20,6 +20,7 @@ import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.nightlabs.jfire.base.ui.app.JFireApplication;
 import org.nightlabs.jfire.scripting.Script;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
 import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
@@ -49,17 +50,17 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 			// TODO remove NullProgressMonitor
 			Script script = ScriptRegistryItemProvider.sharedInstance().getScript(
 					registryItemID, new NullProgressMonitor());
-			File pathFile = new File(JFireApplication.getRootDir()+File.separator+"scripts_tmp");
+			File pathFile = new File(JFireApplication.getRootDir()+File.separator+"scripts_tmp"); //$NON-NLS-1$
 			if (!pathFile.exists()) {
 				if (!pathFile.mkdirs())
-					throw new IllegalStateException("Could not create directory for temporary remote layouts: "+pathFile.getPath());
+					throw new IllegalStateException("Could not create directory for temporary remote layouts: "+pathFile.getPath()); //$NON-NLS-1$
 			}
-			File file = new File(pathFile, "Script_"+script.getOrganisationID()+"_"+script.getScriptRegistryItemID()+".script");
+			File file = new File(pathFile, "Script_"+script.getOrganisationID()+"_"+script.getScriptRegistryItemID()+".script"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (!file.exists()) {
 				try {
 					file.createNewFile();
 				} catch (IOException e) {
-					throw new IllegalStateException("Could not create temporary file for remote layout: "+file.getAbsolutePath(), e);
+					throw new IllegalStateException("Could not create temporary file for remote layout: "+file.getAbsolutePath(), e); //$NON-NLS-1$
 				}
 			}
 			try {
@@ -67,12 +68,12 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 				if (script.getText() != null)
 					out.write(script.getText().getBytes());
 				else
-					out.write(" test script".getBytes());
+					out.write(" test script".getBytes()); //$NON-NLS-1$
 				out.close();
 			} catch (FileNotFoundException e) {
-				throw new IllegalStateException("Could not find temporary file for remote layout: "+file.getAbsolutePath());
+				throw new IllegalStateException("Could not find temporary file for remote layout: "+file.getAbsolutePath()); //$NON-NLS-1$
 			} catch (IOException e) {
-				throw new RuntimeException("Could not write temporary file for remote layout: "+file.getAbsolutePath(), e);
+				throw new RuntimeException("Could not write temporary file for remote layout: "+file.getAbsolutePath(), e); //$NON-NLS-1$
 			}
 			localInput = new ExternalFileEditorInput(file);			
 		}
@@ -166,7 +167,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 		try {
 			ScriptingPlugin.getScriptManager().storeRegistryItem(script, false, null, -1);
 		} catch (RemoteException e) {
-			throw new RuntimeException("Failed to remotely store ReportLayout", e);
+			throw new RuntimeException("Failed to remotely store ReportLayout", e); //$NON-NLS-1$
 		}
 	}
 

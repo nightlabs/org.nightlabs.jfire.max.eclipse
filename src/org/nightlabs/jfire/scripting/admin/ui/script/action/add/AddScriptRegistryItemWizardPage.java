@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -65,7 +66,7 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	 * @param editorCaption
 	 */
 	public AddScriptRegistryItemWizardPage(String pItemType) {
-		super(AddScriptRegistryItemWizardPage.class.getName(), "Add a new Script item", "Item name");
+		super(AddScriptRegistryItemWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.title"), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.editorCaption")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.pItemType = pItemType;
 	}
 	
@@ -75,11 +76,11 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	 */
 	@Override
 	protected void createAdditionalContents(Composite wrapper) {
-		registryItemID = new LabeledText(wrapper, "item ID");
+		registryItemID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemID.label.text")); //$NON-NLS-1$
 //		registryItemID.setEnabled(false);
 		getTextEditor().addModifyListener(modifyListener);		
-		registryItemType = new LabeledText(wrapper, "item type");
-		if (pItemType != null && !"".equals(pItemType)) {
+		registryItemType = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemType.label.text")); //$NON-NLS-1$
+		if (pItemType != null && !"".equals(pItemType)) { //$NON-NLS-1$
 			registryItemType.getTextControl().setText(pItemType);
 			registryItemType.setEnabled(false);
 		}
@@ -100,8 +101,8 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	 */
 	@Override
 	public boolean isPageComplete() {
-		return ( registryItemID.getTextControl().getText() != null && !"".equals(registryItemID.getTextControl().getText())) &&
-						( registryItemType.getTextControl().getText() != null && !"".equals(registryItemType.getTextControl().getText()));
+		return ( registryItemID.getTextControl().getText() != null && !"".equals(registryItemID.getTextControl().getText())) && //$NON-NLS-1$
+						( registryItemType.getTextControl().getText() != null && !"".equals(registryItemType.getTextControl().getText())); //$NON-NLS-1$
 	}
 	
 }

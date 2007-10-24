@@ -2,6 +2,7 @@ package org.nightlabs.jfire.scripting.admin.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.framework.BundleContext;
  */
 public class ScriptingAdminPlugin extends AbstractUIPlugin {
 
-	public static final String ZONE_ADMIN = ScriptingAdminPlugin.class.getName()+"#ZONE_ADMIN";
+	public static final String ZONE_ADMIN = ScriptingAdminPlugin.class.getName()+"#ZONE_ADMIN"; //$NON-NLS-1$
 	
 	//The shared instance.
 	private static ScriptingAdminPlugin plugin;
@@ -51,6 +52,6 @@ public class ScriptingAdminPlugin extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.scripting.admin.ui", path);
+		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.scripting.admin.ui", path); //$NON-NLS-1$
 	}
 }

@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.scripting.ScriptParameter;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 
 /**
@@ -40,8 +41,8 @@ import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
  */
 public class EditScriptParameterTable extends ScriptParameterTable implements ICellModifier {
 
-	public static final String COL_PROPERTY_PARAMETER_ID = "scriptParameterID";
-	public static final String COL_PROPERTY_PARAMETER_TYPE = "scriptParameterClassName";
+	public static final String COL_PROPERTY_PARAMETER_ID = "scriptParameterID"; //$NON-NLS-1$
+	public static final String COL_PROPERTY_PARAMETER_TYPE = "scriptParameterClassName"; //$NON-NLS-1$
 	
 	/**
 	 * @param parent

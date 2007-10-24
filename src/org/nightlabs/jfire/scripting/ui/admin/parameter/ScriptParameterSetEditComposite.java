@@ -21,6 +21,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.id.ScriptParameterSetID;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterSetProvider;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterSetTable;
@@ -42,7 +43,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 	private ScriptParameterSetTableMenuManager menuManager;
 	private ScriptParameterSetDetailComposite detailComposite;	
 	
-	private Job fetchParameterSetsJob = new Job("Fetching ParameterSets ..."){
+	private Job fetchParameterSetsJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetEditComposite.fetchParameterSetsJob.name")){ //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			final Collection<ScriptParameterSet> sets = ScriptParameterSetProvider.sharedInstance().getParameterSets();
@@ -132,11 +133,11 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		wrapper.getGridLayout().makeColumnsEqualWidth = true;
 		parameterSetTable = new ScriptParameterSetTable(wrapper, SWT.NONE, true);
 		Collection<String> input = new ArrayList<String>();
-		input.add("Fetching ParameterSets ...");
+		input.add(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetEditComposite.fetchParameterSets.loadingMessage")); //$NON-NLS-1$
 		parameterSetTable.setInput(input);
 		parameterSetTable.getTableViewer().addDoubleClickListener(tableDoubleClickListener);
 		menuManager = new ScriptParameterSetTableMenuManager(
-				this.getClass().getName()+"#SetContextMenu", 
+				this.getClass().getName()+"#SetContextMenu",  //$NON-NLS-1$
 				parameterSetTable.getTable()
 			);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptParameterSetID.class, setChangeListener);

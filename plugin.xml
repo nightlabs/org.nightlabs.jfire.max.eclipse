@@ -1,84 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.0"?>
 <plugin>
-   <extension-point id="scriptRegistryItemAction" name="ScriptRegistryItemAction Extension-Point" schema="schema/scriptRegistryItemAction.exsd"/>
-   <extension-point id="scriptParameterSetAction" name="ScriptParameterSetAction Extension-Point" schema="schema/scriptParameterSetAction.exsd"/>
-   <extension-point id="scriptEditor" name="ScriptEditor ExtensionPoint" schema="schema/scriptEditor.exsd"/>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
+    <extension-point id="scriptRegistryItemAction"
+        name="ScriptRegistryItemAction Extension-Point" schema="schema/scriptRegistryItemAction.exsd"/>
+    <extension-point id="scriptParameterSetAction"
+        name="ScriptParameterSetAction Extension-Point" schema="schema/scriptParameterSetAction.exsd"/>
+    <extension-point id="scriptEditor"
+        name="ScriptEditor ExtensionPoint" schema="schema/scriptEditor.exsd"/>
+    <extension point="org.eclipse.ui.views">
+        <view
             category="org.nightlabs.jfire.scripting.admin.ui.viewCategory"
             class="org.nightlabs.jfire.scripting.admin.ui.script.ScriptView"
             icon="icons/ScriptView.16x16.png"
-            id="org.nightlabs.jfire.scripting.admin.ui.script.ScriptView"
-            name="Scripts"/>
-      <category
-            id="org.nightlabs.jfire.scripting.admin.ui.viewCategory"
-            name="JFireScripting"/>
-      <view
+            id="org.nightlabs.jfire.scripting.admin.ui.script.ScriptView" name="%org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.name"/>
+        <category
+            id="org.nightlabs.jfire.scripting.admin.ui.viewCategory" name="%org.nightlabs.jfire.scripting.admin.ui.viewCategory.name"/>
+        <view
             category="org.nightlabs.jfire.scripting.admin.ui.viewCategory"
             class="org.nightlabs.jfire.scripting.ui.admin.parameter.ParameterView"
             icon="icons/ScriptView.16x16.png"
-            id="org.nightlabs.jfire.scripting.admin.ui.parameter.ParameterView"
-            name="Parameter View"/>
-   </extension>
-   <extension
-         point="org.nightlabs.jfire.scripting.admin.ui.scriptRegistryItemAction">
-      <separator name="additions"/>
-      <scriptRegistryItemAction
+            id="org.nightlabs.jfire.scripting.admin.ui.parameter.ParameterView" name="%org.nightlabs.jfire.scripting.admin.ui.parameter.ParameterView.name"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptRegistryItemAction">
+        <separator name="additions"/>
+        <scriptRegistryItemAction
             class="org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptCategoryAction"
             contextmenuPath="additions"
             icon="icons/script/action/add/AddScriptCategoryAction.16x16.png"
             id="org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptCategoryAction"
-            name="AddScriptCategoryAction"
-            toolbarPath="additions"
-            tooltip="Add a new ScriptCategory"/>
-      <scriptRegistryItemAction
+            name="%org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptCategoryAction.name"
+            toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptCategoryAction.tooltip"/>
+        <scriptRegistryItemAction
             class="org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptAction"
             contextmenuPath="additions"
             icon="icons/script/action/add/AddScriptAction.16x16.png"
             id="org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptAction"
-            name="AddScriptAction"
-            toolbarPath="additions"
-            tooltip="Add a new Script"/>
-      <scriptRegistryItemAction
+            name="%org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptAction.name"
+            toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptAction.tooltip"/>
+        <scriptRegistryItemAction
             class="org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction"
             contextmenuPath="additions"
             icon="icons/script/action/edit/EditScriptAction.16x16.png"
             id="org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction"
-            name="EditScriptAction"
-            toolbarPath="additions"
-            tooltip="Edit Script"/>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
+            name="%org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction.name"
+            toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction.tooltip"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
             class="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
             icon="icons/editor/ScriptingJSEditor.16x16.png"
-            id="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor"
-            name="ScriptingJSEditor"/>
-   </extension>
-   <extension
-         point="org.nightlabs.jfire.scripting.admin.ui.scriptEditor">
-      <scriptEditor
-            editorID="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor"
-            scriptLanguage="JavaScript"/>
-   </extension>
-   <extension
-         point="org.nightlabs.jfire.scripting.admin.ui.scriptParameterSetAction">
-      <separator
-            name="additions"
-            />
-      <scriptParameterSetAction
+            id="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor" name="%org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor.name"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptEditor">
+        <scriptEditor
+            editorID="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor" scriptLanguage="JavaScript"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptParameterSetAction">
+        <separator name="additions"/>
+        <scriptParameterSetAction
             class="org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction"
             contextmenuPath="additions"
             icon="icons/parameter/action/add/AddScriptParameterSetAction.16x16.png"
             id="org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction"
-            name="Add ScriptParameterSet"
-            toolbarPath="additions"
-            tooltip="Add a new parameter set"/>
-   </extension>
-
+            name="%org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.name"
+            toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.tooltip"/>
+    </extension>
 </plugin>

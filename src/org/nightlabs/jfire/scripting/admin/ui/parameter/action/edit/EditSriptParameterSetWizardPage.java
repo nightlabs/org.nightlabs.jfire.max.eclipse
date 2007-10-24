@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 
 /**
@@ -55,7 +56,7 @@ public class EditSriptParameterSetWizardPage extends I18nTextEditorWizardPage {
 	 * @param editorCaption
 	 */
 	public EditSriptParameterSetWizardPage(ScriptParameterSet parameterSet) {
-		super(EditSriptParameterSetWizardPage.class.getName(), "Edit the Parameter sets name and entries", "Parameter set name:");
+		super(EditSriptParameterSetWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit.EditSriptParameterSetWizardPage.title"), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit.EditSriptParameterSetWizardPage.editorCaption")); //$NON-NLS-1$ //$NON-NLS-2$
 		this.parameterSet = parameterSet;
 	}
 	
@@ -72,11 +73,11 @@ public class EditSriptParameterSetWizardPage extends I18nTextEditorWizardPage {
 			parameterTable.setInput(parameterSet);
 		buttonsWrapper = new XComposite(paramWrapper, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
 		newParamButton = new Button(buttonsWrapper, SWT.PUSH);
-		newParamButton.setText("New Param");
+		newParamButton.setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit.EditSriptParameterSetWizardPage.newParamButton.text")); //$NON-NLS-1$
 		newParamButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		delParamButton = new Button(buttonsWrapper, SWT.PUSH);
-		delParamButton.setText("Del Param");
+		delParamButton.setText(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.edit.EditSriptParameterSetWizardPage.delParamButton.text")); //$NON-NLS-1$
 		delParamButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	

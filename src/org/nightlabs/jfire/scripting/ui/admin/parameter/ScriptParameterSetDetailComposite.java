@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 
 /**
@@ -65,7 +66,7 @@ public class ScriptParameterSetDetailComposite extends XComposite {
 	
 	private void init() {
 		wrapper = new XComposite(this, SWT.NONE, XComposite.LayoutMode.ORDINARY_WRAPPER);
-		nameEditor = new I18nTextEditor(wrapper, "ParameterSet name:");
+		nameEditor = new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetDetailComposite.nameEditor.caption")); //$NON-NLS-1$
 		parameterTable = new ScriptParameterTable(wrapper, SWT.NONE);
 	}
 
