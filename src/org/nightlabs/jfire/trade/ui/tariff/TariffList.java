@@ -98,6 +98,21 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		this.filterOrganisationIDInverse = filterOrganisationIDInverse;
 	}
 
+	/**
+	 * Load the tariffs. When this composite is created, it is initially empty. In order to make it display
+	 * the tariffs, this method needs to be called on the UI thread. It spawns a {@link Job} which loads the data,
+	 * orders it with the given {@link Comparator} and displays it. If no <code>Comparator</code> is given, it
+	 * sorts according to the tariff's name (obtained via {@link Tariff#getName()} and using the default {@link Locale}).
+	 * <p>
+	 * If not all {@link Tariff}s should be displayed, you can pass a {@link TariffFilter} to the constructor.
+	 * </p>
+	 *
+	 * @param _tariffComparator The comparator to be used for sorting the {@link Tariff}s or <code>null</code> to use the built-in
+	 *		default (sorting by the tariff's name).
+	 * 
+	 * TODO isn't the API inconsistent in that it takes the {@link TariffFilter} in the constructor, but the comparator here? Maybe we should
+	 *		pass both here? 
+	 */
 	public void loadTariffs(final Comparator<Tariff> _tariffComparator) {
 		setLoadingMessage("Loading tariffs...");
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.loadTariffsJob.name")) { //$NON-NLS-1$
