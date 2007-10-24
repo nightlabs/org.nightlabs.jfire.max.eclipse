@@ -74,7 +74,7 @@ public class IssuePage extends EntityEditorPageWithProgress
 	 */
 	public IssuePage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.issuetracking.ui.editor.issue.IssuePage.pageTitle")); //$NON-NLS-1$
+		super(editor, ID_PAGE, "Issue Page Title");
 	}
 
 	@Override
@@ -101,6 +101,6 @@ public class IssuePage extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.editor.issue.IssuePage.pageFormTitle"); //$NON-NLS-1$
+		return "Issue Page Title";
 	}
 }

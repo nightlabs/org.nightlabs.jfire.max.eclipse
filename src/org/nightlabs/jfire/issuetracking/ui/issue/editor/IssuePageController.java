@@ -63,7 +63,7 @@ public class IssuePageController extends EntityEditorPageController
 
 	public void doLoad(IProgressMonitor monitor)
 	{
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.IssuePageController.loadIssuesJob.name"), 100); //$NON-NLS-1$
+		monitor.beginTask("Loading Issues....", 100);
 
 //		List<IssueQuery> queryList = new LinkedList<IssueQuery>();
 //		queryList.add(issueQuery);
@@ -89,7 +89,7 @@ public class IssuePageController extends EntityEditorPageController
 	{
 //		propertyChangeSupport.firePropertyChange(PROPERTY_MONEY_TRANSFER_QUERY, null, issueQuery);
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.IssuePageController.loadIssuesMonitor.task.name")) { //$NON-NLS-1$
+		Job job = new Job("Loading Issues....") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{

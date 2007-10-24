@@ -18,12 +18,15 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
+import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateIssueComposite extends XComposite{
 	
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
+	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	
 	public CreateIssueComposite(Composite parent, int style) {
 		super(parent, style);
@@ -41,7 +44,7 @@ public class CreateIssueComposite extends XComposite{
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 		
 		Label severityLbl = new Label(this, SWT.NONE);
-		severityLbl.setText("Severity");
+		severityLbl.setText("Severity: ");
 		
 		ILabelProvider labelProvider = new LabelProvider() {
 			@Override
@@ -51,17 +54,28 @@ public class CreateIssueComposite extends XComposite{
 					IssueSeverityType issueSeverityType = (IssueSeverityType) element;
 					return issueSeverityType.getIssueSeverityTypeText().getText();
 				}
+				
+				if (element instanceof IssueStatus) {
+					IssueStatus issueStatus = (IssueStatus) element;
+					return issueStatus.getIssueStatusText().getText();
+				}
 				return super.getText(element);
 			}		
 		};
 		
 		final XComboComposite<IssueSeverityType> severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
 		
+		Label statusLbl = new Label(this, SWT.NONE);
+		statusLbl.setText("Status: ");
+		
+		final XComboComposite<IssueStatus> statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
+		
 		Job loadJob = new Job("Loading Issue Severity Types....") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
+					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
 				} catch (Exception e) {
 					ExceptionHandlerRegistry.asyncHandleException(e);
 					throw new RuntimeException(e);
@@ -73,6 +87,18 @@ public class CreateIssueComposite extends XComposite{
 							IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
 							severityCombo.addElement(issueSeverityType);
 						}
+						severityCombo.selectElementByIndex(1);
+					}
+				});
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						statusCombo.removeAll();
+						for (Iterator it = issueStatus.iterator(); it.hasNext(); ) {
+							IssueStatus is = (IssueStatus) it.next();
+							statusCombo.addElement(is);
+						}
+						statusCombo.selectElementByIndex(1);
 					}
 				});
 
