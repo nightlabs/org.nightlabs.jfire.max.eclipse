@@ -10,8 +10,12 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -23,13 +27,17 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateIssueComposite extends XComposite{
@@ -37,6 +45,10 @@ public class CreateIssueComposite extends XComposite{
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
 	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
+	
+	private IssueSeverityType selectedIssueSeverityType;
+	private IssueStatus selectedIssueStatus;
+	private IssuePriority selectedIssuePriority;
 	
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
@@ -59,15 +71,47 @@ public class CreateIssueComposite extends XComposite{
 		Label severityLbl = new Label(this, SWT.NONE);
 		severityLbl.setText("Severity: ");
 		final XComboComposite<IssueSeverityType> severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
+		severityCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				selectedIssueSeverityType = severityCombo.getSelectedElement();
+			}
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedIssueSeverityType = severityCombo.getSelectedElement();
+			}
+		});
 		
 		Label statusLbl = new Label(this, SWT.NONE);
 		statusLbl.setText("Status: ");
 		final XComboComposite<IssueStatus> statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
+		statusCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				selectedIssueStatus = statusCombo.getSelectedElement();
+			}
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedIssueStatus = statusCombo.getSelectedElement();
+			}
+		});
 		
 		Label priorityLbl = new Label(this, SWT.NONE);
 		priorityLbl.setText("Priority: ");
 		final XComboComposite<IssuePriority> priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
-		
+		priorityCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				selectedIssuePriority = priorityCombo.getSelectedElement();
+			}
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedIssuePriority = priorityCombo.getSelectedElement();
+			}
+		});
 		/**********USER**********/
 		Label userLbl = new Label(this, SWT.NONE);
 		userLbl.setText("User: ");
@@ -151,6 +195,23 @@ public class CreateIssueComposite extends XComposite{
 		};
 		loadJob.schedule();
 		
+		Button submitButton = new Button(this, SWT.PUSH);
+		submitButton.setText("Submit");
+		
+		submitButton.addSelectionListener(new SelectionListener(){
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void widgetSelected(SelectionEvent arg0) {
+				IssueDAO id = IssueDAO.sharedInstance();
+				id.createIssueWithoutAttachedDocument(new Issue(selectedIssuePriority, selectedIssueSeverityType, selectedIssueStatus, null, null)
+					,true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				
+			}
+		});
+		
 //		 Category  	
 //		 Reproducibility 	
 	}
@@ -176,4 +237,29 @@ public class CreateIssueComposite extends XComposite{
 			return super.getText(element);
 		}		
 	};
+
+	public IssueSeverityType getSelectedIssueSeverityType() {
+		return selectedIssueSeverityType;
+	}
+
+	public void setSelectedIssueSeverityType(
+			IssueSeverityType selectedIssueSeverityType) {
+		this.selectedIssueSeverityType = selectedIssueSeverityType;
+	}
+
+	public IssueStatus getSelectedIssueStatus() {
+		return selectedIssueStatus;
+	}
+
+	public void setSelectedIssueStatus(IssueStatus selectedIssueStatus) {
+		this.selectedIssueStatus = selectedIssueStatus;
+	}
+
+	public IssuePriority getSelectedIssuePriority() {
+		return selectedIssuePriority;
+	}
+
+	public void setSelectedIssuePriority(IssuePriority selectedIssuePriority) {
+		this.selectedIssuePriority = selectedIssuePriority;
+	}
 }
