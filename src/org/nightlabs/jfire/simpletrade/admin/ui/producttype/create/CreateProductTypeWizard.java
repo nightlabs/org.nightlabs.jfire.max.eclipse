@@ -112,6 +112,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeWizard.windowTitle")); //$NON-NLS-1$
 	}
 
+	@Override
 	public void addPages()
 	{
 		productTypeNamePage = new ProductTypeNamePage(parentProductTypeID);
@@ -133,6 +134,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{
@@ -165,15 +167,15 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 						}
 
 						switch (selectPriceConfigPage.getAction()) {
-							case ChooseSimpleTradePriceConfigPage.ACTION_INHERIT:
+							case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
 								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(true); //$NON-NLS-1$
 								newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
 								break;
-							case ChooseSimpleTradePriceConfigPage.ACTION_LATER:
+							case AbstractChooseGridPriceConfigPage.ACTION_LATER:
 								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
 								// nothing
 								break;
-							case ChooseSimpleTradePriceConfigPage.ACTION_CREATE:
+							case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
 								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
 								IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
 								priceConfig = new FormulaPriceConfig(
@@ -182,9 +184,9 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 								priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
 								newProductType.setInnerPriceConfig(priceConfig);
 								break;
-							case ChooseSimpleTradePriceConfigPage.ACTION_SELECT:
+							case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
 								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
-								newProductType.setInnerPriceConfig((IInnerPriceConfig) selectPriceConfigPage.getSelectedPriceConfig());
+								newProductType.setInnerPriceConfig(selectPriceConfigPage.getSelectedPriceConfig());
 								break;
 							default:
 								throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + selectPriceConfigPage.getAction()); //$NON-NLS-1$

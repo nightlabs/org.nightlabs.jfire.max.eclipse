@@ -29,6 +29,7 @@ public class OrganisationSelectionPage
 		setDescription(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.OrganisationSelectionPage.description")); //$NON-NLS-1$
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{

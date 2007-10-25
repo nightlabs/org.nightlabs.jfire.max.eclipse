@@ -35,7 +35,7 @@ extends AbstractProductTypeNameSection
 	@Override
 	protected ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor) 
 	{
-		return (SimpleProductType) ProductTypeDAO.sharedInstance().getProductType(
+		return ProductTypeDAO.sharedInstance().getProductType(
 				(ProductTypeID)JDOHelper.getObjectId(type), 
 				FETCH_GROUP_NAME, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,

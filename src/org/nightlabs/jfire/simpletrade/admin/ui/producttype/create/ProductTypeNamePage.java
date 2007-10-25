@@ -86,6 +86,7 @@ extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		final FadeableComposite page = new FadeableComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -96,6 +97,7 @@ extends DynamicPathWizardPage
 		inheritanceNatureCombo.add( Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.inheritanceNatureCombo.item_node")); //$NON-NLS-1$
 		inheritanceNatureCombo.add(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.inheritanceNatureCombo.item_leaf")); //$NON-NLS-1$
 		inheritanceNatureCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				inheritanceNatureCombo_selectionChanged();
@@ -107,6 +109,7 @@ extends DynamicPathWizardPage
 		packageNatureCombo.add(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.packageNatureCombo.item_outer")); //$NON-NLS-1$
 
 		packageNatureCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				packageNatureCombo_selectionChanged();
@@ -136,6 +139,7 @@ extends DynamicPathWizardPage
 		packageNatureDescription.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.packageNatureDescription.text_loading")); //$NON-NLS-1$
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.loadProductTypeJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			throws Exception
@@ -165,7 +169,7 @@ extends DynamicPathWizardPage
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return page;

@@ -69,6 +69,7 @@ public class EditNestedProductTypePage
 		quantitySpinner.setMaximum(Integer.MAX_VALUE);
 		quantitySpinner.setSelection(quantity);
 		quantitySpinner.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				quantity = quantitySpinner.getSelection();
 			}

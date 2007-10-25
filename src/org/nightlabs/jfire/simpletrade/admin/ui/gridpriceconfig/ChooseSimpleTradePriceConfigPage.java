@@ -21,6 +21,7 @@ extends AbstractChooseGridPriceConfigPage
 		super(parentProductTypeID);
 	}
 
+	@Override
 	@Implement
 	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor) 
 	{

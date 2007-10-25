@@ -31,6 +31,7 @@ public class SimpleProductTypeCategory
 		super(tradeAdminCategoryFactory);
 	}
 
+	@Override
 	@Implement
 	protected Composite _createComposite(Composite parent)
 	{

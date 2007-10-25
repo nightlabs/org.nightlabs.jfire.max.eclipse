@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -33,7 +34,7 @@ extends AbstractNestedProductTypeSection
 
 		CreateNestedProductTypeWizard wizard = new CreateNestedProductTypeWizard(packageProductType);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
-		if (dialog.open() == DynamicPathWizardDialog.OK) {
+		if (dialog.open() == Window.OK) {
 			refreshNestedProductTypes();
 			markDirty();
 		}

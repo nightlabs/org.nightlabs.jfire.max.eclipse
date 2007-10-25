@@ -18,6 +18,7 @@ public class SubscribeWizard
 		addPage(organisationSelectionPage);
 	}
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{

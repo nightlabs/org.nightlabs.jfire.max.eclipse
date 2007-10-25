@@ -13,6 +13,7 @@ import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 /**
@@ -46,7 +47,7 @@ extends AbstractProductTypePageController
 		ProductType productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
 				getProductTypeID(), new String[] {FetchPlan.DEFAULT, SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA}, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
-		ProductType clonedProductType = Utils.cloneSerializable(productType);
+		ProductType clonedProductType = Util.cloneSerializable(productType);
 		setProductType(clonedProductType);
 		monitor.worked(1);
 	}

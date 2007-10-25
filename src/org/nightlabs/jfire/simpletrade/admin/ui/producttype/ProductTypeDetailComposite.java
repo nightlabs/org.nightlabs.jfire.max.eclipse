@@ -37,6 +37,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.producttype.NestedProductTypeTable;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 public class ProductTypeDetailComposite
@@ -108,6 +109,7 @@ implements ISelectionProvider
 //		inheritProductTypeName.setText("inherit");
 		inheritProductTypeName.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
 		inheritProductTypeName.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				if (inheritProductTypeName.getSelection()) {
@@ -123,7 +125,7 @@ implements ISelectionProvider
 								final ProductTypeHolder typeHolder = new ProductTypeHolder();
 								typeHolder.extendedProductType = productTypeWithExtended.getExtendedProductType();
 								if (typeHolder.extendedProductType != null) {
-									typeHolder.extendedProductType = (SimpleProductType) ProductTypeDAO.sharedInstance().getProductType(
+									typeHolder.extendedProductType = ProductTypeDAO.sharedInstance().getProductType(
 											(ProductTypeID)JDOHelper.getObjectId(typeHolder.extendedProductType), 
 											new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME}, 
 											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -191,6 +193,7 @@ implements ISelectionProvider
 			productType.getFieldMetaData("nestedProductTypes").setValueInherited(inherited); //$NON-NLS-1$
 		if (inherited) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.ProductTypeDetailComposite.inheritNestedProductTypesJob.name")) { //$NON-NLS-1$
+				@Override
 				@Implement
 				protected IStatus run(ProgressMonitor monitor) throws Exception
 				{
@@ -229,7 +232,7 @@ implements ISelectionProvider
 					return Status.OK_STATUS;
 				}
 			};
-			job.setPriority(Job.SHORT);
+			job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 			nestedProductTypeTable.setEnabled(false);
 			job.schedule();
 		} // if (inherited) {
@@ -344,7 +347,7 @@ implements ISelectionProvider
 				if (productTypeID == null)
 					return Status.OK_STATUS;
 				try {
-					final ProductType productType = Utils.cloneSerializable(
+					final ProductType productType = Util.cloneSerializable(
 						ProductTypeDAO.sharedInstance().getProductType(
 								productTypeID, FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor));
