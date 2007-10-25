@@ -80,6 +80,7 @@ extends LSDViewPart
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus() {
 	}
 
@@ -100,6 +101,7 @@ extends LSDViewPart
 	
 	public abstract String getNotificationZone();
 	
+	@Override
 	public boolean canDisplayPart() {
 		return Login.isLoggedIn();
 	}

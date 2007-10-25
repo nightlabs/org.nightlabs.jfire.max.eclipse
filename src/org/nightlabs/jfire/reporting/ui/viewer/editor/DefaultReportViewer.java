@@ -55,6 +55,7 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 		return DefaultReportViewerEditor.ID_EDITOR;
 	}
 
+	@Override
 	public Object getAdapter(Object adapterObject) {
 		if (Composite.class.isInstance(adapterObject)) {
 			if (compositeAdapter == null) {

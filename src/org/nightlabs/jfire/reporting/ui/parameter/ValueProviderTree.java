@@ -92,12 +92,14 @@ public class ValueProviderTree extends ActiveJDOObjectTreeComposite<ObjectID, Ob
 		getTreeViewer().setSorter(new ViewerSorter());
 	}
 	
+	@Override
 	@Implement
 	public void createTreeColumns(Tree tree)
 	{
 //		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 	}
 
+	@Override
 	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{

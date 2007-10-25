@@ -87,7 +87,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 		}
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, IProgressMonitor monitor) {
 		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);
@@ -117,19 +117,19 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 			return Collections.emptySet();
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, IProgressMonitor monitor) {
 		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);
 		if (objectIDs.size() <= 0)
 			return Collections.emptySet();
 		if (objectIDs.iterator().next() instanceof ValueProviderCategoryID) {
-			Set<ValueProviderCategoryID> catIDs = (Set<ValueProviderCategoryID>)((Set)objectIDs);
-			return (Collection<Object>)((Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(catIDs, CATEGORY_FETCH_GROUPS, monitorWrapper));
+			Set<ValueProviderCategoryID> catIDs = ((Set)objectIDs);
+			return ((Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(catIDs, CATEGORY_FETCH_GROUPS, monitorWrapper));
 		}
 		else {
-			Set<ValueProviderID> providerIDs = (Set<ValueProviderID>)((Set)objectIDs);
-			return (Collection<Object>)((Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, monitorWrapper));
+			Set<ValueProviderID> providerIDs = ((Set)objectIDs);
+			return ((Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, monitorWrapper));
 		}
 	}
 

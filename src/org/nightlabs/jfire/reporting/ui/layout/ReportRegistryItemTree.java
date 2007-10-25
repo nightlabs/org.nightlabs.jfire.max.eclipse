@@ -114,12 +114,14 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 		getTreeViewer().setSorter(new ViewerSorter());
 	}
 	
+	@Override
 	@Implement
 	public void createTreeColumns(Tree tree)
 	{
 //		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 	}
 
+	@Override
 	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{

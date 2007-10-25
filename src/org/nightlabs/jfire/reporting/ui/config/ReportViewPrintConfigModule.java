@@ -65,6 +65,7 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 		/**
 		 * @deprecated Only for Serialization
 		 */
+		@Deprecated
 		public UseCaseConfig() {
 		}
 		

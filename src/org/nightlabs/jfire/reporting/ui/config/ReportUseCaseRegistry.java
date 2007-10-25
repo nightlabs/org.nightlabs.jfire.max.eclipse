@@ -66,7 +66,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#processElement(org.eclipse.core.runtime.IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	public void processElement(IExtension extension,
 			IConfigurationElement element) throws Exception {
