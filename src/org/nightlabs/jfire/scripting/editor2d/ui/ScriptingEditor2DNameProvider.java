@@ -37,6 +37,7 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
 public class ScriptingEditor2DNameProvider 
 extends EditorNameProvider 
 {
+	@Override
 	public String getTypeName(Class c) 
 	{
 		if (TextScriptDrawComponent.class.isAssignableFrom(c)) {

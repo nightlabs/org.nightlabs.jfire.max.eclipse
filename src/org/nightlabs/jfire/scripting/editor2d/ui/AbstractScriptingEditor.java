@@ -89,6 +89,7 @@ implements ControllablePart
 		login();
 	}
 	
+	@Override
 	public void createPartControl(Composite parent) 
 	{
 		if (!Login.isLoggedIn())

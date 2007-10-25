@@ -48,6 +48,7 @@ extends GraphicalEditPartFactory
 		super();
 	}
 
+	@Override
 	public EditPart createEditPart(EditPart context, Object model)
 	{
     if (model instanceof ScriptRootDrawComponent)

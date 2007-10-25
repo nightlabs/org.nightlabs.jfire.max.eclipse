@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -146,7 +147,7 @@ extends CenteredDialog
 		heightSpinner.setMinimum(1);
 		heightSpinner.setMaximum(Integer.MAX_VALUE);
 		// TODO: get dotunit from AbstractEditor.getUnitManager()
-		int heightInDots = (int) UnitUtil.getModelValue(DEFAULT_BARCODE_HEIGHT, new DotUnit(new ResolutionImpl()), new MMUnit());
+		int heightInDots = UnitUtil.getModelValue(DEFAULT_BARCODE_HEIGHT, new DotUnit(new ResolutionImpl()), new MMUnit());
 		heightSpinner.setSelection(heightInDots);
 		
 		// Orientation
@@ -170,13 +171,14 @@ extends CenteredDialog
 	{
 //		List<Type> types = CollectionUtil.enum2List(Type.valueOf(Type.class, "TYPE_128"));
 		List<Type> types = CollectionUtil.enum2List(Type.TYPE_128);
-		barcodeTypeCombo = new XComboComposite<Type>(parent, XComboComposite.getDefaultWidgetStyle(parent),
+		barcodeTypeCombo = new XComboComposite<Type>(parent, AbstractListComposite.getDefaultWidgetStyle(parent),
 				(String) null, barcodeTypeLabelProvider);
 		barcodeTypeCombo.setInput(types);
 	}
 		
 	public static ILabelProvider barcodeTypeLabelProvider = new LabelProvider()
 	{	
+		@Override
 		public String getText(Object element) 
 		{
 			if (element instanceof Type) 
@@ -191,6 +193,7 @@ extends CenteredDialog
 			}
 			return null;
 		}	
+		@Override
 		public Image getImage(Object element) {
 			return null;
 		}	
@@ -201,12 +204,13 @@ extends CenteredDialog
 //		List<WidthScale> types = CollectionUtil.enum2List(Enum.valueOf(WidthScale.class, "SCALE_1"));
 		List<WidthScale> types = CollectionUtil.enum2List(WidthScale.SCALE_1);
 		widthScaleCombo = new XComboComposite<WidthScale>(parent, 
-				XComboComposite.getDefaultWidgetStyle(parent), (String) null, widthScaleLabelProvider);
+				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null, widthScaleLabelProvider);
 		widthScaleCombo.setInput(types);
 	}	
 	
 	public static ILabelProvider widthScaleLabelProvider = new LabelProvider()
 	{	
+		@Override
 		public String getText(Object element) 
 		{
 			if (element instanceof WidthScale) {
@@ -225,6 +229,7 @@ extends CenteredDialog
 			}
 			return null;
 		}	
+		@Override
 		public Image getImage(Object element) {
 			return null;
 		}	
@@ -235,12 +240,13 @@ extends CenteredDialog
 //		List<Orientation> types = CollectionUtil.enum2List(Enum.valueOf(Orientation.class, "HORIZONTAL"));		
 		List<Orientation> types = CollectionUtil.enum2List(Orientation.HORIZONTAL);		
 		orientationCombo = new XComboComposite<Orientation>(parent, 
-				XComboComposite.getDefaultWidgetStyle(parent), (String) null, orientationLabelProvider);
+				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null, orientationLabelProvider);
 		orientationCombo.setInput(types);
 	}
 		
 	public static ILabelProvider orientationLabelProvider = new LabelProvider()
 	{	
+		@Override
 		public String getText(Object element) 
 		{
 			if (element instanceof Orientation) {
@@ -252,6 +258,7 @@ extends CenteredDialog
 			}
 			return null;
 		}	
+		@Override
 		public Image getImage(Object element) {
 			return null;
 		}	
@@ -259,6 +266,7 @@ extends CenteredDialog
 	
 	public static ILabelProvider scriptRegistryLabelProvider = new LabelProvider()
 	{	
+		@Override
 		public String getText(Object element) 
 		{
 			if (element instanceof ScriptRegistryItemID) {
@@ -267,6 +275,7 @@ extends CenteredDialog
 			}
 			return null;
 		}	
+		@Override
 		public Image getImage(Object element) {
 			return null;
 		}	

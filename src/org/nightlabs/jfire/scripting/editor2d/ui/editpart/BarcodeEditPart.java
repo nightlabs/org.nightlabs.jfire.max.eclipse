@@ -30,6 +30,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.nightlabs.editor2d.ui.edit.DrawComponentEditPart;
 import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent;
+import org.nightlabs.jfire.scripting.editor2d.ScriptDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource;
 
 /**
@@ -74,7 +75,7 @@ extends DrawComponentEditPart
 			refreshVisuals();
 			return;
 		}
-		if (propertyName.equals(BarcodeDrawComponent.PROP_SCRIPT_REGISTRY_ITEM_ID)) {
+		if (propertyName.equals(ScriptDrawComponent.PROP_SCRIPT_REGISTRY_ITEM_ID)) {
 			refreshVisuals();
 			return;
 		}

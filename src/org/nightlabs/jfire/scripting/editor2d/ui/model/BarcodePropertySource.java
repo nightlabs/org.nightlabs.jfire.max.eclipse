@@ -167,6 +167,7 @@ extends DrawComponentPropertySource
 	}
 	
 	// TODO: use WidthScale Combo
+	@Override
 	protected PropertyDescriptor createWidthPD() 
 	{		
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_WIDTH,

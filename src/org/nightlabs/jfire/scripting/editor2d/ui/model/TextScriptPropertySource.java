@@ -55,7 +55,7 @@ extends TextPropertySource
 	@Override	
 	public void setPropertyValue(Object id, Object value) 
 	{
-		if (id.equals(TextDrawComponent.PROP_NAME)) {
+		if (id.equals(DrawComponent.PROP_NAME)) {
 			// do nothing  
 		}		
 		super.setPropertyValue(id, value);
@@ -64,7 +64,7 @@ extends TextPropertySource
 	@Override
 	public Object getPropertyValue(Object id) 
 	{
-		if (id.equals(TextDrawComponent.PROP_NAME)) {
+		if (id.equals(DrawComponent.PROP_NAME)) {
 			// Show the the ID of the ScriptRegistryItem as Name
 			return getTextScript().getScriptRegistryItemID().scriptRegistryItemID;
 		}				

@@ -51,6 +51,7 @@ public static final Logger LOGGER = Logger.getLogger(CreateBarcodeCommand.class)
   	return (ScriptEditor2DFactory) request.getModelCreationFactory().getFactory();
   }	
   
+	@Override
 	public void execute() 
 	{
 	  int x = getBounds().x;

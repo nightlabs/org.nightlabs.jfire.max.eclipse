@@ -48,7 +48,8 @@ extends ModelCreationFactory
   /** 
    * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
    */
-  public Object getNewObject()
+  @Override
+	public Object getNewObject()
   {                  
 //    if( targetClass.equals(ScriptRootDrawComponent.class)) {
 //      return getScriptingEditor2DFactory().createScriptRootDrawComponent();

@@ -55,7 +55,8 @@ extends AbstractPaletteFactory
 	  * Use this factory method to create a new palette for your graphical editor.
 	  * @return a new PaletteRoot
 	  */
-	 protected PaletteRoot createPalette() 
+	 @Override
+	protected PaletteRoot createPalette() 
 	 {
 		 PaletteRoot palette = new PaletteRoot();
 		 palette.add(createToolsGroup(palette));
@@ -66,6 +67,7 @@ extends AbstractPaletteFactory
 	/**
 	 * @see org.nightlabs.editor2d.ui.AbstractPaletteFactory#getCreationFactory(java.lang.Class)
 	 */
+	@Override
 	public IModelCreationFactory getCreationFactory(Class targetClass) {
 		return new ScriptingEditorModelCreationFactory(targetClass, getScriptEditor2DFactory());
 	}

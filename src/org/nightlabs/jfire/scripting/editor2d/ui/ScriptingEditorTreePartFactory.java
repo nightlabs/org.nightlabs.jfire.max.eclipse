@@ -48,7 +48,8 @@ extends TreePartFactory
 		super(filterMan);
 	}
 
-  public EditPart createEditPart(EditPart context, Object model) 
+  @Override
+	public EditPart createEditPart(EditPart context, Object model) 
   {
   	if (model instanceof TextScriptDrawComponent)
   		return new TextScriptTreeEditPart((TextScriptDrawComponent)model);

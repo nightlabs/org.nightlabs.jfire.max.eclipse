@@ -28,6 +28,7 @@ package org.nightlabs.jfire.scripting.editor2d.ui.tool;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.tools.CreationTool;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.nightlabs.editor2d.ui.model.IModelCreationFactory;
 import org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.BarcodeCreateRequest;
@@ -68,7 +69,7 @@ extends CreationTool
     CreateBarcodeDialog dialog = createBarcodeDialog();
     dialog.open();
         
-    if (dialog.getReturnCode() == Dialog.OK) 
+    if (dialog.getReturnCode() == Window.OK) 
     {
       performCreation(1);
       return true;

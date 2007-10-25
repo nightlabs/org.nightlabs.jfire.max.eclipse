@@ -113,6 +113,7 @@ extends CenteredDialog
 		
 	protected abstract AbstractScriptRegistryItemTreeComposite createScriptTreeComposite(Composite parent);
 	
+	@Override
 	protected Control createDialogArea(Composite parent) 
 	{
 		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
