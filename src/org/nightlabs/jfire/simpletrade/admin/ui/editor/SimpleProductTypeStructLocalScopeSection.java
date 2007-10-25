@@ -52,8 +52,12 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 	
 	public void setSimpleProductType(SimpleProductType productType) {
 		structLocalScope = productType.getStructLocalScope();
-		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, structLocalScope, new NullProgressMonitor());		
-		structLocalScopeText.setText(sl.getName().getText());
+		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, structLocalScope, new NullProgressMonitor());
+		if (sl != null && sl.getName() != null) {
+			structLocalScopeText.setText(sl.getName().getText());
+		} else {
+			structLocalScopeText.setText(structLocalScope);
+		}
 	}
 
 }
