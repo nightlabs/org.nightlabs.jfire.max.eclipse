@@ -52,4 +52,22 @@
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="10" />
   </extension>  
+  
+  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+      <editorActionBarContributionRegistry
+            targetEditorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor">
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.issue.action.IssueAction"
+               contextmenuPath="org.nightlabs.jfire.issuetracking.ui.overview"
+			   icon="icons/overview/account/action/ManualMoneyTransferAction.16x16.png"               
+               id="org.nightlabs.jfire.jfire.issuetracking.ui.issue.action.IssueAction"
+               name="Issue"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="Manually transfer money from or to the selected account.">
+         </editorActionBarContribution>
+         <groupMarker
+               name="org.nightlabs.jfire.issuetracking.ui.overview">
+         </groupMarker>         
+      </editorActionBarContributionRegistry>
+   </extension-->
 </plugin>

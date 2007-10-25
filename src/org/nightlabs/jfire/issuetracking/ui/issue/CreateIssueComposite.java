@@ -9,24 +9,27 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateIssueComposite extends XComposite{
@@ -65,12 +68,36 @@ public class CreateIssueComposite extends XComposite{
 		priorityLbl.setText("Priority: ");
 		final XComboComposite<IssuePriority> priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
 		
+		/**********USER**********/
+		Label userLbl = new Label(this, SWT.NONE);
+		userLbl.setText("User: ");
+		
+		UserSearchComposite uc = new UserSearchComposite(this, SWT.NONE);
+		/************************/
+		
+		Label subjectLabel = new Label(this, SWT.NONE);
+		subjectLabel.setText("Subject: ");
+
+		I18nTextEditor subjectText = new I18nTextEditor(this);
+		subjectText.setI18nText(null, EditMode.BUFFERED);
+		
 		descriptionLabel = new Label(this, SWT.NONE);
 		descriptionLabel.setText("Description: ");
 
 		descriptionText = new I18nTextEditorMultiLine(this);
 		descriptionText.setI18nText(null, EditMode.BUFFERED);
 
+		Label fileLabel = new Label(this, SWT.NONE);
+		fileLabel.setText("Files: ");
+
+		FileSelectionComposite fileComposite = new FileSelectionComposite(this, SWT.NONE, FileSelectionComposite.OPEN_FILE, 
+				null, null){
+			@Override
+			protected void modifyText(ModifyEvent e) {
+				
+			}
+		}; 
+		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		descriptionText.setLayoutData(gridData);
 		
