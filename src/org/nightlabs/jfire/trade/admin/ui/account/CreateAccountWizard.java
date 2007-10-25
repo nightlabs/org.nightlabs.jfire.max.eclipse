@@ -59,6 +59,7 @@ extends DynamicPathWizard
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
 	 */
+	@Override
 	public IDynamicPathWizardPage createWizardEntryPage() {
 		return new CreateAccountEntryWizardPage();
 	}
@@ -74,6 +75,7 @@ extends DynamicPathWizard
 	/**
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish() {
 		Account newAccount = null;
 		try {

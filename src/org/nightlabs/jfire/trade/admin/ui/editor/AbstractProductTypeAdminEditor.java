@@ -72,7 +72,7 @@ public abstract class AbstractProductTypeAdminEditor
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final String title = ProductTypeDAO.sharedInstance().getProductType(
-						(ProductTypeID)((ProductTypeEditorInput)getEditorInput()).getJDOObjectID(),
+						((ProductTypeEditorInput)getEditorInput()).getJDOObjectID(),
 						new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME },
 						1, monitor).getName().getText();
 				Display.getDefault().asyncExec(new Runnable() {

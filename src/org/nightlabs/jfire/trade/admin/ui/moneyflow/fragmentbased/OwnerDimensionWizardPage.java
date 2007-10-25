@@ -82,6 +82,7 @@ implements MappingDimensionWizardPage
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchWizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete() {
 		return allOwnerButton != null && allOwnerButton.getSelection();
 	}

@@ -175,11 +175,13 @@ public class PriceConfigGrid extends XComposite
 			}
 			return null;
 		}
+		@Override
 		public void mouseDown(MouseEvent event) {
 			gridTable.setSelection(-1); // deactivate the tables own selection shit
 
 			gridTableSelectionStart = getCellCoordinate(event);
 		}
+		@Override
 		public void mouseUp(MouseEvent event) {
 			gridTableSelectionStop = getCellCoordinate(event);
 			
@@ -269,6 +271,7 @@ public class PriceConfigGrid extends XComposite
 	}
 
 	private SelectionListener gridTableCursorSelectionListener = new SelectionAdapter() {
+		@Override
 		public void widgetSelected(SelectionEvent event) {
 			cursorCellCoordinate = null;
 			cursorCell = null;

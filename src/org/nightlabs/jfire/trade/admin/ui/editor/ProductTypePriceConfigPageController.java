@@ -8,6 +8,7 @@ import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 /**
@@ -36,7 +37,7 @@ extends AbstractProductTypePageController
 	public void doLoad(IProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypePriceConfigPageController.loadPriceConfigMonitor.task.name"), 2); //$NON-NLS-1$
 		monitor.worked(1);		
-		ProductType productType = (ProductType) Utils.cloneSerializable(
+		ProductType productType = Util.cloneSerializable(
 				PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(
 						getProductTypeID(), new ProgressMonitorWrapper(monitor)));
 		setProductType(productType);

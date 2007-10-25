@@ -68,6 +68,7 @@ public class AddCustomerGroupWizard extends DynamicPathWizard
 	/**
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish()
 	{
 		try {
@@ -118,6 +119,7 @@ public class AddCustomerGroupWizard extends DynamicPathWizard
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
 	 */
+	@Override
 	public IDynamicPathWizardPage createWizardEntryPage()
 	{
 		customerGroupSelectionPage = new CustomerGroupSelectionPage();

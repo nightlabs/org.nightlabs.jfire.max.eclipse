@@ -21,6 +21,7 @@ extends DynamicPathWizard
 	private ProductTypeID parentProductTypeID = null;
 	private AbstractChooseGridPriceConfigPage abstractChooseGridPriceConfigPage = null;
 	
+	@Override
 	public void addPages()
 	{
 		abstractChooseGridPriceConfigPage = createChooseGridPriceConfigPage(parentProductTypeID);
@@ -28,6 +29,7 @@ extends DynamicPathWizard
 		addPage(abstractChooseGridPriceConfigPage);
 	}
 
+	@Override
 	@Implement
 	public boolean performFinish() {
 		return true;

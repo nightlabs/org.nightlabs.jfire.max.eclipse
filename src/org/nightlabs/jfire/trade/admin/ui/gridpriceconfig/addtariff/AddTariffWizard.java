@@ -59,6 +59,7 @@ public class AddTariffWizard extends DynamicPathWizard
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
 	 */
+	@Override
 	public IDynamicPathWizardPage createWizardEntryPage()
 	{
 		tariffSelectionPage = new TariffSelectionPage();
@@ -69,6 +70,7 @@ public class AddTariffWizard extends DynamicPathWizard
 	/**
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish()
 	{
 		try {

@@ -125,6 +125,7 @@ public class DimensionXYSelectorComboImpl extends XComposite
 	}
 
 	private SelectionListener gridComboSelectionListener = new SelectionAdapter() {
+		@Override
 		public void widgetSelected(SelectionEvent event) {
 			gridDimensionsChanged();
 		}

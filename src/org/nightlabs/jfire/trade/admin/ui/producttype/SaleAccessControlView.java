@@ -59,6 +59,7 @@ public abstract class SaleAccessControlView extends ViewPart
 	/**
 	 * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public void createPartControl(Composite parent)
 	{
 		saleAccessControlComposite = new SaleAccessControlComposite(
@@ -100,6 +101,7 @@ public abstract class SaleAccessControlView extends ViewPart
 	/**
 	 * @see org.eclipse.ui.IWorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus()
 	{
 	}

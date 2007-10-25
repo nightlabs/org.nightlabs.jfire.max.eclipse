@@ -75,6 +75,7 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -82,6 +83,7 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 		createNewTariffRadio = new Button(page, SWT.RADIO);
 		createNewTariffRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff.TariffSelectionPage.createNewTariffRadio.text")); //$NON-NLS-1$
 		createNewTariffRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				((AddTariffWizard)getWizard()).setCreateNewTariffEnabled(createNewTariffRadio.getSelection());
 			}
@@ -94,13 +96,14 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 		tariffList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
 		tariffList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tariffList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
 				int selIdx = tariffList.getSelectionIndex();
 				if (selIdx < 0)
 					selectedTariff = null;
 				else if (selIdx < tariffs.size())
-					selectedTariff = (Tariff) tariffs.get(selIdx);
+					selectedTariff = tariffs.get(selIdx);
 
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
@@ -142,6 +145,7 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		return createNewTariffRadio.getSelection() || selectedTariff != null;

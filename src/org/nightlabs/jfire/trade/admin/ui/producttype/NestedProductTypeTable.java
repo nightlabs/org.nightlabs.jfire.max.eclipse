@@ -124,6 +124,7 @@ public class NestedProductTypeTable
 	protected static class NestedProductTypeViewerSorter_Name
 	extends AbstractInvertableTableSorter<NestedProductType>
 	{
+		@Override
 		protected int _compare(Viewer viewer, NestedProductType npt1, NestedProductType npt2)
 		{
 			return getCollator().compare(
@@ -135,6 +136,7 @@ public class NestedProductTypeTable
 	protected static class NestedProductTypeViewerSorter_Quantity
 	extends AbstractInvertableTableSorter<NestedProductType>
 	{
+		@Override
 		protected int _compare(Viewer viewer, NestedProductType npt1, NestedProductType npt2)
 		{
 			int qty1 = npt1.getQuantity();
@@ -152,6 +154,7 @@ public class NestedProductTypeTable
 		super(parent, SWT.NONE, true);		
 	}
 
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn col = new TableColumn(table, SWT.LEFT);
@@ -167,6 +170,7 @@ public class NestedProductTypeTable
 		tsslName.chooseColumnForSorting();
 	}
 
+	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(new NestedProductTypeContentProvider());

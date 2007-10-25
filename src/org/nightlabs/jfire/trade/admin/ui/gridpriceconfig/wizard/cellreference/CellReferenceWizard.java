@@ -22,6 +22,7 @@ public class CellReferenceWizard extends DynamicPathWizard
 	/**
 	 * Adding the page to the wizard.
 	 */
+	@Override
 	public void addPages() {
 		page = new CellReferencePage(sourceViewer, priceConfigComposite);
 		getShell().setSize(600, 600);

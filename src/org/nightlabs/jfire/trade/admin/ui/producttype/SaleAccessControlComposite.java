@@ -138,6 +138,7 @@ public class SaleAccessControlComposite extends XComposite
 		publishedCheckBox = new Button(statusComp, SWT.CHECK);
 		publishedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.publishedCheckBox.text")); //$NON-NLS-1$
 		publishedCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				publishedCheckBoxChanged();
@@ -147,6 +148,7 @@ public class SaleAccessControlComposite extends XComposite
 		confirmedCheckBox = new Button(statusComp, SWT.CHECK);
 		confirmedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.confirmedCheckBox.text")); //$NON-NLS-1$
 		confirmedCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				confirmedCheckBoxChanged();
@@ -156,6 +158,7 @@ public class SaleAccessControlComposite extends XComposite
 		saleableCheckBox = new Button(statusComp, SWT.CHECK);
 		saleableCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.saleableCheckBox.text")); //$NON-NLS-1$
 		saleableCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				saleableCheckBoxChanged();
@@ -165,6 +168,7 @@ public class SaleAccessControlComposite extends XComposite
 		closedCheckBox = new Button(statusComp, SWT.CHECK);
 		closedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closedCheckBox.text")); //$NON-NLS-1$
 		closedCheckBox.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				closedCheckBoxChanged();
@@ -407,6 +411,7 @@ public class SaleAccessControlComposite extends XComposite
 	 * @param productTypeID the {@link ProductTypeID} of the {@link ProductType} to load
 	 * @throws ModuleException if something during loading the productType went wrong
 	 */
+	@Deprecated
 	public void setProductTypeID(ProductTypeID productTypeID)
 	throws ModuleException
 	{
@@ -490,6 +495,7 @@ public class SaleAccessControlComposite extends XComposite
 	 *  
 	 * Submit all the settings to the server.
 	 */
+	@Deprecated
 	public void submit()
 	{
 		if (productType == null)

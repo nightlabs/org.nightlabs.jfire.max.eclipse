@@ -68,18 +68,20 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		currencyList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
 		currencyList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		currencyList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				int selIdx = currencyList.getSelectionIndex();
 				if (selIdx < 0)
 					selectedCurrency = null;
 				else if (selIdx < currencies.size())
-					selectedCurrency = (Currency) currencies.get(selIdx);
+					selectedCurrency = currencies.get(selIdx);
 
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
@@ -117,6 +119,7 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		return selectedCurrency != null;

@@ -65,7 +65,7 @@ extends EntityEditorPageWithProgress
 					if (productType.isClosed()) {
 						priceConfigSection.setMessage(
 								Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigPage.priceConfigSection.message_productTypeClosed"), //$NON-NLS-1$
-								IMessageProvider.INFORMATION); //$NON-NLS-1$
+								IMessageProvider.INFORMATION); 
 						RCPUtil.setControlEnabledRecursive(priceConfigSection.getPriceConfigComposite(), false);
 					}
 					switchToContent();

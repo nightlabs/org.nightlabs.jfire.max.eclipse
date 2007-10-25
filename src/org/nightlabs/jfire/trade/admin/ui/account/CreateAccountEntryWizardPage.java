@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
@@ -103,6 +104,7 @@ extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
 		
@@ -130,13 +132,13 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		comboOwner = new XComboComposite<String>(wrapper, XComboComposite.getDefaultWidgetStyle(wrapper), 
+		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper), 
 			Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.ownerCombo.caption")); //$NON-NLS-1$
 		
 		comboOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboOwner.setEnabled(false);
 		
-		comboCurrency = new XComboComposite<Currency>(wrapper, XComboComposite.getDefaultWidgetStyle(wrapper),	
+		comboCurrency = new XComboComposite<Currency>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),	
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.currencyCombo.caption"), new CurrencyLabelProvider()); //$NON-NLS-1$
 		comboCurrency.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -208,6 +210,7 @@ extends DynamicPathWizardPage
 	 * an account, and does not perform any configuration. 
 	 *  
 	 */
+	@Override
 	public boolean canBeLastPage() {
 		return true;
 	}
@@ -215,10 +218,12 @@ extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#getDefaultPageMessage()
 	 */
+	@Override
 	protected String getDefaultPageMessage() {
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.defaultPageMessage"); //$NON-NLS-1$
 	}
 	
+	@Override
 	public IWizardPage getNextPage() {
 		if (!isPageComplete())
 			return null;
@@ -238,7 +243,7 @@ extends DynamicPathWizardPage
 	public Currency getCurrency() {
 		if (comboCurrency.getSelectionIndex() < 0)
 			throw new IllegalStateException("No currency selected. Can't return one."); //$NON-NLS-1$
-		return (Currency)currencies.get(comboCurrency.getSelectionIndex());
+		return currencies.get(comboCurrency.getSelectionIndex());
 	}
 	
 	public I18nTextEditor getAccountNameEditor() {

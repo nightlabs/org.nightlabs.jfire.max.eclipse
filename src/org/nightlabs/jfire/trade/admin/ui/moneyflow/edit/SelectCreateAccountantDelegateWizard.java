@@ -56,6 +56,7 @@ public class SelectCreateAccountantDelegateWizard extends DynamicPathWizard {
 	/**
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish() {
 		try {
 			if (selectDelegatePage.isCreateNew()) {

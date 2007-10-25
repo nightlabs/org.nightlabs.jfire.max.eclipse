@@ -42,6 +42,7 @@ public class CustomerGroupComposite extends AbstractCellReferenceComposite{
 		return selectedCustomerGroup;
 	}
 	
+	@Override
 	protected void createScript(){
 		StringBuffer scriptBuffer = new StringBuffer();
 		scriptBuffer.append("CustomerGroupID.create") //$NON-NLS-1$

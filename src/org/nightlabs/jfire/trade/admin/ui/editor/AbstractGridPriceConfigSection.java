@@ -4,6 +4,7 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -106,7 +107,7 @@ extends ToolBarSectionPart
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 //		dialog.setTitle("Choose Price Configuration");
 		int returnType = dialog.open();
-		if (returnType == Dialog.OK) {
+		if (returnType == Window.OK) {
 			getPriceConfigComposite().assignNewPriceConfig(wizard);
 			IInnerPriceConfig ipc = getPriceConfigComposite().getPackageProductType().getInnerPriceConfig();
 			if (ipc == null)

@@ -204,6 +204,7 @@ extends AbstractTreeComposite
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
 		 */
+		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof Node && parentElement != null)
 				return ((Node)parentElement).getChildren().toArray();
@@ -213,6 +214,7 @@ extends AbstractTreeComposite
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getParent(java.lang.Object)
 		 */
+		@Override
 		public Object getParent(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).getParent();
@@ -222,12 +224,14 @@ extends AbstractTreeComposite
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
+		@Override
 		public boolean hasChildren(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).hasChildren();
 			return super.hasChildren(element);
 		}
 				
+		@Override
 		public void dispose() {
 		}
 	}
@@ -318,6 +322,7 @@ extends AbstractTreeComposite
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
 		 */
+		@Override
 		public String getText(Object element) {
 			return getColumnText(element, 0);
 		}	
@@ -345,6 +350,7 @@ extends AbstractTreeComposite
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
+	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
 		treeViewer.setLabelProvider(new LabelProvider());
@@ -353,6 +359,7 @@ extends AbstractTreeComposite
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#createTreeColumns(org.eclipse.swt.widgets.Tree)
 	 */
+	@Override
 	public void createTreeColumns(Tree tree) {
 		TreeColumn column = new TreeColumn(getTree(), SWT.LEFT);
 		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.ProductTypeMappingTreeColumn.text")); //$NON-NLS-1$
@@ -395,6 +402,7 @@ extends AbstractTreeComposite
 	 * @param productTypeID the id of the {@link ProductType} to load
 	 * @param monitor the monitor to display the progress of fetching the ProductType
 	 */
+	@Deprecated
 	public void setProductTypeID(final ProductTypeID productTypeID, ProgressMonitor monitor) {
 		if (productTypeID == null)
 			return;

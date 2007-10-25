@@ -8,6 +8,7 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
@@ -128,6 +129,7 @@ extends XComposite
 	 * sets the id of the {@link ProductType} to load
 	 * @param productTypeID the id of the {@link ProductType} to set
 	 */
+	@Deprecated
 	public void setProductTypeID(final ProductTypeID productTypeID) 
 	{
 		currProductTypeID = productTypeID;
@@ -290,7 +292,7 @@ extends XComposite
 				newShell.setSize(500, 450);
 			}				
 		};
-		if (wizardDialog.open() == Dialog.OK) { 
+		if (wizardDialog.open() == Window.OK) { 
 			setNextRefreshSelectMapping(wiz.getCreatedMapping());			
 			refresh(true);			
 		

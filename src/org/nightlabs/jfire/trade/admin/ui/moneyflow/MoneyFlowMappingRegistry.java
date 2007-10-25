@@ -31,6 +31,7 @@ package org.nightlabs.jfire.trade.admin.ui.moneyflow;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @deprecated Not necessary anymore - will be removed soon.
  */
+@Deprecated
 public class MoneyFlowMappingRegistry
 // implements Registry
 {

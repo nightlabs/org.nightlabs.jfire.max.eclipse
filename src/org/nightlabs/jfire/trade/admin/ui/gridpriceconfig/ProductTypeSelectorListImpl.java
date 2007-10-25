@@ -78,6 +78,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		GridData productListLayoutData = new GridData(GridData.FILL_BOTH);
 		productTypeGUIList.setLayoutData(productListLayoutData);
 		productTypeGUIList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				fireSelectionChangedEvent();
 			}
@@ -94,7 +95,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		if (productIdx < 0)
 			return null;
 
-		return (Item) productTypeItemList.get(productIdx);
+		return productTypeItemList.get(productIdx);
 	}
 
 	@Implement

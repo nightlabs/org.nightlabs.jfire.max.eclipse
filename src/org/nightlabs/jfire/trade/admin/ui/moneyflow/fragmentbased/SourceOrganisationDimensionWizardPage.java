@@ -71,6 +71,7 @@ public class SourceOrganisationDimensionWizardPage extends WizardHopPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		Label label = new Label(wrapper, SWT.WRAP);

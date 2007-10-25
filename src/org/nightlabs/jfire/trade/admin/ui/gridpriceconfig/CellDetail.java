@@ -213,6 +213,7 @@ public class CellDetail extends XComposite
 	};
 
 	private FocusListener cellDetailFallbackTextFocusListener = new FocusAdapter() {
+		@Override
 		public void focusLost(FocusEvent event) {
 			PriceConfigGridCell cursorCell = priceConfigGrid.getCursorCell();
 
@@ -231,6 +232,7 @@ public class CellDetail extends XComposite
 	};
 
 	private FocusListener cellDetailTextFocusListener = new FocusAdapter() {
+		@Override
 		public void focusLost(FocusEvent event) {
 			PriceConfigGridCell cursorCell = priceConfigGrid.getCursorCell();
 
@@ -255,6 +257,7 @@ public class CellDetail extends XComposite
 
 	//TODO 
 	private MouseListener cellDetailTextMouseListener = new MouseAdapter(){
+		@Override
 		public void mouseDown(MouseEvent e) {
 			if(e.button == java.awt.event.MouseEvent.BUTTON3){
 				StyledText textWidget = (StyledText)e.getSource();
@@ -266,6 +269,7 @@ public class CellDetail extends XComposite
 	
 	//TODO
 	private MouseListener cellDetailFallbackTextMouseListener = new MouseAdapter(){
+		@Override
 		public void mouseDown(MouseEvent e) {
 			if(e.button == java.awt.event.MouseEvent.BUTTON3){
 				StyledText textWidget = (StyledText)e.getSource();

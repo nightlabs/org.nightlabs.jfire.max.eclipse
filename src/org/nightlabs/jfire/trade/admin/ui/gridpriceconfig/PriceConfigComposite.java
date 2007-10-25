@@ -43,6 +43,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
@@ -286,7 +287,7 @@ public abstract class PriceConfigComposite extends XComposite
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 //				dialog.setTitle("Choose Price Configuration");
 				int returnCode = dialog.open();
-				if (returnCode == Dialog.OK) {
+				if (returnCode == Window.OK) {
 					assignNewPriceConfig(wizard);
 				}
 			}
@@ -505,7 +506,7 @@ public abstract class PriceConfigComposite extends XComposite
 					getShell(),
 					priceConfigIDs,
 					productTypeID, innerPriceConfigID);
-			if (dialog.open() != StorePriceConfigsConfirmationDialog.OK)
+			if (dialog.open() != Window.OK)
 				return;
 		}
 

@@ -49,6 +49,7 @@ public class AddCurrencyWizard extends DynamicPathWizard
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
 	 */
+	@Override
 	public IDynamicPathWizardPage createWizardEntryPage()
 	{
 		currencySelectionPage = new CurrencySelectionPage();
@@ -58,6 +59,7 @@ public class AddCurrencyWizard extends DynamicPathWizard
 	/**
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish()
 	{
 		Currency currency = currencySelectionPage.getSelectedCurrency();

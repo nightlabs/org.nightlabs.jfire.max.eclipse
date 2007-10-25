@@ -45,13 +45,16 @@ public abstract class DimensionValue
 			super(dimension);
 			this.customerGroup = customerGroup;
 		}
+		@Override
 		public String getName() {
 			return customerGroup.getName().getText();
 		}
+		@Override
 		public void adjustPriceCoordinate(IPriceCoordinate priceCoordinate)
 		{
 			priceCoordinate.setCustomerGroupPK(customerGroup.getPrimaryKey());
 		}
+		@Override
 		public Object getObject()
 		{
 			return customerGroup;
@@ -63,13 +66,16 @@ public abstract class DimensionValue
 			super(dimension);
 			this.currency = currency;
 		}
+		@Override
 		public String getName() {
 			return currency.getCurrencySymbol();
 		}
+		@Override
 		public void adjustPriceCoordinate(IPriceCoordinate priceCoordinate)
 		{
 			priceCoordinate.setCurrencyID(currency.getCurrencyID());
 		}
+		@Override
 		public Object getObject()
 		{
 			return currency;
@@ -81,13 +87,16 @@ public abstract class DimensionValue
 			super(dimension);
 			this.tariff = tariff;
 		}
+		@Override
 		public String getName() {
 			return tariff.getName().getText();
 		}
+		@Override
 		public void adjustPriceCoordinate(IPriceCoordinate priceCoordinate)
 		{
 			priceCoordinate.setTariffPK(tariff.getPrimaryKey());
 		}
+		@Override
 		public Object getObject()
 		{
 			return tariff;
@@ -99,9 +108,11 @@ public abstract class DimensionValue
 			super(dimension);
 			this.priceFragmentType = priceFragmentType;
 		}
+		@Override
 		public String getName() {
 			return priceFragmentType.getName().getText(Locale.getDefault().getLanguage());
 		}
+		@Override
 		public void adjustPriceCoordinate(IPriceCoordinate priceCoordinate)
 		{
 			throw new UnsupportedOperationException("PriceFragments are inside a PriceCell and therefore not part of a PriceCoordinate!"); //$NON-NLS-1$
@@ -109,6 +120,7 @@ public abstract class DimensionValue
 		/**
 		 * @see org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue#getObject()
 		 */
+		@Override
 		public Object getObject()
 		{
 			return priceFragmentType;

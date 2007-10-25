@@ -95,7 +95,7 @@ public class DimensionValueSelectorComboImpl
 
 		List<Dimension> dimensionList = createDimensions();
 		dimensions = new Dimension[dimensionList.size()];
-		dimensions = (Dimension[]) dimensionList.toArray(dimensions);
+		dimensions = dimensionList.toArray(dimensions);
 //		int i = 0;
 //		for (Iterator it = dimensionList.iterator(); it.hasNext(); ) {
 //			dimensions[i++] = (Dimension) it.next();
@@ -140,6 +140,7 @@ public class DimensionValueSelectorComboImpl
 		GridData gdCombo = new GridData(GridData.FILL_HORIZONTAL);
 		dimensionCombo.setLayoutData(gdCombo);
 		dimensionCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				fireSelectionChangedEvent();
 			}
@@ -154,6 +155,7 @@ public class DimensionValueSelectorComboImpl
 		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValueSelectorComboImpl.addButton.text")); //$NON-NLS-1$
 		addButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		addButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
 				dimension.guiAddDimensionValue();

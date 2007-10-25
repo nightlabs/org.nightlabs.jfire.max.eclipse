@@ -51,6 +51,7 @@ public class LocalAccountantDelegateProvider extends JDOObjectProvider {
 	/**
 	 * @see org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider#retrieveJDOObject(java.lang.String, java.lang.Object, java.lang.String[])
 	 */
+	@Override
 	protected Object retrieveJDOObject(String scope, Object objectID, String[] fetchGroups, int maxFetchDepth) throws Exception {
 		if (!(objectID instanceof LocalAccountantDelegateID))
 			throw new IllegalArgumentException("LocalAccountantDelegateProvider can only handle LocalAccountantDelegateID but received "+objectID.getClass().getName()); //$NON-NLS-1$
@@ -60,6 +61,7 @@ public class LocalAccountantDelegateProvider extends JDOObjectProvider {
 	/**
 	 * @see org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider#retrieveJDOObjects(java.lang.String, java.util.Set, java.lang.String[])
 	 */
+	@Override
 	protected Collection retrieveJDOObjects(String scope, Set objectIDs, String[] fetchGroups, int maxFetchDepth) throws Exception {
 		return AccountingUtil.getAccountingManager().getLocalAccountantDelegates(objectIDs, fetchGroups, maxFetchDepth);
 	}

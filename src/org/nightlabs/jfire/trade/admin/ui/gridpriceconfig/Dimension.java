@@ -90,7 +90,7 @@ public abstract class Dimension<DV extends DimensionValue>
 		public void guiFeedbackAddDimensionValue(DimensionValue.CustomerGroupDimensionValue dimensionValue)
 		{
 			CustomerGroup customerGroup = (CustomerGroup)dimensionValue.getObject();
-			if (!((GridPriceConfig)getGridPriceConfig()).addCustomerGroup(customerGroup))
+			if (!(getGridPriceConfig()).addCustomerGroup(customerGroup))
 				return;
 
 			if (getValueCache() != null)
@@ -218,7 +218,7 @@ public abstract class Dimension<DV extends DimensionValue>
 			else {
 				if (getValueCache() == null) {
 					List<DimensionValue.TariffDimensionValue> l = new ArrayList<DimensionValue.TariffDimensionValue>();
-					for (Tariff tariff : ((GridPriceConfig)getGridPriceConfig()).getTariffs()) {
+					for (Tariff tariff : (getGridPriceConfig()).getTariffs()) {
 						l.add(new DimensionValue.TariffDimensionValue(this, tariff));
 					}
 					setValueCache(l);

@@ -65,6 +65,7 @@ public class LocalAccountantDelegateRegistry extends AbstractEPProcessor {
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#getExtensionPointID()
 	 */
+	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
 	}
@@ -82,12 +83,12 @@ public class LocalAccountantDelegateRegistry extends AbstractEPProcessor {
 	
 	public LocalAccountantDelegateType getType(Class delegateClass) {
 		checkProcessing();
-		return (LocalAccountantDelegateType)typesByClass.get(delegateClass);
+		return typesByClass.get(delegateClass);
 	}
 
 	public LocalAccountantDelegateType getTypeForMapping(Class mappingClass) {
 		checkProcessing();
-		LocalAccountantDelegateType result = (LocalAccountantDelegateType)typesByMappingClasses.get(mappingClass);
+		LocalAccountantDelegateType result = typesByMappingClasses.get(mappingClass);
 		if (result == null) {
 			for (LocalAccountantDelegateType type : typesByClass.values()) {
 				if (type.canHandleMappingType(mappingClass)) {
@@ -103,6 +104,7 @@ public class LocalAccountantDelegateRegistry extends AbstractEPProcessor {
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
+	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
 	throws Exception 
 	{

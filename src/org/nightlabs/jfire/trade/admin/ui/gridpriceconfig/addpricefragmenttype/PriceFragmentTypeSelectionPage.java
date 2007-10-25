@@ -76,6 +76,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -83,6 +84,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 		createNewPriceFragmentTypeRadio = new Button(page, SWT.RADIO);
 		createNewPriceFragmentTypeRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype.PriceFragmentTypeSelectionPage.createNewPriceFragmentTypeRadio.text")); //$NON-NLS-1$
 		createNewPriceFragmentTypeRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
 				((AddPriceFragmentTypeWizard)getWizard()).setCreateNewPriceFragmentTypeEnabled(
@@ -97,6 +99,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 		priceFragmentTypeList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
 		priceFragmentTypeList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		priceFragmentTypeList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
 				int selIdx = priceFragmentTypeList.getSelectionIndex();
@@ -143,6 +146,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		return createNewPriceFragmentTypeRadio.getSelection() || selectedPriceFragmentType != null;

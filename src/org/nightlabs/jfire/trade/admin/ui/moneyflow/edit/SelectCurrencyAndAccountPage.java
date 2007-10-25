@@ -91,6 +91,7 @@ extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		
@@ -186,6 +187,7 @@ extends DynamicPathWizardPage
 		loadAccountsJob.schedule();
 	}
 
+	@Override
 	public boolean isPageComplete() {
 		if (currencyCombo == null)
 			return false;

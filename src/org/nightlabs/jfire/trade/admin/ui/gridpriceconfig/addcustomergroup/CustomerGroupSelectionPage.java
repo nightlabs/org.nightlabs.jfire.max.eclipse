@@ -77,6 +77,7 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -84,6 +85,7 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 		createNewCustomerGroupRadio = new Button(page, SWT.RADIO);
 		createNewCustomerGroupRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup.CustomerGroupSelectionPage.createNewCustomerGroupRadio.text")); //$NON-NLS-1$
 		createNewCustomerGroupRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				((AddCustomerGroupWizard)getWizard()).setCreateNewCustomerGroupEnabled(createNewCustomerGroupRadio.getSelection());
 			}
@@ -95,13 +97,14 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 		customerGroupList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
 		customerGroupList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		customerGroupList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
 				int selIdx = customerGroupList.getSelectionIndex();
 				if (selIdx < 0)
 					selectedCustomerGroup = null;
 				else if (selIdx < customerGroups.size())
-					selectedCustomerGroup = (CustomerGroup) customerGroups.get(selIdx);
+					selectedCustomerGroup = customerGroups.get(selIdx);
 
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
@@ -151,6 +154,7 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		if (createNewCustomerGroupRadio == null)

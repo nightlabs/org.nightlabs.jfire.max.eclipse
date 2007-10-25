@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.i18n.I18nText;
@@ -69,11 +70,12 @@ extends Dialog
 		Composite area = (Composite) super.createDialogArea(parent);
 		new Label(area, SWT.WRAP).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.description")); //$NON-NLS-1$
 		productTypeList = new ListComposite<ProductType>(area, 
-				SWT.MULTI | ListComposite.getDefaultWidgetStyle(parent), 
+				SWT.MULTI | AbstractListComposite.getDefaultWidgetStyle(parent), 
 				(String) null, new ProductTypeListLabelProvider());
 		ProductType dummy = new ProductType("dummy", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
 			private static final long serialVersionUID = 1L; // get rid of the warning
 			private I18nTextBuffer name;
+			@Override
 			@Implement
 			public I18nText getName()
 			{
@@ -83,6 +85,7 @@ extends Dialog
 				}
 				return name;
 			}
+			@Override
 			@Implement
 			protected void calculatePrices()
 			{
@@ -92,6 +95,7 @@ extends Dialog
 		productTypeList.addElement(dummy);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.loadAffectedProductTypesJob.name")) { //$NON-NLS-1$
+			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				try {
@@ -124,7 +128,7 @@ extends Dialog
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return area;

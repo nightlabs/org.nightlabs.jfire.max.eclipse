@@ -77,6 +77,7 @@ extends LSDViewPart
 	/**
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus()
 	{
 	}

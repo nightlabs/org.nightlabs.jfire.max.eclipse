@@ -84,6 +84,7 @@ extends AbstractTableComposite
 		});
 	}
 
+	@Override
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -105,6 +106,7 @@ extends AbstractTableComposite
 		table.setLayout(tl);
 	}
 
+	@Override
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
@@ -212,6 +214,7 @@ extends AbstractTableComposite
 			setInput(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.inputPseudoEntry_loading")); //$NON-NLS-1$
 	
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.loadCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
+				@Override
 				@Implement
 				protected IStatus run(IProgressMonitor monitor)
 				{

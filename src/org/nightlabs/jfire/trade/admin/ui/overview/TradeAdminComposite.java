@@ -43,7 +43,7 @@ extends XComposite
 			TradeAdminOverviewRegistry.sharedInstance().getIndex2Catgeory();
 		for (Iterator<Integer> iterator = index2Category.keySet().iterator(); iterator.hasNext();) {
 			int index = iterator.next();
-			TradeAdminCategoryFactory categoryFactory = (TradeAdminCategoryFactory) index2Category.get(index);  
+			TradeAdminCategoryFactory categoryFactory = index2Category.get(index);  
 	    PShelfItem categoryItem = new PShelfItem(shelf, SWT.NONE);
 	    categoryItem.setText(categoryFactory.getName());
 	    categoryItem.setImage(categoryFactory.getImage());

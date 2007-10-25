@@ -76,6 +76,7 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		SelectionListener selectionListener = new SelectionListener() {
@@ -142,10 +143,12 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		return packageTypes[comboPackageType.getSelectionIndex()];
 	}
 	
+	@Override
 	public boolean isPageComplete() {
 		return (comboPackageType.getSelectionIndex() >= 0 ) && productTypePackageTree.getFirstSelectedElement() != null;
 	}
 	
+	@Override
 	protected String getDefaultPageMessage() {
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectProductTypeAndPackagePage.description"); //$NON-NLS-1$
 	}

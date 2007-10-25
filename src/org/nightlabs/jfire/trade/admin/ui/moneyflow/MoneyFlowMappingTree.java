@@ -221,6 +221,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
 		 */
+		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof Node)
 				return ((Node)parentElement).getChildren().toArray();
@@ -230,6 +231,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getParent(java.lang.Object)
 		 */
+		@Override
 		public Object getParent(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).getParent();
@@ -239,12 +241,14 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
+		@Override
 		public boolean hasChildren(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).hasChildren();
 			return super.hasChildren(element);
 		}
 
+		@Override
 		public void dispose() {
 		}
 	}
@@ -469,6 +473,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
+	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
 		treeViewer.setLabelProvider(new LabelProvider());
@@ -504,6 +509,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	 * @param productTypeID the id of the {@link ProductType} to display the MoneyFlowMapping for
 	 * @param monitor the monitor to display the progress of the loading
 	 */
+	@Deprecated
 	public void setProductTypeID(ProductTypeID productTypeID, ProgressMonitor monitor) {
 		PFMappingAccountantDelegate dDelegate = null;
 		if (productTypeID == null) {
@@ -688,6 +694,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#createTreeColumns(org.eclipse.swt.widgets.Tree)
 	 */
+	@Override
 	public void createTreeColumns(Tree tree) {
 		// nothing done here columns created dynamically
 	}
@@ -696,6 +703,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		return delegate;
 	}
 
+	@Override
 	public void refresh(final boolean refreshInput) {
 		getContentProvider().updateDelegateContent();
 		Display.getDefault().asyncExec(new Runnable() {
@@ -799,10 +807,12 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			super(viewer);
 		}
 
+		@Override
 		public boolean performDrop(Object data) {
 			return false;
 		}
 
+		@Override
 		public boolean validateDrop(Object target, int operation, TransferData transferType) {
 //			System.out.println("target == "+((Node)target).getMode());
 //			System.out.println("Operation "+operation);

@@ -67,6 +67,7 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 		});
 	}
 	
+	@Override
 	protected void createScript(){
 		StringBuffer scriptBuffer = new StringBuffer();
 		

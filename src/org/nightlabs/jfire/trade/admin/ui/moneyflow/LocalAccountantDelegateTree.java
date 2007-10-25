@@ -72,6 +72,7 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
 		 */		
+		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof LocalAccountantDelegate)
 				return 
@@ -86,10 +87,12 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
+		@Override
 		public boolean hasChildren(Object element) {
 			return true;
 		}
 
+		@Override
 		public void dispose() {
 		}
 		
@@ -109,6 +112,7 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
 		 */
+		@Override
 		public String getText(Object element) {
 			if (element instanceof LocalAccountantDelegate)
 				return ((LocalAccountantDelegate)element).getName().getText(Locale.getDefault().getLanguage());
@@ -133,6 +137,7 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
+	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
 		treeViewer.setLabelProvider(new LabelProvider());
@@ -144,6 +149,7 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#createTreeColumns(org.eclipse.swt.widgets.Tree)
 	 */
+	@Override
 	public void createTreeColumns(Tree tree) {
 		// no columns for this tree
 	}

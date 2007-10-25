@@ -81,7 +81,7 @@ extends WizardHopPage
 	};
 
 	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
-		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_INNER_PRICE_CONFIG, GridPriceConfig.FETCH_GROUP_NAME
+		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_INNER_PRICE_CONFIG, PriceConfig.FETCH_GROUP_NAME
 	};
 	
 	public static final int ACTION_INHERIT = 1;
@@ -131,6 +131,7 @@ extends WizardHopPage
 		setInheritPriceConfigRadio_InnerPriceConfigName(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.pseudoInheritedPriceConfig_loading")); //$NON-NLS-1$
 
 		inheritPriceConfigRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				setAction(ACTION_INHERIT);
@@ -140,6 +141,7 @@ extends WizardHopPage
 		assignPriceConfigLaterRadio = new Button(page, SWT.RADIO);
 		assignPriceConfigLaterRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.assignPriceConfigLaterRadio.text")); //$NON-NLS-1$
 		assignPriceConfigLaterRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				setAction(ACTION_LATER);
@@ -149,6 +151,7 @@ extends WizardHopPage
 		createPriceConfigRadio = new Button(page, SWT.RADIO);
 		createPriceConfigRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.createPriceConfigRadio.text")); //$NON-NLS-1$
 		createPriceConfigRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				setAction(ACTION_CREATE);
@@ -167,6 +170,7 @@ extends WizardHopPage
 		selectPriceConfigRadio = new Button(page, SWT.RADIO);
 		selectPriceConfigRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.selectPriceConfigRadio.text")); //$NON-NLS-1$
 		selectPriceConfigRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				setAction(ACTION_SELECT);
@@ -177,6 +181,7 @@ extends WizardHopPage
 		priceConfigList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		priceConfigList.add(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.pseudoPriceConfig_loading")); //$NON-NLS-1$
 		priceConfigList.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				setAction(ACTION_SELECT);
@@ -186,6 +191,7 @@ extends WizardHopPage
 		page.setFaded(true);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.loadPriceConfigsJob.name")) { //$NON-NLS-1$
+			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				try {
@@ -245,7 +251,7 @@ extends WizardHopPage
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return page;
@@ -289,6 +295,7 @@ extends WizardHopPage
 		((DynamicPathWizard)getWizard()).updateDialog();
 	}
 
+	@Override
 	public boolean isPageComplete()
 	{
 		if (inheritPriceConfigRadio == null)

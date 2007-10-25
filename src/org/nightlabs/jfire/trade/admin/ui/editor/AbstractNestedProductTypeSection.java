@@ -136,6 +136,7 @@ implements IProductTypeSectionPart
 		productType.getFieldMetaData("nestedProductTypes").setValueInherited(inherited); //$NON-NLS-1$
 		if (inherited) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.loadInheritanceDataJob.name")) { //$NON-NLS-1$
+				@Override
 				@Implement
 				protected IStatus run(ProgressMonitor monitor)
 				{
@@ -180,7 +181,7 @@ implements IProductTypeSectionPart
 					return Status.OK_STATUS;
 				}
 			};
-			job.setPriority(Job.SHORT);
+			job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 			nestedProductTypeTable.setEnabled(false);
 			job.schedule();
 		} // if (inherited) {

@@ -10,6 +10,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowMappingTree;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 /**
@@ -52,7 +53,7 @@ extends AbstractProductTypePageController<ProductTypeType>
 				MoneyFlowMappingTree.DEFAULT_PTYPE_FETCH_GROUPS, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new ProgressMonitorWrapper(monitor));
-		ProductTypeType clone = Utils.cloneSerializable(original);
+		ProductTypeType clone = Util.cloneSerializable(original);
 		setProductType(clone);
 		monitor.worked(1);
 	}

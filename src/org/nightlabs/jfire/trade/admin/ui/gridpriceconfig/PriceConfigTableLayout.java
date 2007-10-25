@@ -39,6 +39,7 @@ public class PriceConfigTableLayout extends TableLayout
 {
 	public static int MIN_COL_WIDTH = 80;
 	
+	@Override
 	public void layout(Composite c, boolean flush) 
 	{
 		Table table = (Table)c;
