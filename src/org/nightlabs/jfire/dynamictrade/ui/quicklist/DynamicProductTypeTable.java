@@ -115,11 +115,13 @@ public class DynamicProductTypeTable extends AbstractTableComposite {
 		});
 	}
 
+	@Override
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeTable.productTypeNameTableColumn.text")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));	}
 
+	@Override
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());

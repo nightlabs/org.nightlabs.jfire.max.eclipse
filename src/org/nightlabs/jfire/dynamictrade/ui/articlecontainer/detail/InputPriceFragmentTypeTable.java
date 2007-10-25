@@ -91,6 +91,7 @@ extends AbstractTableComposite
 		getTable().setHeaderVisible(false);
 	}
 
+	@Override
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -107,6 +108,7 @@ extends AbstractTableComposite
 		table.setLayout(tl);
 	}
 
+	@Override
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{

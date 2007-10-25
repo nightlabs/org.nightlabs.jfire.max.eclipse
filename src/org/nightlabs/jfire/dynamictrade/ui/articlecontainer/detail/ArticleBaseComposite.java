@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
@@ -52,7 +53,6 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
-import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
@@ -79,6 +79,7 @@ import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 public abstract class ArticleBaseComposite
@@ -164,7 +165,7 @@ extends FadeableComposite
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				if (Dialog.OK == new ProductNameDialog(getShell(), productName).open()) {
+				if (Window.OK == new ProductNameDialog(getShell(), productName).open()) {
 					updateProductNameUI();
 					productNameModified = true;
 				}
@@ -172,6 +173,7 @@ extends FadeableComposite
 		});
 
 		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2, currency) {
+			@Override
 			@Implement
 			protected void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType)
 			{
@@ -262,6 +264,7 @@ extends FadeableComposite
 	private void loadDynamicProductType()
 	{
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
@@ -272,7 +275,7 @@ extends FadeableComposite
 				loadDynamicProductType_inProcess = true;
 				try {
 
-					dynamicProductType = (DynamicProductType) Utils.cloneSerializable(
+					dynamicProductType = (DynamicProductType) Util.cloneSerializable(
 							PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(productTypeID, monitor));
 
 					dynamicTradePriceConfig = (DynamicTradePriceConfig) dynamicProductType.getInnerPriceConfig();
@@ -375,7 +378,7 @@ extends FadeableComposite
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
 
@@ -459,6 +462,7 @@ extends FadeableComposite
 		} catch (JDODetachedFieldAccessException x) {
 			setFaded(true);
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadArticleWithPriceFragmentsJob.name")) { //$NON-NLS-1$
+				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception
 				{
 					try {

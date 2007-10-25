@@ -17,6 +17,7 @@ extends AbstractArticleAdder
 {
 	private DynamicProductType dynamicProductType;
 
+	@Override
 	@Implement
 	protected Composite _createComposite(Composite parent)
 	{

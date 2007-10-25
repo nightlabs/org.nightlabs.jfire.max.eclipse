@@ -32,6 +32,7 @@ extends ArticleBaseComposite
 		createUI();
 	}
 
+	@Override
 	@Implement
 	protected void fireCompositeContentChangeEvent()
 	{

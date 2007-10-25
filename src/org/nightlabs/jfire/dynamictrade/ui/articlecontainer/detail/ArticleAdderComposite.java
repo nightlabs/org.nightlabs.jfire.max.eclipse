@@ -72,6 +72,7 @@ extends ArticleBaseComposite
 		});
 	}
 
+	@Override
 	@Implement
 	protected void fireCompositeContentChangeEvent()
 	{
@@ -137,7 +138,7 @@ extends ArticleBaseComposite
 					return Status.OK_STATUS;
 				}
 			};
-			addJob.setPriority(Job.SHORT);
+			addJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 //			addJob.setUser(true);
 			addJob.schedule();
 		} catch (Exception x) {

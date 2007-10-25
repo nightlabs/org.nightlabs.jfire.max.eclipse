@@ -42,6 +42,7 @@ public class ArticleEdit extends AbstractArticleEdit
 {
 	private ArticleEditComposite articleEditComposite = null;
 
+	@Override
 	public Composite _createComposite(Composite parent)
 	{
 		articleEditComposite = new ArticleEditComposite(parent, this);
