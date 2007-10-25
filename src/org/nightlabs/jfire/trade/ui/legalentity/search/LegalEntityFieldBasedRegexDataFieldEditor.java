@@ -43,7 +43,7 @@ public class LegalEntityFieldBasedRegexDataFieldEditor extends
 				return SWT.READ_ONLY;
 			}
 			@Override
-			protected Object createLabelLayoutData() {
+			protected Object createTitleLayoutData() {
 				GridData gd = new GridData();
 				gd.widthHint = 80;
 				return gd;
