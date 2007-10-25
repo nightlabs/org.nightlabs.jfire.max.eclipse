@@ -358,14 +358,14 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	 * {@link #DEFAULT_FETCH_GROUPS}. 
 	 */
 	public ScriptRegistryItem getScriptRegistryItem(ScriptRegistryItemID itemID, IProgressMonitor monitor) {
-		return (ScriptRegistryItem)getJDOObject(null, itemID, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		return getJDOObject(null, itemID, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 	
 	/**
 	 * Get the <code>ScriptRegistryItem</code> with the given itemID and fetchGroups.
 	 */
 	public ScriptRegistryItem getScriptRegistryItem(ScriptRegistryItemID itemID, String[] fetchGroups, IProgressMonitor monitor) {
-		return (ScriptRegistryItem)getJDOObject(null, itemID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		return getJDOObject(null, itemID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 	
 	/**

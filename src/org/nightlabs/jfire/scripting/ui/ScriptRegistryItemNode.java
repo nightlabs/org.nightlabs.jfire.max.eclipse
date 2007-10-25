@@ -87,6 +87,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 			return super.hasChildren(element);
 		}
 
+		@Override
 		public void dispose() {
 		}
 		

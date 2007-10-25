@@ -12,6 +12,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.scripting.condition.CompareOperator;
@@ -79,7 +80,7 @@ extends XComposite
 			}
 		}
 
-		int defaultWidgetStyle = XComboComposite.getDefaultWidgetStyle(this); 
+		int defaultWidgetStyle = AbstractListComposite.getDefaultWidgetStyle(this); 
 		
 		variableCombo = new XComboComposite<ScriptRegistryItemID>( parent, defaultWidgetStyle, 
 				(String) null, scriptLabelProvider );
@@ -105,12 +106,14 @@ extends XComposite
 	}
 	
 	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){	
+		@Override
 		public String getText(Object object) {
-			return variable2Name.get((ScriptRegistryItemID)object);
+			return variable2Name.get(object);
 		}	
 	};
 
 	private org.eclipse.jface.viewers.ILabelProvider valueLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){	
+		@Override
 		public String getText(Object object) {
 			return value2Name.get(object);
 		}	

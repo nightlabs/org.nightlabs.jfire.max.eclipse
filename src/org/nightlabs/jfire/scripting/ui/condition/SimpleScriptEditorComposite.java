@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.scripting.ScriptExecutorJavaScript;
@@ -386,7 +387,7 @@ extends XComposite
 					Button deleteContainer = new Button(containerComp, SWT.NONE);
 					deleteContainer.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
 					deleteContainer.addSelectionListener(deleteContainerListener);
-					button2Condition.put(deleteContainer, (IConditionContainer)con);
+					button2Condition.put(deleteContainer, con);
 				} 
 			}
 			createContainerDetailComp(parent, container);
@@ -403,7 +404,7 @@ extends XComposite
 		containerComp.setLayout(new GridLayout(5, false));
 		containerComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComboComposite<CombineOperator> combineOperatorCombo = new XComboComposite<CombineOperator>(
-				containerComp, XComboComposite.getDefaultWidgetStyle(parent), (String) null);
+				containerComp, AbstractListComposite.getDefaultWidgetStyle(parent), (String) null);
 		combineOperatorCombo.setInput( CollectionUtil.enum2List(CombineOperator.LOGICAL_AND) );
 		combineOperatorCombo.selectElement(container.getCombineOperator());
 		combineCombo2Container.put(combineOperatorCombo, container);
