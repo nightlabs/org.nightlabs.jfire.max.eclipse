@@ -55,6 +55,7 @@ import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -180,7 +181,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 //			expressionBuilder.setExpressionProvier(new ParameterExpressionProvider(
 //					handle, dataSetDesign.getName())
 //			);
-			if (expressionBuilder.open( ) == Dialog.OK){
+			if (expressionBuilder.open( ) == Window.OK){
 				return expressionBuilder.getResult().trim();
 			}
 			return null;

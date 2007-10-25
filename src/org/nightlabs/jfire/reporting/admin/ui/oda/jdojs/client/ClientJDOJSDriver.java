@@ -38,6 +38,7 @@ public class ClientJDOJSDriver extends AbstractJDOJSDriver {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.AbstractJDOJSDriver#createProxyFactory()
 	 */
+	@Override
 	protected IJDOJSProxyFactory createProxyFactory() {
 		return new ClientJDOJSProxyFactory();
 	}

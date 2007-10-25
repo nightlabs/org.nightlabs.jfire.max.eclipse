@@ -72,6 +72,7 @@ public abstract class JavaScriptEditorPage extends AbstractPropertyPage {
 		propLoaded = true;		
 	}
 
+	@Override
 	public boolean performOk() {
 		try {
 			if (propLoaded)

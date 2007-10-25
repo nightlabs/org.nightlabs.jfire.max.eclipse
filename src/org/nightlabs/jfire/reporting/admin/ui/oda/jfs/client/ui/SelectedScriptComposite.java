@@ -12,6 +12,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -66,6 +67,7 @@ public class SelectedScriptComposite extends XComposite {
 		 * {@inheritDoc}
 		 * @see org.nightlabs.base.ui.dialog.CenteredDialog#configureShell(org.eclipse.swt.widgets.Shell)
 		 */
+		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.title")); //$NON-NLS-1$
@@ -96,7 +98,7 @@ public class SelectedScriptComposite extends XComposite {
 		
 		public static Script openDialog() {
 			SelectScriptDialog dlg = new SelectScriptDialog(RCPUtil.getActiveWorkbenchShell());
-			if (dlg.open() == Dialog.OK) {
+			if (dlg.open() == Window.OK) {
 				return dlg.selectedScript;
 			}
 			return null;

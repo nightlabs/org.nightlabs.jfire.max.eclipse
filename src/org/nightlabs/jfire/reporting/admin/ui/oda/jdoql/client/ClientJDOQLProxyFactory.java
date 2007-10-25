@@ -28,6 +28,7 @@ package org.nightlabs.jfire.reporting.admin.ui.oda.jdoql.client;
 
 import java.util.Map;
 
+import org.nightlabs.jfire.reporting.oda.Connection;
 import org.nightlabs.jfire.reporting.oda.jdoql.IJDOQueryProxy;
 import org.nightlabs.jfire.reporting.oda.jdoql.IJDOQueryProxyFactory;
 import org.nightlabs.jfire.reporting.oda.jdoql.JDOQLConnection;
@@ -42,7 +43,7 @@ public class ClientJDOQLProxyFactory implements IJDOQueryProxyFactory {
 	 * @see org.nightlabs.jfire.reporting.admin.ui.oda.jdo.IJDOQueryProxyFactory#createJDOQueryProxy(java.util.Map)
 	 */
 	public IJDOQueryProxy createJDOQueryProxy(Map proxyProperties) {
-		JDOQLConnection.checkConnectonProperties(proxyProperties);
+		Connection.checkConnectonProperties(proxyProperties);
 		return new ClientJDOQLProxy();
 	}
 

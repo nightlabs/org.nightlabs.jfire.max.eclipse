@@ -69,7 +69,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 
 		private TreeMap<String, String> properties;
 		
-		@SuppressWarnings("unchecked") //$NON-NLS-1$
+		@SuppressWarnings("unchecked") 
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Map) {
 				this.properties = new TreeMap<String, String>((Map<String, String>)inputElement);
@@ -95,7 +95,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 			return properties;
 		}
 		
-		@SuppressWarnings("unchecked") //$NON-NLS-1$
+		@SuppressWarnings("unchecked") 
 		public void setProperty(String name, String value) {
 			properties.put(name, value);
 		}

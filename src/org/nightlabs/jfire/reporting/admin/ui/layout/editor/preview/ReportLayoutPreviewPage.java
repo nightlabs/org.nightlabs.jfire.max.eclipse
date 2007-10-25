@@ -397,6 +397,7 @@ implements IReportEditorPage
 	
 	private ActionRegistry registry;
 	
+	@Override
 	public Object getAdapter( Class required )
 	{
 		if ( required.equals( ActionRegistry.class ) ) {

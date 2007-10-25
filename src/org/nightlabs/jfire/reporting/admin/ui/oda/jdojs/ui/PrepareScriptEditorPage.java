@@ -37,6 +37,7 @@ public class PrepareScriptEditorPage extends JavaScriptEditorPage {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.JavaScriptEditorPage#getJSPropertyName()
 	 */
+	@Override
 	public String getJSPropertyName() {
 		return IJDOJSProxy.PROPERTY_PREPARE_SCRIPT;
 	}

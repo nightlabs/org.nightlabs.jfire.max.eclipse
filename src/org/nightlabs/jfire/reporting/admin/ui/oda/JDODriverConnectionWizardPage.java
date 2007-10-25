@@ -53,6 +53,7 @@ public class JDODriverConnectionWizardPage extends DynamicPathWizardPage {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
 		organisationID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizardPage.organisationIDLabel.text")); //$NON-NLS-1$

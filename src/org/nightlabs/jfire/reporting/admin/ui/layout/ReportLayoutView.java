@@ -57,6 +57,7 @@ public class ReportLayoutView extends ReportRegistryItemTreeView
 		}		
 	};
 	
+	@Override
 	public void createPartContents(Composite parent) {
 		super.createPartContents(parent);
 		getRegistryItemTree().getTreeViewer().addDoubleClickListener(treeDoubleClickListener);

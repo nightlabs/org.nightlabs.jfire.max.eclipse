@@ -35,6 +35,7 @@ import org.nightlabs.jfire.reporting.oda.jdoql.IJDOQueryProxyFactory;
  */
 public class ClientJDOQLDriver extends AbstractJDOQLDriver {
 
+	@Override
 	protected IJDOQueryProxyFactory createProxyFactory() {
 		return new ClientJDOQLProxyFactory();
 	}

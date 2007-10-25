@@ -42,6 +42,7 @@ import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,6 +50,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
@@ -95,7 +97,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	private int index;
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
@@ -112,7 +114,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 				}
 				
 			try {
-				project.refreshLocal(IProject.DEPTH_INFINITE, new NullProgressMonitor());
+				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			} catch (CoreException e) {
 				throw new RuntimeException(e);
 			}
@@ -152,7 +154,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 			FileEditorInput newInput = new FileEditorInput(file);
 			addPropertyListener(new IPropertyListener() {
 				public void propertyChanged(Object source, int propId) {
-					if (propId == ITextEditor.PROP_DIRTY)
+					if (propId == IEditorPart.PROP_DIRTY)
 						editor.editorDirtyStateChanged();
 				}
 			});
@@ -348,6 +350,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	private ActionRegistry registry;
 
+	@Override
 	public Object getAdapter( Class required )
 	{
 //		System.out.println("Get Adapter called for "+required);
@@ -370,7 +373,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		pagesCreated = true;
 	}
 	
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public void saveLocalisationBundle(IProgressMonitor monitor) {
 		if (!pagesCreated)
 			return;
@@ -418,7 +421,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}		
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public Collection<Locale> getBundleLocales() {
 		return getResourceManager() != null ? getResourceManager().getLocales() : null;
 	}
