@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -110,6 +111,7 @@ extends WizardHopPage
 		inheritPriceConfig.setText(String.format(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.inheritPriceConfigRadio.text"), name)); //$NON-NLS-1$
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{
@@ -152,7 +154,7 @@ extends WizardHopPage
 		});
 
 		priceConfigList = new ListComposite<VoucherPriceConfig>(page, 
-				ListComposite.getDefaultWidgetStyle(page),(String) null, 
+				AbstractListComposite.getDefaultWidgetStyle(page),(String) null, 
 				new LabelProvider() {
 			@Override
 			public String getText(Object element)
@@ -179,12 +181,13 @@ extends WizardHopPage
 		page.setEnabled(false);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				final VoucherType parentVoucherType = VoucherTypeDAO.sharedInstance().getVoucherType(
 						parentVoucherTypeID,
-						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG, VoucherPriceConfig.FETCH_GROUP_NAME},
+						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG, PriceConfig.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 				final List<VoucherPriceConfig> voucherPriceConfigs = VoucherPriceConfigDAO.sharedInstance().getVoucherPriceConfigs(
@@ -212,7 +215,7 @@ extends WizardHopPage
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return page;

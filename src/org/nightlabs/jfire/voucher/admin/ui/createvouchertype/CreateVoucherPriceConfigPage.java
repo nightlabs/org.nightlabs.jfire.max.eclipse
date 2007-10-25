@@ -35,6 +35,7 @@ public class CreateVoucherPriceConfigPage
 				SharedImages.getWizardPageImageDescriptor(VoucherAdminPlugin.getDefault(), CreateVoucherPriceConfigPage.class));
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{

@@ -68,6 +68,7 @@ public class VoucherTypeNamePage extends DynamicPathWizardPage
 		this.parentVoucherTypeID = parentVoucherTypeID;
 	}
  
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -80,6 +81,7 @@ public class VoucherTypeNamePage extends DynamicPathWizardPage
 		inheritanceNatureCombo.add(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeNamePage.inheritanceNatureCombo.item_leaf")); //$NON-NLS-1$
 		inheritanceNatureCombo.select(0);
 		inheritanceNatureCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				inheritanceNatureCombo_selectionChanged();
@@ -107,10 +109,10 @@ public class VoucherTypeNamePage extends DynamicPathWizardPage
 	{
 		switch (inheritanceNatureCombo.getSelectionIndex()) {
 			case 0:
-				inheritanceNature = VoucherType.INHERITANCE_NATURE_BRANCH;
+				inheritanceNature = ProductType.INHERITANCE_NATURE_BRANCH;
 				break;
 			case 1:
-				inheritanceNature = VoucherType.INHERITANCE_NATURE_LEAF;
+				inheritanceNature = ProductType.INHERITANCE_NATURE_LEAF;
 				break;
 			default:
 				throw new IllegalStateException("Unknown inheritanceNatureCombo.selectionIndex!"); //$NON-NLS-1$

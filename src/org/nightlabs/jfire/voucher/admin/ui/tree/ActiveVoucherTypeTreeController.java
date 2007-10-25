@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.notification.VoucherTypeParentResolver;
@@ -21,8 +22,8 @@ public abstract class ActiveVoucherTypeTreeController
 extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTreeNode>
 {
 	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = {
-		FetchPlan.DEFAULT, VoucherType.FETCH_GROUP_NAME,
-		VoucherType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
+		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME,
+		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 
 	@Implement

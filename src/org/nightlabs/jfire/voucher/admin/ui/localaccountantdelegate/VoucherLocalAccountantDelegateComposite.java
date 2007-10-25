@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -129,6 +130,7 @@ implements ISelectionProvider
 				getDefaultLabel().setText(((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
 			}
 
+			@Override
 			@Implement
 			protected Object openDialogBox(Control cellEditorWindow)
 			{
@@ -137,7 +139,7 @@ implements ISelectionProvider
 
 				SelectAccountWizard selectAccountWizard = new SelectAccountWizard(me.getKey(), me.getValue());
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(selectAccountWizard);
-				if (dialog.open() != DynamicPathWizardDialog.OK)
+				if (dialog.open() != Window.OK)
 					return null;
 
 				me.setValue(selectAccountWizard.getSelectedAccount());

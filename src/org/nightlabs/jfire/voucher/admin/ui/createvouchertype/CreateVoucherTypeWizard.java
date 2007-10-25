@@ -64,6 +64,7 @@ extends DynamicPathWizard
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{
@@ -113,6 +114,7 @@ extends DynamicPathWizard
 //		}
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{

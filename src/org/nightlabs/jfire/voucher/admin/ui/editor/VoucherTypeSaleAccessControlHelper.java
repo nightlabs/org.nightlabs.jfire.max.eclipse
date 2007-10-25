@@ -18,9 +18,10 @@ extends AbstractSaleAccessControlHelper
 //		return fetchGroups;
 //	}
 
+	@Override
 	public void setProductType(ProductType productType)
 	{
-		super.setProductType((VoucherType)productType);
+		super.setProductType(productType);
 	}
 
 	public VoucherType getVoucherType()
@@ -28,6 +29,7 @@ extends AbstractSaleAccessControlHelper
 		return (VoucherType) getProductType();
 	}
 
+	@Override
 	public boolean canConfirm(boolean silent)
 	{
 		if (!super.canConfirm(silent))
@@ -50,6 +52,7 @@ extends AbstractSaleAccessControlHelper
 		return true;
 	}
 
+	@Override
 	public boolean canSetSaleable(boolean silent, boolean saleable)
 	{
 		if (!super.canSetSaleable(silent, saleable))

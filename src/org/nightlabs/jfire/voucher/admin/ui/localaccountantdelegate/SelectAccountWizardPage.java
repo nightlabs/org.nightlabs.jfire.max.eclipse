@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -62,6 +63,7 @@ extends WizardHopPage
 		new WizardHop(this);
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{
@@ -89,7 +91,7 @@ extends WizardHopPage
 			}
 		});
 
-		accountList = new ListComposite<Account>(page, ListComposite.getDefaultWidgetStyle(page), 
+		accountList = new ListComposite<Account>(page, AbstractListComposite.getDefaultWidgetStyle(page), 
 				(String) null, new LabelProvider() {
 			@Override
 			public String getText(Object element)
@@ -112,6 +114,7 @@ extends WizardHopPage
 		accountList.addElement(dummy);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
@@ -146,7 +149,7 @@ extends WizardHopPage
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return page;

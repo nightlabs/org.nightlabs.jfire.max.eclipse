@@ -22,6 +22,7 @@ public class AddCurrencyWizard
 		addPage(currencySelectionPage);
 	}
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{

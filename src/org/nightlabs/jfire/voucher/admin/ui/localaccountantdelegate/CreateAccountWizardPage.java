@@ -29,6 +29,7 @@ public class CreateAccountWizardPage
 		this.currency = currency;
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{

@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -67,6 +68,7 @@ extends WizardHopPage
 		new WizardHop(this);
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{
@@ -106,7 +108,7 @@ extends WizardHopPage
 		});
 
 		accountantDelegateList = new ListComposite<VoucherLocalAccountantDelegate>(page, 
-				ListComposite.getDefaultWidgetStyle(page), 
+				AbstractListComposite.getDefaultWidgetStyle(page), 
 				(String) null, new LabelProvider() {
 			@Override
 			public String getText(Object element)
@@ -130,12 +132,13 @@ extends WizardHopPage
 		accountantDelegateList.addElement(dummy);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectLocalAccountantDelegatePage.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				final VoucherType parentVoucherType = VoucherTypeDAO.sharedInstance().getVoucherType(
 						parentVoucherTypeID,
-						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE, VoucherLocalAccountantDelegate.FETCH_GROUP_NAME},
+						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE, LocalAccountantDelegate.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 				final List<VoucherLocalAccountantDelegate> delegates = VoucherLocalAccountantDelegateDAO.sharedInstance().getVoucherLocalAccountantDelegates(
@@ -166,14 +169,14 @@ extends WizardHopPage
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		return page;
 	}
 
 	public static final String[] FETCH_GROUPS_LOCAL_ACCOUNTANT_DELEGATE = {
-		FetchPlan.DEFAULT, VoucherLocalAccountantDelegate.FETCH_GROUP_NAME
+		FetchPlan.DEFAULT, LocalAccountantDelegate.FETCH_GROUP_NAME
 	};
 
 	private void setInheritedLocalAccountantDelegateName(String name)

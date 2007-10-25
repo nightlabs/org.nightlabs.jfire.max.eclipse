@@ -31,6 +31,7 @@ public class SelectAccountWizard
 		addPage(selectAccountWizardPage);
 	}
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{

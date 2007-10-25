@@ -37,6 +37,7 @@ public class CreateLocalAccountantDelegatePage
 		setDescription(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateLocalAccountantDelegatePage.description")); //$NON-NLS-1$
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{
