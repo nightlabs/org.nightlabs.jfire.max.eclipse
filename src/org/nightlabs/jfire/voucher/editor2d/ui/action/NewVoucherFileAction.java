@@ -21,6 +21,7 @@ extends NewFileAction
 		super();
 	}
 
+	@Override
 	public void run() 
 	{		
 		try {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.BarcodeCreateRequest;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
@@ -32,7 +33,7 @@ extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog
 		List<ScriptRegistryItemID> scriptIDs = new LinkedList<ScriptRegistryItemID>();
 		scriptIDs.add(VoucherScriptingConstants.OID.SCRIPT_REGISTRY_ITEM_ID_SCRIPT_VOUCHER_KEY);
 		scriptCombo = new XComboComposite<ScriptRegistryItemID>(parent, 
-				XComboComposite.getDefaultWidgetStyle(parent), (String) null,
+				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null,
 				scriptRegistryLabelProvider);
 		scriptCombo.setInput(scriptIDs);
 		scriptCombo.selectElementByIndex(0);

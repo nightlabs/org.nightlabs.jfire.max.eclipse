@@ -24,6 +24,7 @@ extends ScriptingEditorPaletteFactory
 		super(factory);
 	}
 
+	@Override
 	protected ToolEntry createBarcodeToolEntry() 
  	{
  		return new VoucherBarcodeToolEntry
@@ -38,7 +39,8 @@ extends ScriptingEditorPaletteFactory
  	  ); 		
  	}	
 	
- 	protected ToolEntry createTicketScriptTextToolEntry() 
+ 	@Override
+	protected ToolEntry createTicketScriptTextToolEntry() 
  	{
  		return new VoucherTextScriptToolEntry
  	  (

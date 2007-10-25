@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTreeNode;
@@ -39,6 +40,7 @@ extends CenteredDialog
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
+	@Override
 	protected void configureShell(Shell newShell) 
 	{
 		super.configureShell(newShell);
@@ -65,7 +67,7 @@ extends CenteredDialog
 		voucherGroup.setLayout(new GridLayout());
 		voucherGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
 		voucherTypeTree = new VoucherTypeTree(voucherGroup, 
-				VoucherTypeTree.DEFAULT_STYLE_SINGLE | SWT.BORDER); 
+				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.BORDER); 
 		voucherTypeTree.addSelectionChangedListener(voucherSelectionListener);
 //		voucherTypeTree.getTreeViewer().expandToLevel(2);
 		

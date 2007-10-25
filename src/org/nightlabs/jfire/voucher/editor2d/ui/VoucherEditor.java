@@ -56,6 +56,7 @@ implements ControllablePart
 		return new VoucherEditorPlatteFactory(getScriptEditor2DFactory());
 	}	
 	
+	@Override
 	@Implement
 	public void createPartControl(Composite parent) 
 	{
