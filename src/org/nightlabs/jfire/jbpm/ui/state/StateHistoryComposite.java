@@ -64,6 +64,7 @@ extends AbstractTableComposite<State>
 		super(parent, style);
 	}
 
+	@Override
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -84,6 +85,7 @@ extends AbstractTableComposite<State>
 		));
 	}
 
+	@Override
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
@@ -110,6 +112,7 @@ extends AbstractTableComposite<State>
 		});
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
@@ -142,7 +145,7 @@ extends AbstractTableComposite<State>
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
 }

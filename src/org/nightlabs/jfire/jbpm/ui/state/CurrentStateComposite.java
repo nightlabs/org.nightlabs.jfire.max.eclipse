@@ -86,6 +86,7 @@ public class CurrentStateComposite
 	public void setStatable(final Statable _statable)
 	{
 		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{

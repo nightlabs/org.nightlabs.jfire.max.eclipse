@@ -92,6 +92,7 @@ public class NextTransitionComposite
 	public void setStatable(final Statable _statable)
 	{
 		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.loadJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
