@@ -69,6 +69,7 @@ public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 		this.parentDynamicProductTypeID = parentDynamicProductTypeID;
 	}
  
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -81,6 +82,7 @@ public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 		inheritanceNatureCombo.add(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeNamePage.inheritanceNatureCombo.item_leaf")); //$NON-NLS-1$
 		inheritanceNatureCombo.select(0);
 		inheritanceNatureCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				inheritanceNatureCombo_selectionChanged();
@@ -108,10 +110,10 @@ public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 	{
 		switch (inheritanceNatureCombo.getSelectionIndex()) {
 			case 0:
-				inheritanceNature = DynamicProductType.INHERITANCE_NATURE_BRANCH;
+				inheritanceNature = ProductType.INHERITANCE_NATURE_BRANCH;
 				break;
 			case 1:
-				inheritanceNature = DynamicProductType.INHERITANCE_NATURE_LEAF;
+				inheritanceNature = ProductType.INHERITANCE_NATURE_LEAF;
 				break;
 			default:
 				throw new IllegalStateException("Unknown inheritanceNatureCombo.selectionIndex!"); //$NON-NLS-1$

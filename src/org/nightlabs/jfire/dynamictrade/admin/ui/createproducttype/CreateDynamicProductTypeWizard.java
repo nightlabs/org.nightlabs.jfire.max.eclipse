@@ -72,6 +72,7 @@ extends DynamicPathWizard
 		dynamicProductType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
@@ -104,7 +105,7 @@ extends DynamicPathWizard
 			}
 		};
 		job.setUser(true);
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 		return true;
 	}

@@ -38,6 +38,7 @@ public class CreateDynamicProductTypeAction
 				});
 	}
 
+	@Override
 	public void run()
 	{
 		try {

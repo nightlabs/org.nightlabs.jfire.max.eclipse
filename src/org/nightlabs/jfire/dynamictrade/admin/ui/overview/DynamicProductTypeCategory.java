@@ -29,6 +29,7 @@ public class DynamicProductTypeCategory
 		super(tradeAdminCategoryFactory);
 	}
 
+	@Override
 	@Implement
 	protected Composite _createComposite(Composite parent)
 	{

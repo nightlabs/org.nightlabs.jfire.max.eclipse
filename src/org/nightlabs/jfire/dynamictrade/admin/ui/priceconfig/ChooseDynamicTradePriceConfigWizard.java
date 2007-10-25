@@ -21,6 +21,7 @@ extends AbstractChooseGridPriceConfigWizard
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard#createChooseGridPriceConfigPage(org.nightlabs.jfire.store.ProductType)
 	 */
+	@Override
 	@Implement
 	protected AbstractChooseGridPriceConfigPage createChooseGridPriceConfigPage(
 			ProductTypeID parentProductTypeID) 
