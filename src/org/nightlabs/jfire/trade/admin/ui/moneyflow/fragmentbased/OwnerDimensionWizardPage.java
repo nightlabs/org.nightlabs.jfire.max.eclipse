@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -100,6 +102,11 @@ implements MappingDimensionWizardPage
 			}
 		});
 		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, "");
+		searchComposite.getResultTable().getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				getWizard().performFinish();
+			}
+		});
 		return wrapper;
 	}
 	
