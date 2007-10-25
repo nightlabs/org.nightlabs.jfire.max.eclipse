@@ -10,8 +10,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.jfire.prop.StructLocal;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -49,7 +52,8 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 	
 	public void setSimpleProductType(SimpleProductType productType) {
 		structLocalScope = productType.getStructLocalScope();
-		structLocalScopeText.setText(structLocalScope);
+		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, structLocalScope, new NullProgressMonitor());		
+		structLocalScopeText.setText(sl.getName().getText());
 	}
 
 }
