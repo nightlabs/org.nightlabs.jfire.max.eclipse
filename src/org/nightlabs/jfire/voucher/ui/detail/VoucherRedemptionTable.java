@@ -48,6 +48,7 @@ extends AbstractTableComposite<VoucherRedemption>
 		super(parent, SWT.NONE);
 	}
 
+	@Override
 	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -62,6 +63,7 @@ extends AbstractTableComposite<VoucherRedemption>
 		table.setLayout(new WeightedTableLayout(new int[] { 1, 1 }));
 	}
 
+	@Override
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{

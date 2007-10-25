@@ -14,6 +14,7 @@ public class ArticleEdit extends AbstractArticleEdit
 {
 	private ArticleEditComposite articleEditComposite;
 
+	@Override
 	@Implement
 	protected Composite _createComposite(Composite parent)
 	{

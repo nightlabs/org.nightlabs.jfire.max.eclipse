@@ -52,10 +52,12 @@ public class ArticleAdderComposite
 				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
 
 		quantitySelector = new QuantitySelector(this) {
+			@Override
 			protected void quantitySelected(int qty)
 			{
 				qtySelected(qty);
 			}
+			@Override
 			protected void relayout()
 			{
 				ArticleAdderComposite.this.layout(true, true);
@@ -106,7 +108,7 @@ public class ArticleAdderComposite
 					return Status.OK_STATUS;
 				}
 			};
-			addJob.setPriority(Job.SHORT);
+			addJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 //			addJob.setUser(true);
 			addJob.schedule();
 	};

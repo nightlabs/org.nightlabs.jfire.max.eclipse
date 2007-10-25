@@ -17,6 +17,7 @@ extends AbstractArticleAdder
 {
 	private VoucherType voucherType;
 
+	@Override
 	@Implement
 	protected Composite _createComposite(Composite parent)
 	{

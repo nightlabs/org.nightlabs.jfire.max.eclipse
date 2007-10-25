@@ -240,6 +240,7 @@ implements ISelectionProvider
 		}
 	};
 
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{		
 		TableColumn col = new TableColumn(table, SWT.LEFT);
@@ -304,32 +305,38 @@ implements ISelectionProvider
 							new int[]{-1, -1, -1, 22, 22, 22, 22, -1}));
 	}
 
+	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
 	}
 
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		tableViewer.addSelectionChangedListener(listener);
 	}
 
+	@Override
 	public ISelection getSelection()
 	{
 		return tableViewer.getSelection();
 	}
 
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		tableViewer.removeSelectionChangedListener(listener);
 	}
 
+	@Override
 	public void setSelection(ISelection selection)
 	{
 		tableViewer.setSelection(selection);
 	}
 
+	@Override
 	public void setMenu(Menu menu)
 	{
 		super.setMenu(menu);

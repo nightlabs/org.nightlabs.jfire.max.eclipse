@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.pay.Payment;
+import org.nightlabs.jfire.store.Product;
 import org.nightlabs.jfire.voucher.accounting.VoucherRedemption;
 import org.nightlabs.jfire.voucher.dao.VoucherKeyDAO;
 import org.nightlabs.jfire.voucher.store.Voucher;
@@ -179,13 +180,13 @@ extends XComposite
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
 
 	public static final String[] FETCH_GROUPS_VOUCHER_KEY = {
 		FetchPlan.DEFAULT, VoucherKey.FETCH_GROUP_VOUCHER, VoucherKey.FETCH_GROUP_NOMINAL_VALUE, VoucherKey.FETCH_GROUP_REST_VALUE,
-		Voucher.FETCH_GROUP_PRODUCT_LOCAL, Price.FETCH_GROUP_CURRENCY,
+		Product.FETCH_GROUP_PRODUCT_LOCAL, Price.FETCH_GROUP_CURRENCY,
 		VoucherKey.FETCH_GROUP_REDEMPTIONS, VoucherRedemption.FETCH_GROUP_PAYMENT, Payment.FETCH_GROUP_CURRENCY
 		// , ProductLocal.FE
 	};
