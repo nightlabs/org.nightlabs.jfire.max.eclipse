@@ -41,6 +41,7 @@ implements PropertyChangeListener
 	/**
 	 * Updates the visual aspect of this. 
 	 */
+	@Override
 	protected void refreshVisuals() 
 	{
 		if (getModel() instanceof IGraphicalInfoProvider) {

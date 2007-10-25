@@ -48,6 +48,7 @@ extends ActionBarContributor
 		addGlobalActionKey(ActionFactory.DELETE.getId());
 	}
 
+	@Override
 	public void contributeToToolBar(IToolBarManager tbm) 
 	{
 		tbm.add(getAction(ActionFactory.UNDO.getId()));
@@ -62,6 +63,7 @@ extends ActionBarContributor
 	/**
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
 	 */
+	@Override
 	public void contributeToMenu(IMenuManager menubar) 
 	{
 		super.contributeToMenu(menubar);

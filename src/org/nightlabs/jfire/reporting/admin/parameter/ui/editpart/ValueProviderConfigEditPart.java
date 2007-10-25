@@ -125,6 +125,7 @@ extends AbstractNodeReportEditPart
 		
 	}
 	
+	@Override
 	protected List<INodeAnchorItem> getNodeTargetItems() {
 		ValueProvider valueProvider = ValueProviderDAO.sharedInstance().getValueProvider(
 				getValueProviderConfig().getConfigValueProviderID(),

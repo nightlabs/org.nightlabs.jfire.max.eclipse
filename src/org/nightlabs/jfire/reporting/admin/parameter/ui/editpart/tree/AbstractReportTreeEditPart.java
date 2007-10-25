@@ -26,7 +26,8 @@ extends AbstractTreeEditPart
 	}
 	protected abstract IPropertySource createPropertySource();
 	
-  public Object getAdapter(Class key)
+  @Override
+	public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
     *  which would expect the model to be a property sourced. 

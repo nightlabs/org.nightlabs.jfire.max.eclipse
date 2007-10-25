@@ -54,6 +54,7 @@ implements PropertyChangeListener
 	{
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
+			@Override
 			protected Command getDeleteCommand(GroupRequest request) {
 				return new DeleteConnectionCommand(getValueConsumerBinding(), setup);
 			}
@@ -74,6 +75,7 @@ implements PropertyChangeListener
 		return connection;
 	}
 	
+	@Override
 	public void activateFigure()
 	{
 		super.activateFigure();
@@ -83,6 +85,7 @@ implements PropertyChangeListener
 		getFigure().addPropertyChangeListener(Connection.PROPERTY_CONNECTION_ROUTER, this);
 	}	
 
+	@Override
 	public void deactivateFigure(){
 		getFigure().removePropertyChangeListener(Connection.PROPERTY_CONNECTION_ROUTER, this);
 		super.deactivateFigure();
@@ -139,6 +142,7 @@ implements PropertyChangeListener
 	 * the state of Wire.
 	 * 
 	 */
+	@Override
 	protected void refreshVisuals() {
 		refreshBendpoints();
 //		if (getWire().getValue())

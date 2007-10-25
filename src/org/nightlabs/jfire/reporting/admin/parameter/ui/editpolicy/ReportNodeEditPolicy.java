@@ -129,6 +129,7 @@ extends GraphicalNodeEditPolicy
 		return (AbstractNodeReportEditPart) getHost(); 
 	}
 	
+	@Override
 	protected IFigure getFeedbackLayer() 
 	{
 		/*

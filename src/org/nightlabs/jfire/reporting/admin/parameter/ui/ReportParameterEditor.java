@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -85,6 +86,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.Util;
 import org.nightlabs.util.Utils;
 
 /**
@@ -113,6 +115,7 @@ extends GraphicalEditorWithFlyoutPalette
 		public OutlinePage(EditPartViewer viewer){
 			super(viewer);
 		}
+		@Override
 		public void init(IPageSite pageSite) {
 			super.init(pageSite);
 			ActionRegistry registry = getActionRegistry();
@@ -168,6 +171,7 @@ extends GraphicalEditorWithFlyoutPalette
 //			showPage(ID_OUTLINE);
 		}
 
+		@Override
 		public void createControl(Composite parent){
 			pageBook = new PageBook(parent, SWT.NONE);
 			outline = getViewer().createControl(pageBook);
@@ -178,6 +182,7 @@ extends GraphicalEditorWithFlyoutPalette
 			initializeOutlineViewer();
 		}
 
+		@Override
 		public void dispose(){
 			unhookOutlineViewer();
 			if (thumbnail != null) {
@@ -195,6 +200,7 @@ extends GraphicalEditorWithFlyoutPalette
 			return null;
 		}
 
+		@Override
 		public Control getControl() {
 			return pageBook;
 		}
@@ -311,6 +317,7 @@ extends GraphicalEditorWithFlyoutPalette
 		super();
 	}
 
+	@Override
 	protected DefaultEditDomain getEditDomain() {
 		if (super.getEditDomain() == null)
 			setEditDomain(new DefaultEditDomain(this));
@@ -507,7 +514,7 @@ extends GraphicalEditorWithFlyoutPalette
 					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS, 
 					new NullProgressMonitor());
 			if (cachedSetup != null)
-				reportParameterAcquisitionSetup = Utils.cloneSerializable(cachedSetup);
+				reportParameterAcquisitionSetup = Util.cloneSerializable(cachedSetup);
 			else
 				reportParameterAcquisitionSetup = null;
 		} catch (Exception e) {
@@ -660,7 +667,7 @@ extends GraphicalEditorWithFlyoutPalette
 			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(), 
 					useCaseCombo.getSelectedElement(), reportParameterAcquisitionSetup, UseCaseDialog.EDIT_MODE);
 			int returnCode = dialog.open();
-			if (returnCode == Dialog.OK) {
+			if (returnCode == Window.OK) {
 				useCaseCombo.refresh();
 			}
 		}	
@@ -674,7 +681,7 @@ extends GraphicalEditorWithFlyoutPalette
 			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(), 
 					null, reportParameterAcquisitionSetup, UseCaseDialog.NEW_MODE);
 			int returnCode = dialog.open();
-			if (returnCode == Dialog.OK) {
+			if (returnCode == Window.OK) {
 				ReportParameterAcquisitionUseCase useCase = dialog.getUseCase();
 				ValueAcquisitionSetup setup = createNewValueAcquisitionSetup(useCase);
 				reportParameterAcquisitionSetup.addValueAcquisitionSetup(setup);

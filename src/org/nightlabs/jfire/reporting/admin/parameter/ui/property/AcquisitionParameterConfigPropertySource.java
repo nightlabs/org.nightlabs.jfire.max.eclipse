@@ -26,7 +26,7 @@ extends AbstractPropertySource
 	}
 
 	protected IGraphicalInfoProvider getGraphicalInfoProvider() {
-		return (IGraphicalInfoProvider) acquisitionParameterConfig;
+		return acquisitionParameterConfig;
 	}
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() 
@@ -78,7 +78,7 @@ extends AbstractPropertySource
 					ObjectIDProvider.getObjectID(acquisitionParameterConfig),
 					ModelNotificationManager.PROP_PARAMETER_TYPE,
 					oldVal, 
-					(String)value
+					value
 				);
 			return;
 		}

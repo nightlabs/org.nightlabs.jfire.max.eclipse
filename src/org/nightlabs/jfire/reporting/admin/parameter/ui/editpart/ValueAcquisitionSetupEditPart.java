@@ -65,6 +65,7 @@ extends AbstractReportParameterEditPart
 	/**
 	 * Installs EditPolicies specific to this. 
 	 */
+	@Override
 	protected void createEditPolicies(){
 		super.createEditPolicies();
 
@@ -83,7 +84,7 @@ extends AbstractReportParameterEditPart
 		return ValueAcquisitionSetupID.create(getValueAcquisitionSetup());
 	}	
 		
-  @SuppressWarnings("unchecked") //$NON-NLS-1$
+  @SuppressWarnings("unchecked") 
 	@Override  
   protected List getModelChildren() 
   {
@@ -111,7 +112,7 @@ extends AbstractReportParameterEditPart
 		return new ValueAcquistionSetupPropertySource(getValueAcquisitionSetup());
 	}
 	
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	protected void validateValueAcquisitionSetupParameterConfigs() 
 	{
 		List params = reportHandle.getAllParameters();		
@@ -149,6 +150,7 @@ extends AbstractReportParameterEditPart
 		}
 	}
 	
+	@Override
 	public IPropertySource getPropertySource() {
 		return null;
 	}

@@ -63,7 +63,7 @@ extends AbstractPropertySource
 	}
 
 	protected IGraphicalInfoProvider getGraphicalInfoProvider() {
-		return (IGraphicalInfoProvider) valueProviderConfig;
+		return valueProviderConfig;
 	}
 	
 	private int staticPropertyDescriptorSize = 10;

@@ -178,6 +178,7 @@ implements HandleBounds
 		return boldFont;
 	}
 	
+	@Override
 	public Dimension getPreferredSize(int w, int h) {
 		Dimension prefSize = super.getPreferredSize(w, h);
 		Dimension defaultSize = new Dimension(200, nameHeight + spacerHeight + Math.max(anchorHeight, anchorHeight * getInputAmount()) + spacerHeight);

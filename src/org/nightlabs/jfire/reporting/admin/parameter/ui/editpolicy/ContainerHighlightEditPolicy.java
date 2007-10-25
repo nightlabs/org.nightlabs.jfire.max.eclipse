@@ -23,6 +23,7 @@ extends GraphicalEditPolicy
 		this.reportEditPart = reportEditPart;
 	}
 	
+	@Override
 	public void eraseTargetFeedback(Request request){
 		if (getContainerFigure() instanceof AbstractInputNodeFigure) {
 			((AbstractInputNodeFigure)getContainerFigure()).setInputHighlight(null);
@@ -33,6 +34,7 @@ extends GraphicalEditPolicy
 		return ((GraphicalEditPart)getHost()).getFigure();
 	}
 
+	@Override
 	public EditPart getTargetEditPart(Request request){
 		return request.getType().equals(RequestConstants.REQ_SELECTION_HOVER) ?
 			getHost() : null;
@@ -48,6 +50,7 @@ extends GraphicalEditPolicy
 		}
 	}
 
+	@Override
 	public void showTargetFeedback(Request request){
 		if(request.getType().equals(RequestConstants.REQ_MOVE) ||
 			request.getType().equals(RequestConstants.REQ_ADD) ||

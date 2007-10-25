@@ -67,7 +67,7 @@ extends AbstractNodeReportEditPart
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new AcquisitionParameterConfigEditPolicy());
 	}	
 		
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected List getModelTargetConnections() 
 	{		

@@ -26,6 +26,7 @@ extends AbstractConnectionAnchor
 	/**
 	 * @see org.eclipse.draw2d.AbstractConnectionAnchor#ancestorMoved(IFigure)
 	 */
+	@Override
 	public void ancestorMoved(IFigure figure) {
 		if (figure instanceof ScalableFigure)
 			return;
@@ -50,6 +51,7 @@ extends AbstractConnectionAnchor
 		return p;
 	}
 
+	@Override
 	public Point getReferencePoint(){
 		return getLocation(null);
 	}

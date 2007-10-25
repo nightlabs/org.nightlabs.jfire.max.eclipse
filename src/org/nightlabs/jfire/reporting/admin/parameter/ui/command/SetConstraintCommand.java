@@ -27,6 +27,7 @@ extends Command
 		setLabel(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.command.SetConstraintCommand.changeBounds.label")); //$NON-NLS-1$
 	}
 
+	@Override
 	public void execute() {
 //		oldSize = part.getSize();
 //		oldPos  = part.getLocation();
@@ -34,12 +35,14 @@ extends Command
 		redo();		
 	}
 
+	@Override
 	public String getLabel() {
 //		if (oldSize.equals(newSize))
 			return Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.command.SetConstraintCommand.changeLocation.label"); //$NON-NLS-1$
 //		return "Resize";
 	}
 
+	@Override
 	public void redo() {
 //		part.setSize(newSize);
 		part.setX(newPos.x);
@@ -73,6 +76,7 @@ extends Command
 //		newSize = p;
 //	}
 
+	@Override
 	public void undo() {
 //		part.setSize(oldSize);
 //		part.setLocation(oldPos);

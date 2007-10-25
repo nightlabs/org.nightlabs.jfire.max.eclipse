@@ -39,6 +39,7 @@ extends AbstractInputNodeFigure
 		return inputParam.getParameterID();
 	}
 
+	@Override
 	protected String getOutputString() 
 	{
 		String s = valueProvider.getOutputType();
@@ -59,6 +60,7 @@ extends AbstractInputNodeFigure
 		return valueProvider.getInputParameters().get(index).getParameterID() + "("+ s.substring(s.lastIndexOf(".")+1) +")";		 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
+	@Override
 	public String getName() {
 		return valueProvider.getName().getText();
 	}

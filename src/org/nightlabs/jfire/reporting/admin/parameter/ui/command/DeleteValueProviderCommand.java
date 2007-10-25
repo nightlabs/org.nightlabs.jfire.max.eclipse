@@ -37,10 +37,12 @@ extends Command
 		notifyEditParts();
 	}
 
+	@Override
 	public void redo() {
 		execute();
 	}
 
+	@Override
 	public void undo() {
 		setup.getValueProviderConfigs().add(valueProviderConfig);
 		restoreConnections();
