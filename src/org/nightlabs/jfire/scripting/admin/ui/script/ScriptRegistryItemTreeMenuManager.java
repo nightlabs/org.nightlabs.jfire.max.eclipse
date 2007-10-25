@@ -42,7 +42,6 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
-import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.admin.ui.script.action.IScriptRegistryItemAction;
 import org.nightlabs.jfire.scripting.admin.ui.script.action.ScriptRegistryItemActionRegistry;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;

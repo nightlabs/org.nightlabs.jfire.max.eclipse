@@ -18,9 +18,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.nightlabs.base.ui.app.AbstractApplication;
 import org.nightlabs.jfire.base.ui.app.JFireApplication;
 import org.nightlabs.jfire.scripting.Script;
-import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
 import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
@@ -50,7 +50,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 			// TODO remove NullProgressMonitor
 			Script script = ScriptRegistryItemProvider.sharedInstance().getScript(
 					registryItemID, new NullProgressMonitor());
-			File pathFile = new File(JFireApplication.getRootDir()+File.separator+"scripts_tmp"); //$NON-NLS-1$
+			File pathFile = new File(AbstractApplication.getRootDir()+File.separator+"scripts_tmp"); //$NON-NLS-1$
 			if (!pathFile.exists()) {
 				if (!pathFile.mkdirs())
 					throw new IllegalStateException("Could not create directory for temporary remote layouts: "+pathFile.getPath()); //$NON-NLS-1$
@@ -83,6 +83,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object o) {
 		return getLocalInput().equals(o);
 	}
@@ -146,6 +147,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return getLocalInput().hashCode();
 	}
@@ -153,6 +155,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		return getLocalInput().toString();
 	}

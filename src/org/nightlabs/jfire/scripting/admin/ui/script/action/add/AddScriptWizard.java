@@ -36,7 +36,6 @@ import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptCategory;
 import org.nightlabs.jfire.scripting.ScriptManager;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
-import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 
 /**

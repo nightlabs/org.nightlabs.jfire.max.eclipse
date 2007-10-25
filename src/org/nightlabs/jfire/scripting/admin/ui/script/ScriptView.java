@@ -145,6 +145,7 @@ implements
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public void createPartControl(Composite parent) {
 		LSDPartController.sharedInstance().createPartControl(this, parent);
 		PartVisibilityTracker.sharedInstance().addVisibilityListener(this, this);
@@ -153,6 +154,7 @@ implements
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus() {
 	}
 

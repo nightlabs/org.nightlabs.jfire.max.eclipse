@@ -2,7 +2,6 @@ package org.nightlabs.jfire.scripting.admin.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -25,6 +24,7 @@ public class ScriptingAdminPlugin extends AbstractUIPlugin {
 	/**
 	 * This method is called upon plug-in activation
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 	}
@@ -32,6 +32,7 @@ public class ScriptingAdminPlugin extends AbstractUIPlugin {
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
