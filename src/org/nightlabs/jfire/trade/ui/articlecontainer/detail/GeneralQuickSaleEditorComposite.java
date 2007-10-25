@@ -7,6 +7,7 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -37,6 +38,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -220,11 +222,11 @@ extends XComposite
 	{		
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				getGeneralEditorComposite().getArticleContainerID(),
-				CombiTransferArticleContainerWizard.TRANSFER_MODE_BOTH,
+				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 				TransferWizard.Side.Vendor); // TODO it's not always vendor!
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		int returnCode = dialog.open();
-		if (returnCode == Dialog.CANCEL)
+		if (returnCode == Window.CANCEL)
 			return false;
 		return true;
 	}

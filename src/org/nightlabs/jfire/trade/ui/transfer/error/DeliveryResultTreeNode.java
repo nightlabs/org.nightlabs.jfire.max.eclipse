@@ -15,6 +15,7 @@ public class DeliveryResultTreeNode
 		this.deliveryResult = deliveryResult;
 	}
 
+	@Override
 	@Implement
 	public String getColumnText(int columnIndex)
 	{
@@ -32,6 +33,7 @@ public class DeliveryResultTreeNode
 		}
 	}
 
+	@Override
 	@Implement
 	public Object[] getChildren()
 	{

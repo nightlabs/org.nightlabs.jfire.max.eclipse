@@ -84,6 +84,7 @@ public interface ClientPaymentProcessorFactory
 		/**
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (!(obj instanceof ModeOfPaymentRef))
@@ -98,6 +99,7 @@ public interface ClientPaymentProcessorFactory
 		/**
 		 * @see java.lang.Object#hashCode()
 		 */
+		@Override
 		public int hashCode()
 		{
 			return organisationID.hashCode() ^ modeOfPaymentID.hashCode();
@@ -128,6 +130,7 @@ public interface ClientPaymentProcessorFactory
 		/**
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (!(obj instanceof ModeOfPaymentFlavourRef))
@@ -142,6 +145,7 @@ public interface ClientPaymentProcessorFactory
 		/**
 		 * @see java.lang.Object#hashCode()
 		 */
+		@Override
 		public int hashCode()
 		{
 			return organisationID.hashCode() ^ modeOfPaymentFlavourID.hashCode();

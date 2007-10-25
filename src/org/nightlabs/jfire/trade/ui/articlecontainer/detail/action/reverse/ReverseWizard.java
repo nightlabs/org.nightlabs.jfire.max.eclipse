@@ -67,6 +67,7 @@ public class ReverseWizard extends DynamicPathWizard
 		}
 	}
 
+	@Override
 	public void addPages()
 	{
 		selectOfferPage = new SelectOfferPage();
@@ -87,6 +88,7 @@ public class ReverseWizard extends DynamicPathWizard
 		return tradeManager;
 	}
 
+	@Override
 	public boolean performFinish()
 	{
 		try {

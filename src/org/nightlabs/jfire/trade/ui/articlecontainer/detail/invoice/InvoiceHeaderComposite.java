@@ -55,6 +55,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.notification.NotificationEvent;
@@ -130,7 +131,7 @@ extends HeaderComposite
 			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(invoice);
 			CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 					articleContainerID,
-					CombiTransferArticleContainerWizard.TRANSFER_MODE_PAYMENT,
+					AbstractCombiTransferWizard.TRANSFER_MODE_PAYMENT,
 					TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
 
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
@@ -139,6 +140,7 @@ extends HeaderComposite
 		}
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{

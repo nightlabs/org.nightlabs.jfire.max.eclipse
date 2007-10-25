@@ -55,6 +55,7 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 	public static final String[] FETCH_GROUPS_FULL_LE_DATA = new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};
 	
 	
+	@Override
 	protected GridLayout createGridLayout() {
 		GridLayout result = new GridLayout();
 //		result.horizontalSpacing = 0;
@@ -62,12 +63,14 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 		return result;
 	}
 	
+	@Override
 	protected boolean setLayoutDataForWrapper() {
 		return true;
 	}
 	
 
 
+	@Override
 	protected GridData getGridDataForField(DataField field) {
 		GridData result = null;
 //		if (field.getPersonStructBlockID().equals(PersonStruct.PERSONALDATA.personStructBlockID)) {
@@ -134,11 +137,13 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 		doSetConfiguration = false;
 	}
 
+	@Override
 	public void refreshControl() {
 		setStructFieldConfiguration();
 		super.refreshControl();
 	}
 	
+	@Override
 	public void disposeControl() {
 		super.disposeControl();
 		doSetConfiguration = true;

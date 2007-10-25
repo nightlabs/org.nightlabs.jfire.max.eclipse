@@ -31,10 +31,12 @@ extends JDOQuerySearchEntryViewer
 		super(entry);
 	}
 
+	@Override
 	public AbstractTableComposite<Account> createListComposite(Composite parent) {
 		return new AccountListComposite(parent, SWT.NONE);
 	}
 	
+	@Override
 	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
 		return new AccountFilterComposite(parent, SWT.NONE);
 	}

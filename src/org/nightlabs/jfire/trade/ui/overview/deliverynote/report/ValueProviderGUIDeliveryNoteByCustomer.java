@@ -93,7 +93,7 @@ extends AbstractValueProviderGUI
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
 				}
-				final Collection<DeliveryNote> deliveryNotes = (Collection<DeliveryNote>) DeliveryNoteDAO.
+				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.
 					sharedInstance().getDeliveryNotes(deliveryNoteIDs, FETCH_GROUPS_DELIVERY_NOTES, 
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {

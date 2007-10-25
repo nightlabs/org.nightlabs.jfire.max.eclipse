@@ -60,11 +60,13 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 
 	protected ArticleEditActionRegistry() { }
 
+	@Override
 	public String getExtensionPointID()
 	{
 		return "org.nightlabs.jfire.trade.ui.articleEditAction"; //$NON-NLS-1$
 	}
 
+	@Override
 	protected String getActionElementName()
 	{
 		return "articleEditAction"; //$NON-NLS-1$
@@ -84,6 +86,7 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 
 	private static final String ATTRIBUTE_NAME_ACTION_CLASS = "class"; //$NON-NLS-1$
 
+	@Override
 	protected Object createActionOrContributionItem(IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		String className = element.getAttribute(ATTRIBUTE_NAME_ACTION_CLASS);
@@ -99,12 +102,14 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 		return res;
 	}
 
+	@Override
 	protected void initAction(IAction _action, IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		IArticleEditAction action = (IArticleEditAction) _action;
 		action.init(this);
 	}
 
+	@Override
 	protected void initContributionItem(IXContributionItem contributionItem, IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		if (contributionItem instanceof IArticleEditContributionItem)

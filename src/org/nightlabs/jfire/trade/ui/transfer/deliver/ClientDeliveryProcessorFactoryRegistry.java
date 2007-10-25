@@ -80,6 +80,7 @@ public class ClientDeliveryProcessorFactoryRegistry extends AbstractEPProcessor
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#getExtensionPointID()
 	 */
+	@Override
 	public String getExtensionPointID()
 	{
 		return "org.nightlabs.jfire.trade.ui.clientDeliveryProcessorFactory"; //$NON-NLS-1$
@@ -117,6 +118,7 @@ public class ClientDeliveryProcessorFactoryRegistry extends AbstractEPProcessor
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
+	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
 			throws Exception
 	{

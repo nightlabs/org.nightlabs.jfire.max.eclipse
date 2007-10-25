@@ -98,6 +98,7 @@ extends EditorActionBarContributor
 	/**
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
 	 */
+	@Override
 	public void setActiveEditor(IEditorPart targetEditor)
 	{
 		if (activeGeneralEditor == targetEditor)
@@ -664,6 +665,7 @@ extends EditorActionBarContributor
 	};
 	
 	private IPerspectiveListener4 perspectiveListener = new PerspectiveAdapter() {
+		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
 			if (
 //					activeGeneralEditor != null 

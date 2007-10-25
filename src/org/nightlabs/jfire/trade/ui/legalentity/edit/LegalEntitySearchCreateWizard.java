@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.trade.ui.legalentity.edit;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -66,7 +67,7 @@ public class LegalEntitySearchCreateWizard extends DynamicPathWizard {
 	public static LegalEntity open(String quickSearchText, boolean allowNewLegalEntityCreation) {
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard(quickSearchText, allowNewLegalEntityCreation);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
-		if (dlg.open() == Dialog.OK) {
+		if (dlg.open() == Window.OK) {
 			return wiz.getLegalEntity();
 		}
 		return null;

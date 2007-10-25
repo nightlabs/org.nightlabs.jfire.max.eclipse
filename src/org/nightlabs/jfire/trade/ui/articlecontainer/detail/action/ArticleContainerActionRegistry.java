@@ -53,6 +53,7 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 
 	private static final String ATTRIBUTE_NAME_ACTION_CLASS = "class"; //$NON-NLS-1$
 
+	@Override
 	protected Object createActionOrContributionItem(IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		try {
@@ -69,23 +70,27 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 //		return res;
 	}
 
+	@Override
 	protected void initAction(IAction _action, IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		IArticleContainerAction action = (IArticleContainerAction) _action;
 		action.init(this);
 	}
 
+	@Override
 	protected void initContributionItem(IXContributionItem contributionItem, IExtension extension, IConfigurationElement element) throws EPProcessorException
 	{
 		if (contributionItem instanceof IArticleContainerContributionItem)
 			((IArticleContainerContributionItem)contributionItem).init(this);
 	}
 
+	@Override
 	public String getExtensionPointID()
 	{
 		return "org.nightlabs.jfire.trade.ui.articleContainerAction"; //$NON-NLS-1$
 	}
 
+	@Override
 	protected String getActionElementName()
 	{
 		return "articleContainerAction"; //$NON-NLS-1$

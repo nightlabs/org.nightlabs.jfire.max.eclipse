@@ -53,7 +53,7 @@ public class AccountEditor extends EntityEditor
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
 }

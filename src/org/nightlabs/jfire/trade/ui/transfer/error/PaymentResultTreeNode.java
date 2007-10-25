@@ -15,6 +15,7 @@ public class PaymentResultTreeNode
 		this.paymentResult = paymentResult;
 	}
 
+	@Override
 	@Implement
 	public String getColumnText(int columnIndex)
 	{
@@ -32,6 +33,7 @@ public class PaymentResultTreeNode
 		}
 	}
 
+	@Override
 	@Implement
 	public Object[] getChildren()
 	{

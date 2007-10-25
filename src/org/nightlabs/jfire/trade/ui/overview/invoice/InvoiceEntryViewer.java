@@ -20,6 +20,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -41,7 +42,7 @@ extends ArticleContainerEntryViewer
 		FetchPlan.DEFAULT,
 		Invoice.FETCH_GROUP_THIS_INVOICE,
 		Invoice.FETCH_GROUP_INVOICE_LOCAL,
-		InvoiceLocal.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON

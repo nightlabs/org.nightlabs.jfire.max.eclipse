@@ -131,6 +131,7 @@ public class AccountChooserComposite extends XComposite{
 		columnNameCombo.setText(columnNameCombo.getItem(0));
 
 		Job job = new Job("Loading...") {
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
@@ -153,7 +154,7 @@ public class AccountChooserComposite extends XComposite{
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
 		accountListComposite.setLayoutData(new GridData(GridData.FILL_BOTH));

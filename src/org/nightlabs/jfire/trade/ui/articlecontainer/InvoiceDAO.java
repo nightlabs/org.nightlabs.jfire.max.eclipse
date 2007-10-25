@@ -36,7 +36,8 @@ public class InvoiceDAO
 		return sharedInstance;
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@Override
+	@SuppressWarnings("unchecked") 
 	@Implement
 	protected Collection<Invoice> retrieveJDOObjects(Set<InvoiceID> invoiceIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -56,7 +57,7 @@ public class InvoiceDAO
 		return getJDOObjects(null, invoiceIDs, fetchGroups, maxFetchDepth, monitor);
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public List<Invoice> getInvoices(
 			AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

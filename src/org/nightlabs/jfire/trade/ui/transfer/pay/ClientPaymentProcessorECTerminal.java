@@ -55,6 +55,7 @@ public class ClientPaymentProcessorECTerminal extends AbstractClientPaymentProce
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.AbstractClientPaymentProcessor#getIncludedServerPaymentProcessorIDs()
 	 */
+	@Override
 	public Set getIncludedServerPaymentProcessorIDs()
 	{
 		if (includedServerPaymentProcessorIDs == null) {

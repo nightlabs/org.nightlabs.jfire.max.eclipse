@@ -106,7 +106,7 @@ extends AbstractValueProviderGUI
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
 				}
-				final Collection<Invoice> invoices = (Collection<Invoice>) InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, FETCH_GROUPS_INVOICES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, FETCH_GROUPS_INVOICES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						invoiceListComposite.setInput(invoices);

@@ -65,6 +65,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 		private SummaryAccount summaryAccount;
 		private Set<Account> summedAccounts;
 
+		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement != summaryAccount)
 				summedAccounts = null;
@@ -104,6 +105,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 			return SharedImages.getSharedImage(TradePlugin.getDefault(), SummaryAccountSummedAccountsTable.class, "normal"); //$NON-NLS-1$
 		}
 		
+		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (columnIndex != 0)
 				return null;
@@ -138,6 +140,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 	/**
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(TableViewer, org.eclipse.swt.widgets.Table)
 	 */
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.SummaryAccountSummedAccountsTable.summedAccountTableColumn.text")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));		
@@ -146,6 +149,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 	/**
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
 	 */
+	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());

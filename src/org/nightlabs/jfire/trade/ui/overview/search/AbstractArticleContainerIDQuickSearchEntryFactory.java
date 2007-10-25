@@ -13,6 +13,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 public abstract class AbstractArticleContainerIDQuickSearchEntryFactory 
 extends AbstractQuickSearchEntryFactory 
 {
+	@Override
 	public String getName() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQuickSearchEntry.name"); //$NON-NLS-1$
 	}

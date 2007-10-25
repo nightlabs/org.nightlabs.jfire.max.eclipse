@@ -85,7 +85,7 @@ extends BaseJDOObjectDAO<ProductTypeID, ProductType>  //JDOObjectDAO<ProductType
 			fetchGroups = fgSet.toArray(new String[fgSet.size()]);
 		}
 
-		return (ProductType) getJDOObject(null, productTypeID, fetchGroups, maxFetchDepth, progressMonitor);
+		return getJDOObject(null, productTypeID, fetchGroups, maxFetchDepth, progressMonitor);
 	}
 
 	// TODO: Implement Authority checking (needs to be in the EJB!)

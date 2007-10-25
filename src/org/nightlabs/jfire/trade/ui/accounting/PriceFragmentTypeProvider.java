@@ -52,6 +52,7 @@ public class PriceFragmentTypeProvider extends JDOObjectProvider {
 	/**
 	 * @see org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider#retrieveJDOObject(java.lang.String, java.lang.Object, java.lang.String[])
 	 */
+	@Override
 	protected Object retrieveJDOObject(String scope, Object objectID, String[] fetchGroups, int maxFetchDepth) throws Exception {
 		if (!(objectID instanceof PriceFragmentTypeID))
 			throw new IllegalArgumentException("PriceFragmentTypeProvider requires a PriceFragmentTypeID as objectID parameter to retrieve a PriceFragmentType."); //$NON-NLS-1$
@@ -61,6 +62,7 @@ public class PriceFragmentTypeProvider extends JDOObjectProvider {
 	/**
 	 * @see org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider#retrieveJDOObjects(java.lang.String, java.lang.Set, java.lang.String[])
 	 */
+	@Override
 	protected Collection retrieveJDOObjects(String scope, Set objectIDs, String[] fetchGroups, int maxFetchDepth) throws Exception {
 		return AccountingUtil.getAccountingManager().getPriceFragmentTypes(objectIDs, fetchGroups, maxFetchDepth);
 	}

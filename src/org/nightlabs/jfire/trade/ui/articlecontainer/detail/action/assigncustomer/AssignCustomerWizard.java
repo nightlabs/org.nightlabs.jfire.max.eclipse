@@ -29,6 +29,7 @@ public class AssignCustomerWizard
 		this.orderID = orderID;
 	}
 
+	@Override
 	@Implement
 	public boolean performFinish()
 	{

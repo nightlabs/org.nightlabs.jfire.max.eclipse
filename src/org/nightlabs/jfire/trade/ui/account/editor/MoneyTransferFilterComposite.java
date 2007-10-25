@@ -110,6 +110,7 @@ public class MoneyTransferFilterComposite extends XComposite
 		accountChooserComposite.setLayoutData(gridData);
 		
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.ManualMoneyTransferSearchComposite.loadingAccountsJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
@@ -133,7 +134,7 @@ public class MoneyTransferFilterComposite extends XComposite
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 		
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -143,6 +144,7 @@ public class MoneyTransferFilterComposite extends XComposite
 	}
 	
 	private SelectionListener activeAccountListener = new SelectionAdapter(){
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			activeSelected();
 		}

@@ -90,6 +90,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 				SelectDeliveryNotePage.class, "", ImageDimension._75x70, ImageFormat.png)); //$NON-NLS-1$
 	}
 
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
@@ -100,6 +101,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 		selectDeliveryNoteRadio = new Button(page, SWT.RADIO);
 		selectDeliveryNoteRadio.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.SelectDeliveryNotePage.selectDeliveryNoteRadio.text")); //$NON-NLS-1$
 		selectDeliveryNoteRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				deliveryNoteTable.setEnabled(selectDeliveryNoteRadio.getSelection());
@@ -108,6 +110,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 		});
 
 		deliveryNoteTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{
 				new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.SelectDeliveryNotePage.deliveryNoteIDTableColumn.text")); //$NON-NLS-1$
@@ -115,6 +118,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.SelectDeliveryNotePage.createUserTableColumn.text")); //$NON-NLS-1$
 				table.setLayout(new WeightedTableLayout(new int[] {33, 33, 33}));
 			}
+			@Override
 			protected void setTableProvider(TableViewer tableViewer)
 			{
 				tableViewer.setContentProvider(new TableContentProvider());
@@ -164,6 +168,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 		deliveryNoteTable.setEnabled(selectDeliveryNoteRadio.getSelection());
 
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.SelectDeliveryNotePage.loadDeliveryNotesJob.name")) { //$NON-NLS-1$
+			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				loadDataInJob();
@@ -234,6 +239,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 		return (DeliveryNoteID) JDOHelper.getObjectId(selectedDeliveryNote);
 	}
 
+	@Override
 	public boolean isPageComplete()
 	{
 		return ACTION_CREATE == getAction() || (ACTION_SELECT == getAction() && getSelectedDeliveryNote() != null);

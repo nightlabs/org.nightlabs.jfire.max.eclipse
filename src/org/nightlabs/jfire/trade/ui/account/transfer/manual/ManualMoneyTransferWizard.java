@@ -13,6 +13,7 @@ import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -33,6 +34,7 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 	/**
 	 * Adding the page to the wizard.
 	 */
+	@Override
 	public void addPages() {
 		if(selectedAccountAnchorID == null){
 			fromAccountChooserPage = new AccountChooserWizardPage();
@@ -53,7 +55,7 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 	public boolean performFinish() {
 		ManualMoneyTransfer moneyTransfer = null;
 		try {
-			AccountingManagerHome accountingManagerHome = (AccountingManagerHome) AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties());
+			AccountingManagerHome accountingManagerHome = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties());
 			AccountingManager accountingManager = accountingManagerHome.create();
 			
 			if(fromAccountChooserPage != null){
@@ -71,7 +73,7 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 					moneyTransferPage.getAmount(),
 					reason,
 					true,
-					new String[]{MoneyTransfer.FETCH_GROUP_THIS_TRANSFER},
+					new String[]{Transfer.FETCH_GROUP_THIS_TRANSFER},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

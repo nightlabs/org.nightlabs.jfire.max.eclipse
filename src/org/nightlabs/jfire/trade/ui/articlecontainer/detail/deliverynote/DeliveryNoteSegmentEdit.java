@@ -42,6 +42,7 @@ public class DeliveryNoteSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#_createComposite(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected Composite _createComposite(Composite parent)
 	{
 		deliveryNoteSegmentComposite = new DeliveryNoteSegmentComposite(parent, this);
@@ -51,6 +52,7 @@ public class DeliveryNoteSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleAdderComposite(org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleAdder)
 	 */
+	@Override
 	protected void createArticleAdderComposite(ArticleAdder articleAdder)
 	{
 		// we don't have an ArticleAdder in a DeliveryNote (articles are added via the Offer or Order)
@@ -59,6 +61,7 @@ public class DeliveryNoteSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleEditComposite(org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit)
 	 */
+	@Override
 	protected void createArticleEditComposite(ArticleEdit articleEdit)
 	{
 		articleEdit.createComposite(deliveryNoteSegmentComposite.articleEditArea);

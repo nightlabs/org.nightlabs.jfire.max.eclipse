@@ -57,6 +57,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
 	 */
+	@Override
 	public void doSave(IProgressMonitor monitor)
 	{
 	}
@@ -64,6 +65,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.ISaveablePart#doSaveAs()
 	 */
+	@Override
 	public void doSaveAs()
 	{
 	}
@@ -71,6 +73,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
 	 */
+	@Override
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException
 	{
@@ -118,6 +121,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.ISaveablePart#isDirty()
 	 */
+	@Override
 	public boolean isDirty()
 	{
 		return false;
@@ -126,6 +130,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
 	 */
+	@Override
 	public boolean isSaveAsAllowed()
 	{
 		return false;
@@ -134,6 +139,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public void createPartControl(Composite parent)
 	{
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromFile(
@@ -150,6 +156,7 @@ implements IGeneralEditor
 	/**
 	 * @see org.eclipse.ui.IWorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus()
 	{
 	}

@@ -33,6 +33,7 @@ extends JDOObjectDAO<TariffMappingID, TariffMapping>
 
 	public TariffMappingDAO() { }
 
+	@Override
 	@Implement
 	protected Collection<TariffMapping> retrieveJDOObjects(
 			Set<TariffMappingID> tariffMappingIDs, String[] fetchGroups, int maxFetchDepth,

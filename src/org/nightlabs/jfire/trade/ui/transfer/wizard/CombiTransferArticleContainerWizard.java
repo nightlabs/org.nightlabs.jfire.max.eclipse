@@ -45,6 +45,7 @@ import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -207,7 +208,7 @@ extends AbstractCombiTransferWizard
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
-		ArticlePrice.FETCH_GROUP_CURRENCY, // for payment
+		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
 	
@@ -224,7 +225,7 @@ extends AbstractCombiTransferWizard
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
-		ArticlePrice.FETCH_GROUP_CURRENCY, // for payment
+		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
 	
@@ -263,7 +264,7 @@ extends AbstractCombiTransferWizard
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
-		ArticlePrice.FETCH_GROUP_CURRENCY, // for payment
+		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
 
@@ -377,6 +378,7 @@ extends AbstractCombiTransferWizard
 		}
 	}
 
+	@Override
 	public boolean performFinish()
 	{
 		try {

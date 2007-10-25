@@ -67,6 +67,7 @@ public class RemoveAction extends ArticleEditAction
 		return true;
 	}
 
+	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
 		// The RemoveAction calculates enabled, already:
@@ -122,6 +123,7 @@ public class RemoveAction extends ArticleEditAction
 //		return super.calculateEnabled(articleSelections);
 	}
 
+	@Override
 	public void run()
 	{
 		// We remove the lines from the server - therefore find out first, what lines shall be handled here.

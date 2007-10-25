@@ -94,7 +94,7 @@ extends AbstractValueProviderGUI
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
 				}
-				final Collection<Order> orders = (Collection<Order>) OrderDAO.
+				final Collection<Order> orders = OrderDAO.
 					sharedInstance().getOrders(orderIDs, FETCH_GROUPS_ORDERS, 
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {

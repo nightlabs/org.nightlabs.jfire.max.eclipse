@@ -38,29 +38,24 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CreateOfferAction extends Action
 {
 	private HeaderTreeComposite headerTreeComposite;
 
-	private static final ImageDescriptor IMAGE_DESCRIPTOR = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articleContainer/createOffer16.gif"); //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE_DESCRIPTOR = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articleContainer/createOffer16.gif"); //$NON-NLS-1$
 
 	public CreateOfferAction(HeaderTreeComposite headerTreeComposite)
 	{
@@ -68,6 +63,7 @@ public class CreateOfferAction extends Action
 		this.headerTreeComposite = headerTreeComposite;
 	}
 
+	@Override
 	public void run()
 	{
 		Job createOrderJob = new Job("Creating order...") {

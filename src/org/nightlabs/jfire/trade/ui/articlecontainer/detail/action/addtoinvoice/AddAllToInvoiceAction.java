@@ -52,6 +52,7 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 		return false;
 	}
 
+	@Override
 	public void run()
 	{
 		AddToInvoiceWizard addToInvoiceWizard = new AddToInvoiceWizard(

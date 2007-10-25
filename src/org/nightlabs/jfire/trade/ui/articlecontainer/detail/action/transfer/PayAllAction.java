@@ -33,6 +33,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 
@@ -53,6 +54,7 @@ public class PayAllAction extends ArticleContainerAction
 		return article.getInvoiceID() != null;
 	}
 
+	@Override
 	public boolean calculateEnabled() {
 		if (!super.calculateEnabled())
 			return false;
@@ -78,6 +80,7 @@ public class PayAllAction extends ArticleContainerAction
 //		return false;		
 //	}
 
+	@Override
 	public void run()
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
@@ -85,7 +88,7 @@ public class PayAllAction extends ArticleContainerAction
 
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				articleContainerID,
-				CombiTransferArticleContainerWizard.TRANSFER_MODE_PAYMENT,
+				AbstractCombiTransferWizard.TRANSFER_MODE_PAYMENT,
 				TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

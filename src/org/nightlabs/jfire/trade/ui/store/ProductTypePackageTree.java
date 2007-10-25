@@ -209,6 +209,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
 		 */
+		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof Node)
 				return ((Node)parentElement).getChildren().toArray();
@@ -218,6 +219,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getParent(java.lang.Object)
 		 */
+		@Override
 		public Object getParent(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).getParent();
@@ -227,6 +229,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
+		@Override
 		public boolean hasChildren(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).hasChildren();
@@ -240,6 +243,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 			return currentProductTypeID;
 		}		
 
+		@Override
 		public void dispose() {
 		}
 	}
@@ -257,6 +261,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
 		 */
+		@Override
 		public String getText(Object element) {
 			if (element instanceof Node)
 				return ((Node)element).getText();
@@ -316,6 +321,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
+	@Override
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
 		treeViewer.setLabelProvider(new LabelProvider());
@@ -326,6 +332,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#createTreeColumns(org.eclipse.swt.widgets.Tree)
 	 */
+	@Override
 	public void createTreeColumns(Tree tree) {
 		// TODO: Maybe add columns to ProductyTypePackageTree
 	}

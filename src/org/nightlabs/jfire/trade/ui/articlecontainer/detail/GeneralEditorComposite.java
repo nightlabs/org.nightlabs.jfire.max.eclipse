@@ -70,6 +70,7 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.editlock.id.EditLockTypeID;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.DeliveryNoteLocal;
 import org.nightlabs.jfire.store.EditLockTypeDeliveryNote;
@@ -223,6 +224,7 @@ extends XComposite
 			segmentCompositeFolder = new TabFolder(this, SWT.NONE);
 			segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 			((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e) {
 					updateActiveSegmentEdit();
 				}
@@ -637,7 +639,7 @@ extends XComposite
 			TabFolder tabFolder = ((TabFolder)segmentCompositeFolder);
 			TabItem item = tabFolder.getItemCount() < 1 ? null
 					: tabFolder.getItem(tabFolder.getSelectionIndex());
-			activeSegmentEdit = (SegmentEdit) segmentEditsByTabItem.get(item);
+			activeSegmentEdit = segmentEditsByTabItem.get(item);
 			if (activeSegmentEdit == null && item != null && item.getControl() != null)
 				throw new IllegalStateException(
 						"TabItem is not registered in Map segmentEditsByTabItem!!!");			 //$NON-NLS-1$
@@ -772,7 +774,7 @@ extends XComposite
 
 	public static final String[] FETCH_GROUPS_OFFER = new String[] {
 			Offer.FETCH_GROUP_THIS_OFFER, OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
-			OfferLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
+			StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 			Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
@@ -780,14 +782,14 @@ extends XComposite
 	public static final String[] FETCH_GROUPS_INVOICE = new String[] {
 			Invoice.FETCH_GROUP_THIS_INVOICE,
 			InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
-			InvoiceLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
+			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
 
 	public static final String[] FETCH_GROUPS_DELIVERY_NOTE = new String[] {
 			DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
 			DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL,
-			DeliveryNoteLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
+			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
 			FetchPlan.DEFAULT };

@@ -169,6 +169,7 @@ extends HeaderComposite
 	private void signalNextTransition(final SignalEvent event)
 	{
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{

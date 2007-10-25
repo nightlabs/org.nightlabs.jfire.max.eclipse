@@ -4,6 +4,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -71,6 +72,7 @@ extends JDOQueryComposite
 	private Button customerActiveButton = null;
 	private Button vendorActiveButton = null;
 	
+	@Override
 	protected void createComposite(Composite parent) 
 	{
 //		parent.setLayout(new RowLayout());
@@ -184,7 +186,7 @@ extends JDOQueryComposite
 		public void widgetSelected(SelectionEvent e) {
 			UserSearchDialog dialog = new UserSearchDialog(getShell(), userText.getText());
 			int returnCode = dialog.open();
-			if (returnCode == Dialog.OK) {
+			if (returnCode == Window.OK) {
 				User selectedUser = dialog.getSelectedUser();
 				selectedUserID = (UserID) JDOHelper.getObjectId(selectedUser);
 				if (selectedUser != null)

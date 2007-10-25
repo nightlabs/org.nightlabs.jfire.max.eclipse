@@ -48,6 +48,7 @@ extends LocalObjectTransfer
 	/**
 	 * @see org.nightlabs.base.ui.dnd.LocalObjectTransfer#validate(java.lang.Object)
 	 */
+	@Override
 	protected boolean validate(Object object) {
 		if (object instanceof Account)
 			return true;

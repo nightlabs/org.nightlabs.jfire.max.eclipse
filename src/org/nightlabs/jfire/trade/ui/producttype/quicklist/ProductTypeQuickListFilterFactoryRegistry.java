@@ -110,6 +110,7 @@ public class ProductTypeQuickListFilterFactoryRegistry extends AbstractEPProcess
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#getExtensionPointID()
 	 */
+	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
 	}
@@ -117,6 +118,7 @@ public class ProductTypeQuickListFilterFactoryRegistry extends AbstractEPProcess
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
+	@Override
 	public void processElement(IExtension extension, IConfigurationElement element) throws Exception {
 		if (element.getName().equals(FILTER_ELEMENT_NAME)) {
 			IProductTypeQuickListFilterFactory factory = null;

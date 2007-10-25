@@ -40,6 +40,7 @@ extends AbstractClientDeliveryProcessor
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#init()
 	 */
+	@Override
 	public void init()
 	{
 	}

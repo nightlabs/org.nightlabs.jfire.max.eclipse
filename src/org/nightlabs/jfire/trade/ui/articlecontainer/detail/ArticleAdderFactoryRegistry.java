@@ -69,6 +69,7 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 			productTypeClass, throwExceptionIfNotFound);
 	}
 
+	@Override
 	protected void addFactory(SegmentTypeProductTypeDependentFactory factory)
 	{
 		if (!(factory instanceof ArticleAdderFactory))
@@ -82,6 +83,7 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#getExtensionPointID()
 	 */
+	@Override
 	public String getExtensionPointID()
 	{
 		return "org.nightlabs.jfire.trade.ui.articleAdderFactory"; //$NON-NLS-1$

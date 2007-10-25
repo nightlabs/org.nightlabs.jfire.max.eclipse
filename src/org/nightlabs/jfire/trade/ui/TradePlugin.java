@@ -64,6 +64,7 @@ extends AbstractUIPlugin
 	/**
 	 * This method is called upon plug-in activation
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 //		try {
@@ -164,6 +165,7 @@ extends AbstractUIPlugin
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
@@ -203,6 +205,7 @@ extends AbstractUIPlugin
 	public static final String IMAGE_INVOICE_16x16 = "icons/TradePlugin-Invoice.16x16.png"; //$NON-NLS-1$
 	public static final String IMAGE_DELIVERY_NOTE_16x16 = "icons/TradePlugin-DeliveryNote.16x16.png";	 //$NON-NLS-1$
 
+	@Override
 	protected void initializeImageRegistry(ImageRegistry reg)
 	{
 		super.initializeImageRegistry(reg);

@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -56,7 +57,7 @@ extends XComposite
 	
 	private static String[] FETCH_GROUPS_LEGALENTITY = new String[] { 
 		LegalEntity.FETCH_GROUP_PERSON, 
-		Person.FETCH_GROUP_FULL_DATA, 
+		PropertySet.FETCH_GROUP_FULL_DATA, 
 		FetchPlan.DEFAULT 
 		};
 	
@@ -297,6 +298,7 @@ extends XComposite
 
 		final AnchorID leID = selectedLegalEntityID;
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.loadLegalEntityJob.name")) { //$NON-NLS-1$
+			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final LegalEntity entity = LegalEntityDAO.sharedInstance().getLegalEntity(
@@ -320,7 +322,7 @@ extends XComposite
 				return Status.OK_STATUS;
 			}
 		};
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 	}
 

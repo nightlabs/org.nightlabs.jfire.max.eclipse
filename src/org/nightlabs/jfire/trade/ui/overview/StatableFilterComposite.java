@@ -69,6 +69,7 @@ extends JDOQueryComposite
 		createComposite(this);
 	}
 	
+	@Override
 	protected void createComposite(Composite parent) 
 	{		
 		Group group = new Group(parent, SWT.NONE);

@@ -64,6 +64,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
@@ -131,16 +132,16 @@ implements ISelectionProvider
 		this.site = site;
 
 		// TODO we should use our SharedImages framework here.
-		imageOrderRootTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OrderRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageOrderTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OrderTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageOfferTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OfferTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageInvoiceRootTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/InvoiceRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageInvoiceTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/InvoiceTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageDeliveryNoteRootTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/DeliveryNoteRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageDeliveryNoteTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/DeliveryNoteTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageOrderRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OrderRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageOrderTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OrderTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageOfferTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/OfferTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageInvoiceRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/InvoiceRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageInvoiceTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/InvoiceTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageDeliveryNoteRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/DeliveryNoteRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageDeliveryNoteTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/DeliveryNoteTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 
-		imageCustomerRootTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/PurchaseRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
-		imageVendorRootTreeNode = TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/SaleRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageCustomerRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/PurchaseRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
+		imageVendorRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/SaleRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 
 		try {
 			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

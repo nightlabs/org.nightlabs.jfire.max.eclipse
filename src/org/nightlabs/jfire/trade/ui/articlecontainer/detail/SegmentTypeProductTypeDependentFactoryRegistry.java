@@ -128,6 +128,7 @@ extends AbstractEPProcessor
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#processElement(IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
+	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
 	throws Exception
 	{

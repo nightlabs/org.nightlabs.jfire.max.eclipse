@@ -36,11 +36,13 @@ public class PrintToAction extends ArticleContainerAction
 		return false;
 	}
 
+	@Override
 	public boolean calculateEnabled()
 	{
 		return false;
 	}
 
+	@Override
 	public void run()
 	{
 	}

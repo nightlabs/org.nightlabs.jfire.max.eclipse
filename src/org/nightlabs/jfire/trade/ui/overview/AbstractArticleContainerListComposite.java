@@ -84,6 +84,7 @@ extends AbstractTableComposite<ArticleContainer>
 	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table, TableLayout tableLayout);
 	protected abstract void createAdditionalTableColumns(TableViewer tableViewer, Table table, TableLayout tableLayout);
 
+	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(new TableContentProvider());

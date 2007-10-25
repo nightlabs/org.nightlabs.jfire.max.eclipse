@@ -58,7 +58,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 			{
 				Display.getDefault().asyncExec(new Runnable()
 				{
-					@SuppressWarnings("unchecked") //$NON-NLS-1$
+					@SuppressWarnings("unchecked") 
 					public void run()
 					{
 						moneyTransferListChanged((List<MoneyTransfer>) modifyEvent.getNewObject());

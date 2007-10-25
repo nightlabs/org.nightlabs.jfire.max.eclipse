@@ -148,9 +148,11 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 		super(parent, style, true);
 	}
 
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 	}
 
+	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());

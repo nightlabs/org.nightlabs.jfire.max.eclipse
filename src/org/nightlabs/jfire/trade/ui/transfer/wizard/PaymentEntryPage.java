@@ -153,6 +153,7 @@ implements IPaymentEntryPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#setWizard(org.eclipse.jface.wizard.IWizard)
 	 */
+	@Override
 	public void setWizard(IWizard newWizard)
 	{
 		super.setWizard(newWizard);
@@ -211,6 +212,7 @@ implements IPaymentEntryPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		try {
@@ -244,6 +246,7 @@ implements IPaymentEntryPage
 			amountSpinner.setMaximum(Integer.MAX_VALUE);
 			// Spinner supports only int and is not very userfriendly. We need a currency-edit-composite!
 			amountSpinner.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
 					amountSpinnerValueChanged();
@@ -345,6 +348,7 @@ implements IPaymentEntryPage
 //			});
 
 			clientPaymentProcessorFactoryCombo.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
 					try {
@@ -358,6 +362,7 @@ implements IPaymentEntryPage
 			});
 
 			serverPaymentProcessorCombo.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent e)
 				{
 					try {
@@ -734,7 +739,7 @@ implements IPaymentEntryPage
 
 		int idx = clientPaymentProcessorFactoryCombo.getSelectionIndex();
 		if (idx >= 0) {
-			selectedClientPaymentProcessorFactory = (ClientPaymentProcessorFactory) clientPaymentProcessorFactoryList.get(idx);
+			selectedClientPaymentProcessorFactory = clientPaymentProcessorFactoryList.get(idx);
 			getPaymentWizardHop().getPayment().setClientPaymentProcessorFactoryID(selectedClientPaymentProcessorFactory.getID());
 
 			PaymentWizardHop paymentWizardHop = getPaymentWizardHop();
@@ -859,7 +864,7 @@ implements IPaymentEntryPage
 
 		int idx = serverPaymentProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
-			selectedServerPaymentProcessor = (ServerPaymentProcessor) serverPaymentProcessorList.get(idx);
+			selectedServerPaymentProcessor = serverPaymentProcessorList.get(idx);
 			String reqMsg = selectedServerPaymentProcessor.getRequirementCheckKey();
 			if (reqMsg != null) {				
 				this.setErrorMessage(reqMsg.trim());
@@ -910,6 +915,7 @@ implements IPaymentEntryPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		return

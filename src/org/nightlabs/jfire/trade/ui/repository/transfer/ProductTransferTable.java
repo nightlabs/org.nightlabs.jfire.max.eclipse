@@ -24,6 +24,7 @@ import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.Anchor;
+import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.util.Util;
@@ -32,7 +33,7 @@ public class ProductTransferTable
 extends AbstractTableComposite<ProductTransfer>
 {
 	public static final String[] FETCH_GROUPS_PRODUCT_TRANSFER = {
-		FetchPlan.DEFAULT, ProductTransfer.FETCH_GROUP_THIS_TRANSFER,
+		FetchPlan.DEFAULT, Transfer.FETCH_GROUP_THIS_TRANSFER,
 		ProductTransfer.FETCH_GROUP_PRODUCT_TYPE_ID_2_PRODUCT_COUNT_MAP,
 //		ProductTransfer.FETCH_GROUP_PRODUCT_COUNT,
 		LegalEntity.FETCH_GROUP_PERSON, Repository.FETCH_GROUP_NAME, Repository.FETCH_GROUP_OWNER,

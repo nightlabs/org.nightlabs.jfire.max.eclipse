@@ -59,6 +59,7 @@ public class OfferTreeNode extends HeaderTreeNode
 		}
 	}
 
+	@Override
 	@Implement
 	public String getColumnText(int columnIndex)
 	{
@@ -80,12 +81,14 @@ public class OfferTreeNode extends HeaderTreeNode
 		return false;
 	}
 
+	@Override
 	@Implement
 	protected List loadChildData(ProgressMonitor monitor)
 	{
 		return null;
 	}
 
+	@Override
 	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List childData)
 	{

@@ -82,6 +82,7 @@ extends RestorableSectionPart
 		refreshButton.setText("Refresh");
 		refreshButton.setToolTipText("Refresh");
 		refreshButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				controller.getMoneyTransferQuery().setFromInclude(moneyTransferSearchComposite.getTransferAmountEntry().getSpinnerComposite().getValue().longValue());

@@ -52,11 +52,13 @@ public class PrintAction extends ArticleContainerReportAction
 		return true;
 	}
 
+	@Override
 	public boolean calculateEnabled()
 	{
 		return true;
 	}
 
+	@Override
 	public void run()
 	{
 		Job printJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction.printJob.name")) { //$NON-NLS-1$

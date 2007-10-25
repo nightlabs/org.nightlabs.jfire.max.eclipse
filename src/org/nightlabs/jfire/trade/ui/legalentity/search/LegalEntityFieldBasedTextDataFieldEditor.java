@@ -32,6 +32,7 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Control createControl(Composite parent) {
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);

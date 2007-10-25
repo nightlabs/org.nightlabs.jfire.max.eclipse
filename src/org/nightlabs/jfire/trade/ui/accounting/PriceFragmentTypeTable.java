@@ -61,6 +61,7 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 		/**
 		 * @see org.nightlabs.base.ui.table.TableContentProvider#getElements(java.lang.Object)
 		 */
+		@Override
 		public Object[] getElements(Object inputElement) {
 			return PriceFragmentTypeProvider.sharedInstance().getPriceFragmentTypes(DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).toArray(); // TODO load asynchronously in a Job!!! And not in the ContentProvider!
 		}
@@ -109,6 +110,7 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 		return result;
 	}
 	
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 //		table.setHeaderVisible(true); // This UI element is only used in contexts (wizard-page + tab-item) where there is already written "Price fragment type" above => no need for this header!
 		table.setHeaderVisible(false); // true is default => forcing false
@@ -116,6 +118,7 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 		table.setLayout(new WeightedTableLayout(new int[]{1}));
 	}
 
+	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());

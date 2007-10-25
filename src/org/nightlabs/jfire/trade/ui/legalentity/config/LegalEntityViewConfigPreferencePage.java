@@ -79,6 +79,7 @@ extends AbstractUserConfigModulePreferencePage
 	/**
 	 * @see org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage#createPreferencePage(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected void createPreferencePage(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		wrapper.getGridLayout().numColumns = 2;

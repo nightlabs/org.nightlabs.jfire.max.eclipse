@@ -82,6 +82,7 @@ public class ClientDeliveryProcessorDeliveryQueue extends AbstractClientDelivery
 		return deliveryData;
 	}
 
+	@Override
 	public void init() {
 	}
 

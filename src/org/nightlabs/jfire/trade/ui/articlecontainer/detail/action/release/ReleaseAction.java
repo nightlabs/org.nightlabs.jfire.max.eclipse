@@ -46,6 +46,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 public class ReleaseAction extends ArticleEditAction
 {
+	@Override
 	public boolean calculateVisible()
 	{
 		return true; // It must be always visible, because there might be a reversing article in the invoice/deliverynote
@@ -58,6 +59,7 @@ public class ReleaseAction extends ArticleEditAction
 		Article.FETCH_GROUP_DELIVERY_NOTE_ID
 	};
 
+	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
 		this.articles = null;
@@ -108,6 +110,7 @@ public class ReleaseAction extends ArticleEditAction
 		return true;
 	}
 
+	@Override
 	public void run()
 	{
 		try {

@@ -62,6 +62,7 @@ public class ArticleProvider extends JDOObjectProvider
 		return (Article) getJDOObject(null, articleID, fetchGroups, maxFetchDepth);
 	}
 
+	@Override
 	protected Object retrieveJDOObject(String scope, Object objectID, String[] fetchGroups, int maxFetchDepth)
 	throws Exception
 	{
@@ -80,13 +81,14 @@ public class ArticleProvider extends JDOObjectProvider
 		return getArticles(null, articleIDs, fetchGroups, maxFetchDepth);
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	public Collection<Article> getArticles(TradeManager tradeManager, Collection<ArticleID> articleIDs, String[] fetchGroups, int maxFetchDepth)
 	{
 		this.tradeManager = tradeManager;
-		return (Collection<Article>) getJDOObjects(null, articleIDs, fetchGroups, maxFetchDepth);
+		return getJDOObjects(null, articleIDs, fetchGroups, maxFetchDepth);
 	}
 
+	@Override
 	protected Collection retrieveJDOObjects(String scope, Set articleIDs, String[] fetchGroups, int maxFetchDepth) throws Exception
 	{
 		if (tradeManager == null)

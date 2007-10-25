@@ -39,12 +39,14 @@ extends HeaderTreeNode.RootNode
 		return _children;
 	}
 
+	@Override
 	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List childData)
 	{
 		throw new UnsupportedOperationException("This method should never be called!"); //$NON-NLS-1$
 	}
 
+	@Override
 	@Implement
 	protected List loadChildData(ProgressMonitor monitor)
 	{

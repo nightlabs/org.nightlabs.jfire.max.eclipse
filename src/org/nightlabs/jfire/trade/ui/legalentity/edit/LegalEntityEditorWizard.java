@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.ui.legalentity.edit;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -90,6 +91,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 	/**
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
+	@Override
 	public boolean performFinish() {
 		editorWizardHop.updatePerson();
 		legalEntity = null;
@@ -112,7 +114,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 	public static LegalEntity open(LegalEntity legalEntity) {
 		LegalEntityEditorWizard wiz = new LegalEntityEditorWizard(legalEntity);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
-		if (dlg.open() == Dialog.OK)
+		if (dlg.open() == Window.OK)
 			return wiz.getLegalEntity();
 		else
 			return null;

@@ -13,6 +13,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -36,7 +37,7 @@ extends ArticleContainerEntryViewer
 		FetchPlan.DEFAULT,
 		DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
 		DeliveryNote.FETCH_GROUP_DELIVERY_NOTE_LOCAL,
-		DeliveryNoteLocal.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON

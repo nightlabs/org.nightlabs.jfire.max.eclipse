@@ -73,6 +73,7 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 //		}
 //	}
 
+	@Override
 	public void addPages()
 	{
 		selectDeliveryNotePage = new SelectDeliveryNotePage();
@@ -103,6 +104,7 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 		}
 	}
 
+	@Override
 	public boolean performFinish()
 	{
 		try {

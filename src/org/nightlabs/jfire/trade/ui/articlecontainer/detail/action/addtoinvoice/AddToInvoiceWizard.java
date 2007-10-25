@@ -68,6 +68,7 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceWizard.windowTitle")); //$NON-NLS-1$
 	}
 
+	@Override
 	public void addPages()
 	{
 		selectInvoicePage = new SelectInvoicePage();
@@ -98,6 +99,7 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 		}
 	}
 
+	@Override
 	public boolean performFinish()
 	{
 		try {

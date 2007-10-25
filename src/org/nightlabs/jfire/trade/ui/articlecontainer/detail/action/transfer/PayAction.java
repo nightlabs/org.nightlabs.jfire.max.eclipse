@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticlesWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 
@@ -62,7 +63,7 @@ extends GenericArticleEditAction
 	{
 		CombiTransferArticlesWizard wizard = new CombiTransferArticlesWizard(
 				NLJDOHelper.getObjectIDSet(getArticles()),
-				CombiTransferArticlesWizard.TRANSFER_MODE_PAYMENT,
+				AbstractCombiTransferWizard.TRANSFER_MODE_PAYMENT,
 				TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();

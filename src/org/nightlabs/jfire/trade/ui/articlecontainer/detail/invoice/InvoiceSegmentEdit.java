@@ -43,6 +43,7 @@ public class InvoiceSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#_createComposite(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected Composite _createComposite(Composite parent)
 	{
 		invoiceSegmentComposite = new InvoiceSegmentComposite(parent, this);
@@ -52,6 +53,7 @@ public class InvoiceSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleAdderComposite(org.nightlabs.jfire.trade.ui.articlecontainer.ArticleAdder)
 	 */
+	@Override
 	protected void createArticleAdderComposite(ArticleAdder articleAdder)
 	{
 		// we don't have an ArticleAdder in an Invoice (articles are added via the Offer or Order)
@@ -60,6 +62,7 @@ public class InvoiceSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleEditComposite(org.nightlabs.jfire.trade.ui.articlecontainer.ArticleEdit)
 	 */
+	@Override
 	protected void createArticleEditComposite(ArticleEdit articleEdit)
 	{
 		articleEdit.createComposite(invoiceSegmentComposite.articleEditArea);

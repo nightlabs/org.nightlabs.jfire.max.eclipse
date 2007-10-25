@@ -33,6 +33,7 @@ extends JDOObjectDAO<CustomerGroupMappingID, CustomerGroupMapping>
 
 	public CustomerGroupMappingDAO() { }
 
+	@Override
 	@Implement
 	protected Collection<CustomerGroupMapping> retrieveJDOObjects(
 			Set<CustomerGroupMappingID> customerGroupMappingIDs, String[] fetchGroups, int maxFetchDepth,

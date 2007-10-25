@@ -89,6 +89,7 @@ public class CreditCardPage extends WizardHopPage
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 //	 TODO remove test stuff
@@ -160,6 +161,7 @@ public class CreditCardPage extends WizardHopPage
 		expiryYear = new Combo(expiryComposite, SWT.BORDER | SWT.READ_ONLY);
 
 		expiryMonth.addSelectionListener(new SelectionAdapter(){
+			@Override
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				paymentData.setExpiryMonth(
 						((Integer)expiryMonthList.get(expiryMonth.getSelectionIndex())).intValue());
@@ -167,6 +169,7 @@ public class CreditCardPage extends WizardHopPage
 		});
 
 		expiryYear.addSelectionListener(new SelectionAdapter(){
+			@Override
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				paymentData.setExpiryYear(
 						((Integer)expiryYearList.get(expiryYear.getSelectionIndex())).intValue());
@@ -213,6 +216,7 @@ public class CreditCardPage extends WizardHopPage
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
+	@Override
 	public boolean isPageComplete()
 	{
 		if (paymentData == null)

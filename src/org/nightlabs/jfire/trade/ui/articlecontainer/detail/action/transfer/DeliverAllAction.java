@@ -69,6 +69,7 @@ public class DeliverAllAction extends ArticleContainerAction
 //		return false;		
 //	}
 
+	@Override
 	public void run()
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()

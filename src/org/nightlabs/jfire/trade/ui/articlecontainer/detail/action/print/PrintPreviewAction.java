@@ -50,6 +50,7 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 		return true;
 	}
 
+	@Override
 	public boolean calculateEnabled()
 	{
 		return true;
@@ -63,6 +64,7 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 		}
 	};
 	
+	@Override
 	public void run()
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()

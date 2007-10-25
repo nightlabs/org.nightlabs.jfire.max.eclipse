@@ -51,6 +51,7 @@ public class InvoiceTreeNode extends HeaderTreeNode
 		init();
 	}
 
+	@Override
 	public Image getColumnImage(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -61,6 +62,7 @@ public class InvoiceTreeNode extends HeaderTreeNode
 		}
 	}
 
+	@Override
 	@Implement
 	public String getColumnText(int columnIndex)
 	{
@@ -72,6 +74,7 @@ public class InvoiceTreeNode extends HeaderTreeNode
 		}
 	}
 
+	@Override
 	public boolean hasChildren()
 	{
 		return false;
@@ -80,6 +83,7 @@ public class InvoiceTreeNode extends HeaderTreeNode
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#loadChildData(ProgressMonitor)
 	 */
+	@Override
 	protected List loadChildData(ProgressMonitor monitor)
 	{
 		return null;
@@ -88,6 +92,7 @@ public class InvoiceTreeNode extends HeaderTreeNode
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#createChildNodes(java.util.List)
 	 */
+	@Override
 	protected List<HeaderTreeNode> createChildNodes(List childData)
 	{
 		return null;

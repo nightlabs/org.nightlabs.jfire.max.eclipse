@@ -18,6 +18,7 @@ import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.dao.RepositoryDAO;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
@@ -87,14 +88,14 @@ extends EntityEditor
 							return;
 
 						setPartName(repository.getName().getText());
-						setTitleToolTip(Repository.getPrimaryKey(repository.getOrganisationID(), repository.getAnchorTypeID(), repository.getAnchorID()));
+						setTitleToolTip(Anchor.getPrimaryKey(repository.getOrganisationID(), repository.getAnchorTypeID(), repository.getAnchorID()));
 					}
 				});
 				return Status.OK_STATUS;
 			}
 		};
 		loadNameJob = job;
-		job.setPriority(Job.SHORT);
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();	
 	}
 }

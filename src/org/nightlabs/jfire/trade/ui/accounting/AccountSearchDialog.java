@@ -34,6 +34,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -98,6 +99,7 @@ extends CenteredDialog
 	}
 	
 	private AccountEntryViewer accountEntryViewer;
+	@Override
 	protected Control createDialogArea(Composite parent) 
 	{		
 		accountEntryViewer = new AccountEntryViewer(
@@ -140,7 +142,7 @@ extends CenteredDialog
 		final Set accountSet = new HashSet();
 		AccountSearchDialog dialog = new AccountSearchDialog(anchorTypeID);
 		int returnCode = dialog.open();
-		if (returnCode == Dialog.OK) {
+		if (returnCode == Window.OK) {
 			return dialog.getSelectedAccounts();
 		}		
 		return accountSet;

@@ -14,6 +14,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 public class RepositoryOwnerNameQuickSearchEntryFactory 
 extends AbstractQuickSearchEntryFactory 
 {
+	@Override
 	public String getName() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntry.name"); //$NON-NLS-1$
 	}

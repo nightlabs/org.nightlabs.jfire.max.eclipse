@@ -84,6 +84,7 @@ public abstract class HeaderTreeNode
 		/**
 		 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#getColumnText(int)
 		 */
+		@Override
 		public String getColumnText(int columnIndex)
 		{
 			if (columnIndex == 0)
@@ -92,6 +93,7 @@ public abstract class HeaderTreeNode
 			return ""; //$NON-NLS-1$
 		}
 
+		@Override
 		public Image getColumnImage(int columnIndex)
 		{
 			switch (columnIndex) {
@@ -256,6 +258,7 @@ public abstract class HeaderTreeNode
 			children.add(loadingDataNode);
 
 			currentJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode.loadJob.name")) { //$NON-NLS-1$
+				@Override
 				protected IStatus run(ProgressMonitor monitor)
 				{
 					final List c = loadChildData(monitor);
@@ -285,7 +288,7 @@ public abstract class HeaderTreeNode
 			currentJob.schedule();
 		}
 
-		return (HeaderTreeNode[]) CollectionUtil.collection2TypedArray(children, HeaderTreeNode.class, false);
+		return CollectionUtil.collection2TypedArray(children, HeaderTreeNode.class, false);
 	}
 
 	public void refresh()

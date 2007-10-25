@@ -33,7 +33,7 @@ public class CurrencyDAO
 		return sharedInstance;
 	}
 	
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked") 
 	@Override
 	protected Collection<Currency> retrieveJDOObjects(Set<CurrencyID> objectIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

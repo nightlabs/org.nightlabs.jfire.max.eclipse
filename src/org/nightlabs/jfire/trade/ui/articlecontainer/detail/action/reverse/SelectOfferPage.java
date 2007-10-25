@@ -85,6 +85,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.description")); //$NON-NLS-1$
 	}
 
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -95,6 +96,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		selectOfferRadio = new Button(page, SWT.RADIO);
 		selectOfferRadio.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.selectOfferRadio.text")); //$NON-NLS-1$
 		selectOfferRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				offerTable.setEnabled(selectOfferRadio.getSelection());
@@ -103,6 +105,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		});
 
 		offerTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{
 				new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.offerIDTableColumn.text")); //$NON-NLS-1$
@@ -110,6 +113,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.createUserTableColumn.text")); //$NON-NLS-1$
 				table.setLayout(new WeightedTableLayout(new int[] {33, 33, 33}));
 			}
+			@Override
 			protected void setTableProvider(TableViewer tableViewer)
 			{
 				tableViewer.setContentProvider(new TableContentProvider());
@@ -159,6 +163,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		offerTable.setEnabled(selectOfferRadio.getSelection());
 
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.loadOffersJob.name")) { //$NON-NLS-1$
+			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				loadDataInJob();
@@ -227,6 +232,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		return (OfferID) JDOHelper.getObjectId(selectedOffer);
 	}
 
+	@Override
 	public boolean isPageComplete()
 	{
 		return ACTION_CREATE == getAction() || (ACTION_SELECT == getAction() && getSelectedOffer() != null);

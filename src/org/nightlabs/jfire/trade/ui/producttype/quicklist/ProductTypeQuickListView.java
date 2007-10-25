@@ -111,7 +111,7 @@ implements ISelectionProvider
 			filters.add(factory.createProductTypeQuickListFilter());
 		}
 		if ( filters.size() == 1 ) {
-			IProductTypeQuickListFilter filter = ((IProductTypeQuickListFilter)filters.get(0));
+			IProductTypeQuickListFilter filter = (filters.get(0));
 			filter.addSelectionChangedListener(filterSelectionListener);
 			Label label = new Label(wrapper, SWT.NONE);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -200,14 +200,14 @@ implements ISelectionProvider
 	public IProductTypeQuickListFilter getSelectedFilter() {
 		int selection = tabFolder == null ? 0 : tabFolder.getSelectionIndex();
 		if (selection >= 0 && selection < filters.size())
-			return (IProductTypeQuickListFilter)filters.get(selection);
+			return filters.get(selection);
 		return null;
 	}
 
 	public boolean didSelectedFilterSearch() {
 		int selection = tabFolder == null ? 0 : tabFolder.getSelectionIndex();
 		if (selection >= 0 && selection < filters.size())
-			return ((Boolean)filterSearched.get(selection)).booleanValue();
+			return (filterSearched.get(selection)).booleanValue();
 		return false;
 	}
 
@@ -251,6 +251,7 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
+	@Override
 	public void setFocus() {
 	}
 

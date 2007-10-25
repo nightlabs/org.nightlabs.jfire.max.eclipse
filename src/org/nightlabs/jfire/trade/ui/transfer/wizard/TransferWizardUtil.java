@@ -318,7 +318,7 @@ public class TransferWizardUtil
 	{
 		Set<ArticleID> res = new HashSet<ArticleID>(articles.size());
 		for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
-			Article article = (Article) it.next();
+			Article article = it.next();
 			res.add((ArticleID) JDOHelper.getObjectId(article));
 		}
 		return res;
@@ -452,12 +452,12 @@ public class TransferWizardUtil
 		Map<ProductTypeID, ProductType> productTypeByIDMap = deliveryWizard.getProductTypeByIDMap();
 
 		for (Iterator<ModeOfDeliveryFlavourProductTypeGroup> itG = carrier.getModeOfDeliveryFlavourProductTypeGroups().iterator(); itG.hasNext(); ) {
-			ModeOfDeliveryFlavourProductTypeGroup group = (ModeOfDeliveryFlavourProductTypeGroup) itG.next();
+			ModeOfDeliveryFlavourProductTypeGroup group = itG.next();
 
 			List<ProductType> productTypes = new ArrayList<ProductType>();
 			for (Iterator<ProductTypeID> itPT = group.getProductTypeIDs().iterator(); itPT.hasNext();) {
-				ProductTypeID productTypeID = (ProductTypeID) itPT.next();
-				ProductType productType = (ProductType) productTypeByIDMap.get(productTypeID);
+				ProductTypeID productTypeID = itPT.next();
+				ProductType productType = productTypeByIDMap.get(productTypeID);
 				if (productType == null)
 					throw new IllegalStateException("ProductType with ID \"" + productTypeID + "\" missing in map!"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -466,7 +466,7 @@ public class TransferWizardUtil
 
 			List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
 			for (Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
-				ModeOfDeliveryFlavourID modfID = (ModeOfDeliveryFlavourID) itMDOFID.next();
+				ModeOfDeliveryFlavourID modfID = itMDOFID.next();
 				ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
 				modeOfDeliveryFlavours.add(modf);
 			}

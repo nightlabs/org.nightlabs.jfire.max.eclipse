@@ -15,6 +15,7 @@ import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -44,7 +45,7 @@ extends ArticleContainerEntryViewer
 //		Offer.FETCH_GROUP_STATES
 		Offer.FETCH_GROUP_THIS_OFFER,
 		Offer.FETCH_GROUP_OFFER_LOCAL,
-		OfferLocal.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON

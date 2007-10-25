@@ -18,6 +18,7 @@ extends AbstractQuickSearchEntryFactory
 		return new AccountNameQuickSearchEntry(this);
 	}
 
+	@Override
 	public String getName() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.search.AccountNameQuickSearchEntry.name"); //$NON-NLS-1$
 	}

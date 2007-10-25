@@ -30,6 +30,7 @@ public class CustomerGroupDAO
 		return sharedInstance;
 	}
 
+	@Override
 	@Implement
 	protected Collection<CustomerGroup> retrieveJDOObjects(
 			Set<CustomerGroupID> customerGroupIDs, String[] fetchGroups, int maxFetchDepth,

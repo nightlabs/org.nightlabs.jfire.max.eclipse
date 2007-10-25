@@ -93,7 +93,7 @@ extends AbstractValueProviderGUI
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
 				}
-				final Collection<Offer> offers = (Collection<Offer>) OfferDAO.
+				final Collection<Offer> offers = OfferDAO.
 					sharedInstance().getOffers(offerIDs, FETCH_GROUPS_OFFERS, 
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {

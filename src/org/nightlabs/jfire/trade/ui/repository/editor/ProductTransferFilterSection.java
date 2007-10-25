@@ -61,6 +61,7 @@ extends RestorableSectionPart
 		refreshButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferFilterSection.refreshButton.text")); //$NON-NLS-1$
 		refreshButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferFilterSection.refreshButton.toolTipText")); //$NON-NLS-1$
 		refreshButton.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				controller.getProductTransferQuery().setFromInclude(0);

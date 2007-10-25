@@ -62,6 +62,7 @@ public class HeaderComposite extends XComposite
 	
 	public static Font DEFAULT_FONT = new Font(null, "Arial", 8, SWT.BOLD); //$NON-NLS-1$ // TODO shouldn't these font infos be read from somewhere (e.g. other composites or a config?)
 	protected Font font = DEFAULT_FONT;
+	@Override
 	public void setFont(Font f) {
 		font = f;
 	}

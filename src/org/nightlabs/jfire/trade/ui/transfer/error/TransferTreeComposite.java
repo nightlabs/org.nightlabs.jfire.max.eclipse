@@ -102,6 +102,7 @@ extends AbstractTreeComposite
 		super(parent);
 	}
 
+	@Override
 	@Implement
 	public void createTreeColumns(Tree tree)
 	{
@@ -126,6 +127,7 @@ extends AbstractTreeComposite
 				new int[] { 150, 150, 100, -1 }));
 	}
 
+	@Override
 	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{

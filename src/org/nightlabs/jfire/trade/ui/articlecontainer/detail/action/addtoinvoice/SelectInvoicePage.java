@@ -90,6 +90,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 				SelectInvoicePage.class, "", ImageDimension._75x70, ImageFormat.png)); //$NON-NLS-1$
 	}
 
+	@Override
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
@@ -100,6 +101,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		selectInvoiceRadio = new Button(page, SWT.RADIO);
 		selectInvoiceRadio.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.selectInvoiceRadio.text")); //$NON-NLS-1$
 		selectInvoiceRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				invoiceTable.setEnabled(selectInvoiceRadio.getSelection());
@@ -108,6 +110,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		});
 
 		invoiceTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{
 				new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.invoiceIDTableColumn.text")); //$NON-NLS-1$
@@ -115,6 +118,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.createUserTableColumn.text")); //$NON-NLS-1$
 				table.setLayout(new WeightedTableLayout(new int[] {33, 33, 33}));
 			}
+			@Override
 			protected void setTableProvider(TableViewer tableViewer)
 			{
 				tableViewer.setContentProvider(new TableContentProvider());
@@ -164,6 +168,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		invoiceTable.setEnabled(selectInvoiceRadio.getSelection());
 
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.loadInvoicesJob.name")) { //$NON-NLS-1$
+			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				loadDataInJob();
@@ -234,6 +239,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 		return (InvoiceID) JDOHelper.getObjectId(selectedInvoice);
 	}
 
+	@Override
 	public boolean isPageComplete()
 	{
 		return ACTION_CREATE == getAction() || (ACTION_SELECT == getAction() && getSelectedInvoice() != null);

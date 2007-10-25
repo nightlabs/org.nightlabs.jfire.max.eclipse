@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.search.ISearchResultProvider;
 import org.nightlabs.base.ui.search.ISearchResultProviderFactory;
@@ -27,7 +28,7 @@ implements ISearchResultProvider<ProductType>
 				RCPUtil.getActiveWorkbenchShell());
 		dialog.setSearchText(searchText);
 		int returnCode = dialog.open();
-		if (returnCode == Dialog.OK) {
+		if (returnCode == Window.OK) {
 			Collection<ProductType> productTypes = new ArrayList<ProductType>(1);
 			productTypes.add(dialog.getProductType());
 			return productTypes;

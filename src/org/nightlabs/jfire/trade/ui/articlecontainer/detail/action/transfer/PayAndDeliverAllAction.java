@@ -65,6 +65,7 @@ public class PayAndDeliverAllAction extends ArticleContainerAction
 		return !allPaid && !allDelivered;
 	}
 
+	@Override
 	public void run()
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()

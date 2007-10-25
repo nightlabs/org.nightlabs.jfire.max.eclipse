@@ -82,6 +82,7 @@ public interface ClientDeliveryProcessorFactory
 		/**
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (!(obj instanceof ModeOfDeliveryRef))
@@ -96,6 +97,7 @@ public interface ClientDeliveryProcessorFactory
 		/**
 		 * @see java.lang.Object#hashCode()
 		 */
+		@Override
 		public int hashCode()
 		{
 			return organisationID.hashCode() ^ modeOfDeliveryID.hashCode();
@@ -126,6 +128,7 @@ public interface ClientDeliveryProcessorFactory
 		/**
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
+		@Override
 		public boolean equals(Object obj)
 		{
 			if (!(obj instanceof ModeOfDeliveryFlavourRef))
@@ -140,6 +143,7 @@ public interface ClientDeliveryProcessorFactory
 		/**
 		 * @see java.lang.Object#hashCode()
 		 */
+		@Override
 		public int hashCode()
 		{
 			return organisationID.hashCode() ^ modeOfDeliveryFlavourID.hashCode();

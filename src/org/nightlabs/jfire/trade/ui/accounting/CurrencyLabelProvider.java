@@ -21,6 +21,7 @@ public class CurrencyLabelProvider extends LabelProvider implements ILabelProvid
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getImage(java.lang.Object)
 	 */
+	@Override
 	public Image getImage(Object element) {
 		return null;
 	}
@@ -28,6 +29,7 @@ public class CurrencyLabelProvider extends LabelProvider implements ILabelProvid
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
 	 */
+	@Override
 	public String getText(Object element) {
 		if (! (element instanceof Currency))
 			throw new IllegalArgumentException("The CurrencyLabelProvider seems to be used in another " + //$NON-NLS-1$

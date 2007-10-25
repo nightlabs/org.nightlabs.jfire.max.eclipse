@@ -5,6 +5,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -70,7 +71,7 @@ extends CenteredDialog
 		searchButton.addSelectionListener(searchListener);
 		super.createButtonsForButtonBar(parent);
 		
-		getButton(Dialog.OK).setEnabled(earlySearchResult);	
+		getButton(Window.OK).setEnabled(earlySearchResult);	
 		if (abstractProductTypeSearchComposite != null) {
 			abstractProductTypeSearchComposite.getProductTypeTableComposite().getTableViewer().
 			addSelectionChangedListener(okListener);			
@@ -89,7 +90,7 @@ extends CenteredDialog
 	private ISelectionChangedListener okListener = new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
 			ISelection selection = event.getSelection();
-			getButton(Dialog.OK).setEnabled(!selection.isEmpty());
+			getButton(Window.OK).setEnabled(!selection.isEmpty());
 			selectedProductType = abstractProductTypeSearchComposite.getSelectedProductType(); 
 		}
 	};

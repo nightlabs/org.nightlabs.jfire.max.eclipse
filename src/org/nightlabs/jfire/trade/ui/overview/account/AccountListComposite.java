@@ -299,7 +299,7 @@ extends AbstractTableComposite<Account>
 			for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
 				for(Account a : accountList){
-					final Account account = (Account)a;
+					final Account account = a;
 					final AnchorID anchorID = (AnchorID)JDOHelper.getObjectId(account);
 					if (anchorID.equals(dirtyObjectID.getObjectID())) {
 						Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountEditor.loadingAccountJob.name")) //$NON-NLS-1$
@@ -329,7 +329,7 @@ extends AbstractTableComposite<Account>
 						};
 						
 						loadAccountJob = job;
-						job.setPriority(Job.SHORT);
+						job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 						job.schedule();
 					}//if	
 				}//for

@@ -505,12 +505,14 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		articleChangeListeners.remove(articleChangeListener);
 	}
 
+	@Override
 	protected void _addArticleCarrier(ArticleCarrier articleCarrier)
 	{
 		super._addArticleCarrier(articleCarrier);
 		Cache.sharedInstance().put(null, articleCarrier.getArticle(), fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}
 
+	@Override
 	protected void _removeArticle(Article article)
 	{
 		super._removeArticle(article);

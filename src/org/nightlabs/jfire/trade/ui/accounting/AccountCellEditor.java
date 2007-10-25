@@ -85,6 +85,7 @@ extends DialogCellEditor
 	/**
 	 * @see org.eclipse.jface.viewers.DialogCellEditor#doSetValue(java.lang.Object)
 	 */
+	@Override
 	protected void doSetValue(Object value) {
 		if (value instanceof Account) {
 			currValue = (Account)value;
@@ -109,6 +110,7 @@ extends DialogCellEditor
 	/**
 	 * @see org.eclipse.jface.viewers.DialogCellEditor#createControl(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected Control createControl(Composite parent) {
 		Control superResult = super.createControl(parent);
 		getDefaultLabel().setAlignment(SWT.RIGHT);
@@ -136,13 +138,16 @@ extends DialogCellEditor
 //		return wrapper;
 	}
 
+	@Override
 	protected Object doGetValue() {
 		return currValue;
 	}
 
+	@Override
 	protected void doSetFocus() {
 	}
 
+	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
 		Account account = AccountSearchDialog.searchAccount(anchorTypeID);
 		return account;

@@ -40,6 +40,7 @@ extends AbstractDataFieldEditorFactory<TextDataField> {
 	/**
 	 * @see org.nightlabs.jfire.base.ui.person.edit.AbstractPersonDataFieldEditorFactory#getEditorType()
 	 */
+	@Override
 	public String[] getEditorTypes() {
 		return new String[] {LegalEntityPersonEditor.EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY};
 	}

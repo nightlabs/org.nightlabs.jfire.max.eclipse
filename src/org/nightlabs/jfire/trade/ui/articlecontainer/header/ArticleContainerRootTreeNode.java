@@ -68,6 +68,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 
 	private int nextRangeBeginIdx = 0;
 
+	@Override
 	public void clear()
 	{
 		super.clear();
@@ -78,6 +79,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#loadChildData(IProgressMonitor)
 	 */
+	@Override
 	@Implement
 	protected List loadChildData(ProgressMonitor monitor)
 	{
@@ -107,6 +109,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#createChildNodes(java.util.List)
 	 */
+	@Override
 	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List childData)
 	{
@@ -134,10 +137,12 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 			return;
 
 		SimpleNode moreNode = new SimpleNode(this, POSITION_LAST_CHILD, "...", true) { //$NON-NLS-1$
+			@Override
 			public List loadChildData(ProgressMonitor monitor)
 			{
 				return ArticleContainerRootTreeNode.this.loadChildData(monitor);
 			}
+			@Override
 			public List<HeaderTreeNode> createChildNodes(List childData)
 			{
 				ArticleContainerRootTreeNode.this.removeChildNode(this);

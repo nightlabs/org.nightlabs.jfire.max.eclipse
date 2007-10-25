@@ -29,6 +29,7 @@ extends WizardHopPage
 		super(PaymentSummaryPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentSummaryPage.title")); //$NON-NLS-1$
 	}
 
+	@Override
 	@Implement
 	public Control createPageContents(Composite parent)
 	{

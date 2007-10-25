@@ -180,6 +180,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 		return TransferWizardUtil.getProductTypeByIDMap(articlesToTransfer);
 	}
 
+	@Override
 	public boolean performFinish()
 	{
 		try {

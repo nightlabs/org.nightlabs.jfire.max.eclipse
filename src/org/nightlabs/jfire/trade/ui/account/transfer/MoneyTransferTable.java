@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.transfer.id.TransferID;
 import org.nightlabs.l10n.NumberFormatter;
@@ -35,7 +36,7 @@ extends AbstractTableComposite<MoneyTransfer>
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		MoneyTransfer.FETCH_GROUP_THIS_TRANSFER,
+		Transfer.FETCH_GROUP_THIS_TRANSFER,
 		MoneyTransfer.FETCH_GROUP_CURRENCY,
 		ManualMoneyTransfer.FETCH_GROUP_REASON}	;
 

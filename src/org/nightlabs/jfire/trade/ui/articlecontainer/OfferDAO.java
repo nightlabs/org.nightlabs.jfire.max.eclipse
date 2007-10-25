@@ -25,7 +25,8 @@ public class OfferDAO
 		return _sharedInstance;
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@Override
+	@SuppressWarnings("unchecked") 
 	@Implement
 	protected Collection<Offer> retrieveJDOObjects(Set<OfferID> offerIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

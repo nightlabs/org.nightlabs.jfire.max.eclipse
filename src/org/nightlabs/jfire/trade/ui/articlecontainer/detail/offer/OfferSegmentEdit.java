@@ -56,6 +56,7 @@ public class OfferSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#_createComposite(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	protected Composite _createComposite(Composite parent)
 	{
 		offerSegmentComposite = new OfferSegmentComposite(parent, this);
@@ -65,6 +66,7 @@ public class OfferSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleAdderComposite(org.nightlabs.jfire.trade.ui.articlecontainer.ArticleAdder)
 	 */
+	@Override
 	protected void createArticleAdderComposite(ArticleAdder articleAdder)
 	{
 		if (offerSegmentComposite.articleAdderPlaceholderLabel != null) {
@@ -80,6 +82,7 @@ public class OfferSegmentEdit extends AbstractSegmentEdit
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit#createArticleEditComposite(org.nightlabs.jfire.trade.ui.articlecontainer.ArticleEdit)
 	 */
+	@Override
 	protected void createArticleEditComposite(ArticleEdit articleEdit)
 	{
 		articleEdit.createComposite(offerSegmentComposite.articleEditArea);

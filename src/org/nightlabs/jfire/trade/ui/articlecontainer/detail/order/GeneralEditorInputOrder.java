@@ -28,6 +28,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.order;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -61,11 +62,13 @@ implements IEditorInput
 		return orderID;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		return orderID == null ? 0 : orderID.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object obj)
 	{
 		if (obj == this) return true;
@@ -87,8 +90,9 @@ implements IEditorInput
 
 	private static final String IMAGE = "icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"; //$NON-NLS-1$
 
+	@Override
 	public ImageDescriptor getImageDescriptor()
 	{
-		return TradePlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE);
+		return AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE);
 	}
 }
