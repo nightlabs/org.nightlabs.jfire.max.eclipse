@@ -108,6 +108,7 @@ public class SimpleProductTypeTable extends AbstractTableComposite<SimpleProduct
 	/**
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(TableViewer, org.eclipse.swt.widgets.Table)
 	 */
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeTable.nameTableColumn.text")); //$NON-NLS-1$
 //		TableLayout l = new TableLayout();
@@ -119,6 +120,7 @@ public class SimpleProductTypeTable extends AbstractTableComposite<SimpleProduct
 	/**
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
 	 */
+	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());

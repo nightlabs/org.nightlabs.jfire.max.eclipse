@@ -225,6 +225,7 @@ implements ISelectionProvider
 		}
 	};
 
+	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{		
 		TableColumn col = new TableColumn(table, SWT.LEFT);
@@ -284,6 +285,7 @@ implements ISelectionProvider
 	/**
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
 	 */
+	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(articleContentProvider);
@@ -295,6 +297,7 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		tableViewer.addSelectionChangedListener(listener);
@@ -304,6 +307,7 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
 	 */
+	@Override
 	public ISelection getSelection()
 	{
 		return tableViewer.getSelection();
@@ -312,6 +316,7 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		tableViewer.removeSelectionChangedListener(listener);
@@ -321,11 +326,13 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
+	@Override
 	public void setSelection(ISelection selection)
 	{
 		tableViewer.setSelection(selection);
 	}
 
+	@Override
 	public void setMenu(Menu menu)
 	{
 		super.setMenu(menu);

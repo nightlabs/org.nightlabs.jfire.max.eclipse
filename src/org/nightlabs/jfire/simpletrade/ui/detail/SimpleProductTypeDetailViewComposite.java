@@ -197,8 +197,8 @@ extends XComposite
 		imageLabel.setLayoutData(gd);
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				int leftWeight = (int) ((float)((float)(getSize().x - 150))/(float)getSize().x * 100);
-				int rightWeight = (int) ((float)((float)150)/(float)getSize().x * 100);;
+				int leftWeight = (int) (((getSize().x - 150))/getSize().x * 100);
+				int rightWeight = (int) ((150)/getSize().x * 100);;
 				sashForm.setWeights(new int[] {leftWeight, rightWeight});
 			}
 		});

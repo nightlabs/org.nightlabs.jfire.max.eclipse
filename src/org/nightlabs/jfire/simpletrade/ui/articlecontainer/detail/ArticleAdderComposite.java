@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.ComboComposite;
@@ -132,10 +131,12 @@ public class ArticleAdderComposite extends FadeableComposite
 			tariffCombo.setSelection(0); // TODO later on we need to store a priority in the server
 
 		quantitySelector = new QuantitySelector(this) {
+			@Override
 			protected void quantitySelected(int qty)
 			{
 				qtySelected(qty);
 			}
+			@Override
 			protected void relayout()
 			{
 				ArticleAdderComposite.this.layout(true, true);
@@ -186,7 +187,7 @@ public class ArticleAdderComposite extends FadeableComposite
 				return Status.OK_STATUS;
 			}
 		};
-		addJob.setPriority(Job.SHORT);
+		addJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 //		addJob.setUser(true);
 		addJob.schedule();
 	};

@@ -66,6 +66,7 @@ public class ArticleAdder extends AbstractArticleAdder
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder#_createComposite(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Composite _createComposite(Composite parent)
 	{
 		articleAdderComposite = new ArticleAdderComposite(parent, this, tariffPricePairs);
@@ -75,6 +76,7 @@ public class ArticleAdder extends AbstractArticleAdder
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleAdder#getComposite()
 	 */
+	@Override
 	public Composite getComposite()
 	{
 		return articleAdderComposite;
