@@ -85,7 +85,7 @@ public class IssuePage extends EntityEditorPageWithProgress
 //		issueFilterSection = new IssueFilterSection(this, parent, controller);
 //		getManagedForm().addPart(issueFilterSection);
 //		
-		IssueListSection issueListSection = new IssueListSection(this, parent, controller);
+		IssueNewSection issueListSection = new IssueNewSection(this, parent, controller);
 		getManagedForm().addPart(issueListSection);
 	}
 
