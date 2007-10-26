@@ -23,7 +23,6 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -32,8 +31,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.issuetracking.ui.issue.CreateIssueComposite;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * An editor page for issue tracking.
@@ -82,11 +79,11 @@ public class IssuePage extends EntityEditorPageWithProgress
 		
 		IssuePageController controller = (IssuePageController) getPageController();
 		
-//		issueFilterSection = new IssueFilterSection(this, parent, controller);
-//		getManagedForm().addPart(issueFilterSection);
-//		
 		IssueNewSection issueListSection = new IssueNewSection(this, parent, controller);
 		getManagedForm().addPart(issueListSection);
+		
+		IssueTableSection issueTableSection = new IssueTableSection(this, parent, controller);
+		getManagedForm().addPart(issueTableSection);
 	}
 
 	@Override
