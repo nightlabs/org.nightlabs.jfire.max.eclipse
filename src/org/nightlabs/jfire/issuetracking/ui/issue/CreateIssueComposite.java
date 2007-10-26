@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -28,6 +30,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -37,8 +40,12 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
+import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.xml.NLDOMUtil;
 
 public class CreateIssueComposite extends XComposite{
 	
@@ -206,9 +213,18 @@ public class CreateIssueComposite extends XComposite{
 			
 			public void widgetSelected(SelectionEvent arg0) {
 				IssueDAO id = IssueDAO.sharedInstance();
-				id.createIssueWithoutAttachedDocument(new Issue(selectedIssuePriority, selectedIssueSeverityType, selectedIssueStatus, null, null)
-					,true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				Issue issue = new Issue(selectedIssuePriority, 
+						selectedIssueSeverityType, 
+						selectedIssueStatus, 
+						UserDAO.sharedInstance().getUsers(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()).iterator().next(),
+						null);
 				
+				try {
+					issue.setOrganisationID(Login.getLogin().getOrganisationID());
+					id.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				} catch (LoginException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
