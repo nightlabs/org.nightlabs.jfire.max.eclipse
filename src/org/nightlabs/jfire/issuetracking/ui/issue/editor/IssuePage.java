@@ -98,6 +98,6 @@ public class IssuePage extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Page Title";
+		return "Issue Page Form Title";
 	}
 }

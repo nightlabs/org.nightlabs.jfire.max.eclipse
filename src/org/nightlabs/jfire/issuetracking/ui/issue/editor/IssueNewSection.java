@@ -9,7 +9,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
-import org.nightlabs.jfire.issuetracking.ui.issue.CreateIssueComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueCreateComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /* 
@@ -30,7 +30,7 @@ public class IssueNewSection extends RestorableSectionPart{
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 		
-		CreateIssueComposite c = new CreateIssueComposite(client, SWT.NONE);
+		IssueCreateComposite c = new IssueCreateComposite(client, SWT.NONE);
 //		moneyTransferTable = new MoneyTransferTable(
 //				client, SWT.NONE);
 //		moneyTransferTable.getGridData().grabExcessHorizontalSpace = true;

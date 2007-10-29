@@ -14,7 +14,7 @@
 		<view 
 			category="org.nightlabs.jfire.issuetracking"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView"
-            icon="icons/TradeAdminPerspective.16x16.png"
+            icon="icons/IssuePerspective.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="Issue View"/>
     </extension>
 
@@ -29,7 +29,7 @@
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issue"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryFactory"
-            icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
+            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
             index="0"
             name="Issues">
       </entryFactory>
@@ -49,6 +49,10 @@
    <extension point="org.nightlabs.base.ui.entityEditor">
         <pageFactory
 			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			indexHint="15" />
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueListPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="10" />
   </extension>  
