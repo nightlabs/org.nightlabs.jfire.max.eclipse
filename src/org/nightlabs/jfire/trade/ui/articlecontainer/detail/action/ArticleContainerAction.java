@@ -33,6 +33,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 
 public abstract class ArticleContainerAction
 extends Action implements IArticleContainerAction
@@ -88,8 +89,11 @@ extends Action implements IArticleContainerAction
 	{
 		this.articles = null;
 
-		Collection<Article> articles = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditor().getGeneralEditorComposite().getArticles();
+		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (editor == null)
+			return false;
+
+		Collection<Article> articles = editor.getGeneralEditorComposite().getArticles();
 
 		List<Article> filteredArticles = new ArrayList<Article>(articles.size());
 		for (Article article : articles) {

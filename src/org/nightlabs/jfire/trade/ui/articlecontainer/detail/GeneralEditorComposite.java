@@ -67,6 +67,7 @@ import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
+import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.editlock.id.EditLockTypeID;
@@ -278,7 +279,7 @@ extends XComposite
 		// throw new RuntimeException(e);
 		// }
 
-		EditLockMan.sharedInstance().acquireEditLock(editLockTypeID, getArticleContainerID(), "TODO", // TODO description //$NON-NLS-1$
+		final EditLockHandle editLockHandle = EditLockMan.sharedInstance().acquireEditLock(editLockTypeID, getArticleContainerID(), "TODO", // TODO description //$NON-NLS-1$
 //				null,
 				new EditLockCallback() {
 					@Override
@@ -287,7 +288,7 @@ extends XComposite
 					}
 				},
 				getShell(), new NullProgressMonitor());
-		// TODO whenever we change sth., we should refresh the lock by calling acquireEditLock(...) again.
+		// TODO whenever we change sth., we should refresh the lock by calling editLockHandle.refresh()!
 
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -305,7 +306,8 @@ extends XComposite
 					}
 				}
 				// TODO WORKAROUND JPOX bug end
-				EditLockMan.sharedInstance().releaseEditLock(articleContainerID);
+
+				editLockHandle.release();
 				if (articleSegmentGroups != null)
 					articleSegmentGroups.onDispose();
 				// removeDisposeListener(this); // nötig? Marco.
@@ -517,9 +519,8 @@ extends XComposite
 		}
 
 		// ArticleSegmentGroups asgs = new ArticleSegmentGroups(articleContainer);
-		for (Iterator it = articleSegmentGroups.getArticleSegmentGroups()
-				.iterator(); it.hasNext();)
-			createSegmentEditAndComposite((ArticleSegmentGroup) it.next());
+		for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroups.getArticleSegmentGroups())
+			createSegmentEditAndComposite(articleSegmentGroup);
 
 		updateActiveSegmentEdit();
 
@@ -758,7 +759,7 @@ extends XComposite
 		return activeSegmentEdit;
 	}
 
-	public Collection getSegmentEdits() {
+	public Collection<SegmentEdit> getSegmentEdits() {
 		return segmentEditsByTabItem.values();
 	}
 
@@ -873,9 +874,9 @@ extends XComposite
 		return (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
 	}
 
-	public Collection getArticles() {
+	public Collection<Article> getArticles() {
 		if (articleSegmentGroups == null)
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		return articleSegmentGroups.getArticles();
 	}
 
