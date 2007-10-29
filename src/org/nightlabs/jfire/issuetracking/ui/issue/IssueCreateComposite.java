@@ -4,23 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -31,7 +33,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
+import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -40,12 +42,11 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
-import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
+import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.xml.NLDOMUtil;
 
 public class IssueCreateComposite extends XComposite{
 	
@@ -80,11 +81,6 @@ public class IssueCreateComposite extends XComposite{
 		final XComboComposite<IssueSeverityType> severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
 		severityCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				selectedIssueSeverityType = severityCombo.getSelectedElement();
-			}
-			
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectedIssueSeverityType = severityCombo.getSelectedElement();
 			}
@@ -94,11 +90,6 @@ public class IssueCreateComposite extends XComposite{
 		statusLbl.setText("Status: ");
 		final XComboComposite<IssueStatus> statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
 		statusCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				selectedIssueStatus = statusCombo.getSelectedElement();
-			}
-			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectedIssueStatus = statusCombo.getSelectedElement();
@@ -110,11 +101,6 @@ public class IssueCreateComposite extends XComposite{
 		final XComboComposite<IssuePriority> priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
 		priorityCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				selectedIssuePriority = priorityCombo.getSelectedElement();
-			}
-			
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectedIssuePriority = priorityCombo.getSelectedElement();
 			}
@@ -123,7 +109,34 @@ public class IssueCreateComposite extends XComposite{
 		Label userLbl = new Label(this, SWT.NONE);
 		userLbl.setText("User: ");
 		
-		UserSearchComposite uc = new UserSearchComposite(this, SWT.NONE);
+		Composite userComposite = new Composite(this, SWT.NONE);
+		userComposite.setLayout(new GridLayout(2, false));
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		userComposite.setLayoutData(gridData);
+		
+		final Text userText = new Text(userComposite, SWT.BORDER);
+		gridData  = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		userText.setLayoutData(gridData);
+		
+		Button userButton = new Button(userComposite, SWT.PUSH);
+		userButton.setText("Choose User");
+		
+		userButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), userText.getText());
+				int returnCode = userSearchDialog.open();
+				if (returnCode == Dialog.OK) {
+					User selectedUser = userSearchDialog.getSelectedUser();
+//					userID = (UserID) JDOHelper.getObjectId(selectedUser);
+					if (selectedUser != null)
+						userText.setText(selectedUser.getName());
+				}//if
+			}
+		});
 		/************************/
 		
 		Label subjectLabel = new Label(this, SWT.NONE);
@@ -149,7 +162,7 @@ public class IssueCreateComposite extends XComposite{
 			}
 		}; 
 		
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData = new GridData(GridData.FILL_BOTH);
 		descriptionText.setLayoutData(gridData);
 		
 		Job loadJob = new Job("Loading Issue Severity Types....") {
@@ -204,13 +217,14 @@ public class IssueCreateComposite extends XComposite{
 		
 		Button submitButton = new Button(this, SWT.PUSH);
 		submitButton.setText("Submit");
+		gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		gridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_CENTER;
+		gridData.grabExcessHorizontalSpace = true;
+		submitButton.setLayoutData(gridData);
 		
-		submitButton.addSelectionListener(new SelectionListener(){
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+		submitButton.addSelectionListener(new SelectionAdapter(){
+			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				IssueDAO id = IssueDAO.sharedInstance();
 				Issue issue = new Issue(selectedIssuePriority, 
