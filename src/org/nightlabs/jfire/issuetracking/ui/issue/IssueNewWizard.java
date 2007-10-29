@@ -1,9 +1,13 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.util.Set;
+
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -35,6 +39,18 @@ public class IssueNewWizard extends DynamicPathWizard{
 					issueNewPage.getIssueCreateComposite().getSelectedIssueStatus(), 
 					issueNewPage.getIssueCreateComposite().getSelectedUser(),
 					null);
+			
+			I18nText i18nText = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();
+			Set<String> languageIDs = i18nText.getLanguageIDs();
+			for(String languageID : languageIDs){
+				issue.getSubject().setText(languageID, i18nText.getText(languageID));
+			}//for
+			
+			i18nText = issueNewPage.getIssueCreateComposite().getDescriptionText().getI18nText();
+			languageIDs = i18nText.getLanguageIDs();
+			for(String languageID : languageIDs){
+				issue.getDescription().setText(languageID, i18nText.getText(languageID));
+			}//for
 			
 			issue.setOrganisationID(Login.getLogin().getOrganisationID());
 			issueDAO.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());

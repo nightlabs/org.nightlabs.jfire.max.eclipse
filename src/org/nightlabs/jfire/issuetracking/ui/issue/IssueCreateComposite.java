@@ -305,4 +305,12 @@ public class IssueCreateComposite extends XComposite{
 	public User getSelectedUser() {
 		return selectedUser;
 	}
+	
+	public I18nTextEditorMultiLine getDescriptionText() {
+		return descriptionText;
+	}
+	
+	public I18nTextEditor getSubjectText() {
+		return subjectText;
+	}
 }

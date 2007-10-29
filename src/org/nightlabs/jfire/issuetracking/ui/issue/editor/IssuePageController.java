@@ -23,6 +23,8 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -32,8 +34,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -67,12 +73,11 @@ public class IssuePageController extends EntityEditorPageController
 
 //		List<IssueQuery> queryList = new LinkedList<IssueQuery>();
 //		queryList.add(issueQuery);
-//		List<Issue> issues = IssueDAO.sharedInstance().getIssues(queryList,
-//				IssueTable.FETCH_GROUPS,
-//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
-//
-//		this.issueList = issues;
+		Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
+
+//		this.issueList = new ArrayList(issues);
 		monitor.done();
 		fireModifyEvent(null, null/*issues*/);
 	}
