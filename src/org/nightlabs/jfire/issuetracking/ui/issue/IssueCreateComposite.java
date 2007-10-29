@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.jdo.JDOHelper;
-import javax.security.auth.login.LoginException;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -26,28 +23,19 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.security.dao.UserDAO;
-import org.nightlabs.jfire.security.id.UserID;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite extends XComposite{
@@ -80,6 +68,8 @@ public class IssueCreateComposite extends XComposite{
 	private I18nTextEditorMultiLine descriptionText;
 	
 	private Button submitButton;
+	
+	private User selectedUser;
 	
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
@@ -151,7 +141,7 @@ public class IssueCreateComposite extends XComposite{
 				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), userText.getText());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
-					User selectedUser = userSearchDialog.getSelectedUser();
+					selectedUser = userSearchDialog.getSelectedUser();
 //					userID = (UserID) JDOHelper.getObjectId(selectedUser);
 					if (selectedUser != null)
 						userText.setText(selectedUser.getName());
@@ -182,7 +172,6 @@ public class IssueCreateComposite extends XComposite{
 				null, null){
 			@Override
 			protected void modifyText(ModifyEvent e) {
-				
 			}
 		}; 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -311,5 +300,9 @@ public class IssueCreateComposite extends XComposite{
 
 	public void setSelectedIssuePriority(IssuePriority selectedIssuePriority) {
 		this.selectedIssuePriority = selectedIssuePriority;
+	}
+	
+	public User getSelectedUser() {
+		return selectedUser;
 	}
 }

@@ -57,4 +57,8 @@ public class IssueNewWizardPage extends WizardHopPage{
 		setErrorMessage(null);
 		
 	}
+	
+	public IssueCreateComposite getIssueCreateComposite(){
+		return issueCreateComposite;
+	}
 }
