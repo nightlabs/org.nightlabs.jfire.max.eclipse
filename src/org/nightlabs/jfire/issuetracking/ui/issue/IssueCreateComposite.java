@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
@@ -58,8 +60,26 @@ public class IssueCreateComposite extends XComposite{
 	private IssueStatus selectedIssueStatus;
 	private IssuePriority selectedIssuePriority;
 	
+	private Label severityLbl;
+	private XComboComposite<IssueSeverityType> severityCombo;
+	private Label statusLbl;
+	private XComboComposite<IssueStatus> statusCombo;
+	private Label priorityLbl;
+	private XComboComposite<IssuePriority> priorityCombo;
+
+	private Label userLbl;
+	private Text userText;
+	private Button userButton;
+	private Label subjectLabel;
+	private I18nTextEditor subjectText;
+
+	private Label fileLabel;
+	private FileSelectionComposite fileComposite;
+	
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
+	
+	private Button submitButton;
 	
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
@@ -76,9 +96,9 @@ public class IssueCreateComposite extends XComposite{
 		
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 		
-		Label severityLbl = new Label(this, SWT.NONE);
+		severityLbl = new Label(this, SWT.NONE);
 		severityLbl.setText("Severity: ");
-		final XComboComposite<IssueSeverityType> severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
+		severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
 		severityCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -86,9 +106,9 @@ public class IssueCreateComposite extends XComposite{
 			}
 		});
 		
-		Label statusLbl = new Label(this, SWT.NONE);
+		statusLbl = new Label(this, SWT.NONE);
 		statusLbl.setText("Status: ");
-		final XComboComposite<IssueStatus> statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
+		statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
 		statusCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -96,32 +116,33 @@ public class IssueCreateComposite extends XComposite{
 			}
 		});
 		
-		Label priorityLbl = new Label(this, SWT.NONE);
+		priorityLbl = new Label(this, SWT.NONE);
 		priorityLbl.setText("Priority: ");
-		final XComboComposite<IssuePriority> priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
+		priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
 		priorityCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				selectedIssuePriority = priorityCombo.getSelectedElement();
 			}
 		});
+		
 		/**********USER**********/
-		Label userLbl = new Label(this, SWT.NONE);
+		userLbl = new Label(this, SWT.NONE);
 		userLbl.setText("User: ");
 		
-		Composite userComposite = new Composite(this, SWT.NONE);
-		userComposite.setLayout(new GridLayout(2, false));
+		XComposite userComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		userComposite.getGridLayout().numColumns = 2;
 		
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		userComposite.setLayoutData(gridData);
 		
-		final Text userText = new Text(userComposite, SWT.BORDER);
-		gridData  = new GridData(GridData.FILL_HORIZONTAL);
+		userText = new Text(userComposite, SWT.BORDER);
+		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		userText.setLayoutData(gridData);
 		
-		Button userButton = new Button(userComposite, SWT.PUSH);
+		userButton = new Button(userComposite, SWT.PUSH);
 		userButton.setText("Choose User");
 		
 		userButton.addSelectionListener(new SelectionAdapter(){
@@ -139,10 +160,10 @@ public class IssueCreateComposite extends XComposite{
 		});
 		/************************/
 		
-		Label subjectLabel = new Label(this, SWT.NONE);
+		subjectLabel = new Label(this, SWT.NONE);
 		subjectLabel.setText("Subject: ");
 
-		I18nTextEditor subjectText = new I18nTextEditor(this);
+		subjectText = new I18nTextEditor(this);
 		subjectText.setI18nText(null, EditMode.BUFFERED);
 		
 		descriptionLabel = new Label(this, SWT.NONE);
@@ -151,19 +172,21 @@ public class IssueCreateComposite extends XComposite{
 		descriptionText = new I18nTextEditorMultiLine(this);
 		descriptionText.setI18nText(null, EditMode.BUFFERED);
 
-		Label fileLabel = new Label(this, SWT.NONE);
+		gridData = new GridData(GridData.FILL_BOTH);
+		descriptionText.setLayoutData(gridData);
+		
+		fileLabel = new Label(this, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		FileSelectionComposite fileComposite = new FileSelectionComposite(this, SWT.NONE, FileSelectionComposite.OPEN_FILE, 
+		fileComposite = new FileSelectionComposite(this, SWT.NONE, FileSelectionComposite.OPEN_FILE, 
 				null, null){
 			@Override
 			protected void modifyText(ModifyEvent e) {
 				
 			}
 		}; 
-		
-		gridData = new GridData(GridData.FILL_BOTH);
-		descriptionText.setLayoutData(gridData);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		fileComposite.setLayoutData(gridData);
 		
 		Job loadJob = new Job("Loading Issue Severity Types....") {
 			@Override
@@ -215,32 +238,29 @@ public class IssueCreateComposite extends XComposite{
 		};
 		loadJob.schedule();
 		
-		Button submitButton = new Button(this, SWT.PUSH);
-		submitButton.setText("Submit");
-		gridData = new GridData();
-		gridData.horizontalSpan = 2;
-		gridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_CENTER;
-		gridData.grabExcessHorizontalSpace = true;
-		submitButton.setLayoutData(gridData);
-		
-		submitButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				IssueDAO id = IssueDAO.sharedInstance();
-				Issue issue = new Issue(selectedIssuePriority, 
-						selectedIssueSeverityType, 
-						selectedIssueStatus, 
-						UserDAO.sharedInstance().getUsers(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()).iterator().next(),
-						null);
-				
-				try {
-					issue.setOrganisationID(Login.getLogin().getOrganisationID());
-					id.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				} catch (LoginException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		submitButton = new Button(this, SWT.PUSH);
+//		submitButton.setText("Submit");
+//		gridData = new GridData(GridData.FILL_BOTH);
+//		submitButton.setLayoutData(gridData);
+//		
+//		submitButton.addSelectionListener(new SelectionAdapter(){
+//			@Override
+//			public void widgetSelected(SelectionEvent arg0) {
+//				IssueDAO id = IssueDAO.sharedInstance();
+//				Issue issue = new Issue(selectedIssuePriority, 
+//						selectedIssueSeverityType, 
+//						selectedIssueStatus, 
+//						UserDAO.sharedInstance().getUsers(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()).iterator().next(),
+//						null);
+//				
+//				try {
+//					issue.setOrganisationID(Login.getLogin().getOrganisationID());
+//					id.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//				} catch (LoginException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 		
 //		 Category  	
 //		 Reproducibility 	
