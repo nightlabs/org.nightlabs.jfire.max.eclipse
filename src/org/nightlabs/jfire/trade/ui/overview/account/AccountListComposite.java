@@ -122,7 +122,9 @@ extends AbstractTableComposite<Account>
 				final LegalEntity owner = ((Account) element).getOwner();
 				if (owner == null)
 					return "";
-				return owner.getAnchorID();
+				if (owner.getPerson().getDisplayName() == null || "".equals(owner.getPerson().getDisplayName()))
+					return owner.getAnchorID();
+				return owner.getPerson().getDisplayName();
 			}
 		});
 		
