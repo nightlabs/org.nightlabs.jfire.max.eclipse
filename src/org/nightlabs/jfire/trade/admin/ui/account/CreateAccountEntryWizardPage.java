@@ -32,6 +32,11 @@ import java.util.List;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -44,6 +49,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
@@ -51,12 +58,18 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableContentProvider;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -77,8 +90,8 @@ extends DynamicPathWizardPage
 	private Group accountTypeGroup;
 	private Button normalAccountRadio;
 	private Button shadowAccountRadio;
-	private AccountingManager accountingManager;
 	private List<Currency> currencies;
+	private AbstractTableComposite<String> accountTypeTable;
 	
 	public CreateAccountEntryWizardPage() {
 		this(null);
@@ -143,7 +156,7 @@ extends DynamicPathWizardPage
 		comboCurrency.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		try {
-			Collection<Currency> tmpCurrenies = accountingManager.getCurrencies(new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Collection<Currency> tmpCurrenies = getAccountingManager().getCurrencies(new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			currencies = new ArrayList<Currency>(tmpCurrenies.size());
 			currencies.addAll(tmpCurrenies);
 		} catch (Exception e) {
@@ -174,7 +187,34 @@ extends DynamicPathWizardPage
 			}
 		});
 		normalAccountRadio.setSelection(true);
-		updatePage();
+		 
+		accountTypeTable = new AbstractTableComposite<String>(accountTypeGroup, SWT.NONE) {
+			@Override
+			protected void createTableColumns(TableViewer tableViewer, Table table) {
+				table.setHeaderVisible(false);
+				TableColumn col = new TableColumn(table, SWT.LEFT);
+				TableLayout l = new TableLayout();
+				l.addColumnData(new ColumnWeightData(1));
+				table.setLayout(l);
+			}
+
+			@Override
+			protected void setTableProvider(TableViewer tableViewer) {
+				tableViewer.setLabelProvider(new TableLabelProvider() {
+					public String getColumnText(Object element, int columnIndex) {
+						return String.valueOf(element);
+					}
+				});
+				tableViewer.setContentProvider(new TableContentProvider());
+			}
+		};
+		accountTypeTable.getGridData().minimumHeight = 80;
+		accountTypeTable.setInput(new String[] {Account.ANCHOR_TYPE_ID_LOCAL_REVENUE, Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE});
+		accountTypeTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				updatePage();
+			}
+		});
 		
 		shadowAccountRadio = new Button(accountTypeGroup, SWT.RADIO);
 		shadowAccountRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -186,7 +226,7 @@ extends DynamicPathWizardPage
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		
+		updatePage();
 		return wrapper;
 	}
 	
@@ -194,12 +234,17 @@ extends DynamicPathWizardPage
 	 * Checks page status
 	 */
 	protected void updatePage() {
+		accountTypeTable.setEnabled(normalAccountRadio.getSelection());
 		if ( "".equals(accountNameEditor.getEditText()) ) { //$NON-NLS-1$
 			updateStatus(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.errorMessageNoAnchorID")); //$NON-NLS-1$
 			return;
 		}
 		if (comboCurrency.getSelectionIndex() < 0) {
 			updateStatus(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.errorMessageNoCurrency")); //$NON-NLS-1$
+			return;
+		}
+		if (normalAccountRadio.getSelection() && accountTypeTable.getFirstSelectedElement() == null) {
+			updateStatus("Please select the type of normal account to create");
 			return;
 		}
 		updateStatus(null);
@@ -248,6 +293,21 @@ extends DynamicPathWizardPage
 	
 	public I18nTextEditor getAccountNameEditor() {
 		return accountNameEditor;
+	}
+	
+	public String getAnchorTypeID() {
+		return accountTypeTable.getFirstSelectedElement();
+	}
+	
+	/**
+	 * @return A new {@link AccountingManager}.
+	 */
+	private AccountingManager getAccountingManager() {
+		try {
+			return AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 }

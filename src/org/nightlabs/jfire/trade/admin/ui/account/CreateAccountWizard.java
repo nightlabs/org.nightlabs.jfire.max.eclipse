@@ -28,8 +28,11 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -92,22 +95,14 @@ extends DynamicPathWizard
 			else
 				newAccount = new Account(
 						Login.getLogin().getOrganisationID(),
-						Account.ANCHOR_TYPE_ID_LOCAL_REVENUE, // TODO Account: This type should be selectable in the wizard!
+						getEntryPage().getAnchorTypeID(),
 						getEntryPage().getAnchorID(),
 						owner,
 						getEntryPage().getCurrency(),
 						false);
 
-//			newAccount = accountingManager.createMandatorAccount(
-//				getEntryPage().getAnchorID(), 
-//				getEntryPage().getCurrency().getCurrencyID(),
-//				getCreateAccountEntryPage().isCreateSummaryAccount(),
-//				true,
-//				AccountTable.ACCOUNT_DEFAULT_FETCHGROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
-//			);
 			((I18nTextBuffer)getCreateAccountEntryPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
-			newAccount = AccountDAO.sharedInstance().storeAccount(newAccount, true, 
-//					AccountTable.ACCOUNT_DEFAULT_FETCHGROUP,
+			AccountDAO.sharedInstance().storeAccount(newAccount, false, 
 					AbstractAccountPageController.FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
@@ -118,4 +113,12 @@ extends DynamicPathWizard
 		return true;
 	}
 
+	public static boolean open() {
+		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(
+				Display.getDefault().getActiveShell(),
+				new CreateAccountWizard()
+			);
+		return dlg.open() == Dialog.OK;
+	}
+	
 }

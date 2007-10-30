@@ -146,4 +146,18 @@
             class="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage"
             id="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage" name="%org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage.name"/>
     </extension>
+    <extension
+         point="org.nightlabs.base.ui.editorActionBarContribution">    
+      <editorActionBarContributionRegistry
+            targetEditorID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor">
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
+               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+               icon="icons/account/action/AddAccountAction.16x16.png"
+               id="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
+               name="Add Account"
+               toolbarPath="org.nightlabs.jfire.trade.ui.overview">
+         </editorActionBarContribution>
+      </editorActionBarContributionRegistry>
+    </extension>
 </plugin>
