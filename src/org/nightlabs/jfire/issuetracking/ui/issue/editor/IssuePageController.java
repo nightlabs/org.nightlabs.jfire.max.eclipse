@@ -71,13 +71,7 @@ public class IssuePageController extends EntityEditorPageController
 	{
 		monitor.beginTask("Loading Issues....", 100);
 
-//		List<IssueQuery> queryList = new LinkedList<IssueQuery>();
-//		queryList.add(issueQuery);
-		Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
-
-//		this.issueList = new ArrayList(issues);
+		
 		monitor.done();
 		fireModifyEvent(null, null/*issues*/);
 	}

@@ -8,7 +8,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -89,9 +91,8 @@ public class IssueCreateComposite extends XComposite{
 		severityLbl = new Label(this, SWT.NONE);
 		severityLbl.setText("Severity: ");
 		severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
-		severityCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+		severityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = severityCombo.getSelectedElement();
 			}
 		});
@@ -99,9 +100,8 @@ public class IssueCreateComposite extends XComposite{
 		statusLbl = new Label(this, SWT.NONE);
 		statusLbl.setText("Status: ");
 		statusCombo = new XComboComposite<IssueStatus>(this, SWT.NONE, labelProvider);
-		statusCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+		statusCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueStatus = statusCombo.getSelectedElement();
 			}
 		});
@@ -109,9 +109,8 @@ public class IssueCreateComposite extends XComposite{
 		priorityLbl = new Label(this, SWT.NONE);
 		priorityLbl.setText("Priority: ");
 		priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
-		priorityCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+		priorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssuePriority = priorityCombo.getSelectedElement();
 			}
 		});
@@ -177,7 +176,7 @@ public class IssueCreateComposite extends XComposite{
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		fileComposite.setLayoutData(gridData);
 		
-		Job loadJob = new Job("Loading Issue Severity Types....") {
+		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
@@ -195,7 +194,7 @@ public class IssueCreateComposite extends XComposite{
 							IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
 							severityCombo.addElement(issueSeverityType);
 						}
-						severityCombo.selectElementByIndex(1);
+						severityCombo.selectElementByIndex(0);
 					}
 				});
 				
@@ -206,7 +205,7 @@ public class IssueCreateComposite extends XComposite{
 							IssueStatus is = (IssueStatus) it.next();
 							statusCombo.addElement(is);
 						}
-						statusCombo.selectElementByIndex(1);
+						statusCombo.selectElementByIndex(0);
 					}
 				});
 				
@@ -217,7 +216,7 @@ public class IssueCreateComposite extends XComposite{
 							IssuePriority ip = (IssuePriority) it.next();
 							priorityCombo.addElement(ip);
 						}
-						priorityCombo.selectElementByIndex(1);
+						priorityCombo.selectElementByIndex(0);
 					}
 				});
 

@@ -23,11 +23,15 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -35,9 +39,15 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueNewWizard;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * An editor page for issue tracking list.
@@ -92,7 +102,18 @@ public class IssueListPage extends EntityEditorPageWithProgress
 			}
 		});
 		
-		IssueTable it = new IssueTable(parent, SWT.NONE);
+		final IssueTable it = new IssueTable(parent, SWT.NONE);
+		
+		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor());
+
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {					
+				it.setIssues(null, issues);
+			}
+		});		
+		
 	}
 
 	@Override

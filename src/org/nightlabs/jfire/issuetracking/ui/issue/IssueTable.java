@@ -15,6 +15,9 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -28,10 +31,15 @@ extends AbstractTableComposite<Issue>
 	private IssueID issueID;
 
 	/**
-	 * The fetch groups of money transfer data.
+	 * The fetch groups of issue data.
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT}	;
+		FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS, 
+		Issue.FETCH_GROUP_DESCRIPTION, 
+		Issue.FETCH_GROUP_SUBJECT, 
+		IssueSeverityType.FETCH_GROUP_THIS,
+		IssuePriority.FETCH_GROUP_THIS,
+		IssueStatus.FETCH_GROUP_THIS};
 
 	public IssueTable(Composite parent, int style)
 	{
@@ -91,8 +99,8 @@ extends AbstractTableComposite<Issue>
 
 	public void setIssues(IssueID currentIssueID, Collection<Issue> issues)
 	{
-		if (currentIssueID == null)
-			throw new IllegalArgumentException("currentIssueID == null"); //$NON-NLS-1$
+//		if (currentIssueID == null)
+//			throw new IllegalArgumentException("currentIssueID == null"); //$NON-NLS-1$
 
 		this.currentIssueID = currentIssueID;
 		super.setInput(issues);
@@ -112,15 +120,30 @@ extends AbstractTableComposite<Issue>
 						return issue.getIssueID();
 				break;
 				case(1):
-					if (issue.getDescription() != null)
-						return issue.getDescription().getText(); 
 				break;
 				case(2):
-					return issue.getCreateTimestamp().toString();
+					if (issue.getSubject() != null)
+						return issue.getSubject().getText();
+					break;
 				case(3):
-					if (issue.getUpdateTimestamp() != null)
-						return issue.getUpdateTimestamp().toString();
+					if (issue.getDescription() != null)
+						return issue.getDescription().getText();
+//					return issue.getCreateTimestamp().toString();
+//					if (issue.getUpdateTimestamp() != null)
+//						return issue.getUpdateTimestamp().toString();
 				break;
+				case(4):
+					if(issue.getSeverityType() != null)
+						return issue.getSeverityType().getIssueSeverityTypeText().getText();
+					break;
+				case(5):
+					if(issue.getPriority() != null)
+						return issue.getPriority().getIssuePriorityText().getText();
+					break;
+				case(6):
+					if(issue.getStatus() != null)
+						return issue.getStatus().getIssueStatusText().getText();
+					break;
 				default:
 					return ""; //$NON-NLS-1$
 				}
@@ -132,13 +155,13 @@ extends AbstractTableComposite<Issue>
 	public void setLoadingStatus()
 	{
 		this.currentIssueID = null;
-		super.setInput(Messages.getString("org.nightlabs.jfire.trade.ui.repository.transfer.ProductTransferTable.loadingDataPlaceholder")); //$NON-NLS-1$
+		super.setInput("Loading message");
 	}
 
 	@Override
 	public void setInput(Object input)
 	{
-		throw new UnsupportedOperationException("Use setMoneyTransfers(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
+		throw new UnsupportedOperationException("Use setIssues(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
 	}
 
 }
