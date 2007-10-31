@@ -38,10 +38,12 @@ extends LSDViewPart
 
 	@Implement
 	public void createPartContents(Composite parent) 
-	{
+	{		
+		productTypeDetailComposite = new ProductTypeDetailViewComposite(parent, SWT.NONE);
+
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE, ProductType.class, productTypeSelectionListener);
-		productTypeDetailComposite = new ProductTypeDetailViewComposite(parent, SWT.NONE);
+
 		productTypeDetailComposite.addDisposeListener(new DisposeListener() {
 			
 			public void widgetDisposed(DisposeEvent e) {
@@ -56,7 +58,6 @@ extends LSDViewPart
 
 	@Override
 	public void setFocus() {
-
 	}
 
 	private NotificationListener productTypeSelectionListener = new NotificationAdapterCallerThread(){	
@@ -64,7 +65,7 @@ extends LSDViewPart
 			Object firstSelection = notificationEvent.getFirstSubject();
 			if (firstSelection instanceof ProductTypeID) {
 				ProductTypeID productTypeID = (ProductTypeID) firstSelection;
-				if (productTypeDetailComposite != null)
+				if (productTypeDetailComposite != null && !productTypeDetailComposite.isDisposed())
 					productTypeDetailComposite.showProductTypeDetail(productTypeID);					
 			}
 		}	
