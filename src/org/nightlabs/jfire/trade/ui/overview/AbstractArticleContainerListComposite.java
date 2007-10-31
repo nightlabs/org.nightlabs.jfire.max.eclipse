@@ -160,9 +160,9 @@ extends AbstractTableComposite<ArticleContainer>
 				case 5:
 					return DateFormatter.formatDateShort(articleContainer.getCreateDT(), false);
 				case 6:
-					return getCreateUserName(articleContainer);							
+					return getCreateUserName(articleContainer);
 				case 7:
-					return String.valueOf(articleContainer.getArticles().size()); // TODO the articles must not be detached - that's very expensive!!! Instead ArticleContainer should have a non-persistent field for this!
+					return String.valueOf(articleContainer.getArticleCount());
 			} 
 		}
 		int firstAdditionalColumnIndex = 8;

@@ -17,7 +17,6 @@ import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.DeliveryNoteLocal;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
