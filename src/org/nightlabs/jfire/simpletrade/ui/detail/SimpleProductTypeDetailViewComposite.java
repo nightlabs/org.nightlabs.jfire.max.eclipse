@@ -148,13 +148,15 @@ extends XComposite
 		};
 		loadJob.schedule();
 	}
-	
+
+	private SashForm sashForm;
+
 	protected void createComposite(XComposite parent) 
 	{
 		parent.getGridLayout().numColumns = 2;
 		parent.getGridLayout().makeColumnsEqualWidth = false;
 		
-		final SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);		
+		sashForm = new SashForm(parent, SWT.HORIZONTAL);		
 		sashForm.setLayout(new FillLayout());
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 		textWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -195,16 +197,29 @@ extends XComposite
 		gd.grabExcessHorizontalSpace = true;
 		gd.grabExcessVerticalSpace = true;
 		imageLabel.setLayoutData(gd);
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				int leftWeight = (int) (((getSize().x - 150))/getSize().x * 100);
-				int rightWeight = (int) ((150)/getSize().x * 100);;
-				sashForm.setWeights(new int[] {leftWeight, rightWeight});
-			}
-		});
-		sashForm.setWeights(new int[] {10, 4});
+
+		sashForm.setWeights(new int[] {10, 10});
+		Display.getDefault().asyncExec(sash_setWeights_runnable);
 	}
-	
+
+	private int sash_setWeights_counter = 0;
+
+	private Runnable sash_setWeights_runnable = new Runnable() {
+		public void run() {
+			++sash_setWeights_counter;
+			int leftWeight = (int) (100 * (getSize().x - 150) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
+			int rightWeight = (int) (100 * 150 / getSize().x);
+			if (leftWeight > 0 && rightWeight > 0)
+				sashForm.setWeights(new int[] {leftWeight, rightWeight});
+			else {
+				logger.warn("Weights are out of range! leftWeight=" + leftWeight + " rightWeight=" + rightWeight);
+
+				if (sash_setWeights_counter < 10)
+					Display.getDefault().asyncExec(sash_setWeights_runnable);
+			}
+		}
+	};
+
 	private boolean layoutingImageWrapper = false;
 	
 	private void displayImage() {
