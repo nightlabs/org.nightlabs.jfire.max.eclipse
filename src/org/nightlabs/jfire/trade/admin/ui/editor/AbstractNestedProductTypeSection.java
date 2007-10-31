@@ -95,7 +95,7 @@ implements IProductTypeSectionPart
 	}
 	public void setProductType(ProductType productType)
 	{
-		if (productType == null || getSection() != null || getSection().isDisposed() || nestedProductTypeTable.isDisposed())
+		if (productType == null || getSection() == null || getSection().isDisposed() || nestedProductTypeTable.isDisposed())
 			return;
 
 		this.productType = productType;
