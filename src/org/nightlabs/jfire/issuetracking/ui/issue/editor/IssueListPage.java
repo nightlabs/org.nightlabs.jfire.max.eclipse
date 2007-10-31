@@ -90,6 +90,8 @@ public class IssueListPage extends EntityEditorPageWithProgress
 
 	@Override
 	protected void addSections(Composite parent) {
+		final IssuePageController controller = (IssuePageController)getPageController();
+		
 		Button createButton = new Button(parent, SWT.PUSH);
 		createButton.setText("New Issue");
 		createButton.addSelectionListener(new SelectionAdapter(){
@@ -103,17 +105,6 @@ public class IssueListPage extends EntityEditorPageWithProgress
 		});
 		
 		final IssueTable it = new IssueTable(parent, SWT.NONE);
-		
-		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new NullProgressMonitor());
-
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {					
-				it.setIssues(null, issues);
-			}
-		});		
-		
 	}
 
 	@Override

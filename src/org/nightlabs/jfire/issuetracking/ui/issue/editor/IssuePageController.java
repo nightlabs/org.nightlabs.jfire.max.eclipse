@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
@@ -39,6 +40,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
@@ -47,7 +49,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class IssuePageController extends EntityEditorPageController
 {
 //	private IssueQuery issueQuery = new IssueQuery();
-	private List<Issue> issueList = null;
+	private Collection<Issue> issues = null;
 	
 	/**
 	 * LOG4J logger used by this class
@@ -70,10 +72,9 @@ public class IssuePageController extends EntityEditorPageController
 	public void doLoad(IProgressMonitor monitor)
 	{
 		monitor.beginTask("Loading Issues....", 100);
-
 		
 		monitor.done();
-		fireModifyEvent(null, null/*issues*/);
+		fireModifyEvent(null, null);
 	}
 
 	public void doSave(IProgressMonitor monitor)
@@ -105,9 +106,9 @@ public class IssuePageController extends EntityEditorPageController
 //		return issueQuery;
 //	}
 
-	public List<Issue> getIssueList()
+	public Collection<Issue> getIssues()
 	{
-		return issueList;
+		return issues;
 	}
 
 	

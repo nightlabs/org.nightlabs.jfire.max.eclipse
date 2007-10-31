@@ -64,9 +64,9 @@ public class IssueTableSection extends RestorableSectionPart{
 //		});
 //		moneyTransferQueryChanged(this.controller.getMoneyTransferQuery());
 		
-		List<Issue> issueList = this.controller.getIssueList();
-		if (issueList != null)
-			issueTable.setLoadingStatus();
+//		List<Issue> issueList = this.controller.getIssueList();
+//		if (issueList != null)
+//			issueTable.setLoadingStatus();
 //			moneyTransferListChanged(moneyTransferList);
 		
 		getSection().setClient(client);
