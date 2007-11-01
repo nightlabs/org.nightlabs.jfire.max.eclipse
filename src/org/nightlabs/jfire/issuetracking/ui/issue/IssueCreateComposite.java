@@ -226,30 +226,6 @@ public class IssueCreateComposite extends XComposite{
 		};
 		loadJob.schedule();
 		
-//		submitButton = new Button(this, SWT.PUSH);
-//		submitButton.setText("Submit");
-//		gridData = new GridData(GridData.FILL_BOTH);
-//		submitButton.setLayoutData(gridData);
-//		
-//		submitButton.addSelectionListener(new SelectionAdapter(){
-//			@Override
-//			public void widgetSelected(SelectionEvent arg0) {
-//				IssueDAO id = IssueDAO.sharedInstance();
-//				Issue issue = new Issue(selectedIssuePriority, 
-//						selectedIssueSeverityType, 
-//						selectedIssueStatus, 
-//						UserDAO.sharedInstance().getUsers(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()).iterator().next(),
-//						null);
-//				
-//				try {
-//					issue.setOrganisationID(Login.getLogin().getOrganisationID());
-//					id.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//				} catch (LoginException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-		
 //		 Category  	
 //		 Reproducibility 	
 	}

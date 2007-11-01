@@ -104,7 +104,7 @@ public class IssueListPage extends EntityEditorPageWithProgress
 			}
 		});
 		
-		final IssueTable it = new IssueTable(parent, SWT.NONE);
+		final IssueTable issueTable = new IssueTable(parent, SWT.NONE);
 	}
 
 	@Override

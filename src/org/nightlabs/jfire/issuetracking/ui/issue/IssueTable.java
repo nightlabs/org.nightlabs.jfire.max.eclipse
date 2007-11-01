@@ -5,6 +5,9 @@ import java.util.Collection;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -17,6 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
@@ -58,6 +62,23 @@ extends AbstractTableComposite<Issue>
 		super(parent, style);
 		
 		loadIssues();
+		
+		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
+
+				Issue issue = (Issue)s.getFirstElement();
+				try {
+					System.out.println(issue.getIssueID());
+					IssueViewDialog d = new IssueViewDialog(getShell(), issue);
+					d.open();
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
 		
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
 	    addDisposeListener(new DisposeListener() {
