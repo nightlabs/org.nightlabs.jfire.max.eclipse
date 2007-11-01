@@ -61,25 +61,104 @@ public class IssueViewComposite extends XComposite{
 	 */
 	protected void createComposite(Composite parent) 
 	{
-		setLayout(new GridLayout(1, false));
+		setLayout(new GridLayout(2, false));
 		
-		Group group = new Group(this, SWT.NONE);
-		group.setText("The Basics");
-		group.setLayout(new GridLayout(2, false));
+		Group basicsGroup = new Group(this, SWT.NONE);
+		basicsGroup.setText("The Basics");
+		basicsGroup.setLayout(new GridLayout(1, false));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		basicsGroup.setLayoutData(gridData);
+		
+		XComposite basicsComposite = createBasicsComposite(basicsGroup);
+		//-------------------------------------------------------
+		Group peopleGroup = new Group(this, SWT.NONE);
+		peopleGroup.setText("People");
+		peopleGroup.setLayout(new GridLayout(1, false));
+		gridData = new GridData(GridData.FILL_BOTH);
+		peopleGroup.setLayoutData(gridData);
+		
+		XComposite peopleComposite = createPersonComposite(peopleGroup);
+		//-------------------------------------------------------
+		Group datesGroup = new Group(this, SWT.NONE);
+		datesGroup.setText("Dates");
+		gridData = new GridData(GridData.FILL_BOTH);
+		datesGroup.setLayoutData(gridData);
+		
+		Group relationshipsGroup = new Group(this, SWT.NONE);
+		relationshipsGroup.setText("Relationships");
+		gridData = new GridData(GridData.FILL_BOTH);
+		relationshipsGroup.setLayoutData(gridData);
+
+		//--------------------------------------------------------
+		subjectLabel = new Label(this, SWT.NONE);
+		subjectLabel.setText("Subject:");
+
+		subjectText = new I18nTextEditor(this);
+		subjectText.setI18nText(issue.getSubject(), EditMode.BUFFERED);
+		
+		descriptionLabel = new Label(this, SWT.NONE);
+		descriptionLabel.setText("Description:");
+
+		descriptionText = new I18nTextEditorMultiLine(this);
+		descriptionText.setI18nText(issue.getDescription(), EditMode.BUFFERED);
+
+		gridData = new GridData(GridData.FILL_BOTH);
+		descriptionText.setLayoutData(gridData);
+		
+		fileLabel = new Label(this, SWT.NONE);
+		fileLabel.setText("Files:");
+
+	}
+	
+	private XComposite createBasicsComposite(Composite parent){
+		XComposite c = new XComposite(parent, SWT.NONE);
+		c.getGridLayout().numColumns = 2;
+		
+		severityLbl = new Label(c, SWT.NONE);
+		severityLbl.setAlignment(SWT.RIGHT);
+		severityLbl.setText("Severity:");
+		
+		severityTextLbl = new Label(c, SWT.NONE);
+		severityTextLbl.setText(issue.getSeverityType().getIssueSeverityTypeText().getText());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		group.setLayoutData(gridData);
+		severityTextLbl.setLayoutData(gridData);
 		
-		XComposite c = createBasicsComposite(group);
+		statusLbl = new Label(c, SWT.NONE);
+		statusLbl.setAlignment(SWT.RIGHT);
+		statusLbl.setText("Status:");
+
+		statusTextLbl = new Label(c, SWT.NONE);	
+		statusTextLbl.setText(issue.getStatus().getIssueStatusText().getText());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		statusTextLbl.setLayoutData(gridData);
+		
+		priorityLbl = new Label(c, SWT.NONE);
+		priorityLbl.setAlignment(SWT.RIGHT);
+		priorityLbl.setText("Priority:");
+		
+		priorityTextLbl = new Label(c, SWT.NONE);
+		priorityTextLbl.setText(issue.getPriority().getIssuePriorityText().getText());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		priorityTextLbl.setLayoutData(gridData);
+		
+		return c;
+	}
+	
+	private XComposite createPersonComposite(Composite parent){
+		XComposite c = new XComposite(parent, SWT.NONE);
+		c.getGridLayout().numColumns = 2;
 		/**********USER**********/
-		userLbl = new Label(group, SWT.NONE);
+		userLbl = new Label(c, SWT.NONE);
 		userLbl.setAlignment(SWT.RIGHT);
-		userLbl.setText("User: ");
+		userLbl.setText("User:");
 		
-		XComposite userComposite = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		XComposite userComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		userComposite.getGridLayout().numColumns = 2;
 		
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		userComposite.setLayoutData(gridData);
 		
@@ -90,62 +169,7 @@ public class IssueViewComposite extends XComposite{
 		userTextLbl.setText(issue.getUser().getName());
 		
 		/************************/
-		
-		subjectLabel = new Label(this, SWT.NONE);
-		subjectLabel.setText("Subject: ");
-
-		subjectText = new I18nTextEditor(this);
-		subjectText.setI18nText(issue.getSubject(), EditMode.BUFFERED);
-		
-		descriptionLabel = new Label(this, SWT.NONE);
-		descriptionLabel.setText("Description: ");
-
-		descriptionText = new I18nTextEditorMultiLine(this);
-		descriptionText.setI18nText(issue.getDescription(), EditMode.BUFFERED);
-
-		gridData = new GridData(GridData.FILL_BOTH);
-		descriptionText.setLayoutData(gridData);
-		
-		fileLabel = new Label(this, SWT.NONE);
-		fileLabel.setText("Files: ");
-
-	}
-	
-	private XComposite createBasicsComposite(Composite parent){
-		severityLbl = new Label(parent, SWT.NONE);
-		severityLbl.setAlignment(SWT.RIGHT);
-		severityLbl.setText("Severity: ");
-		
-		severityTextLbl = new Label(parent, SWT.NONE);
-		severityTextLbl.setText(issue.getSeverityType().getIssueSeverityTypeText().getText());
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		severityTextLbl.setLayoutData(gridData);
-		
-		statusLbl = new Label(parent, SWT.NONE);
-		statusLbl.setAlignment(SWT.RIGHT);
-		statusLbl.setText("Status: ");
-
-		statusTextLbl = new Label(parent, SWT.NONE);	
-		statusTextLbl.setText(issue.getStatus().getIssueStatusText().getText());
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		statusTextLbl.setLayoutData(gridData);
-		
-		priorityLbl = new Label(parent, SWT.NONE);
-		priorityLbl.setAlignment(SWT.RIGHT);
-		priorityLbl.setText("Priority: ");
-		
-		priorityTextLbl = new Label(parent, SWT.NONE);
-		priorityTextLbl.setText(issue.getPriority().getIssuePriorityText().getText());
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		priorityTextLbl.setLayoutData(gridData);
-		return null;
-	}
-	
-	private XComposite createPersonComposite(Composite parent){
-		return null;
+		return c;
 	}
 	
 	private XComposite createDateComposite(Composite parent){
