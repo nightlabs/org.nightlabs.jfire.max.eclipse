@@ -23,31 +23,25 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueNewWizard;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
-import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * An editor page for issue tracking list.
@@ -104,7 +98,16 @@ public class IssueListPage extends EntityEditorPageWithProgress
 			}
 		});
 		
-		final IssueTable issueTable = new IssueTable(parent, SWT.NONE);
+		XComposite tableComposite = new XComposite(parent, SWT.NONE);
+		tableComposite.getGridLayout().numColumns = 2;
+		
+		IssueTable issueTable = new IssueTable(tableComposite, SWT.NONE);
+		
+		IssueTable issueTable2 = new IssueTable(tableComposite, SWT.NONE);
+		
+		IssueTable issueTable3 = new IssueTable(tableComposite, SWT.NONE);
+		
+		IssueTable issueTable4 = new IssueTable(tableComposite, SWT.NONE);
 	}
 
 	@Override

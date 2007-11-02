@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
@@ -28,28 +29,42 @@ public class IssueViewDialog extends CenteredDialog{
 	protected Control createDialogArea(Composite parent) 
 	{
 		getShell().setText("Title");
-		parent.setLayout(new GridLayout(1, false));
+//		parent.setLayout(new GridLayout(1, false));
 		
-		XComposite c = new XComposite(parent, SWT.NONE);
-		c.getGridLayout().numColumns = 5;
+		XComposite buttonComposite = new XComposite(parent, SWT.NONE);
+		buttonComposite.getGridLayout().numColumns = 7;
 		
-		Button editButton = new Button(c, SWT.PUSH);
+		Button editButton = new Button(buttonComposite, SWT.PUSH);
 		editButton.setText("Edit");
 		
-		Button replyButton = new Button(c, SWT.PUSH);
+		Button replyButton = new Button(buttonComposite, SWT.PUSH);
 		replyButton.setText("Reply");
 		
-		Button notifyButton = new Button(c, SWT.PUSH);
+		Button notifyButton = new Button(buttonComposite, SWT.PUSH);
 		notifyButton.setText("Notify");
 		
-		Button deleteButton = new Button(c, SWT.PUSH);
+		Button deleteButton = new Button(buttonComposite, SWT.PUSH);
 		deleteButton.setText("Delete");
 		
-		Button reassignButton = new Button(c, SWT.PUSH);
+		Button reassignButton = new Button(buttonComposite, SWT.PUSH);
 		reassignButton.setText("Reassign");
 		
+		Button resolveButton = new Button(buttonComposite, SWT.PUSH);
+		resolveButton.setText("Resolve");
+		
+		Button commentButton = new Button(buttonComposite, SWT.PUSH);
+		commentButton.setText("Comment");
+		
 		IssueViewComposite issueViewComposite = new IssueViewComposite(issue, parent, SWT.NONE);
-		return issueViewComposite;
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		issueViewComposite.setLayoutData(gridData);
+		
+		Label issueHistoryLabel = new Label(parent, SWT.NONE);
+		issueHistoryLabel.setText("History: ");
+		
+		IssueHistoryTable issueHistoryTable = new IssueHistoryTable(parent, SWT.NONE);
+		
+		return parent;
 	}  
 
 	@Override

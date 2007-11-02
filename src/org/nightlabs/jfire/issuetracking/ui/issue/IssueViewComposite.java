@@ -93,64 +93,63 @@ public class IssueViewComposite extends XComposite{
 		gridData.horizontalSpan = 2;
 		sashForm.setLayoutData(gridData);
 		
-		XComposite xc = new XComposite(sashForm, SWT.NONE);
-		xc.getGridLayout().numColumns = 2;
-		xc.setLayoutData(new GridData(GridData.FILL_BOTH));
+		XComposite sashFormComposite = new XComposite(sashForm, SWT.NONE);
+		sashFormComposite.getGridLayout().numColumns = 2;
+		sashFormComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		subjectLabel = new Label(xc, SWT.NONE);
+		subjectLabel = new Label(sashFormComposite, SWT.NONE);
 		subjectLabel.setText("Subject:");
 
-		subjectText = new I18nTextEditor(xc);
+		subjectText = new I18nTextEditor(sashFormComposite);
 		subjectText.setI18nText(issue.getSubject(), EditMode.BUFFERED);
 		subjectText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		descriptionLabel = new Label(xc, SWT.NONE);
+		descriptionLabel = new Label(sashFormComposite, SWT.NONE);
 		descriptionLabel.setText("Description:");
 
-		descriptionText = new I18nTextEditorMultiLine(xc);
+		descriptionText = new I18nTextEditorMultiLine(sashFormComposite);
 		descriptionText.setI18nText(issue.getDescription(), EditMode.BUFFERED);
 		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		fileLabel = new Label(xc, SWT.NONE);
+		fileLabel = new Label(sashFormComposite, SWT.NONE);
 		fileLabel.setText("Files:");
-
 	}
 	
 	private XComposite createBasicsComposite(Composite parent){
-		XComposite c = new XComposite(parent, SWT.NONE);
-		c.getGridLayout().numColumns = 2;
+		XComposite mainComposite = new XComposite(parent, SWT.NONE);
+		mainComposite.getGridLayout().numColumns = 2;
 		
-		severityLbl = new Label(c, SWT.NONE);
+		severityLbl = new Label(mainComposite, SWT.NONE);
 		severityLbl.setAlignment(SWT.RIGHT);
 		severityLbl.setText("Severity:");
 		
-		severityTextLbl = new Label(c, SWT.NONE);
+		severityTextLbl = new Label(mainComposite, SWT.NONE);
 		severityTextLbl.setText(issue.getSeverityType().getIssueSeverityTypeText().getText());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		severityTextLbl.setLayoutData(gridData);
 		
-		statusLbl = new Label(c, SWT.NONE);
+		statusLbl = new Label(mainComposite, SWT.NONE);
 		statusLbl.setAlignment(SWT.RIGHT);
 		statusLbl.setText("Status:");
 
-		statusTextLbl = new Label(c, SWT.NONE);	
+		statusTextLbl = new Label(mainComposite, SWT.NONE);	
 		statusTextLbl.setText(issue.getStatus().getIssueStatusText().getText());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		statusTextLbl.setLayoutData(gridData);
 		
-		priorityLbl = new Label(c, SWT.NONE);
+		priorityLbl = new Label(mainComposite, SWT.NONE);
 		priorityLbl.setAlignment(SWT.RIGHT);
 		priorityLbl.setText("Priority:");
 		
-		priorityTextLbl = new Label(c, SWT.NONE);
+		priorityTextLbl = new Label(mainComposite, SWT.NONE);
 		priorityTextLbl.setText(issue.getPriority().getIssuePriorityText().getText());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		priorityTextLbl.setLayoutData(gridData);
 		
-		return c;
+		return mainComposite;
 	}
 	
 	private XComposite createPersonComposite(Composite parent){

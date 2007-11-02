@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
@@ -94,6 +96,7 @@ public class IssueCreateComposite extends XComposite{
 		severityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = severityCombo.getSelectedElement();
+				System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++> !@#");
 			}
 		});
 		
@@ -195,6 +198,7 @@ public class IssueCreateComposite extends XComposite{
 							severityCombo.addElement(issueSeverityType);
 						}
 						severityCombo.selectElementByIndex(0);
+						selectedIssueSeverityType = severityCombo.getSelectedElement();
 					}
 				});
 				
@@ -206,6 +210,7 @@ public class IssueCreateComposite extends XComposite{
 							statusCombo.addElement(is);
 						}
 						statusCombo.selectElementByIndex(0);
+						selectedIssueStatus = statusCombo.getSelectedElement();
 					}
 				});
 				
@@ -217,6 +222,7 @@ public class IssueCreateComposite extends XComposite{
 							priorityCombo.addElement(ip);
 						}
 						priorityCombo.selectElementByIndex(0);
+						selectedIssuePriority = priorityCombo.getSelectedElement();
 					}
 				});
 
@@ -224,6 +230,7 @@ public class IssueCreateComposite extends XComposite{
 			} 
 			
 		};
+		loadJob.setPriority(Job.SHORT);
 		loadJob.schedule();
 		
 //		 Category  	
