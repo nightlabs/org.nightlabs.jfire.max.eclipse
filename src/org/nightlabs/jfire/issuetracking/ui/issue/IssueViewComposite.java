@@ -1,15 +1,13 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
@@ -90,22 +88,30 @@ public class IssueViewComposite extends XComposite{
 		relationshipsGroup.setLayoutData(gridData);
 
 		//--------------------------------------------------------
-		subjectLabel = new Label(this, SWT.NONE);
+		SashForm sashForm = new SashForm(this, SWT.VERTICAL);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 2;
+		sashForm.setLayoutData(gridData);
+		
+		XComposite xc = new XComposite(sashForm, SWT.NONE);
+		xc.getGridLayout().numColumns = 2;
+		xc.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		subjectLabel = new Label(xc, SWT.NONE);
 		subjectLabel.setText("Subject:");
 
-		subjectText = new I18nTextEditor(this);
+		subjectText = new I18nTextEditor(xc);
 		subjectText.setI18nText(issue.getSubject(), EditMode.BUFFERED);
+		subjectText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		descriptionLabel = new Label(this, SWT.NONE);
+		descriptionLabel = new Label(xc, SWT.NONE);
 		descriptionLabel.setText("Description:");
 
-		descriptionText = new I18nTextEditorMultiLine(this);
+		descriptionText = new I18nTextEditorMultiLine(xc);
 		descriptionText.setI18nText(issue.getDescription(), EditMode.BUFFERED);
-
-		gridData = new GridData(GridData.FILL_BOTH);
-		descriptionText.setLayoutData(gridData);
+		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		fileLabel = new Label(this, SWT.NONE);
+		fileLabel = new Label(xc, SWT.NONE);
 		fileLabel.setText("Files:");
 
 	}
