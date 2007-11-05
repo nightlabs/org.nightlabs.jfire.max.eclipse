@@ -56,10 +56,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ClientJFSDriver;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
+import org.nightlabs.jfire.reporting.oda.jfs.client.ClientJFSDriver;
 
 /**
  * DataSet WizardPage that lets the user pick a JFireScript that

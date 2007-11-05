@@ -2,168 +2,14 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension
-         point="org.eclipse.datatools.connectivity.oda.dataSource">
-      <dataSource
-            defaultDisplayName="JFire JDOQL Driver"
-            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jdoql.client.ClientJDOQLDriver"
-            id="org.nightlabs.jfire.reporting.admin.ui.oda.jdoql.JDOQLDriver"
-            odaVersion="3.0"
-            setThreadContextClassLoader="false">
-      </dataSource>
-      <dataSet
-            defaultDisplayName="JDOQL Data Set"            
-            id="org.nightlabs.jfire.reporting.ui.oda.jdoql.JDOQLDataSet">
-         <dataTypeMapping
-               nativeDataType="String"
-               nativeDataTypeCode="1"
-               odaScalarDataType="String"/>
-         <dataTypeMapping
-               nativeDataType="Integer"
-               nativeDataTypeCode="2"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Double"
-               nativeDataTypeCode="3"
-               odaScalarDataType="Double"/>
-         <dataTypeMapping
-               nativeDataType="Boolean"
-               nativeDataTypeCode="4"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Date"
-               nativeDataTypeCode="5"
-               odaScalarDataType="Date"/>
-         <dataTypeMapping
-               nativeDataType="Time"
-               nativeDataTypeCode="92"
-               odaScalarDataType="Time"/>
-         <dataTypeMapping
-               nativeDataType="Timestamp"
-               nativeDataTypeCode="93"
-               odaScalarDataType="Timestamp"/>
-         <dataTypeMapping
-               nativeDataType="BigDecimal(Long)"
-               nativeDataTypeCode="6"
-               odaScalarDataType="Integer"/>
-      </dataSet>
-   </extension>      
-   <extension
-         point="org.eclipse.datatools.connectivity.oda.dataSource">
-      <dataSource
-            defaultDisplayName="JFire JDO JavaScript Driver"
-            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.client.ClientJDOJSDriver"
-            id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDriver"
-            odaVersion="3.0"
-            setThreadContextClassLoader="false">
-      </dataSource>
-      <dataSet
-            defaultDisplayName="JDO JavaScript Data Set"            
-            id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDataSet">
-         <dataTypeMapping
-               nativeDataType="String"
-               nativeDataTypeCode="1"
-               odaScalarDataType="String"/>
-         <dataTypeMapping
-               nativeDataType="Integer"
-               nativeDataTypeCode="2"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Double"
-               nativeDataTypeCode="3"
-               odaScalarDataType="Double"/>
-         <dataTypeMapping
-               nativeDataType="Boolean"
-               nativeDataTypeCode="4"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Date"
-               nativeDataTypeCode="5"
-               odaScalarDataType="Date"/>
-         <dataTypeMapping
-               nativeDataType="Time"
-               nativeDataTypeCode="92"
-               odaScalarDataType="Time"/>
-         <dataTypeMapping
-               nativeDataType="Timestamp"
-               nativeDataTypeCode="93"
-               odaScalarDataType="Timestamp"/>
-         <dataTypeMapping
-               nativeDataType="BigDecimal(Long)"
-               nativeDataTypeCode="6"
-               odaScalarDataType="Decimal"/>
-         <properties>
-            <property
-                  canInherit="true"
-                  defaultDisplayName="fetch script"
-                  isEncryptable="false"
-                  name="fetchScript"
-                  type="string"/>
-         </properties>
-      </dataSet>
-   </extension>
-   
-    <extension
-         point="org.eclipse.datatools.connectivity.oda.dataSource">
-      <dataSource
-            defaultDisplayName="JFire Server Side Script Driver"
-            driverClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ClientJFSDriver"
-            id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDriver"
-            odaVersion="3.0"
-            setThreadContextClassLoader="false">
-      </dataSource>
-      <dataSet
-            defaultDisplayName="Server Side JFire Script Data Set"            
-            id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDataSet">
-         <dataTypeMapping
-               nativeDataType="String"
-               nativeDataTypeCode="1"
-               odaScalarDataType="String"/>
-         <dataTypeMapping
-               nativeDataType="Integer"
-               nativeDataTypeCode="2"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Double"
-               nativeDataTypeCode="3"
-               odaScalarDataType="Double"/>
-         <dataTypeMapping
-               nativeDataType="Boolean"
-               nativeDataTypeCode="4"
-               odaScalarDataType="Integer"/>
-         <dataTypeMapping
-               nativeDataType="Date"
-               nativeDataTypeCode="5"
-               odaScalarDataType="Date"/>
-         <dataTypeMapping
-               nativeDataType="Time"
-               nativeDataTypeCode="92"
-               odaScalarDataType="Time"/>
-         <dataTypeMapping
-               nativeDataType="Timestamp"
-               nativeDataTypeCode="93"
-               odaScalarDataType="Timestamp"/>
-         <dataTypeMapping
-               nativeDataType="BigDecimal(Long)"
-               nativeDataTypeCode="6"
-               odaScalarDataType="Decimal"/>
-<!--         <dataTypeMapping
-               nativeDataType="JavaObject"
-               nativeDataTypeCode="2000"
-               odaScalarDataType="Any"/> -->
-      </dataSet>
-    </extension>    
-   
-      
-   
-   <extension
          point="org.eclipse.birt.report.designer.ui.odadatasource">
-      <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jdoql.JDOQLDriver">
+      <odaDataSourceUI id="org.nightlabs.jfire.reporting.oda.jdoql.JDOQLDriver">
          <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
-      <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDriver">
+      <odaDataSourceUI id="org.nightlabs.jfire.reporting.oda.jdojs.JDOJSDriver">
          <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
       </odaDataSourceUI>
-      <odaDataSetUI id="org.nightlabs.jfire.reporting.ui.oda.jdojs.JDOJSDataSet">
+      <odaDataSetUI id="org.nightlabs.jfire.reporting.oda.jdojs.JDOJSDataSet">
          <dataSetEditorPage
                class="org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui.PrepareScriptEditorPage"
                displayName="prepare script"
@@ -176,37 +22,6 @@
                path="/"/>
       </odaDataSetUI>
    </extension>
-<!--   <extension
-         point="org.eclipse.birt.report.designer.ui.odadatasource">
-      <odaDataSourceUI id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDriver">
-         <newDataSourceWizard class="org.nightlabs.jfire.reporting.admin.ui.oda.JDODriverConnectionWizard"/>
-      </odaDataSourceUI>
-      <odaDataSetUI id="org.nightlabs.jfire.reporting.ui.oda.jfs.JFSDataSet">
-         <dataSetEditorPage
-               class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage2"
-               displayName="JFire Script"
-               name="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
-               path="/"/> 
-      </odaDataSetUI>
-   </extension>  -->
-<!--   <extension
-         point="org.nightlabs.classsharing.globalclasspublish">
-      <globalClassPublish pattern="^com\.nightlabs\.jfire\.reporting\.admin\.oda\..*"/>
-      <resourcePublish
-            bundle="org.eclipse.birt.core"
-            pattern="org\/eclipse\/birt\/core.*"/>
-
-      <resourcePublish
-            bundle="org.eclipse.birt.report.designer.ui"
-            pattern="org\/eclipse\/birt\/report\/designer\/ui\/.*"/>
-      <resourcePublish
-            bundle="org.eclipse.ui"
-            pattern="org\/eclipse\/ui\/IPathEditorInput.*"/>
-      <resourcePublish
-            bundle="org.eclipse.ui"
-            pattern="org\/eclipse\/ui\/IEditorInput.*"/> 
-            
-   </extension> -->
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -354,33 +169,7 @@
                id="org.eclipse.datatools.connectivity.oda.IConnection"
                name="JFS Connection Factory"
                profile="%jfs.dataSource.id"/>
-<!--               
-         <connectionFactory
-               class="org.eclipse.datatools.connectivity.oda.profile.OdaConnectionFactory"
-               id="%jfs.connectionFactory.id"
-               name="%jfs.connectionFactory.name"
-               profile="%jfs.dataSource.id"/>
-         <newWizard
-               class="org.eclipse.datatools.connectivity.oda.design.ui.wizards.NewDataSourceWizard"
-               description="%jfs.newWizard.description"
-               id="%jfs.dataSource.id"
-               name="%jfs.newWizard.name"
-               profile="%jfs.dataSource.id"/>
--->               
       </extension>
-<!--      <extension
-            point="org.eclipse.ui.propertyPages">
-    	  <page
-	            id="%jfs.dataSource.id"
-            	name="%jfs.propertyPage.name"
-        	    class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSDataSourceEditorPage"
-    	        objectClass="org.eclipse.datatools.connectivity.IConnectionProfile">
-	         <filter
-        	       name="org.eclipse.datatools.profile.property.id"
-    	           value="%jfs.dataSource.id"/>
-	      </page>
-      </extension>
--->
      <extension
            point="org.eclipse.ui.propertyPages">
         <page
@@ -414,13 +203,6 @@
                   id="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireScriptRegistryItemWizardPage"
                   path="/"
                   wizardPageClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSQueryPropertySetWizardPage"/>
-<!--            <dataSetPage
-                  displayName="Parameters 2"
-                  icon="icons/ReportingAdminPerspective.16x16.png"
-                  id="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSParameterWizardPage"
-                  path="/"
-                  wizardPageClass="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSParameterWizardPage"/>
-                  -->
          </dataSetUI> 
       </extension>
     <extension
