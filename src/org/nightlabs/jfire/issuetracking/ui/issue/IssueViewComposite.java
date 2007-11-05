@@ -32,6 +32,8 @@ public class IssueViewComposite extends XComposite{
 
 	private Label userLbl;
 	private Label userTextLbl;
+	private Label createTimeLbl;
+	private Label createTimeTextLbl;
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
 
@@ -75,17 +77,22 @@ public class IssueViewComposite extends XComposite{
 		peopleGroup.setLayoutData(gridData);
 		
 		XComposite peopleComposite = createPersonComposite(peopleGroup);
-		//-------------------------------------------------------
+		//-----------------DATE GROUP-------------------------------------
 		Group datesGroup = new Group(this, SWT.NONE);
 		datesGroup.setText("Dates");
+		datesGroup.setLayout(new GridLayout(1, false));
 		gridData = new GridData(GridData.FILL_BOTH);
 		datesGroup.setLayoutData(gridData);
 		
+		XComposite dateComposite = createDateComposite(datesGroup);
+		//------------------------RELATIONSHIP GROUP----------------------
 		Group relationshipsGroup = new Group(this, SWT.NONE);
+		relationshipsGroup.setLayout(new GridLayout(1, false));
 		relationshipsGroup.setText("Relationships");
 		gridData = new GridData(GridData.FILL_BOTH);
 		relationshipsGroup.setLayoutData(gridData);
 
+		XComposite relationshipsComposite = createDetailComposite(relationshipsGroup);
 		//--------------------------------------------------------
 		SashForm sashForm = new SashForm(this, SWT.VERTICAL);
 		gridData = new GridData(GridData.FILL_BOTH);
@@ -177,9 +184,52 @@ public class IssueViewComposite extends XComposite{
 	}
 	
 	private XComposite createDateComposite(Composite parent){
-		return null;
+		XComposite c = new XComposite(parent, SWT.NONE);
+		c.getGridLayout().numColumns = 2;
+		/**********USER**********/
+		createTimeLbl = new Label(c, SWT.NONE);
+		createTimeLbl.setAlignment(SWT.RIGHT);
+		createTimeLbl.setText("Create Time:");
+		
+		XComposite dateComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		dateComposite.getGridLayout().numColumns = 2;
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		dateComposite.setLayoutData(gridData);
+		
+		createTimeTextLbl = new Label(dateComposite, SWT.NONE);
+		gridData  = new GridData(GridData.FILL_BOTH);
+		gridData.grabExcessHorizontalSpace = true;
+		createTimeTextLbl.setLayoutData(gridData);
+		
+		createTimeTextLbl.setText(issue.getCreateTimestamp().toString());
+		
+		/************************/
+		return c;
 	}
 	private XComposite createDetailComposite(Composite parent){
-		return null;
+		XComposite c = new XComposite(parent, SWT.NONE);
+		c.getGridLayout().numColumns = 2;
+		/**********USER**********/
+		userLbl = new Label(c, SWT.NONE);
+		userLbl.setAlignment(SWT.RIGHT);
+		userLbl.setText("User:");
+		
+		XComposite userComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		userComposite.getGridLayout().numColumns = 2;
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		userComposite.setLayoutData(gridData);
+		
+		userTextLbl = new Label(userComposite, SWT.NONE);
+		gridData  = new GridData(GridData.FILL_BOTH);
+		gridData.grabExcessHorizontalSpace = true;
+		userTextLbl.setLayoutData(gridData);
+		userTextLbl.setText(issue.getUser().getName());
+		
+		/************************/
+		return c;
 	}
 }
