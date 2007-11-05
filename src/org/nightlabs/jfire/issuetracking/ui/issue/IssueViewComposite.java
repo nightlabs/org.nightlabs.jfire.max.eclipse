@@ -16,7 +16,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
-import org.nightlabs.jfire.security.User;
 
 public class IssueViewComposite extends XComposite{
 	
@@ -43,7 +42,7 @@ public class IssueViewComposite extends XComposite{
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
 	
-	private User selectedUser;
+	private Issue selectedUser;
 	
 	private Issue issue;
 	

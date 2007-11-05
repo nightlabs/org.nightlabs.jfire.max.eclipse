@@ -7,7 +7,6 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
