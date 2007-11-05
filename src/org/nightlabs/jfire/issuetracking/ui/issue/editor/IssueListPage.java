@@ -101,13 +101,39 @@ public class IssueListPage extends EntityEditorPageWithProgress
 		XComposite tableComposite = new XComposite(parent, SWT.NONE);
 		tableComposite.getGridLayout().numColumns = 2;
 		
+		Label l1 = new Label(tableComposite, SWT.NONE);
+		l1.setAlignment(SWT.CENTER);
+		l1.setText("Most recently issues");
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		l1.setLayoutData(gridData);
+		
+		Label l2 = new Label(tableComposite, SWT.NONE);
+		l2.setAlignment(SWT.CENTER);
+		l2.setText("Summary");
+		l2.setLayoutData(gridData);
+		
 		IssueTable issueTable = new IssueTable(tableComposite, SWT.NONE);
+		gridData = new GridData(GridData.FILL_BOTH);
+		issueTable.setLayoutData(gridData);
 		
 		IssueTable issueTable2 = new IssueTable(tableComposite, SWT.NONE);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.verticalSpan = 3;
+		gridData.verticalAlignment = GridData.FILL;
+		issueTable2.setLayoutData(gridData);
+		
+		Label l3 = new Label(tableComposite, SWT.NONE);
+		l3.setAlignment(SWT.CENTER);
+		l3.setText("Resolved issues");
+		gridData = new GridData();
+		gridData.horizontalAlignment = GridData.FILL;
+		l3.setLayoutData(gridData);
 		
 		IssueTable issueTable3 = new IssueTable(tableComposite, SWT.NONE);
-		
-		IssueTable issueTable4 = new IssueTable(tableComposite, SWT.NONE);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.verticalSpan = 1;
+		issueTable3.setLayoutData(gridData);
 	}
 
 	@Override
