@@ -26,19 +26,15 @@
 
 package org.nightlabs.jfire.reporting.ui.layout;
 
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMenuManager;
-import org.nightlabs.jfire.reporting.ui.layout.action.view.ViewReportLayoutAction;
 
 /**
  * Abstract class as a basis for Views that need to display
@@ -94,7 +90,6 @@ extends LSDViewPart
 			}
 		});
 		registryItemTree.getTreeViewer().expandToLevel(4);
-		registryItemTree.getTreeViewer().addDoubleClickListener(doubleClickListener);
 	}
 	
 	public abstract String getActionScope();
@@ -113,13 +108,7 @@ extends LSDViewPart
 		return registryItemTree;
 	}
 	
-	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
-		public void doubleClick(DoubleClickEvent event) {
-			ActionDescriptor ad = contextMenuManager.getActionRegistry().getActionDescriptor(
-					ViewReportLayoutAction.ID, false);
-			if (ad != null) {
-				ad.getAction().run();
-			}
-		}
-	};
+	protected ReportRegistryItemActionMenuManager getContextMenuManager() {
+		return contextMenuManager;
+	}
 }

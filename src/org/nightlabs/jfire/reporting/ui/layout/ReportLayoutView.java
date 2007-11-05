@@ -26,7 +26,12 @@
 
 package org.nightlabs.jfire.reporting.ui.layout;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.jfire.reporting.ui.layout.action.view.ViewReportLayoutAction;
 
 /**
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
@@ -36,10 +41,26 @@ public class ReportLayoutView extends ReportRegistryItemTreeView {
 
 	public static final String ID_VIEW = ReportLayoutView.class.getName();
 		
+	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
+		public void doubleClick(DoubleClickEvent event) {
+			ActionDescriptor ad = getContextMenuManager().getActionRegistry().getActionDescriptor(
+					ViewReportLayoutAction.ID, false);
+			if (ad != null) {
+				ad.getAction().run();
+			}
+		}
+	};
+	
 	public ReportLayoutView() {
 		super();
 	}
 
+	@Override
+	public void createPartContents(Composite parent) {
+		super.createPartContents(parent);
+		getRegistryItemTree().getTreeViewer().addDoubleClickListener(doubleClickListener);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemTreeView#getActionScope()
 	 */
