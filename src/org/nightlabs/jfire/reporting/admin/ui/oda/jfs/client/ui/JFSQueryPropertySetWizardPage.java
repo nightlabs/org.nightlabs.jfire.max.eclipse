@@ -289,10 +289,8 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
         
         // no exception in conversion; go ahead and assign to specified dataSetDesign
         paramDesign.setDerivedMetaData( true );
-        dataSetDesign.setParameters( paramDesign );
-
-        // TODO replace below with data source specific implementation;
-        // hard-coded parameter's default value for demo purpose
+        // TODO WORKAROUND
+        // hard-coded parameter's default because bindings will be ignored if no default value set :-(
         if( paramDesign.getParameterDefinitions().size() > 0 )
         {
             ParameterDefinition paramDef = 
@@ -300,6 +298,8 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
             if( paramDef != null )
                 paramDef.setDefaultScalarValue("\"\""); //$NON-NLS-1$
         }
+        dataSetDesign.setParameters( paramDesign );
+
     }
     
     /**
