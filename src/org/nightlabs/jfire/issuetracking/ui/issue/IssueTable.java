@@ -212,7 +212,7 @@ extends AbstractTableComposite<Issue>
 					break;
 				case(6):
 					if(issue.getStatus() != null)
-						return issue.getStatus().getIssueStatusText().getText();
+						return issue.getStatus().getProcessDefinition().getJbpmProcessDefinitionName();
 					break;
 				default:
 					return ""; //$NON-NLS-1$

@@ -10,5 +10,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireIssueTracking"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

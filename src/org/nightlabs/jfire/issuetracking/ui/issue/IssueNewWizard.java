@@ -36,7 +36,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue = new Issue(Login.getLogin().getOrganisationID(),
 					issueNewPage.getIssueCreateComposite().getSelectedIssuePriority(), 
 					issueNewPage.getIssueCreateComposite().getSelectedIssueSeverityType(), 
-					issueNewPage.getIssueCreateComposite().getSelectedIssueStatus(), 
+					issueNewPage.getIssueCreateComposite().getSelectedState(), 
 					issueNewPage.getIssueCreateComposite().getSelectedUser(),
 					null);
 			
