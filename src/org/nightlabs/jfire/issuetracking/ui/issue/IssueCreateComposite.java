@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -68,30 +69,34 @@ public class IssueCreateComposite extends XComposite{
 	private String[] documentTypes = new String[]{DeliveryNote.class.getName(), ReceptionNote.class.getName(), 
 			Invoice.class.getName(), Offer.class.getName()};
 
-	private Map<String, Collection<StateDefinition>> stateMap = new HashMap<String, Collection<StateDefinition>>();
+	private Map<String, Collection<StateDefinition>> stateDefinitionMap = new HashMap<String, Collection<StateDefinition>>();
 
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
-	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
+//	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
-//	final Set<StateDefinition> allStateDefinitions = new HashSet<StateDefinition>();
 
 	private String selectedDocumentType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
-	private Label documentLbl;
-	private XComboComposite<String> documentCombo;
-	private Label severityLbl;
-	private XComboComposite<IssueSeverityType> severityCombo;
-	private Label statusLbl;
-	private XComboComposite<StateDefinition> statusCombo;
-	private Label priorityLbl;
-	private XComboComposite<IssuePriority> priorityCombo;
+	private Label documentTypeLbl;
+	private XComboComposite<String> documentTypeCombo;
+	private Label issueSeverityLbl;
+	private XComboComposite<IssueSeverityType> issueSeverityCombo;
+	private Label stateDefinitionLbl;
+	private XComboComposite<StateDefinition> stateDefinitionCombo;
+	private Label issuePriorityLbl;
+	private XComboComposite<IssuePriority> issuePriorityCombo;
 
-	private Label userLbl;
-	private Text userText;
-	private Button userButton;
+	private Label reporterLbl;
+	private Text reporterText;
+	private Button reporterButton;
+	
+	private Label toUserLbl;
+	private Text toUserText;
+	private Button toUserButton;
+	
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
 
@@ -103,7 +108,8 @@ public class IssueCreateComposite extends XComposite{
 
 	private Button submitButton;
 
-	private User selectedUser;
+	private User selectedReporter;
+	private User selectedUndertaker;
 
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
@@ -122,79 +128,114 @@ public class IssueCreateComposite extends XComposite{
 
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 
-		documentLbl = new Label(this, SWT.NONE);
-		documentLbl.setText("Document Type: ");
-		documentCombo = new XComboComposite<String>(this, SWT.NONE, labelProvider);
-		documentCombo.setInput(CollectionUtil.array2ArrayList(documentTypes));
-		documentCombo.selectElementByIndex(0);
-		documentCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		documentTypeLbl = new Label(this, SWT.NONE);
+		documentTypeLbl.setText("Document Type: ");
+		documentTypeCombo = new XComboComposite<String>(this, SWT.NONE, labelProvider);
+		documentTypeCombo.setInput(CollectionUtil.array2ArrayList(documentTypes));
+		documentTypeCombo.selectElementByIndex(0);
+		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				selectedDocumentType = documentCombo.getSelectedElement();
-				statusCombo.removeAll();
-				Collection<StateDefinition> states = stateMap.get(selectedDocumentType);
+				selectedDocumentType = documentTypeCombo.getSelectedElement();
+				stateDefinitionCombo.removeAll();
+				Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
 				for(StateDefinition state : states){
-					statusCombo.addElement(state);
+					stateDefinitionCombo.addElement(state);
 				}//for
-				statusCombo.selectElementByIndex(0);
+				stateDefinitionCombo.selectElementByIndex(0);
 			}
 		});
 
-		statusLbl = new Label(this, SWT.NONE);
-		statusLbl.setText("Status: ");
-		statusCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
-		statusCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		stateDefinitionLbl = new Label(this, SWT.NONE);
+		stateDefinitionLbl.setText("State: ");
+		stateDefinitionCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
+		stateDefinitionCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				selectedState = statusCombo.getSelectedElement();
+				selectedState = stateDefinitionCombo.getSelectedElement();
 			}
 		});
 
-		severityLbl = new Label(this, SWT.NONE);
-		severityLbl.setText("Severity: ");
-		severityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
-		severityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		issueSeverityLbl = new Label(this, SWT.NONE);
+		issueSeverityLbl.setText("Severity: ");
+		issueSeverityCombo = new XComboComposite<IssueSeverityType>(this, SWT.NONE, labelProvider);
+		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				selectedIssueSeverityType = severityCombo.getSelectedElement();
+				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 			}
 		});
 
-		priorityLbl = new Label(this, SWT.NONE);
-		priorityLbl.setText("Priority: ");
-		priorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
-		priorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		issuePriorityLbl = new Label(this, SWT.NONE);
+		issuePriorityLbl.setText("Priority: ");
+		issuePriorityCombo = new XComboComposite<IssuePriority>(this, SWT.NONE, labelProvider);
+		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				selectedIssuePriority = priorityCombo.getSelectedElement();
+				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 			}
 		});
 
-		/**********USER**********/
-		userLbl = new Label(this, SWT.NONE);
-		userLbl.setText("User: ");
+		/**********Reporter**********/
+		reporterLbl = new Label(this, SWT.NONE);
+		reporterLbl.setText("Reporter: ");
 
-		XComposite userComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		userComposite.getGridLayout().numColumns = 2;
+		XComposite reporterComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		reporterComposite.getGridLayout().numColumns = 2;
 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		userComposite.setLayoutData(gridData);
+		reporterComposite.setLayoutData(gridData);
 
-		userText = new Text(userComposite, SWT.BORDER);
+		reporterText = new Text(reporterComposite, SWT.BORDER);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
-		userText.setLayoutData(gridData);
+		reporterText.setLayoutData(gridData);
+		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		reporterText.setText(selectedReporter.getName());
+		
+		reporterButton = new Button(reporterComposite, SWT.PUSH);
+		reporterButton.setText("Choose User");
 
-		userButton = new Button(userComposite, SWT.PUSH);
-		userButton.setText("Choose User");
-
-		userButton.addSelectionListener(new SelectionAdapter(){
+		reporterButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), userText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), reporterText.getText());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
-					selectedUser = userSearchDialog.getSelectedUser();
+					selectedReporter = userSearchDialog.getSelectedUser();
 //					userID = (UserID) JDOHelper.getObjectId(selectedUser);
-					if (selectedUser != null)
-						userText.setText(selectedUser.getName());
+					if (selectedReporter != null)
+						reporterText.setText(selectedUndertaker.getName());
+				}//if
+			}
+		});
+		/************************/
+		/**********Assigned To**********/
+		toUserLbl = new Label(this, SWT.NONE);
+		toUserLbl.setText("Assigned To: ");
+
+		XComposite toUserComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		toUserComposite.getGridLayout().numColumns = 2;
+
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		toUserComposite.setLayoutData(gridData);
+
+		toUserText = new Text(toUserComposite, SWT.BORDER);
+		gridData  = new GridData(GridData.FILL_BOTH);
+		gridData.grabExcessHorizontalSpace = true;
+		toUserText.setLayoutData(gridData);
+
+		toUserButton = new Button(toUserComposite, SWT.PUSH);
+		toUserButton.setText("Choose User");
+
+		toUserButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), toUserText.getText());
+				int returnCode = userSearchDialog.open();
+				if (returnCode == Dialog.OK) {
+					selectedUndertaker = userSearchDialog.getSelectedUser();
+//					userID = (UserID) JDOHelper.getObjectId(selectedUser);
+					if (selectedUndertaker != null)
+						toUserText.setText(selectedUndertaker.getName());
 				}//if
 			}
 		});
@@ -232,7 +273,7 @@ public class IssueCreateComposite extends XComposite{
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
-					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
+//					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
 					issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(monitor);
 
 				} catch (Exception e) {
@@ -241,25 +282,25 @@ public class IssueCreateComposite extends XComposite{
 				}
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						severityCombo.removeAll();
+						issueSeverityCombo.removeAll();
 						for (Iterator it = issueSeverityTypes.iterator(); it.hasNext(); ) {
 							IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
-							severityCombo.addElement(issueSeverityType);
+							issueSeverityCombo.addElement(issueSeverityType);
 						}
-						severityCombo.selectElementByIndex(0);
-						selectedIssueSeverityType = severityCombo.getSelectedElement();
+						issueSeverityCombo.selectElementByIndex(0);
+						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 					}
 				});
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						priorityCombo.removeAll();
+						issuePriorityCombo.removeAll();
 						for (Iterator it = issuePriorities.iterator(); it.hasNext(); ) {
 							IssuePriority ip = (IssuePriority) it.next();
-							priorityCombo.addElement(ip);
+							issuePriorityCombo.addElement(ip);
 						}
-						priorityCombo.selectElementByIndex(0);
-						selectedIssuePriority = priorityCombo.getSelectedElement();
+						issuePriorityCombo.selectElementByIndex(0);
+						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 					}
 				});
 
@@ -328,7 +369,7 @@ public class IssueCreateComposite extends XComposite{
 	}
 
 	public User getSelectedUser() {
-		return selectedUser;
+		return selectedUndertaker;
 	}
 
 	public I18nTextEditorMultiLine getDescriptionText() {
@@ -372,7 +413,7 @@ public class IssueCreateComposite extends XComposite{
 									STATE_DEFINITION_FETCH_GROUPS, 
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 									monitor);
-							stateMap.put(type, stateDefinitions);
+							stateDefinitionMap.put(type, stateDefinitions);
 //							allStateDefinitions.addAll(stateDefinitions);				
 						}//for
 					}//for
