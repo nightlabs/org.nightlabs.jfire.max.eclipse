@@ -144,7 +144,7 @@ public class IssueCreateComposite extends XComposite{
 		statusCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
 		statusCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-//				selectedIssueSeverityType = severityCombo.getSelectedElement();
+				selectedState = statusCombo.getSelectedElement();
 			}
 		});
 

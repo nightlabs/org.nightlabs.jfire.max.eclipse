@@ -140,7 +140,7 @@ public class IssueViewComposite extends XComposite{
 		statusLbl.setText("Status:");
 
 		statusTextLbl = new Label(mainComposite, SWT.NONE);	
-		statusTextLbl.setText(issue.getStatus().getJbpmNodeName());
+		statusTextLbl.setText(issue.getStatus().getProcessDefinitionID());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		statusTextLbl.setLayoutData(gridData);

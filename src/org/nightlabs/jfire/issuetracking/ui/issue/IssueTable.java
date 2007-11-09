@@ -31,6 +31,8 @@ import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
@@ -54,7 +56,8 @@ extends AbstractTableComposite<Issue>
 		Issue.FETCH_GROUP_SUBJECT, 
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
-		IssueStatus.FETCH_GROUP_THIS};
+		IssueStatus.FETCH_GROUP_THIS,
+		StateDefinition.FETCH_GROUP_NAME};
 
 	public IssueTable(Composite parent, int style)
 	{
@@ -70,7 +73,6 @@ extends AbstractTableComposite<Issue>
 
 				Issue issue = (Issue)s.getFirstElement();
 				try {
-					System.out.println(issue.getIssueID());
 					IssueViewDialog d = new IssueViewDialog(getShell(), issue);
 					d.open();
 				} catch (Exception ex) {
@@ -212,7 +214,7 @@ extends AbstractTableComposite<Issue>
 					break;
 				case(6):
 					if(issue.getStatus() != null)
-						return issue.getStatus().getProcessDefinition().getJbpmProcessDefinitionName();
+						return issue.getStatus().getName().getText();
 					break;
 				default:
 					return ""; //$NON-NLS-1$
