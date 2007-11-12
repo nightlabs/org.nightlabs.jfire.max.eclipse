@@ -33,6 +33,7 @@ public class IssueViewDialog extends CenteredDialog{
 		
 		XComposite buttonComposite = new XComposite(parent, SWT.NONE);
 		buttonComposite.getGridLayout().numColumns = 7;
+		buttonComposite.getGridData().grabExcessVerticalSpace = false;
 		
 		Button editButton = new Button(buttonComposite, SWT.PUSH);
 		editButton.setText("Edit");

@@ -60,19 +60,19 @@ public class IssueViewComposite extends XComposite{
 	 */
 	protected void createComposite(Composite parent) 
 	{
-		setLayout(new GridLayout(2, false));
+		setLayout(new GridLayout(2, true));
 		
 		Group basicsGroup = new Group(this, SWT.NONE);
 		basicsGroup.setText("The Basics");
-		basicsGroup.setLayout(new GridLayout(1, false));
+		basicsGroup.setLayout(new GridLayout(1, true));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		basicsGroup.setLayoutData(gridData);
 		
 		XComposite basicsComposite = createBasicsComposite(basicsGroup);
-		//-------------------------------------------------------
+		//-----------------PEOPLE GROUP----------------------------------
 		Group peopleGroup = new Group(this, SWT.NONE);
 		peopleGroup.setText("People");
-		peopleGroup.setLayout(new GridLayout(1, false));
+		peopleGroup.setLayout(new GridLayout(1, true));
 		gridData = new GridData(GridData.FILL_BOTH);
 		peopleGroup.setLayoutData(gridData);
 		
@@ -80,14 +80,14 @@ public class IssueViewComposite extends XComposite{
 		//-----------------DATE GROUP-------------------------------------
 		Group datesGroup = new Group(this, SWT.NONE);
 		datesGroup.setText("Dates");
-		datesGroup.setLayout(new GridLayout(1, false));
+		datesGroup.setLayout(new GridLayout(1, true));
 		gridData = new GridData(GridData.FILL_BOTH);
 		datesGroup.setLayoutData(gridData);
 		
 		XComposite dateComposite = createDateComposite(datesGroup);
 		//------------------------RELATIONSHIP GROUP----------------------
 		Group relationshipsGroup = new Group(this, SWT.NONE);
-		relationshipsGroup.setLayout(new GridLayout(1, false));
+		relationshipsGroup.setLayout(new GridLayout(1, true));
 		relationshipsGroup.setText("Relationships");
 		gridData = new GridData(GridData.FILL_BOTH);
 		relationshipsGroup.setLayoutData(gridData);
