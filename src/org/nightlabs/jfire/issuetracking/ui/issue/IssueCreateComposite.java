@@ -46,7 +46,6 @@ import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
-import org.nightlabs.jfire.issue.dao.IssueStatusDAO;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
 import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
@@ -114,8 +113,6 @@ public class IssueCreateComposite extends XComposite{
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
 		createComposite(this);
-
-		loadStates();
 	}
 
 	/**
@@ -206,7 +203,7 @@ public class IssueCreateComposite extends XComposite{
 				}//if
 			}
 		});
-		/************************/
+		/*******************************/
 		/**********Assigned To**********/
 		toUserLbl = new Label(this, SWT.NONE);
 		toUserLbl.setText("Assigned To: ");
@@ -270,41 +267,102 @@ public class IssueCreateComposite extends XComposite{
 
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
-			protected IStatus run(ProgressMonitor monitor) {
+			protected IStatus run(final ProgressMonitor monitor) {
 				try {
+					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
+					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					
 					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
 //					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
 					issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(monitor);
 
-				} catch (Exception e) {
-					ExceptionHandlerRegistry.asyncHandleException(e);
-					throw new RuntimeException(e);
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							issueSeverityCombo.removeAll();
+							for (Iterator it = issueSeverityTypes.iterator(); it.hasNext(); ) {
+								IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
+								issueSeverityCombo.addElement(issueSeverityType);
+							}
+							issueSeverityCombo.selectElementByIndex(0);
+							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+						}
+					});
+
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							issuePriorityCombo.removeAll();
+							for (Iterator it = issuePriorities.iterator(); it.hasNext(); ) {
+								IssuePriority ip = (IssuePriority) it.next();
+								issuePriorityCombo.addElement(ip);
+							}
+							issuePriorityCombo.selectElementByIndex(0);
+							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+						}
+					});
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							for(final String type : documentTypes){
+								try {
+									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type);
+									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
+											FetchPlan.DEFAULT,
+											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
+									};
+									Collection<ProcessDefinition> processDefinitions;
+
+									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
+											processDefinitionIDs, 
+											PROCESS_DEFINITION_FETCH_GROUPS, 
+											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+											monitor);
+
+									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
+											FetchPlan.DEFAULT,
+											StateDefinition.FETCH_GROUP_NAME
+									};
+
+
+									for (ProcessDefinition processDefinition : processDefinitions){
+										Set<StateDefinitionID> statedDefinitionIDs;
+										try {
+											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
+											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
+													statedDefinitionIDs, 
+													STATE_DEFINITION_FETCH_GROUPS, 
+													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+													monitor);
+											stateDefinitionMap.put(type, stateDefinitions);
+//											allStateDefinitions.addAll(stateDefinitions);		
+										} catch (Exception e) {
+											ExceptionHandlerRegistry.asyncHandleException(e);
+											throw new RuntimeException(e);
+										}
+									}//for
+
+									documentTypeCombo.selectElementByIndex(0);
+									selectedDocumentType = documentTypeCombo.getSelectedElement();
+									
+									stateDefinitionCombo.removeAll();
+									Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
+									for(StateDefinition state : states){
+										stateDefinitionCombo.addElement(state);
+									}//for
+									stateDefinitionCombo.selectElementByIndex(0);
+								}//try
+								catch (Exception e1) {
+									ExceptionHandlerRegistry.asyncHandleException(e1);
+									throw new RuntimeException(e1);
+								}
+							}//for
+						}//run
+					});
+					
+					return Status.OK_STATUS;
+				}catch (Exception e1) {
+					ExceptionHandlerRegistry.asyncHandleException(e1);
+					throw new RuntimeException(e1);
 				}
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						issueSeverityCombo.removeAll();
-						for (Iterator it = issueSeverityTypes.iterator(); it.hasNext(); ) {
-							IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
-							issueSeverityCombo.addElement(issueSeverityType);
-						}
-						issueSeverityCombo.selectElementByIndex(0);
-						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-					}
-				});
-
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						issuePriorityCombo.removeAll();
-						for (Iterator it = issuePriorities.iterator(); it.hasNext(); ) {
-							IssuePriority ip = (IssuePriority) it.next();
-							issuePriorityCombo.addElement(ip);
-						}
-						issuePriorityCombo.selectElementByIndex(0);
-						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
-					}
-				});
-
-				return Status.OK_STATUS;
 			} 
 
 		};
@@ -378,55 +436,5 @@ public class IssueCreateComposite extends XComposite{
 
 	public I18nTextEditor getSubjectText() {
 		return subjectText;
-	}
-
-	private void loadStates(){
-		Job loadJob = new Job("Loading Issue Properties....") {
-			@Override
-			protected IStatus run(ProgressMonitor monitor) {
-				try{
-					TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
-					JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
-					for(String type : documentTypes){
-						Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type);
-						String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
-								FetchPlan.DEFAULT,
-								ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
-						};
-						Collection<ProcessDefinition> processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-								processDefinitionIDs, 
-								PROCESS_DEFINITION_FETCH_GROUPS, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-
-						String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
-								FetchPlan.DEFAULT,
-								StateDefinition.FETCH_GROUP_NAME
-						};
-
-						for (ProcessDefinition processDefinition : processDefinitions) 
-						{
-							Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
-							Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
-									statedDefinitionIDs, 
-									STATE_DEFINITION_FETCH_GROUPS, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-									monitor);
-							stateDefinitionMap.put(type, stateDefinitions);
-//							allStateDefinitions.addAll(stateDefinitions);				
-						}//for
-					}//for
-					return Status.OK_STATUS;
-				} catch (Exception e) {
-					ExceptionHandlerRegistry.asyncHandleException(e);
-					throw new RuntimeException(e);
-				}
-
-			} 
-
-		};
-		loadJob.setPriority(Job.SHORT);
-		loadJob.schedule();
 	}
 }
