@@ -349,6 +349,8 @@ public class IssueCreateComposite extends XComposite{
 										stateDefinitionCombo.addElement(state);
 									}//for
 									stateDefinitionCombo.selectElementByIndex(0);
+									
+									selectedState = stateDefinitionCombo.getSelectedElement();
 								}//try
 								catch (Exception e1) {
 									ExceptionHandlerRegistry.asyncHandleException(e1);
