@@ -34,6 +34,7 @@ public class OrganisationSelectionPage
 	public Control createPageContents(Composite parent)
 	{
 		organisationList = new OrganisationList(parent, new OrganisationIDDataSource() {
+			@SuppressWarnings("unchecked")
 			public Collection<OrganisationID> getOrganisationIDs()
 			{
 				try {
