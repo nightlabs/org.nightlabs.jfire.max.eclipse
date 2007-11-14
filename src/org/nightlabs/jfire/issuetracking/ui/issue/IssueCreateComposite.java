@@ -92,9 +92,9 @@ public class IssueCreateComposite extends XComposite{
 	private Text reporterText;
 	private Button reporterButton;
 	
-	private Label toUserLbl;
-	private Text toUserText;
-	private Button toUserButton;
+	private Label assigntoUserLbl;
+	private Text assigntoUserText;
+	private Button assigntoUserButton;
 	
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
@@ -108,7 +108,7 @@ public class IssueCreateComposite extends XComposite{
 	private Button submitButton;
 
 	private User selectedReporter;
-	private User selectedUndertaker;
+	private User selectedAssigntoUser;
 
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
@@ -199,14 +199,14 @@ public class IssueCreateComposite extends XComposite{
 					selectedReporter = userSearchDialog.getSelectedUser();
 //					userID = (UserID) JDOHelper.getObjectId(selectedUser);
 					if (selectedReporter != null)
-						reporterText.setText(selectedUndertaker.getName());
+						reporterText.setText(selectedReporter.getName());
 				}//if
 			}
 		});
 		/*******************************/
 		/**********Assigned To**********/
-		toUserLbl = new Label(this, SWT.NONE);
-		toUserLbl.setText("Assigned To: ");
+		assigntoUserLbl = new Label(this, SWT.NONE);
+		assigntoUserLbl.setText("Assigned To: ");
 
 		XComposite toUserComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		toUserComposite.getGridLayout().numColumns = 2;
@@ -215,24 +215,24 @@ public class IssueCreateComposite extends XComposite{
 		gridData.grabExcessHorizontalSpace = true;
 		toUserComposite.setLayoutData(gridData);
 
-		toUserText = new Text(toUserComposite, SWT.BORDER);
+		assigntoUserText = new Text(toUserComposite, SWT.BORDER);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
-		toUserText.setLayoutData(gridData);
+		assigntoUserText.setLayoutData(gridData);
 
-		toUserButton = new Button(toUserComposite, SWT.PUSH);
-		toUserButton.setText("Choose User");
+		assigntoUserButton = new Button(toUserComposite, SWT.PUSH);
+		assigntoUserButton.setText("Choose User");
 
-		toUserButton.addSelectionListener(new SelectionAdapter(){
+		assigntoUserButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), toUserText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), assigntoUserText.getText());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
-					selectedUndertaker = userSearchDialog.getSelectedUser();
+					selectedAssigntoUser = userSearchDialog.getSelectedUser();
 //					userID = (UserID) JDOHelper.getObjectId(selectedUser);
-					if (selectedUndertaker != null)
-						toUserText.setText(selectedUndertaker.getName());
+					if (selectedAssigntoUser != null)
+						assigntoUserText.setText(selectedAssigntoUser.getName());
 				}//if
 			}
 		});
@@ -428,8 +428,12 @@ public class IssueCreateComposite extends XComposite{
 		this.selectedIssuePriority = selectedIssuePriority;
 	}
 
-	public User getSelectedUser() {
-		return selectedUndertaker;
+	public User getSelectedReporter() {
+		return selectedReporter;
+	}
+	
+	public User getSelectedAssigntoUser() {
+		return selectedAssigntoUser;
 	}
 
 	public I18nTextEditorMultiLine getDescriptionText() {

@@ -213,8 +213,8 @@ extends AbstractTableComposite<Issue>
 						return issue.getPriority().getIssuePriorityText().getText();
 					break;
 				case(6):
-					if(issue.getStatus() != null)
-						return issue.getStatus().getName().getText();
+					if(issue.getStateDefinition() != null)
+						return issue.getStateDefinition().getName().getText();
 					break;
 				default:
 					return ""; //$NON-NLS-1$

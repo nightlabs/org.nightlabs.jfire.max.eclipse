@@ -33,11 +33,12 @@ public class IssueNewWizard extends DynamicPathWizard{
 		Issue issue = null;
 		try {
 			IssueDAO issueDAO = IssueDAO.sharedInstance();
-			issue = new Issue(Login.getLogin().getOrganisationID(),
+			issue = new Issue(issueNewPage.getIssueCreateComposite().getSelectedReporter().getOrganisationID(),
 					issueNewPage.getIssueCreateComposite().getSelectedIssuePriority(), 
 					issueNewPage.getIssueCreateComposite().getSelectedIssueSeverityType(), 
 					issueNewPage.getIssueCreateComposite().getSelectedState(), 
-					issueNewPage.getIssueCreateComposite().getSelectedUser(),
+					issueNewPage.getIssueCreateComposite().getSelectedReporter(),
+					issueNewPage.getIssueCreateComposite().getSelectedAssigntoUser(),
 					null);
 			
 			I18nText i18nText = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();

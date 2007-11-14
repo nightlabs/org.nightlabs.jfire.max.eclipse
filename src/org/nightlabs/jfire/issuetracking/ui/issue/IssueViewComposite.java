@@ -19,9 +19,9 @@ import org.nightlabs.jfire.issue.IssueStatus;
 
 public class IssueViewComposite extends XComposite{
 	
-	private IssueSeverityType selectedIssueSeverityType;
-	private IssueStatus selectedIssueStatus;
-	private IssuePriority selectedIssuePriority;
+//	private IssueSeverityType selectedIssueSeverityType;
+//	private IssueStatus selectedIssueStatus;
+//	private IssuePriority selectedIssuePriority;
 	
 	private Label severityLbl;
 	private Label severityTextLbl;
@@ -30,10 +30,15 @@ public class IssueViewComposite extends XComposite{
 	private Label priorityLbl;
 	private Label priorityTextLbl;
 
-	private Label userLbl;
-	private Label userTextLbl;
+	private Label reporterLbl;
+	private Label reporterTextLbl;
+	
+	private Label assigntoUserLbl;
+	private Label assigntoUserTextLbl;
+	
 	private Label createTimeLbl;
 	private Label createTimeTextLbl;
+	
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
 
@@ -43,8 +48,6 @@ public class IssueViewComposite extends XComposite{
 	
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
-	
-	private Issue selectedUser;
 	
 	private Issue issue;
 	
@@ -140,7 +143,7 @@ public class IssueViewComposite extends XComposite{
 		statusLbl.setText("Status:");
 
 		statusTextLbl = new Label(mainComposite, SWT.NONE);	
-		statusTextLbl.setText(issue.getStatus().getProcessDefinitionID());
+		statusTextLbl.setText(issue.getStateDefinition().getProcessDefinitionID());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		statusTextLbl.setLayoutData(gridData);
@@ -159,77 +162,72 @@ public class IssueViewComposite extends XComposite{
 	}
 	
 	private XComposite createPersonComposite(Composite parent){
-		XComposite c = new XComposite(parent, SWT.NONE);
-		c.getGridLayout().numColumns = 2;
-		/**********USER**********/
-		userLbl = new Label(c, SWT.NONE);
-		userLbl.setAlignment(SWT.RIGHT);
-		userLbl.setText("User:");
+		XComposite mainComposite = new XComposite(parent, SWT.NONE);
+		mainComposite.getGridLayout().numColumns = 2;
+		/**********Person**********/
+		reporterLbl = new Label(mainComposite, SWT.NONE);
+		reporterLbl.setAlignment(SWT.RIGHT);
+		reporterLbl.setText("Reporter:");
 		
-		XComposite userComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		userComposite.getGridLayout().numColumns = 2;
-		
+		reporterTextLbl = new Label(mainComposite, SWT.NONE);
+		reporterTextLbl.setText(issue.getReporter().getName());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		userComposite.setLayoutData(gridData);
+		reporterTextLbl.setLayoutData(gridData);
 		
-		userTextLbl = new Label(userComposite, SWT.NONE);
-		gridData  = new GridData(GridData.FILL_BOTH);
+		assigntoUserLbl = new Label(mainComposite, SWT.NONE);
+		assigntoUserLbl.setAlignment(SWT.RIGHT);
+		assigntoUserLbl.setText("Assigned To:");
+
+		assigntoUserTextLbl = new Label(mainComposite, SWT.NONE);	
+		assigntoUserTextLbl.setText(issue.getAssigntoUser().getName());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		userTextLbl.setLayoutData(gridData);
-		userTextLbl.setText(issue.getUser().getName());
-		
+		assigntoUserTextLbl.setLayoutData(gridData);
 		/************************/
-		return c;
+		return mainComposite;
 	}
 	
 	private XComposite createDateComposite(Composite parent){
-		XComposite c = new XComposite(parent, SWT.NONE);
-		c.getGridLayout().numColumns = 2;
-		/**********USER**********/
-		createTimeLbl = new Label(c, SWT.NONE);
+		XComposite mainComposite = new XComposite(parent, SWT.NONE);
+		mainComposite.getGridLayout().numColumns = 2;
+		/**********Date**********/
+		createTimeLbl = new Label(mainComposite, SWT.NONE);
 		createTimeLbl.setAlignment(SWT.RIGHT);
 		createTimeLbl.setText("Create Time:");
 		
-		XComposite dateComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		dateComposite.getGridLayout().numColumns = 2;
-		
+		createTimeTextLbl = new Label(mainComposite, SWT.NONE);
+		createTimeTextLbl.setText(issue.getCreateTimestamp().toString());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		dateComposite.setLayoutData(gridData);
-		
-		createTimeTextLbl = new Label(dateComposite, SWT.NONE);
-		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		createTimeTextLbl.setLayoutData(gridData);
-		
-		createTimeTextLbl.setText(issue.getCreateTimestamp().toString());
-		
 		/************************/
-		return c;
+		return mainComposite;
 	}
 	private XComposite createDetailComposite(Composite parent){
-		XComposite c = new XComposite(parent, SWT.NONE);
-		c.getGridLayout().numColumns = 2;
-		/**********USER**********/
-		userLbl = new Label(c, SWT.NONE);
-		userLbl.setAlignment(SWT.RIGHT);
-		userLbl.setText("User:");
+		XComposite mainComposite = new XComposite(parent, SWT.NONE);
+		mainComposite.getGridLayout().numColumns = 2;
+		/**********Detail**********/
+		reporterLbl = new Label(mainComposite, SWT.NONE);
+		reporterLbl.setAlignment(SWT.RIGHT);
+		reporterLbl.setText("Reporter:");
 		
-		XComposite userComposite = new XComposite(c, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		userComposite.getGridLayout().numColumns = 2;
-		
+		reporterTextLbl = new Label(mainComposite, SWT.NONE);
+		reporterTextLbl.setText(issue.getReporter().getName());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		userComposite.setLayoutData(gridData);
+		reporterTextLbl.setLayoutData(gridData);
 		
-		userTextLbl = new Label(userComposite, SWT.NONE);
-		gridData  = new GridData(GridData.FILL_BOTH);
+		assigntoUserLbl = new Label(mainComposite, SWT.NONE);
+		assigntoUserLbl.setAlignment(SWT.RIGHT);
+		assigntoUserLbl.setText("Assigned To:");
+
+		assigntoUserTextLbl = new Label(mainComposite, SWT.NONE);	
+		assigntoUserTextLbl.setText(issue.getAssigntoUser().getName());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		userTextLbl.setLayoutData(gridData);
-		userTextLbl.setText(issue.getUser().getName());
-		
+		assigntoUserTextLbl.setLayoutData(gridData);
 		/************************/
-		return c;
+		return mainComposite;
 	}
 }
