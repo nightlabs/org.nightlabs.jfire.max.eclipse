@@ -66,9 +66,7 @@ import org.nightlabs.util.CollectionUtil;
 
 public class IssueEditComposite 
 extends XComposite{
-	private Class[] documentTypes = new Class[]{DeliveryNote.class, ReceptionNote.class, Invoice.class, Offer.class};
-
-	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
+	private Map<String, Collection<StateDefinition>> stateDefinitionMap = new HashMap<String, Collection<StateDefinition>>();
 
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
 //	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
@@ -295,9 +293,9 @@ extends XComposite{
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							for(final Class type : documentTypes){
+							for(final IssueDocumentType type : IssueDocumentType.values()){
 								try {
-									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.getName());
+									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
 									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
 											FetchPlan.DEFAULT,
 											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
@@ -325,7 +323,7 @@ extends XComposite{
 													STATE_DEFINITION_FETCH_GROUPS, 
 													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 													monitor);
-											stateDefinitionMap.put(type, stateDefinitions);
+											stateDefinitionMap.put(type.c().getSimpleName(), stateDefinitions);
 										} catch (Exception e) {
 											ExceptionHandlerRegistry.asyncHandleException(e);
 											throw new RuntimeException(e);
@@ -333,13 +331,16 @@ extends XComposite{
 									}//for
 
 									stateDefinitionCombo.removeAll();
-//									Collection<StateDefinition> states = stateDefinitionMap.get(issue.getStateDefinition().getProcessDefinitionID());
-//									for(StateDefinition state : states){
-//										stateDefinitionCombo.addElement(state);
-//									}//for
-//									stateDefinitionCombo.selectElement(issue.getStateDefinition());
-//
-//									selectedState = stateDefinitionCombo.getSelectedElement();
+									String processDefinitionID = issue.getStateDefinition().getProcessDefinitionID();
+									int index = processDefinitionID.indexOf(".");
+									String s = processDefinitionID.substring(0, index);
+									Collection<StateDefinition> states = stateDefinitionMap.get(s);
+									for(StateDefinition state : states){
+										stateDefinitionCombo.addElement(state);
+									}//for
+									stateDefinitionCombo.selectElement(issue.getStateDefinition());
+
+									selectedState = stateDefinitionCombo.getSelectedElement();
 								}//try
 								catch (Exception e1) {
 									ExceptionHandlerRegistry.asyncHandleException(e1);

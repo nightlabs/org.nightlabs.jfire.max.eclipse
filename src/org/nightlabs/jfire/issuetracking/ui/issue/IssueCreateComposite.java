@@ -66,8 +66,7 @@ import org.nightlabs.util.CollectionUtil;
 public class IssueCreateComposite
 extends XComposite{
 
-	private Class[] documentTypes = new Class[]{DeliveryNote.class, ReceptionNote.class, 
-			Invoice.class, Offer.class};
+	private IssueDocumentType documentType;
 
 	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
 
@@ -129,7 +128,12 @@ extends XComposite{
 		documentTypeLbl = new Label(this, SWT.NONE);
 		documentTypeLbl.setText("Document Type: ");
 		documentTypeCombo = new XComboComposite<Class>(this, SWT.NONE, labelProvider);
-		documentTypeCombo.setInput(CollectionUtil.array2ArrayList(documentTypes));
+		
+		List docTypeList = new ArrayList<Class>();
+		for(IssueDocumentType type : IssueDocumentType.values()){
+			docTypeList.add(type.c());
+		}
+		documentTypeCombo.setInput(docTypeList);
 		documentTypeCombo.selectElementByIndex(0);
 		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -303,9 +307,9 @@ extends XComposite{
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							for(final Class type : documentTypes){
+							for(final IssueDocumentType type : IssueDocumentType.values()){
 								try {
-									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.getName());
+									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
 									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
 											FetchPlan.DEFAULT,
 											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
@@ -333,8 +337,7 @@ extends XComposite{
 													STATE_DEFINITION_FETCH_GROUPS, 
 													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 													monitor);
-											stateDefinitionMap.put(type, stateDefinitions);
-//											allStateDefinitions.addAll(stateDefinitions);		
+											stateDefinitionMap.put(type.c(), stateDefinitions);
 										} catch (Exception e) {
 											ExceptionHandlerRegistry.asyncHandleException(e);
 											throw new RuntimeException(e);
