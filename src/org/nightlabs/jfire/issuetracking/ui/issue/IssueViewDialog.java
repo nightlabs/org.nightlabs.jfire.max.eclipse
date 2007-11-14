@@ -1,8 +1,13 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,6 +42,17 @@ public class IssueViewDialog extends CenteredDialog{
 		
 		Button editButton = new Button(buttonComposite, SWT.PUSH);
 		editButton.setText("Edit");
+		editButton.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseUp(MouseEvent e) {
+				try {
+					IssueEditDialog d = new IssueEditDialog(getShell(), issue);
+					d.open();
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
 		
 		Button replyButton = new Button(buttonComposite, SWT.PUSH);
 		replyButton.setText("Reply");

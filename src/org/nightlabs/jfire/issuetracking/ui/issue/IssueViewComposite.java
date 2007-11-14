@@ -13,15 +13,8 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueStatus;
 
 public class IssueViewComposite extends XComposite{
-	
-//	private IssueSeverityType selectedIssueSeverityType;
-//	private IssueStatus selectedIssueStatus;
-//	private IssuePriority selectedIssuePriority;
 	
 	private Label severityLbl;
 	private Label severityTextLbl;

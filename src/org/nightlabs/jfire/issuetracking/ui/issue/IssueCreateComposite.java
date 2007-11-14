@@ -63,24 +63,25 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
-public class IssueCreateComposite extends XComposite{
+public class IssueCreateComposite
+extends XComposite{
 
-	private String[] documentTypes = new String[]{DeliveryNote.class.getName(), ReceptionNote.class.getName(), 
-			Invoice.class.getName(), Offer.class.getName()};
+	private Class[] documentTypes = new Class[]{DeliveryNote.class, ReceptionNote.class, 
+			Invoice.class, Offer.class};
 
-	private Map<String, Collection<StateDefinition>> stateDefinitionMap = new HashMap<String, Collection<StateDefinition>>();
+	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
 
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
 //	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
 
-	private String selectedDocumentType;
+	private Class selectedDocumentType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
 	private Label documentTypeLbl;
-	private XComboComposite<String> documentTypeCombo;
+	private XComboComposite<Class> documentTypeCombo;
 	private Label issueSeverityLbl;
 	private XComboComposite<IssueSeverityType> issueSeverityCombo;
 	private Label stateDefinitionLbl;
@@ -127,7 +128,7 @@ public class IssueCreateComposite extends XComposite{
 
 		documentTypeLbl = new Label(this, SWT.NONE);
 		documentTypeLbl.setText("Document Type: ");
-		documentTypeCombo = new XComboComposite<String>(this, SWT.NONE, labelProvider);
+		documentTypeCombo = new XComboComposite<Class>(this, SWT.NONE, labelProvider);
 		documentTypeCombo.setInput(CollectionUtil.array2ArrayList(documentTypes));
 		documentTypeCombo.selectElementByIndex(0);
 		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
@@ -302,9 +303,9 @@ public class IssueCreateComposite extends XComposite{
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							for(final String type : documentTypes){
+							for(final Class type : documentTypes){
 								try {
-									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type);
+									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.getName());
 									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
 											FetchPlan.DEFAULT,
 											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
@@ -359,14 +360,13 @@ public class IssueCreateComposite extends XComposite{
 							}//for
 						}//run
 					});
-					
-					return Status.OK_STATUS;
 				}catch (Exception e1) {
 					ExceptionHandlerRegistry.asyncHandleException(e1);
 					throw new RuntimeException(e1);
 				}
+				
+				return Status.OK_STATUS;
 			} 
-
 		};
 		loadJob.setPriority(Job.SHORT);
 		loadJob.schedule();
@@ -397,6 +397,11 @@ public class IssueCreateComposite extends XComposite{
 			if (element instanceof IssuePriority) {
 				IssuePriority issuePriority = (IssuePriority) element;
 				return issuePriority.getIssuePriorityText().getText();
+			}
+			
+			if (element instanceof Class) {
+				Class c = (Class) element;
+				return c.getSimpleName();
 			}
 
 			return super.getText(element);
