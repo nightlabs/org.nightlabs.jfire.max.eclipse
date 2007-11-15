@@ -1,5 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -33,13 +36,32 @@ public class IssueNewWizard extends DynamicPathWizard{
 		Issue issue = null;
 		try {
 			IssueDAO issueDAO = IssueDAO.sharedInstance();
-			issue = new Issue(issueNewPage.getIssueCreateComposite().getSelectedReporter().getOrganisationID(),
-					issueNewPage.getIssueCreateComposite().getSelectedIssuePriority(), 
-					issueNewPage.getIssueCreateComposite().getSelectedIssueSeverityType(), 
-					issueNewPage.getIssueCreateComposite().getSelectedState(), 
-					issueNewPage.getIssueCreateComposite().getSelectedReporter(),
-					issueNewPage.getIssueCreateComposite().getSelectedAssigntoUser(),
+			
+			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
+			issue = new Issue(ic.getSelectedReporter().getOrganisationID(),
+					ic.getSelectedIssuePriority(), 
+					ic.getSelectedIssueSeverityType(), 
+					ic.getSelectedState(), 
+					ic.getSelectedReporter(),
+					ic.getSelectedAssigntoUser(),
 					null);
+			if(ic.getSelectedAttachmentFile() != null){
+				InputStream in = new FileInputStream(ic.getSelectedAttachmentFile());
+
+				if (in != null) {
+					try {
+						issue.loadStream(in, ic.getSelectedAttachmentFile().getName());
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					} finally {
+						try {
+							in.close();
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			}//if
 			
 			I18nText i18nText = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();
 			Set<String> languageIDs = i18nText.getLanguageIDs();

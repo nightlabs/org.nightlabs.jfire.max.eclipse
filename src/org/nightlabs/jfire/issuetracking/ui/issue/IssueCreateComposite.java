@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,7 +39,6 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -54,14 +54,10 @@ import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.state.id.StateDefinitionID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.CollectionUtil;
 
 public class IssueCreateComposite
 extends XComposite{
@@ -450,5 +446,9 @@ extends XComposite{
 
 	public I18nTextEditor getSubjectText() {
 		return subjectText;
+	}
+	
+	public File getSelectedAttachmentFile(){
+		return fileComposite.getFile();
 	}
 }
