@@ -76,7 +76,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			}//for
 			
 			issue.setOrganisationID(Login.getLogin().getOrganisationID());
-			issueDAO.createIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

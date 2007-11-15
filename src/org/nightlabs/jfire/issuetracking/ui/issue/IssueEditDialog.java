@@ -14,7 +14,8 @@ public class IssueEditDialog extends CenteredDialog{
 	private static final Logger logger = Logger.getLogger(IssueEditDialog.class);
 
 	private Issue issue;  
-
+	private IssueEditComposite issueEditComposite;
+	
 	public IssueEditDialog(Shell parentShell, Issue issue) 
 	{
 		super(parentShell);
@@ -26,7 +27,7 @@ public class IssueEditDialog extends CenteredDialog{
 	{
 		getShell().setText("Title");
 		
-		IssueEditComposite issueEditComposite = new IssueEditComposite(issue, parent, SWT.NONE);
+		issueEditComposite = new IssueEditComposite(issue, parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		issueEditComposite.setLayoutData(gridData);
 		
@@ -36,7 +37,11 @@ public class IssueEditDialog extends CenteredDialog{
 	@Override
 	protected Control createContents(Composite parent) {
 		Control ctrl = super.createContents(parent);
-		getButton(Dialog.OK).setEnabled(false);
+		getButton(Dialog.OK).setEnabled(true);
 		return ctrl;
+	}
+	
+	public IssueEditComposite getIssueEditComposite(){
+		return issueEditComposite;
 	}
 }

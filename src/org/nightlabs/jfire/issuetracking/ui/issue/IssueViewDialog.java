@@ -1,7 +1,13 @@
  package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -14,10 +20,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.i18n.I18nText;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.history.IssueHistory;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueViewDialog extends CenteredDialog{
 	private static final Logger logger = Logger.getLogger(IssueViewDialog.class);
@@ -46,8 +59,63 @@ public class IssueViewDialog extends CenteredDialog{
 			@Override
 			public void mouseUp(MouseEvent e) {
 				try {
-					IssueEditDialog d = new IssueEditDialog(getShell(), issue);
-					d.open();
+					IssueEditDialog editDialog = new IssueEditDialog(getShell(), issue);
+					if(editDialog.open() == Dialog.OK){
+						boolean confirm = MessageDialog.openConfirm(getShell(), "Confirm", "Are you sure to update this issue?");
+						if(confirm){
+							//-----------------------------------
+							try {
+								IssueHistory issueHistory = new IssueHistory(issue);
+								IssueDAO issueDAO = IssueDAO.sharedInstance();
+								
+								issueHistory = issueDAO.createIssueHistory(issueHistory, true, new String[]{IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+								
+								IssueEditComposite ie = editDialog.getIssueEditComposite();
+								issue = new Issue(Login.sharedInstance().getOrganisationID(),
+										ie.getSelectedIssuePriority(), 
+										ie.getSelectedIssueSeverityType(), 
+										ie.getSelectedState(), 
+										ie.getSelectedReporter(),
+										ie.getSelectedAssigntoUser(),
+										null);
+
+								issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+								
+//								if(ie.getSelectedAttachmentFile() != null){
+//									InputStream in = new FileInputStream(ie.getSelectedAttachmentFile());
+//
+//									if (in != null) {
+//										try {
+//											issue.loadStream(in, ie.getSelectedAttachmentFile().getName());
+//										} catch (IOException e) {
+//											throw new RuntimeException(e);
+//										} finally {
+//											try {
+//												in.close();
+//											} catch (IOException e) {
+//												throw new RuntimeException(e);
+//											}
+//										}
+//									}
+//								}//if
+//								
+//								I18nText i18nText = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();
+//								Set<String> languageIDs = i18nText.getLanguageIDs();
+//								for(String languageID : languageIDs){
+//									issue.getSubject().setText(languageID, i18nText.getText(languageID));
+//								}//for
+//								
+//								i18nText = issueNewPage.getIssueCreateComposite().getDescriptionText().getI18nText();
+//								languageIDs = i18nText.getLanguageIDs();
+//								for(String languageID : languageIDs){
+//									issue.getDescription().setText(languageID, i18nText.getText(languageID));
+//								}//for
+							} catch (Exception ex) {
+								throw new RuntimeException(ex);
+							}
+							//-----------------------------------
+						}
+					}//if
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -84,7 +152,7 @@ public class IssueViewDialog extends CenteredDialog{
 	@Override
 	protected Control createContents(Composite parent) {
 		Control ctrl = super.createContents(parent);
-		getButton(Dialog.OK).setEnabled(false);
+		getButton(Dialog.OK).setEnabled(true);
 		return ctrl;
 	}
 }

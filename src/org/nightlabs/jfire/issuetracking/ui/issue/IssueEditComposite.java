@@ -255,6 +255,8 @@ extends XComposite{
 		}; 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		fileComposite.setLayoutData(gridData);
+		fileComposite.setFileText(issue.getFileName());
+		fileComposite.getFileTextControl().setEditable(false);
 
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
