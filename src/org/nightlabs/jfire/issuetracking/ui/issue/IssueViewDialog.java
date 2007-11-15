@@ -76,9 +76,6 @@ public class IssueViewDialog extends CenteredDialog{
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		issueViewComposite.setLayoutData(gridData);
 		
-		Label issueHistoryLabel = new Label(parent, SWT.NONE);
-		issueHistoryLabel.setText("History: ");
-		
 		IssueHistoryTable issueHistoryTable = new IssueHistoryTable(parent, SWT.NONE);
 		
 		return parent;

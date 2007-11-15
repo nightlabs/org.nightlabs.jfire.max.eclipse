@@ -22,6 +22,9 @@ public class IssueViewComposite extends XComposite{
 	private Label statusTextLbl;
 	private Label priorityLbl;
 	private Label priorityTextLbl;
+	
+	private Label typeLbl;
+	private Label typeTextLbl;
 
 	private Label reporterLbl;
 	private Label reporterTextLbl;
@@ -31,6 +34,8 @@ public class IssueViewComposite extends XComposite{
 	
 	private Label createTimeLbl;
 	private Label createTimeTextLbl;
+	private Label updateTimeLbl;
+	private Label updateTimeTextLbl;
 	
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
@@ -136,7 +141,7 @@ public class IssueViewComposite extends XComposite{
 		statusLbl.setText("Status:");
 
 		statusTextLbl = new Label(mainComposite, SWT.NONE);	
-		statusTextLbl.setText(issue.getStateDefinition().getProcessDefinitionID());
+		statusTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		statusTextLbl.setLayoutData(gridData);
@@ -150,6 +155,16 @@ public class IssueViewComposite extends XComposite{
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		priorityTextLbl.setLayoutData(gridData);
+		
+		typeLbl = new Label(mainComposite, SWT.NONE);
+		typeLbl.setAlignment(SWT.RIGHT);
+		typeLbl.setText("Type:");
+		
+		typeTextLbl = new Label(mainComposite, SWT.NONE);
+		typeTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		typeTextLbl.setLayoutData(gridData);
 		
 		return mainComposite;
 	}
@@ -194,6 +209,16 @@ public class IssueViewComposite extends XComposite{
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		createTimeTextLbl.setLayoutData(gridData);
+		
+		updateTimeLbl = new Label(mainComposite, SWT.NONE);
+		updateTimeLbl.setAlignment(SWT.RIGHT);
+		updateTimeLbl.setText("Update Time:");
+		
+		updateTimeTextLbl = new Label(mainComposite, SWT.NONE);
+		updateTimeTextLbl.setText(issue.getUpdateTimestamp() == null? "": issue.getUpdateTimestamp().toString());
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		updateTimeTextLbl.setLayoutData(gridData);
 		/************************/
 		return mainComposite;
 	}

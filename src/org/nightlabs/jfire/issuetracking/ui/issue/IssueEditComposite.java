@@ -331,22 +331,22 @@ extends XComposite{
 									}//for
 
 									stateDefinitionCombo.removeAll();
-									String processDefinitionID = issue.getStateDefinition().getProcessDefinitionID();
-									int index = processDefinitionID.indexOf(".");
-									String s = processDefinitionID.substring(0, index);
-									Collection<StateDefinition> states = stateDefinitionMap.get(s);
-									for(StateDefinition state : states){
-										stateDefinitionCombo.addElement(state);
-									}//for
-									stateDefinitionCombo.selectElement(issue.getStateDefinition());
-
-									selectedState = stateDefinitionCombo.getSelectedElement();
 								}//try
 								catch (Exception e1) {
 									ExceptionHandlerRegistry.asyncHandleException(e1);
 									throw new RuntimeException(e1);
 								}
 							}//for
+							
+							String processDefinitionID = issue.getStateDefinition().getProcessDefinitionID();
+							int index = processDefinitionID.indexOf(".");
+							String s = processDefinitionID.substring(0, index);
+							Collection<StateDefinition> states = stateDefinitionMap.get(s);
+							for(StateDefinition state : states){
+								stateDefinitionCombo.addElement(state);
+							}//for
+							stateDefinitionCombo.selectElement(issue.getStateDefinition());
+							selectedState = stateDefinitionCombo.getSelectedElement();
 						}//run
 					});
 				}catch (Exception e1) {
