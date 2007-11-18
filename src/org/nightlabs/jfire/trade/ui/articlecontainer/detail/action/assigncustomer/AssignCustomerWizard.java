@@ -14,7 +14,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 public class AssignCustomerWizard
@@ -25,7 +24,7 @@ public class AssignCustomerWizard
 
 	public AssignCustomerWizard(OrderID orderID)
 	{
-		super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerWizard.quickSearchText"), true); //$NON-NLS-1$
+		super("", true); //$NON-NLS-1$
 		this.orderID = orderID;
 	}
 
