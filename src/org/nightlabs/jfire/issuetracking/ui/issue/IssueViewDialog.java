@@ -1,30 +1,18 @@
  package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
-import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
@@ -71,13 +59,7 @@ public class IssueViewDialog extends CenteredDialog{
 								issueHistory = issueDAO.createIssueHistory(issueHistory, true, new String[]{IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								
 								IssueEditComposite ie = editDialog.getIssueEditComposite();
-								issue = new Issue(Login.sharedInstance().getOrganisationID(),
-										ie.getSelectedIssuePriority(), 
-										ie.getSelectedIssueSeverityType(), 
-										ie.getSelectedState(), 
-										ie.getSelectedReporter(),
-										ie.getSelectedAssigntoUser(),
-										null);
+								issue = new Issue(Login.sharedInstance().getOrganisationID());
 
 								issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								

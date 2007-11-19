@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -38,13 +37,11 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.jbpm.JbpmManager;
@@ -55,14 +52,10 @@ import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.state.id.StateDefinitionID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.CollectionUtil;
 
 public class IssueEditComposite 
 extends XComposite{
@@ -380,10 +373,10 @@ extends XComposite{
 				return issueSeverityType.getIssueSeverityTypeText().getText();
 			}
 
-			if (element instanceof IssueStatus) {
-				IssueStatus issueStatus = (IssueStatus) element;
-				return issueStatus.getIssueStatusText().getText();
-			}
+//			if (element instanceof IssueStatus) {
+//				IssueStatus issueStatus = (IssueStatus) element;
+//				return issueStatus.getIssueStatusText().getText();
+//			}
 
 			if (element instanceof IssuePriority) {
 				IssuePriority issuePriority = (IssuePriority) element;

@@ -28,10 +28,8 @@ import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueStatus;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
@@ -56,7 +54,7 @@ extends AbstractTableComposite<Issue>
 		Issue.FETCH_GROUP_SUBJECT, 
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
-		IssueStatus.FETCH_GROUP_THIS,
+//		IssueStatus.FETCH_GROUP_THIS,
 		StateDefinition.FETCH_GROUP_NAME};
 
 	public IssueTable(Composite parent, int style)
@@ -188,9 +186,7 @@ extends AbstractTableComposite<Issue>
 				switch (columnIndex) 
 				{
 				case(0):
-					if (issue.getIssueID() != null)
-						return issue.getIssueID();
-				break;
+					return Long.toString(issue.getIssueID());
 				case(1):
 				break;
 				case(2):

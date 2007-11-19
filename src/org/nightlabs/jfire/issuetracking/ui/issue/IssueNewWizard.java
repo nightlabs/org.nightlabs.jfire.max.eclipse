@@ -38,13 +38,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			IssueDAO issueDAO = IssueDAO.sharedInstance();
 			
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
-			issue = new Issue(ic.getSelectedReporter().getOrganisationID(),
-					ic.getSelectedIssuePriority(), 
-					ic.getSelectedIssueSeverityType(), 
-					ic.getSelectedState(), 
-					ic.getSelectedReporter(),
-					ic.getSelectedAssigntoUser(),
-					null);
+			issue = new Issue(ic.getSelectedReporter().getOrganisationID());
 			if(ic.getSelectedAttachmentFile() != null){
 				InputStream in = new FileInputStream(ic.getSelectedAttachmentFile());
 

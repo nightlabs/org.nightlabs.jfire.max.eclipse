@@ -388,10 +388,10 @@ extends XComposite{
 				return issueSeverityType.getIssueSeverityTypeText().getText();
 			}
 
-			if (element instanceof IssueStatus) {
-				IssueStatus issueStatus = (IssueStatus) element;
-				return issueStatus.getIssueStatusText().getText();
-			}
+//			if (element instanceof IssueStatus) {
+//				IssueStatus issueStatus = (IssueStatus) element;
+//				return issueStatus.getIssueStatusText().getText();
+//			}
 
 			if (element instanceof IssuePriority) {
 				IssuePriority issuePriority = (IssuePriority) element;
