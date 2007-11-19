@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
@@ -49,8 +50,9 @@ public class IssueNewWizard extends DynamicPathWizard{
 	
 					if (in != null) {
 						try {
-							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue);
+							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
 							issueFileAttachment.loadStream(in, file.getName());
+							issue.getFileList().add(issueFileAttachment);
 						} catch (IOException e) {
 							throw new RuntimeException(e);
 						} finally {
