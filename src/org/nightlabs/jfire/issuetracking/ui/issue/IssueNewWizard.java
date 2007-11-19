@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +11,11 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.NullProgressMonitor;
+
+import sun.security.x509.IssuerAlternativeNameExtension;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -39,19 +43,22 @@ public class IssueNewWizard extends DynamicPathWizard{
 			
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
 			issue = new Issue(ic.getSelectedReporter().getOrganisationID());
-			if(ic.getSelectedAttachmentFile() != null){
-				InputStream in = new FileInputStream(ic.getSelectedAttachmentFile());
-
-				if (in != null) {
-					try {
-						issue.loadStream(in, ic.getSelectedAttachmentFile().getName());
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					} finally {
+			if(ic.getSelectedAttachmentFiles() != null){
+				for(File file : ic.getSelectedAttachmentFiles()){
+					InputStream in = new FileInputStream(file);
+	
+					if (in != null) {
 						try {
-							in.close();
+							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue);
+							issueFileAttachment.loadStream(in, file.getName());
 						} catch (IOException e) {
 							throw new RuntimeException(e);
+						} finally {
+							try {
+								in.close();
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
 						}
 					}
 				}

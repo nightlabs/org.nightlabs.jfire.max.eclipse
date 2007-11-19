@@ -122,7 +122,7 @@ public class IssueViewComposite extends XComposite{
 		fileLabel.setText("File:");
 		
 		fileTextLbl = new Label(sashFormComposite, SWT.NONE);
-		fileTextLbl.setText(issue.getFileName());
+//		fileTextLbl.setText(issue.getFileName());
 	}
 	
 	private XComposite createBasicsComposite(Composite parent){

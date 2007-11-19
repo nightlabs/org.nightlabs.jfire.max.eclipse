@@ -41,6 +41,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueStatus;
@@ -96,7 +97,7 @@ extends XComposite{
 	private I18nTextEditor subjectText;
 
 	private Label fileLabel;
-	private FileSelectionComposite fileComposite;
+	private FileListSelectionComposite fileComposite;
 
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
@@ -257,12 +258,7 @@ extends XComposite{
 		fileLabel = new Label(this, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new FileSelectionComposite(this, SWT.NONE, FileSelectionComposite.OPEN_FILE, 
-				null, null){
-			@Override
-			protected void modifyText(ModifyEvent e) {
-			}
-		}; 
+		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		fileComposite.setLayoutData(gridData);
 
@@ -448,7 +444,7 @@ extends XComposite{
 		return subjectText;
 	}
 	
-	public File getSelectedAttachmentFile(){
-		return fileComposite.getFile();
+	public List<File> getSelectedAttachmentFiles(){
+		return fileComposite.getFileList();
 	}
 }
