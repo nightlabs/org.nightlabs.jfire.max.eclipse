@@ -54,7 +54,6 @@ extends AbstractTableComposite<Issue>
 		Issue.FETCH_GROUP_SUBJECT, 
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
-//		IssueStatus.FETCH_GROUP_THIS,
 		StateDefinition.FETCH_GROUP_NAME};
 
 	public IssueTable(Composite parent, int style)
