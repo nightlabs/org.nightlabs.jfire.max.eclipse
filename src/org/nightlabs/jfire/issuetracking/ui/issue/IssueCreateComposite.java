@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -30,7 +29,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
@@ -41,12 +39,10 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueStatus;
-import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
-import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
+import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
 import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
@@ -65,34 +61,38 @@ extends XComposite{
 
 	private IssueDocumentType documentType;
 
-	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
+//	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
 
+	private List<IssueType> issueTypes = new ArrayList<IssueType>();
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
 //	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
 
-	private Class selectedDocumentType;
+	private IssueType selectedIssueType;
+//	private Class selectedDocumentType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
-	private Label documentTypeLbl;
-	private XComboComposite<Class> documentTypeCombo;
+	private Label issueTypeLbl;
+	private XComboComposite<IssueType> issueTypeCombo;
 	private Label issueSeverityLbl;
 	private XComboComposite<IssueSeverityType> issueSeverityCombo;
-	private Label stateDefinitionLbl;
-	private XComboComposite<StateDefinition> stateDefinitionCombo;
+//	private Label documentTypeLbl;
+//	private XComboComposite<Class> documentTypeCombo;
+//	private Label stateDefinitionLbl;
+//	private XComboComposite<StateDefinition> stateDefinitionCombo;
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
 	private Label reporterLbl;
 	private Text reporterText;
 	private Button reporterButton;
-	
+
 	private Label assigntoUserLbl;
 	private Text assigntoUserText;
 	private Button assigntoUserButton;
-	
+
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
 
@@ -102,11 +102,11 @@ extends XComposite{
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
 
-	private Button submitButton;
-
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
+	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+	
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
 		createComposite(this);
@@ -122,36 +122,61 @@ extends XComposite{
 
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 
-		documentTypeLbl = new Label(this, SWT.NONE);
-		documentTypeLbl.setText("Document Type: ");
-		documentTypeCombo = new XComboComposite<Class>(this, SWT.NONE, labelProvider);
-		
-		List docTypeList = new ArrayList<Class>();
-		for(IssueDocumentType type : IssueDocumentType.values()){
-			docTypeList.add(type.c());
-		}
-		documentTypeCombo.setInput(docTypeList);
-		documentTypeCombo.selectElementByIndex(0);
-		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
-			public void selectionChanged(SelectionChangedEvent e) {
-				selectedDocumentType = documentTypeCombo.getSelectedElement();
-				stateDefinitionCombo.removeAll();
-				Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
-				for(StateDefinition state : states){
-					stateDefinitionCombo.addElement(state);
-				}//for
-				stateDefinitionCombo.selectElementByIndex(0);
-			}
-		});
+		issueTypeLbl = new Label(this, SWT.NONE);
+		issueTypeLbl.setText("Issue Type: ");
+		issueTypeCombo = new XComboComposite<IssueType>(this, SWT.NONE, labelProvider);
 
-		stateDefinitionLbl = new Label(this, SWT.NONE);
-		stateDefinitionLbl.setText("State: ");
-		stateDefinitionCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
-		stateDefinitionCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		List issueTypeList = new ArrayList<IssueType>();
+		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				selectedState = stateDefinitionCombo.getSelectedElement();
+				selectedIssueType = issueTypeCombo.getSelectedElement();
+				
+				issueSeverityCombo.removeAll();
+				for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
+					issueSeverityCombo.addElement(is);
+				}
+				issueSeverityCombo.selectElementByIndex(0);
+				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+				
+				issuePriorityCombo.removeAll();
+				for (IssuePriority ip : selectedIssueType.getPriorities()) {
+					issuePriorityCombo.addElement(ip);
+				}
+				issuePriorityCombo.selectElementByIndex(0);
+				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 			}
 		});
+//		//----------------------------------------------
+//		documentTypeLbl = new Label(this, SWT.NONE);
+//		documentTypeLbl.setText("Document Type: ");
+//		documentTypeCombo = new XComboComposite<Class>(this, SWT.NONE, labelProvider);
+//
+//		List docTypeList = new ArrayList<Class>();
+//		for(IssueDocumentType type : IssueDocumentType.values()){
+//			docTypeList.add(type.c());
+//		}
+//		documentTypeCombo.setInput(docTypeList);
+//		documentTypeCombo.selectElementByIndex(0);
+//		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+//			public void selectionChanged(SelectionChangedEvent e) {
+//				selectedDocumentType = documentTypeCombo.getSelectedElement();
+//				stateDefinitionCombo.removeAll();
+//				Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
+//				for(StateDefinition state : states){
+//					stateDefinitionCombo.addElement(state);
+//				}//for
+//				stateDefinitionCombo.selectElementByIndex(0);
+//			}
+//		});
+//
+//		stateDefinitionLbl = new Label(this, SWT.NONE);
+//		stateDefinitionLbl.setText("State: ");
+//		stateDefinitionCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
+//		stateDefinitionCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+//			public void selectionChanged(SelectionChangedEvent e) {
+//				selectedState = stateDefinitionCombo.getSelectedElement();
+//			}
+//		});
 
 		issueSeverityLbl = new Label(this, SWT.NONE);
 		issueSeverityLbl.setText("Severity: ");
@@ -188,7 +213,7 @@ extends XComposite{
 		reporterText.setLayoutData(gridData);
 		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		reporterText.setText(selectedReporter.getName());
-		
+
 		reporterButton = new Button(reporterComposite, SWT.PUSH);
 		reporterButton.setText("Choose User");
 
@@ -199,7 +224,6 @@ extends XComposite{
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
-//					userID = (UserID) JDOHelper.getObjectId(selectedUser);
 					if (selectedReporter != null)
 						reporterText.setText(selectedReporter.getName());
 				}//if
@@ -269,27 +293,27 @@ extends XComposite{
 					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
 					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					
-					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
-//					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
-					issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(monitor);
-
+					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
+							issueTypeCombo.removeAll();
+							for (Iterator it = issueTypes.iterator(); it.hasNext(); ) {
+								IssueType issueType = (IssueType) it.next();
+								issueTypeCombo.addElement(issueType);
+							}
+							issueTypeCombo.selectElementByIndex(0);
+							selectedIssueType = issueTypeCombo.getSelectedElement();
+							
 							issueSeverityCombo.removeAll();
-							for (Iterator it = issueSeverityTypes.iterator(); it.hasNext(); ) {
-								IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
-								issueSeverityCombo.addElement(issueSeverityType);
+							for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
+								issueSeverityCombo.addElement(is);
 							}
 							issueSeverityCombo.selectElementByIndex(0);
 							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-						}
-					});
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
+							
 							issuePriorityCombo.removeAll();
-							for (Iterator it = issuePriorities.iterator(); it.hasNext(); ) {
-								IssuePriority ip = (IssuePriority) it.next();
+							for (IssuePriority ip : selectedIssueType.getPriorities()) {
 								issuePriorityCombo.addElement(ip);
 							}
 							issuePriorityCombo.selectElementByIndex(0);
@@ -297,69 +321,69 @@ extends XComposite{
 						}
 					});
 					
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							for(final IssueDocumentType type : IssueDocumentType.values()){
-								try {
-									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
-									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
-											FetchPlan.DEFAULT,
-											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
-									};
-									Collection<ProcessDefinition> processDefinitions;
-
-									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-											processDefinitionIDs, 
-											PROCESS_DEFINITION_FETCH_GROUPS, 
-											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-											monitor);
-
-									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
-											FetchPlan.DEFAULT,
-											StateDefinition.FETCH_GROUP_NAME
-									};
-
-
-									for (ProcessDefinition processDefinition : processDefinitions){
-										Set<StateDefinitionID> statedDefinitionIDs;
-										try {
-											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
-											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
-													statedDefinitionIDs, 
-													STATE_DEFINITION_FETCH_GROUPS, 
-													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-													monitor);
-											stateDefinitionMap.put(type.c(), stateDefinitions);
-										} catch (Exception e) {
-											ExceptionHandlerRegistry.asyncHandleException(e);
-											throw new RuntimeException(e);
-										}
-									}//for
-
-									documentTypeCombo.selectElementByIndex(0);
-									selectedDocumentType = documentTypeCombo.getSelectedElement();
-									
-									stateDefinitionCombo.removeAll();
-									Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
-									for(StateDefinition state : states){
-										stateDefinitionCombo.addElement(state);
-									}//for
-									stateDefinitionCombo.selectElementByIndex(0);
-									
-									selectedState = stateDefinitionCombo.getSelectedElement();
-								}//try
-								catch (Exception e1) {
-									ExceptionHandlerRegistry.asyncHandleException(e1);
-									throw new RuntimeException(e1);
-								}
-							}//for
-						}//run
-					});
+//					Display.getDefault().asyncExec(new Runnable() {
+//						public void run() {
+//							for(final IssueDocumentType type : IssueDocumentType.values()){
+//								try {
+//									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
+//									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
+//											FetchPlan.DEFAULT,
+//											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
+//									};
+//									Collection<ProcessDefinition> processDefinitions;
+//
+//									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
+//											processDefinitionIDs, 
+//											PROCESS_DEFINITION_FETCH_GROUPS, 
+//											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//											monitor);
+//
+//									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
+//											FetchPlan.DEFAULT,
+//											StateDefinition.FETCH_GROUP_NAME
+//									};
+//
+//
+//									for (ProcessDefinition processDefinition : processDefinitions){
+//										Set<StateDefinitionID> statedDefinitionIDs;
+//										try {
+//											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
+//											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
+//													statedDefinitionIDs, 
+//													STATE_DEFINITION_FETCH_GROUPS, 
+//													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//													monitor);
+//											stateDefinitionMap.put(type.c(), stateDefinitions);
+//										} catch (Exception e) {
+//											ExceptionHandlerRegistry.asyncHandleException(e);
+//											throw new RuntimeException(e);
+//										}
+//									}//for
+//
+//									documentTypeCombo.selectElementByIndex(0);
+//									selectedDocumentType = documentTypeCombo.getSelectedElement();
+//
+//									stateDefinitionCombo.removeAll();
+//									Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
+//									for(StateDefinition state : states){
+//										stateDefinitionCombo.addElement(state);
+//									}//for
+//									stateDefinitionCombo.selectElementByIndex(0);
+//
+//									selectedState = stateDefinitionCombo.getSelectedElement();
+//								}//try
+//								catch (Exception e1) {
+//									ExceptionHandlerRegistry.asyncHandleException(e1);
+//									throw new RuntimeException(e1);
+//								}
+//							}//for
+//						}//run
+//					});
 				}catch (Exception e1) {
 					ExceptionHandlerRegistry.asyncHandleException(e1);
 					throw new RuntimeException(e1);
 				}
-				
+
 				return Status.OK_STATUS;
 			} 
 		};
@@ -385,15 +409,20 @@ extends XComposite{
 			}
 
 //			if (element instanceof IssueStatus) {
-//				IssueStatus issueStatus = (IssueStatus) element;
-//				return issueStatus.getIssueStatusText().getText();
+//			IssueStatus issueStatus = (IssueStatus) element;
+//			return issueStatus.getIssueStatusText().getText();
 //			}
+			
+			if(element instanceof IssueType){
+				IssueType issueType = (IssueType)element;
+				return issueType.getName().getText();
+			}
 
 			if (element instanceof IssuePriority) {
 				IssuePriority issuePriority = (IssuePriority) element;
 				return issuePriority.getIssuePriorityText().getText();
 			}
-			
+
 			if (element instanceof Class) {
 				Class c = (Class) element;
 				return c.getSimpleName();
@@ -431,7 +460,7 @@ extends XComposite{
 	public User getSelectedReporter() {
 		return selectedReporter;
 	}
-	
+
 	public User getSelectedAssigntoUser() {
 		return selectedAssigntoUser;
 	}
@@ -443,7 +472,7 @@ extends XComposite{
 	public I18nTextEditor getSubjectText() {
 		return subjectText;
 	}
-	
+
 	public List<File> getSelectedAttachmentFiles(){
 		return fileComposite.getFileList();
 	}

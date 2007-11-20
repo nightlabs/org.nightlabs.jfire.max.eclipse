@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -42,18 +41,13 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
-import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
+import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
-import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
-import org.nightlabs.jfire.jbpm.dao.StateDefinitionDAO;
-import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.state.id.StateDefinitionID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -61,14 +55,18 @@ public class IssueEditComposite
 extends XComposite{
 	private Map<String, Collection<StateDefinition>> stateDefinitionMap = new HashMap<String, Collection<StateDefinition>>();
 
+	private List<IssueType> issueTypes = new ArrayList<IssueType>();
 	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
 //	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
 	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
 
+	private IssueType selectedIssueType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
+	private Label issueTypeLbl;
+	private XComboComposite<IssueType> issueTypeCombo;
 	private Label documentTypeLbl;
 	private Label documentTypeTextLbl;
 	private Label issueSeverityLbl;
@@ -102,6 +100,8 @@ extends XComposite{
 	
 	private Issue issue;
 
+	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+	
 	public IssueEditComposite(Issue issue, Composite parent, int style) {
 		super(parent, style);
 		this.issue = issue;
@@ -119,6 +119,17 @@ extends XComposite{
 
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 
+		issueTypeLbl = new Label(this, SWT.NONE);
+		issueTypeLbl.setText("Issue Type: ");
+		issueTypeCombo = new XComboComposite<IssueType>(this, SWT.NONE, labelProvider);
+
+		List issueTypeList = new ArrayList<IssueType>();
+		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
+				selectedIssueType = issueTypeCombo.getSelectedElement();
+			}
+		});
+		
 		documentTypeLbl = new Label(this, SWT.NONE);
 		documentTypeLbl.setText("Document Type: ");
 		documentTypeTextLbl = new Label(this, SWT.NONE);
@@ -257,93 +268,93 @@ extends XComposite{
 				try {
 					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
 					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
-					issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(monitor);
-//					issueStatus = IssueStatusDAO.sharedInstance().getIssueStatus(monitor);
-					issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(monitor);
-
+					
+					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							issueSeverityCombo.removeAll();
-							for (Iterator it = issueSeverityTypes.iterator(); it.hasNext(); ) {
-								IssueSeverityType issueSeverityType = (IssueSeverityType) it.next();
-								issueSeverityCombo.addElement(issueSeverityType);
+							issueTypeCombo.removeAll();
+							for (Iterator it = issueTypes.iterator(); it.hasNext(); ) {
+								IssueType issueType = (IssueType) it.next();
+								issueTypeCombo.addElement(issueType);
 							}
-							issueSeverityCombo.selectElement(issue.getSeverityType());
+							issueTypeCombo.selectElementByIndex(0);
+							selectedIssueType = issueTypeCombo.getSelectedElement();
+							
+							issueSeverityCombo.removeAll();
+							for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
+								issueSeverityCombo.addElement(is);
+							}
+							issueSeverityCombo.selectElementByIndex(0);
 							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-						}
-					});
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
+							
 							issuePriorityCombo.removeAll();
-							for (Iterator it = issuePriorities.iterator(); it.hasNext(); ) {
-								IssuePriority ip = (IssuePriority) it.next();
+							for (IssuePriority ip : selectedIssueType.getPriorities()) {
 								issuePriorityCombo.addElement(ip);
 							}
-							issuePriorityCombo.selectElement(issue.getPriority());
+							issuePriorityCombo.selectElementByIndex(0);
 							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						}
 					});
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							for(final IssueDocumentType type : IssueDocumentType.values()){
-								try {
-									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
-									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
-											FetchPlan.DEFAULT,
-											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
-									};
-									Collection<ProcessDefinition> processDefinitions;
-
-									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-											processDefinitionIDs, 
-											PROCESS_DEFINITION_FETCH_GROUPS, 
-											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-											monitor);
-
-									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
-											FetchPlan.DEFAULT,
-											StateDefinition.FETCH_GROUP_NAME
-									};
-
-
-									for (ProcessDefinition processDefinition : processDefinitions){
-										Set<StateDefinitionID> statedDefinitionIDs;
-										try {
-											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
-											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
-													statedDefinitionIDs, 
-													STATE_DEFINITION_FETCH_GROUPS, 
-													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-													monitor);
-											stateDefinitionMap.put(type.c().getSimpleName(), stateDefinitions);
-										} catch (Exception e) {
-											ExceptionHandlerRegistry.asyncHandleException(e);
-											throw new RuntimeException(e);
-										}
-									}//for
-
-									stateDefinitionCombo.removeAll();
-								}//try
-								catch (Exception e1) {
-									ExceptionHandlerRegistry.asyncHandleException(e1);
-									throw new RuntimeException(e1);
-								}
-							}//for
-							
-							String processDefinitionID = issue.getStateDefinition().getProcessDefinitionID();
-							int index = processDefinitionID.indexOf(".");
-							String s = processDefinitionID.substring(0, index);
-							Collection<StateDefinition> states = stateDefinitionMap.get(s);
-							for(StateDefinition state : states){
-								stateDefinitionCombo.addElement(state);
-							}//for
-							stateDefinitionCombo.selectElement(issue.getStateDefinition());
-							selectedState = stateDefinitionCombo.getSelectedElement();
-						}//run
-					});
+					
+//					Display.getDefault().asyncExec(new Runnable() {
+//						public void run() {
+//							for(final IssueDocumentType type : IssueDocumentType.values()){
+//								try {
+//									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
+//									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
+//											FetchPlan.DEFAULT,
+//											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
+//									};
+//									Collection<ProcessDefinition> processDefinitions;
+//
+//									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
+//											processDefinitionIDs, 
+//											PROCESS_DEFINITION_FETCH_GROUPS, 
+//											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//											monitor);
+//
+//									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
+//											FetchPlan.DEFAULT,
+//											StateDefinition.FETCH_GROUP_NAME
+//									};
+//
+//
+//									for (ProcessDefinition processDefinition : processDefinitions){
+//										Set<StateDefinitionID> statedDefinitionIDs;
+//										try {
+//											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
+//											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
+//													statedDefinitionIDs, 
+//													STATE_DEFINITION_FETCH_GROUPS, 
+//													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//													monitor);
+//											stateDefinitionMap.put(type.c(), stateDefinitions);
+//										} catch (Exception e) {
+//											ExceptionHandlerRegistry.asyncHandleException(e);
+//											throw new RuntimeException(e);
+//										}
+//									}//for
+//
+//									documentTypeCombo.selectElementByIndex(0);
+//									selectedDocumentType = documentTypeCombo.getSelectedElement();
+//
+//									stateDefinitionCombo.removeAll();
+//									Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
+//									for(StateDefinition state : states){
+//										stateDefinitionCombo.addElement(state);
+//									}//for
+//									stateDefinitionCombo.selectElementByIndex(0);
+//
+//									selectedState = stateDefinitionCombo.getSelectedElement();
+//								}//try
+//								catch (Exception e1) {
+//									ExceptionHandlerRegistry.asyncHandleException(e1);
+//									throw new RuntimeException(e1);
+//								}
+//							}//for
+//						}//run
+//					});
 				}catch (Exception e1) {
 					ExceptionHandlerRegistry.asyncHandleException(e1);
 					throw new RuntimeException(e1);
