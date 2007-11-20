@@ -43,7 +43,13 @@ public class IssueNewWizard extends DynamicPathWizard{
 			IssueDAO issueDAO = IssueDAO.sharedInstance();
 			
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
-			issue = new Issue(ic.getSelectedReporter().getOrganisationID());
+			issue = new Issue(Login.getLogin().getOrganisationID());
+
+			issue.setSeverityType(ic.getSelectedIssueSeverityType());
+			issue.setPriority(ic.getSelectedIssuePriority());
+			issue.setReporter(ic.getSelectedReporter());
+			issue.setAssigntoUser(ic.getSelectedAssigntoUser());
+			
 			if(ic.getSelectedAttachmentFiles() != null){
 				for(File file : ic.getSelectedAttachmentFiles()){
 					InputStream in = new FileInputStream(file);
@@ -78,7 +84,6 @@ public class IssueNewWizard extends DynamicPathWizard{
 				issue.getDescription().setText(languageID, i18nText.getText(languageID));
 			}//for
 			
-			issue.setOrganisationID(Login.getLogin().getOrganisationID());
 			issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
