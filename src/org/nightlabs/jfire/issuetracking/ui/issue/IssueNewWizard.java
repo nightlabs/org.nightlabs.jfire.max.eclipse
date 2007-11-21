@@ -40,7 +40,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			IssueDAO issueDAO = IssueDAO.sharedInstance();
 			
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
-			issue = new Issue(Login.getLogin().getOrganisationID());
+			issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setSeverityType(ic.getSelectedIssueSeverityType());
@@ -69,16 +69,16 @@ public class IssueNewWizard extends DynamicPathWizard{
 				}
 			}//if
 			
-			I18nText i18nText = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();
-			Set<String> languageIDs = i18nText.getLanguageIDs();
+			I18nText subject = issueNewPage.getIssueCreateComposite().getSubjectText().getI18nText();
+			Set<String> languageIDs = subject.getLanguageIDs();
 			for(String languageID : languageIDs){
-				issue.getSubject().setText(languageID, i18nText.getText(languageID));
+				issue.getSubject().setText(languageID, subject.getText(languageID));
 			}//for
 			
-			i18nText = issueNewPage.getIssueCreateComposite().getDescriptionText().getI18nText();
-			languageIDs = i18nText.getLanguageIDs();
+			I18nText description = issueNewPage.getIssueCreateComposite().getDescriptionText().getI18nText();
+			languageIDs = description.getLanguageIDs();
 			for(String languageID : languageIDs){
-				issue.getDescription().setText(languageID, i18nText.getText(languageID));
+				issue.getDescription().setText(languageID, description.getText(languageID));
 			}//for
 			
 			issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());

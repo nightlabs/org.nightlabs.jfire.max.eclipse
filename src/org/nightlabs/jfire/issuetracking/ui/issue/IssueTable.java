@@ -201,9 +201,6 @@ extends AbstractTableComposite<Issue>
 				case(3):
 					if (issue.getDescription() != null)
 						return issue.getDescription().getText();
-//					return issue.getCreateTimestamp().toString();
-//					if (issue.getUpdateTimestamp() != null)
-//						return issue.getUpdateTimestamp().toString();
 				break;
 				case(4):
 					if(issue.getSeverityType() != null)

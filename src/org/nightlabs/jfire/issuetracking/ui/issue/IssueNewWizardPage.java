@@ -46,12 +46,25 @@ public class IssueNewWizardPage extends WizardHopPage{
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
+			updatePageComplete();
 		}
 		super.setVisible(visible);
 	}
 	
 	private void updatePageComplete() {
 		setPageComplete(false);
+		
+		if(issueCreateComposite.getSubjectText().getEditText() == null && issueCreateComposite.getSubjectText().getEditText().equals("")){
+			setMessage("The subject should not be empty.");
+		}//if
+		
+		if(issueCreateComposite.getSelectedReporter() == null){
+			setMessage("The reporter should not be null");
+		}
+		else{
+			setMessage(null);
+		}
+
 		//.................
 		setPageComplete(true);
 		setErrorMessage(null);

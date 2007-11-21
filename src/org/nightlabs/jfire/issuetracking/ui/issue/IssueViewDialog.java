@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
@@ -59,7 +60,7 @@ public class IssueViewDialog extends CenteredDialog{
 								issueHistory = issueDAO.createIssueHistory(issueHistory, true, new String[]{IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								
 								IssueEditComposite ie = editDialog.getIssueEditComposite();
-								issue = new Issue(Login.sharedInstance().getOrganisationID());
+								issue = new Issue(Login.sharedInstance().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
 								issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								
