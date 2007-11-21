@@ -13,9 +13,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -41,12 +39,8 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.jbpm.JbpmManager;
-import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
@@ -99,6 +93,8 @@ extends XComposite{
 	private User selectedAssigntoUser;
 
 	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+
+	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
 	public IssueCreateComposite(Composite parent, int style) {
 		super(parent, style);
@@ -283,8 +279,8 @@ extends XComposite{
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
-					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
+//					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					
 					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 					
@@ -386,44 +382,6 @@ extends XComposite{
 //		Category  	
 //		Reproducibility 	
 	}
-
-	private ILabelProvider labelProvider = new LabelProvider() {
-		@Override
-		public String getText(Object element) 
-		{
-			if (element instanceof StateDefinition) {
-				StateDefinition issueSeverityType = (StateDefinition) element;
-				return issueSeverityType.getName().getText();
-			}
-
-			if (element instanceof IssueSeverityType) {
-				IssueSeverityType issueSeverityType = (IssueSeverityType) element;
-				return issueSeverityType.getIssueSeverityTypeText().getText();
-			}
-
-//			if (element instanceof IssueStatus) {
-//			IssueStatus issueStatus = (IssueStatus) element;
-//			return issueStatus.getIssueStatusText().getText();
-//			}
-			
-			if(element instanceof IssueType){
-				IssueType issueType = (IssueType)element;
-				return issueType.getName().getText();
-			}
-
-			if (element instanceof IssuePriority) {
-				IssuePriority issuePriority = (IssuePriority) element;
-				return issuePriority.getIssuePriorityText().getText();
-			}
-
-			if (element instanceof Class) {
-				Class c = (Class) element;
-				return c.getSimpleName();
-			}
-
-			return super.getText(element);
-		}		
-	};
 
 	public IssueSeverityType getSelectedIssueSeverityType() {
 		return selectedIssueSeverityType;
