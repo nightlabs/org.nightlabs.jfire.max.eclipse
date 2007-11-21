@@ -26,6 +26,7 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
@@ -51,7 +52,8 @@ extends AbstractTableComposite<Issue>
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS, 
 		Issue.FETCH_GROUP_DESCRIPTION, 
-		Issue.FETCH_GROUP_SUBJECT, 
+		Issue.FETCH_GROUP_SUBJECT,
+		IssueFileAttachment.FETCH_GROUP_THIS,
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
 		StateDefinition.FETCH_GROUP_NAME};

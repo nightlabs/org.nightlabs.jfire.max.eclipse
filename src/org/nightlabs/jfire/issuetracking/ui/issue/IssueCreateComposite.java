@@ -1,13 +1,11 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -45,14 +43,9 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
-import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
-import org.nightlabs.jfire.jbpm.dao.StateDefinitionDAO;
-import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.state.id.StateDefinitionID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -473,7 +466,11 @@ extends XComposite{
 		return subjectText;
 	}
 
-	public List<File> getSelectedAttachmentFiles(){
-		return fileComposite.getFileList();
+	public List<FileInputStream> getSelectedAttachmentFiles(){
+		return fileComposite.getFileInputStreamList();
+	}
+	
+	public Map<String, InputStream> getSelectedAttachmentFileMap(){
+		return fileComposite.getInputStreamMap();
 	}
 }

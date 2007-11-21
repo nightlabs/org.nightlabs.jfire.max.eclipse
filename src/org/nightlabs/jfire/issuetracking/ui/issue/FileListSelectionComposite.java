@@ -27,6 +27,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Chairat Kongarayawetchakun <chairat[AT]nightlabs[DOT]de>
@@ -50,7 +54,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 public class FileListSelectionComposite 
 extends XComposite 
 {
-	private Map<String, File> fileMap = new HashMap<String, File>();
+	private Map<String, InputStream> fileInputStreamMap = new HashMap<String, InputStream>();
 	private org.eclipse.swt.widgets.List fileListWidget;
 	
 	public FileListSelectionComposite(Composite parent, int compositeStyle, LayoutMode layoutMode) 
@@ -80,7 +84,11 @@ extends XComposite
 				String selectedFile = fileDialog.open();
 				if (selectedFile != null) {
 					File file = getFile(selectedFile);
-					fileMap.put(file.getName(), file);
+					try {
+						fileInputStreamMap.put(file.getName(), new FileInputStream(file));
+					} catch (FileNotFoundException e1) {
+						throw new RuntimeException(e1);
+					}
 					fileListWidget.add(file.getName());
 				}
 			}
@@ -93,7 +101,7 @@ extends XComposite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				fileMap.remove(fileListWidget.getItem(fileListWidget.getSelectionIndex()));
+				fileInputStreamMap.remove(fileListWidget.getItem(fileListWidget.getSelectionIndex()));
 				fileListWidget.remove(fileListWidget.getSelectionIndex());
 			}
 		});
@@ -105,13 +113,35 @@ extends XComposite
 		fileListComposite.setLayoutData(gridData);
 	}
 	
-	public List<File> getFileList() {
-		Collection<File> c = fileMap.values();
-		List<File> l = new ArrayList<File>(c);
+	public void setInputStreamMap(Map<String, InputStream> iMap){
+		fileListWidget.removeAll();
+		this.fileInputStreamMap = iMap;
+		for(String name : iMap.keySet()){
+			fileListWidget.add(name);
+		}
+	}
+	
+	public void setFileList(List<File> fileList){
+		for(File file : fileList){
+			try {
+				fileInputStreamMap.put(file.getName(), new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	public List<FileInputStream> getFileInputStreamList() {
+		Collection<FileInputStream> c = CollectionUtil.castCollection(fileInputStreamMap.values());
+		List<FileInputStream> l = new ArrayList<FileInputStream>(c);
 		return l;
 	}
 	
 	public File getFile(String fileText) {
 		return new File(fileText);
+	}
+	
+	public Map<String, InputStream> getInputStreamMap(){
+		return fileInputStreamMap;
 	}
 }

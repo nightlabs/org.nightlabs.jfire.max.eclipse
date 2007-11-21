@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -50,20 +51,19 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue.setReporter(ic.getSelectedReporter());
 			issue.setAssigntoUser(ic.getSelectedAssigntoUser());
 			
-			if(ic.getSelectedAttachmentFiles() != null){
-				for(File file : ic.getSelectedAttachmentFiles()){
-					InputStream in = new FileInputStream(file);
-	
-					if (in != null) {
+			if(ic.getSelectedAttachmentFileMap() != null){
+				Map<String, InputStream> fileMap = ic.getSelectedAttachmentFileMap();
+				for(String name : fileMap.keySet()){
+					if (fileMap.get(name) != null) {
 						try {
 							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
-							issueFileAttachment.loadStream(in, file.getName());
+							issueFileAttachment.loadStream(fileMap.get(name), name);
 							issue.getFileList().add(issueFileAttachment);
 						} catch (IOException e) {
 							throw new RuntimeException(e);
 						} finally {
 							try {
-								in.close();
+								fileMap.get(name).close();
 							} catch (IOException e) {
 								throw new RuntimeException(e);
 							}

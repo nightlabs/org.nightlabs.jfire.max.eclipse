@@ -1,10 +1,14 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -13,18 +17,19 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
 
 public class IssueViewComposite extends XComposite{
 	
 	private Label severityLbl;
 	private Label severityTextLbl;
-	private Label statusLbl;
-	private Label statusTextLbl;
+//	private Label statusLbl;
+//	private Label statusTextLbl;
 	private Label priorityLbl;
 	private Label priorityTextLbl;
 	
-	private Label typeLbl;
-	private Label typeTextLbl;
+	private Label issueTypeLbl;
+	private Label issueTypeTextLbl;
 
 	private Label reporterLbl;
 	private Label reporterTextLbl;
@@ -41,8 +46,9 @@ public class IssueViewComposite extends XComposite{
 	private I18nTextEditor subjectText;
 
 	private Label fileLabel;
-	private Label fileTextLbl;
-	private Button fileButton;
+	private FileListSelectionComposite fileComposite;
+	//private Label fileTextLbl;
+	//private Button fileButton;
 	
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
@@ -119,10 +125,23 @@ public class IssueViewComposite extends XComposite{
 		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		fileLabel = new Label(sashFormComposite, SWT.NONE);
-		fileLabel.setText("File:");
+		fileLabel.setText("Files:");
+	
+		fileComposite = new FileListSelectionComposite(sashFormComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		fileComposite.setLayoutData(gridData);
 		
-		fileTextLbl = new Label(sashFormComposite, SWT.NONE);
-//		fileTextLbl.setText(issue.getFileName());
+		List<IssueFileAttachment> iList = issue.getFileList();
+		Map<String, InputStream> iMap = new HashMap<String, InputStream>();
+		for(IssueFileAttachment ia : iList){
+			iMap.put(ia.getFileName(), ia.createFileAttachmentInputStream());
+		}
+		fileComposite.setInputStreamMap(iMap);
+		
+//		fileComposite.getFileInputStreamList().addAll(new Colissue.getFileList().toArray());
+//		fileTextLbl = new Label(sashFormComposite, SWT.NONE);
+//		issue.getFileList()
+//		fileTextLbl.setText();
 	}
 	
 	private XComposite createBasicsComposite(Composite parent){
@@ -139,15 +158,15 @@ public class IssueViewComposite extends XComposite{
 		gridData.grabExcessHorizontalSpace = true;
 		severityTextLbl.setLayoutData(gridData);
 		
-		statusLbl = new Label(mainComposite, SWT.NONE);
-		statusLbl.setAlignment(SWT.RIGHT);
-		statusLbl.setText("Status:");
-
-		statusTextLbl = new Label(mainComposite, SWT.NONE);	
-		statusTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		statusTextLbl.setLayoutData(gridData);
+//		statusLbl = new Label(mainComposite, SWT.NONE);
+//		statusLbl.setAlignment(SWT.RIGHT);
+//		statusLbl.setText("Status:");
+//
+//		statusTextLbl = new Label(mainComposite, SWT.NONE);	
+//		statusTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
+//		gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.grabExcessHorizontalSpace = true;
+//		statusTextLbl.setLayoutData(gridData);
 		
 		priorityLbl = new Label(mainComposite, SWT.NONE);
 		priorityLbl.setAlignment(SWT.RIGHT);
@@ -159,15 +178,15 @@ public class IssueViewComposite extends XComposite{
 		gridData.grabExcessHorizontalSpace = true;
 		priorityTextLbl.setLayoutData(gridData);
 		
-		typeLbl = new Label(mainComposite, SWT.NONE);
-		typeLbl.setAlignment(SWT.RIGHT);
-		typeLbl.setText("Type:");
-		
-		typeTextLbl = new Label(mainComposite, SWT.NONE);
-		typeTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		typeTextLbl.setLayoutData(gridData);
+//		issueTypeLbl = new Label(mainComposite, SWT.NONE);
+//		issueTypeLbl.setAlignment(SWT.RIGHT);
+//		issueTypeLbl.setText("Type:");
+//		
+//		issueTypeTextLbl = new Label(mainComposite, SWT.NONE);
+//		issueTypeTextLbl.setText(issue.getStateDefinition().getJbpmNodeName());
+//		gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.grabExcessHorizontalSpace = true;
+//		issueTypeTextLbl.setLayoutData(gridData);
 		
 		return mainComposite;
 	}
