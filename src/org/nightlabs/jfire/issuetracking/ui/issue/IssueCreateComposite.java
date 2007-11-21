@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -93,6 +94,8 @@ extends XComposite{
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
+	private ObjectID attachedObjectID;
+	
 	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
@@ -435,5 +438,9 @@ extends XComposite{
 	
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
+	}
+	
+	public void setJDOObject(ObjectID objectID){
+		this.attachedObjectID = objectID;
 	}
 }
