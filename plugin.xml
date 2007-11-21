@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+	<extension-point id="issueOverview" name="Issue overview" schema="schema/overview.exsd"/>
+    <extension 
+   		point="org.eclipse.ui.perspectives">
+   		<perspective
+    		class="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"
+    		id="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective" name="Issue Tracking"/>
+    </extension>
+    <extension 
+    	point="org.eclipse.ui.views">
+    	<category
+    		id="org.nightlabs.jfire.issuetracking" name="Issue"/>
+		<view 
+			category="org.nightlabs.jfire.issuetracking"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView"
+            icon="icons/IssuePerspective.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="Issue View"/>
+    </extension>
+
+	<extension
+         point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
+      <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            index="0"
+            name="Issue">
+      </categoryFactory>
+      <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issue"
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryFactory"
+            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
+            index="0"
+            name="Issues">
+      </entryFactory>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">
+   		<editor
+        	class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            default="true"
+            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            name="Issue">
+      </editor>
+   </extension>
+   
+   <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			indexHint="15" />
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueListPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			indexHint="10" />
+  </extension>  
+  
+  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+      <editorActionBarContributionRegistry
+            targetEditorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor">
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.issue.action.IssueAction"
+               contextmenuPath="org.nightlabs.jfire.issuetracking.ui.overview"
+			   icon="icons/overview/account/action/ManualMoneyTransferAction.16x16.png"               
+               id="org.nightlabs.jfire.jfire.issuetracking.ui.issue.action.IssueAction"
+               name="Issue"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="Manually transfer money from or to the selected account.">
+         </editorActionBarContribution>
+         <groupMarker
+               name="org.nightlabs.jfire.issuetracking.ui.overview">
+         </groupMarker>         
+      </editorActionBarContributionRegistry>
+   </extension-->
+</plugin>

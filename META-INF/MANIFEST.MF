@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.trade.ui;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
