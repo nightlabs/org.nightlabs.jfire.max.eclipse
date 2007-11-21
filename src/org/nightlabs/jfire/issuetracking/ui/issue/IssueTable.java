@@ -34,7 +34,6 @@ import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
@@ -132,7 +131,7 @@ extends AbstractTableComposite<Issue>
 		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Category");
+		tc.setText("Type");
 		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
@@ -193,6 +192,8 @@ extends AbstractTableComposite<Issue>
 				case(0):
 					return Long.toString(issue.getIssueID());
 				case(1):
+					if(issue.getIssueType() != null)
+						return issue.getIssueType().getName().getText();
 				break;
 				case(2):
 					if (issue.getSubject() != null)

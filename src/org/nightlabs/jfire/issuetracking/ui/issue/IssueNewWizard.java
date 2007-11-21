@@ -81,7 +81,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 				issue.getDescription().setText(languageID, description.getText(languageID));
 			}//for
 			
-			issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			issueDAO.storeIssueWithoutAttachedDocument(issue, true, IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
