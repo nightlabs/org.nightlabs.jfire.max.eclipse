@@ -85,7 +85,12 @@ extends XComposite{
 	
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 
-	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS_ISSUE_TYPE = { 
+		IssueType.FETCH_GROUP_THIS, 
+		IssueSeverityType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_NAME, 
+		IssuePriority.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_NAME, 
+		FetchPlan.DEFAULT 
+	};
 	
 	public IssueEditComposite(Issue issue, Composite parent, int style) {
 		super(parent, style);
@@ -249,7 +254,7 @@ extends XComposite{
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
@@ -258,21 +263,21 @@ extends XComposite{
 								IssueType issueType = (IssueType) it.next();
 								issueTypeCombo.addElement(issueType);
 							}
-							issueTypeCombo.selectElementByIndex(0);
+							issueTypeCombo.selectElement(issue.getIssueType());
 							selectedIssueType = issueTypeCombo.getSelectedElement();
 
 							issueSeverityCombo.removeAll();
 							for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
 								issueSeverityCombo.addElement(is);
 							}
-							issueSeverityCombo.selectElementByIndex(0);
+							issueSeverityCombo.selectElement(issue.getSeverityType());
 							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
 							issuePriorityCombo.removeAll();
 							for (IssuePriority ip : selectedIssueType.getPriorities()) {
 								issuePriorityCombo.addElement(ip);
 							}
-							issuePriorityCombo.selectElementByIndex(0);
+							issuePriorityCombo.selectElement(issue.getPriority());
 							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						}
 					});

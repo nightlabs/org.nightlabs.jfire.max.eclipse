@@ -26,9 +26,12 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueSubject;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -50,13 +53,14 @@ extends AbstractTableComposite<Issue>
 	 * The fetch groups of issue data.
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS, 
-		Issue.FETCH_GROUP_DESCRIPTION, 
-		Issue.FETCH_GROUP_SUBJECT,
+		FetchPlan.DEFAULT, 
+		Issue.FETCH_GROUP_THIS,
+		IssueType.FETCH_GROUP_THIS,
+		IssueDescription.FETCH_GROUP_THIS, 
+		IssueSubject.FETCH_GROUP_THIS,
 		IssueFileAttachment.FETCH_GROUP_THIS,
 		IssueSeverityType.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS,
-		StateDefinition.FETCH_GROUP_NAME};
+		IssuePriority.FETCH_GROUP_THIS};
 
 	public IssueTable(Composite parent, int style)
 	{

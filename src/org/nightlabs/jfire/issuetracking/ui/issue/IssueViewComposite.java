@@ -47,8 +47,6 @@ public class IssueViewComposite extends XComposite{
 
 	private Label fileLabel;
 	private FileListSelectionComposite fileComposite;
-	//private Label fileTextLbl;
-	//private Button fileButton;
 	
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
@@ -147,6 +145,16 @@ public class IssueViewComposite extends XComposite{
 	private XComposite createBasicsComposite(Composite parent){
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 2;
+
+		issueTypeLbl = new Label(mainComposite, SWT.NONE);
+		issueTypeLbl.setAlignment(SWT.RIGHT);
+		issueTypeLbl.setText("Issue Type:");
+		
+		issueTypeTextLbl = new Label(mainComposite, SWT.NONE);
+		issueTypeTextLbl.setText(issue.getIssueType().getName().getText());
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		issueTypeTextLbl.setLayoutData(gridData);
 		
 		severityLbl = new Label(mainComposite, SWT.NONE);
 		severityLbl.setAlignment(SWT.RIGHT);
@@ -154,7 +162,7 @@ public class IssueViewComposite extends XComposite{
 		
 		severityTextLbl = new Label(mainComposite, SWT.NONE);
 		severityTextLbl.setText(issue.getSeverityType().getIssueSeverityTypeText().getText());
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		severityTextLbl.setLayoutData(gridData);
 		

@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -16,8 +14,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.NullProgressMonitor;
-
-import sun.security.x509.IssuerAlternativeNameExtension;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -46,6 +42,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
 			issue = new Issue(Login.getLogin().getOrganisationID());
 
+			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setSeverityType(ic.getSelectedIssueSeverityType());
 			issue.setPriority(ic.getSelectedIssuePriority());
 			issue.setReporter(ic.getSelectedReporter());

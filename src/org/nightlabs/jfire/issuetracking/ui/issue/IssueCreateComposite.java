@@ -431,4 +431,8 @@ extends XComposite{
 	public Map<String, InputStream> getSelectedAttachmentFileMap(){
 		return fileComposite.getInputStreamMap();
 	}
+	
+	public IssueType getSelectedIssueType(){
+		return selectedIssueType;
+	}
 }
