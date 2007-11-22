@@ -10,6 +10,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditActionRegistry;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 
@@ -55,7 +56,9 @@ public abstract class OpenRelatedAction extends Action implements IArticleEditAc
 	}
 
 	public IEditorInput getActiveGeneralEditorInput() {
-		return getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditor().getEditorInput();		
+		IGeneralEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (editor == null)
+			return null;
+		return editor.getEditorInput();
 	}
 }
