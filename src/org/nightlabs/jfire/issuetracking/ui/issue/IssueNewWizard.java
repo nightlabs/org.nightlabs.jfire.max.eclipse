@@ -8,6 +8,7 @@ import java.util.Set;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
@@ -20,8 +21,13 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class IssueNewWizard extends DynamicPathWizard{
 	private IssueNewWizardPage issueNewPage;
-	
-	public IssueNewWizard(){
+
+	private Set<ObjectID> objectIDs;
+	/**
+	 * @param objectIDs The JDO ObjectcIDs the new Issue should be linked to.
+	 */
+	public IssueNewWizard(Set<ObjectID> objectIDs){
+		this.objectIDs = objectIDs;
 		setWindowTitle("Wizard Title");
 	}
 
@@ -29,7 +35,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		issueNewPage = new IssueNewWizardPage();
+		issueNewPage = new IssueNewWizardPage(objectIDs);
 		addPage(issueNewPage);
 	}
 

@@ -29,7 +29,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -91,7 +90,7 @@ public class IssueListPage extends EntityEditorPageWithProgress
 		createButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IssueNewWizard wizard = new IssueNewWizard();
+				IssueNewWizard wizard = new IssueNewWizard(null);
 				//Instantiates the wizard container with the wizard and opens it
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 				dialog.open();

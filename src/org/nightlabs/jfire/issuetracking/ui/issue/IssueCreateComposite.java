@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -35,6 +36,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -43,12 +45,13 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
 extends XComposite{
 
-	private IssueDocumentType documentType;
+//	private IssueDocumentType documentType;
 
 //	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
 
@@ -63,6 +66,9 @@ extends XComposite{
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
+	private Label attachedObjectLbl;
+	private org.eclipse.swt.widgets.List attachedObjectList;
+	
 	private Label issueTypeLbl;
 	private XComboComposite<IssueType> issueTypeCombo;
 	private Label issueSeverityLbl;
@@ -94,7 +100,7 @@ extends XComposite{
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
-	private ObjectID attachedObjectID;
+	private Set<ObjectID> attachedObjectIDs;
 	
 	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 
@@ -115,6 +121,15 @@ extends XComposite{
 
 		int textStyle = SWT.READ_ONLY | SWT.BORDER;
 
+		attachedObjectLbl = new Label(this, SWT.NONE);
+		attachedObjectLbl.setText("Attached Object");
+		
+		attachedObjectList = new org.eclipse.swt.widgets.List(this, SWT.BORDER);
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		attachedObjectList.setLayoutData(gridData);
+		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
 		issueTypeCombo = new XComboComposite<IssueType>(this, SWT.NONE, labelProvider);
@@ -196,7 +211,7 @@ extends XComposite{
 		XComposite reporterComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		reporterComposite.getGridLayout().numColumns = 2;
 
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterComposite.setLayoutData(gridData);
 
@@ -440,7 +455,12 @@ extends XComposite{
 		return selectedIssueType;
 	}
 	
-	public void setJDOObject(ObjectID objectID){
-		this.attachedObjectID = objectID;
+	public void setAttachedObjectIDs(Set<ObjectID> objectIDs){
+		this.attachedObjectIDs = objectIDs;
+		for(ObjectID objectID : attachedObjectIDs){
+			 Class c = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
+			 attachedObjectList.add(c.getSimpleName());
+		}
+		
 	}
 }

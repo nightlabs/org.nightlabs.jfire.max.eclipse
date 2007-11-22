@@ -15,5 +15,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nightlabs.base.ui,
  org.eclipse.ui.workbench.texteditor
 Eclipse-LazyStart: true
-Eclipse-BuddyPolicy: registered
-Eclipse-RegisterBuddy: org.nightlabs.base.ui
+Export-Package: org.nightlabs.jfire.issuetracking.ui,
+ org.nightlabs.jfire.issuetracking.ui.issue,
+ org.nightlabs.jfire.issuetracking.ui.issue.editor,
+ org.nightlabs.jfire.issuetracking.ui.overview
