@@ -78,7 +78,7 @@ extends XComposite
 		if (!scriptNodes.isEmpty()) {
 			for (Iterator<ScriptRegistryItemNode> it = scriptNodes.iterator(); it.hasNext(); ) {
 				ScriptRegistryItemNode scriptNode = it.next();
-				logger.debug("topLevel scriptNode = "+scriptNode.getName()); //$NON-NLS-1$
+				logger.debug("topLevel scriptNode = " + (scriptNode == null ? null : scriptNode.getName())); //$NON-NLS-1$
 			}			
 		}
 		else {
