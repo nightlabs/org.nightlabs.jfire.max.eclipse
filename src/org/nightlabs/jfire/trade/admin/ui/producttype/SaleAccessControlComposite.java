@@ -175,13 +175,13 @@ public class SaleAccessControlComposite extends XComposite
 			}
 		});
 
-		JDOLifecycleManager.sharedInstance().addNotificationListener(ProductType.class, productTypeChangedListener);
-		addDisposeListener(new DisposeListener(){
-			public void widgetDisposed(DisposeEvent e)
-			{
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(ProductType.class, productTypeChangedListener);
-			}
-		});
+//		JDOLifecycleManager.sharedInstance().addNotificationListener(ProductType.class, productTypeChangedListener);
+//		addDisposeListener(new DisposeListener(){
+//			public void widgetDisposed(DisposeEvent e)
+//			{
+//				JDOLifecycleManager.sharedInstance().removeNotificationListener(ProductType.class, productTypeChangedListener);
+//			}
+//		});
 
 		setProductType(null);
 	}
@@ -373,21 +373,22 @@ public class SaleAccessControlComposite extends XComposite
 		closed = closedCheckBox.getSelection();
 	}
 
-	protected NotificationListener productTypeChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.loadProductTypesJob.name")) { //$NON-NLS-1$
-		public void notify(NotificationEvent notificationEvent)
-		{
-			DirtyObjectID dirtyObjectID = (DirtyObjectID) notificationEvent.getFirstSubject();
-			ProductTypeID productTypeID = (ProductTypeID) dirtyObjectID.getObjectID();
-			if (productTypeID == null || !productTypeID.equals(JDOHelper.getObjectId(productType)))
-				return; // We have none or another object open and are not interested in this change.
-
-			try {
-				setProductTypeID(productTypeID);
-			} catch (ModuleException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	};
+// I think this is set by the surrounding composite/editor
+//	protected NotificationListener productTypeChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.loadProductTypesJob.name")) { //$NON-NLS-1$
+//		public void notify(NotificationEvent notificationEvent)
+//		{
+//			DirtyObjectID dirtyObjectID = (DirtyObjectID) notificationEvent.getFirstSubject();
+//			ProductTypeID productTypeID = (ProductTypeID) dirtyObjectID.getObjectID();
+//			if (productTypeID == null || !productTypeID.equals(JDOHelper.getObjectId(productType)))
+//				return; // We have none or another object open and are not interested in this change.
+//
+//			try {
+//				setProductTypeID(productTypeID);
+//			} catch (ModuleException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
+//	};
 
 	public SaleAccessControlHelper getSaleAccessControlHelper()
 	{
@@ -405,43 +406,43 @@ public class SaleAccessControlComposite extends XComposite
 //		FetchPlan.DEFAULT,
 //		ProductType.FETCH_GROUP_NAME};
 
-	/**
-	 * @deprecated should not be used anymore, call {@link SaleAccessControlComposite#setProductType(ProductType)} instead
-	 * 
-	 * @param productTypeID the {@link ProductTypeID} of the {@link ProductType} to load
-	 * @throws ModuleException if something during loading the productType went wrong
-	 */
-	@Deprecated
-	public void setProductTypeID(ProductTypeID productTypeID)
-	throws ModuleException
-	{
-		try {
-			if (productTypeID == null) {
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						setProductType(null);
-					}
-				});
-				return;
-			}
-
-			StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			final ProductType productType = sm.getProductType(
-					productTypeID, fetchGroupsProductType, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
-			if (Thread.currentThread() == Display.getDefault().getThread())
-				setProductType(productType);
-			else {
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						setProductType(productType);
-					}
-				});
-			}
-		} catch (Exception x) {
-			throw new ModuleException(x);
-		}
-	}
+//	/**
+//	 * @deprecated should not be used anymore, call {@link SaleAccessControlComposite#setProductType(ProductType)} instead
+//	 * 
+//	 * @param productTypeID the {@link ProductTypeID} of the {@link ProductType} to load
+//	 * @throws ModuleException if something during loading the productType went wrong
+//	 */
+//	@Deprecated
+//	public void setProductTypeID(ProductTypeID productTypeID)
+//	throws ModuleException
+//	{
+//		try {
+//			if (productTypeID == null) {
+//				Display.getDefault().asyncExec(new Runnable() {
+//					public void run() {
+//						setProductType(null);
+//					}
+//				});
+//				return;
+//			}
+//
+//			StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			final ProductType productType = sm.getProductType(
+//					productTypeID, fetchGroupsProductType, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//
+//			if (Thread.currentThread() == Display.getDefault().getThread())
+//				setProductType(productType);
+//			else {
+//				Display.getDefault().asyncExec(new Runnable() {
+//					public void run() {
+//						setProductType(productType);
+//					}
+//				});
+//			}
+//		} catch (Exception x) {
+//			throw new ModuleException(x);
+//		}
+//	}
 
 	/** 
 	 * @param productType The selected ProductType.

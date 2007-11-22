@@ -49,6 +49,15 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 	@Implement
 	public void setProductType(ProductType productType)
 	{
+		// access all fields we'll access later so we know already now, whether fetch-groups were missing
+		if (productType != null) {
+			productType.getExtendedProductType();
+			productType.getInnerPriceConfig();
+			productType.getPackagePriceConfig();
+			productType.getProductTypeLocal().getLocalAccountantDelegate();
+		}
+
+		// and assign
 		this.productType = productType;
 	}
 
