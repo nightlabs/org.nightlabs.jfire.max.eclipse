@@ -33,6 +33,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 
 public abstract class ArticleContainerAction
@@ -105,5 +106,15 @@ extends Action implements IArticleContainerAction
 		this.articles = filteredArticles;
 
 		return !this.articles.isEmpty();
+	}
+	
+	/**
+	 * Returns the {@link ArticleContainer} the Editor this actions was contributed to is associated with. 
+	 * @return The {@link ArticleContainer} the Editor this actions was contributed to is associated with.
+	 */
+	public ArticleContainer getArticleContainer() {
+		// TODO: Shouldn't there be a more convenient and straight forward way to access this?!? Alex
+		IGeneralEditor generalEditor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		return generalEditor.getGeneralEditorComposite().getArticleContainer();
 	}
 }
