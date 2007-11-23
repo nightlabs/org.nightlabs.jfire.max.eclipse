@@ -12,6 +12,7 @@ import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -34,7 +35,7 @@ extends JDOQuerySearchEntryViewer {
 	}
 
 	@Override
-	public AbstractTableComposite createListComposite(Composite parent) {
+	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
 		issueTable = new IssueTable(parent, SWT.NONE);
 		return issueTable;
 	}
@@ -42,8 +43,15 @@ extends JDOQuerySearchEntryViewer {
 	@Override
 	protected Object getQueryResult(Collection<JDOQuery> queries,
 			ProgressMonitor monitor) {
+//		try {
+//			return IssueDAO.sharedInstance().getAccountsForQueries(
+//					queries,
+//					FETCH_GROUPS_ACCOUNTS, 
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//					monitor);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
 		return null;
 	}
-
-	
 }

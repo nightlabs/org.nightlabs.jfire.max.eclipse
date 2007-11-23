@@ -50,27 +50,29 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	 */
 	@Override
 	protected void createComposite(Composite parent) {
-		Group group = new Group(this, getBorderStyle());
-		group.setLayout(new GridLayout(6, false));
-		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		parent.setLayout(new GridLayout(3, false));
 		
-		new Label(group, SWT.NONE).setText("ID");
-		issueIDText = new Text(group, SWT.NONE);
+//		Group group = new Group(this, getBorderStyle());
+//		group.setLayout(new GridLayout(6, false));
+//		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		new Label(group, SWT.NONE).setText("Severity");
-		severityTypeText = new Text(group, SWT.NONE);
+		new Label(parent, SWT.NONE).setText("ID");
+		issueIDText = new Text(parent, SWT.NONE);
 		
-		new Label(group, SWT.NONE).setText("Subject");
-		subjectText = new Text(group, SWT.NONE);
+		new Label(parent, SWT.NONE).setText("Severity");
+		severityTypeText = new Text(parent, SWT.NONE);
 		
-		new Label(group, SWT.NONE).setText("Priority");
-		priorityText = new Text(group, SWT.NONE);
+		new Label(parent, SWT.NONE).setText("Subject");
+		subjectText = new Text(parent, SWT.NONE);
 		
-		new Label(group, SWT.NONE).setText("Reporter");
-		reporterText = new Text(group, SWT.NONE);
+		new Label(parent, SWT.NONE).setText("Priority");
+		priorityText = new Text(parent, SWT.NONE);
 		
-		new Label(group, SWT.NONE).setText("Assignee");
-		assigneeText = new Text(group, SWT.NONE);
+		new Label(parent, SWT.NONE).setText("Reporter");
+		reporterText = new Text(parent, SWT.NONE);
+		
+		new Label(parent, SWT.NONE).setText("Assignee");
+		assigneeText = new Text(parent, SWT.NONE);
 	}
 
 	/* (non-Javadoc)
