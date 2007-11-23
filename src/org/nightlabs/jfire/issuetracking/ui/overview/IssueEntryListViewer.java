@@ -19,10 +19,10 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueListEntryViewer 
+public class IssueEntryListViewer 
 extends JDOQuerySearchEntryViewer {
 
-	public IssueListEntryViewer(Entry entry) {
+	public IssueEntryListViewer(Entry entry) {
 		super(entry);
 	}
 

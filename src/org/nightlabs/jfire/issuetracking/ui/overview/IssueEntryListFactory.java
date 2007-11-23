@@ -22,7 +22,7 @@ extends AbstractEntryFactory
 		return new DefaultEntry (this) {
 
 			public EntryViewer createEntryViewer() {
-				return new IssueListEntryViewer(this);
+				return new IssueEntryListViewer(this);
 			}
 
 			public void handleActivation() {
