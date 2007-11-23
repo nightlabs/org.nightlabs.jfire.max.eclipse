@@ -62,7 +62,7 @@ public class IssueViewDialog extends CenteredDialog{
 								IssueEditComposite ie = editDialog.getIssueEditComposite();
 								issue = new Issue(Login.sharedInstance().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
-								issueDAO.storeIssueWithoutAttachedDocument(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+								issueDAO.storeIssue(issue, true, new String[]{Issue.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								
 //								if(ie.getSelectedAttachmentFile() != null){
 //									InputStream in = new FileInputStream(ie.getSelectedAttachmentFile());

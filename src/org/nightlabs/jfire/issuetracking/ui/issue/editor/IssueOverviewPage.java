@@ -47,21 +47,21 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
  * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueListPage extends EntityEditorPageWithProgress
+public class IssueOverviewPage extends EntityEditorPageWithProgress
 {
 	/**
 	 * The id of this page.
 	 */
-	public static final String ID_PAGE = IssueListPage.class.getName();
+	public static final String ID_PAGE = IssueOverviewPage.class.getName();
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link IssueListPage}. 
+	 * new instances of {@link IssueOverviewPage}. 
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
 		public IFormPage createPage(FormEditor formEditor) {
-			return new IssueListPage(formEditor);
+			return new IssueOverviewPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
 			return new IssuePageController(editor);
@@ -76,7 +76,7 @@ public class IssueListPage extends EntityEditorPageWithProgress
 	 * @param editor The editor for which to create this
 	 * 		form page. 
 	 */
-	public IssueListPage(FormEditor editor)
+	public IssueOverviewPage(FormEditor editor)
 	{
 		super(editor, ID_PAGE, "Issue List Page Title");
 	}

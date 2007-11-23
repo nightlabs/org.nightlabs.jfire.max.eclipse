@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,23 +46,14 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
 extends XComposite{
 
-//	private IssueDocumentType documentType;
-
-//	private Map<Class, Collection<StateDefinition>> stateDefinitionMap = new HashMap<Class, Collection<StateDefinition>>();
-
 	private List<IssueType> issueTypes = new ArrayList<IssueType>();
-	private List<IssueSeverityType> issueSeverityTypes = new ArrayList<IssueSeverityType>();
-//	private List<IssueStatus> issueStatus = new ArrayList<IssueStatus>();
-	private List<IssuePriority> issuePriorities = new ArrayList<IssuePriority>();
 
 	private IssueType selectedIssueType;
-//	private Class selectedDocumentType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
@@ -73,10 +65,6 @@ extends XComposite{
 	private XComboComposite<IssueType> issueTypeCombo;
 	private Label issueSeverityLbl;
 	private XComboComposite<IssueSeverityType> issueSeverityCombo;
-//	private Label documentTypeLbl;
-//	private XComboComposite<Class> documentTypeCombo;
-//	private Label stateDefinitionLbl;
-//	private XComboComposite<StateDefinition> stateDefinitionCombo;
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
@@ -101,6 +89,7 @@ extends XComposite{
 	private User selectedAssigntoUser;
 
 	private Set<ObjectID> attachedObjectIDs;
+	private Set<Class> attachedPCClasses = new HashSet<Class>();
 	
 	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 
@@ -126,7 +115,7 @@ extends XComposite{
 		
 		attachedObjectList = new org.eclipse.swt.widgets.List(this, SWT.BORDER);
 		
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		attachedObjectList.setLayoutData(gridData);
 		
@@ -134,7 +123,7 @@ extends XComposite{
 		issueTypeLbl.setText("Issue Type: ");
 		issueTypeCombo = new XComboComposite<IssueType>(this, SWT.NONE, labelProvider);
 
-		List issueTypeList = new ArrayList<IssueType>();
+		List<IssueType> issueTypeList = new ArrayList<IssueType>();
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
@@ -154,37 +143,6 @@ extends XComposite{
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 			}
 		});
-//		//----------------------------------------------
-//		documentTypeLbl = new Label(this, SWT.NONE);
-//		documentTypeLbl.setText("Document Type: ");
-//		documentTypeCombo = new XComboComposite<Class>(this, SWT.NONE, labelProvider);
-//
-//		List docTypeList = new ArrayList<Class>();
-//		for(IssueDocumentType type : IssueDocumentType.values()){
-//			docTypeList.add(type.c());
-//		}
-//		documentTypeCombo.setInput(docTypeList);
-//		documentTypeCombo.selectElementByIndex(0);
-//		documentTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
-//			public void selectionChanged(SelectionChangedEvent e) {
-//				selectedDocumentType = documentTypeCombo.getSelectedElement();
-//				stateDefinitionCombo.removeAll();
-//				Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
-//				for(StateDefinition state : states){
-//					stateDefinitionCombo.addElement(state);
-//				}//for
-//				stateDefinitionCombo.selectElementByIndex(0);
-//			}
-//		});
-//
-//		stateDefinitionLbl = new Label(this, SWT.NONE);
-//		stateDefinitionLbl.setText("State: ");
-//		stateDefinitionCombo = new XComboComposite<StateDefinition>(this, SWT.NONE, labelProvider);
-//		stateDefinitionCombo.addSelectionChangedListener(new ISelectionChangedListener(){
-//			public void selectionChanged(SelectionChangedEvent e) {
-//				selectedState = stateDefinitionCombo.getSelectedElement();
-//			}
-//		});
 
 		issueSeverityLbl = new Label(this, SWT.NONE);
 		issueSeverityLbl.setText("Severity: ");
@@ -457,10 +415,19 @@ extends XComposite{
 	
 	public void setAttachedObjectIDs(Set<ObjectID> objectIDs){
 		this.attachedObjectIDs = objectIDs;
-		for(ObjectID objectID : attachedObjectIDs){
-			 Class c = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
-			 attachedObjectList.add(c.getSimpleName());
-		}
-		
+		if(objectIDs != null)
+			for(ObjectID objectID : attachedObjectIDs){
+				Class c = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
+				attachedPCClasses.add(c);
+				attachedObjectList.add(c.getSimpleName());
+			}
+	}
+
+	public Set<ObjectID> getAttachedObjectIDs(){
+		return attachedObjectIDs;
+	}
+	
+	public Set<Class> getAttachedPCClasses() {
+		return attachedPCClasses;
 	}
 }
