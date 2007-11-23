@@ -63,10 +63,6 @@
    </extension>
    
    <extension point="org.nightlabs.base.ui.entityEditor">
-        <pageFactory
-			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
-			indexHint="15" />
 		<pageFactory
 			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueOverviewPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
