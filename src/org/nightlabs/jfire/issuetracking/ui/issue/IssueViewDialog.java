@@ -19,6 +19,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
+import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueViewDialog extends CenteredDialog{

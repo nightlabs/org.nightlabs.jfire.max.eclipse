@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
