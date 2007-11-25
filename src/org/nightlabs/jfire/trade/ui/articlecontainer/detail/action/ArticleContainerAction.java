@@ -110,11 +110,14 @@ extends Action implements IArticleContainerAction
 	
 	/**
 	 * Returns the {@link ArticleContainer} the Editor this actions was contributed to is associated with. 
-	 * @return The {@link ArticleContainer} the Editor this actions was contributed to is associated with.
+	 * @return The {@link ArticleContainer} the Editor this actions was contributed to is associated with or null, if there is currently no editor active.
 	 */
 	public ArticleContainer getArticleContainer() {
 		// TODO: Shouldn't there be a more convenient and straight forward way to access this?!? Alex
 		IGeneralEditor generalEditor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (generalEditor == null)
+			return null;
+
 		return generalEditor.getGeneralEditorComposite().getArticleContainer();
 	}
 }
