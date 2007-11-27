@@ -56,6 +56,7 @@
       <editor
         	class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             default="false"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             name="Issue Entry List">
@@ -69,21 +70,19 @@
 			indexHint="10" />
   </extension>  
   
-  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+  <extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor">
+            targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">
          <editorActionBarContribution
-               class="org.nightlabs.jfire.issuetracking.ui.issue.action.IssueAction"
-               contextmenuPath="org.nightlabs.jfire.issuetracking.ui.overview"
-			   icon="icons/overview/account/action/ManualMoneyTransferAction.16x16.png"               
-               id="org.nightlabs.jfire.jfire.issuetracking.ui.issue.action.IssueAction"
-               name="Issue"
+               class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+               id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+               name="%overview.action.search.name"
                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
-               tooltip="Manually transfer money from or to the selected account.">
+               tooltip="%overview.action.search.tooltip">
          </editorActionBarContribution>
          <groupMarker
                name="org.nightlabs.jfire.issuetracking.ui.overview">
          </groupMarker>         
       </editorActionBarContributionRegistry>
-   </extension-->
+   </extension>
 </plugin>

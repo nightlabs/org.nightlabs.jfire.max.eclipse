@@ -120,14 +120,14 @@ extends XComposite{
 				selectedIssueType = issueTypeCombo.getSelectedElement();
 				
 				issueSeverityCombo.removeAll();
-				for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
+				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
 					issueSeverityCombo.addElement(is);
 				}
 				issueSeverityCombo.selectElementByIndex(0);
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 				
 				issuePriorityCombo.removeAll();
-				for (IssuePriority ip : selectedIssueType.getPriorities()) {
+				for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
 					issuePriorityCombo.addElement(ip);
 				}
 				issuePriorityCombo.selectElementByIndex(0);
@@ -268,17 +268,17 @@ extends XComposite{
 							selectedIssueType = issueTypeCombo.getSelectedElement();
 
 							issueSeverityCombo.removeAll();
-							for (IssueSeverityType is : selectedIssueType.getSeverityTypes()) {
+							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
 								issueSeverityCombo.addElement(is);
 							}
-							issueSeverityCombo.selectElement(issue.getSeverityType());
+							issueSeverityCombo.selectElement(issue.getIssueSeverityType());
 							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
 							issuePriorityCombo.removeAll();
-							for (IssuePriority ip : selectedIssueType.getPriorities()) {
+							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
 								issuePriorityCombo.addElement(ip);
 							}
-							issuePriorityCombo.selectElement(issue.getPriority());
+							issuePriorityCombo.selectElement(issue.getIssuePriority());
 							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						}
 					});

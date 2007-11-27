@@ -22,6 +22,7 @@ public class IssueLabelProvider extends LabelProvider{
 
 		if(element instanceof IssueType){
 			IssueType issueType = (IssueType)element;
+			
 			return issueType.getName().getText();
 		}
 

@@ -204,12 +204,12 @@ extends AbstractTableComposite<Issue>
 						return issue.getDescription().getText();
 				break;
 				case(4):
-					if(issue.getSeverityType() != null)
-						return issue.getSeverityType().getIssueSeverityTypeText().getText();
+					if(issue.getIssueSeverityType() != null)
+						return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
 					break;
 				case(5):
-					if(issue.getPriority() != null)
-						return issue.getPriority().getIssuePriorityText().getText();
+					if(issue.getIssuePriority() != null)
+						return issue.getIssuePriority().getIssuePriorityText().getText();
 					break;
 				case(6):
 					if(issue.getStateDefinition() != null)

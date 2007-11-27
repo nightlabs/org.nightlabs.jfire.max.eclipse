@@ -58,7 +58,7 @@ public class IssueViewDialog extends CenteredDialog{
 								IssueHistory issueHistory = new IssueHistory(issue);
 								IssueDAO issueDAO = IssueDAO.sharedInstance();
 								
-								issueHistory = issueDAO.createIssueHistory(issueHistory, true, new String[]{IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//								issueHistory = issueDAO.createIssueHistory(issueHistory, true, new String[]{IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 								
 								IssueEditComposite ie = editDialog.getIssueEditComposite();
 								issue = new Issue(Login.sharedInstance().getOrganisationID(), IDGenerator.nextID(Issue.class));

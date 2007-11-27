@@ -48,12 +48,13 @@ public class IssueNewWizard extends DynamicPathWizard{
 			IssueCreateComposite ic = issueNewPage.getIssueCreateComposite();
 			issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
-			for (ObjectID objectID : objectIDs) {
-				issue.getReferencedObjectIDs().add(objectID.toString());	
-			}
+			if(objectIDs != null)
+				for (ObjectID objectID : objectIDs) {
+					issue.getReferencedObjectIDs().add(objectID.toString());	
+				}
 			issue.setIssueType(ic.getSelectedIssueType());
-			issue.setSeverityType(ic.getSelectedIssueSeverityType());
-			issue.setPriority(ic.getSelectedIssuePriority());
+			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
+			issue.setIssuePriority(ic.getSelectedIssuePriority());
 			issue.setReporter(ic.getSelectedReporter());
 			issue.setAssigntoUser(ic.getSelectedAssigntoUser());			
 			

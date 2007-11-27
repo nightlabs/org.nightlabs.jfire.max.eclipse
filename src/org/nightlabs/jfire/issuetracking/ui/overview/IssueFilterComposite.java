@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.Issue;
@@ -12,6 +14,17 @@ import org.nightlabs.jfire.issue.Issue;
 public class IssueFilterComposite 
 extends AbstractQueryFilterComposite 
 {	
+	/**
+	 * @param parent
+	 * @param style
+	 * @param layoutMode
+	 * @param layoutDataMode
+	 */
+	public IssueFilterComposite(Composite parent, int style,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+		super(parent, style, layoutMode, layoutDataMode);
+	}
+	
 	public IssueFilterComposite(Composite parent, int style) {
 		super(parent, style);
 	}

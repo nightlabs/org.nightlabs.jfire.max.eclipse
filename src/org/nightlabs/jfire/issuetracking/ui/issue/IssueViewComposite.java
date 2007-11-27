@@ -162,7 +162,7 @@ public class IssueViewComposite extends XComposite{
 		severityLbl.setText("Severity:");
 		
 		severityTextLbl = new Label(mainComposite, SWT.NONE);
-		severityTextLbl.setText(issue.getSeverityType().getIssueSeverityTypeText().getText());
+		severityTextLbl.setText(issue.getIssueSeverityType().getIssueSeverityTypeText().getText());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		severityTextLbl.setLayoutData(gridData);
@@ -182,7 +182,7 @@ public class IssueViewComposite extends XComposite{
 		priorityLbl.setText("Priority:");
 		
 		priorityTextLbl = new Label(mainComposite, SWT.NONE);
-		priorityTextLbl.setText(issue.getPriority().getIssuePriorityText().getText());
+		priorityTextLbl.setText(issue.getIssuePriority().getIssuePriorityText().getText());
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		priorityTextLbl.setLayoutData(gridData);
