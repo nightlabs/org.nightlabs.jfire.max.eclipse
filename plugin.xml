@@ -31,7 +31,7 @@
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryFactory"
             icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
             index="0"
-            name="Issues">
+            name="Issue Overview">
       </entryFactory>
       <entryFactory
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueList"
@@ -46,10 +46,10 @@
    <extension
          point="org.eclipse.ui.editors">
    		<editor
-        	class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+        	class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
             default="true"
             icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
             name="Issue Overview">
       </editor>
       
@@ -65,8 +65,8 @@
    
    <extension point="org.nightlabs.base.ui.entityEditor">
 		<pageFactory
-			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueOverviewPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
 			indexHint="10" />
   </extension>  
   

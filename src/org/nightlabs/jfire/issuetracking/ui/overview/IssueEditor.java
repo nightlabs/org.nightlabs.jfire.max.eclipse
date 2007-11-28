@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;

@@ -7,7 +7,6 @@ import org.nightlabs.jfire.base.ui.overview.DefaultEntry;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.EntryViewer;
 import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

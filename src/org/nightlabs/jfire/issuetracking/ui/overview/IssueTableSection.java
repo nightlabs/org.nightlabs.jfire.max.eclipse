@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

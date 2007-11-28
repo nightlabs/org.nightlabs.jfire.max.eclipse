@@ -21,7 +21,7 @@
  * Or get it online :                                                          *
  *     http://opensource.org/licenses/lgpl-license.php                         *
  ******************************************************************************/
-package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

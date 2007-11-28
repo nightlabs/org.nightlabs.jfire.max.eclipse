@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditor;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 
 /**
  * @author Chairat Kongarayawetchakun 

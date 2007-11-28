@@ -21,7 +21,7 @@
  * Or get it online :                                                          *
  *     http://opensource.org/licenses/lgpl-license.php                         *
  ******************************************************************************/
-package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
 import java.util.Collection;
