@@ -23,30 +23,21 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
-import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  */
-public class IssuePageController extends EntityEditorPageController
+public class IssueOverviewPageController extends EntityEditorPageController
 {
 //	private IssueQuery issueQuery = new IssueQuery();
 	private Collection<Issue> issues = null;
@@ -54,9 +45,9 @@ public class IssuePageController extends EntityEditorPageController
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(IssuePageController.class);
+	private static final Logger logger = Logger.getLogger(IssueOverviewPageController.class);
 
-	public IssuePageController(EntityEditor editor)
+	public IssueOverviewPageController(EntityEditor editor)
 	{
 		super(editor);
 //		issueQuery.setToExclude(100);
@@ -87,8 +78,6 @@ public class IssuePageController extends EntityEditorPageController
 	 */
 	public void fireIssueQueryChange()
 	{
-//		propertyChangeSupport.firePropertyChange(PROPERTY_MONEY_TRANSFER_QUERY, null, issueQuery);
-
 		Job job = new Job("Loading Issues....") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
@@ -110,35 +99,4 @@ public class IssuePageController extends EntityEditorPageController
 	{
 		return issues;
 	}
-
-	
-//	public static final String PROPERTY_MONEY_TRANSFER_QUERY = "issueQuery"; //$NON-NLS-1$
-//
-//	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-//
-//	/**
-//	 * Add a {@link PropertyChangeListener} which will be triggered on the UI thread. Currently,
-//	 * the only property available is {@link #PROPERTY_MONEY_TRANSFER_QUERY} which
-//	 * references the object returned by {@link #getIssueQuery()}.
-//	 *
-//	 * @param listener The listener to be added.
-//	 */
-//	public void addPropertyChangeListener(PropertyChangeListener listener)
-//	{
-//		propertyChangeSupport.addPropertyChangeListener(listener);
-//	}
-//	public void addPropertyChangeListener(String propertyName,
-//			PropertyChangeListener listener)
-//	{
-//		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-//	}
-//	public void removePropertyChangeListener(PropertyChangeListener listener)
-//	{
-//		propertyChangeSupport.removePropertyChangeListener(listener);
-//	}
-//	public void removePropertyChangeListener(String propertyName,
-//			PropertyChangeListener listener)
-//	{
-//		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-//	}
 }

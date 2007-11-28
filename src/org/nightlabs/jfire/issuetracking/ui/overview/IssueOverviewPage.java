@@ -43,7 +43,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueNewWizard;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 
 /**
- * An editor page for issue tracking list.
+ * An editor page for issue tracking overview.
  * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
@@ -64,7 +64,7 @@ public class IssueOverviewPage extends EntityEditorPageWithProgress
 			return new IssueOverviewPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new IssuePageController(editor);
+			return new IssueOverviewPageController(editor);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class IssueOverviewPage extends EntityEditorPageWithProgress
 
 	@Override
 	protected void addSections(Composite parent) {
-		final IssuePageController controller = (IssuePageController)getPageController();
+		final IssueOverviewPageController controller = (IssueOverviewPageController)getPageController();
 		
 		Button createButton = new Button(parent, SWT.PUSH);
 		createButton.setText("New Issue");
@@ -100,17 +100,17 @@ public class IssueOverviewPage extends EntityEditorPageWithProgress
 		XComposite tableComposite = new XComposite(parent, SWT.NONE);
 		tableComposite.getGridLayout().numColumns = 2;
 		
-		Label l1 = new Label(tableComposite, SWT.NONE);
-		l1.setAlignment(SWT.CENTER);
-		l1.setText("Most recently issues");
+		Label mostRecentlyLabel = new Label(tableComposite, SWT.NONE);
+		mostRecentlyLabel.setAlignment(SWT.CENTER);
+		mostRecentlyLabel.setText("Most recently issues");
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
-		l1.setLayoutData(gridData);
+		mostRecentlyLabel.setLayoutData(gridData);
 		
-		Label l2 = new Label(tableComposite, SWT.NONE);
-		l2.setAlignment(SWT.CENTER);
-		l2.setText("Summary");
-		l2.setLayoutData(gridData);
+		Label summaryLabel = new Label(tableComposite, SWT.NONE);
+		summaryLabel.setAlignment(SWT.CENTER);
+		summaryLabel.setText("Summary");
+		summaryLabel.setLayoutData(gridData);
 		
 		IssueTable issueTable = new IssueTable(tableComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
@@ -122,12 +122,12 @@ public class IssueOverviewPage extends EntityEditorPageWithProgress
 		gridData.verticalAlignment = GridData.FILL;
 		issueTable2.setLayoutData(gridData);
 		
-		Label l3 = new Label(tableComposite, SWT.NONE);
-		l3.setAlignment(SWT.CENTER);
-		l3.setText("Resolved issues");
+		Label resolvedLabel = new Label(tableComposite, SWT.NONE);
+		resolvedLabel.setAlignment(SWT.CENTER);
+		resolvedLabel.setText("Resolved issues");
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
-		l3.setLayoutData(gridData);
+		resolvedLabel.setLayoutData(gridData);
 		
 		IssueTable issueTable3 = new IssueTable(tableComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
