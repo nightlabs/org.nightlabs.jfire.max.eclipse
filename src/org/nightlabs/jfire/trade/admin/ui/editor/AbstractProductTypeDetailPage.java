@@ -108,12 +108,6 @@ implements IProductTypeDetailPage
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				setProductType(productType);
-				if (productType.isClosed()) {
-					getManagedForm().getForm().getForm().setMessage(
-							Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.productTypeClosedMessage"),  //$NON-NLS-1$
-							IMessageProvider.INFORMATION);
-					RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
-				}
 				switchToContent();				
 			}
 		});
@@ -126,6 +120,21 @@ implements IProductTypeDetailPage
 
 	protected void setProductType(ProductType productType) 
 	{
+		if (productType == null) {
+			getManagedForm().getForm().getForm().setMessage("No product type selected.", IMessageProvider.INFORMATION);
+			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
+		}
+		else if (productType.isClosed()) {
+			getManagedForm().getForm().getForm().setMessage(
+					Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.productTypeClosedMessage"),  //$NON-NLS-1$
+					IMessageProvider.INFORMATION);
+			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
+		}
+		else {
+			getManagedForm().getForm().getForm().setMessage(null, IMessageProvider.INFORMATION);
+			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), true);
+		}
+		
 		if (nameSection != null)
 			nameSection.setProductType(productType);
 		if (nestedProductTypeSection != null)
