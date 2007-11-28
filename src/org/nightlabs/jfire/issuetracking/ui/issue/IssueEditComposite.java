@@ -202,7 +202,7 @@ extends XComposite{
 		assigntoUserText = new Text(toUserComposite, SWT.BORDER);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
-		selectedAssigntoUser = issue.getAssigntoUser();
+		selectedAssigntoUser = issue.getAssignee();
 		assigntoUserText.setText(selectedAssigntoUser.getName());
 		assigntoUserText.setLayoutData(gridData);
 

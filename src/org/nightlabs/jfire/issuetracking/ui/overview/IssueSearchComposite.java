@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
@@ -14,11 +11,15 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -32,6 +33,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
@@ -42,10 +44,11 @@ import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.organisation.Organisation;
+import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
-import org.osgi.framework.AllServiceListener;
 
 /**
  * @author Chairat Kongarayawetchakun 
@@ -68,6 +71,9 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	private IssueType selectedIssueType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private IssuePriority selectedIssuePriority;
+	
+	private User selectedReporter;
+	private User selectedAssignee;
 	
 	private DateTimeEdit createdTimeEdit;
 	private DateTimeEdit updatedTimeEdit;
@@ -171,7 +177,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		//-----------------------------------------------------------
 		Group userGroup = new Group(parent, SWT.NONE);
 		userGroup.setText("People Related");
-		GridLayout gridLayout = new GridLayout(2, false);
+		GridLayout gridLayout = new GridLayout(3, false);
 		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -179,11 +185,43 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		new Label(userGroup, SWT.NONE).setText("Reporter: ");
 		reporterText = new Text(userGroup, SWT.NONE);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		/////////////////////////////////
+		Button reporterButton = new Button(userGroup, SWT.PUSH);
+		reporterButton.setText("Choose User");
+
+		reporterButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), reporterText.getText());
+				int returnCode = userSearchDialog.open();
+				if (returnCode == Dialog.OK) {
+					selectedReporter = userSearchDialog.getSelectedUser();
+					if (selectedReporter != null)
+						reporterText.setText(selectedReporter.getName());
+				}//if
+			}
+		});
+		/////////////////////////////////
 		
 		new Label(userGroup, SWT.NONE).setText("Assignee: ");
 		assigneeText = new Text(userGroup, SWT.NONE);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
+		Button assigneeButton = new Button(userGroup, SWT.PUSH);
+		assigneeButton.setText("Choose User");
+
+		assigneeButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), assigneeText.getText());
+				int returnCode = userSearchDialog.open();
+				if (returnCode == Dialog.OK) {
+					selectedAssignee = userSearchDialog.getSelectedUser();
+					if (selectedAssignee != null)
+						assigneeText.setText(selectedAssignee.getName());
+				}//if
+			}
+		});
 		//-----------------------------------------------------------
 		Group timeGroup = new Group(parent, SWT.NONE);
 		timeGroup.setText("Time Related");
@@ -226,9 +264,6 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-//					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
-//					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					
 					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 					allIssuePriorities = new ArrayList<IssuePriority>();
 					allIssueSeverityTypes = new ArrayList<IssueSeverityType>();
@@ -304,6 +339,25 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
 			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
 		}
+		
+		if(selectedReporter != null){
+			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
+		}
+		
+		if(selectedAssignee != null){
+			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+		}
+		
+		if(createdTimeEdit.isActive()){
+			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+		}
+		
+		if(updatedTimeEdit.isActive()){
+			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+		}
+//		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
+//			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+//		}
 		
 		return issueQuery;
 	}

@@ -209,7 +209,13 @@ public class IssueViewComposite extends XComposite{
 		reporterLbl.setText("Reporter:");
 		
 		reporterTextLbl = new Label(mainComposite, SWT.NONE);
+		if(issue.getReporter() != null)
+			reporterTextLbl.setText(issue.getReporter().getName());
+		else{
+			reporterTextLbl.setText("-- NONE--");
+		}
 		reporterTextLbl.setText(issue.getReporter().getName());
+		
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterTextLbl.setLayoutData(gridData);
@@ -219,7 +225,12 @@ public class IssueViewComposite extends XComposite{
 		assigntoUserLbl.setText("Assigned To:");
 
 		assigntoUserTextLbl = new Label(mainComposite, SWT.NONE);	
-		assigntoUserTextLbl.setText(issue.getAssigntoUser().getName());
+		if(issue.getAssignee() != null)
+			assigntoUserTextLbl.setText(issue.getAssignee().getName());
+		else{
+			assigntoUserTextLbl.setText("-- NONE --");
+		}
+			
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		assigntoUserTextLbl.setLayoutData(gridData);
@@ -256,13 +267,19 @@ public class IssueViewComposite extends XComposite{
 	private XComposite createDetailComposite(Composite parent){
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 2;
-		/**********Detail**********/
+		/**********Person**********/
 		reporterLbl = new Label(mainComposite, SWT.NONE);
 		reporterLbl.setAlignment(SWT.RIGHT);
 		reporterLbl.setText("Reporter:");
 		
 		reporterTextLbl = new Label(mainComposite, SWT.NONE);
+		if(issue.getReporter() != null)
+			reporterTextLbl.setText(issue.getReporter().getName());
+		else{
+			reporterTextLbl.setText("-- NONE--");
+		}
 		reporterTextLbl.setText(issue.getReporter().getName());
+		
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterTextLbl.setLayoutData(gridData);
@@ -272,7 +289,12 @@ public class IssueViewComposite extends XComposite{
 		assigntoUserLbl.setText("Assigned To:");
 
 		assigntoUserTextLbl = new Label(mainComposite, SWT.NONE);	
-		assigntoUserTextLbl.setText(issue.getAssigntoUser().getName());
+		if(issue.getAssignee() != null)
+			assigntoUserTextLbl.setText(issue.getAssignee().getName());
+		else{
+			assigntoUserTextLbl.setText("-- NONE --");
+		}
+			
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		assigntoUserTextLbl.setLayoutData(gridData);
