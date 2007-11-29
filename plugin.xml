@@ -41,6 +41,19 @@
             index="1"
             name="Issue List">
       </entryFactory>
+      <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty"
+            index="1"
+            name="Issue Properties">
+      </categoryFactory>
+      <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.issueType"
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewFactory"
+            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
+            index="0"
+            name="Issue Type">
+      </entryFactory>
    </extension>
    
    <extension
@@ -61,12 +74,25 @@
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             name="Issue Entry List">
       </editor>
+      
+      <editor
+        	class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
+            default="false"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
+            name="Issue Type">
+      </editor>
    </extension>
    
    <extension point="org.nightlabs.base.ui.entityEditor">
 		<pageFactory
 			class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
+			indexHint="10" />
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
 			indexHint="10" />
   </extension>  
   
