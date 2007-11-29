@@ -3,19 +3,15 @@
 <plugin>
 	<extension
          point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
-		<categoryFactory
+      	<categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            index="5"
-            name="Issue Properties">
-      	</categoryFactory>
-      	<entryFactory
-            categoryEntryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.issueType"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewCategoryFactory"
+            index="1" name="Issue Types"/>
+        <entryFactory
+            categoryEntryID="org.nightlabs.jfire.pissuetracking.admin.ui.overview.issuetype.IssueTypeEntry"
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewFactory"
-            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
-            index="0"
-            name="Issue Types">
-      	</entryFactory>
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeEntryFactory"
+            index="0" name="Issue Types"/>
     </extension>
     
     <extension
