@@ -41,19 +41,6 @@
             index="1"
             name="Issue List">
       </entryFactory>
-      <categoryFactory
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty"
-            index="1"
-            name="Issue Properties">
-      </categoryFactory>
-      <entryFactory
-            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.issueType"
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewFactory"
-            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
-            index="0"
-            name="Issue Type">
-      </entryFactory>
    </extension>
    
    <extension
