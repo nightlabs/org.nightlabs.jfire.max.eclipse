@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Issue Tracking Admin Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.admin.ui;singleton:=true
+Bundle-Version: 0.9.1
+Bundle-ClassPath: org.nightlabs.jfire.issuetracking.admin.ui.jar
+Bundle-Activator: org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin
+Bundle-Vendor: NightLabs.org
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.forms,
+ org.nightlabs.jfire.trade.ui,
+ org.eclipse.jface.text,
+ org.eclipse.ui.editors,
+ org.nightlabs.base.ui,
+ org.eclipse.ui.workbench.texteditor,
+ org.nightlabs.jfire.issuetracking.ui
+Eclipse-LazyStart: true
+Export-Package: org.nightlabs.jfire.issuetracking.admin.ui,
+ org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty

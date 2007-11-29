@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension
+         point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
+		<categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
+            index="5"
+            name="Issue Properties">
+      	</categoryFactory>
+      	<entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.issueType"
+            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewFactory"
+            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
+            index="0"
+            name="Issue Types">
+      	</entryFactory>
+    </extension>
+    
+    <extension
+         point="org.eclipse.ui.editors">
+      <editor
+        	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
+            default="false"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
+            name="Issue Type">
+      </editor>
+   </extension>
+   
+    <extension point="org.nightlabs.base.ui.entityEditor">
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueEditor"
+			indexHint="10" />
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
+			indexHint="10" />
+  </extension>  
+  
+  <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
+      <editorActionBarContributionRegistry
+            targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+               id="org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction"
+               name="%overview.action.search.name"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="%overview.action.search.tooltip">
+         </editorActionBarContribution>
+         <groupMarker
+               name="org.nightlabs.jfire.issuetracking.ui.overview">
+         </groupMarker>         
+      </editorActionBarContributionRegistry>
+   </extension-->
+</plugin>
