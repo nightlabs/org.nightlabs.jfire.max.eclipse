@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
@@ -45,7 +46,7 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 			}
 		});
 		updateToolBarManager();
-		structLocalScopeText = new Text(getContainer(), SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
+		structLocalScopeText = new Text(getContainer(), XComposite.getBorderStyle(getContainer()) | SWT.SINGLE | SWT.READ_ONLY);
 		structLocalScopeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}

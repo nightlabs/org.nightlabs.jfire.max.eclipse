@@ -32,7 +32,6 @@ extends AbstractProductTypeDetailPageController
 			fetchGroups.add(fetchGroup);
 		
 		fetchGroups.add(ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION);
-		fetchGroups.add(ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE);
 		
 		FETCH_GROUPS = fetchGroups.toArray(new String[fetchGroups.size()]);
 	}
