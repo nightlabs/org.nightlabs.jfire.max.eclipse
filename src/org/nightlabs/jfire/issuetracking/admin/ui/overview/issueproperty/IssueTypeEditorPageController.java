@@ -4,9 +4,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 
-public class IssueTypeNewPageController extends EntityEditorPageController{
+public class IssueTypeEditorPageController extends EntityEditorPageController{
 
-	public IssueTypeNewPageController(EntityEditor editor)
+	public IssueTypeEditorPageController(EntityEditor editor)
 	{
 		super(editor);
 	}

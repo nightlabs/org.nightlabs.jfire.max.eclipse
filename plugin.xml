@@ -8,25 +8,25 @@
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewCategoryFactory"
             index="1" name="Issue Types"/>
         <entryFactory
-            categoryEntryID="org.nightlabs.jfire.pissuetracking.admin.ui.overview.issuetype.IssueTypeEntry"
+            categoryEntryID="org.nightlabs.jfire.pissuetracking.admin.ui.overview.issueproperty.IssueTypeEntry"
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeEntryFactory"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
             index="0" name="Issue Types"/>
     </extension>
     
     <extension
          point="org.eclipse.ui.editors">
       <editor
-        	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
+        	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             default="false"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
+            id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             name="Issue Type">
       </editor>
    </extension>
    
-    <extension point="org.nightlabs.base.ui.entityEditor">
+    <!--extension point="org.nightlabs.base.ui.entityEditor">
 		<pageFactory
 			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueEditor"
@@ -35,7 +35,7 @@
 			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
 			indexHint="10" />
-  </extension>  
+  </extension-->  
   
   <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry

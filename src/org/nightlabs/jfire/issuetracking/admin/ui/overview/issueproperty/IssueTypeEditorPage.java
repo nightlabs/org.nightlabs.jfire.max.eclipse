@@ -10,23 +10,23 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 
-public class IssueTypeNewEditorPage extends EntityEditorPageWithProgress {
+public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	/**
 	 * The id of this page.
 	 */
-	public static final String ID_PAGE = IssueTypeNewEditorPage.class.getName();
+	public static final String ID_PAGE = IssueTypeEditorPage.class.getName();
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link IssueTypeNewEditorPage}. 
+	 * new instances of {@link IssueTypeEditorPage}. 
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
 		public IFormPage createPage(FormEditor formEditor) {
-			return new IssueTypeNewEditorPage(formEditor);
+			return new IssueTypeEditorPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new IssueTypeNewPageController(editor);
+			return new IssueTypeEditorPageController(editor);
 		}
 	}
 
@@ -38,16 +38,16 @@ public class IssueTypeNewEditorPage extends EntityEditorPageWithProgress {
 	 * @param editor The editor for which to create this
 	 * 		form page. 
 	 */
-	public IssueTypeNewEditorPage(FormEditor editor)
+	public IssueTypeEditorPage(FormEditor editor)
 	{
 		super(editor, ID_PAGE, "New Issue Type");
 	}
 
 	@Override
 	protected void addSections(Composite parent) {
-		final IssueTypeNewPageController controller = (IssueTypeNewPageController)getPageController();
+		final IssueTypeEditorPageController controller = (IssueTypeEditorPageController)getPageController();
 		
-		IssueTypeCreateComposite ic = new IssueTypeCreateComposite(parent, SWT.NONE);
+		IssueTypeComposite ic = new IssueTypeComposite(parent, SWT.NONE);
 	}
 
 	@Override
