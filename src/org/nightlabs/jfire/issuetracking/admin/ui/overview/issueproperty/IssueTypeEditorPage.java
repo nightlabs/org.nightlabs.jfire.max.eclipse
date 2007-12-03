@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -45,9 +44,10 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 
 	@Override
 	protected void addSections(Composite parent) {
-		final IssueTypeEditorPageController controller = (IssueTypeEditorPageController)getPageController();
+		IssueTypeEditorPageController controller = (IssueTypeEditorPageController)getPageController();
 		
-		IssueTypeComposite ic = new IssueTypeComposite(parent, SWT.NONE);
+		IssueTypePrioritySection issueTypePrioritySection = new IssueTypePrioritySection(this, parent, controller);
+		getManagedForm().addPart(issueTypePrioritySection);
 	}
 
 	@Override

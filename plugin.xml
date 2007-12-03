@@ -26,16 +26,16 @@
       </editor>
    </extension>
    
-    <!--extension point="org.nightlabs.base.ui.entityEditor">
-		<pageFactory
-			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueEditor"
+    <extension point="org.nightlabs.base.ui.entityEditor">
+		<pageFactory 
+			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
 			indexHint="10" />
-		<pageFactory
+		<!--pageFactory
 			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
-			indexHint="10" />
-  </extension-->  
+			indexHint="10" /-->
+  	</extension>  
   
   <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
