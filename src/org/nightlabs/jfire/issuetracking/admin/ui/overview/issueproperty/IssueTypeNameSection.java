@@ -4,29 +4,31 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
+import org.nightlabs.base.ui.language.I18nTextEditor;
 
-public class IssueTypePrioritySection extends RestorableSectionPart {
+public class IssueTypeNameSection extends RestorableSectionPart {
 
 	private IssueTypeEditorPageController controller;
 	
-	public IssueTypePrioritySection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
+	public IssueTypeNameSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
 		this.controller = controller;
 		getSection().setText("Section Title");
-		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+		client.getGridLayout().numColumns = 2; 
 
-		IssuePriorityTable issuePriorityTable = new IssuePriorityTable(client, SWT.NONE);
-//		moneyTransferTable.getGridDCopyOfIssueTypePrioritySectionata().grabExcessHorizontalSpace = true;
-//		
+		new Label(client, SWT.NONE).setText("Issue Type Name: ");
+		I18nTextEditor issueTypeName = new I18nTextEditor(client);
+		
 		getSection().setClient(client);
 	}
 

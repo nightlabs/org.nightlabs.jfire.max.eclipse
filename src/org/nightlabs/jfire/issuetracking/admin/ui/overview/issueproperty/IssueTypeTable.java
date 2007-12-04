@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -25,8 +24,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
@@ -46,8 +43,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueTypeTable 
-extends AbstractTableComposite<IssueType>
-implements ControllablePart{
+extends AbstractTableComposite<IssueType>{
 
 	/**
 	 * The fetch groups of issue data.
@@ -65,8 +61,6 @@ implements ControllablePart{
 	public IssueTypeTable(Composite parent, int style)
 	{
 		super(parent, style);
-		
-//		LSDPartController.sharedInstance().registerPart(this);
 		
 		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
@@ -136,10 +130,6 @@ implements ControllablePart{
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("");
-		layout.addColumnData(new ColumnWeightData(5));
-
-		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Name");
 		layout.addColumnData(new ColumnWeightData(30));
 		
@@ -171,13 +161,5 @@ implements ControllablePart{
 			}
 			return null;
 		}		
-	}
-
-	public boolean canDisplayPart() {
-		return Login.isLoggedIn();
-	}
-
-	public void createPartContents(Composite parent) {
-		LSDPartController.sharedInstance().createPartControl(this, parent);
 	}
 }
