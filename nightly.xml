@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.jfire.reporting.admin.parameter.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.parameter.ui/dist/org.nightlabs.jfire.reporting.admin.parameter.ui_0.9.1.jar"/>
+    <publishes description="..." location="org.nightlabs.jfire.reporting.admin.parameter.ui/dist/org.nightlabs.jfire.reporting.admin.parameter.ui_0.9.2.jar"/>
     <javadoc path="org.nightlabs.jfire.reporting.admin.parameter.ui/src"/>
 	<ignore-requires path="org.eclipse.jdt.ui"/>
 	<ignore-requires path="org.apache.derby.core"/>
