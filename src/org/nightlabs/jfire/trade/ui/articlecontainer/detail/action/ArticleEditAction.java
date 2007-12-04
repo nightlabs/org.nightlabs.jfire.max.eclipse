@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEditFactory;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
@@ -40,7 +40,19 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 {
 	public ArticleEditAction()
 	{
-		super("", SWT.PUSH | SWT.FLAT); //$NON-NLS-1$
+//		super("", AS_PUSH_BUTTON); //$NON-NLS-1$
+	}
+
+	public ArticleEditAction(String text, ImageDescriptor image) {
+		super(text, image);
+	}
+
+	public ArticleEditAction(String text, int style) {
+		super(text, style);
+	}
+
+	public ArticleEditAction(String text) {
+		super(text);
 	}
 
 	private ArticleEditActionRegistry articleEditActionRegistry;

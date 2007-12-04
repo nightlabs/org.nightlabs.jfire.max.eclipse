@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
@@ -41,8 +41,21 @@ extends Action implements IArticleContainerAction
 {
 	public ArticleContainerAction()
 	{
-		super("", SWT.PUSH | SWT.FLAT); //$NON-NLS-1$
+//		super("", AS_PUSH_BUTTON); //$NON-NLS-1$
 	}
+
+	public ArticleContainerAction(String text, ImageDescriptor image) {
+		super(text, image);
+	}
+
+	public ArticleContainerAction(String text, int style) {
+		super(text, style);
+	}
+
+	public ArticleContainerAction(String text) {
+		super(text);
+	}
+
 
 	private ArticleContainerActionRegistry articleContainerActionRegistry;
 
