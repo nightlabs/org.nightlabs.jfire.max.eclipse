@@ -152,8 +152,6 @@ extends AbstractTableComposite<IssueType>{
 				switch (columnIndex) 
 				{
 				case(0):
-					return "";
-				case(1):
 					return issueType.getName().getText();
 				default:
 					return ""; //$NON-NLS-1$

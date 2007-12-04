@@ -9,10 +9,12 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
+import org.nightlabs.jfire.issue.IssueType;
 
 public class IssueTypeSeverityTypeSection extends RestorableSectionPart {
 
 	private IssueTypeEditorPageController controller;
+	private IssueSeverityTypeTable issueSeverityTypeTable;
 	
 	public IssueTypeSeverityTypeSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
@@ -24,10 +26,11 @@ public class IssueTypeSeverityTypeSection extends RestorableSectionPart {
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 
-		IssueSeverityTypeTable issueSeverityTypeTable = new IssueSeverityTypeTable(client, SWT.NONE);
-//		moneyTransferTable.getGridDCopyOfIssueTypePrioritySectionata().grabExcessHorizontalSpace = true;
-//		
+		issueSeverityTypeTable = new IssueSeverityTypeTable(client, SWT.NONE);
 		getSection().setClient(client);
 	}
-
+	
+	public void setIssueType(IssueType issueType){
+		issueSeverityTypeTable.setInput(issueType.getIssueSeverityTypes());
+	}
 }

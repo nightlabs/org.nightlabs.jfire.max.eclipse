@@ -82,14 +82,12 @@ extends AbstractTableComposite<IssueSeverityType>
 	{
 		public String getColumnText(Object element, int columnIndex) 
 		{
-			if (element instanceof IssueType) {
-				IssueType issueType = (IssueType) element;
+			if (element instanceof IssueSeverityType) {
+				IssueSeverityType issueSeverityType = (IssueSeverityType) element;
 				switch (columnIndex) 
 				{
 				case(0):
-					return "";
-				case(1):
-					return issueType.getName().getText();
+					return issueSeverityType.getIssueSeverityTypeText().getText();
 				default:
 					return ""; //$NON-NLS-1$
 				}

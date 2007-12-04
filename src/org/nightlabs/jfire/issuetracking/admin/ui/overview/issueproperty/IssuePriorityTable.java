@@ -85,14 +85,14 @@ extends AbstractTableComposite<IssuePriority>
 	{
 		public String getColumnText(Object element, int columnIndex) 
 		{
-			if (element instanceof IssueType) {
-				IssueType issueType = (IssueType) element;
+			if (element instanceof IssuePriority) {
+				IssuePriority issuePriority = (IssuePriority) element;
 				switch (columnIndex) 
 				{
 				case(0):
-					return "";
+					return issuePriority.getIssuePriorityText().getText();
 				case(1):
-					return issueType.getName().getText();
+					return issuePriority.getIssuePriorityID();
 				default:
 					return ""; //$NON-NLS-1$
 				}

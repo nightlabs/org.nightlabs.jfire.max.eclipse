@@ -50,9 +50,11 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		getManagedForm().addPart(issueTypeNameSection);
 		
 		IssueTypePrioritySection issueTypePrioritySection = new IssueTypePrioritySection(this, parent, controller);
+		issueTypePrioritySection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypePrioritySection);
 		
 		IssueTypeSeverityTypeSection issueTypeSeverityTypeSection = new IssueTypeSeverityTypeSection(this, parent, controller);
+		issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypeSeverityTypeSection);
 	}
 

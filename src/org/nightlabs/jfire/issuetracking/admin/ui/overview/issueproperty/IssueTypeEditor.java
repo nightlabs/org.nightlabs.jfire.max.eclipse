@@ -22,7 +22,6 @@ public class IssueTypeEditor extends EntityEditor{
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException
 	{
 		super.init(site, input);
-		
 		issueTypeEditorInput = (IssueTypeEditorInput)input;
 		Job job = new Job("Loading Issue Type.....")
 		{
