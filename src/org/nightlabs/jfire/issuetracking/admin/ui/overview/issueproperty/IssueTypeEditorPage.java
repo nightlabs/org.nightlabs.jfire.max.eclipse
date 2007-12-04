@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -29,6 +30,9 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		}
 	}
 
+	private IssueTypeNameSection issueTypeNameSection;
+	private IssueTypePrioritySection issueTypePrioritySection;
+	private IssueTypeSeverityTypeSection issueTypeSeverityTypeSection;
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -46,14 +50,14 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	protected void addSections(Composite parent) {
 		IssueTypeEditorPageController controller = (IssueTypeEditorPageController)getPageController();
 		
-		IssueTypeNameSection issueTypeNameSection = new IssueTypeNameSection(this, parent, controller);
+		issueTypeNameSection = new IssueTypeNameSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeNameSection);
 		
-		IssueTypePrioritySection issueTypePrioritySection = new IssueTypePrioritySection(this, parent, controller);
+		issueTypePrioritySection = new IssueTypePrioritySection(this, parent, controller);
 		issueTypePrioritySection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypePrioritySection);
 		
-		IssueTypeSeverityTypeSection issueTypeSeverityTypeSection = new IssueTypeSeverityTypeSection(this, parent, controller);
+		issueTypeSeverityTypeSection = new IssueTypeSeverityTypeSection(this, parent, controller);
 		issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypeSeverityTypeSection);
 	}
@@ -67,7 +71,20 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	@Override
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
-		switchToContent(); // multiple calls don't hurt
+		switchToContent();		
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				IssueTypeEditorPageController controller = (IssueTypeEditorPageController)getPageController();
+				
+				if(issueTypeSeverityTypeSection != null)
+					issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
+				if(issueTypePrioritySection != null)
+					issueTypePrioritySection.setIssueType(controller.getIssueType());
+				if(issueTypeNameSection != null)
+					issueTypeNameSection.setIssueType(controller.getIssueType());
+			}
+		});
+		
 	}
 	
 	@Override

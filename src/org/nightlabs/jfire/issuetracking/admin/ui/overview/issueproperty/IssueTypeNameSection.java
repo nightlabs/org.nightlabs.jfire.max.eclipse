@@ -11,10 +11,14 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.jfire.issue.IssueType;
 
 public class IssueTypeNameSection extends RestorableSectionPart {
 
 	private IssueTypeEditorPageController controller;
+	private IssueType issueType;
+	
+	private I18nTextEditor issueTypeName;
 	
 	public IssueTypeNameSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
@@ -27,9 +31,13 @@ public class IssueTypeNameSection extends RestorableSectionPart {
 		client.getGridLayout().numColumns = 2; 
 
 		new Label(client, SWT.NONE).setText("Issue Type Name: ");
-		I18nTextEditor issueTypeName = new I18nTextEditor(client);
+		issueTypeName = new I18nTextEditor(client);
 		
 		getSection().setClient(client);
 	}
 
+	public void setIssueType(IssueType issueType){
+		this.issueType = issueType;
+		issueTypeName.setI18nText(issueType.getName());
+	}
 }

@@ -26,10 +26,13 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 		this.issueTypeID = input.getJDOObjectID();
 
 		issueType = 
-			IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, IssueTypeTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, 
+					IssueTypeTable.FETCH_GROUPS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					new NullProgressMonitor());
 		
 		monitor.done();
-		fireModifyEvent(null, null);
+		fireModifyEvent(null, issueType);
 	}
 
 	public void doSave(IProgressMonitor monitor) {
