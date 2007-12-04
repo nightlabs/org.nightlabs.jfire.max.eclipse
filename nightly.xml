@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.jfire.simpletrade.admin.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.simpletrade.admin.ui/dist/org.nightlabs.jfire.simpletrade.admin.ui_0.9.1.jar"/>
+    <publishes description="..." location="org.nightlabs.jfire.simpletrade.admin.ui/dist/org.nightlabs.jfire.simpletrade.admin.ui_0.9.2.jar"/>
     <javadoc path="org.nightlabs.jfire.simpletrade.admin.ui/src"/>
   </project>
 
