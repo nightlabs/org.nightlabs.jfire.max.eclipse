@@ -47,7 +47,6 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
-import org.nightlabs.jfire.voucher.store.VoucherType;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
