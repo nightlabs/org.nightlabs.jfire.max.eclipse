@@ -45,7 +45,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.dynamictrade.admin.ui.DynamicTradeAdminPlugin;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
