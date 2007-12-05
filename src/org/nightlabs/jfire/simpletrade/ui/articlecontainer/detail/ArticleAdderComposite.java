@@ -47,7 +47,6 @@ import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.QuantitySelector;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
