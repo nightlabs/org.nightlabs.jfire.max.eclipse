@@ -36,7 +36,6 @@ import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.gef.ui.properties.UndoablePropertySheetEntry;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -87,7 +86,6 @@ import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSet
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.Util;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
