@@ -78,18 +78,14 @@ extends XComposite
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
 		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS}; 
-	
+
+	private volatile Job setProductTypeIDJob = null;
 	public void setProductTypeID(final ProductTypeID productTypeID) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.loadProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final SimpleProductType productType = (SimpleProductType) ProductTypeDAO.sharedInstance().getProductType(productTypeID, 
 						FETCH_GROUP_PRODUCT_TYPE_DETAIL, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						productTypeName.setText(productType.getName().getText());		
-					}
-				});
 				Set<ProductTypeID> ids = new HashSet<ProductTypeID>(Arrays.asList(new ProductTypeID[] {productTypeID}));
 				Set<StructFieldID> fields = new HashSet<StructFieldID>(Arrays.asList(new StructFieldID[] {
 						SimpleProductTypeStruct.DESCRIPTION_LONG, SimpleProductTypeStruct.IMAGES_SMALL_IMAGE}
@@ -104,48 +100,56 @@ extends XComposite
 				} 
 				final PropertySet props = propertySets.get(productTypeID);
 				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, productType.getStructLocalScope(), monitor);
-				props.inflate(struct);
-				if (props != null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							ImageDataField smallImg;
-							try {
+				if (props != null)
+					props.inflate(struct);
+
+				final Job thisJob = this;
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (thisJob != setProductTypeIDJob)
+							return;
+
+						productTypeName.setText(productType.getName().getText());
+						currImageData = null; 
+
+						ImageDataField smallImg = null;
+						try {
+							if (props != null)
 								smallImg = (ImageDataField) props.getDataField(SimpleProductTypeStruct.IMAGES_SMALL_IMAGE);
-							} catch (Exception e) {
-								return;
-							}
-							if (smallImg.getContent() != null) { 
-								ImageData id = null;
-								InputStream in = new InflaterInputStream(new ByteArrayInputStream(smallImg.getContent()));
-								try {
-									currImageData = new ImageData(in);
-								} finally {
-									if (in != null)
-										try {
-											in.close();
-										} catch (IOException e) {
-											logger.error(e);
-										}
-								}
-								displayImage();
-							} else {
-								currImageData = null;
-								displayImage();
-							}
-							
-							I18nTextDataField description;
-							try {
-								description = (I18nTextDataField) props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG);
-							} catch (Exception e) {
-								return;
-							}							
-							productTypeDescription.setText(description.getI18nText().getText());
+						} catch (Exception e) {
+							logger.warn("Loading image from propertySet failed!", e);
 						}
-					});
-				}
+						if (smallImg != null && smallImg.getContent() != null) {
+//							ImageData id = null;
+							InputStream in = new InflaterInputStream(new ByteArrayInputStream(smallImg.getContent()));
+							try {
+								currImageData = new ImageData(in);
+							} finally {
+								if (in != null)
+									try {
+										in.close();
+									} catch (IOException e) {
+										logger.error("", e);
+									}
+							}
+						}
+
+						displayImage();
+
+						I18nTextDataField description = null;
+						try {
+							if (props != null)
+								description = (I18nTextDataField) props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG);
+						} catch (Exception e) {
+							logger.warn("Loading image from propertySet failed!", e);
+						}							
+						productTypeDescription.setText(description == null ? "" : description.getI18nText().getText());
+					}
+				});
 				return Status.OK_STATUS;
 			}
 		};
+		setProductTypeIDJob = loadJob;
 		loadJob.schedule();
 	}
 
