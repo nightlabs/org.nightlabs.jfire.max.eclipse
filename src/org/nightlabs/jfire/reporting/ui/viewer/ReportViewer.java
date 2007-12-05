@@ -29,8 +29,8 @@ package org.nightlabs.jfire.reporting.ui.viewer;
 import java.util.Set;
 
 import org.nightlabs.jfire.reporting.Birt;
-import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.ReportManager;
+import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;

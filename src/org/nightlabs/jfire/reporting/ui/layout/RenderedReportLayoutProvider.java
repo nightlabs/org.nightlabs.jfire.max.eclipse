@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
-import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.ReportManager;
+import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
