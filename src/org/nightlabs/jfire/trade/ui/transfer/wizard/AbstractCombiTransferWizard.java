@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -112,7 +113,7 @@ implements CombiTransferWizard
 		return side;
 	}
 
-	private List paymentEntryPages = null;
+	private List<PaymentEntryPage> paymentEntryPages = null;
 
 //	public IDynamicPathWizardPage createWizardEntryPage()
 //	{
@@ -136,16 +137,92 @@ implements CombiTransferWizard
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getPaymentEntryPages()
 	 */
-	public List getPaymentEntryPages()
+	public List<PaymentEntryPage> getPaymentEntryPages()
 	{
 		if (paymentEntryPages == null && (transferMode & TRANSFER_MODE_PAYMENT) != 0) {
 			try {
-				paymentEntryPages = new ArrayList();
+				paymentEntryPages = new ArrayList<PaymentEntryPage>();
 				PaymentEntryPage pep = new PaymentEntryPage(
 						new Payment(IDGenerator.getOrganisationID(), IDGenerator.nextID(Payment.class)));
 				paymentEntryPages.add(pep);
 			} catch (RuntimeException e) {
 				throw e;
+
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getModeOfPaymentFlavourID()
+//			 */
+//			public ModeOfPaymentFlavourID getModeOfPaymentFlavourID()
+//			{
+//				ModeOfPaymentFlavour modeOfPaymentFlavour = getPaymentEntryPage().getSelectedModeOfPaymentFlavour();
+//				if (modeOfPaymentFlavour == null)
+//					return null;
+		//
+//				return (ModeOfPaymentFlavourID) JDOHelper.getObjectId(modeOfPaymentFlavour);
+//			}
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getClientPaymentProcessor()
+//			 */
+//			public ClientPaymentProcessor getClientPaymentProcessor()
+//			{
+//				return getPaymentEntryPage().getClientPaymentProcessor();
+//			}
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getServerPaymentProcessorID()
+//			 */
+//			public ServerPaymentProcessorID getServerPaymentProcessorID()
+//			{
+//				ServerPaymentProcessor spp = getPaymentEntryPage().getSelectedServerPaymentProcessor();
+//				if (spp == null)
+//					return null;
+		//
+//				return (ServerPaymentProcessorID) JDOHelper.getObjectId(spp);
+//			}
+
+//			private List deliveries = new ArrayList();
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#createDelivery()
+//			 */
+//			public Delivery createDelivery()
+//			{
+//				Delivery delivery = new Delivery(Login.sharedInstance().getOrganisationID());
+//				deliveries.add(delivery);
+//				return delivery;
+//			}
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#getDeliveries()
+//			 */
+//			public List getDeliveries()
+//			{
+//				return deliveries;
+//			}
+		//
+//			/**
+//			 * key: String deliveryID<br/>
+//			 * value: DeliveryData deliveryData
+//			 */
+//			private Map deliveryDatas = new HashMap();
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#addDeliveryData(org.nightlabs.jfire.store.deliver.DeliveryData)
+//			 */
+//			public void addDeliveryData(DeliveryData deliveryData)
+//			{
+//				deliveryDatas.put(
+//						deliveryData.getDeliveryID(),
+//						deliveryData);
+//			}
+		//
+//			/**
+//			 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#getDeliveryData(org.nightlabs.jfire.store.deliver.Delivery)
+//			 */
+//			public DeliveryData getDeliveryData(Delivery delivery)
+//			{
+//				return (DeliveryData) deliveryDatas.get(delivery.getDeliveryID());
+
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -159,7 +236,7 @@ implements CombiTransferWizard
 //		return paymentEntryPage;
 //	}
 
-	private List deliveryEntryPages = null;
+	private List<DeliveryEntryPage> deliveryEntryPages = null;
 
 	public List<DeliveryEntryPage> getDeliveryEntryPages()
 	{
@@ -196,8 +273,8 @@ implements CombiTransferWizard
 				paymentDirection = Payment.PAYMENT_DIRECTION_INCOMING;
 
 			PaymentEntryPage firstPaymentEntryPage = null;
-			for (Iterator it = getPaymentEntryPages().iterator(); it.hasNext(); ) {
-				PaymentEntryPage page = (PaymentEntryPage) it.next();
+			for (Iterator<PaymentEntryPage> it = getPaymentEntryPages().iterator(); it.hasNext(); ) {
+				PaymentEntryPage page = it.next();
 
 				page.getPayment().setPaymentDirection(paymentDirection);
 
@@ -215,8 +292,8 @@ implements CombiTransferWizard
 		}
 
 		if (getDeliveryEntryPages() != null) {
-			for (Iterator it = getDeliveryEntryPages().iterator(); it.hasNext(); ) {
-				DeliveryEntryPage page = (DeliveryEntryPage) it.next();
+			for (Iterator<DeliveryEntryPage> it = getDeliveryEntryPages().iterator(); it.hasNext(); ) {
+				DeliveryEntryPage page = it.next();
 				if (getPageCount() > 0) // we add all except the first page as dynamic pages to allow the first PaymentEntryPage to add other PaymentEntryPages BEFORE the DeliveryEntryPages
 					addDynamicWizardPage(page);
 				else
@@ -274,7 +351,7 @@ implements CombiTransferWizard
 	}
 
 	private AnchorID customerID;
-	private Collection customerGroupIDs = new HashSet();
+	private Collection<CustomerGroupID> customerGroupIDs = new HashSet<CustomerGroupID>();
 
 	@Implement
 	public AnchorID getPartnerID()
@@ -290,20 +367,20 @@ implements CombiTransferWizard
 	}
 
 	@Implement
-	public Collection getCustomerGroupIDs()
+	public Collection<CustomerGroupID> getCustomerGroupIDs()
 	{
 		return Collections.unmodifiableCollection(customerGroupIDs);
 	}
-	protected void addCustomerGroupID(CustomerGroupID customerGroupID)
+	public void addCustomerGroupID(CustomerGroupID customerGroupID)
 	{
 		if (!customerGroupIDs.contains(customerGroupID))
 			customerGroupIDs.add(customerGroupID);
 	}
-	protected void removeCustomerGroupID(CustomerGroupID customerGroupID)
+	public void removeCustomerGroupID(CustomerGroupID customerGroupID)
 	{
 		customerGroupIDs.remove(customerGroupID);
 	}
-	protected void clearCustomerGroupIDs()
+	public void clearCustomerGroupIDs()
 	{
 		customerGroupIDs.clear();
 	}
@@ -315,8 +392,8 @@ implements CombiTransferWizard
 
 		if (page instanceof PaymentEntryPage) {
 			if (paymentEntryPages == null)
-				paymentEntryPages = new ArrayList();
-			paymentEntryPages.add(page);
+				paymentEntryPages = new ArrayList<PaymentEntryPage>();
+			paymentEntryPages.add((PaymentEntryPage) page);
 		}
 	}
 
@@ -327,8 +404,8 @@ implements CombiTransferWizard
 
 		if (page instanceof PaymentEntryPage) {
 			if (paymentEntryPages == null)
-				paymentEntryPages = new ArrayList();
-			paymentEntryPages.add(page);
+				paymentEntryPages = new ArrayList<PaymentEntryPage>();
+			paymentEntryPages.add((PaymentEntryPage) page);
 		}
 	}
 
@@ -357,80 +434,15 @@ implements CombiTransferWizard
 	{
 		throw new UnsupportedOperationException("This method is not supported!"); //$NON-NLS-1$
 	}
-
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getModeOfPaymentFlavourID()
-//	 */
-//	public ModeOfPaymentFlavourID getModeOfPaymentFlavourID()
-//	{
-//		ModeOfPaymentFlavour modeOfPaymentFlavour = getPaymentEntryPage().getSelectedModeOfPaymentFlavour();
-//		if (modeOfPaymentFlavour == null)
-//			return null;
-//
-//		return (ModeOfPaymentFlavourID) JDOHelper.getObjectId(modeOfPaymentFlavour);
-//	}
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getClientPaymentProcessor()
-//	 */
-//	public ClientPaymentProcessor getClientPaymentProcessor()
-//	{
-//		return getPaymentEntryPage().getClientPaymentProcessor();
-//	}
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getServerPaymentProcessorID()
-//	 */
-//	public ServerPaymentProcessorID getServerPaymentProcessorID()
-//	{
-//		ServerPaymentProcessor spp = getPaymentEntryPage().getSelectedServerPaymentProcessor();
-//		if (spp == null)
-//			return null;
-//
-//		return (ServerPaymentProcessorID) JDOHelper.getObjectId(spp);
-//	}
-
-//	private List deliveries = new ArrayList();
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#createDelivery()
-//	 */
-//	public Delivery createDelivery()
-//	{
-//		Delivery delivery = new Delivery(Login.sharedInstance().getOrganisationID());
-//		deliveries.add(delivery);
-//		return delivery;
-//	}
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#getDeliveries()
-//	 */
-//	public List getDeliveries()
-//	{
-//		return deliveries;
-//	}
-//
-//	/**
-//	 * key: String deliveryID<br/>
-//	 * value: DeliveryData deliveryData
-//	 */
-//	private Map deliveryDatas = new HashMap();
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#addDeliveryData(org.nightlabs.jfire.store.deliver.DeliveryData)
-//	 */
-//	public void addDeliveryData(DeliveryData deliveryData)
-//	{
-//		deliveryDatas.put(
-//				deliveryData.getDeliveryID(),
-//				deliveryData);
-//	}
-//
-//	/**
-//	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard#getDeliveryData(org.nightlabs.jfire.store.deliver.Delivery)
-//	 */
-//	public DeliveryData getDeliveryData(Delivery delivery)
-//	{
-//		return (DeliveryData) deliveryDatas.get(delivery.getDeliveryID());
-//	}
+	
+	/**
+	 * Calling this method triggers asynchronous reloading of the modes of payment/delivery based on the {@link CustomerGroupID}s set in this wizard.
+	 */
+	public void reloadPaymentDeliveryModes() {
+		for (PaymentEntryPage page : paymentEntryPages)
+			page.loadModeOfPayments();
+		
+		for (DeliveryEntryPage page : deliveryEntryPages)
+			page.loadModeOfDeliveries();
+	}
 }

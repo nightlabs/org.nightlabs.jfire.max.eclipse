@@ -55,7 +55,6 @@ import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.ArticlePrice;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
@@ -85,7 +84,7 @@ extends AbstractCombiTransferWizard
 	private InvoiceID invoiceID = null;
 	private DeliveryNoteID deliveryNoteID = null;
 
-	private List articlesToTransfer = new ArrayList();
+	private List<Article> articlesToTransfer = new ArrayList<Article>();
 
 	/**
 	 * @param articleContainerID Either an instance of {@link OrderID} or of {@link OfferID} or

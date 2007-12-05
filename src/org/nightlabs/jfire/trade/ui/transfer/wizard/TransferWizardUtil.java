@@ -464,12 +464,12 @@ public class TransferWizardUtil
 				productTypes.add(productType);
 			}
 
-			List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
-			for (Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
-				ModeOfDeliveryFlavourID modfID = itMDOFID.next();
-				ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
-				modeOfDeliveryFlavours.add(modf);
-			}
+//			List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
+//			for (Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
+//				ModeOfDeliveryFlavourID modfID = itMDOFID.next();
+//				ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
+//				modeOfDeliveryFlavours.add(modf);
+//			}
 
 ////			delivery.setDeliveryNoteIDs(deliveryWizard.getDeliveryNoteIDs());
 //			delivery.setProductIDs(deliveryWizard.getProductIDs(group.getProductTypeIDs()));
@@ -496,8 +496,7 @@ public class TransferWizardUtil
 				DeliveryEntryPage page = new DeliveryEntryPage(
 						delivery,
 						productTypes,
-						articles,
-						modeOfDeliveryFlavours);
+						articles);
 
 				res.add(page);
 			}

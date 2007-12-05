@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -43,6 +44,8 @@ import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -60,6 +63,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.util.RCPUtil;
@@ -88,6 +92,7 @@ import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRegistry;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -277,55 +282,6 @@ implements IPaymentEntryPage
 			serverPaymentProcessorCombo = new Combo(page, SWT.BORDER | SWT.READ_ONLY);
 			serverPaymentProcessorCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-
-// load ModeOfPaymentFlavour s
-			// AnchorID legalEntityID = (AnchorID) JDOHelper.getObjectId(offer.getOrder().getCustomer());
-			Collection c = getAccountingManager().getAvailableModeOfPaymentFlavoursForAllCustomerGroups(
-					wizard.getCustomerGroupIDs(),
-					ModeOfPaymentFlavour.MERGE_MODE_SUBTRACTIVE,
-					new String[]{
-							FetchPlan.DEFAULT,
-							ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
-							ModeOfPaymentFlavourName.FETCH_GROUP_NAMES,
-							ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA,
-							ModeOfPayment.FETCH_GROUP_NAME,
-							ModeOfPaymentName.FETCH_GROUP_NAMES}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
-			modeOfPaymentFlavourList.clear();
-			modeOfPaymentFlavourList.addAll(c);
-			Collections.sort(modeOfPaymentFlavourList, new Comparator() {
-				public int compare(Object obj0, Object obj1)
-				{
-					ModeOfPaymentFlavour mopf0 = (ModeOfPaymentFlavour)obj0;
-					ModeOfPaymentFlavour mopf1 = (ModeOfPaymentFlavour)obj1;
-					String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
-					String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
-					return name0.compareTo(name1);
-				}
-			});
-
-			modeOfPaymentFlavourTable.setInput(modeOfPaymentFlavourList);
-			PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
-			List<ModeOfPaymentFlavour> selList = new ArrayList<ModeOfPaymentFlavour>(1);
-			for (ModeOfPaymentFlavour modeOfPaymentFlavour : modeOfPaymentFlavourList) {
-				if (Util.equals(paymentEntryPageCfMod.getModeOfPaymentFlavourPK(), modeOfPaymentFlavour.getPrimaryKey())) {
-					selList.add(modeOfPaymentFlavour);
-					break;
-				}
-			}
-			modeOfPaymentFlavourTable.setSelectedElements(selList);
-
-//			int selIdx = -1;
-//			for (Iterator it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
-//				ModeOfPaymentFlavour modeOfPaymentFlavour = (ModeOfPaymentFlavour) it.next();
-//
-//				if (sessionLastSelectedMOPFPK != null && sessionLastSelectedMOPFPK.equals(modeOfPaymentFlavour.getPrimaryKey()))
-//					selIdx = modeOfPaymentFlavourGUIList.getItemCount();
-//
-//				modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(Locale.getDefault().getLanguage()));
-//			}
-//			if (selIdx  < 0) selIdx = 0;
-
 			modeOfPaymentFlavourTable.getTableViewer().addSelectionChangedListener(
 					new ISelectionChangedListener() {
 						public void selectionChanged(SelectionChangedEvent event)
@@ -378,13 +334,15 @@ implements IPaymentEntryPage
 			// TODO default selection!
 //			modeOfPaymentFlavourGUIList.setSelection(selIdx);
 
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run()
-				{
-					setMessage(null);
-					modeOfPaymentFlavourGUIListSelectionChanged();
-				}
-			});
+//			Display.getDefault().asyncExec(new Runnable() {
+//				public void run()
+//				{
+//					setMessage(null);
+//					modeOfPaymentFlavourGUIListSelectionChanged();
+//				}
+//			});
+			
+			loadModeOfPayments();
 
 			return page;
 		} catch (RuntimeException x) {
@@ -397,6 +355,94 @@ implements IPaymentEntryPage
 	protected PaymentWizardHop getPaymentWizardHop()
 	{
 		return (PaymentWizardHop) getWizardHop();
+	}
+	
+	private volatile Job loadModeOfPaymentsJob = null;
+	
+	public void loadModeOfPayments() {
+		Job loadJob = new Job("Loading mode of payments") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				PaymentWizard wizard = (PaymentWizard) getWizard();
+				final List<ModeOfPaymentFlavour> modeOfPaymentFlavourList = new LinkedList<ModeOfPaymentFlavour>();
+				
+				// load ModeOfPaymentFlavour s
+				// AnchorID legalEntityID = (AnchorID) JDOHelper.getObjectId(offer.getOrder().getCustomer());
+				Collection c;
+				try {
+					c = getAccountingManager().getAvailableModeOfPaymentFlavoursForAllCustomerGroups(
+							wizard.getCustomerGroupIDs(),
+							ModeOfPaymentFlavour.MERGE_MODE_SUBTRACTIVE,
+							new String[]{
+									FetchPlan.DEFAULT,
+									ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
+									ModeOfPaymentFlavourName.FETCH_GROUP_NAMES,
+									ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA,
+									ModeOfPayment.FETCH_GROUP_NAME,
+									ModeOfPaymentName.FETCH_GROUP_NAMES}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+
+				modeOfPaymentFlavourList.clear();
+				modeOfPaymentFlavourList.addAll(c);
+				Collections.sort(modeOfPaymentFlavourList, new Comparator() {
+					public int compare(Object obj0, Object obj1)
+					{
+						ModeOfPaymentFlavour mopf0 = (ModeOfPaymentFlavour)obj0;
+						ModeOfPaymentFlavour mopf1 = (ModeOfPaymentFlavour)obj1;
+						String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
+						String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
+						return name0.compareTo(name1);
+					}
+				});
+				
+				PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
+				final List<ModeOfPaymentFlavour> selList = new ArrayList<ModeOfPaymentFlavour>(1);
+				for (ModeOfPaymentFlavour modeOfPaymentFlavour : modeOfPaymentFlavourList) {
+					if (Util.equals(paymentEntryPageCfMod.getModeOfPaymentFlavourPK(), modeOfPaymentFlavour.getPrimaryKey())) {
+						selList.add(modeOfPaymentFlavour);
+						break;
+					}
+				}
+				
+				
+				final Job thisJob = this;
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (loadModeOfPaymentsJob != thisJob)
+							return;
+						
+						PaymentEntryPage.this.modeOfPaymentFlavourList = modeOfPaymentFlavourList;
+						
+						if (modeOfPaymentFlavourTable != null) {
+							modeOfPaymentFlavourTable.setInput(modeOfPaymentFlavourList);
+							modeOfPaymentFlavourTable.setSelectedElements(selList);
+							setMessage(null);
+							modeOfPaymentFlavourGUIListSelectionChanged();
+						}
+					}
+				});
+
+
+//				int selIdx = -1;
+//				for (Iterator it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
+//					ModeOfPaymentFlavour modeOfPaymentFlavour = (ModeOfPaymentFlavour) it.next();
+		//
+//					if (sessionLastSelectedMOPFPK != null && sessionLastSelectedMOPFPK.equals(modeOfPaymentFlavour.getPrimaryKey()))
+//						selIdx = modeOfPaymentFlavourGUIList.getItemCount();
+		//
+//					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(Locale.getDefault().getLanguage()));
+//				}
+//				if (selIdx  < 0) selIdx = 0;
+				
+				return Status.OK_STATUS;
+			}			
+		};
+		
+		loadModeOfPaymentsJob = loadJob;
+		loadJob.schedule();
 	}
 
 //	protected void adjustMaxAmount(long diffMaxAmount)

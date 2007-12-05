@@ -126,13 +126,19 @@ extends XComposite
 	private SelectionListener okListenerCustomer = new SelectionListener(){	
 		public void widgetSelected(SelectionEvent e) {
 			String text = customerSearchText.getText();
-			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(text, true);
-			if (legalEntity != null) {
-				assignToCustomer(legalEntity);
-				if (payAndDeliverAll()) {
-					createNewOrder();				
-				}					
-			}
+//			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(text, true);
+//			if (legalEntity != null) {
+//				assignToCustomer(legalEntity);
+//				if (payAndDeliverAll()) {
+//					createNewOrder();				
+//				}					
+//			}
+			CustomerPaymentDeliveryWizard wiz = new CustomerPaymentDeliveryWizard(
+					text,
+					(OrderID) getGeneralEditorComposite().getArticleContainerID(),
+					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
+					TransferWizard.Side.Vendor);
+			new DynamicPathWizardDialog(wiz).open();
 		}	
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);

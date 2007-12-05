@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.trade.id.CustomerGroupID;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -66,7 +67,7 @@ extends IDynamicPathWizard, TransferWizard
 	 *
 	 * @return Returns instances of {@link org.nightlabs.jfire.accounting.id.CustomerGroupID}
 	 */
-	Collection getCustomerGroupIDs();
+	Collection<CustomerGroupID> getCustomerGroupIDs();
 
 	Currency getCurrency();
 	
