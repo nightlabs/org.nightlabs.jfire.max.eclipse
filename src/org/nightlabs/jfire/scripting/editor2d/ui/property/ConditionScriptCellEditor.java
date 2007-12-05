@@ -27,7 +27,6 @@ package org.nightlabs.jfire.scripting.editor2d.ui.property;
 
 import java.util.Collection;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;

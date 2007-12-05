@@ -28,7 +28,6 @@ package org.nightlabs.jfire.scripting.editor2d.ui.tool;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.tools.CreationTool;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.TextScriptCreateRequest;
