@@ -22,7 +22,6 @@ import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.store.Product;
 import org.nightlabs.jfire.voucher.accounting.VoucherRedemption;
 import org.nightlabs.jfire.voucher.dao.VoucherKeyDAO;
-import org.nightlabs.jfire.voucher.store.Voucher;
 import org.nightlabs.jfire.voucher.store.VoucherKey;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
