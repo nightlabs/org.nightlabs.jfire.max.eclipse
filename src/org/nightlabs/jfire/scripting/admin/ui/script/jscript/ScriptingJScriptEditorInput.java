@@ -19,7 +19,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.nightlabs.base.ui.app.AbstractApplication;
-import org.nightlabs.jfire.base.ui.app.JFireApplication;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
