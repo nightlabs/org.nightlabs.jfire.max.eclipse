@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;

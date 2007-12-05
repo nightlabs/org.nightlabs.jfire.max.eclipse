@@ -9,7 +9,6 @@ import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.util.Util;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

@@ -11,7 +11,6 @@ import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowMappingTree;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.util.Util;
-import org.nightlabs.util.Utils;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de

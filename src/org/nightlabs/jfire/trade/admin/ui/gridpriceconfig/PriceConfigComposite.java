@@ -42,7 +42,6 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
