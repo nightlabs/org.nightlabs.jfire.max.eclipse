@@ -29,7 +29,6 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.editor;
 import java.io.File;
 
 import org.eclipse.birt.report.designer.internal.ui.editors.ReportEditorInput;
-//import org.eclipse.birt.report.designer.ui.editors.ReportEditorInput;
 import org.eclipse.ui.IPathEditorInput;
 
 /**

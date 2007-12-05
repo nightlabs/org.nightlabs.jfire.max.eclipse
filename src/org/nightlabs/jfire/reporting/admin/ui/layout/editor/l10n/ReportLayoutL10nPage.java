@@ -57,7 +57,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.platform.ClientResourceLocator;
