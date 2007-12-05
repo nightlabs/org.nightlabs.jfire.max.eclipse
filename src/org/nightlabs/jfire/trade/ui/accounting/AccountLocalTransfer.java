@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.swt.dnd.Transfer;
-
 import org.nightlabs.base.ui.dnd.LocalObjectTransfer;
 import org.nightlabs.jfire.accounting.Account;
 

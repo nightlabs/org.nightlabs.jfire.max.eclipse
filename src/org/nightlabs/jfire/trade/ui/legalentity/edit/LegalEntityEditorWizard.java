@@ -28,7 +28,6 @@ package org.nightlabs.jfire.trade.ui.legalentity.edit;
 
 import javax.security.auth.login.LoginException;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;

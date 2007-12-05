@@ -15,7 +15,6 @@ import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.Entry;

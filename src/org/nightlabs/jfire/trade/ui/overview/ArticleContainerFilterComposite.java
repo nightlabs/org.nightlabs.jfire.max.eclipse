@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.ui.overview;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

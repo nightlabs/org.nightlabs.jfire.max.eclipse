@@ -33,7 +33,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 

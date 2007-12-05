@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.ui.store.search;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.search.ISearchResultProvider;

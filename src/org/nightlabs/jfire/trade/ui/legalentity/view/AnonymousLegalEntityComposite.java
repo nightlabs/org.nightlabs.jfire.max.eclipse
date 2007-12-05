@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.ui.legalentity.view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 

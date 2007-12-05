@@ -8,7 +8,6 @@ import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerHome;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
-import org.nightlabs.jfire.accounting.MoneyTransfer;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.ui.login.Login;

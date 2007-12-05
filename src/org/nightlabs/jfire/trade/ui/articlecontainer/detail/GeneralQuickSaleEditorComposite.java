@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,7 +33,6 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
-import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
