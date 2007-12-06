@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.jfire.voucher.admin.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.voucher.admin.ui/dist/org.nightlabs.jfire.voucher.admin.ui_0.9.2.jar"/>
+    <publishes description="..." location="org.nightlabs.jfire.voucher.admin.ui/dist/org.nightlabs.jfire.voucher.admin.ui_0.9.3.jar"/>
     <javadoc path="org.nightlabs.jfire.voucher.admin.ui/src"/>
   </project>
 
