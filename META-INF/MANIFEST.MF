@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.admin.ui;singleton:=true
-Bundle-Version: 0.9.2
+Bundle-Version: 0.9.3
 Bundle-ClassPath: org.nightlabs.jfire.reporting.admin.ui.jar
 Bundle-Activator: org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin
 Bundle-Vendor: NightLabs.org
