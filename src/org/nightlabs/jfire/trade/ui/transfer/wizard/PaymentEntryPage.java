@@ -372,7 +372,7 @@ implements IPaymentEntryPage
 				try {
 					c = getAccountingManager().getAvailableModeOfPaymentFlavoursForAllCustomerGroups(
 							wizard.getCustomerGroupIDs(),
-							ModeOfPaymentFlavour.MERGE_MODE_SUBTRACTIVE,
+							ModeOfPaymentFlavour.MERGE_MODE_INTERSECTION,
 							new String[]{
 									FetchPlan.DEFAULT,
 									ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
