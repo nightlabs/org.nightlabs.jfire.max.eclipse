@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Tariff;
@@ -26,8 +27,8 @@ public class TariffComposite extends AbstractCellReferenceComposite{
 		tariffList.loadTariffs(null);
 		tariffList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
-				TariffList tc = (TariffList)e.getSource();
-				Tariff t = tc.getSelectedTariff();
+				TableViewer tc = (TableViewer)e.getSource();
+				Tariff t = (Tariff)tc.getElementAt(0);
 				if(t != null){
 					selectedTariff = t;
 					checked(true);
