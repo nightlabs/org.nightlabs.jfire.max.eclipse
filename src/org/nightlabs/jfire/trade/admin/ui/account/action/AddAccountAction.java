@@ -16,9 +16,6 @@ extends WorkbenchPartSelectionAction
 
 	@Override
 	public void run() {
-		if (getSelectedObjects().isEmpty())
-			return;
-
 		CreateAccountWizard.open();
 	}
 }
