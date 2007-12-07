@@ -43,13 +43,8 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 					throw new RuntimeException(e);
 				}
 				
-//				TradeManager tm = TradePlugin.getDefault().getTradeManager();
-//				AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-//				try {
-//					tm.assignCustomer(orderID, customerID, true, null, 1);
-//				} catch (Exception e) {
-//					throw new RuntimeException(e);
-//				}
+				// Since we are only dealing with a single ArticleContainer here, we can safely remove all existing
+				// customer group IDs and then add the one of the selected user.
 				
 				clearCustomerGroupIDs();				
 				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(legalEntity.getDefaultCustomerGroup()));
