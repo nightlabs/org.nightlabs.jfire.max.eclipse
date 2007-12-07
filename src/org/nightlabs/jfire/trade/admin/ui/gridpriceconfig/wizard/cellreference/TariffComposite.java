@@ -2,14 +2,15 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 
-public class TariffComposite extends AbstractCellReferenceComposite{
+public class TariffComposite extends AbstractCellReferenceComposite
+{
 
+	private TariffList tariffList;
 	private Tariff selectedTariff = null;
 	private CellReferencePage cellReferencePage = null;
 	
@@ -22,13 +23,12 @@ public class TariffComposite extends AbstractCellReferenceComposite{
 //		tariffListGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 //		tariffListGroup.setLayout(new GridLayout());
 
-		TariffList tariffList = new TariffList(this, SWT.NONE, false, null);
+		tariffList = new TariffList(this, SWT.NONE, false, null);
 		tariffList.getGridData().grabExcessHorizontalSpace = true;
 		tariffList.loadTariffs(null);
 		tariffList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
-				TableViewer tc = (TableViewer)e.getSource();
-				Tariff t = (Tariff)tc.getElementAt(0);
+				Tariff t = tariffList.getSelectedTariff();
 				if(t != null){
 					selectedTariff = t;
 					checked(true);
