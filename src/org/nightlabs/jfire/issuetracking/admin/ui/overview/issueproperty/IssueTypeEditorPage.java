@@ -54,12 +54,16 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		getManagedForm().addPart(issueTypeNameSection);
 		
 		issueTypePrioritySection = new IssueTypePrioritySection(this, parent, controller);
-		issueTypePrioritySection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypePrioritySection);
 		
 		issueTypeSeverityTypeSection = new IssueTypeSeverityTypeSection(this, parent, controller);
-		issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
 		getManagedForm().addPart(issueTypeSeverityTypeSection);
+		
+		if (controller.isLoaded()) {
+			issueTypeNameSection.setIssueType(controller.getIssueType());
+			issueTypePrioritySection.setIssueType(controller.getIssueType());
+			issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
+		}
 	}
 
 	@Override
@@ -91,5 +95,4 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	protected String getPageFormTitle() {
 		return "Create a new Issue Type";
 	}
-
 }

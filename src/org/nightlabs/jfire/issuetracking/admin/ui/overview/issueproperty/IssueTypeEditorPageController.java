@@ -36,7 +36,9 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 	}
 
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
+		IssueTypeDAO.sharedInstance().storeIssueTypes(issueType, IssueTypeTable.FETCH_GROUPS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					new NullProgressMonitor());
 	}
 	
 	public IssueTypeID getIssueTypeID() {

@@ -66,9 +66,9 @@ extends AbstractTableComposite<IssuePriority>
 		tc.setText("Name");
 		layout.addColumnData(new ColumnWeightData(30));
 		
-		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Priority Number");
-		layout.addColumnData(new ColumnWeightData(30));
+//		tc = new TableColumn(table, SWT.LEFT);
+//		tc.setText("Priority Number");
+//		layout.addColumnData(new ColumnWeightData(30));
 		
 		table.setLayout(layout);
 		
@@ -91,8 +91,8 @@ extends AbstractTableComposite<IssuePriority>
 				{
 				case(0):
 					return issuePriority.getIssuePriorityText().getText();
-				case(1):
-					return issuePriority.getIssuePriorityID();
+//				case(1):
+//					return issuePriority.getIssuePriorityID();
 				default:
 					return ""; //$NON-NLS-1$
 				}
