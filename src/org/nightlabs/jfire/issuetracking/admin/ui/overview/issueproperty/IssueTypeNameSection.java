@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +34,12 @@ public class IssueTypeNameSection extends RestorableSectionPart {
 
 		new Label(client, SWT.NONE).setText("Issue Type Name: ");
 		issueTypeName = new I18nTextEditor(client);
+		issueTypeName.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				issueType.getName().copyFrom(issueTypeName.getI18nText());
+				markDirty();
+			}
+		});
 		
 		getSection().setClient(client);
 	}

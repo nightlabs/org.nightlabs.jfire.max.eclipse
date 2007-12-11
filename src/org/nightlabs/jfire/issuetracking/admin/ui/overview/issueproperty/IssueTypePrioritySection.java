@@ -16,8 +16,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
-import com.sun.corba.se.spi.ior.MakeImmutable;
-
 public class IssueTypePrioritySection extends ToolBarSectionPart {
 
 	private IssueTypeEditorPageController controller;
@@ -36,10 +34,17 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 
 		getSection().setClient(client);
 		
-		IncreasePriorityAction iAction = new IncreasePriorityAction();
-		DecreasePriorityAction dAction = new DecreasePriorityAction();
-		getToolBarManager().add(dAction);
-		getToolBarManager().add(iAction);
+		IncreasePriorityAction increaseAction = new IncreasePriorityAction();
+		DecreasePriorityAction decreaseAction = new DecreasePriorityAction();
+		CreatePriorityAction createAction = new CreatePriorityAction();
+		DeletePriorityAction deleteAction = new DeletePriorityAction();
+		EditPriorityAction editAction = new EditPriorityAction();
+		
+		getToolBarManager().add(createAction);
+		getToolBarManager().add(deleteAction);
+		getToolBarManager().add(editAction);
+		getToolBarManager().add(decreaseAction);
+		getToolBarManager().add(increaseAction);
 		
 		updateToolBarManager();
 	}
@@ -64,11 +69,13 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
-			int index = controller.getIssueType().getIssuePriorities().indexOf(issuePriorityTable.getFirstSelectedElement());
-			if(index < controller.getIssueType().getIssuePriorities().size() - 1){
-				Collections.swap(controller.getIssueType().getIssuePriorities(), index, index + 1);
-				issuePriorityTable.setInput(controller.getIssueType().getIssuePriorities());
-				markDirty();
+			if(issuePriorityTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssuePriorities().indexOf(issuePriorityTable.getFirstSelectedElement());
+				if(index < controller.getIssueType().getIssuePriorities().size() - 1){
+					Collections.swap(controller.getIssueType().getIssuePriorities(), index, index + 1);
+					issuePriorityTable.setInput(controller.getIssueType().getIssuePriorities());
+					markDirty();
+				}//if
 			}//if
 		}		
 	}
@@ -89,12 +96,71 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
-			int index = controller.getIssueType().getIssuePriorities().indexOf(issuePriorityTable.getFirstSelectedElement());
-			if(index > 0){
-				Collections.swap(controller.getIssueType().getIssuePriorities(), index, index - 1);
-				issuePriorityTable.setInput(controller.getIssueType().getIssuePriorities());
-				markDirty();
+			if(issuePriorityTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssuePriorities().indexOf(issuePriorityTable.getFirstSelectedElement());
+				if(index > 0){
+					Collections.swap(controller.getIssueType().getIssuePriorities(), index, index - 1);
+					issuePriorityTable.setInput(controller.getIssueType().getIssuePriorities());
+					markDirty();
+				}//if
 			}//if
 		}	
+	}
+	
+	class CreatePriorityAction 
+	extends Action 
+	{		
+		public CreatePriorityAction() {
+			super();
+			setId(IncreasePriorityAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypePrioritySection.class, 
+					"Create"));
+			setToolTipText("Tool Tip Text");
+			setText("Text");
+		}
+		
+		@Override
+		public void run() {
+		}		
+	}
+	
+	class DeletePriorityAction 
+	extends Action 
+	{		
+		public DeletePriorityAction() {
+			super();
+			setId(IncreasePriorityAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypePrioritySection.class, 
+					"Delete"));
+			setToolTipText("Tool Tip Text");
+			setText("Text");
+		}
+		
+		@Override
+		public void run() {
+		}		
+	}
+	
+	class EditPriorityAction 
+	extends Action 
+	{		
+		public EditPriorityAction() {
+			super();
+			setId(IncreasePriorityAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypePrioritySection.class, 
+					"Edit"));
+			setToolTipText("Tool Tip Text");
+			setText("Text");
+		}
+		
+		@Override
+		public void run() {
+		}		
 	}
 }

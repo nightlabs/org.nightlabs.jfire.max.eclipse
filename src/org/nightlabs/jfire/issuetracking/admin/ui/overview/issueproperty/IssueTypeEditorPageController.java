@@ -17,8 +17,32 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 	public IssueTypeEditorPageController(EntityEditor editor)
 	{
 		super(editor);
+		
+//		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
 	}
 	
+//	@Override
+//	public void dispose() {
+//		JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
+//	}
+//	
+//	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Xyz") {
+//	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
+//	      IssueType.class,
+//	      true,
+//	      JDOLifecycleState.DIRTY);
+//
+//	    public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
+//	    {
+//	      return filter;
+//	    }
+//
+//	    public void notify(JDOLifecycleEvent event)
+//	    {
+//	      loadIssueTypes();
+//	    }
+//	};
+
 	public void doLoad(IProgressMonitor monitor) {
 		monitor.beginTask("Loading Issue Types....", 100);
 		

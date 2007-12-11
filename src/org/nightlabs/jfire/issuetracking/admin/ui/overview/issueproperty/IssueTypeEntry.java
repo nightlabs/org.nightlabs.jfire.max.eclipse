@@ -11,7 +11,7 @@ import org.nightlabs.jfire.base.ui.overview.EntryViewer;
 
 public class IssueTypeEntry extends AbstractEntry{
 
-	private IssueTypeComposite composite;
+	private IssueTypeCategoryComposite composite;
 	
 	public IssueTypeEntry(EntryFactory entryFactory) {
 		super(entryFactory);
@@ -23,7 +23,7 @@ public class IssueTypeEntry extends AbstractEntry{
 		} catch (LoginException e) {
 			throw new RuntimeException(e);
 		}
-		return new IssueTypeComposite(parent, SWT.NONE);
+		return new IssueTypeCategoryComposite(parent, SWT.NONE);
 	}
 
 	public EntryViewer createEntryViewer() {
