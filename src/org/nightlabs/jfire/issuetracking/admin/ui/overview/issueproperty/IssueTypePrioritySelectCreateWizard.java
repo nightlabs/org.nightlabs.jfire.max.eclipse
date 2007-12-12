@@ -24,7 +24,7 @@ extends DynamicPathWizard {
 	public IssueTypePrioritySelectCreateWizard(IssueType issueType) {
 		super();		
 		this.issueType = issueType;
-		setWindowTitle("New Issue Type Wizard");
+		setWindowTitle("New Issue Priority Wizard");
 	}
 	
 	@Override

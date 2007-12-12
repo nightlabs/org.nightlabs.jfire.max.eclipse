@@ -242,7 +242,10 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 			IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(issuePriority, false, null);
 			try {
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
-				dialog.open();
+				if(dialog.open() == Dialog.OK) {
+					issuePriorityTable.refresh(true);
+					markDirty();
+				}
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
