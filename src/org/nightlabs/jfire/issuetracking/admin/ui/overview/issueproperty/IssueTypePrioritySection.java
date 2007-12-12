@@ -213,9 +213,11 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
-			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Title", "Message");
+			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Delete this item(s)?");
 			if(confirm) {
-				
+				controller.getIssueType().getIssuePriorities().removeAll(issuePriorityTable.getSelectedElements());
+				issuePriorityTable.refresh(true);
+				markDirty();
 			}
 		}		
 	}
