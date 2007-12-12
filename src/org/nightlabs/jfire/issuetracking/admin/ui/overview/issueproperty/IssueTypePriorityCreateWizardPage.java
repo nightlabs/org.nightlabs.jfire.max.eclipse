@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 public class IssueTypePriorityCreateWizardPage extends DynamicPathWizardPage {
 	
 	private IssuePriority issuePriority;
+	private IssueTypePriorityComposite priorityComposite;
 	
 	public IssueTypePriorityCreateWizardPage(IssuePriority issuePriority) {
 		super(	IssueTypePriorityCreateWizardPage.class.getName(),
@@ -33,7 +34,11 @@ public class IssueTypePriorityCreateWizardPage extends DynamicPathWizardPage {
 	 */
 	@Override
 	public Control createPageContents(Composite parent) {
-		return new IssueTypePriorityComposite(issuePriority, parent, SWT.NONE);
+		priorityComposite = new IssueTypePriorityComposite(issuePriority, parent, SWT.NONE);
+		return priorityComposite; 
 	}
 
+	public IssueTypePriorityComposite getPriorityComposite() {
+		return priorityComposite;
+	}
 }

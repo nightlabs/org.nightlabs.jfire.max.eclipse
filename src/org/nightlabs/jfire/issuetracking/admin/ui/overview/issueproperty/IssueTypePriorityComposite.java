@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -12,14 +14,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.security.SecurityReflector;
 
 public class IssueTypePriorityComposite 
 extends XComposite{
 
-	private I18nTextEditor priorityName;
-	private Button wantedIDCheckbox;
-	private Label enableIDLabel;
+	private I18nTextEditor priorityNameI18nTextEditor;
+	private Button autoCreateIDCheckBox;
 	private Label idLabel; 
 	private Text idText;
 	
@@ -41,40 +45,52 @@ extends XComposite{
 
 		// Name
 		new Label(this, SWT.NONE).setText("Priority Name: ");
-		priorityName = new I18nTextEditor(this);
-		
+		priorityNameI18nTextEditor = new I18nTextEditor(this);
+		priorityNameI18nTextEditor.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent ev) {
+				if (issuePriority == null && autoCreateIDCheckBox.getSelection()) {
+					String nameStr = priorityNameI18nTextEditor.getEditText();
+					idText.setText(ObjectIDUtil.makeValidIDString(nameStr));
+				}
+			}
+		});
 		// ID
 		Group idGroup = new Group(this, SWT.NONE);
 		idGroup.setText("Priority ID");
-		idGroup.setLayout(new GridLayout(2, false));
+		idGroup.setLayout(new GridLayout(1, false));
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Composite checkboxComposite = new Composite(idGroup, SWT.NONE);
-		checkboxComposite.setLayout(new GridLayout(2, false));
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		checkboxComposite.setLayoutData(gridData);
-		wantedIDCheckbox = new Button(checkboxComposite, SWT.CHECK);
-		wantedIDCheckbox.addMouseListener(new MouseAdapter() {
+//		Composite checkboxComposite = new Composite(idGroup, SWT.NONE);
+//		checkboxComposite.setLayout(new GridLayout(2, false));
+//		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.horizontalSpan = 2;
+//		checkboxComposite.setLayoutData(gridData);
+		autoCreateIDCheckBox = new Button(idGroup, SWT.CHECK);
+		autoCreateIDCheckBox.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				enableCheckingID(!wantedIDCheckbox.getSelection());
+				enableCheckingID(!autoCreateIDCheckBox.getSelection());
 			}
 		});
-		enableIDLabel = new Label(checkboxComposite, SWT.NONE);
-		enableIDLabel.setText("Enable user created ID.");
+		autoCreateIDCheckBox.setText("Auto-create IssuePriorityID.");
 
 		idLabel = new Label(idGroup, SWT.NONE);
 		idLabel.setText("ID: ");
 		idText = new Text(idGroup, SWT.SINGLE | SWT.BORDER);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		idText.setLayoutData(gridData);
 		
 		if(issuePriority != null) {
-			priorityName.setI18nText(issuePriority.getIssuePriorityText());
+			priorityNameI18nTextEditor.setI18nText(issuePriority.getIssuePriorityText());
 			idText.setText(issuePriority.getIssuePriorityID());
-		}//if
+			setAutoCreateID(true);
+			autoCreateIDCheckBox.setEnabled(false);
+		} else {
+			priorityNameI18nTextEditor.setI18nText(new I18nTextBuffer());
+			idText.setText("");
+			setAutoCreateID(true);
+		}
 		
 		enableCheckingID(false);
 	}
@@ -82,5 +98,28 @@ extends XComposite{
 	public void enableCheckingID(boolean b) {
 		idLabel.setEnabled(b);
 		idText.setEnabled(b);
+	}
+	
+	protected void setAutoCreateID(boolean b) {
+		autoCreateIDCheckBox.setSelection(b);
+		enableCheckingID(!b);
+	}
+	
+	public IssuePriority getIssuePriority() {
+		if (!isComplete())
+			return null;
+		if (issuePriority == null) {
+			issuePriority = new IssuePriority(SecurityReflector.getUserDescriptor().getOrganisationID(), idText.getText());
+		}
+		issuePriority.getIssuePriorityText().copyFrom(priorityNameI18nTextEditor.getI18nText());
+		return issuePriority;
+	}
+
+	/**
+	 * Check if the editing of the issue priority can be completed (valid data is available)
+	 * @return
+	 */
+	public boolean isComplete() {
+		return issuePriority != null || (!"".equals(idText.getText()));
 	}
 }

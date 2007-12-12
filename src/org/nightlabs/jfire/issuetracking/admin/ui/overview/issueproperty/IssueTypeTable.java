@@ -5,13 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -19,16 +15,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
-import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueDescription;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
-import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
@@ -46,14 +35,8 @@ extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 	 * The fetch groups of issue data.
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_THIS,
-		IssueType.FETCH_GROUP_THIS,
-		IssueDescription.FETCH_GROUP_THIS, 
-		IssueSubject.FETCH_GROUP_THIS,
-		IssueFileAttachment.FETCH_GROUP_THIS,
-		IssueSeverityType.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS};
+		FetchPlan.DEFAULT,
+		IssueType.FETCH_GROUP_NAME};
 	
 	public IssueTypeTable(Composite parent, int style)
 	{

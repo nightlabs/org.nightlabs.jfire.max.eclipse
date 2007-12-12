@@ -47,13 +47,14 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					return;
 
 				IssuePriority issuePriority = (IssuePriority)s.getFirstElement();
-				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard(issuePriority);
+				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard(issuePriority, false, null);
 				try {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 					dialog.open();
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
+				issuePriorityTable.refresh(true);
 			}
 		});
 		

@@ -1,9 +1,13 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
@@ -11,6 +15,16 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueTypeEditorPageController extends EntityEditorPageController{
 
+	/**
+	 * The fetch groups of issue data.
+	 */
+	public static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT,
+		IssueType.FETCH_GROUP_THIS,
+		IssueSeverityType.FETCH_GROUP_THIS,
+		IssuePriority.FETCH_GROUP_THIS};
+	
+	
 	private IssueTypeID issueTypeID;
 	private IssueType issueType;
 	
@@ -51,7 +65,7 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 
 		issueType = 
 			IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, 
-					IssueTypeTable.FETCH_GROUPS,
+					FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new NullProgressMonitor());
 		
@@ -60,7 +74,7 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 	}
 
 	public void doSave(IProgressMonitor monitor) {
-		IssueTypeDAO.sharedInstance().storeIssueTypes(issueType, IssueTypeTable.FETCH_GROUPS,
+		IssueTypeDAO.sharedInstance().storeIssueTypes(issueType, FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new NullProgressMonitor());
 	}
