@@ -2,9 +2,9 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import java.util.Collections;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -18,11 +18,9 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
-import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
 public class IssueTypePrioritySection extends ToolBarSectionPart {
@@ -47,7 +45,7 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					return;
 
 				IssuePriority issuePriority = (IssuePriority)s.getFirstElement();
-				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard(issuePriority, false, null);
+				IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(issuePriority, false, null);
 				try {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 					dialog.open();
@@ -149,6 +147,18 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
+			IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(null, true, null);
+			try {
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+				int result = dialog.open();
+				if(result == Dialog.OK) {
+					controller.getIssueType().getIssuePriorities().add(wizard.getIssuePriority());
+					issuePriorityTable.refresh(true);
+					markDirty();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
 		}		
 	}
 	
@@ -168,6 +178,10 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
+			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Title", "Message");
+			if(confirm) {
+				
+			}
 		}		
 	}
 	
@@ -187,6 +201,14 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		@Override
 		public void run() {
+			IssuePriority issuePriority = issuePriorityTable.getFirstSelectedElement();
+			IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(issuePriority, false, null);
+			try {
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+				dialog.open();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
 		}		
 	}
 }

@@ -13,17 +13,21 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueTypePriorityCreateWizard 
+public class IssueTypePriorityEditWizard 
 extends DynamicPathWizard {
 
 	private IssuePriority issuePriority;
-	private IssueTypePriorityCreateWizardPage priorityCreatePage;
+	private IssueTypePriorityGeneralWizardPage priorityCreatePage;
 	
-	private boolean createPriority;
 	private boolean storeOnServer;
 	private String[] fetchGroups;
 	
-	public IssueTypePriorityCreateWizard(IssuePriority issuePriority, boolean storeOnServer, String[] fetchGroups) {
+	/**
+	 * @param issuePriority IssuePriority - the issue priority for wizard.
+	 * @param storeOnserver boolean - send data to server if it's true.
+	 * @param fetchGroups
+	 */
+	public IssueTypePriorityEditWizard(IssuePriority issuePriority, boolean storeOnServer, String[] fetchGroups) {
 		super();		
 		this.issuePriority = issuePriority;
 		this.storeOnServer = storeOnServer || issuePriority == null;
@@ -34,7 +38,7 @@ extends DynamicPathWizard {
 	@Override
 	public void addPages() 
 	{
-		priorityCreatePage = new IssueTypePriorityCreateWizardPage(issuePriority);
+		priorityCreatePage = new IssueTypePriorityGeneralWizardPage(issuePriority);
 		addPage(priorityCreatePage);
 	}
 	
@@ -47,7 +51,7 @@ extends DynamicPathWizard {
 		if (storeOnServer) {
 			issuePriority = IssuePriorityDAO.sharedInstance().storeIssuePriority(issuePriority, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		}
-		return true;
+		return issuePriority != null;
 	}
 
 	public IssuePriority getIssuePriority() {

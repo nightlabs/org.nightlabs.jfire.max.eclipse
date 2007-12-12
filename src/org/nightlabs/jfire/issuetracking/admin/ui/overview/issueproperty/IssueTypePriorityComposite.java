@@ -60,11 +60,6 @@ extends XComposite{
 		idGroup.setLayout(new GridLayout(1, false));
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-//		Composite checkboxComposite = new Composite(idGroup, SWT.NONE);
-//		checkboxComposite.setLayout(new GridLayout(2, false));
-//		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		gridData.horizontalSpan = 2;
-//		checkboxComposite.setLayoutData(gridData);
 		autoCreateIDCheckBox = new Button(idGroup, SWT.CHECK);
 		autoCreateIDCheckBox.addMouseListener(new MouseAdapter() {
 			@Override

@@ -15,15 +15,15 @@ import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueTypePriorityCreateWizardPage extends DynamicPathWizardPage {
+public class IssueTypePriorityGeneralWizardPage extends DynamicPathWizardPage {
 	
 	private IssuePriority issuePriority;
 	private IssueTypePriorityComposite priorityComposite;
 	
-	public IssueTypePriorityCreateWizardPage(IssuePriority issuePriority) {
-		super(	IssueTypePriorityCreateWizardPage.class.getName(),
+	public IssueTypePriorityGeneralWizardPage(IssuePriority issuePriority) {
+		super(	IssueTypePriorityGeneralWizardPage.class.getName(),
 	    		"Title",
-	    		SharedImages.getWizardPageImageDescriptor(IssueTrackingAdminPlugin.getDefault(), IssueTypePriorityCreateWizardPage.class)
+	    		SharedImages.getWizardPageImageDescriptor(IssueTrackingAdminPlugin.getDefault(), IssueTypePriorityGeneralWizardPage.class)
 	    	);
 		this.issuePriority = issuePriority;
 	    setDescription("Description");
