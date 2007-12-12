@@ -3,6 +3,10 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 import java.util.Collections;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -12,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -27,6 +32,12 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 
 	private IssueTypeEditorPageController controller;
 	private IssuePriorityTable issuePriorityTable;
+	
+	private IncreasePriorityAction increaseAction;
+	private DecreasePriorityAction decreaseAction;
+	private CreatePriorityAction createAction;
+	private DeletePriorityAction deleteAction;
+	private EditPriorityAction editAction;
 	
 	public IssueTypePrioritySection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
@@ -58,11 +69,11 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		
 		getSection().setClient(client);
 		
-		IncreasePriorityAction increaseAction = new IncreasePriorityAction();
-		DecreasePriorityAction decreaseAction = new DecreasePriorityAction();
-		CreatePriorityAction createAction = new CreatePriorityAction();
-		DeletePriorityAction deleteAction = new DeletePriorityAction();
-		EditPriorityAction editAction = new EditPriorityAction();
+		increaseAction = new IncreasePriorityAction();
+		decreaseAction = new DecreasePriorityAction();
+		createAction = new CreatePriorityAction();
+		deleteAction = new DeletePriorityAction();
+		editAction = new EditPriorityAction();
 		
 		getToolBarManager().add(createAction);
 		getToolBarManager().add(deleteAction);
@@ -70,9 +81,33 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		getToolBarManager().add(decreaseAction);
 		getToolBarManager().add(increaseAction);
 		
+		hookContextMenu();
+		
 		updateToolBarManager();
 	}
 
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				IssueTypePrioritySection.this.fillContextMenu(manager);
+			}
+		});
+
+		Menu menu = menuMgr.createContextMenu(issuePriorityTable);
+		issuePriorityTable.setMenu(menu);
+	}
+	
+	private void fillContextMenu(IMenuManager manager) {
+		manager.add(decreaseAction);
+		manager.add(increaseAction);
+		manager.add(new Separator());
+		manager.add(createAction);
+		manager.add(editAction);
+		manager.add(deleteAction);
+	}
+	
 	public void setIssueType(IssueType issueType){
 		issuePriorityTable.setInput(issueType.getIssuePriorities());
 	}
@@ -87,8 +122,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
 					"Down"));
-			setToolTipText("Tool Tip Text");
-			setText("Text");
+			setToolTipText("Increase");
+			setText("Increase Priority");
 		}
 		
 		@Override
@@ -114,8 +149,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
 					"Up"));
-			setToolTipText("Tool Tip Text");
-			setText("Text");
+			setToolTipText("Decrease");
+			setText("Decrease Priority");
 		}
 		
 		@Override
@@ -141,18 +176,18 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
 					"Create"));
-			setToolTipText("Tool Tip Text");
-			setText("Text");
+			setToolTipText("Create a New Issue Priority");
+			setText("New");
 		}
 		
 		@Override
 		public void run() {
-			IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(null, true, null);
+			IssueTypePrioritySelectCreateWizard wizard = new IssueTypePrioritySelectCreateWizard(controller.getIssueType());
 			try {
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 				int result = dialog.open();
 				if(result == Dialog.OK) {
-					controller.getIssueType().getIssuePriorities().add(wizard.getIssuePriority());
+					controller.getIssueType().getIssuePriorities().addAll(wizard.getSelectedIssuePriorities());
 					issuePriorityTable.refresh(true);
 					markDirty();
 				}
@@ -172,8 +207,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
 					"Delete"));
-			setToolTipText("Tool Tip Text");
-			setText("Text");
+			setToolTipText("Delete the Selected Issue Priority");
+			setText("Delete");
 		}
 		
 		@Override
@@ -195,8 +230,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
 					"Edit"));
-			setToolTipText("Tool Tip Text");
-			setText("Text");
+			setToolTipText("Edit the Selected Issue Priority");
+			setText("Edit");
 		}
 		
 		@Override

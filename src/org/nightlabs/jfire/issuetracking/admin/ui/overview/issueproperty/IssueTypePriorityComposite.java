@@ -5,6 +5,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -61,9 +63,9 @@ extends XComposite{
 		idGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		autoCreateIDCheckBox = new Button(idGroup, SWT.CHECK);
-		autoCreateIDCheckBox.addMouseListener(new MouseAdapter() {
+		autoCreateIDCheckBox.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 				enableCheckingID(!autoCreateIDCheckBox.getSelection());
 			}
 		});
@@ -116,5 +118,9 @@ extends XComposite{
 	 */
 	public boolean isComplete() {
 		return issuePriority != null || (!"".equals(idText.getText()));
+	}
+	
+	public I18nTextEditor getPriorityNameI18nTextEditor() {
+		return priorityNameI18nTextEditor;
 	}
 }

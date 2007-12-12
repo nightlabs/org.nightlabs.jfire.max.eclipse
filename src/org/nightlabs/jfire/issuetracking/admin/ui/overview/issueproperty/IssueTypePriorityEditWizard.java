@@ -36,8 +36,7 @@ extends DynamicPathWizard {
 	}
 	
 	@Override
-	public void addPages() 
-	{
+	public void addPages() {
 		priorityCreatePage = new IssueTypePriorityGeneralWizardPage(issuePriority);
 		addPage(priorityCreatePage);
 	}
