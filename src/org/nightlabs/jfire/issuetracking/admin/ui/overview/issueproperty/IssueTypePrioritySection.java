@@ -47,7 +47,7 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 					return;
 
 				IssuePriority issuePriority = (IssuePriority)s.getFirstElement();
-				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard();
+				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard(issuePriority);
 				try {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 					dialog.open();

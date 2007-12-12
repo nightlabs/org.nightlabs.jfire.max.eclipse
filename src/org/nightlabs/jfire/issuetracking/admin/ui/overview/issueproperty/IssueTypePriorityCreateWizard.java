@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jfire.issue.IssuePriority;
 
 /**
  * @author Chairat Kongarayawetchakun 
@@ -12,15 +13,18 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 public class IssueTypePriorityCreateWizard 
 extends DynamicPathWizard {
 
-	public IssueTypePriorityCreateWizard() {
+	private IssuePriority issuePriority;
+	
+	public IssueTypePriorityCreateWizard(IssuePriority issuePriority) {
 		super();
+		this.issuePriority = issuePriority;
 		setWindowTitle("New Issue Type Wizard");
 	}
 	
 	@Override
 	public void addPages() 
 	{
-		IssueTypePriorityCreateWizardPage createPage = new IssueTypePriorityCreateWizardPage();
+		IssueTypePriorityCreateWizardPage createPage = new IssueTypePriorityCreateWizardPage(issuePriority);
 		addPage(createPage);
 	}
 	
@@ -33,4 +37,7 @@ extends DynamicPathWizard {
 		return false;
 	}
 
+	public IssuePriority getIssuePriority() {
+		return issuePriority;
+	}
 }

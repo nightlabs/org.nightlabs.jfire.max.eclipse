@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +19,8 @@ extends XComposite{
 
 	private I18nTextEditor priorityName;
 	private Button wantedIDCheckbox;
+	private Label enableIDLabel;
+	private Label idLabel; 
 	private Text idText;
 	
 	private IssuePriority issuePriority;
@@ -35,9 +39,11 @@ extends XComposite{
 	protected void createComposite(Composite parent) {
 		setLayout(new GridLayout(1, false));
 
+		// Name
 		new Label(this, SWT.NONE).setText("Priority Name: ");
 		priorityName = new I18nTextEditor(this);
-
+		
+		// ID
 		Group idGroup = new Group(this, SWT.NONE);
 		idGroup.setText("Priority ID");
 		idGroup.setLayout(new GridLayout(2, false));
@@ -49,12 +55,32 @@ extends XComposite{
 		gridData.horizontalSpan = 2;
 		checkboxComposite.setLayoutData(gridData);
 		wantedIDCheckbox = new Button(checkboxComposite, SWT.CHECK);
-		new Label(checkboxComposite, SWT.NONE).setText("Enable user created ID.");
+		wantedIDCheckbox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				enableCheckingID(!wantedIDCheckbox.getSelection());
+			}
+		});
+		enableIDLabel = new Label(checkboxComposite, SWT.NONE);
+		enableIDLabel.setText("Enable user created ID.");
 
-		new Label(idGroup, SWT.NONE).setText("ID: ");
+		idLabel = new Label(idGroup, SWT.NONE);
+		idLabel.setText("ID: ");
 		idText = new Text(idGroup, SWT.SINGLE | SWT.BORDER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		idText.setLayoutData(gridData);
+		
+		if(issuePriority != null) {
+			priorityName.setI18nText(issuePriority.getIssuePriorityText());
+			idText.setText(issuePriority.getIssuePriorityID());
+		}//if
+		
+		enableCheckingID(false);
+	}
+	
+	public void enableCheckingID(boolean b) {
+		idLabel.setEnabled(b);
+		idText.setEnabled(b);
 	}
 }
