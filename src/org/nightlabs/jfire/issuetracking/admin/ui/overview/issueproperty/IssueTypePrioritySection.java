@@ -2,7 +2,12 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import java.util.Collections;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,7 +18,11 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
 public class IssueTypePrioritySection extends ToolBarSectionPart {
@@ -31,7 +40,23 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		client.getGridLayout().numColumns = 1; 
 
 		issuePriorityTable = new IssuePriorityTable(client, SWT.NONE);
+		issuePriorityTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
 
+				IssuePriority issuePriority = (IssuePriority)s.getFirstElement();
+				IssueTypePriorityCreateWizard wizard = new IssueTypePriorityCreateWizard();
+				try {
+					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+					dialog.open();
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+		
 		getSection().setClient(client);
 		
 		IncreasePriorityAction increaseAction = new IncreasePriorityAction();
