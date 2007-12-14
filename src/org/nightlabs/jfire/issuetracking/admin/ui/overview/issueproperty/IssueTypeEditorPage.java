@@ -33,6 +33,7 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	private IssueTypeNameSection issueTypeNameSection;
 	private IssueTypePrioritySection issueTypePrioritySection;
 	private IssueTypeSeverityTypeSection issueTypeSeverityTypeSection;
+	private IssueTypeResolutionSection issueTypeResolutionSection;
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -59,10 +60,14 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		issueTypeSeverityTypeSection = new IssueTypeSeverityTypeSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeSeverityTypeSection);
 		
+		issueTypeResolutionSection = new IssueTypeResolutionSection(this, parent, controller);
+		getManagedForm().addPart(issueTypeResolutionSection);
+		
 		if (controller.isLoaded()) {
 			issueTypeNameSection.setIssueType(controller.getIssueType());
 			issueTypePrioritySection.setIssueType(controller.getIssueType());
 			issueTypeSeverityTypeSection.setIssueType(controller.getIssueType());
+			issueTypeResolutionSection.setIssueType(controller.getIssueType());
 		}
 	}
 
@@ -86,6 +91,8 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 					issueTypePrioritySection.setIssueType(controller.getIssueType());
 				if(issueTypeNameSection != null)
 					issueTypeNameSection.setIssueType(controller.getIssueType());
+				if(issueTypeResolutionSection != null)
+					issueTypeResolutionSection.setIssueType(controller.getIssueType());
 			}
 		});
 		

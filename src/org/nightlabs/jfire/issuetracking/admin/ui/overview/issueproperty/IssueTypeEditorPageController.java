@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
@@ -22,6 +23,7 @@ public class IssueTypeEditorPageController extends EntityEditorPageController{
 		FetchPlan.DEFAULT,
 		IssueType.FETCH_GROUP_THIS,
 		IssueSeverityType.FETCH_GROUP_THIS,
+		IssueResolution.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS};
 	
 	
