@@ -7,6 +7,7 @@
     		class="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective"
     		id="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective" name="Issue Tracking"/>
     </extension>
+    
     <extension 
     	point="org.eclipse.ui.views">
     	<category
@@ -26,33 +27,17 @@
             name="Issue">
       </categoryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueOverview"
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
-            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryFactory"
-            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
-            index="0"
-            name="Issue Overview">
-      </entryFactory>
-      <entryFactory
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueList"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
-            index="1"
+            index="0"
             name="Issue List">
       </entryFactory>
    </extension>
    
    <extension
          point="org.eclipse.ui.editors">
-   		<editor
-        	class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
-            default="true"
-            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
-            name="Issue Overview">
-      </editor>
-      
       <editor
         	class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             default="false"
@@ -61,27 +46,22 @@
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             name="Issue Entry List">
       </editor>
-      
       <editor
-        	class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
+        	class="org.nightlabs.jfire.issuetracking.ui.issue.IssueEditor"
             default="false"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
-            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
-            name="Issue Type">
+            icon="icons/issue/editor/IssueEdit.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.issue.IssueEditor"
+            name="Issue Editor">
       </editor>
    </extension>
    
    <extension point="org.nightlabs.base.ui.entityEditor">
 		<pageFactory
-			class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEditor"
+			class="org.nightlabs.jfire.issuetracking.ui.issue.IssueEditorPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.IssueEditor"
 			indexHint="10" />
-		<pageFactory
-			class="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.ui.overview.issueproperty.IssueTypeNewEditor"
-			indexHint="10" />
-  </extension>  
+   </extension>  
   
   <extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
@@ -92,6 +72,13 @@
                name="%overview.action.search.name"
                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
                tooltip="%overview.action.search.tooltip">
+         </editorActionBarContribution>
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.issue.action.AddIssueAction"
+               icon="icons/issue/action/AddIssueAction.16x16.png"
+               id="org.nightlabs.jfire.issuetracking.ui.issue.action.AddIssueAction"
+               name="Add Account"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview">
          </editorActionBarContribution>
          <groupMarker
                name="org.nightlabs.jfire.issuetracking.ui.overview">

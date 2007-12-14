@@ -5,9 +5,6 @@ import java.util.Collection;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -66,22 +63,6 @@ extends AbstractTableComposite<Issue>
 		super(parent, style);
 		
 		loadIssues();
-		
-		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent e) {
-				StructuredSelection s = (StructuredSelection)e.getSelection();
-				if (s.isEmpty())
-					return;
-
-				Issue issue = (Issue)s.getFirstElement();
-				try {
-					IssueViewDialog d = new IssueViewDialog(getShell(), issue);
-					d.open();
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
 		
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
 	    addDisposeListener(new DisposeListener() {
