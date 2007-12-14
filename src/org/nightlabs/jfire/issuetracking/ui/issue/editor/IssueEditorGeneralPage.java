@@ -21,9 +21,10 @@
  * Or get it online :                                                          *
  *     http://opensource.org/licenses/lgpl-license.php                         *
  ******************************************************************************/
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -37,27 +38,29 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
  * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueEditorPage extends EntityEditorPageWithProgress
+public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 {
 	/**
 	 * The id of this page.
 	 */
-	public static final String ID_PAGE = IssueEditorPage.class.getName();
+	public static final String ID_PAGE = IssueEditorGeneralPage.class.getName();
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link IssueEditorPage}. 
+	 * new instances of {@link IssueEditorGeneralPage}. 
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
 		public IFormPage createPage(FormEditor formEditor) {
-			return new IssueEditorPage(formEditor);
+			return new IssueEditorGeneralPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
 			return new IssueEditorPageController(editor);
 		}
 	}
 
+	private IssueTypeAndStateSection issueTypeAndStateSection;
+	
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -66,7 +69,7 @@ public class IssueEditorPage extends EntityEditorPageWithProgress
 	 * @param editor The editor for which to create this
 	 * 		form page. 
 	 */
-	public IssueEditorPage(FormEditor editor)
+	public IssueEditorGeneralPage(FormEditor editor)
 	{
 		super(editor, ID_PAGE, "Issue Editor Title");
 	}
@@ -75,6 +78,13 @@ public class IssueEditorPage extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
+		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
+		getManagedForm().addPart(issueTypeAndStateSection);
+		
+		
+		if (controller.isLoaded()) {
+			issueTypeAndStateSection.setIssue(controller.getIssue());
+		}
 	}
 
 	@Override
@@ -85,10 +95,20 @@ public class IssueEditorPage extends EntityEditorPageWithProgress
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent(); // multiple calls don't hurt
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (issueTypeAndStateSection != null && !issueTypeAndStateSection.getSection().isDisposed())
+					issueTypeAndStateSection.setIssue(getController().getIssue());
+			}
+		});
 	}
 
 	@Override
 	protected String getPageFormTitle() {
 		return "Issue Editor Page Title";
+	}
+	
+	protected IssueEditorPageController getController() {
+		return (IssueEditorPageController)getPageController();
 	}
 }

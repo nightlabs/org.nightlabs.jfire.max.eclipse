@@ -1,3 +1,5 @@
+package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+
 /* *****************************************************************************
  * JFire - it's hot - Free ERP System - http://jfire.org                       *
  * Copyright (C) 2004-2006 NightLabs - http://NightLabs.org                    *
@@ -21,44 +23,25 @@
  * Or get it online :                                                          *
  *     http://opensource.org/licenses/lgpl-license.php                         *
  ******************************************************************************/
-package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
+import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.id.IssueID;
 
 /**
- * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ * Editor input for {@link IssueEditor}s.
+ * 
+ * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueEditorPageController extends EntityEditorPageController
+public class IssueEditorInput extends JDOObjectEditorInput<IssueID>
 {
 	/**
-	 * LOG4J logger used by this class
+	 * Constructor for an existing issue.
+	 * @param issueID The issue
 	 */
-	private static final Logger logger = Logger.getLogger(IssueEditorPageController.class);
-
-	public IssueEditorPageController(EntityEditor editor)
+	public IssueEditorInput(IssueID issueID)
 	{
-		super(editor);
-	}
-
-	@Override
-	public void dispose()
-	{
-		// TODO remove listener for new transfers
-		super.dispose();
-	}
-
-	public void doLoad(IProgressMonitor monitor)
-	{
-		monitor.beginTask("Loading Issue....", 100);
-		
-		monitor.done();
-	}
-
-	public void doSave(IProgressMonitor monitor)
-	{
-		// nothing to do
+		super(issueID);
+		setName(String.format("Name", Issue.getPrimaryKey(issueID.organisationID, issueID.issueID))); //$NON-NLS-1$
 	}
 }

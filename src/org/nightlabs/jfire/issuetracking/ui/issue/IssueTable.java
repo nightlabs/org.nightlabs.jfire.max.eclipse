@@ -25,12 +25,17 @@ import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
@@ -56,7 +61,10 @@ extends AbstractTableComposite<Issue>
 		IssueSubject.FETCH_GROUP_THIS,
 		IssueFileAttachment.FETCH_GROUP_THIS,
 		IssueSeverityType.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS};
+		IssuePriority.FETCH_GROUP_THIS,
+		IssueLocal.FETCH_GROUP_THIS,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		StateDefinition.FETCH_GROUP_NAME};
 
 	public IssueTable(Composite parent, int style)
 	{
@@ -193,9 +201,7 @@ extends AbstractTableComposite<Issue>
 						return issue.getIssuePriority().getIssuePriorityText().getText();
 					break;
 				case(6):
-					if(issue.getState() != null)
-						return issue.getState().getStateDefinition().getName().getText();
-					break;
+					return getStateName(issue);					
 				default:
 					return ""; //$NON-NLS-1$
 				}
@@ -204,6 +210,25 @@ extends AbstractTableComposite<Issue>
 		}		
 	}
 
+	protected String getStateName(Statable statable) 
+	{
+		// I think we need to look for the newest State in both, statableLocal and statable! Marco.
+		StatableLocal statableLocal = statable.getStatableLocal();
+		State state = statable.getState();
+		State state2 = statableLocal.getState();
+		if (state2 != null) {
+			if (state == null)
+				state = state2;
+			else if (state.getCreateDT().compareTo(state2.getCreateDT()) < 0)
+				state = state2;
+		}
+
+		if (state != null)
+			return state.getStateDefinition().getName().getText();
+
+		return ""; //$NON-NLS-1$
+	}	
+	
 	public void setLoadingStatus()
 	{
 		this.currentIssueID = null;

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue.action;
+package org.nightlabs.jfire.issuetracking.ui.overview.action;
 
 import org.nightlabs.base.ui.action.WorkbenchPartSelectionAction;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;

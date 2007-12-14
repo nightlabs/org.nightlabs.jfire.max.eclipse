@@ -49,6 +49,9 @@ public class IssueViewDialog extends CenteredDialog{
 			@Override
 			public void mouseUp(MouseEvent e) {
 				try {
+					IssueDAO.sharedInstance().storeIssue(issue, false, null, -1, new NullProgressMonitor());
+					if (true)
+						return;
 					IssueEditDialog editDialog = new IssueEditDialog(getShell(), issue);
 					if(editDialog.open() == Dialog.OK){
 						boolean confirm = MessageDialog.openConfirm(getShell(), "Confirm", "Are you sure to update this issue?");

@@ -28,9 +28,9 @@ import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueEditor;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueEditorInput;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
