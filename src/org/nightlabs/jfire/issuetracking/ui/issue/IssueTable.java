@@ -127,7 +127,7 @@ extends AbstractTableComposite<Issue>
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("DocumentID");
+		tc.setText("IssueID");
 		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
@@ -151,7 +151,7 @@ extends AbstractTableComposite<Issue>
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Status");
+		tc.setText("State");
 		layout.addColumnData(new ColumnWeightData(20));
 		
 		table.setLayout(layout);
@@ -212,8 +212,8 @@ extends AbstractTableComposite<Issue>
 						return issue.getIssuePriority().getIssuePriorityText().getText();
 					break;
 				case(6):
-					if(issue.getStateDefinition() != null)
-						return issue.getStateDefinition().getName().getText();
+					if(issue.getState() != null)
+						return issue.getState().getStateDefinition().getName().getText();
 					break;
 				default:
 					return ""; //$NON-NLS-1$
