@@ -10,7 +10,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -29,6 +31,9 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
  */
 public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection {
 
+	private Label issueTypeLabel;
+	private Label statusLabel;
+	
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 	
@@ -38,8 +43,19 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 	 */
 	public IssueTypeAndStateSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getClient().getGridLayout().numColumns = 2;
+		getClient().getGridLayout().numColumns = 3;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
+		getSection().setText("Type and Status");
+		
+		issueTypeLabel = new Label(getClient(), SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		issueTypeLabel.setLayoutData(gd);
+		
+		statusLabel = new Label(getClient(), SWT.WRAP);
+		statusLabel.setText("Staus: ");
+		statusLabel.setLayoutData(new GridData());
+		
 		currentStateComposite = new CurrentStateComposite(getClient(), SWT.NONE);
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
@@ -70,8 +86,13 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 	}
 	
 	protected void doSetIssue(Issue issue) {
+		issueTypeLabel.setText(
+			String.format(
+				"Issue type: %s", 
+				issue.getIssueType().getName().getText())
+		);
 		currentStateComposite.setStatable(issue);
-		nextTransitionComposite.setStatable(issue);
+		nextTransitionComposite.setStatable(issue);		
 	}
 
 }

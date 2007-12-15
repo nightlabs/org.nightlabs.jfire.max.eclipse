@@ -59,7 +59,10 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		}
 	}
 
+	// TODO: Somehow have a LanguageChooser for the whole page, not for every I18nEditor.
+	
 	private IssueTypeAndStateSection issueTypeAndStateSection;
+	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
 	
 	/**
 	 * <p>
@@ -81,9 +84,12 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeAndStateSection);
 		
+		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, parent, controller);
+		getManagedForm().addPart(issueSubjectAndDescriptionSection);
 		
 		if (controller.isLoaded()) {
 			issueTypeAndStateSection.setIssue(controller.getIssue());
+			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
 		}
 	}
 
@@ -99,6 +105,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 			public void run() {
 				if (issueTypeAndStateSection != null && !issueTypeAndStateSection.getSection().isDisposed())
 					issueTypeAndStateSection.setIssue(getController().getIssue());
+				if (issueSubjectAndDescriptionSection != null && !issueSubjectAndDescriptionSection.getSection().isDisposed())
+					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
 			}
 		});
 	}

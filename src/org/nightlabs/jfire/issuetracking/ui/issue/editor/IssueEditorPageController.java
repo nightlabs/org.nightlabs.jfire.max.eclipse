@@ -109,7 +109,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 	{
 		super(editor);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(
-				new Class[] {Issue.class, IssueLocal.class}, 
+				new Class[] {Issue.class}, 
 				issueChangeListener
 		);
 	}
@@ -118,7 +118,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 	public void dispose()
 	{
 		JDOLifecycleManager.sharedInstance().removeNotificationListener(
-				new Class[] {Issue.class, IssueLocal.class}, 
+				new Class[] {Issue.class}, 
 				issueChangeListener
 		);
 		super.dispose();
