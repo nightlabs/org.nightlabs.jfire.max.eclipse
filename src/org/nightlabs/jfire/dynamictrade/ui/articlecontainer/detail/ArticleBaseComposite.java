@@ -255,7 +255,7 @@ extends FadeableComposite
 	};
 
 //	private static long temporaryResultPriceConfigID = IDGenerator.nextID(PriceConfig.class);
-	private static long temporaryResultPriceConfigID = Long.MAX_VALUE;
+	private static String temporaryResultPriceConfigID = "temporary.resultPriceConfigID";
 
 	private volatile boolean loadDynamicProductType_inProcess = false;
 
