@@ -305,7 +305,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 	protected IInnerPriceConfig createInnerPriceConfig()
 	{
-		return new FormulaPriceConfig(IDGenerator.getOrganisationID(), IDGenerator.nextID(PriceConfig.class));
+		return new FormulaPriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
 	}
 
 //	private ModifyListener cellEditModifyListener = new ModifyListener(){	
