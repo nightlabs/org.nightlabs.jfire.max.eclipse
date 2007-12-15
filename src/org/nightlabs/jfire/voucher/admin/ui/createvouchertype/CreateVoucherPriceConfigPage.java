@@ -52,7 +52,7 @@ public class CreateVoucherPriceConfigPage
 
 	public VoucherPriceConfig createPriceConfig()
 	{
-		VoucherPriceConfig voucherPriceConfig = new VoucherPriceConfig(IDGenerator.getOrganisationID(), IDGenerator.nextID(PriceConfig.class));
+		VoucherPriceConfig voucherPriceConfig = new VoucherPriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
 		voucherPriceConfig.getName().copyFrom(priceConfigName);
 		Map<Currency, Long> map = currencyAmountTable.getMap();
 		for(Map.Entry<Currency, Long> me : map.entrySet()) {

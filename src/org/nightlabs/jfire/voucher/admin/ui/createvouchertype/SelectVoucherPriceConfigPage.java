@@ -163,7 +163,7 @@ extends WizardHopPage
 				return vpc.getName().getText();
 			}
 		});
-		VoucherPriceConfig dummy = new VoucherPriceConfig("", 0); //$NON-NLS-1$
+		VoucherPriceConfig dummy = new VoucherPriceConfig("dummy", "dummy"); //$NON-NLS-1$  //$NON-NLS-2$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.priceConfigList.item_loadingData")); //$NON-NLS-1$
 		priceConfigList.addElement(dummy);
 
