@@ -84,7 +84,7 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	@Override
 	protected IInnerPriceConfig createInnerPriceConfig()
 	{
-		return new DynamicTradePriceConfig(IDGenerator.getOrganisationID(), IDGenerator.nextID(PriceConfig.class));
+		return new DynamicTradePriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
 	}
 
 	@Implement
