@@ -163,7 +163,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 							newProductType.setPackagePriceConfig(
 									new StablePriceConfig(
 											IDGenerator.getOrganisationID(),
-											IDGenerator.nextID(PriceConfig.class)));
+											PriceConfig.createPriceConfigID()));
 						}
 
 						switch (selectPriceConfigPage.getAction()) {
@@ -180,7 +180,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 								IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
 								priceConfig = new FormulaPriceConfig(
 										IDGenerator.getOrganisationID(),
-										IDGenerator.nextID(PriceConfig.class));
+										PriceConfig.createPriceConfigID());
 								priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
 								newProductType.setInnerPriceConfig(priceConfig);
 								break;
