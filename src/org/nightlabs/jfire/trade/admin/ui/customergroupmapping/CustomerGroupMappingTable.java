@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -24,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -39,9 +39,10 @@ import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.CustomerGroupMapping;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.trade.dao.CustomerGroupMappingDAO;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.CustomerGroupMappingID;
-import org.nightlabs.jfire.trade.ui.customergroupmapping.CustomerGroupMappingDAO;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class CustomerGroupMappingTable
 extends AbstractTableComposite
@@ -156,7 +157,9 @@ extends AbstractTableComposite
 					customerGroupMappingIDs.add((CustomerGroupMappingID) dirtyObjectID.getObjectID());
 				}
 
-				final List<CustomerGroupMapping> _customerGroupMappings = CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(customerGroupMappingIDs, FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, getProgressMonitor());
+				final List<CustomerGroupMapping> _customerGroupMappings = CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(
+						customerGroupMappingIDs, FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new ProgressMonitorWrapper(getProgressMonitor()));
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()
@@ -213,16 +216,17 @@ extends AbstractTableComposite
 			customerGroupMappings = null;
 			setInput(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.inputPseudoEntry_loading")); //$NON-NLS-1$
 	
-			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.loadCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
+			org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.loadCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
 				@Override
 				@Implement
-				protected IStatus run(IProgressMonitor monitor)
+				protected IStatus run(ProgressMonitor monitor)
 				{
 					boolean error2 = true;
 					try {
 	
 						final List<CustomerGroupMapping> _customerGroupMappings = CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(
-								FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+								FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								monitor);
 		
 						Display.getDefault().asyncExec(new Runnable()
 						{
@@ -280,9 +284,9 @@ extends AbstractTableComposite
 	{
 		final ArrayList<CustomerGroupMapping> _customerGroupMappings = new ArrayList<CustomerGroupMapping>(customerGroupMappings);
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.storeCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
+		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.storeCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor)
+			protected IStatus run(ProgressMonitor monitor)
 			{
 				for (CustomerGroupMapping customerGroupMapping : _customerGroupMappings) {
 					if (JDOHelper.getObjectId(customerGroupMapping) != null) // already on server
@@ -291,7 +295,7 @@ extends AbstractTableComposite
 					CustomerGroupID partnerCustomerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getPartnerCustomerGroup());
 					CustomerGroupID localCustomerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getLocalCustomerGroup());
 
-					CustomerGroupMappingDAO.sharedInstance().createCustomerGroupMapping(partnerCustomerGroupID, localCustomerGroupID, false, null, 1, monitor);
+					CustomerGroupMappingDAO.sharedInstance().createCustomerGroupMapping_new(localCustomerGroupID, partnerCustomerGroupID, false, null, 1, monitor);
 				}
 
 				Display.getDefault().asyncExec(new Runnable()

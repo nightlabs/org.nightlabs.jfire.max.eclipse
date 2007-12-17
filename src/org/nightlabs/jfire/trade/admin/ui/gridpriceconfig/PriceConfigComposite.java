@@ -54,10 +54,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
-import org.nightlabs.base.ui.progress.XProgressMonitor;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.TariffMapper;
+import org.nightlabs.jfire.accounting.dao.TariffMappingDAO;
 import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigCommand;
 import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
@@ -75,8 +75,8 @@ import org.nightlabs.jfire.trade.CustomerGroupMapper;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.customergroupmapping.CustomerGroupMappingDAO;
-import org.nightlabs.jfire.trade.ui.tariffmapping.TariffMappingDAO;
+import org.nightlabs.jfire.trade.dao.CustomerGroupMappingDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * This composite can be used to display and edit the whole grid-price-configuration
@@ -374,12 +374,16 @@ public abstract class PriceConfigComposite extends XComposite
 
 	protected CustomerGroupMapper createCustomerGroupMapper()
 	{
-		return new CustomerGroupMapper(CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(FETCH_GROUPS_CUSTOMER_GROUP_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new XProgressMonitor()));
+		return new CustomerGroupMapper(
+				CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(
+						FETCH_GROUPS_CUSTOMER_GROUP_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor())); // TODO do this asynchronously with a real ProgressMonitor?!
 	}
 
 	protected TariffMapper createTariffMapper()
 	{
-		return new TariffMapper(TariffMappingDAO.sharedInstance().getTariffMappings(FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new XProgressMonitor()));
+		return new TariffMapper(
+				TariffMappingDAO.sharedInstance().getTariffMappings(
+						FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor())); // TODO do this asynchronously with a real ProgressMonitor?!
 	}
 
 	protected PriceCalculator createPriceCalculator(ProductType packageProductType)

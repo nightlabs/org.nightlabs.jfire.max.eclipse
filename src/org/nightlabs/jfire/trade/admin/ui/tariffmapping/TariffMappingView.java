@@ -38,24 +38,24 @@ extends LSDViewPart
 	private Button createTariffMappingButton;
 	private Button removeTariffMappingButton;
 
-	private Set<TariffID> partnerTariffIDs = null;
+//	private Set<TariffID> partnerTariffIDs = null;
 	private Set<TariffID> localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
 
-	private TariffList.TariffFilter partnerTariffFilter = new TariffList.TariffFilter() {
-		public boolean includeTariff(Tariff tariff)
-		{
-			if (partnerTariffIDs == null) {
-				Set<TariffMapping> tariffMappings = tariffMappingTable.getTariffMappings(true);
-				Set<TariffID> tariffIDs = new HashSet<TariffID>(tariffMappings.size());
-				for (TariffMapping tariffMapping : tariffMappings)
-					tariffIDs.add((TariffID) JDOHelper.getObjectId(tariffMapping.getPartnerTariff()));
-
-				partnerTariffIDs = tariffIDs;
-			}
-
-			return !partnerTariffIDs.contains(JDOHelper.getObjectId(tariff));
-		}
-	};
+//	private TariffList.TariffFilter partnerTariffFilter = new TariffList.TariffFilter() {
+//		public boolean includeTariff(Tariff tariff)
+//		{
+//			if (partnerTariffIDs == null) {
+//				Set<TariffMapping> tariffMappings = tariffMappingTable.getTariffMappings(true);
+//				Set<TariffID> tariffIDs = new HashSet<TariffID>(tariffMappings.size());
+//				for (TariffMapping tariffMapping : tariffMappings)
+//					tariffIDs.add((TariffID) JDOHelper.getObjectId(tariffMapping.getPartnerTariff()));
+//
+//				partnerTariffIDs = tariffIDs;
+//			}
+//
+//			return !partnerTariffIDs.contains(JDOHelper.getObjectId(tariff));
+//		}
+//	};
 
 	private TariffList.TariffFilter localTariffFilter = new TariffList.TariffFilter() {
 		public boolean includeTariff(Tariff tariff)
@@ -89,7 +89,7 @@ extends LSDViewPart
 		sfMainVert.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		SashForm sfTopHoriz = new SashForm(sfMainVert, SWT.HORIZONTAL);
-		partnerTariffList = new TariffList(sfTopHoriz, SWT.NONE, false, partnerTariffFilter);
+		partnerTariffList = new TariffList(sfTopHoriz, SWT.NONE, false, null); // partnerTariffFilter);
 		partnerTariffList.setOrganisationVisible(true);
 		partnerTariffList.setFilterOrganisationIDInverse(true);
 		partnerTariffList.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -125,7 +125,7 @@ extends LSDViewPart
 			{
 				boolean enabled = !tariffMappingTable.getSelectedElements().isEmpty();
 
-				for (Iterator it = tariffMappingTable.getSelectedElements().iterator(); it.hasNext(); ) {
+				for (Iterator<?> it = tariffMappingTable.getSelectedElements().iterator(); it.hasNext(); ) {
 					TariffMapping tm = (TariffMapping) it.next();
 					if (JDOHelper.getObjectId(tm) != null)
 						enabled = false;
@@ -173,10 +173,10 @@ extends LSDViewPart
 		if (selectedPartnerTariff == null || selectedLocalTariff == null)
 			return;
 
-		TariffMapping tm = new TariffMapping(selectedPartnerTariff, selectedLocalTariff);
+		TariffMapping tm = new TariffMapping(selectedLocalTariff, selectedPartnerTariff);
 		tariffMappingTable.addClientOnlyTariffMapping(tm);
 
-		partnerTariffIDs = null;
+//		partnerTariffIDs = null;
 		localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
 		partnerTariffList.loadTariffs(null);
 		localTariffList.loadTariffs(null);
@@ -185,7 +185,7 @@ extends LSDViewPart
 	public void removeTariffMappings()
 	{
 		List<TariffMapping> tariffMappingsToDelete = new ArrayList<TariffMapping>();
-		for (Iterator it = tariffMappingTable.getSelectedElements().iterator(); it.hasNext();) {
+		for (Iterator<?> it = tariffMappingTable.getSelectedElements().iterator(); it.hasNext();) {
 			TariffMapping tm = (TariffMapping) it.next();
 			if (JDOHelper.getObjectId(tm) == null)
 				tariffMappingsToDelete.add(tm);
@@ -196,7 +196,7 @@ extends LSDViewPart
 
 		tariffMappingTable.removeClientOnlyTariffMappings(tariffMappingsToDelete);
 
-		partnerTariffIDs = null;
+//		partnerTariffIDs = null;
 		localTariffIDsInMappingsForSelectedPartnerOrganisationID = null;
 		partnerTariffList.loadTariffs(null);
 		localTariffList.loadTariffs(null);

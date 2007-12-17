@@ -38,24 +38,24 @@ extends LSDViewPart
 	private Button createCustomerGroupMappingButton;
 	private Button removeCustomerGroupMappingButton;
 
-	private Set<CustomerGroupID> partnerCustomerGroupIDs = null;
+//	private Set<CustomerGroupID> partnerCustomerGroupIDs = null;
 	private Set<CustomerGroupID> localCustomerGroupIDsInMappingsForSelectedPartnerOrganisationID = null;
 
-	private CustomerGroupListComposite.CustomerGroupFilter partnerCustomerGroupFilter = new CustomerGroupListComposite.CustomerGroupFilter() {
-		public boolean includeCustomerGroup(CustomerGroup customerGroup)
-		{
-			if (partnerCustomerGroupIDs == null) {
-				Set<CustomerGroupMapping> customerGroupMappings = customerGroupMappingTable.getCustomerGroupMappings(true);
-				Set<CustomerGroupID> customerGroupIDs = new HashSet<CustomerGroupID>(customerGroupMappings.size());
-				for (CustomerGroupMapping customerGroupMapping : customerGroupMappings)
-					customerGroupIDs.add((CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getPartnerCustomerGroup()));
-
-				partnerCustomerGroupIDs = customerGroupIDs;
-			}
-
-			return !partnerCustomerGroupIDs.contains(JDOHelper.getObjectId(customerGroup));
-		}
-	};
+//	private CustomerGroupListComposite.CustomerGroupFilter partnerCustomerGroupFilter = new CustomerGroupListComposite.CustomerGroupFilter() {
+//		public boolean includeCustomerGroup(CustomerGroup customerGroup)
+//		{
+//			if (partnerCustomerGroupIDs == null) {
+//				Set<CustomerGroupMapping> customerGroupMappings = customerGroupMappingTable.getCustomerGroupMappings(true);
+//				Set<CustomerGroupID> customerGroupIDs = new HashSet<CustomerGroupID>(customerGroupMappings.size());
+//				for (CustomerGroupMapping customerGroupMapping : customerGroupMappings)
+//					customerGroupIDs.add((CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getPartnerCustomerGroup()));
+//
+//				partnerCustomerGroupIDs = customerGroupIDs;
+//			}
+//
+//			return !partnerCustomerGroupIDs.contains(JDOHelper.getObjectId(customerGroup));
+//		}
+//	};
 
 	private CustomerGroupListComposite.CustomerGroupFilter localCustomerGroupFilter = new CustomerGroupListComposite.CustomerGroupFilter() {
 		public boolean includeCustomerGroup(CustomerGroup customerGroup)
@@ -89,7 +89,7 @@ extends LSDViewPart
 		sfMainVert.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		SashForm sfTopHoriz = new SashForm(sfMainVert, SWT.HORIZONTAL);
-		partnerCustomerGroupList = new CustomerGroupListComposite(sfTopHoriz, SWT.NONE, false, partnerCustomerGroupFilter);
+		partnerCustomerGroupList = new CustomerGroupListComposite(sfTopHoriz, SWT.NONE, false, null); // partnerCustomerGroupFilter);
 		partnerCustomerGroupList.setOrganisationVisible(true);
 		partnerCustomerGroupList.setFilterOrganisationIDInverse(true);
 		partnerCustomerGroupList.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -174,10 +174,10 @@ extends LSDViewPart
 		if (selectedPartnerCustomerGroup == null || selectedLocalCustomerGroup == null)
 			return;
 
-		CustomerGroupMapping tm = new CustomerGroupMapping(selectedPartnerCustomerGroup, selectedLocalCustomerGroup);
+		CustomerGroupMapping tm = new CustomerGroupMapping(selectedLocalCustomerGroup, selectedPartnerCustomerGroup);
 		customerGroupMappingTable.addClientOnlyCustomerGroupMapping(tm);
 
-		partnerCustomerGroupIDs = null;
+//		partnerCustomerGroupIDs = null;
 		localCustomerGroupIDsInMappingsForSelectedPartnerOrganisationID = null;
 		partnerCustomerGroupList.loadCustomerGroups();
 		localCustomerGroupList.loadCustomerGroups();
@@ -197,7 +197,7 @@ extends LSDViewPart
 
 		customerGroupMappingTable.removeClientOnlyCustomerGroupMappings(customerGroupMappingsToDelete);
 
-		partnerCustomerGroupIDs = null;
+//		partnerCustomerGroupIDs = null;
 		localCustomerGroupIDsInMappingsForSelectedPartnerOrganisationID = null;
 		partnerCustomerGroupList.loadCustomerGroups();
 		localCustomerGroupList.loadCustomerGroups();
