@@ -42,6 +42,7 @@ import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
@@ -70,6 +71,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 		IssueFileAttachment.FETCH_GROUP_THIS,
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
+		IssueResolution.FETCH_GROUP_THIS,
 		IssueLocal.FETCH_GROUP_THIS,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};

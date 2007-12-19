@@ -63,6 +63,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	
 	private IssueTypeAndStateSection issueTypeAndStateSection;
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
+	private IssuePropertySection issuePropertySection;
 	
 	/**
 	 * <p>
@@ -74,7 +75,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	 */
 	public IssueEditorGeneralPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Issue Editor Title");
+		super(editor, ID_PAGE, "Issue Editor");
 	}
 
 	@Override
@@ -87,9 +88,13 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, parent, controller);
 		getManagedForm().addPart(issueSubjectAndDescriptionSection);
 		
+		issuePropertySection = new IssuePropertySection(this, parent, controller);
+		getManagedForm().addPart(issuePropertySection);
+		
 		if (controller.isLoaded()) {
 			issueTypeAndStateSection.setIssue(controller.getIssue());
 			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
+			issuePropertySection.setIssue(controller.getIssue());
 		}
 	}
 
@@ -107,13 +112,15 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 					issueTypeAndStateSection.setIssue(getController().getIssue());
 				if (issueSubjectAndDescriptionSection != null && !issueSubjectAndDescriptionSection.getSection().isDisposed())
 					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
+				if (issuePropertySection != null && !issuePropertySection.getSection().isDisposed())
+					issuePropertySection.setIssue(getController().getIssue());
 			}
 		});
 	}
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Editor Page Title";
+		return "Issue Editor Page";
 	}
 	
 	protected IssueEditorPageController getController() {

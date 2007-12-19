@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -29,6 +30,11 @@ public class IssueLabelProvider extends LabelProvider{
 		if (element instanceof IssuePriority) {
 			IssuePriority issuePriority = (IssuePriority) element;
 			return issuePriority.getIssuePriorityText().getText();
+		}
+		
+		if (element instanceof IssueResolution) {
+			IssueResolution issueResolution = (IssueResolution) element;
+			return issueResolution.getName().getText();
 		}
 
 		if (element instanceof Class) {

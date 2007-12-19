@@ -81,7 +81,7 @@ extends AbstractTableComposite<Issue>
 	    });
 	}		
 
-	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Xyz") {
+	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Issue") {
 	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 	      Issue.class,
 	      true,
