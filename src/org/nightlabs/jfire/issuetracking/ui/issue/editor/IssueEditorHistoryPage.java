@@ -38,21 +38,21 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
  * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
+public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 {
 	/**
 	 * The id of this page.
 	 */
-	public static final String ID_PAGE = IssueEditorGeneralPage.class.getName();
+	public static final String ID_PAGE = IssueEditorHistoryPage.class.getName();
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link IssueEditorGeneralPage}. 
+	 * new instances of {@link IssueEditorHistoryPage}. 
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
 		public IFormPage createPage(FormEditor formEditor) {
-			return new IssueEditorGeneralPage(formEditor);
+			return new IssueEditorHistoryPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
 			return new IssueEditorPageController(editor);
@@ -61,9 +61,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 
 	// TODO: Somehow have a LanguageChooser for the whole page, not for every I18nEditor.
 	
-	private IssueTypeAndStateSection issueTypeAndStateSection;
-	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
-	private IssuePropertySection issuePropertySection;
+	private IssueHistoryListSection issueHistorySection;
 	
 	/**
 	 * <p>
@@ -73,29 +71,17 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	 * @param editor The editor for which to create this
 	 * 		form page. 
 	 */
-	public IssueEditorGeneralPage(FormEditor editor)
+	public IssueEditorHistoryPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Issue Details");
+		super(editor, ID_PAGE, "History");
 	}
 
 	@Override
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
-		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
-		getManagedForm().addPart(issueTypeAndStateSection);
-		
-		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, parent, controller);
-		getManagedForm().addPart(issueSubjectAndDescriptionSection);
-		
-		issuePropertySection = new IssuePropertySection(this, parent, controller);
-		getManagedForm().addPart(issuePropertySection);
-		
-		if (controller.isLoaded()) {
-			issueTypeAndStateSection.setIssue(controller.getIssue());
-			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
-			issuePropertySection.setIssue(controller.getIssue());
-		}
+		issueHistorySection = new IssueHistoryListSection(this, parent, controller);
+		getManagedForm().addPart(issueHistorySection);
 	}
 
 	@Override
@@ -106,21 +92,11 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent(); // multiple calls don't hurt
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				if (issueTypeAndStateSection != null && !issueTypeAndStateSection.getSection().isDisposed())
-					issueTypeAndStateSection.setIssue(getController().getIssue());
-				if (issueSubjectAndDescriptionSection != null && !issueSubjectAndDescriptionSection.getSection().isDisposed())
-					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
-				if (issuePropertySection != null && !issuePropertySection.getSection().isDisposed())
-					issuePropertySection.setIssue(getController().getIssue());
-			}
-		});
 	}
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Details";
+		return "Issue History";
 	}
 	
 	protected IssueEditorPageController getController() {

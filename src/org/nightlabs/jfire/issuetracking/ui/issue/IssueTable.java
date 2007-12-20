@@ -116,12 +116,16 @@ extends AbstractTableComposite<Issue>
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("IssueID");
-		layout.addColumnData(new ColumnWeightData(30));
+		tc.setText("ID");
+		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setText("Date Submitted");
+		layout.addColumnData(new ColumnWeightData(40));
+		
+		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Type");
-		layout.addColumnData(new ColumnWeightData(30));
+		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Subject");
@@ -133,15 +137,15 @@ extends AbstractTableComposite<Issue>
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Severity");
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(15));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Priority");
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("State");
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(15));
 		
 		table.setLayout(layout);
 	}
@@ -181,26 +185,30 @@ extends AbstractTableComposite<Issue>
 				case(0):
 					return Long.toString(issue.getIssueID());
 				case(1):
+					if(issue.getCreateTimestamp() != null)
+						return issue.getCreateTimestamp().toString();
+				break;
+				case(2):
 					if(issue.getIssueType() != null)
 						return issue.getIssueType().getName().getText();
 				break;
-				case(2):
+				case(3):
 					if (issue.getSubject() != null)
 						return issue.getSubject().getText();
 					break;
-				case(3):
+				case(4):
 					if (issue.getDescription() != null)
 						return issue.getDescription().getText();
 				break;
-				case(4):
+				case(5):
 					if(issue.getIssueSeverityType() != null)
 						return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
 					break;
-				case(5):
+				case(6):
 					if(issue.getIssuePriority() != null)
 						return issue.getIssuePriority().getIssuePriorityText().getText();
 					break;
-				case(6):
+				case(7):
 					return getStateName(issue);					
 				default:
 					return ""; //$NON-NLS-1$
