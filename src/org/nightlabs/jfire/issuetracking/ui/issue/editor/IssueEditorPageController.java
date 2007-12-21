@@ -23,6 +23,7 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.jdo.FetchPlan;
@@ -146,6 +147,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 	{
 		monitor.beginTask("Saving Issue...", 100);
 		Issue oldIssue = issue;
+		issue.setUpdateTimestamp(new Date());
 		ProgressMonitorWrapper pMonitor = new ProgressMonitorWrapper(monitor);
 		Issue _issue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(pMonitor, 100));
 		issue = Util.cloneSerializable(_issue);
