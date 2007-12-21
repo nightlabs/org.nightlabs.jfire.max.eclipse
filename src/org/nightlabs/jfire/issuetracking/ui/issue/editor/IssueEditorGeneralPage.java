@@ -61,6 +61,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 
 	// TODO: Somehow have a LanguageChooser for the whole page, not for every I18nEditor.
 	
+	private IssueDetailSection issueDetailSection;
 	private IssueTypeAndStateSection issueTypeAndStateSection;
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
 	private IssuePropertySection issuePropertySection;
@@ -82,6 +83,9 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
+		issueDetailSection = new IssueDetailSection(this, parent, controller);
+		getManagedForm().addPart(issueDetailSection);
+		
 		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeAndStateSection);
 		
@@ -92,6 +96,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		getManagedForm().addPart(issuePropertySection);
 		
 		if (controller.isLoaded()) {
+			issueDetailSection.setIssue(controller.getIssue());
 			issueTypeAndStateSection.setIssue(controller.getIssue());
 			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
 			issuePropertySection.setIssue(controller.getIssue());
@@ -108,6 +113,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		switchToContent(); // multiple calls don't hurt
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (issueDetailSection != null && !issueDetailSection.getSection().isDisposed())
+					issueDetailSection.setIssue(getController().getIssue());
 				if (issueTypeAndStateSection != null && !issueTypeAndStateSection.getSection().isDisposed())
 					issueTypeAndStateSection.setIssue(getController().getIssue());
 				if (issueSubjectAndDescriptionSection != null && !issueSubjectAndDescriptionSection.getSection().isDisposed())

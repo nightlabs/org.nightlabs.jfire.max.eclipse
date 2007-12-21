@@ -53,7 +53,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		issueTypeLabel.setLayoutData(gd);
 		
 		statusLabel = new Label(getClient(), SWT.WRAP);
-		statusLabel.setText("Staus: ");
+		statusLabel.setText("Status: ");
 		statusLabel.setLayoutData(new GridData());
 		
 		currentStateComposite = new CurrentStateComposite(getClient(), SWT.NONE);

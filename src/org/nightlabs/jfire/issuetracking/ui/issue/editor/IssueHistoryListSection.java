@@ -10,7 +10,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /* 
 * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
