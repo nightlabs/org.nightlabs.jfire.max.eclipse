@@ -37,7 +37,7 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 	public IssueTypeResolutionSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
 		this.controller = controller;
-		getSection().setText("Section Title");
+		getSection().setText("Resolutions");
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		

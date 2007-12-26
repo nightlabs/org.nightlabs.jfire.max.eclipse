@@ -44,7 +44,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
-
+		getSection().setText("Priorities");
+		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 

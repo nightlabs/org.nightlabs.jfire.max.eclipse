@@ -44,7 +44,7 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	 */
 	public IssueTypeEditorPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "New Issue Type");
+		super(editor, ID_PAGE, "Issue Type");
 	}
 
 	@Override
@@ -100,6 +100,6 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	
 	@Override
 	protected String getPageFormTitle() {
-		return "Create a new Issue Type";
+		return "Issue Type";
 	}
 }

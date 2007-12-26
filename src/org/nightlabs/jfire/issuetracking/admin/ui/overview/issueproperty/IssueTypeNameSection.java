@@ -25,7 +25,7 @@ public class IssueTypeNameSection extends RestorableSectionPart {
 	public IssueTypeNameSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
 		this.controller = controller;
-		getSection().setText("Section Title");
+		getSection().setText("Issue Type");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
