@@ -8,10 +8,15 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -115,35 +120,49 @@ extends AbstractTableComposite<Issue>
 		TableColumn tc;
 		TableLayout layout = new TableLayout();
 
+		Listener listener = new Listener(){
+			public void handleEvent(Event arg0) {
+				System.out.println("HELLLLLLLLLLLO");
+			}
+		};
+		
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("ID");
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Date Submitted");
 		layout.addColumnData(new ColumnWeightData(40));
 		
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Type");
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Subject");
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Description");
 		layout.addColumnData(new ColumnWeightData(20));
 		
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Severity");
 		layout.addColumnData(new ColumnWeightData(15));
 		
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Priority");
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("State");
 		layout.addColumnData(new ColumnWeightData(15));
 		

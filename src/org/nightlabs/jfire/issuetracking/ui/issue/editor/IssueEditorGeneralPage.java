@@ -65,6 +65,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	private IssueTypeAndStateSection issueTypeAndStateSection;
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
 	private IssuePropertySection issuePropertySection;
+	private IssueFileAttachmentSection issueFileAttachmentSection;
 	
 	/**
 	 * <p>
@@ -95,11 +96,15 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issuePropertySection = new IssuePropertySection(this, parent, controller);
 		getManagedForm().addPart(issuePropertySection);
 		
+		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
+		getManagedForm().addPart(issueFileAttachmentSection);
+		
 		if (controller.isLoaded()) {
 			issueDetailSection.setIssue(controller.getIssue());
 			issueTypeAndStateSection.setIssue(controller.getIssue());
 			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
 			issuePropertySection.setIssue(controller.getIssue());
+			issueFileAttachmentSection.setIssue(controller.getIssue());
 		}
 	}
 
@@ -121,6 +126,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
 				if (issuePropertySection != null && !issuePropertySection.getSection().isDisposed())
 					issuePropertySection.setIssue(getController().getIssue());
+				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed())
+					issueFileAttachmentSection.setIssue(getController().getIssue());
 			}
 		});
 	}

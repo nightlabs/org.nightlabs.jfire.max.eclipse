@@ -248,7 +248,7 @@ extends XComposite{
 		fileLabel = new Label(this, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, FileListSelectionComposite.ADD);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		fileComposite.setLayoutData(gridData);
 
@@ -287,64 +287,6 @@ extends XComposite{
 						}
 					});
 					
-//					Display.getDefault().asyncExec(new Runnable() {
-//						public void run() {
-//							for(final IssueDocumentType type : IssueDocumentType.values()){
-//								try {
-//									Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(type.c().getName());
-//									String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
-//											FetchPlan.DEFAULT,
-//											ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
-//									};
-//									Collection<ProcessDefinition> processDefinitions;
-//
-//									processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-//											processDefinitionIDs, 
-//											PROCESS_DEFINITION_FETCH_GROUPS, 
-//											NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//											monitor);
-//
-//									final String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
-//											FetchPlan.DEFAULT,
-//											StateDefinition.FETCH_GROUP_NAME
-//									};
-//
-//
-//									for (ProcessDefinition processDefinition : processDefinitions){
-//										Set<StateDefinitionID> statedDefinitionIDs;
-//										try {
-//											statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
-//											Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
-//													statedDefinitionIDs, 
-//													STATE_DEFINITION_FETCH_GROUPS, 
-//													NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//													monitor);
-//											stateDefinitionMap.put(type.c(), stateDefinitions);
-//										} catch (Exception e) {
-//											ExceptionHandlerRegistry.asyncHandleException(e);
-//											throw new RuntimeException(e);
-//										}
-//									}//for
-//
-//									documentTypeCombo.selectElementByIndex(0);
-//									selectedDocumentType = documentTypeCombo.getSelectedElement();
-//
-//									stateDefinitionCombo.removeAll();
-//									Collection<StateDefinition> states = stateDefinitionMap.get(selectedDocumentType);
-//									for(StateDefinition state : states){
-//										stateDefinitionCombo.addElement(state);
-//									}//for
-//									stateDefinitionCombo.selectElementByIndex(0);
-//
-//									selectedState = stateDefinitionCombo.getSelectedElement();
-//								}//try
-//								catch (Exception e1) {
-//									ExceptionHandlerRegistry.asyncHandleException(e1);
-//									throw new RuntimeException(e1);
-//								}
-//							}//for
-//						}//run
-//					});
 				}catch (Exception e1) {
 					ExceptionHandlerRegistry.asyncHandleException(e1);
 					throw new RuntimeException(e1);
