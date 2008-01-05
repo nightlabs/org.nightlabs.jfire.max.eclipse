@@ -12,8 +12,8 @@
    <extension
          point="org.nightlabs.jfire.trade.ui.clientDeliveryProcessorFactory">
       <clientDeliveryProcessorFactory
-            class="org.nightlabs.jfire.voucher.print.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
-            id="org.nightlabs.jfire.voucher.print.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
+            class="org.nightlabs.jfire.voucher.print.ui.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
+            id="org.nightlabs.jfire.voucher.print.ui.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
             name="Print using the Operating System Printer">
          <modeOfDeliveryFlavour
                modeOfDeliveryFlavourID="voucherPrintViaOperatingSystemPrinter"

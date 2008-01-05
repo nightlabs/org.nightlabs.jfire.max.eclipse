@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.print.transfer.deliver;
+package org.nightlabs.jfire.voucher.print.ui.transfer.deliver;
 
 import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;

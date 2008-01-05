@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.print.transfer.deliver;
+package org.nightlabs.jfire.voucher.print.ui.transfer.deliver;
 
 import java.io.File;
 import java.rmi.RemoteException;
