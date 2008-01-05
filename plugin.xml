@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.nightlabs.base.ui.printerConfiguration">
+      <printerUseCase
+            defaultConfigurator="org.nightlabs.base.ui.print.PrinterConfiguratorFactoryDefault"
+            description="Prints Delivered Vouchers on the Printer of the Operating System"
+            id="PrinterUseCase-OSVoucherPrint"
+            name="Operating System Voucher Print"/>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.clientDeliveryProcessorFactory">
+      <clientDeliveryProcessorFactory
+            class="org.nightlabs.jfire.voucher.print.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
+            id="org.nightlabs.jfire.voucher.print.transfer.deliver.ClientDeliveryProcessorFactoryOSPrint"
+            name="Print using the Operating System Printer">
+         <modeOfDeliveryFlavour
+               modeOfDeliveryFlavourID="voucherPrintViaOperatingSystemPrinter"
+               name="Print To Operating System Printer"
+               organisationID="devil.NightLabs.org"/>
+      </clientDeliveryProcessorFactory>
+   </extension>
+
+</plugin>
