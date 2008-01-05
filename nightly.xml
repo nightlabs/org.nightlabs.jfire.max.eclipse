@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.10//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_10.dtd">
+
+<nightlybuild>
+
+  <project name="org.nightlabs.jfire.scripting.print">
+	<plugin/>
+    <ant path="org.nightlabs.jfire.scripting.print" file="build-nightlabs.xml" target="deploy"/>
+    <requires/>
+    <provides/>
+    <publishes description="..." location="org.nightlabs.jfire.scripting.print/dist/org.nightlabs.jfire.scripting.print_0.9.3.jar"/>
+    <javadoc path="org.nightlabs.jfire.scripting.print/src"/>
+  </project>
+
+</nightlybuild>
