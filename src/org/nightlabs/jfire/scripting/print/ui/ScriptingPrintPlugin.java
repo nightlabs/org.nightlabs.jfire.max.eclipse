@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.print;
+package org.nightlabs.jfire.scripting.print.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class ScriptingPrintPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.scripting.print"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.scripting.print.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static ScriptingPrintPlugin plugin;

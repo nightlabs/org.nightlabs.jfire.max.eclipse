@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.print.transfer.delivery;
+package org.nightlabs.jfire.scripting.print.ui.transfer.delivery;
 
 import java.io.File;
 import java.util.LinkedList;

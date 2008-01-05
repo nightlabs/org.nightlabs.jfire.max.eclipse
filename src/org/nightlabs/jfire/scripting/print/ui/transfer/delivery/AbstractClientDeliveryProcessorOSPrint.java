@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.scripting.print.transfer.delivery;
+package org.nightlabs.jfire.scripting.print.ui.transfer.delivery;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
