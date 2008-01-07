@@ -9,7 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.StoreManager;
@@ -46,8 +46,10 @@ implements IProductTypeDetailPageController
 		FetchPlan.DEFAULT, 
 		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
-		ProductType.FETCH_GROUP_NESTED_PRODUCT_TYPES,
-		NestedProductType.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE,
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
+		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
+		NestedProductTypeLocal.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE,

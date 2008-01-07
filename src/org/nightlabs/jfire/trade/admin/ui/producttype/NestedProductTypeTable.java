@@ -43,12 +43,12 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractInvertableTableSorter;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableSortSelectionListener;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public class NestedProductTypeTable
-		extends AbstractTableComposite<NestedProductType>
+		extends AbstractTableComposite<NestedProductTypeLocal>
 		implements ISelectionProvider
 {
 	protected static class NestedProductTypeContentProvider
@@ -56,7 +56,7 @@ public class NestedProductTypeTable
 	{
 		public Object[] getElements(Object inputElement)
 		{
-			return productType.getNestedProductTypes().toArray();
+			return productType.getProductTypeLocal().getNestedProductTypeLocals().toArray();
 		}
 
 		public void dispose()
@@ -88,21 +88,21 @@ public class NestedProductTypeTable
 
 		public String getColumnText(Object element, int columnIndex)
 		{
-			if (! (element instanceof NestedProductType))
-				return "Invalid element! Must be NestedProductType, but is " + (element == null ? "null" : element.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
+			if (! (element instanceof NestedProductTypeLocal))
+				return "Invalid element! Must be NestedProductTypeLocal, but is " + (element == null ? "null" : element.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
-			NestedProductType nestedProductType = (NestedProductType) element;
-//			if (! (nestedProductType.getInnerProductType() instanceof SimpleProductType))
-//				return "nestedProductType.innerProductType is an instance of " + (nestedProductType.getInnerProductType() == null ? "null" : nestedProductType.getInnerProductType().getClass().getName()) + ", but must be a SimpleProductType!";
+			NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) element;
+//			if (! (nestedProductTypeLocal.getInnerProductType() instanceof SimpleProductType))
+//				return "nestedProductTypeLocal.innerProductType is an instance of " + (nestedProductTypeLocal.getInnerProductType() == null ? "null" : nestedProductTypeLocal.getInnerProductType().getClass().getName()) + ", but must be a SimpleProductType!";
 
-			ProductType productType = nestedProductType.getInnerProductType();
+			ProductType productType = nestedProductTypeLocal.getInnerProductTypeLocal().getProductType();
 
 			int ci = 0;
 			if (ci == columnIndex)
 				return productType.getName().getText(Locale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return String.valueOf(nestedProductType.getQuantity());
+				return String.valueOf(nestedProductTypeLocal.getQuantity());
 
 			return ""; //$NON-NLS-1$
 		}
@@ -113,31 +113,31 @@ public class NestedProductTypeTable
 //	{
 //		public int compare(Viewer viewer, Object e1, Object e2)
 //		{
-//			NestedProductType npt1 = (NestedProductType) e1;
-//			NestedProductType npt2 = (NestedProductType) e2;
+//			NestedProductTypeLocal npt1 = (NestedProductTypeLocal) e1;
+//			NestedProductTypeLocal npt2 = (NestedProductTypeLocal) e2;
 //			return _compare(viewer, npt1, npt2);
 //		}
 //
-//		protected abstract int _compare(Viewer viewer, NestedProductType npt1, NestedProductType npt2);
+//		protected abstract int _compare(Viewer viewer, NestedProductTypeLocal npt1, NestedProductTypeLocal npt2);
 //	}
 
 	protected static class NestedProductTypeViewerSorter_Name
-	extends AbstractInvertableTableSorter<NestedProductType>
+	extends AbstractInvertableTableSorter<NestedProductTypeLocal>
 	{
 		@Override
-		protected int _compare(Viewer viewer, NestedProductType npt1, NestedProductType npt2)
+		protected int _compare(Viewer viewer, NestedProductTypeLocal npt1, NestedProductTypeLocal npt2)
 		{
 			return getCollator().compare(
-					npt1.getInnerProductType().getName().getText(Locale.getDefault().getLanguage()),
-					npt2.getInnerProductType().getName().getText(Locale.getDefault().getLanguage()));
+					npt1.getInnerProductTypeLocal().getProductType().getName().getText(Locale.getDefault().getLanguage()),
+					npt2.getInnerProductTypeLocal().getProductType().getName().getText(Locale.getDefault().getLanguage()));
 		}
 	}
 
 	protected static class NestedProductTypeViewerSorter_Quantity
-	extends AbstractInvertableTableSorter<NestedProductType>
+	extends AbstractInvertableTableSorter<NestedProductTypeLocal>
 	{
 		@Override
-		protected int _compare(Viewer viewer, NestedProductType npt1, NestedProductType npt2)
+		protected int _compare(Viewer viewer, NestedProductTypeLocal npt1, NestedProductTypeLocal npt2)
 		{
 			int qty1 = npt1.getQuantity();
 			int qty2 = npt2.getQuantity();

@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -49,7 +50,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IPriceConfig;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
@@ -206,14 +207,13 @@ public class ProductTypeSelectorListImpl extends XComposite
 //			productTypeItemList.add(assemblyInnerProductInfo);
 //			productTypeGUIList.add(assemblyInnerProductInfo.getPrimaryKey()); // TO DO i18n
 
-			for (Iterator it = packageProductType.getNestedProductTypes().iterator(); it.hasNext(); ) {
-				NestedProductType nestedProductType = (NestedProductType)it.next();
-				ProductType productType = nestedProductType.getInnerProductType();
+			for (NestedProductTypeLocal nestedProductTypeLocal : packageProductType.getProductTypeLocal().getNestedProductTypeLocals()) {
+				ProductType productType = nestedProductTypeLocal.getInnerProductTypeLocal().getProductType();
 //				if (assemblyInnerProductInfo == productInfo)
 //					continue;
 
 				productTypeItemList.add(new Item(false, false, productType));
-				productTypeGUIList.add(productType.getName().getText(languageID) + " [" + nestedProductType.getQuantity() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+				productTypeGUIList.add(productType.getName().getText(languageID) + " [" + nestedProductTypeLocal.getQuantity() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (packageProductType.getPackagePriceConfig() != null) {
@@ -228,13 +228,13 @@ public class ProductTypeSelectorListImpl extends XComposite
 		fireSelectionChangedEvent();
 	}
 
-	private java.util.List selectionChangedListeners = new LinkedList();
+	private ListenerList selectionChangedListeners = new ListenerList();
 	
 	protected void fireSelectionChangedEvent()
 	{
 		SelectionChangedEvent e = new SelectionChangedEvent(this, getSelection());
-		for (Iterator it = selectionChangedListeners.iterator(); it.hasNext(); ) {
-			ISelectionChangedListener l = (ISelectionChangedListener)it.next();
+		for (Object listener : selectionChangedListeners.getListeners()) {
+			ISelectionChangedListener l = (ISelectionChangedListener)listener;
 			l.selectionChanged(e);
 		}
 	}

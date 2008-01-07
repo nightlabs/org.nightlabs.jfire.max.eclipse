@@ -70,7 +70,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.l10n.NumberFormatter;
 
@@ -499,10 +499,10 @@ public class PriceConfigGrid extends XComposite
 			doResetSelectedCells = true;
 		else {
 	
-			NestedProductType nestedProductType = null;
+			NestedProductTypeLocal nestedProductTypeLocal = null;
 			ProductType selectedProductType = productTypeSelector.getSelectedProductTypeItem(true).getProductType();
 			if (!productTypeSelector.getPackageProductType().getPrimaryKey().equals(selectedProductType.getPrimaryKey())) {
-				nestedProductType = productTypeSelector.getPackageProductType().getNestedProductType(
+				nestedProductTypeLocal = productTypeSelector.getPackageProductType().getProductTypeLocal().getNestedProductTypeLocal(
 						selectedProductType.getOrganisationID(), selectedProductType.getProductTypeID(), true);
 			}
 	
@@ -570,8 +570,8 @@ public class PriceConfigGrid extends XComposite
 						else
 							dvX.adjustPriceCoordinate(priceCoordinate);
 		
-						if (nestedProductType != null)
-							priceCoordinate = priceCalculator.createMappedLocalPriceCoordinate(nestedProductType, priceFragmentType, priceCoordinate);
+						if (nestedProductTypeLocal != null)
+							priceCoordinate = priceCalculator.createMappedLocalPriceCoordinate(nestedProductTypeLocal, priceFragmentType, priceCoordinate);
 		
 						PriceCell priceCell = resultPriceConfig.getPriceCell(priceCoordinate, false);
 						if (priceCell != null) {

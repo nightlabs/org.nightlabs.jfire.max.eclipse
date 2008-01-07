@@ -56,7 +56,7 @@ import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate.ResolvedMapEntry;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate.ResolvedMapKey;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -92,7 +92,7 @@ extends AbstractTreeComposite
 			if (productTypeID == null)
 				return;
 			productType = ProductTypeDAO.sharedInstance().getProductType(
-					productTypeID, ProductTypePackageTree.DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					productTypeID, ProductTypePackageTree.DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
 			
 			String packageType = MoneyFlowMapping.PACKAGE_TYPE_INNER;
@@ -120,15 +120,15 @@ extends AbstractTreeComposite
 				);
 			}
 			
-			for (Iterator iter = productType.getNestedProductTypes().iterator(); iter.hasNext();) {
-				NestedProductType nestedProductType = (NestedProductType) iter.next();
+			for (Iterator iter = productType.getProductTypeLocal().getNestedProductTypeLocals().iterator(); iter.hasNext();) {
+				NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) iter.next();
 				children.add(
 						new Node(
 								this, 
 								null,
 								ProductTypeID.create(
-										nestedProductType.getInnerProductTypeOrganisationID(), 
-										nestedProductType.getInnerProductTypeProductTypeID()
+										nestedProductTypeLocal.getInnerProductTypeOrganisationID(), 
+										nestedProductTypeLocal.getInnerProductTypeProductTypeID()
 								), 
 								resolvedMappings
 						)
