@@ -131,8 +131,8 @@ extends AbstractTableComposite
 					if (pt.getOwner() != null && pt.getOwner().getPerson() != null)
 						return pt.getOwner().getPerson().getDisplayName();
 				case(8):
-					if (pt.getNestedProductTypes() != null)
-						return ""+pt.getNestedProductTypes().size();				 //$NON-NLS-1$
+					if (pt.getProductTypeLocal().getNestedProductTypeLocals() != null)
+						return ""+pt.getProductTypeLocal().getNestedProductTypeLocals().size();				 //$NON-NLS-1$
 			}
 			return ""; //$NON-NLS-1$
 		}

@@ -44,8 +44,9 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -58,8 +59,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class ProductTypePackageTree extends AbstractTreeComposite {
 	
-	public static final String[] DEFAULT_FETCH_GROUP = new String[]{
-		ProductType.FETCH_GROUP_NESTED_PRODUCT_TYPES,
+	public static final String[] DEFAULT_FETCH_GROUPS = new String[]{
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
 		ProductType.FETCH_GROUP_NAME
 	};
 	
@@ -93,7 +95,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 			if (nodeProductType == null)
 				return;
 			ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
-					nodeProductType, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					nodeProductType, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
 			contentProvider.nodesByProductTypeID.put(nodeProductType, this);
 			try {
@@ -102,15 +104,15 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 				text = nodeProductType.toString();
 			}
 			children = new LinkedList();
-			for (Iterator iter = productType.getNestedProductTypes().iterator(); iter.hasNext();) {
-				NestedProductType nestedProductType = (NestedProductType) iter.next();
+			for (Iterator iter = productType.getProductTypeLocal().getNestedProductTypeLocals().iterator(); iter.hasNext();) {
+				NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) iter.next();
 				children.add(
 						new Node(
 								contentProvider, 
 								this, 
 								ProductTypeID.create(
-										nestedProductType.getInnerProductTypeOrganisationID(), 
-										nestedProductType.getInnerProductTypeProductTypeID()
+										nestedProductTypeLocal.getInnerProductTypeOrganisationID(), 
+										nestedProductTypeLocal.getInnerProductTypeProductTypeID()
 								) 
 						)
 				);
