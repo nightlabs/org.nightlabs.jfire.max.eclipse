@@ -76,7 +76,7 @@ extends AbstractProductTypeQuickListFilter
 //		DynamicProductTypeSearchFilter searchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 //		try {
 //			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Collection dynamicProductTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//			Collection dynamicProductTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //			dynamicProductTypeTable.setInput(dynamicProductTypes);
 //		} catch (Exception x) {
 //			throw new RuntimeException(x);
