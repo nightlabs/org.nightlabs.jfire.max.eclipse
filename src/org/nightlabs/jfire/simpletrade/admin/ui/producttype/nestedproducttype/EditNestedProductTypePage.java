@@ -13,7 +13,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -26,7 +26,7 @@ public class EditNestedProductTypePage
 	private Spinner quantitySpinner;
 
 	/**
-	 * This constructor calls {@link #EditNestedProductTypePage(NestedProductType) } with
+	 * This constructor calls {@link #EditNestedProductTypePage(NestedProductTypeLocal) } with
 	 * <code>null</code>.
 	 */
 	public EditNestedProductTypePage()
@@ -35,17 +35,17 @@ public class EditNestedProductTypePage
 	}
 
 	/**
-	 * @param nestedProductType <code>null</code> for a new nested product type
-	 *		(default values will be used) or the {@link NestedProductType} that shall
+	 * @param nestedProductTypeLocal <code>null</code> for a new nested product type
+	 *		(default values will be used) or the {@link NestedProductTypeLocal} that shall
 	 *		be edited.
 	 */
-	public EditNestedProductTypePage(NestedProductType nestedProductType)
+	public EditNestedProductTypePage(NestedProductTypeLocal nestedProductTypeLocal)
 	{
 		super(EditNestedProductTypePage.class.getName(), Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.nestedproducttype.EditNestedProductTypePage.title"), null); //$NON-NLS-1$
 		setDescription(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.nestedproducttype.EditNestedProductTypePage.description")); //$NON-NLS-1$
 
-		if (nestedProductType != null)
-			this.quantity = nestedProductType.getQuantity();
+		if (nestedProductTypeLocal != null)
+			this.quantity = nestedProductTypeLocal.getQuantity();
 	}
 
 	public int getQuantity()

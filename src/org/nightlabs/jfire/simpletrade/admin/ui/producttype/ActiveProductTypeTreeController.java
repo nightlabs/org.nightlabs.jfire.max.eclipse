@@ -27,7 +27,7 @@ extends ActiveJDOObjectTreeController<ProductTypeID, SimpleProductType, ProductT
 	}
 
 	public static final String[] FETCH_GROUPS_PRODUCT_TYPE = {
-		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
+		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 
 	@Override
