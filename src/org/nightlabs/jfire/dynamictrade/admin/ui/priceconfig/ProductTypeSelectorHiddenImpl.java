@@ -2,10 +2,8 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Locale;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -14,7 +12,7 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IPriceConfig;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.ProductTypeSelector;
 
@@ -122,15 +120,12 @@ public class ProductTypeSelectorHiddenImpl
 		productTypeItemList.clear();
 
 		if (packageProductType != null) {
-			String languageID = Locale.getDefault().getLanguage();
-
 			if (packageProductType.getInnerPriceConfig() != null) {
 				productTypeItemList.add(new Item(false, true, packageProductType));
 			}
 
-			for (Iterator it = packageProductType.getNestedProductTypes().iterator(); it.hasNext(); ) {
-				NestedProductType nestedProductType = (NestedProductType)it.next();
-				ProductType productType = nestedProductType.getInnerProductType();
+			for (NestedProductTypeLocal nestedProductTypeLocal : packageProductType.getProductTypeLocal().getNestedProductTypeLocals()) {
+				ProductType productType = nestedProductTypeLocal.getInnerProductTypeLocal().getProductType();
 
 				productTypeItemList.add(new Item(false, false, productType));
 			}
@@ -145,13 +140,13 @@ public class ProductTypeSelectorHiddenImpl
 		fireSelectionChangedEvent();
 	}
 
-	private java.util.List selectionChangedListeners = new LinkedList();
+	private ListenerList selectionChangedListeners = new ListenerList();
 	
 	protected void fireSelectionChangedEvent()
 	{
 		SelectionChangedEvent e = new SelectionChangedEvent(this, getSelection());
-		for (Iterator it = selectionChangedListeners.iterator(); it.hasNext(); ) {
-			ISelectionChangedListener l = (ISelectionChangedListener)it.next();
+		for (Object listener : selectionChangedListeners.getListeners()) {
+			ISelectionChangedListener l = (ISelectionChangedListener)listener;
 			l.selectionChanged(e);
 		}
 	}

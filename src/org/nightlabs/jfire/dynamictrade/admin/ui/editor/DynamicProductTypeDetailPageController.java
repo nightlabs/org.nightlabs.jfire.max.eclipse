@@ -12,8 +12,9 @@ import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.store.NestedProductType;
+import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 
 /**
@@ -44,8 +45,10 @@ extends AbstractProductTypeDetailPageController
 		FetchPlan.DEFAULT, 
 		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
-		ProductType.FETCH_GROUP_NESTED_PRODUCT_TYPES,
-		NestedProductType.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE
+		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
+		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+		NestedProductTypeLocal.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE
 	};
 
 	@Override
