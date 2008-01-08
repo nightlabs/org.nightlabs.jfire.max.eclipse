@@ -12,12 +12,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
-import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherLayoutSection;
-import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPageController;
-import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeNameSection;
-import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeSaleAccessControlSection;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
@@ -32,8 +27,7 @@ extends EntityEditorPageWithProgress
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
 		//super(editor, id, name);
 		
-		super(editor, VoucherTypePricePage.class.getName(), 
-				Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.title")); //$NON-NLS-1$
+		super(editor, VoucherTypePricePage.class.getName(),"Price Config");
 
 		// TODO Auto-generated constructor stub
 	}

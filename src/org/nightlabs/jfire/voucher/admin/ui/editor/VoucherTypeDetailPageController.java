@@ -7,12 +7,14 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.VoucherManagerUtil;
+import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -44,7 +46,9 @@ extends AbstractProductTypeDetailPageController
 
 	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = CollectionUtil.mergeArrays(
 			FETCH_GROUPS_DEFAULT,
-			new String[] {VoucherType.FETCH_GROUP_VOUCHER_LAYOUT}
+			new String[] {FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
+					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
+				}
 		);
 	
 	protected void createVoucherLayout(VoucherTypeDetailPage page) 
