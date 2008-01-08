@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="file:/home/tobias/java/jdo_javadoc/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -15,7 +15,34 @@
             name="Attach an Issue"
             tooltip="Attach an Issue">
       </articleContainerAction>
-   </extension>  
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
+      <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.category1"
+            name="Category1">
+      </issueLinkHandlerCategory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.category1"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.factory1"
+            name="Factory1">
+      </issueLinkHandlerFactory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.category1"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.Factory2"
+            name="Factory2">
+      </issueLinkHandlerFactory>
+      <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.category2"
+            name="Category2">
+      </issueLinkHandlerCategory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.category2"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.Factory3"
+            name="Factory3">
+      </issueLinkHandlerFactory>
+   </extension>
+   
   
   <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
       <editorActionBarContributionRegistry
