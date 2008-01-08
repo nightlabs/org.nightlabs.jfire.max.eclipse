@@ -12,11 +12,9 @@ public interface IssueLinkHandlerFactory extends IExecutableExtension
 {
 	String getCategoryId();
 	
-	String getName();
-	
 	Class<? extends Object> getLinkObjectClass();
 	
-	void setEntryType(String entryType);
+	String getName();
 	
 	void setName(String name);
 	

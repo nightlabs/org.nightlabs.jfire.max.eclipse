@@ -87,17 +87,16 @@ extends AbstractEPProcessor
 		if (element.getName().equals("issueLinkHandlerFactory")) {
 			processIssueLinkHandlerFactory(extension, element);
 		} else if (element.getName().equals("issueLinkHandlerCategory")) {
-			processIssueLinkHandlerFactory(extension, element);
+			processIssueLinkHandlerCategory(extension, element);
 		}
 	}
 	
 	protected void processIssueLinkHandlerFactory(IExtension extension, IConfigurationElement element) throws Exception {
 		try {
 			IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
+			String name = element.getAttribute("name");
 			
-			String entryType = element.getAttribute("entryType"); //$NON-NLS-1$
-			factory.setEntryType(entryType);
-
+			factory.setName(name);
 			addFactory(factory);
 			
 		} catch (Throwable t) {
@@ -107,7 +106,7 @@ extends AbstractEPProcessor
 
 	protected void processIssueLinkHandlerCategory(IExtension extension, IConfigurationElement element) throws Exception {
 		try {
-			String categoryId = element.getAttribute("categoryId");
+			String categoryId = element.getAttribute("id");
 			String name = element.getAttribute("name");
 			String parentCategoryId = element.getAttribute("parentCategoryId");
 			
@@ -142,8 +141,10 @@ extends AbstractEPProcessor
 	
 	private void validateCategory(IssueLinkHandlerCategory category) {
 		List<IssueLinkHandlerFactory> factories = parentCategoryId2Factories.get(category.getCategoryId());
-		for (IssueLinkHandlerFactory childFactory : factories) {
-			category.addChildFactory(childFactory);
+		if (factories != null) {
+			for (IssueLinkHandlerFactory childFactory : factories) {
+				category.addChildFactory(childFactory);
+			}
 		}
 		List<IssueLinkHandlerCategory> children = parentCategoryId2Categories.get(category.getCategoryId());
 		if (children != null) {
