@@ -38,7 +38,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
-			return new VoucherTypePricePage(formEditor,VoucherTypePricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.title")); //$NON-NLS-1$
+			return new VoucherTypePricePage(formEditor,VoucherTypePricePage.class.getName(),"Price Config"); 
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
