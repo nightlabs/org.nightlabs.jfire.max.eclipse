@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-	<extension-point id="issueOverview" name="Issue overview" schema="schema/overview.exsd"/>
+	<extension-point id="issueOverview" name="Issue Overview Extension-Point" schema="schema/issueOverview.exsd"/>
+	<extension-point id="issueLinkHandlerFactory" name="Issue Link Handler Factory Extension-Point" schema="schema/issueLinkHandlerFactory.exsd"/>
     <extension 
    		point="org.eclipse.ui.perspectives">
    		<perspective

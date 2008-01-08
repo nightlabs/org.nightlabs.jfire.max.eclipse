@@ -18,7 +18,7 @@ public class IssueNewWizardPage extends WizardHopPage{
 	private Set<ObjectID> objectIDs;
 	
 	public IssueNewWizardPage(Set<ObjectID> objectIDs){
-		super(IssueNewWizardPage.class.getName(), "Wizard Page Title");
+		super(IssueNewWizardPage.class.getName(), "New Issue");
 		this.objectIDs = objectIDs;
 		setDescription("Create a new issue.");
 	}

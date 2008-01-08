@@ -35,6 +35,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
@@ -44,6 +45,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkObjectWizard;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
@@ -58,8 +60,8 @@ extends XComposite{
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 
-	private Label attachedObjectLbl;
-	private org.eclipse.swt.widgets.List attachedObjectList;
+	private Label linkedObjectLbl;
+	private org.eclipse.swt.widgets.List linkedObjectList;
 	
 	private Label issueTypeLbl;
 	private XComboComposite<IssueType> issueTypeCombo;
@@ -108,16 +110,33 @@ extends XComposite{
 	{
 		setLayout(new GridLayout(2, false));
 
-		int textStyle = SWT.READ_ONLY | SWT.BORDER;
-
-		attachedObjectLbl = new Label(this, SWT.NONE);
-		attachedObjectLbl.setText("Attached Object");
+		linkedObjectLbl = new Label(this, SWT.NONE);
+		linkedObjectLbl.setText("Linked Object");
 		
-		attachedObjectList = new org.eclipse.swt.widgets.List(this, SWT.BORDER);
-		
+		XComposite linkedComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		linkedComposite.getGridLayout().numColumns = 2;
+		linkedComposite.getGridLayout().makeColumnsEqualWidth = true;
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
-		attachedObjectList.setLayoutData(gridData);
+		linkedComposite.setLayoutData(gridData);
+		
+		linkedObjectList = new org.eclipse.swt.widgets.List(linkedComposite, SWT.BORDER  | SWT.V_SCROLL | SWT.H_SCROLL);
+		linkedObjectList.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		XComposite linkedButtonComposite = new XComposite(linkedComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;
+		Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
+		addLinkButton.setText("Add Link");
+		Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
+		removeLinkButton.setText("Remove Link");
+		
+		addLinkButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkObjectWizard());
+				dialog.open();
+			}
+		});
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
@@ -361,7 +380,7 @@ extends XComposite{
 			for(ObjectID objectID : attachedObjectIDs){
 				Class c = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
 				attachedPCClasses.add(c);
-				attachedObjectList.add(c.getSimpleName());
+				linkedObjectList.add(c.getSimpleName());
 			}
 	}
 
