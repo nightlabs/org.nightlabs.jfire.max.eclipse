@@ -6,7 +6,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdder extends AbstractIssueLinkAdder{
+public class IssueLinkHandlerAdder extends AbstractIssueLinkAdder{
 
 	@Override
 	protected Object doCreateComposite(Object object) {

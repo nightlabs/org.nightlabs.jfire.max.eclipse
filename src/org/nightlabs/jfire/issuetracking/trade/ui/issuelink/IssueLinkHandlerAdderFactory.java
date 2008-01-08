@@ -2,12 +2,13 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.trade.Offer;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdderFactory 
+public class IssueLinkHandlerAdderFactory 
 extends AbstractIssueLinkHandlerFactory
 {
 	public IssueLinkAdder createIssueLinkAdder() {
@@ -16,12 +17,6 @@ extends AbstractIssueLinkHandlerFactory
 	}
 
 	public Class<? extends Object> getLinkObjectClass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setEntryType(String entryType) {
-		// TODO Auto-generated method stub
-		
+		return Offer.class;
 	}
 }
