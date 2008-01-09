@@ -27,12 +27,14 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountSearchFilter;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
@@ -109,7 +111,7 @@ extends WizardHopPage
 			}
 		});
 
-		Account dummy = new Account("a", "a", "a", new LegalEntity("a", "a", "a"), new Currency("a", "a", 0), false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
 
@@ -120,7 +122,8 @@ extends WizardHopPage
 			{
 				try {
 					AccountSearchFilter accountSearchFilter = new AccountSearchFilter();
-					accountSearchFilter.setAnchorTypeID(VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER);
+//					accountSearchFilter.setAnchorTypeID(VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER);
+					accountSearchFilter.setAccountTypeID(JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER);
 					accountSearchFilter.setCurrencyID(currency.getCurrencyID());
 					accountSearchFilter.setOwner(
 							AnchorID.create(Login.getLogin().getOrganisationID(), OrganisationLegalEntity.ANCHOR_TYPE_ID_ORGANISATION, OrganisationLegalEntity.class.getName()));

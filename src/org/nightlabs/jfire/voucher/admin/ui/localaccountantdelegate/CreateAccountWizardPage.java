@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -8,13 +10,18 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.transfer.Anchor;
-import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
+import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.math.Base36Coder;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class CreateAccountWizardPage
 		extends WizardHopPage
@@ -43,12 +50,17 @@ public class CreateAccountWizardPage
 
 	public Account createAccount()
 	{
+		// TODO this method should be called async! if it is, it should get a monitor - if it doesn't we need refactoring 
+		AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
+				JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER,
+				new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
 		Account account = new Account(
-				IDGenerator.getOrganisationID(), VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER,
-				new Base36Coder(false).encode(IDGenerator.nextID(Anchor.class, VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER), 1),
-				null, // this will be set by the EJB to the OrganisationLegalEntity
-				currency,
-				false);
+				IDGenerator.getOrganisationID(),
+				new Base36Coder(false).encode(IDGenerator.nextID(Anchor.class, JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER.accountTypeID), 1),
+				accountType,
+				(LegalEntity)null, // this will be set by the EJB to the OrganisationLegalEntity
+				currency);
 		account.getName().copyFrom(accountName);
 		return account;
 	}
