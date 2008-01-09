@@ -105,7 +105,7 @@ public class DeliveryEntryPage
 extends WizardHopPage
 implements IDeliveryEntryPage
 {
-	private List productTypes;
+	private List<? extends ProductType> productTypes;
 	private org.eclipse.swt.widgets.List productTypeGUIList;
 
 	private List articles;
@@ -143,7 +143,7 @@ implements IDeliveryEntryPage
 	}
 
 	public DeliveryEntryPage(Delivery delivery,
-			List productTypes,
+			List<? extends ProductType> productTypes,
 			List articles)
 	{
 		super(DeliveryEntryPage.class.getName() + '/' + delivery.getDeliveryID(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.title"), //$NON-NLS-1$
@@ -583,9 +583,10 @@ implements IDeliveryEntryPage
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				DeliveryWizard deliveryWizard = (DeliveryWizard) getWizard();
 				final List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
-				
+
 				ModeOfDeliveryFlavourProductTypeGroupCarrier carrier = getStoreManager().getModeOfDeliveryFlavourProductTypeGroupCarrier(
-						deliveryWizard.getProductTypeIDs(),
+//						deliveryWizard.getProductTypeIDs(), // this is wrong, since it loads the ModeOfDeliveryFlavours for all productTypes of the whole wizard!
+						NLJDOHelper.getObjectIDSet(productTypes), // only the productTypeIDs for this one page! not for all!
 						deliveryWizard.getCustomerGroupIDs(),
 						ModeOfDeliveryFlavour.MERGE_MODE_SUBTRACTIVE,
 						new String[]{
@@ -629,10 +630,10 @@ implements IDeliveryEntryPage
 					}
 				});
 				
-				DeliveryEntryPageCfMod paymentEntryPageCfMod = getDeliveryEntryPageCfMod();
+				DeliveryEntryPageCfMod deliveryEntryPageCfMod = getDeliveryEntryPageCfMod();
 				final List<ModeOfDeliveryFlavour> selList = new ArrayList<ModeOfDeliveryFlavour>(1);
 				for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
-					if (Util.equals(paymentEntryPageCfMod.getModeOfDeliveryFlavourPK(), modeOfDeliveryFlavour.getPrimaryKey())) {
+					if (Util.equals(deliveryEntryPageCfMod.getModeOfDeliveryFlavourPK(), modeOfDeliveryFlavour.getPrimaryKey())) {
 						selList.add(modeOfDeliveryFlavour);
 						break;
 					}
