@@ -91,9 +91,7 @@ implements ISelectionProvider
 		public void modify(Object element, String property, Object value)
 		{
 			
-			
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
-			
+				
 			TableItem tableItem = (TableItem)element;
 			Map.Entry<Currency, Long> me = (Map.Entry<Currency, Long>)tableItem.getData();
 

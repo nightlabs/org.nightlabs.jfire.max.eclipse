@@ -1,11 +1,10 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
-import java.util.Collections;
+
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
+
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
