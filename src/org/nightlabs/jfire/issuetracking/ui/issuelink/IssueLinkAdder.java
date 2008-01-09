@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 
+import java.util.Collection;
+
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -27,5 +29,5 @@ public interface IssueLinkAdder
 	
 	void removeIssueLinkSelectionListener(IssueLinkSelectionListener listener);
 	
-	String getIssueLinkObjectId();
+	Collection<String> getIssueLinkObjectIds();
 }

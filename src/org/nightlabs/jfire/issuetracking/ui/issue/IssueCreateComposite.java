@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -46,12 +47,13 @@ import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizardContainer;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
-extends XComposite{
+extends XComposite implements IssueLinkWizardContainer{
 
 	private List<IssueType> issueTypes = new ArrayList<IssueType>();
 
@@ -90,15 +92,12 @@ extends XComposite{
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
-	private Set<ObjectID> attachedObjectIDs;
-	private Set<Class> attachedPCClasses = new HashSet<Class>();
-	
 	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
 	public IssueCreateComposite(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		createComposite(this);
 	}
 
@@ -108,23 +107,23 @@ extends XComposite{
 	 */
 	protected void createComposite(Composite parent) 
 	{
-		setLayout(new GridLayout(2, false));
+		getGridLayout().numColumns = 2;
 
 		linkedObjectLbl = new Label(this, SWT.NONE);
 		linkedObjectLbl.setText("Linked Object");
 		
 		XComposite linkedComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		linkedComposite.getGridLayout().numColumns = 2;
-		linkedComposite.getGridLayout().makeColumnsEqualWidth = true;
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.grabExcessHorizontalSpace = true;
-		linkedComposite.setLayoutData(gridData);
+		linkedComposite.getGridLayout().makeColumnsEqualWidth = false;
+		linkedComposite.getGridData().grabExcessHorizontalSpace = true;
 		
 		linkedObjectList = new org.eclipse.swt.widgets.List(linkedComposite, SWT.BORDER  | SWT.V_SCROLL | SWT.H_SCROLL);
 		linkedObjectList.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		XComposite linkedButtonComposite = new XComposite(linkedComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;
+		linkedButtonComposite.getGridData().grabExcessHorizontalSpace = false;
+		
 		Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
 		addLinkButton.setText("Add Link");
 		Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
@@ -133,7 +132,7 @@ extends XComposite{
 		addLinkButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard());
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard(IssueCreateComposite.this));
 				dialog.open();
 			}
 		});
@@ -188,7 +187,7 @@ extends XComposite{
 		XComposite reporterComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		reporterComposite.getGridLayout().numColumns = 2;
 
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterComposite.setLayoutData(gridData);
 
@@ -373,22 +372,18 @@ extends XComposite{
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
 	}
-	
-	public void setAttachedObjectIDs(Set<ObjectID> objectIDs){
-		this.attachedObjectIDs = objectIDs;
-		if(objectIDs != null)
-			for(ObjectID objectID : attachedObjectIDs){
-				Class c = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
-				attachedPCClasses.add(c);
-				linkedObjectList.add(c.getSimpleName());
-			}
-	}
 
-	public Set<ObjectID> getAttachedObjectIDs(){
-		return attachedObjectIDs;
+	private Collection<String> issueLinkObjectIds = new ArrayList<String>();
+	public Collection<String> getIssueLinkObjectIds() {
+		return issueLinkObjectIds;
 	}
 	
-	public Set<Class> getAttachedPCClasses() {
-		return attachedPCClasses;
+	public void setIssueLinkObjectIds(Collection<String> ids) {
+		this.issueLinkObjectIds = ids;
+		linkedObjectList.removeAll();
+		if(issueLinkObjectIds != null)
+			for(String objectID : issueLinkObjectIds){
+				linkedObjectList.add(objectID);
+			}
 	}
 }

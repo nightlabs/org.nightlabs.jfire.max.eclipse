@@ -2,13 +2,13 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
@@ -22,11 +22,11 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueNewWizard extends DynamicPathWizard{
 	private IssueNewWizardPage issueNewPage;
 
-	private Set<ObjectID> objectIDs;
+	private Collection<String> objectIDs;
 	/**
 	 * @param objectIDs The JDO ObjectcIDs the new Issue should be linked to.
 	 */
-	public IssueNewWizard(Set<ObjectID> objectIDs){
+	public IssueNewWizard(Collection<String> objectIDs){
 		this.objectIDs = objectIDs;
 		setWindowTitle("Wizard Title");
 	}
@@ -49,8 +49,8 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
 			if(objectIDs != null)
-				for (ObjectID objectID : objectIDs) {
-					issue.getReferencedObjectIDs().add(objectID.toString());	
+				for (String objectID : objectIDs) {
+					issue.getReferencedObjectIDs().add(objectID);	
 				}
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());

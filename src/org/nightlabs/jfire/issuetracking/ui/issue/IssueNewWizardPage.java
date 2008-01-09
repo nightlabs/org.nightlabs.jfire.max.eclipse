@@ -1,6 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -8,16 +8,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jdo.ObjectID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueNewWizardPage extends WizardHopPage{
 	private IssueCreateComposite issueCreateComposite;
-	private Set<ObjectID> objectIDs;
+	private Collection<String> objectIDs;
 	
-	public IssueNewWizardPage(Set<ObjectID> objectIDs){
+	public IssueNewWizardPage(Collection<String> objectIDs){
 		super(IssueNewWizardPage.class.getName(), "New Issue");
 		this.objectIDs = objectIDs;
 		setDescription("Create a new issue.");
@@ -29,7 +28,7 @@ public class IssueNewWizardPage extends WizardHopPage{
 		mainComposite.getGridLayout().numColumns = 1;
 
 		issueCreateComposite = new IssueCreateComposite(mainComposite, SWT.NONE);
-		issueCreateComposite.setAttachedObjectIDs(objectIDs);
+		issueCreateComposite.setIssueLinkObjectIds(objectIDs);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
