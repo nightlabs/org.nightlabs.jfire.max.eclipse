@@ -97,7 +97,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.pageFormTitle"); //$NON-NLS-1$
+		return "Edit Price";
 	}
 	
 }

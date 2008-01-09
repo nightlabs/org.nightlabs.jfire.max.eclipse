@@ -27,7 +27,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -38,6 +37,17 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
+
+
+
+
+
+
+
+
+
+
+
 
 public class CurrencyAmountTable
 extends XComposite
@@ -107,6 +117,8 @@ implements ISelectionProvider
 				if (v != null) {
 					me.setValue(v);
 					tableItem.setText(1, ((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
+					fireValueChangedEvent();
+				
 				}
 			}
 		}
@@ -298,6 +310,41 @@ implements ISelectionProvider
 		selectionChangedListeners.remove(listener);
 	}
 
+	
+	
+
+	private ListenerList priceValueChangedListeners = new ListenerList();
+	
+	
+	protected void fireValueChangedEvent()
+	{
+		
+		Object[] listeners = priceValueChangedListeners.getListeners();
+		if (listeners.length < 1)
+			return;
+	
+		for (Object l : listeners) {
+			IPriceConfigValueChangedListener listener = (IPriceConfigValueChangedListener) l;
+			listener.priceValueChanged();
+		}
+		
+	
+	}
+	
+	
+	public void addPriceConfigValueChangedListener(IPriceConfigValueChangedListener listener)
+	{
+		priceValueChangedListeners.add(listener);
+	}
+
+	
+	public void removePriceConfigValueChangedListener(IPriceConfigValueChangedListener listener)
+	{
+		priceValueChangedListeners.remove(listener);
+	}
+	
+	
+	
 	public ISelection getSelection()
 	{
 		return tableViewer.getSelection();

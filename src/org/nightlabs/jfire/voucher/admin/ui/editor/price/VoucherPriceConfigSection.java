@@ -6,12 +6,15 @@ import java.util.TreeMap;
 
 
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
+import org.nightlabs.jfire.voucher.admin.ui.priceconfig.IPriceConfigValueChangedListener;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
 /**
@@ -32,10 +35,19 @@ extends ToolBarSectionPart
 	 * @param style
 	 */
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
-		super(page, parent, style, "PriceConfig");
+		super(page, parent, style, "Price Config");
 		currencyAmountTable = new CurrencyAmountTable(getContainer(),false);
 	
-	
+		
+		currencyAmountTable.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
+			public void priceValueChanged()
+			{
+				//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
+			 markDirty();
+			}
+		});
+		
+		
 	}
 	
 	@Override
@@ -43,9 +55,8 @@ extends ToolBarSectionPart
 		super.commit(onSave);
 		
 		Map<Currency, Long> map = currencyAmountTable.getMap();
-		
-		
-		for(Map.Entry<Currency, Long> me : map.entrySet()) {
+
+		for (Map.Entry<Currency, Long> me : map.entrySet()) {
 			voucherconfig.setPrice(me.getKey(), me.getValue());
 		}
 	
@@ -56,14 +67,13 @@ extends ToolBarSectionPart
 	
 	public void setVoucherType(VoucherType voucher)
 	{
+		
 	
      voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
-     
-     
-     Map<Currency, Long> map = new TreeMap<Currency, Long>(voucherconfig.getPrices());
-          
-     
-	 currencyAmountTable.setMap(map);
+
+		Map<Currency, Long> map = new TreeMap<Currency, Long>(voucherconfig.getPrices());
+
+		currencyAmountTable.setMap(map);
 
 	
 	
