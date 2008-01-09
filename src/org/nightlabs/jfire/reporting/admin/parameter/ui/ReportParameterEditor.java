@@ -373,9 +373,8 @@ extends GraphicalEditorWithFlyoutPalette
 							IDGenerator.nextID(ValueAcquisitionSetup.class),
 							reportParameterAcquisitionSetup,
 							useCase);
+					reportParameterAcquisitionSetup.addValueAcquisitionSetup(valueAcquisitionSetup);
 					reportParameterAcquisitionSetup.setDefaultSetup(valueAcquisitionSetup);
-					reportParameterAcquisitionSetup.getValueAcquisitionSetups().put(
-							useCase, valueAcquisitionSetup);
 					currentSetup = valueAcquisitionSetup; 
 //					return currentSetup;					
 				}
@@ -397,8 +396,7 @@ extends GraphicalEditorWithFlyoutPalette
 					ReportParameterAcquisitionUseCase.USE_CASE_ID_DEFAULT); 
 			ValueAcquisitionSetup valueAcquisitionSetup = createNewValueAcquisitionSetup(useCase);
 			reportParameterAcquisitionSetup.setDefaultSetup(valueAcquisitionSetup);
-			reportParameterAcquisitionSetup.getValueAcquisitionSetups().put(
-					useCase, valueAcquisitionSetup);
+			reportParameterAcquisitionSetup.addValueAcquisitionSetup(valueAcquisitionSetup);
 			currentSetup = valueAcquisitionSetup; 
 //			return currentSetup;			
 		}
