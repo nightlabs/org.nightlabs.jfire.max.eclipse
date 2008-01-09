@@ -89,7 +89,7 @@ extends XComposite
 	}
 	
 	protected String getOrganisationID() {
-		return Organisation.DEVIL_ORGANISATION_ID;
+		return Organisation.DEV_ORGANISATION_ID;
 	}
 	
 	protected abstract Set<ScriptRegistryItemID> getNodes();
