@@ -59,6 +59,7 @@ import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
@@ -652,10 +653,10 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		CellEditor[] result = new CellEditor[idLength + 6];
 		result[0] = null;
 		result[1] = null;
-		result[result.length-4] = new AccountCellEditor(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE, getTree());
-		result[result.length-3] = new AccountCellEditor(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE, getTree());
-		result[result.length-2] = new AccountCellEditor(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE, getTree());
-		result[result.length-1] = new AccountCellEditor(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE, getTree());
+		result[result.length-4] = new AccountCellEditor(AccountType.ACCOUNT_TYPE_ID_LOCAL_REVENUE, getTree());
+		result[result.length-3] = new AccountCellEditor(AccountType.ACCOUNT_TYPE_ID_LOCAL_EXPENSE, getTree());
+		result[result.length-2] = new AccountCellEditor(AccountType.ACCOUNT_TYPE_ID_LOCAL_REVENUE, getTree());
+		result[result.length-1] = new AccountCellEditor(AccountType.ACCOUNT_TYPE_ID_LOCAL_EXPENSE, getTree());
 		int i = 2;
 		if (currDimensionIDs != null) {
 			for (Iterator iter = currDimensionIDs.iterator(); iter.hasNext();) {

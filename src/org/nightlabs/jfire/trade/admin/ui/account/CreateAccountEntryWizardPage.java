@@ -28,10 +28,17 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -48,6 +55,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -56,6 +64,7 @@ import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -65,15 +74,17 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.accounting.CurrencyLabelProvider;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -91,7 +102,7 @@ extends DynamicPathWizardPage
 	private Button normalAccountRadio;
 	private Button shadowAccountRadio;
 	private List<Currency> currencies;
-	private AbstractTableComposite<String> accountTypeTable;
+	private AbstractTableComposite<AccountType> accountTypeTable;
 	
 	public CreateAccountEntryWizardPage() {
 		this(null);
@@ -187,8 +198,8 @@ extends DynamicPathWizardPage
 			}
 		});
 		normalAccountRadio.setSelection(true);
-		 
-		accountTypeTable = new AbstractTableComposite<String>(accountTypeGroup, SWT.NONE) {
+
+		accountTypeTable = new AbstractTableComposite<AccountType>(accountTypeGroup, SWT.NONE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table) {
 				table.setHeaderVisible(false);
@@ -202,20 +213,66 @@ extends DynamicPathWizardPage
 			protected void setTableProvider(TableViewer tableViewer) {
 				tableViewer.setLabelProvider(new TableLabelProvider() {
 					public String getColumnText(Object element, int columnIndex) {
-						return String.valueOf(element);
+						return ((AccountType)element).getName().getText();
 					}
 				});
 				tableViewer.setContentProvider(new TableContentProvider());
 			}
 		};
 		accountTypeTable.getGridData().minimumHeight = 80;
-		accountTypeTable.setInput(new String[] {Account.ANCHOR_TYPE_ID_LOCAL_REVENUE, Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE});
+//		accountTypeTable.setInput(new String[] {AccountType.ACCOUNT_TYPE_ID_LOCAL_REVENUE, AccountType.ANCHOR_TYPE_ID_LOCAL_EXPENSE});
+
+		AccountType dummy = new AccountType("dummy.a.b", "dummy", false);
+		dummy.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+		accountTypeTable.setInput(Collections.singletonList(dummy));
+
+		Job job = new Job("Loading account types") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor)
+					throws Exception
+			{
+				final List<AccountType> accountTypes = AccountTypeDAO.sharedInstance().getAccountTypes(
+						new String[] { FetchPlan.DEFAULT, AccountType.FETCH_GROUP_NAME },
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor
+				);
+
+				// the account-type "Summary" is specially handled because we need to instantiate a subclass - maybe we'll simplify the UI one day to solely show
+				// the list and *not* additionally the radio buttons
+
+				for (Iterator<AccountType> it = accountTypes.iterator(); it.hasNext();) {
+					AccountType accountType = it.next();
+					if (AccountType.ACCOUNT_TYPE_ID_SUMMARY.equals(JDOHelper.getObjectId(accountType)))
+						it.remove();	
+				}
+
+				Collections.sort(accountTypes, new Comparator<AccountType>() {
+					@Override
+					public int compare(AccountType o1, AccountType o2)
+					{
+						return o1.getName().getText().compareTo(o2.getName().getText());
+					}
+				});
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run()
+					{
+						accountTypeTable.setInput(accountTypes);
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+
 		accountTypeTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				updatePage();
 			}
 		});
-		
+
 		shadowAccountRadio = new Button(accountTypeGroup, SWT.RADIO);
 		shadowAccountRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		shadowAccountRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.radioSummaryAccount.text")); //$NON-NLS-1$
@@ -295,10 +352,14 @@ extends DynamicPathWizardPage
 		return accountNameEditor;
 	}
 	
-	public String getAnchorTypeID() {
+//	public String getAnchorTypeID() {
+//		return accountTypeTable.getFirstSelectedElement();
+//	}
+
+	public AccountType getAccountType() {
 		return accountTypeTable.getFirstSelectedElement();
 	}
-	
+
 	/**
 	 * @return A new {@link AccountingManager}.
 	 */

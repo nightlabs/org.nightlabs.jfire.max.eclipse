@@ -37,8 +37,10 @@ import org.nightlabs.base.ui.wizard.IDynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
@@ -58,7 +60,9 @@ extends DynamicPathWizard
 		super();
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.windowTitle")); //$NON-NLS-1$
 	}
-	
+
+	private CreateAccountEntryWizardPage createAccountEntryWizardPage;
+
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
 	 */
@@ -67,12 +71,24 @@ extends DynamicPathWizard
 		return new CreateAccountEntryWizardPage();
 	}
 	
-	protected CreateAccountEntryWizardPage getCreateAccountEntryPage() {
-		return (CreateAccountEntryWizardPage)getWizardEntryPage();
+//	protected CreateAccountEntryWizardPage getCreateAccountEntryPage() {
+//		return (CreateAccountEntryWizardPage)getWizardEntryPage();
+//	}
+//	
+//	private CreateAccountEntryWizardPage getEntryPage() {
+//		return (CreateAccountEntryWizardPage)getWizardEntryPage();
+//	}
+
+	@Override
+	public void addPages()
+	{
+		createAccountEntryWizardPage = new CreateAccountEntryWizardPage();
+		addPage(createAccountEntryWizardPage);
 	}
-	
-	private CreateAccountEntryWizardPage getEntryPage() {
-		return (CreateAccountEntryWizardPage)getWizardEntryPage();
+
+	protected CreateAccountEntryWizardPage getCreateAccountEntryWizardPage()
+	{
+		return createAccountEntryWizardPage;
 	}
 
 	/**
@@ -81,27 +97,34 @@ extends DynamicPathWizard
 	@Override
 	public boolean performFinish() {
 		Account newAccount = null;
+		// TODO async => Job!
 		try {
 			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			OrganisationLegalEntity owner = tm.getOrganisationLegalEntity(Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1); // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard
 
-			if (getCreateAccountEntryPage().isCreateSummaryAccount())
+			if (getCreateAccountEntryWizardPage().isCreateSummaryAccount()) {
+				AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
+						AccountType.ACCOUNT_TYPE_ID_SUMMARY,
+						new String[] { FetchPlan.DEFAULT },
+						1, new NullProgressMonitor()
+				);
+				
 				newAccount = new SummaryAccount(
 						Login.getLogin().getOrganisationID(),
-						getEntryPage().getAnchorID(),
+						getCreateAccountEntryWizardPage().getAnchorID(),
+						accountType,
 						owner,
-						getEntryPage().getCurrency(),
-						false);
+						getCreateAccountEntryWizardPage().getCurrency());
+			}
 			else
 				newAccount = new Account(
 						Login.getLogin().getOrganisationID(),
-						getEntryPage().getAnchorTypeID(),
-						getEntryPage().getAnchorID(),
+						getCreateAccountEntryWizardPage().getAnchorID(),
+						getCreateAccountEntryWizardPage().getAccountType(),
 						owner,
-						getEntryPage().getCurrency(),
-						false);
+						getCreateAccountEntryWizardPage().getCurrency());
 
-			((I18nTextBuffer)getCreateAccountEntryPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
+			((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
 			AccountDAO.sharedInstance().storeAccount(newAccount, false, 
 					AbstractAccountPageController.FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
