@@ -2,16 +2,16 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 
-public class IssueLinkObjectWizard 
+public class IssueLinkWizard 
 extends DynamicPathWizard
 {
-	public IssueLinkObjectWizard() {
+	public IssueLinkWizard() {
 		setWindowTitle("Link Objects to Issue");
 	}
 
 	@Override
 	public void addPages() {
-		IssueLinkObjectWizardPage page = new IssueLinkObjectWizardPage();
+		IssueLinkWizardCategoryPage page = new IssueLinkWizardCategoryPage();
 		addPage(page);
 	}
 	

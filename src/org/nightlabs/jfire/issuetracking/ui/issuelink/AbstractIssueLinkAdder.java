@@ -34,8 +34,8 @@ implements IssueLinkAdder
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
-//		composite = _addEntry(parent);
-
+		composite = doCreateComposite(parent);
+		
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
@@ -55,7 +55,7 @@ implements IssueLinkAdder
 	 * @param parent The parent <tt>Composite</tt> for the new <tt>Composite</tt>.
 	 * @return The newly created <tt>Composite</tt>.
 	 */
-	protected abstract Object doCreateComposite(Object object);
+	protected abstract Composite doCreateComposite(Composite parent);
 	
 	public void dispose()
 	{

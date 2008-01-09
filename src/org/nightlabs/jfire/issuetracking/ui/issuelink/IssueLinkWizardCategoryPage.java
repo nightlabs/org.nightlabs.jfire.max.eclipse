@@ -2,7 +2,10 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -12,15 +15,19 @@ import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
+import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 
-public class IssueLinkObjectWizardPage 
+import sun.security.x509.IssuerAlternativeNameExtension;
+
+public class IssueLinkWizardCategoryPage 
 extends WizardHopPage
 {
 	
-	public IssueLinkObjectWizardPage() {
+	public IssueLinkWizardCategoryPage() {
 		super("Select an Object", "Select an object to link this issue with.");
 		setDescription("Link an object to the issue.");
+		new WizardHop(this);
 	}
 
 	@Override
@@ -48,17 +55,67 @@ extends WizardHopPage
 		
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
+				setLinkClass(((TreeSelection)e.getSelection()).getFirstElement());
+			}
+		});
+		
 		return mainComposite;
 	}
+	
+	private void setLinkClass(Object factory){
+		if(factory instanceof IssueLinkHandlerFactory) {
+			IssueLinkHandlerFactory iFactory = (IssueLinkHandlerFactory)factory;
+			Class linkObjectClass = iFactory.getLinkObjectClass();
+			IssueLinkAdder adder = iFactory.createIssueLinkAdder();
+			
+			WizardHopPage page = createAdderWizardPage(adder);
+			getWizardHop().addHopPage(page);
+		}
+		else{
+			getWizardHop().removeAllHopPages();
+		}
+		
+		getContainer().updateButtons();
+	}
 
+	private IssueLinkWizardListPage issueLinkWizardListPage;
+	private WizardHopPage createAdderWizardPage(IssueLinkAdder adder){
+		issueLinkWizardListPage = new IssueLinkWizardListPage(adder);
+		return issueLinkWizardListPage;
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		return getWizardHop().getHopPages() != null && getWizardHop().getHopPages().size() != 0;
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * TODO
+	 */
 	class LinkableObjectContentProvider extends TreeContentProvider {
 		public Object getParent(Object childElement) {
-			IssueLinkHandlerCategory child = (IssueLinkHandlerCategory)childElement;
-			return child.getParent();
+			if(childElement instanceof IssueLinkHandlerCategory) {
+				IssueLinkHandlerCategory issueLinkHandlerCategory = (IssueLinkHandlerCategory)childElement;
+				return issueLinkHandlerCategory.getParent();
+			}
+//			if(childElement instanceof IssueLinkHandlerFactory) {
+//				IssueLinkHandlerFactory issueLinkHandlerFactory = (IssueLinkHandlerFactory)childElement;
+//				return issueLinkHandlerFactory.getCategoryId();
+//			}
+			return null;
 		}
 
 		public boolean hasChildren(Object element) {
-			return true;
+			boolean result = false;
+			if(element instanceof IssueLinkHandlerCategory) {
+				IssueLinkHandlerCategory issueLinkHandlerCategory = (IssueLinkHandlerCategory)element;
+				result = issueLinkHandlerCategory.getChildFactories().size() > 0 || issueLinkHandlerCategory.getChildCategories().size() > 0;
+			}
+
+			return result;
 		}
 
 
@@ -106,7 +163,12 @@ extends WizardHopPage
 				result = issueLinkHandlerCategory.getName();
 			}
 			
-			return result==null?element.getClass().getName():result; //$NON-NLS-1$
+			if(element instanceof IssueLinkHandlerFactory) {
+				IssueLinkHandlerFactory issueLinkHandlerFactory = (IssueLinkHandlerFactory)element;
+				result = issueLinkHandlerFactory.getName();
+			}
+			
+			return result==null?element.toString():result; //$NON-NLS-1$
 		}
 	}
 

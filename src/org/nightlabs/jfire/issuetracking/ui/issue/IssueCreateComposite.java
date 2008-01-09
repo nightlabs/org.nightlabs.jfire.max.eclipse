@@ -45,7 +45,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkObjectWizard;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
@@ -133,7 +133,7 @@ extends XComposite{
 		addLinkButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkObjectWizard());
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard());
 				dialog.open();
 			}
 		});

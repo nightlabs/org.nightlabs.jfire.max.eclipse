@@ -120,11 +120,11 @@ extends AbstractTableComposite<Issue>
 		TableColumn tc;
 		TableLayout layout = new TableLayout();
 
-		Listener listener = new Listener(){
-			public void handleEvent(Event arg0) {
-				System.out.println("HELLLLLLLLLLLO");
-			}
-		};
+//		Listener listener = new Listener(){
+//			public void handleEvent(Event arg0) {
+//				System.out.println("HELLLLLLLLLLLO");
+//			}
+//		};
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);

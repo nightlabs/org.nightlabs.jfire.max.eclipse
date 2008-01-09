@@ -34,10 +34,6 @@ extends AbstractEPProcessor
 		return _sharedInstance;
 	}
 
-	/**
-	 * key: String entryType<br/>
-	 * value: IssueAttachmentDocumentAdderFactory
-	 */
 	private Map<Class<? extends Object>, IssueLinkHandlerFactory> factories = new HashMap<Class<? extends Object>, IssueLinkHandlerFactory>();
 	
 	private Map<String, List<IssueLinkHandlerCategory>> parentCategoryId2Categories = new HashMap<String, List<IssueLinkHandlerCategory>>();
@@ -49,7 +45,7 @@ extends AbstractEPProcessor
 	{
 		IssueLinkHandlerFactory factory = factories.get(linkObjectClass);
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("No IssueAttachmentObjectEntryAdderFactory registered for linkObjectClass=\""+ linkObjectClass +"\"");
+			throw new IllegalStateException("No IssueLinkHandlerFactory registered for linkObjectClass=\""+ linkObjectClass +"\"");
 
 		return factory;
 	}
@@ -105,29 +101,25 @@ extends AbstractEPProcessor
 	}
 
 	protected void processIssueLinkHandlerCategory(IExtension extension, IConfigurationElement element) throws Exception {
-		try {
-			String categoryId = element.getAttribute("id");
-			String name = element.getAttribute("name");
-			String parentCategoryId = element.getAttribute("parentCategoryId");
-			
-			IssueLinkHandlerCategory category = new IssueLinkHandlerCategory();
-			category.setCategoryId(categoryId);
-			category.setName(name);
-			if ("".equals(parentCategoryId)) {
-				parentCategoryId = null;
-			}
-			category.setParentCategoryId(parentCategoryId);
-			
-			List<IssueLinkHandlerCategory> cats = parentCategoryId2Categories.get(parentCategoryId);
-			if (cats == null) {
-				cats = new ArrayList<IssueLinkHandlerCategory>();
-				parentCategoryId2Categories.put(parentCategoryId, cats);
-			}
-			cats.add(category);
-			
-		} catch (Throwable t) {
-			throw new EPProcessorException("Extension to "+getExtensionPointID()+" with class "+element.getAttribute("class")+" has errors!", t); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		}		
+		String categoryId = element.getAttribute("id");
+		String name = element.getAttribute("name");
+		String parentCategoryId = element.getAttribute("parentCategoryId");
+
+		IssueLinkHandlerCategory category = new IssueLinkHandlerCategory();
+		category.setCategoryId(categoryId);
+		category.setName(name);
+		if ("".equals(parentCategoryId)) {
+			parentCategoryId = null;
+		}
+		category.setParentCategoryId(parentCategoryId);
+
+		List<IssueLinkHandlerCategory> cats = parentCategoryId2Categories.get(parentCategoryId);
+		if (cats == null) {
+			cats = new ArrayList<IssueLinkHandlerCategory>();
+			parentCategoryId2Categories.put(parentCategoryId, cats);
+		}
+		cats.add(category);
+
 	}
 	
 	@Override
