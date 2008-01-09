@@ -53,7 +53,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.birt.report.engine.emitter.pdf,
  org.eclipse.ui.ide,
  org.eclipse.birt.report.engine,
- com.essiembre.eclipse.i18n.resourcebundle
+ com.essiembre.eclipse.i18n.resourcebundle,
+ org.eclipse.birt.resources
 Eclipse-LazyStart: true
 Eclipse-RegisterBuddy: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.base.j2ee
