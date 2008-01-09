@@ -58,7 +58,7 @@
          <modeOfPayment
                modeOfPaymentID="voucher"
                name="Voucher"
-               organisationID="devil.NightLabs.org"/>
+               organisationID="dev.jfire.org"/>
       </clientPaymentProcessorFactory>
    </extension>
    <extension
