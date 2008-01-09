@@ -80,7 +80,7 @@ public class ClientPaymentProcessorCreditCardBackend extends AbstractClientPayme
 			HashSet set = new HashSet();
 			set.add(
 					ServerPaymentProcessorID.create(
-							Organisation.DEVIL_ORGANISATION_ID,
+							Organisation.DEV_ORGANISATION_ID,
 							ServerPaymentProcessorCreditCardDummyForClientPayment.class.getName()));
 
 			excludedServerPaymentProcessorIDs = Collections.unmodifiableSet(set);

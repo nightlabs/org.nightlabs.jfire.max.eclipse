@@ -385,7 +385,7 @@ gibt's nimmer - oder?! Marco.
             name="Cash"
             id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCash">
          <modeOfPayment
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                name="Cash"
                modeOfPaymentID="cash"/>
       </clientPaymentProcessorFactory>
@@ -394,7 +394,7 @@ gibt's nimmer - oder?! Marco.
             name="Credit Card Payment On Server"
             id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryCreditCardBackend">
          <modeOfPayment
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                name="Credit Card"
                modeOfPaymentID="creditCard"/>
       </clientPaymentProcessorFactory>
@@ -403,7 +403,7 @@ gibt's nimmer - oder?! Marco.
             name="Credit Card Payment via EC Terminal"
             id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryECTerminal">
          <modeOfPayment
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                name="Credit Card"
                modeOfPaymentID="creditCard"/>
       </clientPaymentProcessorFactory>
@@ -412,7 +412,7 @@ gibt's nimmer - oder?! Marco.
             name="Bank Transfer within Germany"
             id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryBankTransferGermany">
          <modeOfPayment
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                name="Bank Transfer"
                modeOfPaymentID="bankTransfer"/>
       </clientPaymentProcessorFactory>
@@ -421,7 +421,7 @@ gibt's nimmer - oder?! Marco.
             name="Debit Note within Germany"
             id="org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryDebitNoteGermany">
          <modeOfPayment
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                name="Debit Note"
                modeOfPaymentID="debitNote"/>
       </clientPaymentProcessorFactory>
@@ -432,7 +432,7 @@ gibt's nimmer - oder?! Marco.
          <modeOfPayment
                modeOfPaymentID="nonPayment"
                name="Non Payment"
-               organisationID="devil.NightLabs.org"/>
+               organisationID="dev.jfire.org"/>
       </clientPaymentProcessorFactory>
    </extension>
    <extension
@@ -442,7 +442,7 @@ gibt's nimmer - oder?! Marco.
             name="Manual"
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryManual">
          <modeOfDelivery
-               organisationID="devil.NightLabs.org"
+               organisationID="dev.jfire.org"
                modeOfDeliveryID="manual"
                name="Manual"/>
       </clientDeliveryProcessorFactory>
@@ -453,7 +453,7 @@ gibt's nimmer - oder?! Marco.
          <modeOfDelivery
                modeOfDeliveryID="deliverToDeliveryQueue"
                name="Deliver to Delivery Queue"
-               organisationID="devil.NightLabs.org"/>
+               organisationID="dev.jfire.org"/>
       </clientDeliveryProcessorFactory>
    </extension>
    <extension

@@ -89,7 +89,7 @@ public class ClientDeliveryProcessorDeliveryQueue extends AbstractClientDelivery
 	@Override
 	public Set getIncludedServerDeliveryProcessorIDs() {
 		Set<ServerDeliveryProcessorID> ids = new HashSet<ServerDeliveryProcessorID>();
-		ids.add(ServerDeliveryProcessorID.create(Organisation.DEVIL_ORGANISATION_ID, ServerDeliveryProcessorDeliveryQueue.class.getName()));
+		ids.add(ServerDeliveryProcessorID.create(Organisation.DEV_ORGANISATION_ID, ServerDeliveryProcessorDeliveryQueue.class.getName()));
 		return ids;
 	}
 
