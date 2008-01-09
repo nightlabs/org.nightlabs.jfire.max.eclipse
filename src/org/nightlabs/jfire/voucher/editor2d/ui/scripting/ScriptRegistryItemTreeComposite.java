@@ -53,7 +53,7 @@ extends AbstractScriptRegistryItemTreeComposite
 	protected ScriptRegistryItemID getVoucherNodeID() 
 	{
 		return ScriptRegistryItemID.create(
-				Organisation.DEVIL_ORGANISATION_ID,
+				Organisation.DEV_ORGANISATION_ID,
 				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_TYPE_TRADE_VOUCHER,				
 				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_ID_CATEGORY_VOUCHER);		
 	}	
