@@ -32,6 +32,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.id.DeliveryNoteID;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
@@ -68,7 +71,7 @@ extends IDynamicPathWizard, TransferWizard
 	 * @return Returns a <tt>Collection</tt> of
 	 *		{@link org.nightlabs.jfire.store.id.ProductTypeID}.
 	 */
-	Collection getProductTypeIDs();
+	Collection<ProductTypeID> getProductTypeIDs();
 
 	/**
 	 * Hint: Delegate to {@link TransferWizardUtil#getArticles(Collection, Set, boolean)}.
@@ -77,7 +80,7 @@ extends IDynamicPathWizard, TransferWizard
 	 * @param reversing This method returns only those {@link Article}s where <code>reversing == </code>{@link Article#isReversing()}.
 	 * @return Returns instances of {@link org.nightlabs.jfire.trade.ui.Article} or <code>null</code>.
 	 */
-	List getArticles(Set productTypeIDs, boolean reversing);
+	List<Article> getArticles(Set<? extends ProductTypeID> productTypeIDs, boolean reversing);
 
 //	/**
 //	 * Hint: Delegate to {@link TransferWizardUtil#getProductIDs(Collection, Set)}.
@@ -98,7 +101,7 @@ extends IDynamicPathWizard, TransferWizard
 	 * @return A <tt>Map</tt> of {@link org.nightlabs.jfire.store.id.ProductTypeID} as key
 	 *		and {@link org.nightlabs.jfire.store.ProductType} as value.
 	 */
-	Map getProductTypeByIDMap();
+	Map<ProductTypeID, ProductType> getProductTypeByIDMap();
 
 	/**
 	 * @return Returns instances of {@link org.nightlabs.jfire.accounting.id.CustomerGroupID}
@@ -109,6 +112,9 @@ extends IDynamicPathWizard, TransferWizard
 	 * @return Returns instances of {@link DeliveryEntryPage}.
 	 */
 	List<DeliveryEntryPage> getDeliveryEntryPages();
+
+// TODO shouldn't we add this method here - just like the PaymentWizard has getInvoiceIDs()???
+//	Collection<DeliveryNoteID> getDeliveryNoteIDs();
 
 //	Delivery createDelivery();
 //

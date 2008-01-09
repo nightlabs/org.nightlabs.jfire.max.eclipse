@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 
 /**
@@ -173,7 +174,7 @@ extends IDynamicPathWizard, TransferWizard
 	 * @return Your implementation should return instances of
 	 *		{@link org.nightlabs.jfire.accounting.id.InvoiceID}.
 	 */
-	Collection getInvoiceIDs();
+	Collection<InvoiceID> getInvoiceIDs();
 
 	// PaymentEntryPage getPaymentEntryPage();
 

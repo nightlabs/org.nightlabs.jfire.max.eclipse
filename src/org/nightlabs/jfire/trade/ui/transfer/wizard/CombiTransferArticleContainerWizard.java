@@ -53,6 +53,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Offer;
@@ -389,7 +390,7 @@ extends AbstractCombiTransferWizard
 						if (invoiceIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
 								AccountingManager accountingManager = TransferWizardUtil.getAccountingManager();
-								invoiceIDs = new ArrayList(1);
+								invoiceIDs = new ArrayList<InvoiceID>(1);
 								if (invoiceID != null)
 									invoiceIDs.add(invoiceID);
 								else {
@@ -462,19 +463,19 @@ extends AbstractCombiTransferWizard
 //		return offer;
 //	}
 
-	public Collection getProductTypeIDs()
+	public Collection<ProductTypeID> getProductTypeIDs()
 	{
 		return TransferWizardUtil.getProductTypeIDs(articlesToTransfer);
 	}
 
-	public Map getProductTypeByIDMap()
+	public Map<ProductTypeID, ProductType> getProductTypeByIDMap()
 	{
 		return TransferWizardUtil.getProductTypeByIDMap(articlesToTransfer);
 	}
 
-	private Collection invoiceIDs = null;
+	private Collection<InvoiceID> invoiceIDs = null;
 
-	public Collection getInvoiceIDs()
+	public Collection<InvoiceID> getInvoiceIDs()
 	{
 		return invoiceIDs;
 	}
@@ -486,7 +487,7 @@ extends AbstractCombiTransferWizard
 //		return deliveryNoteIDs;
 //	}
 
-	public List getArticles(Set productTypeIDs, boolean reversing)
+	public List<Article> getArticles(Set<? extends ProductTypeID> productTypeIDs, boolean reversing)
 	{
 		return TransferWizardUtil.getArticles(articlesToTransfer, productTypeIDs, reversing);
 	}

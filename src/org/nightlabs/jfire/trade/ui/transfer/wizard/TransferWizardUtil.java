@@ -335,7 +335,7 @@ public class TransferWizardUtil
 	 *		one of the given {@link org.nightlabs.jfire.store.id.ProductTypeID}s
 	 *		exactly (no inheritance). This method may return <code>null</code>.
 	 */
-	public static List<Article> getArticles(Collection<Article> articlesToTransfer, Set<Article> productTypeIDs, boolean reversing)
+	public static List<Article> getArticles(Collection<? extends Article> articlesToTransfer, Set<? extends ProductTypeID> productTypeIDs, boolean reversing)
 	{
 		// we return all products of the offer matching the given productTypeIDs
 		List<Article> res = null;

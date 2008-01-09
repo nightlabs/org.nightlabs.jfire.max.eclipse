@@ -51,6 +51,7 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
@@ -146,26 +147,30 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 		}
 	}
 	
-	private Collection invoiceIDs = null;
+	private Collection<InvoiceID> invoiceIDs = null;
 
-	public Collection getInvoiceIDs()
+	@Override
+	public Collection<InvoiceID> getInvoiceIDs()
 	{
 		return invoiceIDs;
 	}
 
-	private Collection deliveryNoteIDs = null;
+	private Collection<DeliveryNoteID> deliveryNoteIDs = null;
 
-	public Collection getDeliveryNoteIDs()
+	// TODO shouldn't this method be defined in the interface DeliveryWizard ?
+	public Collection<DeliveryNoteID> getDeliveryNoteIDs()
 	{
 		return deliveryNoteIDs;
 	}
 
-	public Collection getProductTypeIDs()
+	@Override
+	public Collection<ProductTypeID> getProductTypeIDs()
 	{
 		return TransferWizardUtil.getProductTypeIDs(articlesToTransfer);
 	}
 
-	public List getArticles(Set productTypeIDs, boolean reversing)
+	@Override
+	public List<Article> getArticles(Set<? extends ProductTypeID> productTypeIDs, boolean reversing)
 	{
 		return TransferWizardUtil.getArticles(articlesToTransfer, productTypeIDs, reversing);
 	}
@@ -175,7 +180,8 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 //		return TransferWizardUtil.getProductIDs(articlesToTransfer, productTypeIDs);
 //	}
 
-	public Map getProductTypeByIDMap()
+	@Override
+	public Map<ProductTypeID, ProductType> getProductTypeByIDMap()
 	{
 		return TransferWizardUtil.getProductTypeByIDMap(articlesToTransfer);
 	}
