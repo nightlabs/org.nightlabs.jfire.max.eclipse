@@ -38,6 +38,7 @@ extends AbstractProductTypeDetailPage
 		}
 	}
 	
+	
 	@Override
 	protected IProductTypeSectionPart createNameSection(Composite parent) {
 		return new VoucherTypeNameSection(this, parent, ExpandableComposite.TITLE_BAR);
@@ -98,9 +99,17 @@ extends AbstractProductTypeDetailPage
 		final VoucherType voucherType = (VoucherType) controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				voucherLayoutSection.getVoucherLayoutComposite().setVoucherType(voucherType);
-				getNameSection().setProductType(voucherType);
-				getSaleAccessControlSection().setProductType(voucherType);
+				
+				if (voucherLayoutSection != null
+						&& !voucherLayoutSection.getSection().isDisposed()) {
+
+					voucherLayoutSection.getVoucherLayoutComposite()
+							.setVoucherType(voucherType);
+					getNameSection().setProductType(voucherType);
+					getSaleAccessControlSection().setProductType(voucherType);
+
+				}
+				
 				if (voucherType.isClosed()) {
 					getManagedForm().getForm().getForm().setMessage(
 							Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.productTypeClosedMessage"), //$NON-NLS-1$

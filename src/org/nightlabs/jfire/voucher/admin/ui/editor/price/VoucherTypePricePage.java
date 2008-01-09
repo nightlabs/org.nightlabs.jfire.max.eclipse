@@ -78,18 +78,11 @@ extends EntityEditorPageWithProgress
 		final VoucherType voucherType = (VoucherType) controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			
-			public void run() {
+			public void run() {			
 				
-				voucherPriceConfigSection.setVoucherType(voucherType);
-				
-				
-				if (voucherType.isClosed()) {
-					getManagedForm().getForm().getForm().setMessage(
-							Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.productTypeClosedMessage"), //$NON-NLS-1$
-							IMessageProvider.INFORMATION);
-					RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
-			
-				}
+				if ( voucherPriceConfigSection != null && !voucherPriceConfigSection.getSection().isDisposed())
+					voucherPriceConfigSection.setVoucherType(voucherType);
+					
 				switchToContent();				
 			}
 		});
