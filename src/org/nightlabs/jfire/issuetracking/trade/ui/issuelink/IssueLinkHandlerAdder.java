@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 
 /**
@@ -9,7 +10,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 public class IssueLinkHandlerAdder extends AbstractIssueLinkAdder{
 
 	@Override
-	protected Object doCreateComposite(Object object) {
+	protected Composite doCreateComposite(Composite parent) {
 		// TODO Auto-generated method stub
 		return null;
 	}

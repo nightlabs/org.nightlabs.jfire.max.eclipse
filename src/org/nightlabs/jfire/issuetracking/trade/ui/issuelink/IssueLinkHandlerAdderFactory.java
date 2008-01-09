@@ -12,8 +12,10 @@ public class IssueLinkHandlerAdderFactory
 extends AbstractIssueLinkHandlerFactory
 {
 	public IssueLinkAdder createIssueLinkAdder() {
-		// TODO Auto-generated method stub
-		return null;
+		IssueLinkAdder adder = new org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkAdder();
+		adder.init(this);
+		
+		return adder;
 	}
 
 	public Class<? extends Object> getLinkObjectClass() {
