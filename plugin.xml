@@ -18,7 +18,7 @@
          <modeOfDeliveryFlavour
                modeOfDeliveryFlavourID="voucherPrintViaOperatingSystemPrinter"
                name="Print To Operating System Printer"
-               organisationID="devil.NightLabs.org"/>
+               organisationID="dev.jfire.org"/>
       </clientDeliveryProcessorFactory>
    </extension>
 
