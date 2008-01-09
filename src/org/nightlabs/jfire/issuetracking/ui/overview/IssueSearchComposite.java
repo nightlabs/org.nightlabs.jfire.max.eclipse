@@ -317,9 +317,9 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		loadJob.schedule();
 	}
 	
-	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEVIL_ORGANISATION_ID, "Issue_Type_All");
-	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEVIL_ORGANISATION_ID, "Issue_Severity_Type_All");
-	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEVIL_ORGANISATION_ID, "Issue_Priority_All");
+	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
+	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All");
+	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
 	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
