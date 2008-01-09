@@ -44,6 +44,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer;
@@ -57,24 +58,27 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountSearchDialog 
 extends CenteredDialog
 {
-	private String anchorTypeID;
-	
+//	private String anchorTypeID;
+	private AccountTypeID accountTypeID;
+
 	/**
 	 * @param anchorTypeID
 	 */
-	public AccountSearchDialog(String anchorTypeID) {
+	public AccountSearchDialog(AccountTypeID accountTypeID) {
 		super(RCPUtil.getActiveWorkbenchShell());
-		this.anchorTypeID = anchorTypeID;
+//		this.anchorTypeID = anchorTypeID;
+		this.accountTypeID = accountTypeID;
 	}
 
 	public AccountSearchDialog() {
 		super(RCPUtil.getActiveWorkbenchShell());
 	}	
 	
-	protected void applyAnchorTypeID() 
+	protected void applyAccountTypeID() 
 	{
 		AccountQuery query = new AccountQuery();
-		query.setAnchorTypeID(anchorTypeID);
+//		query.setAnchorTypeID(anchorTypeID);
+		query.setAccountTypeID(accountTypeID);
 		final Collection<JDOQuery> queries = new ArrayList<JDOQuery>();
 		queries.add(query);
 		
@@ -104,8 +108,8 @@ extends CenteredDialog
 		accountEntryViewer = new AccountEntryViewer(
 				new AccountEntryFactory().createEntry());
 		Composite comp = accountEntryViewer.createComposite(parent);
-		if (anchorTypeID != null)
-			applyAnchorTypeID();
+		if (accountTypeID != null)
+			applyAccountTypeID();
 		return comp;
 	}
 		
@@ -125,8 +129,8 @@ extends CenteredDialog
 	 * Opens a new AccountSearchDialog and returns the selected Account.
 	 * @return One selected Account.
 	 */
-	public static Account searchAccount(String anchorTypeID) {
-		Collection accountSet = searchAccounts(anchorTypeID);
+	public static Account searchAccount(AccountTypeID accountTypeID) {
+		Collection accountSet = searchAccounts(accountTypeID);
 		if (!accountSet.isEmpty())
 			return (Account)accountSet.iterator().next();
 		else 
@@ -137,9 +141,9 @@ extends CenteredDialog
 	 * Opens a new AccountSearchDialog and returns all selected Account.
 	 * @return All selected Account.
 	 */
-	public static Collection searchAccounts(String anchorTypeID) {
+	public static Collection searchAccounts(AccountTypeID accountTypeID) {
 		final Set accountSet = new HashSet();
-		AccountSearchDialog dialog = new AccountSearchDialog(anchorTypeID);
+		AccountSearchDialog dialog = new AccountSearchDialog(accountTypeID);
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
 			return dialog.getSelectedAccounts();

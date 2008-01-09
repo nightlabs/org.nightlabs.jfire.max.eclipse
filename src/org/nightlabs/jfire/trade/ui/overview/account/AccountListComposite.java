@@ -28,7 +28,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountName;
-import org.nightlabs.jfire.accounting.SummaryAccount;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
@@ -50,7 +50,16 @@ public class AccountListComposite
 extends AbstractTableComposite<Account> 
 {
 	private TableViewerColumn tableViewerColumn;
-	public static String[] FETCH_GROUPS_ACCOUNT = new String[]{FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT , LegalEntity.FETCH_GROUP_PERSON};
+	public static String[] FETCH_GROUPS_ACCOUNT = new String[] {
+		FetchPlan.DEFAULT,
+//		Account.FETCH_GROUP_THIS_ACCOUNT,
+		Account.FETCH_GROUP_OWNER,
+		Account.FETCH_GROUP_CURRENCY,
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_ACCOUNT_TYPE,
+		AccountType.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON
+	};
 	public AccountListComposite(Composite parent, int style) {
 		super(parent, style);
 
@@ -207,7 +216,7 @@ extends AbstractTableComposite<Account>
 							return account.getOwner().getPerson().getDisplayName(); 
 						break;
 					case(3):
-						return getAnchorTypeIDName(account.getAnchorTypeID());
+						return account.getAccountType().getName().getText();
 					case(4):
 						if (account.getCurrency() != null)
 							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
@@ -254,45 +263,45 @@ extends AbstractTableComposite<Account>
 //		}		
 	}
 	
-	public static String getAnchorTypeIDName(String anchorTypeID ) 
-	{
-//		String anchorTypeID = account.getAnchorTypeID();
-		if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE)) {
-			return "Expense Account"; //$NON-NLS-1$
-		}
-//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN)) {
-//			return "Revenue-In Account"; //$NON-NLS-1$
+//	public static String getAnchorTypeIDName(String anchorTypeID ) 
+//	{
+////		String anchorTypeID = account.getAnchorTypeID();
+//		if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE)) {
+//			return "Expense Account"; //$NON-NLS-1$
 //		}
-//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_OUT)) {
-//			return "Revenue-Out Account"; //$NON-NLS-1$
+////		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN)) {
+////			return "Revenue-In Account"; //$NON-NLS-1$
+////		}
+////		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_OUT)) {
+////			return "Revenue-Out Account"; //$NON-NLS-1$
+////		}
+//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE)) {
+//			return "Revenue Account"; //$NON-NLS-1$
 //		}
-		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE)) {
-			return "Revenue Account"; //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_OUTSIDE)) {
-			return "External Income/Outcome Account"; //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_CUSTOMER)) {
-			return "Partner Account"; //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_NEUTRAL)) {
-			return "Neutral Account"; //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_VENDOR)) {
-			return "Vendor Account"; //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY)) {
-			return "Summary Account"; //$NON-NLS-1$
-		}
-		// WORKAROUND: Cannot use VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER
-		// as no dependency exists
-		// TODO This info should come from an extension point
-		else if (anchorTypeID.equals("Account.Voucher")) { //$NON-NLS-1$
-			return "Voucher Account"; //$NON-NLS-1$
-		}
-			
-		return anchorTypeID;
-	}
+//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_OUTSIDE)) {
+//			return "External Income/Outcome Account"; //$NON-NLS-1$
+//		}
+//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_CUSTOMER)) {
+//			return "Partner Account"; //$NON-NLS-1$
+//		}
+//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_NEUTRAL)) {
+//			return "Neutral Account"; //$NON-NLS-1$
+//		}
+//		else if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_PARTNER_VENDOR)) {
+//			return "Vendor Account"; //$NON-NLS-1$
+//		}
+//		else if (anchorTypeID.equals(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY)) {
+//			return "Summary Account"; //$NON-NLS-1$
+//		}
+//		// WORKAROUND: Cannot use VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER
+//		// as no dependency exists
+//		// TODO This info should come from an extension point
+//		else if (anchorTypeID.equals("Account.Voucher")) { //$NON-NLS-1$
+//			return "Voucher Account"; //$NON-NLS-1$
+//		}
+//			
+//		return anchorTypeID;
+//	}
 	
 	private NotificationListener accountChangedListener = new NotificationAdapterCallerThread()
 	{

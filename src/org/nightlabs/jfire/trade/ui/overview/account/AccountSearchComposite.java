@@ -1,11 +1,14 @@
 package org.nightlabs.jfire.trade.ui.overview.account;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,14 +17,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
-import org.nightlabs.jfire.accounting.Account;
-import org.nightlabs.jfire.accounting.SummaryAccount;
+import org.nightlabs.jfire.accounting.AccountType;
+import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
+import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.search.SpinnerSearchEntry;
@@ -32,6 +38,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -59,8 +66,8 @@ extends JDOQueryComposite
 	private Button ownerActiveButton = null;
 	private Text ownerText = null;
 	private Button ownerBrowseButton = null;	
-	private Button anchorTypeIDActiveButton = null;
-	private XComboComposite<String> anchorTypeIDs = null;
+	private Button anchorTypeActiveButton = null;
+	private XComboComposite<AccountType> accountTypeList = null;
 	
 	@Override
 	protected void createComposite(Composite parent) 
@@ -113,26 +120,57 @@ extends JDOQueryComposite
 			}		
 		});
 		
-		final Group anchorTypeIDGroup = new Group(parent, SWT.NONE);
-		anchorTypeIDGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.anchorTypeIdGroup.text")); //$NON-NLS-1$
-		anchorTypeIDGroup.setLayout(new GridLayout());	
-		anchorTypeIDGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		anchorTypeIDActiveButton = new Button(anchorTypeIDGroup, SWT.CHECK);
-		anchorTypeIDActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.anchorTypeIdActiveButton.text")); //$NON-NLS-1$
-		anchorTypeIDActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		anchorTypeIDs = new XComboComposite<String>(
-				anchorTypeIDGroup, SWT.BORDER, 
+		final Group accountTypeGroup = new Group(parent, SWT.NONE);
+		accountTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeGroup.text")); //$NON-NLS-1$
+		accountTypeGroup.setLayout(new GridLayout());	
+		accountTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		anchorTypeActiveButton = new Button(accountTypeGroup, SWT.CHECK);
+		anchorTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeActiveButton.text")); //$NON-NLS-1$
+		anchorTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		accountTypeList = new XComboComposite<AccountType>(
+				accountTypeGroup, SWT.BORDER, 
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
-						return AccountListComposite.getAnchorTypeIDName((String)element);
+						if (element instanceof AccountType)
+							return ((AccountType)element).getName().getText();
+						return ""; //$NON-NLS-1$
+//						return AccountListComposite.getAnchorTypeIDName((String)element);
 					}					
 				}
 		);
-		anchorTypeIDs.setInput(getAvailableAccountAnchorTypeIDs());
-		anchorTypeIDActiveButton.addSelectionListener(new SelectionListener(){		
+
+		AccountType dummyAccountType = new AccountType("dummy.b.c", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
+		dummyAccountType.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
+		accountTypeList.setInput(Collections.singletonList(dummyAccountType));
+
+		Job job = new Job("Loading account types") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor)
+					throws Exception
+			{
+				final List<AccountType> accountTypes = AccountTypeDAO.sharedInstance().getAccountTypes(
+						new String[] { FetchPlan.DEFAULT, AccountType.FETCH_GROUP_NAME },
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor
+				);
+
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run()
+					{
+						accountTypeList.setInput(accountTypes);
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+		
+		anchorTypeActiveButton.addSelectionListener(new SelectionListener(){		
 			public void widgetSelected(SelectionEvent e) {
-				anchorTypeIDs.setEnabled(((Button)e.getSource()).getSelection());
+				accountTypeList.setEnabled(((Button)e.getSource()).getSelection());
 			}		
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -238,9 +276,9 @@ extends JDOQueryComposite
 		if (ownerActiveButton.getSelection())
 			accountQuery.setOwnerID(selectedOwnerID);
 		
-		if (anchorTypeIDActiveButton.getSelection() && anchorTypeIDs.getSelectedElement() != null)
-			accountQuery.setAnchorTypeID(anchorTypeIDs.getSelectedElement());
-		
+		if (anchorTypeActiveButton.getSelection() && accountTypeList.getSelectedElement() != null)
+			accountQuery.setAccountTypeID((AccountTypeID) JDOHelper.getObjectId(accountTypeList.getSelectedElement()));
+
 //		if (activeNameButton.getSelection() && accountNameText.getText() != null && !accountNameText.getText().trim().equals(""))
 //			accountQuery.setName(accountNameText.getText());
 //
@@ -250,26 +288,26 @@ extends JDOQueryComposite
 		return accountQuery;
 	}
 	
-	private List<String> availableAccountAnchorTypeIDs = null;
-	protected List<String> getAvailableAccountAnchorTypeIDs() 
-	{
-		if (availableAccountAnchorTypeIDs == null) {
-			List<String> list = new ArrayList<String>();
-			list.add(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE);
-			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE);
-//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN);			
-//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_OUT);
-			list.add(Account.ANCHOR_TYPE_ID_OUTSIDE);			
-			list.add(Account.ANCHOR_TYPE_ID_PARTNER_CUSTOMER);			
-			list.add(Account.ANCHOR_TYPE_ID_PARTNER_NEUTRAL);			
-			list.add(Account.ANCHOR_TYPE_ID_PARTNER_VENDOR);
-			list.add(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);			
-			// WORKAROUND: Cannot use VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER
-			// as no dependency exists			
-			// TODO Information should come from an extension point
-			list.add("Account.Voucher"); //$NON-NLS-1$
-			availableAccountAnchorTypeIDs = list;
-		}
-		return availableAccountAnchorTypeIDs;
-	}
+//	private List<String> availableAccountAnchorTypeIDs = null;
+//	protected List<String> getAvailableAccountAnchorTypeIDs() 
+//	{
+//		if (availableAccountAnchorTypeIDs == null) {
+//			List<String> list = new ArrayList<String>();
+//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE);
+//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE);
+////			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN);			
+////			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_OUT);
+//			list.add(Account.ANCHOR_TYPE_ID_OUTSIDE);			
+//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_CUSTOMER);			
+//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_NEUTRAL);			
+//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_VENDOR);
+//			list.add(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);			
+//			// WORKAROUND: Cannot use VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER
+//			// as no dependency exists			
+//			// TODO Information should come from an extension point
+//			list.add("Account.Voucher"); //$NON-NLS-1$
+//			availableAccountAnchorTypeIDs = list;
+//		}
+//		return availableAccountAnchorTypeIDs;
+//	}
 }

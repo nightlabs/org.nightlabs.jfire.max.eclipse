@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -71,7 +72,7 @@ extends XComposite
 			return;
 
 //		Set accounts = AccountSearchDialog.searchAccounts(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);
-		Collection accounts = AccountSearchDialog.searchAccounts(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);
+		Collection accounts = AccountSearchDialog.searchAccounts(AccountType.ACCOUNT_TYPE_ID_SUMMARY);
 		for (Iterator iter = accounts.iterator(); iter.hasNext();) {
 			Account account = (Account) iter.next();
 			if (account instanceof SummaryAccount) {

@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -54,34 +55,35 @@ extends DialogCellEditor
 	};
 	
 	private Account currValue;
-	private String anchorTypeID;
+//	private String anchorTypeID;
+	private AccountTypeID accountTypeID;
 	
 	/**
 	 * @param anchorTypeID
 	 */
-	public AccountCellEditor(String anchorTypeID) {
+	public AccountCellEditor(AccountTypeID accountTypeID) {
 		super();
-		this.anchorTypeID = anchorTypeID;
+		this.accountTypeID = accountTypeID;
 	}
 
 	/**
 	 * @param anchorTypeID
 	 * @param parent
 	 */
-	public AccountCellEditor(String anchorTypeID, Composite parent) {		
+	public AccountCellEditor(AccountTypeID accountTypeID, Composite parent) {		
 		super(parent);
-		this.anchorTypeID = anchorTypeID;
+		this.accountTypeID = accountTypeID;
 	}
 
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public AccountCellEditor(String anchorTypeID, Composite parent, int style) {
+	public AccountCellEditor(AccountTypeID accountTypeID, Composite parent, int style) {
 		super(parent, style);
-		this.anchorTypeID = anchorTypeID;
+		this.accountTypeID = accountTypeID;
 	}
-		
+
 	/**
 	 * @see org.eclipse.jface.viewers.DialogCellEditor#doSetValue(java.lang.Object)
 	 */
@@ -149,7 +151,7 @@ extends DialogCellEditor
 
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow) {
-		Account account = AccountSearchDialog.searchAccount(anchorTypeID);
+		Account account = AccountSearchDialog.searchAccount(accountTypeID);
 		return account;
 	}
 }
