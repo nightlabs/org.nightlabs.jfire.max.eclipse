@@ -1,9 +1,8 @@
 /**
  * 
  */
-package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
+package org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 

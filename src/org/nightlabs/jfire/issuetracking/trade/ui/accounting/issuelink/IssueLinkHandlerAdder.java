@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
+package org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink;
 
 import java.util.Collection;
 
