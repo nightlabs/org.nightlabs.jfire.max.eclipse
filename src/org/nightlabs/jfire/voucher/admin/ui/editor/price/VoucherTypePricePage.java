@@ -25,7 +25,6 @@ extends EntityEditorPageWithProgress
 
 {
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
-		//super(editor, id, name);
 		
 		super(editor, VoucherTypePricePage.class.getName(),"Price Config");
 
@@ -61,20 +60,10 @@ extends EntityEditorPageWithProgress
 		return voucherPriceConfigSection;
 	}
 	
-//	private VoucherTypeNameSection voucherTypeNameSection = null;
-//	public VoucherTypeNameSection getVoucherTypeNameSection() {
-//		return voucherTypeNameSection;
-//	}
-//	
-//	private VoucherTypeSaleAccessControlSection voucherTypeSaleAccessControlSection = null;
-//	public VoucherTypeSaleAccessControlSection getVoucherSaleAccessControlSection() {
-//		return voucherTypeSaleAccessControlSection;
-//	}
-	
+
 	@Override
 	protected void addSections(Composite parent) 
 	{
-		//super.addSections(parent);
 		
 		
 		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
@@ -92,8 +81,7 @@ extends EntityEditorPageWithProgress
 			public void run() {
 				
 				voucherPriceConfigSection.setVoucherType(voucherType);
-				//getNameSection().setProductType(voucherType);
-				//getSaleAccessControlSection().setProductType(voucherType);
+				
 				
 				if (voucherType.isClosed()) {
 					getManagedForm().getForm().getForm().setMessage(

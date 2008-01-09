@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -89,6 +90,10 @@ implements ISelectionProvider
 		}
 		public void modify(Object element, String property, Object value)
 		{
+			
+			
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
+			
 			TableItem tableItem = (TableItem)element;
 			Map.Entry<Currency, Long> me = (Map.Entry<Currency, Long>)tableItem.getData();
 

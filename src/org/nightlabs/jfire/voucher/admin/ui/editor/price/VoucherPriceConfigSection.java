@@ -1,10 +1,13 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
@@ -58,7 +61,8 @@ extends ToolBarSectionPart
      voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
      
      
-     Map<Currency, Long> map = voucherconfig.getPrices();
+     Map<Currency, Long> map = new TreeMap<Currency, Long>(voucherconfig.getPrices());
+          
      
 	 currencyAmountTable.setMap(map);
 
