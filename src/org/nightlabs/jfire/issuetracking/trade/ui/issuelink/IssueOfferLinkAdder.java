@@ -8,6 +8,8 @@ import java.util.HashSet;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory;
@@ -24,6 +26,11 @@ public class IssueOfferLinkAdder extends AbstractIssueLinkAdder {
 	protected Composite doCreateComposite(Composite parent) {
 		oViewer = new OfferEntryViewer(new OfferEntryFactory().createEntry());
 		oViewer.createComposite(parent);
+		oViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent e) {
+				notifyIssueLinkSelectionListeners();
+			}
+		});
 		return oViewer.getComposite();
 	}
 
