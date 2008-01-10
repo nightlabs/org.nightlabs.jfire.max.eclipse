@@ -57,6 +57,11 @@ implements ISelectionProvider
 
 	private Map<Currency, Long> map;
 
+
+	
+	protected Table table;
+	
+	
 	private static class CurrencyAmountLabelProvider extends LabelProvider implements ITableLabelProvider
 	{
 		public Image getColumnImage(Object element, int columnIndex)
@@ -132,13 +137,18 @@ implements ISelectionProvider
 	protected static final String COLUMN_CURRENCY = "currency"; //$NON-NLS-1$
 	protected static final String COLUMN_AMOUNT = "amount"; //$NON-NLS-1$
 
+	public Table getTable() {
+		return table;
+	}
+	
+	
 	public CurrencyAmountTable(Composite parent, boolean showButtons)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		tableViewer = new TableViewer(this, SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
-		Table table = tableViewer.getTable();
-
+		table = tableViewer.getTable();
+		
 		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new CurrencyAmountLabelProvider());
 		tableViewer.setCellModifier(cellModifier);
