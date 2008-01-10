@@ -13,7 +13,6 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
