@@ -8,37 +8,28 @@ import java.util.HashSet;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
+import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory;
+import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdder extends AbstractIssueLinkAdder {
+public class IssueInvoiceLinkAdder extends AbstractIssueLinkAdder {
 
-	private IssueLinkTable issueLinkTable;
+	private InvoiceEntryViewer iViewer;
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		XComposite c = new XComposite(parent, SWT.NONE);
-		issueLinkTable = new IssueLinkTable(c, SWT.NONE);
-		
-		issueLinkTable.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				notifyIssueLinkSelectionListeners();
-			}
-		});
-		
-		return c;
+		iViewer = new InvoiceEntryViewer(new InvoiceEntryFactory().createEntry());
+		iViewer.createComposite(parent);
+		return iViewer.getComposite();
 	}
 
 	public Collection<String> getIssueLinkObjectIds() {
 		Collection<String> result = new HashSet<String>();
-		for(Object o : issueLinkTable.getSelectedElements()) {
+		for(Object o : iViewer.getListComposite().getSelectedElements()) {
 			result.add(JDOHelper.getObjectId(o).toString());
 		}
 		return result;

@@ -24,8 +24,13 @@
       </issueLinkHandlerCategory>
       <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueLinkHandlerAdderFactory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueOfferLinkHandlerAdderFactory"
             name="Offer">
+      </issueLinkHandlerFactory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.issueLinkHandlerCategory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueOrderLinkHandlerAdderFactory"
+            name="Order">
       </issueLinkHandlerFactory>
       <issueLinkHandlerCategory
             id="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
@@ -33,8 +38,22 @@
       </issueLinkHandlerCategory>
       <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueLinkHandlerAdderFactory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink.IssueInvoiceLinkHandlerAdderFactory"
             name="Invoice">
+      </issueLinkHandlerFactory>
+      <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+            name="Store">
+      </issueLinkHandlerCategory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueDeliveryNoteLinkHandlerAdderFactory"
+            name="DeliveryNote">
+       </issueLinkHandlerFactory>
+       <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.trade.ui.store.issueLinkHandlerCategory"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueReceptionNoteLinkHandlerAdderFactory"
+            name="ReceptionNote">
       </issueLinkHandlerFactory>
    </extension>
    
