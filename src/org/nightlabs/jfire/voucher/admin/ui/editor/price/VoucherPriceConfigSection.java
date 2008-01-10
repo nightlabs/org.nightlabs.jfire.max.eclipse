@@ -7,17 +7,15 @@ import java.util.Map;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
+import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.IPriceConfigValueChangedListener;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -136,13 +134,16 @@ extends ToolBarSectionPart
 		public AddCurrencyConfigAction() {
 			super();
 			setId(AddCurrencyConfigAction.class.getName());
-			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
-			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
-			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.AssignNewPriceConfigAction.toolTipText")); //$NON-NLS-1$
+			
+		     setImageDescriptor(SharedImages.getSharedImageDescriptor(
+						VoucherAdminPlugin.getDefault(),
+						VoucherPriceConfigSection.class,
+						"Add")); //$NON-NLS-1$
+				
+			setToolTipText("Add new Currency to the List"); 
 			setText("Add Currency");
 		}
 
-		@Override
 		public void run() {
 			//assignNewPressed();
 			addCurrencyPressed(); 
@@ -161,7 +162,13 @@ extends ToolBarSectionPart
 			setId(RemoveCurrencyConfigAction.class.getName());
 			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
 			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
-			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.AssignNewPriceConfigAction.toolTipText")); //$NON-NLS-1$
+		
+		     setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					VoucherAdminPlugin.getDefault(),
+					VoucherPriceConfigSection.class,
+					"Remove")); //$NON-NLS-1$
+			
+			setToolTipText("remove the Currency from the List"); 
 			setText("Remove Currency");
 		}
 
