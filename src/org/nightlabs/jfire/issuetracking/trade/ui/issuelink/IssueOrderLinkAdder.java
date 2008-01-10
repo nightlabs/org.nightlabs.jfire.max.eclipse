@@ -5,6 +5,7 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.JDOHelper;
 
@@ -34,8 +35,8 @@ public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
 		return oViewer.getComposite();
 	}
 
-	public Collection<String> getIssueLinkObjectIds() {
-		Collection<String> result = new HashSet<String>();
+	public Set<String> getIssueLinkObjectIds() {
+		Set<String> result = new HashSet<String>();
 		Collection<Object> elements = oViewer.getListComposite().getSelectedElements();
 		for(Object o : elements) {
 			result.add(JDOHelper.getObjectId(o).toString());

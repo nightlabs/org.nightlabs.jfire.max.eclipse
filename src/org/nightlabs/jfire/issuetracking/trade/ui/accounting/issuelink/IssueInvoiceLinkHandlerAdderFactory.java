@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -20,5 +21,9 @@ extends AbstractIssueLinkHandlerFactory
 
 	public Class<? extends Object> getLinkObjectClass() {
 		return Invoice.class;
+	}
+
+	public IssueLinkHandler createIssueLinkHandler() {
+		return null;
 	}
 }

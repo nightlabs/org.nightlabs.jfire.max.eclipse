@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink;
 
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.store.DeliveryNote;
 
 /**
@@ -20,5 +21,10 @@ extends AbstractIssueLinkHandlerFactory
 
 	public Class<? extends Object> getLinkObjectClass() {
 		return DeliveryNote.class;
+	}
+
+	public IssueLinkHandler createIssueLinkHandler() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
