@@ -13,7 +13,7 @@ public class IssueOrderLinkHandlerAdderFactory
 extends AbstractIssueLinkHandlerFactory
 {
 	public IssueLinkAdder createIssueLinkAdder() {
-		IssueLinkAdder adder = new IssueOfferLinkAdder();
+		IssueLinkAdder adder = new IssueOrderLinkAdder();
 		adder.init(this);
 		
 		return adder;
