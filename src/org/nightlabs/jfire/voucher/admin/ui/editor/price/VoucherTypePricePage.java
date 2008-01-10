@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
-import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -11,9 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPageController;
-import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
 /**
