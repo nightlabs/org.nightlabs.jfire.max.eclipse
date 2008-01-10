@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -71,6 +72,8 @@ extends ToolBarSectionPart
 			voucherconfig.setPrice(me.getKey(), me.getValue());
 			
 		}
+		
+
 	
 	
 	}
@@ -82,7 +85,7 @@ extends ToolBarSectionPart
 		
      voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
-		Map<Currency, Long> map = new TreeMap<Currency, Long>(voucherconfig.getPrices());
+		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherconfig.getPrices());
 
 		currencyAmountTable.setMap(map);
 
