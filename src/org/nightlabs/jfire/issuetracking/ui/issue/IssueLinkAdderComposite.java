@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -39,7 +40,7 @@ extends XComposite
 
 		issueLinkTable = new IssueLinkTable(this, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.verticalSpan = 3;
+		gridData.heightHint = 100;
 		issueLinkTable.setLayoutData(gridData);
 
 		XComposite linkedButtonComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -60,14 +61,11 @@ extends XComposite
 		});
 	}
 
-	public void setItems(Set<String> items) {
-		this.items = items;
-		if (items != null) {
-			issueLinkTable.setInput(items);
-		}
+	private Set<String> items = new HashSet<String>();
+	public void setItems(Set<String> newItems) {
+		items.addAll(newItems);
+		issueLinkTable.setInput(items);
 	}
-	
-	private Set<String> items;
 	
 	public Set<String> getItems() {
 		return items;

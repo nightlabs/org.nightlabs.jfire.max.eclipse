@@ -40,6 +40,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		fileComposite = 
 			new FileListSelectionComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, FileListSelectionComposite.LIST);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.heightHint = 100;
 		fileComposite.setLayoutData(gridData);
 	}
 

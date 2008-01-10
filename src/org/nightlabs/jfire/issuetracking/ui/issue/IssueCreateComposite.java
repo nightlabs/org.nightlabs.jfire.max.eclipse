@@ -237,6 +237,7 @@ extends XComposite{
 
 		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, FileListSelectionComposite.ADD);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.heightHint = 100;
 		fileComposite.setLayoutData(gridData);
 
 		Job loadJob = new Job("Loading Issue Properties....") {
