@@ -42,8 +42,13 @@ extends ToolBarSectionPart
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Price Config");
 
-		AssignNewCurrencyConfigAction assignNewCurrencyConfigAction = new AssignNewCurrencyConfigAction();
-		getToolBarManager().add(assignNewCurrencyConfigAction);
+		AddCurrencyConfigAction addCurrencyConfigAction = new AddCurrencyConfigAction();
+		getToolBarManager().add(addCurrencyConfigAction);
+
+		
+		RemoveCurrencyConfigAction removeCurrencyConfigAction = new RemoveCurrencyConfigAction();
+		getToolBarManager().add(removeCurrencyConfigAction);
+
 
 
 		currencyAmountTable = new CurrencyAmountTable(getContainer(),false);
@@ -58,8 +63,10 @@ extends ToolBarSectionPart
 		});
 
 		MenuManager menuManager = new MenuManager();
-		menuManager.add(assignNewCurrencyConfigAction);
-
+		menuManager.add(addCurrencyConfigAction);
+		menuManager.add(removeCurrencyConfigAction);
+		
+		
 		Menu menu = menuManager.createContextMenu(currencyAmountTable.getTable());
 		
 		
@@ -101,41 +108,71 @@ extends ToolBarSectionPart
 
 		currencyAmountTable.setMap(map);
 
+		
+		
 	}
 
 
 
-
-
-	protected void assignCurrencyPressed() 
+	protected void addCurrencyPressed() 
 	{
 
 		currencyAmountTable.addCurrency();
 	}
 
+	
+	
+	protected void removeCurrencyPressed() 
+	{
 
-	class AssignNewCurrencyConfigAction
+		currencyAmountTable.removeCurrency();
+	}
+	
+	
+	
+	class AddCurrencyConfigAction
 	extends Action 
 	{
-		public AssignNewCurrencyConfigAction() {
+		public AddCurrencyConfigAction() {
 			super();
-			setId(AssignNewCurrencyConfigAction.class.getName());
+			setId(AddCurrencyConfigAction.class.getName());
 			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
 			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.AssignNewPriceConfigAction.toolTipText")); //$NON-NLS-1$
-			setText("Currency");
+			setText("Add Currency");
 		}
 
 		@Override
 		public void run() {
 			//assignNewPressed();
-			assignCurrencyPressed(); 
+			addCurrencyPressed(); 
 			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
 
 		}		
 	}
 
 
+
+	class RemoveCurrencyConfigAction
+	extends Action 
+	{
+		public RemoveCurrencyConfigAction() {
+			super();
+			setId(RemoveCurrencyConfigAction.class.getName());
+			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
+			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.AssignNewPriceConfigAction.toolTipText")); //$NON-NLS-1$
+			setText("Remove Currency");
+		}
+
+		@Override
+		public void run() {
+			//assignNewPressed();
+			removeCurrencyPressed(); 
+			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
+
+		}		
+	}
 
 
 
