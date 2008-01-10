@@ -56,7 +56,8 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
 			issue.setIssuePriority(ic.getSelectedIssuePriority());
 			issue.setReporter(ic.getSelectedReporter());
-			issue.setAssignee(ic.getSelectedAssigntoUser());			
+			issue.setAssignee(ic.getSelectedAssigntoUser());	
+			issue.setReferencedObjectIDs(ic.getIssueLinkObjectIds());
 			
 			if(ic.getSelectedAttachmentFileMap() != null){
 				Map<String, InputStream> fileMap = ic.getSelectedAttachmentFileMap();

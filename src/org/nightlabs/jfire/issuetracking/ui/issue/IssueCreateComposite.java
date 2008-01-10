@@ -3,8 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -36,24 +33,19 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizardContainer;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
-extends XComposite implements IssueLinkWizardContainer{
+extends XComposite{
 
 	private List<IssueType> issueTypes = new ArrayList<IssueType>();
 
@@ -63,7 +55,7 @@ extends XComposite implements IssueLinkWizardContainer{
 	private IssuePriority selectedIssuePriority;
 
 	private Label linkedObjectLbl;
-	private org.eclipse.swt.widgets.List linkedObjectList;
+	private IssueLinkAdderComposite adderComposite;
 	
 	private Label issueTypeLbl;
 	private XComboComposite<IssueType> issueTypeCombo;
@@ -112,30 +104,7 @@ extends XComposite implements IssueLinkWizardContainer{
 		linkedObjectLbl = new Label(this, SWT.NONE);
 		linkedObjectLbl.setText("Linked Object");
 		
-		XComposite linkedComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		linkedComposite.getGridLayout().numColumns = 2;
-		linkedComposite.getGridLayout().makeColumnsEqualWidth = false;
-		linkedComposite.getGridData().grabExcessHorizontalSpace = true;
-		
-		linkedObjectList = new org.eclipse.swt.widgets.List(linkedComposite, SWT.BORDER  | SWT.V_SCROLL | SWT.H_SCROLL);
-		linkedObjectList.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		XComposite linkedButtonComposite = new XComposite(linkedComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;
-		linkedButtonComposite.getGridData().grabExcessHorizontalSpace = false;
-		
-		Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-		addLinkButton.setText("Add Link");
-		Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-		removeLinkButton.setText("Remove Link");
-		
-		addLinkButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard(IssueCreateComposite.this));
-				dialog.open();
-			}
-		});
+		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE);
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
@@ -315,9 +284,6 @@ extends XComposite implements IssueLinkWizardContainer{
 		};
 		loadJob.setPriority(Job.SHORT);
 		loadJob.schedule();
-
-//		Category  	
-//		Reproducibility 	
 	}
 
 	public IssueSeverityType getSelectedIssueSeverityType() {
@@ -373,17 +339,7 @@ extends XComposite implements IssueLinkWizardContainer{
 		return selectedIssueType;
 	}
 
-	private Collection<String> issueLinkObjectIds = new ArrayList<String>();
-	public Collection<String> getIssueLinkObjectIds() {
-		return issueLinkObjectIds;
-	}
-	
-	public void setIssueLinkObjectIds(Collection<String> ids) {
-		this.issueLinkObjectIds = ids;
-		linkedObjectList.removeAll();
-		if(issueLinkObjectIds != null)
-			for(String objectID : issueLinkObjectIds){
-				linkedObjectList.add(objectID);
-			}
+	public Set<String> getIssueLinkObjectIds() {
+		return adderComposite.getItems();
 	}
 }

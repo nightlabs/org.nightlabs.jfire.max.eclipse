@@ -28,23 +28,15 @@ public class IssueNewWizardPage extends WizardHopPage{
 		mainComposite.getGridLayout().numColumns = 1;
 
 		issueCreateComposite = new IssueCreateComposite(mainComposite, SWT.NONE);
-		issueCreateComposite.setIssueLinkObjectIds(objectIDs);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		issueCreateComposite.setLayoutData(gridData);
 
-//		issueCreateComposite.addModifyListener(new ModifyListener(){
-//			public void modifyText(ModifyEvent e) {
-//				updatePageComplete();
-//			}
-//		});
-
 		return mainComposite;
 	}
 	@Override
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
 		super.createControl(parent);
 	}	
 

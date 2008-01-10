@@ -73,6 +73,8 @@ extends WizardHopPage
 			IssueLinkAdder adder = iFactory.createIssueLinkAdder();
 			
 			WizardHopPage page = createAdderWizardPage(adder);
+			page.setTitle(iFactory.getLinkObjectClass().getName());
+			page.setDescription("Select the " + iFactory.getLinkObjectClass().getName() + "(s) to add to the issue.");
 			getWizardHop().addHopPage(page);
 		}
 		

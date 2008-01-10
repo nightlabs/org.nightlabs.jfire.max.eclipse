@@ -22,4 +22,6 @@ public interface IssueLinkHandlerFactory extends IExecutableExtension
 	 * @return a <tt>Collection</tt> of {@link IssueLinkAdder}
 	 */
 	IssueLinkAdder createIssueLinkAdder();
+	
+	IssueLinkHandler createIssueLinkHandler();
 }

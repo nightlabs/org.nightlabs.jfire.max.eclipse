@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -33,7 +34,7 @@ public class IssueEditor extends EntityEditor{
 			{
 				final Issue issue = IssueDAO.sharedInstance().getIssue(
 						issueEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS },
+						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS, IssueSubject.FETCH_GROUP_THIS },
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable()
 				{

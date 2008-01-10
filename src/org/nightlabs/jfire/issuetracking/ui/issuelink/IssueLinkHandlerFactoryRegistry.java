@@ -56,6 +56,24 @@ extends AbstractEPProcessor
 			return Collections.emptyList();
 		return Collections.unmodifiableList(cats);
 	}
+	
+	public IssueLinkHandlerFactory getIssueLinkHandlerFactory(Class<?> linkObjectClass) {
+		// Check for direct class
+		IssueLinkHandlerFactory factory = factories.get(linkObjectClass);
+		if (factory == null) {
+			// check hierarchy here			
+			Class sClass = linkObjectClass.getSuperclass();
+			while (!sClass.equals(Object.class)) {
+				factory = factories.get(linkObjectClass);
+				if (factory != null)
+					break;
+			}
+		}
+		if (factory == null) {
+			return new DefaultIssueLinkHandlerFactory();
+		}
+		return factory;
+	}
 	 
 	
 	protected void addFactory(IssueLinkHandlerFactory factory)

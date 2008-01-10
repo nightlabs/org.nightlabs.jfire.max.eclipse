@@ -13,20 +13,12 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
  */
 public class IssueLinkWizardListPage extends WizardHopPage {
 
-	/**
-	 * @param pageName
-	 * @param title
-	 */
-	public IssueLinkWizardListPage(String pageName, String title) {
-		super(pageName, title);
-	}
-
 	private Composite objectListComposite;
 	private IssueLinkAdder adder;
 	private IssueLinkWizard iWizard;
 	
 	public IssueLinkWizardListPage(IssueLinkWizard iWizard, IssueLinkAdder adder) {
-		this("Page Name", "Title");
+		super("Page", "Title");
 		this.adder = adder;
 		this.iWizard = iWizard;
 	}
