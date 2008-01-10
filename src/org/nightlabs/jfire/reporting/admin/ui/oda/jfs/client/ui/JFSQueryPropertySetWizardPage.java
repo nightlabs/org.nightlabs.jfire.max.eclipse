@@ -291,12 +291,10 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
         paramDesign.setDerivedMetaData( true );
         // TODO WORKAROUND
         // hard-coded parameter's default because bindings will be ignored if no default value set :-(
-        if( paramDesign.getParameterDefinitions().size() > 0 )
-        {
-            ParameterDefinition paramDef = 
-                (ParameterDefinition) paramDesign.getParameterDefinitions().get( 0 );
+        for (int i = 0; i < paramDesign.getParameterDefinitions().size(); i++) {
+            ParameterDefinition paramDef = (ParameterDefinition) paramDesign.getParameterDefinitions().get(i);
             if( paramDef != null )
-                paramDef.setDefaultScalarValue("\"\""); //$NON-NLS-1$
+                paramDef.setDefaultScalarValue(""); //$NON-NLS-1$
         }
         dataSetDesign.setParameters( paramDesign );
 
@@ -329,6 +327,8 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 			logger.info(prefix + "Found parameter with InOutMode: " + definition.getInOutMode().toString());			 //$NON-NLS-1$
 			DataElementAttributes dataElementAttributes = definition.getAttributes();
 			InputParameterAttributes attrs = definition.getInputAttributes();
+			if (attrs == null)
+				return;
 			InputElementAttributes elementAttributes = attrs.getElementAttributes();			
 			logger.info(prefix + "Parameter name: " + dataElementAttributes.getName()); //$NON-NLS-1$
 			logger.info(prefix + "Parameter allowsNull: " + dataElementAttributes.allowsNull()); //$NON-NLS-1$
