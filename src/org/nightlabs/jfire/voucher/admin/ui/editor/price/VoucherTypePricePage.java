@@ -25,7 +25,7 @@ extends EntityEditorPageWithProgress
 
 {
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
-		
+
 		super(editor, VoucherTypePricePage.class.getName(),"Price Config");
 
 		// TODO Auto-generated constructor stub
@@ -41,31 +41,31 @@ extends EntityEditorPageWithProgress
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			
+
 			VoucherTypeDetailPageController controller = editor.getController().getSinglePageController(VoucherTypeDetailPageController.class);
-			
-			
+
+
 			if(controller == null)
-		    controller = new VoucherTypeDetailPageController(editor);
-			
+				controller = new VoucherTypeDetailPageController(editor);
+
 			return controller;
 		}
 	}
-	
 
-	
+
+
 	private VoucherPriceConfigSection voucherPriceConfigSection = null;
-	
+
 	public VoucherPriceConfigSection getVoucherLayoutSection() {
 		return voucherPriceConfigSection;
 	}
-	
+
 
 	@Override
 	protected void addSections(Composite parent) 
 	{
-		
-		
+
+
 		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
 		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		getManagedForm().addPart(voucherPriceConfigSection);
@@ -77,12 +77,12 @@ extends EntityEditorPageWithProgress
 		VoucherTypeDetailPageController controller = (VoucherTypeDetailPageController) getPageController();
 		final VoucherType voucherType = (VoucherType) controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
-			
+
 			public void run() {			
-				
+
 				if ( voucherPriceConfigSection != null && !voucherPriceConfigSection.getSection().isDisposed())
 					voucherPriceConfigSection.setVoucherType(voucherType);
-					
+
 				switchToContent();				
 			}
 		});
@@ -92,5 +92,5 @@ extends EntityEditorPageWithProgress
 	protected String getPageFormTitle() {
 		return "Edit Price";
 	}
-	
+
 }

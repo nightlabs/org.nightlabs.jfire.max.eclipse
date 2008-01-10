@@ -32,8 +32,8 @@ extends ToolBarSectionPart
 {
 	private CurrencyAmountTable currencyAmountTable;
 	private VoucherPriceConfig voucherconfig;
-	
-	
+
+
 	/**
 	 * @param page
 	 * @param parent
@@ -41,49 +41,49 @@ extends ToolBarSectionPart
 	 */
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Price Config");
-		
+
 		AssignNewCurrencyConfigAction assignNewCurrencyConfigAction = new AssignNewCurrencyConfigAction();
 		getToolBarManager().add(assignNewCurrencyConfigAction);
-		
-		
+
+
 		currencyAmountTable = new CurrencyAmountTable(getContainer(),false);
-	
-		
+
+
 		currencyAmountTable.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
 			public void priceValueChanged()
 			{
 				//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
-			 markDirty();
+				markDirty();
 			}
 		});
-		
+
 		updateToolBarManager();
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void commit(boolean onSave) {
 		super.commit(onSave);
-		
+
 		Map<Currency, Long> map = currencyAmountTable.getMap();
 
 		for (Map.Entry<Currency, Long> me : map.entrySet()) {
 			voucherconfig.setPrice(me.getKey(), me.getValue());
-			
-		}
-		
 
-	
-	
+		}
+
+
+
+
 	}
-	
-	
-	
+
+
+
 	public void setVoucherType(VoucherType voucher)
 	{
-		
-     voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
+
+		voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
 		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherconfig.getPrices());
 
@@ -91,17 +91,17 @@ extends ToolBarSectionPart
 
 	}
 
-	
-	
-	
-	
+
+
+
+
 	protected void assignCurrencyPressed() 
 	{
-	
+
 		currencyAmountTable.addCurrency();
 	}
-	
-	
+
+
 	class AssignNewCurrencyConfigAction
 	extends Action 
 	{
@@ -109,7 +109,7 @@ extends ToolBarSectionPart
 			super();
 			setId(AssignNewCurrencyConfigAction.class.getName());
 			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
-				//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
+			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.AssignNewPriceConfigAction.toolTipText")); //$NON-NLS-1$
 			setText("Currency");
 		}
