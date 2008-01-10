@@ -67,7 +67,8 @@ extends EntityEditorPageWithProgress
 
 
 		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
-		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//		default is FILL_BOTH
+//		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
 		getManagedForm().addPart(voucherPriceConfigSection);
 	}
 
