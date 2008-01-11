@@ -38,6 +38,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
 			public void issueLinkItemChanged(
 					IssueLinkItemChangedEvent itemChangedEvent) {
+				controller.getIssue().clearReferencedObjectIDs();
 				for (ObjectID objectID : issueLinkAdderComposite.getItems()) {
 					controller.getIssue().addReferencedObjectID(objectID);	
 				}
@@ -54,5 +55,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		Set<ObjectID> objectIDs = issue.getReferencedObjectIDs();
 		issueLinkAdderComposite.setItems(objectIDs);
+	}
+	
+	public Issue getIssue() {
+		return issue;
 	}
 }

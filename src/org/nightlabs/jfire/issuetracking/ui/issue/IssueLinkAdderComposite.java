@@ -23,11 +23,10 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueLinkAdderComposite 
-extends XComposite 
-{
+public class IssueLinkAdderComposite extends XComposite {
 	private IssueLinkTable issueLinkTable;
 	private ListenerList tableItemChangeListeners = new ListenerList();
+
 	/**
 	 * @param parent
 	 * @param style
@@ -48,7 +47,8 @@ extends XComposite
 		gridData.heightHint = 100;
 		issueLinkTable.setLayoutData(gridData);
 
-		XComposite linkedButtonComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite linkedButtonComposite = new XComposite(this, SWT.NONE,
+				LayoutMode.TIGHT_WRAPPER);
 		linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;
 		linkedButtonComposite.getGridData().grabExcessHorizontalSpace = false;
 		gridData = new GridData(GridData.FILL_VERTICAL);
@@ -59,21 +59,22 @@ extends XComposite
 		addLinkButton.setText("Add Link");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		addLinkButton.setLayoutData(gridData);
-		
+
 		Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
 		removeLinkButton.setText("Remove Link");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		removeLinkButton.setLayoutData(gridData);
 
-		addLinkButton.addSelectionListener(new SelectionAdapter(){
+		addLinkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard(IssueLinkAdderComposite.this));
+				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
+						new IssueLinkWizard(IssueLinkAdderComposite.this));
 				dialog.open();
 			}
 		});
-		
-		removeLinkButton.addSelectionListener(new SelectionAdapter(){
+
+		removeLinkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				removeItems(issueLinkTable.getSelectedElements());
@@ -81,53 +82,68 @@ extends XComposite
 		});
 	}
 
-	private Set<ObjectID> items = null;
+	private Set<ObjectID> oItems = null;
+	private Set<ObjectID> mItems = new HashSet<ObjectID>();
+
 	public void setItems(Set<ObjectID> newItems) {
-		if (items == null) {
-			items = newItems;
+		mItems.addAll(newItems);
+		if (oItems == null) {
+			oItems = newItems;
 		}
-		else {
-			Set<ObjectID> tmpItems = new HashSet<ObjectID>();
-			tmpItems.addAll(items);
-			if (tmpItems.addAll(newItems)) {
-				notifyIssueLinkTableItemListeners();
-			}
-			items = tmpItems;
-		}
-		issueLinkTable.setInput(items);
+		issueLinkTable.setInput(mItems);
 	}
-	
+
+	public void addItems(Set<ObjectID> newItems) {
+		mItems.addAll(newItems);
+		if (oItems == null) {
+			oItems = newItems;
+		} else {
+			if (!mItems.equals(oItems))
+				notifyIssueLinkTableItemListeners();
+		}
+		issueLinkTable.setInput(mItems);
+	}
+
 	public boolean removeItems(Collection<ObjectID> removedItems) {
-		boolean result = items.removeAll(removedItems);
-		issueLinkTable.setInput(items);
-		notifyIssueLinkTableItemListeners();
+		if (mItems == null) {
+			mItems = new HashSet<ObjectID>();
+			mItems.addAll(oItems);
+		}
+
+		boolean result = mItems.removeAll(removedItems);
+
+		if (!mItems.equals(oItems))
+			notifyIssueLinkTableItemListeners();
+
+		issueLinkTable.setInput(mItems);
 		return result;
 	}
-	
+
 	public Set<ObjectID> getItems() {
-		return items;
+		return mItems;
 	}
 
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;
 	}
-	
+
 	public void addIssueLinkTableItemListener(
 			IssueLinkTableItemChangedListener listener) {
 		tableItemChangeListeners.add(listener);
 	}
-	
+
 	public void removeIssueLinkTableItemListener(
 			IssueLinkTableItemChangedListener listener) {
 		tableItemChangeListeners.remove(listener);
 	}
-	
+
 	protected void notifyIssueLinkTableItemListeners() {
 		Object[] listeners = tableItemChangeListeners.getListeners();
 		IssueLinkItemChangedEvent evt = new IssueLinkItemChangedEvent(this);
 		for (Object l : listeners) {
 			if (l instanceof IssueLinkTableItemChangedListener) {
-				((IssueLinkTableItemChangedListener) l).issueLinkItemChanged(evt);
+				((IssueLinkTableItemChangedListener) l)
+						.issueLinkItemChanged(evt);
 			}
 		}
 	}

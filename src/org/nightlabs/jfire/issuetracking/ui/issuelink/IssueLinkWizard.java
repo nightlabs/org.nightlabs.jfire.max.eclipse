@@ -25,7 +25,7 @@ extends DynamicPathWizard
 
 	@Override
 	public boolean performFinish() {
-		parent.setItems(issueLinkObjectID);
+		parent.addItems(issueLinkObjectID);
 		return true;
 	}
 
