@@ -3,9 +3,11 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +16,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkSelectionChangedEvent;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkSelectionListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
 /**
@@ -23,6 +28,7 @@ public class IssueLinkAdderComposite
 extends XComposite 
 {
 	private IssueLinkTable issueLinkTable;
+	private ListenerList tableItemChangeListeners = new ListenerList();
 	/**
 	 * @param parent
 	 * @param style
@@ -59,12 +65,33 @@ extends XComposite
 				dialog.open();
 			}
 		});
+		
+		removeLinkButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				removeItems(issueLinkTable.getSelectedElements());
+			}
+		});
 	}
 
-	private Set<String> items = new HashSet<String>();
+	private Set<String> items = null;
 	public void setItems(Set<String> newItems) {
-		items.addAll(newItems);
+		if (items == null) {
+			items = newItems;
+		}
+		else {
+			if (items.addAll(newItems)) {
+				notifyIssueLinkTableItemListeners();
+			}
+		}
 		issueLinkTable.setInput(items);
+	}
+	
+	public boolean removeItems(Collection<String> removedItems) {
+		boolean result = items.removeAll(removedItems);
+		issueLinkTable.setInput(items);
+		notifyIssueLinkTableItemListeners();
+		return result;
 	}
 	
 	public Set<String> getItems() {
@@ -73,5 +100,25 @@ extends XComposite
 
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;
+	}
+	
+	public void addIssueLinkTableItemListener(
+			IssueLinkTableItemChangedListener listener) {
+		tableItemChangeListeners.add(listener);
+	}
+	
+	public void removeIssueLinkTableItemListener(
+			IssueLinkTableItemChangedListener listener) {
+		tableItemChangeListeners.remove(listener);
+	}
+	
+	protected void notifyIssueLinkTableItemListeners() {
+		Object[] listeners = tableItemChangeListeners.getListeners();
+		IssueLinkItemChangedEvent evt = new IssueLinkItemChangedEvent(this);
+		for (Object l : listeners) {
+			if (l instanceof IssueLinkTableItemChangedListener) {
+				((IssueLinkTableItemChangedListener) l).issueLinkItemChanged(evt);
+			}
+		}
 	}
 }

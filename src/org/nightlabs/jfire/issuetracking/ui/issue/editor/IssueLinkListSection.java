@@ -11,6 +11,8 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 
 /* 
 * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -20,7 +22,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	private Issue issue;
 	
-	public IssueLinkListSection(FormPage page, Composite parent, IssueEditorPageController controller) {
+	public IssueLinkListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
 		getSection().setText("Issue Links");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -32,6 +34,13 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite = new IssueLinkAdderComposite(
 				client, SWT.NONE);
 		issueLinkAdderComposite.getGridData().grabExcessHorizontalSpace = true;
+		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
+			public void issueLinkItemChanged(
+					IssueLinkItemChangedEvent itemChangedEvent) {
+				controller.getIssue().setReferencedObjectIDs(issueLinkAdderComposite.getItems());
+				markDirty();
+			}
+		});
 		
 		getSection().setClient(client);
 	}
