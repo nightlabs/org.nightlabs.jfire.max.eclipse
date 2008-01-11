@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -34,7 +33,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<TimePeriod> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
 			return new ValueProviderGUITimePeriod(valueProviderConfig);
 		}
 
