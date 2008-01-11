@@ -67,6 +67,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
 	private IssuePropertySection issuePropertySection;
 	private IssueFileAttachmentSection issueFileAttachmentSection;
+	private IssueCommentListSection issueCommentListSection;
+	private IssueCommentCreateSection issueCommentCreateSection;
 	
 	/**
 	 * <p>
@@ -103,6 +105,12 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
 		getManagedForm().addPart(issueFileAttachmentSection);
 		
+		issueCommentListSection = new IssueCommentListSection(this, parent, controller);
+		getManagedForm().addPart(issueCommentListSection);
+		
+		issueCommentCreateSection = new IssueCommentCreateSection(this, parent, controller);
+		getManagedForm().addPart(issueCommentCreateSection);
+		
 		if (controller.isLoaded()) {
 			issueLinkListSection.setIssue(controller.getIssue());
 			issueDetailSection.setIssue(controller.getIssue());
@@ -110,6 +118,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
 			issuePropertySection.setIssue(controller.getIssue());
 			issueFileAttachmentSection.setIssue(controller.getIssue());
+			issueCommentListSection.setIssue(controller.getIssue());
+			issueCommentCreateSection.setIssue(controller.getIssue());
 		}
 	}
 
@@ -135,6 +145,10 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 					issuePropertySection.setIssue(getController().getIssue());
 				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed())
 					issueFileAttachmentSection.setIssue(getController().getIssue());
+				if (issueCommentListSection != null && !issueCommentListSection.getSection().isDisposed())
+					issueCommentListSection.setIssue(getController().getIssue());
+				if (issueCommentCreateSection != null && !issueCommentCreateSection.getSection().isDisposed())
+					issueCommentCreateSection.setIssue(getController().getIssue());
 			}
 		});
 	}
