@@ -80,7 +80,7 @@ public class JDOQLEditor extends EditorPart {
 	private Text jdoql;
 	private XComposite buttons;
 	private Button execButton;
-	
+	private JDOQLParameterTable parameterTable;
 	private JDOQLResultTable resultTable;
 //	private 
 	
@@ -101,7 +101,7 @@ public class JDOQLEditor extends EditorPart {
 			public void widgetSelected(SelectionEvent arg0) {
 				Collection result;
 				try {
-					result = ReportingPlugin.getReportManager().execJDOQL(jdoql.getText(), null, new String[] {FetchPlan.ALL});
+					result = ReportingPlugin.getReportManager().execJDOQL(jdoql.getText(), parameterTable.getParameterValues(), new String[] {FetchPlan.ALL});
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -129,6 +129,7 @@ public class JDOQLEditor extends EditorPart {
 		
 		jdoql = new Text(wrapper, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		jdoql.setLayoutData(new GridData(GridData.FILL_BOTH));
+		parameterTable = new JDOQLParameterTable(wrapper, SWT.NONE);
 		resultTable = new JDOQLResultTable(wrapper, SWT.NONE);
 		
 	}
