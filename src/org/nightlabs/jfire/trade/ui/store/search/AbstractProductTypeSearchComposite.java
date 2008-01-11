@@ -33,6 +33,7 @@ import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeGroup;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.deliver.DeliveryConfiguration;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.search.ProductTypeQuery;
@@ -131,7 +132,9 @@ extends XComposite
 		LocalAccountantDelegate.FETCH_GROUP_NAME,
 		ProductTypeGroup.FETCH_GROUP_NAME,
 		PriceConfig.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON
+		LegalEntity.FETCH_GROUP_PERSON,
+		// TODO remove the following fetch-group, because most implementations of ProductType don't support nesting
+		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS
 	};
  
 	protected String[] getFetchGroups() {
