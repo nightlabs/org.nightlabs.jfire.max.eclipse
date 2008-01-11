@@ -58,6 +58,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.client.jfs.ClientJFSDriver;
+import org.nightlabs.jfire.reporting.oda.jfs.JFSParameterUtil;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
 
@@ -294,7 +295,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
         for (int i = 0; i < paramDesign.getParameterDefinitions().size(); i++) {
             ParameterDefinition paramDef = (ParameterDefinition) paramDesign.getParameterDefinitions().get(i);
             if( paramDef != null )
-                paramDef.setDefaultScalarValue(""); //$NON-NLS-1$
+                paramDef.setDefaultScalarValue(JFSParameterUtil.DUMMY_DEFAULT_PARAMETER_VALUE);
         }
         dataSetDesign.setParameters( paramDesign );
 
