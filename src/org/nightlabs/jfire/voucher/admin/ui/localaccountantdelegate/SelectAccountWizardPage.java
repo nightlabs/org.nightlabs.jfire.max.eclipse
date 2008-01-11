@@ -111,7 +111,7 @@ extends WizardHopPage
 			}
 		});
 
-		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
 
@@ -126,7 +126,7 @@ extends WizardHopPage
 					accountSearchFilter.setAccountTypeID(JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER);
 					accountSearchFilter.setCurrencyID(currency.getCurrencyID());
 					accountSearchFilter.setOwner(
-							AnchorID.create(Login.getLogin().getOrganisationID(), OrganisationLegalEntity.ANCHOR_TYPE_ID_ORGANISATION, OrganisationLegalEntity.class.getName()));
+							AnchorID.create(Login.getLogin().getOrganisationID(), LegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName()));
 
 					final List<Account> accounts = AccountDAO.sharedInstance().getAccounts(accountSearchFilter, FETCH_GROUPS_ACCOUNT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
