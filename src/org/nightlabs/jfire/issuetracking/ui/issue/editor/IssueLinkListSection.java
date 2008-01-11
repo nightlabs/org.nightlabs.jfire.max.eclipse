@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
@@ -37,7 +38,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
 			public void issueLinkItemChanged(
 					IssueLinkItemChangedEvent itemChangedEvent) {
-				controller.getIssue().setReferencedObjectIDs(issueLinkAdderComposite.getItems());
+				for (ObjectID objectID : issueLinkAdderComposite.getItems()) {
+					controller.getIssue().addReferencedObjectID(objectID);	
+				}
 				markDirty();
 			}
 		});
@@ -49,7 +52,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
 
-		Set<String> objectIDs = issue.getReferencedObjectIDs();
+		Set<ObjectID> objectIDs = issue.getReferencedObjectIDs();
 		issueLinkAdderComposite.setItems(objectIDs);
 	}
 }

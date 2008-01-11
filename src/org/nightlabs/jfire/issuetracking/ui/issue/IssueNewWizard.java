@@ -9,6 +9,7 @@ import java.util.Set;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
@@ -22,11 +23,11 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueNewWizard extends DynamicPathWizard{
 	private IssueNewWizardPage issueNewPage;
 
-	private Collection<String> objectIDs;
+	private Collection<ObjectID> objectIDs;
 	/**
 	 * @param objectIDs The JDO ObjectcIDs the new Issue should be linked to.
 	 */
-	public IssueNewWizard(Collection<String> objectIDs){
+	public IssueNewWizard(Collection<ObjectID> objectIDs){
 		this.objectIDs = objectIDs;
 		setWindowTitle("Wizard Title");
 	}
@@ -49,15 +50,18 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 
 			if(objectIDs != null)
-				for (String objectID : objectIDs) {
+				for (ObjectID objectID : objectIDs) {
 					issue.getReferencedObjectIDs().add(objectID);	
 				}
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
 			issue.setIssuePriority(ic.getSelectedIssuePriority());
 			issue.setReporter(ic.getSelectedReporter());
-			issue.setAssignee(ic.getSelectedAssigntoUser());	
-			issue.setReferencedObjectIDs(ic.getIssueLinkObjectIds());
+			issue.setAssignee(ic.getSelectedAssigntoUser());
+			
+			for (ObjectID oID : ic.getIssueLinkObjectIds()) {
+				issue.addReferencedObjectID(oID);
+			}
 			
 			if(ic.getSelectedAttachmentFileMap() != null){
 				Map<String, InputStream> fileMap = ic.getSelectedAttachmentFileMap();

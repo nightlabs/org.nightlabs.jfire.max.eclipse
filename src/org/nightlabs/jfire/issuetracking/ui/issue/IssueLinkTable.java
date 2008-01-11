@@ -30,7 +30,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryReg
  *
  */
 public class IssueLinkTable 
-extends AbstractTableComposite<String>{
+extends AbstractTableComposite<ObjectID>{
 
 	private class LabelProvider extends TableLabelProvider {
 
@@ -42,6 +42,12 @@ extends AbstractTableComposite<String>{
 					IssueLinkHandler handler = getIssueLinkHandler(objectID);
 					return handler.getLinkObjectImage(objectID);
 				}
+				
+				if (element instanceof ObjectID) {
+					ObjectID objectID = (ObjectID)element;
+					IssueLinkHandler handler = getIssueLinkHandler(objectID);
+					return handler.getLinkObjectImage(objectID);
+				}
 			}
 			return null;
 		}
@@ -50,6 +56,12 @@ extends AbstractTableComposite<String>{
 			if (columnIndex == 0) {
 				if (element instanceof String) {
 					ObjectID objectID = ObjectIDUtil.createObjectID((String) element);
+					IssueLinkHandler handler = getIssueLinkHandler(objectID);
+					return handler.getLinkObjectDescription(objectID);
+				}
+				
+				if (element instanceof ObjectID) {
+					ObjectID objectID = (ObjectID)element;
 					IssueLinkHandler handler = getIssueLinkHandler(objectID);
 					return handler.getLinkObjectDescription(objectID);
 				}

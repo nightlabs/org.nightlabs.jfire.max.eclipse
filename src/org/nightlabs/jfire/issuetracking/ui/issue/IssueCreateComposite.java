@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -340,7 +341,7 @@ extends XComposite{
 		return selectedIssueType;
 	}
 
-	public Set<String> getIssueLinkObjectIds() {
+	public Set<ObjectID> getIssueLinkObjectIds() {
 		return adderComposite.getItems();
 	}
 }

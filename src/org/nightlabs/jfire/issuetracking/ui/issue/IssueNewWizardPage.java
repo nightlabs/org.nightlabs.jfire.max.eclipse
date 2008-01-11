@@ -8,15 +8,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.ObjectID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueNewWizardPage extends WizardHopPage{
 	private IssueCreateComposite issueCreateComposite;
-	private Collection<String> objectIDs;
+	private Collection<ObjectID> objectIDs;
 	
-	public IssueNewWizardPage(Collection<String> objectIDs){
+	public IssueNewWizardPage(Collection<ObjectID> objectIDs){
 		super(IssueNewWizardPage.class.getName(), "New Issue");
 		this.objectIDs = objectIDs;
 		setDescription("Create a new issue.");

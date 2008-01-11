@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
@@ -16,9 +15,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkSelectionChangedEvent;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkSelectionListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
 /**
@@ -52,11 +50,19 @@ extends XComposite
 		XComposite linkedButtonComposite = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;
 		linkedButtonComposite.getGridData().grabExcessHorizontalSpace = false;
+		gridData = new GridData(GridData.FILL_VERTICAL);
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
+		linkedButtonComposite.setLayoutData(gridData);
 
 		Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
 		addLinkButton.setText("Add Link");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		addLinkButton.setLayoutData(gridData);
+		
 		Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
 		removeLinkButton.setText("Remove Link");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		removeLinkButton.setLayoutData(gridData);
 
 		addLinkButton.addSelectionListener(new SelectionAdapter(){
 			@Override
@@ -74,8 +80,8 @@ extends XComposite
 		});
 	}
 
-	private Set<String> items = null;
-	public void setItems(Set<String> newItems) {
+	private Set<ObjectID> items = null;
+	public void setItems(Set<ObjectID> newItems) {
 		if (items == null) {
 			items = newItems;
 		}
@@ -87,14 +93,14 @@ extends XComposite
 		issueLinkTable.setInput(items);
 	}
 	
-	public boolean removeItems(Collection<String> removedItems) {
+	public boolean removeItems(Collection<ObjectID> removedItems) {
 		boolean result = items.removeAll(removedItems);
 		issueLinkTable.setInput(items);
 		notifyIssueLinkTableItemListeners();
 		return result;
 	}
 	
-	public Set<String> getItems() {
+	public Set<ObjectID> getItems() {
 		return items;
 	}
 

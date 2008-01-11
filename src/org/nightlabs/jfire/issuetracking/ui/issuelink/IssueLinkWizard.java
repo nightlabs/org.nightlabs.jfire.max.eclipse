@@ -3,12 +3,13 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 
 public class IssueLinkWizard 
 extends DynamicPathWizard
 {
-	private Set<String> issueLinkObjectID;
+	private Set<ObjectID> issueLinkObjectID;
 
 	private IssueLinkAdderComposite parent;
 	public IssueLinkWizard(IssueLinkAdderComposite parent) {
@@ -37,7 +38,7 @@ extends DynamicPathWizard
 		return false;
 	}
 
-	public void setIssueLinkObjectID(Set<String> issueLinkObjectID) {
+	public void setIssueLinkObjectID(Set<ObjectID> issueLinkObjectID) {
 		this.issueLinkObjectID = issueLinkObjectID;
 	}
 }

@@ -4,6 +4,7 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jdo.ObjectID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -29,5 +30,5 @@ public interface IssueLinkAdder
 	
 	void removeIssueLinkSelectionListener(IssueLinkSelectionListener listener);
 	
-	Set<String> getIssueLinkObjectIds();
+	Set<ObjectID> getIssueLinkObjectIds();
 }
