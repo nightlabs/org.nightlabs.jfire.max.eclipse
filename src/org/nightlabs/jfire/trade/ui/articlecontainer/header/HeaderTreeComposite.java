@@ -329,6 +329,12 @@ implements ISelectionProvider
 
 	public void setPartner(LegalEntity partner, boolean closeEditorsOfOtherPartners)
 	{
+		if (!Login.isLoggedIn())
+			return;
+
+		if (isDisposed())
+			return;
+
 		this.partner = partner;
 		AnchorID partnerAnchorID = (AnchorID) JDOHelper.getObjectId(partner);
 		headerTreeContentProvider.clear();

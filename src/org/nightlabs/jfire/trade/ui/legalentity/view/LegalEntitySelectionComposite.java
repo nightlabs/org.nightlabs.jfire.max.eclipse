@@ -211,6 +211,14 @@ extends XComposite
 		// if there was no event. In this case, we select the anonymous customer.
 		if (selectedLegalEntityID == null)
 			setSelectedLegalEntityID(null); // this will translate null to the AnchorID of the anonymous legal entity
+
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent arg0)
+			{
+				setSelectedLegalEntity(null);
+			}
+		});
 	}
 	
 	protected LegalEntity getSelectedLegalEntity() {
@@ -235,7 +243,7 @@ extends XComposite
 	
 	protected void setLegalEntityVisualisation(LegalEntity legalEntity) 
 	{
-		if ( anonymousLegalEntityComposite != null) {
+		if (anonymousLegalEntityComposite != null) {
 			anonymousLegalEntityComposite.dispose();
 			anonymousLegalEntityComposite = null;
 		}
@@ -260,19 +268,35 @@ extends XComposite
 
 	private void setSelectedLegalEntity(LegalEntity legalEntity) 
 	{
-		if (legalEntity == null)
-			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
+//		if (legalEntity == null)
+//			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
 
-		AnchorID leID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-		if (leID == null)
-			throw new IllegalArgumentException("legalEntity does not have an object-id assigned!"); //$NON-NLS-1$
+		AnchorID leID = null;
+		if (legalEntity != null) {
+			leID = (AnchorID) JDOHelper.getObjectId(legalEntity);
+			if (leID == null)
+				throw new IllegalArgumentException("legalEntity does not have an object-id assigned!"); //$NON-NLS-1$
+		}
 
 		this.selectedLegalEntityID = leID;
 		this.selectedLegalEntity = legalEntity;
-		if (legalEntity.isAnonymous()) 
-			setAnonymousVisualisation();
-		else
-			setLegalEntityVisualisation(legalEntity);
+
+		if (legalEntity == null) {
+			if (leEditorControl != null) {
+				leEditor.disposeControl();
+				leEditorControl = null;
+			}
+			if (anonymousLegalEntityComposite != null) {
+				anonymousLegalEntityComposite.dispose();
+				anonymousLegalEntityComposite = null;
+			}
+		}
+		else {
+			if (legalEntity.isAnonymous()) 
+				setAnonymousVisualisation();
+			else
+				setLegalEntityVisualisation(legalEntity);
+		}
 
 		AnchorID anchorID = (AnchorID) (selectedLegalEntity == null ? null : JDOHelper.getObjectId(selectedLegalEntity));
 		NotificationEvent event = new NotificationEvent(
