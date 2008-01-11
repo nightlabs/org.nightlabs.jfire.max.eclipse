@@ -290,7 +290,7 @@ extends XComposite
 		if (selectedLegalEntityID == null) {
 			selectedLegalEntityID = AnchorID.create(
 					IDGenerator.getOrganisationID(),
-					LegalEntity.ANCHOR_TYPE_ID_PARTNER,
+					LegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY,
 					LegalEntity.ANCHOR_ID_ANONYMOUS);
 		}
 

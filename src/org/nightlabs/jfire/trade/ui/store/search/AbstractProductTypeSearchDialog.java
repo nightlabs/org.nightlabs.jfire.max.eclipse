@@ -8,6 +8,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -35,8 +36,14 @@ extends CenteredDialog
 	public void create() {
 		super.create();
 		getShell().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.title")); //$NON-NLS-1$
-		getShell().setSize(800, 600);				
-		setToCenteredLocation();
+//		getShell().setSize(800, 600);				
+//		setToCenteredLocation();
+	}
+
+	@Override
+	protected Point getInitialSize()
+	{
+		return new Point(800, 600);
 	}
 
 	private boolean earlySearchResult = false;
