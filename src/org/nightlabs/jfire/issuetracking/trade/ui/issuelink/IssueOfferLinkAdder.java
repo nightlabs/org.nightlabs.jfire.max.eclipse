@@ -12,6 +12,7 @@ import javax.jdo.JDOHelper;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer;
@@ -35,11 +36,11 @@ public class IssueOfferLinkAdder extends AbstractIssueLinkAdder {
 		return oViewer.getComposite();
 	}
 
-	public Set<String> getIssueLinkObjectIds() {
-		Set<String> result = new HashSet<String>();
+	public Set<ObjectID> getIssueLinkObjectIds() {
+		Set<ObjectID> result = new HashSet<ObjectID>();
 		Collection<Object> elements = oViewer.getListComposite().getSelectedElements();
 		for(Object o : elements) {
-			result.add(JDOHelper.getObjectId(o).toString());
+			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}
 		return result;
 	}
