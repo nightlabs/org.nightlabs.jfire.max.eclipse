@@ -1,11 +1,15 @@
 package org.nightlabs.jfire.trade.ui.overview.repository;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,13 +18,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
-import org.nightlabs.jfire.store.Repository;
+import org.nightlabs.jfire.store.RepositoryType;
+import org.nightlabs.jfire.store.dao.RepositoryTypeDAO;
+import org.nightlabs.jfire.store.id.RepositoryTypeID;
 import org.nightlabs.jfire.store.query.RepositoryQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -28,6 +36,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -51,8 +60,8 @@ extends JDOQueryComposite
 	private Button ownerActiveButton = null;
 	private Text ownerText = null;
 	private Button ownerBrowseButton = null;
-	private Button anchorTypeIDActiveButton = null;
-	private XComboComposite<String> anchorTypeIDs = null;
+	private Button repositoryTypeActiveButton = null;
+	private XComboComposite<RepositoryType> repositoryTypeList = null;
 	
 	@Override
 	protected void createComposite(Composite parent) 
@@ -85,27 +94,69 @@ extends JDOQueryComposite
 				widgetSelected(e);
 			}		
 		});
-		
-		final Group anchorTypeIDGroup = new Group(parent, SWT.NONE);
-		anchorTypeIDGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdGroup.text")); //$NON-NLS-1$
-		anchorTypeIDGroup.setLayout(new GridLayout());	
-		anchorTypeIDGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		anchorTypeIDActiveButton = new Button(anchorTypeIDGroup, SWT.CHECK);
-		anchorTypeIDActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdActiveButton.text")); //$NON-NLS-1$
-		anchorTypeIDActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		anchorTypeIDs = new XComboComposite<String>(
-				anchorTypeIDGroup, SWT.BORDER, 
+
+		final Group repositoryTypeGroup = new Group(parent, SWT.NONE);
+		repositoryTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdGroup.text")); //$NON-NLS-1$
+		repositoryTypeGroup.setLayout(new GridLayout());	
+		repositoryTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		repositoryTypeActiveButton = new Button(repositoryTypeGroup, SWT.CHECK);
+		repositoryTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdActiveButton.text")); //$NON-NLS-1$
+		repositoryTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		repositoryTypeList = new XComboComposite<RepositoryType>(
+				repositoryTypeGroup, SWT.BORDER,
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
-						return RepositoryListComposite.getAnchorTypeIDName((String)element);
+						return ((RepositoryType)element).getName().getText();
 					}					
 				}
 		);
-		anchorTypeIDs.setInput(getAvailableRepositoryAnchorTypeIDs());
-		anchorTypeIDActiveButton.addSelectionListener(new SelectionListener(){		
+		repositoryTypeList.setEnabled(false);
+
+		RepositoryType dummy = new RepositoryType("a.b.c", "a.b.c", false);
+		dummy.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+		repositoryTypeList.setInput(Collections.singletonList(dummy));
+		repositoryTypeList.setSelection(0);
+
+		Job job = new Job("Loading repository types") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor)
+					throws Exception
+			{
+				final List<RepositoryType> repositoryTypes = RepositoryTypeDAO.sharedInstance().getRepositoryTypes(
+						new String[] {
+								FetchPlan.DEFAULT,
+								RepositoryType.FETCH_GROUP_NAME
+						},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor
+				);
+
+				Collections.sort(repositoryTypes, new Comparator<RepositoryType>() {
+					@Override
+					public int compare(RepositoryType o1, RepositoryType o2)
+					{
+						return o1.getName().getText().compareTo(o2.getName().getText());
+					}
+				});
+
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					public void run()
+					{
+						repositoryTypeList.setInput(repositoryTypes);
+						repositoryTypeList.setSelection(0);
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+
+		repositoryTypeActiveButton.addSelectionListener(new SelectionListener(){		
 			public void widgetSelected(SelectionEvent e) {
-				anchorTypeIDs.setEnabled(((Button)e.getSource()).getSelection());
+				repositoryTypeList.setEnabled(((Button)e.getSource()).getSelection());
 			}		
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -178,13 +229,13 @@ extends JDOQueryComposite
 	public JDOQuery getJDOQuery() 
 	{
 		RepositoryQuery repositoryQuery = new RepositoryQuery();
-		
+
 		if (ownerActiveButton.getSelection())
 			repositoryQuery.setOwnerID(selectedOwnerID);
-		
-		if (anchorTypeIDActiveButton.getSelection() && anchorTypeIDs.getSelectedElement() != null)
-			repositoryQuery.setAnchorTypeID(anchorTypeIDs.getSelectedElement());
-		
+
+		if (repositoryTypeActiveButton.getSelection() && repositoryTypeList.getSelectedElement() != null)
+			repositoryQuery.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+
 //		if (activeNameButton.getSelection() && repositoryNameText.getText() != null && !repositoryNameText.getText().trim().equals(""))
 //			repositoryQuery.setName(repositoryNameText.getText());
 //
@@ -194,15 +245,15 @@ extends JDOQueryComposite
 		return repositoryQuery;
 	}
 	
-	private List<String> availableRepositoryAnchorTypeIDs = null;
-	protected List<String> getAvailableRepositoryAnchorTypeIDs() 
-	{
-		if (availableRepositoryAnchorTypeIDs == null) {
-			List<String> list = new ArrayList<String>();
-			list.add(Repository.ANCHOR_TYPE_ID_HOME);
-			list.add(Repository.ANCHOR_TYPE_ID_OUTSIDE);			
-			availableRepositoryAnchorTypeIDs = list;
-		}
-		return availableRepositoryAnchorTypeIDs;
-	}	
+//	private List<String> availableRepositoryAnchorTypeIDs = null;
+//	protected List<String> getAvailableRepositoryAnchorTypeIDs() 
+//	{
+//		if (availableRepositoryAnchorTypeIDs == null) {
+//			List<String> list = new ArrayList<String>();
+//			list.add(Repository.ANCHOR_TYPE_ID_HOME);
+//			list.add(Repository.ANCHOR_TYPE_ID_OUTSIDE);			
+//			availableRepositoryAnchorTypeIDs = list;
+//		}
+//		return availableRepositoryAnchorTypeIDs;
+//	}	
 }

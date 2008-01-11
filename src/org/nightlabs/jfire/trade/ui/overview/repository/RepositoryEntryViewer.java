@@ -13,6 +13,7 @@ import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.store.Repository;
+import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
@@ -39,9 +40,13 @@ extends JDOQuerySearchEntryViewer
 	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
 		return new RepositoryFilterComposite(parent, SWT.NONE);
 	}
-	
+
 	public static final String[] FETCH_GROUPS_REPOSITORIES = new String[] {
-		Repository.FETCH_GROUP_THIS_REPOSITORY, 
+//		Repository.FETCH_GROUP_THIS_REPOSITORY, // we don't know what will be added - hence in order to keep it small, we specify individually
+		Repository.FETCH_GROUP_NAME,
+		Repository.FETCH_GROUP_OWNER,
+		Repository.FETCH_GROUP_REPOSITORY_TYPE,
+		RepositoryType.FETCH_GROUP_NAME,
 		FetchPlan.DEFAULT,
 		LegalEntity.FETCH_GROUP_PERSON
 	};

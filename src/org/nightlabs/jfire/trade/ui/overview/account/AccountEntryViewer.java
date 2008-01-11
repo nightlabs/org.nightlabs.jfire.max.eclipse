@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
@@ -42,7 +43,12 @@ extends JDOQuerySearchEntryViewer
 	}
 
 	public static final String[] FETCH_GROUPS_ACCOUNTS = new String[] {
-		Account.FETCH_GROUP_THIS_ACCOUNT, 
+//		Account.FETCH_GROUP_THIS_ACCOUNT, // we don't need the summaryAccounts that are included in this - better specify individually
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_OWNER,
+		Account.FETCH_GROUP_CURRENCY,
+		Account.FETCH_GROUP_ACCOUNT_TYPE,
+		AccountType.FETCH_GROUP_NAME,
 		FetchPlan.DEFAULT,
 		LegalEntity.FETCH_GROUP_PERSON
 	};

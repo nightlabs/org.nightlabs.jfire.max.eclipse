@@ -23,7 +23,6 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
-import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
@@ -97,7 +96,7 @@ extends AbstractTableComposite<Account>
 				
 				final String anchorID = ((Account) element).getAnchorID();
 				if (anchorID == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				return anchorID;
 			}
 		});
@@ -113,7 +112,7 @@ extends AbstractTableComposite<Account>
 
 				final AccountName accountName = ((Account) element).getName();
 				if (accountName == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				
 				return accountName.getText();
 			}
@@ -130,8 +129,8 @@ extends AbstractTableComposite<Account>
 				
 				final LegalEntity owner = ((Account) element).getOwner();
 				if (owner == null)
-					return "";
-				if (owner.getPerson().getDisplayName() == null || "".equals(owner.getPerson().getDisplayName()))
+					return ""; //$NON-NLS-1$
+				if (owner.getPerson().getDisplayName() == null || "".equals(owner.getPerson().getDisplayName())) //$NON-NLS-1$
 					return owner.getAnchorID();
 				return owner.getPerson().getDisplayName();
 			}
@@ -139,17 +138,14 @@ extends AbstractTableComposite<Account>
 		
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		
-		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.anchorType"));	//$NON-NLS-1$
+		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountTypeName"));	//$NON-NLS-1$
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (!(element instanceof Account)) 
 					return null;
-				
-				final String anchorTypeID = ((Account) element).getAnchorTypeID();
-				if (anchorTypeID == null)
-					return "";
-				return anchorTypeID;
+
+				return ((Account) element).getAccountType().getName().getText();
 			}
 		});
 		
@@ -197,71 +193,71 @@ extends AbstractTableComposite<Account>
 //		tableViewer.setLabelProvider(new AcountListLabelProvider());
 	}
 
-	class AcountListLabelProvider
-	extends TableLabelProvider
-	{
-		public String getColumnText(Object element, int columnIndex) 
-		{
-			if (element instanceof Account) {
-				Account account = (Account) element;
-				switch (columnIndex) 
-				{
-					case(0):
-						return account.getAnchorID();
-					case(1):
-						if (account.getName() != null)
-							return account.getName().getText();
-					case(2):
-						if (account.getOwner() != null && account.getOwner().getPerson() != null)
-							return account.getOwner().getPerson().getDisplayName(); 
-						break;
-					case(3):
-						return account.getAccountType().getName().getText();
-					case(4):
-						if (account.getCurrency() != null)
-							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
-						break;						
-					default:
-						return ""; //$NON-NLS-1$
-				}
-			}
-			return null;
-		}
-
-//		public Color getBackground(Object element, int columnIndex) {
+//	class AcountListLabelProvider
+//	extends TableLabelProvider
+//	{
+//		public String getColumnText(Object element, int columnIndex) 
+//		{
 //			if (element instanceof Account) {
 //				Account account = (Account) element;
-//				switch (columnIndex)
+//				switch (columnIndex) 
 //				{
+//					case(0):
+//						return account.getAnchorID();
+//					case(1):
+//						if (account.getName() != null)
+//							return account.getName().getText();
+//					case(2):
+//						if (account.getOwner() != null && account.getOwner().getPerson() != null)
+//							return account.getOwner().getPerson().getDisplayName(); 
+//						break;
+//					case(3):
+//						return account.getAccountType().getName().getText();
 //					case(4):
-//						if(account.getBalance() < 0){
-//							return new Color(getDisplay(), 255, 0, 0);
-//						}
-//					break;
+//						if (account.getCurrency() != null)
+//							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
+//						break;						
 //					default:
-//						return new Color(getDisplay(), 0, 255, 0);
+//						return ""; //$NON-NLS-1$
 //				}
 //			}
-//			return new Color(getDisplay(), 0, 255, 0);		
+//			return null;
 //		}
 //
-//		public Color getForeground(Object element, int columnIndex) {
-//			if (element instanceof Account) {
-//				Account account = (Account) element;
-//				switch (columnIndex)
-//				{
-//					case(4):
-//						if(account.getBalance() < 0){
-//							return new Color(getDisplay(), 255, 0, 0);
-//						}
-//					break;
-//					default:
-//						return new Color(getDisplay(), 0, 255, 0);
-//				}
-//			}
-//			return new Color(getDisplay(), 0, 255, 0);
-//		}		
-	}
+////		public Color getBackground(Object element, int columnIndex) {
+////			if (element instanceof Account) {
+////				Account account = (Account) element;
+////				switch (columnIndex)
+////				{
+////					case(4):
+////						if(account.getBalance() < 0){
+////							return new Color(getDisplay(), 255, 0, 0);
+////						}
+////					break;
+////					default:
+////						return new Color(getDisplay(), 0, 255, 0);
+////				}
+////			}
+////			return new Color(getDisplay(), 0, 255, 0);		
+////		}
+////
+////		public Color getForeground(Object element, int columnIndex) {
+////			if (element instanceof Account) {
+////				Account account = (Account) element;
+////				switch (columnIndex)
+////				{
+////					case(4):
+////						if(account.getBalance() < 0){
+////							return new Color(getDisplay(), 255, 0, 0);
+////						}
+////					break;
+////					default:
+////						return new Color(getDisplay(), 0, 255, 0);
+////				}
+////			}
+////			return new Color(getDisplay(), 0, 255, 0);
+////		}		
+//	}
 	
 //	public static String getAnchorTypeIDName(String anchorTypeID ) 
 //	{

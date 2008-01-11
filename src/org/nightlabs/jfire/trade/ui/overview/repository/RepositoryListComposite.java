@@ -56,7 +56,7 @@ extends AbstractTableComposite
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.idColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.repositoryNameTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.ownerTableColumn.text")); //$NON-NLS-1$
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.anchorTypeIdTableColumn.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.repositoryTypeNameTableColumn.text")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {
 				20, 20, 20, 20
 				}));		
@@ -87,7 +87,7 @@ extends AbstractTableComposite
 							return repository.getOwner().getPerson().getDisplayName(); 
 						break;
 					case(3):
-						return getAnchorTypeIDName(repository.getAnchorTypeID());
+						return repository.getRepositoryType().getName().getText();
 					default:
 						return ""; //$NON-NLS-1$
 				}
@@ -96,15 +96,15 @@ extends AbstractTableComposite
 		}		
 	}
 	
-	public static String getAnchorTypeIDName(String anchorTypeID) 
-	{
-		if (anchorTypeID.equals(Repository.ANCHOR_TYPE_ID_HOME)) {
-			return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.homeRepositoryAnchorTypeIdName"); //$NON-NLS-1$
-		}
-		else if (anchorTypeID.equals(Repository.ANCHOR_TYPE_ID_OUTSIDE)) {
-			return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.outsideRepositoryAnchorTypeIdName"); //$NON-NLS-1$
-		}
-		else
-			return anchorTypeID;
-	}
+//	public static String getAnchorTypeIDName(String anchorTypeID) 
+//	{
+//		if (anchorTypeID.equals(Repository.ANCHOR_TYPE_ID_HOME)) {
+//			return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.homeRepositoryAnchorTypeIdName"); //$NON-NLS-1$
+//		}
+//		else if (anchorTypeID.equals(Repository.ANCHOR_TYPE_ID_OUTSIDE)) {
+//			return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.outsideRepositoryAnchorTypeIdName"); //$NON-NLS-1$
+//		}
+//		else
+//			return anchorTypeID;
+//	}
 }

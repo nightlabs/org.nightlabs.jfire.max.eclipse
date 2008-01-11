@@ -66,7 +66,7 @@ extends JDOQueryComposite
 	private Button ownerActiveButton = null;
 	private Text ownerText = null;
 	private Button ownerBrowseButton = null;	
-	private Button anchorTypeActiveButton = null;
+	private Button accountTypeActiveButton = null;
 	private XComboComposite<AccountType> accountTypeList = null;
 	
 	@Override
@@ -79,7 +79,7 @@ extends JDOQueryComposite
 		minBalanceEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		maxBalanceEntry = new SpinnerSearchEntry(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.maxBalanceEntry.caption")); //$NON-NLS-1$
 		maxBalanceEntry.getSpinnerComposite().setMinimum(-Integer.MAX_VALUE);
-		maxBalanceEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+		maxBalanceEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Group currencyGroup = new Group(parent, SWT.NONE);
 		currencyGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.currencyGroup.text")); //$NON-NLS-1$
@@ -124,9 +124,9 @@ extends JDOQueryComposite
 		accountTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeGroup.text")); //$NON-NLS-1$
 		accountTypeGroup.setLayout(new GridLayout());	
 		accountTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		anchorTypeActiveButton = new Button(accountTypeGroup, SWT.CHECK);
-		anchorTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeActiveButton.text")); //$NON-NLS-1$
-		anchorTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		accountTypeActiveButton = new Button(accountTypeGroup, SWT.CHECK);
+		accountTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeActiveButton.text")); //$NON-NLS-1$
+		accountTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		accountTypeList = new XComboComposite<AccountType>(
 				accountTypeGroup, SWT.BORDER, 
 				new LabelProvider() {
@@ -139,10 +139,12 @@ extends JDOQueryComposite
 					}					
 				}
 		);
+		accountTypeList.setEnabled(false);
 
 		AccountType dummyAccountType = new AccountType("dummy.b.c", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
 		dummyAccountType.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
 		accountTypeList.setInput(Collections.singletonList(dummyAccountType));
+		accountTypeList.setSelection(0);
 
 		Job job = new Job("Loading account types") {
 			@Override
@@ -160,6 +162,7 @@ extends JDOQueryComposite
 					public void run()
 					{
 						accountTypeList.setInput(accountTypes);
+						accountTypeList.setSelection(0);
 					}
 				});
 
@@ -168,7 +171,7 @@ extends JDOQueryComposite
 		};
 		job.schedule();
 		
-		anchorTypeActiveButton.addSelectionListener(new SelectionListener(){		
+		accountTypeActiveButton.addSelectionListener(new SelectionListener(){		
 			public void widgetSelected(SelectionEvent e) {
 				accountTypeList.setEnabled(((Button)e.getSource()).getSelection());
 			}		
@@ -276,7 +279,7 @@ extends JDOQueryComposite
 		if (ownerActiveButton.getSelection())
 			accountQuery.setOwnerID(selectedOwnerID);
 		
-		if (anchorTypeActiveButton.getSelection() && accountTypeList.getSelectedElement() != null)
+		if (accountTypeActiveButton.getSelection() && accountTypeList.getSelectedElement() != null)
 			accountQuery.setAccountTypeID((AccountTypeID) JDOHelper.getObjectId(accountTypeList.getSelectedElement()));
 
 //		if (activeNameButton.getSelection() && accountNameText.getText() != null && !accountNameText.getText().trim().equals(""))
