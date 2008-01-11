@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
@@ -86,9 +87,12 @@ extends XComposite
 			items = newItems;
 		}
 		else {
-			if (items.addAll(newItems)) {
+			Set<ObjectID> tmpItems = new HashSet<ObjectID>();
+			tmpItems.addAll(items);
+			if (tmpItems.addAll(newItems)) {
 				notifyIssueLinkTableItemListeners();
 			}
+			items = tmpItems;
 		}
 		issueLinkTable.setInput(items);
 	}
