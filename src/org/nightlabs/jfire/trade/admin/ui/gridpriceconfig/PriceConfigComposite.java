@@ -52,6 +52,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -185,11 +186,14 @@ public abstract class PriceConfigComposite extends XComposite
 	public boolean isChanged() {
 		return changed;
 	}
+
+	private Composite productTypeNotSetComposite;
 	
 	private Composite stackWrapper;
 	private StackLayout stackLayout;
-	private Composite contentComp = null;
-	private Composite noPriceConfigComp = null;
+	private Composite priceConfigEditComposite = null;
+	private PriceConfigInInnerProductTypeNotEditableComposite priceConfigInInnerProductTypeNotEditableComposite = null;
+	private Composite noPriceConfigAssignedComposite = null;
 	public PriceConfigComposite(Composite parent, IDirtyStateManager dirtyStateManager)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -200,11 +204,13 @@ public abstract class PriceConfigComposite extends XComposite
 		stackLayout = new StackLayout();		
 		stackWrapper.setLayout(stackLayout);
 		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));		
-		
-		contentComp = createContentComposite(stackWrapper);
-		noPriceConfigComp = createNoPriceConfigAssignedComposite(stackWrapper);
-//		stackLayout.topControl = contentComp;		
-		stackLayout.topControl = noPriceConfigComp;
+
+//		priceConfigEditComposite = createPriceConfigEditComposite(stackWrapper);
+//		noPriceConfigAssignedComposite = createNoPriceConfigAssignedComposite(stackWrapper);
+//		stackLayout.topControl = priceConfigEditComposite;
+		productTypeNotSetComposite = new XComposite(stackWrapper, SWT.NONE);
+		new Label(productTypeNotSetComposite, SWT.NONE).setText("No product type.");
+		stackLayout.topControl = productTypeNotSetComposite;
 	}
 
 	protected Composite createLeftCarrierComposite(Composite parent)
@@ -217,7 +223,58 @@ public abstract class PriceConfigComposite extends XComposite
 		return new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 	}
 
-	protected Composite createContentComposite(Composite parent) 
+	protected Composite getPriceConfigEditComposite() 
+	{
+		if (priceConfigEditComposite == null)
+			priceConfigEditComposite = createPriceConfigEditComposite(stackWrapper);
+
+		return priceConfigEditComposite;
+	}
+
+	protected PriceConfigInInnerProductTypeNotEditableComposite getPriceConfigInInnerProductTypeNotEditableComposite()
+	{
+		if (priceConfigInInnerProductTypeNotEditableComposite == null)
+			priceConfigInInnerProductTypeNotEditableComposite = createPriceConfigInInnerProductTypeNotEditableComposite(stackWrapper);
+
+		return priceConfigInInnerProductTypeNotEditableComposite;
+	}
+
+	class PriceConfigInInnerProductTypeNotEditableComposite extends XComposite
+	{
+		private Text priceConfigName;
+
+		public PriceConfigInInnerProductTypeNotEditableComposite(Composite parent) {
+			super(parent, SWT.NONE);
+			getGridLayout().numColumns = 2;
+
+			Label title = new Label(this, SWT.NONE);
+			title.setText("Assigned:");
+			priceConfigName = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+			priceConfigName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			
+			Label info = new Label(this, SWT.NONE | SWT.WRAP);
+			GridData gdInfo = new GridData(GridData.FILL_HORIZONTAL);
+			gdInfo.horizontalSpan = 2;
+			info.setLayoutData(gdInfo);
+
+			info.setText("The current product type has the package-nature \"inner\" and therefore the assigned price configuration cannot be edited here. Open a product type packaging the current one and edit the prices there.");
+		}
+
+		public void setPackageProductType(ProductType packageProductType)
+		{
+			if (packageProductType == null)
+				priceConfigName.setText("");
+			else
+				priceConfigName.setText(packageProductType.getInnerPriceConfig().getName().getText());
+		}
+	}
+
+	protected PriceConfigInInnerProductTypeNotEditableComposite createPriceConfigInInnerProductTypeNotEditableComposite(Composite parent)
+	{
+		return new PriceConfigInInnerProductTypeNotEditableComposite(parent);
+	}
+
+	protected Composite createPriceConfigEditComposite(Composite parent) 
 	{
 		SashForm sfLeftRight = new SashForm(parent, SWT.NONE | SWT.HORIZONTAL);
 		sfLeftRight.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -271,7 +328,15 @@ public abstract class PriceConfigComposite extends XComposite
 		
 		return sfLeftRight;
 	}
-	
+
+	protected Composite getNoPriceConfigAssignedComposite() 
+	{
+		if (noPriceConfigAssignedComposite == null)
+			noPriceConfigAssignedComposite = createNoPriceConfigAssignedComposite(stackWrapper);
+
+		return noPriceConfigAssignedComposite;
+	}
+
 	protected Composite createNoPriceConfigAssignedComposite(Composite parent) 
 	{
 		Composite noPriceConfigComp = new XComposite(parent, SWT.NONE);
@@ -399,40 +464,62 @@ public abstract class PriceConfigComposite extends XComposite
 	public void setPackageProductType(ProductType packageProductType)
 //	throws ModuleException
 	{
-		productTypeSelector.setPackageProductType(null);
-		dimensionValueSelector.setGridPriceConfig(null);
+		if (productTypeSelector != null)
+			productTypeSelector.setPackageProductType(null);
+
+		if (dimensionValueSelector != null)
+			dimensionValueSelector.setGridPriceConfig(null);
+
+		if (priceConfigInInnerProductTypeNotEditableComposite != null)
+			priceConfigInInnerProductTypeNotEditableComposite.setPackageProductType(null);
+
 		priceCalculator = null;
 		this.packageProductType = packageProductType;
-		
-		if (packageProductType != null) {
-			if (packageProductType.getInnerPriceConfig() != null || packageProductType.getPackagePriceConfig() != null) {
-				priceCalculator = createPriceCalculator(packageProductType);
-				priceCalculator.preparePriceCalculation();
-				try {
-					priceCalculator.calculatePrices();
-				} catch (PriceCalculationException e) {
-					throw new RuntimeException(e);
-				}
-				
-				// The packagePriceConfig defines all parameters (dimension values) we need to know.
-				// When the packagePriceConfig comes from the server (after preparePriceCalculation hase been called)
-				// it has the same parameters (except PriceFragmentTypes) as the innerPriceConfig.
-				// The PriceFragmentTypes have already been collected from all the packaged PriceConfigs.
-				GridPriceConfig gridPriceConfig = (GridPriceConfig) packageProductType.getPackagePriceConfig();
-				if (gridPriceConfig == null)
-					gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
 
-				dimensionValueSelector.setGridPriceConfig(gridPriceConfig);
-				productTypeSelector.setPackageProductType(packageProductType);								
+		if (packageProductType == null) {
+			stackLayout.topControl = productTypeNotSetComposite;
+		}
+		else {
+			if (packageProductType.getInnerPriceConfig() == null) {
+				stackLayout.topControl = getNoPriceConfigAssignedComposite();
 			}
-			
-			if (packageProductType.getInnerPriceConfig() != null) {
-				// show price config comp
-				stackLayout.topControl = contentComp;
-				stackWrapper.layout(true, true);								
-			}
+			else {
+				if (packageProductType.getPackageNature() == ProductType.PACKAGE_NATURE_INNER) {
+					stackLayout.topControl = getPriceConfigInInnerProductTypeNotEditableComposite();
+					getPriceConfigInInnerProductTypeNotEditableComposite().setPackageProductType(packageProductType);
+				}
+				else { // package nature outer
+					// show price config comp
+					stackLayout.topControl = getPriceConfigEditComposite();
+
+//					if (packageProductType.getInnerPriceConfig() != null || packageProductType.getPackagePriceConfig() != null) {
+					priceCalculator = createPriceCalculator(packageProductType);
+					priceCalculator.preparePriceCalculation();
+					try {
+						priceCalculator.calculatePrices();
+					} catch (PriceCalculationException e) {
+						throw new RuntimeException(e);
+					}
+
+					// The packagePriceConfig defines all parameters (dimension values) we need to know.
+					// When the packagePriceConfig comes from the server (after preparePriceCalculation hase been called)
+					// it has the same parameters (except PriceFragmentTypes) as the innerPriceConfig.
+					// The PriceFragmentTypes have already been collected from all the packaged PriceConfigs.
+					GridPriceConfig gridPriceConfig = (GridPriceConfig) packageProductType.getPackagePriceConfig();
+					if (gridPriceConfig == null)
+						gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
+
+					dimensionValueSelector.setGridPriceConfig(gridPriceConfig);
+					productTypeSelector.setPackageProductType(packageProductType);								
+//					}
+
+				} // package nature outer
+			} // if (packageProductType.getInnerPriceConfig() != null) {
 		} // if (packageProductType != null) {
-		priceConfigGrid.setPriceCalculator(priceCalculator);
+		stackWrapper.layout(true, true);
+
+		if (priceConfigGrid != null)
+			priceConfigGrid.setPriceCalculator(priceCalculator);
 	}
 
 	/**
@@ -464,7 +551,7 @@ public abstract class PriceConfigComposite extends XComposite
 	
 	public void submit()
 	{
-		ProductType packageProductType = productTypeSelector.getPackageProductType();
+//		ProductType packageProductType = productTypeSelector.getPackageProductType();
 		if (packageProductType == null)
 			return;
 
@@ -481,25 +568,39 @@ public abstract class PriceConfigComposite extends XComposite
 		}
 
 		// collect all price configurations
-		Map<GridPriceConfig, List<ProductTypeSelector.Item>> priceConfigs = new HashMap<GridPriceConfig, List<ProductTypeSelector.Item>>(productTypeSelector.getProductTypeItems().size());
-		for (Iterator it = productTypeSelector.getProductTypeItems().iterator(); it.hasNext(); ) {
-			ProductTypeSelector.Item item = (ProductTypeSelector.Item) it.next();
-			if (!localOrganisationID.equals(item.getProductType().getOrganisationID())) // ignore partner-ProductTypes as we must not modify their prices
-				continue;
+		Set<GridPriceConfig> priceConfigs;
+		Set<PriceConfigID> priceConfigIDs;
 
-			GridPriceConfig priceConfig = item.getPriceConfig();
-			if (priceConfig != null) {
-				List<ProductTypeSelector.Item> items = priceConfigs.get(priceConfig);
-				if (items == null) {
-					items = new ArrayList<ProductTypeSelector.Item>();
-					priceConfigs.put(priceConfig, items);
+		Map<GridPriceConfig, List<ProductTypeSelector.Item>> priceConfig2ProductTypeSelectorItemList = null;
+		if (packageProductType.getPackageNature() == ProductType.PACKAGE_NATURE_INNER) {
+			priceConfigs = new HashSet<GridPriceConfig>(1);
+			priceConfigs.add((GridPriceConfig) packageProductType.getInnerPriceConfig());
+		}
+		else {
+			priceConfig2ProductTypeSelectorItemList = new HashMap<GridPriceConfig, List<ProductTypeSelector.Item>>(productTypeSelector.getProductTypeItems().size());
+			for (ProductTypeSelector.Item item : productTypeSelector.getProductTypeItems()) {
+				if (!localOrganisationID.equals(item.getProductType().getOrganisationID())) // ignore partner-ProductTypes as we must not modify their prices
+					continue;
+
+				GridPriceConfig priceConfig = item.getPriceConfig();
+				if (priceConfig != null) {
+					List<ProductTypeSelector.Item> items = priceConfig2ProductTypeSelectorItemList.get(priceConfig);
+					if (items == null) {
+						items = new ArrayList<ProductTypeSelector.Item>();
+						priceConfig2ProductTypeSelectorItemList.put(priceConfig, items);
+					}
+					items.add(item);
 				}
-				items.add(item);
 			}
+			priceConfigs = new HashSet<GridPriceConfig>(priceConfig2ProductTypeSelectorItemList.keySet()); // we copy the set, because the keySet is not serializable and cannot be sent to the server
 		}
 
-		Set<PriceConfigID> priceConfigIDs = NLJDOHelper.getObjectIDSet(priceConfigs.keySet());
+		// remove null values - maybe not every product type has a price config assigned
+		while (priceConfigs.remove(null));
+
+		priceConfigIDs = NLJDOHelper.getObjectIDSet(priceConfigs);
 		priceConfigIDs = new HashSet<PriceConfigID>(priceConfigIDs);
+
 		// if there are priceConfigs which have never been stored (i.e. no ID assigned), we ignore them silently.
 		while (priceConfigIDs.remove(null));
 
@@ -515,17 +616,19 @@ public abstract class PriceConfigComposite extends XComposite
 
 		// store the price configs to the server (it will recalculate all affected product types)
 		Collection<GridPriceConfig> newPCs = storePriceConfigs(
-				new ArrayList<GridPriceConfig>(priceConfigs.keySet()), // the new ArrayList is necessary, because the keySet is not serializable!
+				priceConfigs,
 				new AssignInnerPriceConfigCommand(
 						productTypeID,
 						innerPriceConfigID,
 						packageProductType.getFieldMetaData("innerPriceConfig").isValueInherited()));
 
 		// and replace the local price configs by the new ones (freshly detached from the server)
-		for (GridPriceConfig priceConfig : newPCs) {
-			List<ProductTypeSelector.Item> items = priceConfigs.get(priceConfig);
-			for (ProductTypeSelector.Item item : items)
-				item.setPriceConfig(priceConfig);
+		if (priceConfig2ProductTypeSelectorItemList != null) {
+			for (GridPriceConfig priceConfig : newPCs) {
+				List<ProductTypeSelector.Item> items = priceConfig2ProductTypeSelectorItemList.get(priceConfig);
+				for (ProductTypeSelector.Item item : items)
+					item.setPriceConfig(priceConfig);
+			}
 		}
 	}
 	
@@ -560,14 +663,12 @@ public abstract class PriceConfigComposite extends XComposite
 				throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + wizard.getAbstractChooseGridPriceConfigPage().getAction()); //$NON-NLS-1$
 		} // switch (selectPriceConfigPage.getAction()) {
 
-		if (packageProductType.getInnerPriceConfig() == null)
-			stackLayout.topControl = noPriceConfigComp;
-		else {
-			stackLayout.topControl = contentComp;
-
-			((GridPriceConfig)packageProductType.getPackagePriceConfig()).adoptParameters(packageProductType.getInnerPriceConfig(), false);
+		if (packageProductType.getInnerPriceConfig() != null) {
+			GridPriceConfig packagePriceConfig = (GridPriceConfig)packageProductType.getPackagePriceConfig();
+			if (packagePriceConfig != null)
+				packagePriceConfig.adoptParameters(packageProductType.getInnerPriceConfig(), false);
 		}
-		stackWrapper.layout(true, true);
+
 		setPackageProductType(packageProductType);
 		dirtyStateManager.markDirty();
 	}
