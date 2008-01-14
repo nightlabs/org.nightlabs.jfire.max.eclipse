@@ -39,6 +39,7 @@ import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssueLocal;
@@ -74,6 +75,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 		IssuePriority.FETCH_GROUP_THIS,
 		IssueResolution.FETCH_GROUP_THIS,
 		IssueLocal.FETCH_GROUP_THIS,
+		IssueComment.FETCH_GROUP_THIS,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
 	
