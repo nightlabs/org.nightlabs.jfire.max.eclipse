@@ -7,14 +7,19 @@ import java.util.Map;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
+import org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.IPriceConfigValueChangedListener;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -29,8 +34,9 @@ extends ToolBarSectionPart
 {
 	private CurrencyAmountTable currencyAmountTable;
 	private VoucherPriceConfig voucherconfig;
-
-
+	private VoucherType voucherType;
+	
+	
 	/**
 	 * @param page
 	 * @param parent
@@ -39,6 +45,20 @@ extends ToolBarSectionPart
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Price Config");
 
+		
+		
+		InheritanceAction inheritanceAction = new InheritanceAction(){
+			@Override
+			public void run() {
+				inheritPressed();
+			}		
+		};
+		
+		
+		getToolBarManager().add(inheritanceAction);
+		
+		
+		
 		AddCurrencyConfigAction addCurrencyConfigAction = new AddCurrencyConfigAction();
 		getToolBarManager().add(addCurrencyConfigAction);
 
@@ -94,16 +114,31 @@ extends ToolBarSectionPart
 
 	}
 
+	protected void inheritPressed() {
 
+					
+		PriceVoucherTypeWizard priceVoucherTypeWizard = new PriceVoucherTypeWizard(voucherType.getExtendedProductTypeID() , voucherType);
+			
+			
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
+					 Display.getDefault().getActiveShell(), 
+					priceVoucherTypeWizard);
+			
+			wizardDialog.open(); 
+	}
+
+	
+	
 
 	public void setVoucherType(VoucherType voucher)
 	{
-
+		voucherType = voucher;
 		voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
 		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherconfig.getPrices());
 
 		currencyAmountTable.setMap(map);
+		
 
 		
 		
