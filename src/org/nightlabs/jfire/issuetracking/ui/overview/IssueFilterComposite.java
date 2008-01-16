@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.Issue;

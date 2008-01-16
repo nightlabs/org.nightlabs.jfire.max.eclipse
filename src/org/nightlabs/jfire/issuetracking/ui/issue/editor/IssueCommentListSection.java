@@ -61,8 +61,10 @@ extends AbstractIssueEditorGeneralSection
 	}
 
 	public void addComment(IssueComment comment, boolean expand) {
-		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
-		commentEntry.setText(String.format("%s : %s - %s", comment.getCommentID(), comment.getUser().getName(), new Date().toString()));
+		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		commentEntry.setText(String.format("%s - %s", 
+				comment.getUser().getName(), 
+				comment.getCreateTimestamp().toString()));
 
 		FormText text = toolkit.createFormText(commentEntry, false);
 		text.setText(comment.getText(),

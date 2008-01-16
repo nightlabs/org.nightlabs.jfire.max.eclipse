@@ -24,6 +24,7 @@
          point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
       <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueDefaultCategoryFactory"
             index="0"
             name="Issue">
       </categoryFactory>
@@ -77,6 +78,14 @@
                name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
                tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip">
+         </editorActionBarContribution>
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+               icon="icons/overview/action/DeleteIssueAction.16x16.png"
+               id="org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction"
+               name="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.name"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
                class="org.nightlabs.jfire.issuetracking.ui.overview.action.AddIssueAction"
