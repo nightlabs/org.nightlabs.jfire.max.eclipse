@@ -3,8 +3,7 @@ package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
 import java.util.HashMap;
 import java.util.Map;
-
-
+import javax.jdo.FetchPlan;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Composite;
@@ -15,13 +14,18 @@ import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
-import org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.IPriceConfigValueChangedListener;
+import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author fitas [at] NightLabs [dot] de
@@ -32,8 +36,9 @@ public class VoucherPriceConfigSection
 extends ToolBarSectionPart 
 {
 	private CurrencyAmountTable currencyAmountTable;
-	private VoucherPriceConfig voucherconfig;
+	private VoucherPriceConfig originalVoucherConfig;
 	private VoucherType voucherType;
+	private VoucherType parentVoucherType;
 	private InheritanceAction inheritanceAction;
 
 
@@ -47,17 +52,6 @@ extends ToolBarSectionPart
 
 
 
-		inheritanceAction = new InheritanceAction(){
-			@Override
-			public void run() {
-				inheritPressed();
-			}		
-		};
-
-
-		getToolBarManager().add(inheritanceAction);
-
-
 
 		AddCurrencyConfigAction addCurrencyConfigAction = new AddCurrencyConfigAction();
 		getToolBarManager().add(addCurrencyConfigAction);
@@ -69,6 +63,17 @@ extends ToolBarSectionPart
 		AssignPriceConfigAction assignPriceConfigAction = new AssignPriceConfigAction();
 		getToolBarManager().add(assignPriceConfigAction);
 
+
+
+		inheritanceAction = new InheritanceAction(){
+			@Override
+			public void run() {
+				inheritPressed();
+			}		
+		};
+
+
+		getToolBarManager().add(inheritanceAction);
 
 
 
@@ -93,9 +98,6 @@ extends ToolBarSectionPart
 		Menu menu = menuManager.createContextMenu(currencyAmountTable.getTable());
 
 
-		//currencyAmountTable.getTable().setMenu(menu);
-
-
 		getContainer().setMenu(menu);
 
 		updateToolBarManager();
@@ -110,41 +112,88 @@ extends ToolBarSectionPart
 
 		Map<Currency, Long> map = currencyAmountTable.getMap();
 
+		
+		VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
+		
+		
 		for (Map.Entry<Currency, Long> me : map.entrySet()) {
-			voucherconfig.setPrice(me.getKey(), me.getValue());
-
+			actualVoucherConfig.setPrice(me.getKey(), me.getValue());
 		}
-
-
-
-
 	}
+
+
 
 	protected void inheritPressed() {
 
+		if( inheritanceAction.isChecked() )
+		{
+
+
+			parentVoucherType =  VoucherTypeDAO.sharedInstance().getVoucherType(
+					voucherType.getExtendedProductTypeID(),
+					new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,FetchGroupsPriceConfig.FETCH_GROUP_EDIT, PriceConfig.FETCH_GROUP_NAME},
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+
+			voucherType.setPackagePriceConfig(parentVoucherType.getPackagePriceConfig());
+
+
+		}
+		else
+			voucherType.setPackagePriceConfig(originalVoucherConfig);
+
 
 		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited( !voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+		
+		updatePricesTable();
+		
+		markDirty();
 
 
 	}
 
 
 
-
+	protected VoucherPriceConfig getVoucherPriceConfig()
+	{
+		
+		if(voucherType.getPackagePriceConfig() instanceof VoucherPriceConfig)
+		{			
+			VoucherPriceConfig	voucherConfigPrice = (VoucherPriceConfig) voucherType.getPackagePriceConfig();	
+			return voucherConfigPrice;
+	    }
+		else
+			
+			throw new IllegalStateException();
+		
+	
+	}
+	
+	
 	public void setVoucherType(VoucherType voucher)
 	{
 		voucherType = voucher;
-		voucherconfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
+		
+		originalVoucherConfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
-		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherconfig.getPrices());
-
-		currencyAmountTable.setMap(map);
-
+		updatePricesTable();
+		
 		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
 
-
 	}
+	
+	
 
+	
+	
+	protected void updatePricesTable()
+	{
+		Map<Currency, Long> map = new HashMap<Currency, Long>(getVoucherPriceConfig().getPrices());
+
+		currencyAmountTable.setMap(map);
+		
+	}
+	
 
 
 	protected void addCurrencyPressed() 
@@ -168,6 +217,8 @@ extends ToolBarSectionPart
 
 	protected void assignPriceConfigPressed() 
 	{
+
+
 		PriceVoucherTypeWizard priceVoucherTypeWizard = new PriceVoucherTypeWizard(voucherType.getExtendedProductTypeID() , voucherType);
 
 
@@ -177,8 +228,11 @@ extends ToolBarSectionPart
 
 		wizardDialog.open(); 
 
-	}
+		updatePricesTable();
+		
+		markDirty();
 
+	}
 
 	class AssignPriceConfigAction
 	extends Action 
@@ -187,13 +241,14 @@ extends ToolBarSectionPart
 			super();
 			setId(AssignPriceConfigAction.class.getName());
 
-			/*setImageDescriptor(SharedImages.getSharedImageDescriptor(
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 						VoucherAdminPlugin.getDefault(),
 						VoucherPriceConfigSection.class,
-						"Add")); //$NON-NLS-1$
-			 */
+						"AssignPriceConfig")); //$NON-NLS-1$
+			 
+			
 			setToolTipText("Assign Price Config"); 
-			setText("Assign Price");
+			setText("Assign Price Config");
 		}
 
 		public void run() {
