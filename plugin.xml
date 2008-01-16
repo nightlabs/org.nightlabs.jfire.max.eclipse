@@ -108,4 +108,13 @@
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension>
+   
+   <extension
+         point="org.nightlabs.jfire.base.ui.quickSearchEntry">
+      <quickSearchEntryFactory
+            class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueSubjectQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer"
+            name="Subject">
+      </quickSearchEntryFactory>
+   </extension>
 </plugin>
