@@ -1,11 +1,22 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.IPackagePriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
+import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.voucher.admin.ui.createvouchertype.*;
+import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
+import org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage;
+import org.nightlabs.jfire.voucher.dao.VoucherPriceConfigDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.progress.NullProgressMonitor;
 
 
 /**
@@ -51,26 +62,33 @@ extends DynamicPathWizard
 	@Implement
 	public boolean performFinish()
 	{
-
+		IPackagePriceConfig packagePriceConfig = null;
+		boolean inherit = false;
 		switch (selectVoucherPriceConfigPage.getMode()) {
 			case INHERIT:
-				voucherType.setPackagePriceConfig( selectVoucherPriceConfigPage.getInheritedPriceConfig());
-				
+				packagePriceConfig = selectVoucherPriceConfigPage.getInheritedPriceConfig();
+				inherit = true;
 				break;
 			case CREATE:
 				
-				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.createPriceConfig());
+				packagePriceConfig = selectVoucherPriceConfigPage.createPriceConfig();
 			
 				break;
 			case SELECT:
 				
-				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getSelectedPriceConfig());
+				packagePriceConfig = selectVoucherPriceConfigPage.getSelectedPriceConfig();
 				break;
 			default:
 				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
+			
 		}
-
-
+		if (packagePriceConfig != null) {
+			packagePriceConfig = VoucherPriceConfigDAO.sharedInstance().getVoucherPriceConfig((PriceConfigID)JDOHelper.getObjectId(packagePriceConfig) , 
+					new String[] { FetchPlan.DEFAULT, FetchGroupsPriceConfig.FETCH_GROUP_EDIT, PriceConfig.FETCH_GROUP_NAME}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		}
+		voucherType.setPackagePriceConfig(packagePriceConfig);
+		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited(inherit);
 		
 		return true;
 	}

@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +47,7 @@ extends ToolBarSectionPart
 {
 	private CurrencyAmountTable currencyAmountTableWrapper;
 
-	
+
 	private VoucherPriceConfig originalVoucherConfig;
 	private VoucherType voucherType;
 	private VoucherType parentVoucherType;
@@ -55,7 +56,7 @@ extends ToolBarSectionPart
 	private Composite stackWrapper;
 	private StackLayout stackLayout;
 	private Composite assignNewPriceConfigWrapper = null;
-	
+
 
 	/**
 	 * @param page
@@ -96,20 +97,20 @@ extends ToolBarSectionPart
 		stackLayout = new StackLayout();
 		stackWrapper.setLayout(stackLayout);
 		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));		
-		
-		
+
+
 		currencyAmountTableWrapper = new CurrencyAmountTable(stackWrapper,false);
-		
-			
+
+
 		assignNewPriceConfigWrapper = new XComposite(stackWrapper, SWT.NONE, 
 				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
 
-	
+
 		Button assignNewPriceConfigButton = new Button(assignNewPriceConfigWrapper, SWT.NONE);
 		//assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
 		//		TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
 		assignNewPriceConfigButton.setToolTipText("Assign new Price Configuration");		
-		
+		assignNewPriceConfigButton.setText("Assign new Price Configuration");
 		assignNewPriceConfigButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				assignPriceConfigPressed();
@@ -128,11 +129,11 @@ extends ToolBarSectionPart
 			}
 		});
 
-		
-		
+
+
 		stackLayout.topControl = currencyAmountTableWrapper;
-		
-		
+
+
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addCurrencyConfigAction);
 		menuManager.add(removeCurrencyConfigAction);
@@ -155,10 +156,10 @@ extends ToolBarSectionPart
 
 		Map<Currency, Long> map = currencyAmountTableWrapper.getMap();
 
-		
+
 		VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
-		
-		
+
+
 		for (Map.Entry<Currency, Long> me : map.entrySet()) {
 			actualVoucherConfig.setPrice(me.getKey(), me.getValue());
 		}
@@ -166,20 +167,21 @@ extends ToolBarSectionPart
 
 	protected void switchtoNewAssignPriceConfigPage()
 	{
-	
+
 		stackLayout.topControl = assignNewPriceConfigWrapper;
-	
+		stackWrapper.layout(true, true);
+
 	}
-	
+
 	protected void switchtoEditPriceConfigPage()
 	{
-	
+
 		stackLayout.topControl = currencyAmountTableWrapper;
-	
+		stackWrapper.layout(true, true);
 	}
-		
-	
-	
+
+
+
 	protected void inheritPressed() {
 
 		if( inheritanceAction.isChecked() )
@@ -201,9 +203,9 @@ extends ToolBarSectionPart
 
 
 		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited( !voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
-		
+
 		updatePricesTable();
-		
+
 		markDirty();
 
 
@@ -215,54 +217,55 @@ extends ToolBarSectionPart
 	{
 		if (voucherType.getPackagePriceConfig() == null)
 			return null;
-		
+
 		if(voucherType.getPackagePriceConfig() instanceof VoucherPriceConfig)
 		{			
 			VoucherPriceConfig	voucherConfigPrice = (VoucherPriceConfig) voucherType.getPackagePriceConfig();	
 			return voucherConfigPrice;
-	    }
+		}
 		else
 			throw new IllegalStateException("PriceConfig is not an instance of VoucherPriceConfig");
-		
+
 	}
-	
-	
+
+
 	public void setVoucherType(VoucherType voucher)
 	{
 		voucherType = voucher;
-		
+
 		originalVoucherConfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
 		updatePricesTable();
-		
+
 		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
 
 	}
-	
-	
 
-	
-	
+
+
+
+
 	protected void updatePricesTable()
 	{
 		// check fro null
 		// if null show the new assign config page 
-		
+
 		if(getVoucherPriceConfig()== null)	
 		{
-	     switchtoNewAssignPriceConfigPage();
-		 return;
-	   }
+			switchtoNewAssignPriceConfigPage();
+			return;
+		}
 		else
 			switchtoEditPriceConfigPage();
-	
-		
+
+
 		Map<Currency, Long> map = new HashMap<Currency, Long>(getVoucherPriceConfig().getPrices());
 
 		currencyAmountTableWrapper.setMap(map);
-		
+
+
 	}
-	
+
 
 
 	protected void addCurrencyPressed() 
@@ -295,11 +298,15 @@ extends ToolBarSectionPart
 				Display.getDefault().getActiveShell(), 
 				priceVoucherTypeWizard);
 
-		wizardDialog.open(); 
+		if( wizardDialog.open() == Window.OK) 
+		{		
 
-		updatePricesTable();
-		
-		markDirty();
+			inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+
+			updatePricesTable();
+
+			markDirty();
+		}
 
 	}
 
@@ -311,11 +318,11 @@ extends ToolBarSectionPart
 			setId(AssignPriceConfigAction.class.getName());
 
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-						VoucherAdminPlugin.getDefault(),
-						VoucherPriceConfigSection.class,
-						"AssignPriceConfig")); //$NON-NLS-1$
-			 
-			
+					VoucherAdminPlugin.getDefault(),
+					VoucherPriceConfigSection.class,
+					"AssignPriceConfig")); //$NON-NLS-1$
+
+
 			setToolTipText("Assign Price Config"); 
 			setText("Assign Price Config");
 		}
