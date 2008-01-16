@@ -5,8 +5,8 @@
          point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
       	<categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueOverviewCategoryFactory"
-            index="1" name="Issue Types"/>
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory"
+            index="10" name="Issue Types"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.pissuetracking.admin.ui.overview.issueproperty.IssueTypeEntry"
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"

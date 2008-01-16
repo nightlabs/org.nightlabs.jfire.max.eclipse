@@ -86,6 +86,7 @@ extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 		layout.addColumnData(new ColumnWeightData(30));
 		
 		table.setLayout(layout);
+		table.setHeaderVisible(false);
 	}
 
 	@Override

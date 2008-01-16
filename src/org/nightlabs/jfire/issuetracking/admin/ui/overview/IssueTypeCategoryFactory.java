@@ -10,12 +10,12 @@ import org.nightlabs.jfire.base.ui.overview.DefaultCategoryFactory;
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueOverviewCategoryFactory extends DefaultCategoryFactory {
+public class IssueTypeCategoryFactory extends DefaultCategoryFactory {
 
 	/**
 	 * 
 	 */
-	public IssueOverviewCategoryFactory() {
+	public IssueTypeCategoryFactory() {
 	}
 	
 	@Override
