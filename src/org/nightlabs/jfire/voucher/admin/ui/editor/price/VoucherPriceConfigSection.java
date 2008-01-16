@@ -6,11 +6,20 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -35,12 +44,18 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class VoucherPriceConfigSection 
 extends ToolBarSectionPart 
 {
-	private CurrencyAmountTable currencyAmountTable;
+	private CurrencyAmountTable currencyAmountTableWrapper;
+
+	
 	private VoucherPriceConfig originalVoucherConfig;
 	private VoucherType voucherType;
 	private VoucherType parentVoucherType;
 	private InheritanceAction inheritanceAction;
 
+	private Composite stackWrapper;
+	private StackLayout stackLayout;
+	private Composite assignNewPriceConfigWrapper = null;
+	
 
 	/**
 	 * @param page
@@ -77,12 +92,35 @@ extends ToolBarSectionPart
 
 
 
+		stackWrapper = new XComposite(getContainer(), SWT.NONE);
+		stackLayout = new StackLayout();
+		stackWrapper.setLayout(stackLayout);
+		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		
+		
+		currencyAmountTableWrapper = new CurrencyAmountTable(stackWrapper,false);
+		
+			
+		assignNewPriceConfigWrapper = new XComposite(stackWrapper, SWT.NONE, 
+				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
+
+	
+		Button assignNewPriceConfigButton = new Button(assignNewPriceConfigWrapper, SWT.NONE);
+		//assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
+		//		TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
+		assignNewPriceConfigButton.setToolTipText("Assign new Price Configuration");		
+		
+		assignNewPriceConfigButton.addSelectionListener(new SelectionListener(){
+			public void widgetSelected(SelectionEvent e) {
+				assignPriceConfigPressed();
+			}
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}		
+		});
 
 
-		currencyAmountTable = new CurrencyAmountTable(getContainer(),false);
-
-
-		currencyAmountTable.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
+		currencyAmountTableWrapper.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
 			public void priceValueChanged()
 			{
 				//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
@@ -90,12 +128,17 @@ extends ToolBarSectionPart
 			}
 		});
 
+		
+		
+		stackLayout.topControl = currencyAmountTableWrapper;
+		
+		
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addCurrencyConfigAction);
 		menuManager.add(removeCurrencyConfigAction);
 
 
-		Menu menu = menuManager.createContextMenu(currencyAmountTable.getTable());
+		Menu menu = menuManager.createContextMenu(currencyAmountTableWrapper.getTable());
 
 
 		getContainer().setMenu(menu);
@@ -110,7 +153,7 @@ extends ToolBarSectionPart
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 
-		Map<Currency, Long> map = currencyAmountTable.getMap();
+		Map<Currency, Long> map = currencyAmountTableWrapper.getMap();
 
 		
 		VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
@@ -121,8 +164,22 @@ extends ToolBarSectionPart
 		}
 	}
 
-
-
+	protected void switchtoNewAssignPriceConfigPage()
+	{
+	
+		stackLayout.topControl = assignNewPriceConfigWrapper;
+	
+	}
+	
+	protected void switchtoEditPriceConfigPage()
+	{
+	
+		stackLayout.topControl = currencyAmountTableWrapper;
+	
+	}
+		
+	
+	
 	protected void inheritPressed() {
 
 		if( inheritanceAction.isChecked() )
@@ -156,6 +213,8 @@ extends ToolBarSectionPart
 
 	protected VoucherPriceConfig getVoucherPriceConfig()
 	{
+		if (voucherType.getPackagePriceConfig() == null)
+			return null;
 		
 		if(voucherType.getPackagePriceConfig() instanceof VoucherPriceConfig)
 		{			
@@ -163,10 +222,8 @@ extends ToolBarSectionPart
 			return voucherConfigPrice;
 	    }
 		else
-			
-			throw new IllegalStateException();
+			throw new IllegalStateException("PriceConfig is not an instance of VoucherPriceConfig");
 		
-	
 	}
 	
 	
@@ -188,9 +245,21 @@ extends ToolBarSectionPart
 	
 	protected void updatePricesTable()
 	{
+		// check fro null
+		// if null show the new assign config page 
+		
+		if(getVoucherPriceConfig()== null)	
+		{
+	     switchtoNewAssignPriceConfigPage();
+		 return;
+	   }
+		else
+			switchtoEditPriceConfigPage();
+	
+		
 		Map<Currency, Long> map = new HashMap<Currency, Long>(getVoucherPriceConfig().getPrices());
 
-		currencyAmountTable.setMap(map);
+		currencyAmountTableWrapper.setMap(map);
 		
 	}
 	
@@ -199,7 +268,7 @@ extends ToolBarSectionPart
 	protected void addCurrencyPressed() 
 	{
 
-		currencyAmountTable.addCurrency();
+		currencyAmountTableWrapper.addCurrency();
 	}
 
 
@@ -207,7 +276,7 @@ extends ToolBarSectionPart
 	protected void removeCurrencyPressed() 
 	{
 
-		currencyAmountTable.removeCurrency();
+		currencyAmountTableWrapper.removeCurrency();
 	}
 
 
