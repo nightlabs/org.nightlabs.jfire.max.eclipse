@@ -274,11 +274,11 @@ extends ToolBarSectionPart
 	}
 
 
-
 	protected void addCurrencyPressed() 
 	{
 
 		currencyAmountTableWrapper.addCurrency();
+		markDirty();
 	}
 
 
@@ -287,6 +287,7 @@ extends ToolBarSectionPart
 	{
 
 		currencyAmountTableWrapper.removeCurrency();
+		markDirty();
 	}
 
 
