@@ -76,7 +76,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 	private Button selectOfferRadio;
 
 	private AbstractTableComposite offerTable;
-	private List offers = new ArrayList(0);
+	private List<Object> offers = new ArrayList<Object>(0); // holds either a String or instances of Offer
 	private Offer selectedOffer = null;
 
 	public SelectOfferPage()
@@ -183,7 +183,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 	{
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			final List l = tradeManager.getNonFinalizedOffers(
+			final List<Offer> l = tradeManager.getNonFinalizedNonEndedOffers(
 					getReverseWizard().getOrderID(),
 					FETCH_GROUPS_OFFERS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
