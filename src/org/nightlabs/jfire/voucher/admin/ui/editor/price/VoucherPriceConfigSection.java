@@ -154,15 +154,22 @@ extends ToolBarSectionPart
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 
-		Map<Currency, Long> map = currencyAmountTableWrapper.getMap();
+
+		if (getVoucherPriceConfig() != null)
+		{
+
+			Map<Currency, Long> map = currencyAmountTableWrapper.getMap();
 
 
-		VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
+			VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
 
 
-		for (Map.Entry<Currency, Long> me : map.entrySet()) {
-			actualVoucherConfig.setPrice(me.getKey(), me.getValue());
+			for (Map.Entry<Currency, Long> me : map.entrySet()) {
+				actualVoucherConfig.setPrice(me.getKey(), me.getValue());
+			}
+
 		}
+
 	}
 
 	protected void switchtoNewAssignPriceConfigPage()
@@ -320,7 +327,7 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					VoucherAdminPlugin.getDefault(),
 					VoucherPriceConfigSection.class,
-					"AssignPriceConfig")); //$NON-NLS-1$
+			"AssignPriceConfig")); //$NON-NLS-1$
 
 
 			setToolTipText("Assign Price Config"); 
