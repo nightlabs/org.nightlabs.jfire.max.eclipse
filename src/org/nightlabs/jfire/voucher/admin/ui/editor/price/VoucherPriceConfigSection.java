@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
@@ -35,8 +34,9 @@ extends ToolBarSectionPart
 	private CurrencyAmountTable currencyAmountTable;
 	private VoucherPriceConfig voucherconfig;
 	private VoucherType voucherType;
-	
-	
+	private InheritanceAction inheritanceAction;
+
+
 	/**
 	 * @param page
 	 * @param parent
@@ -45,26 +45,32 @@ extends ToolBarSectionPart
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Price Config");
 
-		
-		
-		InheritanceAction inheritanceAction = new InheritanceAction(){
+
+
+		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
 				inheritPressed();
 			}		
 		};
-		
-		
+
+
 		getToolBarManager().add(inheritanceAction);
-		
-		
-		
+
+
+
 		AddCurrencyConfigAction addCurrencyConfigAction = new AddCurrencyConfigAction();
 		getToolBarManager().add(addCurrencyConfigAction);
 
-		
+
 		RemoveCurrencyConfigAction removeCurrencyConfigAction = new RemoveCurrencyConfigAction();
 		getToolBarManager().add(removeCurrencyConfigAction);
+
+		AssignPriceConfigAction assignPriceConfigAction = new AssignPriceConfigAction();
+		getToolBarManager().add(assignPriceConfigAction);
+
+
+
 
 
 
@@ -82,19 +88,19 @@ extends ToolBarSectionPart
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addCurrencyConfigAction);
 		menuManager.add(removeCurrencyConfigAction);
-		
-		
+
+
 		Menu menu = menuManager.createContextMenu(currencyAmountTable.getTable());
-		
-		
+
+
 		//currencyAmountTable.getTable().setMenu(menu);
-		
-		
+
+
 		getContainer().setMenu(menu);
-		
+
 		updateToolBarManager();
-		
-		
+
+
 
 	}
 
@@ -116,19 +122,14 @@ extends ToolBarSectionPart
 
 	protected void inheritPressed() {
 
-					
-		PriceVoucherTypeWizard priceVoucherTypeWizard = new PriceVoucherTypeWizard(voucherType.getExtendedProductTypeID() , voucherType);
-			
-			
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					 Display.getDefault().getActiveShell(), 
-					priceVoucherTypeWizard);
-			
-			wizardDialog.open(); 
+
+		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited( !voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+
+
 	}
 
-	
-	
+
+
 
 	public void setVoucherType(VoucherType voucher)
 	{
@@ -138,10 +139,10 @@ extends ToolBarSectionPart
 		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherconfig.getPrices());
 
 		currencyAmountTable.setMap(map);
-		
 
-		
-		
+		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+
+
 	}
 
 
@@ -152,36 +153,81 @@ extends ToolBarSectionPart
 		currencyAmountTable.addCurrency();
 	}
 
-	
-	
+
+
 	protected void removeCurrencyPressed() 
 	{
 
 		currencyAmountTable.removeCurrency();
 	}
-	
-	
-	
+
+
+
+
+
+
+	protected void assignPriceConfigPressed() 
+	{
+		PriceVoucherTypeWizard priceVoucherTypeWizard = new PriceVoucherTypeWizard(voucherType.getExtendedProductTypeID() , voucherType);
+
+
+		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
+				Display.getDefault().getActiveShell(), 
+				priceVoucherTypeWizard);
+
+		wizardDialog.open(); 
+
+	}
+
+
+	class AssignPriceConfigAction
+	extends Action 
+	{
+		public AssignPriceConfigAction() {
+			super();
+			setId(AssignPriceConfigAction.class.getName());
+
+			/*setImageDescriptor(SharedImages.getSharedImageDescriptor(
+						VoucherAdminPlugin.getDefault(),
+						VoucherPriceConfigSection.class,
+						"Add")); //$NON-NLS-1$
+			 */
+			setToolTipText("Assign Price Config"); 
+			setText("Assign Price");
+		}
+
+		public void run() {
+
+			assignPriceConfigPressed();
+
+		}		
+	}
+
+
+
+
+
+
+
 	class AddCurrencyConfigAction
 	extends Action 
 	{
 		public AddCurrencyConfigAction() {
 			super();
 			setId(AddCurrencyConfigAction.class.getName());
-			
-		     setImageDescriptor(SharedImages.getSharedImageDescriptor(
-						VoucherAdminPlugin.getDefault(),
-						VoucherPriceConfigSection.class,
-						"Add")); //$NON-NLS-1$
-				
+
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					VoucherAdminPlugin.getDefault(),
+					VoucherPriceConfigSection.class,
+			"Add")); //$NON-NLS-1$
+
 			setToolTipText("Add new Currency to the List"); 
 			setText("Add Currency");
 		}
 
 		public void run() {
-			//assignNewPressed();
+
 			addCurrencyPressed(); 
-			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
 
 		}		
 	}
@@ -194,23 +240,20 @@ extends ToolBarSectionPart
 		public RemoveCurrencyConfigAction() {
 			super();
 			setId(RemoveCurrencyConfigAction.class.getName());
-			//setImageDescriptor(SharedImages.getSharedImageDescriptor(
-			//	TradeAdminPlugin.getDefault(), AssignNewCurrencyConfigAction.class, "AssignPriceConfig")); //$NON-NLS-1$
-		
-		     setImageDescriptor(SharedImages.getSharedImageDescriptor(
+
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					VoucherAdminPlugin.getDefault(),
 					VoucherPriceConfigSection.class,
-					"Remove")); //$NON-NLS-1$
-			
+			"Remove")); //$NON-NLS-1$
+
 			setToolTipText("remove the Currency from the List"); 
 			setText("Remove Currency");
 		}
 
 		@Override
 		public void run() {
-			//assignNewPressed();
+
 			removeCurrencyPressed(); 
-			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
 
 		}		
 	}
