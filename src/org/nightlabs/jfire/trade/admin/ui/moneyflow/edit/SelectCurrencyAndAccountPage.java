@@ -58,7 +58,7 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo;
+import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 import org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite;
 import org.nightlabs.progress.ProgressMonitor;
 

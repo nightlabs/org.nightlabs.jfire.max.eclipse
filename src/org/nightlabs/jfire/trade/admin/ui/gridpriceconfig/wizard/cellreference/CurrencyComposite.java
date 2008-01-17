@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyDAO;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyLabelProvider;
+import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
+import org.nightlabs.jfire.trade.ui.currency.CurrencyLabelProvider;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class CurrencyComposite extends AbstractCellReferenceComposite{

@@ -83,7 +83,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyLabelProvider;
+import org.nightlabs.jfire.trade.ui.currency.CurrencyLabelProvider;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**

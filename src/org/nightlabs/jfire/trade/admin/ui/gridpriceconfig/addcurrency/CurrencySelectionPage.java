@@ -46,8 +46,8 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
