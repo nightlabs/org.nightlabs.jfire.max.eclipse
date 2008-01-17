@@ -121,7 +121,7 @@ extends Command
 
 	private Comparator<ValueProviderConfig> pageOrderComparator = new Comparator<ValueProviderConfig>(){	
 		public int compare(ValueProviderConfig config1, ValueProviderConfig config2) {
-			return config1.getPageOrder() - config2.getPageOrder();
+			return config1.getPageRow() - config2.getPageRow();
 		}
 	};
 

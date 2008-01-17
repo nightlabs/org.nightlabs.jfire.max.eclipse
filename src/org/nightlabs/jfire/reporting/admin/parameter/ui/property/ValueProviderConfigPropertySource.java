@@ -66,7 +66,7 @@ extends AbstractPropertySource
 		return valueProviderConfig;
 	}
 	
-	private int staticPropertyDescriptorSize = 10;
+	private int staticPropertyDescriptorSize = 11;
 	private int getInpuParamterSize() {
 		return getValueProvider().getInputParameters().size();
 	}
@@ -82,9 +82,10 @@ extends AbstractPropertySource
 		propertyDescriptors[4] = createMessagePD(false);
 		propertyDescriptors[5] = createShowMessageInHeaderPD();
 		propertyDescriptors[6] = createPageIndexPD();
-		propertyDescriptors[7] = createPageOrderPD();
-		propertyDescriptors[8] = createOutputTypePD();
-		propertyDescriptors[9] = createAllowOutputNullPD();
+		propertyDescriptors[7] = createPageRowPD();
+		propertyDescriptors[8] = createPageColumnPD();
+		propertyDescriptors[9] = createOutputTypePD();
+		propertyDescriptors[10] = createAllowOutputNullPD();
 		for (int i=0; i<inputParameters; i++) 
 		{
 			int suffix = (i + 1);
@@ -140,15 +141,25 @@ extends AbstractPropertySource
 		return desc;		
 	}
 
-	protected PropertyDescriptor createPageOrderPD() 
+	protected PropertyDescriptor createPageRowPD() 
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
-				ModelNotificationManager.PROP_PAGE_ORDER,
-				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorOrder.name"), //$NON-NLS-1$
+				ModelNotificationManager.PROP_PAGE_ROW,
+				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorPageRow.name"), //$NON-NLS-1$
 				false);
 		desc.setCategory(CATEGORY_PAGE);
 		return desc;		
 	}	
+	
+	protected PropertyDescriptor createPageColumnPD() 
+	{
+		PropertyDescriptor desc = new IntPropertyDescriptor(
+				ModelNotificationManager.PROP_PAGE_COLUMN,
+				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorPageColumn.name"), //$NON-NLS-1$
+				false);
+		desc.setCategory(CATEGORY_PAGE);
+		return desc;		
+	}
 	
 	protected PropertyDescriptor createOutputTypePD() 
 	{
@@ -201,8 +212,11 @@ extends AbstractPropertySource
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_INDEX)) {
 			return valueProviderConfig.getPageIndex();
 		}						
-		else if (id.equals(ModelNotificationManager.PROP_PAGE_ORDER)) {
-			return valueProviderConfig.getPageOrder();
+		else if (id.equals(ModelNotificationManager.PROP_PAGE_ROW)) {
+			return valueProviderConfig.getPageRow();
+		}						
+		else if (id.equals(ModelNotificationManager.PROP_PAGE_COLUMN)) {
+			return valueProviderConfig.getPageColumn();
 		}						
 		else if (id.equals(ModelNotificationManager.PROP_OUTPUT_TYPE)) {
 			return getValueProvider().getOutputType();
@@ -266,14 +280,24 @@ extends AbstractPropertySource
 					pageIndex);
 			return;
 		}						
-		else if (id.equals(ModelNotificationManager.PROP_PAGE_ORDER)) {
-			int pageOrder = ((Integer)value).intValue();			
-			valueProviderConfig.setPageOrder(pageOrder);
+		else if (id.equals(ModelNotificationManager.PROP_PAGE_ROW)) {
+			int pageRow = ((Integer)value).intValue();			
+			valueProviderConfig.setPageRow(pageRow);
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
-					ModelNotificationManager.PROP_PAGE_ORDER,
+					ModelNotificationManager.PROP_PAGE_ROW,
 					-1, 
-					pageOrder);
+					pageRow);
+			return;
+		}		
+		else if (id.equals(ModelNotificationManager.PROP_PAGE_COLUMN)) {
+			int pageColumn = ((Integer)value).intValue();			
+			valueProviderConfig.setPageColumn(pageColumn);
+			ModelNotificationManager.sharedInstance().notify(
+					ObjectIDProvider.getObjectID(valueProviderConfig),
+					ModelNotificationManager.PROP_PAGE_COLUMN,
+					-1, 
+					pageColumn);
 			return;
 		}		
 		else if (id.equals(ModelNotificationManager.PROP_ALLOW_OUTPUT_NULL_VALUE)) {
@@ -301,7 +325,7 @@ extends AbstractPropertySource
 			valueProviderConfig.getMessage().copyFrom(text);
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
-					ModelNotificationManager.PROP_PAGE_ORDER,
+					ModelNotificationManager.PROP_MESSAGE,
 					-1, 
 					text);
 			return;

@@ -24,7 +24,8 @@ public class ModelNotificationManager
 	public static final String PROP_DESCRIPTION = "Description"; //$NON-NLS-1$
 	public static final String PROP_MESSAGE = "Message"; //$NON-NLS-1$
 	public static final String PROP_PAGE_INDEX = "PageIndex"; //$NON-NLS-1$
-	public static final String PROP_PAGE_ORDER = "PageOrder"; //$NON-NLS-1$
+	public static final String PROP_PAGE_ROW = "PageRow"; //$NON-NLS-1$
+	public static final String PROP_PAGE_COLUMN = "PageColumn"; //$NON-NLS-1$
 	public static final String PROP_PARAMETER_ID = "ParameterID"; //$NON-NLS-1$
 	public static final String PROP_PARAMETER_TYPE = "ParameterType"; //$NON-NLS-1$
 	public static final String PROP_PROVIDER = "Provider"; //$NON-NLS-1$

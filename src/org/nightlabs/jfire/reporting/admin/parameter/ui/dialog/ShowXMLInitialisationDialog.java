@@ -109,7 +109,7 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 						"categoryID=\""+providerConfig.getValueProviderCategoryID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"valueProviderID=\""+providerConfig.getValueProviderID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"pageIndex=\""+String.valueOf(providerConfig.getPageIndex())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
-						"pageOrder=\""+String.valueOf(providerConfig.getPageOrder())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"pageOrder=\""+String.valueOf(providerConfig.getPageRow())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"allowNullOutputValue=\""+String.valueOf(providerConfig.isAllowNullOutputValue())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"showMessageInHeader=\""+String.valueOf(providerConfig.isShowMessageInHeader())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"x=\""+String.valueOf(providerConfig.getX())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
