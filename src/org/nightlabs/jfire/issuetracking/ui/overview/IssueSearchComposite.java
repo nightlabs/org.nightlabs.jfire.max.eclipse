@@ -35,11 +35,16 @@ import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.config.StoredIssueQuery;
+import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
+import org.nightlabs.jfire.issue.dao.IssueResolutionDAO;
+import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssuePriorityID;
+import org.nightlabs.jfire.issue.id.IssueResolutionID;
 import org.nightlabs.jfire.issue.id.IssueSeverityTypeID;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
@@ -62,26 +67,29 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	private Text subjectText;
 	private Text reporterText;
 	private Text assigneeText;
-	
-	private List<IssueType> issueTypes;
-	private List<IssuePriority> allIssuePriorities;
-	private List<IssueSeverityType> allIssueSeverityTypes;
-	
+
+	private List<IssueType> issueTypeList;
+	private List<IssuePriority> issuePriorityList;
+	private List<IssueSeverityType> issueSeverityTypeList;
+	private List<IssueResolution> issueResolutionList;
+
 	private XComboComposite<IssueType> issueTypeCombo;
 	private XComboComposite<IssueSeverityType> issueSeverityCombo;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
-	
+	private XComboComposite<IssueResolution> issueResolutionCombo;
+
 	private IssueType selectedIssueType;
 	private IssueSeverityType selectedIssueSeverityType;
 	private IssuePriority selectedIssuePriority;
-	
+	private IssueResolution selectedIssueResolution;
+
 	private User selectedReporter;
 	private User selectedAssignee;
-	
+
 	private DateTimeEdit createdTimeEdit;
 	private DateTimeEdit updatedTimeEdit;
-	
-	
+
+
 	/**
 	 * @param parent
 	 * @param style
@@ -109,8 +117,9 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		ISSUE_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
 		ISSUE_SEVERITY_TYPE_ALL.getIssueSeverityTypeText().setText(Locale.ENGLISH.getLanguage(), "All");
 		ISSUE_PRIORITY_ALL.getIssuePriorityText().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#createComposite(org.eclipse.swt.widgets.Composite)
 	 */
@@ -121,26 +130,26 @@ public class IssueSearchComposite extends JDOQueryComposite {
 //		new Label(userGroup, SWT.NONE).setText("ID");
 //		issueIDText = new Text(userGroup, SWT.NONE);
 //		issueIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
+
 //		new Label(userGroup, SWT.NONE).setText("Subject");
 //		subjectText = new Text(userGroup, SWT.NONE);
 //		subjectText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		Group issueTypeGroup = new Group(parent, SWT.NONE);
 		issueTypeGroup.setText("Issue Related");
 		issueTypeGroup.setLayout(new GridLayout(1, false));
 		issueTypeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		XComposite issueTypeComposite = new XComposite(issueTypeGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
-		
+
 		new Label(issueTypeComposite, SWT.NONE).setText("Issue Type: ");
 		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, SWT.NONE);
 		issueTypeCombo.setLabelProvider(labelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
-				
+
 				issueSeverityCombo.removeAll();
 				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
 				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
@@ -148,7 +157,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 				}
 				issueSeverityCombo.selectElementByIndex(0);
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-				
+
 				issuePriorityCombo.removeAll();
 				issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
 				for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
@@ -158,7 +167,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 			}
 		});
-		
+
 		new Label(issueTypeComposite, SWT.NONE).setText("Severity: ");
 		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, SWT.NONE);
 		issueSeverityCombo.setLabelProvider(labelProvider);
@@ -167,7 +176,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 			}
 		});
-		
+
 		new Label(issueTypeComposite, SWT.NONE).setText("Priority: ");
 		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, SWT.NONE);
 		issuePriorityCombo.setLabelProvider(labelProvider);
@@ -176,7 +185,16 @@ public class IssueSearchComposite extends JDOQueryComposite {
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 			}
 		});
-		
+
+		new Label(issueTypeComposite, SWT.NONE).setText("Resolution: ");
+		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, SWT.NONE);
+		issueResolutionCombo.setLabelProvider(labelProvider);
+		issueResolutionCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
+				selectedIssueResolution = issueResolutionCombo.getSelectedElement();
+			}
+		});
+
 		//-----------------------------------------------------------
 		Group userGroup = new Group(parent, SWT.NONE);
 		userGroup.setText("People Related");
@@ -184,7 +202,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		new Label(userGroup, SWT.NONE).setText("Reporter: ");
 		reporterText = new Text(userGroup, SWT.NONE);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -205,11 +223,11 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			}
 		});
 		/////////////////////////////////
-		
+
 		new Label(userGroup, SWT.NONE).setText("Assignee: ");
 		assigneeText = new Text(userGroup, SWT.NONE);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		Button assigneeButton = new Button(userGroup, SWT.PUSH);
 		assigneeButton.setText("Choose User");
 
@@ -232,7 +250,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		gridLayout.verticalSpacing = 10;
 		timeGroup.setLayout(gridLayout);
 		timeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		new Label(timeGroup, SWT.NONE).setText("Created Time: ");
 		createdTimeEdit = new DateTimeEdit(
 				timeGroup,
@@ -244,7 +262,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		createdTimeEdit.setDate(cal.getTime());
-		
+
 		new Label(timeGroup, SWT.NONE).setText("Updated Time: ");
 		updatedTimeEdit = new DateTimeEdit(
 				timeGroup,
@@ -256,7 +274,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		updatedTimeEdit.setDate(cal.getTime());
-		
+
 		loadProperties();
 	}
 
@@ -267,30 +285,30 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
-					allIssuePriorities = new ArrayList<IssuePriority>();
-					allIssueSeverityTypes = new ArrayList<IssueSeverityType>();
-					
+					issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					issuePriorityList = new ArrayList<IssuePriority>();
+					issueSeverityTypeList = new ArrayList<IssueSeverityType>();
+
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							issueTypeCombo.removeAll();
 							issueTypeCombo.addElement(ISSUE_TYPE_ALL);
-							for (Iterator it = issueTypes.iterator(); it.hasNext(); ) {
+							for (Iterator it = issueTypeList.iterator(); it.hasNext(); ) {
 								IssueType issueType = (IssueType) it.next();
 								issueTypeCombo.addElement(issueType);
 								for(IssuePriority p : issueType.getIssuePriorities())
-									allIssuePriorities.add(p);
+									issuePriorityList.add(p);
 								for(IssueSeverityType s : issueType.getIssueSeverityTypes())
-									allIssueSeverityTypes.add(s);
+									issueSeverityTypeList.add(s);
 							}
 							issueTypeCombo.selectElementByIndex(0);
 							selectedIssueType = issueTypeCombo.getSelectedElement();
-							
+
 							/**************************************************/
-							ISSUE_TYPE_ALL.getIssuePriorities().addAll(allIssuePriorities);
-							ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(allIssueSeverityTypes);
+							ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
+							ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
 							/**************************************************/
-							
+
 							issueSeverityCombo.removeAll();
 							issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
 							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
@@ -298,7 +316,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 							}
 							issueSeverityCombo.selectElementByIndex(0);
 							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-							
+
 							issuePriorityCombo.removeAll();
 							issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
 							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
@@ -306,6 +324,14 @@ public class IssueSearchComposite extends JDOQueryComposite {
 							}
 							issuePriorityCombo.selectElementByIndex(0);
 							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+
+							issueResolutionCombo.removeAll();
+							issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
+							for (IssueResolution ip : selectedIssueType.getIssueResolutions()) {
+								issueResolutionCombo.addElement(ip);
+							}
+							issueResolutionCombo.selectElementByIndex(0);
+							selectedIssueResolution = issueResolutionCombo.getSelectedElement();
 						}
 					});
 				}catch (Exception e1) {
@@ -319,64 +345,108 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		loadJob.setPriority(Job.SHORT);
 		loadJob.schedule();
 	}
-	
+
 	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
 	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All");
 	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
-	
+	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All");
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
 	 */
 	@Override
 	public JDOQuery getJDOQuery() {
 		IssueQuery issueQuery = new IssueQuery();
-		
+
 		if(selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)){
 			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
 		}
-		
+
 		if(selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)){
 			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
 		}
-		
+
 		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
 			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
 		}
-		
+
+		if(selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)){
+			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+		}
+
 		if(selectedReporter != null){
 			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
 		}
-		
+
 		if(selectedAssignee != null){
 			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
 		}
-		
+
 		if(createdTimeEdit.isActive()){
 			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
 		}
-		
+
 		if(updatedTimeEdit.isActive()){
 			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
 		}
+
 //		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
-//			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+//		issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
 //		}
-		
+
 		return issueQuery;
 	}
-	
+
 	public void setStoredIssueQuery(StoredIssueQuery storedIssueQuery) {
 		for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
 			if (jdoQuery instanceof IssueQuery) {
 				IssueQuery issueQuery = (IssueQuery)jdoQuery;
-				
+
 				if (issueQuery.getAssigneeID() != null) {
-				selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
-						new String[]{User.FETCH_GROUP_THIS_USER}, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new NullProgressMonitor());
+					selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
+							new String[]{User.FETCH_GROUP_THIS_USER}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
 				}
-				
+
+				if (issueQuery.getReporterID() != null) {
+					selectedReporter = UserDAO.sharedInstance().getUser(issueQuery.getReporterID(), 
+							new String[]{User.FETCH_GROUP_THIS_USER}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+				}
+
+				if (issueQuery.getIssueTypeID() != null) {
+					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueQuery.getIssueTypeID(), 
+							new String[]{IssueType.FETCH_GROUP_THIS}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+					issueTypeCombo.setSelection(issueType);
+				}
+
+				if (issueQuery.getIssuePriorityID() != null) {
+					IssuePriority issuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(issueQuery.getIssuePriorityID(), 
+							new String[]{IssuePriority.FETCH_GROUP_THIS}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+					issuePriorityCombo.setSelection(issuePriority);
+				}
+
+				if (issueQuery.getIssueSeverityTypeID() != null) {
+					IssueSeverityType issueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(issueQuery.getIssueSeverityTypeID(), 
+							new String[]{IssueSeverityType.FETCH_GROUP_THIS}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+					issueSeverityCombo.setSelection(issueSeverityType);
+				}
+
+				if (issueQuery.getIssueResolutionID() != null) {
+					IssueResolution issueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(issueQuery.getIssueResolutionID(), 
+							new String[]{IssueResolution.FETCH_GROUP_THIS}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+				}
+
 				createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
 				updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
 			}
