@@ -103,6 +103,14 @@
                toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
                tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction.tooltip">
          </editorActionBarContribution>
+         <editorActionBarContribution
+               class="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
+               icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
+               id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
+               name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
+               toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview"
+               tooltip="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.tooltip">
+         </editorActionBarContribution>
          <groupMarker
                name="org.nightlabs.jfire.issuetracking.ui.overview">
          </groupMarker>         

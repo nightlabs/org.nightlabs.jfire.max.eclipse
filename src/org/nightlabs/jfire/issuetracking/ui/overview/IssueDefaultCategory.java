@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+import javax.security.auth.login.LoginException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -9,6 +11,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.AbstractCategory;
 import org.nightlabs.jfire.base.ui.overview.CategoryFactory;
 import org.nightlabs.jfire.base.ui.overview.DefaultCategoryComposite;
@@ -33,6 +36,12 @@ extends AbstractCategory
 	public IssueDefaultCategory(CategoryFactory categoryFactory) {
 		super(categoryFactory);
 		createEntries();
+		
+		try {
+			Login.getLogin();
+		} catch (LoginException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/** 
