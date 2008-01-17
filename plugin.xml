@@ -29,7 +29,7 @@
             name="Issue">
       </categoryFactory>
       <entryFactory
-            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.issueList"
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"

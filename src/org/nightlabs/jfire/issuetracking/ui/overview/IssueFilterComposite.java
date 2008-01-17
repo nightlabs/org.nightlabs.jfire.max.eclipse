@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.config.StoredIssueQuery;
 
 public class IssueFilterComposite 
 extends AbstractQueryFilterComposite 
@@ -46,5 +47,10 @@ extends AbstractQueryFilterComposite
 		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>();
 		queryComps.add(issueSearchComposite);
 		return queryComps;
+	}
+	
+	
+	public void setStoredIssueQuery(StoredIssueQuery query) {
+		issueSearchComposite.setStoredIssueQuery(query);
 	}
 }

@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.overview.action;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -56,27 +58,31 @@ extends AbstractIssueAction
 				dialog = new IssueQuerySaveDialog(Display.getDefault().getActiveShell());
 				if (dialog.open() == Dialog.OK) {
 					try {
+						Collection<JDOQuery> queryCollection = new HashSet<JDOQuery>();
 						for (JDOQuery query : queries) {
-							StoredIssueQuery storedIssueQuery = new StoredIssueQuery(Login.sharedInstance().getOrganisationID(), 
-									IDGenerator.nextID(StoredIssueQuery.class),
-									dialog.getNameText(),
-									(IssueQuery)query);
-							
-							IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
-									IssueQueryConfigModule.class,
-							        new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
-							        NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							        new NullProgressMonitor()
-							 );
-							
-							cfMod.addStoredIssueQuery(storedIssueQuery);
-							
-							ConfigModuleDAO.sharedInstance().storeConfigModule(cfMod, 
-									false, 
-									new String[]{StoredIssueQuery.FETCH_GROUP_STOREDISSUEQUERY}, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-									new NullProgressMonitor());
+							queryCollection.add(query);
 						}
+						
+						StoredIssueQuery storedIssueQuery = new StoredIssueQuery(Login.sharedInstance().getOrganisationID(), 
+								IDGenerator.nextID(StoredIssueQuery.class));
+						storedIssueQuery.setName(dialog.getNameText());
+						
+						storedIssueQuery.setIssueQueries(queryCollection);
+						
+						IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
+								IssueQueryConfigModule.class,
+						        new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
+						        NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						        new NullProgressMonitor()
+						 );
+						
+						cfMod.addStoredIssueQuery(storedIssueQuery);
+						
+						ConfigModuleDAO.sharedInstance().storeConfigModule(cfMod, 
+								false, 
+								new String[]{StoredIssueQuery.FETCH_GROUP_STOREDISSUEQUERY}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								new NullProgressMonitor());
 					}
 					catch (Exception e) {
 						throw new RuntimeException(e);

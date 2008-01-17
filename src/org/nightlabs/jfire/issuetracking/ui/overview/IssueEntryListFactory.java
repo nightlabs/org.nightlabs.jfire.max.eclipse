@@ -14,7 +14,7 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
 public class IssueEntryListFactory 
 extends AbstractEntryFactory 
 {
-
+	public static final String ID = IssueEntryListFactory.class.getName();
 	public IssueEntryListFactory() {
 	}
 

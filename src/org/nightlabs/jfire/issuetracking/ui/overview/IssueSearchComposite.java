@@ -37,6 +37,7 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.config.StoredIssueQuery;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssuePriorityID;
 import org.nightlabs.jfire.issue.id.IssueSeverityTypeID;
@@ -45,9 +46,11 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -361,5 +364,22 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		
 		return issueQuery;
 	}
-
+	
+	public void setStoredIssueQuery(StoredIssueQuery storedIssueQuery) {
+		for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
+			if (jdoQuery instanceof IssueQuery) {
+				IssueQuery issueQuery = (IssueQuery)jdoQuery;
+				
+				if (issueQuery.getAssigneeID() != null) {
+				selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
+						new String[]{User.FETCH_GROUP_THIS_USER}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+				}
+				
+				createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
+				updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
+			}
+		}
+	}
 }

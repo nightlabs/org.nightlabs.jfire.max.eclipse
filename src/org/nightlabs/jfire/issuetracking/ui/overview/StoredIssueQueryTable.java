@@ -1,11 +1,15 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+import java.awt.Stroke;
 import java.util.Collection;
 import java.util.Iterator;
 
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -15,13 +19,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
+import org.nightlabs.jfire.base.ui.overview.Entry;
+import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
 import org.nightlabs.jfire.issue.config.IssueQueryConfigModule;
 import org.nightlabs.jfire.issue.config.StoredIssueQuery;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
@@ -68,7 +78,7 @@ extends AbstractTableComposite<StoredIssueQuery>
 	private void loadStoredIssueQueries(){
 		IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
 				IssueQueryConfigModule.class,
-				new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
+				new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST, StoredIssueQuery.FETCH_GROUP_STOREDISSUEQUERY},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor());
 
@@ -82,7 +92,7 @@ extends AbstractTableComposite<StoredIssueQuery>
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) {
+	protected void createTableColumns(final TableViewer tableViewer, Table table) {
 		TableLayout layout = new TableLayout();
 
 		TableColumn tc = new TableColumn(table, SWT.NONE);
@@ -91,6 +101,37 @@ extends AbstractTableComposite<StoredIssueQuery>
 
 		table.setLayout(layout);
 		table.setHeaderVisible(false);
+		
+		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(final DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
+
+				try {
+					Entry entry = IssueOverviewRegistry.sharedInstance().getEntryFactory(IssueEntryListFactory.ID).createEntry();
+					final IssueEntryListEditor part = (IssueEntryListEditor)RCPUtil.openEditor(
+							new OverviewEntryEditorInput(entry), 
+							IssueEntryListEditor.EDITOR_ID,
+							true
+						);
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							IssueEntryListViewer viewer = (IssueEntryListViewer)part.getEntryViewer();
+							
+							StructuredSelection ss = (StructuredSelection)e.getSelection();
+							
+							IssueFilterComposite searchComposite = (IssueFilterComposite)viewer.getSearchComposite();
+							searchComposite.setStoredIssueQuery((StoredIssueQuery)ss.getFirstElement());
+						}
+					});
+					
+				} catch (PartInitException e1) {
+					throw new RuntimeException(e1);
+				}
+			}
+		});
 	}
 
 	@Override
