@@ -48,7 +48,8 @@ extends WizardHopPage
 	public static enum Mode {
 		INHERIT,
 		CREATE,
-		SELECT
+		SELECT,
+		NONE
 	}
 
 	private Mode mode;
@@ -56,6 +57,7 @@ extends WizardHopPage
 	private Button inheritPriceConfig;
 	private Button createPriceConfig;
 	private Button selectPriceConfig;
+	private Button assignNoneConfig;
 	private ListComposite<VoucherPriceConfig> priceConfigList;
 
 	private CreateVoucherPriceConfigPage createVoucherPriceConfigPage = null;
@@ -89,14 +91,25 @@ extends WizardHopPage
 
 	private void updateUI()
 	{
+
+
+
 		if (inheritPriceConfig.getSelection())
 			mode = Mode.INHERIT;
 		else if (createPriceConfig.getSelection())
 			mode = Mode.CREATE;
 		else if (selectPriceConfig.getSelection())
 			mode = Mode.SELECT;
+		else if (assignNoneConfig.getSelection())	
+			mode = Mode.NONE;
 		else
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
+
+
+		if (mode == Mode.NONE)
+			priceConfigList.setEnabled(false);
+		else
+			priceConfigList.setEnabled(true);	
 
 		if (mode == Mode.CREATE)
 			addCreateVoucherPriceConfigPage();
@@ -151,7 +164,22 @@ extends WizardHopPage
 			{
 				updateUI();
 			}
-		});
+		}
+
+		);
+
+		assignNoneConfig = new Button(page, SWT.RADIO);
+		assignNoneConfig.setText("Assign None"); //$NON-NLS-1$
+		assignNoneConfig.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		assignNoneConfig.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				updateUI();
+			}
+		}
+
+		);
 
 		priceConfigList = new ListComposite<VoucherPriceConfig>(page, 
 				AbstractListComposite.getDefaultWidgetStyle(page),(String) null, 
@@ -172,6 +200,7 @@ extends WizardHopPage
 			{
 				inheritPriceConfig.setSelection(false);
 				createPriceConfig.setSelection(false);
+				assignNoneConfig.setSelection(false);
 				selectPriceConfig.setSelection(true); // because of a bug in swt, we must clear the selection above - it doesn't clear itself here
 				selectedPriceConfig = priceConfigList.getSelectedElement();
 				updateUI();
@@ -252,14 +281,16 @@ extends WizardHopPage
 	public boolean isPageComplete()
 	{
 		switch (mode) {
-			case INHERIT:
-				return true;
-			case CREATE:
-				return true;
-			case SELECT:
-				return getSelectedPriceConfig() != null;
-			default:
-				throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
+		case INHERIT:
+			return true;
+		case CREATE:
+			return true;
+		case SELECT:
+			return getSelectedPriceConfig() != null;
+		case NONE:
+			return true;
+		default:
+			throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
 		}
 	}
 }

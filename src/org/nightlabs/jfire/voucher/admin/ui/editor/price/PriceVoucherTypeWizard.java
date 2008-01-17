@@ -69,19 +69,22 @@ extends DynamicPathWizard
 				packagePriceConfig = selectVoucherPriceConfigPage.getInheritedPriceConfig();
 				inherit = true;
 				break;
-			case CREATE:
-				
+			case CREATE:	
 				packagePriceConfig = selectVoucherPriceConfigPage.createPriceConfig();
-			
 				break;
-			case SELECT:
-				
+			case SELECT:				
 				packagePriceConfig = selectVoucherPriceConfigPage.getSelectedPriceConfig();
+				break;				
+			case NONE:				
 				break;
 			default:
 				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 			
 		}
+		
+		
+		
+		
 		if (packagePriceConfig != null) {
 			packagePriceConfig = VoucherPriceConfigDAO.sharedInstance().getVoucherPriceConfig((PriceConfigID)JDOHelper.getObjectId(packagePriceConfig) , 
 					new String[] { FetchPlan.DEFAULT, FetchGroupsPriceConfig.FETCH_GROUP_EDIT, PriceConfig.FETCH_GROUP_NAME}, 
