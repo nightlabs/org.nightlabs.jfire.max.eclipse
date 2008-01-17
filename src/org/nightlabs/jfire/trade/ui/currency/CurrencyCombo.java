@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.trade.ui.accounting;
+package org.nightlabs.jfire.trade.ui.currency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;

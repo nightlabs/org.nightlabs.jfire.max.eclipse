@@ -87,6 +87,7 @@ import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;

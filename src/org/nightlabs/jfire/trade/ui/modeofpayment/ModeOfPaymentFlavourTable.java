@@ -1,14 +1,13 @@
-package org.nightlabs.jfire.trade.ui.transfer.wizard;
+package org.nightlabs.jfire.trade.ui.modeofpayment;
 
 import java.io.ByteArrayInputStream;
-import java.util.Collection;
 import java.util.Locale;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -17,29 +16,23 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.internal.forms.widgets.SWTUtil;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 
 public class ModeOfPaymentFlavourTable
-		extends AbstractTableComposite
+		extends AbstractTableComposite<ModeOfPaymentFlavour>
 {
-	private static class ContentProvider implements IStructuredContentProvider {
-
-		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof Collection) {
-				return ((Collection)inputElement).toArray();
-			}
-			else
-				throw new IllegalArgumentException("ModeOfPaymentFlavourTable.ContentProvider expects a Collection as inputElement. Recieved "+inputElement.getClass().getName()); //$NON-NLS-1$
-		}
-
-		public void dispose() {
-		}
-
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		}
-	}
 	
-	private static class LabelProvider extends org.eclipse.jface.viewers.LabelProvider implements ITableLabelProvider {
+	/**
+	 * The minimal fetch-groups needed for a {@link ModeOfPaymentFlavour}
+	 * to be displayed in this table.
+	 */
+	public static final String[] FETCH_GROUPS_MODE_OF_PAYMENT_FLAVOUR = new String[] {
+		FetchPlan.DEFAULT, ModeOfPaymentFlavour.FETCH_GROUP_ICON_16X16_DATA,
+		ModeOfPaymentFlavour.FETCH_GROUP_NAME
+	};
+	
+	private class LabelProvider extends org.eclipse.jface.viewers.LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			byte[] iconData = ((ModeOfPaymentFlavour)element).getIcon16x16Data();
@@ -56,10 +49,14 @@ public class ModeOfPaymentFlavourTable
 		}
 	}
 
+	public ModeOfPaymentFlavourTable(Composite parent, int style, int viewerStyle) {
+		super(parent, style, true, viewerStyle);
+		table.setHeaderVisible(false); // if this is set to true, then table-columns need to be externalised
+	}
+	
 	public ModeOfPaymentFlavourTable(Composite parent)
 	{
-		super(parent, SWT.NONE, true, DEFAULT_STYLE_SINGLE_BORDER);
-		table.setHeaderVisible(false); // if this is set to true, then table-columns need to be externalised
+		this(parent, SWT.NONE, DEFAULT_STYLE_SINGLE_BORDER);
 	}
 
 	@Override
@@ -73,7 +70,7 @@ public class ModeOfPaymentFlavourTable
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setContentProvider(new ContentProvider());
+		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 

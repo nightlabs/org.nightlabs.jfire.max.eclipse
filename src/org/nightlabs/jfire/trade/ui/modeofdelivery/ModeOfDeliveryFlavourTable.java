@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.ui.transfer.wizard;
+package org.nightlabs.jfire.trade.ui.modeofdelivery;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;

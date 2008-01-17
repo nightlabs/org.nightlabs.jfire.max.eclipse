@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.trade.ui.accounting;
+package org.nightlabs.jfire.trade.ui.currency;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;

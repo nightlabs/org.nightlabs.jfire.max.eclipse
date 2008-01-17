@@ -84,6 +84,7 @@ import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.modeofdelivery.ModeOfDeliveryFlavourTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory;

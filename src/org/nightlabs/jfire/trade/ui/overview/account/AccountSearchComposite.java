@@ -33,7 +33,7 @@ import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.search.SpinnerSearchEntry;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
-import org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo;
+import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
