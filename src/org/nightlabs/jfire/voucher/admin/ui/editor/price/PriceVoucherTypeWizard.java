@@ -84,8 +84,7 @@ extends DynamicPathWizard
 		
 		
 		
-		
-		if (packagePriceConfig != null) {
+		if (packagePriceConfig != null && JDOHelper.isDetached(packagePriceConfig)) {
 			packagePriceConfig = VoucherPriceConfigDAO.sharedInstance().getVoucherPriceConfig((PriceConfigID)JDOHelper.getObjectId(packagePriceConfig) , 
 					new String[] { FetchPlan.DEFAULT, FetchGroupsPriceConfig.FETCH_GROUP_EDIT, PriceConfig.FETCH_GROUP_NAME}, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());

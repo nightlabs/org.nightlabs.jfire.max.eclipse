@@ -256,9 +256,11 @@ extends ToolBarSectionPart
 		updatePricesTable();
 
 		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
-
+		
+		
+			
+		
 	}
-
 
 
 
@@ -280,6 +282,7 @@ extends ToolBarSectionPart
 
 		currencyAmountTableWrapper.setMap(map);
 
+		getSection().setText(getVoucherPriceConfig().getName().getText());
 
 	}
 
@@ -292,6 +295,8 @@ extends ToolBarSectionPart
 	}
 
 
+	
+	
 
 	protected void removeCurrencyPressed() 
 	{
