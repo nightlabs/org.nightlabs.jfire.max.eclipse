@@ -6,6 +6,7 @@ package org.nightlabs.jfire.reporting.ui.parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.Map.Entry;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -124,11 +125,11 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 		wizardHop.removeAllHopPages();
 		if (valueAcquisitionSetup == null)
 			return;
-		SortedMap<Integer, SortedMap<Integer, ValueProviderConfig>> sortedConfigs = valueAcquisitionSetup.getSortedValueProviderConfigs();
+		SortedMap<Integer, SortedMap<Integer, SortedSet<ValueProviderConfig>>> sortedConfigs = valueAcquisitionSetup.getSortedValueProviderConfigs();
 		
 		
 		int i = 0;
-		for (SortedMap<Integer, ValueProviderConfig> providerPageConfigs : sortedConfigs.values()) {
+		for (SortedMap<Integer, SortedSet<ValueProviderConfig>> providerPageConfigs : sortedConfigs.values()) {
 			ReportParameterValueProviderWizardPage page = new ReportParameterValueProviderWizardPage(
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.pagePrefix")+(++i),  //$NON-NLS-1$
 					valueAcquisitionSetup, 

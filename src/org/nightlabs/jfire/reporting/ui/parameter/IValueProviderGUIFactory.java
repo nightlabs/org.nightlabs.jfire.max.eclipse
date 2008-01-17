@@ -15,6 +15,6 @@ public interface IValueProviderGUIFactory extends IExecutableExtension {
 
 	public ValueProviderID getValueProviderID();
 	
-	IValueProviderGUI createValueProviderGUI(ValueProviderConfig valueProviderConfig);
+	IValueProviderGUI<?> createValueProviderGUI(ValueProviderConfig valueProviderConfig);
 	
 }

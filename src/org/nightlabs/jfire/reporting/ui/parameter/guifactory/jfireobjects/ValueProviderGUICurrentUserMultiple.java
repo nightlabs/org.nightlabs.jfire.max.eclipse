@@ -3,6 +3,9 @@
  */
 package org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.CoreException;
@@ -27,32 +30,30 @@ import org.nightlabs.jfire.security.id.UserID;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ValueProviderGUICurrentUser extends AbstractValueProviderGUI<UserID> {
+public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGUIUsers {
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<UserID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
-			return new ValueProviderGUICurrentUser(valueProviderConfig);
+		public IValueProviderGUI<Collection<UserID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+			return new ValueProviderGUICurrentUserMultiple(valueProviderConfig);
 		}
 
 		public ValueProviderID getValueProviderID() {
-			return ReportingConstants.VALUE_PROVIDER_ID_CURRENT_USER;
+			return ReportingConstants.VALUE_PROVIDER_ID_CURRENT_USER_MULTIPLE;
 		}
 
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		}
-		
 	}
 	
-	private UserID currentUserID;
-	private UserSearchComposite searchComposite;
+	private Collection<UserID> currentUserID;
 
 	/**
 	 * 
 	 */
-	public ValueProviderGUICurrentUser(ValueProviderConfig valueProviderConfig) {
+	public ValueProviderGUICurrentUserMultiple(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
-		currentUserID = SecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID();
+		currentUserID = Collections.singleton(SecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID());
 	}
 
 	/* (non-Javadoc)
@@ -62,18 +63,24 @@ public class ValueProviderGUICurrentUser extends AbstractValueProviderGUI<UserID
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(comp, SWT.WRAP);
 		label.setText(
-				String.format("The current user '%s' is preselected, but you can select another one.", 
-				currentUserID.userID));
-		searchComposite = new UserSearchComposite(comp, SWT.NONE, UserSearchComposite.FLAG_TYPE_USER | UserSearchComposite.FLAG_SEARCH_BUTTON);
-		return searchComposite;
+				String.format("The current user '%s' is preselected, but you can select others.", 
+				currentUserID.iterator().next().userID));
+		super.createGUI(comp);
+		return comp;
+	}
+	
+	@Override
+	protected int getTypeFlags() {
+		return UserSearchComposite.FLAG_TYPE_USER;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
-	public UserID getOutputValue() {
-		if (searchComposite.getSelectedUser() != null)
-			return (UserID) JDOHelper.getObjectId(searchComposite.getSelectedUser());
+	public Collection<UserID> getOutputValue() {
+		Collection<UserID> superValue = super.getOutputValue();
+		if (superValue != null)
+			return superValue;
 		return currentUserID;
 	}
 

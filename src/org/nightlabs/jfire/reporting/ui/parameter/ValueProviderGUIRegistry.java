@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
-import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 
 /**
@@ -50,7 +49,8 @@ public class ValueProviderGUIRegistry extends AbstractEPProcessor {
 			try {
 				factory = (IValueProviderGUIFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			} catch (CoreException e) {
-				throw new EPProcessorException(e);
+				logger.error("Failed loading ValueProviderGUIFactory: " + element.getAttribute("class") + ", but will continue", e);
+				return;
 			}
 			if (factories.get(factory.getValueProviderID()) != null)
 				logger.warn("Found duplicate registration for valueProviderID "+factory.getValueProviderID()+". Duplicate was from: "+element.getNamespaceIdentifier()); //$NON-NLS-1$ //$NON-NLS-2$

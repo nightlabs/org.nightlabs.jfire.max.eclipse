@@ -6,6 +6,8 @@ package org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -72,9 +74,21 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 			fromEdit = new DateTimeEdit(
 					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX, 
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.fromDateTimeEdit.caption")); //$NON-NLS-1$
+			fromEdit.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent e) {
+					notifyOutputChanged();
+				}
+			});
 			toEdit = new DateTimeEdit(
 					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX, 
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.toDateTimeEdit.caption")); //$NON-NLS-1$
+			toEdit.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent e) {
+					notifyOutputChanged();
+				}
+			});
 		}
 		return wrapper;
 	}
@@ -92,14 +106,17 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 			period.setTo(toEdit.getDate());
 		else 
 			period.setTo(null);
-		return period;
+		if (period.isConfining())
+			return period;
+		else 
+			return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
-		return true;
+		return getOutputValue() != null || getValueProviderConfig().isAllowNullOutputValue();
 	}
 
 	/* (non-Javadoc)

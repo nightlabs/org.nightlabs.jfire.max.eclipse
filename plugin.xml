@@ -117,6 +117,8 @@
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUserGroups$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIOrganisation$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIOrganisations$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIWorkstation$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIWorkstations$Factory"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.removeExtension">
