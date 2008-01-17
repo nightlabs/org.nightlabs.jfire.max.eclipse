@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         name="Trade Value Providers"
+         point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.legalentity.ValueProviderGUILegalEntitySearch$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.order.ValueProviderGUIOrderByCustomer$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer.ValueProviderGUIOfferByCustomer$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.invoice.ValueProviderGUIInvoiceByCustomer$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.deliverynote.ValueProviderGUIDeliveryNoteByCustomer$Factory"/>
+   </extension>
+   <extension
+         name="Accounting Value Providers"
+         point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavour$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavours$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavoursByModeOfPayment$Factory"/>
+   </extension>
+
+</plugin>

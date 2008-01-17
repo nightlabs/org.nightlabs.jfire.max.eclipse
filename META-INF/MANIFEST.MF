@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Reporting Trade Ui Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.reporting.trade.ui;singleton:=true
+Bundle-Version: 0.9.3
+Bundle-ClassPath: org.nightlabs.jfire.reporting.trade.ui.jar
+Bundle-Activator: org.nightlabs.jfire.reporting.trade.ui.JFireReportingTradePlugin
+Bundle-Vendor: NightLabs.org
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.trade.ui
+Eclipse-LazyStart: true
+Export-Package: org.nightlabs.jfire.reporting.trade.ui,
+ org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment,
+ org.nightlabs.jfire.reporting.trade.ui.articlecontainer.deliverynote,
+ org.nightlabs.jfire.reporting.trade.ui.articlecontainer.invoice,
+ org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer,
+ org.nightlabs.jfire.reporting.trade.ui.articlecontainer.order,
+ org.nightlabs.jfire.reporting.trade.ui.legalentity
