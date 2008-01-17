@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -56,6 +57,8 @@ extends ToolBarSectionPart
 	private Composite stackWrapper;
 	private StackLayout stackLayout;
 	private Composite assignNewPriceConfigWrapper = null;
+	private Map<Currency, Long> orgPriceMap;
+
 
 
 	/**
@@ -124,8 +127,13 @@ extends ToolBarSectionPart
 		currencyAmountTableWrapper.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
 			public void priceValueChanged()
 			{
-				//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
-				markDirty();
+				// if value has changed 
+				if(!orgPriceMap.equals(currencyAmountTableWrapper.getMap()))
+				{ 	   
+					markDirty();
+
+				}
+
 			}
 		});
 
@@ -159,6 +167,7 @@ extends ToolBarSectionPart
 		{
 
 			Map<Currency, Long> map = currencyAmountTableWrapper.getMap();
+
 
 
 			VoucherPriceConfig actualVoucherConfig = getVoucherPriceConfig();
@@ -242,6 +251,8 @@ extends ToolBarSectionPart
 
 		originalVoucherConfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
 
+		orgPriceMap = originalVoucherConfig.getPrices();
+
 		updatePricesTable();
 
 		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
@@ -254,8 +265,7 @@ extends ToolBarSectionPart
 
 	protected void updatePricesTable()
 	{
-		// check fro null
-		// if null show the new assign config page 
+
 
 		if(getVoucherPriceConfig()== null)	
 		{
@@ -341,11 +351,6 @@ extends ToolBarSectionPart
 
 		}		
 	}
-
-
-
-
-
 
 
 	class AddCurrencyConfigAction

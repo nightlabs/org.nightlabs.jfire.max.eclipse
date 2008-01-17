@@ -336,6 +336,7 @@ implements ISelectionProvider
 		for (Object l : listeners) {
 			IPriceConfigValueChangedListener listener = (IPriceConfigValueChangedListener) l;
 			listener.priceValueChanged();
+			
 		}
 		
 	

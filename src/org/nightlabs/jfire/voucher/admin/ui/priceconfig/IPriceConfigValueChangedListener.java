@@ -11,5 +11,3 @@ public interface IPriceConfigValueChangedListener extends java.util.EventListene
 	  public void priceValueChanged();
 
 	}
-
-
