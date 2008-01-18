@@ -31,8 +31,8 @@ implements IssueLinkHandlerFactory
 				return null;
 			}
 
-			public void openLinkObject() {
-
+			public void openLinkObject(ObjectID objectID) {
+				
 			}
 		};
 	}

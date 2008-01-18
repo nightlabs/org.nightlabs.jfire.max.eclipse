@@ -85,8 +85,15 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
 		
-		reporterTextLabel.setText(issue.getReporter().getName());
-		assigneeTextLabel.setText(issue.getAssignee().getName());
+		if (issue.getReporter() != null)
+			reporterTextLabel.setText(issue.getReporter().getName());
+		else
+			reporterTextLabel.setText("");
+		
+		if (issue.getAssignee() != null)
+			assigneeTextLabel.setText(issue.getAssignee().getName());
+		else
+			assigneeTextLabel.setText("");
 
 		createdTimeTextLabel.setText(issue.getCreateTimestamp().toString());
 		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? "-" : issue.getUpdateTimestamp().toString());
@@ -111,8 +118,8 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 			if (returnCode == Dialog.OK) {
 				assigneeUser = userSearchDialog.getSelectedUser();
 				if (assigneeUser != null) {
-					assigneeTextLabel.setText(issue.getAssignee().getName() + " ---> " + assigneeUser.getName());
 					issue.setAssignee(assigneeUser);
+					assigneeTextLabel.setText(issue.getAssignee().getName());
 					markDirty();
 				}
 			}//if

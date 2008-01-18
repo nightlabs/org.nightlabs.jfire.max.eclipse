@@ -55,7 +55,9 @@ extends AbstractIssueEditorGeneralSection
 			firstLoaded = false;
 		}
 		else {
-			addComment(issue.getComments().get(issue.getComments().size() - 1), true);
+			if (issue.getComments().size() > 0) {
+				addComment(issue.getComments().get(issue.getComments().size() - 1), true);
+			}
 		}
 		getManagedForm().getForm().reflow(true);
 	}

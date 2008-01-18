@@ -55,7 +55,6 @@ import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -278,68 +277,78 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		loadProperties();
 	}
 
-	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, IssueResolution.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
+	private boolean loadJobRunning = false;
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
+				loadJobRunning = true;
 				try {
-					issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
-					issuePriorityList = new ArrayList<IssuePriority>();
-					issueSeverityTypeList = new ArrayList<IssueSeverityType>();
+					try {
+						issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+						issuePriorityList = new ArrayList<IssuePriority>();
+						issueSeverityTypeList = new ArrayList<IssueSeverityType>();
 
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							issueTypeCombo.removeAll();
-							issueTypeCombo.addElement(ISSUE_TYPE_ALL);
-							for (Iterator it = issueTypeList.iterator(); it.hasNext(); ) {
-								IssueType issueType = (IssueType) it.next();
-								issueTypeCombo.addElement(issueType);
-								for(IssuePriority p : issueType.getIssuePriorities())
-									issuePriorityList.add(p);
-								for(IssueSeverityType s : issueType.getIssueSeverityTypes())
-									issueSeverityTypeList.add(s);
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								issueTypeCombo.removeAll();
+								issueTypeCombo.addElement(ISSUE_TYPE_ALL);
+								for (Iterator it = issueTypeList.iterator(); it.hasNext(); ) {
+									IssueType issueType = (IssueType) it.next();
+									issueTypeCombo.addElement(issueType);
+									for(IssuePriority p : issueType.getIssuePriorities())
+										issuePriorityList.add(p);
+									for(IssueSeverityType s : issueType.getIssueSeverityTypes())
+										issueSeverityTypeList.add(s);
+								}
+								issueTypeCombo.selectElementByIndex(0);
+								selectedIssueType = issueTypeCombo.getSelectedElement();
+
+								/**************************************************/
+								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
+								ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
+								/**************************************************/
+
+								issueSeverityCombo.removeAll();
+								issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
+								for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+									issueSeverityCombo.addElement(is);
+								}
+								issueSeverityCombo.selectElementByIndex(0);
+								selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+
+								issuePriorityCombo.removeAll();
+								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
+								for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+									issuePriorityCombo.addElement(ip);
+								}
+								issuePriorityCombo.selectElementByIndex(0);
+								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+
+								issueResolutionCombo.removeAll();
+								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
+								for (IssueResolution ip : selectedIssueType.getIssueResolutions()) {
+									issueResolutionCombo.addElement(ip);
+								}
+								issueResolutionCombo.selectElementByIndex(0);
+								selectedIssueResolution = issueResolutionCombo.getSelectedElement();
 							}
-							issueTypeCombo.selectElementByIndex(0);
-							selectedIssueType = issueTypeCombo.getSelectedElement();
+						});
+					}catch (Exception e1) {
+						ExceptionHandlerRegistry.asyncHandleException(e1);
+						throw new RuntimeException(e1);
+					}
 
-							/**************************************************/
-							ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
-							ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
-							/**************************************************/
-
-							issueSeverityCombo.removeAll();
-							issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
-							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-								issueSeverityCombo.addElement(is);
-							}
-							issueSeverityCombo.selectElementByIndex(0);
-							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-
-							issuePriorityCombo.removeAll();
-							issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
-							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-								issuePriorityCombo.addElement(ip);
-							}
-							issuePriorityCombo.selectElementByIndex(0);
-							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
-
-							issueResolutionCombo.removeAll();
-							issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
-							for (IssueResolution ip : selectedIssueType.getIssueResolutions()) {
-								issueResolutionCombo.addElement(ip);
-							}
-							issueResolutionCombo.selectElementByIndex(0);
-							selectedIssueResolution = issueResolutionCombo.getSelectedElement();
-						}
-					});
-				}catch (Exception e1) {
-					ExceptionHandlerRegistry.asyncHandleException(e1);
-					throw new RuntimeException(e1);
+					if (storedIssueQueryRunnable != null) {
+						storedIssueQueryRunnable.run(monitor);
+						storedIssueQueryRunnable = null;
+					}
+					return Status.OK_STATUS;
+				} finally {
+					loadJobRunning = false;
 				}
-
-				return Status.OK_STATUS;
 			} 
 		};
 		loadJob.setPriority(Job.SHORT);
@@ -390,66 +399,97 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
 		}
 
-//		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
-//		issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
-//		}
-
 		return issueQuery;
 	}
 
-	public void setStoredIssueQuery(StoredIssueQuery storedIssueQuery) {
-		for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
-			if (jdoQuery instanceof IssueQuery) {
-				IssueQuery issueQuery = (IssueQuery)jdoQuery;
+	private SetStoredIssueQueryRunnable storedIssueQueryRunnable = null;
+	
+	private class SetStoredIssueQueryRunnable {
+		private StoredIssueQuery storedIssueQuery;
+		
+		public SetStoredIssueQueryRunnable(StoredIssueQuery storedIssueQuery) {
+			this.storedIssueQuery = storedIssueQuery;
+		}
+				
+		public void run(ProgressMonitor monitor) {
+			for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
+				if (jdoQuery instanceof IssueQuery) {
+					final IssueQuery issueQuery = (IssueQuery)jdoQuery;
 
-				if (issueQuery.getAssigneeID() != null) {
-					selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
-							new String[]{User.FETCH_GROUP_THIS_USER}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
+					if (issueQuery.getAssigneeID() != null) {
+						selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
+								new String[]{User.FETCH_GROUP_THIS_USER}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					if (issueQuery.getReporterID() != null) {
+						selectedReporter = UserDAO.sharedInstance().getUser(issueQuery.getReporterID(), 
+								new String[]{User.FETCH_GROUP_THIS_USER}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					if (issueQuery.getIssueTypeID() != null) {
+						selectedIssueType = IssueTypeDAO.sharedInstance().getIssueType(issueQuery.getIssueTypeID(), 
+								new String[]{IssueType.FETCH_GROUP_THIS}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					if (issueQuery.getIssuePriorityID() != null) {
+						selectedIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(issueQuery.getIssuePriorityID(), 
+								new String[]{IssuePriority.FETCH_GROUP_THIS}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					if (issueQuery.getIssueSeverityTypeID() != null) {
+						selectedIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(issueQuery.getIssueSeverityTypeID(), 
+								new String[]{IssueSeverityType.FETCH_GROUP_THIS}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					if (issueQuery.getIssueResolutionID() != null) {
+						selectedIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(issueQuery.getIssueResolutionID(), 
+								new String[]{IssueResolution.FETCH_GROUP_THIS}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								monitor);
+					}
+
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							reporterText.setText(selectedReporter.getName());
+							issueTypeCombo.setSelection(selectedIssueType == null ? ISSUE_TYPE_ALL : selectedIssueType);
+							issuePriorityCombo.setSelection(selectedIssuePriority == null ? ISSUE_PRIORITY_ALL : selectedIssuePriority);
+							issueSeverityCombo.setSelection(selectedIssueSeverityType == null ? ISSUE_SEVERITY_TYPE_ALL : selectedIssueSeverityType);
+							issueResolutionCombo.setSelection(selectedIssueResolution == null ? ISSUE_RESOLUTION_ALL : selectedIssueResolution);
+							
+							assigneeText.setText(selectedAssignee.getName() == null ? "" : selectedAssignee.getName());
+							createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
+							updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
+						}
+					});
 				}
-
-				if (issueQuery.getReporterID() != null) {
-					selectedReporter = UserDAO.sharedInstance().getUser(issueQuery.getReporterID(), 
-							new String[]{User.FETCH_GROUP_THIS_USER}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-				}
-
-				if (issueQuery.getIssueTypeID() != null) {
-					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueQuery.getIssueTypeID(), 
-							new String[]{IssueType.FETCH_GROUP_THIS}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-					issueTypeCombo.setSelection(issueType);
-				}
-
-				if (issueQuery.getIssuePriorityID() != null) {
-					IssuePriority issuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(issueQuery.getIssuePriorityID(), 
-							new String[]{IssuePriority.FETCH_GROUP_THIS}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-					issuePriorityCombo.setSelection(issuePriority);
-				}
-
-				if (issueQuery.getIssueSeverityTypeID() != null) {
-					IssueSeverityType issueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(issueQuery.getIssueSeverityTypeID(), 
-							new String[]{IssueSeverityType.FETCH_GROUP_THIS}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-					issueSeverityCombo.setSelection(issueSeverityType);
-				}
-
-				if (issueQuery.getIssueResolutionID() != null) {
-					IssueResolution issueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(issueQuery.getIssueResolutionID(), 
-							new String[]{IssueResolution.FETCH_GROUP_THIS}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-				}
-
-				createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
-				updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
 			}
+		}
+		
+	}
+	
+	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {
+		if (loadJobRunning) {
+			storedIssueQueryRunnable = new SetStoredIssueQueryRunnable(storedIssueQuery);
+		} else {
+			Job setQueryJob = new Job("Setting Issue Query") {
+				@Override
+				protected IStatus run(ProgressMonitor monitor) throws Exception {
+					new SetStoredIssueQueryRunnable(storedIssueQuery).run(monitor);
+					return Status.OK_STATUS;
+				}
+			};
+			setQueryJob.setPriority(Job.SHORT);
+			setQueryJob.schedule();
 		}
 	}
 }

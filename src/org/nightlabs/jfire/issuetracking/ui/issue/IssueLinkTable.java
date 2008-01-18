@@ -93,11 +93,11 @@ extends AbstractTableComposite<ObjectID>{
 		tableViewer.setContentProvider(new TableContentProvider());
 	}
 	
-	protected IssueLinkHandler getIssueLinkHandler(String DStr) {
-		return getIssueLinkHandler(ObjectIDUtil.createObjectID(DStr));
+	public IssueLinkHandler getIssueLinkHandler(String idStr) {
+		return getIssueLinkHandler(ObjectIDUtil.createObjectID(idStr));
 	}
 	
-	protected IssueLinkHandler getIssueLinkHandler(ObjectID objectID) {
+	public IssueLinkHandler getIssueLinkHandler(ObjectID objectID) {
 		Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
 		return getIssueLinkHandler(pcClass);
 	}

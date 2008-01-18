@@ -16,6 +16,6 @@ public interface IssueLinkHandler {
 	
 	String getLinkObjectDescription(ObjectID objectID);
 	
-	void openLinkObject();
+	void openLinkObject(ObjectID objectID);
 	
 }

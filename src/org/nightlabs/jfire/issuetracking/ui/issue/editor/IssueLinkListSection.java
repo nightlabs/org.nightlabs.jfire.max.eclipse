@@ -2,6 +2,8 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import java.util.Set;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,6 +15,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 
 /* 
@@ -43,6 +46,15 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 					controller.getIssue().addReferencedObjectID(objectID);	
 				}
 				markDirty();
+			}
+		});
+
+		issueLinkAdderComposite.getIssueLinkTable().getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent e) {
+				IssueLinkHandler linkHandler = 
+					issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement());
+				linkHandler.openLinkObject(issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement());
 			}
 		});
 		

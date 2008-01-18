@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
-import java.awt.Stroke;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,8 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -124,6 +121,8 @@ extends AbstractTableComposite<StoredIssueQuery>
 							
 							IssueFilterComposite searchComposite = (IssueFilterComposite)viewer.getSearchComposite();
 							searchComposite.setStoredIssueQuery((StoredIssueQuery)ss.getFirstElement());
+
+							viewer.search();
 						}
 					});
 					
