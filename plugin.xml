@@ -125,4 +125,16 @@
             name="Subject">
       </quickSearchEntryFactory>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
+      <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+            name="Issue">
+      </issueLinkHandlerCategory>
+      <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
+            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueIssueLinkHandlerAdderFactory"
+            name="Issue">
+      </issueLinkHandlerFactory>
+   </extension>
 </plugin>

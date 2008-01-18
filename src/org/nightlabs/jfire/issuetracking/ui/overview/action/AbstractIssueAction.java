@@ -84,6 +84,10 @@ public abstract class AbstractIssueAction extends WorkbenchPartSelectionAction {
 		return selectedIssueIDs;
 	}
 	
+	public void setSelectedIssueIDs(Collection<IssueID> issueIDs) {
+		this.selectedIssueIDs = issueIDs;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.action.IUpdateActionOrContributionItem#calculateEnabled()
 	 */
