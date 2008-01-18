@@ -126,14 +126,6 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	protected void createComposite(Composite parent) {
 		parent.setLayout(new GridLayout(3, false));
 
-//		new Label(userGroup, SWT.NONE).setText("ID");
-//		issueIDText = new Text(userGroup, SWT.NONE);
-//		issueIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-//		new Label(userGroup, SWT.NONE).setText("Subject");
-//		subjectText = new Text(userGroup, SWT.NONE);
-//		subjectText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		Group issueTypeGroup = new Group(parent, SWT.NONE);
 		issueTypeGroup.setText("Issue Related");
 		issueTypeGroup.setLayout(new GridLayout(1, false));
@@ -197,12 +189,17 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		//-----------------------------------------------------------
 		Group userGroup = new Group(parent, SWT.NONE);
 		userGroup.setText("People Related");
-		GridLayout gridLayout = new GridLayout(3, false);
+		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(userGroup, SWT.NONE).setText("Reporter: ");
+		Label rLabel = new Label(userGroup, SWT.NONE);
+		rLabel.setText("Reporter: ");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		rLabel.setLayoutData(gridData);
+		
 		reporterText = new Text(userGroup, SWT.NONE);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/////////////////////////////////
@@ -223,7 +220,11 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		});
 		/////////////////////////////////
 
-		new Label(userGroup, SWT.NONE).setText("Assignee: ");
+		Label aLabel = new Label(userGroup, SWT.NONE);
+		aLabel.setText("Assignee: ");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		aLabel.setLayoutData(gridData);
 		assigneeText = new Text(userGroup, SWT.NONE);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 

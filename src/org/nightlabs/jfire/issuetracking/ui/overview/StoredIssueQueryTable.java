@@ -116,6 +116,7 @@ extends AbstractTableComposite<StoredIssueQuery>
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							IssueEntryListViewer viewer = (IssueEntryListViewer)part.getEntryViewer();
+							viewer.expand();
 							
 							StructuredSelection ss = (StructuredSelection)e.getSelection();
 							

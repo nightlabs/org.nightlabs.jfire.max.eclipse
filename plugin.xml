@@ -124,6 +124,11 @@
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer"
             name="Subject">
       </quickSearchEntryFactory>
+      <quickSearchEntryFactory
+            class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueCommentQuickSearchEntryFactory"
+            id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer"
+            name="Comment">
+      </quickSearchEntryFactory>
    </extension>
    <extension
          point="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerFactory">
