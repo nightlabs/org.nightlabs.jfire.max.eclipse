@@ -10,6 +10,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
+import org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction;
 
 /**
  * @author chairatk
@@ -33,8 +34,10 @@ implements IssueLinkHandler
 				"LinkObject").createImage();
 	}
 
-	public void openLinkObject() {
-		
+	public void openLinkObject(ObjectID objectID) {
+		EditInvoiceAction editAction = new EditInvoiceAction();
+		editAction.setArticleContainerID(objectID);
+		editAction.run();
 	}
 
 }

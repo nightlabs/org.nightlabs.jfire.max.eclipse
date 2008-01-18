@@ -33,8 +33,9 @@ implements IssueLinkHandler
 				"LinkObject").createImage();
 	}
 
-	public void openLinkObject() {
-		
+	public void openLinkObject(ObjectID objectID) {
+//		EditRepositoryAction editAction = new EditRepositoryAction();
+//		editAction.setArticleContainerID(objectID);
+//		editAction.run();	
 	}
-
 }

@@ -10,6 +10,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction;
 
 /**
  * @author chairatk
@@ -33,9 +34,9 @@ implements IssueLinkHandler
 				"LinkObject").createImage();
 	}
 
-	public void openLinkObject() {
-		
+	public void openLinkObject(ObjectID objectID) {
+		EditOrderAction editAction = new EditOrderAction();
+		editAction.setArticleContainerID(objectID);
+		editAction.run();	
 	}
-
-
 }
