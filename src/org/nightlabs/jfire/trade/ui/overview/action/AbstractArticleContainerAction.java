@@ -5,6 +5,7 @@ import javax.jdo.JDOHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.nightlabs.base.ui.action.WorkbenchPartSelectionAction;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 
 /**
@@ -39,6 +40,10 @@ extends WorkbenchPartSelectionAction
 		}
 	}
 
+	public void setArticleContainerID(ObjectID objectID) {
+		articleContainerID = (ArticleContainerID)objectID;
+	}
+	
 	public boolean calculateEnabled() {		
 		return articleContainerID != null;
 	}
