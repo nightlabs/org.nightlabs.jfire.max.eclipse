@@ -24,6 +24,6 @@ extends AbstractIssueLinkHandlerFactory
 	}
 
 	public IssueLinkHandler createIssueLinkHandler() {
-		return null;
+		return new IssueInvoiceLinkHandler();
 	}
 }
