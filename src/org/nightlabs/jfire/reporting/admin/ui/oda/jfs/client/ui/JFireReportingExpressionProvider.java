@@ -75,6 +75,8 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 	private static final String IDENTIFIER_CATEGORY_HELPER_METHODS_VAR = "JFireReporting.HelperMethods.getVar"; //$NON-NLS-1$
 	private static final String IDENTIFIER_CATEGORY_HELPER_METHODS_GET_JDO_OBJECT = "JFireReporting.HelperMethods.getJDOObject"; //$NON-NLS-1$
 	private static final String IDENTIFIER_CATEGORY_HELPER_METHODS_LOGGER = "JFireReporting.HelperMethods.getLogger"; //$NON-NLS-1$
+	private static final String IDENTIFIER_CATEGORY_LOCALISATION = "JFireReporting.Localisatoin"; //$NON-NLS-1$
+	private static final String IDENTIFIER_CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT = "JFireReporting.Localisatoin.MessageInDynamicText"; //$NON-NLS-1$
 	
 	public static final ItemCarrier ITEM_JFIRE_REPORTING = new ItemCarrier(IDENTIFIER_JFIRE_REPORTING);
 	public static final ItemCarrier CATEGORY_IMPORTS = new ItemCarrier(IDENTIFIER_CATEGORY_IMPORTS);
@@ -85,6 +87,8 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 	public static final ItemCarrier CATEGORY_HELPER_METHODS_VAR = new ItemCarrier(IDENTIFIER_CATEGORY_HELPER_METHODS_VAR);
 	public static final ItemCarrier CATEGORY_HELPER_METHODS_LOGGER = new ItemCarrier(IDENTIFIER_CATEGORY_HELPER_METHODS_LOGGER);
 	public static final ItemCarrier CATEGORY_HELPER_METHODS_GET_JDO_OBJECT = new ItemCarrier(IDENTIFIER_CATEGORY_HELPER_METHODS_GET_JDO_OBJECT);
+	public static final ItemCarrier CATEGORY_LOCALISATION = new ItemCarrier(IDENTIFIER_CATEGORY_LOCALISATION);
+	public static final ItemCarrier CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT = new ItemCarrier(IDENTIFIER_CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT);
 	
 	private static boolean indexCreated = false;
 	
@@ -94,7 +98,7 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 		identifier2Name.put(IDENTIFIER_JFIRE_REPORTING, "JFire Reporting"); //$NON-NLS-1$
 		
 		addSubCategories(IDENTIFIER_JFIRE_REPORTING, new ItemCarrier[] {
-				CATEGORY_IMPORTS, CATEGORY_HELPER_METHODS
+				CATEGORY_IMPORTS, CATEGORY_HELPER_METHODS, CATEGORY_LOCALISATION
 			});
 
 		addSubCategoryElements(CATEGORY_IMPORTS, new ItemCarrier[] {
@@ -109,6 +113,10 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 				CATEGORY_HELPER_METHODS_LOGGER
 			});
 		
+		addSubCategoryElements(CATEGORY_LOCALISATION, new ItemCarrier[] {
+				CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT
+			});
+		
 		identifier2InsertText.put(CATEGORY_IMPORTS_HELPER.getItemKey(), "importClass(Packages."+JFireReportingHelper.class.getName()+");"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		identifier2InsertText.put(CATEGORY_HELPER_METHODS_DATASET_PARAM.getItemKey(), "JFireReportingHelper.createDataSetParam()"); //$NON-NLS-1$
@@ -116,6 +124,7 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 		identifier2InsertText.put(CATEGORY_HELPER_METHODS_VAR.getItemKey(), "JFireReportingHelper.getVar()"); //$NON-NLS-1$
 		identifier2InsertText.put(CATEGORY_HELPER_METHODS_GET_JDO_OBJECT.getItemKey(), "JFireReportingHelper.getJDOObject()"); //$NON-NLS-1$
 		identifier2InsertText.put(CATEGORY_HELPER_METHODS_LOGGER.getItemKey(), "JFireReportingHelper.getLogger()"); //$NON-NLS-1$
+		identifier2InsertText.put(CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT.getItemKey(), "reportContext.getMessage(\"\", reportContext.getLocale())"); //$NON-NLS-1$
 		
 		identifier2Name.put(CATEGORY_IMPORTS.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.import")); //$NON-NLS-1$
 		identifier2Name.put(CATEGORY_IMPORTS_HELPER.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.reportingHelper")); //$NON-NLS-1$
@@ -125,6 +134,8 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 		identifier2Name.put(CATEGORY_HELPER_METHODS_PERSISTENCE_MANAGER.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.getPersistenceManager")); //$NON-NLS-1$
 		identifier2Name.put(CATEGORY_HELPER_METHODS_VAR.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.getSharedVariables")); //$NON-NLS-1$
 		identifier2Name.put(CATEGORY_HELPER_METHODS_LOGGER.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.loggerToUse")); //$NON-NLS-1$
+		identifier2Name.put(CATEGORY_LOCALISATION.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.localisation")); //$NON-NLS-1$
+		identifier2Name.put(CATEGORY_LOCALISATION_MESSAGE_IN_DYNAMIC_TEXT.getItemKey(), Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFireReportingExpressionProvider.identifier.accessRessource")); //$NON-NLS-1$
 		
 		indexCreated = true;
 	}
