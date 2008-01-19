@@ -461,13 +461,13 @@ public class IssueSearchComposite extends JDOQueryComposite {
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							reporterText.setText(selectedReporter.getName());
 							issueTypeCombo.setSelection(selectedIssueType == null ? ISSUE_TYPE_ALL : selectedIssueType);
 							issuePriorityCombo.setSelection(selectedIssuePriority == null ? ISSUE_PRIORITY_ALL : selectedIssuePriority);
 							issueSeverityCombo.setSelection(selectedIssueSeverityType == null ? ISSUE_SEVERITY_TYPE_ALL : selectedIssueSeverityType);
 							issueResolutionCombo.setSelection(selectedIssueResolution == null ? ISSUE_RESOLUTION_ALL : selectedIssueResolution);
 							
-							assigneeText.setText(selectedAssignee.getName() == null ? "" : selectedAssignee.getName());
+							reporterText.setText(selectedReporter == null ? "" : selectedReporter.getName());
+							assigneeText.setText(selectedAssignee == null ? "" : selectedAssignee.getName());
 							createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
 							updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
 						}
