@@ -201,6 +201,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		rLabel.setLayoutData(gridData);
 		
 		reporterText = new Text(userGroup, SWT.NONE);
+		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/////////////////////////////////
 		Button reporterButton = new Button(userGroup, SWT.PUSH);
@@ -226,6 +227,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		gridData.horizontalSpan = 2;
 		aLabel.setLayoutData(gridData);
 		assigneeText = new Text(userGroup, SWT.NONE);
+		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button assigneeButton = new Button(userGroup, SWT.PUSH);
@@ -243,6 +245,7 @@ public class IssueSearchComposite extends JDOQueryComposite {
 				}//if
 			}
 		});
+		
 		//-----------------------------------------------------------
 		Group timeGroup = new Group(parent, SWT.NONE);
 		timeGroup.setText("Time Related");
@@ -416,7 +419,8 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
 				if (jdoQuery instanceof IssueQuery) {
 					final IssueQuery issueQuery = (IssueQuery)jdoQuery;
-
+					clearData();
+					
 					if (issueQuery.getAssigneeID() != null) {
 						selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
 								new String[]{User.FETCH_GROUP_THIS_USER}, 
@@ -476,6 +480,15 @@ public class IssueSearchComposite extends JDOQueryComposite {
 			}
 		}
 		
+	}
+	
+	private void clearData() {
+		selectedAssignee = null;
+		selectedReporter = null;
+		selectedIssueType = null;
+		selectedIssuePriority = null;
+		selectedIssueSeverityType = null;
+		selectedIssueResolution = null;
 	}
 	
 	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {
