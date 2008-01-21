@@ -139,7 +139,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 							case 1:
 								return DateFormatter.formatDateShortTimeHMS(deliveryNote.getCreateDT(), true);
 							case 2:
-								return deliveryNote.getCreateUser().getName() + " (" + deliveryNote.getCreateUser().getLogin() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+								return deliveryNote.getCreateUser().getName() + " (" + deliveryNote.getCreateUser().getCompleteUserID() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 							default:
 								return ""; //$NON-NLS-1$
 						}

@@ -134,7 +134,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 							case 1:
 								return DateFormatter.formatDateShortTimeHMS(offer.getCreateDT(), true);
 							case 2:
-								return offer.getCreateUser().getName() + " (" + offer.getCreateUser().getLogin() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+								return offer.getCreateUser().getName() + " (" + offer.getCreateUser().getCompleteUserID() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 							default:
 								return ""; //$NON-NLS-1$
 						}

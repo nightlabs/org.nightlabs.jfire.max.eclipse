@@ -139,7 +139,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 							case 1:
 								return DateFormatter.formatDateShortTimeHMS(invoice.getCreateDT(), true);
 							case 2:
-								return invoice.getCreateUser().getName() + " (" + invoice.getCreateUser().getLogin() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+								return invoice.getCreateUser().getName() + " (" + invoice.getCreateUser().getCompleteUserID() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 							default:
 								return ""; //$NON-NLS-1$
 						}
