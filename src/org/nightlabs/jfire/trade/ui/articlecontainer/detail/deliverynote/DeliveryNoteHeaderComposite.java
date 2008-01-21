@@ -108,7 +108,7 @@ extends HeaderComposite
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite.loadDeliveryNoteMonitor.task.name"), 3); //$NON-NLS-1$
 			deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(
 					(DeliveryNoteID) JDOHelper.getObjectId(deliveryNote),
-					GeneralEditorComposite.FETCH_GROUPS_DELIVERY_NOTE, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					GeneralEditorComposite.FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			currentStateComposite.setStatable(deliveryNote, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(deliveryNote, new SubProgressMonitor(monitor, 1));

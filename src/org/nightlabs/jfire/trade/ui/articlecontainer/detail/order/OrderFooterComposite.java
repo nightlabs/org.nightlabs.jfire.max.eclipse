@@ -38,9 +38,9 @@ extends FooterComposite
 {
 	private Order order;
 
-	public OrderFooterComposite(GeneralEditorComposite generalEditorComposite, Order order)
+	public OrderFooterComposite(GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite, order);
+		super(generalEditorComposite, generalEditorComposite);
 		this.order = order;
 //		refresh(order.getArticles());
 	}

@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -52,13 +51,13 @@ public class FooterComposite extends XComposite
 	private static final Logger logger = Logger.getLogger(FooterComposite.class);
 	
 	private GeneralEditorComposite generalEditorComposite;
-	private ArticleContainer articleContainer;
+//	private ArticleContainer articleContainer;
 
-	public FooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite, ArticleContainer articleContainer)
+	public FooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
 		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);		
 		this.generalEditorComposite = generalEditorComposite;
-		this.articleContainer = articleContainer;
+//		this.articleContainer = articleContainer;
 		
 		setBackground(DEFAULT_BG_COLOR);	
 		
@@ -72,8 +71,8 @@ public class FooterComposite extends XComposite
 		label.setBackground(bgColor);
 //		label.setText("                                                                    ");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL));
-		
-		refresh(articleContainer.getArticles());
+
+//		refresh();
 	}
 
 	public static final Color DEFAULT_BG_COLOR = new Color(null, 255, 255, 255);
@@ -100,7 +99,7 @@ public class FooterComposite extends XComposite
 	 */
 	public ArticleContainer getArticleContainer()
 	{
-		return articleContainer;
+		return generalEditorComposite.getArticleContainer();
 	}
 	/**
 	 * @return Returns the generalEditorComposite.
@@ -115,12 +114,12 @@ public class FooterComposite extends XComposite
 	 * the default implementation shows the total price of all articles in the articleContainer
 	 */
 //	public abstract void refresh();
-	public void refresh(Collection<Article> articles) 
+	public void refresh() 
 	{		
 		long priceAmount = 0;
 		Currency currency = null;
-		
-		for (Article article : articles) {
+
+		for (Article article : generalEditorComposite.getArticles()) {
 			ArticlePrice articlePrice = article.getPrice();
 			priceAmount += articlePrice.getAmount();
 			if (currency == null)

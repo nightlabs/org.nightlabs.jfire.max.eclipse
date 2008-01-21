@@ -41,6 +41,7 @@ import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.DisposeEvent;
@@ -51,6 +52,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -58,13 +61,14 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
-import org.nightlabs.base.ui.progress.XProgressMonitor;
+import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.EditLockTypeInvoice;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
@@ -110,6 +114,8 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorI
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -191,12 +197,13 @@ extends XComposite
 
 	private IWorkbenchPartSite site;
 
+	private Label loadingDataLabel;
+
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public GeneralEditorComposite(IWorkbenchPartSite site, Composite parent,
-			GeneralEditorInput input) {
+	public GeneralEditorComposite(IWorkbenchPartSite site, Composite parent, GeneralEditorInput generalEditorInput) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		if (site == null)
@@ -204,116 +211,178 @@ extends XComposite
 
 		this.site = site;
 
-		initGeneralEditorInput(input);
+		loadingDataLabel = new Label(this, SWT.NONE);
+		loadingDataLabel.setText("Loading data...");
 
-		if (order != null)
-			headerComposite = new OrderHeaderComposite(this, order);
-
-		if (offer != null)
-			headerComposite = new OfferHeaderComposite(this, offer);
-
-		if (invoice != null)
-			headerComposite = new InvoiceHeaderComposite(this, invoice);
-
-		if (deliveryNote != null)
-			headerComposite = new DeliveryNoteHeaderComposite(this, deliveryNote);
-
-		headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// TODO: segments can be potentially added on the fly, therefore this behaviour must be supported
-		if (hasDifferentSegments()) {
-			segmentCompositeFolder = new TabFolder(this, SWT.NONE);
-			segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-			((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					updateActiveSegmentEdit();
-				}
-			});			
-		} 
-		else {
-			segmentCompositeFolder = new XComposite(this, SWT.NONE);
-		}
-
-		// segmentCompositeScrollContainer = new ScrolledComposite(this,
-		// SWT.V_SCROLL); // TODO do we really not want horizontal scrolling?
-		// segmentCompositeScrollContainer.setExpandHorizontal(true);
-		// segmentCompositeScrollContainer.setExpandVertical(true);
-		// segmentCompositeScrollContainer.setLayoutData(new
-		// GridData(GridData.FILL_BOTH));
-		// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true); // TODO do
-		// we really want to ALWAYS display scroll bars?
-		//
-		// segmentCompositeContainer = new
-		// XComposite(segmentCompositeScrollContainer, SWT.NONE,
-		// XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
-		// segmentCompositeScrollContainer.setContent(segmentCompositeContainer);
-
-		// segmentCompositeContainer.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-
-		EditLockTypeID editLockTypeID;
-		if (order != null) {
-			footerComposite = new OrderFooterComposite(this, order);
-			editLockTypeID = EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
-		}
-		else if (offer != null) {
-			footerComposite = new OfferFooterComposite(this, offer);
-			editLockTypeID = EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
-		}
-		else if (invoice != null) {
-			footerComposite = new InvoiceFooterComposite(this, invoice);
-			editLockTypeID = EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
-		}
-		else if (deliveryNote != null) {
-			footerComposite = new DeliveryNoteFooterComposite(this, deliveryNote);
-			editLockTypeID = EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
-		}
-		else
-			throw new IllegalStateException("All null!"); //$NON-NLS-1$
-
-		footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// try {
-		// createSegmentEditComposites();
-		// } catch (EPProcessorException e) {
-		// throw new RuntimeException(e);
-		// }
-
-		final EditLockHandle editLockHandle = EditLockMan.sharedInstance().acquireEditLock(editLockTypeID, getArticleContainerID(), "TODO", // TODO description //$NON-NLS-1$
-//				null,
-				new EditLockCallback() {
-					@Override
-					public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
-						return InactivityAction.REFRESH_LOCK;
-					}
-				},
-				getShell(), new NullProgressMonitor());
-		// TODO whenever we change sth., we should refresh the lock by calling editLockHandle.refresh()!
-
-		addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				ArticleContainerID articleContainerID = getArticleContainerID();
-				// TODO WORKAROUND JPOX bug begin
-				if (articleContainerID instanceof OrderID) {
-					OrderID orderID = (OrderID) articleContainerID;
-					if (orderID.organisationID == null) {
-						logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
-						orderID.organisationID = order.getOrganisationID();
-					}
-					if (orderID.orderIDPrefix == null) {
-						logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
-						orderID.orderIDPrefix = order.getOrderIDPrefix();
-					}
-				}
-				// TODO WORKAROUND JPOX bug end
-
-				editLockHandle.release();
-				if (articleSegmentGroups != null)
-					articleSegmentGroups.onDispose();
-				// removeDisposeListener(this); // nötig? Marco.
-			}
-		});
+		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(generalEditorInput);
+		loadInitialArticleContainerJob.schedule();
 	}
+
+	private LoadInitialArticleContainerJob loadInitialArticleContainerJob;
+
+	private class LoadInitialArticleContainerJob extends Job
+	{
+		private GeneralEditorInput generalEditorInput;
+
+		public LoadInitialArticleContainerJob(GeneralEditorInput generalEditorInput)
+		{
+			super("Loading article container");
+			this.generalEditorInput = generalEditorInput;
+			assert generalEditorInput != null : "generalEditorInput != null";
+		}
+		
+		protected org.eclipse.core.runtime.IStatus run(ProgressMonitor monitor) throws Exception
+		{
+			loadInitialArticleContainerJob = null; // release memory
+
+			initGeneralEditorInput(generalEditorInput, monitor);
+
+			Display.getDefault().asyncExec(new Runnable()
+			{
+				public void run()
+				{
+					loadingDataLabel.dispose();
+					loadingDataLabel = null;
+
+					if (order != null)
+						headerComposite = new OrderHeaderComposite(GeneralEditorComposite.this, order);
+
+					if (offer != null)
+						headerComposite = new OfferHeaderComposite(GeneralEditorComposite.this, offer);
+
+					if (invoice != null)
+						headerComposite = new InvoiceHeaderComposite(GeneralEditorComposite.this, invoice);
+
+					if (deliveryNote != null)
+						headerComposite = new DeliveryNoteHeaderComposite(GeneralEditorComposite.this, deliveryNote);
+
+					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+					// TODO: segments can be potentially added on the fly, therefore GeneralEditorComposite.this behaviour must be supported
+					if (hasDifferentSegments()) {
+						segmentCompositeFolder = new TabFolder(GeneralEditorComposite.this, SWT.NONE);
+						segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+						((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								updateActiveSegmentEdit();
+							}
+						});			
+					} 
+					else {
+						segmentCompositeFolder = new XComposite(GeneralEditorComposite.this, SWT.NONE);
+					}
+
+					// segmentCompositeScrollContainer = new ScrolledComposite(GeneralEditorComposite.this,
+					// SWT.V_SCROLL); // TODO do we really not want horizontal scrolling?
+					// segmentCompositeScrollContainer.setExpandHorizontal(true);
+					// segmentCompositeScrollContainer.setExpandVertical(true);
+					// segmentCompositeScrollContainer.setLayoutData(new
+					// GridData(GridData.FILL_BOTH));
+					// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true); // TODO do
+					// we really want to ALWAYS display scroll bars?
+					//
+					// segmentCompositeContainer = new
+					// XComposite(segmentCompositeScrollContainer, SWT.NONE,
+					// XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
+					// segmentCompositeScrollContainer.setContent(segmentCompositeContainer);
+
+					// segmentCompositeContainer.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+
+					EditLockTypeID editLockTypeID;
+					if (order != null) {
+						footerComposite = new OrderFooterComposite(GeneralEditorComposite.this);
+						editLockTypeID = EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
+					}
+					else if (offer != null) {
+						footerComposite = new OfferFooterComposite(GeneralEditorComposite.this);
+						editLockTypeID = EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
+					}
+					else if (invoice != null) {
+						footerComposite = new InvoiceFooterComposite(GeneralEditorComposite.this);
+						editLockTypeID = EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
+					}
+					else if (deliveryNote != null) {
+						footerComposite = new DeliveryNoteFooterComposite(GeneralEditorComposite.this);
+						editLockTypeID = EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
+					}
+					else
+						throw new IllegalStateException("All null!"); //$NON-NLS-1$
+
+					footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+					footerComposite.refresh();
+
+					// try {
+					// createSegmentEditComposites();
+					// } catch (EPProcessorException e) {
+					// throw new RuntimeException(e);
+					// }
+
+					final EditLockHandle editLockHandle = EditLockMan.sharedInstance().acquireEditLock(editLockTypeID, getArticleContainerID(), "TODO", // TODO description //$NON-NLS-1$
+//							null,
+							new EditLockCallback() {
+						@Override
+						public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
+							return InactivityAction.REFRESH_LOCK;
+						}
+					},
+					getShell(), new NullProgressMonitor()); // TODO async!
+					// TODO whenever we change sth., we should refresh the lock by calling editLockHandle.refresh()!
+
+					final Class<? extends ArticleContainer> articleContainerClass = articleContainer.getClass();
+					JDOLifecycleManager.sharedInstance().addNotificationListener(articleContainerClass, articleContainerChangedListener);
+
+					addDisposeListener(new DisposeListener() {
+						public void widgetDisposed(DisposeEvent e) {
+							JDOLifecycleManager.sharedInstance().removeNotificationListener(articleContainerClass, articleContainerChangedListener);
+
+							ArticleContainerID articleContainerID = getArticleContainerID();
+							// TODO WORKAROUND JPOX bug begin
+							if (articleContainerID instanceof OrderID) {
+								OrderID orderID = (OrderID) articleContainerID;
+								if (orderID.organisationID == null) {
+									logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
+									orderID.organisationID = order.getOrganisationID();
+								}
+								if (orderID.orderIDPrefix == null) {
+									logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
+									orderID.orderIDPrefix = order.getOrderIDPrefix();
+								}
+							}
+							// TODO WORKAROUND JPOX bug end
+
+							editLockHandle.release();
+							if (articleSegmentGroups != null)
+								articleSegmentGroups.onDispose();
+							// removeDisposeListener(this); // nötig? Marco.
+						}
+					});
+
+					// it is likely that the action-bar-contributor has been set too early for creating the UI, hence, we call it now.
+					if (generalEditorActionBarContributor != null)
+						setGeneralEditorActionBarContributor(generalEditorActionBarContributor);
+				} // void run()
+			});
+
+			return Status.OK_STATUS;
+		}
+	};
+
+	private NotificationListener articleContainerChangedListener = new NotificationAdapterJob() {
+		@Override
+		public void notify(NotificationEvent notificationEvent)
+		{
+			if (isDisposed())
+				return;
+
+			if (!getArticleContainerID().equals(notificationEvent.getFirstSubject()))
+				return;
+
+			// TODO load the new ArticleContainer from the server
+
+			footerComposite.refresh();
+		}
+	};
 
 	public GeneralEditorInput getInput() {
 		return input;
@@ -354,7 +423,7 @@ extends XComposite
 	}	
 	
 	protected void updateFooter() {
-		footerComposite.refresh(getArticles());
+		footerComposite.refresh();
 		logger.info("updateFooter"); //$NON-NLS-1$
 	}
 
@@ -374,6 +443,12 @@ extends XComposite
 	public void setGeneralEditorActionBarContributor(
 			GeneralEditorActionBarContributor generalEditorActionBarContributor) {
 		this.generalEditorActionBarContributor = generalEditorActionBarContributor;
+
+		assert Display.getCurrent() != null : "*NOT* called on UI thread! This method must be called on the UI thread!";
+
+		// not yet initialised - will initialise in the callback
+		if (loadingDataLabel != null)
+			return;
 
 		try {
 			if (!segmentEditCompositesCreated)
@@ -477,46 +552,47 @@ extends XComposite
 
 	private ClientArticleSegmentGroups articleSegmentGroups = null;
 
+	protected void createArticleSegmentGroups() 
+	throws EPProcessorException 
+	{
+		ArticleCreateListener[] articleCreateListenerArray = null;
+		ArticleChangeListener[] articleChangeListenerArray = null;
+
+		if (!earlyArticleCreateListeners.isEmpty()) {
+			Object[] listeners = earlyArticleCreateListeners.getListeners();
+			articleCreateListenerArray = new ArticleCreateListener[listeners.length + 1];
+			System.arraycopy(listeners, 0, articleCreateListenerArray, 0, listeners.length);
+//			for (int i=0; i<earlyArticleCreateListeners.size(); i++) {
+//				articleCreateListenerArray[i] = earlyArticleCreateListeners.get(i);
+//			}
+			articleCreateListenerArray[articleCreateListenerArray.length-1] = articleCreateListener;
+		}
+		else {
+			articleCreateListenerArray = new ArticleCreateListener[] { articleCreateListener };
+		}
+
+		if (!earlyArticleChangeListeners.isEmpty()) {
+			Object[] listeners = earlyArticleChangeListeners.getListeners();
+			articleChangeListenerArray = new ArticleChangeListener[listeners.length + 1];
+			System.arraycopy(listeners, 0, articleChangeListenerArray, 0, listeners.length);
+//			for (int i=0; i<earlyArticleChangeListeners.size(); i++) {
+//				articleChangeListenerArray[i] = earlyArticleChangeListeners.get(i);
+//			}
+			articleChangeListenerArray[articleChangeListenerArray.length-1] = articleChangeListener;
+		}
+		else {
+			articleChangeListenerArray = new ArticleChangeListener[] { articleChangeListener };
+		}
+
+		articleSegmentGroups = new ClientArticleSegmentGroups(articleContainer,
+				articleCreateListenerArray,
+				articleChangeListenerArray);		
+	}
+	
 	protected void createSegmentEditComposites() 
 	throws EPProcessorException 
 	{
 		segmentEditCompositesCreated = true;
-
-		if (articleSegmentGroups == null) 
-		{
-			ArticleCreateListener[] articleCreateListenerArray = null;
-			ArticleChangeListener[] articleChangeListenerArray = null;
-
-			if (!earlyArticleCreateListeners.isEmpty()) {
-				Object[] listeners = earlyArticleCreateListeners.getListeners();
-				articleCreateListenerArray = new ArticleCreateListener[listeners.length + 1];
-				System.arraycopy(listeners, 0, articleCreateListenerArray, 0, listeners.length);
-//				for (int i=0; i<earlyArticleCreateListeners.size(); i++) {
-//					articleCreateListenerArray[i] = earlyArticleCreateListeners.get(i);
-//				}
-				articleCreateListenerArray[articleCreateListenerArray.length-1] = articleCreateListener;
-			}
-			else {
-				articleCreateListenerArray = new ArticleCreateListener[] { articleCreateListener };
-			}
-
-			if (!earlyArticleChangeListeners.isEmpty()) {
-				Object[] listeners = earlyArticleChangeListeners.getListeners();
-				articleChangeListenerArray = new ArticleChangeListener[listeners.length + 1];
-				System.arraycopy(listeners, 0, articleChangeListenerArray, 0, listeners.length);
-//				for (int i=0; i<earlyArticleChangeListeners.size(); i++) {
-//					articleChangeListenerArray[i] = earlyArticleChangeListeners.get(i);
-//				}
-				articleChangeListenerArray[articleChangeListenerArray.length-1] = articleChangeListener;
-			}
-			else {
-				articleChangeListenerArray = new ArticleChangeListener[] { articleChangeListener };
-			}
-
-			articleSegmentGroups = new ClientArticleSegmentGroups(articleContainer,
-					articleCreateListenerArray,
-					articleChangeListenerArray);			
-		}
 
 		// ArticleSegmentGroups asgs = new ArticleSegmentGroups(articleContainer);
 		for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroups.getArticleSegmentGroups())
@@ -768,26 +844,26 @@ extends XComposite
 	// return segmentEdits;
 	// }
 
-	public static final String[] FETCH_GROUPS_ORDER = new String[] {
+	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTCILES = new String[] {
 			Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_OFFER = new String[] {
+	public static final String[] FETCH_GROUPS_OFFER_WITH_ARTICLES = new String[] {
 			Offer.FETCH_GROUP_THIS_OFFER, OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 			Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_INVOICE = new String[] {
+	public static final String[] FETCH_GROUPS_INVOICE_WITH_ARTICLES = new String[] {
 			Invoice.FETCH_GROUP_THIS_INVOICE,
 			InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_DELIVERY_NOTE = new String[] {
+	public static final String[] FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES = new String[] {
 			DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
 			DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
@@ -795,50 +871,53 @@ extends XComposite
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
 			FetchPlan.DEFAULT };
 
-	protected void initGeneralEditorInput(GeneralEditorInput generalEditorInput) {
+	protected void initGeneralEditorInput(GeneralEditorInput generalEditorInput, ProgressMonitor monitor) {
 		if (input != null)
 			throw new IllegalStateException("input already initialized!"); //$NON-NLS-1$
 
+//		monitor.beginTask("Loading article container", 100);
 		try {
 			this.input = generalEditorInput;
 			this.order = null;
 			this.offer = null;
 			this.invoice = null;
 			this.deliveryNote = null;
-			// TODO real progress monitor!			
-			ProgressMonitor monitor = new ProgressMonitorWrapper(new XProgressMonitor());  
 
 			if (generalEditorInput == null) {
-				// TODO "unload" all -- does this ever happen?!
+				throw new IllegalArgumentException("generalEditorInput == null");
 			} else {
 				if (input instanceof GeneralEditorInputOrder) {
 					OrderID orderID = ((GeneralEditorInputOrder) input).getOrderID();
 					articleContainer = order = OrderDAO.sharedInstance()
-							.getOrder(orderID, FETCH_GROUPS_ORDER,
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor); // TODO refactor: async!
+							.getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES,
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				} else if (input instanceof GeneralEditorInputOffer) {
 					OfferID offerID = ((GeneralEditorInputOffer) input).getOfferID();
 					articleContainer = offer = OfferDAO.sharedInstance().getOffer(
-							offerID, FETCH_GROUPS_OFFER,
+							offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				} else if (input instanceof GeneralEditorInputInvoice) {
 					InvoiceID invoiceID = ((GeneralEditorInputInvoice) input)
 							.getInvoiceID();
 					articleContainer = invoice = InvoiceProvider.sharedInstance()
-							.getInvoice(invoiceID, FETCH_GROUPS_INVOICE,
+							.getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES,
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				} else if (input instanceof GeneralEditorInputDeliveryNote) {
 					DeliveryNoteID deliveryNoteID = ((GeneralEditorInputDeliveryNote) input)
 							.getDeliveryNoteID();
 					articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance()
-							.getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE,
+							.getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES,
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				} else
 					throw new IllegalArgumentException("input type \"" //$NON-NLS-1$
 							+ input.getClass().getName() + "\" unknown"); //$NON-NLS-1$
 			}
+
+			createArticleSegmentGroups();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+//		} finally {
+//			monitor.done();
 		}
 	}
 
@@ -920,5 +999,9 @@ extends XComposite
 			logger.warn("ArticleCreateListener not removed because articleSegmentGroups == null!"); //$NON-NLS-1$
 		}				
 	}
-	
+
+	public ClientArticleSegmentGroups getArticleSegmentGroups()
+	{
+		return articleSegmentGroups;
+	}
 }

@@ -123,7 +123,7 @@ public class OrderTreeNode extends HeaderTreeNode
 			OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
 			Order o = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//			Order o = tm.getOrder(orderID, FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//			Order o = tm.getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 			ArrayList<Offer> res = new ArrayList<Offer>(o.getOffers());
 

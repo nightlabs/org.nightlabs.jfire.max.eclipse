@@ -38,9 +38,9 @@ extends FooterComposite
 {
 	private Offer offer;
 
-	public OfferFooterComposite(GeneralEditorComposite generalEditorComposite, Offer offer)
+	public OfferFooterComposite(GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite, offer);
+		super(generalEditorComposite, generalEditorComposite);
 		this.offer = offer;
 //		refresh(offer.getArticles());
 	}

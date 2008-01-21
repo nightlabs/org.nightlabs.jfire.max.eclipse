@@ -38,9 +38,9 @@ extends FooterComposite
 {
 	private DeliveryNote deliveryNote;
 
-	public DeliveryNoteFooterComposite(GeneralEditorComposite generalEditorComposite, DeliveryNote deliveryNote)
+	public DeliveryNoteFooterComposite(GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite, deliveryNote);
+		super(generalEditorComposite, generalEditorComposite);
 		this.deliveryNote = deliveryNote;
 //		refresh(deliveryNote.getArticles());
 	}
