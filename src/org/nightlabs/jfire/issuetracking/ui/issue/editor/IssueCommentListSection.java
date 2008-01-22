@@ -8,11 +8,11 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -65,19 +65,25 @@ extends AbstractIssueEditorGeneralSection
 
 	public void addComment(IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD)));
 		commentEntry.setText(String.format("%s - %s", 
 				comment.getUser().getName(), 
 				comment.getCreateTimestamp().toString()));
 
-		FormText text = toolkit.createFormText(commentEntry, false);
-		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+		toolkit.adapt(commentEntry);
 		
-		text.setText(comment.getText(),
-				false,
-				false);
+		Label commentLabel = new Label(commentEntry, SWT.NONE);
+		toolkit.adapt(commentLabel, false, false);		
+		commentLabel.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+		commentLabel.setText(comment.getText());
+//		FormText text = toolkit.createFormText(commentEntry, false);
+//		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+//		
+//		text.setText(comment.getText(),
+//				false,
+//				true);
 		
-		
-		commentEntry.setClient(text);
+		commentEntry.setClient(commentLabel);
 
 		commentEntry.addExpansionListener(new ExpansionAdapter() {
 			public void expansionStateChanged(ExpansionEvent e) {
