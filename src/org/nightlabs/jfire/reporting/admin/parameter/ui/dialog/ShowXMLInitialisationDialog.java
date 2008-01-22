@@ -83,11 +83,13 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 			for (AcquisitionParameterConfig paramConfig : setup.getParameterConfigs()) {
 				indent++;
 				object2IdNo.put(paramConfig, idNo);
+				String paramType = paramConfig.getParameterType().replaceAll("<", "&lt;");
+				paramType = paramType.replaceAll(">", "&gt;");
 				addLine(buffer, indent, 
 						"<parameter " + //$NON-NLS-1$
 						"id=\""+String.valueOf(idNo)+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"name=\""+paramConfig.getParameterID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
-						"type=\""+paramConfig.getParameterType()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"type=\""+paramType+"\" " + //$NON-NLS-1$	
 						"x=\""+String.valueOf(paramConfig.getX())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"y=\""+String.valueOf(paramConfig.getY())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"/>"); //$NON-NLS-1$
@@ -103,13 +105,16 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 			for (ValueProviderConfig providerConfig : setup.getValueProviderConfigs()) {
 				indent++;
 				object2IdNo.put(providerConfig, idNo);
+				String providerID = providerConfig.getValueProviderID().replaceAll("<", "&lt;");
+				providerID = providerID.replaceAll(">", "&gt;");
 				addLine(buffer, indent, "<provider-config " + //$NON-NLS-1$
 						"id=\""+String.valueOf(idNo)+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"organisationID=\""+providerConfig.getValueProviderOrganisationID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"categoryID=\""+providerConfig.getValueProviderCategoryID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
-						"valueProviderID=\""+providerConfig.getValueProviderID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"valueProviderID=\""+providerID+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"pageIndex=\""+String.valueOf(providerConfig.getPageIndex())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
-						"pageOrder=\""+String.valueOf(providerConfig.getPageRow())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"pageRow=\""+String.valueOf(providerConfig.getPageRow())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"pageColumn=\""+String.valueOf(providerConfig.getPageColumn())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"allowNullOutputValue=\""+String.valueOf(providerConfig.isAllowNullOutputValue())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"showMessageInHeader=\""+String.valueOf(providerConfig.isShowMessageInHeader())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"x=\""+String.valueOf(providerConfig.getX())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
