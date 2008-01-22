@@ -89,8 +89,12 @@ extends XComposite{
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
-	public IssueCreateComposite(Composite parent, int style) {
+	private Set<ObjectID> objectIDs;
+	
+	public IssueCreateComposite(Composite parent, int style, Set<ObjectID> objectIDs) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
+		
+		this.objectIDs = objectIDs;
 		createComposite(this);
 	}
 
@@ -106,6 +110,9 @@ extends XComposite{
 		linkedObjectLbl.setText("Linked Object");
 		
 		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE);
+		if (objectIDs != null) {
+			adderComposite.addItems(objectIDs);
+		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");

@@ -2,7 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,11 +22,11 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueNewWizard extends DynamicPathWizard{
 	private IssueNewWizardPage issueNewPage;
 
-	private Collection<ObjectID> objectIDs;
+	private Set<ObjectID> objectIDs;
 	/**
 	 * @param objectIDs The JDO ObjectcIDs the new Issue should be linked to.
 	 */
-	public IssueNewWizard(Collection<ObjectID> objectIDs){
+	public IssueNewWizard(Set<ObjectID> objectIDs){
 		this.objectIDs = objectIDs;
 		setWindowTitle("Wizard Title");
 	}
