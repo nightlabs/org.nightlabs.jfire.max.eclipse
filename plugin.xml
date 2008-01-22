@@ -5,6 +5,7 @@
          name="Trade Value Providers"
          point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.legalentity.ValueProviderGUILegalEntitySearch$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.legalentity.ValueProviderGUILegalEntitySearchMultiple$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.order.ValueProviderGUIOrderByCustomer$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer.ValueProviderGUIOfferByCustomer$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.invoice.ValueProviderGUIInvoiceByCustomer$Factory"/>
