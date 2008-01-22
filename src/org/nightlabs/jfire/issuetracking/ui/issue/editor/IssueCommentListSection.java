@@ -72,7 +72,7 @@ extends AbstractIssueEditorGeneralSection
 
 		toolkit.adapt(commentEntry);
 		
-		Label commentLabel = new Label(commentEntry, SWT.NONE);
+		Label commentLabel = new Label(commentEntry, SWT.BORDER);
 		toolkit.adapt(commentLabel, false, false);		
 		commentLabel.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
 		commentLabel.setText(comment.getText());

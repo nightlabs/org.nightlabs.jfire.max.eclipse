@@ -18,4 +18,5 @@ Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.ui,
  org.nightlabs.jfire.issuetracking.ui.issue,
  org.nightlabs.jfire.issuetracking.ui.issuelink,
- org.nightlabs.jfire.issuetracking.ui.overview
+ org.nightlabs.jfire.issuetracking.ui.overview,
+ org.nightlabs.jfire.issuetracking.ui.issue.editor
