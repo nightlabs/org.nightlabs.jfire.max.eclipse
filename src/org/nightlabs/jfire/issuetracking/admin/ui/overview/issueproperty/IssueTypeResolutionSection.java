@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
+import java.util.Collections;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -33,6 +35,8 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 	private CreateResolutionAction createAction;
 	private DeleteResolutionAction deleteAction;
 	private EditResolutionAction editAction;
+	private IncreaseResolutionAction increaseResolutionAction;
+	private DecreaseResolutionAction decreaseResolutionAction;
 	
 	public IssueTypeResolutionSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
@@ -68,10 +72,15 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 		createAction = new CreateResolutionAction();
 		deleteAction = new DeleteResolutionAction();
 		editAction = new EditResolutionAction();
+		increaseResolutionAction = new IncreaseResolutionAction();
+		decreaseResolutionAction = new DecreaseResolutionAction();
+		
 		
 		getToolBarManager().add(createAction);
 		getToolBarManager().add(deleteAction);
 		getToolBarManager().add(editAction);
+		getToolBarManager().add(decreaseResolutionAction);
+		getToolBarManager().add(increaseResolutionAction);
 		
 		hookContextMenu();
 		
@@ -99,6 +108,60 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 	
 	public void setIssueType(IssueType issueType){
 		issueResolutionTable.setInput(issueType.getIssueResolutions());
+	}
+	
+	class IncreaseResolutionAction 
+	extends Action 
+	{		
+		public IncreaseResolutionAction() {
+			super();
+			setId(IncreaseResolutionAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypeResolutionSection.class, 
+					"Down"));
+			setToolTipText("Increase");
+			setText("Increase Resolution");
+		}
+		
+		@Override
+		public void run() {
+			if(issueResolutionTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssueResolutions().indexOf(issueResolutionTable.getFirstSelectedElement());
+				if(index < controller.getIssueType().getIssueResolutions().size() - 1){
+					Collections.swap(controller.getIssueType().getIssueResolutions(), index, index + 1);
+					issueResolutionTable.setInput(controller.getIssueType().getIssueResolutions());
+					markDirty();
+				}//if
+			}//if
+		}		
+	}
+	
+	class DecreaseResolutionAction
+	extends Action
+	{
+		public DecreaseResolutionAction() {
+			super();
+			setId(DecreaseResolutionAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypeResolutionSection.class, 
+					"Up"));
+			setToolTipText("Decrease");
+			setText("Decrease Resolution");
+		}
+		
+		@Override
+		public void run() {
+			if(issueResolutionTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssueResolutions().indexOf(issueResolutionTable.getFirstSelectedElement());
+				if(index > 0){
+					Collections.swap(controller.getIssueType().getIssueResolutions(), index, index - 1);
+					issueResolutionTable.setInput(controller.getIssueType().getIssueResolutions());
+					markDirty();
+				}//if
+			}//if
+		}	
 	}
 	
 	class CreateResolutionAction 

@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
+import java.util.Collections;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -33,6 +35,8 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 	private CreateSeverityTypeAction createAction;
 	private DeleteSeverityTypeAction deleteAction;
 	private EditSeverityTypeAction editAction;
+	private IncreaseSeverityAction increaseSeverityAction;
+	private DecreaseSeverityAction decreaseSeverityAction;
 	
 	public IssueTypeSeverityTypeSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
@@ -68,10 +72,14 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 		createAction = new CreateSeverityTypeAction();
 		deleteAction = new DeleteSeverityTypeAction();
 		editAction = new EditSeverityTypeAction();
+		increaseSeverityAction = new IncreaseSeverityAction();
+		decreaseSeverityAction = new DecreaseSeverityAction();
 		
 		getToolBarManager().add(createAction);
 		getToolBarManager().add(deleteAction);
 		getToolBarManager().add(editAction);
+		getToolBarManager().add(decreaseSeverityAction);
+		getToolBarManager().add(increaseSeverityAction);
 		
 		hookContextMenu();
 		
@@ -99,6 +107,60 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 	
 	public void setIssueType(IssueType issueType){
 		issueSeverityTypeTable.setInput(issueType.getIssueSeverityTypes());
+	}
+	
+	class IncreaseSeverityAction 
+	extends Action 
+	{		
+		public IncreaseSeverityAction() {
+			super();
+			setId(IncreaseSeverityAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypeSeverityTypeSection.class, 
+					"Down"));
+			setToolTipText("Increase");
+			setText("Increase Severity");
+		}
+		
+		@Override
+		public void run() {
+			if(issueSeverityTypeTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssueSeverityTypes().indexOf(issueSeverityTypeTable.getFirstSelectedElement());
+				if(index < controller.getIssueType().getIssueSeverityTypes().size() - 1){
+					Collections.swap(controller.getIssueType().getIssueSeverityTypes(), index, index + 1);
+					issueSeverityTypeTable.setInput(controller.getIssueType().getIssueSeverityTypes());
+					markDirty();
+				}//if
+			}//if
+		}		
+	}
+	
+	class DecreaseSeverityAction
+	extends Action
+	{
+		public DecreaseSeverityAction() {
+			super();
+			setId(DecreaseSeverityAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					IssueTypeSeverityTypeSection.class, 
+					"Up"));
+			setToolTipText("Decrease");
+			setText("Decrease Severity");
+		}
+		
+		@Override
+		public void run() {
+			if(issueSeverityTypeTable.getFirstSelectedElement() != null){
+				int index = controller.getIssueType().getIssueSeverityTypes().indexOf(issueSeverityTypeTable.getFirstSelectedElement());
+				if(index > 0){
+					Collections.swap(controller.getIssueType().getIssueSeverityTypes(), index, index - 1);
+					issueSeverityTypeTable.setInput(controller.getIssueType().getIssueSeverityTypes());
+					markDirty();
+				}//if
+			}//if
+		}	
 	}
 	
 	class CreateSeverityTypeAction 
