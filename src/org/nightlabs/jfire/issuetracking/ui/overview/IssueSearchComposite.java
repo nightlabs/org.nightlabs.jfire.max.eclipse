@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -25,12 +26,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
@@ -49,6 +55,7 @@ import org.nightlabs.jfire.issue.id.IssueSeverityTypeID;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
@@ -61,7 +68,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueSearchComposite extends JDOQueryComposite {
+public class IssueSearchComposite extends JDOQueryComposite{
 	private Text issueIDText;
 	private Text subjectText;
 	private Text reporterText;
@@ -88,7 +95,9 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	private DateTimeEdit createdTimeEdit;
 	private DateTimeEdit updatedTimeEdit;
 
-
+	private IssueLinkAdderComposite iComposite;
+	
+	private FormToolkit formToolkit;
 	/**
 	 * @param parent
 	 * @param style
@@ -98,6 +107,9 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	public IssueSearchComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
 		super(parent, style, layoutMode, layoutDataMode);
+		
+		formToolkit = new FormToolkit(getShell().getDisplay());
+		
 		createComposite(this);
 		prepareProperties();
 	}
@@ -123,14 +135,24 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#createComposite(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	protected void createComposite(Composite parent) {
+	protected void createComposite(final Composite parent) {
 		parent.setLayout(new GridLayout(3, false));
-
-		Group issueTypeGroup = new Group(parent, SWT.NONE);
+		
+		ExpandableComposite issueTypeEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		issueTypeEC.setText("Issue Related");
+		issueTypeEC.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Group issueTypeGroup = new Group(issueTypeEC, SWT.NONE);
 		issueTypeGroup.setText("Issue Related");
 		issueTypeGroup.setLayout(new GridLayout(1, false));
 		issueTypeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		issueTypeEC.setClient(issueTypeGroup);
+		issueTypeEC.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+			}
+		});
+		
 		XComposite issueTypeComposite = new XComposite(issueTypeGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
 
@@ -187,25 +209,36 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		});
 
 		//-----------------------------------------------------------
-		Group userGroup = new Group(parent, SWT.NONE);
+		ExpandableComposite userGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		userGroupEC.setText("People Related");
+		userGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Group userGroup = new Group(userGroupEC, SWT.NONE);
 		userGroup.setText("People Related");
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		userGroupEC.setClient(userGroup);
+		userGroupEC.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+				// resizes the application window.
+			}
+		});
+		
 		Label rLabel = new Label(userGroup, SWT.NONE);
 		rLabel.setText("Reporter: ");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		rLabel.setLayoutData(gridData);
 		
-		reporterText = new Text(userGroup, SWT.NONE);
+		reporterText = new Text(userGroup, SWT.BORDER);
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/////////////////////////////////
 		Button reporterButton = new Button(userGroup, SWT.PUSH);
-		reporterButton.setText("Choose User");
+		reporterButton.setText("...");
 
 		reporterButton.addSelectionListener(new SelectionAdapter(){
 			@Override
@@ -226,12 +259,13 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		aLabel.setLayoutData(gridData);
-		assigneeText = new Text(userGroup, SWT.NONE);
+		
+		assigneeText = new Text(userGroup, SWT.BORDER);
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Button assigneeButton = new Button(userGroup, SWT.PUSH);
-		assigneeButton.setText("Choose User");
+		assigneeButton.setText("...");
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
 			@Override
@@ -247,13 +281,24 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		});
 		
 		//-----------------------------------------------------------
-		Group timeGroup = new Group(parent, SWT.NONE);
+		ExpandableComposite timeGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		timeGroupEC.setText("Time Related");
+		timeGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Group timeGroup = new Group(timeGroupEC, SWT.NONE);
 		timeGroup.setText("Time Related");
 		gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
 		timeGroup.setLayout(gridLayout);
 		timeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		timeGroupEC.setClient(timeGroup);
+		timeGroupEC.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+				// resizes the application window.
+			}
+		});
+		
 		new Label(timeGroup, SWT.NONE).setText("Created Time: ");
 		createdTimeEdit = new DateTimeEdit(
 				timeGroup,
@@ -278,6 +323,29 @@ public class IssueSearchComposite extends JDOQueryComposite {
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		updatedTimeEdit.setDate(cal.getTime());
 
+		//-------------------------------------------------------------
+		ExpandableComposite documentGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		documentGroupEC.setText("Document Related");
+		documentGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Group documentGroup = new Group(documentGroupEC, SWT.NONE);
+		documentGroup.setText("Related Documents");
+		gridLayout = new GridLayout(1, false);
+		documentGroup.setLayout(gridLayout);
+		documentGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		documentGroupEC.setClient(documentGroup);
+		documentGroupEC.addExpansionListener(new ExpansionAdapter() {
+			public void expansionStateChanged(ExpansionEvent e) {
+				// resizes the application window.
+			}
+		});
+		
+		iComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 150;
+		iComposite.setLayoutData(gridData);
+		
 		loadProperties();
 	}
 
@@ -371,36 +439,40 @@ public class IssueSearchComposite extends JDOQueryComposite {
 	public JDOQuery getJDOQuery() {
 		IssueQuery issueQuery = new IssueQuery();
 
-		if(selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)){
+		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
 			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
 		}
 
-		if(selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)){
+		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
 			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
 		}
 
-		if(selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)){
+		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
 			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
 		}
 
-		if(selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)){
+		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
 			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
 		}
 
-		if(selectedReporter != null){
+		if (selectedReporter != null) {
 			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
 		}
 
-		if(selectedAssignee != null){
+		if (selectedAssignee != null) {
 			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
 		}
 
-		if(createdTimeEdit.isActive()){
+		if (createdTimeEdit.isActive()) {
 			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
 		}
 
-		if(updatedTimeEdit.isActive()){
+		if (updatedTimeEdit.isActive()) {
 			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+		}
+		
+		if (iComposite.getItems().size() != 0) {
+			issueQuery.setObjectIDs(iComposite.getItems());
 		}
 
 		return issueQuery;

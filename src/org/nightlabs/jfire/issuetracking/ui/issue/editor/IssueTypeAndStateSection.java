@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,11 +16,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueDescription;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssueManager;
 import org.nightlabs.jfire.issue.IssueManagerUtil;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueSubject;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
@@ -65,6 +76,22 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		});
 	}
 	
+	/**
+	 * The fetch groups of issue data.
+	 */
+	public static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT, 
+		Issue.FETCH_GROUP_THIS,
+		IssueType.FETCH_GROUP_THIS,
+		IssueDescription.FETCH_GROUP_THIS, 
+		IssueSubject.FETCH_GROUP_THIS,
+		IssueFileAttachment.FETCH_GROUP_THIS,
+		IssueSeverityType.FETCH_GROUP_THIS,
+		IssuePriority.FETCH_GROUP_THIS,
+		IssueLocal.FETCH_GROUP_THIS,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		StateDefinition.FETCH_GROUP_NAME};
+	
 	protected void signalIssue(final SignalEvent event) {
 		Job job = new Job("Performing transition") {
 			@Override
@@ -73,7 +100,11 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 			{
 				try {
 					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName());
+					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
+							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					
+					currentStateComposite.setStatable(issue);
+					nextTransitionComposite.setStatable(issue);
 				} catch (Exception x) {
 					throw new RuntimeException(x);
 				}

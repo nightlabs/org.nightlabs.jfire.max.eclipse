@@ -71,13 +71,15 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 		updatedTimeTextLabel = new Label(getClient(), SWT.NONE);
 		updatedTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		PrintIssueAction printAction = new PrintIssueAction();
-		PrintPreviewIssueAction printPreviewAction = new PrintPreviewIssueAction();
+//		PrintIssueAction printAction = new PrintIssueAction();
+//		PrintPreviewIssueAction printPreviewAction = new PrintPreviewIssueAction();
 		ReassignAction reassignAction = new ReassignAction();
+		UnassignAction unassignAction = new UnassignAction();
 
+		getToolBarManager().add(unassignAction);
 		getToolBarManager().add(reassignAction);
-		getToolBarManager().add(printAction);
-		getToolBarManager().add(printPreviewAction);
+//		getToolBarManager().add(printAction);
+//		getToolBarManager().add(printPreviewAction);
 
 		updateToolBarManager();
 	}
@@ -125,38 +127,58 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 			}//if
 		}		
 	}
-
-	class PrintIssueAction extends Action {		
-		public PrintIssueAction() {
+	
+	public class UnassignAction extends Action {		
+		public UnassignAction() {
 			super();
-			setId(PrintIssueAction.class.getName());
+			setId(UnassignAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-			"Print"));
-			setToolTipText("Print");
-			setText("Print");
+			"Unassign"));
+			setToolTipText("Unassign");
+			setText("UnassignAction");
 		}
 
 		@Override
 		public void run() {
+			issue.setAssignee(null);
+			assigneeTextLabel.setText("-");
+			markDirty();
 		}		
 	}
 
-	class PrintPreviewIssueAction extends Action {		
-		public PrintPreviewIssueAction() {
-			super();
-			setId(PrintPreviewIssueAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
-					"PrintPreview"));
-			setToolTipText("Print Preview");
-			setText("Print Preview");
-		}
-
-		@Override
-		public void run() {
-		}		
-	}
+//	class PrintIssueAction extends Action {		
+//		public PrintIssueAction() {
+//			super();
+//			setId(PrintIssueAction.class.getName());
+//			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+//					IssueTrackingPlugin.getDefault(), 
+//					IssueDetailSection.class, 
+//			"Print"));
+//			setToolTipText("Print");
+//			setText("Print");
+//		}
+//
+//		@Override
+//		public void run() {
+//		}		
+//	}
+//
+//	class PrintPreviewIssueAction extends Action {		
+//		public PrintPreviewIssueAction() {
+//			super();
+//			setId(PrintPreviewIssueAction.class.getName());
+//			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+//					IssueTrackingPlugin.getDefault(), 
+//					IssueDetailSection.class, 
+//					"PrintPreview"));
+//			setToolTipText("Print Preview");
+//			setText("Print Preview");
+//		}
+//
+//		@Override
+//		public void run() {
+//		}		
+//	}
 }

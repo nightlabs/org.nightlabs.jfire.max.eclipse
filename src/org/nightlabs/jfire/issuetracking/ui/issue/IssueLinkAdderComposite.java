@@ -23,7 +23,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueLinkAdderComposite extends XComposite {
+public class IssueLinkAdderComposite extends XComposite{
 	private IssueLinkTable issueLinkTable;
 	private ListenerList tableItemChangeListeners = new ListenerList();
 

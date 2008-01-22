@@ -2,14 +2,16 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -35,7 +37,9 @@ extends AbstractIssueEditorGeneralSection
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 
-		commentText = new Text(client, SWT.V_SCROLL | SWT.H_SCROLL);
+		commentText = new Text(client, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
+		commentText.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 60;
 		commentText.setLayoutData(gridData);

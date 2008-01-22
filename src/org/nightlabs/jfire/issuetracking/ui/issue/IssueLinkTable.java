@@ -6,8 +6,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -15,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -77,13 +76,11 @@ extends AbstractTableComposite<ObjectID>{
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		TableLayout layout = new TableLayout();
-		
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
 		tableColumn.setText("Link object");
-		layout.addColumnData(new ColumnWeightData(30));
-		
+
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30});
 		table.setLayout(layout);
 	}
 

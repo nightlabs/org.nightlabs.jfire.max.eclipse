@@ -1,9 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,7 +35,7 @@ extends AbstractIssueEditorGeneralSection
 
 		// Sets up the toolkit.
 		toolkit = new FormToolkit(getSection().getShell().getDisplay());
-
+		
 		commentComposite = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		commentComposite.getGridLayout().numColumns = 1; 
 
@@ -69,9 +70,13 @@ extends AbstractIssueEditorGeneralSection
 				comment.getCreateTimestamp().toString()));
 
 		FormText text = toolkit.createFormText(commentEntry, false);
+		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+		
 		text.setText(comment.getText(),
 				false,
 				false);
+		
+		
 		commentEntry.setClient(text);
 
 		commentEntry.addExpansionListener(new ExpansionAdapter() {
@@ -83,5 +88,4 @@ extends AbstractIssueEditorGeneralSection
 		
 		commentEntry.setExpanded(expand);
 	}
-
 }
