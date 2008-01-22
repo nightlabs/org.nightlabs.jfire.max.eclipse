@@ -129,8 +129,6 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
 	public boolean isAcquisitionComplete() {
-		if (selectedUsersTable.getSelectedUsers().size() == 0)
-			return searchComposite.getSelectedUsers().size() > 0;
 		return getOutputValue() != null || getValueProviderConfig().isAllowNullOutputValue();
 	}
 
