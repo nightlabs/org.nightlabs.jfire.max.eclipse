@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension-point id="expressionProviderEntry" name="Expression Provider Entry" schema="schema/expressionProviderEntry.exsd"/>
    <extension
          point="org.eclipse.birt.report.designer.ui.odadatasource">
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.oda.jdoql.JDOQLDriver">
@@ -265,5 +266,90 @@
                  type="org.eclipse.birt.report.designer.ui.dialogs.IExpressionProvider">
            </adapter>
         </adaptable>
+     </extension>
+     <extension
+           point="org.nightlabs.jfire.reporting.admin.ui.expressionProviderEntry">
+        <expressionProviderCategory
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting"
+              name="JFireReporting">
+        </expressionProviderCategory>
+        <expressionProviderCategory
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.imports"
+              name="Imports"
+              parentCategoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting">
+        </expressionProviderCategory>
+        <expressionProviderCategory
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              name="Helper Methods"
+              parentCategoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting">
+        </expressionProviderCategory>
+        <expressionProviderCategory
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation"
+              name="Localisation"
+              parentCategoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting">
+        </expressionProviderCategory>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.imports"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.imports.JFireReportingHelper"
+              insertText="importClass(Packages.org.nightlabs.jfire.reporting.JFireReportingHelper);"
+              name="Import JFireReportingHelper"
+              tooltip="Import the class JFireReportingHelper">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.dataSetParameter"
+              insertText="JFireReportingHelper.createDataSetParam()"
+              name="Dataset-parameter from Java(Script) object"
+              tooltip="Create dataset-parameter from Java(Script) object">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.dataPersistenceManager"
+              insertText="JFireReportingHelper.getPersistenceManager()"
+              name="Get PersistenceManager"
+              tooltip="Get PersistenceManager to read yourself from the datastore">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.dataSetParameter"
+              insertText="JFireReportingHelper.getJDOObject()"
+              name="Resolve JDO object from its id"
+              tooltip="Resolve JDO object from its id (Pass the String-representation of the id here).">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.getVar"
+              insertText="JFireReportingHelper.getVar()"
+              name="Shared variable: Get"
+              tooltip="Get a shared variable from the JFireReportingHelper">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.putVar"
+              insertText="JFireReportingHelper.getVars().put(&quot;&quot;, );"
+              name="Shared variable: Put"
+              tooltip="Put a shared variable to the JFireReportingHelper">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.getParameter"
+              insertText="JFireReportingHelper.getParameter(&quot;&quot;)"
+              name="Get report parameter"
+              tooltip="Get a report parameter from the JFireReportingHelper">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.getLogger"
+              insertText="JFireReporingHelper.getLogger()"
+              name="Logger to write messages to the log"
+              tooltip="Logger to write messages to the log">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation.getMessage"
+              insertText="reportContext.getMessage(&quot;&quot;, reportContext.getLocale())"
+              name="Get localised report message"
+              tooltip="Get localised report message">
+        </expressionProviderEntry>
      </extension>
 </plugin>
