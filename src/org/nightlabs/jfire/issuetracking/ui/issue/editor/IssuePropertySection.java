@@ -8,17 +8,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.nightlabs.base.ui.action.SelectionListenerAction;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
@@ -27,8 +21,6 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
-import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
-import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -45,30 +37,18 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 	private XComboComposite<IssueSeverityType> issueSeverityTypeCombo;
 	private XComboComposite<IssueResolution> issueResolutionCombo;
 
-	private CurrentStateComposite currentStateComposite;
-	private NextTransitionComposite nextTransitionComposite;
-
 	/**
 	 * @param section
 	 * @param managedForm
 	 */
 	public IssuePropertySection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getClient().getGridLayout().numColumns = 3;
+		getClient().getGridLayout().numColumns = 6;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
 		getSection().setText("Properties");
 
 		priorityLabel = new Label(getClient(), SWT.WRAP);
 		priorityLabel.setText("Priority: ");
-		priorityLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		severityLabel = new Label(getClient(), SWT.WRAP);
-		severityLabel.setText("Severity: ");
-		severityLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		resolutionLabel = new Label(getClient(), SWT.WRAP);
-		resolutionLabel.setText("Resolution: ");
-		resolutionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		issuePriorityCombo = new XComboComposite<IssuePriority>(getClient(), SWT.NONE);
 		issuePriorityCombo.setLabelProvider(new IssueLabelProvider());
@@ -80,6 +60,9 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 				markDirty();
 			}
 		});
+		
+		severityLabel = new Label(getClient(), SWT.WRAP);
+		severityLabel.setText("Severity: ");
 
 		issueSeverityTypeCombo = new XComboComposite<IssueSeverityType>(getClient(), SWT.NONE);
 		issueSeverityTypeCombo.setLabelProvider(new IssueLabelProvider());
@@ -91,6 +74,9 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 				markDirty();
 			}
 		});
+
+		resolutionLabel = new Label(getClient(), SWT.WRAP);
+		resolutionLabel.setText("Resolution: ");
 
 		issueResolutionCombo = new XComboComposite<IssueResolution>(getClient(), SWT.NONE);
 		issueResolutionCombo.setLabelProvider(new IssueLabelProvider());
@@ -104,26 +90,18 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		});
 	}
 
-	protected void doSetIssue(Issue issue) {
+	protected void doSetIssue(final Issue issue) {
 		loadProperties(issue);
 
-		priorityLabel.setText(
-				String.format(
-						"Priority: %s", 
-						issue.getIssuePriority().getIssuePriorityText().getText())
-		);
-
-		severityLabel.setText(
-				String.format(
-						"Severity Type: %s", 
-						issue.getIssueSeverityType().getIssueSeverityTypeText().getText())
-		);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				issuePriorityCombo.selectElement(issue.getIssuePriority());
+				issueSeverityTypeCombo.selectElement(issue.getIssueSeverityType());
+				issueResolutionCombo.selectElement(issue.getIssueResolution());
+			}
+		});
 		
-		resolutionLabel.setText(
-				String.format(
-						"Resolution: %s", 
-						issue.getIssueResolution() == null? "-": issue.getIssueResolution().getName().getText())
-		);
 	}
 
 	private void loadProperties(final Issue issue){
