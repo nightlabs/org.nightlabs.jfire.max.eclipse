@@ -50,7 +50,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 
 			if(objectIDs != null)
 				for (ObjectID objectID : objectIDs) {
-					issue.getReferencedObjectIDs().add(objectID);	
+					issue.addReferencedObjectID(objectID);
 				}
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
