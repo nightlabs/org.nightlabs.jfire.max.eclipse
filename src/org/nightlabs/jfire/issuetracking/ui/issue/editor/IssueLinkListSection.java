@@ -1,7 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
@@ -11,12 +13,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileAction;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileAction;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
 /* 
 * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -25,6 +34,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	private Issue issue;
+	
+	private AddLinkAction addLinkAction;
+	private RemoveLinkAction removeLinkAction;
 	
 	public IssueLinkListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
@@ -36,7 +48,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		client.getGridLayout().numColumns = 1; 
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(
-				client, SWT.NONE);
+				client, SWT.NONE, false);
 		issueLinkAdderComposite.getGridData().grabExcessHorizontalSpace = true;
 		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
 			public void issueLinkItemChanged(
@@ -59,6 +71,14 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		});
 		
 		getSection().setClient(client);
+		
+		addLinkAction = new AddLinkAction();
+		removeLinkAction = new RemoveLinkAction();
+		
+		getToolBarManager().add(addLinkAction);
+		getToolBarManager().add(removeLinkAction);
+		
+		updateToolBarManager();
 	}
 	
 	@Override
@@ -71,5 +91,43 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	
 	public Issue getIssue() {
 		return issue;
+	}
+	
+	public class AddLinkAction extends Action {		
+		public AddLinkAction() {
+			super();
+			setId(AddLinkAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueLinkListSection.class, 
+			"Add"));
+			setToolTipText("Add Link(s)");
+			setText("Add");
+		}
+
+		@Override
+		public void run() {
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
+					new IssueLinkWizard(issueLinkAdderComposite));
+			dialog.open();
+		}		
+	}
+	
+	public class RemoveLinkAction extends Action {		
+		public RemoveLinkAction() {
+			super();
+			setId(RemoveLinkAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueLinkListSection.class, 
+			"Remove"));
+			setToolTipText("Remove Link(s)");
+			setText("Remove");
+		}
+
+		@Override
+		public void run() {
+			issueLinkAdderComposite.removeItems(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
+		}		
 	}
 }

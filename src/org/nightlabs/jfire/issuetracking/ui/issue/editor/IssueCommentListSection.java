@@ -65,6 +65,7 @@ extends AbstractIssueEditorGeneralSection
 
 	public void addComment(IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
+		commentEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD)));
 		commentEntry.setText(String.format("%s - %s", 
 				comment.getUser().getName(), 

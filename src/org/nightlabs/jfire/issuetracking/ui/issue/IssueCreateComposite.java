@@ -109,7 +109,7 @@ extends XComposite{
 		linkedObjectLbl = new Label(this, SWT.NONE);
 		linkedObjectLbl.setText("Linked Object");
 		
-		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE);
+		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true);
 		if (objectIDs != null) {
 			adderComposite.addItems(objectIDs);
 		}

@@ -2,7 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +35,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
@@ -341,7 +339,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			}
 		});
 		
-		iComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE);
+		iComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE, true);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 150;
 		iComposite.setLayoutData(gridData);
