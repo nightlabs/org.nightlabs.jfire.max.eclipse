@@ -66,7 +66,10 @@ extends TableLabelProvider
 
 		if (element instanceof ScriptRegistryItemNode && columnIndex == 0)
 			return ((ScriptRegistryItemNode)element).getName();
-		
+
+		if (columnIndex == 0)
+			return String.valueOf(element);
+
 		return ""; //$NON-NLS-1$
 	}
 		

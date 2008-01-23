@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
@@ -56,6 +58,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptRegistryItemTreeComposite;
 import org.nightlabs.jfire.scripting.editor2d.ui.ScriptRegistryTreeLabelProvider;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.TextScriptCreateRequest;
@@ -242,7 +245,15 @@ extends CenteredDialog
 	
 		getScriptTree().getTree().setLayout(new WeightedTableLayout(new int[] {3, 2}));
 		getScriptTree().getTreeViewer().refresh(true);
-		getScriptTree().getTreeViewer().getTree().redraw();				
+		getScriptTree().getTreeViewer().getTree().redraw();
+
+		getScriptTree().addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				getButton(OK).setEnabled(isComplete());
+			}
+		});
 	}
 
 	// TODO: get fonts which are supported by printer
@@ -370,7 +381,7 @@ extends CenteredDialog
 		}	
 		public void widgetSelected(SelectionEvent e) {
 			y = ySpinner.getSelection();
-		}	
+		}
 	};
 		
 	private int fontSize = defaultFontSize;
@@ -394,10 +405,21 @@ extends CenteredDialog
 		
 		return fontStyle;
 	}
-	
+
+	protected boolean isComplete()
+	{
+		if (getScriptRegistryItemID() == null)
+			return false;
+
+		return getScriptTree().getSelectedRegistryItem() instanceof Script;
+	}
+
 	@Override
 	protected void okPressed() 
 	{
+		if (!isComplete())
+			return;
+
 		request.setFontName(fontName);
 		request.setLocation(new Point(x, y));
 		request.setRotation(rotation);

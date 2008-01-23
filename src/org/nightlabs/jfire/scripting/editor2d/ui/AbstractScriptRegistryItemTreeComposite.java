@@ -30,15 +30,20 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemTree;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -48,13 +53,13 @@ public abstract class AbstractScriptRegistryItemTreeComposite
 extends XComposite 
 {
 	public static final Logger logger = Logger.getLogger(AbstractScriptRegistryItemTreeComposite.class);
-	
+
 	public AbstractScriptRegistryItemTreeComposite(Composite parent, int style) 
 	{
 		super(parent, style);
 		createComposite(this);		
 	}
-	
+
 	public AbstractScriptRegistryItemTreeComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
 	{
@@ -72,26 +77,62 @@ extends XComposite
 		scriptTree = new ScriptRegistryItemTree(parent, SWT.BORDER | SWT.FULL_SELECTION, 
 				true, true, getZone(), true); 
 		scriptTree.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		ScriptRegistryItemProvider provider = ScriptRegistryItemProvider.sharedInstance();			 
-		Collection<ScriptRegistryItemNode> scriptNodes = provider.getNodes(getNodes());		
-		if (!scriptNodes.isEmpty()) {
-			for (Iterator<ScriptRegistryItemNode> it = scriptNodes.iterator(); it.hasNext(); ) {
-				ScriptRegistryItemNode scriptNode = it.next();
-				logger.debug("topLevel scriptNode = " + (scriptNode == null ? null : scriptNode.getName())); //$NON-NLS-1$
-			}			
-		}
-		else {
-			logger.debug("topLevel scriptNodes is empty!"); //$NON-NLS-1$
-		}
-		scriptTree.setInput(scriptNodes);
-//		scriptTree.getTreeViewer().expandToLevel(2);
+
+//		final ScriptRegistryItem loadingDataSRI = new org.nightlabs.jfire.scripting.ScriptCategory(getOrganisationID(), "dummy", "dummy");
+//		loadingDataSRI.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+//		ScriptRegistryItemNode loadingDataNode = new ScriptRegistryItemNode(null, new ScriptRegistryItemCarrier(null, loadingDataSRI, false)) {
+//			@Override
+//			public ScriptRegistryItem getRegistryItem()
+//			{
+//				return loadingDataSRI;
+//			}
+//		};
+//		scriptTree.setInput(loadingDataNode);
+		scriptTree.setInput("Loading data...");
+
+		Job job = new Job("Loading scripts") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor)
+					throws Exception
+			{
+				ScriptRegistryItemProvider provider = ScriptRegistryItemProvider.sharedInstance();
+				final Collection<ScriptRegistryItemNode> scriptNodes = provider.getNodes(getScriptRegistryItemIDs());		
+				if (!scriptNodes.isEmpty()) {
+					for (Iterator<ScriptRegistryItemNode> it = scriptNodes.iterator(); it.hasNext(); ) {
+						ScriptRegistryItemNode scriptNode = it.next();
+						logger.debug("topLevel scriptNode = " + (scriptNode == null ? null : scriptNode.getName())); //$NON-NLS-1$
+						if (scriptNode == null)
+							it.remove();
+					}			
+				}
+				else {
+					logger.debug("topLevel scriptNodes is empty!"); //$NON-NLS-1$
+				}
+
+				Thread.sleep(10000);
+
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					public void run()
+					{
+						if (scriptTree.isDisposed())
+							return;
+
+						scriptTree.setInput(scriptNodes);
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
 	}
 	
 	protected String getOrganisationID() {
 		return Organisation.DEV_ORGANISATION_ID;
 	}
 	
-	protected abstract Set<ScriptRegistryItemID> getNodes();
+	protected abstract Set<ScriptRegistryItemID> getScriptRegistryItemIDs();
 	protected abstract String getZone();
 }
