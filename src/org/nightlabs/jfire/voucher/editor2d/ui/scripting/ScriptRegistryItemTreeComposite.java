@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptRegistryItemTreeComposite;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.voucher.scripting.VoucherScriptingConstants;
@@ -53,7 +52,8 @@ extends AbstractScriptRegistryItemTreeComposite
 	protected ScriptRegistryItemID getVoucherNodeID() 
 	{
 		return ScriptRegistryItemID.create(
-				Organisation.DEV_ORGANISATION_ID,
+				getOrganisationID(),
+//				Organisation.DEV_ORGANISATION_ID,
 				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_TYPE_TRADE_VOUCHER,				
 				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_ID_CATEGORY_VOUCHER);		
 	}	
