@@ -291,19 +291,19 @@ extends XComposite
 
 					EditLockTypeID editLockTypeID;
 					if (order != null) {
-						footerComposite = new OrderFooterComposite(GeneralEditorComposite.this);
+						footerComposite = new OrderFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
 						editLockTypeID = EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
 					}
 					else if (offer != null) {
-						footerComposite = new OfferFooterComposite(GeneralEditorComposite.this);
+						footerComposite = new OfferFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
 						editLockTypeID = EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
 					}
 					else if (invoice != null) {
-						footerComposite = new InvoiceFooterComposite(GeneralEditorComposite.this);
+						footerComposite = new InvoiceFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
 						editLockTypeID = EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
 					}
 					else if (deliveryNote != null) {
-						footerComposite = new DeliveryNoteFooterComposite(GeneralEditorComposite.this);
+						footerComposite = new DeliveryNoteFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
 						editLockTypeID = EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
 					}
 					else

@@ -26,7 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.order;
 
-import org.nightlabs.jfire.trade.Order;
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
 
@@ -36,13 +36,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposi
 public class OrderFooterComposite
 extends FooterComposite
 {
-	private Order order;
-
-	public OrderFooterComposite(GeneralEditorComposite generalEditorComposite)
+	public OrderFooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite);
-		this.order = order;
-//		refresh(order.getArticles());
+		super(parent, generalEditorComposite);
 	}
 
 //	public void refresh() 

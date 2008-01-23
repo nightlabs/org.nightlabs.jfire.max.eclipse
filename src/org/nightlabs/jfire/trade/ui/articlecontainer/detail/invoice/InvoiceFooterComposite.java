@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice;
 
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
@@ -37,13 +38,9 @@ import org.nightlabs.l10n.NumberFormatter;
 public class InvoiceFooterComposite
 extends FooterComposite
 {
-	private Invoice invoice;
-
-	public InvoiceFooterComposite(GeneralEditorComposite generalEditorComposite)
+	public InvoiceFooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite);
-		this.invoice = invoice;
-//		refresh(invoice.getArticles());
+		super(parent, generalEditorComposite);
 	}
 
 //	public void refresh() 
@@ -54,6 +51,8 @@ extends FooterComposite
 	@Override
 	public void refresh()
 	{
+		Invoice invoice = (Invoice) getArticleContainer();
+
 		String amountPaid = NumberFormatter.formatCurrency(invoice.getInvoiceLocal().getAmountPaid(), invoice.getCurrency());
 		String amountToPay = NumberFormatter.formatCurrency(invoice.getInvoiceLocal().getAmountToPay(), invoice.getCurrency());
 		String totalPrice = NumberFormatter.formatCurrency(invoice.getPrice().getAmount(), invoice.getCurrency());

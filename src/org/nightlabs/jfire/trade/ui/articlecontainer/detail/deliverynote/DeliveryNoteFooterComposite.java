@@ -26,7 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote;
 
-import org.nightlabs.jfire.store.DeliveryNote;
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
 
@@ -36,13 +36,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposi
 public class DeliveryNoteFooterComposite
 extends FooterComposite
 {
-	private DeliveryNote deliveryNote;
-
-	public DeliveryNoteFooterComposite(GeneralEditorComposite generalEditorComposite)
+	public DeliveryNoteFooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite);
-		this.deliveryNote = deliveryNote;
-//		refresh(deliveryNote.getArticles());
+		super(parent, generalEditorComposite);
 	}
 
 //	public void refresh() 

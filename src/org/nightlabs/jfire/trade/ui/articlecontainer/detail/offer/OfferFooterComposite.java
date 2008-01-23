@@ -26,7 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer;
 
-import org.nightlabs.jfire.trade.Offer;
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
 
@@ -36,13 +36,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposi
 public class OfferFooterComposite
 extends FooterComposite
 {
-	private Offer offer;
-
-	public OfferFooterComposite(GeneralEditorComposite generalEditorComposite)
+	public OfferFooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
-		super(generalEditorComposite, generalEditorComposite);
-		this.offer = offer;
-//		refresh(offer.getArticles());
+		super(parent, generalEditorComposite);
 	}
 
 //	public void refresh() 
