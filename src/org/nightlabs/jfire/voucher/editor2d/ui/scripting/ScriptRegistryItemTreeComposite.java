@@ -37,7 +37,7 @@ extends AbstractScriptRegistryItemTreeComposite
 	}
 
 	@Override
-	protected Set<ScriptRegistryItemID> getNodes() 
+	protected Set<ScriptRegistryItemID> getScriptRegistryItemIDs() 
 	{
 		Set<ScriptRegistryItemID> voucherNodes = new HashSet<ScriptRegistryItemID>();
 		voucherNodes.add(getVoucherNodeID());
