@@ -62,7 +62,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 				return ((Collection)inputElement).toArray();
 			else if (inputElement instanceof ScriptRegistryItemNode)
 				return ((ScriptRegistryItemNode)inputElement).getChildren();
-			return null;
+			return new Object[] { inputElement };
 		}
 		
 		@Override
@@ -101,14 +101,18 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof ScriptRegistryItemNode)
 				return ((ScriptRegistryItemNode)element).getName();
+
+			if (columnIndex == 0)
+				return String.valueOf(element);
+
 			return ""; //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public String getText(Object element) {
 			return getColumnText(element, 0); 
 		}
-		
+
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (columnIndex != 0)
@@ -117,7 +121,10 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 				ScriptRegistryItemNode node = (ScriptRegistryItemNode)element;
 				if (node.getRegistryItem() == null)
 					return null;
-				Class clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(node.getRegistryItemID());
+//				if ("dummy".equals(node.getRegistryItem().getScriptRegistryItemType()))
+//					return null;
+
+				Class<?> clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(node.getRegistryItemID());
 				if (clazz == null)
 					return null;
 				if (clazz.equals(ScriptCategory.class))
@@ -127,7 +134,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 			}
 			return super.getColumnImage(element, columnIndex);
 		}
-		
+
 		@Override
 		public Image getImage(Object element) {
 			return getColumnImage(element, 0);

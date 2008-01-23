@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -54,7 +56,21 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		public SelectionProxy(ScriptRegistryItemTree source, String zone, boolean ignoreInheritance, boolean clearOnEmptySelection) {
 			super(source, zone, ignoreInheritance, clearOnEmptySelection);
 		}
-		
+
+		@Override
+		public void selectionChanged(SelectionChangedEvent event)
+		{
+			if (event.getSelection() instanceof IStructuredSelection) {
+				IStructuredSelection sel = (IStructuredSelection) event.getSelection();
+				if (sel.getFirstElement() instanceof ScriptRegistryItemNode) {
+					ScriptRegistryItemNode node = (ScriptRegistryItemNode) sel.getFirstElement();
+					if ("dummy".equals(node.getRegistryItemType())) // ignore - it's the "Loading data" message
+						return;
+				}
+			}
+			super.selectionChanged(event);
+		}
+
 		@Override
 		protected Object getPersistenceCapable(Object selectionObject) {
 			if (selectionObject instanceof ScriptRegistryItemNode)
@@ -130,8 +146,8 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		super(parent, style, setLayoutData, init, headerVisible);
 		this.selectionZone = zone;
 		this.addSelectionProxy = addSelectionProxy;
-	}	
-	
+	}
+
 	@Override
 	public void init() {
 		super.init();
@@ -145,7 +161,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 			getTreeViewer().addSelectionChangedListener(selectionProxy);
 		}		
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
@@ -161,29 +177,32 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 	@Override
 	public void createTreeColumns(Tree tree) {
 	}
-	
+
 	public ScriptRegistryItemNode.ContentProvider getContentProvider() {
 		return (ScriptRegistryItemNode.ContentProvider)getTreeViewer().getContentProvider();
 	}
-	
+
 	public void setInput(Collection<ScriptRegistryItemNode> input) {
 		getTreeViewer().setInput(input);
 	}
-	
+
 	public void setInput(ScriptRegistryItemNode input) {
 		Collection<ScriptRegistryItemNode> nodes = new ArrayList<ScriptRegistryItemNode>();
 		nodes.add(input);
 		setInput(nodes);
 	}
-	
-	
+
+
 	/**
 	 * Returns the (first) selected ScriptRegistryItem or null.
 	 * @return The (first) selected ScriptRegistryItem or null.
 	 */
 	public ScriptRegistryItem getSelectedRegistryItem() {
 		if (getTree().getSelectionCount() == 1) {
-			return ((ScriptRegistryItemNode)getTree().getSelection()[0].getData()).getRegistryItem();
+			if (getTree().getSelection()[0].getData() instanceof ScriptRegistryItemNode) {
+				ScriptRegistryItemNode node = (ScriptRegistryItemNode) getTree().getSelection()[0].getData();
+				return node.getRegistryItem();
+			}
 		}
 		return null;
 	}
@@ -196,7 +215,8 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		Set<ScriptRegistryItem> result = new HashSet<ScriptRegistryItem>();
 		TreeItem[] items = getTree().getSelection();
 		for (int i = 0; i < items.length; i++) {
-			result.add(((ScriptRegistryItemNode)items[i].getData()).getRegistryItem());
+			if (items[i].getData() instanceof ScriptRegistryItemNode)
+				result.add(((ScriptRegistryItemNode)items[i].getData()).getRegistryItem());
 		}
 		return result;
 	}
