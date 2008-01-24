@@ -109,8 +109,6 @@ extends XComposite
 					logger.debug("topLevel scriptNodes is empty!"); //$NON-NLS-1$
 				}
 
-				Thread.sleep(10000);
-
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()
