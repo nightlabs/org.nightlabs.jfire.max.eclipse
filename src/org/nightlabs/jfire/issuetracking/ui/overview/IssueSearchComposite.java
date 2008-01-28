@@ -368,9 +368,9 @@ public class IssueSearchComposite extends JDOQueryComposite{
 								for (Iterator it = issueTypeList.iterator(); it.hasNext(); ) {
 									IssueType issueType = (IssueType) it.next();
 									issueTypeCombo.addElement(issueType);
-									for(IssuePriority p : issueType.getIssuePriorities())
+									for (IssuePriority p : issueType.getIssuePriorities())
 										issuePriorityList.add(p);
-									for(IssueSeverityType s : issueType.getIssueSeverityTypes())
+									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
 										issueSeverityTypeList.add(s);
 								}
 								issueTypeCombo.selectElementByIndex(0);
@@ -384,7 +384,8 @@ public class IssueSearchComposite extends JDOQueryComposite{
 								issueSeverityCombo.removeAll();
 								issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
 								for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-									issueSeverityCombo.addElement(is);
+									if (!issueSeverityCombo.contains(is))
+										issueSeverityCombo.addElement(is);
 								}
 								issueSeverityCombo.selectElementByIndex(0);
 								selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
@@ -392,15 +393,17 @@ public class IssueSearchComposite extends JDOQueryComposite{
 								issuePriorityCombo.removeAll();
 								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
 								for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-									issuePriorityCombo.addElement(ip);
+									if (!issuePriorityCombo.contains(ip))
+										issuePriorityCombo.addElement(ip);
 								}
 								issuePriorityCombo.selectElementByIndex(0);
 								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 
 								issueResolutionCombo.removeAll();
 								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
-								for (IssueResolution ip : selectedIssueType.getIssueResolutions()) {
-									issueResolutionCombo.addElement(ip);
+								for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+									if (!issueResolutionCombo.contains(ir))
+										issueResolutionCombo.addElement(ir);
 								}
 								issueResolutionCombo.selectElementByIndex(0);
 								selectedIssueResolution = issueResolutionCombo.getSelectedElement();
