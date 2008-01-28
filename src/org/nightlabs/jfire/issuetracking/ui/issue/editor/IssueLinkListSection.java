@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
@@ -17,12 +16,9 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileAction;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileAction;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;

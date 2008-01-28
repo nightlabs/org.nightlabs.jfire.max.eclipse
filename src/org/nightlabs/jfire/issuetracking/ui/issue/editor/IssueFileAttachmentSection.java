@@ -148,7 +148,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		@Override
 		public void run() {
 			List<IssueFileAttachment> fileList = issue.getFileList();
-			fileComposite.removeFile(fileComposite.getFileListWidget().getSelection());
+			fileComposite.removeFiles(fileComposite.getFileListWidget().getSelection());
 			for (int i = 0; i < fileComposite.getFileListWidget().getSelection().length; i++) {
 				String fileName = fileComposite.getFileListWidget().getSelection()[i];
 				for (IssueFileAttachment ia : fileList) {
