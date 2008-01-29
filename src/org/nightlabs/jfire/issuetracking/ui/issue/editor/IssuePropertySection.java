@@ -93,14 +93,14 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 	protected void doSetIssue(final Issue issue) {
 		loadProperties(issue);
 
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				issuePriorityCombo.selectElement(issue.getIssuePriority());
-				issueSeverityTypeCombo.selectElement(issue.getIssueSeverityType());
-				issueResolutionCombo.selectElement(issue.getIssueResolution());
-			}
-		});
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				issuePriorityCombo.selectElement(issue.getIssuePriority());
+//				issueSeverityTypeCombo.selectElement(issue.getIssueSeverityType());
+//				issueResolutionCombo.selectElement(issue.getIssueResolution());
+//			}
+//		});
 		
 	}
 
@@ -125,6 +125,10 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 							for (IssueSeverityType it : issue.getIssueType().getIssueSeverityTypes()) {
 								issueSeverityTypeCombo.addElement(it);
 							}
+							
+							issuePriorityCombo.selectElement(issue.getIssuePriority());
+							issueSeverityTypeCombo.selectElement(issue.getIssueSeverityType());
+							issueResolutionCombo.selectElement(issue.getIssueResolution());
 						}
 					});
 				}catch (Exception e1) {

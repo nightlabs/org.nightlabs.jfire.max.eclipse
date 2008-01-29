@@ -5,8 +5,6 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -29,6 +27,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 
 public class IssueEditor extends EntityEditor{
+	
 	public static final String EDITOR_ID = IssueEditor.class.getName();
 	
 	private EditLockHandle editLockHandle;

@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jdo.JDOHelper;
+
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -14,6 +17,9 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -95,7 +101,10 @@ public class IssueNewWizard extends DynamicPathWizard{
 				issue.getDescription().setText(languageID, description.getText(languageID));
 			}//for
 			
-			issueDAO.storeIssue(issue, true, IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			Issue newIssue = issueDAO.storeIssue(issue, true, IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			
+			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(newIssue));
+			Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
