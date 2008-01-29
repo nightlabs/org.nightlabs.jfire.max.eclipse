@@ -54,14 +54,19 @@ extends ArticleContainerEntryViewer
 	@Override
 	public AbstractTableComposite createListComposite(Composite parent) {
 		final InvoiceListComposite invoiceListComposite = new InvoiceListComposite(parent, SWT.NONE);
-		invoiceListComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener(){
+		return invoiceListComposite;
+	}
+	
+	@Override
+	protected void addResultTableListeners(final AbstractTableComposite tableComposite) {
+		super.addResultTableListeners(tableComposite);
+		tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditInvoiceAction editAction = new EditInvoiceAction();
-				editAction.setSelection(invoiceListComposite.getTableViewer().getSelection());
+				editAction.setSelection(tableComposite.getTableViewer().getSelection());
 				editAction.run();
 			}
 		});
-		return invoiceListComposite;
 	}
 
 	@Override
@@ -89,5 +94,4 @@ extends ArticleContainerEntryViewer
 			throw new RuntimeException(e);
 		}
 	}
-	
 }

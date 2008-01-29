@@ -54,19 +54,26 @@ extends ArticleContainerEntryViewer
 		super(entry);
 	}
 
+	private OfferListComposite list;
+	
 	@Override
 	public AbstractTableComposite createListComposite(Composite parent) {
-		final OfferListComposite list = new OfferListComposite(parent, SWT.NONE); 
-		list.getTableViewer().addDoubleClickListener(new IDoubleClickListener(){
+		list = new OfferListComposite(parent, SWT.NONE); 
+		return list;
+	}
+
+	@Override
+	protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+		super.addResultTableListeners(tableComposite);
+		list.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditOfferAction editAction = new EditOfferAction();
 				editAction.setSelection(list.getTableViewer().getSelection());
 				editAction.run();
 			}
 		});
-		return list;
 	}
-
+	
 	@Override
 	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
 		return new OfferFilterComposite(parent, SWT.NONE);
