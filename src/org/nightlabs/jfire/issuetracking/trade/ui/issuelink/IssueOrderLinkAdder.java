@@ -9,9 +9,10 @@ import java.util.Set;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory;
@@ -26,13 +27,18 @@ public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
 	private OrderEntryViewer oViewer;
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		oViewer = new OrderEntryViewer(new OrderEntryFactory().createEntry());
-		oViewer.createComposite(parent);
-		oViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				notifyIssueLinkSelectionListeners();
+		oViewer = new OrderEntryViewer(new OrderEntryFactory().createEntry()) {
+			@Override
+			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+					@Override
+					public void doubleClick(DoubleClickEvent evt) {
+						notifyIssueLinkDoubleClickListeners();
+					}
+				});
 			}
-		});
+		};
+		oViewer.createComposite(parent);
 		return oViewer.getComposite();
 	}
 
