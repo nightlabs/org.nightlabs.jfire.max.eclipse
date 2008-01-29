@@ -56,21 +56,21 @@ extends AbstractTableComposite<StoredIssueQuery>
 	}
 
 	private NotificationListener myListener = new NotificationAdapterJob() {
-	    public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-	      for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
-	        DirtyObjectID dirtyObjectID = it.next();
+		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+				DirtyObjectID dirtyObjectID = it.next();
 
-	        switch (dirtyObjectID.getLifecycleState()) {
-	          case DIRTY:
-	        	  loadStoredIssueQueries();
-	            break;
-	          case DELETED:
-	            // - remove the object from the UI
-	            break;
-	        }
-	      }
-	    }
-	  };
+				switch (dirtyObjectID.getLifecycleState()) {
+				case DIRTY:
+					loadStoredIssueQueries();
+					break;
+				case DELETED:
+					// - remove the object from the UI
+					break;
+				}
+			}
+		}
+	};
 
 	private void loadStoredIssueQueries(){
 		IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
@@ -98,7 +98,7 @@ extends AbstractTableComposite<StoredIssueQuery>
 
 		table.setLayout(layout);
 		table.setHeaderVisible(false);
-		
+
 		tableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(final DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
@@ -111,22 +111,22 @@ extends AbstractTableComposite<StoredIssueQuery>
 							new OverviewEntryEditorInput(entry), 
 							IssueEntryListEditor.EDITOR_ID,
 							true
-						);
-					
+					);
+
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							IssueEntryListViewer viewer = (IssueEntryListViewer)part.getEntryViewer();
 							viewer.expand();
-							
+
 							StructuredSelection ss = (StructuredSelection)e.getSelection();
-							
+
 							IssueFilterComposite searchComposite = (IssueFilterComposite)viewer.getSearchComposite();
 							searchComposite.setStoredIssueQuery((StoredIssueQuery)ss.getFirstElement());
 
 							viewer.search();
 						}
 					});
-					
+
 				} catch (PartInitException e1) {
 					throw new RuntimeException(e1);
 				}

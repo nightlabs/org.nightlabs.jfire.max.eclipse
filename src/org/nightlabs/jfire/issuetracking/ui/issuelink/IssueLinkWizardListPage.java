@@ -6,7 +6,6 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jdo.ObjectID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -27,13 +26,20 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 	@Override
 	public Control createPageContents(Composite parent) {
 		this.objectListComposite = adder.createComposite(parent);
-		adder.addIssueLinkSelectionListener(new IssueLinkSelectionListener() {
+		adder.addIssueLinkSelectionListener(new IssueLinkSelectionAdapter() {
+			@Override
 			public void issueLinkSelectionChanged(
 					IssueLinkSelectionChangedEvent selectionChangedEvent) {
-				for (ObjectID objectID : adder.getIssueLinkObjectIds()) {
-					iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());	
-				}
+				iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());	
 				getContainer().updateButtons();
+			}
+		});
+		
+		adder.addIssueLinkDoubleClickListener(new IssueLinkDoubleClickListener() {
+			@Override
+			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
+				iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());
+				iWizard.finish();
 			}
 		});
 		

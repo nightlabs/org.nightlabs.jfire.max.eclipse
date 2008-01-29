@@ -8,6 +8,5 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
  *
  */
 public interface IssueLinkSelectionListener {
-
 	void issueLinkSelectionChanged(IssueLinkSelectionChangedEvent selectionChangedEvent);
 }

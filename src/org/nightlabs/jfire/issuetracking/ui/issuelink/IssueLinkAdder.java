@@ -30,5 +30,9 @@ public interface IssueLinkAdder
 	
 	void removeIssueLinkSelectionListener(IssueLinkSelectionListener listener);
 	
+	void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
+	
+	void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
+	
 	Set<ObjectID> getIssueLinkObjectIds();
 }

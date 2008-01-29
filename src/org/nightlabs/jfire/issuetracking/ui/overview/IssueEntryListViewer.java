@@ -38,8 +38,8 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class IssueEntryListViewer 
-extends JDOQuerySearchEntryViewer {
-
+extends JDOQuerySearchEntryViewer 
+{
 	public IssueEntryListViewer(Entry entry) {
 		super(entry);
 	}
@@ -54,7 +54,12 @@ extends JDOQuerySearchEntryViewer {
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
 		issueTable = new IssueTable(parent, SWT.NONE);
-		
+		return issueTable;
+	}
+
+	@Override
+	protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+		super.addResultTableListeners(tableComposite);
 		issueTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
@@ -62,6 +67,7 @@ extends JDOQuerySearchEntryViewer {
 					return;
 
 				Issue issue = (Issue)s.getFirstElement();
+
 				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
 				try {
 					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
@@ -70,12 +76,12 @@ extends JDOQuerySearchEntryViewer {
 				}
 			}
 		});
-		
-		return issueTable;
-	}
 
+	}
+	
 	private static final String[] FETCH_GROUPS_ISSUES = { Issue.FETCH_GROUP_THIS, IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, IssueDescription.FETCH_GROUP_THIS, IssueSubject.FETCH_GROUP_THIS
 		, FetchPlan.DEFAULT };
+	
 	@Override
 	protected Object getQueryResult(Collection<JDOQuery> queries,
 			ProgressMonitor monitor) {
@@ -88,5 +94,9 @@ extends JDOQuerySearchEntryViewer {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public IssueTable getIssueTable() {
+		return issueTable;
 	}
 }

@@ -17,6 +17,7 @@ implements IssueLinkAdder
 {
 	private IssueLinkHandlerFactory issueLinkHandlerFactory;
 	private ListenerList selectionChangeListeners = new ListenerList();
+	private ListenerList selectionDoubleClickListeners = new ListenerList();
 	
 	public void init(IssueLinkHandlerFactory issueLinkHandlerFactory) 
 	{
@@ -75,13 +76,11 @@ implements IssueLinkAdder
 		composite = null;
 	}
 	
-	public void addIssueLinkSelectionListener(
-			IssueLinkSelectionListener listener) {
+	public void addIssueLinkSelectionListener(IssueLinkSelectionListener listener) {
 		selectionChangeListeners.add(listener);
 	}
 	
-	public void removeIssueLinkSelectionListener(
-			IssueLinkSelectionListener listener) {
+	public void removeIssueLinkSelectionListener(IssueLinkSelectionListener listener) {
 		selectionChangeListeners.remove(listener);
 	}
 	
@@ -94,5 +93,22 @@ implements IssueLinkAdder
 			}
 		}
 	}
-
+	
+	public void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
+		selectionDoubleClickListeners.add(listener);
+	}
+	
+	public void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
+		selectionDoubleClickListeners.remove(listener);
+	}
+	
+	protected void notifyIssueLinkDoubleClickListeners() {
+		Object[] listeners = selectionDoubleClickListeners.getListeners();
+		IssueLinkDoubleClickedEvent evt = new IssueLinkDoubleClickedEvent(this);
+		for (Object l : listeners) {
+			if (l instanceof IssueLinkDoubleClickListener) {
+				((IssueLinkDoubleClickListener) l).issueLinkDoubleClicked(evt);
+			}
+		}
+	}
 }
