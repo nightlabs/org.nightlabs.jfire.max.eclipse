@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -34,6 +33,7 @@ import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.IPriceConfigValueChangedListener;
+import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -67,7 +67,7 @@ extends ToolBarSectionPart
 	 * @param style
 	 */
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
-		super(page, parent, style, "Price Config");
+		super(page, parent, style, Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.Title")); //$NON-NLS-1$
 
 
 
@@ -112,8 +112,8 @@ extends ToolBarSectionPart
 		Button assignNewPriceConfigButton = new Button(assignNewPriceConfigWrapper, SWT.NONE);
 		//assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
 		//		TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
-		assignNewPriceConfigButton.setToolTipText("Assign new Price Configuration");		
-		assignNewPriceConfigButton.setText("Assign new Price Configuration");
+		assignNewPriceConfigButton.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AssignNewConfigBtnTooltip"));		 //$NON-NLS-1$
+		assignNewPriceConfigButton.setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AssignNewConfigBtn")); //$NON-NLS-1$
 		assignNewPriceConfigButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				assignPriceConfigPressed();
@@ -218,7 +218,7 @@ extends ToolBarSectionPart
 			voucherType.setPackagePriceConfig(originalVoucherConfig);
 
 
-		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited( !voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+		voucherType.getFieldMetaData("packagePriceConfig").setValueInherited( !voucherType.getFieldMetaData("packagePriceConfig").isValueInherited()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		updatePricesTable();
 
@@ -240,7 +240,7 @@ extends ToolBarSectionPart
 			return voucherConfigPrice;
 		}
 		else
-			throw new IllegalStateException("PriceConfig is not an instance of VoucherPriceConfig");
+			throw new IllegalStateException("PriceConfig is not an instance of VoucherPriceConfig"); //$NON-NLS-1$
 
 	}
 
@@ -255,14 +255,12 @@ extends ToolBarSectionPart
 
 		updatePricesTable();
 
-		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited()); //$NON-NLS-1$
 		
 		
 			
 		
 	}
-
-
 
 
 	protected void updatePricesTable()
@@ -324,7 +322,7 @@ extends ToolBarSectionPart
 		if( wizardDialog.open() == Window.OK) 
 		{		
 
-			inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited());
+			inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited()); //$NON-NLS-1$
 
 			updatePricesTable();
 
@@ -346,8 +344,8 @@ extends ToolBarSectionPart
 			"AssignPriceConfig")); //$NON-NLS-1$
 
 
-			setToolTipText("Assign Price Config"); 
-			setText("Assign Price Config");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AssignPriceConfigActionText"));  //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AssignPriceConfigActionTooltip")); //$NON-NLS-1$
 		}
 
 		public void run() {
@@ -370,8 +368,8 @@ extends ToolBarSectionPart
 					VoucherPriceConfigSection.class,
 			"Add")); //$NON-NLS-1$
 
-			setToolTipText("Add new Currency to the List"); 
-			setText("Add Currency");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AddCurrencyConfigActionTooltip"));  //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AddCurrencyConfigActionText")); //$NON-NLS-1$
 		}
 
 		public void run() {
@@ -395,8 +393,8 @@ extends ToolBarSectionPart
 					VoucherPriceConfigSection.class,
 			"Remove")); //$NON-NLS-1$
 
-			setToolTipText("remove the Currency from the List"); 
-			setText("Remove Currency");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.RemoveCurrencyConfigActionTooltip"));  //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.RemoveCurrencyConfigActionText")); //$NON-NLS-1$
 		}
 
 		@Override
