@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPageController;
+import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
 /**
@@ -22,7 +23,7 @@ extends EntityEditorPageWithProgress
 {
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
 
-		super(editor, VoucherTypePricePage.class.getName(),"Price Config");
+		super(editor, VoucherTypePricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.TitlePage")); //$NON-NLS-1$
 
 		// TODO Auto-generated constructor stub
 	}
@@ -33,7 +34,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
-			return new VoucherTypePricePage(formEditor,VoucherTypePricePage.class.getName(),"Price Config"); 
+			return new VoucherTypePricePage(formEditor,VoucherTypePricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.TitleSection"));  //$NON-NLS-1$
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
@@ -87,7 +88,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Edit Price";
+		return Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.PageFormTitle"); //$NON-NLS-1$
 	}
 
 }
