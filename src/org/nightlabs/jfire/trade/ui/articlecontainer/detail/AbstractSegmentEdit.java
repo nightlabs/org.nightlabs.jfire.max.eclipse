@@ -36,7 +36,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -45,9 +47,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
@@ -229,6 +233,20 @@ implements SegmentEdit
 
 		fireCreateArticleEditEvent(articleEdits);
 
+		// it may obviously happen that the productTypeSelected(...) method below is called before this createComposite(...) => select it now
+		final ProductTypeID selProductTypeID = selectedProductTypeID;
+		if (selProductTypeID != null) {
+			new Job("Select product type") {
+				@Override
+				protected IStatus run(ProgressMonitor monitor)
+						throws Exception
+				{
+					productTypeSelected(selProductTypeID, monitor);
+					return Status.OK_STATUS;
+				}
+			}.schedule();
+		}
+
 		return res;
 	}
 
@@ -248,8 +266,8 @@ implements SegmentEdit
 		return composite;
 	}
 
-	private ProductTypeID selectedProductTypeID = null;
-	private Class selectedProductTypeClass = null;
+	private volatile ProductTypeID selectedProductTypeID = null;
+	private volatile Class<? extends ProductType> selectedProductTypeClass = null;
 	private ArticleAdderFactory articleAdderFactoryForSelectedProductType = null;
 	private ArticleAdder articleAdderForSelectedProductType = null;
 
@@ -294,8 +312,7 @@ implements SegmentEdit
 			}
 			else {
 				this.selectedProductTypeID = productTypeID;
-				this.selectedProductTypeClass = JDOObjectID2PCClassMap.sharedInstance()
-						.getPersistenceCapableClass(productTypeID);
+				this.selectedProductTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 
 				if (SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext) ||
 						SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext))
@@ -312,6 +329,9 @@ implements SegmentEdit
 					articleAdder.setProductTypeID(selectedProductTypeID, monitor);
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
+							if (composite == null)
+								return;
+
 							if (articleAdderToDispose != null) {
 								articleAdderToDispose.dispose();
 							}
