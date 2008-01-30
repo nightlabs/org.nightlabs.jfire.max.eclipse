@@ -1,5 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+import java.util.Collection;
+
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -11,13 +16,20 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
+import org.nightlabs.jfire.issue.config.IssueQueryConfigModule;
+import org.nightlabs.jfire.issue.config.StoredIssueQuery;
+import org.nightlabs.jfire.issue.dao.StoredIssueQueryDAO;
+import org.nightlabs.jfire.issue.id.StoredIssueQueryID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class StoredIssueQuerySection 
 extends ToolBarSectionPart 
 {
 	private XComposite client;
-	
+	private StoredIssueQueryTable storedIssueQueryTable;
 	public StoredIssueQuerySection(FormToolkit toolkit, Composite parent) {
 		super(toolkit, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Stored Filters");
 		
@@ -27,7 +39,7 @@ extends ToolBarSectionPart
 		client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 		
-		StoredIssueQueryTable storedIssueQueryTable = new StoredIssueQueryTable(client, SWT.NONE);
+		storedIssueQueryTable = new StoredIssueQueryTable(client, SWT.NONE);
 		
 		getSection().setClient(client);
 		
@@ -53,7 +65,6 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
-
 		}
 	}
 	
@@ -73,7 +84,17 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
+			IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
+					IssueQueryConfigModule.class,
+					new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor()
+			);
 
+			Collection<StoredIssueQuery> queries = storedIssueQueryTable.getSelectedElements();
+			for (StoredIssueQuery query : queries) {
+				cfMod.removeStoredIssueQuery(query);
+			}
 		}
 	}
 }
