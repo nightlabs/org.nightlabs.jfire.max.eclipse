@@ -10,6 +10,8 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
@@ -23,10 +25,10 @@ import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryVie
  */
 public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
 
-	private ReceptionNoteEntryViewer dViewer;
+	private ReceptionNoteEntryViewer rViewer;
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		dViewer = new ReceptionNoteEntryViewer(new ReceptionNoteEntryFactory().createEntry()) {
+		rViewer = new ReceptionNoteEntryViewer(new ReceptionNoteEntryFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
 				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
@@ -35,15 +37,22 @@ public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
+				
+				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent e) {
+						notifyIssueLinkSelectionListeners();
+					}
+				});
 			}
 		};
-		dViewer.createComposite(parent);
-		return dViewer.getComposite();
+		
+		rViewer.createComposite(parent);
+		return rViewer.getComposite();
 	}
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
-		for(Object o : dViewer.getListComposite().getSelectedElements()) {
+		for(Object o : rViewer.getListComposite().getSelectedElements()) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}
 		return result;

@@ -10,6 +10,8 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
@@ -35,8 +37,15 @@ public class IssueDeliveryNoteLinkAdder extends AbstractIssueLinkAdder {
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
+				
+				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent e) {
+						notifyIssueLinkSelectionListeners();
+					}
+				});
 			}
 		};
+
 		dViewer.createComposite(parent);
 		return dViewer.getComposite();
 	}

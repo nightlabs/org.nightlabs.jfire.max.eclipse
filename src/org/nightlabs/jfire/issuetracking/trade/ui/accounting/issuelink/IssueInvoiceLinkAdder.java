@@ -37,15 +37,16 @@ public class IssueInvoiceLinkAdder extends AbstractIssueLinkAdder {
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
+				
+				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent e) {
+						notifyIssueLinkSelectionListeners();
+					}
+				});
 			}
 		};
 		
 		iViewer.createComposite(parent);
-		iViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				notifyIssueLinkSelectionListeners();
-			}
-		});
 		return iViewer.getComposite();
 	}
 
