@@ -44,6 +44,10 @@ implements IProductTypeDetailPage
 		this.sectionStyle = sectionStyle;
 	}
 	
+	
+	
+
+	
 //	private AbstractProductTypeNameSection nameSection = null;
 //	public AbstractProductTypeNameSection getNameSection() {
 //		return nameSection;
@@ -54,6 +58,18 @@ implements IProductTypeDetailPage
 		return nameSection;
 	}
 	protected abstract IProductTypeSectionPart createNameSection(Composite parent);
+	
+	
+	
+
+	private IProductTypeSectionPart ownerVendorSection = null;
+	public IProductTypeSectionPart getOwnerVendorSection() {
+		return ownerVendorSection;
+	}
+	protected abstract IProductTypeSectionPart createOwnerVendorSection(Composite parent);
+	
+	
+	
 	
 	
 //	private AbstractNestedProductTypeSection nestedProductTypeSection = null;
@@ -78,6 +94,7 @@ implements IProductTypeDetailPage
 	}
 	protected abstract IProductTypeSectionPart createSaleAccessControlSection(Composite parent);
 	
+
 	@Override
 	protected void addSections(Composite parent) 
 	{
@@ -93,11 +110,22 @@ implements IProductTypeDetailPage
 			getManagedForm().addPart(nestedProductTypeSection);
 		}
 
+		
+		
+		ownerVendorSection = createOwnerVendorSection(parent);
+		if (ownerVendorSection != null) {
+			ownerVendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
+			getManagedForm().addPart(ownerVendorSection);
+		}		
+		
+		
 		saleAccessControlSection = createSaleAccessControlSection(parent);
 		if (saleAccessControlSection != null) {
 			saleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			getManagedForm().addPart(saleAccessControlSection);			
 		}
+	
+	
 	}
 
 	@Override
@@ -141,6 +169,10 @@ implements IProductTypeDetailPage
 			nestedProductTypeSection.setProductType(productType);
 		if (saleAccessControlSection != null)
 			saleAccessControlSection.setProductType(productType);						
+		if (ownerVendorSection != null)
+			ownerVendorSection.setProductType(productType);						
+	
+		
 	}
 
 	/**

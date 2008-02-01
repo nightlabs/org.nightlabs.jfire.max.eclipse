@@ -15,6 +15,7 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
@@ -52,6 +53,9 @@ implements IProductTypeDetailPageController
 		NestedProductTypeLocal.FETCH_GROUP_THIS_PACKAGED_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
+		ProductType.FETCH_GROUP_OWNER,
+		ProductType.FETCH_GROUP_VENDOR,
+		LegalEntity.FETCH_GROUP_PERSON,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
