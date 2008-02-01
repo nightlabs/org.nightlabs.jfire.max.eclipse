@@ -23,10 +23,11 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.dynamictrade.store.id.UnitID;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
@@ -87,11 +88,13 @@ extends ArticleBaseComposite
 			if (tariffID == null)
 				throw new IllegalStateException("No tariff selected (tariffID is null)!"); //$NON-NLS-1$
 
-			final UnitID unitID = (UnitID) JDOHelper.getObjectId(unitCombo.getSelectedElement());
+			Unit unit = unitCombo.getSelectedElement();
+			final UnitID unitID = (UnitID) JDOHelper.getObjectId(unit);
 			if (tariffID == null)
 				throw new IllegalStateException("No unit selected (unitID is null)!"); //$NON-NLS-1$
 
-			
+			final long quantity = unit.toLong(qty);
+
 			final Price singlePriceOrig = resultPriceConfig.getPriceCell(createPriceCoordinate(), true).getPrice();
 			// we must create a new instance (with a new ID), because it would otherwise cause duplicate-key-exceptions when adding multiple articles
 			final Price singlePrice = new Price(resultPriceConfig.getOrganisationID(), resultPriceConfig.getPriceConfigID(), resultPriceConfig.createPriceID(), singlePriceOrig.getCurrency());
@@ -123,11 +126,9 @@ extends ArticleBaseComposite
 					else
 						throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? segmentContext=" + segmentContext); //$NON-NLS-1$
 
-
-
 					DynamicTradeManager dm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					Article article = dm.createArticle(
-							segmentID, offerID, productTypeID, qty, unitID, tariffID, productName, singlePrice, true, false,
+							segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false,
 							new String[] {
 									fetchGroupTrade_article,
 									FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

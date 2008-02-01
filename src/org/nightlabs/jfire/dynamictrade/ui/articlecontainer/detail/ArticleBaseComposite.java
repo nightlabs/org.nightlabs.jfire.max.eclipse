@@ -57,12 +57,12 @@ import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
-import org.nightlabs.jfire.dynamictrade.dao.UnitDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.dynamictrade.store.Unit;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.store.Unit;
+import org.nightlabs.jfire.store.dao.UnitDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -440,7 +440,7 @@ extends FadeableComposite
 		updateProductNameUI();
 		productNameModified = false;
 
-		quantity.setText(NumberFormatter.formatFloat(product.getQuantity(), 2));
+		quantity.setText(NumberFormatter.formatFloat(product.getQuantityAsDouble(), 2));
 		if (!unitCombo.selectElement(product.getUnit()))
 			throw new IllegalStateException("Unit not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 

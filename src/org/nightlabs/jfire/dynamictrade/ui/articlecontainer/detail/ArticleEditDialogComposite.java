@@ -14,8 +14,8 @@ import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.dynamictrade.store.Unit;
-import org.nightlabs.jfire.dynamictrade.store.id.UnitID;
+import org.nightlabs.jfire.store.Unit;
+import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.NumberFormatter;
@@ -43,20 +43,21 @@ extends ArticleBaseComposite
 	{
 		try {
 			ArticleID articleID = (ArticleID) JDOHelper.getObjectId(this.article);
-			Double quantity = null;
+			Long quantity = null;
 			UnitID unitID = null;
 			TariffID tariffID = null;
 			I18nText productName = null;
 			Price singlePrice = null;
 
 			DynamicProduct product = (DynamicProduct) this.article.getProduct();
-			double q = NumberFormatter.parseFloat(this.quantity.getText());
-			if (Math.abs(product.getQuantity() - q) > 0.0001)
-				quantity = new Double(q);
 
 			Unit u = this.unitCombo.getSelectedElement();
 			if (!u.equals(product.getUnit()))
 				unitID = (UnitID) JDOHelper.getObjectId(u);
+
+			double q = NumberFormatter.parseFloat(this.quantity.getText());
+			if (Math.abs(product.getQuantityAsDouble() - q) > 0.0001)
+				quantity = new Long(u.toLong(q));
 
 			Tariff t = this.tariffCombo.getSelectedElement();
 			if (!t.equals(this.article.getTariff()))

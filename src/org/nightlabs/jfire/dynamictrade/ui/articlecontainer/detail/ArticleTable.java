@@ -173,7 +173,7 @@ implements ISelectionProvider
 				return dynamicProduct.getName().getText(Locale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return NumberFormatter.formatFloat(dynamicProduct.getQuantity(), 2);
+				return NumberFormatter.formatFloat(dynamicProduct.getQuantityAsDouble(), 2);
 
 			if (++ci == columnIndex)
 				return dynamicProduct.getUnit().getSymbol().getText();
