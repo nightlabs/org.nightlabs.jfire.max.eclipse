@@ -50,6 +50,11 @@ extends AbstractProductTypeDetailPage
 	}
 
 	@Override
+	protected IProductTypeSectionPart createOwnerVendorSection(Composite parent) {
+		return null;
+	}
+	
+	@Override
 	protected IProductTypeSectionPart createSaleAccessControlSection(Composite parent) {
 		return new VoucherTypeSaleAccessControlSection(this, parent);
 	}
