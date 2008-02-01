@@ -9,7 +9,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
-
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.*;
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
@@ -50,5 +50,11 @@ extends AbstractProductTypeDetailPage
 		return new SimpleProductTypeSaleAccessControlSection(this, parent, getSectionStyle());
 	}
 	
+
+	@Override
+	protected IProductTypeSectionPart createOwnerVendorSection(Composite parent) {
+		return new OwnerVendorConfigSection(this, parent, getSectionStyle());
+	}
 	
+
 }
