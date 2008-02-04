@@ -13,6 +13,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.security.User;
 
@@ -37,6 +38,8 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 	private User assigneeUser;
 	
 	private Issue issue;
+	
+	private IssueEditorGeneralPage page;
 
 	/**
 	 * @param section
@@ -44,6 +47,8 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 	 */
 	public IssueDetailSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
+		this.page = (IssueEditorGeneralPage)page;
+		
 		getClient().getGridLayout().numColumns = 2;
 		getSection().setText("General Details");
 
@@ -122,7 +127,12 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 				if (assigneeUser != null) {
 					issue.setAssignee(assigneeUser);
 					assigneeTextLabel.setText(issue.getAssignee().getName());
-					markDirty();
+					
+					//TODO Fix this!!!
+					if (! issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.NODE_NAME_ASSIGNED)) {
+						page.getIssueTypeAndStateSection().signalAssign();
+					}
+//					markDirty();
 				}
 			}//if
 		}		

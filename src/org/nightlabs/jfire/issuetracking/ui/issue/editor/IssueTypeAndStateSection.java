@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -18,6 +19,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
@@ -29,12 +31,14 @@ import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
+import org.nightlabs.jfire.security.User;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -71,7 +75,36 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
+				if (event.getTransition().getJbpmTransitionName().equals(JbpmConstants.NODE_NAME_ASSIGNED) && getIssue().getAssignee() == null) {
+					if (isDirty()) {
+						commit(true);
+						//either not possible or save first
+					}
+					else {
+						UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+						int returnCode = userSearchDialog.open();
+						if (returnCode == Dialog.OK) {
+							User assigneeUser = userSearchDialog.getSelectedUser();
+							if (assigneeUser != null) {
+								getIssue().setAssignee(assigneeUser);
+//								assigneeTextLabel.setText(issue.getAssignee().getName());
+							}
+						}//if
+						//assign to somebody + save
+					}
+				}
+
+//				List<State> states = getIssue().getStates();
+//				boolean signal = false;
+//				for (State state : states) {
+//					if (state.getStateDefinition().getJbpmNodeName().equals(JbpmConstants.NODE_NAME_ASSIGNED)) {
+//						signal = true;
+//					}
+//				}
+//				
+//				if (signal) {
 				signalIssue(event);
+//				}
 			}
 		});
 	}
@@ -114,6 +147,30 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		job.setPriority(Job.SHORT);
 		job.setUser(true);
 		job.schedule();		
+	}
+	
+	protected void signalAssign() {
+		Job job = new Job("Performing transition") {
+			@Override
+			@Implement
+			protected IStatus run(IProgressMonitor monitor)
+			{
+				try {
+					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), JbpmConstants.NODE_NAME_ASSIGNED, 
+							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					
+					currentStateComposite.setStatable(issue);
+					nextTransitionComposite.setStatable(issue);
+				} catch (Exception x) {
+					throw new RuntimeException(x);
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.setUser(true);
+		job.schedule();
 	}
 	
 	protected void doSetIssue(Issue issue) {

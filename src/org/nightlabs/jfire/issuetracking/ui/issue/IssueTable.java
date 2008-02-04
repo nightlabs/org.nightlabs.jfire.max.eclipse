@@ -63,6 +63,7 @@ extends AbstractTableComposite<Issue>
 		IssueSeverityType.FETCH_GROUP_THIS,
 		IssuePriority.FETCH_GROUP_THIS,
 		IssueLocal.FETCH_GROUP_THIS,
+		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
 

@@ -173,4 +173,36 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	protected IssueEditorPageController getController() {
 		return (IssueEditorPageController)getPageController();
 	}
+
+	public IssueLinkListSection getIssueLinkListSection() {
+		return issueLinkListSection;
+	}
+
+	public IssueDetailSection getIssueDetailSection() {
+		return issueDetailSection;
+	}
+
+	public IssueTypeAndStateSection getIssueTypeAndStateSection() {
+		return issueTypeAndStateSection;
+	}
+
+	public IssueSubjectAndDescriptionSection getIssueSubjectAndDescriptionSection() {
+		return issueSubjectAndDescriptionSection;
+	}
+
+	public IssuePropertySection getIssuePropertySection() {
+		return issuePropertySection;
+	}
+
+	public IssueFileAttachmentSection getIssueFileAttachmentSection() {
+		return issueFileAttachmentSection;
+	}
+
+	public IssueCommentListSection getIssueCommentListSection() {
+		return issueCommentListSection;
+	}
+
+	public IssueCommentCreateSection getIssueCommentCreateSection() {
+		return issueCommentCreateSection;
+	}
 }
