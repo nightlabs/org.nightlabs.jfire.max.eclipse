@@ -33,6 +33,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -104,6 +107,8 @@ public class IssueEditorPageController extends EntityEditorPageController
 	
 	private String[] CHOICE_LIST = new String[]{KEEP_LOCAL_CHANGES, RELOAD, LOAD_REMOTE_CHANGES};
 	
+	private String selectedChoice = CHOICE_LIST[0];
+	
 	/**
 	 * LOG4J logger used by this class
 	 */
@@ -126,15 +131,17 @@ public class IssueEditorPageController extends EntityEditorPageController
 								public void run() {
 									IssueEditorChoiceDialog dialog = new IssueEditorChoiceDialog(Display.getDefault().getActiveShell());
 									if (dialog.open() == Dialog.OK) {
-										if (dialog.getSelectedChoice().equals(KEEP_LOCAL_CHANGES)) {
-											
+										if (selectedChoice.equals(KEEP_LOCAL_CHANGES)) {
+											//do nothing
 										}
 										
-										else if (dialog.getSelectedChoice().equals(RELOAD)) {
+										else if (selectedChoice.equals(RELOAD)) {
 											doReload = true;
+											reload(getProgressMonitor());
+											markUndirty();
 										}
 										
-										else if (dialog.getSelectedChoice().equals(LOAD_REMOTE_CHANGES)) {
+										else if (selectedChoice.equals(LOAD_REMOTE_CHANGES)) {
 											try {
 												RCPUtil.openEditor(new IssueEditorInput((IssueID)s), IssueEditor.EDITOR_ID);
 											} catch (PartInitException e) {
@@ -240,6 +247,12 @@ public class IssueEditorPageController extends EntityEditorPageController
 			}
 		
 			choiceList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			choiceList.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					selectedChoice = choiceList.getSelection()[0];
+				}
+			});
 			
 			return wrapper;
 		}
