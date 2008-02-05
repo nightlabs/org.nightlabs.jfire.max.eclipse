@@ -60,9 +60,14 @@ extends AbstractIssueEditorGeneralSection
 				addComment(issue.getComments().get(issue.getComments().size() - 1), true);
 			}
 		}
-		getManagedForm().getForm().reflow(true);
+		reflowParentForm();
 	}
 
+	protected void reflowParentForm() {
+		getManagedForm().getForm().getBody().layout(true, true);
+		getManagedForm().getForm().reflow(true);
+	}
+	
 	public void addComment(IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
 		commentEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -88,8 +93,8 @@ extends AbstractIssueEditorGeneralSection
 
 		commentEntry.addExpansionListener(new ExpansionAdapter() {
 			public void expansionStateChanged(ExpansionEvent e) {
-				// resizes the application window.
-				getManagedForm().getForm().reflow(true);
+				// resizes the application window.				
+				reflowParentForm();
 			}
 		});
 		
