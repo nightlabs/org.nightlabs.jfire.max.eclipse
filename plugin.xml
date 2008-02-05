@@ -17,6 +17,14 @@
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavour$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavours$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavoursByModeOfPayment$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.account.ValueProviderGUIAccount$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.accounting.account.ValueProviderGUIAccounts$Factory"/>      
    </extension>
 
+   <extension
+         name="Store Value Providers"
+         point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.store.repository.ValueProviderGUIRepository$Factory"/>
+      <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.store.repository.ValueProviderGUIRepositories$Factory"/>      
+   </extension>
 </plugin>
