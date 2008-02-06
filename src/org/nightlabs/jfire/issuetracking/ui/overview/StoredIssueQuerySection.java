@@ -76,7 +76,10 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 			IssueQueryRenameDialog dialog = new IssueQueryRenameDialog(Display.getDefault().getActiveShell());
+			
 			StoredIssueQuery selectedIssueQuery = storedIssueQueryTable.getFirstSelectedElement();
+			dialog.setNameString(selectedIssueQuery.getName());
+			
 			if (selectedIssueQuery != null) {
 				if (dialog.open() == Dialog.OK) {
 					try {
@@ -167,6 +170,7 @@ extends ToolBarSectionPart
 			new Label(wrapper, SWT.NONE).setText("Name");
 			nameText = new Text(wrapper, SWT.BORDER);
 			nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			nameText.setText(nameString);
 			
 			return wrapper;
 		}
@@ -174,6 +178,10 @@ extends ToolBarSectionPart
 		private String nameString;
 		public String getNameText() {
 			return nameString;
+		}
+		
+		public void setNameString(String nameString) {
+			this.nameString = nameString;
 		}
 		
 		@Override
