@@ -107,8 +107,10 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		@Override
 		public void run() {
-			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-			table.getIssueLinkHandler(table.getFirstSelectedElement()).openLinkObject(table.getFirstSelectedElement());
+			if (issueLinkAdderComposite.getIssueLinkTable().getTable().getSelectionIndex() != -1) {
+				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
+				table.getIssueLinkHandler(table.getFirstSelectedElement()).openLinkObject(table.getFirstSelectedElement());
+			}
 		}		
 	}
 	
