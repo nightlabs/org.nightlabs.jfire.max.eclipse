@@ -26,6 +26,7 @@ extends AbstractIssueEditorGeneralSection
 	private FormToolkit toolkit;
 	private XComposite commentComposite;
 
+	private int oldSize;
 	
 	public IssueCommentListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
@@ -44,22 +45,28 @@ extends AbstractIssueEditorGeneralSection
 	
 	private boolean firstLoaded = true;
 	@Override
-	protected void doSetIssue(Issue issue) {
+	protected void doSetIssue(Issue newIssue) {
 		
-		this.issue = issue;
-
+		if (issue != null && newIssue.getComments().size() == oldSize) {
+			return;
+		}
+		
+		issue = newIssue;
+		oldSize = issue.getComments().size();
+		
 		if (firstLoaded) {
-			List<IssueComment> comments = issue.getComments();
+			List<IssueComment> comments = newIssue.getComments();
 			for (int i = 0; i < comments.size(); i++) {
 				addComment(comments.get(i), i == comments.size() - 1 ? true : false);
 			}
 			firstLoaded = false;
 		}
 		else {
-			if (issue.getComments().size() > 0) {
-				addComment(issue.getComments().get(issue.getComments().size() - 1), true);
+			if (newIssue.getComments().size() > 0) {
+				addComment(newIssue.getComments().get(newIssue.getComments().size() - 1), true);
 			}
 		}
+		
 		reflowParentForm();
 	}
 
