@@ -18,6 +18,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
@@ -31,6 +32,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	private Issue issue;
 	
+	private OpenLinkAction openLinkAction;
 	private AddLinkAction addLinkAction;
 	private RemoveLinkAction removeLinkAction;
 	
@@ -68,9 +70,11 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		
 		getSection().setClient(client);
 		
+		openLinkAction = new OpenLinkAction();
 		addLinkAction = new AddLinkAction();
 		removeLinkAction = new RemoveLinkAction();
 		
+		getToolBarManager().add(openLinkAction);
 		getToolBarManager().add(addLinkAction);
 		getToolBarManager().add(removeLinkAction);
 		
@@ -87,6 +91,25 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	
 	public Issue getIssue() {
 		return issue;
+	}
+	
+	public class OpenLinkAction extends Action {		
+		public OpenLinkAction() {
+			super();
+			setId(OpenLinkAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueLinkListSection.class, 
+			"Open"));
+			setToolTipText("Open Link(s)");
+			setText("Open");
+		}
+
+		@Override
+		public void run() {
+			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
+			table.getIssueLinkHandler(table.getFirstSelectedElement()).openLinkObject(table.getFirstSelectedElement());
+		}		
 	}
 	
 	public class AddLinkAction extends Action {		
