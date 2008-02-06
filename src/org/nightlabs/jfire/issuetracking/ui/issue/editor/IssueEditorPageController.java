@@ -28,6 +28,7 @@ import java.util.Iterator;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
+import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +36,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -55,7 +55,9 @@ import org.nightlabs.base.ui.notification.NotificationListenerJob;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
@@ -83,7 +85,7 @@ import org.nightlabs.util.Util;
  */
 public class IssueEditorPageController extends EntityEditorPageController
 {
-	
+
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, 
 		Issue.FETCH_GROUP_THIS,
@@ -104,71 +106,80 @@ public class IssueEditorPageController extends EntityEditorPageController
 	private String KEEP_LOCAL_CHANGES = "Keep Local Changes";
 	private String RELOAD = "Reload";
 	private String LOAD_REMOTE_CHANGES = "Load Remote Changes";
-	
+
 	private String[] CHOICE_LIST = new String[]{KEEP_LOCAL_CHANGES, RELOAD, LOAD_REMOTE_CHANGES};
-	
+
 	private String selectedChoice = CHOICE_LIST[0];
-	
+
 	/**
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(IssueEditorPageController.class);
-	
+
 	private Issue issue;
 
 	private boolean doReload;
 	private NotificationListenerJob issueChangeListener = new NotificationAdapterJob("Loading changes...") {
 		public void notify(NotificationEvent notificationEvent) {
 			doReload = false;
-			for (Iterator iterator = notificationEvent.getSubjects().iterator(); iterator.hasNext();) {
-				// TODO: Implement listener correctly
-				DirtyObjectID doID = (DirtyObjectID) iterator.next();
-				final Object s = doID.getObjectID();
-				if (s instanceof IssueID) {
-					if (issue != null && JDOHelper.getObjectId(issue).equals(s)) {
-						if (isDirty()) {
-							Display.getDefault().asyncExec(new Runnable() {
-								public void run() {
-									IssueEditorChoiceDialog dialog = new IssueEditorChoiceDialog(Display.getDefault().getActiveShell());
-									if (dialog.open() == Dialog.OK) {
-										if (selectedChoice.equals(KEEP_LOCAL_CHANGES)) {
-											//do nothing
+			try {
+				Cache cache = (Cache)notificationEvent.getSource();
+				String sessionID = Login.getLogin().getSessionID();
+				boolean noCheck = sessionID.equals(cache.getSessionID());
+				if (!noCheck) {
+					for (Iterator iterator = notificationEvent.getSubjects().iterator(); iterator.hasNext();) {
+						// TODO: Implement listener correctly
+						DirtyObjectID doID = (DirtyObjectID) iterator.next();
+						final Object s = doID.getObjectID();
+						if (s instanceof IssueID) {
+							if (issue != null && JDOHelper.getObjectId(issue).equals(s)) {
+								if (isDirty()) {
+									Display.getDefault().asyncExec(new Runnable() {
+										public void run() {
+											IssueEditorChoiceDialog dialog = new IssueEditorChoiceDialog(Display.getDefault().getActiveShell());
+											if (dialog.open() == Dialog.OK) {
+												if (selectedChoice.equals(KEEP_LOCAL_CHANGES)) {
+													//do nothing
+												}
+
+												else if (selectedChoice.equals(RELOAD)) {
+													doReload = true;
+													reload(getProgressMonitor());
+													markUndirty();
+												}
+
+												else if (selectedChoice.equals(LOAD_REMOTE_CHANGES)) {
+													try {
+														RCPUtil.openEditor(new IssueEditorInput((IssueID)s), IssueEditor.EDITOR_ID);
+													} catch (PartInitException e) {
+														throw new RuntimeException(e);
+													}								
+												}
+											}
 										}
-										
-										else if (selectedChoice.equals(RELOAD)) {
-											doReload = true;
-											reload(getProgressMonitor());
-											markUndirty();
-										}
-										
-										else if (selectedChoice.equals(LOAD_REMOTE_CHANGES)) {
-											try {
-												RCPUtil.openEditor(new IssueEditorInput((IssueID)s), IssueEditor.EDITOR_ID);
-											} catch (PartInitException e) {
-												throw new RuntimeException(e);
-											}								
-										}
-									}
+									});
 								}
-							});
+
+								break;
+							} 
+						} else if (s instanceof IssueLocalID && issue != null) {
+							if (JDOHelper.getObjectId(issue.getStatableLocal()).equals(s)) {
+								doReload = true;
+								break;
+							}
 						}
-						
-						break;
-					} 
-				} else if (s instanceof IssueLocalID && issue != null) {
-					if (JDOHelper.getObjectId(issue.getStatableLocal()).equals(s)) {
-						doReload = true;
-						break;
 					}
 				}
+			} catch (LoginException e1) {
+				throw new RuntimeException(e1);
 			}
-			
+
 			if (doReload) {
 				reload(getProgressMonitor());
 			}
 		}
 	};
-	
+
 	public IssueEditorPageController(EntityEditor editor)
 	{
 		super(editor);
@@ -187,7 +198,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 		);
 		super.dispose();
 	}
-	
+
 	protected IssueID getIssueID() {
 		IssueEditorInput input = (IssueEditorInput) getEntityEditor().getEditorInput();
 		return input.getJDOObjectID();
@@ -216,11 +227,11 @@ public class IssueEditorPageController extends EntityEditorPageController
 		fireModifyEvent(oldIssue, issue);
 		monitor.done();
 	}
-	
+
 	public Issue getIssue() {
 		return issue;
 	}
-	
+
 	class IssueEditorChoiceDialog extends CenteredDialog 
 	{
 		private List choiceList;
@@ -229,7 +240,7 @@ public class IssueEditorPageController extends EntityEditorPageController
 		public IssueEditorChoiceDialog(Shell parentShell) {
 			super(parentShell);
 		}
-		
+
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -238,14 +249,14 @@ public class IssueEditorPageController extends EntityEditorPageController
 			GridData gd = new GridData();
 			gd.heightHint = 40;
 			label.setLayoutData(gd);
-			
+
 			new Label(wrapper, SWT.NONE).setText("Please Choose");
 			choiceList = new List(wrapper, SWT.BORDER | SWT.SINGLE);
-			
+
 			for (String choice : CHOICE_LIST) {
 				choiceList.add(choice);
 			}
-		
+
 			choiceList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			choiceList.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -253,22 +264,22 @@ public class IssueEditorPageController extends EntityEditorPageController
 					selectedChoice = choiceList.getSelection()[0];
 				}
 			});
-			
+
 			return wrapper;
 		}
-		
+
 		@Override
 		protected void okPressed() {
 			super.okPressed();
 		}
-		
+
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setText("Choice Shell");
 			newShell.setSize(400, 300);
 		}
-		
+
 		public String getSelectedChoice() {
 			return choiceList.getSelection()[0];
 		}
