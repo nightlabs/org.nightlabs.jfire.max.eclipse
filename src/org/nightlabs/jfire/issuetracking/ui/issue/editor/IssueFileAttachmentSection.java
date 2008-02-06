@@ -42,6 +42,8 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	private RemoveFileAction removeFileAction;
 	
 	private Issue issue;
+	
+	private int nFile;
 	/**
 	 * @param section
 	 * @param managedForm
@@ -94,10 +96,15 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	}
 	
 	@Override
-	protected void doSetIssue(Issue issue) {
-		this.issue = issue;
+	protected void doSetIssue(Issue newIssue) {
+		if (issue != null && newIssue.getFileList().size() == nFile) {
+			return;
+		}
 		
-		List<IssueFileAttachment> fileAttachments = issue.getFileList();
+		issue = newIssue;
+		nFile = issue.getFileList().size();
+		
+		List<IssueFileAttachment> fileAttachments = newIssue.getFileList();
 		List<File> fileList = new ArrayList<File>();
 		for(IssueFileAttachment isa : fileAttachments) {
 			fileComposite.addFile(isa.getFileName(), isa.createFileAttachmentInputStream());
