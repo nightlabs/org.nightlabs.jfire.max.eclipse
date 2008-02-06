@@ -172,6 +172,7 @@ extends XComposite{
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterText.setLayoutData(gridData);
+		reporterText.setEditable(false);
 		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		reporterText.setText(selectedReporter.getName());
 
@@ -203,6 +204,7 @@ extends XComposite{
 		toUserComposite.setLayoutData(gridData);
 
 		assigntoUserText = new Text(toUserComposite, SWT.BORDER);
+		assigntoUserText.setEditable(false);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		assigntoUserText.setLayoutData(gridData);
