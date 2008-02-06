@@ -25,6 +25,6 @@ extends AbstractIssueLinkHandlerFactory
 
 	public IssueLinkHandler createIssueLinkHandler() {
 		// TODO Auto-generated method stub
-		return null;
+		return new IssueDeliveryNoteLinkHandler();
 	}
 }
