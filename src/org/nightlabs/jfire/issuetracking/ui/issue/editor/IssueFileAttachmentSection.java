@@ -5,6 +5,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 	private FileListSelectionComposite fileComposite;
 	
+	private DownloadFileAction downloadFileAction;
 	private AddFileAction addFileAction;
 	private RemoveFileAction removeFileAction;
 	
@@ -59,9 +61,11 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		gridData.heightHint = 100;
 		fileComposite.setLayoutData(gridData);
 		
+		downloadFileAction = new DownloadFileAction();
 		addFileAction = new AddFileAction();
 		removeFileAction = new RemoveFileAction();
 		
+		getToolBarManager().add(downloadFileAction);
 		getToolBarManager().add(addFileAction);
 		getToolBarManager().add(removeFileAction);
 		
@@ -84,6 +88,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	}
 	
 	private void fillContextMenu(IMenuManager manager) {
+		manager.add(downloadFileAction);
 		manager.add(addFileAction);
 		manager.add(removeFileAction);
 	}
@@ -97,6 +102,37 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		for(IssueFileAttachment isa : fileAttachments) {
 			fileComposite.addFile(isa.getFileName(), isa.createFileAttachmentInputStream());
 		}
+	}
+	
+	public class DownloadFileAction extends Action {		
+		public DownloadFileAction() {
+			super();
+			setId(DownloadFileAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueFileAttachmentSection.class, 
+			"Download"));
+			setToolTipText("Download File(s)");
+			setText("Download");
+		}
+
+		@Override
+		public void run() {
+			if (fileComposite.getFileListWidget().getSelectionIndex() != -1) {
+				InputStream is = fileComposite.getInputStreamMap().get(fileComposite.getFileListWidget().getItem(fileComposite.getFileListWidget().getSelectionIndex()));
+				if (is != null) {
+					try {
+						FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell(), SWT.SAVE);
+						String selectedFile = fileDialog.open();
+						if (selectedFile != null) {
+							fileComposite.saveFile(is, selectedFile);
+						}
+					} catch (Exception ex) {
+						throw new RuntimeException(ex);
+					}
+				}
+			}
+		}		
 	}
 	
 	public class AddFileAction extends Action {		
