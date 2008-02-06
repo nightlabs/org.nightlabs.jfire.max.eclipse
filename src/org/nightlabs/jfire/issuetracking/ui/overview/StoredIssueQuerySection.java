@@ -77,32 +77,34 @@ extends ToolBarSectionPart
 		public void run() {
 			IssueQueryRenameDialog dialog = new IssueQueryRenameDialog(Display.getDefault().getActiveShell());
 			
-			StoredIssueQuery selectedIssueQuery = storedIssueQueryTable.getFirstSelectedElement();
-			dialog.setNameString(selectedIssueQuery.getName());
-			
-			if (selectedIssueQuery != null) {
-				if (dialog.open() == Dialog.OK) {
-					try {
-						IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
-								IssueQueryConfigModule.class,
-								new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new NullProgressMonitor()
-						);
+			if (storedIssueQueryTable.getTable().getSelectionIndex() != -1) {
+				StoredIssueQuery selectedIssueQuery = storedIssueQueryTable.getFirstSelectedElement();
+				dialog.setNameString(selectedIssueQuery.getName());
 
-						StoredIssueQuery query = storedIssueQueryTable.getFirstSelectedElement();
-						query.setName(dialog.getNameText());
-						
-//						cfMod.addStoredIssueQuery(query);
-						
-						ConfigModuleDAO.sharedInstance().storeConfigModule(cfMod, 
-								false, 
-								new String[]{StoredIssueQuery.FETCH_GROUP_STOREDISSUEQUERY}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								new NullProgressMonitor());
-					}
-					catch (Exception e) {
-						throw new RuntimeException(e);
+				if (selectedIssueQuery != null) {
+					if (dialog.open() == Dialog.OK) {
+						try {
+							IssueQueryConfigModule cfMod = (IssueQueryConfigModule)ConfigUtil.getUserCfMod(
+									IssueQueryConfigModule.class,
+									new String[] {FetchPlan.DEFAULT, IssueQueryConfigModule.FETCH_GROUP_STOREDISSUEQUERRYLIST},
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+									new NullProgressMonitor()
+							);
+
+							StoredIssueQuery query = storedIssueQueryTable.getFirstSelectedElement();
+							query.setName(dialog.getNameText());
+
+//							cfMod.addStoredIssueQuery(query);
+
+							ConfigModuleDAO.sharedInstance().storeConfigModule(cfMod, 
+									false, 
+									new String[]{StoredIssueQuery.FETCH_GROUP_STOREDISSUEQUERY}, 
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+									new NullProgressMonitor());
+						}
+						catch (Exception e) {
+							throw new RuntimeException(e);
+						}
 					}
 				}
 			}
