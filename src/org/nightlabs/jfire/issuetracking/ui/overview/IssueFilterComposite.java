@@ -53,4 +53,8 @@ extends AbstractQueryFilterComposite
 	public void setStoredIssueQuery(StoredIssueQuery query) {
 		issueSearchComposite.setStoredIssueQuery(query);
 	}
+	
+	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
+		issueSearchComposite.setSearchInvoker(searchInvoker);
+	}
 }

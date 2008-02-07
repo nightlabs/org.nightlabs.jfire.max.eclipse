@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -67,6 +68,9 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class IssueSearchComposite extends JDOQueryComposite{
+	
+	private static final Logger logger = Logger.getLogger(IssueSearchComposite.class);
+	
 	private Text issueIDText;
 	private Text subjectText;
 	private Text reporterText;
@@ -96,6 +100,11 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private IssueLinkAdderComposite iComposite;
 	
 	private FormToolkit formToolkit;
+	
+	private Object mutex = new Object();
+	
+	private IIssueSearchInvoker searchInvoker;
+	
 	/**
 	 * @param parent
 	 * @param style
@@ -353,15 +362,18 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
-			protected IStatus run(final ProgressMonitor monitor) {
-				loadJobRunning = true;
+			protected IStatus run(final ProgressMonitor monitor) {				
+				synchronized (mutex) {
+					loadJobRunning = true;
+					logger.debug("Load Job running....");
+				}
 				try {
 					try {
 						issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 						issuePriorityList = new ArrayList<IssuePriority>();
 						issueSeverityTypeList = new ArrayList<IssueSeverityType>();
 
-						Display.getDefault().asyncExec(new Runnable() {
+						Display.getDefault().syncExec(new Runnable() {
 							public void run() {
 								issueTypeCombo.removeAll();
 								issueTypeCombo.addElement(ISSUE_TYPE_ALL);
@@ -414,13 +426,17 @@ public class IssueSearchComposite extends JDOQueryComposite{
 						throw new RuntimeException(e1);
 					}
 
-					if (storedIssueQueryRunnable != null) {
-						storedIssueQueryRunnable.run(monitor);
-						storedIssueQueryRunnable = null;
-					}
 					return Status.OK_STATUS;
 				} finally {
-					loadJobRunning = false;
+					synchronized (mutex) {
+						if (storedIssueQueryRunnable != null) {
+							logger.debug("Running storedIssueQueryRunnable from load Job.");
+							storedIssueQueryRunnable.run(monitor);
+							storedIssueQueryRunnable = null;
+						}
+						loadJobRunning = false;
+						logger.debug("Load Job finished.");
+					}
 				}
 			} 
 		};
@@ -489,6 +505,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		}
 				
 		public void run(ProgressMonitor monitor) {
+			logger.debug("SetStoredIssueQueryRunnable started.");
 			for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
 				if (jdoQuery instanceof IssueQuery) {
 					final IssueQuery issueQuery = (IssueQuery)jdoQuery;
@@ -547,9 +564,14 @@ public class IssueSearchComposite extends JDOQueryComposite{
 							assigneeText.setText(selectedAssignee == null ? "" : selectedAssignee.getName());
 							createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
 							updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
+							
+							if (searchInvoker != null) {
+								searchInvoker.search();
+							}
 						}
 					});
 				}
+				logger.debug("SetStoredIssueQueryRunnable finished.");
 			}
 		}
 		
@@ -565,18 +587,27 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	}
 	
 	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {
-		if (loadJobRunning) {
-			storedIssueQueryRunnable = new SetStoredIssueQueryRunnable(storedIssueQuery);
-		} else {
-			Job setQueryJob = new Job("Setting Issue Query") {
-				@Override
-				protected IStatus run(ProgressMonitor monitor) throws Exception {
-					new SetStoredIssueQueryRunnable(storedIssueQuery).run(monitor);
-					return Status.OK_STATUS;
-				}
-			};
-			setQueryJob.setPriority(Job.SHORT);
-			setQueryJob.schedule();
+		synchronized (mutex) {
+			logger.debug("setStoredIssueQuery started.");
+			if (loadJobRunning) { 
+				logger.debug("setStoredIssueQuery: load Job is running, setting the runnable.");
+				storedIssueQueryRunnable = new SetStoredIssueQueryRunnable(storedIssueQuery);
+				return;
+			}			
 		}
+		logger.debug("setStoredIssueQuery: load Job is NOT running, starting runnable Job.");
+		Job setQueryJob = new Job("Setting Issue Query") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				new SetStoredIssueQueryRunnable(storedIssueQuery).run(monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		setQueryJob.setPriority(Job.SHORT);
+		setQueryJob.schedule();
+	}
+	
+	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
+		this.searchInvoker = searchInvoker;
 	}
 }

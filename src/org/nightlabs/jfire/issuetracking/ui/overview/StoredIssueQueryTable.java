@@ -38,6 +38,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class StoredIssueQueryTable
 extends AbstractTableComposite<StoredIssueQuery>
 {
+	
 	public StoredIssueQueryTable(Composite parent, int style) {
 		super(parent, style);
 
@@ -115,15 +116,20 @@ extends AbstractTableComposite<StoredIssueQuery>
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							IssueEntryListViewer viewer = (IssueEntryListViewer)part.getEntryViewer();
+							final IssueEntryListViewer viewer = (IssueEntryListViewer)part.getEntryViewer();
 							viewer.expand();
 
 							StructuredSelection ss = (StructuredSelection)e.getSelection();
 
 							IssueFilterComposite searchComposite = (IssueFilterComposite)viewer.getSearchComposite();
+							searchComposite.setSearchInvoker(new IIssueSearchInvoker() {
+								@Override
+								public void search() {
+									viewer.search();
+								}
+							});
 							searchComposite.setStoredIssueQuery((StoredIssueQuery)ss.getFirstElement());
 
-							viewer.search();
 						}
 					});
 
