@@ -182,7 +182,7 @@ extends XComposite{
 		reporterButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), reporterText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedReporter == null ? "" : selectedReporter.getUserID());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
@@ -215,7 +215,7 @@ extends XComposite{
 		assigntoUserButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), assigntoUserText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssigntoUser == null ? "" : selectedAssigntoUser.getUserID());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
 					selectedAssigntoUser = userSearchDialog.getSelectedUser();
