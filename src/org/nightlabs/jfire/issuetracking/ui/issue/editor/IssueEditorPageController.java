@@ -25,6 +25,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.Issue;
@@ -79,6 +80,11 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 
 	public Issue getIssue() {
 		return getControllerObject();
+	}
+	
+	@Override
+	protected IEditorInput createNewInstanceEditorInput() {
+		return new IssueEditorInput(getIssueID(), true);
 	}
 
 	@Override

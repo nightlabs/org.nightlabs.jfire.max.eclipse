@@ -41,7 +41,18 @@ public class IssueEditorInput extends JDOObjectEditorInput<IssueID>
 	 */
 	public IssueEditorInput(IssueID issueID)
 	{
-		super(issueID);
-		setName(String.format("Name", Issue.getPrimaryKey(issueID.organisationID, issueID.issueID))); //$NON-NLS-1$
+		this(issueID, false);
 	}
+
+	public IssueEditorInput(IssueID issueID, boolean createUniqueInput) {
+		super(issueID, createUniqueInput);
+		setName(
+				String.format(
+						"Name", 
+						Issue.getPrimaryKey(issueID.organisationID, issueID.issueID)
+				)
+		);
+	}
+	
+	
 }
