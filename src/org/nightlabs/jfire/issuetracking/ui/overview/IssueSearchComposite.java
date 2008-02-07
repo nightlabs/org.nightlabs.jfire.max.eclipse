@@ -241,7 +241,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		reporterButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), reporterText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedReporter == null ? "" : selectedReporter.getUserID());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
@@ -268,7 +268,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), assigneeText.getText());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssignee == null ? "" : selectedAssignee.getUserID());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Dialog.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
