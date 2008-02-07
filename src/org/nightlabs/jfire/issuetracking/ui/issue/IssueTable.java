@@ -1,6 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -14,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -36,9 +40,11 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -50,6 +56,7 @@ extends AbstractTableComposite<Issue>
 {
 	private IssueID issueID;
 
+	private Collection<Issue> issues;
 	/**
 	 * The fetch groups of issue data.
 	 */
@@ -73,16 +80,26 @@ extends AbstractTableComposite<Issue>
 		
 		loadIssues();
 		
-		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
+		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
 	    addDisposeListener(new DisposeListener() {
 	      public void widgetDisposed(DisposeEvent event)
 	      {
-	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
+	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
 	      }
+	    });
+
+	    JDOLifecycleManager.sharedInstance().addNotificationListener(
+	    		Issue.class, changedIssueListener);
+	    addDisposeListener(new DisposeListener() {
+	    	public void widgetDisposed(DisposeEvent event)
+	    	{
+	    		JDOLifecycleManager.sharedInstance().removeNotificationListener(
+	    				Issue.class, changedIssueListener);
+	    	}
 	    });
 	}		
 
-	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Issue") {
+	private JDOLifecycleListener newIssueListener = new JDOLifecycleAdapterJob("Loading Issue") {
 	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 	      Issue.class,
 	      true,
@@ -95,12 +112,63 @@ extends AbstractTableComposite<Issue>
 
 	    public void notify(JDOLifecycleEvent event)
 	    {
-	      loadIssues();
+	    	Set<DirtyObjectID> objectIDs = event.getDirtyObjectIDs();
+	    	
+	    	final Collection<Issue> newIssues = new HashSet<Issue>();
+	    	newIssues.addAll(issues);
+	    	
+	    	for (DirtyObjectID objectID : objectIDs) {
+	    		Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)objectID.getObjectID(), IssueTable.FETCH_GROUPS,
+	    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+	    				new NullProgressMonitor());
+
+	    		for (Issue is : issues) {
+	    			newIssues.add(issue);	
+	    		}
+	    	}
+	    	
+	    	Display.getDefault().asyncExec(new Runnable() {
+	    		public void run() {
+	    			setIssues(null, newIssues);
+	    		}
+	    	});
 	    }
 	};
 
+	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
+		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+			final Collection<Issue> newIssues = new HashSet<Issue>();
+	    	newIssues.addAll(issues);
+	    	
+			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+				DirtyObjectID dirtyObjectID = it.next();
+				
+				
+
+				switch (dirtyObjectID.getLifecycleState()) {
+				case DIRTY:
+					Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS,
+		    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+		    				new NullProgressMonitor());
+					newIssues.remove(issue);
+					newIssues.add(issue);
+					break;
+				case DELETED:
+					// - remove the object from the UI
+					break;
+				}
+			}
+			
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {			
+					setIssues(null, newIssues);
+				}
+			});
+		}
+	};
+	  
 	private void loadIssues(){
-		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
+		issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor());
 		
@@ -178,6 +246,7 @@ extends AbstractTableComposite<Issue>
 //		if (currentIssueID == null)
 //			throw new IllegalArgumentException("currentIssueID == null"); //$NON-NLS-1$
 
+		this.issues = issues;
 		this.currentIssueID = currentIssueID;
 		super.setInput(issues);
 	}
