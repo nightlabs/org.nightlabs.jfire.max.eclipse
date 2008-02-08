@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -78,6 +79,8 @@ extends AbstractTableComposite<Issue>
 	{
 		super(parent, style);
 		
+		issues = new ArrayList<Issue>();
+		
 		loadIssues();
 		
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
@@ -114,22 +117,18 @@ extends AbstractTableComposite<Issue>
 	    {
 	    	Set<DirtyObjectID> objectIDs = event.getDirtyObjectIDs();
 	    	
-	    	final Collection<Issue> newIssues = new HashSet<Issue>();
-	    	newIssues.addAll(issues);
-	    	
 	    	for (DirtyObjectID objectID : objectIDs) {
 	    		Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)objectID.getObjectID(), IssueTable.FETCH_GROUPS,
 	    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 	    				new NullProgressMonitor());
 
-	    		for (Issue is : issues) {
-	    			newIssues.add(issue);	
-	    		}
+	    		if (!issues.contains(issue))
+	    			issues.add(issue);	
 	    	}
 	    	
 	    	Display.getDefault().asyncExec(new Runnable() {
 	    		public void run() {
-	    			setIssues(null, newIssues);
+	    			setIssues(null, issues);
 	    		}
 	    	});
 	    }
@@ -137,14 +136,12 @@ extends AbstractTableComposite<Issue>
 
 	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-			final Collection<Issue> newIssues = new HashSet<Issue>();
+			final Collection<Issue> newIssues = new ArrayList<Issue>();
 	    	newIssues.addAll(issues);
 	    	
 			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = it.next();
 				
-				
-
 				switch (dirtyObjectID.getLifecycleState()) {
 				case DIRTY:
 					Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS,
@@ -168,9 +165,9 @@ extends AbstractTableComposite<Issue>
 	};
 	  
 	private void loadIssues(){
-		issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
+		issues.addAll(IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new NullProgressMonitor());
+				new NullProgressMonitor()));
 		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {					
@@ -178,6 +175,7 @@ extends AbstractTableComposite<Issue>
 			}
 		});
 	}
+	
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
