@@ -1,11 +1,11 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -13,6 +13,8 @@ import javax.jdo.FetchPlan;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -20,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -82,7 +83,7 @@ extends AbstractTableComposite<Issue>
 	{
 		super(parent, style);
 		
-		issues = new ArrayList<Issue>();
+		issues = new HashSet<Issue>();
 		
 		loadIssues();
 		
@@ -103,6 +104,17 @@ extends AbstractTableComposite<Issue>
 	    				Issue.class, changedIssueListener);
 	    	}
 	    });
+	    
+	    getTableViewer().setComparator(new ViewerComparator() {
+			@Override
+			public void sort(Viewer viewer, Object[] elements) {
+				Arrays.sort(elements, new Comparator() {
+					public int compare(Object o1, Object o2) {
+						return -((Issue)o1).getCreateTimestamp().compareTo(((Issue)o2).getCreateTimestamp());
+					}
+				});
+			}
+		});
 	}		
 
 	private JDOLifecycleListener newIssueListener = new JDOLifecycleAdapterJob("Loading Issue") {
@@ -120,26 +132,26 @@ extends AbstractTableComposite<Issue>
 	    {
 	    	Set<DirtyObjectID> objectIDs = event.getDirtyObjectIDs();
 	    	
+	    	final Collection<Issue> newIssues = new ArrayList<Issue>();
+	    	
 	    	for (DirtyObjectID objectID : objectIDs) {
 	    		Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)objectID.getObjectID(), IssueTable.FETCH_GROUPS,
 	    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 	    				new NullProgressMonitor());
-
-	    		if (!issues.contains(issue))
-	    			issues.add(issue);
-	    		
-	    		Collections.sort((List<Issue>)issues, new Comparator<Issue>() {
-					@Implement
-					public int compare(Issue i1, Issue i2)
-					{
-						return -i1.getCreateTimestamp().compareTo(i2.getCreateTimestamp());
+	    		for (Issue is : issues) {
+	    			if (!(is.getIssueID() == issue.getIssueID())) {
+						newIssues.add(is);
 					}
-				});
+	    		}
+	    		
+	    		newIssues.add(issue);
 	    	}
+	    	
+	    	issues = newIssues;
 	    	
 	    	Display.getDefault().asyncExec(new Runnable() {
 	    		public void run() {
-	    			setIssues(null, issues);
+	    			setIssues(null, newIssues);
 	    		}
 	    	});
 	    }
@@ -147,8 +159,6 @@ extends AbstractTableComposite<Issue>
 
 	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-			final Collection<Issue> newIssues = new ArrayList<Issue>();
-	    	newIssues.addAll(issues);
 	    	
 			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = it.next();
@@ -158,15 +168,11 @@ extends AbstractTableComposite<Issue>
 					Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS,
 		    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 		    				new NullProgressMonitor());
-					newIssues.remove(issue);
-					newIssues.add(issue);
-					Collections.sort((List<Issue>)newIssues, new Comparator<Issue>() {
-						@Implement
-						public int compare(Issue i1, Issue i2)
-						{
-							if (i1.getUpdateTimestamp() != null)
-								return -i1.getCreateTimestamp().compareTo(i2.getUpdateTimestamp());
-							return -i1.getCreateTimestamp().compareTo(i2.getCreateTimestamp());
+					issues.add(issue);
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {			
+							setIssues(null, issues);
 						}
 					});
 					break;
@@ -175,12 +181,6 @@ extends AbstractTableComposite<Issue>
 					break;
 				}
 			}
-			
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {			
-					setIssues(null, newIssues);
-				}
-			});
 		}
 	};
 	  
@@ -261,9 +261,6 @@ extends AbstractTableComposite<Issue>
 
 	public void setIssues(IssueID currentIssueID, Collection<Issue> issues)
 	{
-//		if (currentIssueID == null)
-//			throw new IllegalArgumentException("currentIssueID == null"); //$NON-NLS-1$
-
 		this.issues = issues;
 		this.currentIssueID = currentIssueID;
 		super.setInput(issues);

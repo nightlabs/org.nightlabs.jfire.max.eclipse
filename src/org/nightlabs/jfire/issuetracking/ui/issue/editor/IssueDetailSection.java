@@ -13,9 +13,13 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.progress.NullProgressMonitor;
+
+import com.sun.corba.se.spi.ior.MakeImmutable;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -128,11 +132,10 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 					issue.setAssignee(assigneeUser);
 					assigneeTextLabel.setText(issue.getAssignee().getName());
 					
-					//TODO Fix this!!!
-					if (! issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.NODE_NAME_ASSIGNED)) {
-						page.getIssueTypeAndStateSection().signalAssign();
+					if (!issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
+						if (IssueTypeAndStateSection.assignInPossibleTransition(issue, new NullProgressMonitor()))
+							page.getIssueTypeAndStateSection().signalAssign();
 					}
-//					markDirty();
 				}
 			}//if
 		}		

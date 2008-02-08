@@ -169,6 +169,10 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
+				
+				if (selectedIssueType.equals(ISSUE_TYPE_ALL)) {
+					loadProperties();
+				}
 
 				issueSeverityCombo.removeAll();
 				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);

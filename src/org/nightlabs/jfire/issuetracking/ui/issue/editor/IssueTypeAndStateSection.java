@@ -3,6 +3,8 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.List;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -30,15 +32,21 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
+import org.nightlabs.jfire.jbpm.dao.TransitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.trade.state.id.StateID;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -75,36 +83,23 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
-				if (event.getTransition().getJbpmTransitionName().equals(JbpmConstants.NODE_NAME_ASSIGNED) && getIssue().getAssignee() == null) {
-					if (isDirty()) {
-						commit(true);
-						//either not possible or save first
-					}
-					else {
-						UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
-						int returnCode = userSearchDialog.open();
-						if (returnCode == Dialog.OK) {
-							User assigneeUser = userSearchDialog.getSelectedUser();
-							if (assigneeUser != null) {
-								getIssue().setAssignee(assigneeUser);
-//								assigneeTextLabel.setText(issue.getAssignee().getName());
-							}
-						}//if
-						//assign to somebody + save
+				if (assignInPossibleTransition(getIssue(), new NullProgressMonitor())) {
+					if (getIssue().getAssignee() == null) {
+						if (!isDirty()) {
+							UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+							int returnCode = userSearchDialog.open();
+							if (returnCode == Dialog.OK) {
+								User assigneeUser = userSearchDialog.getSelectedUser();
+								if (assigneeUser != null) {
+									getIssue().setAssignee(assigneeUser);
+								}
+							}//if							
+						}
 					}
 				}
 
-//				List<State> states = getIssue().getStates();
-//				boolean signal = false;
-//				for (State state : states) {
-//					if (state.getStateDefinition().getJbpmNodeName().equals(JbpmConstants.NODE_NAME_ASSIGNED)) {
-//						signal = true;
-//					}
-//				}
-//				
-//				if (signal) {
+				commit(true);
 				signalIssue(event);
-//				}
 			}
 		});
 	}
@@ -157,7 +152,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 			{
 				try {
 					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), JbpmConstants.NODE_NAME_ASSIGNED, 
+					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), JbpmConstants.TRANSITION_NAME_ASSIGN, 
 							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					
 					currentStateComposite.setStatable(issue);
@@ -183,4 +178,24 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		nextTransitionComposite.setStatable(issue);		
 	}
 
+	public static final String[] FETCH_GROUPS_TRANSITION = {
+		FetchPlan.DEFAULT,
+		Transition.FETCH_GROUP_NAME
+	};
+	
+	public static boolean assignInPossibleTransition(Issue issue, ProgressMonitor monitor) {
+		State state = issue.getStatableLocal().getState();
+		StateID stateID = (StateID) JDOHelper.getObjectId(state);
+
+		// fetch the possible further transitions for the current state
+		final List<Transition> transitions = TransitionDAO.sharedInstance().getTransitions(
+				stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+
+		for (Transition transition : transitions) {
+			if (transition.getJbpmTransitionName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
