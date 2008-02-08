@@ -2,8 +2,10 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -18,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -123,7 +126,15 @@ extends AbstractTableComposite<Issue>
 	    				new NullProgressMonitor());
 
 	    		if (!issues.contains(issue))
-	    			issues.add(issue);	
+	    			issues.add(issue);
+	    		
+	    		Collections.sort((List<Issue>)issues, new Comparator<Issue>() {
+					@Implement
+					public int compare(Issue i1, Issue i2)
+					{
+						return -i1.getCreateTimestamp().compareTo(i2.getCreateTimestamp());
+					}
+				});
 	    	}
 	    	
 	    	Display.getDefault().asyncExec(new Runnable() {
@@ -149,6 +160,15 @@ extends AbstractTableComposite<Issue>
 		    				new NullProgressMonitor());
 					newIssues.remove(issue);
 					newIssues.add(issue);
+					Collections.sort((List<Issue>)newIssues, new Comparator<Issue>() {
+						@Implement
+						public int compare(Issue i1, Issue i2)
+						{
+							if (i1.getUpdateTimestamp() != null)
+								return -i1.getCreateTimestamp().compareTo(i2.getUpdateTimestamp());
+							return -i1.getCreateTimestamp().compareTo(i2.getCreateTimestamp());
+						}
+					});
 					break;
 				case DELETED:
 					// - remove the object from the UI
