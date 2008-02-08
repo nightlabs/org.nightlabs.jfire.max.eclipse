@@ -63,6 +63,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.EditLockTypeInvoice;
 import org.nightlabs.jfire.accounting.Invoice;
@@ -76,6 +77,7 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.editlock.id.EditLockTypeID;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.DeliveryNoteLocal;
 import org.nightlabs.jfire.store.EditLockTypeDeliveryNote;
@@ -336,20 +338,20 @@ extends XComposite
 						public void widgetDisposed(DisposeEvent e) {
 							JDOLifecycleManager.sharedInstance().removeNotificationListener(articleContainerClass, articleContainerChangedListener);
 
-							ArticleContainerID articleContainerID = getArticleContainerID();
-							// TODO WORKAROUND JPOX bug begin
-							if (articleContainerID instanceof OrderID) {
-								OrderID orderID = (OrderID) articleContainerID;
-								if (orderID.organisationID == null) {
-									logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
-									orderID.organisationID = order.getOrganisationID();
-								}
-								if (orderID.orderIDPrefix == null) {
-									logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
-									orderID.orderIDPrefix = order.getOrderIDPrefix();
-								}
-							}
-							// TODO WORKAROUND JPOX bug end
+//							ArticleContainerID articleContainerID = getArticleContainerID();
+//							// TODO WORKAROUND JPOX bug begin
+//							if (articleContainerID instanceof OrderID) {
+//								OrderID orderID = (OrderID) articleContainerID;
+//								if (orderID.organisationID == null) {
+//									logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
+//									orderID.organisationID = order.getOrganisationID();
+//								}
+//								if (orderID.orderIDPrefix == null) {
+//									logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
+//									orderID.orderIDPrefix = order.getOrderIDPrefix();
+//								}
+//							}
+//							// TODO WORKAROUND JPOX bug end
 
 							editLockHandle.release();
 							if (articleSegmentGroups != null)
@@ -375,12 +377,28 @@ extends XComposite
 			if (isDisposed())
 				return;
 
-			if (!getArticleContainerID().equals(notificationEvent.getFirstSubject()))
+			DirtyObjectID notifiedDirtyObjectID = (DirtyObjectID) notificationEvent.getFirstSubject();
+			if (!getArticleContainerID().equals(notifiedDirtyObjectID.getObjectID())) {
+//				if (logger.isDebugEnabled()) {
+//					logger.debug("");
+//				}
 				return;
+			}
 
-			// TODO load the new ArticleContainer from the server
+			// reload the new ArticleContainer from the server
+			initGeneralEditorInput(input, new ProgressMonitorWrapper(getProgressMonitor()));
 
-			footerComposite.refresh();
+			// update header+footer on the UI thread
+			Display.getDefault().asyncExec(new Runnable()
+			{
+				public void run()
+				{
+					if (isDisposed())
+						return;
+
+					updateHeaderAndFooter();
+				}
+			});
 		}
 	};
 
@@ -422,9 +440,11 @@ extends XComposite
 		return false;
 	}	
 	
-	protected void updateFooter() {
+	protected void updateHeaderAndFooter() {
+		headerComposite.refresh();
 		footerComposite.refresh();
-		logger.info("updateFooter"); //$NON-NLS-1$
+		if (logger.isDebugEnabled())
+			logger.debug("updateHeaderAndFooter"); //$NON-NLS-1$
 	}
 
 	/**
@@ -488,7 +508,7 @@ extends XComposite
 		 */
 		public void changed(CompositeContentChangeEvent event) {
 			calculateScrollContentSize();
-			updateFooter();
+//			updateHeaderAndFooter(); // I think that's not necessary here. There are already other listeners.
 		}
 	};
 
@@ -675,7 +695,7 @@ extends XComposite
 			// // imho, it should be the case...
 			// createSegmentEditAndComposite(asg);
 			// }
-			updateFooter();
+			updateHeaderAndFooter();
 		}
 	};
 
@@ -706,7 +726,7 @@ extends XComposite
 			for (Map.Entry<SegmentEdit, Collection<ArticleCarrier>> me : segmentEdit2DeletedArticleCarriers.entrySet())
 				me.getKey().removeArticles(me.getValue());
 
-			updateFooter();
+			updateHeaderAndFooter();
 		}
 	};
 
@@ -844,26 +864,34 @@ extends XComposite
 	// return segmentEdits;
 	// }
 
-	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTCILES = new String[] {
+	public static final String[] FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES = {
+		FetchPlan.DEFAULT,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
+		Segment.FETCH_GROUP_THIS_SEGMENT,
+		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		StatableLocal.FETCH_GROUP_STATE
+	};
+
+	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTCILES = {
 			Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_OFFER_WITH_ARTICLES = new String[] {
+	public static final String[] FETCH_GROUPS_OFFER_WITH_ARTICLES = {
 			Offer.FETCH_GROUP_THIS_OFFER, OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 			Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_INVOICE_WITH_ARTICLES = new String[] {
+	public static final String[] FETCH_GROUPS_INVOICE_WITH_ARTICLES = {
 			Invoice.FETCH_GROUP_THIS_INVOICE,
 			InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
 
-	public static final String[] FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES = new String[] {
+	public static final String[] FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES = {
 			DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
 			DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL,
 			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
@@ -871,11 +899,26 @@ extends XComposite
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
 			FetchPlan.DEFAULT };
 
-	protected void initGeneralEditorInput(GeneralEditorInput generalEditorInput, ProgressMonitor monitor) {
-		if (input != null)
-			throw new IllegalStateException("input already initialized!"); //$NON-NLS-1$
+	/**
+	 * Initialise this instance of <code>GeneralEditorComposite</code> or reload the {@link ArticleContainer} referenced
+	 * by the <code>generalEditorInput</code> parameter. In case of reloading, the articles are not fetched again
+	 * (they're managed separately by the {@link ClientArticleSegmentGroups} in {@link #articleSegmentGroups})
+	 *
+	 * @param generalEditorInput the input to be set.
+	 * @param monitor the monitor to provide feedback.
+	 */
+	protected synchronized void initGeneralEditorInput(GeneralEditorInput generalEditorInput, ProgressMonitor monitor) {
+		boolean reloadArticleContainerWithoutArticles = this.input != null;
 
-//		monitor.beginTask("Loading article container", 100);
+		if (input == null && generalEditorInput == null)
+				throw new IllegalStateException("input not yet initialized and no input parameter given!"); //$NON-NLS-1$
+
+		if (generalEditorInput == null)
+			generalEditorInput = input;
+		else if (input != null && !generalEditorInput.equals(input))
+			throw new IllegalStateException("this.input != GeneralEditorInput generalEditorInput !!!"); //$NON-NLS-1$
+
+//		monitor.beginTask("Loading article container", 100); // the monitor is directly passed to the DAOs - no need to use a sub-monitor
 		try {
 			this.input = generalEditorInput;
 			this.order = null;
@@ -883,37 +926,38 @@ extends XComposite
 			this.invoice = null;
 			this.deliveryNote = null;
 
-			if (generalEditorInput == null) {
-				throw new IllegalArgumentException("generalEditorInput == null");
-			} else {
-				if (input instanceof GeneralEditorInputOrder) {
-					OrderID orderID = ((GeneralEditorInputOrder) input).getOrderID();
-					articleContainer = order = OrderDAO.sharedInstance()
-							.getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES,
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				} else if (input instanceof GeneralEditorInputOffer) {
-					OfferID offerID = ((GeneralEditorInputOffer) input).getOfferID();
-					articleContainer = offer = OfferDAO.sharedInstance().getOffer(
-							offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				} else if (input instanceof GeneralEditorInputInvoice) {
-					InvoiceID invoiceID = ((GeneralEditorInputInvoice) input)
-							.getInvoiceID();
-					articleContainer = invoice = InvoiceProvider.sharedInstance()
-							.getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES,
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-				} else if (input instanceof GeneralEditorInputDeliveryNote) {
-					DeliveryNoteID deliveryNoteID = ((GeneralEditorInputDeliveryNote) input)
-							.getDeliveryNoteID();
-					articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance()
-							.getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES,
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				} else
-					throw new IllegalArgumentException("input type \"" //$NON-NLS-1$
-							+ input.getClass().getName() + "\" unknown"); //$NON-NLS-1$
-			}
+			if (input instanceof GeneralEditorInputOrder) {
+				OrderID orderID = ((GeneralEditorInputOrder) input).getOrderID();
+				if (reloadArticleContainerWithoutArticles)
+					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				else
+					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else if (input instanceof GeneralEditorInputOffer) {
+				OfferID offerID = ((GeneralEditorInputOffer) input).getOfferID();
+				if (reloadArticleContainerWithoutArticles)
+					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				else
+					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else if (input instanceof GeneralEditorInputInvoice) {
+				InvoiceID invoiceID = ((GeneralEditorInputInvoice) input).getInvoiceID();
+				if (reloadArticleContainerWithoutArticles)
+					articleContainer = invoice = InvoiceProvider.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				else
+				articleContainer = invoice = InvoiceProvider.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			} else if (input instanceof GeneralEditorInputDeliveryNote) {
+				DeliveryNoteID deliveryNoteID = ((GeneralEditorInputDeliveryNote) input).getDeliveryNoteID();
+				if (reloadArticleContainerWithoutArticles)
+					articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				else
+				articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else
+				throw new IllegalArgumentException("input type \"" + input.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 
-			createArticleSegmentGroups();
+			if (logger.isDebugEnabled())
+				logger.debug("initGeneralEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer));
+
+			if (!reloadArticleContainerWithoutArticles)
+				createArticleSegmentGroups();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 //		} finally {

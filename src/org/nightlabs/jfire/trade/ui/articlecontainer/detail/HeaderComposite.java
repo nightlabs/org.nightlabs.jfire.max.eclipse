@@ -118,4 +118,9 @@ public class HeaderComposite extends XComposite
 				gec.createArticleContainerContextMenu(child);
 		}
 	}
+
+	public void refresh() 
+	{
+		
+	}
 }

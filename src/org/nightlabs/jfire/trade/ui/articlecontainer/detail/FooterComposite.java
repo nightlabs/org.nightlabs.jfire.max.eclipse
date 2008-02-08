@@ -115,11 +115,11 @@ public class FooterComposite extends XComposite
 	 */
 //	public abstract void refresh();
 	public void refresh() 
-	{		
+	{
 		long priceAmount = 0;
 		Currency currency = null;
 
-		for (Article article : generalEditorComposite.getArticles()) {
+		for (Article article : generalEditorComposite.getArticles()) { 
 			ArticlePrice articlePrice = article.getPrice();
 			priceAmount += articlePrice.getAmount();
 			if (currency == null)

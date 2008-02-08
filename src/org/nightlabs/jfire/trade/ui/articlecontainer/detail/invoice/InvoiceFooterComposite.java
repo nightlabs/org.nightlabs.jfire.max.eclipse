@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
 
 /**
@@ -58,8 +59,8 @@ extends FooterComposite
 		String totalPrice = NumberFormatter.formatCurrency(invoice.getPrice().getAmount(), invoice.getCurrency());
 
 		if (invoice.getInvoiceLocal().getAmountPaid() == 0)
-			setFooterText(String.format("Total price: %3$s", amountPaid, amountToPay, totalPrice));
+			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextNothingPaid"), amountPaid, amountToPay, totalPrice)); //$NON-NLS-1$
 		else
-			setFooterText(String.format("Already paid: %1$s  To pay: %2$s  Total price: %3$s", amountPaid, amountToPay, totalPrice));
+			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextWithPayment"), amountPaid, amountToPay, totalPrice)); //$NON-NLS-1$
 	}
 }
