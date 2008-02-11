@@ -124,7 +124,7 @@ implements IProductTypeSectionPart
 
 
 
-		if (ownerVendorConfigComposite != null)
+		if (ownerVendorConfigComposite != null && isDirty())
 		{
 			productType.setOwner(ownerVendorConfigComposite.getOwnerLegalEntity());
 
@@ -147,6 +147,8 @@ implements IProductTypeSectionPart
 		public void run() {
 			if (productType == null)
 				return;
+			
+			
 
 			updateToolBarManager();
 			markDirty();
