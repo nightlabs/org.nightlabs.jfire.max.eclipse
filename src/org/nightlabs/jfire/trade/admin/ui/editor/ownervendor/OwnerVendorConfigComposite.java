@@ -46,9 +46,12 @@ import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * @author Daniel.Mazurek [at] NightLabs [dot] de
+ * @author Fitas [at] NightLabs [dot] de
  *
  */
+
+
+
 public class OwnerVendorConfigComposite 
 extends XComposite
 {	
