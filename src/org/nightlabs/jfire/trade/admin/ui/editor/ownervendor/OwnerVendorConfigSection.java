@@ -19,7 +19,6 @@ import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 
-
 /**
  * @author Fitas [at] NightLabs [dot] de
  *
@@ -34,9 +33,9 @@ extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
 
-	
+
 	private InheritAction inheritAction;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -57,6 +56,21 @@ implements IProductTypeSectionPart
 				SWT.NONE, this, false);
 
 
+		ownerVendorConfigComposite.addLegalEntityValueChangedListener( 
+				new ILegalEntityValueChangedListener()
+		  {
+			public void legalEntityValueChanged()
+			{
+				// if value has changed 				
+					markDirty();
+				
+			}
+		});
+
+		
+		
+		
+		
 
 		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
@@ -76,15 +90,15 @@ implements IProductTypeSectionPart
 		return ownerVendorConfigComposite;
 	}
 
-	
+
 	private ProductType productType = null;
-	
-	
+
+
 	public ProductType getProductType() {
 		return productType;
 	}
-	
-	
+
+
 	/**
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set
@@ -93,8 +107,8 @@ implements IProductTypeSectionPart
 	{
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
-		
-		
+
+
 		this.productType = productType;
 		getOwnerVendorConfigComposite().setProductType(productType);
 
@@ -107,6 +121,15 @@ implements IProductTypeSectionPart
 	@Override
 	public void commit(boolean save) {
 		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
+
+
+
+		if (ownerVendorConfigComposite != null)
+		{
+			productType.setOwner(ownerVendorConfigComposite.getOwnerLegalEntity());
+
+			productType.setVendor(ownerVendorConfigComposite.getVendorLegalEntity());
+		}
 
 
 		// delegate itself was already set

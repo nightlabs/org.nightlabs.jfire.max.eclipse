@@ -6,6 +6,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -49,7 +50,7 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class OwnerVendorConfigComposite 
-extends XComposite 
+extends XComposite
 {	
 	private boolean showButtons = true;
 	
@@ -142,7 +143,11 @@ extends XComposite
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
 		if (dlg.open() == Window.OK) {
-			productType.setOwner(wiz.getLegalEntity());
+		
+			 ownerLegalEntity = wiz.getLegalEntity();
+			 fireLegalEntityValueChangedEvent();
+			 updateUI();
+			 
 		}
 		
 		
@@ -154,15 +159,44 @@ extends XComposite
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
 		if (dlg.open() == Window.OK) {
-			productType.setVendor(wiz.getLegalEntity());
+			//productType.setVendor(wiz.getLegalEntity());
+		
+			 vendorLegalEntity = wiz.getLegalEntity(); 
+			 
+			 fireLegalEntityValueChangedEvent();
+			 updateUI();
+			 
 		}
 		
 
 	}
 	
 	
+	protected void updateUI() {
+		
+		vendorText.setText(getVendorLegalEntity().getPerson().getDisplayName());
+		
+		ownerText.setText(getOwnerLegalEntity().getPerson().getDisplayName());
+		
+	}
+	
+	
 	
 	private ProductType productType;
+	
+	
+	public LegalEntity getVendorLegalEntity() {
+		return ownerLegalEntity;
+	}
+	public LegalEntity getOwnerLegalEntity() {
+		return vendorLegalEntity;
+	}
+	
+	
+	
+	
+	
+	
 	public ProductType getProductType() {
 		return productType;
 	}
@@ -175,11 +209,11 @@ extends XComposite
 	{
 		this.productType = productType;
 		
+		ownerLegalEntity = productType.getOwner();
 		
-		vendorText.setText(productType.getVendor().getPerson().getDisplayName());
+		vendorLegalEntity = productType.getVendor();
 		
-		ownerText.setText(productType.getOwner().getPerson().getDisplayName());
-
+		updateUI();
 		
 	}	
 	
@@ -188,6 +222,47 @@ extends XComposite
 	}
 	
 
+private ListenerList legalEntityValueChangedListeners = new ListenerList();
+	
+	
+	protected void fireLegalEntityValueChangedEvent()
+	{
+		
+		Object[] listeners = legalEntityValueChangedListeners.getListeners();
+		if (listeners.length < 1)
+			return;
+	
+		for (Object l : listeners) {
+			ILegalEntityValueChangedListener listener = (ILegalEntityValueChangedListener) l;
+			listener.legalEntityValueChanged();
+			
+		}
+		
+	
+	}
+	
+	
+	public void addLegalEntityValueChangedListener(ILegalEntityValueChangedListener listener)
+	{
+		legalEntityValueChangedListeners.add(listener);
+	}
+
+	
+	public void removeLegalEntityValueChangedListener(ILegalEntityValueChangedListener listener)
+	{
+		legalEntityValueChangedListeners.remove(listener);
+	}
+	
+
+	
+	
+
+	
+	
+	
+	
+	
+	
 	
 	
 		
