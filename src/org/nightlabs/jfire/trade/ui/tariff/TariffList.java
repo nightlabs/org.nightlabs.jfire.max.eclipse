@@ -4,9 +4,11 @@ import java.text.Collator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -59,12 +61,25 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		}
 	}
 
+	/**
+	 * @deprecated Pass the {@link TariffFilter} to {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} and use one of the non-deprecated constructors.
+	 */
 	public TariffList(Composite parent, int style, boolean multiSelect, TariffFilter tariffFilter) {
 		this(parent, style, multiSelect, tariffFilter, getLocalOrganisationID(), false);
 	}
 
-	public TariffList(Composite parent, int style, boolean multiSelect, TariffFilter tariffFilter, String filterOrganisationID,
-			boolean filterOrganisationIDInverse) {
+	public TariffList(Composite parent, int style, boolean multiSelect) {
+		this(parent, style, multiSelect, (TariffFilter)null);
+	}
+
+	public TariffList(Composite parent, int style, boolean multiSelect, String filterOrganisationID, boolean filterOrganisationIDInverse) {
+		this(parent, style, multiSelect, (TariffFilter)null, filterOrganisationID, filterOrganisationIDInverse);
+	}
+
+	/**
+	 * @deprecated Pass the {@link TariffFilter} to {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} and use one of the non-deprecated constructors.
+	 */
+	public TariffList(Composite parent, int style, boolean multiSelect, TariffFilter tariffFilter, String filterOrganisationID, boolean filterOrganisationIDInverse) {
 		super(parent, style, false);
 
 		this.tariffFilter = tariffFilter;
@@ -99,6 +114,13 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	}
 
 	/**
+	 * @deprecated Use {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} instead (you can pass <code>null</code> as filter).
+	 */
+	public void loadTariffs(final Comparator<Tariff> _tariffComparator) {
+		loadTariffs(_tariffComparator, this.tariffFilter);
+	}
+
+	/**
 	 * Load the tariffs. When this composite is created, it is initially empty. In order to make it display
 	 * the tariffs, this method needs to be called on the UI thread. It spawns a {@link Job} which loads the data,
 	 * orders it with the given {@link Comparator} and displays it. If no <code>Comparator</code> is given, it
@@ -109,11 +131,11 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	 *
 	 * @param _tariffComparator The comparator to be used for sorting the {@link Tariff}s or <code>null</code> to use the built-in
 	 *		default (sorting by the tariff's name).
-	 * 
-	 * TODO isn't the API inconsistent in that it takes the {@link TariffFilter} in the constructor, but the comparator here? Maybe we should
-	 *		pass both here? 
+	 * @param tariffFilter the filter to be used or <code>null</code> if the tariffs should not be filtered.
 	 */
-	public void loadTariffs(final Comparator<Tariff> _tariffComparator) {
+	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter) {
+		this.tariffFilter = tariffFilter;
+
 		setLoadingMessage("Loading tariffs...");
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.loadTariffsJob.name")) { //$NON-NLS-1$
 			@Override
@@ -152,7 +174,9 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 								return;
 
 							setInput(tariffs);
-							
+							if (!selectedTariffs.isEmpty())
+								setSelectedElements(selectedTariffs);
+
 //							for (Tariff tariff : _tariffs) {
 //								tariffList.add(tariff.getName().getText(Locale.getDefault().getLanguage())
 //										+ (organisationVisible ? (" (" + tariff.getOrganisationID() + ")") : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -175,6 +199,24 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 
 	public Collection<Tariff> getSelectedTariffs() {
 		return getSelectedElements();
+	}
+
+	/**
+	 * Keeps track of selected tariffs already before they are loaded from the server. This way, it is not necessary to wait or pass a callback, if the
+	 * API client wants to select tariffs. 
+	 */
+	private Set<Tariff> selectedTariffs = new HashSet<Tariff>();
+
+	@Override
+	public void setSelectedElements(Collection<Tariff> elements)
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!");
+
+		this.selectedTariffs.clear();
+		this.selectedTariffs.addAll(elements);
+		if (this.tariffs != null)
+			super.setSelectedElements(elements);
 	}
 	
 	public void moveSelectedTariffOneUp() {

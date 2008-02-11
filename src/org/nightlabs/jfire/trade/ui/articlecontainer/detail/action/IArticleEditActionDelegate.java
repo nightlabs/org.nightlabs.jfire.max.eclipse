@@ -75,7 +75,7 @@ public interface IArticleEditActionDelegate
 	 * @return Returns <code>true</code> if this action is applicable to all selected <code>Article</code>s;
 	 *		<code>false</code> if it cannot be applied to at least one selection item.
 	 */
-	boolean calculateEnabled(ArticleSelection articleSelection, Set articleSelections);
+	boolean calculateEnabled(ArticleSelection articleSelection, Set<ArticleSelection> articleSelections);
 
 	/**
 	 * This method is called on the SWT GUI thread whenever the action

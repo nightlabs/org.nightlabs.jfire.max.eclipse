@@ -88,7 +88,7 @@ public abstract class RemoveActionDelegate extends ArticleEditActionDelegate
 	 *  </li>
 	 * </ul>
 	 */
-	public boolean calculateEnabled(ArticleSelection articleSelection, Set articleSelections)
+	public boolean calculateEnabled(ArticleSelection articleSelection, Set<ArticleSelection> articleSelections)
 	{
 		// The RemoveAction calculates enabled, already:
 		//  * Removal from Offer/Order (=deletion of Article) is NOT possible, if
