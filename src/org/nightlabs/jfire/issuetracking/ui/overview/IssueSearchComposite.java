@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -76,6 +77,11 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private Text reporterText;
 	private Text assigneeText;
 
+	private Button allReporterButton;
+	private Button reporterButton;
+	private Button allAssigneeButton;
+	private Button assigneeButton;
+	
 	private List<IssueType> issueTypeList;
 	private List<IssuePriority> issuePriorityList;
 	private List<IssueSeverityType> issueSeverityTypeList;
@@ -104,6 +110,9 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private Object mutex = new Object();
 	
 	private IIssueSearchInvoker searchInvoker;
+	
+	private boolean selectedAllReporter = false;
+	private boolean selectedAllAssignee = false;
 	
 	/**
 	 * @param parent
@@ -240,15 +249,33 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		
 		Label rLabel = new Label(userGroup, SWT.NONE);
 		rLabel.setText("Reporter: ");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = GridData.CENTER;
 		rLabel.setLayoutData(gridData);
+				
+		XComposite rComposite = new XComposite(userGroup, SWT.NONE);
+		rComposite.setLayout(new GridLayout(2, false));
 		
-		reporterText = new Text(userGroup, SWT.BORDER);
+		allReporterButton = new Button(rComposite, SWT.CHECK);
+		allReporterButton.setText("All");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		allReporterButton.setLayoutData(gridData);
+		allReporterButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedAllReporter = allReporterButton.getSelection();
+				reporterText.setEnabled(!selectedAllReporter);
+				reporterButton.setEnabled(!selectedAllReporter);
+			}
+		});
+		allReporterButton.setSelection(true);
+		
+		reporterText = new Text(rComposite, SWT.BORDER);
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/////////////////////////////////
-		Button reporterButton = new Button(userGroup, SWT.PUSH);
+		reporterButton = new Button(rComposite, SWT.PUSH);
 		reporterButton.setText("...");
 
 		reporterButton.addSelectionListener(new SelectionAdapter(){
@@ -264,18 +291,35 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			}
 		});
 		/////////////////////////////////
-
 		Label aLabel = new Label(userGroup, SWT.NONE);
 		aLabel.setText("Assignee: ");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
+		gridData.verticalAlignment = GridData.CENTER;
 		aLabel.setLayoutData(gridData);
 		
-		assigneeText = new Text(userGroup, SWT.BORDER);
+		XComposite aComposite = new XComposite(userGroup, SWT.NONE);
+		aComposite.setLayout(new GridLayout(2, false));
+		
+		allAssigneeButton = new Button(aComposite, SWT.CHECK);
+		allAssigneeButton.setText("All");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		allAssigneeButton.setLayoutData(gridData);
+		allAssigneeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedAllAssignee = allAssigneeButton.getSelection();
+				assigneeText.setEnabled(!selectedAllAssignee);
+				assigneeButton.setEnabled(!selectedAllAssignee);
+			}
+		});
+		allAssigneeButton.setSelection(true);
+		
+		assigneeText = new Text(aComposite, SWT.BORDER);
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Button assigneeButton = new Button(userGroup, SWT.PUSH);
+		assigneeButton = new Button(aComposite, SWT.PUSH);
 		assigneeButton.setText("...");
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
@@ -476,12 +520,18 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
 		}
 
-		if (selectedReporter != null) {
+		if (!selectedAllReporter && selectedReporter != null) {
 			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
 		}
+		else {
+			issueQuery.setReporterID(null);
+		}
 
-		if (selectedAssignee != null) {
+		if (!selectedAllAssignee && selectedAssignee != null) {
 			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+		}
+		else {
+			issueQuery.setAssigneeID(null);
 		}
 
 		if (createdTimeEdit.isActive()) {
@@ -569,6 +619,9 @@ public class IssueSearchComposite extends JDOQueryComposite{
 							createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
 							updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
 							
+							allReporterButton.setSelection(selectedReporter == null);
+							allAssigneeButton.setSelection(selectedAssignee == null);
+							
 							if (searchInvoker != null) {
 								searchInvoker.search();
 							}
@@ -588,6 +641,8 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		selectedIssuePriority = null;
 		selectedIssueSeverityType = null;
 		selectedIssueResolution = null;
+		selectedAllAssignee = false;
+		selectedAllReporter = false;
 	}
 	
 	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {

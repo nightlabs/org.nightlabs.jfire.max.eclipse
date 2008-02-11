@@ -22,9 +22,9 @@ import org.nightlabs.jfire.issue.Issue;
 public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGeneralSection {
 
 	private Label subjectLabel;
-	private I18nTextEditor subjectEditor;
+	private I18nTextEditor subjectText;
 	private Label descriptionLabel;
-	private I18nTextEditor descriptionEditor;
+	private I18nTextEditor descriptionText;
 	
 	private ModifyListener modifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent arg0) {
@@ -46,28 +46,28 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		subjectLabel.setLayoutData(new GridData());
 		subjectLabel.setText("Subject:");
 		
-		subjectEditor = new I18nTextEditor(getClient());
-		subjectEditor.addModifyListener(modifyListener);
+		subjectText = new I18nTextEditor(getClient());
+		subjectText.addModifyListener(modifyListener);
 		
 		descriptionLabel = new Label(getClient(), SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description:");
 		
-		descriptionEditor = new I18nTextEditorMultiLine(getClient(), subjectEditor.getLanguageChooser());		
-		((GridData) descriptionEditor.getLayoutData()).heightHint = 80;
-		descriptionEditor.addModifyListener(modifyListener);
+		descriptionText = new I18nTextEditorMultiLine(getClient(), subjectText.getLanguageChooser());		
+		((GridData) descriptionText.getLayoutData()).heightHint = 80;
+		descriptionText.addModifyListener(modifyListener);
 	}
 	
 	protected void doSetIssue(Issue issue) {
-		subjectEditor.setI18nText(issue.getSubject(), EditMode.DIRECT);
-		descriptionEditor.setI18nText(issue.getDescription(), EditMode.DIRECT);
+		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
+		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
 		
 	}
 
-	@Override
-	public void commit(boolean onSave) {
-		super.commit(onSave);
-		subjectEditor.getI18nText();
-		descriptionEditor.getI18nText();
-	}
+//	@Override
+//	public void commit(boolean onSave) {
+//		super.commit(onSave);
+//		getIssue().getSubject().setText(subjectText.getLanguageChooser().getLanguage().getLanguageID(), subjectText.getEditText());
+//		getIssue().getDescription().setText(descriptionText.getLanguageChooser().getLanguage().getLanguageID(), descriptionText.getEditText());
+//	}
 }

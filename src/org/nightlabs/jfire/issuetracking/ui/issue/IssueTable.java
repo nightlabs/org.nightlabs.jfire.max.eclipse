@@ -82,30 +82,30 @@ extends AbstractTableComposite<Issue>
 	public IssueTable(Composite parent, int style)
 	{
 		super(parent, style);
-		
-		issues = new HashSet<Issue>();
-		
-		loadIssues();
-		
-		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
-	    addDisposeListener(new DisposeListener() {
-	      public void widgetDisposed(DisposeEvent event)
-	      {
-	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
-	      }
-	    });
 
-	    JDOLifecycleManager.sharedInstance().addNotificationListener(
-	    		Issue.class, changedIssueListener);
-	    addDisposeListener(new DisposeListener() {
-	    	public void widgetDisposed(DisposeEvent event)
-	    	{
-	    		JDOLifecycleManager.sharedInstance().removeNotificationListener(
-	    				Issue.class, changedIssueListener);
-	    	}
-	    });
-	    
-	    getTableViewer().setComparator(new ViewerComparator() {
+		issues = new HashSet<Issue>();
+
+		loadIssues();
+
+		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent event)
+			{
+				JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
+			}
+		});
+
+		JDOLifecycleManager.sharedInstance().addNotificationListener(
+				Issue.class, changedIssueListener);
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent event)
+			{
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(
+						Issue.class, changedIssueListener);
+			}
+		});
+
+		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
 				Arrays.sort(elements, new Comparator() {
@@ -118,61 +118,64 @@ extends AbstractTableComposite<Issue>
 	}		
 
 	private JDOLifecycleListener newIssueListener = new JDOLifecycleAdapterJob("Loading Issue") {
-	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
-	      Issue.class,
-	      true,
-	      JDOLifecycleState.NEW);
+		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
+				Issue.class,
+				true,
+				JDOLifecycleState.NEW);
 
-	    public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
-	    {
-	      return filter;
-	    }
+		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
+		{
+			return filter;
+		}
 
-	    public void notify(JDOLifecycleEvent event)
-	    {
-	    	Set<DirtyObjectID> objectIDs = event.getDirtyObjectIDs();
-	    	
-	    	final Collection<Issue> newIssues = new ArrayList<Issue>();
-	    	
-	    	for (DirtyObjectID objectID : objectIDs) {
-	    		Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)objectID.getObjectID(), IssueTable.FETCH_GROUPS,
-	    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-	    				new NullProgressMonitor());
-	    		for (Issue is : issues) {
-	    			if (!(is.getIssueID() == issue.getIssueID())) {
+		public void notify(JDOLifecycleEvent event)
+		{
+			Set<DirtyObjectID> objectIDs = event.getDirtyObjectIDs();
+
+			final Collection<Issue> newIssues = new ArrayList<Issue>();
+
+			for (DirtyObjectID objectID : objectIDs) {
+				Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)objectID.getObjectID(), IssueTable.FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
+				for (Issue is : issues) {
+					if (!(is.getIssueID() == issue.getIssueID())) {
 						newIssues.add(is);
 					}
-	    		}
-	    		
-	    		newIssues.add(issue);
-	    	}
-	    	
-	    	issues = newIssues;
-	    	
-	    	Display.getDefault().asyncExec(new Runnable() {
-	    		public void run() {
-	    			setIssues(null, newIssues);
-	    		}
-	    	});
-	    }
+				}
+
+				newIssues.add(issue);
+			}
+
+			issues = newIssues;
+
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					setIssues(null, newIssues);
+					refresh();
+				}
+			});
+		}
 	};
 
 	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-	    	
+
 			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = it.next();
-				
+
 				switch (dirtyObjectID.getLifecycleState()) {
 				case DIRTY:
 					Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS,
-		    				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-		    				new NullProgressMonitor());
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor());
 					issues.add(issue);
-					
+
 					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {			
+						public void run() {		
+							setIssues(null, null);
 							setIssues(null, issues);
+							refresh();
 						}
 					});
 					break;
@@ -183,19 +186,19 @@ extends AbstractTableComposite<Issue>
 			}
 		}
 	};
-	  
+
 	private void loadIssues(){
 		issues.addAll(IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()));
-		
+
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {					
 				setIssues(null, issues);
 			}
 		});
 	}
-	
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -211,7 +214,7 @@ extends AbstractTableComposite<Issue>
 		tc.setMoveable(true);
 		tc.setText("Date Submitted");
 		layout.addColumnData(new ColumnWeightData(40));
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Type");
@@ -226,12 +229,12 @@ extends AbstractTableComposite<Issue>
 		tc.setMoveable(true);
 		tc.setText("Description");
 		layout.addColumnData(new ColumnWeightData(20));
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Severity");
 		layout.addColumnData(new ColumnWeightData(15));
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Priority");
@@ -241,7 +244,7 @@ extends AbstractTableComposite<Issue>
 		tc.setMoveable(true);
 		tc.setText("State");
 		layout.addColumnData(new ColumnWeightData(15));
-		
+
 		table.setLayout(layout);
 	}
 
@@ -288,7 +291,7 @@ extends AbstractTableComposite<Issue>
 				case(3):
 					if (issue.getSubject() != null)
 						return issue.getSubject().getText();
-					break;
+				break;
 				case(4):
 					if (issue.getDescription() != null)
 						return issue.getDescription().getText();
@@ -296,11 +299,11 @@ extends AbstractTableComposite<Issue>
 				case(5):
 					if(issue.getIssueSeverityType() != null)
 						return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
-					break;
+				break;
 				case(6):
 					if(issue.getIssuePriority() != null)
 						return issue.getIssuePriority().getIssuePriorityText().getText();
-					break;
+				break;
 				case(7):
 					return getStateName(issue);					
 				default:
@@ -329,7 +332,7 @@ extends AbstractTableComposite<Issue>
 
 		return ""; //$NON-NLS-1$
 	}	
-	
+
 	public void setLoadingStatus()
 	{
 		this.currentIssueID = null;
