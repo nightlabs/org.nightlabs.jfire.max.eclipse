@@ -140,7 +140,16 @@ implements IProductTypeSectionPart
 
 
 
-
+	protected void inheritPressed() {
+		if( inheritAction.isChecked() )
+		{
+		
+			
+			
+		}
+	}
+	
+	
 	class InheritAction 
 	extends InheritanceAction {
 		@Override
@@ -148,8 +157,8 @@ implements IProductTypeSectionPart
 			if (productType == null)
 				return;
 			
+			inheritPressed();
 			
-
 			updateToolBarManager();
 			markDirty();
 		}
