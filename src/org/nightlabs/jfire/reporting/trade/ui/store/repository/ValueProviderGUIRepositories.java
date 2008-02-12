@@ -92,7 +92,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
-		Collection<Anchor> anchors = (Collection<Anchor>) repositoryEntryViewer.getListComposite().getSelectedElements();		
+		Collection<Anchor> anchors = repositoryEntryViewer.getListComposite().getSelectedElements();		
 		if (anchors != null && anchors.size() > 0) {
 			Collection<AnchorID> result = new ArrayList<AnchorID>(anchors.size());
 			for (Anchor anchor : anchors) {
