@@ -37,6 +37,11 @@ import java.util.EventObject;
 public class CompositeContentChangeEvent extends EventObject
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CompositeContentChangeEvent(Object source)
 	{
 		super(source);

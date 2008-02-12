@@ -302,7 +302,7 @@ implements IDeliveryEntryPage
 
 	protected DeliveryEntryPageCfMod getDeliveryEntryPageCfMod()
 	{
-		return (DeliveryEntryPageCfMod) Config.sharedInstance().createConfigModule(DeliveryEntryPageCfMod.class);
+		return Config.sharedInstance().createConfigModule(DeliveryEntryPageCfMod.class);
 	}
 
 	protected void modeOfDeliveryFlavourGUIListSelectionChanged()

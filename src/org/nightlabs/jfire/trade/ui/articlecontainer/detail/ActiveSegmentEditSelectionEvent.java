@@ -31,6 +31,11 @@ import java.util.EventObject;
 public class ActiveSegmentEditSelectionEvent extends EventObject
 {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * @param source The source is the {@link GeneralEditorComposite}, in which
 	 *		an activeSegmentEdit has been selected.
 	 *

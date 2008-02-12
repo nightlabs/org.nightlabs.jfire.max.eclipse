@@ -706,7 +706,7 @@ implements IPaymentEntryPage
 
 	protected PaymentEntryPageCfMod getPaymentEntryPageCfMod()
 	{
-		return (PaymentEntryPageCfMod) Config.sharedInstance().createConfigModule(PaymentEntryPageCfMod.class);
+		return Config.sharedInstance().createConfigModule(PaymentEntryPageCfMod.class);
 	}
 
 	protected void modeOfPaymentFlavourGUIListSelectionChanged()

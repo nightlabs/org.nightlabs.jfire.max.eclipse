@@ -64,6 +64,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	/**
 	 * @deprecated Pass the {@link TariffFilter} to {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} and use one of the non-deprecated constructors.
 	 */
+	@Deprecated
 	public TariffList(Composite parent, int style, boolean multiSelect, TariffFilter tariffFilter) {
 		this(parent, style, multiSelect, tariffFilter, getLocalOrganisationID(), false);
 	}
@@ -79,6 +80,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	/**
 	 * @deprecated Pass the {@link TariffFilter} to {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} and use one of the non-deprecated constructors.
 	 */
+	@Deprecated
 	public TariffList(Composite parent, int style, boolean multiSelect, TariffFilter tariffFilter, String filterOrganisationID, boolean filterOrganisationIDInverse) {
 		super(parent, style, false);
 
@@ -116,6 +118,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	/**
 	 * @deprecated Use {@link #loadTariffs(Comparator, org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter)} instead (you can pass <code>null</code> as filter).
 	 */
+	@Deprecated
 	public void loadTariffs(final Comparator<Tariff> _tariffComparator) {
 		loadTariffs(_tariffComparator, this.tariffFilter);
 	}

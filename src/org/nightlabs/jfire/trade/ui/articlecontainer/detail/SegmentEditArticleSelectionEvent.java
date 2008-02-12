@@ -31,6 +31,10 @@ import java.util.Set;
 
 public class SegmentEditArticleSelectionEvent extends EventObject
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Set articleSelections;
 
 	public SegmentEditArticleSelectionEvent(SegmentEdit segmentEdit)

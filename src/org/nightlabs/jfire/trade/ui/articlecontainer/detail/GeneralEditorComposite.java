@@ -233,6 +233,7 @@ extends XComposite
 			assert generalEditorInput != null : "generalEditorInput != null";
 		}
 		
+		@Override
 		protected org.eclipse.core.runtime.IStatus run(ProgressMonitor monitor) throws Exception
 		{
 			loadInitialArticleContainerJob = null; // release memory
