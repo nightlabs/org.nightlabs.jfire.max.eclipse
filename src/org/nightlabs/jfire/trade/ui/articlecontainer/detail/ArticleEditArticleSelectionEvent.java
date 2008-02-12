@@ -31,9 +31,6 @@ import java.util.Set;
 
 public class ArticleEditArticleSelectionEvent extends EventObject
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Set selectedArticles;
 

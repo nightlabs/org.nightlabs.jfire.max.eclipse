@@ -34,9 +34,6 @@ import org.nightlabs.jfire.trade.ArticleCarrier;
 
 public class ArticleChangeEvent extends EventObject
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Collection<Article> dirtyArticles;
 	private Collection<ArticleCarrier> dirtyArticleCarriers;
