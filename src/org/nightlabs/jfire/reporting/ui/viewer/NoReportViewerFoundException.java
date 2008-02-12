@@ -12,10 +12,6 @@ package org.nightlabs.jfire.reporting.ui.viewer;
  *
  */
 public class NoReportViewerFoundException extends Exception {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

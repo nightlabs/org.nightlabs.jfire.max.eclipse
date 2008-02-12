@@ -43,16 +43,9 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
  *
  */
 public class ReportViewPrintConfigModule extends ConfigModule {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public static class UseCaseConfig implements Cloneable, Serializable {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		
 		private String reportUseCaseID;
