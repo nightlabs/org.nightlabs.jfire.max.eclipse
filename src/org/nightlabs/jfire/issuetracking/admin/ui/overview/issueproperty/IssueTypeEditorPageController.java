@@ -14,7 +14,7 @@ import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.progress.NullProgressMonitor;
 
-public class IssueTypeEditorPageController extends EntityEditorPageController{
+public class IssueTypeEditorPageController extends EntityEditorPageController {
 
 	/**
 	 * The fetch groups of issue data.
