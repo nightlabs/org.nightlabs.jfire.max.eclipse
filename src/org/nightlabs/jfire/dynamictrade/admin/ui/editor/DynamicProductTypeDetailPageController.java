@@ -3,9 +3,7 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
@@ -16,6 +14,7 @@ import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -23,7 +22,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageCo
  */
 public class DynamicProductTypeDetailPageController 
 //extends AbstractDynamicProductTypePageController 
-extends AbstractProductTypeDetailPageController
+extends AbstractProductTypeDetailPageController<DynamicProductType>
 {
 	/**
 	 * @param editor
@@ -52,19 +51,24 @@ extends AbstractProductTypeDetailPageController
 	};
 
 	@Override
-	protected ProductType retrieveProductType(IProgressMonitor monitor) {
+	protected String[] getEntityFetchGroups() {
+		return FETCH_GROUPS_DEFAULT;
+	}
+	
+	@Override
+	protected DynamicProductType retrieveProductType(ProgressMonitor monitor) {
 		return DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getProductTypeID(), 
-				FETCH_GROUPS_DEFAULT,  
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-				new ProgressMonitorWrapper(monitor));
+				getEntityFetchGroups(),  
+				getEntityMaxFetchDepth(), 
+				monitor);
 	}
 
 	@Override
-	protected void storeProductType(IFormPage page, IProgressMonitor monitor) 
+	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor) 
 	{
 		try {
 			DynamicTradeManager stm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			stm.storeDynamicProductType((DynamicProductType) getProductType(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			return stm.storeDynamicProductType((DynamicProductType) productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
