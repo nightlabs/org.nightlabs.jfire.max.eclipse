@@ -2,22 +2,19 @@ package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.VoucherManagerUtil;
-import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
 /**
@@ -25,7 +22,7 @@ import org.nightlabs.util.CollectionUtil;
  *
  */
 public class VoucherTypeDetailPageController  
-extends AbstractProductTypeDetailPageController
+extends AbstractProductTypeDetailPageController<VoucherType>
 {
 	private static final long serialVersionUID = 1L;
 
@@ -65,7 +62,7 @@ extends AbstractProductTypeDetailPageController
 				voucherLayout.saveFile(selectedFile);				
 				getVoucherType().setVoucherLayout(voucherLayout);
 				getVoucherType().getFieldMetaData("voucherLayout").setValueInherited(false);  //$NON-NLS-1$
-				// TODO inheritance should be controllable by UI. Marco.				
+				// TODO: inheritance should be controllable by UI. Marco.				
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -73,29 +70,38 @@ extends AbstractProductTypeDetailPageController
 	}
 
 	@Override
-	protected ProductType retrieveProductType(IProgressMonitor monitor) 
+	protected String[] getEntityFetchGroups() {
+		return FETCH_GROUPS_VOUCHER_TYPE;
+	}
+	
+	@Override
+	protected VoucherType retrieveProductType(ProgressMonitor monitor) 
 	{
 		return VoucherTypeDAO.sharedInstance().getVoucherType(
 				getProductTypeID(), 
-				FETCH_GROUPS_VOUCHER_TYPE, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-				new ProgressMonitorWrapper(monitor));
+				getEntityFetchGroups(), 
+				getEntityMaxFetchDepth(), 
+				monitor);
 	}
 
 	@Override
-	protected void storeProductType(IFormPage page, IProgressMonitor monitor) 
+	protected VoucherType storeProductType(VoucherType voucherType, ProgressMonitor monitor) 
 	{
-		VoucherTypeDetailPage detailPage = (VoucherTypeDetailPage) page;
-		createVoucherLayout(detailPage);
+		// TODO: WORKAROUND: Why is the access to the page here ?!? Alex
+		for (IFormPage page : getPages()) {
+			if (page instanceof VoucherTypeDetailPage) {
+				createVoucherLayout((VoucherTypeDetailPage) page);
+			}
+		}
 		try {
 			VoucherManager voucherManager = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			voucherManager.storeVoucherType(getVoucherType(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			return voucherManager.storeVoucherType(voucherType, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}		
 	}
 	
 	protected VoucherType getVoucherType() {
-		return (VoucherType) getProductType();
+		return getProductType();
 	}
 }
