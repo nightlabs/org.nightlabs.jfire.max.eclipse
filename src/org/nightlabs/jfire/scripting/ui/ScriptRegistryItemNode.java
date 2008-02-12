@@ -53,6 +53,11 @@ import org.nightlabs.jfire.scripting.ui.resource.Messages;
 public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * ContentProvider for a tree of <code>ScriptRegistryItemNode</code>s 
 	 */
 	static class ContentProvider extends TreeContentProvider {
@@ -143,6 +148,11 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	}	
 	
 	public static final ScriptRegistryItemNode STATUS_FETCHING_NODE = new ScriptRegistryItemNode() {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public String getName() {
