@@ -23,6 +23,19 @@
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
                class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.action.remove.RemoveActionDelegate"
                name="remove (#toolbar)"/>
+
+
+            <articleEditActionDelegate
+                  articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction"
+                  class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffActionDelegate"
+                  name="Change tariff">
+            </articleEditActionDelegate>
+            <articleEditActionDelegate
+                  articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
+                  class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffActionDelegate"
+                  name="Change tariff (#toolbar)">
+            </articleEditActionDelegate>
+
       </articleEditFactory>
       <articleEditFactory
             segmentContext="Offer"
@@ -38,6 +51,19 @@
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction#toolbar"
                class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.action.remove.RemoveActionDelegate"
                name="remove (#toolbar)"/>
+
+
+            <articleEditActionDelegate
+                  articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction"
+                  class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffActionDelegate"
+                  name="Change tariff">
+            </articleEditActionDelegate>
+            <articleEditActionDelegate
+                  articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
+                  class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffActionDelegate"
+                  name="Change tariff (#toolbar)">
+            </articleEditActionDelegate>
+
       </articleEditFactory>
       <articleEditFactory
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
