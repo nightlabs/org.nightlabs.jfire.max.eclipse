@@ -103,7 +103,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private DateTimeEdit createdTimeEdit;
 	private DateTimeEdit updatedTimeEdit;
 
-	private IssueLinkAdderComposite iComposite;
+	private IssueLinkAdderComposite issueLinkAdderComposite;
 	
 	private FormToolkit formToolkit;
 	
@@ -396,10 +396,15 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			}
 		});
 		
-		iComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE, true);
+		issueLinkAdderComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE, true);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 150;
-		iComposite.setLayoutData(gridData);
+		issueLinkAdderComposite.setLayoutData(gridData);
+		
+		reporterText.setEnabled(false);
+		reporterButton.setEnabled(false);
+		assigneeText.setEnabled(false);
+		assigneeButton.setEnabled(false);
 		
 		loadProperties();
 	}
@@ -542,8 +547,8 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
 		}
 		
-		if (iComposite.getItems().size() != 0) {
-			issueQuery.setObjectIDs(iComposite.getItems());
+		if (issueLinkAdderComposite.getItems().size() != 0) {
+			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
 		}
 
 		return issueQuery;
