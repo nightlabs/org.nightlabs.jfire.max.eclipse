@@ -348,6 +348,7 @@ extends ToolBarSectionPart
 			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AssignPriceConfigActionTooltip")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void run() {
 
 			assignPriceConfigPressed();
@@ -372,6 +373,7 @@ extends ToolBarSectionPart
 			setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.AddCurrencyConfigActionText")); //$NON-NLS-1$
 		}
 
+		@Override
 		public void run() {
 
 			addCurrencyPressed(); 

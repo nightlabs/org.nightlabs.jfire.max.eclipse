@@ -73,7 +73,7 @@ extends EntityEditorPageWithProgress
 	protected void asyncCallback() 
 	{
 		VoucherTypeDetailPageController controller = (VoucherTypeDetailPageController) getPageController();
-		final VoucherType voucherType = (VoucherType) controller.getProductType();
+		final VoucherType voucherType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {			

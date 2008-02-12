@@ -12,7 +12,6 @@ import org.nightlabs.jfire.accounting.priceconfig.IPackagePriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage;
 import org.nightlabs.jfire.voucher.dao.VoucherPriceConfigDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;

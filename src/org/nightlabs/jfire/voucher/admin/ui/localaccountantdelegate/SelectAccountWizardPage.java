@@ -35,7 +35,6 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.voucher.JFireVoucherEAR;
-import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -111,7 +110,7 @@ extends WizardHopPage
 			}
 		});
 
-		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ 
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
 
