@@ -3,11 +3,8 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
@@ -17,15 +14,15 @@ import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.util.Util;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeDetailPageController 
-extends AbstractProductTypePageController 
-implements IProductTypeDetailPageController
+public abstract class AbstractProductTypeDetailPageController<ProductTypeType extends ProductType> 
+extends AbstractProductTypePageController<ProductTypeType>
 {
 	/**
 	 * @param editor
@@ -63,34 +60,26 @@ implements IProductTypeDetailPageController
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
-	public void doLoad(IProgressMonitor monitor) 
-	{
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.loadProductTypeDetailMonitor.task.name"), 2); //$NON-NLS-1$
+	@Override
+	protected ProductTypeType retrieveEntity(ProgressMonitor monitor) {
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.loadProductTypeDetailMonitor.task.name"), 3); //$NON-NLS-1$
 		monitor.worked(1);
-		ProductType productType = retrieveProductType(monitor);
-		ProductType clonedProductType = Util.cloneSerializable(productType); 
-		setProductType(clonedProductType);
+		ProductTypeType productType = retrieveProductType(new SubProgressMonitor(monitor, 2));
+		saleAccessStatus = null;
+		monitor.done();
+		return productType;
+	}
+	
+	@Override
+	protected ProductTypeType storeEntity(ProductTypeType productType, ProgressMonitor monitor) {
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.storeProductTypeDetailMonitor.task.name"), 5); //$NON-NLS-1$
 		monitor.worked(1);
+		ProductTypeType newProductType = storeProductType(productType, new SubProgressMonitor(monitor, 2));
+		storeSaleAccessControl(new SubProgressMonitor(monitor, 2));
+		monitor.done();
+		return newProductType;
 	}
-
-	public void doSave(IProgressMonitor monitor) 
-	{
-		for (IFormPage page : getPages()) {
-			if (page instanceof AbstractProductTypeDetailPage) {
-				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.storeProductTypeDetailMonitor.task.name"), 2); //$NON-NLS-1$
-				monitor.worked(1);
-				ProductType oldObject = getProductType();
-				final AbstractProductTypeDetailPage detailPage = (AbstractProductTypeDetailPage) page;
-				storeProductType(page, monitor);
-				storeSaleAccessControl(monitor);
-				Cache.sharedInstance().removeByObjectID(JDOHelper.getObjectId(oldObject), false);
-				setProductType(Util.cloneSerializable(retrieveProductType(monitor)));
-				fireModifyEvent(oldObject, getProductType());
-				monitor.worked(1);				
-			}			
-		}		
-	}
-
+	
 	protected void storeSaleAccessControlProperties(ProductTypeSaleAccessStatus saleStatus) 
 	{
 		try {
@@ -123,7 +112,7 @@ implements IProductTypeDetailPageController
 		}		
 	}	
 
-	protected void storeSaleAccessControl(IProgressMonitor monitor) 
+	protected void storeSaleAccessControl(ProgressMonitor monitor) 
 	{
 		storeSaleAccessControlProperties(saleAccessStatus);
 	}	
@@ -141,7 +130,7 @@ implements IProductTypeDetailPageController
 		this.saleAccessStatus = saleAccessStatus;
 	}
 	
-	protected abstract ProductType retrieveProductType(IProgressMonitor monitor);
-	protected abstract void storeProductType(IFormPage page, IProgressMonitor monitor);
+	protected abstract ProductTypeType retrieveProductType(ProgressMonitor monitor);
+	protected abstract ProductTypeType storeProductType(ProductTypeType productType, ProgressMonitor monitor);
 }
 

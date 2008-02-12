@@ -4,9 +4,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
@@ -15,13 +17,16 @@ import org.nightlabs.util.Util;
  *
  */
 public class ProductTypePriceConfigPageController 
-extends AbstractProductTypePageController
+extends EntityEditorPageController
 {
+	private ProductTypeID productTypeID;
+	private ProductType productType;
+	
 	/**
 	 * @param editor
 	 */
 	public ProductTypePriceConfigPageController(EntityEditor editor) {
-		super(editor);
+		this(editor, false);
 	}
 
 	/**
@@ -31,6 +36,7 @@ extends AbstractProductTypePageController
 	public ProductTypePriceConfigPageController(EntityEditor editor,
 			boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
+		productTypeID = ((ProductTypeEditorInput)editor.getEditorInput()).getJDOObjectID();
 	}
 
 	public void doLoad(IProgressMonitor monitor) {
@@ -54,6 +60,19 @@ extends AbstractProductTypePageController
 				});
 			}
 		}
+	}
+	
+	
+	public ProductTypeID getProductTypeID() {
+		return productTypeID;
+	}
+	
+	protected void setProductType(ProductType productType) {
+		this.productType = productType;
+	}
+	
+	public ProductType getProductType() {
+		return productType;
 	}
 
 }
