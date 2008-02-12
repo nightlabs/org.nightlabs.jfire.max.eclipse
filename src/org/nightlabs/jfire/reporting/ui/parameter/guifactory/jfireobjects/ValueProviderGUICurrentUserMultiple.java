@@ -6,8 +6,6 @@ package org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
@@ -20,7 +18,6 @@ import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
 import org.nightlabs.jfire.reporting.ReportingConstants;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
-import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.security.SecurityReflector;
@@ -53,12 +50,13 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	 */
 	public ValueProviderGUICurrentUserMultiple(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
-		currentUserID = Collections.singleton(SecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID());
+		currentUserID = Collections.singleton(SecurityReflector.getUserDescriptor().getUserObjectID());
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#createGUI(org.eclipse.swt.widgets.Composite)
 	 */
+	@Override
 	public Control createGUI(Composite wrapper) {
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(comp, SWT.WRAP);
@@ -77,6 +75,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
+	@Override
 	public Collection<UserID> getOutputValue() {
 		Collection<UserID> superValue = super.getOutputValue();
 		if (superValue != null)
@@ -87,6 +86,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#isAcquisitionComplete()
 	 */
+	@Override
 	public boolean isAcquisitionComplete() {
 		return true;
 	}
@@ -94,6 +94,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setInputParameterValue(String parameterID, Object value) {		
 	}
 

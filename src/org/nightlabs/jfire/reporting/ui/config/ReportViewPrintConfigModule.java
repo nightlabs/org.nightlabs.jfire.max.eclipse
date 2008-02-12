@@ -204,7 +204,7 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 	 */
 	public static ReportViewPrintConfigModule sharedInstance() {
 		try {
-			return (ReportViewPrintConfigModule)Config.sharedInstance().createConfigModule(ReportViewPrintConfigModule.class);
+			return Config.sharedInstance().createConfigModule(ReportViewPrintConfigModule.class);
 		} catch (ConfigException e) {
 			throw new RuntimeException(e);
 		}

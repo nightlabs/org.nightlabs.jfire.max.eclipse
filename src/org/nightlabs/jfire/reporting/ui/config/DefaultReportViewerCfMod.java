@@ -67,7 +67,7 @@ public class DefaultReportViewerCfMod extends ConfigModule {
 	 */
 	public static DefaultReportViewerCfMod sharedInstance() {
 		try {
-			return (DefaultReportViewerCfMod)Config.sharedInstance().createConfigModule(DefaultReportViewerCfMod.class);
+			return Config.sharedInstance().createConfigModule(DefaultReportViewerCfMod.class);
 		} catch (ConfigException e) {
 			throw new RuntimeException(e);
 		}

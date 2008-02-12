@@ -52,7 +52,7 @@ public class ValueProviderGUICurrentUser extends AbstractValueProviderGUI<UserID
 	 */
 	public ValueProviderGUICurrentUser(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
-		currentUserID = SecurityReflector.sharedInstance().getUserDescriptor().getUserObjectID();
+		currentUserID = SecurityReflector.getUserDescriptor().getUserObjectID();
 	}
 
 	/* (non-Javadoc)
