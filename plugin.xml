@@ -792,6 +792,21 @@ gibt's nimmer - oder?! Marco.
             name="%articleEditAction.pay.label"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             tooltip="%articleEditAction.pay.tooltip"/>
+
+
+      <articleEditAction
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+            name="Change tariff..."
+            tooltip="Change the tariff of the selected articles.">
+      </articleEditAction>
+      <articleEditAction
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
+            name="Change tariff..."
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+            tooltip="Change the tariff of the selected articles.">
+      </articleEditAction>
    </extension>
    <extension
          point="org.nightlabs.jfire.reporting.ui.reportUseCase">
