@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -141,7 +142,7 @@ extends DynamicPathWizard
 				Display.getDefault().getActiveShell(),
 				new CreateAccountWizard()
 			);
-		return dlg.open() == Dialog.OK;
+		return dlg.open() == Window.OK;
 	}
 	
 }

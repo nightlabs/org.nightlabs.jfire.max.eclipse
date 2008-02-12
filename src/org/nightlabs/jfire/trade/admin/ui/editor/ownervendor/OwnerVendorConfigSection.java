@@ -1,22 +1,12 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.ownervendor;
 
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
-import org.nightlabs.base.ui.action.SelectionAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
-import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection;
-import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 
 /**

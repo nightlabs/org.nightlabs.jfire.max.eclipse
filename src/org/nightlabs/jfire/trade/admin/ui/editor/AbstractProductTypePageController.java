@@ -4,7 +4,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * An abstract page controller for entity editor pages that holds a ProductType. 

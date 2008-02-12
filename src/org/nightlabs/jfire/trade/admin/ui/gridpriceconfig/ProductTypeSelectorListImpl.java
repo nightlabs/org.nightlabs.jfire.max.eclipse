@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Locale;
 
 import org.eclipse.core.runtime.ListenerList;

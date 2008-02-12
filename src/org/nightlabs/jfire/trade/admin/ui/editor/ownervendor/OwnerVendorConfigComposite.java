@@ -1,49 +1,24 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.ownervendor;
 
-import java.util.Iterator;
-
-import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
-
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.job.FadeableCompositeJob;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
-import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
-import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
-import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard;
-import org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectCreateAccountantDelegateWizard;
-import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
-import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Fitas [at] NightLabs [dot] de
