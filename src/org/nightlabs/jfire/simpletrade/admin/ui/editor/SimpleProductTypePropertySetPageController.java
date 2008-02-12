@@ -2,26 +2,24 @@ package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
-import org.nightlabs.util.Util;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
 public class SimpleProductTypePropertySetPageController 
-extends AbstractProductTypePageController 
+extends AbstractProductTypePageController<SimpleProductType> 
 {
+	private static final String[] FETCH_GROUPS = new String[] {FetchPlan.DEFAULT, SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA};
 	/**
 	 * @param editor
 	 */
@@ -38,37 +36,30 @@ extends AbstractProductTypePageController
 		super(editor, startBackgroundLoading);
 	}
 
-	@Implement
-	public void doLoad(IProgressMonitor monitor) 
-	{
-		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPageController.loadProductTypeMonitor.task.name"), 2); //$NON-NLS-1$
-		monitor.worked(1);		
-		ProductType productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
-				getProductTypeID(), new String[] {FetchPlan.DEFAULT, SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA}, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
-		ProductType clonedProductType = Util.cloneSerializable(productType);
-		setProductType(clonedProductType);
-		monitor.worked(1);
+	@Override
+	protected String[] getEntityFetchGroups() {
+		return FETCH_GROUPS;
 	}
-
-	@Implement
-	public void doSave(IProgressMonitor monitor) 
-	{
-		SimpleProductTypeDAO.sharedInstance().storeSimpleProductType(
-				(SimpleProductType)getProductType(), new ProgressMonitorWrapper(monitor));
-//		monitor.beginTask("Saving Product Properties", 2);
-//		monitor.worked(1);		
-//		try {
-//			SimpletradePlugin.getSimpleTradeManager().storeProductType(
-//					(SimpleProductType)getProductType(), false, null, -1);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//		monitor.worked(1);		
+	
+	@Override
+	protected SimpleProductType retrieveEntity(ProgressMonitor monitor) {
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPageController.loadProductTypeMonitor.task.name"), 3); //$NON-NLS-1$
+		monitor.worked(1);		
+		SimpleProductType productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
+				getProductTypeID(), getEntityFetchGroups(), 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 2));
+		monitor.worked(1);
+		return productType;
+	}
+	
+	@Override
+	protected SimpleProductType storeEntity(SimpleProductType controllerObject,
+			ProgressMonitor monitor) {		
+		return SimpleProductTypeDAO.sharedInstance().storeJDOObject(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 	}
 	
 	public PropertySet getPropertySet() {
-		return ((SimpleProductType)getProductType()).getPropertySet();
+		return getControllerObject().getPropertySet();
 	}
 
 }

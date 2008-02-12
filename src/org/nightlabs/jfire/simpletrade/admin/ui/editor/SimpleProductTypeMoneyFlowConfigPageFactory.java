@@ -40,7 +40,6 @@ public class SimpleProductTypeMoneyFlowConfigPageFactory implements
 			protected IJDOObjectDAO<SimpleProductType> getProductTypeDAO() {
 				return SimpleProductTypeDAO.sharedInstance();
 			}
-			
 		};
 	}
 
