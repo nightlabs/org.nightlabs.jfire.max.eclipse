@@ -2,9 +2,7 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
@@ -68,7 +66,7 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 	{
 		try {
 			DynamicTradeManager stm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			return stm.storeDynamicProductType((DynamicProductType) productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
+			return stm.storeDynamicProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
