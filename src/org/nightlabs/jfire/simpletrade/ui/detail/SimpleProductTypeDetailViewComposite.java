@@ -211,8 +211,8 @@ extends XComposite
 	private Runnable sash_setWeights_runnable = new Runnable() {
 		public void run() {
 			++sash_setWeights_counter;
-			int leftWeight = (int) (100 * (getSize().x - 150) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
-			int rightWeight = (int) (100 * 150 / getSize().x);
+			int leftWeight = (100 * (getSize().x - 150) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
+			int rightWeight = (100 * 150 / getSize().x);
 			if (leftWeight > 0 && rightWeight > 0)
 				sashForm.setWeights(new int[] {leftWeight, rightWeight});
 			else {
