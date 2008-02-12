@@ -73,7 +73,7 @@ extends EntityEditorPageWithProgress
 	protected void asyncCallback() 
 	{
 		final SimpleProductTypePropertySetPageController controller = (SimpleProductTypePropertySetPageController) getPageController();
-		final SimpleProductType simpleProductType = (SimpleProductType) controller.getProductType();
+		final SimpleProductType simpleProductType = controller.getProductType();
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.loadStructLocalJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
