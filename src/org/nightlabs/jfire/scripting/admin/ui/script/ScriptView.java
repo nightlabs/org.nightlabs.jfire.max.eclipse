@@ -71,8 +71,8 @@ import org.nightlabs.notification.NotificationListener;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ScriptView 
-extends 
+public class ScriptView
+extends
 	ViewPart
 implements
 	ControllablePart,
@@ -127,9 +127,9 @@ implements
 //			contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedRegistryItems(), true, true);
 			ScriptRegistryItem item = registryItemTree.getSelectedRegistryItem();
 			if (item instanceof Script) {
-//				editScriptAction.run(registryItemTree.getSelectedRegistryItems());				
+//				editScriptAction.run(registryItemTree.getSelectedRegistryItems());
 			}
-		}		
+		}
 	};
 	
 	/**
@@ -194,7 +194,7 @@ implements
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			registryItemTree.refresh(true);
-		}		
+		}
 	};
 	
 	private ScriptRegistryListener registryListener = new ScriptRegistryListener() {

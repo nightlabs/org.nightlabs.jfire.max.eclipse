@@ -69,7 +69,7 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 		addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				fillContextMenu(manager);
-			} 
+			}
 		});
 		menu = createContextMenu(registryItemTree.getTreeViewer().getControl());
 		registryItemTree.getTreeViewer().getControl().setMenu(menu);
@@ -118,7 +118,7 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 		for (Iterator iter = itemIDs.iterator(); iter.hasNext();) {
 			Object o = iter.next();
 			if (o instanceof ScriptRegistryItemID)
-				// TODO remove NullProgressMonitor				
+				// TODO remove NullProgressMonitor
 				scriptRegistryItems.add(ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
 						(ScriptRegistryItemID)o, new NullProgressMonitor()));
 		}

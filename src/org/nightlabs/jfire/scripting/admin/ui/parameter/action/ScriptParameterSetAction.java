@@ -109,7 +109,7 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 
 	/**
 	 * Runs the action with {@link #run(Collection)} passing
-	 * the current <code>ScriptParameterSet</code>s. After the action 
+	 * the current <code>ScriptParameterSet</code>s. After the action
 	 * was performed the current <code>ReportRegistryItem</code>
 	 */
 	@Override
@@ -137,10 +137,10 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 	
 	/**
 	 * Get the cached instance fo ScriptRegistryItem if only one
-	 * can be found in the passed selection subjects. Expects 
-	 * <code>ScriptRegistryItemID</code>s as values in the given set. 
+	 * can be found in the passed selection subjects. Expects
+	 * <code>ScriptRegistryItemID</code>s as values in the given set.
 	 * Returns null if either no or more than one entry is found
-	 * in the given set. 
+	 * in the given set.
 	 */
 	public ScriptRegistryItem getSingleSelectionRegistryItem(Set subjects) {
 		if (subjects.size() != 1)

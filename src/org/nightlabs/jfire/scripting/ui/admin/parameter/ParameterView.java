@@ -64,8 +64,8 @@ import org.nightlabs.notification.NotificationListener;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ParameterView 
-extends 
+public class ParameterView
+extends
 	ViewPart
 implements
 	ControllablePart,
@@ -101,7 +101,7 @@ implements
 	private IDoubleClickListener tableDoubleClickListener = new IDoubleClickListener () {
 
 		public void doubleClick(DoubleClickEvent event) {
-		}		
+		}
 	};
 	
 	/**
@@ -150,7 +150,7 @@ implements
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			parameterSetTable.refresh(true);
-		}		
+		}
 	};
 	
 	public boolean canDisplayPart() {

@@ -78,14 +78,14 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	protected void createAdditionalContents(Composite wrapper) {
 		registryItemID = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemID.label.text")); //$NON-NLS-1$
 //		registryItemID.setEnabled(false);
-		getTextEditor().addModifyListener(modifyListener);		
+		getTextEditor().addModifyListener(modifyListener);
 		registryItemType = new LabeledText(wrapper, Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.action.add.AddScriptRegistryItemWizardPage.registryItemType.label.text")); //$NON-NLS-1$
 		if (pItemType != null && !"".equals(pItemType)) { //$NON-NLS-1$
 			registryItemType.getTextControl().setText(pItemType);
 			registryItemType.setEnabled(false);
 		}
-		registryItemID.getTextControl().addModifyListener(genModifyListener);		
-		registryItemType.getTextControl().addModifyListener(genModifyListener);		
+		registryItemID.getTextControl().addModifyListener(genModifyListener);
+		registryItemType.getTextControl().addModifyListener(genModifyListener);
 	}
 	
 	public String getRegistryItemID() {

@@ -71,7 +71,7 @@ public class AddScriptWizard extends DynamicPathWizard {
 		Script script;
 		try {
 			script = new Script(
-					(ScriptCategory)scriptRegistryItem, 
+					(ScriptCategory)scriptRegistryItem,
 					Login.getLogin().getOrganisationID(),
 					scriptRegistryItem.getScriptRegistryItemType(),
 					scriptRegistryItemID

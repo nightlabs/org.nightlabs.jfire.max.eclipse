@@ -43,7 +43,7 @@ public interface IScriptParameterSetAction extends IAction {
 
 	/**
 	 * Use this method to get the <code>ScriptParameterSet</code>s
-	 * this actions will be invoked on. 
+	 * this actions will be invoked on.
 	 * 
 	 * @return The current <code>ScriptParameterSet</code>s set
 	 */

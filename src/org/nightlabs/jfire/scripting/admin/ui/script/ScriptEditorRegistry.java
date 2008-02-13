@@ -38,7 +38,7 @@ public class ScriptEditorRegistry extends AbstractEPProcessor {
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#getExtensionPointID()
 	 */
 	@Override
-	public String getExtensionPointID() {	
+	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
 	}
 

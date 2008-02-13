@@ -44,7 +44,7 @@ import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 public class EditSriptParameterSetWizardPage extends I18nTextEditorWizardPage {
 
 	private XComposite paramWrapper;
-	private ScriptParameterTable parameterTable;	
+	private ScriptParameterTable parameterTable;
 	private XComposite buttonsWrapper;
 	private ScriptParameterSet parameterSet;
 	private Button newParamButton;

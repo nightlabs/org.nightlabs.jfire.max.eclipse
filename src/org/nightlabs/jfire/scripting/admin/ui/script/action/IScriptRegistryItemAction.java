@@ -43,7 +43,7 @@ public interface IScriptRegistryItemAction extends IAction {
 
 	/**
 	 * Use this method to get the <code>ScriptRegistryItem</code>s
-	 * this actions will be invoked on. 
+	 * this actions will be invoked on.
 	 * 
 	 * @return The current <code>ReportRegistryItem</code> set
 	 */

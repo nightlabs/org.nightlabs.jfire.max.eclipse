@@ -73,7 +73,7 @@ public class AddScriptAction extends ScriptRegistryItemAction {
 	 *  (non-Javadoc)
 	 * @see org.nightlabs.jfire.scripting.admin.ui.script.action.ScriptRegistryItemAction#run(java.util.Collection)
 	 */
-	@Override 
+	@Override
 	public void run(Collection<ScriptRegistryItem> scriptRegistryItems) {
 		if (scriptRegistryItems.size() == 1)
 			AddScriptWizard.show(scriptRegistryItems.iterator().next());

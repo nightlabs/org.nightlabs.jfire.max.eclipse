@@ -41,7 +41,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 	private XComposite wrapper;
 	private ScriptParameterSetTable parameterSetTable;
 	private ScriptParameterSetTableMenuManager menuManager;
-	private ScriptParameterSetDetailComposite detailComposite;	
+	private ScriptParameterSetDetailComposite detailComposite;
 	
 	private Job fetchParameterSetsJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetEditComposite.fetchParameterSetsJob.name")){ //$NON-NLS-1$
 		@Override
@@ -60,7 +60,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 	private NotificationListener setChangeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
 			parameterSetTable.refresh(true);
-		}		
+		}
 	};
 	
 	private ScriptRegistryListener registryListener = new ScriptRegistryListener() {
@@ -80,7 +80,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 	private IDoubleClickListener tableDoubleClickListener = new IDoubleClickListener () {
 
 		public void doubleClick(DoubleClickEvent event) {
-		}		
+		}
 	};
 
 	
@@ -145,6 +145,6 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		detailComposite = new ScriptParameterSetDetailComposite(wrapper, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 		ScriptParameterSetProvider.sharedInstance().addScriptRegistryListener(registryListener);
 		addDisposeListener(disposeListener);
-	}	
+	}
 
 }

@@ -73,7 +73,7 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 		addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				fillContextMenu(manager);
-			} 
+			}
 		});
 		if (createContextMenu) {
 			menu = createContextMenu(control);

@@ -74,7 +74,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 			} catch (IOException e) {
 				throw new RuntimeException("Could not write temporary file for remote layout: "+file.getAbsolutePath(), e); //$NON-NLS-1$
 			}
-			localInput = new ExternalFileEditorInput(file);			
+			localInput = new ExternalFileEditorInput(file);
 		}
 		return localInput;
 	}
@@ -159,7 +159,7 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 		return getLocalInput().toString();
 	}
 	
-	public static void saveScript(ScriptingJScriptEditorInput input, IDocument document) 
+	public static void saveScript(ScriptingJScriptEditorInput input, IDocument document)
 	{
 		// TODO remove NullProgressMonitor
 		Script script = ScriptRegistryItemProvider.sharedInstance().getScript(

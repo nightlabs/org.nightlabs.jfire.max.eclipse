@@ -80,7 +80,7 @@ public class EditScriptAction extends ScriptRegistryItemAction {
 	 *  (non-Javadoc)
 	 * @see org.nightlabs.jfire.scripting.admin.ui.script.action.ScriptRegistryItemAction#run(java.util.Collection)
 	 */
-	@Override 
+	@Override
 	public void run(Collection<ScriptRegistryItem> reportRegistryItems) {
 		Script script = (Script)reportRegistryItems.iterator().next();
 		String editorID = ScriptEditorRegistry.sharedInstance().getEditorID(script.getLanguage());
