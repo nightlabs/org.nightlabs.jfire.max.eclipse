@@ -96,7 +96,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	private int index;
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
@@ -125,8 +125,8 @@ implements IReportEditorPage, IReportLayoutL10nManager
 			}
 			try {
 				Collection<ReportLayoutLocalisationData> bundle = ReportingPlugin.getReportManager().getReportLayoutLocalisationBundle(
-						input.getReportRegistryItemID(), 
-						new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA}, 
+						input.getReportRegistryItemID(),
+						new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 					);
 				localisationBundle = new HashMap<String, ReportLayoutLocalisationData>();
@@ -245,7 +245,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 //	@Override
 //	public void createPartControl(Composite parent) {
 //	logger.debug("create part Control");
-//	super.createPartControl(parent);		
+//	super.createPartControl(parent);
 //	Control[] children = parent.getChildren( );
 //	if (children.length < 1)
 //	throw new IllegalStateException("Can not create "+this.getClass().getSimpleName()+", super iplementation did not create the part control!");
@@ -311,7 +311,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	 */
 	public void setIndex(int index) {
 		logger.debug("setIndex "+index); //$NON-NLS-1$
-		this.index = index;		
+		this.index = index;
 	}
 
 	/*
@@ -329,7 +329,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 //	* <p>
 //	* Returns the provider from the editor set in {@link #initialize(FormEditor)}
 //	* in order to share the provider with the other editor pages.
-//	* 
+//	*
 //	* @see org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewEditor#getProvider()
 //	*/
 //	@Override
@@ -372,7 +372,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		pagesCreated = true;
 	}
 	
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public void saveLocalisationBundle(IProgressMonitor monitor) {
 		if (!pagesCreated)
 			return;
@@ -396,7 +396,7 @@ implements IReportEditorPage, IReportLayoutL10nManager
 				data = localisationBundle.get(locale);
 			else {
 				data = new ReportLayoutLocalisationData(reportLayoutID, locale);
-			}		
+			}
 			try {
 				data.loadFile(bundleFile);
 			} catch (IOException e) {
@@ -406,8 +406,8 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		}
 		Collection<ReportLayoutLocalisationData> bundle = null;
 		try {
-			bundle = ReportingPlugin.getReportManager().storeReportLayoutLocalisationBundle(dataToStore, true, 
-					new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA}, 
+			bundle = ReportingPlugin.getReportManager().storeReportLayoutLocalisationBundle(dataToStore, true,
+					new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 				);
 		} catch (Exception e) {
@@ -417,10 +417,10 @@ implements IReportEditorPage, IReportLayoutL10nManager
 		localisationBundle = new HashMap<String, ReportLayoutLocalisationData>();
 		for (ReportLayoutLocalisationData data : bundle) {
 			localisationBundle.put(data.getLocale(), data);
-		}		
+		}
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public Collection<Locale> getBundleLocales() {
 		return getResourceManager() != null ? getResourceManager().getLocales() : null;
 	}

@@ -102,17 +102,17 @@ public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 		reportFromFile.addSelectionListener(listener);
 		reportFromTemplate.addSelectionListener(listener);
 		reportFromFile.setSelection(true);
-		fileSelectComposite = new FileSelectionComposite(wrapper, SWT.NONE, 
-				FileSelectionComposite.OPEN_FILE, 
-				Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.fileSelectComposite.caption"),  //$NON-NLS-1$ 
-				null) 
+		fileSelectComposite = new FileSelectionComposite(wrapper, SWT.NONE,
+				FileSelectionComposite.OPEN_FILE,
+				Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.fileSelectComposite.caption"),  //$NON-NLS-1$
+				null)
 		{
 			@Override
 			protected void modifyText(ModifyEvent e) {
 				getContainer().updateButtons();
 			}
 		};
-		getTextEditor().addModifyListener(modifyListener);		
+		getTextEditor().addModifyListener(modifyListener);
 	}
 	
 	public FileSelectionComposite getFileSelectComposite() {

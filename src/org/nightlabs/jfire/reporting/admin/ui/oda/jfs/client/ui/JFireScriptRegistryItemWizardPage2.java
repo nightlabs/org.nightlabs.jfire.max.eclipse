@@ -41,7 +41,7 @@ import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemTree;
  */
 public class JFireScriptRegistryItemWizardPage2 extends AbstractPropertyPage {
 
-	private XComposite wrapper; 
+	private XComposite wrapper;
 	
 	private ScriptRegistryItemTree itemTree;
 	

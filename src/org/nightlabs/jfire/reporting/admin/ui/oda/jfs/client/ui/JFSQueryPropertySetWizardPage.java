@@ -75,7 +75,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	 */
 	private static final Logger logger = Logger.getLogger(JFSQueryPropertySetWizardPage.class);
 	
-	private SashForm wrapper; 
+	private SashForm wrapper;
 	private SelectedScriptComposite selectedScriptComposite;
 	private Group propertyGroup;
 	private JFSQueryPropertySetTable propertySetTable;
@@ -137,7 +137,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 			try {
 				queryPropertySet = JFSQueryUtil.createPropertySetFromQueryString(design.getQueryText());
 				if (queryPropertySet == null)
-					queryPropertySet = new JFSQueryPropertySet();				
+					queryPropertySet = new JFSQueryPropertySet();
 			} catch (Exception e) {
 				logger.error("Have query text, but can not create JFSQueryProperySet out of it!", e); //$NON-NLS-1$
 				queryPropertySet = new JFSQueryPropertySet();
@@ -177,12 +177,12 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 
 				// obtain and open a live connection
 				customConn = customDriver.getConnection( null );
-				java.util.Properties connProps = 
-					DesignUtil.convertDataSourceProperties( 
+				java.util.Properties connProps =
+					DesignUtil.convertDataSourceProperties(
 							getInitializationDesign().getDataSourceDesign() );
 				customConn.open( connProps );
 
-				// update the data set design with the 
+				// update the data set design with the
 				// query's current runtime metadata
 				updateDesign( design, customConn, queryText );
 			}
@@ -246,8 +246,8 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
         
         /*
          * See DesignSessionUtil for more convenience methods
-         * to define a data set design instance.  
-         */     
+         * to define a data set design instance.
+         */
     }
 
     /**
@@ -258,7 +258,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
      * @throws OdaException
      */
 	private void updateResultSetDesign( IResultSetMetaData md,
-            DataSetDesign dataSetDesign ) 
+            DataSetDesign dataSetDesign )
         throws OdaException
 	{
         ResultSetColumns columns = DesignSessionUtil.toResultSetColumnsDesign( md );
@@ -281,11 +281,11 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
      * @throws OdaException
      */
     private void updateParameterDesign( IParameterMetaData paramMd,
-            DataSetDesign dataSetDesign ) 
+            DataSetDesign dataSetDesign )
         throws OdaException
     {
-        DataSetParameters paramDesign = 
-            DesignSessionUtil.toDataSetParametersDesign( paramMd, 
+        DataSetParameters paramDesign =
+            DesignSessionUtil.toDataSetParametersDesign( paramMd,
                     DesignSessionUtil.toParameterModeDesign( IParameterMetaData.parameterModeIn ) );
         
         // no exception in conversion; go ahead and assign to specified dataSetDesign
@@ -323,14 +323,14 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 		if (design.getParameters() == null)
 			return;
 		EList paramDefns = design.getParameters().getParameterDefinitions();
-		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {			
+		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {
 			ParameterDefinition definition = (ParameterDefinition) iter.next();
 			logger.info(prefix + "Found parameter with InOutMode: " + definition.getInOutMode().toString());			 //$NON-NLS-1$
 			DataElementAttributes dataElementAttributes = definition.getAttributes();
 			InputParameterAttributes attrs = definition.getInputAttributes();
 			if (attrs == null)
 				return;
-			InputElementAttributes elementAttributes = attrs.getElementAttributes();			
+			InputElementAttributes elementAttributes = attrs.getElementAttributes();
 			logger.info(prefix + "Parameter name: " + dataElementAttributes.getName()); //$NON-NLS-1$
 			logger.info(prefix + "Parameter allowsNull: " + dataElementAttributes.allowsNull()); //$NON-NLS-1$
 			logger.info(prefix + "Parameter defaultValue: " + elementAttributes.getDefaultScalarValue()); //$NON-NLS-1$

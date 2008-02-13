@@ -44,8 +44,8 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 		public String getColumnText(Object element, int colIdx) {
 			if (element instanceof Map.Entry) {
 				switch (colIdx) {
-					case 0: return ((Map.Entry)element).getKey().toString(); 
-					case 1: return ((Map.Entry)element).getValue().toString(); 
+					case 0: return ((Map.Entry)element).getKey().toString();
+					case 1: return ((Map.Entry)element).getValue().toString();
 				}
 			} else {
 				if (colIdx == 0)
@@ -69,7 +69,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 
 		private TreeMap<String, String> properties;
 		
-		@SuppressWarnings("unchecked") 
+		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Map) {
 				this.properties = new TreeMap<String, String>((Map<String, String>)inputElement);
@@ -95,7 +95,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 			return properties;
 		}
 		
-		@SuppressWarnings("unchecked") 
+		@SuppressWarnings("unchecked")
 		public void setProperty(String name, String value) {
 			properties.put(name, value);
 		}

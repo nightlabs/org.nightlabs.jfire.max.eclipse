@@ -89,8 +89,8 @@ public class AddReportLayoutWizard extends DynamicPathWizard {
 		if (reportRegistryItem != null)
 			reportRegistryItemType = reportRegistryItem.getReportRegistryItemType();
 		final ReportLayout layout = new ReportLayout(
-				(ReportCategory)reportRegistryItem, 
-				SecurityReflector.getUserDescriptor().getOrganisationID(), 
+				(ReportCategory)reportRegistryItem,
+				SecurityReflector.getUserDescriptor().getOrganisationID(),
 				reportRegistryItemType, wizardPage.getRegistryItemID()
 			);
 		layout.getName().copyFrom(wizardPage.getI18nText());
@@ -151,7 +151,7 @@ public class AddReportLayoutWizard extends DynamicPathWizard {
 						);
 				} catch (PartInitException e) {
 					throw new RuntimeException(e);
-				}				
+				}
 			}
 		});
 		return true;

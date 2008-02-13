@@ -115,7 +115,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 			tableViewer.setColumnProperties(new String[] {
 					PROPERTY_NAME,
 					PROPERTY_TYPE,
-					PROPERTY_DEFAULT_VALUE					
+					PROPERTY_DEFAULT_VALUE
 			});
 			tableViewer.setCellEditors(new CellEditor[] {
 					null,
@@ -135,7 +135,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 	
 	private class ContentProvider extends TableContentProvider {
 		@Override
-		public Object[] getElements(Object inputElement) {			
+		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof ParameterMetaData) {
 				ParameterMetaData metaData = (ParameterMetaData) inputElement;
 				try {
@@ -173,7 +173,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 		
 		@Override
 		protected Object openDialogBox(Control parent) {
-			ParameterDescriptor descriptor = table.getFirstSelectedElement();			
+			ParameterDescriptor descriptor = table.getFirstSelectedElement();
 			String initExpression = parameterDefaultValues.get(descriptor.getParameterName());
 			ExpressionBuilder expressionBuilder = new ExpressionBuilder(initExpression != null ? initExpression : ""); //$NON-NLS-1$
 //			ScalarParameterHandle handle = (ScalarParameterHandle) ElementProcessorFactory.createProcessor( "ScalarParameter" ).createElement( null );
@@ -193,7 +193,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 	private Map<String, String> parameterDefaultValues;
 	private DataSetDesign dataSetDesign;
 
-	private XComposite wrapper; 
+	private XComposite wrapper;
 	private Table table;
 
 	/**
@@ -236,12 +236,12 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 
 	private void logDesignParameters(String prefix, DataSetDesign design) {
 		EList paramDefns = design.getParameters().getParameterDefinitions();
-		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {			
+		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {
 			ParameterDefinition definition = (ParameterDefinition) iter.next();
 			logger.info(prefix + "Found parameter with InOutMode: " + definition.getInOutMode().toString());			 //$NON-NLS-1$
 			DataElementAttributes dataElementAttributes = definition.getAttributes();
 			InputParameterAttributes attrs = definition.getInputAttributes();
-			InputElementAttributes elementAttributes = attrs.getElementAttributes();			
+			InputElementAttributes elementAttributes = attrs.getElementAttributes();
 			logger.info(prefix + "Parameter name: " + dataElementAttributes.getName()); //$NON-NLS-1$
 			logger.info(prefix + "Parameter allowsNull: " + dataElementAttributes.allowsNull()); //$NON-NLS-1$
 			logger.info(prefix + "Parameter defaultValue: " + elementAttributes.getDefaultScalarValue()); //$NON-NLS-1$
@@ -269,19 +269,19 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 		if (design.getParameters() == null)
 			return;
 		EList paramDefns = design.getParameters().getParameterDefinitions();
-		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {			
+		for (Iterator iter = paramDefns.iterator(); iter.hasNext();) {
 			ParameterDefinition definition = (ParameterDefinition) iter.next();
 			if (parameterDefaultValues == null)
 				parameterDefaultValues = new HashMap<String, String>();
 			DataElementAttributes dataElementAttributes = definition.getAttributes();
 			InputParameterAttributes attrs = definition.getInputAttributes();
-			InputElementAttributes elementAttributes = attrs.getElementAttributes();			
+			InputElementAttributes elementAttributes = attrs.getElementAttributes();
 			parameterDefaultValues.put(dataElementAttributes.getName(), elementAttributes.getDefaultScalarValue());
 		}
 	}
 	
 	protected void setParameterDefaultValues(DataSetDesign design) {
-		for (Iterator iter = design.getParameters().getParameterDefinitions().iterator(); iter.hasNext();) {			
+		for (Iterator iter = design.getParameters().getParameterDefinitions().iterator(); iter.hasNext();) {
 			ParameterDefinition definition = (ParameterDefinition) iter.next();
 			if (parameterDefaultValues == null)
 				parameterDefaultValues = new HashMap<String, String>();
@@ -296,7 +296,7 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 			elementAttributes = attrs.getElementAttributes();
 			String defaultValue = parameterDefaultValues.get(dataElementAttributes.getName());
 			if (defaultValue == null || "".equals(defaultValue)) //$NON-NLS-1$
-				continue; 
+				continue;
 			elementAttributes.setDefaultScalarValue(defaultValue);
 		}
 	}
@@ -314,16 +314,16 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 		superResult.setParameters(params);
 		setParameterDefaultValues(superResult);
 		logDesignParameters("collectDataSetDesign: ", design); //$NON-NLS-1$
-		return superResult;		
+		return superResult;
 	}
 
-	public static DataSetParameters createDataSetParameters( 
+	public static DataSetParameters createDataSetParameters(
 			IParameterMetaData pmd)
 	throws OdaException
 	{
 		DataSetParameters params = DesignSessionUtil.toDataSetParametersDesign(pmd);
 		EList pDefinitions = params.getParameterDefinitions();
-		for (Iterator iter = pDefinitions.iterator(); iter.hasNext();) {			
+		for (Iterator iter = pDefinitions.iterator(); iter.hasNext();) {
 			ParameterDefinition definition = (ParameterDefinition) iter.next();
 			definition.getAttributes().setName(pmd.getParameterName(definition.getAttributes().getPosition()));
 			definition.getAttributes().setNullability(ElementNullability.NULLABLE_LITERAL);

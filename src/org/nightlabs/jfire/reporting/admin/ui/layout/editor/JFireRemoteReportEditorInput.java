@@ -58,7 +58,7 @@ import org.nightlabs.util.IOUtil;
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *
  */
-public class JFireRemoteReportEditorInput 
+public class JFireRemoteReportEditorInput
 extends ReportEditorInput
 implements IJFireRemoteReportEditorInput
 {
@@ -68,7 +68,7 @@ implements IJFireRemoteReportEditorInput
 	 */
 	public static final String[] REPORT_LAYOUT_COMPLETE_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		ReportRegistryItem.FETCH_GROUP_NAME, 
+		ReportRegistryItem.FETCH_GROUP_NAME,
 		ReportLayout.FETCH_GROUP_THIS_REPORT_LAYOUT
 	};
 	
@@ -119,7 +119,7 @@ implements IJFireRemoteReportEditorInput
 				throw new RuntimeException("Could not write temporary file for remote layout: "+file.getAbsolutePath(), e); //$NON-NLS-1$
 			}
 			layoutName = layout.getName();
-			localInput = new JFireLocalReportEditorInput(file);			
+			localInput = new JFireLocalReportEditorInput(file);
 		}
 		return localInput;
 	}

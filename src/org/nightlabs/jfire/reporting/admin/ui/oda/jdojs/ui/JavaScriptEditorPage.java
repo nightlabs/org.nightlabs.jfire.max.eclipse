@@ -69,7 +69,7 @@ public abstract class JavaScriptEditorPage extends AbstractPropertyPage {
 		String script = (String)((OdaDataSetHandle) getContainer( ).getModel( ) ).getProperty( getJSPropertyName());
 		if (script != null)
 			jsText.setText(script);
-		propLoaded = true;		
+		propLoaded = true;
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class JDOQLResultTable extends AbstractTableComposite {
 			if (inputElement instanceof Collection)
 				return ((Collection)inputElement).toArray();
 			return null;
-		}		
+		}
 	}
 	
 	private static class LabelProvider extends TableLabelProvider {
@@ -45,7 +45,7 @@ public class JDOQLResultTable extends AbstractTableComposite {
 				columns = ((List)element).toArray();
 			else if (element instanceof Object[])
 				columns = (Object[])element;
-			else 
+			else
 				return element != null ? element.toString() : "null"; //$NON-NLS-1$
 			if (columns == null || columnIndex >= columns.length)
 				return ""; //$NON-NLS-1$
@@ -91,7 +91,7 @@ public class JDOQLResultTable extends AbstractTableComposite {
 		currentResult = result;
 		createTableColumns(getTableViewer(), getTable());
 		getTableViewer().setInput(result);
-		layout(true, true);		
+		layout(true, true);
 		if (getParent() != null)
 			getParent().layout(true, true);
 	}
@@ -113,13 +113,13 @@ public class JDOQLResultTable extends AbstractTableComposite {
 		if (element instanceof Object[]) {
 			Object[] elements = (Object[])element;
 			for (int i = 0; i < elements.length; i++) {
-				TableColumn col = new TableColumn(table, SWT.LEFT); 
+				TableColumn col = new TableColumn(table, SWT.LEFT);
 				col.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLResultTable.columnPrefix")+i); //$NON-NLS-1$
 				tableColums.add(col);
 			}
 		}
 		else {
-			TableColumn col = new TableColumn(table, SWT.LEFT); 
+			TableColumn col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.jdoql.editor.JDOQLResultTable.columnOneText")); //$NON-NLS-1$
 			tableColums.add(col);
 		}

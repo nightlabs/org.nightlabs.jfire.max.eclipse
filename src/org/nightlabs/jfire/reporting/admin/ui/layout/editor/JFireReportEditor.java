@@ -78,7 +78,7 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 	}
 	
 	@Override
-	public void setFocus() {		
+	public void setFocus() {
 		super.setFocus();
 		
 		if (getEditorInput() instanceof JFireRemoteReportEditorInput) {
@@ -102,7 +102,7 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 	private void refreshPropertiesView() {
 		if (propView == null)
 			return;
-		// forces the PageBookView to re-initialize the 
+		// forces the PageBookView to re-initialize the
 		// page for this part
 		propView.partClosed(this);
 		propView.partActivated(this);
@@ -140,7 +140,7 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 	}
 	
 	/**
-	 * Returns the first page implementing {@link IReportLayoutL10nManager} found, <code>null</code> otherwise. 
+	 * Returns the first page implementing {@link IReportLayoutL10nManager} found, <code>null</code> otherwise.
 	 * @return The first page implementing {@link IReportLayoutL10nManager} found, <code>null</code> otherwise.
 	 */
 	public IReportLayoutL10nManager getReportLayoutL10nManager() {

@@ -46,7 +46,7 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 		List<ItemCarrier> topLevelCarriers = JFireReportingExpressionProviderRegistry.sharedInstance().getSubItemsForParentId(null);
 		if (topLevelCarriers != null)
 			return topLevelCarriers.toArray();
-		else 
+		else
 			return new Object[0];
 	}
 
@@ -60,7 +60,7 @@ public class JFireReportingExpressionProvider implements IExpressionProvider {
 		return new Object[0];
 	}
 	
-	public String getDisplayText(Object element) {		
+	public String getDisplayText(Object element) {
 		if (element instanceof ItemCarrier)
 			return ((ItemCarrier) element).getDisplayText();
 		return null;

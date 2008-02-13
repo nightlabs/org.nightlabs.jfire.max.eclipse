@@ -43,7 +43,7 @@ public class JDODriverConnectionWizard extends DefaultExtendedDataSourceWizard {
 	
 	@Override
 	public DataSourceHandle createDataSource(ModuleHandle handle) {
-		this.dataSourceHandle = super.createDataSource(handle); 
+		this.dataSourceHandle = super.createDataSource(handle);
 		return dataSourceHandle;
 	}
 	

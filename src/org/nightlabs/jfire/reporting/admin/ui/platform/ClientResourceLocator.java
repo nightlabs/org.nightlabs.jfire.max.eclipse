@@ -61,13 +61,13 @@ public class ClientResourceLocator extends DefaultResourceLocator implements
 		try {
 			if (!project.exists())
 				project.create(null);
-			if (!project.isOpen())			
+			if (!project.isOpen())
 				project.open(null);
 		} catch (CoreException e) {
 			throw new RuntimeException(e);
-		}			
+		}
 		IFolder bundleFolder = project.getFolder(reportLayoutID.reportRegistryItemType+"-"+reportLayoutID.reportRegistryItemID); //$NON-NLS-1$
-		return bundleFolder;		
+		return bundleFolder;
 	}
 	
 	public static File getReportLayoutResourceFolderAsFile(ReportRegistryItemID reportLayoutID) {

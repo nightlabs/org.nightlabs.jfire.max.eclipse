@@ -83,7 +83,7 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
  * his reports within the JFire server environment.
  * 
  * It uses an adapted {@link ReportViewer} to
- * view ReportLayouts.  
+ * view ReportLayouts.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
@@ -107,7 +107,7 @@ implements IReportEditorPage
 	
 	private XComposite wrapper;
 	private XComposite topWrapper;
-	private Button parameterButton;	
+	private Button parameterButton;
 	
 	private BirtOutputCombo outputCombo;
 	private ComboComposite<Locale> localeCombo;
@@ -119,7 +119,7 @@ implements IReportEditorPage
 	
 	private int staleType;
 	private Control control;
-	private FormEditor editor;	
+	private FormEditor editor;
 	
 	private int index;
 	
@@ -131,7 +131,7 @@ implements IReportEditorPage
 	public void createPartControl(Composite parent) {
 		logger.debug("create part Control"); //$NON-NLS-1$
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		topWrapper = new XComposite(wrapper, SWT.NONE);	
+		topWrapper = new XComposite(wrapper, SWT.NONE);
 		topWrapper.getGridLayout().numColumns = 5;
 		topWrapper.getGridLayout().makeColumnsEqualWidth = false;
 		topWrapper.getGridData().grabExcessVerticalSpace = false;
@@ -360,7 +360,7 @@ implements IReportEditorPage
 	 */
 	public void setIndex(int index) {
 		logger.debug("setIndex "+index); //$NON-NLS-1$
-		this.index = index;		
+		this.index = index;
 	}
 	
 	/*
@@ -436,7 +436,7 @@ implements IReportEditorPage
 			provider.saveReport(
 					(ModuleHandle) getModel(),
 					getEditorInput(),
-					monitor 
+					monitor
 				);
 			firePropertyChange( PROP_DIRTY );
 		}
@@ -490,9 +490,9 @@ implements IReportEditorPage
 	protected RenderReportRequest createRenderRequest(
 			ReportRegistryItemID registryItemID,
 			Map<String, Object> parameters
-		) 
+		)
 	{
-		// TODO: Add ComboBox for Preview format 
+		// TODO: Add ComboBox for Preview format
 		RenderReportRequest renderRequest = new RenderReportRequest();
 		renderRequest.setReportRegistryItemID(registryItemID);
 		renderRequest.setParameters(parameters);

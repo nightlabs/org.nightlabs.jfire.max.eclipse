@@ -52,9 +52,9 @@ public class ReportLayoutView extends ReportRegistryItemTreeView
 //			contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedRegistryItems(), true, true);
 			ReportRegistryItem item = getRegistryItemTree().getFirstSelectedElement();
 			if (item instanceof ReportLayout) {
-				editReportLayoutAction.run(getRegistryItemTree().getSelectedElements());				
+				editReportLayoutAction.run(getRegistryItemTree().getSelectedElements());
 			}
-		}		
+		}
 	};
 	
 	@Override

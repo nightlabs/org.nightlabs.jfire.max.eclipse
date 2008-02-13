@@ -82,7 +82,7 @@ public class JDOQLEditor extends EditorPart {
 	private Button execButton;
 	private JDOQLParameterTable parameterTable;
 	private JDOQLResultTable resultTable;
-//	private 
+//	private
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)

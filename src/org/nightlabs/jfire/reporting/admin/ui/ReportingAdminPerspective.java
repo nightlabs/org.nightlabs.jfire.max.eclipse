@@ -55,7 +55,7 @@ public class ReportingAdminPerspective implements IPerspectiveFactory {
 	}
 
 	/**
-	 * Creates the action and perspective shortcuts 
+	 * Creates the action and perspective shortcuts
 	 */
 	private void createShortcuts( IPageLayout layout )
 	{

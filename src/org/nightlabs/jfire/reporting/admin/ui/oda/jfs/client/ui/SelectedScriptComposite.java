@@ -71,7 +71,7 @@ public class SelectedScriptComposite extends XComposite {
 			super.configureShell(newShell);
 			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.title")); //$NON-NLS-1$
 			setToCenteredLocationPreferredSize(newShell, 300, 400);
-		}		
+		}
 		
 		@Override
 		protected Control createDialogArea(Composite parent) {
@@ -81,7 +81,7 @@ public class SelectedScriptComposite extends XComposite {
 					ScriptRegistryItemNode node = (ScriptRegistryItemNode) itemTree.getFirstSelectedElement();
 					if (node != null) {
 						if (node.getRegistryItem() != null && node.getRegistryItem() instanceof Script) {
-							selectedScript = (Script) node.getRegistryItem(); 
+							selectedScript = (Script) node.getRegistryItem();
 						} else {
 							selectedScript = null;
 						}
@@ -154,9 +154,9 @@ public class SelectedScriptComposite extends XComposite {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final ScriptRegistryItem item = ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
-						scriptRegistryItemID, 
+						scriptRegistryItemID,
 						new String[] {
-								FetchPlan.DEFAULT, ScriptRegistryItem.FETCH_GROUP_NAME, 
+								FetchPlan.DEFAULT, ScriptRegistryItem.FETCH_GROUP_NAME,
 								ScriptRegistryItem.FETCH_GROUP_DESCRIPTION
 							},
 						getProgressMonitor()
@@ -164,7 +164,7 @@ public class SelectedScriptComposite extends XComposite {
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						name.setText(item.getName().getText());
-						if (!item.getDescription().isEmpty()) {							
+						if (!item.getDescription().isEmpty()) {
 							description.setText(item.getDescription().getText());
 						} else {
 							description.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.description.fallbackText")); //$NON-NLS-1$

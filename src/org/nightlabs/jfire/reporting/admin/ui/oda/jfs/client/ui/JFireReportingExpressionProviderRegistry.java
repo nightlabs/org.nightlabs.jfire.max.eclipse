@@ -21,7 +21,7 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 public class JFireReportingExpressionProviderRegistry extends
 		AbstractEPProcessor {
 
-	public static class ItemCarrier {		
+	public static class ItemCarrier {
 		private String itemId;
 		private String parentId;
 		private String displayText;

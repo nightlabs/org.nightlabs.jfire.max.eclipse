@@ -75,8 +75,8 @@ public class AddReportCategoryWizard extends DynamicPathWizard {
 			throw new RuntimeException(e);
 		}
 		category = new ReportCategory(
-				(ReportCategory)reportRegistryItem, organisationID, 
-				reportRegistryItemType, 
+				(ReportCategory)reportRegistryItem, organisationID,
+				reportRegistryItemType,
 				wizardPage.getReportCategoryID(), false
 		);
 		category.getName().copyFrom(wizardPage.getI18nText());
