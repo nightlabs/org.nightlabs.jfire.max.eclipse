@@ -34,8 +34,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class ScriptingEditor2DPlugin 
-extends AbstractUIPlugin 
+public class ScriptingEditor2DPlugin
+extends AbstractUIPlugin
 {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.nightlabs.jfire.scripting.editor2d.ui"; //$NON-NLS-1$
@@ -58,7 +58,7 @@ extends AbstractUIPlugin
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		resourceBundle = Platform.getResourceBundle(getBundle());		
+		resourceBundle = Platform.getResourceBundle(getBundle());
 	}
 
 	/**
@@ -103,5 +103,5 @@ extends AbstractUIPlugin
 	 */
 	public ResourceBundle getResourceBundle() {
 		return resourceBundle;
-	}	
+	}
 }

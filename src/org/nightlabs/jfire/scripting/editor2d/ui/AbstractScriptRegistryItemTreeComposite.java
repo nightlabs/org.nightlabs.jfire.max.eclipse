@@ -49,19 +49,19 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractScriptRegistryItemTreeComposite 
-extends XComposite 
+public abstract class AbstractScriptRegistryItemTreeComposite
+extends XComposite
 {
 	public static final Logger logger = Logger.getLogger(AbstractScriptRegistryItemTreeComposite.class);
 
-	public AbstractScriptRegistryItemTreeComposite(Composite parent, int style) 
+	public AbstractScriptRegistryItemTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
-		createComposite(this);		
+		createComposite(this);
 	}
 
 	public AbstractScriptRegistryItemTreeComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
@@ -72,10 +72,10 @@ extends XComposite
 		return scriptTree;
 	}
 	
-	public void createComposite(Composite parent) 
-	{	
-		scriptTree = new ScriptRegistryItemTree(parent, SWT.BORDER | SWT.FULL_SELECTION, 
-				true, true, getZone(), true); 
+	public void createComposite(Composite parent)
+	{
+		scriptTree = new ScriptRegistryItemTree(parent, SWT.BORDER | SWT.FULL_SELECTION,
+				true, true, getZone(), true);
 		scriptTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 //		final ScriptRegistryItem loadingDataSRI = new org.nightlabs.jfire.scripting.ScriptCategory(getOrganisationID(), "dummy", "dummy");
@@ -96,14 +96,14 @@ extends XComposite
 					throws Exception
 			{
 				ScriptRegistryItemProvider provider = ScriptRegistryItemProvider.sharedInstance();
-				final Collection<ScriptRegistryItemNode> scriptNodes = provider.getNodes(getScriptRegistryItemIDs());		
+				final Collection<ScriptRegistryItemNode> scriptNodes = provider.getNodes(getScriptRegistryItemIDs());
 				if (!scriptNodes.isEmpty()) {
 					for (Iterator<ScriptRegistryItemNode> it = scriptNodes.iterator(); it.hasNext(); ) {
 						ScriptRegistryItemNode scriptNode = it.next();
 						logger.debug("topLevel scriptNode = " + (scriptNode == null ? null : scriptNode.getName())); //$NON-NLS-1$
 						if (scriptNode == null)
 							it.remove();
-					}			
+					}
 				}
 				else {
 					logger.debug("topLevel scriptNodes is empty!"); //$NON-NLS-1$

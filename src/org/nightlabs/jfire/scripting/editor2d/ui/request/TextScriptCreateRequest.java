@@ -32,9 +32,9 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TextScriptCreateRequest 
-extends TextCreateRequest 
-implements ScriptCreateRequest 
+public class TextScriptCreateRequest
+extends TextCreateRequest
+implements ScriptCreateRequest
 {
 
 	private double rotation = 0;

@@ -72,36 +72,36 @@ import org.nightlabs.util.FontUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class CreateTextScriptDialog 
-extends CenteredDialog 
+public abstract class CreateTextScriptDialog
+extends CenteredDialog
 {
 	public static final Logger logger = Logger.getLogger(CreateTextScriptDialog.class);
 	
-	public CreateTextScriptDialog(Shell parentShell, 
-			TextScriptCreateRequest request) 
-	{
-		super(parentShell);
-		init(request);	
-	}
-
-	public CreateTextScriptDialog(IShellProvider parentShell, 
-			TextScriptCreateRequest request) 
+	public CreateTextScriptDialog(Shell parentShell,
+			TextScriptCreateRequest request)
 	{
 		super(parentShell);
 		init(request);
 	}
 
-	protected void init(TextScriptCreateRequest request) 
-	{		
+	public CreateTextScriptDialog(IShellProvider parentShell,
+			TextScriptCreateRequest request)
+	{
+		super(parentShell);
+		init(request);
+	}
+
+	protected void init(TextScriptCreateRequest request)
+	{
 		if (request == null)
 			throw new IllegalArgumentException("request must not be null!"); //$NON-NLS-1$
 		
 		this.request = request;
-		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MIN | SWT.MAX);		
+		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MIN | SWT.MAX);
 	}
 		
 	@Override
-	protected void configureShell(Shell newShell) 
+	protected void configureShell(Shell newShell)
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.title")); //$NON-NLS-1$
@@ -110,14 +110,14 @@ extends CenteredDialog
 
 	private TextScriptCreateRequest request;
 	private AbstractScriptRegistryItemTreeComposite scriptTreeComp = null;
-	protected ScriptRegistryItemTree getScriptTree() {		
-		return scriptTreeComp.getScriptTree(); 
+	protected ScriptRegistryItemTree getScriptTree() {
+		return scriptTreeComp.getScriptTree();
 	}
 		
 	protected abstract AbstractScriptRegistryItemTreeComposite createScriptTreeComposite(Composite parent);
 	
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp.setLayout(new GridLayout(2, false));
@@ -126,8 +126,8 @@ extends CenteredDialog
 		sash.setLayout(new GridLayout());
 		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		// ScriptTree		
-		Group scriptGroup = new Group(sash, SWT.NONE);		
+		// ScriptTree
+		Group scriptGroup = new Group(sash, SWT.NONE);
 		scriptGroup.setLayout(new GridLayout());
 		scriptGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		scriptGroup.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.group.script")); //$NON-NLS-1$
@@ -140,9 +140,9 @@ extends CenteredDialog
 		// Text Modifcations
 		Group textGroup = new Group(sash, SWT.NONE);
 		textGroup.setLayout(new GridLayout());
-		textGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));		
+		textGroup.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		textGroup.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.group.text")); //$NON-NLS-1$
-		Composite textComp = new XComposite(textGroup, SWT.NONE);		
+		Composite textComp = new XComposite(textGroup, SWT.NONE);
 		
 		createEntry(textComp, Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.label.font"), ENTRY_FONT); //$NON-NLS-1$
 		createEntry(textComp, Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.label.size"), ENTRY_SIZE); //$NON-NLS-1$
@@ -155,7 +155,7 @@ extends CenteredDialog
 		return comp;
 	}
 	
-	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){	
+	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
 		public void doubleClick(DoubleClickEvent event) {
 			if (!event.getSelection().isEmpty() && event.getSelection() instanceof StructuredSelection) {
 				StructuredSelection structuredSelection = (StructuredSelection) event.getSelection();
@@ -163,16 +163,16 @@ extends CenteredDialog
 					okPressed();
 				}
 			}
-		}	
+		}
 	};
 	
 	private Combo fontCombo = null;
 	private Combo rotationCombo = null;
-	private Combo sizeCombo = null;	
+	private Combo sizeCombo = null;
 	private Spinner xSpinner = null;
 	private Spinner ySpinner = null;
-	private Button italicButton; 
-  private Button boldButton;		
+	private Button italicButton;
+  private Button boldButton;
 
 	private static final int ENTRY_FONT = 1;
 	private static final int ENTRY_ROTATION = 2;
@@ -191,12 +191,12 @@ extends CenteredDialog
 		l.setText(label);
 		l.setSize(150, l.getSize().y);
 		
-		Control widget = null;		
-		switch(entryMode) 
+		Control widget = null;
+		switch(entryMode)
 		{
 			case(ENTRY_FONT):
 				createFontCombo(parent);
-				widget = fontCombo; 
+				widget = fontCombo;
 				break;
 			case(ENTRY_ROTATION):
 				createRotationCombo(parent);
@@ -208,23 +208,23 @@ extends CenteredDialog
 				break;
 			case(ENTRY_Y):
 				createYSpinner(parent);
-				widget = xSpinner;				
+				widget = xSpinner;
 				break;
 			case(ENTRY_SIZE):
 				createSizeCombo(parent);
-				widget = sizeCombo;			
+				widget = sizeCombo;
 				break;
 			case(ENTRY_BOLD):
 				createBoldEntry(parent);
-				widget = boldButton;			
-				break;																
+				widget = boldButton;
+				break;
 			case(ENTRY_ITALIC):
 				createItalicEntry(parent);
-				widget = boldButton;			
-				break;																				
+				widget = boldButton;
+				break;
 		}
-		widget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-	}	
+		widget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
 	
 //	private String defaultFontName = "Arial";
 //	private String defaultFontName = FontUtil.getDefaultFont().getName();
@@ -233,7 +233,7 @@ extends CenteredDialog
 		this.defaultFontName = fontName;
 	}
 
-	protected void initScriptTree() 
+	protected void initScriptTree()
 	{
 		TreeColumn tc = new TreeColumn(getScriptTree().getTree(), SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.treeColumn.name"));		 //$NON-NLS-1$
@@ -257,7 +257,7 @@ extends CenteredDialog
 	}
 
 	// TODO: get fonts which are supported by printer
-	protected void createFontCombo(Composite parent) 
+	protected void createFontCombo(Composite parent)
 	{
 		String[] systemFonts = FontUtil.getSystemFonts();
 		fontCombo = new Combo(parent, SWT.READ_ONLY);
@@ -266,40 +266,40 @@ extends CenteredDialog
 		if (index != -1)
 			fontCombo.select(index);
 		else
-			fontCombo.select(0);	
+			fontCombo.select(0);
 		
-		fontCombo.addSelectionListener(fontListener);		
+		fontCombo.addSelectionListener(fontListener);
 	}
 
-	protected void createRotationCombo(Composite parent) 
+	protected void createRotationCombo(Composite parent)
 	{
 		String[] rotations = new String[] {"0", "90", "180", "270"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		rotationCombo = new Combo(parent, SWT.READ_ONLY);
 		rotationCombo.setItems(rotations);
 		rotationCombo.select(0);
-		rotationCombo.addSelectionListener(rotationListener);		
-	}	
+		rotationCombo.addSelectionListener(rotationListener);
+	}
 	
-	protected void createXSpinner(Composite parent) 
+	protected void createXSpinner(Composite parent)
 	{
 		xSpinner = new Spinner(parent, SWT.BORDER);
 		xSpinner.setMaximum(Integer.MAX_VALUE);
-		xSpinner.setMinimum(Integer.MIN_VALUE);		
+		xSpinner.setMinimum(Integer.MIN_VALUE);
 		x = request.getLocation().x;
 		xSpinner.setSelection(x);
 		xSpinner.addSelectionListener(xListener);
 	}
 	
-	protected void createYSpinner(Composite parent) 
+	protected void createYSpinner(Composite parent)
 	{
 		ySpinner = new Spinner(parent, SWT.BORDER);
 		ySpinner.setMaximum(Integer.MAX_VALUE);
-		ySpinner.setMinimum(Integer.MIN_VALUE);		
+		ySpinner.setMinimum(Integer.MIN_VALUE);
 		y = request.getLocation().y;
 		ySpinner.setSelection(y);
 		ySpinner.addSelectionListener(yListener);
 		ySpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	}	
+	}
 	
 	protected void createBoldEntry(Composite parent)
 	{
@@ -325,7 +325,7 @@ extends CenteredDialog
 	}
 	
 	//TODO: get fontSizes which are supported by printer
-  protected void createSizeCombo(Composite parent) 
+  protected void createSizeCombo(Composite parent)
   {
     sizeCombo = new Combo(parent, SWT.READ_ONLY);
     String[] sizes = FontUtil.getFontSizes();
@@ -342,43 +342,43 @@ extends CenteredDialog
 	
   private String fontName = defaultFontName;
   private SelectionListener fontListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
 			fontName = fontCombo.getItem(fontCombo.getSelectionIndex());
-		}	
+		}
 	};
 	
 	private int rotation = 0;
 	private SelectionListener rotationListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
 			rotation = Integer.parseInt(rotationCombo.getItem(rotationCombo.getSelectionIndex()));
-		}	
+		}
 	};
 	
 	private int x = 0;
 	private SelectionListener xListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
 			x = xSpinner.getSelection();
-		}	
+		}
 	};
 
 	private int y = 0;
 	private SelectionListener yListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
 			y = ySpinner.getSelection();
 		}
@@ -386,17 +386,17 @@ extends CenteredDialog
 		
 	private int fontSize = defaultFontSize;
 	private SelectionListener sizeListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
 			fontSize = Integer.parseInt(sizeCombo.getItem(sizeCombo.getSelectionIndex()));
-		}	
+		}
 	};
 			
 	private int fontStyle = Font.PLAIN;
-	private int getFontStyle() 
+	private int getFontStyle()
 	{
 		if (isBold())
 			fontStyle = fontStyle | Font.BOLD;
@@ -415,7 +415,7 @@ extends CenteredDialog
 	}
 
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
 		if (!isComplete())
 			return;
@@ -434,22 +434,22 @@ extends CenteredDialog
 		
 	protected abstract Map<ScriptRegistryItemID, Object> getScriptRegistryItemID2Result();
 	
-	public String getText() 
-	{					
+	public String getText()
+	{
 		Object o = getScriptRegistryItemID2Result().get(getScriptRegistryItemID());
 		if (o == null)
 			text = ""; //$NON-NLS-1$
 		else
-			text = String.valueOf(o);			
+			text = String.valueOf(o);
 		logger.debug("text = "+text); //$NON-NLS-1$
 		return text;
 	}
 	
-	protected ScriptRegistryItemID getScriptRegistryItemID() 
+	protected ScriptRegistryItemID getScriptRegistryItemID()
 	{
 		if (!getScriptTree().isDisposed()) {
 			return (ScriptRegistryItemID)JDOHelper.getObjectId(
-					getScriptTree().getSelectedRegistryItem());			
+					getScriptTree().getSelectedRegistryItem());
 		}
 		return null;
 	}

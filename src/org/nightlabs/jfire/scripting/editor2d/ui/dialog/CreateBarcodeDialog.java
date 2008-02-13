@@ -62,23 +62,23 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class CreateBarcodeDialog 
-extends CenteredDialog 
+public abstract class CreateBarcodeDialog
+extends CenteredDialog
 {
 	public static final Logger LOGGER = Logger.getLogger(CreateBarcodeDialog.class);
 	public static final double DEFAULT_BARCODE_HEIGHT = 15; // mm
 	
-	public CreateBarcodeDialog(Shell parentShell, BarcodeCreateRequest request) 
+	public CreateBarcodeDialog(Shell parentShell, BarcodeCreateRequest request)
 	{
 		super(parentShell);
 		this.request = request;
-		setShellStyle(getShellStyle() | SWT.RESIZE);		
+		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	private BarcodeCreateRequest request = null;
 	
 	@Override
-	protected void configureShell(Shell newShell) 
+	protected void configureShell(Shell newShell)
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.title")); //$NON-NLS-1$
@@ -86,17 +86,17 @@ extends CenteredDialog
 		newShell.setMinimumSize(400, 200);
 	}
 
-	protected XComboComposite<ScriptRegistryItemID> scriptCombo = null;	
+	protected XComboComposite<ScriptRegistryItemID> scriptCombo = null;
 	private XComboComposite<Type> barcodeTypeCombo = null;
 	private XComboComposite<WidthScale> widthScaleCombo = null;
-	private XComboComposite<Orientation> orientationCombo = null; 
+	private XComboComposite<Orientation> orientationCombo = null;
 	private Spinner xSpinner = null;
-	private Spinner ySpinner = null;	
+	private Spinner ySpinner = null;
 	private Spinner heightSpinner = null;
 	private Button humanReadableButton = null;
 	
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		GridLayout layout = new GridLayout(4, true);
@@ -127,8 +127,8 @@ extends CenteredDialog
 		xSpinner = new Spinner(comp, SWT.BORDER);
 		xSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		xSpinner.setMinimum(Integer.MIN_VALUE);
-		xSpinner.setMaximum(Integer.MAX_VALUE);		
-		xSpinner.setSelection(request.getLocation().x);		
+		xSpinner.setMaximum(Integer.MAX_VALUE);
+		xSpinner.setSelection(request.getLocation().x);
 		
 		// Y
 		Label yLabel = new Label(comp, SWT.NONE);
@@ -136,8 +136,8 @@ extends CenteredDialog
 		ySpinner = new Spinner(comp, SWT.BORDER);
 		ySpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ySpinner.setMinimum(Integer.MIN_VALUE);
-		ySpinner.setMaximum(Integer.MAX_VALUE);		
-		ySpinner.setSelection(request.getLocation().y);		
+		ySpinner.setMaximum(Integer.MAX_VALUE);
+		ySpinner.setSelection(request.getLocation().y);
 		
 		// Height
 		Label heightLabel = new Label(comp, SWT.NONE);
@@ -167,7 +167,7 @@ extends CenteredDialog
 		return comp;
 	}
 			
-	private void createBarcodeTypeCombo(Composite parent) 
+	private void createBarcodeTypeCombo(Composite parent)
 	{
 //		List<Type> types = CollectionUtil.enum2List(Type.valueOf(Type.class, "TYPE_128"));
 		List<Type> types = CollectionUtil.enum2List(Type.TYPE_128);
@@ -177,77 +177,77 @@ extends CenteredDialog
 	}
 		
 	public static ILabelProvider barcodeTypeLabelProvider = new LabelProvider()
-	{	
+	{
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
-			if (element instanceof Type) 
+			if (element instanceof Type)
 			{
 				Type type = (Type) element;
-				switch (type) 
+				switch (type)
 				{
-					case TYPE_128:					
+					case TYPE_128:
 						return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.type128");							 //$NON-NLS-1$
 				}
 				return type.name();
 			}
 			return null;
-		}	
+		}
 		@Override
 		public Image getImage(Object element) {
 			return null;
-		}	
-	};	
+		}
+	};
 		
-	private void createWidthScaleCombo(Composite parent) 
+	private void createWidthScaleCombo(Composite parent)
 	{
 //		List<WidthScale> types = CollectionUtil.enum2List(Enum.valueOf(WidthScale.class, "SCALE_1"));
 		List<WidthScale> types = CollectionUtil.enum2List(WidthScale.SCALE_1);
-		widthScaleCombo = new XComboComposite<WidthScale>(parent, 
+		widthScaleCombo = new XComboComposite<WidthScale>(parent,
 				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null, widthScaleLabelProvider);
 		widthScaleCombo.setInput(types);
-	}	
+	}
 	
 	public static ILabelProvider widthScaleLabelProvider = new LabelProvider()
-	{	
+	{
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
 			if (element instanceof WidthScale) {
 				WidthScale widthScale = (WidthScale) element;
-				switch (widthScale) 
+				switch (widthScale)
 				{
-					case SCALE_1:					
+					case SCALE_1:
 						return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.widthScale1");								 //$NON-NLS-1$
 					case SCALE_2:
 						return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.widthScale2"); //$NON-NLS-1$
-					case SCALE_3:					
+					case SCALE_3:
 						return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.widthScale3"); //$NON-NLS-1$
-					case SCALE_4:					
+					case SCALE_4:
 						return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.widthScale4"); //$NON-NLS-1$
 				}
 			}
 			return null;
-		}	
+		}
 		@Override
 		public Image getImage(Object element) {
 			return null;
-		}	
+		}
 	};
 	
-	private void createOrientationCombo(Composite parent) 
+	private void createOrientationCombo(Composite parent)
 	{
-//		List<Orientation> types = CollectionUtil.enum2List(Enum.valueOf(Orientation.class, "HORIZONTAL"));		
-		List<Orientation> types = CollectionUtil.enum2List(Orientation.HORIZONTAL);		
-		orientationCombo = new XComboComposite<Orientation>(parent, 
+//		List<Orientation> types = CollectionUtil.enum2List(Enum.valueOf(Orientation.class, "HORIZONTAL"));
+		List<Orientation> types = CollectionUtil.enum2List(Orientation.HORIZONTAL);
+		orientationCombo = new XComboComposite<Orientation>(parent,
 				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null, orientationLabelProvider);
 		orientationCombo.setInput(types);
 	}
 		
 	public static ILabelProvider orientationLabelProvider = new LabelProvider()
-	{	
+	{
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
 			if (element instanceof Orientation) {
 				Orientation orientation = (Orientation) element;
@@ -257,32 +257,32 @@ extends CenteredDialog
 					return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.vertical");					 //$NON-NLS-1$
 			}
 			return null;
-		}	
+		}
 		@Override
 		public Image getImage(Object element) {
 			return null;
-		}	
-	};	
+		}
+	};
 	
 	public static ILabelProvider scriptRegistryLabelProvider = new LabelProvider()
-	{	
+	{
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
 			if (element instanceof ScriptRegistryItemID) {
 				ScriptRegistryItemID scriptRegistryItemID = (ScriptRegistryItemID) element;
 				return scriptRegistryItemID.scriptRegistryItemID;
 			}
 			return null;
-		}	
+		}
 		@Override
 		public Image getImage(Object element) {
 			return null;
-		}	
+		}
 	};
 	
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
 		request.setLocation(new Point(xSpinner.getSelection(), ySpinner.getSelection()));
 		request.setHumanReadable(humanReadableButton.getSelection());
@@ -294,11 +294,11 @@ extends CenteredDialog
 		request.setValue(getValue(getSelectedScriptRegistryItemID()));
 		request.setLocation(new Point(xSpinner.getSelection(), ySpinner.getSelection()));
 		super.okPressed();
-	}		
+	}
 				
 	protected abstract ScriptRegistryItemID getSelectedScriptRegistryItemID();
 	
-	protected abstract String getValue(ScriptRegistryItemID scriptRegistryItemID); 
+	protected abstract String getValue(ScriptRegistryItemID scriptRegistryItemID);
 
 	protected abstract void createScriptRegistryItemIDCombo(Composite parent);
 }

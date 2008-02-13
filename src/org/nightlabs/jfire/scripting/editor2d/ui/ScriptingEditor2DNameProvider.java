@@ -34,11 +34,11 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptingEditor2DNameProvider 
-extends EditorNameProvider 
+public class ScriptingEditor2DNameProvider
+extends EditorNameProvider
 {
 	@Override
-	public String getTypeName(Class c) 
+	public String getTypeName(Class c)
 	{
 		if (TextScriptDrawComponent.class.isAssignableFrom(c)) {
 			return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditor2DNameProvider.textScript"); //$NON-NLS-1$
@@ -47,5 +47,5 @@ extends EditorNameProvider
 			return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditor2DNameProvider.barcode"); //$NON-NLS-1$
 		}
 		return super.getTypeName(c);
-	}	
+	}
 }

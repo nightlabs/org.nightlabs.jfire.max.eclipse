@@ -39,8 +39,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class ScriptingEditorPaletteFactory 
-extends AbstractPaletteFactory 
+public abstract class ScriptingEditorPaletteFactory
+extends AbstractPaletteFactory
 {
 	public ScriptingEditorPaletteFactory(ScriptEditor2DFactory factory) {
 		super(factory);
@@ -56,7 +56,7 @@ extends AbstractPaletteFactory
 	  * @return a new PaletteRoot
 	  */
 	 @Override
-	protected PaletteRoot createPalette() 
+	protected PaletteRoot createPalette()
 	 {
 		 PaletteRoot palette = new PaletteRoot();
 		 palette.add(createToolsGroup(palette));
@@ -73,7 +73,7 @@ extends AbstractPaletteFactory
 	}
 
 //	protected PaletteDrawer componentsDrawer = null;
-	protected PaletteContainer createPaletteContainer() 
+	protected PaletteContainer createPaletteContainer()
 	{
 		PaletteDrawer componentsDrawer = new PaletteDrawer(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditorPaletteFactory.category.shapes")); //$NON-NLS-1$
 
@@ -90,11 +90,11 @@ extends AbstractPaletteFactory
 	  componentsDrawer.add(toolEntry);
 	  
 	  // add Text Tool
-	  toolEntry = createTextToolEntry();   
+	  toolEntry = createTextToolEntry();
 	  componentsDrawer.add(toolEntry);
 
 	  // add Ticket Text Tool
-	  toolEntry = createTicketScriptTextToolEntry();   
+	  toolEntry = createTicketScriptTextToolEntry();
 	  componentsDrawer.add(toolEntry);
 	  
 	  // add Image Tool
@@ -108,7 +108,7 @@ extends AbstractPaletteFactory
 	  return componentsDrawer;
 	}
 	
- 	protected abstract ToolEntry createBarcodeToolEntry(); 
+ 	protected abstract ToolEntry createBarcodeToolEntry();
 	
  	protected abstract ToolEntry createTicketScriptTextToolEntry();
 }

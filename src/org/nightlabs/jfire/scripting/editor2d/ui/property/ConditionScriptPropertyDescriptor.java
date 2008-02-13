@@ -40,15 +40,15 @@ public class ConditionScriptPropertyDescriptor
 extends XPropertyDescriptor
 {
 
-	public ConditionScriptPropertyDescriptor(Object id, String displayName, boolean readOnly, 
-			Collection<ScriptConditioner> scriptConditioners) 
+	public ConditionScriptPropertyDescriptor(Object id, String displayName, boolean readOnly,
+			Collection<ScriptConditioner> scriptConditioners)
 	{
 		super(id, displayName, readOnly);
 		this.scriptConditioners = scriptConditioners;
 	}
 
-	public ConditionScriptPropertyDescriptor(Object id, String displayName, 
-			Collection<ScriptConditioner> scriptConditioners) 
+	public ConditionScriptPropertyDescriptor(Object id, String displayName,
+			Collection<ScriptConditioner> scriptConditioners)
 	{
 		super(id, displayName);
 		this.scriptConditioners = scriptConditioners;

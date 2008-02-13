@@ -37,8 +37,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class BarcodeEditPart 
-extends DrawComponentEditPart 
+public class BarcodeEditPart
+extends DrawComponentEditPart
 {
 
 	public BarcodeEditPart(BarcodeDrawComponent drawComponent) {
@@ -50,7 +50,7 @@ extends DrawComponentEditPart
 	}
 	
 	@Override
-	public IPropertySource getPropertySource() 
+	public IPropertySource getPropertySource()
 	{
 		if (propertySource == null) {
 			propertySource = new BarcodePropertySource(getBarcodeDrawComponent());
@@ -59,7 +59,7 @@ extends DrawComponentEditPart
 	}
 
 	@Override
-	protected void propertyChanged(PropertyChangeEvent evt) 
+	protected void propertyChanged(PropertyChangeEvent evt)
 	{
 		String propertyName = evt.getPropertyName();
 		
@@ -81,5 +81,5 @@ extends DrawComponentEditPart
 		}
 		
 		super.propertyChanged(evt);
-	}	
+	}
 }

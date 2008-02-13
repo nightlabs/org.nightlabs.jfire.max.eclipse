@@ -60,13 +60,13 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * 
  */
-public abstract class AbstractScriptingEditor 
+public abstract class AbstractScriptingEditor
 extends AbstractEditor
 implements ControllablePart
 {
 	private static final Logger logger = Logger.getLogger(AbstractScriptingEditor.class);
 
-	public AbstractScriptingEditor() 
+	public AbstractScriptingEditor()
 	{
 		super();
 		login();
@@ -74,15 +74,15 @@ implements ControllablePart
 //		getScriptResultProvider().addScriptResultsChangedListener(scriptResultChangedListener);
 	}
 
-	protected void login() 
+	protected void login()
 	{
 		try {
 			Login.getLogin();
 		} catch (LoginException e) {
 			logger.warn("User decided to work offline or there was an authentication problem!", e); //$NON-NLS-1$
 //			throw new RuntimeException(e);
-		}		
-	}	
+		}
+	}
 	
 	@Override
 	protected void init() {
@@ -90,35 +90,35 @@ implements ControllablePart
 	}
 	
 	@Override
-	public void createPartControl(Composite parent) 
+	public void createPartControl(Composite parent)
 	{
 		if (!Login.isLoggedIn())
 			LSDPartController.sharedInstance().createPartControl(this, parent);
-	}	
+	}
 	
-	public void createPartContents(Composite parent) 
+	public void createPartContents(Composite parent)
 	{
 		super.createPartControl(parent);
 		super.setFocus();
 		clearScriptResults();
 		assignAllScripts();
 		getEditorActionBarContributor().getEditorZoomComboContributionItem().setZoomManager(getZoomManager());
-	}	
+	}
 	
 	public void assignVisibleScriptResults()
-	{ 
+	{
 			if (logger.isDebugEnabled())
 				logger.debug("assignVisibleScriptResults()"); //$NON-NLS-1$
-			Map<Long, Script> id2VisibleScript = getScriptRootDrawComponent().getVisibleScripts();			
+			Map<Long, Script> id2VisibleScript = getScriptRootDrawComponent().getVisibleScripts();
 			for (Map.Entry<Long, Script> entry : id2VisibleScript.entrySet()) {
-				Script script = entry.getValue(); 
+				Script script = entry.getValue();
 				for (Map.Entry<String, ScriptRegistryItemID> entry2 : script.getVariableName2ScriptID().entrySet()) {
 					Object result = getScriptResult(entry2.getValue());
 					script.getVariableName2Value().put(entry2.getKey(), result);
 				}
 			}
 			ScriptRegistry scriptRegistry = ScriptRegistryDAO.sharedInstance().getScriptRegistry(
-					new String[] {ScriptRegistry.FETCH_GROUP_THIS_SCRIPT_REGISTRY}, 
+					new String[] {ScriptRegistry.FETCH_GROUP_THIS_SCRIPT_REGISTRY},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			Map<Long, Boolean> id2Result = getConditonScriptResults(id2VisibleScript, scriptRegistry);
 			getScriptRootDrawComponent().assignVisibleScriptResults(id2Result);
@@ -140,7 +140,7 @@ implements ControllablePart
 			Map<Long, Boolean> id2Result = new HashMap<Long, Boolean>();
 			for (Map.Entry<Long, Script> entry : id2ConditionScript.entrySet()) {
 				Script visibleScript = entry.getValue();
-				long id = entry.getKey();				
+				long id = entry.getKey();
 				Boolean result = (Boolean) results.get(scripts.indexOf(visibleScript));
 				id2Result.put(id, result);
 				if (logger.isDebugEnabled()) {
@@ -150,26 +150,26 @@ implements ControllablePart
 			return id2Result;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}		
-	}	
+		}
+	}
 	
 	public ScriptRootDrawComponent getScriptRootDrawComponent() {
 		return (ScriptRootDrawComponent) getRootDrawComponent();
 	}
 	
-	public void assignAllScripts() 
+	public void assignAllScripts()
 	{
 		assignScriptResults();
 		assignVisibleScriptResults();
 	}
 	
-	public void assignScriptResults() 
+	public void assignScriptResults()
 	{
 		if (logger.isDebugEnabled())
 			logger.debug("assignScriptResults()"); //$NON-NLS-1$
 		getScriptRootDrawComponent().assignScriptResults(
-				getScriptResults());			
-	}	
+				getScriptResults());
+	}
 	
 	private Map<ScriptRegistryItemID, Object> scriptID2Result = null;
 	public void clearScriptResults() {
@@ -178,7 +178,7 @@ implements ControllablePart
 	
 	protected Object getScriptResult(ScriptRegistryItemID scriptID) {
 		return getScriptResults().get(scriptID);
-	}	
+	}
 	
 	protected Map<ScriptRegistryItemID, Object> getScriptResults() {
 		if (scriptID2Result == null) {
@@ -187,10 +187,10 @@ implements ControllablePart
 		return scriptID2Result;
 	}
 		
-	@Override	
+	@Override
 	protected EditPartFactory createEditPartFactory() {
   	return new ScriptingEditorEditPartFactory();
-  }	
+  }
 	
   @Override
   protected NameProvider createNameProvider() {
@@ -200,9 +200,9 @@ implements ControllablePart
   @Override
   protected ContextMenuProvider createContextMenuProvider() {
   	return new EditorContextMenuProvider(getGraphicalViewer(), getActionRegistry());
-  }  
+  }
   
-	@Override  
+	@Override
   protected EditPartFactory createOutlineEditPartFactory() {
   	return new ScriptingEditorTreePartFactory(getFilterManager());
   }
@@ -210,7 +210,7 @@ implements ControllablePart
 	@Override
 	protected Editor2DFactory createModelFactory() {
 		return new ScriptEditor2DFactoryImpl();
-	}	
+	}
 	
 	protected ScriptEditor2DFactory getScriptEditor2DFactory() {
 		return (ScriptEditor2DFactory) getModelFactory();
@@ -219,24 +219,24 @@ implements ControllablePart
 //  @Override
 //  protected RootDrawComponent createRootDrawComponent() {
 //		return getScriptEditor2DFactory().createScriptRootDrawComponent();
-//	}	
+//	}
   	
 	@Override
-	public void setFocus() 
+	public void setFocus()
 	{
 		// TODO: to avoid NullPointerException at org.eclipse.gef.ui.parts.GraphicalEditor.setFocus(GraphicalEditor.java:354)
 	}
 	
-	protected abstract Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs);  
+	protected abstract Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs);
 	
-//	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){	
+//	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){
 //		public void scriptResultsChanged(ScriptResultsChangedEvent event) {
 //			clearScriptResults();
 //			assignAllScripts();
 //		}
 //	};
 	
-//	public abstract IScriptResultProvider getScriptResultProvider();	
+//	public abstract IScriptResultProvider getScriptResultProvider();
 	
 //	@Override
 //	protected Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs) {
@@ -246,8 +246,8 @@ implements ControllablePart
 //	protected boolean isScriptResultAvailable() {
 //		return getScriptResultProvider().getSelectedObject() != null;
 //	}
-//	
+//
 //	public boolean canDisplayPart() {
 //		return isScriptResultAvailable();
-//	}	
+//	}
 }

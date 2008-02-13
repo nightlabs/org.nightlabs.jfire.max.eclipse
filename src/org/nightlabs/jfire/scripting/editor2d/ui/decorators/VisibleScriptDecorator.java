@@ -42,23 +42,23 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VisibleScriptDecorator 
-extends LabelProvider 
-implements ILightweightLabelDecorator 
+public class VisibleScriptDecorator
+extends LabelProvider
+implements ILightweightLabelDecorator
 {
-	public void decorate(Object element, IDecoration decoration) 
+	public void decorate(Object element, IDecoration decoration)
 	{
-		if(element instanceof DrawComponentTreeEditPart) {	
+		if(element instanceof DrawComponentTreeEditPart) {
 			DrawComponentTreeEditPart dctep = (DrawComponentTreeEditPart) element;
 			DrawComponent dc = dctep.getDrawComponent();
 			if (dc.getProperties().containsKey(ScriptingConstants.PROP_VISIBLE_SCRIPT)) {
 				ImageDescriptor visibleScriptImage = SharedImages.getSharedImageDescriptor(
-						ScriptingEditor2DPlugin.getDefault(), 
+						ScriptingEditor2DPlugin.getDefault(),
 						VisibleScriptDecorator.class, "", ImageDimension._8x8, ImageFormat.gif);				 //$NON-NLS-1$
 				decoration.addOverlay(visibleScriptImage, IDecoration.TOP_LEFT);
 				decoration.addSuffix("["+Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.decorators.VisibleScriptDecorator.visibleScript")+"]");				 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
-		}		
+		}
 	}
 
 }

@@ -39,11 +39,11 @@ import org.nightlabs.jfire.scripting.editor2d.ui.tool.BarcodeTool;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class BarcodeTreeEditPart 
+public class BarcodeTreeEditPart
 extends DrawComponentTreeEditPart
 {
 	public static final Image BARCODE_ICON = SharedImages.getSharedImageDescriptor(
-			ScriptingEditor2DPlugin.getDefault(), 
+			ScriptingEditor2DPlugin.getDefault(),
 			BarcodeTool.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 
 	public BarcodeTreeEditPart(BarcodeDrawComponent barcode) {
@@ -60,11 +60,11 @@ extends DrawComponentTreeEditPart
 	}
 
 	@Override
-	public IPropertySource getPropertySource() 
+	public IPropertySource getPropertySource()
 	{
 		if (propertySource == null) {
 			propertySource = new BarcodePropertySource(getBarcode());
 		}
 		return propertySource;
-	}		
+	}
 }

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public abstract class AbstractScriptParameterProvider
 implements IScriptParameterProvider
-{	
+{
 	private Map<String, Object> parameterValues = new HashMap<String, Object>();
 	public Map<String, Object> getParameterValues() {
 		return parameterValues;
@@ -49,5 +49,5 @@ implements IScriptParameterProvider
 //	}
 //	public void setScriptRegistryItemID(ScriptRegistryItemID scriptRegistryItemID) {
 //		this.scriptRegistryItemID = scriptRegistryItemID;
-//	}		
+//	}
 }

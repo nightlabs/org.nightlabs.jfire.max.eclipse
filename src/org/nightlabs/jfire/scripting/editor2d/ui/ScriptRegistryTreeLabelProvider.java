@@ -42,10 +42,10 @@ import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptRegistryTreeLabelProvider 
-extends TableLabelProvider 
+public class ScriptRegistryTreeLabelProvider
+extends TableLabelProvider
 {
-	public ScriptRegistryTreeLabelProvider(Map<ScriptRegistryItemID, Object> scriptRegistryItemID2Result) 
+	public ScriptRegistryTreeLabelProvider(Map<ScriptRegistryItemID, Object> scriptRegistryItemID2Result)
 	{
 		super();
 		this.scriptRegistryItemID2Result = scriptRegistryItemID2Result;
@@ -53,7 +53,7 @@ extends TableLabelProvider
 
 	protected Map<ScriptRegistryItemID, Object> scriptRegistryItemID2Result = null;
 	
-	public String getColumnText(Object element, int columnIndex) 
+	public String getColumnText(Object element, int columnIndex)
 	{
 		if (element instanceof ScriptRegistryItemNode && columnIndex == 1) {
 			ScriptRegistryItemNode node = (ScriptRegistryItemNode) element;
@@ -62,7 +62,7 @@ extends TableLabelProvider
 				return ""; //$NON-NLS-1$
 			else
 				return String.valueOf(o);
-		}					
+		}
 
 		if (element instanceof ScriptRegistryItemNode && columnIndex == 0)
 			return ((ScriptRegistryItemNode)element).getName();
@@ -75,11 +75,11 @@ extends TableLabelProvider
 		
 	@Override
 	public String getText(Object element) {
-		return getColumnText(element, 0); 
+		return getColumnText(element, 0);
 	}
 	
 	@Override
-	public Image getColumnImage(Object element, int columnIndex) 
+	public Image getColumnImage(Object element, int columnIndex)
 	{
 		if (columnIndex != 0)
 			return null;

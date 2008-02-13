@@ -67,10 +67,10 @@ extends AbstractEPProcessor
 	}
 	
 	@Override
-	public void processElement(IExtension extension, IConfigurationElement element) 
-	throws Exception 
+	public void processElement(IExtension extension, IConfigurationElement element)
+	throws Exception
 	{
-		if (element.getName().equalsIgnoreCase(ELEMENT_SCRIPT_PARAMETER_PROVIDER)) 
+		if (element.getName().equalsIgnoreCase(ELEMENT_SCRIPT_PARAMETER_PROVIDER))
 		{
 			String organisationID = element.getAttribute(ATTRIBUTE_ORGANISATION_ID);
 			if (!checkString(organisationID))
@@ -94,16 +94,16 @@ extends AbstractEPProcessor
 		}
 	}
 	
-	private Map<ScriptRegistryItemID, IScriptParameterProvider> scriptID2ParameterProvider = 
+	private Map<ScriptRegistryItemID, IScriptParameterProvider> scriptID2ParameterProvider =
 		new HashMap<ScriptRegistryItemID, IScriptParameterProvider>();
 	
-	public IScriptParameterProvider getScriptParameterProvider(ScriptRegistryItemID scriptRegistryItemID) 
+	public IScriptParameterProvider getScriptParameterProvider(ScriptRegistryItemID scriptRegistryItemID)
 	{
 		checkProcessing();
 		return scriptID2ParameterProvider.get(scriptRegistryItemID);
 	}
 	
-	public Collection<IScriptParameterProvider> getScriptParameterProviders(Collection<ScriptRegistryItemID> scriptIDs) 
+	public Collection<IScriptParameterProvider> getScriptParameterProviders(Collection<ScriptRegistryItemID> scriptIDs)
 	{
 		checkProcessing();
 		Collection<IScriptParameterProvider> providers = new ArrayList<IScriptParameterProvider>(scriptIDs.size());
@@ -113,9 +113,9 @@ extends AbstractEPProcessor
 		return providers;
 	}
 	
-	public Map<ScriptRegistryItemID, Map<String, Object>> getParameterValues(Collection<ScriptRegistryItemID> scriptIDs) 
+	public Map<ScriptRegistryItemID, Map<String, Object>> getParameterValues(Collection<ScriptRegistryItemID> scriptIDs)
 	{
-		Map<ScriptRegistryItemID, Map<String, Object>> scriptID2ParameterValues = 
+		Map<ScriptRegistryItemID, Map<String, Object>> scriptID2ParameterValues =
 			new HashMap<ScriptRegistryItemID, Map<String,Object>>();
 		for (ScriptRegistryItemID itemID : scriptIDs) {
 			IScriptParameterProvider provider = getScriptParameterProvider(itemID);

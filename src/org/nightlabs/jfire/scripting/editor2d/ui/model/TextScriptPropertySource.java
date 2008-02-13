@@ -38,8 +38,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TextScriptPropertySource 
-extends TextPropertySource 
+public class TextScriptPropertySource
+extends TextPropertySource
 {
 	/**
 	 * @param text
@@ -52,27 +52,27 @@ extends TextPropertySource
 		return (TextScriptDrawComponent) drawComponent;
 	}
 	
-	@Override	
-	public void setPropertyValue(Object id, Object value) 
+	@Override
+	public void setPropertyValue(Object id, Object value)
 	{
 		if (id.equals(DrawComponent.PROP_NAME)) {
-			// do nothing  
-		}		
+			// do nothing
+		}
 		super.setPropertyValue(id, value);
 	}
 
 	@Override
-	public Object getPropertyValue(Object id) 
+	public Object getPropertyValue(Object id)
 	{
 		if (id.equals(DrawComponent.PROP_NAME)) {
 			// Show the the ID of the ScriptRegistryItem as Name
 			return getTextScript().getScriptRegistryItemID().scriptRegistryItemID;
-		}				
+		}
 		return super.getPropertyValue(id);
-	}	
+	}
 		
 	@Override
-	protected PropertyDescriptor createTextPD() 
+	protected PropertyDescriptor createTextPD()
 	{
 		PropertyDescriptor desc = new XTextPropertyDescriptor(TextDrawComponent.PROP_TEXT,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource.text"), true); //$NON-NLS-1$
@@ -81,12 +81,12 @@ extends TextPropertySource
 	}
 
 	@Override
-	protected PropertyDescriptor createNamePD() 
+	protected PropertyDescriptor createNamePD()
 	{
 		PropertyDescriptor desc = new NamePropertyDescriptor(drawComponent,
 				DrawComponent.PROP_NAME,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource.name"), true);		 //$NON-NLS-1$
 		desc.setCategory(CATEGORY_NAME);
 		return desc;
-	}	
+	}
 }

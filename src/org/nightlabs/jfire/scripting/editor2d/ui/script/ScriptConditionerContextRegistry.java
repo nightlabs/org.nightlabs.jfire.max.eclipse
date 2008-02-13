@@ -38,8 +38,8 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptConditionerContextRegistry 
-extends AbstractEPProcessor 
+public class ScriptConditionerContextRegistry
+extends AbstractEPProcessor
 {
 	private static final Logger logger = Logger.getLogger(ScriptConditionerContextRegistry.class);
 	
@@ -68,9 +68,9 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws Exception 
+	throws Exception
 	{
-		if (element.getName().equalsIgnoreCase(ELEMENT_SCRIPT_CONDITIONER_CONTEXT)) 
+		if (element.getName().equalsIgnoreCase(ELEMENT_SCRIPT_CONDITIONER_CONTEXT))
 		{
 			String organisationID = element.getAttribute(ATTRIBUTE_ORGANISATION_ID);
 			if (!checkString(organisationID))
@@ -89,10 +89,10 @@ extends AbstractEPProcessor
 		}
 	}
 	
-	private Map<String, ScriptConditionerContext> scriptDrawComponentClass2ScriptConditionerContext = 
+	private Map<String, ScriptConditionerContext> scriptDrawComponentClass2ScriptConditionerContext =
 		new HashMap<String, ScriptConditionerContext>();
 	
-	public ScriptConditionerContext getScriptConditionerContext(String scriptDrawComponentClass) 
+	public ScriptConditionerContext getScriptConditionerContext(String scriptDrawComponentClass)
 	{
 		checkProcessing();
 		return scriptDrawComponentClass2ScriptConditionerContext.get(scriptDrawComponentClass);

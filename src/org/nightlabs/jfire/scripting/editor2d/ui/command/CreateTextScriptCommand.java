@@ -37,11 +37,11 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class CreateTextScriptCommand 
-extends AbstractCreateTextCommand 
+public class CreateTextScriptCommand
+extends AbstractCreateTextCommand
 {
 	protected TextScriptCreateRequest request = null;
-	public CreateTextScriptCommand(TextScriptCreateRequest request) 
+	public CreateTextScriptCommand(TextScriptCreateRequest request)
 	{
 		super(request);
 		setLabel(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.command.CreateTextScriptCommand.label")); //$NON-NLS-1$
@@ -58,16 +58,16 @@ extends AbstractCreateTextCommand
   
   protected ScriptEditor2DFactory getScriptEditorFactory() {
   	return (ScriptEditor2DFactory) getFactory();
-  }	
+  }
   
 	@Override
-	public TextDrawComponent createTextDrawComponent(TextCreateRequest request, int x, int y) 
+	public TextDrawComponent createTextDrawComponent(TextCreateRequest request, int x, int y)
 	{
 		TextScriptDrawComponent tt = getScriptEditorFactory().createTextScriptDrawComponent(
-				request.getText(), 
-				request.getFontName(), request.getFontSize(), request.getFontStyle(), 
+				request.getText(),
+				request.getFontName(), request.getFontSize(), request.getFontStyle(),
 				x, y, parent);
-    tt.setScriptRegistryItemID(getTextScriptCreateRequest().getScriptRegistryItemID());		
+    tt.setScriptRegistryItemID(getTextScriptCreateRequest().getScriptRegistryItemID());
 		return tt;
-	}	
+	}
 }

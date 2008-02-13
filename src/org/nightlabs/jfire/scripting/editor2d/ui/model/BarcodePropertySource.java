@@ -47,8 +47,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class BarcodePropertySource 
-extends DrawComponentPropertySource 
+public class BarcodePropertySource
+extends DrawComponentPropertySource
 {
 	public static final String CATEGORY_BARCODE = Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.category.barcode"); //$NON-NLS-1$
 	
@@ -61,16 +61,16 @@ extends DrawComponentPropertySource
 	}
 	
 	@Override
-	protected List<IPropertyDescriptor> createPropertyDescriptors() 
+	protected List<IPropertyDescriptor> createPropertyDescriptors()
 	{
 		List<IPropertyDescriptor> descriptors = getDescriptors();
 		
 		// Name
-		descriptors.add(createNamePD());				
+		descriptors.add(createNamePD());
 		// X
-		descriptors.add(createXPD());		
-		// Y		
-		descriptors.add(createYPD());		
+		descriptors.add(createXPD());
+		// Y
+		descriptors.add(createYPD());
 		// Width
 		descriptors.add(createWidthPD());
 		// Height
@@ -84,7 +84,7 @@ extends DrawComponentPropertySource
 		// Orientation
 		descriptors.add(createOrientationPD());
 		// Visible
-		descriptors.add(createVisiblePD());		
+		descriptors.add(createVisiblePD());
 //		// Visible Script
 //		descriptors.add(createVisibleConditionScriptPD());
 		descriptors.addAll(getExtensionPointProperties());
@@ -93,7 +93,7 @@ extends DrawComponentPropertySource
 	}
 
 	@Override
-	public Object getPropertyValue(Object id) 
+	public Object getPropertyValue(Object id)
 	{
 		if (id.equals(DrawComponent.PROP_X)) {
 			return new Double(getValue(drawComponent.getX(), getUnit()));
@@ -103,19 +103,19 @@ extends DrawComponentPropertySource
 		}
 		if (id.equals(DrawComponent.PROP_NAME)) {
 			return drawComponent.getI18nText().getText(LanguageManager.sharedInstance().getCurrentLanguageID());
-		}		
-		if (id.equals(DrawComponent.PROP_WIDTH)) 
+		}
+		if (id.equals(DrawComponent.PROP_WIDTH))
 		{
 			if (getBarcode().getOrientation() == Orientation.HORIZONTAL)
 				return new Double(getValue(drawComponent.getWidth(), getUnit()));
 			else if (getBarcode().getOrientation() == Orientation.VERTICAL)
-				return new Double(getValue(drawComponent.getHeight(), getUnit()));				
+				return new Double(getValue(drawComponent.getHeight(), getUnit()));
 		}
-		if (id.equals(DrawComponent.PROP_HEIGHT)) {			
+		if (id.equals(DrawComponent.PROP_HEIGHT)) {
 			if (getBarcode().getOrientation() == Orientation.HORIZONTAL)
 				return new Double(getValue(drawComponent.getHeight(), getUnit()));
 			else if (getBarcode().getOrientation() == Orientation.VERTICAL)
-				return new Double(getValue(drawComponent.getWidth(), getUnit()));				
+				return new Double(getValue(drawComponent.getWidth(), getUnit()));
 		}
 		if (id.equals(BarcodeDrawComponent.PROP_VALUE))
 			return getBarcode().getText();
@@ -131,7 +131,7 @@ extends DrawComponentPropertySource
 	}
 
 	@Override
-	public void setPropertyValue(Object id, Object value) 
+	public void setPropertyValue(Object id, Object value)
 	{
 		if (id.equals(DrawComponent.PROP_X)) {
 			double x = ((Double)value).doubleValue();
@@ -155,7 +155,7 @@ extends DrawComponentPropertySource
 			double height = ((Double)value).doubleValue();
 			drawComponent.setHeight(getSetValue(height, getUnit()));
 			return;
-		}		
+		}
 		if (id.equals(BarcodeDrawComponent.PROP_WIDTH_SCALE)) {
 			getBarcode().setWidthScale((WidthScale)value);
 		}
@@ -168,15 +168,15 @@ extends DrawComponentPropertySource
 	
 	// TODO: use WidthScale Combo
 	@Override
-	protected PropertyDescriptor createWidthPD() 
-	{		
+	protected PropertyDescriptor createWidthPD()
+	{
 		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_WIDTH,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.width"), true); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
 	}
 
-//	protected PropertyDescriptor createHeightPD() 
+//	protected PropertyDescriptor createHeightPD()
 //	{
 //		PropertyDescriptor desc = new DoublePropertyDescriptor(DrawComponent.PROP_HEIGHT,
 //				EditorPlugin.getResourceString("property.height.label"), true);
@@ -184,28 +184,28 @@ extends DrawComponentPropertySource
 //		return desc;
 //	}
 	
-	protected PropertyDescriptor createValuePD() 
+	protected PropertyDescriptor createValuePD()
 	{
 		PropertyDescriptor desc = new XTextPropertyDescriptor(BarcodeDrawComponent.PROP_VALUE,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.value"), true); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_BARCODE);
 		return desc;
-	}	
+	}
 	
-	protected PropertyDescriptor createHumanReadablePD() 
+	protected PropertyDescriptor createHumanReadablePD()
 	{
 		PropertyDescriptor desc = new CheckboxPropertyDescriptor(BarcodeDrawComponent.PROP_HUMAN_READABLE,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.humanReadable"), false); //$NON-NLS-1$
 		desc.setCategory(CATEGORY_BARCODE);
 		return desc;
-	}	
+	}
 
-	protected PropertyDescriptor createWidthScalePD() 
+	protected PropertyDescriptor createWidthScalePD()
 	{
 		PropertyDescriptor desc = new GenericComboBoxPropertyDescriptor<WidthScale>(
-				BarcodeDrawComponent.PROP_WIDTH_SCALE, 
+				BarcodeDrawComponent.PROP_WIDTH_SCALE,
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.widthScale"), //$NON-NLS-1$
-				CollectionUtil.enum2List(WidthScale.SCALE_1), 
+				CollectionUtil.enum2List(WidthScale.SCALE_1),
 				new WidthScaleLabelProvider());
 		desc.setCategory(CATEGORY_BARCODE);
 		return desc;
@@ -225,7 +225,7 @@ extends DrawComponentPropertySource
 							return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.BarcodePropertySource.vertical"); //$NON-NLS-1$
 						
 						return super.getText(element);
-					}		
+					}
 				});
 		desc.setCategory(CATEGORY_BARCODE);
 		return desc;

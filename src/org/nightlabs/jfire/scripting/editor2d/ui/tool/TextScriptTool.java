@@ -36,8 +36,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.request.TextScriptCreateRequest
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class TextScriptTool 
-extends CreationTool 
+public abstract class TextScriptTool
+extends CreationTool
 {
 
 	public TextScriptTool(CreationFactory aFactory) {
@@ -48,33 +48,33 @@ extends CreationTool
    * Creates a {@link TicketScriptTextCreateRequest} and sets this tool's factory on the request.
    */
 	@Override
-  protected Request createTargetRequest() 
+  protected Request createTargetRequest()
   {
 		TextScriptCreateRequest request = new TextScriptCreateRequest();
     request.setFactory(getFactory());
     return request;
-  }  	
+  }
   
   public TextScriptCreateRequest getScriptTextCreateRequest() {
     return (TextScriptCreateRequest) getTargetRequest();
-  }  
+  }
     
   /**
    * opens a {@link CreateTicketScriptTextDialog} and performs the creation
    */
-  @Override  
-  protected boolean handleButtonDown(int button) 
-  {  	
+  @Override
+  protected boolean handleButtonDown(int button)
+  {
   	CreateTextScriptDialog dialog = createTextScriptDialog();
     dialog.open();
         
-    if (dialog.getReturnCode() == Window.OK) 
+    if (dialog.getReturnCode() == Window.OK)
     {
       performCreation(1);
       return true;
     }
-    return false;    
-  }	
+    return false;
+  }
   
   protected abstract CreateTextScriptDialog createTextScriptDialog();
 }

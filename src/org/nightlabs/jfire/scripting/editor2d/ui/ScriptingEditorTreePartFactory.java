@@ -37,8 +37,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.editpart.tree.TextScriptTreeEdi
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptingEditorTreePartFactory 
-extends TreePartFactory 
+public class ScriptingEditorTreePartFactory
+extends TreePartFactory
 {
 
 	/**
@@ -49,7 +49,7 @@ extends TreePartFactory
 	}
 
   @Override
-	public EditPart createEditPart(EditPart context, Object model) 
+	public EditPart createEditPart(EditPart context, Object model)
   {
   	if (model instanceof TextScriptDrawComponent)
   		return new TextScriptTreeEditPart((TextScriptDrawComponent)model);
@@ -58,5 +58,5 @@ extends TreePartFactory
     	return new BarcodeTreeEditPart((BarcodeDrawComponent)model);
   	
     return super.createEditPart(context, model);
-  }		
+  }
 }

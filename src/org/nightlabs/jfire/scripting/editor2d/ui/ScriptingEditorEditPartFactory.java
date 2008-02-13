@@ -40,8 +40,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.editpart.TextScriptEditPart;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptingEditorEditPartFactory 
-extends GraphicalEditPartFactory 
+public class ScriptingEditorEditPartFactory
+extends GraphicalEditPartFactory
 {
 
 	public ScriptingEditorEditPartFactory() {
@@ -64,5 +64,5 @@ extends GraphicalEditPartFactory
     	return new BarcodeEditPart((BarcodeDrawComponent)model);
     
     return super.createEditPart(context, model);
-	}		
+	}
 }

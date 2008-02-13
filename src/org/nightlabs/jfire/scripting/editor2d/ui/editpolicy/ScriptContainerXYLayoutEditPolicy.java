@@ -46,8 +46,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.request.TextScriptCreateRequest
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptContainerXYLayoutEditPolicy 
-extends DrawComponentContainerXYLayoutPolicy 
+public class ScriptContainerXYLayoutEditPolicy
+extends DrawComponentContainerXYLayoutPolicy
 {
 
 	public static final Logger LOGGER = Logger.getLogger(ScriptContainerXYLayoutEditPolicy.class);
@@ -57,7 +57,7 @@ extends DrawComponentContainerXYLayoutPolicy
 	}
 
 	@Override
-  public Command getCommand(Request request) 
+  public Command getCommand(Request request)
   {
     if (request instanceof TextScriptCreateRequest)
       return getCreateScriptTextCommand((TextScriptCreateRequest)request);
@@ -66,38 +66,38 @@ extends DrawComponentContainerXYLayoutPolicy
       return getCreateBarcodeCommand((BarcodeCreateRequest)request);
     
   	return super.getCommand(request);
-  }  
+  }
 	
-  public Command getCreateScriptTextCommand(TextScriptCreateRequest request) 
+  public Command getCreateScriptTextCommand(TextScriptCreateRequest request)
   {
     // TODO: Optimize Command (dont create each time a new Command)
-  	CreateTextScriptCommand create = new CreateTextScriptCommand(request);                 
-    create.setParent(getDrawComponentContainer());          
+  	CreateTextScriptCommand create = new CreateTextScriptCommand(request);
+    create.setParent(getDrawComponentContainer());
     Rectangle constraint = new Rectangle();
-    constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);    
-    create.setBounds(constraint);    
+    constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);
+    create.setBounds(constraint);
     return create;
   }
 
-  public Command getCreateBarcodeCommand(BarcodeCreateRequest request) 
+  public Command getCreateBarcodeCommand(BarcodeCreateRequest request)
   {
-    // TODO: Optimize Command (dont create each time a new Command)  	
+    // TODO: Optimize Command (dont create each time a new Command)
   	CreateBarcodeCommand create = new CreateBarcodeCommand(request);
-  	create.setParent(getDrawComponentContainer());  	
+  	create.setParent(getDrawComponentContainer());
     Rectangle constraint = new Rectangle();
-    constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);    
+    constraint = (Rectangle)getConstraintFor((EditorBoundsRequest)request);
     create.setBounds(constraint);
     return create;
   }
     
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) 
+	protected EditPolicy createChildEditPolicy(EditPart child)
 	{
 		if (child instanceof TextEditPart) {
 			return new DrawComponentResizeEditPolicy(true, false);
 		}
 		if (child instanceof BarcodeEditPart) {
-			return new DrawComponentResizeEditPolicy(false, false);			
+			return new DrawComponentResizeEditPolicy(false, false);
 		}
 		
 		return super.createChildEditPolicy(child);

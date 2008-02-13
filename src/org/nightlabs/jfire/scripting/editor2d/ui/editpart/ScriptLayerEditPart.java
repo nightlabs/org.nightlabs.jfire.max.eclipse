@@ -35,8 +35,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.editpolicy.ScriptContainerXYLay
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptLayerEditPart 
-extends LayerEditPart 
+public class ScriptLayerEditPart
+extends LayerEditPart
 {
 
 	/**
@@ -47,10 +47,10 @@ extends LayerEditPart
 	}
 
 	@Override
-  protected void createEditPolicies() 
+  protected void createEditPolicies()
   {
   	super.createEditPolicies();
 		XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ScriptContainerXYLayoutEditPolicy(layout));					
-  } 	
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ScriptContainerXYLayoutEditPolicy(layout));
+  }
 }

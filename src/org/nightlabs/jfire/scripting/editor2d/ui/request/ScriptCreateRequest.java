@@ -31,7 +31,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface ScriptCreateRequest 
+public interface ScriptCreateRequest
 {
 	ScriptRegistryItemID getScriptRegistryItemID();
 	void setScriptRegistryItemID(ScriptRegistryItemID scriptRegistryItemID);

@@ -33,21 +33,21 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface IScriptResultProvider<T> 
+public interface IScriptResultProvider<T>
 {
 	/**
 	 * returns the script results for the current selected object
-	 *  
+	 * 
 	 * @return the script results for the current selected object
 	 */
 //	Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs);
-	Map<ScriptRegistryItemID, Object> getScriptResults();	
+	Map<ScriptRegistryItemID, Object> getScriptResults();
 	
 	Object getScriptResult(ScriptRegistryItemID scriptRegistryItemID);
 	
 	/**
 	 * sets the selected object for which scriptResults should be obtained
-	 *  
+	 * 
 	 * @param selectedObject the object to select
 	 */
 	void setSelectedObject(T selectedObject);

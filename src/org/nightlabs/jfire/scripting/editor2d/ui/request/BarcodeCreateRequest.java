@@ -36,9 +36,9 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class BarcodeCreateRequest 
-extends EditorCreateRequest 
-implements ScriptCreateRequest 
+public class BarcodeCreateRequest
+extends EditorCreateRequest
+implements ScriptCreateRequest
 {
 
 	private ScriptRegistryItemID scriptRegistryItemID = null;
@@ -63,7 +63,7 @@ implements ScriptCreateRequest
 	}
 	public void setOrientation(Orientation orientation) {
 		this.orientation = orientation;
-	}	
+	}
 	
 	private Type barcodeType = BarcodeDrawComponent.TYPE_DEFAULT;
 	public Type getBarcodeType() {
@@ -71,7 +71,7 @@ implements ScriptCreateRequest
 	}
 	public void setBarcodeType(Type type) {
 		this.barcodeType = type;
-	}	
+	}
 	
 	private WidthScale widthScale = BarcodeDrawComponent.WIDTH_SCALE_DEFAULT;
 	public WidthScale getWidthScale() {
@@ -79,7 +79,7 @@ implements ScriptCreateRequest
 	}
 	public void setWidthScale(WidthScale widthScale) {
 		this.widthScale = widthScale;
-	}		
+	}
 	
 	private String value = BarcodeDrawComponent.VALUE_DEFAULT;
 	public String getValue() {

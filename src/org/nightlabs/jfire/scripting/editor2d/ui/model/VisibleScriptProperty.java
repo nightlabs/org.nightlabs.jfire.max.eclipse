@@ -50,8 +50,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VisibleScriptProperty 
-extends AbstractDrawComponentProperty 
+public class VisibleScriptProperty
+extends AbstractDrawComponentProperty
 {
 	private static final Logger logger = Logger.getLogger(VisibleScriptProperty.class);
 	
@@ -62,9 +62,9 @@ extends AbstractDrawComponentProperty
 	}
 
 	private Collection<ScriptConditioner> scriptConditioner;
-	protected Collection<ScriptConditioner> getScriptConditioner() 
+	protected Collection<ScriptConditioner> getScriptConditioner()
 	{
-		if (scriptConditioner == null) 
+		if (scriptConditioner == null)
 		{
 			// TODO should be asynchron fetched at editor start
 			ScriptConditionerContext context = ScriptConditionerContextRegistry.sharedInstance().getScriptConditionerContext(
@@ -72,26 +72,26 @@ extends AbstractDrawComponentProperty
 			
 			Set<ScriptRegistryItemID> scriptIDs = ScriptConditionerDAO.sharedInstance().getConditionContextScriptIDs(
 					ConditionContextProviderID.create(
-							context.getOrganisationID(), 
+							context.getOrganisationID(),
 							context.getConditionContextProviderID()),
 					new NullProgressMonitor());
 			
-			Map<ScriptRegistryItemID, Map<String, Object>> scriptID2ParameterValues = 
+			Map<ScriptRegistryItemID, Map<String, Object>> scriptID2ParameterValues =
 				ScriptParameterProviderRegistry.sharedInstance().getParameterValues(scriptIDs);
 			
-			Map<ScriptRegistryItemID, ScriptConditioner> scriptID2ScriptConditioner = 
+			Map<ScriptRegistryItemID, ScriptConditioner> scriptID2ScriptConditioner =
 				ScriptConditionerDAO.sharedInstance().getScriptConditioners(
-					scriptID2ParameterValues, PossibleValueProvider.LIMIT_UNLIMITED, 
+					scriptID2ParameterValues, PossibleValueProvider.LIMIT_UNLIMITED,
 					new NullProgressMonitor());
 			
-			scriptConditioner = scriptID2ScriptConditioner.values();						
+			scriptConditioner = scriptID2ScriptConditioner.values();
 		}
 		return scriptConditioner;
 	}
 		
-	public PropertyDescriptor getPropertyDescriptor() 
+	public PropertyDescriptor getPropertyDescriptor()
 	{
-		Collection<ScriptConditioner> scriptConditioner = getScriptConditioner(); 
+		Collection<ScriptConditioner> scriptConditioner = getScriptConditioner();
 		PropertyDescriptor desc = new ConditionScriptPropertyDescriptor(getID(),
 				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.VisibleScriptProperty.visibleScript"), //$NON-NLS-1$
 				scriptConditioner);
@@ -106,17 +106,17 @@ extends AbstractDrawComponentProperty
 		return desc;
 	}
 
-	public Object getPropertyValue() 
-	{		
-		Script script = (Script) getDrawComponent().getProperties().get(ScriptingConstants.PROP_VISIBLE_SCRIPT); 
-		return script; 
+	public Object getPropertyValue()
+	{
+		Script script = (Script) getDrawComponent().getProperties().get(ScriptingConstants.PROP_VISIBLE_SCRIPT);
+		return script;
 	}
 
-	public void setPropertyValue(Object value) 
+	public void setPropertyValue(Object value)
 	{
 		if (value instanceof Script) {
 			Script script = (Script) value;
-			getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, script);			
+			getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, script);
 		}
 		if (value instanceof Number) {
 			getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, null);

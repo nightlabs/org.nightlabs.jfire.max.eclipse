@@ -34,8 +34,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TextScriptEditPart 
-extends TextEditPart 
+public class TextScriptEditPart
+extends TextEditPart
 {
 	/**
 	 * @param text
@@ -49,11 +49,11 @@ extends TextEditPart
 	}
 	
 	@Override
-	public IPropertySource getPropertySource() 
+	public IPropertySource getPropertySource()
 	{
 		if (propertySource == null) {
 			propertySource = new TextScriptPropertySource(getTextScriptDrawComponent());
 		}
 		return propertySource;
-	}	
+	}
 }

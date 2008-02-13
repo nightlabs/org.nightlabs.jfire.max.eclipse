@@ -32,8 +32,8 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractScriptResultProvider<T> 
-implements IScriptResultProvider<T> 
+public abstract class AbstractScriptResultProvider<T>
+implements IScriptResultProvider<T>
 {
 
 	private ListenerList listenerList = null;
@@ -53,13 +53,13 @@ implements IScriptResultProvider<T>
 
 	protected void notifyListener() {
 		for (int i=0; i<getListenerList().getListeners().length; i++) {
-			IScriptResultChangedListener listener = (IScriptResultChangedListener) 
+			IScriptResultChangedListener listener = (IScriptResultChangedListener)
 				getListenerList().getListeners()[i];
 			listener.scriptResultsChanged(new ScriptResultsChangedEvent(this));
 		}
 	}
 
-	public Object getScriptResult(ScriptRegistryItemID scriptRegistryItemID) 
+	public Object getScriptResult(ScriptRegistryItemID scriptRegistryItemID)
 	{
 		if (getScriptResults() != null) {
 			return getScriptResults().get(scriptRegistryItemID);

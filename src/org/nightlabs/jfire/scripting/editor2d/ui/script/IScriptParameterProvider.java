@@ -33,7 +33,7 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface IScriptParameterProvider 
+public interface IScriptParameterProvider
 {
 	public Map<String, Object> getParameterValues();
 	

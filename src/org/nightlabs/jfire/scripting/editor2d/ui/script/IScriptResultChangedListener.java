@@ -29,7 +29,7 @@ package org.nightlabs.jfire.scripting.editor2d.ui.script;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface IScriptResultChangedListener 
+public interface IScriptResultChangedListener
 {
 	/**
 	 * 

@@ -36,8 +36,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.request.BarcodeCreateRequest;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class BarcodeTool 
-extends CreationTool 
+public abstract class BarcodeTool
+extends CreationTool
 {
 
 	public BarcodeTool(IModelCreationFactory factory) {
@@ -48,32 +48,32 @@ extends CreationTool
    * Creates a {@link TicketBarcodeCreateRequest} and sets this tool's factory on the request.
    */
 	@Override
-  protected Request createTargetRequest() 
+  protected Request createTargetRequest()
   {
 		BarcodeCreateRequest request = new BarcodeCreateRequest();
     request.setFactory(getFactory());
     return request;
-  }  	
+  }
   
   public BarcodeCreateRequest getBarcodeCreateRequest() {
     return (BarcodeCreateRequest) getTargetRequest();
-  }  
+  }
   
   /**
    * opens a {@link CreateTicketBarcodeDialog} and performs the creation
    */
-  @Override  
-  protected boolean handleButtonDown(int button) 
+  @Override
+  protected boolean handleButtonDown(int button)
   {
     CreateBarcodeDialog dialog = createBarcodeDialog();
     dialog.open();
         
-    if (dialog.getReturnCode() == Window.OK) 
+    if (dialog.getReturnCode() == Window.OK)
     {
       performCreation(1);
       return true;
     }
-    return false;    
+    return false;
   }
 	
   protected abstract CreateBarcodeDialog createBarcodeDialog();

@@ -11,11 +11,11 @@ import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class WidthScaleLabelProvider 
-extends LabelProvider 
+public class WidthScaleLabelProvider
+extends LabelProvider
 {
 	@Override
-	public String getText(Object element) 
+	public String getText(Object element)
 	{
 		if (element == WidthScale.SCALE_1)
 			return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.WidthScaleLabelProvider.widthScale1"); //$NON-NLS-1$
@@ -27,5 +27,5 @@ extends LabelProvider
 			return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.WidthScaleLabelProvider.widthScale4"); //$NON-NLS-1$
 		
 		return super.getText(element);
-	}			
+	}
 }

@@ -31,8 +31,8 @@ import org.nightlabs.editor2d.ui.EditorActionBarContributor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptingEditorActionbarContributor 
-extends EditorActionBarContributor 
+public class ScriptingEditorActionbarContributor
+extends EditorActionBarContributor
 {
 
 	public ScriptingEditorActionbarContributor() {

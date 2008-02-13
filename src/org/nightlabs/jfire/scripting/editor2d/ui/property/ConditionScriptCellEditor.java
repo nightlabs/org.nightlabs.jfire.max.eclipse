@@ -53,19 +53,19 @@ public class ConditionScriptCellEditor extends DialogCellEditor {
 
 	private Collection<ScriptConditioner> scriptConditioners;
 	@Override
-	protected Object openDialogBox(Control cellEditorWindow) 
+	protected Object openDialogBox(Control cellEditorWindow)
 	{
 		Script script = (Script) doGetValue();
 		SimpleScriptEditorDialog dialog = new SimpleScriptEditorDialog(
 				cellEditorWindow.getShell(),
-				scriptConditioners, 
+				scriptConditioners,
 				script);
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
 			return dialog.getScript();
 		}
 		if (returnCode == SimpleScriptEditorDialog.ID_DELETE_SCRIPT) {
-			return -1;			
+			return -1;
 		}
 		return null;
 	}

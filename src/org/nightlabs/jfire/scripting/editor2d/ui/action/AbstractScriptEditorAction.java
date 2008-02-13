@@ -34,8 +34,8 @@ import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptingEditor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractScriptEditorAction 
-extends AbstractEditorAction 
+public abstract class AbstractScriptEditorAction
+extends AbstractEditorAction
 {
 
 	/**
@@ -58,6 +58,6 @@ extends AbstractEditorAction
 	}
 	
 	public ScriptRootDrawComponent getScriptRootDrawComponent() {
-		return getScriptingEditor().getScriptRootDrawComponent(); 
+		return getScriptingEditor().getScriptRootDrawComponent();
 	}
 }

@@ -39,11 +39,11 @@ import org.nightlabs.jfire.scripting.editor2d.ui.tool.TextScriptTool;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TextScriptTreeEditPart 
-extends TextTreeEditPart 
+public class TextScriptTreeEditPart
+extends TextTreeEditPart
 {
 	public static final Image TEXT_SCRIPT_ICON = SharedImages.getSharedImageDescriptor(
-			ScriptingEditor2DPlugin.getDefault(), 
+			ScriptingEditor2DPlugin.getDefault(),
 			TextScriptTool.class, "", ImageFormat.gif).createImage();	 //$NON-NLS-1$
 
 	public TextScriptTreeEditPart(TextScriptDrawComponent text) {
@@ -62,5 +62,5 @@ extends TextTreeEditPart
 	@Override
 	protected Image getOutlineImage() {
 		return TEXT_SCRIPT_ICON;
-	}	
+	}
 }

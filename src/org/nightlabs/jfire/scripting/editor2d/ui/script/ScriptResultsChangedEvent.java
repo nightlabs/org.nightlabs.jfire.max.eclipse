@@ -29,7 +29,7 @@ package org.nightlabs.jfire.scripting.editor2d.ui.script;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptResultsChangedEvent 
+public class ScriptResultsChangedEvent
 {
 	public ScriptResultsChangedEvent(IScriptResultProvider scriptResultProvider) {
 		this.scriptResultProvider = scriptResultProvider;
@@ -38,6 +38,6 @@ public class ScriptResultsChangedEvent
 	private IScriptResultProvider scriptResultProvider;
 	public IScriptResultProvider getScriptResultProvider() {
 		return scriptResultProvider;
-	} 
+	}
 	
 }
