@@ -17,8 +17,8 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author fitas [at] NightLabs [dot] de
  *
  */
-public class VoucherTypePricePage 
-extends EntityEditorPageWithProgress 
+public class VoucherTypePricePage
+extends EntityEditorPageWithProgress
 
 {
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
@@ -30,7 +30,7 @@ extends EntityEditorPageWithProgress
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link EventDetailPage}. 
+	 * new instances of {@link EventDetailPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
@@ -59,29 +59,29 @@ extends EntityEditorPageWithProgress
 
 
 	@Override
-	protected void addSections(Composite parent) 
+	protected void addSections(Composite parent)
 	{
 
 
 		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
 //		default is FILL_BOTH
-//		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
+//		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getManagedForm().addPart(voucherPriceConfigSection);
 	}
 
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
 		VoucherTypeDetailPageController controller = (VoucherTypeDetailPageController) getPageController();
 		final VoucherType voucherType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 
-			public void run() {			
+			public void run() {
 
 				if ( voucherPriceConfigSection != null && !voucherPriceConfigSection.getSection().isDisposed())
 					voucherPriceConfigSection.setVoucherType(voucherType);
 
-				switchToContent();				
+				switchToContent();
 			}
 		});
 	}

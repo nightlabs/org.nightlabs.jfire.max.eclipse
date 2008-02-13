@@ -92,7 +92,7 @@ extends WizardHopPage
 			}
 		});
 
-		accountList = new ListComposite<Account>(page, AbstractListComposite.getDefaultWidgetStyle(page), 
+		accountList = new ListComposite<Account>(page, AbstractListComposite.getDefaultWidgetStyle(page),
 				(String) null, new LabelProvider() {
 			@Override
 			public String getText(Object element)
@@ -110,7 +110,7 @@ extends WizardHopPage
 			}
 		});
 
-		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ 
+		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
 

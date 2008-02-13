@@ -16,8 +16,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeNameSection 
-extends AbstractProductTypeNameSection 
+public class VoucherTypeNameSection
+extends AbstractProductTypeNameSection
 {
 	/**
 	 * @param page
@@ -31,9 +31,9 @@ extends AbstractProductTypeNameSection
 	@Override
 	protected ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor) {
 		return VoucherTypeDAO.sharedInstance().getVoucherType(
-				(ProductTypeID) JDOHelper.getObjectId(type), 
-				FETCH_GROUP_NAME, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				(ProductTypeID) JDOHelper.getObjectId(type),
+				FETCH_GROUP_NAME,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
 

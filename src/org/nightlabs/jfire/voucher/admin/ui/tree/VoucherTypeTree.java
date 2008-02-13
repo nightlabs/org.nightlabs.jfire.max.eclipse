@@ -32,7 +32,7 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
 public class VoucherTypeTree
 extends AbstractTreeComposite<VoucherType>
 {
-	protected static class VoucherTypeTreeContentProvider 
+	protected static class VoucherTypeTreeContentProvider
 	extends JDOObjectTreeContentProvider<ProductTypeID, VoucherType, VoucherTypeTreeNode>
 	{
 		@Override
@@ -66,7 +66,7 @@ extends AbstractTreeComposite<VoucherType>
 
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
-	}	
+	}
 	
 	public VoucherTypeTree(Composite parent)
 	{
@@ -136,11 +136,11 @@ extends AbstractTreeComposite<VoucherType>
 		@Override
 		protected Image getJDOObjectImage(VoucherType voucherType, int columnIndex) {
 			if (columnIndex == 0)
-				return SharedImages.getSharedImage(VoucherAdminPlugin.getDefault(), 
+				return SharedImages.getSharedImage(VoucherAdminPlugin.getDefault(),
 						VoucherTypeTreeLabelProvider.class, voucherType.getInheritanceNatureString());
 
 			return super.getJDOObjectImage(voucherType, columnIndex);
-		}		
+		}
 	}
 
 	@Implement

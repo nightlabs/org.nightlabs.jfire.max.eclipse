@@ -20,13 +20,13 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeDetailPage 
-//extends EntityEditorPageWithProgress 
+public class VoucherTypeDetailPage
+//extends EntityEditorPageWithProgress
 extends AbstractProductTypeDetailPage
 {
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link EventDetailPage}. 
+	 * new instances of {@link EventDetailPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
@@ -60,7 +60,7 @@ extends AbstractProductTypeDetailPage
 	}
 
 	public VoucherTypeDetailPage(FormEditor editor) {
-		super(editor, VoucherTypeDetailPage.class.getName(), 
+		super(editor, VoucherTypeDetailPage.class.getName(),
 				Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.title")); //$NON-NLS-1$
 	}
 	
@@ -73,32 +73,32 @@ extends AbstractProductTypeDetailPage
 //	public VoucherTypeNameSection getVoucherTypeNameSection() {
 //		return voucherTypeNameSection;
 //	}
-//	
+//
 //	private VoucherTypeSaleAccessControlSection voucherTypeSaleAccessControlSection = null;
 //	public VoucherTypeSaleAccessControlSection getVoucherSaleAccessControlSection() {
 //		return voucherTypeSaleAccessControlSection;
 //	}
 	
 	@Override
-	protected void addSections(Composite parent) 
+	protected void addSections(Composite parent)
 	{
 		super.addSections(parent);
-//		voucherTypeNameSection = new VoucherTypeNameSection(this, parent, ExpandableComposite.TITLE_BAR, 
+//		voucherTypeNameSection = new VoucherTypeNameSection(this, parent, ExpandableComposite.TITLE_BAR,
 //				Messages.getString("VoucherTypeDetailPage.section.name.title"));		 //$NON-NLS-1$
-//		voucherTypeNameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
-//		getManagedForm().addPart(voucherTypeNameSection);		
-//		
+//		voucherTypeNameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		getManagedForm().addPart(voucherTypeNameSection);
+//
 //		voucherTypeSaleAccessControlSection = new VoucherTypeSaleAccessControlSection(this, parent);
-//		voucherTypeSaleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//		voucherTypeSaleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 //		getManagedForm().addPart(voucherTypeSaleAccessControlSection);
 		
 		voucherLayoutSection = new VoucherLayoutSection(this, parent);
-		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getManagedForm().addPart(voucherLayoutSection);
 	}
 
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
 		VoucherTypeDetailPageController controller = (VoucherTypeDetailPageController) getPageController();
 		final VoucherType voucherType = controller.getProductType();
@@ -121,7 +121,7 @@ extends AbstractProductTypeDetailPage
 							IMessageProvider.INFORMATION);
 					RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
 				}
-				switchToContent();				
+				switchToContent();
 			}
 		});
 	}

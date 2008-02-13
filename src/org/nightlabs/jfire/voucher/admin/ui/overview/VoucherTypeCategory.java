@@ -33,15 +33,15 @@ public class VoucherTypeCategory
 	@Override
 	protected Composite _createComposite(Composite parent)
 	{
-		VoucherTypeTree voucherTypeTree = new VoucherTypeTree(parent); 
+		VoucherTypeTree voucherTypeTree = new VoucherTypeTree(parent);
 		voucherTypeTree.getTreeViewer().expandToLevel(3);
 		CreateVoucherTypeAction createVoucherTypeAction = new CreateVoucherTypeAction(voucherTypeTree);
 		voucherTypeTree.addContextMenuContribution(createVoucherTypeAction);
-		voucherTypeTree.getTreeViewer().addDoubleClickListener(doubleClickListener);		
+		voucherTypeTree.getTreeViewer().addDoubleClickListener(doubleClickListener);
 		return voucherTypeTree;
 	}
 
-	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){	
+	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
 		public void doubleClick(DoubleClickEvent event) {
 			if (!event.getSelection().isEmpty()) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
@@ -51,13 +51,13 @@ public class VoucherTypeCategory
 					VoucherType voucherType = treeNode.getJdoObject();
 					ProductTypeID voucherTypeID = (ProductTypeID) JDOHelper.getObjectId(voucherType);
 					try {
-						RCPUtil.openEditor(new VoucherTypeEditorInput(voucherTypeID), 
+						RCPUtil.openEditor(new VoucherTypeEditorInput(voucherTypeID),
 								VoucherTypeEditor.EDITOR_ID);
 					} catch (PartInitException e) {
 						throw new RuntimeException(e);
 					}
 				}
 			}
-		}	
+		}
 	};
 }

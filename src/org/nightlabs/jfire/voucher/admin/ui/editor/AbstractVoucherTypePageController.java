@@ -8,14 +8,14 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractVoucherTypePageController 
+public abstract class AbstractVoucherTypePageController
 extends AbstractProductTypePageController
 {
 	/**
 	 * @param editor
 	 */
 	public AbstractVoucherTypePageController(EntityEditor editor) {
-		super(editor);		
+		super(editor);
 	}
 
 	/**
@@ -23,7 +23,7 @@ extends AbstractProductTypePageController
 	 * @param startBackgroundLoading
 	 */
 	public AbstractVoucherTypePageController(EntityEditor editor, boolean startBackgroundLoading) {
-		super(editor, startBackgroundLoading);		
+		super(editor, startBackgroundLoading);
 	}
 	
 	public VoucherType getVoucherType() {

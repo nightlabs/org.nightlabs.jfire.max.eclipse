@@ -8,8 +8,8 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSaleAccessControlHelper 
-extends AbstractSaleAccessControlHelper 
+public class VoucherTypeSaleAccessControlHelper
+extends AbstractSaleAccessControlHelper
 {
 //	public Set<String> getFetchGroupsProductType()
 //	{

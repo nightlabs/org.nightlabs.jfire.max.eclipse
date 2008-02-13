@@ -100,7 +100,7 @@ extends WizardHopPage
 			mode = Mode.CREATE;
 		else if (selectPriceConfig.getSelection())
 			mode = Mode.SELECT;
-		else if (assignNoneConfig.getSelection())	
+		else if (assignNoneConfig.getSelection())
 			mode = Mode.NONE;
 		else
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
@@ -109,7 +109,7 @@ extends WizardHopPage
 		if (mode == Mode.NONE)
 			priceConfigList.setEnabled(false);
 		else
-			priceConfigList.setEnabled(true);	
+			priceConfigList.setEnabled(true);
 
 		if (mode == Mode.CREATE)
 			addCreateVoucherPriceConfigPage();
@@ -181,8 +181,8 @@ extends WizardHopPage
 
 		);
 
-		priceConfigList = new ListComposite<VoucherPriceConfig>(page, 
-				AbstractListComposite.getDefaultWidgetStyle(page),(String) null, 
+		priceConfigList = new ListComposite<VoucherPriceConfig>(page,
+				AbstractListComposite.getDefaultWidgetStyle(page),(String) null,
 				new LabelProvider() {
 			@Override
 			public String getText(Object element)

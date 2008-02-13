@@ -50,7 +50,7 @@ public class CreateAccountWizardPage
 
 	public Account createAccount()
 	{
-		// TODO this method should be called async! if it is, it should get a monitor - if it doesn't we need refactoring 
+		// TODO this method should be called async! if it is, it should get a monitor - if it doesn't we need refactoring
 		AccountType accountType = AccountTypeDAO.sharedInstance().getAccountType(
 				JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER,
 				new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());

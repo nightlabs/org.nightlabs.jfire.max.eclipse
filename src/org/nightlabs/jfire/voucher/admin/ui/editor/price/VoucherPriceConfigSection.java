@@ -43,8 +43,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  *
  */
 
-public class VoucherPriceConfigSection 
-extends ToolBarSectionPart 
+public class VoucherPriceConfigSection
+extends ToolBarSectionPart
 {
 	private CurrencyAmountTable currencyAmountTableWrapper;
 
@@ -88,7 +88,7 @@ extends ToolBarSectionPart
 			@Override
 			public void run() {
 				inheritPressed();
-			}		
+			}
 		};
 
 
@@ -99,13 +99,13 @@ extends ToolBarSectionPart
 		stackWrapper = new XComposite(getContainer(), SWT.NONE);
 		stackLayout = new StackLayout();
 		stackWrapper.setLayout(stackLayout);
-		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 
 		currencyAmountTableWrapper = new CurrencyAmountTable(stackWrapper,false);
 
 
-		assignNewPriceConfigWrapper = new XComposite(stackWrapper, SWT.NONE, 
+		assignNewPriceConfigWrapper = new XComposite(stackWrapper, SWT.NONE,
 				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
 
 
@@ -120,16 +120,16 @@ extends ToolBarSectionPart
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 
 
 		currencyAmountTableWrapper.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
 			public void priceValueChanged()
 			{
-				// if value has changed 
+				// if value has changed
 				if(!orgPriceMap.equals(currencyAmountTableWrapper.getMap()))
-				{ 	   
+				{
 					markDirty();
 
 				}
@@ -235,8 +235,8 @@ extends ToolBarSectionPart
 			return null;
 
 		if(voucherType.getPackagePriceConfig() instanceof VoucherPriceConfig)
-		{			
-			VoucherPriceConfig	voucherConfigPrice = (VoucherPriceConfig) voucherType.getPackagePriceConfig();	
+		{
+			VoucherPriceConfig	voucherConfigPrice = (VoucherPriceConfig) voucherType.getPackagePriceConfig();
 			return voucherConfigPrice;
 		}
 		else
@@ -267,7 +267,7 @@ extends ToolBarSectionPart
 	{
 
 
-		if(getVoucherPriceConfig()== null)	
+		if(getVoucherPriceConfig()== null)
 		{
 			switchtoNewAssignPriceConfigPage();
 			return;
@@ -285,7 +285,7 @@ extends ToolBarSectionPart
 	}
 
 
-	protected void addCurrencyPressed() 
+	protected void addCurrencyPressed()
 	{
 
 		currencyAmountTableWrapper.addCurrency();
@@ -296,7 +296,7 @@ extends ToolBarSectionPart
 	
 	
 
-	protected void removeCurrencyPressed() 
+	protected void removeCurrencyPressed()
 	{
 
 		currencyAmountTableWrapper.removeCurrency();
@@ -308,7 +308,7 @@ extends ToolBarSectionPart
 
 
 
-	protected void assignPriceConfigPressed() 
+	protected void assignPriceConfigPressed()
 	{
 
 
@@ -316,11 +316,11 @@ extends ToolBarSectionPart
 
 
 		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-				Display.getDefault().getActiveShell(), 
+				Display.getDefault().getActiveShell(),
 				priceVoucherTypeWizard);
 
-		if( wizardDialog.open() == Window.OK) 
-		{		
+		if( wizardDialog.open() == Window.OK)
+		{
 
 			inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited()); //$NON-NLS-1$
 
@@ -332,7 +332,7 @@ extends ToolBarSectionPart
 	}
 
 	class AssignPriceConfigAction
-	extends Action 
+	extends Action
 	{
 		public AssignPriceConfigAction() {
 			super();
@@ -353,12 +353,12 @@ extends ToolBarSectionPart
 
 			assignPriceConfigPressed();
 
-		}		
+		}
 	}
 
 
 	class AddCurrencyConfigAction
-	extends Action 
+	extends Action
 	{
 		public AddCurrencyConfigAction() {
 			super();
@@ -376,15 +376,15 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 
-			addCurrencyPressed(); 
+			addCurrencyPressed();
 
-		}		
+		}
 	}
 
 
 
 	class RemoveCurrencyConfigAction
-	extends Action 
+	extends Action
 	{
 		public RemoveCurrencyConfigAction() {
 			super();
@@ -402,9 +402,9 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 
-			removeCurrencyPressed(); 
+			removeCurrencyPressed();
 
-		}		
+		}
 	}
 
 

@@ -107,8 +107,8 @@ extends WizardHopPage
 			}
 		});
 
-		accountantDelegateList = new ListComposite<VoucherLocalAccountantDelegate>(page, 
-				AbstractListComposite.getDefaultWidgetStyle(page), 
+		accountantDelegateList = new ListComposite<VoucherLocalAccountantDelegate>(page,
+				AbstractListComposite.getDefaultWidgetStyle(page),
 				(String) null, new LabelProvider() {
 			@Override
 			public String getText(Object element)

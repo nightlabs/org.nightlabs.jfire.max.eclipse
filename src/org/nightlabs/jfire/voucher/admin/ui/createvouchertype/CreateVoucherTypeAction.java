@@ -45,7 +45,7 @@ extends Action
 			CreateVoucherTypeWizard createProductWizard = new CreateVoucherTypeWizard(selectedNode.getJdoObject().getObjectId());
 			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
 					tree.getTreeViewer().getControl().getShell(),
-//					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+//					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					createProductWizard);
 			wizardDialog.open();
 		} catch (Exception e) {

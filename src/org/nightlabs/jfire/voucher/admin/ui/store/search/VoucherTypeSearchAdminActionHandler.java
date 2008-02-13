@@ -16,13 +16,13 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSearchAdminActionHandler 
-extends AbstractSearchResultActionHandler 
+public class VoucherTypeSearchAdminActionHandler
+extends AbstractSearchResultActionHandler
 {
-//	public void run() {		
+//	public void run() {
 //		Collection<ProductTypeID> selectedObjects = getSearchResultProvider().getSelectedObjects();
 //		if (selectedObjects != null) {
-//			for (ProductTypeID productTypeID : selectedObjects) {				
+//			for (ProductTypeID productTypeID : selectedObjects) {
 //				try {
 //					RCPUtil.openEditor(new VoucherTypeEditorInput(productTypeID), VoucherTypeEditor.EDITOR_ID);
 //				} catch (PartInitException e) {
@@ -32,13 +32,13 @@ extends AbstractSearchResultActionHandler
 //		}
 //	}
 
-	public void run() {		
+	public void run() {
 		Collection<VoucherType> selectedObjects = getSearchResultProvider().getSelectedObjects();
 		if (selectedObjects != null) {
-			for (VoucherType productType : selectedObjects) {				
+			for (VoucherType productType : selectedObjects) {
 				try {
 					RCPUtil.openEditor(new VoucherTypeEditorInput(
-							(ProductTypeID) JDOHelper.getObjectId(productType)), 
+							(ProductTypeID) JDOHelper.getObjectId(productType)),
 							VoucherTypeEditor.EDITOR_ID);
 				} catch (PartInitException e) {
 					throw new RuntimeException(e);

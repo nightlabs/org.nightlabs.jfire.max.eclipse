@@ -20,23 +20,23 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherLayoutComposite 
-extends XComposite 
+public class VoucherLayoutComposite
+extends XComposite
 {
 
-	public VoucherLayoutComposite(Composite parent, int style, VoucherType voucherType, 
-			IDirtyStateManager dirtyStateManager) 
+	public VoucherLayoutComposite(Composite parent, int style, VoucherType voucherType,
+			IDirtyStateManager dirtyStateManager)
 	{
-		super(parent, style);		
+		super(parent, style);
 		this.voucherType = voucherType;
 		this.dirtyStateManager = dirtyStateManager;
 		createComposite(this);
 	}
 
 	private IDirtyStateManager dirtyStateManager;
-	private Text voucherLayoutText = null; 
+	private Text voucherLayoutText = null;
 	private Button browseButton = null;
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		parent.setLayout(new GridLayout(2, false));
 		voucherLayoutText = new Text(parent, SWT.BORDER);
@@ -53,15 +53,15 @@ extends XComposite
 	protected VoucherType getVoucherType() {
 		return voucherType;
 	}
-	public void setVoucherType(VoucherType voucherType) 
+	public void setVoucherType(VoucherType voucherType)
 	{
-		this.voucherType = voucherType;		
+		this.voucherType = voucherType;
 		if (voucherType != null) {
 			if (voucherType.getVoucherLayout() != null) {
 				voucherLayoutText.setText(voucherType.getVoucherLayout().getFileName());
 			} else {
 				voucherLayoutText.setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherLayoutComposite.voucherLayoutText.text_noVoucherLayoutAssigned")); //$NON-NLS-1$
-			}			
+			}
 		}
 		else {
 			voucherLayoutText.setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherLayoutComposite.voucherLayoutText.text_noVoucherType")); //$NON-NLS-1$
@@ -73,7 +73,7 @@ extends XComposite
 		return selectedFile;
 	}
 	
-	private SelectionListener buttonListener = new SelectionListener(){	
+	private SelectionListener buttonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog fileDialog = new FileDialog(getShell());
 			fileDialog.setFilterExtensions(new String[] {"*.v2d"}); //$NON-NLS-1$
@@ -85,9 +85,9 @@ extends XComposite
 				if (dirtyStateManager != null)
 					dirtyStateManager.markDirty();
 			}
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 	};
 }
