@@ -138,7 +138,6 @@ extends DynamicPathWizard
 
 	public static boolean open() {
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(
-				Display.getDefault().getActiveShell(),
 				new CreateAccountWizard()
 			);
 		return dlg.open() == Window.OK;

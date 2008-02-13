@@ -47,7 +47,7 @@ public class DeliveryQueueNameEditDialog extends CenteredDialog {
 	@Override
 	protected void okPressed() {
 		if (deliveryQueueNameEditor.getI18nText().getTexts().isEmpty())
-			MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueNameEditDialog.emptyDeliveryQueueNameDialog.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueNameEditDialog.emptyDeliveryQueueNameDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
+			MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueNameEditDialog.emptyDeliveryQueueNameDialog.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueNameEditDialog.emptyDeliveryQueueNameDialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 		else {
 			deliveryQueueNameEditor.copyToOriginal();
 			super.okPressed();

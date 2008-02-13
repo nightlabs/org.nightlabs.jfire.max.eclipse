@@ -73,7 +73,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 		if (productType.getPriceConfigInPackage(productType.getPrimaryKey()) == null) {
 			if (!silent) {
 				MessageDialog.openError(
-						RCPUtil.getActiveWorkbenchShell(),
+						RCPUtil.getActiveShell(),
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNoPriceConfigDialog.title"), //$NON-NLS-1$
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNoPriceConfigDialog.message")); //$NON-NLS-1$
 			}
@@ -99,7 +99,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 		if (productType.getProductTypeLocal().getLocalAccountantDelegate() == null) {
 			if (!silent) {
 				MessageDialog.openError(
-						RCPUtil.getActiveWorkbenchShell(),
+						RCPUtil.getActiveShell(),
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNoMoneyFlowConfigDialog.title"), //$NON-NLS-1$
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNoMoneyFlowConfigDialog.message")); //$NON-NLS-1$
 			}
@@ -115,7 +115,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 		if (!productType.isInheritanceLeaf()) {
 			if (!silent) {
 				MessageDialog.openError(
-						RCPUtil.getActiveWorkbenchShell(),
+						RCPUtil.getActiveShell(),
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNotALeafDialog.title"), //$NON-NLS-1$
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorNotALeafDialog.message")); //$NON-NLS-1$
 			}
@@ -134,7 +134,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 		if (!productType.getExtendedProductType().isPublished()) {
 			if (!silent) {
 				MessageDialog.openError(
-						RCPUtil.getActiveWorkbenchShell(),
+						RCPUtil.getActiveShell(),
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorParentNotPublishedDialog.title"), //$NON-NLS-1$
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.AbstractSaleAccessControlHelper.errorParentNotPublishedDialog.message")); //$NON-NLS-1$
 			}

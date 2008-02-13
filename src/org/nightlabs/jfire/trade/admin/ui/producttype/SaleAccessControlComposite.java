@@ -194,7 +194,7 @@ public class SaleAccessControlComposite extends XComposite
 
 				if (flag) {
 					flag = MessageDialog.openConfirm(
-							RCPUtil.getActiveWorkbenchShell(),
+							RCPUtil.getActiveShell(),
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.publishDialog.title"), //$NON-NLS-1$
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.publishDialog.message")); //$NON-NLS-1$
 				}
@@ -232,7 +232,7 @@ public class SaleAccessControlComposite extends XComposite
 
 				if (flag) {
 					flag = MessageDialog.openConfirm(
-							RCPUtil.getActiveWorkbenchShell(),
+							RCPUtil.getActiveShell(),
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.confirmDialog.title"), //$NON-NLS-1$
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.confirmDialog.message")); //$NON-NLS-1$
 				}
@@ -249,7 +249,7 @@ public class SaleAccessControlComposite extends XComposite
 			else {
 				if (productType.isConfirmed()) {
 					MessageDialog.openError(
-							RCPUtil.getActiveWorkbenchShell(),
+							RCPUtil.getActiveShell(),
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.undoConfirmDialog.title"), //$NON-NLS-1$
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.undoConfirmDialog.message")); //$NON-NLS-1$
 					confirmedCheckBox.setSelection(true);
@@ -303,7 +303,7 @@ public class SaleAccessControlComposite extends XComposite
 
 				if (flag) {
 					flag = MessageDialog.openConfirm(
-							RCPUtil.getActiveWorkbenchShell(),
+							RCPUtil.getActiveShell(),
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closeDialog.title"), //$NON-NLS-1$
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closeDialog.message"));					 //$NON-NLS-1$
 				}

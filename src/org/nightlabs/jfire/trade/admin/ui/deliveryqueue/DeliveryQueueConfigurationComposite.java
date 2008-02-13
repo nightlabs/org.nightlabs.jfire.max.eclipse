@@ -173,7 +173,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 	void addDeliveryQueue() {
 		DeliveryQueue deliveryQueue = new DeliveryQueue(SecurityReflector.getUserDescriptor().getOrganisationID());
 		
-		Dialog dialog = new DeliveryQueueNameEditDialog(RCPUtil.getActiveWorkbenchShell(), deliveryQueue);
+		Dialog dialog = new DeliveryQueueNameEditDialog(RCPUtil.getActiveShell(), deliveryQueue);
 		
 		if (dialog.open() == Window.OK) {
 			deliveryQueues.add(deliveryQueue);
@@ -192,7 +192,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 	
 	void editSelectedDeliveryQueue() {
 		DeliveryQueue deliveryQueue = pqTableComposite.getFirstSelectedElement();
-		Dialog dialog = new DeliveryQueueNameEditDialog(RCPUtil.getActiveWorkbenchShell(), deliveryQueue);
+		Dialog dialog = new DeliveryQueueNameEditDialog(RCPUtil.getActiveShell(), deliveryQueue);
 		if (dialog.open() == Window.OK) {
 			// TODO WORKAROUND to circumvent the JFace bug that checkbox states are not correctly updated
 			// when an element is deleted or removed from the model and the view is refreshed.
@@ -210,7 +210,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 	}
 	
 	void deleteSelectedDeliveryQueue() {
-		if (MessageDialog.openQuestion(RCPUtil.getActiveWorkbenchShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.deleteConfirmationDialog.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.deleteConfirmationDialog.message")) == true) { //$NON-NLS-1$ //$NON-NLS-2$
+		if (MessageDialog.openQuestion(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.deleteConfirmationDialog.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.deleteConfirmationDialog.message")) == true) { //$NON-NLS-1$ //$NON-NLS-2$
 			DeliveryQueue selectedQueue = pqTableComposite.getFirstSelectedElement();
 			
 			// Only delivery queues that have yet been persisted have to be marked as deleted.
@@ -218,7 +218,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			if (JDOHelper.isDetached(selectedQueue)) {
 				if (selectedQueue.hasPendingDeliveries()) {
 					String message = Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.DeliveryQueueDeletionImpossible.message"); //$NON-NLS-1$
-					MessageDialog.openError(RCPUtil.getActiveWorkbenchShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.DeliveryQueueDeletionImpossible.title"), message); //$NON-NLS-1$
+					MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.DeliveryQueueDeletionImpossible.title"), message); //$NON-NLS-1$
 					return;
 				}
 				selectedQueue.markDefunct();

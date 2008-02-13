@@ -82,8 +82,7 @@ public abstract class Dimension<DV extends DimensionValue>
 		public void guiAddDimensionValue()
 		{
 			AddCustomerGroupWizard wizard = new AddCustomerGroupWizard(this);
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					RCPUtil.getActiveWorkbenchShell(), wizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(wizard);
 			wizardDialog.open();
 		}
 		@Override
@@ -127,8 +126,7 @@ public abstract class Dimension<DV extends DimensionValue>
 		public void guiAddDimensionValue()
 		{
 			AddCurrencyWizard wizard = new AddCurrencyWizard(this);
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					RCPUtil.getActiveWorkbenchShell(), wizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(wizard);
 			wizardDialog.open();
 		}
 		@Override
@@ -185,8 +183,7 @@ public abstract class Dimension<DV extends DimensionValue>
 		public void guiAddDimensionValue()
 		{
 			AddPriceFragmentTypeWizard wizard = new AddPriceFragmentTypeWizard(this);
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					RCPUtil.getActiveWorkbenchShell(), wizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(wizard);
 			wizardDialog.open();
 		}
 		@Override
@@ -230,8 +227,7 @@ public abstract class Dimension<DV extends DimensionValue>
 		public void guiAddDimensionValue()
 		{
 			AddTariffWizard wizard = new AddTariffWizard(this);
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					RCPUtil.getActiveWorkbenchShell(), wizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(wizard);
 			wizardDialog.open();
 		}
 		@Override
