@@ -96,7 +96,7 @@ public class SelectedScriptComposite extends XComposite {
 		}
 		
 		public static Script openDialog() {
-			SelectScriptDialog dlg = new SelectScriptDialog(RCPUtil.getActiveWorkbenchShell());
+			SelectScriptDialog dlg = new SelectScriptDialog(RCPUtil.getActiveShell());
 			if (dlg.open() == Window.OK) {
 				return dlg.selectedScript;
 			}

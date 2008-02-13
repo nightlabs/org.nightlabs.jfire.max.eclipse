@@ -29,6 +29,7 @@ import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.util.RCPUtil;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -148,7 +149,7 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 	}
 
 	public void addJDOQLParameterEntry() {
-		EditEntryDialog dlg = new EditEntryDialog(Display.getDefault().getActiveShell(), null);
+		EditEntryDialog dlg = new EditEntryDialog(RCPUtil.getActiveShell(), null);
 		if (dlg.open() == Window.OK) {
 			addJDOQLParameterEntry(dlg.getEntry());
 		}
@@ -177,7 +178,7 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 		if (entry == null)
 			return;
 		entries.remove(entry);
-		EditEntryDialog dlg = new EditEntryDialog(Display.getDefault().getActiveShell(), entry);
+		EditEntryDialog dlg = new EditEntryDialog(RCPUtil.getActiveShell(), entry);
 		dlg.open();
 		getTableViewer().setInput(entries);
 	}
