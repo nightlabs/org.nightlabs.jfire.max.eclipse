@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSearchDialog 
-extends AbstractProductTypeSearchDialog 
+public class VoucherTypeSearchDialog
+extends AbstractProductTypeSearchDialog
 {
 	/**
 	 * @param parentShell

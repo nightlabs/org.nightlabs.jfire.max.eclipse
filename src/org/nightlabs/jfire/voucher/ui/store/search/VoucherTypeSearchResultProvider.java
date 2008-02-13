@@ -9,8 +9,8 @@ import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchResult
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSearchResultProvider 
-extends AbstractProductTypeSearchResultProvider 
+public class VoucherTypeSearchResultProvider
+extends AbstractProductTypeSearchResultProvider
 {
 	/**
 	 * @param factory

@@ -9,8 +9,8 @@ import org.nightlabs.jfire.voucher.store.search.VoucherTypeQuery;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSearchComposite 
-extends AbstractProductTypeSearchComposite 
+public class VoucherTypeSearchComposite
+extends AbstractProductTypeSearchComposite
 {
 	/**
 	 * @param parent

@@ -8,8 +8,8 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTypeSearchResultProviderFactory 
-extends AbstractSearchResultProviderFactory 
+public class VoucherTypeSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory
 {
 	public VoucherTypeSearchResultProviderFactory() {
 	}

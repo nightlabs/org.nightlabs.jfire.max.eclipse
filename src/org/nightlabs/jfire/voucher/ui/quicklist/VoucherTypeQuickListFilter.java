@@ -56,7 +56,7 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
-	public void search(ProgressMonitor monitor) { 
+	public void search(ProgressMonitor monitor) {
 		final VoucherTypeSearchFilter searchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 
 		new Job(Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.loadVoucherTypesJob.name")) { //$NON-NLS-1$
@@ -66,7 +66,7 @@ extends AbstractProductTypeQuickListFilter
 					StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					final Collection voucherTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {			
+						public void run() {
 							voucherTypeTable.setInput(voucherTypes);
 						}
 					});

@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.voucher.ui.detail;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 

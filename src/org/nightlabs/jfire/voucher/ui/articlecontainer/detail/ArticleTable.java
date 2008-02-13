@@ -235,14 +235,14 @@ implements ISelectionProvider
 				tableViewer.refresh();
 //			for (Iterator it = articleChangeEvent.getArticles().iterator(); it.hasNext();) {
 //				Article article = (Article) it.next();
-//				
+//
 //			}
 		}
 	};
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
-	{		
+	{
 		TableColumn col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("Name of the voucher");
@@ -275,7 +275,7 @@ implements ISelectionProvider
 		if (!articleEdit.isInInvoice()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Invoice");			
+//			col.setToolTipText("Invoice");
 		}
 
 		if (!articleEdit.isInDeliveryNote()) {

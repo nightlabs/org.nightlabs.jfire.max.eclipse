@@ -86,7 +86,7 @@ public class VoucherTypeTable extends AbstractTableComposite {
 	private VoucherTypeQuickListFilter filter;
 
 	public VoucherTypeTable(Composite parent, VoucherTypeQuickListFilter filter) {
-		this(parent, filter, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);		
+		this(parent, filter, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 	}
 	
 	public VoucherTypeTable(Composite parent, VoucherTypeQuickListFilter filter, int viewerStyle) {
