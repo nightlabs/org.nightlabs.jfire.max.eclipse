@@ -22,7 +22,7 @@ extends BarcodeTool
 
 	@Override
 	protected CreateBarcodeDialog createBarcodeDialog() {
-		return new CreateVoucherBarcodeDialog(RCPUtil.getActiveWorkbenchShell(),
+		return new CreateVoucherBarcodeDialog(RCPUtil.getActiveShell(),
 				getBarcodeCreateRequest());
 	}
 }

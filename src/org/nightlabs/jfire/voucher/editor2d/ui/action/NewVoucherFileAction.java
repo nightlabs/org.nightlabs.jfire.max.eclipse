@@ -30,7 +30,7 @@ extends NewFileAction
 				Runnable runnable = new Runnable() {
 					public void run() {
 						VoucherChooseDialog voucherChooseDialog = new VoucherChooseDialog(
-								RCPUtil.getActiveWorkbenchShell());
+								RCPUtil.getActiveShell());
 						voucherChooseDialog.open();
 					}
 				};

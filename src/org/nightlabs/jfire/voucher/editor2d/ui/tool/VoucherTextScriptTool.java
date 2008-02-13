@@ -23,7 +23,7 @@ extends TextScriptTool
 
 	@Override
 	protected CreateTextScriptDialog createTextScriptDialog() {
-		return new CreateVoucherTextScriptDialog(RCPUtil.getActiveWorkbenchShell(),
+		return new CreateVoucherTextScriptDialog(RCPUtil.getActiveShell(),
 				getScriptTextCreateRequest());
 	}
 
