@@ -46,10 +46,7 @@ public class CreateDynamicProductTypeAction
 				throw new IllegalStateException("No node selected!"); //$NON-NLS-1$
 
 			CreateDynamicProductTypeWizard createProductWizard = new CreateDynamicProductTypeWizard((ProductTypeID) JDOHelper.getObjectId(selectedNode.getJdoObject()));
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-					tree.getTreeViewer().getControl().getShell(),
-//					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-					createProductWizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(createProductWizard);
 			wizardDialog.open();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
