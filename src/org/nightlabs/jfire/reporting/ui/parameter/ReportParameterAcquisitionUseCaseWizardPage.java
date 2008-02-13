@@ -106,8 +106,8 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 				if (useCaseTable.getFirstSelectedElement() == null)
 					return;
 				populateValueProviderSetupPages(
-						setup.getValueAcquisitionSetups().get(useCaseTable.getFirstSelectedElement()), 
-						getReportParameterWizardHop(), 
+						setup.getValueAcquisitionSetups().get(useCaseTable.getFirstSelectedElement()),
+						getReportParameterWizardHop(),
 						false
 					);
 				getContainer().updateButtons();
@@ -120,7 +120,7 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 	public static void populateValueProviderSetupPages(
 			ValueAcquisitionSetup valueAcquisitionSetup, ReportParameterWizardHop wizardHop,
 			boolean populateAlsoEntryPage
-		) 
+		)
 	{
 		wizardHop.removeAllHopPages();
 		if (valueAcquisitionSetup == null)
@@ -132,8 +132,8 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 		for (SortedMap<Integer, SortedSet<ValueProviderConfig>> providerPageConfigs : sortedConfigs.values()) {
 			ReportParameterValueProviderWizardPage page = new ReportParameterValueProviderWizardPage(
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.pagePrefix")+(++i),  //$NON-NLS-1$
-					valueAcquisitionSetup, 
-					providerPageConfigs, 
+					valueAcquisitionSetup,
+					providerPageConfigs,
 					wizardHop
 				);
 			if (populateAlsoEntryPage) {
@@ -144,7 +144,7 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 			}
 			else
 				wizardHop.addHopPage(page);
-		}		
+		}
 	}
 
 	protected ReportParameterWizardHop getReportParameterWizardHop() {

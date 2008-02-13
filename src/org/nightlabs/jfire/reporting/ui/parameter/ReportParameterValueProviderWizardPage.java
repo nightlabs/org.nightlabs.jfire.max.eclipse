@@ -48,11 +48,11 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 	 * @param pageName
 	 */
 	public ReportParameterValueProviderWizardPage(
-			String pageName, 
-			ValueAcquisitionSetup valueAcquisitionSetup, 
+			String pageName,
+			ValueAcquisitionSetup valueAcquisitionSetup,
 			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs,
 			IReportParameterController parameterController
-		) 
+		)
 	{
 		super(pageName);
 		init(pageProviderConfigs, valueAcquisitionSetup, parameterController);
@@ -74,11 +74,11 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 	 */
 	public ReportParameterValueProviderWizardPage(
 			String pageName, String title,
-			ImageDescriptor titleImage, 
+			ImageDescriptor titleImage,
 			ValueAcquisitionSetup valueAcquisitionSetup,
-			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, 
-			IReportParameterController parameterController 
-		) 
+			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs,
+			IReportParameterController parameterController
+		)
 	{
 		super(pageName, title, titleImage);
 		init(pageProviderConfigs, valueAcquisitionSetup, parameterController);
@@ -89,7 +89,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 	protected void init(SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, ValueAcquisitionSetup valueAcquisitionSetup, IReportParameterController parameterController)  {
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(ReportingPlugin.getDefault(), ReportParameterValueProviderWizardPage.class, null, ImageDimension._75x70));
 		this.pageProviderConfigs = pageProviderConfigs;
-		this.valueAcquisitionSetup = valueAcquisitionSetup; 
+		this.valueAcquisitionSetup = valueAcquisitionSetup;
 		this.parameterController = parameterController;
 	}
 
@@ -112,12 +112,12 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 			for (final ValueProviderConfig config : configRow) {
 				
 				final ValueProviderID providerID = ValueProviderID.create(
-						config.getValueProviderOrganisationID(), 
-						config.getValueProviderCategoryID(), 
+						config.getValueProviderOrganisationID(),
+						config.getValueProviderCategoryID(),
 						config.getValueProviderID()
 				);
 				IValueProviderGUIFactory factory = ValueProviderGUIRegistry.sharedInstance().getValueProviderGUIFactory(providerID);
-				if (factory == null) {			
+				if (factory == null) {
 					Label configLabel = new Label(rowWrapper, SWT.WRAP);
 					configLabel.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ReportParameterValueProviderWizardPage.configLabel.text")+config.getConsumerKey()); //$NON-NLS-1$
 					configLabel.setLayoutData(new GridData());
@@ -138,8 +138,8 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 								if (binding.getConsumer() instanceof ValueProviderConfig) {
 									ValueProviderConfig providerConfig = (ValueProviderConfig) binding.getConsumer();
 									ValueProviderID bindingProviderID = ValueProviderID.create(
-											providerConfig.getValueProviderOrganisationID(), 
-											providerConfig.getValueProviderCategoryID(), 
+											providerConfig.getValueProviderOrganisationID(),
+											providerConfig.getValueProviderCategoryID(),
 											providerConfig.getValueProviderID()
 									);
 									if (valueProviderGUIs.containsKey(bindingProviderID)) {
@@ -151,7 +151,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 									if (parameterController != null) {
 										parameterController.setParameterValue(consumer.getParameterID(), output);
 									}
-								}							
+								}
 							}
 						}
 						else {

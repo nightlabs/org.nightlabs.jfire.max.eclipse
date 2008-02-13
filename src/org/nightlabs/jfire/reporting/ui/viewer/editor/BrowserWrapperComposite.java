@@ -30,7 +30,7 @@ public class BrowserWrapperComposite extends XComposite {
 	
 	public void setUrl(String url) {
 		if (browser == null) {
-			browser = new Browser(this, SWT.NONE);		
+			browser = new Browser(this, SWT.NONE);
 			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 		browser.setUrl(url);

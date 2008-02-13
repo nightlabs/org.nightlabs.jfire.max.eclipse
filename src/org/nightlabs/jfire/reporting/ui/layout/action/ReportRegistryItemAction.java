@@ -103,7 +103,7 @@ public abstract class ReportRegistryItemAction extends Action implements IReport
 
 	/**
 	 * Runs the action with {@link #run(ReportRegistryItem)} passing
-	 * the current <code>ReportRegistryItem</code>. After the action 
+	 * the current <code>ReportRegistryItem</code>. After the action
 	 * was performed the current <code>ReportRegistryItem</code> is
 	 * set back to <code>null</code> so {@link #setReportRegistryItem(ReportRegistryItem)}
 	 * has to be invoked again before rerunning the action.

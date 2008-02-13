@@ -52,7 +52,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 		Group group = new Group(wrapper, SWT.NONE);
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.ORDINARY_WRAPPER, gl);
-		group.setLayout(gl);		
+		group.setLayout(gl);
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		group.setText(getValueProviderConfig().getMessage().getText());
 		
@@ -65,7 +65,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 			public void selectionChanged(SelectionChangedEvent event) {
 				notifyOutputChanged();
 			}
-		});		
+		});
 		
 		XComposite buttonComp = new XComposite(group, SWT.NONE);
 		buttonComp.getGridData().grabExcessHorizontalSpace = false;
@@ -93,7 +93,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 			}
 		});
 		
-		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);		
+		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(selectionWrapper, SWT.WRAP);
 		label.setText("Selected objects");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -109,7 +109,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public Collection<UserID> getOutputValue() {
-		Collection<User> users;		
+		Collection<User> users;
 		Collection<User> selectedUsers = selectedUsersTable.getSelectedUsers();
 		if (selectedUsers.size() == 0) {
 			users = searchComposite.getSelectedUsers();
@@ -135,7 +135,7 @@ public abstract class AbstractValueProviderGUIUsers extends AbstractValueProvide
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
-	public void setInputParameterValue(String parameterID, Object value) {		
+	public void setInputParameterValue(String parameterID, Object value) {
 	}
 
 }

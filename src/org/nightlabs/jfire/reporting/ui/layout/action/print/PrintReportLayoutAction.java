@@ -32,8 +32,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class PrintReportLayoutAction 
-extends AbstractPrintReportLayoutAction 
+public class PrintReportLayoutAction
+extends AbstractPrintReportLayoutAction
 {
 	public static final String ID = PrintReportLayoutAction.class.getName();
 	

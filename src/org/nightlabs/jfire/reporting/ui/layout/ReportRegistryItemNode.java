@@ -11,8 +11,8 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ReportRegistryItemNode 
-extends JDOObjectTreeNode<ReportRegistryItemID, ReportRegistryItem, ActiveReportRegistryItemTreeController> 
+public class ReportRegistryItemNode
+extends JDOObjectTreeNode<ReportRegistryItemID, ReportRegistryItem, ActiveReportRegistryItemTreeController>
 {
 
 	/**

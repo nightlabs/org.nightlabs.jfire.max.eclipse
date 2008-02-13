@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -47,7 +46,7 @@ import com.adobe.acrobat.Viewer;
 import com.adobe.acrobat.ViewerCommand;
 
 /**
- * This Composite incorporates two widgets to view 
+ * This Composite incorporates two widgets to view
  * reports rendered to pdf and html.
  * <p>
  * It uses the SWT {@link Browser} widget to display the entry
@@ -56,7 +55,7 @@ import com.adobe.acrobat.ViewerCommand;
  * is installed for the systems default browser. If
  * not this Composite can also display pdfs via the
  * Adobe Viewer Java bean.
- *  
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -70,7 +69,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	private Composite stack;
 	private StackLayout stackLayout;
 	private Composite fetchingLayoutComposite;
-	// TODO: Maybe add progressmonitor to status composite 
+	// TODO: Maybe add progressmonitor to status composite
 	private BrowserWrapperComposite browser;
 	
 	private Composite awtWrapper;
@@ -78,7 +77,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	private Viewer viewer;
 	
 	/**
-	 * The {@link PreparedRenderedReportLayout} for the currently 
+	 * The {@link PreparedRenderedReportLayout} for the currently
 	 * displayed report.
 	 */
 	private PreparedRenderedReportLayout preparedLayout;
@@ -204,7 +203,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	}
 	
 	/**
-	 * Uses the {@link RenderedReportLayoutProvider} to prepare (unpack) the given 
+	 * Uses the {@link RenderedReportLayoutProvider} to prepare (unpack) the given
 	 * {@link RenderedReportLayout} and returns the URL to its entry file.
 	 * 
 	 * @param reportLayout The rendered layout to prepare.
@@ -212,8 +211,8 @@ public class DefaultReportViewerComposite extends XComposite {
 	 * @return The {@link PreparedRenderedReportLayout} for the the given .
 	 */
 	protected PreparedRenderedReportLayout getPreparedRenderedReportLayout(RenderedReportLayout reportLayout, IProgressMonitor monitor) {
-		return RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(reportLayout, monitor); 
-	}	
+		return RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(reportLayout, monitor);
+	}
 	
 	/**
 	 * Updates the viewer (switches viewer from browser to adobe bean if necessary)
@@ -284,12 +283,12 @@ public class DefaultReportViewerComposite extends XComposite {
 						ExceptionHandlerRegistry.asyncHandleException(t);
 					}
 				}
-			});			
-			errorLink.setImage(					
+			});
+			errorLink.setImage(
 				FieldDecorationRegistry.getDefault().getFieldDecoration(
 					FieldDecorationRegistry.DEC_ERROR
 				).getImage()
-			);			
+			);
 		}
 		this.layout(true, true);
 	}

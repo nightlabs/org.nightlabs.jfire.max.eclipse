@@ -53,8 +53,8 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ReportViewPrintPreferencePage 
-//extends PreferencePage 
+public class ReportViewPrintPreferencePage
+//extends PreferencePage
 //implements IWorkbenchPreferencePage
 extends LSDPreferencePage
 {
@@ -137,7 +137,7 @@ extends LSDPreferencePage
 	}
 	
 	protected void readCurrentlyEdited() {
-		String readUseCaseID = currentlyEditedID;		
+		String readUseCaseID = currentlyEditedID;
 		if (readUseCaseID != null)
 			useCaseConfigs.put(readUseCaseID, editUseCaseConfigComposite.readUseCaseConfig());
 		else if (sameForAll.getSelection()) {

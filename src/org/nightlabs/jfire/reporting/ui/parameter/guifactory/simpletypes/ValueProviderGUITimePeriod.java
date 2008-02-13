@@ -68,11 +68,11 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 			wrapper.getGridData().verticalAlignment = GridData.BEGINNING;
 			wrapper.getGridData().grabExcessVerticalSpace = false;
 			Group group = new Group(wrapper, SWT.NONE);
-			group.setLayout(new GridLayout(2, true));			
+			group.setLayout(new GridLayout(2, true));
 			group.setLayoutData(new GridData(GridData.FILL_BOTH));
 			group.setText(ValueProviderConfigUtil.getValueProviderMessage(getValueProviderConfig()));
 			fromEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX, 
+					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.fromDateTimeEdit.caption")); //$NON-NLS-1$
 			fromEdit.addModifyListener(new ModifyListener() {
 				@Override
@@ -81,7 +81,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 				}
 			});
 			toEdit = new DateTimeEdit(
-					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX, 
+					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.toDateTimeEdit.caption")); //$NON-NLS-1$
 			toEdit.addModifyListener(new ModifyListener() {
 				@Override
@@ -100,15 +100,15 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 		TimePeriod period = new TimePeriod();
 		if (fromEdit.isActive())
 			period.setFrom(fromEdit.getDate());
-		else 
+		else
 			period.setFrom(null);
 		if (toEdit.isActive())
 			period.setTo(toEdit.getDate());
-		else 
+		else
 			period.setTo(null);
 		if (period.isConfining())
 			return period;
-		else 
+		else
 			return null;
 	}
 
@@ -122,7 +122,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
-	public void setInputParameterValue(String parameterID, Object value) {		
+	public void setInputParameterValue(String parameterID, Object value) {
 	}
 
 }

@@ -67,14 +67,14 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ReportLayoutTree 
-extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> 
-implements ICellModifier 
+public class ReportLayoutTree
+extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
+implements ICellModifier
 {
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(ReportLayoutTree.class);  
+	private static final Logger logger = Logger.getLogger(ReportLayoutTree.class);
 	
 	private static class LabelProvider extends TableLabelProvider {
 
@@ -88,12 +88,12 @@ implements ICellModifier
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex)
-		{ 
+		{
 			if (element instanceof ReportRegistryItemNode) {
 				ReportRegistryItemNode node = (ReportRegistryItemNode)element;
 				if (columnIndex != 0) {
 					if (node.getJdoObject() instanceof ReportLayout) {
-						if (columnIndex == 1)						
+						if (columnIndex == 1)
 							return CheckboxCellEditorHelper.getCellEditorImage(cellModifier, element, PROPERTY_AVAILABLE);
 						else
 							return CheckboxCellEditorHelper.getCellEditorImage(cellModifier, element, PROPERTY_DEFAULT);
@@ -123,7 +123,7 @@ implements ICellModifier
 		{
 			if (element instanceof ReportRegistryItemNode) {
 				ReportRegistryItem item = ((ReportRegistryItemNode)element).getJdoObject();
-				switch(columnIndex) { 
+				switch(columnIndex) {
 					case 0: return item.getName().getText(Locale.getDefault().getLanguage());
 					case 1:
 					case 2:
@@ -134,14 +134,14 @@ implements ICellModifier
 		}
 	}
 	
-	private ReportLayoutConfigPreferencePage preferencePage;	
+	private ReportLayoutConfigPreferencePage preferencePage;
 	
 	/**
 	 * @param parent
 	 */
 	public ReportLayoutTree(Composite parent, ReportLayoutConfigPreferencePage preferencePage) {
 		super(parent, DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION, true, true, true);
-		this.preferencePage = preferencePage;		
+		this.preferencePage = preferencePage;
 	}
 
 	/**
@@ -149,7 +149,7 @@ implements ICellModifier
 	 */
 	public ReportLayoutTree(Composite parent, ReportLayoutConfigPreferencePage preferencePage, int treeStyle) {
 		super(parent, treeStyle, true, true, true);
-		this.preferencePage = preferencePage;		
+		this.preferencePage = preferencePage;
 	}
 	
 	/* (non-Javadoc)

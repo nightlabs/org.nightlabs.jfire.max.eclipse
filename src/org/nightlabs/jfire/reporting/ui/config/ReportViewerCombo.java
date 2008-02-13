@@ -69,19 +69,19 @@ public class ReportViewerCombo extends ComboComposite<ReportViewerEntry> {
 
 	public void refresh(ReportUseCase useCase) {
 		removeAll();
-		List<ReportViewerEntry> entries = ReportViewerRegistry.sharedInstance().getReportViewerEntries();		
+		List<ReportViewerEntry> entries = ReportViewerRegistry.sharedInstance().getReportViewerEntries();
 		if (useCase != null && useCase.getMinAdapterClasses() != null) {
 			List<ReportViewerEntry> filteredEntries = new LinkedList<ReportViewerEntry>();
 			entryLoop: for (ReportViewerEntry entry : entries) {
 				for (Class useCaseAdapter : useCase.getMinAdapterClasses()) {
 					if (!entry.getReportViewerFactory().isAdaptable(useCaseAdapter))
-						continue entryLoop;					
+						continue entryLoop;
 				}
 				filteredEntries.add(entry);
 			}
 			setInput(filteredEntries);
 		}
-		else 
+		else
 			setInput(entries);
 	}
 	

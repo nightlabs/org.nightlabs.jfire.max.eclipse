@@ -8,12 +8,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
-import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 
 /**
  * A {@link PreparedRenderedReportLayout} references
  * is created by a {@link RenderedReportHandler} and
- * references a file that represents the entry for the 
+ * references a file that represents the entry for the
  * given rendered report layout ready for use (unpacked and stored on disk).
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -33,7 +32,7 @@ public class PreparedRenderedReportLayout {
 	/**
 	 * Create a new {@link PreparedRenderedReportLayout}.
 	 * @param layout The prepared report layout.
-	 * @param entryFile The entry file of the report layout.  
+	 * @param entryFile The entry file of the report layout.
 	 */
 	public PreparedRenderedReportLayout(RenderedReportLayout layout, File entryFile) {
 		this.renderedReportLayout = layout;
@@ -69,7 +68,7 @@ public class PreparedRenderedReportLayout {
 	}
 	
 	/**
-	 * Get the {@link #entryFile} of this 
+	 * Get the {@link #entryFile} of this
 	 * prepared layout as {@link URL}.
 	 * 
 	 * @return The entry file as {@link URL}.

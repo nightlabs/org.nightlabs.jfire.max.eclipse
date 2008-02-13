@@ -67,7 +67,7 @@ public class ValueProviderGUIRegistry extends AbstractEPProcessor {
 	
 	public static ValueProviderGUIRegistry sharedInstance() {
 		if (sharedInstance == null)
-			sharedInstance = new ValueProviderGUIRegistry();		
+			sharedInstance = new ValueProviderGUIRegistry();
 		return sharedInstance;
 	}
 

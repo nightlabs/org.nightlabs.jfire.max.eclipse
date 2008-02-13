@@ -74,7 +74,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 		Group group = new Group(wrapper, SWT.NONE);
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.ORDINARY_WRAPPER, gl);
-		group.setLayout(gl);		
+		group.setLayout(gl);
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		group.setText(getValueProviderConfig().getMessage().getText());
 		
@@ -87,7 +87,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 			public void selectionChanged(SelectionChangedEvent event) {
 				notifyOutputChanged();
 			}
-		});		
+		});
 		
 		XComposite buttonComp = new XComposite(group, SWT.NONE);
 		buttonComp.getGridData().grabExcessHorizontalSpace = false;
@@ -115,7 +115,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 			}
 		});
 		
-		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);		
+		XComposite selectionWrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(selectionWrapper, SWT.WRAP);
 		label.setText("Selected workstations");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -129,7 +129,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public Collection<WorkstationID> getOutputValue() {
-		Collection<Workstation> workstations;		
+		Collection<Workstation> workstations;
 		Collection<Workstation> selectedWorkstations = selectedWorkstationsTable.getSelectedElements();
 		if (selectedWorkstations.size() == 0) {
 			workstations = searchComposite.getSelectedElements();
@@ -155,7 +155,7 @@ public class ValueProviderGUIWorkstations extends AbstractValueProviderGUI<Colle
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
-	public void setInputParameterValue(String parameterID, Object value) {		
+	public void setInputParameterValue(String parameterID, Object value) {
 	}
 
 }

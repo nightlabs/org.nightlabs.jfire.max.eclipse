@@ -110,7 +110,7 @@ public class EditUseCaseConfigComposite extends XComposite {
 	protected void initGUI() {
 		Label viewFormatLabel = new Label(this, SWT.WRAP);
 		viewFormatLabel.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.EditUseCaseConfigComposite.viewFormatLabel.text")); //$NON-NLS-1$
-		viewFormatCombo = new BirtOutputCombo(this, SWT.READ_ONLY);		
+		viewFormatCombo = new BirtOutputCombo(this, SWT.READ_ONLY);
 		Label reportViewerLabel = new Label(this, SWT.WRAP);
 		reportViewerLabel.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.EditUseCaseConfigComposite.reportViewerLabel.text")); //$NON-NLS-1$
 		reportViewerCombo = new ReportViewerCombo(this, SWT.READ_ONLY);
@@ -123,7 +123,7 @@ public class EditUseCaseConfigComposite extends XComposite {
 	
 	public void setUseCaseConfig(String reportUseCaseID, UseCaseConfig useCaseConfig) {
 		if (useCaseConfig != null) {
-			useCaseID = reportUseCaseID;			
+			useCaseID = reportUseCaseID;
 			if (useCaseID != null) {
 				ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCase(useCaseID);
 				if (useCase != null)

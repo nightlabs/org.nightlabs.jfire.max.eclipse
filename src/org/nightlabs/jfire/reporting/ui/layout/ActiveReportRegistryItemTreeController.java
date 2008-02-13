@@ -51,7 +51,7 @@ import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
  *
  */
 public abstract class ActiveReportRegistryItemTreeController
-extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> 
+extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
 	
 	public static final String[] DEFAULT_FETCH_GROUPS = new String[] {
@@ -104,7 +104,7 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 			return Collections.emptyList();
 		}
 		return ReportRegistryItemDAO.sharedInstance().getReportRegistryItems(
-				new HashSet<ReportRegistryItemID>(itemIDs), 
+				new HashSet<ReportRegistryItemID>(itemIDs),
 				DEFAULT_FETCH_GROUPS,
 				new ProgressMonitorWrapper(monitor)
 			);

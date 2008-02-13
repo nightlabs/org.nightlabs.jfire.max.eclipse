@@ -51,7 +51,7 @@ public class SelectedUsersTable extends AbstractTableComposite<User> {
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		// TODO: FIXME: Fix Column layout on windows (column will be rendered only as wide as its header-text)
 //		TableLayout l = new TableLayout();
-//		new TableColumn(table, SWT.LEFT).setText("Selected user");		
+//		new TableColumn(table, SWT.LEFT).setText("Selected user");
 //		l.addColumnData(new ColumnWeightData(10));
 //		table.setLayout(l);
 	}

@@ -46,9 +46,9 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class DefaultReportViewerPreferencePage 
-extends PreferencePage 
-implements IWorkbenchPreferencePage 
+public class DefaultReportViewerPreferencePage
+extends PreferencePage
+implements IWorkbenchPreferencePage
 {
 
 	private XComposite wrapper;

@@ -55,8 +55,8 @@ public class ReportRegistryItemActionRegistry extends AbstractActionRegistry {
 	 */
 	@Override
 	protected Object createActionOrContributionItem(IExtension extension,
-			IConfigurationElement element) 
-	throws EPProcessorException 
+			IConfigurationElement element)
+	throws EPProcessorException
 	{
 		String scope = element.getAttribute("scope"); //$NON-NLS-1$
 		String className = element.getAttribute(ATTRIBUTE_NAME_ACTION_CLASS);

@@ -41,7 +41,7 @@ public class ReportLayoutConfigController extends
 		if (REPORT_LAYOUT_FETCH_GROUPS.isEmpty()) {
 			REPORT_LAYOUT_FETCH_GROUPS.addAll(getCommonConfigModuleFetchGroups());
 			REPORT_LAYOUT_FETCH_GROUPS.add(ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS);
-			REPORT_LAYOUT_FETCH_GROUPS.add(ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS);			
+			REPORT_LAYOUT_FETCH_GROUPS.add(ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS);
 		}
 		return REPORT_LAYOUT_FETCH_GROUPS;
 	}

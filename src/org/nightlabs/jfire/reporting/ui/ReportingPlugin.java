@@ -81,7 +81,7 @@ public class ReportingPlugin extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		super.stop(context);		
+		super.stop(context);
 		plugin = null;
 	}
 
@@ -161,7 +161,7 @@ public class ReportingPlugin extends AbstractUIPlugin {
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
-		return pathFile;		
+		return pathFile;
 	}
 	
 }

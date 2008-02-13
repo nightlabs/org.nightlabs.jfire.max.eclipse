@@ -74,7 +74,7 @@ public class ValueProviderGUIDate extends AbstractValueProviderGUI<Date> {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
-	public void setInputParameterValue(String parameterID, Object value) {		
+	public void setInputParameterValue(String parameterID, Object value) {
 	}
 
 }

@@ -20,7 +20,7 @@ public interface RenderedReportHandler {
 	
 	/**
 	 * Takes the given {@link RenderedReportLayout} and prepares
-	 * or unpacks it for viewing or other tasks. 
+	 * or unpacks it for viewing or other tasks.
 	 * A File referencing the entry of the prepared layout is returned
 	 * along with the given report layout.
 	 * 

@@ -33,8 +33,8 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class ValueProviderController 
-extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode> 
+public abstract class ValueProviderController
+extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 {
 	public static final String[] CATEGORY_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, ValueProviderCategory.FETCH_GROUP_NAME, ValueProviderCategory.FETCH_GROUP_PARENT_ID
@@ -65,7 +65,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 				new Class[] {ValueProviderCategory.class, ValueProvider.class}, true,
 				parentObjectIDs, getTreeNodeParentResolver(),
 				new JDOLifecycleState[] { JDOLifecycleState.NEW }
-			);		
+			);
 	}
 	
 	
@@ -87,7 +87,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 		}
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, IProgressMonitor monitor) {
 		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);
@@ -113,11 +113,11 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 				throw new RuntimeException(e);
 			}
 		}
-		else 
+		else
 			return Collections.emptySet();
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, IProgressMonitor monitor) {
 		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);

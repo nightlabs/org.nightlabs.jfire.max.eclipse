@@ -91,7 +91,7 @@ public class ReportViewerEditorInput implements IEditorInput {
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapter) {
 		return null;
 	}
@@ -111,8 +111,8 @@ public class ReportViewerEditorInput implements IEditorInput {
 			boolean regItemEqual = false;
 			if (other.getReportRegistryItemID() != null && other.getReportRegistryItemID().equals(getReportRegistryItemID()))
 				regItemEqual = true;
-			boolean paramsEqual = 
-				(other.getReportParams() != null && getReportParams() != null) || 
+			boolean paramsEqual =
+				(other.getReportParams() != null && getReportParams() != null) ||
 				(other.getReportParams() == null && getReportParams() == null) ;
 			
 			if (other.getReportParams() != null) {

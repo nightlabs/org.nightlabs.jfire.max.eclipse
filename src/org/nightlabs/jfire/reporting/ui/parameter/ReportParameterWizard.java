@@ -9,9 +9,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
@@ -27,13 +25,13 @@ import org.nightlabs.progress.NullProgressMonitor;
  * page of this wizard will provide a selection of the use-case to use.
  * </p>
  * <p>
- * It is recommended to use the static methods 
+ * It is recommended to use the static methods
  * {@link #openResult(ReportRegistryItemID)} and {@link #open(ReportRegistryItemID)}
- * rather than instantiating the wizard directly. However this is of course possible, 
+ * rather than instantiating the wizard directly. However this is of course possible,
  * but it is then a good idea to use the {@link Dialog} defined here
- * as WizardDialog. 
+ * as WizardDialog.
  * </p>
- *  
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -81,7 +79,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * WizardDialog to be used with the {@link ReportParameterWizard}.
 	 * It overrides {@link #open()} and returns {@link Window#OK} directly
 	 * when the report has no parameters, or the ReportLayout
-	 * has no acquisition setup assigned. 
+	 * has no acquisition setup assigned.
 	 */
 	public static class Dialog extends DynamicPathWizardDialog {
 		public Dialog(DynamicPathWizard wizard) {
@@ -94,13 +92,13 @@ public class ReportParameterWizard extends DynamicPathWizard{
 			if (getWizard() instanceof ReportParameterWizard) {
 				ReportParameterWizard wiz  = (ReportParameterWizard) getWizard();
 				if (wiz.wizardHop != null && wiz.wizardHop.getEntryPage() != null) {
-					// if the report layout has an acquisition setup assigned 
+					// if the report layout has an acquisition setup assigned
 					// and the workflow provides at least one use-case and ValueProvider
 					return super.open();
 				}
 				// if the report has no acquisition setup or not ValueProvider
 				// in its setup or the report has no parameters, return OK
-				return Window.OK;					
+				return Window.OK;
 			}
 			return super.open();
 		}
@@ -186,7 +184,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * <p>
 	 * The parameters acquired by the wizard will also be avaiable in the Result. ({@link Result#getParameters()}).
 	 * This migt be <code>null</code>, if the user canceled the wizard,
-	 * or the ReportLayout has no {@link ReportParameterAcquisitionSetup} assigned, or the 
+	 * or the ReportLayout has no {@link ReportParameterAcquisitionSetup} assigned, or the
 	 * Report has not parameters.
 	 * </p>
 	 * 

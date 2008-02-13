@@ -35,22 +35,20 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutAvailEntry;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
-import org.nightlabs.jfire.reporting.layout.ReportCategory;
-import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * Helper methods for the {@link ReportLayout} configuration.
- *  
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class ReportConfigUtil {
 
 	/**
 	 * Returns a {@link ReportRegistryItemID} of the given type that is available for
-	 * the current user, or <code>null</code> if the user canceled the operation. 
+	 * the current user, or <code>null</code> if the user canceled the operation.
 	 * <p>
 	 * If more than one layouts are available the user will be presented a dialog to choose the layout.
 	 * Only if the dialog is shown this method might return <code>null</code> otherwise an itemID
@@ -58,14 +56,14 @@ public class ReportConfigUtil {
 	 * </p>
 	 * 
 	 * @param reportRegistryItemType The layout type of the report layout to search.
-	 * @return The default {@link ReportRegistryItemID} for the given type, 
+	 * @return The default {@link ReportRegistryItemID} for the given type,
 	 * 		the id of a layout choosen by the user, or <code>null</code> if the user cancels the operation.
 	 */
 	public static final ReportRegistryItemID getReportLayoutID(String reportRegistryItemType) {
 		ReportLayoutConfigModule cfMod = (ReportLayoutConfigModule)ConfigUtil.getUserCfMod(
-				ReportLayoutConfigModule.class, 
-				new String[] {FetchPlan.DEFAULT, ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS, ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS}, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				ReportLayoutConfigModule.class,
+				new String[] {FetchPlan.DEFAULT, ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS, ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
 			);
 		ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
@@ -86,7 +84,7 @@ public class ReportConfigUtil {
 		if (selectedItemID == null)
 			throw new IllegalStateException("No default ReportLayout could be found for the category type "+reportRegistryItemType); //$NON-NLS-1$
 		
-		return selectedItemID;		
+		return selectedItemID;
 	}
 
 	/**
@@ -99,9 +97,9 @@ public class ReportConfigUtil {
 	 */
 	public static final ReportRegistryItemID getDefaultReportLayoutID(String reportRegistryItemType) {
 		ReportLayoutConfigModule cfMod = (ReportLayoutConfigModule)ConfigUtil.getUserCfMod(
-				ReportLayoutConfigModule.class, 
-				new String[] {FetchPlan.DEFAULT, ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS, ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS}, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				ReportLayoutConfigModule.class,
+				new String[] {FetchPlan.DEFAULT, ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS, ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
 			);
 		return cfMod.getDefaultAvailEntry(reportRegistryItemType);

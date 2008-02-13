@@ -34,7 +34,7 @@ public abstract class AbstractRenderedReportHandler implements RenderedReportHan
 			);
 		ReportingPlugin.createReportTempFolder();
 //		if (file.exists()) {
-//			if (!Utils.deleteDirectoryRecursively(file)) 
+//			if (!Utils.deleteDirectoryRecursively(file))
 //				throw new IllegalStateException("Could not delete rendered report tmp folder "+file);
 //		}
 		if (file.exists())
@@ -54,12 +54,12 @@ public abstract class AbstractRenderedReportHandler implements RenderedReportHan
 	 * @see org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler#prepareRenderedReportLayout(IProgressMonitor, RenderedReportLayout)
 	 */
 	public PreparedRenderedReportLayout prepareRenderedReportLayout(IProgressMonitor monitor, RenderedReportLayout layout) {
-		File folder = createRenderedReportFolder(layout);		
+		File folder = createRenderedReportFolder(layout);
 		File zip = new File(folder, "renderedLayout.zip"); //$NON-NLS-1$
 		File file = new File(folder, layout.getHeader().getEntryFileName());
 		
 		if (!layout.getHeader().isZipped()) {
-			// redirect writing to entry file 
+			// redirect writing to entry file
 			zip = file;
 		}
 		

@@ -48,7 +48,7 @@ import org.nightlabs.util.Util;
  * Additionally it can server already handled layouts, meaning
  * layouts that were already rendered by the server with
  * certain parameter and already stored on the clients
- * disk. The handled reports will be cached. 
+ * disk. The handled reports will be cached.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
@@ -79,7 +79,7 @@ public class RenderedReportLayoutProvider {
 	
 	/**
 	 * Key class used to reference handled {@link RenderedReportEntry}s
-	 * in the cache. It holds the report layout id and the 
+	 * in the cache. It holds the report layout id and the
 	 * params it was generated with.
 	 */
 	public class RenderedReportKey {
@@ -140,19 +140,19 @@ public class RenderedReportLayoutProvider {
 	 * to render the report with the given params.
 	 * 
 	 * 
-	 * @param reportRegistryItemID The report layout id to get the entry for. 
+	 * @param reportRegistryItemID The report layout id to get the entry for.
 	 * @param params The params to render the report with.
 	 * @param format The format to render the report to.
 	 * @param monitor An {@link IProgressMonitor} to provide feedback.
-	 * @return The file that represents the entry for the given rendered report layout ready for use (unpacked and stored on disk). 
+	 * @return The file that represents the entry for the given rendered report layout ready for use (unpacked and stored on disk).
 	 */
 	public  PreparedRenderedReportLayout getPreparedRenderedReportLayout(
 			RenderReportRequest renderRequest,
 //			ReportRegistryItemID reportRegistryItemID,
 //			Map<String,Object> params,
 //			Birt.OutputFormat format,
-			IProgressMonitor monitor 
-		) 
+			IProgressMonitor monitor
+		)
 	{
 		RenderedReportKey key = new RenderedReportKey(renderRequest.getReportRegistryItemID(), renderRequest.getParameters());
 		RenderedReportEntry entry = getRenderedReportEntry(key);
@@ -182,9 +182,9 @@ public class RenderedReportLayoutProvider {
 	 * @return The prepared rendered report layout.
 	 */
 	public PreparedRenderedReportLayout getPreparedRenderedReportLayout(
-			RenderedReportLayout renderedReportLayout, 
+			RenderedReportLayout renderedReportLayout,
 			IProgressMonitor monitor
-		) 
+		)
 	{
 		RenderedReportHandler handler = RenderedReportHandlerRegistry.sharedInstance().getHandler(renderedReportLayout.getHeader().getOutputFormat());
 		if (handler == null)
@@ -208,8 +208,8 @@ public class RenderedReportLayoutProvider {
 //			ReportRegistryItemID reportRegistryItemID,
 //			Map<String,Object> params,
 //			Birt.OutputFormat format,
-			IProgressMonitor monitor 
-		) 
+			IProgressMonitor monitor
+		)
 	{
 		ReportManager rm = ReportingPlugin.getReportManager();
 		try {
@@ -222,7 +222,7 @@ public class RenderedReportLayoutProvider {
 	/**
 	 * Get a cached result for the given key.
 	 * 
-	 * @param key The key containing layout id and params. 
+	 * @param key The key containing layout id and params.
 	 * @return A cached {@link RenderedReportEntry} or <code>null</code>
 	 */
 	protected RenderedReportEntry getRenderedReportEntry(RenderedReportKey key) {
@@ -230,7 +230,7 @@ public class RenderedReportLayoutProvider {
 	}
 	
 	protected void setRenderedReportEntry(RenderedReportKey key, RenderedReportEntry entry) {
-		 Cache.sharedInstance().put(null, key, entry, (String[])null, 0);		
+		 Cache.sharedInstance().put(null, key, entry, (String[])null, 0);
 	}
 	
 	private static RenderedReportLayoutProvider sharedInstance;

@@ -34,7 +34,7 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * A table that displays ReportRegistyItems. 
+ * A table that displays ReportRegistyItems.
  * It has one column showing the items name.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -162,7 +162,7 @@ public class ReportRegistryItemTable extends AbstractTableComposite<ReportRegist
 							defaultRegistryItemID,
 							fetchGroups,
 							monitor
-						); 
+						);
 				}
 				final ReportRegistryItem finalDefaultItem = defaultRegistryItem;
 				Display.getDefault().asyncExec(new Runnable() {

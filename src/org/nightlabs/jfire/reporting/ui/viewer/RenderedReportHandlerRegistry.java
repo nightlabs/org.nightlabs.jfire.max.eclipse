@@ -40,8 +40,8 @@ public class RenderedReportHandlerRegistry extends AbstractEPProcessor {
 	public void processElement(
 			IExtension extension,
 			IConfigurationElement element
-		) 
-	throws Exception 
+		)
+	throws Exception
 	{
 		if (element.getName().equalsIgnoreCase("renderedReportHandler")) { //$NON-NLS-1$
 			String format = element.getAttribute("format"); //$NON-NLS-1$

@@ -14,8 +14,8 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
 
 /**
  * The default report viewer is based an editor base report viewer
- * that supports html (by internal browser widget) and pdf 
- * (by either the internal browser or a java pdf viewer by adobe)  
+ * that supports html (by internal browser widget) and pdf
+ * (by either the internal browser or a java pdf viewer by adobe)
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
@@ -77,7 +77,7 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 
 	
 	@Override
-	public void showReport(RenderedReportLayout renderedReportLayout) 
+	public void showReport(RenderedReportLayout renderedReportLayout)
 	{
 		if (compositeAdapter == null)
 			super.showReport(renderedReportLayout);

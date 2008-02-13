@@ -89,15 +89,15 @@ public abstract class AbstractEditorReportViewer implements ReportViewer {
 	 * <p>
 	 * The editor will be opened with a {@link ReportViewerEditorInput} that contains
 	 * the report layout id and the params the report should be generate with.
-	 *  
+	 * 
 	 * @see org.nightlabs.jfire.reporting.ui.viewer.ReportViewer#showReport(org.nightlabs.jfire.reporting.ui.layout.id.ReportRegistryItemID, java.util.Map, org.nightlabs.jfire.reporting.ui.Birt.OutputFormat)
 	 */
 	public void showReport(
-//			ReportRegistryItemID reportRegistryItemID, 
-//			Map<String, Object> params, 
+//			ReportRegistryItemID reportRegistryItemID,
+//			Map<String, Object> params,
 //			OutputFormat format
 			RenderReportRequest renderRequest
-		) 
+		)
 	{
 		final ReportViewerEditorInput input = new ReportViewerEditorInput(renderRequest.getReportRegistryItemID(), renderRequest.getParameters());
 		final String editorID = getReportViewerEditorID();
@@ -131,7 +131,7 @@ public abstract class AbstractEditorReportViewer implements ReportViewer {
 	 * 
 	 * @see org.nightlabs.jfire.reporting.ui.viewer.ReportViewer#showReport(org.nightlabs.jfire.reporting.ui.layout.id.ReportRegistryItemID, org.nightlabs.jfire.reporting.ui.layout.render.RenderedReportLayout)
 	 */
-	public void showReport(RenderedReportLayout renderedReportLayout) 
+	public void showReport(RenderedReportLayout renderedReportLayout)
 	{
 		final ReportViewerEditorInput input = new ReportViewerEditorInput(renderedReportLayout.getHeader().getReportRegistryItemID(), null);
 		final String editorID = getReportViewerEditorID();
@@ -156,7 +156,7 @@ public abstract class AbstractEditorReportViewer implements ReportViewer {
 
 	/**
 	 * {@inheritDoc}
-	 * <p> 
+	 * <p>
 	 * Default implementation returns null.
 	 */
 	public Object getAdapter(Object adapterObject) {

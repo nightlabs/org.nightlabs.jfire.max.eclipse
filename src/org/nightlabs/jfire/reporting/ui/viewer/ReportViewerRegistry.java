@@ -197,7 +197,7 @@ public class ReportViewerRegistry extends AbstractEPProcessor {
 		return new ArrayList<ReportViewerEntry>(reportViewerEntries.values());
 	}
 	
-	public ReportViewerFactory getReportViewerFactoryByLayoutType(ReportRegistryItemID itemID) throws NoReportViewerFoundException 
+	public ReportViewerFactory getReportViewerFactoryByLayoutType(ReportRegistryItemID itemID) throws NoReportViewerFoundException
 	{
 		// Try to lookup the UseCase by the reportLayoutType
 		ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(itemID.reportRegistryItemType);
@@ -215,7 +215,7 @@ public class ReportViewerRegistry extends AbstractEPProcessor {
 		UseCaseConfig useCaseConfig = cfMod.getReportUseCaseConfigs().get(useCaseID);
 		
 		String reportViewerID = null;
-		if (useCaseConfig != null) 
+		if (useCaseConfig != null)
 			reportViewerID = useCaseConfig.getReportViewerID();
 		if (reportViewerID == null)
 			reportViewerID = ReportViewerRegistry.DEFAULT_REPORT_VIEWER_ID;

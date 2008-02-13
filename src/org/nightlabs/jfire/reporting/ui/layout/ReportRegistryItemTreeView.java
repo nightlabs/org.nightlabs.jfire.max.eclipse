@@ -33,25 +33,24 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
-import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMenuManager;
 
 /**
  * Abstract class as a basis for Views that need to display
  * a tree of {@link ReportRegistryItem}s. This view
  * automatically adds actions to toolbar, menu and contextMenu
- * that are registered to the correct scope by the 
+ * that are registered to the correct scope by the
  * extension point
- * <code>org.nightlabs.jfire.reporting.ui.reportRegistryItemAction</code>  
+ * <code>org.nightlabs.jfire.reporting.ui.reportRegistryItemAction</code>
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public abstract class ReportRegistryItemTreeView 
+public abstract class ReportRegistryItemTreeView
 //extends ViewPart
 //implements ControllablePart, PartVisibilityListener
 extends LSDViewPart
-{	
+{
 	private XComposite wrapper;
 	private ReportRegistryItemTree registryItemTree;
 	private ReportRegistryItemActionMenuManager contextMenuManager;
@@ -70,7 +69,7 @@ extends LSDViewPart
 
 //	public void partVisible(IWorkbenchPartReference partRef) {
 //	}
-//	
+//
 //	public void partHidden(IWorkbenchPartReference partRef) {
 //	}
 	/* (non-Javadoc)

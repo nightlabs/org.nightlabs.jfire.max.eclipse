@@ -31,8 +31,8 @@ package org.nightlabs.jfire.reporting.ui.layout.action.view;
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
  *
  */
-public class ViewReportLayoutAction 
-extends AbstractViewReportLayoutAction 
+public class ViewReportLayoutAction
+extends AbstractViewReportLayoutAction
 {
 	public static final String ID = ViewReportLayoutAction.class.getName();
 	

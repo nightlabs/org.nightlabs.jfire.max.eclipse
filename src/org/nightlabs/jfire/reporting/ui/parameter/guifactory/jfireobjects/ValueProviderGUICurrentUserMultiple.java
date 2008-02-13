@@ -61,7 +61,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		Label label = new Label(comp, SWT.WRAP);
 		label.setText(
-				String.format("The current user '%s' is preselected, but you can select others.", 
+				String.format("The current user '%s' is preselected, but you can select others.",
 				currentUserID.iterator().next().userID));
 		super.createGUI(comp);
 		return comp;
@@ -95,7 +95,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#setInputParameterValue(java.lang.String, java.lang.Object)
 	 */
 	@Override
-	public void setInputParameterValue(String parameterID, Object value) {		
+	public void setInputParameterValue(String parameterID, Object value) {
 	}
 
 }

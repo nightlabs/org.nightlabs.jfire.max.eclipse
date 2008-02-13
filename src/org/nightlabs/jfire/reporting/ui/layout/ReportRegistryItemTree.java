@@ -108,7 +108,7 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	public void init() {
 		super.init();
 		if (addSelectionProxy) {
-			selectionProxy = new SelectionProxy(this, selectionZone, IGNORE_INHERITANCE, false);			
+			selectionProxy = new SelectionProxy(this, selectionZone, IGNORE_INHERITANCE, false);
 			getTreeViewer().addSelectionChangedListener(selectionProxy);
 		}
 		getTreeViewer().setSorter(new ViewerSorter());
@@ -156,5 +156,5 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	@Override
 	protected ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> getJDOObjectTreeController() {
 		return activeReportRegistryItemTreeController;
-	}	
+	}
 }

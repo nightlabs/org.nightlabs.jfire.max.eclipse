@@ -35,15 +35,15 @@ import org.eclipse.ui.part.EditorPart;
 /**
  * Abstract implementation of an Editor that can be used as
  * {@link ReportViewerEditor} it provides several helper
- * methods that can be used by concrete implementations in order to 
+ * methods that can be used by concrete implementations in order to
  * show reports.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public abstract class AbstractReportViewerEditor 
-extends EditorPart 
-implements ReportViewerEditor 
+public abstract class AbstractReportViewerEditor
+extends EditorPart
+implements ReportViewerEditor
 {
 	
 	private ReportViewerEditorInput viewerInput;

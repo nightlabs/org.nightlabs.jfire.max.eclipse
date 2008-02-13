@@ -66,7 +66,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor#processElement(org.eclipse.core.runtime.IExtension, org.eclipse.core.runtime.IConfigurationElement)
 	 */
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void processElement(IExtension extension,
 			IConfigurationElement element) throws Exception {
@@ -90,7 +90,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 			ReportUseCase useCase = new ReportUseCase();
 			useCase.setId(id);
 			useCase.setName(name);
-			useCase.setDescription(description);			
+			useCase.setDescription(description);
 			if (reportLayoutType != null)
 				reportUseCasesByLayoutType.put(reportLayoutType, useCase);
 			else
@@ -115,7 +115,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 			} else
 				useCase.setMinAdapterClasses(null);
 			
-			reportUseCases.put(useCase.getId(), useCase);			
+			reportUseCases.put(useCase.getId(), useCase);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 	 * 
 	 * @return All registered {@link ReportUseCase}s.
 	 */
-	public List<ReportUseCase> getReportUseCases() { 
+	public List<ReportUseCase> getReportUseCases() {
 		checkProcessing();
 		ArrayList<ReportUseCase> result = new ArrayList<ReportUseCase>(reportUseCases.size());
 		result.addAll(reportUseCases.values());

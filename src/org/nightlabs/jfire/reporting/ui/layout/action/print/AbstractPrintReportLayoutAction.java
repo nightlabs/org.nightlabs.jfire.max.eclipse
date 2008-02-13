@@ -140,7 +140,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 		printJob.schedule();
 	}
 	
-	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, IProgressMonitor monitor) 
+	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, IProgressMonitor monitor)
 	throws PrinterException
 	{
 		String useCaseID = getReportUseCaseID();
@@ -170,8 +170,8 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 		if (!"".equals(errorMessages)) //$NON-NLS-1$
 			errorMessages = errorMessages + "\n"; //$NON-NLS-1$
 		errorMessages = errorMessages + addition;
-		return errorMessages;		
-	}	
+		return errorMessages;
+	}
 	
 
 	public void setNextRunParams(Map<String, Object> nextRunParams) {

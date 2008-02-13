@@ -37,7 +37,7 @@ import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public class ReportLayoutConfigPreferencePage  
+public class ReportLayoutConfigPreferencePage
 extends AbstractUserConfigModulePreferencePage
 {
 	/**
@@ -68,7 +68,7 @@ extends AbstractUserConfigModulePreferencePage
 
 	@Override
 	protected void createPreferencePage(Composite parent) {
-		reportLayoutTree = new ReportLayoutTree(parent, this, 
+		reportLayoutTree = new ReportLayoutTree(parent, this,
 				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
 	}
 
@@ -81,7 +81,7 @@ extends AbstractUserConfigModulePreferencePage
 
 	@Override
 	public void updateConfigModule() {
-		// WORKAROUND This is a 
+		// WORKAROUND This is a
 //		(ReportLayoutConfigModule)getConfigModuleManager().getConfigModule()).copyFrom(
 		
 //		((ReportLayoutConfigModule)getConfigModuleManager().getConfigModule()).copyFrom(

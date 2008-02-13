@@ -62,15 +62,15 @@ public class PrintReportLayoutUtil {
 	private static final Logger logger = Logger.getLogger(PrintReportLayoutUtil.class);
 	
 	/**
-	 * Creates a {@link RenderReportRequest} out of the given parameters 
-	 * and prints using the report use case that can be obtained for the 
+	 * Creates a {@link RenderReportRequest} out of the given parameters
+	 * and prints using the report use case that can be obtained for the
 	 * type of the given reportRegistryItemID.
 	 * 
 	 * @throws PrinterException
 	 */
 	public static void printReportLayout(
-			ReportRegistryItemID reportRegistryItemID, 
-			Map<String, Object> params, 
+			ReportRegistryItemID reportRegistryItemID,
+			Map<String, Object> params,
 			IProgressMonitor monitor
 		)
 	throws PrinterException
@@ -97,7 +97,7 @@ public class PrintReportLayoutUtil {
 	/**
 	 * Takes the given renderRequest and assigns the output format
 	 * to it that is configured with the appropriate report use case
-	 * for the type of layout and prints via 
+	 * for the type of layout and prints via
 	 * {@link #printReportLayout(RenderReportRequest, String, IProgressMonitor)}
 	 * 
 	 * @throws PrinterException
@@ -106,8 +106,8 @@ public class PrintReportLayoutUtil {
 			RenderReportRequest renderRequest,
 			String reportUseCaseID,
 			IProgressMonitor monitor
-		) 
-	throws PrinterException 
+		)
+	throws PrinterException
 	{
 		RCPUtil.getSaveProgressMonitor(monitor).setTaskName(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil.saveProgressMonitor.lookupReportUseCaseTask.naem")); //$NON-NLS-1$
 		ReportViewPrintConfigModule cfMod = ReportViewPrintConfigModule.sharedInstance();
@@ -124,20 +124,20 @@ public class PrintReportLayoutUtil {
 	}
 	
 	/**
-	 * Fetches the report referenced by the given reportRequest (using {@link RenderedReportLayoutProvider}) 
+	 * Fetches the report referenced by the given reportRequest (using {@link RenderedReportLayoutProvider})
 	 * and prints using the printer configuration assigned to the given report use case.
 	 * 
 	 * @throws PrinterException
 	 */
 	public static void printReportLayout(
 			RenderReportRequest renderRequest,
-//			ReportRegistryItemID reportRegistryItemID, 
-//			Map<String, Object> params, 
-//			Birt.OutputFormat format, 
-			String reportUseCaseID, 
+//			ReportRegistryItemID reportRegistryItemID,
+//			Map<String, Object> params,
+//			Birt.OutputFormat format,
+			String reportUseCaseID,
 			IProgressMonitor monitor
-		) 
-	throws PrinterException 
+		)
+	throws PrinterException
 	{
 		RCPUtil.getSaveProgressMonitor(monitor).setTaskName(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil.saveProgressMonitor.prepareLayoutTask.name")); //$NON-NLS-1$
 		PreparedRenderedReportLayout preparedLayout = RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(renderRequest, monitor);
@@ -160,7 +160,7 @@ public class PrintReportLayoutUtil {
 	 * @throws PrinterException
 	 */
 	public static void printReportLayout(
-			ReportRegistryItemID reportRegistryItemID, 
+			ReportRegistryItemID reportRegistryItemID,
 			File file,
 			IProgressMonitor monitor
 		)
@@ -189,8 +189,8 @@ public class PrintReportLayoutUtil {
 	 * 
 	 * @throws PrinterException
 	 */
-	public static void printFile(File file, String printerUseCaseID, IProgressMonitor monitor) 
-	throws PrinterException 
+	public static void printFile(File file, String printerUseCaseID, IProgressMonitor monitor)
+	throws PrinterException
 	{
 		RCPUtil.getSaveProgressMonitor(monitor).setTaskName(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil.saveProgressMonitor.printTask.name")); //$NON-NLS-1$
 		PrinterInterface iFace = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_DOCUMENT, printerUseCaseID);

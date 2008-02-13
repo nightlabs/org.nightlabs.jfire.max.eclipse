@@ -154,7 +154,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 					Birt.OutputFormat outFormat = Birt.OutputFormat.valueOf(format);
 					
 					String reportViewerID = null;
-					if (useCaseConfig != null) 
+					if (useCaseConfig != null)
 						reportViewerID = useCaseConfig.getReportViewerID();
 					if (reportViewerID == null)
 						reportViewerID = ReportViewerRegistry.DEFAULT_REPORT_VIEWER_ID;
@@ -178,14 +178,14 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 			}
 			
 		};
-		viewJob.schedule();		
+		viewJob.schedule();
 	}
 	
 	private String addErrMessage(String errorMessages, String addition) {
 		if (!"".equals(errorMessages)) //$NON-NLS-1$
 			errorMessages = errorMessages + "\n"; //$NON-NLS-1$
 		errorMessages = errorMessages + addition;
-		return errorMessages;		
+		return errorMessages;
 	}
 	
 	public void setNextRunParams(Map<String, Object> nextRunParams) {

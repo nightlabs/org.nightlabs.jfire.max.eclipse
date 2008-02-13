@@ -62,7 +62,7 @@ public class ReportRegistryItemActionMenuManager extends MenuManager {
 		addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
 				fillContextMenu(manager);
-			} 
+			}
 		});
 		menu = createContextMenu(registryItemTree.getTreeViewer().getControl());
 		registryItemTree.getTreeViewer().getControl().setMenu(menu);

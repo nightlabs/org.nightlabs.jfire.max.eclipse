@@ -41,7 +41,7 @@ public interface IReportRegistryItemAction extends IAction {
 	public void setScope(String scope);
 	
 	/**
-	 * Return the scope. 
+	 * Return the scope.
 	 * @return
 	 */
 	public String getScope();
@@ -56,7 +56,7 @@ public interface IReportRegistryItemAction extends IAction {
 
 	/**
 	 * Use this method to get the <code>ReportRegistryItem</code>s
-	 * this actions will be invoked on. 
+	 * this actions will be invoked on.
 	 * 
 	 * @return The current <code>ReportRegistryItem</code> set
 	 */

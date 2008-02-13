@@ -110,5 +110,5 @@ public class ValueProviderTree extends ActiveJDOObjectTreeComposite<ObjectID, Ob
 	@Override
 	protected ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode> getJDOObjectTreeController() {
 		return providerTreeController;
-	}	
+	}
 }

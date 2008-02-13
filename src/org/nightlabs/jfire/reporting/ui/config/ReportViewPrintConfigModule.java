@@ -105,7 +105,7 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 		 */
 		public void setViewerFormat(String viewerFormat) {
 			this.viewerFormat = viewerFormat;
-		}		
+		}
 		
 		/**
 		 * @return the printerUseCase
