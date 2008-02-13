@@ -50,7 +50,7 @@ public class MoneyFlowMappingRegistry
 //			throw new RuntimeException(e);
 //		}
 //	}
-//	
+//
 //	public int createMoneyFlowMappingID() {
 //		try {
 //			return AccountingUtil.getAccountingManager().createMoneyFlowMappingID();

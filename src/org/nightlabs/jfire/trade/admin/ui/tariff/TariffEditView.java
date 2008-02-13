@@ -41,7 +41,7 @@ import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class TariffEditView 
+public class TariffEditView
 extends LSDViewPart
 {
 	public static final String ID_VIEW = TariffEditView.class.getName();
@@ -51,7 +51,7 @@ extends LSDViewPart
 
 	public void createPartContents(Composite parent)
 	{
-		Composite composite = parent;		
+		Composite composite = parent;
 		composite.setLayout(new GridLayout(1, false));
 		
 		SashForm sf = new SashForm(composite, SWT.BORDER);

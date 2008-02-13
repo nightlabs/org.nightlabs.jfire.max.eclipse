@@ -56,7 +56,7 @@ public class LocalAccountantDelegateTypeCombo extends XComposite {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		combo = new Combo(this, SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Collection _types = LocalAccountantDelegateRegistry.sharedInstance().getTypes();		
+		Collection _types = LocalAccountantDelegateRegistry.sharedInstance().getTypes();
 		for (Iterator iter = _types.iterator(); iter.hasNext();) {
 			LocalAccountantDelegateType type = (LocalAccountantDelegateType) iter.next();
 			combo.add(type.getName());
@@ -71,16 +71,16 @@ public class LocalAccountantDelegateTypeCombo extends XComposite {
 	}
 
 	/**
-	 * Get the currently selected LocalAccountantDelegateType. 
+	 * Get the currently selected LocalAccountantDelegateType.
 	 */
 	public LocalAccountantDelegateType getSelectedType() {
 		if (combo.getSelectionIndex() < 0 || combo.getSelectionIndex() >= types.size())
 			return null;
-		return (LocalAccountantDelegateType)types.get(combo.getSelectionIndex());		
+		return (LocalAccountantDelegateType)types.get(combo.getSelectionIndex());
 	}
 	
 	/**
-	 * Set the selected LocalAccountantDelegateType. 
+	 * Set the selected LocalAccountantDelegateType.
 	 */
 	public void setSelectedType(LocalAccountantDelegateType type) {
 		for (int i = 0; i < types.size(); i++) {

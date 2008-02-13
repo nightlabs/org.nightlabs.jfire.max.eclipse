@@ -13,8 +13,8 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TradeAdminOverviewRegistry 
-extends AbstractEPProcessor 
+public class TradeAdminOverviewRegistry
+extends AbstractEPProcessor
 {
 	private static final Logger logger = Logger.getLogger(TradeAdminOverviewRegistry.class);
 	
@@ -43,9 +43,9 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws Exception 
+	throws Exception
 	{
-		if (element.getName().equalsIgnoreCase(ELEMENT_CATEGORY)) 
+		if (element.getName().equalsIgnoreCase(ELEMENT_CATEGORY))
 		{
 			try {
 				TradeAdminCategoryFactory category = (TradeAdminCategoryFactory) element.createExecutableExtension(

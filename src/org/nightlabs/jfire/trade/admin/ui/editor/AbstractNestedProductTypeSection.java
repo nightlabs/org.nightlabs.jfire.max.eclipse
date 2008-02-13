@@ -40,8 +40,8 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractNestedProductTypeSection 
-extends ToolBarSectionPart 
+public abstract class AbstractNestedProductTypeSection
+extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
 	/**
@@ -51,7 +51,7 @@ implements IProductTypeSectionPart
 	 * @param title
 	 */
 	public AbstractNestedProductTypeSection(IFormPage page,
-			Composite parent, int style, String title) 
+			Composite parent, int style, String title)
 	{
 		super(page, parent, style, title);
 		XComposite compNestHeader = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -126,7 +126,7 @@ implements IProductTypeSectionPart
 
 	private ISelectionChangedListener nestesProductTypeTabelListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
-//			removeNestedProductTypeButton.setEnabled(!event.getSelection().isEmpty());				
+//			removeNestedProductTypeButton.setEnabled(!event.getSelection().isEmpty());
 		}
 	};
 
@@ -135,14 +135,14 @@ implements IProductTypeSectionPart
 	 * the extended product type is required to copy the nested product-types.
 	 * <p>
 	 * If your subclass requires other fetch-groups or other special handling, you might override this method.
-	 * </p> 
+	 * </p>
 	 */
 	protected ProductType getExtendedProductTypeWithNestedProductTypes(ProgressMonitor monitor)
 	{
 		ProductType pt = ProductTypeDAO.sharedInstance().getProductType(
-				(ProductTypeID)JDOHelper.getObjectId(productType), 
+				(ProductTypeID)JDOHelper.getObjectId(productType),
 				new String[] { ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE },
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new SubProgressMonitor(monitor, 1)
 		);
 
@@ -162,11 +162,11 @@ implements IProductTypeSectionPart
 	}
 
 	protected void inheritNestedProductTypesClicked()
-	{		
+	{
 		if (productType == null)
 			return;
 
-		boolean inherited = getInheritanceSelection();		
+		boolean inherited = getInheritanceSelection();
 		productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").setValueInherited(inherited); //$NON-NLS-1$
 		if (inherited) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.loadInheritanceDataJob.name")) { //$NON-NLS-1$
@@ -233,19 +233,19 @@ implements IProductTypeSectionPart
 			markDirty();
 
 		refreshNestedProductTypes();
-	}	
+	}
 
-	protected abstract void createNestedProductTypeClicked(); 	
+	protected abstract void createNestedProductTypeClicked();
 	
-	class AddNestedProductTypeAction 
-	extends Action 
-	{		
+	class AddNestedProductTypeAction
+	extends Action
+	{
 		public AddNestedProductTypeAction() {
 			super();
 			setId(AddNestedProductTypeAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					TradeAdminPlugin.getDefault(), 
-					AbstractNestedProductTypeSection.class, 
+					TradeAdminPlugin.getDefault(),
+					AbstractNestedProductTypeSection.class,
 					"Create")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.AddNestedProductTypeAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.AddNestedProductTypeAction.text"));	 //$NON-NLS-1$
@@ -254,7 +254,7 @@ implements IProductTypeSectionPart
 		@Override
 		public void run() {
 			createNestedProductTypeClicked();
-		}		
+		}
 	}
 	
 	class RemoveNestedProductTypeAction
@@ -274,7 +274,7 @@ implements IProductTypeSectionPart
 		@Override
 		public void run() {
 			removeSelectedNestedProductTypes();
-		}	
+		}
 	}
 
 	protected void setInheritanceSelection(boolean inherit) {

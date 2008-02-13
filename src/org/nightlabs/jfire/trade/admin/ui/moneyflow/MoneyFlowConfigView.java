@@ -42,10 +42,10 @@ import org.nightlabs.jfire.store.ProductType;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public abstract class MoneyFlowConfigView 
+public abstract class MoneyFlowConfigView
 extends ViewPart
 implements ControllablePart, PartVisibilityListener
-{	
+{
 	/**
 	 * Should return the zone the listener to selections of ProductTypes
 	 * should be registered
@@ -101,7 +101,7 @@ implements ControllablePart, PartVisibilityListener
 	public void partHidden(IWorkbenchPartReference partRef) {
 		SelectionManager.sharedInstance().removeNotificationListener(
 				getListenerZone(),
-				ProductType.class, 
+				ProductType.class,
 				getMoneyFlowConfigComposite().getNotificationListener()
 			);
 	}
@@ -114,7 +114,7 @@ implements ControllablePart, PartVisibilityListener
 	public void partVisible(IWorkbenchPartReference partRef) {
 		SelectionManager.sharedInstance().addNotificationListener(
 				getListenerZone(),
-				ProductType.class, 
+				ProductType.class,
 				getMoneyFlowConfigComposite().getNotificationListener()
 			);
 	}

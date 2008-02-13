@@ -59,7 +59,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		new Label(wrapper, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd); // Spacer		
+		new Label(wrapper, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(gd); // Spacer
 		
 		XComposite spaceWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
 		new Label(spaceWrapper, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.visibleDeliveryQueuesLabel.text")); //$NON-NLS-1$
@@ -108,7 +108,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			}
 		});
 		
-		delQueueButton = new Button(wrapper, SWT.NONE);	
+		delQueueButton = new Button(wrapper, SWT.NONE);
 		delQueueButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.removeQueueButton.text")); //$NON-NLS-1$
 		delQueueButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -130,7 +130,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 				try {
 					StoreManager storeManager = getStoreManager();
 					Collection<DeliveryQueueID> deliveryQueueIds = storeManager.getAvailableDeliveryQueueIDs(false);
-					deliveryQueues = DeliveryQueueDAO.sharedInstance().getDeliveryQueues(deliveryQueueIds, new String[] {DeliveryQueue.FETCH_GROUP_NAME, DeliveryQueue.FETCH_GROUP_HAS_PENDING_DELIVERIES}, 1, new NullProgressMonitor());					
+					deliveryQueues = DeliveryQueueDAO.sharedInstance().getDeliveryQueues(deliveryQueueIds, new String[] {DeliveryQueue.FETCH_GROUP_NAME, DeliveryQueue.FETCH_GROUP_HAS_PENDING_DELIVERIES}, 1, new NullProgressMonitor());
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException(e);
@@ -158,7 +158,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 		pqTableComposite.refresh(true);
 	}
 	
-	private List<DeliveryQueue> checkedQueues;	
+	private List<DeliveryQueue> checkedQueues;
 	private void storeCheckedDeliveryQueues() {
 		checkedQueues = pqTableComposite.getCheckedElements();
 	}
@@ -201,7 +201,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 //			pqTableComposite.getTableViewer().add(deliveryQueue);
 			// END WORKAROUND
 			
-			storeCheckedDeliveryQueues();			
+			storeCheckedDeliveryQueues();
 			updateGUI();
 			restoreCheckedDeliveryQueues();
 			
@@ -214,7 +214,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			DeliveryQueue selectedQueue = pqTableComposite.getFirstSelectedElement();
 			
 			// Only delivery queues that have yet been persisted have to be marked as deleted.
-			// All others can simply be deleted 
+			// All others can simply be deleted
 			if (JDOHelper.isDetached(selectedQueue)) {
 				if (selectedQueue.hasPendingDeliveries()) {
 					String message = Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.DeliveryQueueDeletionImpossible.message"); //$NON-NLS-1$

@@ -44,7 +44,7 @@ public class ProductTypeComposite extends AbstractCellReferenceComposite
 					if(productTypeID != null){
 						selectedProductTypeID = cellReferenceProductTypeSelector.getSelectedProductTypeID();
 						checked(true);
-					}					
+					}
 				}
 			});
 			productSelectorComposite = cellReferenceProductTypeSelector.createComposite(productTypeSelectorGroup);
@@ -98,7 +98,7 @@ public class ProductTypeComposite extends AbstractCellReferenceComposite
 	@Override
 	protected void doEnable() {
 		if(selectedProductTypeID != null)
-			createScript();	
+			createScript();
 	}
 	
 	@Override

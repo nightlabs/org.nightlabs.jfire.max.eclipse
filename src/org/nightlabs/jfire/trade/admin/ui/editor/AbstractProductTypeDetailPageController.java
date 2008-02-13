@@ -21,7 +21,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeDetailPageController<ProductTypeType extends ProductType> 
+public abstract class AbstractProductTypeDetailPageController<ProductTypeType extends ProductType>
 extends AbstractProductTypePageController<ProductTypeType>
 {
 	/**
@@ -41,7 +41,7 @@ extends AbstractProductTypePageController<ProductTypeType>
 	}
 
 	public static final String[] FETCH_GROUPS_DEFAULT = new String[] {
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
@@ -80,7 +80,7 @@ extends AbstractProductTypePageController<ProductTypeType>
 		return newProductType;
 	}
 	
-	protected void storeSaleAccessControlProperties(ProductTypeSaleAccessStatus saleStatus) 
+	protected void storeSaleAccessControlProperties(ProductTypeSaleAccessStatus saleStatus)
 	{
 		try {
 			ProductType productType = getProductType();
@@ -109,13 +109,13 @@ extends AbstractProductTypePageController<ProductTypeType>
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}		
-	}	
+		}
+	}
 
-	protected void storeSaleAccessControl(ProgressMonitor monitor) 
+	protected void storeSaleAccessControl(ProgressMonitor monitor)
 	{
 		storeSaleAccessControlProperties(saleAccessStatus);
-	}	
+	}
 	
 	private ProductTypeSaleAccessStatus saleAccessStatus;
 	

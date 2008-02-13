@@ -45,7 +45,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntitySearchComposit
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class OwnerDimensionWizardPage 
+public class OwnerDimensionWizardPage
 extends WizardHopPage
 implements MappingDimensionWizardPage
 {
@@ -67,7 +67,7 @@ implements MappingDimensionWizardPage
 	}
 
 
-	public String getDimensionValue() {		
+	public String getDimensionValue() {
 		if (allOwnerButton.getSelection())
 			return null;
 		return (searchComposite.getResultTable().getFirstSelectedElement() == null)? null: searchComposite.getResultTable().getFirstSelectedElement().getPrimaryKey();

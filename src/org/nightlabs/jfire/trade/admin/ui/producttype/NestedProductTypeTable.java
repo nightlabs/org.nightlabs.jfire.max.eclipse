@@ -151,7 +151,7 @@ public class NestedProductTypeTable
 
 	public NestedProductTypeTable(Composite parent)
 	{
-		super(parent, SWT.NONE, true);		
+		super(parent, SWT.NONE, true);
 	}
 
 	@Override

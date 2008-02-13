@@ -13,8 +13,8 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractGridPriceConfigPage 
-extends EntityEditorPageWithProgress 
+public abstract class AbstractGridPriceConfigPage
+extends EntityEditorPageWithProgress
 {
 	/**
 	 * @param editor
@@ -38,7 +38,7 @@ extends EntityEditorPageWithProgress
 	}
 		
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
 		ProductTypePriceConfigPageController controller = (ProductTypePriceConfigPageController) getPageController();
 		final ProductType productType = controller.getProductType();
@@ -51,27 +51,27 @@ extends EntityEditorPageWithProgress
 						return;
 					
 //					priceConfigSection.getPriceConfigComposite().setInitaliseState(true);
-//					try {						
+//					try {
 					if (productType != null) {
-						priceConfigSection.getPriceConfigComposite().setPackageProductType(productType);						
+						priceConfigSection.getPriceConfigComposite().setPackageProductType(productType);
 					}
 //					} finally {
 //						priceConfigSection.getPriceConfigComposite().setInitaliseState(false);
 //					}
 					if (productType.getInnerPriceConfig() != null) {
 						priceConfigSection.getSection().setText(
-								productType.getInnerPriceConfig().getName().getText());									
+								productType.getInnerPriceConfig().getName().getText());
 					}
 					if (productType.isClosed()) {
 						priceConfigSection.setMessage(
 								Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigPage.priceConfigSection.message_productTypeClosed"), //$NON-NLS-1$
-								IMessageProvider.INFORMATION); 
+								IMessageProvider.INFORMATION);
 						RCPUtil.setControlEnabledRecursive(priceConfigSection.getPriceConfigComposite(), false);
 					}
 					switchToContent();
 				}
-			});			
-//		}		
+			});
+//		}
 	}
 
 	@Override

@@ -90,8 +90,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class CreateAccountEntryWizardPage 
-extends DynamicPathWizardPage 
+public class CreateAccountEntryWizardPage
+extends DynamicPathWizardPage
 {
 	private XComposite wrapper = null;
 	private I18nTextEditor accountNameEditor;
@@ -112,7 +112,7 @@ extends DynamicPathWizardPage
 	 */
 	public CreateAccountEntryWizardPage(ProductType productTypeForAccount) {
 		super(
-				CreateAccountEntryWizardPage.class.getName(),  
+				CreateAccountEntryWizardPage.class.getName(),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.title"), //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(TradeAdminPlugin.getDefault(), CreateAccountEntryWizardPage.class)
 			);
@@ -156,13 +156,13 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper), 
+		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
 			Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.ownerCombo.caption")); //$NON-NLS-1$
 		
 		comboOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboOwner.setEnabled(false);
 		
-		comboCurrency = new XComboComposite<Currency>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),	
+		comboCurrency = new XComboComposite<Currency>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.currencyCombo.caption"), new CurrencyLabelProvider()); //$NON-NLS-1$
 		comboCurrency.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -243,7 +243,7 @@ extends DynamicPathWizardPage
 				for (Iterator<AccountType> it = accountTypes.iterator(); it.hasNext();) {
 					AccountType accountType = it.next();
 					if (AccountType.ACCOUNT_TYPE_ID_SUMMARY.equals(JDOHelper.getObjectId(accountType)))
-						it.remove();	
+						it.remove();
 				}
 
 				Collections.sort(accountTypes, new Comparator<AccountType>() {
@@ -308,9 +308,9 @@ extends DynamicPathWizardPage
 	}
 	
 	/**
-	 * Returns true. Can be last page, when user just creates 
-	 * an account, and does not perform any configuration. 
-	 *  
+	 * Returns true. Can be last page, when user just creates
+	 * an account, and does not perform any configuration.
+	 * 
 	 */
 	@Override
 	public boolean canBeLastPage() {
@@ -329,7 +329,7 @@ extends DynamicPathWizardPage
 	public IWizardPage getNextPage() {
 		if (!isPageComplete())
 			return null;
-		else {			 
+		else {
 			return null;
 		}
 	}

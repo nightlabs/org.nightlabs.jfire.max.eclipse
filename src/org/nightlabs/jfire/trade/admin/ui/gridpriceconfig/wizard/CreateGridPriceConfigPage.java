@@ -69,7 +69,7 @@ public class CreateGridPriceConfigPage extends WizardHopPage
 			/**
 			 * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
 			 */
-			public void modifyText(ModifyEvent arg0) 
+			public void modifyText(ModifyEvent arg0)
 			{
 				if (getWizard() instanceof DynamicPathWizard)
 					((DynamicPathWizard)getWizard()).updateDialog();

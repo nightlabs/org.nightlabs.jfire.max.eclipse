@@ -166,7 +166,7 @@ public class PriceConfigGridCell
 		formulaPriceConfig.setFormula(priceCoordinate, priceFragmentType, formula);
 
 		if (oldFormula != formula) // workaround for bug in firePropertyChange(..) if both are null
-			propertyChangeSupport.firePropertyChange(PROPERTY_FORMULA, oldFormula, formula); 
+			propertyChangeSupport.firePropertyChange(PROPERTY_FORMULA, oldFormula, formula);
 	}
 
 	public void setFallbackFormula(String formula)
@@ -179,7 +179,7 @@ public class PriceConfigGridCell
 		formulaPriceConfig.setFallbackFormula(priceFragmentType, formula);
 
 		if (oldFormula != formula) // workaround for bug in firePropertyChange(..) if both are null
-			propertyChangeSupport.firePropertyChange(PROPERTY_FALLBACK_FORMULA, oldFormula, formula); 
+			propertyChangeSupport.firePropertyChange(PROPERTY_FALLBACK_FORMULA, oldFormula, formula);
 	}
 
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener)

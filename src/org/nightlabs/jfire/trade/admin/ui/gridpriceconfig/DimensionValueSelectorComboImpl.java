@@ -49,7 +49,6 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
-import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
@@ -111,8 +110,8 @@ public class DimensionValueSelectorComboImpl
 			final Combo dimensionCombo = dimensionCombos[dimensionIdx];
 
 			dimension.addPropertyChangeListener(
-					Dimension.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE, 
-					new PropertyChangeListener() 
+					Dimension.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE,
+					new PropertyChangeListener()
 					{
 						public void propertyChange(PropertyChangeEvent evt)
 						{

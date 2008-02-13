@@ -95,7 +95,7 @@ public class PFLocalAccountantDelegateType implements
 			LocalAccountantDelegate extendedDelegate,
 			String organisationID,
 			String localAccountantDelegateID
-		) 
+		)
 	{
 		if ((extendedDelegate != null) && !(extendedDelegate instanceof PFMappingAccountantDelegate))
 			throw new IllegalArgumentException("Can not extend a new PFMappingAccountantDelegate from the given delegate: "+extendedDelegate.getClass().getName()); //$NON-NLS-1$
@@ -103,19 +103,19 @@ public class PFLocalAccountantDelegateType implements
 	}
 
 	public MoneyFlowMapping createNewMapping(
-			ProductType productType, 
-			String packageType, 
-			Map dimensionValues, 
+			ProductType productType,
+			String packageType,
+			Map dimensionValues,
 			Currency currency,
 			Account revenueAccount,
 			Account expenseAccount, Account reverseRevenueAccount, Account reverseExpenseAccount
-		) 
+		)
 	{
 		String pTypeStr = (String) dimensionValues.get(org.nightlabs.jfire.accounting.book.mappingbased.PriceFragmentDimension.MONEY_FLOW_DIMENSION_ID);
 		PriceFragmentType pType = null;
 		if (pTypeStr != null) {
 			PriceFragmentTypeID pTypeID = PriceFragmentType.primaryKeyToPriceFragmentTypeID(pTypeStr);
-			pType = PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(pTypeID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);			
+			pType = PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(pTypeID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		}
 		PFMoneyFlowMapping mapping = new PFMoneyFlowMapping(
 				IDGenerator.getOrganisationID(),
@@ -130,8 +130,8 @@ public class PFLocalAccountantDelegateType implements
 		if (leStr != null) {
 			AnchorID leID = Anchor.primaryKeyToAnchorID((String) dimensionValues.get(org.nightlabs.jfire.accounting.book.mappingbased.OwnerDimension.MONEY_FLOW_DIMENSION_ID));
 			owner = LegalEntityDAO.sharedInstance().getLegalEntity(
-					leID, 
-					new String[] {FetchPlan.DEFAULT}, 
+					leID,
+					new String[] {FetchPlan.DEFAULT},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor()
 			);
@@ -159,10 +159,10 @@ public class PFLocalAccountantDelegateType implements
 //		AnchorID anchorID = Anchor.primaryKeyToAnchorID(pfMapping.getOwnerPK());
 		PriceFragmentTypeID priceFragmentTypeID = (PriceFragmentTypeID) JDOHelper.getObjectId(pfMapping.getPriceFragmentType());
 		PriceFragmentType priceFragmentType = PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(
-				priceFragmentTypeID, new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME}, 
+				priceFragmentTypeID, new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 			);
-//		LegalEntityProvider.sharedInstance().getLegalEntity(anchorID, 
+//		LegalEntityProvider.sharedInstance().getLegalEntity(anchorID,
 //				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 //			);
 //		return pfMapping.getSourceOrganisationID()+" "+priceFragmentType.getName().getText(Locale.getDefault().getLanguage());

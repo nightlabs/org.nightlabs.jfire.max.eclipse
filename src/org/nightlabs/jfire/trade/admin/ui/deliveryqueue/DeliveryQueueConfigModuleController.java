@@ -18,7 +18,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
  */
 public class DeliveryQueueConfigModuleController extends AbstractConfigModuleController {
 	
-	private static Set<String> fetchGroups;	
+	private static Set<String> fetchGroups;
 	static {
 		fetchGroups = new HashSet<String>(AbstractConfigModuleController.getCommonConfigModuleFetchGroups());
 		fetchGroups.add(DeliveryQueueConfigModule.FETCH_GROUP_VISIBLE_DELIVERY_QUEUES);

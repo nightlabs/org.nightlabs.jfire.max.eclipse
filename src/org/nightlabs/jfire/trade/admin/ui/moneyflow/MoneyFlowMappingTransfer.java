@@ -56,7 +56,7 @@ public class MoneyFlowMappingTransfer extends LocalObjectTransfer {
 		else if (object instanceof Collection) {
 			for (Iterator iter = ((Collection)object).iterator(); iter.hasNext();) {
 				if (!(iter.next() instanceof MoneyFlowMapping))
-						return false;				
+						return false;
 			}
 			return true;
 		}

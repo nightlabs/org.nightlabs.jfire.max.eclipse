@@ -70,9 +70,9 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ResolvedMappingTree 
-extends AbstractTreeComposite 
-{	
+public class ResolvedMappingTree
+extends AbstractTreeComposite
+{
 	/**
 	 * Instances of Node are the elements of the ProductTypePackageTree
 	 */
@@ -124,12 +124,12 @@ extends AbstractTreeComposite
 				NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) iter.next();
 				children.add(
 						new Node(
-								this, 
+								this,
 								null,
 								ProductTypeID.create(
-										nestedProductTypeLocal.getInnerProductTypeOrganisationID(), 
+										nestedProductTypeLocal.getInnerProductTypeOrganisationID(),
 										nestedProductTypeLocal.getInnerProductTypeProductTypeID()
-								), 
+								),
 								resolvedMappings
 						)
 				);
@@ -182,15 +182,15 @@ extends AbstractTreeComposite
 	 * key: ProductTypeID nodeProductTypeID
 	 * value: Node node
 	 */
-	private Map nodesByProductTypeID = new HashMap();	
+	private Map nodesByProductTypeID = new HashMap();
 	
 	/**
 	 * ContentProvider that holds a tree of Nodes.
 	 * 
 	 */
-	private static class ContentProvider 
-	extends TreeContentProvider 
-	{			
+	private static class ContentProvider
+	extends TreeContentProvider
+	{
 		/**
 		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
 		 */
@@ -240,16 +240,16 @@ extends AbstractTreeComposite
 		FetchPlan.DEFAULT,
 		MoneyFlowMapping.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 		MoneyFlowMapping.FETCH_GROUP_ALL_DIMENSIONS,
-		Account.FETCH_GROUP_NAME,									
+		Account.FETCH_GROUP_NAME,
 		LocalAccountantDelegate.FETCH_GROUP_NAME
 	};
 
 	
-	protected void buildTree(ProductTypeID productTypeID, LocalAccountantDelegateID delegateID, ProgressMonitor monitor) 
+	protected void buildTree(ProductTypeID productTypeID, LocalAccountantDelegateID delegateID, ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.loadMoneyFlowMappingMonitor.task.name"), 2); //$NON-NLS-1$
 		monitor.worked(1);
-		if ((currentProductTypeID == null) || (!productTypeID.equals(currentProductTypeID))) 
+		if ((currentProductTypeID == null) || (!productTypeID.equals(currentProductTypeID)))
 		{
 			nodesByProductTypeID.clear();
 			Map resolvedMappings = null;
@@ -257,7 +257,7 @@ extends AbstractTreeComposite
 			
 			try {
 				resolvedMappings = AccountingUtil.getAccountingManager().getResolvedMoneyFlowMappings(
-						currentProductTypeID,						
+						currentProductTypeID,
 						delegateID,
 						FETCH_GROUP_RESOLVED_MONEY_FLOW_MAPPING,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
@@ -270,14 +270,14 @@ extends AbstractTreeComposite
 		if (currentProductTypeID == null) {
 			rootNode = null;
 		}
-		monitor.worked(1);		
-	}	
+		monitor.worked(1);
+	}
 	
 	/**
 	 * Simple LabelProvider accessing Nodes
 	 */
-	private static class LabelProvider 
-	extends TableLabelProvider 
+	private static class LabelProvider
+	extends TableLabelProvider
 	{
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof Node) {
@@ -292,10 +292,10 @@ extends AbstractTreeComposite
 						case 0:
 							LocalAccountantDelegateType delegateType = LocalAccountantDelegateRegistry.sharedInstance().getTypeForMapping(node.getMapping().getClass());
 							return delegateType.getMappingDescription(node.getMapping());
-						case 1: 
+						case 1:
 //							Account account = AccountDAO.sharedInstance().getAccount(
 //									Account.primaryKeyToAnchorID(node.getMapping().getAccountPK()),
-//									AccountCellEditor.DEFAULT_FETCH_GROUPS, 
+//									AccountCellEditor.DEFAULT_FETCH_GROUPS,
 //									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //									new NullProgressMonitor()
 //								);
@@ -325,7 +325,7 @@ extends AbstractTreeComposite
 		@Override
 		public String getText(Object element) {
 			return getColumnText(element, 0);
-		}	
+		}
 	}
 	
 	/**
@@ -415,20 +415,20 @@ extends AbstractTreeComposite
 		final LocalAccountantDelegateID delegateID = (LocalAccountantDelegateID) JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate());
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.loadMoneyFlowMappingJob.name")){ //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				buildTree(productTypeID, delegateID, monitor);
 				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
 						getTreeViewer().setInput(rootNode);
-						getTreeViewer().expandAll();						
-					}				
-				});				
+						getTreeViewer().expandAll();
+					}
+				});
 				return Status.OK_STATUS;
-			}		
+			}
 		};
 		job.setUser(true);
-		job.schedule();		
+		job.schedule();
 	}
 	
 	/**
@@ -450,28 +450,28 @@ extends AbstractTreeComposite
 		
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.loadMoneyFlowMappingJob.name")){ //$NON-NLS-1$
 			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception 
+			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				buildTree(productTypeID, delegateID, monitor);
 				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
 						getTreeViewer().setInput(rootNode);
-						getTreeViewer().expandAll();						
-					}				
+						getTreeViewer().expandAll();
+					}
 				});
 				return Status.OK_STATUS;
-			}		
+			}
 		};
 		job.setUser(true);
 		job.schedule();
 	}
 	
-	public void clear() 
+	public void clear()
 	{
 		Display.getDefault().syncExec(new Runnable(){
 			public void run() {
-				setInput(null);	
-			}		
+				setInput(null);
+			}
 		});
 	}
 }

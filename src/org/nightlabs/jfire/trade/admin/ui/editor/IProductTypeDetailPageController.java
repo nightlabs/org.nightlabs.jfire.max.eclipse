@@ -5,7 +5,7 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 
 /**
  * Extension for page controllers for ProductTypes that manage
- * the {@link ProductTypeSaleAccessStatus}. 
+ * the {@link ProductTypeSaleAccessStatus}.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *

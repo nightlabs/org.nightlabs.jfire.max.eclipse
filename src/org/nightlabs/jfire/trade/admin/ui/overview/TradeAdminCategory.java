@@ -14,7 +14,7 @@ public interface TradeAdminCategory
 
 	/**
 	 * @return the <code>Composite</code> that has been created by {@link #createComposite(Composite)} or <code>null</code>, if {@link #createComposite(Composite)} was
-	 *		not yet called. 
+	 *		not yet called.
 	 */
 	Composite getComposite();
 }

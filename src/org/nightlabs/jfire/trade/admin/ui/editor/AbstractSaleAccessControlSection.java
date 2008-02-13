@@ -12,11 +12,11 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * 
- * @author Daniel.Mazurek [at] NightLabs [dot] de 
+ * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class AbstractSaleAccessControlSection 
+public abstract class AbstractSaleAccessControlSection
 //extends ToolBarSectionPart
 extends MessageSectionPart
 implements IProductTypeSectionPart
@@ -32,18 +32,18 @@ implements IProductTypeSectionPart
 		super(page, parent, style, title);
 		this.detailPage = page;
 		saleAccessControlComposite = new SaleAccessControlComposite(
-				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);		
-		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));				
+				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);
+		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	
 	public AbstractSaleAccessControlSection(IProductTypeDetailPage page, Composite parent) {
 		this(page, parent, ExpandableComposite.TITLE_BAR);
-//		super(page, parent, ExpandableComposite.TITLE_BAR, 
+//		super(page, parent, ExpandableComposite.TITLE_BAR,
 //				Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractSaleAccessControlSection.title"));		 //$NON-NLS-1$
 //		this.detailPage = page;
 //		saleAccessControlComposite = new SaleAccessControlComposite(
-//				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);		
-//		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+//				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);
+//		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	
 	private SaleAccessControlComposite saleAccessControlComposite = null;
@@ -72,6 +72,6 @@ implements IProductTypeSectionPart
 			);
 			detailPage.getProductTypeDetailPageController().setProductTypeSaleAccessStatus(saleAccessStatus);
 		}
-		super.commit(save);		
+		super.commit(save);
 	}
 }

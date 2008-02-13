@@ -120,8 +120,8 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 					AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					priceFragmentTypes.clear();
 					// TODO not ALL!
-					// TODO use DAO 
-					priceFragmentTypes.addAll(accountingManager.getPriceFragmentTypes(null, new String[] {FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)); 
+					// TODO use DAO
+					priceFragmentTypes.addAll(accountingManager.getPriceFragmentTypes(null, new String[] {FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
 				} catch (Exception e) {
 					ExceptionHandlerRegistry.asyncHandleException(e);
 					throw new RuntimeException(e);

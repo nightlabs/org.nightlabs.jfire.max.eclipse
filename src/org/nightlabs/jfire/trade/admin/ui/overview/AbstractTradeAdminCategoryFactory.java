@@ -12,8 +12,8 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractTradeAdminCategoryFactory 
-implements TradeAdminCategoryFactory 
+public abstract class AbstractTradeAdminCategoryFactory
+implements TradeAdminCategoryFactory
 {
 	private static final Logger logger = Logger.getLogger(AbstractTradeAdminCategoryFactory.class);
 	
@@ -45,9 +45,9 @@ implements TradeAdminCategoryFactory
 		this.name = name;
 	}
 
-	public void setInitializationData(IConfigurationElement element, 
-			String propertyName, Object data) 
-	throws CoreException 
+	public void setInitializationData(IConfigurationElement element,
+			String propertyName, Object data)
+	throws CoreException
 	{
 		String name = element.getAttribute(ATTRIBUTE_NAME);
 		String iconString = element.getAttribute(ATTRIBUTE_ICON);
@@ -58,7 +58,7 @@ implements TradeAdminCategoryFactory
 			ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(
 					element.getNamespaceIdentifier(), iconString);
 			if (imageDescriptor != null)
-				setImage(imageDescriptor.createImage());										
+				setImage(imageDescriptor.createImage());
 		}
 		if (AbstractEPProcessor.checkString(indexString)) {
 			try {

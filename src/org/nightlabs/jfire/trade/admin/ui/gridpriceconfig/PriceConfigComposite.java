@@ -200,9 +200,9 @@ public abstract class PriceConfigComposite extends XComposite
 		this.dirtyStateManager = dirtyStateManager;
 		
 		stackWrapper = new XComposite(this, SWT.NONE);
-		stackLayout = new StackLayout();		
+		stackLayout = new StackLayout();
 		stackWrapper.setLayout(stackLayout);
-		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 //		priceConfigEditComposite = createPriceConfigEditComposite(stackWrapper);
 //		noPriceConfigAssignedComposite = createNoPriceConfigAssignedComposite(stackWrapper);
@@ -222,7 +222,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 	}
 
-	protected Composite getPriceConfigEditComposite() 
+	protected Composite getPriceConfigEditComposite()
 	{
 		if (priceConfigEditComposite == null)
 			priceConfigEditComposite = createPriceConfigEditComposite(stackWrapper);
@@ -273,7 +273,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return new PriceConfigInInnerProductTypeNotEditableComposite(parent);
 	}
 
-	protected Composite createPriceConfigEditComposite(Composite parent) 
+	protected Composite createPriceConfigEditComposite(Composite parent)
 	{
 		SashForm sfLeftRight = new SashForm(parent, SWT.NONE | SWT.HORIZONTAL);
 		sfLeftRight.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -316,11 +316,11 @@ public abstract class PriceConfigComposite extends XComposite
 //		);
 
 		dimensionValueSelector.addPropertyChangeListener(
-				DimensionValueSelector.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE, 
+				DimensionValueSelector.PROPERTYCHANGEKEY_ADDDIMENSIONVALUE,
 				dimensionValueChangeListener);
 
 		dimensionValueSelector.addPropertyChangeListener(
-				DimensionValueSelector.PROPERTYCHANGEKEY_REMOVEDIMENSIONVALUE, 
+				DimensionValueSelector.PROPERTYCHANGEKEY_REMOVEDIMENSIONVALUE,
 				dimensionValueChangeListener);
 		
 		sfGrid.setWeights(new int[] {1, 1});
@@ -328,7 +328,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return sfLeftRight;
 	}
 
-	protected Composite getNoPriceConfigAssignedComposite() 
+	protected Composite getNoPriceConfigAssignedComposite()
 	{
 		if (noPriceConfigAssignedComposite == null)
 			noPriceConfigAssignedComposite = createNoPriceConfigAssignedComposite(stackWrapper);
@@ -336,7 +336,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return noPriceConfigAssignedComposite;
 	}
 
-	protected Composite createNoPriceConfigAssignedComposite(Composite parent) 
+	protected Composite createNoPriceConfigAssignedComposite(Composite parent)
 	{
 		Composite noPriceConfigComp = new XComposite(parent, SWT.NONE);
 		Label label = new Label(noPriceConfigComp, SWT.NONE);
@@ -346,7 +346,7 @@ public abstract class PriceConfigComposite extends XComposite
 		assignButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				AbstractChooseGridPriceConfigWizard wizard = createChoosePriceConfigWizard(
-						(ProductTypeID) JDOHelper.getObjectId(packageProductType.getExtendedProductType())); 
+						(ProductTypeID) JDOHelper.getObjectId(packageProductType.getExtendedProductType()));
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 //				dialog.setTitle("Choose Price Configuration");
 				int returnCode = dialog.open();
@@ -356,7 +356,7 @@ public abstract class PriceConfigComposite extends XComposite
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 		return noPriceConfigComp;
 	}
@@ -372,19 +372,19 @@ public abstract class PriceConfigComposite extends XComposite
 		return new FormulaPriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
 	}
 
-//	private ModifyListener cellEditModifyListener = new ModifyListener(){	
+//	private ModifyListener cellEditModifyListener = new ModifyListener(){
 //		public void modifyText(ModifyEvent e) {
 //			if (dirtyStateManager != null)
 //				dirtyStateManager.markDirty();
-//		}	
+//		}
 //	};
 	
 //	private boolean initalState = false;
 //	/**
 //	 * sets the initalState, to determine that while in this state no calls to the
-//	 * dirtyStateManager are performed, to avoid dirty states when calling 
+//	 * dirtyStateManager are performed, to avoid dirty states when calling
 //	 * setPackageProductType(ProductType packageProductType)
-//	 * 
+//	 *
 //	 * @param initalState the initalState to set
 //	 */
 //	public void setInitaliseState(boolean initalState) {
@@ -398,7 +398,7 @@ public abstract class PriceConfigComposite extends XComposite
 //		return initalState;
 //	}
 	
-//	private IDocumentListener cellEditModifyListener = new IDocumentListener(){	
+//	private IDocumentListener cellEditModifyListener = new IDocumentListener(){
 //		public void documentAboutToBeChanged(DocumentEvent arg0) {
 //		}
 //
@@ -406,7 +406,7 @@ public abstract class PriceConfigComposite extends XComposite
 ////			// FIXME: documentChanged is called even if only a productType is selected
 ////			if (dirtyStateManager != null && !initalState)
 ////				dirtyStateManager.markDirty();
-//		}	
+//		}
 //	};
 
 	/**
@@ -425,7 +425,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 			if (dirtyStateManager != null)
 				dirtyStateManager.markDirty();
-		}	
+		}
 	};
 	
 	public static final String[] FETCH_GROUPS_TARIFF_MAPPING = {
@@ -455,7 +455,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return new PriceCalculator(packageProductType, createCustomerGroupMapper(), createTariffMapper());
 	}
 
-	private ProductType packageProductType = null;	
+	private ProductType packageProductType = null;
 	public ProductType getPackageProductType() {
 		return packageProductType;
 	}
@@ -509,7 +509,7 @@ public abstract class PriceConfigComposite extends XComposite
 						gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
 
 					dimensionValueSelector.setGridPriceConfig(gridPriceConfig);
-					productTypeSelector.setPackageProductType(packageProductType);								
+					productTypeSelector.setPackageProductType(packageProductType);
 //					}
 
 				} // package nature outer
@@ -523,7 +523,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 	/**
 	 * stores the Price Configurations
-	 *  
+	 * 
 	 * @param priceConfigs the priceConfigs to store
 	 * @param assignInnerPriceConfigCommand TODO
 	 * @return a Collection of the stored gridPriceConfigs
@@ -631,7 +631,7 @@ public abstract class PriceConfigComposite extends XComposite
 		}
 	}
 	
-	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard) 
+	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard)
 	{
 		IInnerPriceConfig innerPC = wizard.getAbstractChooseGridPriceConfigPage().getSelectedPriceConfig();
 		if (innerPC != null) {

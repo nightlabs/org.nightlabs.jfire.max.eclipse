@@ -69,8 +69,8 @@ extends Dialog
 	{
 		Composite area = (Composite) super.createDialogArea(parent);
 		new Label(area, SWT.WRAP).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.description")); //$NON-NLS-1$
-		productTypeList = new ListComposite<ProductType>(area, 
-				SWT.MULTI | AbstractListComposite.getDefaultWidgetStyle(parent), 
+		productTypeList = new ListComposite<ProductType>(area,
+				SWT.MULTI | AbstractListComposite.getDefaultWidgetStyle(parent),
 				(String) null, new ProductTypeListLabelProvider());
 		ProductType dummy = new ProductType("dummy", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
 			private static final long serialVersionUID = 1L; // get rid of the warning

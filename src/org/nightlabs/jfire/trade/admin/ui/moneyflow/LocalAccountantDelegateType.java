@@ -58,7 +58,7 @@ public interface LocalAccountantDelegateType {
 
 	/**
 	 * Returns a descriptive text pointing out what this type of delegate
-	 * does. E.g. which dimensions it knows. 
+	 * does. E.g. which dimensions it knows.
 	 */
 	public String getDescription();
 
@@ -75,8 +75,8 @@ public interface LocalAccountantDelegateType {
 	
 	public MoneyFlowMapping createNewMapping(
 			ProductType productType,
-			String packageType, 
-			Map dimensionValues,			
+			String packageType,
+			Map dimensionValues,
 			Currency currency,
 			Account revenueAccount,
 			Account expenseAccount, Account reverseRevenueAccount, Account reverseExpenseAccount

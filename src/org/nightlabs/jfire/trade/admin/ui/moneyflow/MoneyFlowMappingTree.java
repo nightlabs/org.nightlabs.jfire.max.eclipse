@@ -162,7 +162,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		
 		private LocalAccountantDelegate currDelegate;
 		private ProductTypeID currProductTypeID;
-		private Map nodesByMappings = new HashMap();		
+		private Map nodesByMappings = new HashMap();
 		
 		/**
 		 * value Node delegateNode
@@ -173,7 +173,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		}
 		
 		protected void updateDelegateContent() {
-			flushContent();			
+			flushContent();
 			if (currDelegate == null)
 				return;
 			
@@ -188,9 +188,9 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 						MoneyFlowMapping mapping = (MoneyFlowMapping) iter.next();
 						Node mappingNode = Node.mappingNode(delegateNode, mapping);
 						nodesByMappings.put(mapping, mappingNode);
-					}				
+					}
 				}
-				// TODO IMPROVE: when fetch-depth works change this 
+				// TODO IMPROVE: when fetch-depth works change this
 				delegateRun = delegateRun.getExtendedAccountantDelegate();
 				if (delegateRun != null)
 					delegateRun = LocalAccountantDelegateProvider.sharedInstance()
@@ -288,10 +288,10 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 					else if (columnIndex == currDimensionIDs.size() + 2) {
 //						Account account = AccountDAO.sharedInstance().getAccount(
 //								Account.primaryKeyToAnchorID(mapping.getAccountPK()),
-//								AccountCellEditor.DEFAULT_FETCH_GROUPS, 
+//								AccountCellEditor.DEFAULT_FETCH_GROUPS,
 //								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //								new NullProgressMonitor()
-//							);						
+//							);
 //						return account.getName().getText(Locale.getDefault().getLanguage());
 						return getAccountName(mapping.getRevenueAccount());
 					}
@@ -322,7 +322,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	
 
 	private static class CellModifier implements ICellModifier {
-		private MoneyFlowMappingTree tree;		
+		private MoneyFlowMappingTree tree;
 
 		public CellModifier(MoneyFlowMappingTree tree) {
 			this.tree = tree;
@@ -332,7 +332,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		public boolean canModify(Object element, String property) {
 			if (element instanceof Node) {
 				Node node = (Node)element;
-				// Currency and Delegate Nodes are not modifiable 
+				// Currency and Delegate Nodes are not modifiable
 				if (node.getMode() == NODE_MODE_DELEGATE)
 					return false;
 				// get the registered dimension for the property
@@ -365,7 +365,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			if (element instanceof Node) {
 				Node node = (Node)element;
 //				if (node.getMode() == NODE_MODE_DELEGATE)
-//					// Should never be true as canModify returns false in this case 
+//					// Should never be true as canModify returns false in this case
 //					return null;
 
 				if (COLUMN_REVENUE_ACCOUNT.equals(property))
@@ -391,7 +391,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 
 		@Implement
 		public void modify(Object element, String property, Object value) {
-			// we assume canModify was correct and 
+			// we assume canModify was correct and
 			// now we can simply delegate to the MappingDimension
 			boolean haveChanged = false;
 			Object data = element;
@@ -417,7 +417,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				else if (COLUMN_REVERSE_EXPENSE_ACCOUNT.equals(property)) {
 					node.getMapping().setReverseExpenseAccount((Account)value);
 				}
-				else {				
+				else {
 					// delegate to the MappingDimension
 					MappingDimension dimension = MappingDimensionRegistry.sharedInstance().getDimensionByPropertyName(property);
 					if (dimension == null)
@@ -427,7 +427,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				if (haveChanged)
 					tree.mappingModified(node.getMapping(), property);
 			}
-		}		
+		}
 	}
 		
 	public static final String COLUMN_PRODUCT_TYPE = "productType"; //$NON-NLS-1$
@@ -481,8 +481,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		cellModifier = new CellModifier(this);
 		treeViewer.setCellModifier(cellModifier);
 		
-    treeViewer.addDragSupport(DND.DROP_MOVE, MoneyFlowMappingTransfer.MONEY_FLOW_MAPPING_TRANSFERS, new DragListener());    
-    treeViewer.addDropSupport(DND.DROP_MOVE, MoneyFlowMappingTransfer.MONEY_FLOW_MAPPING_TRANSFERS, new DropAdapter(treeViewer));  
+    treeViewer.addDragSupport(DND.DROP_MOVE, MoneyFlowMappingTransfer.MONEY_FLOW_MAPPING_TRANSFERS, new DragListener());
+    treeViewer.addDropSupport(DND.DROP_MOVE, MoneyFlowMappingTransfer.MONEY_FLOW_MAPPING_TRANSFERS, new DropAdapter(treeViewer));
 	}
 	
 	public PFMappingAccountantDelegate getDelegate() {
@@ -533,7 +533,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	 * sets the {@link ProductType} to display the MoneyFlowMapping for
 	 * @param productType the productType to set
 	 */
-	public void setProductType(ProductType productType) 
+	public void setProductType(ProductType productType)
 	{
 		PFMappingAccountantDelegate dDelegate = null;
 		if (productType == null) {
@@ -544,7 +544,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateProvider.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
 						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
-					);				
+					);
 			}
 		}
 		setDelegate(dDelegate);
@@ -596,7 +596,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		packageTypeCol.setResizable(true);
 		packageTypeCol.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowMappingTree.packageTypeTreeColumn.text")); //$NON-NLS-1$
 		// TODO: Set better width
-		packageTypeCol.setWidth(100);		
+		packageTypeCol.setWidth(100);
 	}
 
 	protected void addTrailingColumns() {
@@ -721,7 +721,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 					getTreeViewer().setSelection(
 							new StructuredSelection(
 									getContentProvider().getNodeByMapping(nextSelectMapping)
-								), 
+								),
 							true
 						);
 					nextSelectMapping = null;
@@ -792,7 +792,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 						mappings.add(((Node)o).getMapping());
 				}
 			}
-			event.data = mappings; 
+			event.data = mappings;
 		}
 
 		public void dragFinished(DragSourceEvent event) {
@@ -820,7 +820,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			if ((target instanceof Node && target != null)/* && ((operation & DND.DROP_MOVE) > 0)*/) {
 //				System.out.println("Result "+ (((Node)target).getMode() == NODE_MODE_DELEGATE));
 				return ((Node)target).getMode() == NODE_MODE_DELEGATE;
-			}			
+			}
 			return false;
 		}
 		

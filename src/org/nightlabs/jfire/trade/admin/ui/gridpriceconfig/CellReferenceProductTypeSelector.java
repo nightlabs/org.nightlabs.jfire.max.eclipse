@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 public interface CellReferenceProductTypeSelector

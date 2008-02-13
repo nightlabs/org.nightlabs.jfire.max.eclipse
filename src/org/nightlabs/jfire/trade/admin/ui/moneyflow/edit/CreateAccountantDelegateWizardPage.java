@@ -80,7 +80,7 @@ public class CreateAccountantDelegateWizardPage extends DynamicPathWizardPage {
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */
 	@Override
-	public boolean isPageComplete() {		
+	public boolean isPageComplete() {
 		return delegateName != null && !delegateName.getI18nText().isEmpty();
 	}
 	

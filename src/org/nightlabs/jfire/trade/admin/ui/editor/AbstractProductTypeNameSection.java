@@ -29,7 +29,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeNameSection 
+public abstract class AbstractProductTypeNameSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
@@ -58,19 +58,19 @@ implements IProductTypeSectionPart
 					setInheritanceSelection(false);
 					if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
 						productType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
-				}			
+				}
 				// TODO: fix NullPointerException
 				markDirty();
 			}
 		});
 		
-		inheritanceAction = new InheritanceAction(){		
+		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
 				inheritNamePressed();
 //				setSelection(!isSelection());
-			}		
-		};		
+			}
+		};
 		getToolBarManager().add(inheritanceAction);
 		updateToolBarManager();
 		
@@ -87,7 +87,7 @@ implements IProductTypeSectionPart
 		public ProductType extendedProductType;
 	}
 
-//	private InheritanceToggleButton inheritProductTypeName = null;	
+//	private InheritanceToggleButton inheritProductTypeName = null;
 	private InheritanceAction inheritanceAction = null;
 	private boolean ignoreProductTypeNameModify = false;
 	
@@ -113,11 +113,11 @@ implements IProductTypeSectionPart
 		}
 	}
 	
-	private II18nTextEditor productTypeName = null; 	
+	private II18nTextEditor productTypeName = null;
 	
 	protected abstract ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor);
 	
-	protected void inheritNamePressed() 
+	protected void inheritNamePressed()
 	{
 //		if (!getInheritanceSelection())
 		if (getInheritanceSelection())
@@ -131,8 +131,8 @@ implements IProductTypeSectionPart
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeNameSection.loadExtendedProductTypeMonitor.task.name"), 10); //$NON-NLS-1$
 
 						// TODO why do we need the retrieveExtendedProductType(...) method, if we fetch the extended product type here already, anyway???
-						ProductType productTypeWithExtended = ProductTypeDAO.sharedInstance().getProductType(									
-								productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE}, 
+						ProductType productTypeWithExtended = ProductTypeDAO.sharedInstance().getProductType(
+								productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE},
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 4)
 								);
@@ -159,11 +159,11 @@ implements IProductTypeSectionPart
 							});
 						}
 						return Status.OK_STATUS;
-					}						
+					}
 				};
 				job.schedule();
 			}
-		}		
+		}
 	}
 	
 	protected boolean getInheritanceSelection() {

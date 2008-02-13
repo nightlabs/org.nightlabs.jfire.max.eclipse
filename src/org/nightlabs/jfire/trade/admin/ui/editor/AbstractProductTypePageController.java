@@ -6,14 +6,14 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 /**
- * An abstract page controller for entity editor pages that holds a ProductType. 
+ * An abstract page controller for entity editor pages that holds a ProductType.
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
- * @param <ProductTypeType> The class of Producttype this controller is used for 
+ * @param <ProductTypeType> The class of Producttype this controller is used for
  */
-public abstract class AbstractProductTypePageController<ProductTypeType extends ProductType> 
+public abstract class AbstractProductTypePageController<ProductTypeType extends ProductType>
 extends ActiveEntityEditorPageController<ProductTypeType>
 implements IProductTypePageController<ProductTypeType>
 {
@@ -30,7 +30,7 @@ implements IProductTypePageController<ProductTypeType>
 	 * @param startBackgroundLoading
 	 */
 	public AbstractProductTypePageController(EntityEditor editor,
-			boolean startBackgroundLoading) 
+			boolean startBackgroundLoading)
 	{
 		super(editor, startBackgroundLoading);
 		productTypeID = ((ProductTypeEditorInput)editor.getEditorInput()).getJDOObjectID();
@@ -50,7 +50,7 @@ implements IProductTypePageController<ProductTypeType>
 	 */
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;
-	}	
+	}
 	
 	private ProductTypeType productType;
 	/**

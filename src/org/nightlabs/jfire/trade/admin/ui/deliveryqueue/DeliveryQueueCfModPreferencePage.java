@@ -6,7 +6,7 @@ import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
 
-public class DeliveryQueueCfModPreferencePage 
+public class DeliveryQueueCfModPreferencePage
 extends AbstractUserConfigModulePreferencePage
 {
 	private IDirtyStateManager dirtyStateManager = new IDirtyStateManager() {
@@ -36,20 +36,20 @@ extends AbstractUserConfigModulePreferencePage
 	}
 
 //	@Override
-//	protected void updatePreferencePage(ConfigModule configModule) 
+//	protected void updatePreferencePage(ConfigModule configModule)
 //	{
 //		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) configModule;
 //		pqConfigComposite.loadData(pqcm);
 //	}
 	@Override
-	protected void updatePreferencePage() 
+	protected void updatePreferencePage()
 	{
 		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) getConfigModuleController().getConfigModule();
 		pqConfigComposite.loadData(pqcm);
 	}
 
 	@Override
-	public void updateConfigModule() 
+	public void updateConfigModule()
 	{
 		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) getConfigModuleController().getConfigModule();
 		pqConfigComposite.storeChanges(pqcm);

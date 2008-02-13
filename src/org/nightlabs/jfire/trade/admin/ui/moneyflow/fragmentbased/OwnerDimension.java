@@ -104,7 +104,7 @@ public class OwnerDimension implements MappingDimension {
 		if (pfMapping.getOwner() == null)
 			return "*"; //$NON-NLS-1$
 		AnchorID anchorID = (AnchorID) JDOHelper.getObjectId(pfMapping.getOwner());
-		LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(			
+		LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
 				anchorID,
 				new String[] {
 						FetchPlan.DEFAULT,

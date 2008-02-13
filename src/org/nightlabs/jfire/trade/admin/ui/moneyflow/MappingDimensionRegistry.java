@@ -38,7 +38,7 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 
 /**
  * Registry holding {@link org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension}.
- *  
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
 public class MappingDimensionRegistry extends AbstractEPProcessor {
@@ -75,7 +75,7 @@ public class MappingDimensionRegistry extends AbstractEPProcessor {
 	/**
 	 * Returns the Dimensin with the given moneyFlowDimensionID, or null if no
 	 * MappingDimension with this moneyFlowDimensionID is registered.
-	 *  
+	 * 
 	 * @param moneyFlowDimensionID The moneyFlowDimensionID of the desired MappingDimension
 	 */
 	public MappingDimension getDimension(String moneyFlowDimensionID) {
@@ -111,7 +111,7 @@ public class MappingDimensionRegistry extends AbstractEPProcessor {
 			}
 			dimensionsByID.put(dimension.getMoneyFlowDimensionID(), dimension);
 			dimensionsByCellProperty.put(dimension.getCellEditorPropertyName(), dimension);
-		}			
+		}
 	}
 	
 	private static MappingDimensionRegistry sharedInstance;

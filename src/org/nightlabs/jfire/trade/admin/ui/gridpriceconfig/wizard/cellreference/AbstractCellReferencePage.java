@@ -17,7 +17,7 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
 
-public abstract class AbstractCellReferencePage 
+public abstract class AbstractCellReferencePage
 extends WizardHopPage
 {
 	private TabFolder tabFolder;
@@ -104,47 +104,47 @@ extends WizardHopPage
 //		overviewTabItem =
 //			new TabItem(tabFolder, SWT.NONE);
 //		overviewTabItem.setText("Overview");
-//		
+//
 //		/******************************
 //		 * Overview
 //		 ******************************/
 //		//Main Composite
 //		XComposite overviewComposite = new XComposite(tabFolder, SWT.NONE);
 //		overviewComposite.getGridLayout().numColumns = 3;
-//		
+//
 //		//Dimension Group
 //		Group dGroup = new Group(overviewComposite, SWT.BORDER);
 //		dGroup.setText("Dimension Properties");
 //		dGroup.setLayout(new GridLayout());
-//		
+//
 //		GridData d = new GridData(GridData.FILL_BOTH);
 //		d.horizontalSpan = 3;
 //		dGroup.setLayoutData(d);
-//		
+//
 //		//Dimension Overview
-//		PropertyDimentionOverviewComposite dimensionOverviewComposite = 
-//			new PropertyDimentionOverviewComposite(dGroup, SWT.NONE);		
+//		PropertyDimentionOverviewComposite dimensionOverviewComposite =
+//			new PropertyDimentionOverviewComposite(dGroup, SWT.NONE);
 //		dimensionOverviewComposite.getDimensionTree().addSelectionListener(dimensionSelectionListener);
-//		
+//
 //		//Description Composite
 //		Group descGroup = new Group(overviewComposite, SWT.NONE);
 //		descGroup.setText("Description");
 //		descGroup.setLayout(new GridLayout());
-//		
+//
 //		XComposite descComposite = new XComposite(descGroup, SWT.NONE);
 //		descComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 //		descComposite.getGridLayout().numColumns = 1;
 //		descText = new Text(descComposite, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY);
 //		descText.setText("Description");
 //		descText.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		
+//
 //		d = new GridData(GridData.FILL_BOTH);
 //		d.horizontalSpan = 3;
 //		d.heightHint = 100;
 //		descGroup.setLayoutData(d);
-//		
+//
 //		overviewTabItem.setControl(overviewComposite);
-//		
+//
 //		/******************************
 //		 * Customer Group Composite
 //		 ******************************/
@@ -152,7 +152,7 @@ extends WizardHopPage
 //			new XComposite(tabFolder, SWT.NONE);
 //		customerGroupTabComposite.getGridLayout().numColumns = 4;
 //	}
-//	
+//
 //	private SelectionAdapter dimensionSelectionListener = new SelectionAdapter(){
 //		@Override
 //		public void widgetSelected(SelectionEvent e) {
@@ -160,7 +160,7 @@ extends WizardHopPage
 //			descText.setText(tree.getSelection()[0].getText());
 //		}
 //	};
-//	
+//
 //	public JSEditorComposite getSrcText(){
 //		return srcText;
 //	}

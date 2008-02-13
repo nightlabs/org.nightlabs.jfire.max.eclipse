@@ -32,27 +32,27 @@ extends XComposite
 	}
 
 	private PShelf shelf;
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		parent.setLayout(new FillLayout());
 		
 		shelf = new PShelf(parent, SWT.NONE);
-	  shelf.setRenderer(new RedmondShelfRenderer());			
+	  shelf.setRenderer(new RedmondShelfRenderer());
 		shelf.setLayoutData(new GridData(GridData.FILL_BOTH));
-		SortedMap<Integer, TradeAdminCategoryFactory> index2Category = 
+		SortedMap<Integer, TradeAdminCategoryFactory> index2Category =
 			TradeAdminOverviewRegistry.sharedInstance().getIndex2Catgeory();
 		for (Iterator<Integer> iterator = index2Category.keySet().iterator(); iterator.hasNext();) {
 			int index = iterator.next();
-			TradeAdminCategoryFactory categoryFactory = index2Category.get(index);  
+			TradeAdminCategoryFactory categoryFactory = index2Category.get(index);
 	    PShelfItem categoryItem = new PShelfItem(shelf, SWT.NONE);
 	    categoryItem.setText(categoryFactory.getName());
 	    categoryItem.setImage(categoryFactory.getImage());
-//	    categoryItem.getBody().setLayout(new GridLayout());	    
+//	    categoryItem.getBody().setLayout(new GridLayout());
 	    categoryItem.getBody().setLayout(new FillLayout());
     	// TODO: should use scrollable composite
 	    TradeAdminCategory category = categoryFactory.createTradeAdminCategory();
 	    categoryItem.setData(category);
-    	category.createComposite(categoryItem.getBody());	    	
+    	category.createComposite(categoryItem.getBody());
 		}
 	}
 	

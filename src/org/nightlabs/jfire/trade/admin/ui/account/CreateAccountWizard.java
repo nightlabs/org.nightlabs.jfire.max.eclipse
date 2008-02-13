@@ -28,7 +28,6 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
@@ -54,9 +53,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class CreateAccountWizard 
-extends DynamicPathWizard 
-{	
+public class CreateAccountWizard
+extends DynamicPathWizard
+{
 	public CreateAccountWizard() {
 		super();
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.windowTitle")); //$NON-NLS-1$
@@ -75,7 +74,7 @@ extends DynamicPathWizard
 //	protected CreateAccountEntryWizardPage getCreateAccountEntryPage() {
 //		return (CreateAccountEntryWizardPage)getWizardEntryPage();
 //	}
-//	
+//
 //	private CreateAccountEntryWizardPage getEntryPage() {
 //		return (CreateAccountEntryWizardPage)getWizardEntryPage();
 //	}
@@ -126,7 +125,7 @@ extends DynamicPathWizard
 						getCreateAccountEntryWizardPage().getCurrency());
 
 			((I18nTextBuffer)getCreateAccountEntryWizardPage().getAccountNameEditor().getI18nText()).copyTo(newAccount.getName());
-			AccountDAO.sharedInstance().storeAccount(newAccount, false, 
+			AccountDAO.sharedInstance().storeAccount(newAccount, false,
 					AbstractAccountPageController.FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());

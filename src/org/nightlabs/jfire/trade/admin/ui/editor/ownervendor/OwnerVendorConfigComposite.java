@@ -27,9 +27,9 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 
 
 
-public class OwnerVendorConfigComposite 
+public class OwnerVendorConfigComposite
 extends XComposite
-{	
+{
 	private boolean showButtons = true;
 	
 	private Text ownerText;
@@ -44,8 +44,8 @@ extends XComposite
 	
 	
 	
-	public OwnerVendorConfigComposite(Composite parent, int style, 
-			IDirtyStateManager dirtyStateManager, boolean showButtons) 
+	public OwnerVendorConfigComposite(Composite parent, int style,
+			IDirtyStateManager dirtyStateManager, boolean showButtons)
 	{
 		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
@@ -71,7 +71,7 @@ extends XComposite
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 		
 	
@@ -91,7 +91,7 @@ extends XComposite
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 		
 
@@ -116,7 +116,7 @@ extends XComposite
 	
 	
 	
-	protected void ownerPressed() 
+	protected void ownerPressed()
 	{
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
@@ -132,14 +132,14 @@ extends XComposite
 	}
 	
 	
-	protected void vendorPressed() 
+	protected void vendorPressed()
 	{
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
 		if (dlg.open() == Window.OK) {
 			//productType.setVendor(wiz.getLegalEntity());
 		
-			 vendorLegalEntity = wiz.getLegalEntity(); 
+			 vendorLegalEntity = wiz.getLegalEntity();
 			 
 			 fireLegalEntityValueChangedEvent();
 			 updateUI();
@@ -183,7 +183,7 @@ extends XComposite
 	 * sets the {@link ProductType} to display the MoneyFlowConfiguration for
 	 * @param productType the proudctType to set
 	 */
-	public void setProductType(final ProductType productType) 
+	public void setProductType(final ProductType productType)
 	{
 		this.productType = productType;
 		
@@ -193,7 +193,7 @@ extends XComposite
 		
 		updateUI();
 		
-	}	
+	}
 	
 	protected void updateDelegate(final LocalAccountantDelegate delegate) {
 	

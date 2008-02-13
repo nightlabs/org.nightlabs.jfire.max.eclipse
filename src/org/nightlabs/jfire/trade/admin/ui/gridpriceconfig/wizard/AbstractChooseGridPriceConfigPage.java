@@ -72,7 +72,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public abstract class AbstractChooseGridPriceConfigPage 
+public abstract class AbstractChooseGridPriceConfigPage
 extends WizardHopPage
 {
 	public static final String[] FETCH_GROUPS_PRICE_CONFIG = {
@@ -117,7 +117,7 @@ extends WizardHopPage
 		inheritPriceConfigRadio.setText(
 				String.format(
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.inheritPriceConfigRadio.text"), //$NON-NLS-1$
-						name)); 
+						name));
 				
 	}
 
@@ -369,8 +369,8 @@ extends WizardHopPage
 //	public boolean isCreateNewPriceConfigChosen() {
 //		return createPriceConfigRadio.getSelection();
 //	}
-//	
+//
 //	public boolean isUseInheritedPriceConfigChosen() {
 //		return inheritPriceConfigRadio.getSelection();
-//	}	
+//	}
 }

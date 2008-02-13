@@ -69,7 +69,7 @@ public class SelectCreateAccountantDelegateWizard extends DynamicPathWizard {
 					throw new IllegalStateException("LocalAccountantDelegateType did return null in createNewDelegate. Selected type was "+selectDelegatePage.getSelectedDelegateType().getDescription()); //$NON-NLS-1$
 				selectedDelegate.getName().copyFrom(createDelegatePage.getDelegateName());
 				selectedDelegate = AccountingUtil.getAccountingManager().storeLocalAccountantDelegate(
-						selectedDelegate, 
+						selectedDelegate,
 						true,
 						LocalAccountantDelegateTree.DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 					);

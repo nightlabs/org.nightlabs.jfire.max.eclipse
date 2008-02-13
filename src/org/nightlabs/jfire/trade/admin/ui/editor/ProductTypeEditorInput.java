@@ -7,8 +7,8 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeEditorInput 
-extends JDOObjectEditorInput<ProductTypeID> 
+public class ProductTypeEditorInput
+extends JDOObjectEditorInput<ProductTypeID>
 {
 	/**
 	 * @param jdoObjectID

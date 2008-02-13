@@ -74,7 +74,7 @@ public class SelectAccountantDelegateWizardPage extends DynamicPathWizardPage {
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}		
+		}
 	};
 	
 	private SelectionListener typeComboListner = new SelectionListener(){
@@ -104,7 +104,7 @@ public class SelectAccountantDelegateWizardPage extends DynamicPathWizardPage {
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
 
-		radioWrapper = new XComposite(wrapper, SWT.BORDER);		
+		radioWrapper = new XComposite(wrapper, SWT.BORDER);
 		chooseSelected = new Button(radioWrapper, SWT.RADIO);
 		chooseSelected.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectAccountantDelegateWizardPage.chooseButton.text")); //$NON-NLS-1$
 		chooseSelected.setSelection(true);
@@ -119,8 +119,8 @@ public class SelectAccountantDelegateWizardPage extends DynamicPathWizardPage {
 		typeCombo.getCombo().addSelectionListener(typeComboListner);
 
 		delegateTree = new LocalAccountantDelegateTree(
-				wrapper, 
-				typeCombo.getSelectedType() == null ? null : typeCombo.getSelectedType().getDelegateClass() 
+				wrapper,
+				typeCombo.getSelectedType() == null ? null : typeCombo.getSelectedType().getDelegateClass()
 			);
 
 		delegateTree.addSelectionChangedListener(new ISelectionChangedListener() {

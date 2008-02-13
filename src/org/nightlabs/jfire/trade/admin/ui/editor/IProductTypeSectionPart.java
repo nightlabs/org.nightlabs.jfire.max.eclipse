@@ -27,5 +27,5 @@ extends IFormPart
 	 * returns the section
 	 * @return the section
 	 */
-	Section getSection();	
+	Section getSection();
 }

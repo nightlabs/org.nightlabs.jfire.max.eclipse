@@ -17,7 +17,6 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
-import org.nightlabs.jfire.editlock.EditLock;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.JFireTradeEAR;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -25,19 +24,19 @@ import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * The Base Class of all {@link ProductType} AdminEditors. It automatically extracts the correct 
+ * The Base Class of all {@link ProductType} AdminEditors. It automatically extracts the correct
  * title and checks for {@link EditLock}.
  * 
- * <p> Note: This Editor should only be subclassed if used for ProductType configuration. The 
+ * <p> Note: This Editor should only be subclassed if used for ProductType configuration. The
  * 			{@link EditLock}s should only be used if necessary.
- * </p>		
- *   
+ * </p>
+ * 
  * @author Marius Heinzmann [marius[at]NightLabs[dot]de]
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
-public abstract class AbstractProductTypeAdminEditor 
-	extends EntityEditor 
-{	
+public abstract class AbstractProductTypeAdminEditor
+	extends EntityEditor
+{
 	private EditLockHandle editLockHandle;
 	
 	private EditLockCallback editLockCallback = new EditLockCallback() {
@@ -51,7 +50,7 @@ public abstract class AbstractProductTypeAdminEditor
 
 		@Override
 		public void doDiscardAndRelease() {
-			close(false);			
+			close(false);
 		}
 
 		@Override
@@ -59,7 +58,7 @@ public abstract class AbstractProductTypeAdminEditor
 			doSave(new NullProgressMonitor());
 			close(false);
 		}
-	};	
+	};
 	
 	@Override
 	public String getTitle()
@@ -90,7 +89,7 @@ public abstract class AbstractProductTypeAdminEditor
 		public void propertyChanged(Object source, int propID) {
 			if (PROP_DIRTY == propID) {
 				editLockHandle.refresh();
-			}			
+			}
 		}
 	};
 
@@ -98,11 +97,11 @@ public abstract class AbstractProductTypeAdminEditor
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		editLockHandle = EditLockMan.sharedInstance().acquireEditLockAsynchronously(
-				JFireTradeEAR.EDIT_LOCK_TYPE_ID_PRODUCT_TYPE, ((ProductTypeEditorInput)input).getJDOObjectID(), 
+				JFireTradeEAR.EDIT_LOCK_TYPE_ID_PRODUCT_TYPE, ((ProductTypeEditorInput)input).getJDOObjectID(),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.editLock.description"), editLockCallback //$NON-NLS-1$
 		);
 		
-		addPropertyListener(dirtyStateListener);		
+		addPropertyListener(dirtyStateListener);
 	}
 
 	@Override

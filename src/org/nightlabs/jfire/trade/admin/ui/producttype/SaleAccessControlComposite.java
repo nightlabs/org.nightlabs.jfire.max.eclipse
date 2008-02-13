@@ -79,9 +79,9 @@ public class SaleAccessControlComposite extends XComposite
 	 * @param style SWT style
 	 * @param fetchGroupsProductType Can be null.
 	 * @param saleAccessControlHelper Must not be null.
-	 */	
-	public SaleAccessControlComposite(Composite parent, int style, 
-			SaleAccessControlHelper saleAccessControlHelper) 
+	 */
+	public SaleAccessControlComposite(Composite parent, int style,
+			SaleAccessControlHelper saleAccessControlHelper)
 	{
 		this(parent, style, saleAccessControlHelper, true, null);
 	}
@@ -94,7 +94,7 @@ public class SaleAccessControlComposite extends XComposite
 	 * @param showProductTypeLabel determines if the the name of the productType should be displayed
 	 * or not
 	 */
-	public SaleAccessControlComposite(Composite parent, int style, 
+	public SaleAccessControlComposite(Composite parent, int style,
 			SaleAccessControlHelper _saleAccessControlHelper, boolean showProductTypeLabel,
 			IDirtyStateManager dirtyStateManager)
 	{
@@ -119,7 +119,7 @@ public class SaleAccessControlComposite extends XComposite
 
 		if (showProductTypeLabel) {
 			productTypeLabel = new Label(this, SWT.BORDER);
-			productTypeLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));			
+			productTypeLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 
 		XComposite statusComp = new XComposite(this, SWT.NONE);
@@ -184,7 +184,7 @@ public class SaleAccessControlComposite extends XComposite
 
 		saleableCheckBox.setEnabled(confirmedCheckBox.getSelection());
 		closedCheckBox.setEnabled(productType.isConfirmed());
-	}	
+	}
 	
 	protected void publishedCheckBoxChanged()
 	{
@@ -220,8 +220,8 @@ public class SaleAccessControlComposite extends XComposite
 		
 		if (dirtyStateManager != null) {
 			if (isChanged())
-				dirtyStateManager.markDirty();				
-		}		
+				dirtyStateManager.markDirty();
+		}
 	}
 
 	protected void confirmedCheckBoxChanged()
@@ -266,8 +266,8 @@ public class SaleAccessControlComposite extends XComposite
 		
 		if (dirtyStateManager != null) {
 			if (isChanged())
-				dirtyStateManager.markDirty();				
-		}				
+				dirtyStateManager.markDirty();
+		}
 	}
 
 	protected void saleableCheckBoxChanged()
@@ -291,8 +291,8 @@ public class SaleAccessControlComposite extends XComposite
 		
 		if (dirtyStateManager != null) {
 			if (isChanged())
-				dirtyStateManager.markDirty();				
-		}		
+				dirtyStateManager.markDirty();
+		}
 	}
 
 	protected void closedCheckBoxChanged()
@@ -311,11 +311,11 @@ public class SaleAccessControlComposite extends XComposite
 				if (!flag)
 					closedCheckBox.setSelection(false);
 				
-				saleableCheckBox.setSelection(false);	
+				saleableCheckBox.setSelection(false);
 			}
 			else {
 				// nothing
-				saleableCheckBox.setSelection(true);	
+				saleableCheckBox.setSelection(true);
 			}
 		} catch (Throwable t) {
 			closedCheckBox.setSelection(!closedCheckBox.getSelection());
@@ -326,7 +326,7 @@ public class SaleAccessControlComposite extends XComposite
 		
 		if (dirtyStateManager != null) {
 			if (isChanged())
-				dirtyStateManager.markDirty();				
+				dirtyStateManager.markDirty();
 		}
 	}
 
@@ -399,7 +399,7 @@ public class SaleAccessControlComposite extends XComposite
 
 //	/**
 //	 * @deprecated should not be used anymore, call {@link SaleAccessControlComposite#setProductType(ProductType)} instead
-//	 * 
+//	 *
 //	 * @param productTypeID the {@link ProductTypeID} of the {@link ProductType} to load
 //	 * @throws ModuleException if something during loading the productType went wrong
 //	 */
@@ -435,7 +435,7 @@ public class SaleAccessControlComposite extends XComposite
 //		}
 //	}
 
-	/** 
+	/**
 	 * @param productType The selected ProductType.
 	 */
 	public void setProductType(ProductType productType)
@@ -457,7 +457,7 @@ public class SaleAccessControlComposite extends XComposite
 			closedCheckBox.setSelection(false);
 		}
 		else {
-			if (showProductTypeLabel)			
+			if (showProductTypeLabel)
 				productTypeLabel.setText(productType.getName().getText(Locale.getDefault().getLanguage()));
 
 			publishedCheckBox.setSelection(productType.isPublished());
@@ -482,9 +482,9 @@ public class SaleAccessControlComposite extends XComposite
 	}
 
 	/**
-	 * @deprecated should not be called any more, but productType should be saved 
+	 * @deprecated should not be called any more, but productType should be saved
 	 * somewhere else e.g. by a controller
-	 *  
+	 * 
 	 * Submit all the settings to the server.
 	 */
 	@Deprecated

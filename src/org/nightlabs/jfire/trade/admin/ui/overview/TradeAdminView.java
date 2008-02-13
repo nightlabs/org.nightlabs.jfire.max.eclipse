@@ -10,16 +10,16 @@ import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
-public class TradeAdminView 
-extends LSDViewPart 
+public class TradeAdminView
+extends LSDViewPart
 {
 	public static String VIEW_ID = TradeAdminView.class.getName();
 	
 	private TradeAdminComposite tradeAdminComposite = null;
-	public void createPartContents(Composite parent) 
+	public void createPartContents(Composite parent)
 	{
 		tradeAdminComposite = new TradeAdminComposite(parent, SWT.NONE);
-		if (parent.getLayout() instanceof FillLayout) {			
+		if (parent.getLayout() instanceof FillLayout) {
 			tradeAdminComposite.setLayoutData(new Object());
 		}
 		if (parent.getLayout() instanceof GridLayout) {

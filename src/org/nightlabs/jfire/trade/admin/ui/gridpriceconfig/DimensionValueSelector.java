@@ -32,8 +32,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
-import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.IPackagePriceConfig;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de

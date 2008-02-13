@@ -40,16 +40,16 @@ public class PriceConfigTableLayout extends TableLayout
 	public static int MIN_COL_WIDTH = 80;
 	
 	@Override
-	public void layout(Composite c, boolean flush) 
+	public void layout(Composite c, boolean flush)
 	{
 		Table table = (Table)c;
 		int columnCount = table.getColumnCount();
 		int width = table.getBounds().width;
 		ScrollBar sb = table.getVerticalBar();
-		if(sb.isEnabled() && sb.isVisible()) 
+		if(sb.isEnabled() && sb.isVisible())
 			width -= sb.getSize().x;
 
-		for(int i = 0; i < columnCount; i++) 
+		for(int i = 0; i < columnCount; i++)
     {
       TableColumn tc = table.getColumn(i);
       tc.setWidth(Math.max(MIN_COL_WIDTH, width / columnCount));

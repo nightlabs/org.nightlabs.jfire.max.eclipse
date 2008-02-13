@@ -22,8 +22,8 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractGridPriceConfigSection 
-extends ToolBarSectionPart 
+public abstract class AbstractGridPriceConfigSection
+extends ToolBarSectionPart
 {
 	private String orgTitle;
 
@@ -52,12 +52,12 @@ extends ToolBarSectionPart
 			public void run() {
 				inheritPressed();
 //				setSelection(!isSelection());
-			}		
+			}
 		};
 		getToolBarManager().add(inheritanceAction);
 
 		updateToolBarManager();
-//		Composite buttonWrapper = new XComposite(getSection(), SWT.NONE, 
+//		Composite buttonWrapper = new XComposite(getSection(), SWT.NONE,
 //				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
 //		inheritButton = new InheritanceToggleButton(buttonWrapper);
 //		inheritButton.addSelectionListener(new SelectionListener(){
@@ -68,7 +68,7 @@ extends ToolBarSectionPart
 //				widgetSelected(e);
 //			}
 //		});
-//		
+//
 //		Button assignNewPriceConfigButton = new Button(buttonWrapper, SWT.NONE);
 //		assignNewPriceConfigButton.setImage(SharedImages.getSharedImage(
 //				TradeAdminPlugin.getDefault(), AbstractGridPriceConfigSection.class, "AssignPriceConfig"));
@@ -79,9 +79,9 @@ extends ToolBarSectionPart
 //			}
 //			public void widgetDefaultSelected(SelectionEvent e) {
 //				widgetSelected(e);
-//			}		
+//			}
 //		});
-//		
+//
 //		getSection().setTextClient(buttonWrapper);
 	}
 
@@ -99,7 +99,7 @@ extends ToolBarSectionPart
 		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
 	}
 
-	protected void assignNewPressed() 
+	protected void assignNewPressed()
 	{
 		AbstractChooseGridPriceConfigWizard wizard = getPriceConfigComposite().createChoosePriceConfigWizard(
 				(ProductTypeID) JDOHelper.getObjectId(getPriceConfigComposite().getPackageProductType().getExtendedProductType()));
@@ -115,11 +115,11 @@ extends ToolBarSectionPart
 				getSection().setText(ipc.getName().getText());
 			getSection().layout();
 			markDirty();
-		}				
+		}
 	}
 	
 	class AssignNewPriceConfigAction
-	extends Action 
+	extends Action
 	{
 		public AssignNewPriceConfigAction() {
 			super();
@@ -133,6 +133,6 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 			assignNewPressed();
-		}		
+		}
 	}
 }

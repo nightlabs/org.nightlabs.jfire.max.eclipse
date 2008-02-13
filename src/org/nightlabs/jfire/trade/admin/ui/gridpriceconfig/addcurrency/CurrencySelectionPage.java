@@ -109,7 +109,7 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 				});
 
 				return Status.OK_STATUS;
-			} 
+			}
 			
 		};
 		loadJob.schedule();

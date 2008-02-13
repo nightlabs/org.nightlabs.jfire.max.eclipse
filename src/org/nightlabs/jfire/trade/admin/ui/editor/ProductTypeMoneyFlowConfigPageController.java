@@ -15,8 +15,8 @@ import org.nightlabs.progress.SubProgressMonitor;
  *
  */
 public abstract class ProductTypeMoneyFlowConfigPageController<
-	ProductTypeType extends ProductType, JDOObjectDAOType extends IJDOObjectDAO<ProductTypeType>> 
-extends AbstractProductTypePageController<ProductTypeType> 
+	ProductTypeType extends ProductType, JDOObjectDAOType extends IJDOObjectDAO<ProductTypeType>>
+extends AbstractProductTypePageController<ProductTypeType>
 {
 	
 	private static final long serialVersionUID = 1L;
@@ -59,7 +59,7 @@ extends AbstractProductTypePageController<ProductTypeType>
 		monitor.worked(1);
 		ProductTypeType productType = (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(
 				getProductTypeID(),
-				getEntityFetchGroups(), 
+				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				new SubProgressMonitor(monitor, 2));
 		monitor.done();

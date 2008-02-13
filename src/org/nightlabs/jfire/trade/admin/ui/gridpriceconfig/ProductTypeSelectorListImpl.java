@@ -134,7 +134,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 			return null;
 
 		ProductType pt = item.getProductType();
-		IPriceConfig priceConfig; 
+		IPriceConfig priceConfig;
 
 		if (pt.isPackageOuter() && !item.isInnerVirtual()) {
 			priceConfig = pt.getPackagePriceConfig();
@@ -202,7 +202,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 //			EventInnerProductInfo assemblyInnerProductInfo = assemblyPackageProductInfo.getEventInnerProductInfo();
 //			if (!(assemblyInnerProductInfo.getPriceConfig() instanceof FormulaPriceConfig))
 //				throw new IllegalArgumentException("The PriceConfig of assemblyInnerProductInfo is not an instance of FormulaPriceConfig!");
-//	
+//
 //			productTypeItemList.add(assemblyInnerProductInfo);
 //			productTypeGUIList.add(assemblyInnerProductInfo.getPrimaryKey()); // TO DO i18n
 

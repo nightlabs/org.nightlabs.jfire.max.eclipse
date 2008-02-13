@@ -33,7 +33,7 @@ public class ProductTypeSaleAccessStatus {
 	}
 	
 	/**
-	 * Create a sale access status status with the given values 
+	 * Create a sale access status status with the given values
 	 */
 	public ProductTypeSaleAccessStatus(
 			boolean published,

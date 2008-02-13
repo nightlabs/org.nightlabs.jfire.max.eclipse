@@ -126,7 +126,7 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 						customerGroupList.removeAll();
 						for (Iterator it = customerGroups.iterator(); it.hasNext(); ) {
 							CustomerGroup customerGroup = (CustomerGroup) it.next();
-							customerGroupList.add(customerGroup.getName().getText()); 
+							customerGroupList.add(customerGroup.getName().getText());
 						}
 					}
 				});

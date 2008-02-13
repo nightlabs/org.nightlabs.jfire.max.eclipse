@@ -20,7 +20,7 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeMoneyFlowConfigSection  
+public class ProductTypeMoneyFlowConfigSection
 extends ToolBarSectionPart
 {
 	private AddDelegateAction addAction;
@@ -36,10 +36,10 @@ extends ToolBarSectionPart
 	 * @param title
 	 */
 	public ProductTypeMoneyFlowConfigSection(IFormPage page,
-			Composite parent, int style, String title) 
+			Composite parent, int style, String title)
 	{
 		super(page, parent, style, title);
-		this.moneyFlowConfigComposite = new MoneyFlowConfigComposite(getContainer(), 
+		this.moneyFlowConfigComposite = new MoneyFlowConfigComposite(getContainer(),
 				SWT.NONE, this, false);
 		
 		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
@@ -60,7 +60,7 @@ extends ToolBarSectionPart
 		menuManager.add(removeAction);
 		
 		Menu menu = menuManager.createContextMenu(moneyFlowConfigComposite.getProductTypeMappingTree().getTree());
-		moneyFlowConfigComposite.getProductTypeMappingTree().getTree().setMenu(menu);	
+		moneyFlowConfigComposite.getProductTypeMappingTree().getTree().setMenu(menu);
 		moneyFlowConfigComposite.getProductTypeMappingTree().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				updateToolBarManager();
@@ -79,7 +79,7 @@ extends ToolBarSectionPart
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set
 	 */
-	public void setProductType(ProductType productType) 
+	public void setProductType(ProductType productType)
 	{
 		this.productType = productType;
 		getMoneyFlowConfigComposite().setProductType(productType);
@@ -91,13 +91,13 @@ extends ToolBarSectionPart
 		}
 	}
 	
-	class AddDelegateAction 
-	extends SelectionAction 
+	class AddDelegateAction
+	extends SelectionAction
 	{
 		public AddDelegateAction() {
 			super();
 			setId(AddDelegateAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(), 
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(),
 					ProductTypeMoneyFlowConfigSection.class, "Create")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.AddDelegateAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.AddDelegateAction.text")); //$NON-NLS-1$
@@ -114,16 +114,16 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 			getMoneyFlowConfigComposite().addDelegate();
-		}		
+		}
 	}
 	
-	class RemoveDelegateAction 
-	extends SelectionAction 
+	class RemoveDelegateAction
+	extends SelectionAction
 	{
 		public RemoveDelegateAction() {
 			super();
 			setId(RemoveDelegateAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(), 
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(),
 					ProductTypeMoneyFlowConfigSection.class, "Remove")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.RemoveDelegateAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.RemoveDelegateAction.text")); //$NON-NLS-1$
@@ -140,16 +140,16 @@ extends ToolBarSectionPart
 		@Override
 		public void run() {
 			getMoneyFlowConfigComposite().removeDelegate();
-		}		
+		}
 	}
 	
-	class AssignAction 
-	extends SelectionAction 
+	class AssignAction
+	extends SelectionAction
 	{
 		public AssignAction() {
 			super();
 			setId(AssignAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(), 
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradeAdminPlugin.getDefault(),
 					ProductTypeMoneyFlowConfigSection.class, "AssignNew")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.AssignAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.AssignAction.text")); //$NON-NLS-1$
@@ -169,12 +169,12 @@ extends ToolBarSectionPart
 			ProductType productType = getMoneyFlowConfigComposite().getProductType();
 			if (productType != null) {
 				getSection().setText(productType.getProductTypeLocal().getLocalAccountantDelegate().getName().getText());
-				getSection().layout();			
+				getSection().layout();
 			}
-		}		
+		}
 	}
 
-	class InheritAction 
+	class InheritAction
 	extends InheritanceAction {
 		@Override
 		public void run() {

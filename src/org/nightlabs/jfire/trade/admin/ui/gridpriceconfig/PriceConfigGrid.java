@@ -581,7 +581,7 @@ public class PriceConfigGrid extends XComposite
 							row.setText(tableX, NumberFormatter.formatCurrency(amount, currency, false));
 						}
 		
-						PriceConfigGridCell cell = cells[cellsY][cellsX];				
+						PriceConfigGridCell cell = cells[cellsY][cellsX];
 						if (cell == null ||
 								formulaPriceConfig != cell.getFormulaPriceConfig() ||
 								!priceCoordinate.equals(cell.getPriceCoordinate()) ||

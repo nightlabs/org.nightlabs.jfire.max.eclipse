@@ -176,7 +176,7 @@ public class CellDetail extends XComposite
 			cellDetailFallbackText.setEnabled(enabled);
 			cellDetailText.setEnabled(enabled);
 
-			// Formulas are only editable, if the 
+			// Formulas are only editable, if the
 			ProductType pt = priceConfigGrid.getProductTypeSelector().getSelectedProductTypeItem(true).getProductType();
 			editable = false;
 			if (pt != null) {
@@ -255,7 +255,7 @@ public class CellDetail extends XComposite
 		}
 	};
 
-	//TODO 
+	//TODO
 	private MouseListener cellDetailTextMouseListener = new MouseAdapter(){
 		@Override
 		public void mouseDown(MouseEvent e) {

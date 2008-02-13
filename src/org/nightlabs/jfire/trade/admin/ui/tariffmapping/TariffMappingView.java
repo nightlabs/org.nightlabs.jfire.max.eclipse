@@ -163,7 +163,7 @@ extends LSDViewPart
 				removeTariffMappingButton.setEnabled(false);
 				removeTariffMappings();
 			}
-		});		
+		});
 		
 		partnerTariffList.loadTariffs(null);
 	}

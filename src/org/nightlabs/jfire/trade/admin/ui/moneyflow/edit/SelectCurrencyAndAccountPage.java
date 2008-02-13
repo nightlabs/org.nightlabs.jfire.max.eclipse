@@ -66,15 +66,15 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class SelectCurrencyAndAccountPage 
-extends DynamicPathWizardPage 
+public class SelectCurrencyAndAccountPage
+extends DynamicPathWizardPage
 {
 	public static final String PROPERTY_CURRENCY = "currency"; //$NON-NLS-1$
 	public static final String PROPERTY_ACCOUNT = "account"; //$NON-NLS-1$
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	private Label currencyLabel; 
+	private Label currencyLabel;
 	private CurrencyCombo currencyCombo;
 //	private AccountTable accountTable;
 	private AccountListComposite accountTable;
@@ -197,13 +197,13 @@ extends DynamicPathWizardPage
 			return
 					doNotSpecifyThisAccountCheckBox.getSelection() ||
 					(
-							currency != null && 
+							currency != null &&
 							getAccount() != null
 					);
 		}
 
 		return
-				currency != null && 
+				currency != null &&
 				getAccount() != null;
 	}
 

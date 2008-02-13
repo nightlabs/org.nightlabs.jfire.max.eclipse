@@ -9,8 +9,8 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marco Schulze - Marco at NightLabs dot de
  */
-public abstract class AbstractChooseGridPriceConfigWizard 
-extends DynamicPathWizard 
+public abstract class AbstractChooseGridPriceConfigWizard
+extends DynamicPathWizard
 {
 	public AbstractChooseGridPriceConfigWizard(ProductTypeID parentProductTypeID) {
 		super();

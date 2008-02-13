@@ -18,7 +18,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 
 
 
-public class OwnerVendorConfigSection  
+public class OwnerVendorConfigSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
@@ -37,21 +37,21 @@ implements IProductTypeSectionPart
 
 
 	public OwnerVendorConfigSection(IFormPage page,
-			Composite parent, int style) 
+			Composite parent, int style)
 	{
 
 
 		super(page, parent, style, "Owner & Vendor");
-		this.ownerVendorConfigComposite = new OwnerVendorConfigComposite(getContainer(), 
+		this.ownerVendorConfigComposite = new OwnerVendorConfigComposite(getContainer(),
 				SWT.NONE, this, false);
 
 
-		ownerVendorConfigComposite.addLegalEntityValueChangedListener( 
+		ownerVendorConfigComposite.addLegalEntityValueChangedListener(
 				new ILegalEntityValueChangedListener()
 		  {
 			public void legalEntityValueChanged()
 			{
-				// if value has changed 				
+				// if value has changed
 					markDirty();
 				
 			}
@@ -93,7 +93,7 @@ implements IProductTypeSectionPart
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set
 	 */
-	public void setProductType(ProductType productType) 
+	public void setProductType(ProductType productType)
 	{
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
@@ -140,7 +140,7 @@ implements IProductTypeSectionPart
 	}
 	
 	
-	class InheritAction 
+	class InheritAction
 	extends InheritanceAction {
 		@Override
 		public void run() {

@@ -52,7 +52,7 @@ public class TradeAdminPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-//		resourceBundle = Platform.getResourceBundle(getBundle());	
+//		resourceBundle = Platform.getResourceBundle(getBundle());
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class TradeAdminPlugin extends AbstractUIPlugin {
 //			return resourceBundle.getString(key);
 //		} catch (Exception e) {
 //			return key;
-//		}		
+//		}
 //	}
 //
 //	/**

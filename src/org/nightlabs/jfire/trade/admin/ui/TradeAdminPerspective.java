@@ -10,12 +10,12 @@ import org.nightlabs.jfire.trade.admin.ui.overview.TradeAdminView;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TradeAdminPerspective 
-implements IPerspectiveFactory 
+public class TradeAdminPerspective
+implements IPerspectiveFactory
 {
 	public static final String ID_PERSPECTIVE = TradeAdminPerspective.class.getName();
 	
-	public void createInitialLayout(IPageLayout layout) 
+	public void createInitialLayout(IPageLayout layout)
 	{
 		layout.setEditorAreaVisible(true);
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f,	IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$

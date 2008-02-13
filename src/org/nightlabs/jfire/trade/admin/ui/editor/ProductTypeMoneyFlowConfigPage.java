@@ -12,12 +12,12 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeMoneyFlowConfigPage 
-extends EntityEditorPageWithProgress 
+public class ProductTypeMoneyFlowConfigPage
+extends EntityEditorPageWithProgress
 {
 //	/**
 //	 * The Factory is registered to the extension-point and creates
-//	 * new instances of {@link TicketingMoneyFlowConfigPage}. 
+//	 * new instances of {@link TicketingMoneyFlowConfigPage}.
 //	 */
 //	public static class Factory implements IEntityEditorPageFactory {
 //		public IFormPage createPage(FormEditor formEditor) {
@@ -30,7 +30,7 @@ extends EntityEditorPageWithProgress
 //	}
 	
 	public ProductTypeMoneyFlowConfigPage(FormEditor editor) {
-		super(editor, ProductTypeMoneyFlowConfigPage.class.getName(), 
+		super(editor, ProductTypeMoneyFlowConfigPage.class.getName(),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigPage.title")); //$NON-NLS-1$
 	}
 
@@ -41,16 +41,16 @@ extends EntityEditorPageWithProgress
 	
 	@Override
 	protected void addSections(Composite parent) {
-		moneyFlowSection = new ProductTypeMoneyFlowConfigSection(this, parent, 
-				ExpandableComposite.TITLE_BAR, 
+		moneyFlowSection = new ProductTypeMoneyFlowConfigSection(this, parent,
+				ExpandableComposite.TITLE_BAR,
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigPage.moneyFlowSection.title")); //$NON-NLS-1$
 		getManagedForm().addPart(moneyFlowSection);
 	}
 
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
-		final ProductTypeMoneyFlowConfigPageController controller = (ProductTypeMoneyFlowConfigPageController) getPageController(); 
+		final ProductTypeMoneyFlowConfigPageController controller = (ProductTypeMoneyFlowConfigPageController) getPageController();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 //				moneyFlowSection.setProductTypeID(controller.getProductTypeID());

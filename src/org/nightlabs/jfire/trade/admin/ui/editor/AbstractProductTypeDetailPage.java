@@ -15,7 +15,7 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeDetailPage 
+public abstract class AbstractProductTypeDetailPage
 extends EntityEditorPageWithProgress
 implements IProductTypeDetailPage
 {
@@ -28,7 +28,7 @@ implements IProductTypeDetailPage
 		super(editor, id, name);
 	}
 
-	private int sectionStyle = ExpandableComposite.TITLE_BAR; 
+	private int sectionStyle = ExpandableComposite.TITLE_BAR;
 	/**
 	 * returns the sectionStyle.
 	 * @return the sectionStyle
@@ -96,17 +96,17 @@ implements IProductTypeDetailPage
 	
 
 	@Override
-	protected void addSections(Composite parent) 
+	protected void addSections(Composite parent)
 	{
 		nameSection = createNameSection(parent);
 		if (nameSection != null) {
 			nameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			getManagedForm().addPart(nameSection);			
+			getManagedForm().addPart(nameSection);
 		}
 
 		nestedProductTypeSection = createNestedProductTypesSection(parent);
 		if (nestedProductTypeSection != null) {
-			nestedProductTypeSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
+			nestedProductTypeSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 			getManagedForm().addPart(nestedProductTypeSection);
 		}
 
@@ -114,29 +114,29 @@ implements IProductTypeDetailPage
 		
 		ownerVendorSection = createOwnerVendorSection(parent);
 		if (ownerVendorSection != null) {
-			ownerVendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
+			ownerVendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 			getManagedForm().addPart(ownerVendorSection);
-		}		
+		}
 		
 		
 		saleAccessControlSection = createSaleAccessControlSection(parent);
 		if (saleAccessControlSection != null) {
 			saleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			getManagedForm().addPart(saleAccessControlSection);			
+			getManagedForm().addPart(saleAccessControlSection);
 		}
 	
 	
 	}
 
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
 		final AbstractProductTypePageController controller = (AbstractProductTypePageController) getPageController();
 		final ProductType productType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				setProductType(productType);
-				switchToContent();				
+				switchToContent();
 			}
 		});
 	}
@@ -146,7 +146,7 @@ implements IProductTypeDetailPage
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.pageFormTitle"); //$NON-NLS-1$
 	}
 
-	protected void setProductType(ProductType productType) 
+	protected void setProductType(ProductType productType)
 	{
 		if (productType == null) {
 			getManagedForm().getForm().getForm().setMessage("No product type selected.", IMessageProvider.INFORMATION);
@@ -168,9 +168,9 @@ implements IProductTypeDetailPage
 		if (nestedProductTypeSection != null)
 			nestedProductTypeSection.setProductType(productType);
 		if (saleAccessControlSection != null)
-			saleAccessControlSection.setProductType(productType);						
+			saleAccessControlSection.setProductType(productType);
 		if (ownerVendorSection != null)
-			ownerVendorSection.setProductType(productType);						
+			ownerVendorSection.setProductType(productType);
 	
 		
 	}

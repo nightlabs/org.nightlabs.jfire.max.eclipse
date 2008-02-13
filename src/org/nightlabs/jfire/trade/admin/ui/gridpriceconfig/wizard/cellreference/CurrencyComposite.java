@@ -52,7 +52,7 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 					}
 				});
 				return Status.OK_STATUS;
-			}	
+			}
 		};
 		job.schedule();
 				
@@ -82,7 +82,7 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 	@Override
 	protected void doEnable() {
 		if(selectedCurrency != null)
-			createScript();	
+			createScript();
 	}
 
 	@Override

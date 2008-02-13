@@ -106,7 +106,7 @@ public class LocalAccountantDelegateRegistry extends AbstractEPProcessor {
 	 */
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws Exception 
+	throws Exception
 	{
 		if (element.getName().equalsIgnoreCase("localAccountantDelegateType")) { //$NON-NLS-1$
 			LocalAccountantDelegateType type = null;

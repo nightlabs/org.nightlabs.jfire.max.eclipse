@@ -16,7 +16,7 @@ import org.nightlabs.util.Util;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypePriceConfigPageController 
+public class ProductTypePriceConfigPageController
 extends EntityEditorPageController
 {
 	private ProductTypeID productTypeID;
@@ -41,7 +41,7 @@ extends EntityEditorPageController
 
 	public void doLoad(IProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypePriceConfigPageController.loadPriceConfigMonitor.task.name"), 2); //$NON-NLS-1$
-		monitor.worked(1);		
+		monitor.worked(1);
 		ProductType productType = Util.cloneSerializable(
 				PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(
 						getProductTypeID(), new ProgressMonitorWrapper(monitor)));
@@ -53,10 +53,10 @@ extends EntityEditorPageController
 		for (IFormPage page : getPages()) {
 			if (page instanceof AbstractGridPriceConfigPage) {
 				final AbstractGridPriceConfigPage priceConfigPage = (AbstractGridPriceConfigPage) page;
-				Display.getDefault().syncExec(new Runnable(){				
+				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
 						priceConfigPage.getPriceConfigSection().getPriceConfigComposite().submit();
-					}				
+					}
 				});
 			}
 		}

@@ -84,7 +84,7 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
-			}		
+			}
 		};
 		wrapper.getGridLayout().numColumns = 2;
 		
@@ -139,7 +139,7 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		return productTypeID;
 	}
 	
-	public String getPackageType() {		
+	public String getPackageType() {
 		return packageTypes[comboPackageType.getSelectionIndex()];
 	}
 	
@@ -158,10 +158,10 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		if (pTypeID == null)
 			return null;
 		ProductType pType = ProductTypeDAO.sharedInstance().getProductType(
-				pTypeID, new String[] {FetchPlan.DEFAULT}, 
+				pTypeID, new String[] {FetchPlan.DEFAULT},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 		);
-		return pType; 
+		return pType;
 	}
 
 }

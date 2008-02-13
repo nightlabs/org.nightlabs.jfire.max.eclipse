@@ -87,7 +87,7 @@ public class AddCustomerGroupWizard extends DynamicPathWizard
 				getContainer().run(false, false, new IRunnableWithProgress() {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 						groupHolder.customerGroup = CustomerGroupDAO.sharedInstance().storeCustomerGroup(
-								groupHolder.customerGroup, true, FETCH_GROUPS_CUSTOMER_GROUP, 
+								groupHolder.customerGroup, true, FETCH_GROUPS_CUSTOMER_GROUP,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor
 						);
 					}

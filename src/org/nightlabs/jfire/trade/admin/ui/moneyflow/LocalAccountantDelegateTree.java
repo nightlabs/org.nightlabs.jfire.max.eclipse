@@ -64,18 +64,18 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 				delegateClass = (Class)inputElement;
 			if (delegateClass == null)
 				return EMPTY_DATA;
-			return 
+			return
 				LocalAccountantDelegateProvider.sharedInstance()
 				.getTopLevelDelegates(delegateClass, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).toArray();
 		}
 
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
-		 */		
+		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof LocalAccountantDelegate)
-				return 
+				return
 					LocalAccountantDelegateProvider.sharedInstance()
 					.getChildDelegates(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(parentElement),
