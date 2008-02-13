@@ -8,8 +8,8 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseG
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
-public class ChooseDynamicTradePriceConfigWizard 
-extends AbstractChooseGridPriceConfigWizard 
+public class ChooseDynamicTradePriceConfigWizard
+extends AbstractChooseGridPriceConfigWizard
 {
 	/**
 	 * @param parentProductTypeID
@@ -24,7 +24,7 @@ extends AbstractChooseGridPriceConfigWizard
 	@Override
 	@Implement
 	protected AbstractChooseGridPriceConfigPage createChooseGridPriceConfigPage(
-			ProductTypeID parentProductTypeID) 
+			ProductTypeID parentProductTypeID)
 	{
 		return new ChooseDynamicTradePriceConfigPage(parentProductTypeID);
 	}

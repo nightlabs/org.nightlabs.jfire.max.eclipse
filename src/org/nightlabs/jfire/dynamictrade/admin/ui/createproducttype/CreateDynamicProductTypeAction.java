@@ -48,7 +48,7 @@ public class CreateDynamicProductTypeAction
 			CreateDynamicProductTypeWizard createProductWizard = new CreateDynamicProductTypeWizard((ProductTypeID) JDOHelper.getObjectId(selectedNode.getJdoObject()));
 			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
 					tree.getTreeViewer().getControl().getShell(),
-//					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+//					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 					createProductWizard);
 			wizardDialog.open();
 		} catch (Exception e) {

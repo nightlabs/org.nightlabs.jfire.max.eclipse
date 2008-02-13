@@ -41,7 +41,7 @@ public class DynamicProductTypeCategory
 		return dynamicProductTypeTree;
 	}
 
-	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){	
+	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
 		public void doubleClick(DoubleClickEvent event) {
 			if (!event.getSelection().isEmpty()) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
@@ -51,13 +51,13 @@ public class DynamicProductTypeCategory
 					DynamicProductType dynamicProductType = treeNode.getJdoObject();
 					ProductTypeID dynamicProductTypeID = (ProductTypeID) JDOHelper.getObjectId(dynamicProductType);
 					try {
-						RCPUtil.openEditor(new DynamicProductTypeEditorInput(dynamicProductTypeID), 
+						RCPUtil.openEditor(new DynamicProductTypeEditorInput(dynamicProductTypeID),
 								DynamicProductTypeEditor.EDITOR_ID);
 					} catch (PartInitException e) {
 						throw new RuntimeException(e);
 					}
 				}
 			}
-		}	
+		}
 	};
 }

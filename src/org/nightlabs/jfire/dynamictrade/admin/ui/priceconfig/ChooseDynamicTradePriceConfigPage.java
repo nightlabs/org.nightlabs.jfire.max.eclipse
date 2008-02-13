@@ -23,18 +23,18 @@ extends AbstractChooseGridPriceConfigPage
 
 	@Override
 	@Implement
-	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor) 
+	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor)
 	{
 		return DynamicTradePriceConfigDAO.sharedInstance().getDynamicTradePriceConfigs(
-				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG, 
+				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 //		try {
 //			DynamicTradeManager stm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //			List<DynamicTradePriceConfig> pcs = new ArrayList<DynamicTradePriceConfig>(stm.getDynamicTradePriceConfigs(
-//					AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG, 
+//					AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
 //					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
-//			return pcs;		
+//			return pcs;
 //		} catch (Exception e) {
 //			throw new RuntimeException(e);
 //		}

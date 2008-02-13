@@ -16,7 +16,7 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class DynamicProductTypeNameSection
-extends AbstractProductTypeNameSection 
+extends AbstractProductTypeNameSection
 {
 	public DynamicProductTypeNameSection(IFormPage page, Composite parent) {
 		super(page, parent);
@@ -29,9 +29,9 @@ extends AbstractProductTypeNameSection
 	@Override
 	protected ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor) {
 		return DynamicProductTypeDAO.sharedInstance().getDynamicProductType(
-				(ProductTypeID) JDOHelper.getObjectId(type), 
-				FETCH_GROUP_NAME, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				(ProductTypeID) JDOHelper.getObjectId(type),
+				FETCH_GROUP_NAME,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
 }

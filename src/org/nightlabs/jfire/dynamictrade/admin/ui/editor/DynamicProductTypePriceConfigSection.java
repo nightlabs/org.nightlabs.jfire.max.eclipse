@@ -9,7 +9,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marco Schulze - Marco at NightLabs dot de
  */
-public class DynamicProductTypePriceConfigSection  
+public class DynamicProductTypePriceConfigSection
 extends AbstractGridPriceConfigSection
 {
 	/**
@@ -25,5 +25,5 @@ extends AbstractGridPriceConfigSection
 	@Override
 	protected PriceConfigComposite createPriceConfigComposite(Composite parent) {
 		return new PriceConfigComposite(getContainer(), this);
-	}		
+	}
 }

@@ -18,8 +18,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DynamicProductTypeDetailPageController 
-//extends AbstractDynamicProductTypePageController 
+public class DynamicProductTypeDetailPageController
+//extends AbstractDynamicProductTypePageController
 extends AbstractProductTypeDetailPageController<DynamicProductType>
 {
 	/**
@@ -39,7 +39,7 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 	}
 
 	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
 		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
@@ -55,14 +55,14 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 	
 	@Override
 	protected DynamicProductType retrieveProductType(ProgressMonitor monitor) {
-		return DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getProductTypeID(), 
-				getEntityFetchGroups(),  
-				getEntityMaxFetchDepth(), 
+		return DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
 				monitor);
 	}
 
 	@Override
-	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor) 
+	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor)
 	{
 		try {
 			DynamicTradeManager stm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

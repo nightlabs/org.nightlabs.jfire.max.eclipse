@@ -70,7 +70,7 @@ public class ProductTypeSelectorHiddenImpl
 			return null;
 
 		ProductType pt = item.getProductType();
-		IPriceConfig priceConfig; 
+		IPriceConfig priceConfig;
 
 		if (pt.isPackageOuter() && !item.isInnerVirtual()) {
 			priceConfig = pt.getPackagePriceConfig();

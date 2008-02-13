@@ -15,12 +15,12 @@ import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorConfigSe
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DynamicProductTypeDetailPage 
-extends AbstractProductTypeDetailPage 
+public class DynamicProductTypeDetailPage
+extends AbstractProductTypeDetailPage
 {
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link EventDetailPage}. 
+	 * new instances of {@link EventDetailPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
@@ -39,7 +39,7 @@ extends AbstractProductTypeDetailPage
 	@Override
 	protected IProductTypeSectionPart createNameSection(Composite parent)
 	{
-		return new DynamicProductTypeNameSection(this, parent, getSectionStyle()); 
+		return new DynamicProductTypeNameSection(this, parent, getSectionStyle());
 	}
 
 	@Override
@@ -59,29 +59,29 @@ extends AbstractProductTypeDetailPage
 	@Override
 	protected IProductTypeSectionPart createSaleAccessControlSection(Composite parent)
 	{
-		return new DynamicProductTypeSaleAccessControlSection(this, parent, getSectionStyle()); 
+		return new DynamicProductTypeSaleAccessControlSection(this, parent, getSectionStyle());
 	}
 
 //	private DynamicProductTypeNameSection productTypeNameSection = null;
 //	public DynamicProductTypeNameSection getProductTypeNameSection() {
 //		return productTypeNameSection;
 //	}
-//	
+//
 //	private DynamicProductTypeSaleAccessControlSection saleAccessSection = null;
 //	public DynamicProductTypeSaleAccessControlSection getSaleAccessSection() {
 //		return saleAccessSection;
 //	}
-//	
+//
 //	private int sectionStyle = ExpandableComposite.TITLE_BAR;
-//	
+//
 //	@Override
-//	protected void addSections(Composite parent) 
+//	protected void addSections(Composite parent)
 //	{
-//		productTypeNameSection = new DynamicProductTypeNameSection(this, parent, sectionStyle, 
+//		productTypeNameSection = new DynamicProductTypeNameSection(this, parent, sectionStyle,
 //				Messages.getString("DynamicProductTypeDetailPage.name")); //$NON-NLS-1$
 //		productTypeNameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 //		getManagedForm().addPart(productTypeNameSection);
-//		
+//
 //		saleAccessSection = new DynamicProductTypeSaleAccessControlSection(this, parent, sectionStyle,
 //				Messages.getString("DynamicProductTypeDetailPage.saleAccessControl")); //$NON-NLS-1$
 //		saleAccessSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -89,7 +89,7 @@ extends AbstractProductTypeDetailPage
 //	}
 //
 //	@Override
-//	protected void asyncCallback() 
+//	protected void asyncCallback()
 //	{
 //		final DynamicProductTypeDetailPageController controller = (DynamicProductTypeDetailPageController) getPageController();
 //		final ProductType productType = controller.getProductType();
@@ -103,7 +103,7 @@ extends AbstractProductTypeDetailPage
 //							IMessageProvider.INFORMATION);
 //					RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
 //				}
-//				switchToContent();				
+//				switchToContent();
 //			}
 //		});
 //	}

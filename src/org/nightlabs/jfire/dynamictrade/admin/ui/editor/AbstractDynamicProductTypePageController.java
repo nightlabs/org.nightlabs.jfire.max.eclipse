@@ -8,7 +8,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageControll
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractDynamicProductTypePageController 
+public abstract class AbstractDynamicProductTypePageController
  extends AbstractProductTypePageController
 {
 	/**

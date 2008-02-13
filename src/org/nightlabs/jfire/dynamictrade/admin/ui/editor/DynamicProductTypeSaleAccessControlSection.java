@@ -10,10 +10,10 @@ import org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlHelper;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marco Schulze - Marco at NightLabs dot de
  */
-public class DynamicProductTypeSaleAccessControlSection  
+public class DynamicProductTypeSaleAccessControlSection
 extends AbstractSaleAccessControlSection
 {
-	public DynamicProductTypeSaleAccessControlSection(IProductTypeDetailPage page, Composite parent, int style) 
+	public DynamicProductTypeSaleAccessControlSection(IProductTypeDetailPage page, Composite parent, int style)
 	{
 		super(page, parent, style);
 	}
