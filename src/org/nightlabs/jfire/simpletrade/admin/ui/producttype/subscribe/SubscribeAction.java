@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 public class SubscribeAction
 implements IWorkbenchWindowActionDelegate
 {
+	@SuppressWarnings("unused")
 	private IWorkbenchWindow window;
 
 	public void init(IWorkbenchWindow window)
@@ -19,7 +20,7 @@ implements IWorkbenchWindowActionDelegate
 	public void run(IAction action)
 	{
 		SubscribeWizard wizard = new SubscribeWizard();
-		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(window.getShell(), wizard);
+		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();
 	}
 

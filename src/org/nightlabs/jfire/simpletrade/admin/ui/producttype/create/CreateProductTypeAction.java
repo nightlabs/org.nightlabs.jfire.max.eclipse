@@ -31,7 +31,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.simpletrade.admin.ui.producttype.ProductTypeTree;
 import org.nightlabs.jfire.simpletrade.admin.ui.producttype.ProductTypeTreeNode;
@@ -80,7 +79,7 @@ public class CreateProductTypeAction extends Action
 				throw new IllegalStateException("No node selected!"); //$NON-NLS-1$
 
 			CreateProductTypeWizard createProductWizard = new CreateProductTypeWizard(selectedNode.getJdoObject().getObjectId());
-			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(RCPUtil.getActiveWorkbenchShell(), createProductWizard);
+			DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(createProductWizard);
 			wizardDialog.open();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
