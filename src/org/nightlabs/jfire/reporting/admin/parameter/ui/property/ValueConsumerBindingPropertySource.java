@@ -19,8 +19,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueConsumerBindingPropertySource 
-extends AbstractPropertySource 
+public class ValueConsumerBindingPropertySource
+extends AbstractPropertySource
 {
 
 	private ValueConsumerBinding binding;
@@ -32,7 +32,7 @@ extends AbstractPropertySource
 		return binding;
 	}
 
-	public IPropertyDescriptor[] getPropertyDescriptors() 
+	public IPropertyDescriptor[] getPropertyDescriptors()
 	{
 		IPropertyDescriptor[] pds = new IPropertyDescriptor[2];
 		pds[0] = createConsumerPD();
@@ -40,19 +40,19 @@ extends AbstractPropertySource
 		return pds;
 	}
 
-	public Object getPropertyValue(Object id) 
+	public Object getPropertyValue(Object id)
 	{
-		if (id.equals(ModelNotificationManager.PROP_PROVIDER)) 
+		if (id.equals(ModelNotificationManager.PROP_PROVIDER))
 		{
 			ValueProvider valueProvider = getValueProvider(
 					binding.getProvider().getConfigValueProviderID());
 			return valueProvider.getName().getText();
 		}
-		else if (id.equals(ModelNotificationManager.PROP_CONSUMER)) 
+		else if (id.equals(ModelNotificationManager.PROP_CONSUMER))
 		{
 			ValueConsumer valueConsumer = binding.getConsumer();
 			if (valueConsumer instanceof ValueProviderConfig) {
-				ValueProviderConfig valueProviderConfig = (ValueProviderConfig) valueConsumer;				
+				ValueProviderConfig valueProviderConfig = (ValueProviderConfig) valueConsumer;
 				ValueProvider valueProvider = getValueProvider(
 						valueProviderConfig.getConfigValueProviderID());
 				return valueProvider.getName().getText();
@@ -65,11 +65,11 @@ extends AbstractPropertySource
 		return null;
 	}
 
-	protected ValueProvider getValueProvider(ValueProviderID valueProviderID) 
+	protected ValueProvider getValueProvider(ValueProviderID valueProviderID)
 	{
 		ValueProvider valueProvider = ValueProviderDAO.sharedInstance().getValueProvider(
-				valueProviderID, 
-				ValueProviderConfigEditPart.FETCH_GROUPS, 
+				valueProviderID,
+				ValueProviderConfigEditPart.FETCH_GROUPS,
 				new NullProgressMonitor());
 		return valueProvider;
 	}
@@ -78,7 +78,7 @@ extends AbstractPropertySource
 
 	}
 
-	protected IPropertyDescriptor createProviderPD() 
+	protected IPropertyDescriptor createProviderPD()
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(
 				ModelNotificationManager.PROP_PROVIDER,
@@ -86,7 +86,7 @@ extends AbstractPropertySource
 		return pd;
 	}
 
-	protected IPropertyDescriptor createConsumerPD() 
+	protected IPropertyDescriptor createConsumerPD()
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(
 				ModelNotificationManager.PROP_CONSUMER,

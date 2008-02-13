@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Color;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class PageColorUtil 
+public class PageColorUtil
 {
 	private static List<Color> pageColors = new ArrayList<Color>();
 	private static Color paramColor = new Color(null, 163, 163, 163);
@@ -61,27 +61,27 @@ public class PageColorUtil
 		return list.get(index);
 	}
 	
-	public static Color getPageColor(int colorIndex) 
+	public static Color getPageColor(int colorIndex)
 	{
 		return getColor(colorIndex, pageColors);
 	}
 	
-	public static Color getHeaderColor(int colorIndex) 
+	public static Color getHeaderColor(int colorIndex)
 	{
 		return getColor(colorIndex, headerColors);
 	}
 	
-	public static Color getBorderColor(int colorIndex) 
+	public static Color getBorderColor(int colorIndex)
 	{
 		return getColor(colorIndex, borderColors);
 	}
 
-	public static Color getFontColor(int colorIndex) 
+	public static Color getFontColor(int colorIndex)
 	{
 		return getColor(colorIndex, fontColors);
 	}
 	
-	public static Color getHeaderFontColor(int colorIndex) 
+	public static Color getHeaderFontColor(int colorIndex)
 	{
 		return getColor(colorIndex, headerFontColors);
 	}

@@ -13,8 +13,8 @@ import org.nightlabs.jfire.reporting.parameter.config.IGraphicalInfoProvider;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SetConstraintCommand 
-extends Command 
+public class SetConstraintCommand
+extends Command
 {
 	private Point newPos;
 //	private Dimension newSize;
@@ -32,7 +32,7 @@ extends Command
 //		oldSize = part.getSize();
 //		oldPos  = part.getLocation();
 		oldPos  = new Point(part.getX(), part.getY());
-		redo();		
+		redo();
 	}
 
 	@Override
@@ -49,9 +49,9 @@ extends Command
 		part.setY(newPos.y);
 		
 		ModelNotificationManager.sharedInstance().notify(
-				getObjectID(part), 
-				IGraphicalInfoProvider.PROP_X, 
-				oldPos.x, 
+				getObjectID(part),
+				IGraphicalInfoProvider.PROP_X,
+				oldPos.x,
 				newPos.x);
 	}
 
@@ -83,9 +83,9 @@ extends Command
 		part.setX(oldPos.x);
 		part.setY(oldPos.y);
 		ModelNotificationManager.sharedInstance().notify(
-				getObjectID(part), 
-				IGraphicalInfoProvider.PROP_X, 
-				oldPos.x, 
-				newPos.x);		
+				getObjectID(part),
+				IGraphicalInfoProvider.PROP_X,
+				oldPos.x,
+				newPos.x);
 	}
 }

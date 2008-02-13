@@ -9,8 +9,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ModelCreationFactory 
-implements CreationFactory 
+public class ModelCreationFactory
+implements CreationFactory
 {
 	private Class targetClass;
 	private IValueAcquisitionSetupProvider setupProvider;
@@ -27,12 +27,12 @@ implements CreationFactory
 		return targetClass;
 	}
 
-	public Object getNewObject() 
+	public Object getNewObject()
 	{
 		Object result = null;
 		
 		if( targetClass.equals(ValueProviderConfig.class)) {
-			result = new ValueProviderConfig(setupProvider.getValueAcquisitionSetup(), 
+			result = new ValueProviderConfig(setupProvider.getValueAcquisitionSetup(),
 					IDGenerator.nextID(ValueProviderConfig.class));
 		}
 		

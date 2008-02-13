@@ -91,12 +91,12 @@ import org.nightlabs.util.Util;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class ReportParameterEditor 
-extends GraphicalEditorWithFlyoutPalette 
+public abstract class ReportParameterEditor
+extends GraphicalEditorWithFlyoutPalette
 {
 	private static final Logger logger = Logger.getLogger(ReportParameterEditor.class);
 	
-/******************************* Inner class OutlinePage BEGIN *********************************/	
+/******************************* Inner class OutlinePage BEGIN *********************************/
 	class OutlinePage
 	extends ContentOutlinePage
 	implements IAdaptable
@@ -146,10 +146,10 @@ extends GraphicalEditorWithFlyoutPalette
 //
 //			showOutlineAction.setImageDescriptor(
 //					SharedImages.getSharedImageDescriptor(
-//							ReportingAdminParameterPlugin.getDefault(), 
-//							ReportParameterEditor.class, 
-//							"OutlinePage-Outline", 
-//							ImageDimension._16x16, 
+//							ReportingAdminParameterPlugin.getDefault(),
+//							ReportParameterEditor.class,
+//							"OutlinePage-Outline",
+//							ImageDimension._16x16,
 //							ImageFormat.gif));
 //			tbm.add(showOutlineAction);
 //			showOverviewAction = new Action() {
@@ -160,10 +160,10 @@ extends GraphicalEditorWithFlyoutPalette
 //
 //			showOverviewAction.setImageDescriptor(
 //					SharedImages.getSharedImageDescriptor(
-//					ReportingAdminParameterPlugin.getDefault(), 
-//					ReportParameterEditor.class, 
-//					"OutlinePage-Overview", 
-//					ImageDimension._16x16, 
+//					ReportingAdminParameterPlugin.getDefault(),
+//					ReportParameterEditor.class,
+//					"OutlinePage-Overview",
+//					ImageDimension._16x16,
 //					ImageFormat.gif));
 //			tbm.add(showOverviewAction);
 //			showPage(ID_OUTLINE);
@@ -211,7 +211,7 @@ extends GraphicalEditorWithFlyoutPalette
 			setContents(getValueAcquisitionSetup());
 		}
 
-		protected void initializeOverview() 
+		protected void initializeOverview()
 		{
 			if (overview != null && overview.isDisposed()) {
 				LightweightSystem lws = new LightweightSystem(overview);
@@ -231,7 +231,7 @@ extends GraphicalEditorWithFlyoutPalette
 						}
 					};
 					getFigureCanvas().addDisposeListener(disposeListener);
-				}				
+				}
 			}
 		}
 
@@ -277,7 +277,7 @@ extends GraphicalEditorWithFlyoutPalette
 		if (type == ZoomManager.class)
 			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
 
-		if (type == IPropertySheetPage.class) {    		
+		if (type == IPropertySheetPage.class) {
 //			IPropertySheetPage page = new ReportPropertySheetPage();
 			PropertySheetPage page = new PropertySheetPage();
 			page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
@@ -309,7 +309,7 @@ extends GraphicalEditorWithFlyoutPalette
 				getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
 		}
 		return sharedKeyHandler;
-	}	
+	}
 	
 	public ReportParameterEditor() {
 		super();
@@ -335,7 +335,7 @@ extends GraphicalEditorWithFlyoutPalette
 	}
 
 	private IValueAcquisitionSetupProvider setupProvider = null;
-	public IValueAcquisitionSetupProvider getSetupProvider() 
+	public IValueAcquisitionSetupProvider getSetupProvider()
 	{
 		if (setupProvider == null)
 			setupProvider = new ValueAcquisitionSetupProvider(getValueAcquisitionSetup());
@@ -344,30 +344,30 @@ extends GraphicalEditorWithFlyoutPalette
 	}
 	
 	private ValueAcquisitionSetup currentSetup;
-	public ValueAcquisitionSetup getValueAcquisitionSetup() 
+	public ValueAcquisitionSetup getValueAcquisitionSetup()
 	{
 		if (currentSetup != null)
 			return currentSetup;
 		
 		if (reportParameterAcquisitionSetup != null) {
 			if (reportParameterAcquisitionSetup.getDefaultSetup() != null) {
-				currentSetup = reportParameterAcquisitionSetup.getDefaultSetup(); 
+				currentSetup = reportParameterAcquisitionSetup.getDefaultSetup();
 //				return currentSetup;
-			}			
+			}
 			else {
 				if (reportParameterAcquisitionSetup.getValueAcquisitionSetups().values() != null &&
-						!reportParameterAcquisitionSetup.getValueAcquisitionSetups().values().isEmpty()) 
+						!reportParameterAcquisitionSetup.getValueAcquisitionSetups().values().isEmpty())
 				{
-					ValueAcquisitionSetup valueAcquisitionSetup = 
+					ValueAcquisitionSetup valueAcquisitionSetup =
 						reportParameterAcquisitionSetup.getValueAcquisitionSetups().values().iterator().next();
 					reportParameterAcquisitionSetup.setDefaultSetup(valueAcquisitionSetup);
-					currentSetup = valueAcquisitionSetup; 
+					currentSetup = valueAcquisitionSetup;
 //					return currentSetup;
-				} 
+				}
 				else {
 					ReportParameterAcquisitionUseCase useCase = new ReportParameterAcquisitionUseCase(
-							reportParameterAcquisitionSetup, 
-							ReportParameterAcquisitionUseCase.USE_CASE_ID_DEFAULT); 
+							reportParameterAcquisitionSetup,
+							ReportParameterAcquisitionUseCase.USE_CASE_ID_DEFAULT);
 					ValueAcquisitionSetup valueAcquisitionSetup = new ValueAcquisitionSetup(
 							reportRegistryItemID.organisationID,
 							IDGenerator.nextID(ValueAcquisitionSetup.class),
@@ -375,49 +375,49 @@ extends GraphicalEditorWithFlyoutPalette
 							useCase);
 					reportParameterAcquisitionSetup.addValueAcquisitionSetup(valueAcquisitionSetup);
 					reportParameterAcquisitionSetup.setDefaultSetup(valueAcquisitionSetup);
-					currentSetup = valueAcquisitionSetup; 
-//					return currentSetup;					
+					currentSetup = valueAcquisitionSetup;
+//					return currentSetup;
 				}
 			}
-		} 
+		}
 		else {
-			String[] FETCH_GROUP = new String[] {FetchPlan.DEFAULT}; 
+			String[] FETCH_GROUP = new String[] {FetchPlan.DEFAULT};
 			ReportRegistryItem reportRegistryItem = ReportRegistryItemDAO.sharedInstance().
 				getReportRegistryItem(reportRegistryItemID, FETCH_GROUP, new NullProgressMonitor());
 			if (!(reportRegistryItem instanceof ReportLayout))
 				throw new IllegalStateException("ReportRegistryItem is not an instance of "+ReportLayout.class.getSimpleName()); //$NON-NLS-1$
 			reportParameterAcquisitionSetup = new ReportParameterAcquisitionSetup(
-					reportRegistryItem.getOrganisationID(), 
+					reportRegistryItem.getOrganisationID(),
 					IDGenerator.nextID(ReportParameterAcquisitionSetup.class),
 					(ReportLayout)reportRegistryItem
 				);
 			ReportParameterAcquisitionUseCase useCase = new ReportParameterAcquisitionUseCase(
-					reportParameterAcquisitionSetup, 
-					ReportParameterAcquisitionUseCase.USE_CASE_ID_DEFAULT); 
+					reportParameterAcquisitionSetup,
+					ReportParameterAcquisitionUseCase.USE_CASE_ID_DEFAULT);
 			ValueAcquisitionSetup valueAcquisitionSetup = createNewValueAcquisitionSetup(useCase);
 			reportParameterAcquisitionSetup.setDefaultSetup(valueAcquisitionSetup);
 			reportParameterAcquisitionSetup.addValueAcquisitionSetup(valueAcquisitionSetup);
-			currentSetup = valueAcquisitionSetup; 
-//			return currentSetup;			
+			currentSetup = valueAcquisitionSetup;
+//			return currentSetup;
 		}
 		
 		getSetupProvider().setValueAcquisitionSetup(currentSetup);
 		return currentSetup;
 	}
 
-	private ValueAcquisitionSetup createNewValueAcquisitionSetup(ReportParameterAcquisitionUseCase useCase) 
+	private ValueAcquisitionSetup createNewValueAcquisitionSetup(ReportParameterAcquisitionUseCase useCase)
 	{
 		return new ValueAcquisitionSetup(
 				reportRegistryItemID.organisationID,
 				IDGenerator.nextID(ValueAcquisitionSetup.class),
 				reportParameterAcquisitionSetup,
-				useCase);		
+				useCase);
 	}
 	
 	@Override
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
-		getGraphicalViewer().setContents(getValueAcquisitionSetup());		
+		getGraphicalViewer().setContents(getValueAcquisitionSetup());
 		doAutoLayout();
 	}
 
@@ -432,20 +432,20 @@ extends GraphicalEditorWithFlyoutPalette
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) 
+	public void doSave(IProgressMonitor monitor)
 	{
 		try {
 			reportParameterAcquisitionSetup = ReportingPlugin.getReportParameterManager().storeReportParameterAcquisitionSetup(
-					reportParameterAcquisitionSetup, 
-					true, 
-					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS, 
+					reportParameterAcquisitionSetup,
+					true,
+					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			getCommandStack().markSaveLocation();
 			currentSetup = null;
 			getGraphicalViewer().setContents(getValueAcquisitionSetup());
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
-		}				
+		}
 	}
 
 	@Override
@@ -459,7 +459,7 @@ extends GraphicalEditorWithFlyoutPalette
 	}
 
 	@Override
-	protected void configureGraphicalViewer() 
+	protected void configureGraphicalViewer()
 	{
 		super.configureGraphicalViewer();
 		ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)getGraphicalViewer();
@@ -478,7 +478,7 @@ extends GraphicalEditorWithFlyoutPalette
 		getSite().registerContextMenu(cmProvider, viewer);
 		
 //		doAutoLayout();
-	}	
+	}
 
 	private ScalableFreeformRootEditPart rootEditPart;
 	public ScalableFreeformRootEditPart getRootEditPart() {
@@ -497,7 +497,7 @@ extends GraphicalEditorWithFlyoutPalette
 	private ReportRegistryItemID reportRegistryItemID;
 	private ReportParameterAcquisitionSetup reportParameterAcquisitionSetup;
 	@Override
-	protected void setInput(IEditorInput input) 
+	protected void setInput(IEditorInput input)
 	{
 		super.setInput(input);
 		if (reportRegistryItemID != null && reportParameterAcquisitionSetup != null)
@@ -506,8 +506,8 @@ extends GraphicalEditorWithFlyoutPalette
 		reportRegistryItemID = reportEditorInput.getReportRegistryItemID();
 		try {
 			ReportParameterAcquisitionSetup cachedSetup = ReportParameterAcquisitionSetupDAO.sharedInstance().getSetupForReportLayout(
-					reportEditorInput.getReportRegistryItemID(), 
-					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS, 
+					reportEditorInput.getReportRegistryItemID(),
+					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS,
 					new NullProgressMonitor());
 			if (cachedSetup != null)
 				reportParameterAcquisitionSetup = Util.cloneSerializable(cachedSetup);
@@ -515,15 +515,15 @@ extends GraphicalEditorWithFlyoutPalette
 				reportParameterAcquisitionSetup = null;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 
 	@Override
-	protected void createActions() 
+	protected void createActions()
 	{
 		super.createActions();
 		ActionRegistry registry = getActionRegistry();
-		IAction action;	
+		IAction action;
 		
 		action = new AutoLayoutAction(this);
 		registry.registerAction(action);
@@ -531,29 +531,29 @@ extends GraphicalEditorWithFlyoutPalette
 		
 		action = new AutoLayoutPagesAction(this);
 		registry.registerAction(action);
-		getPropertyActions().add(action.getId());	
+		getPropertyActions().add(action.getId());
 		
 //		action = new UndoAction(this);
 //		registry.registerAction(action);
 //		getStackActions().add(action.getId());
-//		
+//
 //		action = new RedoAction(this);
 //		registry.registerAction(action);
 //		getStackActions().add(action.getId());
-//		
+//
 //		action = new SelectAllAction(this);
 //		registry.registerAction(action);
-//		
+//
 //		action = new DeleteAction((IWorkbenchPart)this);
 //		registry.registerAction(action);
 //		getSelectionActions().add(action.getId());
-//		
+//
 //		action = new SaveAction(this);
 //		registry.registerAction(action);
 //		getPropertyActions().add(action.getId());
-//		
+//
 //		action = new PrintAction(this);
-//		registry.registerAction(action);		
+//		registry.registerAction(action);
 	}
 	
 	public abstract ModuleHandle getReportHandle();
@@ -573,7 +573,7 @@ extends GraphicalEditorWithFlyoutPalette
 	private Composite parent = null;
 		
 	@Override
-	public void createPartControl(Composite parent) 
+	public void createPartControl(Composite parent)
 	{
 		this.parent = parent;
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -622,17 +622,17 @@ extends GraphicalEditorWithFlyoutPalette
 		
 	private ILabelProvider useCaseLabelProvider = new LabelProvider() {
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
 			if (element instanceof ReportParameterAcquisitionUseCase) {
 				ReportParameterAcquisitionUseCase useCase = (ReportParameterAcquisitionUseCase) element;
 				return useCase.getName().getText();
 			}
 			return super.getText(element);
-		}		
+		}
 	};
 	
-	private ISelectionChangedListener useCaseComboListener = new ISelectionChangedListener(){	
+	private ISelectionChangedListener useCaseComboListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
 			if (!event.getSelection().isEmpty() && event.getSelection() instanceof StructuredSelection) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
@@ -645,36 +645,36 @@ extends GraphicalEditorWithFlyoutPalette
 					defaultUseCaseButton.setSelection(false);
 				
 				setCurrentValueAcquisitionSetup(setup);
-			}			
-		}	
+			}
+		}
 	};
 	
-	private SelectionListener defaultUseCaseButtonListener = new SelectionListener(){	
+	private SelectionListener defaultUseCaseButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			reportParameterAcquisitionSetup.setDefaultSetup(currentSetup);
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
-	}; 
+		}
+	};
 	
-	private SelectionListener editUseCaseButtonListener = new SelectionListener(){	
+	private SelectionListener editUseCaseButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
-			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(), 
+			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(),
 					useCaseCombo.getSelectedElement(), reportParameterAcquisitionSetup, UseCaseDialog.EDIT_MODE);
 			int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
 				useCaseCombo.refresh();
 			}
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
-	}; 
+		}
+	};
 
-	private SelectionListener newUseCaseButtonListener = new SelectionListener(){	
+	private SelectionListener newUseCaseButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
-			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(), 
+			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(),
 					null, reportParameterAcquisitionSetup, UseCaseDialog.NEW_MODE);
 			int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
@@ -682,18 +682,18 @@ extends GraphicalEditorWithFlyoutPalette
 				ValueAcquisitionSetup setup = createNewValueAcquisitionSetup(useCase);
 				reportParameterAcquisitionSetup.addValueAcquisitionSetup(setup);
 //				reportParameterAcquisitionSetup.getValueAcquisitionSetups().put(
-//						useCase, setup);				
-				useCaseCombo.addElement(useCase);				
-				useCaseCombo.selectElement(useCase);				
+//						useCase, setup);
+				useCaseCombo.addElement(useCase);
+				useCaseCombo.selectElement(useCase);
 				setCurrentValueAcquisitionSetup(setup);
 			}
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
-	}; 
+		}
+	};
 	
-	protected void setCurrentValueAcquisitionSetup(ValueAcquisitionSetup setup) 
+	protected void setCurrentValueAcquisitionSetup(ValueAcquisitionSetup setup)
 	{
 		this.currentSetup = setup;
 		getSetupProvider().setValueAcquisitionSetup(currentSetup);
@@ -702,7 +702,7 @@ extends GraphicalEditorWithFlyoutPalette
 		IEditorInput input = new JFireRemoteReportEditorInput(oldInput.getReportRegistryItemID());
 		try {
 			getSelectionSynchronizer().removeViewer(getRootEditPart().getViewer());
-			// necessary to avoid FigureCanvas SWT Bug (Scrollbar Widget is disposed)			
+			// necessary to avoid FigureCanvas SWT Bug (Scrollbar Widget is disposed)
 			getFigureCanvas().setViewport(new Viewport(true));
 			getGraphicalViewer().getControl().dispose();
 			contentWrapper.dispose();
@@ -718,7 +718,7 @@ extends GraphicalEditorWithFlyoutPalette
 			contentWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			contentWrapper.setLayout(new FillLayout());
 			super.createPartControl(contentWrapper);
-			parent.layout(true, true);						
+			parent.layout(true, true);
 			
 //			DefaultEditDomain domain = (DefaultEditDomain) getEditDomain();
 			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());

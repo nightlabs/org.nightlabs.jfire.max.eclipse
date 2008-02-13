@@ -21,7 +21,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractNodeReportEditPart 
+public abstract class AbstractNodeReportEditPart
 extends AbstractReportParameterEditPart
 implements NodeEditPart
 {
@@ -162,7 +162,7 @@ implements NodeEditPart
 			return null;
 		}
 		return null;
-	}	
+	}
 	
 	/**
 	 * Returns the name (parameterID) of the {@link INodeAnchorItem} assiciated to the given anchor.
@@ -174,7 +174,7 @@ implements NodeEditPart
 		if (item != null)
 			return item.getAnchorName();
 		return null;
-	}	
+	}
 	
 	/**
 	 * Returns the type of the {@link INodeAnchorItem} associated to the given anchor.
@@ -186,7 +186,7 @@ implements NodeEditPart
 		if (item != null)
 			return item.getAnchorType();
 		return null;
-	}	
+	}
 	
 	
 }

@@ -11,11 +11,11 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueConsumerBinding;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DeleteConnectionCommand 
-extends Command 
+public class DeleteConnectionCommand
+extends Command
 {
-	public DeleteConnectionCommand(ValueConsumerBinding binding, ValueAcquisitionSetup setup) 
-	{		
+	public DeleteConnectionCommand(ValueConsumerBinding binding, ValueAcquisitionSetup setup)
+	{
 		super();
 		if (binding == null)
 			throw new IllegalArgumentException("Param binding must NOT be null!"); //$NON-NLS-1$
@@ -30,7 +30,7 @@ extends Command
 
 	@Override
 	public void execute() {
-//		valueConsumerBinding.getSetup().getValueConsumerBindings().remove(valueConsumerBinding);		
+//		valueConsumerBinding.getSetup().getValueConsumerBindings().remove(valueConsumerBinding);
 		setup.getValueConsumerBindings().remove(valueConsumerBinding);
 		notifyEditParts();
 	}
@@ -47,28 +47,28 @@ extends Command
 		notifyEditParts();
 	}
 
-	protected void notifyEditParts() 
+	protected void notifyEditParts()
 	{
 		ModelNotificationManager.sharedInstance().notify(
-				ObjectIDProvider.getObjectID(setup), 
-				ModelNotificationManager.PROP_CREATE_CONNECTION, 
+				ObjectIDProvider.getObjectID(setup),
+				ModelNotificationManager.PROP_CREATE_CONNECTION,
 				null,
 				valueConsumerBinding);
 		
 		ModelNotificationManager.sharedInstance().notify(
-			ObjectIDProvider.getObjectID(valueConsumerBinding), 
-			ModelNotificationManager.PROP_CREATE_CONNECTION, 
+			ObjectIDProvider.getObjectID(valueConsumerBinding),
+			ModelNotificationManager.PROP_CREATE_CONNECTION,
 			null,
 			valueConsumerBinding);
 		ModelNotificationManager.sharedInstance().notify(
-				ObjectIDProvider.getObjectID(valueConsumerBinding.getConsumer()), 
-				ModelNotificationManager.PROP_DELETE_CONNECTION, 
-				null, 
+				ObjectIDProvider.getObjectID(valueConsumerBinding.getConsumer()),
+				ModelNotificationManager.PROP_DELETE_CONNECTION,
+				null,
 				valueConsumerBinding);
 		ModelNotificationManager.sharedInstance().notify(
-				ObjectIDProvider.getObjectID(valueConsumerBinding.getProvider()), 
-				ModelNotificationManager.PROP_DELETE_CONNECTION, 
-				null, 
-				valueConsumerBinding);				
+				ObjectIDProvider.getObjectID(valueConsumerBinding.getProvider()),
+				ModelNotificationManager.PROP_DELETE_CONNECTION,
+				null,
+				valueConsumerBinding);
 	}
 }

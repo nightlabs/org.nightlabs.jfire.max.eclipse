@@ -25,7 +25,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class PaletteFactory 
+public class PaletteFactory
 {
 	/** Default palette size. */
 	protected static final int DEFAULT_PALETTE_SIZE = 125;
@@ -36,7 +36,7 @@ public class PaletteFactory
 	/** Preference ID used to persist the flyout palette's state. */
 	protected static final String PALETTE_STATE = "PaletteFactory.State"; //$NON-NLS-1$
 
-	public FlyoutPreferences createPalettePreferences() 
+	public FlyoutPreferences createPalettePreferences()
 	{
 		// set default flyout palette preference values, in case the preference store
 		// does not hold stored values for the given preferences
@@ -64,23 +64,23 @@ public class PaletteFactory
 				getPreferenceStore().setValue(PALETTE_SIZE, width);
 			}
 		};
-	} 
+	}
 
 	/**
 	 * Returns the preference store for the ReportingAdminParameterPlugin.
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#getPreferenceStore() 
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#getPreferenceStore()
 	 */
-	protected IPreferenceStore getPreferenceStore() 
+	protected IPreferenceStore getPreferenceStore()
 	{
 		return ReportingAdminParameterPlugin.getDefault().getPreferenceStore();
-	}	 
+	}
 
 	/**
 	 * Creates the PaletteRoot and adds all palette elements.
 	 * Use this factory method to create a new palette for your graphical editor.
 	 * @return a new PaletteRoot
 	 */
-	public PaletteRoot createPalette() 
+	public PaletteRoot createPalette()
 	{
 		PaletteRoot palette = new PaletteRoot();
 		palette.add(createToolsGroup(palette));
@@ -88,13 +88,13 @@ public class PaletteFactory
 		return palette;
 	}
 
-	protected PaletteContainer createToolsGroup(PaletteRoot palette) 
+	protected PaletteContainer createToolsGroup(PaletteRoot palette)
 	{
 		PaletteGroup toolGroup = new PaletteGroup(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.paletteGroup.tools.name")); //$NON-NLS-1$
 
 		// Add a selection tool to the group
 		ToolEntry tool = createSelectionToolEntry();
-		toolGroup.add(tool);	  
+		toolGroup.add(tool);
 		palette.setDefaultEntry(tool);
 
 		// Add a marquee tool to the group
@@ -104,19 +104,19 @@ public class PaletteFactory
 		toolGroup.add(new PaletteSeparator());
 
 		return toolGroup;
-	}	 
+	}
 
-	protected ToolEntry createMarqueeToolEntry() 
+	protected ToolEntry createMarqueeToolEntry()
 	{
-		return new MarqueeToolEntry();	 
-	}	 
+		return new MarqueeToolEntry();
+	}
 
 	protected ToolEntry createSelectionToolEntry()
 	{
 		return new PanningSelectionToolEntry();
 	}
 
-	protected PaletteContainer createModelGroup() 
+	protected PaletteContainer createModelGroup()
 	{
 		PaletteDrawer componentsDrawer = new PaletteDrawer(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.paletteGroup.model.name")); //$NON-NLS-1$
 
@@ -129,37 +129,37 @@ public class PaletteFactory
 		componentsDrawer.add(component);
 
 		return componentsDrawer;
-	} 
+	}
 
-	protected ToolEntry createConnectionToolEntry() 
+	protected ToolEntry createConnectionToolEntry()
 	{
 		return new ConnectionCreationToolEntry(
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.connectionTool.label"), //$NON-NLS-1$
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.connectionTool.shortDesc"), //$NON-NLS-1$
 				null,
 				SharedImages.getSharedImageDescriptor(
-						ReportingAdminParameterPlugin.getDefault(), 
+						ReportingAdminParameterPlugin.getDefault(),
 						ConnectionToolEntry.class, "",  //$NON-NLS-1$
 						ImageDimension._16x16, ImageFormat.gif),
 				SharedImages.getSharedImageDescriptor(
-						ReportingAdminParameterPlugin.getDefault(), 
+						ReportingAdminParameterPlugin.getDefault(),
 						ConnectionToolEntry.class, "", //$NON-NLS-1$
 						ImageDimension._24x24, ImageFormat.gif)
-			);			
+			);
 	}
 
-//	protected ToolEntry createConnectionToolEntry() 
+//	protected ToolEntry createConnectionToolEntry()
 //	{
 //		return new ConnectionCreationToolEntry(
 //				"ConnectionToolLabel",
 //				"ConnectionToolShortDesc",
 //				null,
 //				SharedImages.getSharedImageDescriptor(
-//						ReportingAdminParameterPlugin.getDefault(), 
-//						ConnectionToolEntry.class, "", 
+//						ReportingAdminParameterPlugin.getDefault(),
+//						ConnectionToolEntry.class, "",
 //						ImageDimension._16x16, ImageFormat.gif),
 //				SharedImages.getSharedImageDescriptor(
-//						ReportingAdminParameterPlugin.getDefault(), 
+//						ReportingAdminParameterPlugin.getDefault(),
 //						ConnectionToolEntry.class, "",
 //						ImageDimension._24x24, ImageFormat.gif)
 //			);
@@ -170,7 +170,7 @@ public class PaletteFactory
 		return new ValueProviderToolEntry(
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.providerTool.label"), //$NON-NLS-1$
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.PaletteFactory.providerTool.shortDesc"), //$NON-NLS-1$
-				ValueProviderConfig.class, 
+				ValueProviderConfig.class,
 				getCreationFactory(ValueProviderConfig.class),
 				SharedImages.getSharedImageDescriptor(
 						ReportingAdminParameterPlugin.getDefault(),

@@ -85,11 +85,11 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 				object2IdNo.put(paramConfig, idNo);
 				String paramType = paramConfig.getParameterType().replaceAll("<", "&lt;");
 				paramType = paramType.replaceAll(">", "&gt;");
-				addLine(buffer, indent, 
+				addLine(buffer, indent,
 						"<parameter " + //$NON-NLS-1$
 						"id=\""+String.valueOf(idNo)+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"name=\""+paramConfig.getParameterID()+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
-						"type=\""+paramType+"\" " + //$NON-NLS-1$	
+						"type=\""+paramType+"\" " + //$NON-NLS-1$
 						"x=\""+String.valueOf(paramConfig.getX())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"y=\""+String.valueOf(paramConfig.getY())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"/>"); //$NON-NLS-1$

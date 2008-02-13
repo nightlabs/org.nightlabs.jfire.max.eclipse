@@ -14,8 +14,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ConnectionCommand 
-extends Command 
+public class ConnectionCommand
+extends Command
 {
 	private static final Logger logger = Logger.getLogger(ConnectionCommand.class);
 	
@@ -30,7 +30,7 @@ extends Command
 	private String sourceParameterID;
 	private String sourceParameterType;
 	private String targetParameterID;
-	private String targetParameterType;	
+	private String targetParameterType;
 		
 	private ValueConsumerBinding binding;
 	private ValueAcquisitionSetup setup;
@@ -41,7 +41,7 @@ extends Command
 	}
 
 	@Override
-	public boolean canExecute() 
+	public boolean canExecute()
 	{
 		if (sourceParameterType != null && targetParameterType != null) {
 			if (sourceParameterType.equals(targetParameterType))
@@ -51,7 +51,7 @@ extends Command
 	}
 
 	@Override
-	public void execute() 
+	public void execute()
 	{
 		if (binding != null) {
 			binding.setParameterID(targetParameterID);
@@ -61,18 +61,18 @@ extends Command
 				setup.getValueConsumerBindings().add(binding);
 				setup.clearBindingIndexes();
 				ModelNotificationManager.sharedInstance().notify(
-						ObjectIDProvider.getObjectID(source), 
-						ModelNotificationManager.PROP_CONNECT, 
-						null, 
-						binding);			
+						ObjectIDProvider.getObjectID(source),
+						ModelNotificationManager.PROP_CONNECT,
+						null,
+						binding);
 				ModelNotificationManager.sharedInstance().notify(
-						ObjectIDProvider.getObjectID(target), 
-						ModelNotificationManager.PROP_CONNECT, 
-						null, 
-						binding);			
+						ObjectIDProvider.getObjectID(target),
+						ModelNotificationManager.PROP_CONNECT,
+						null,
+						binding);
 			} else {
 				logger.warn("ValueAcquisitionSetup is null!"); //$NON-NLS-1$
-			}			
+			}
 		} else {
 			logger.warn("binding == null!"); //$NON-NLS-1$
 		}
@@ -84,15 +84,15 @@ extends Command
 	}
 
 	@Override
-	public void undo() 
+	public void undo()
 	{
 		if (setup != null) {
 			setup.getValueConsumerBindings().remove(binding);
 			ModelNotificationManager.sharedInstance().notify(
-					ObjectIDProvider.getObjectID(setup), 
-					ModelNotificationManager.PROP_CONNECT, 
-					null, 
-					binding);			
+					ObjectIDProvider.getObjectID(setup),
+					ModelNotificationManager.PROP_CONNECT,
+					null,
+					binding);
 		} else {
 			logger.warn("ValueAcquisitionSetup is null!"); //$NON-NLS-1$
 		}

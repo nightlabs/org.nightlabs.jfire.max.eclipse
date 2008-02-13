@@ -11,7 +11,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class FixedConnectionAnchor 
+public class FixedConnectionAnchor
 extends AbstractConnectionAnchor
 {
 	private boolean leftToRight = true;

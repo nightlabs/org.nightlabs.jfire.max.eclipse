@@ -7,8 +7,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ConnectionCreateRequest 
-//extends CreateRequest 
+public class ConnectionCreateRequest
+//extends CreateRequest
 extends CreateConnectionRequest
 {
 	private ValueAcquisitionSetup valueAcquisitionSetup;

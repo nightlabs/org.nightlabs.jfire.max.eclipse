@@ -14,8 +14,8 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.action.AutoLayoutPagesAc
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReportParameterContextMenuProvider 
-extends ContextMenuProvider 
+public class ReportParameterContextMenuProvider
+extends ContextMenuProvider
 {
 
 	/**
@@ -31,11 +31,11 @@ extends ContextMenuProvider
 		return actionRegistry;
 	}
 	private void setActionRegistry(ActionRegistry registry) {
-		actionRegistry = registry;		
+		actionRegistry = registry;
 	}
 	
 	@Override
-	public void buildContextMenu(IMenuManager manager) 
+	public void buildContextMenu(IMenuManager manager)
 	{
 		GEFActionConstants.addStandardActionGroups(manager);
 
@@ -50,15 +50,15 @@ extends ContextMenuProvider
 			manager.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 		
 		action = getActionRegistry().getAction(AutoLayoutAction.ID);
-		if (action != null)		
+		if (action != null)
 			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 
 		action = getActionRegistry().getAction(AutoLayoutPagesAction.ID);
-		if (action != null)		
+		if (action != null)
 			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		
 		action = getActionRegistry().getAction(ActionFactory.DELETE.getId());
-		if (action != null)		
+		if (action != null)
 			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
 		
 //		action = getActionRegistry().getAction(DeleteReportItemAction.ID);
@@ -71,7 +71,7 @@ extends ContextMenuProvider
 //		action = getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT);
 //		if (action.isEnabled())
 //			manager.appendToGroup(GEFActionConstants.GROUP_EDIT, action);
-//		
+//
 //		// Alignment Actions
 //		MenuManager submenu = new MenuManager("Align");
 //
@@ -86,9 +86,9 @@ extends ContextMenuProvider
 //		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_RIGHT);
 //		if (action.isEnabled())
 //			submenu.add(action);
-//			
+//
 //		submenu.add(new Separator());
-//		
+//
 //		action = getActionRegistry().getAction(GEFActionConstants.ALIGN_TOP);
 //		if (action.isEnabled())
 //			submenu.add(action);

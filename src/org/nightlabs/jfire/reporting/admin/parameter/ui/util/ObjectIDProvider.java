@@ -16,9 +16,9 @@ import org.nightlabs.jfire.reporting.parameter.config.id.ValueProviderConfigID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ObjectIDProvider 
+public class ObjectIDProvider
 {
-	public static ObjectID getObjectID(Object o) 
+	public static ObjectID getObjectID(Object o)
 	{
 		if (o instanceof ValueProviderConfig)
 			return ValueProviderConfigID.create((ValueProviderConfig)o);
@@ -29,6 +29,6 @@ public class ObjectIDProvider
 		else if (o instanceof ValueConsumerBinding)
 			return ValueConsumerBindingID.create((ValueConsumerBinding)o);
 		
-		return (ObjectID) JDOHelper.getObjectId(o);		
+		return (ObjectID) JDOHelper.getObjectId(o);
 	}
 }

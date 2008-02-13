@@ -22,8 +22,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class AutoLayoutPagesAction 
-extends AutoLayoutAction 
+public class AutoLayoutPagesAction
+extends AutoLayoutAction
 {
 	public static final String ID = AutoLayoutPagesAction.class.getName();
 		
@@ -42,7 +42,7 @@ extends AutoLayoutAction
 		public ValueProvider getValueProvider(ValueProviderConfig valueProviderConfig) {
 			ValueProviderID providerID = valueProviderConfig.getConfigValueProviderID();
 			return ValueProviderDAO.sharedInstance().getValueProvider(
-					providerID, 
+					providerID,
 					new String[] {FetchPlan.DEFAULT, ValueProvider.FETCH_GROUP_INPUT_PARAMETERS},
 					new NullProgressMonitor()
 				);
@@ -50,7 +50,7 @@ extends AutoLayoutAction
 	};
 	
 	@Override
-	public void run() 
+	public void run()
 	{
 		getReportParameterEditor().getValueAcquisitionSetup().createAcquisitionSequence(valueProviderProvider);
 		getReportParameterEditor().getValueAcquisitionSetup().clearBindingIndexes();

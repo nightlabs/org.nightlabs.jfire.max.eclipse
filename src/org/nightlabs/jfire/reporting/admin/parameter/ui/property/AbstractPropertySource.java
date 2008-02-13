@@ -12,8 +12,8 @@ import org.nightlabs.jfire.reporting.parameter.config.IGraphicalInfoProvider;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractPropertySource 
-implements IPropertySource 
+public abstract class AbstractPropertySource
+implements IPropertySource
 {
 	public static final String CATEGORY_GEOM = Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.AbstractPropertySource.propertyDescriptorCategoryGeometry.name"); //$NON-NLS-1$
 	public static final String CATEGORY_CONSUMER_KEY = Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.AbstractPropertySource.propertyDescriptorCategoryConsumerKey.name"); //$NON-NLS-1$
@@ -28,7 +28,7 @@ implements IPropertySource
 
 	}
 
-	protected PropertyDescriptor createXPD(boolean readOnly) 
+	protected PropertyDescriptor createXPD(boolean readOnly)
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
 				IGraphicalInfoProvider.PROP_X,
@@ -38,7 +38,7 @@ implements IPropertySource
 		return desc;
 	}
 	
-	protected PropertyDescriptor createYPD(boolean readOnly) 
+	protected PropertyDescriptor createYPD(boolean readOnly)
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
 				IGraphicalInfoProvider.PROP_Y,
@@ -46,7 +46,7 @@ implements IPropertySource
 				readOnly);
 		desc.setCategory(CATEGORY_GEOM);
 		return desc;
-	}	
+	}
 	
 	protected PropertyDescriptor createConsumerKeyPD(boolean readOnly)
 	{
@@ -58,23 +58,23 @@ implements IPropertySource
 		return desc;
 	}
 	
-	protected PropertyDescriptor createParameterIDPD(String suffix) 
+	protected PropertyDescriptor createParameterIDPD(String suffix)
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(
 				ModelNotificationManager.PROP_PARAMETER_ID + suffix,
 				String.format(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.AbstractPropertySource.propertyDescriptorParameterID.name"),  //$NON-NLS-1$
-						suffix), 
+						suffix),
 				true);
 		pd.setCategory(CATEGORY_PARAMETER);
 		return pd;
 	}
 
-	protected PropertyDescriptor createParameterTypePD(String suffix, boolean readOnly) 
+	protected PropertyDescriptor createParameterTypePD(String suffix, boolean readOnly)
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(
 				ModelNotificationManager.PROP_PARAMETER_TYPE + suffix,
 				String.format(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.AbstractPropertySource.propertyDescriptorParameterType.name"),  //$NON-NLS-1$
-						suffix), 
+						suffix),
 				readOnly);
 		pd.setCategory(CATEGORY_PARAMETER);
 		return pd;

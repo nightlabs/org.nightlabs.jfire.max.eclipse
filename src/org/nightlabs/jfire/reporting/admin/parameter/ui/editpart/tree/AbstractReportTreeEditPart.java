@@ -7,8 +7,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractReportTreeEditPart 
-extends AbstractTreeEditPart 
+public abstract class AbstractReportTreeEditPart
+extends AbstractTreeEditPart
 {
 
 	/**
@@ -30,12 +30,12 @@ extends AbstractTreeEditPart
 	public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
-    *  which would expect the model to be a property sourced. 
+    *  which would expect the model to be a property sourced.
     *  instead the editpart can provide a property source
     */
     if (IPropertySource.class == key) {
       return getPropertySource();
     }
     return super.getAdapter(key);
-  }	
+  }
 }

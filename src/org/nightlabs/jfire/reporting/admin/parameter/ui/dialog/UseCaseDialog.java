@@ -17,8 +17,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisition
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class UseCaseDialog 
-extends CenteredDialog 
+public class UseCaseDialog
+extends CenteredDialog
 {
 	public static final int EDIT_MODE = 1;
 	public static final int NEW_MODE = 2;
@@ -26,8 +26,8 @@ extends CenteredDialog
 	/**
 	 * @param parentShell
 	 */
-	public UseCaseDialog(Shell parentShell, ReportParameterAcquisitionUseCase useCase, 
-			ReportParameterAcquisitionSetup setup, int mode) 
+	public UseCaseDialog(Shell parentShell, ReportParameterAcquisitionUseCase useCase,
+			ReportParameterAcquisitionSetup setup, int mode)
 	{
 		super(parentShell);
 		this.useCase = useCase;
@@ -36,7 +36,7 @@ extends CenteredDialog
 	}
 
 	@Override
-	public void create() 
+	public void create()
 	{
 		super.create();
 		if (mode == EDIT_MODE)
@@ -54,7 +54,7 @@ extends CenteredDialog
 	private I18nTextEditor nameEditor;
 	private I18nTextEditor descriptionEditor;
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		Composite wrapper = new XComposite(parent, SWT.NONE);
 		nameEditor = new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.nameEditor.caption")); //$NON-NLS-1$
@@ -67,7 +67,7 @@ extends CenteredDialog
 			descriptionEditor.setI18nText(useCase.getDescription(), EditMode.BUFFERED);
 		
 		nameEditor.setFocus();
-		return wrapper;		
+		return wrapper;
 	}
 	
 	public ReportParameterAcquisitionUseCase getUseCase() {
@@ -75,7 +75,7 @@ extends CenteredDialog
 	}
 	
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
 		if (mode == NEW_MODE) {
 			String useCaseID = "" + IDGenerator.nextID(ReportParameterAcquisitionUseCase.class); //$NON-NLS-1$
@@ -83,10 +83,10 @@ extends CenteredDialog
 		}
 //		if (mode == EDIT_MODE) {
 			nameEditor.getI18nText().copyTo(useCase.getName());
-			descriptionEditor.getI18nText().copyTo(useCase.getDescription());			
+			descriptionEditor.getI18nText().copyTo(useCase.getDescription());
 //		}
 		super.okPressed();
-	}	
+	}
 	
 	
 }

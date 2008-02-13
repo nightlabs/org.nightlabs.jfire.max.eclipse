@@ -17,7 +17,7 @@ import org.nightlabs.jfire.reporting.parameter.config.IGraphicalInfoProvider;
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
-public abstract class AbstractReportParameterEditPart 
+public abstract class AbstractReportParameterEditPart
 extends AbstractGraphicalEditPart
 implements PropertyChangeListener
 {
@@ -39,10 +39,10 @@ implements PropertyChangeListener
 	}
 	
 	/**
-	 * Updates the visual aspect of this. 
+	 * Updates the visual aspect of this.
 	 */
 	@Override
-	protected void refreshVisuals() 
+	protected void refreshVisuals()
 	{
 		if (getModel() instanceof IGraphicalInfoProvider) {
 			int x = getGraphicalInfoProvider().getX();
@@ -56,14 +56,14 @@ implements PropertyChangeListener
 			((GraphicalEditPart) getParent()).setLayoutConstraint(
 				this,
 				getFigure(),
-				r);			
+				r);
 		}
 		else {
 			Rectangle r = new Rectangle(0, 0, -1, -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(
 					this,
 					getFigure(),
-					r);	
+					r);
 			
 			getFigure().repaint();
 			getFigure().revalidate();
@@ -71,31 +71,31 @@ implements PropertyChangeListener
 	}
 
 	@Override
-	protected void createEditPolicies() 
-	{		
+	protected void createEditPolicies()
+	{
 //		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ReportXYLayoutEditPolicy(
-//				(XYLayout)getContentPane().getLayoutManager()));				
+//				(XYLayout)getContentPane().getLayoutManager()));
 	}
 
 	protected abstract ObjectID getObjectID();
 	
 	@Override
-	public void activate() 
+	public void activate()
 	{
 		if (isActive())
-			return;		
+			return;
 		super.activate();
 		ModelNotificationManager.sharedInstance().addPropertyChangeListener(getObjectID(), this);
 	}
 
 	@Override
-	public void deactivate() 
+	public void deactivate()
 	{
 		if (!isActive())
-			return;		
+			return;
 		super.deactivate();
-		ModelNotificationManager.sharedInstance().removePropertyChangeListener(getObjectID(), this);		
-	}	
+		ModelNotificationManager.sharedInstance().removePropertyChangeListener(getObjectID(), this);
+	}
 	
 	private IPropertySource propertySource;
 	public IPropertySource getPropertySource() {
@@ -108,16 +108,16 @@ implements PropertyChangeListener
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
-  @Override  
+  @Override
   public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
-     *  which would expect the model to be a property sourced. 
+     *  which would expect the model to be a property sourced.
      *  instead the editpart can provide a property source
      */
     if (IPropertySource.class == key) {
       return getPropertySource();
     }
     return super.getAdapter(key);
-  }	
+  }
 }

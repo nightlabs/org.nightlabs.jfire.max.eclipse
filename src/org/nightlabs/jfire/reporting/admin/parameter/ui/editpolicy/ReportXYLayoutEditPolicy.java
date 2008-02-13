@@ -17,8 +17,8 @@ import org.nightlabs.jfire.reporting.parameter.config.IGraphicalInfoProvider;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReportXYLayoutEditPolicy 
-extends XYLayoutEditPolicy 
+public class ReportXYLayoutEditPolicy
+extends XYLayoutEditPolicy
 {
 
 	public ReportXYLayoutEditPolicy(XYLayout layout) {
@@ -29,20 +29,20 @@ extends XYLayoutEditPolicy
 	}
 
 	@Override
-	protected Command createChangeConstraintCommand(EditPart child, Object constraint) 
+	protected Command createChangeConstraintCommand(EditPart child, Object constraint)
 	{
 //		if (child instanceof ValueProviderConfigEditPart) {
 			IGraphicalInfoProvider model = (IGraphicalInfoProvider) child.getModel();
-			Rectangle rect = (Rectangle) constraint;		
+			Rectangle rect = (Rectangle) constraint;
 			SetConstraintCommand setConstraint = new SetConstraintCommand();
 			setConstraint.setLocation(rect);
 			setConstraint.setModel(model);
-			return setConstraint;			
+			return setConstraint;
 //		}
 	}
 
 	@Override
-	protected Command getCreateCommand(CreateRequest request) 
+	protected Command getCreateCommand(CreateRequest request)
 	{
 		if (request instanceof ValueProviderCreateRequest) {
 			return new CreateValueProviderCommand((ValueProviderCreateRequest)request);
@@ -56,11 +56,11 @@ extends XYLayoutEditPolicy
 
 //	@Override
 //	protected Command createChangeConstraintCommand(ChangeBoundsRequest request,
-//			EditPart child, Object constraint) 
+//			EditPart child, Object constraint)
 //	{
 ////		return super.createChangeConstraintCommand(request, child, constraint);
 //		IGraphicalInfoProvider model = (IGraphicalInfoProvider) child.getModel();
-//		Rectangle rect = (Rectangle) constraint;		
+//		Rectangle rect = (Rectangle) constraint;
 //		SetConstraintCommand setConstraint = new SetConstraintCommand();
 //		setConstraint.setLocation(rect);
 //		setConstraint.setModel(model);

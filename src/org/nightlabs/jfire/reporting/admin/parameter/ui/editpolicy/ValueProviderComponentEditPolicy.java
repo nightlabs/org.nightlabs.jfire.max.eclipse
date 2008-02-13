@@ -13,20 +13,20 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderComponentEditPolicy 
-extends ComponentEditPolicy 
+public class ValueProviderComponentEditPolicy
+extends ComponentEditPolicy
 {
 
 	@Override
-	protected Command createDeleteCommand(GroupRequest deleteRequest) 
+	protected Command createDeleteCommand(GroupRequest deleteRequest)
 	{
 		DeleteValueProviderCommand cmd = new DeleteValueProviderCommand(
-				(ValueProviderConfig) getHost().getModel(), 
+				(ValueProviderConfig) getHost().getModel(),
 				getValueAcquisitionSetup(deleteRequest));
 		return cmd;
 	}
 	
-	protected ValueAcquisitionSetup getValueAcquisitionSetup(GroupRequest request) 
+	protected ValueAcquisitionSetup getValueAcquisitionSetup(GroupRequest request)
 	{
 		if (!request.getEditParts().isEmpty()) {
 			EditPart targetEP = (EditPart) request.getEditParts().iterator().next();
@@ -34,8 +34,8 @@ extends ComponentEditPolicy
 				EditPart parentEP = targetEP.getParent();
 				ValueAcquisitionSetupEditPart vasep = (ValueAcquisitionSetupEditPart) parentEP;
 				return vasep.getValueAcquisitionSetup();
-			}			
+			}
 		}
 		return null;
-	}	
+	}
 }

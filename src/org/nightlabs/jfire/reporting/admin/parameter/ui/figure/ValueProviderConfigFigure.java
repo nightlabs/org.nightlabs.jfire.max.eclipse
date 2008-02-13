@@ -11,10 +11,10 @@ import org.nightlabs.jfire.reporting.parameter.ValueProviderInputParameter;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderConfigFigure 
+public class ValueProviderConfigFigure
 extends AbstractInputNodeFigure
 {
-	public ValueProviderConfigFigure(AbstractNodeReportEditPart editPart, ValueProvider valueProvider) 
+	public ValueProviderConfigFigure(AbstractNodeReportEditPart editPart, ValueProvider valueProvider)
 	{
 		super(editPart);
 		this.valueProvider = valueProvider;
@@ -24,23 +24,23 @@ extends AbstractInputNodeFigure
 		setBorder(lineBorder);
 	}
 		
-	private ValueProvider valueProvider;	
+	private ValueProvider valueProvider;
 	
 	@Override
-	protected void paintFigure(Graphics g) 
+	protected void paintFigure(Graphics g)
 	{
 		super.paintFigure(g);
 		drawOutputConnector(g, getBounds());
-	}	
+	}
 		
-	protected String getInputString(ValueProviderInputParameter inputParam) 
+	protected String getInputString(ValueProviderInputParameter inputParam)
 	{
-//		return "ID " + inputParam.getParameterID() + "\n" + "Type " + inputParam.getParameterType(); 
+//		return "ID " + inputParam.getParameterID() + "\n" + "Type " + inputParam.getParameterType();
 		return inputParam.getParameterID();
 	}
 
 	@Override
-	protected String getOutputString() 
+	protected String getOutputString()
 	{
 		String s = valueProvider.getOutputType();
 		int index = s.lastIndexOf("."); //$NON-NLS-1$
@@ -48,15 +48,15 @@ extends AbstractInputNodeFigure
 	}
 
 	@Override
-	public int getInputAmount() 
+	public int getInputAmount()
 	{
 		return valueProvider.getInputParameters().size();
 	}
 
 	@Override
-	public String getInputString(int index) 
+	public String getInputString(int index)
 	{
-		String s = valueProvider.getInputParameters().get(index).getParameterType(); 
+		String s = valueProvider.getInputParameters().get(index).getParameterType();
 		return valueProvider.getInputParameters().get(index).getParameterID() + "("+ s.substring(s.lastIndexOf(".")+1) +")";		 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
@@ -73,6 +73,6 @@ extends AbstractInputNodeFigure
 //	@Override
 //	public String getIputParameterType(int index) {
 //		return valueProvider.getInputParameters().get(index).getParameterType();
-//	}	
+//	}
 
 }

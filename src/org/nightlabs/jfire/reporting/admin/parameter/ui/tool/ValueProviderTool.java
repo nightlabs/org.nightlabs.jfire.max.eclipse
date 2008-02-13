@@ -12,21 +12,21 @@ import org.nightlabs.jfire.reporting.ui.parameter.ValueProviderDialog;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderTool 
-extends CreationTool 
+public class ValueProviderTool
+extends CreationTool
 {
 	public ValueProviderTool(ModelCreationFactory factory) {
 		super(factory);
-		valueAcquisitionSetup = factory.getSetup();		
+		valueAcquisitionSetup = factory.getSetup();
 	}
 
 	@Override
-	protected Request createTargetRequest() 
+	protected Request createTargetRequest()
 	{
 		ValueProviderCreateRequest request = new ValueProviderCreateRequest();
 		request.setFactory(getFactory());
 		return request;
-	}	
+	}
 
 	protected ValueAcquisitionSetup valueAcquisitionSetup;
 	
@@ -34,16 +34,16 @@ extends CreationTool
 		return (ValueProviderCreateRequest) getTargetRequest();
 	}
 	
-	@Override  
-	protected boolean handleButtonDown(int button) 
+	@Override
+	protected boolean handleButtonDown(int button)
 	{
-		ValueProvider valueProvider = ValueProviderDialog.openDialog();			        
+		ValueProvider valueProvider = ValueProviderDialog.openDialog();
 		if (valueProvider != null) {
 			getValueProviderCreateRequest().setValueProvider(valueProvider);
 			getValueProviderCreateRequest().setValueAcquisitionSetup(valueAcquisitionSetup);
 			performCreation(1);
 			return true;
 		}
-		return false;    
+		return false;
 	}
 }

@@ -28,7 +28,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderConfigEditPart 
+public class ValueProviderConfigEditPart
 extends AbstractNodeReportEditPart
 {
 	public ValueProviderConfigEditPart(ValueProviderConfig valueProviderConfig,
@@ -49,7 +49,7 @@ extends AbstractNodeReportEditPart
 	};
 	
 	@Override
-	protected IFigure createFigure() 
+	protected IFigure createFigure()
 	{
 		ValueProvider valueProvider = ValueProviderDAO.sharedInstance().getValueProvider(
 				getValueProviderConfig().getConfigValueProviderID(),
@@ -57,7 +57,7 @@ extends AbstractNodeReportEditPart
 				new NullProgressMonitor());
 		ValueProviderConfigFigure nodeFigure = new ValueProviderConfigFigure(this, valueProvider);
 		nodeFigure.setColorIndex(getValueProviderConfig().getPageIndex());
-		return nodeFigure; 
+		return nodeFigure;
 	}
 	
 	@Override
@@ -77,10 +77,10 @@ extends AbstractNodeReportEditPart
 	}
 
 	@Override
-	protected List getModelSourceConnections() 
+	protected List getModelSourceConnections()
 	{
 		ValueConsumerBinding binding = getValueAcquisitionSetup().getValueProviderBinding(getValueProviderConfig());
-		List<ValueConsumerBinding> bindings = new ArrayList<ValueConsumerBinding>(1);		
+		List<ValueConsumerBinding> bindings = new ArrayList<ValueConsumerBinding>(1);
 		if (binding != null) {
 			bindings.add(binding);
 		}
@@ -88,7 +88,7 @@ extends AbstractNodeReportEditPart
 	}
 
 	@Override
-	protected List getModelTargetConnections() 
+	protected List getModelTargetConnections()
 	{
 		Map<String, ValueConsumerBinding> bindings = getValueAcquisitionSetup().getValueConsumerBindings(getValueProviderConfig());
 		if (bindings != null) {
@@ -98,7 +98,7 @@ extends AbstractNodeReportEditPart
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) 
+	public void propertyChange(PropertyChangeEvent evt)
 	{
 		if (evt.getPropertyName().equals(ModelNotificationManager.PROP_PAGE_INDEX)) {
 			int newPageIndex = (Integer)evt.getNewValue();

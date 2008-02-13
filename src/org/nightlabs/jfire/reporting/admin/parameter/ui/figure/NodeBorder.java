@@ -13,8 +13,8 @@ import org.eclipse.swt.graphics.Color;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class NodeBorder 
-extends AbstractBorder 
+public class NodeBorder
+extends AbstractBorder
 {
 	protected static Insets insets = new Insets(8,6,8,6);
 	protected static PointList connector = new PointList();
@@ -51,7 +51,7 @@ extends AbstractBorder
 		fillColor = c;
 	}
 	
-	public void paint(IFigure figure, Graphics g, Insets in) 
+	public void paint(IFigure figure, Graphics g, Insets in)
 	{
 		Rectangle r = figure.getBounds().getCropped(in);
 		
@@ -78,9 +78,9 @@ extends AbstractBorder
 		drawConnectors(g, figure.getBounds().getCropped(in));
 	}
 
-	protected void drawConnectors(Graphics g, Rectangle rec) 
+	protected void drawConnectors(Graphics g, Rectangle rec)
 	{
-		int y1 = rec.y;  
+		int y1 = rec.y;
 		int width = rec.width,x1;
 		int bottom = y1 + rec.height;
 		g.setBackgroundColor(connectorColor);

@@ -24,8 +24,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReportNodeEditPolicy 
-extends GraphicalNodeEditPolicy 
+public class ReportNodeEditPolicy
+extends GraphicalNodeEditPolicy
 {
 	private static final Logger logger = Logger.getLogger(ReportNodeEditPolicy.class);
 	
@@ -39,7 +39,7 @@ extends GraphicalNodeEditPolicy
 		ConnectionAnchor anchor = getNodeEditPart().getTargetConnectionAnchor(request);
 		if (anchor == null) {
 			logger.warn("anchor == null for request "+request); //$NON-NLS-1$
-			return null;			
+			return null;
 		}
 		command.setTargetParameterID(getNodeEditPart().mapConnectionAnchorToParameterID(anchor));
 		command.setTargetParameterType(getNodeEditPart().mapConnectionAnchorToParameterType(anchor));
@@ -47,7 +47,7 @@ extends GraphicalNodeEditPolicy
 	}
 
 	@Override
-	protected Command getConnectionCreateCommand(CreateConnectionRequest request) 
+	protected Command getConnectionCreateCommand(CreateConnectionRequest request)
 	{
 		ConnectionCommand command = new ConnectionCommand();
 		ValueAcquisitionSetup setup = null;
@@ -56,7 +56,7 @@ extends GraphicalNodeEditPolicy
 			setup = connectionCreateRequest.getValueAcquisitionSetup();
 		}
 		else {
-			setup = getValueAcquisitionSetup(request);			
+			setup = getValueAcquisitionSetup(request);
 		}
 		
 		if (setup == null)
@@ -70,20 +70,20 @@ extends GraphicalNodeEditPolicy
 		command.setBinding(new ValueConsumerBinding(
 				setup.getOrganisationID(),
 				IDGenerator.nextID(ValueConsumerBinding.class),
-				setup));					
+				setup));
 		command.setSource(getValueProviderConfig());
 		ConnectionAnchor anchor = getNodeEditPart().getSourceConnectionAnchor(request);
 		command.setSourceParameterID(getNodeEditPart().mapConnectionAnchorToParameterID(anchor));
-		command.setSourceParameterType(getNodeEditPart().mapConnectionAnchorToParameterType(anchor));		
+		command.setSourceParameterType(getNodeEditPart().mapConnectionAnchorToParameterType(anchor));
 		request.setStartCommand(command);
 		return command;
 	}
 
 	@Override
-	protected Command getReconnectSourceCommand(ReconnectRequest request) 
+	protected Command getReconnectSourceCommand(ReconnectRequest request)
 	{
 		ConnectionCommand cmd = new ConnectionCommand();
-		cmd.setBinding((ValueConsumerBinding)request.getConnectionEditPart().getModel());		
+		cmd.setBinding((ValueConsumerBinding)request.getConnectionEditPart().getModel());
 		ConnectionAnchor anchor = getNodeEditPart().getSourceConnectionAnchor(request);
 		cmd.setSource(getValueProviderConfig());
 		cmd.setSourceParameterID(getNodeEditPart().mapConnectionAnchorToParameterID(anchor));
@@ -92,10 +92,10 @@ extends GraphicalNodeEditPolicy
 	}
 
 	@Override
-	protected Command getReconnectTargetCommand(ReconnectRequest request) 
+	protected Command getReconnectTargetCommand(ReconnectRequest request)
 	{
 //		if (getValueConsumer() instanceof AcquisitionParameterConfig)
-//			return null;			
+//			return null;
 		ConnectionCommand cmd = new ConnectionCommand();
 		cmd.setBinding((ValueConsumerBinding)request.getConnectionEditPart().getModel());
 		ConnectionAnchor anchor = getNodeEditPart().getTargetConnectionAnchor(request);
@@ -105,7 +105,7 @@ extends GraphicalNodeEditPolicy
 		return cmd;
 	}
 
-	public ValueProviderConfig getValueProviderConfig() 
+	public ValueProviderConfig getValueProviderConfig()
 	{
 		if (getHost().getModel() instanceof ValueProviderConfig)
 			return (ValueProviderConfig) getHost().getModel();
@@ -113,7 +113,7 @@ extends GraphicalNodeEditPolicy
 		return null;
 	}
 	
-	public ValueProviderConfigEditPart getValueProviderConfigEditPart() 
+	public ValueProviderConfigEditPart getValueProviderConfigEditPart()
 	{
 		if (getHost() instanceof ValueProviderConfigEditPart)
 			return (ValueProviderConfigEditPart) getHost();
@@ -126,20 +126,20 @@ extends GraphicalNodeEditPolicy
 	}
 	
 	public AbstractNodeReportEditPart getNodeEditPart() {
-		return (AbstractNodeReportEditPart) getHost(); 
+		return (AbstractNodeReportEditPart) getHost();
 	}
 	
 	@Override
-	protected IFigure getFeedbackLayer() 
+	protected IFigure getFeedbackLayer()
 	{
 		/*
 		 * Fix for Bug# 66590
 		 * Feedback needs to be added to the scaled feedback layer
 		 */
 		return getLayer(LayerConstants.SCALED_FEEDBACK_LAYER);
-	}	
+	}
 	
-	protected ValueAcquisitionSetup getValueAcquisitionSetup(CreateConnectionRequest request) 
+	protected ValueAcquisitionSetup getValueAcquisitionSetup(CreateConnectionRequest request)
 	{
 		EditPart targetEP = request.getTargetEditPart();
 		if (targetEP != null) {

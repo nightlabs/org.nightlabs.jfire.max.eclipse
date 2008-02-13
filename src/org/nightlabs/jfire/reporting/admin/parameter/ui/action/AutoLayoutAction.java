@@ -9,8 +9,8 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AutoLayoutAction 
-extends EditorPartAction 
+public class AutoLayoutAction
+extends EditorPartAction
 {
 	public static final String ID = AutoLayoutAction.class.getName();
 	
@@ -30,7 +30,7 @@ extends EditorPartAction
 	}
 	
 	@Override
-	public void run() 
+	public void run()
 	{
 		execute(new AutoLayoutCommand(
 				getReportParameterEditor().getValueAcquisitionSetup(),

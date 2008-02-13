@@ -9,13 +9,13 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.ModelCreationFactory;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderToolEntry 
-extends CombinedTemplateCreationEntry 
+public class ValueProviderToolEntry
+extends CombinedTemplateCreationEntry
 {
 
 	public ValueProviderToolEntry(String label, String shortDesc,
 			Object template, ModelCreationFactory factory, ImageDescriptor iconSmall,
-			ImageDescriptor iconLarge) 
+			ImageDescriptor iconLarge)
 	{
 		super(label, shortDesc, template, factory, iconSmall, iconLarge);
 		this.factory = factory;

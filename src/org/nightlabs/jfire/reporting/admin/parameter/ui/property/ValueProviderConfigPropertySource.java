@@ -24,8 +24,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderConfigPropertySource 
-extends AbstractPropertySource 
+public class ValueProviderConfigPropertySource
+extends AbstractPropertySource
 {
 
 	public ValueProviderConfigPropertySource(ValueProviderConfig valueProviderConfig) {
@@ -50,7 +50,7 @@ extends AbstractPropertySource
 		return valueProvider;
 	}
 	
-//protected ValueProvider getValueProvider() 
+//protected ValueProvider getValueProvider()
 //{
 //	return ValueProviderDAO.sharedInstance().getValueProvider(
 //			valueProviderConfig.getConfigValueProviderID(),
@@ -70,7 +70,7 @@ extends AbstractPropertySource
 	private int getInpuParamterSize() {
 		return getValueProvider().getInputParameters().size();
 	}
-	public IPropertyDescriptor[] getPropertyDescriptors() 
+	public IPropertyDescriptor[] getPropertyDescriptors()
 	{
 		int inputParameters = getInpuParamterSize();
 		int finalSize = staticPropertyDescriptorSize + inputParameters * 2;
@@ -86,7 +86,7 @@ extends AbstractPropertySource
 		propertyDescriptors[8] = createPageColumnPD();
 		propertyDescriptors[9] = createOutputTypePD();
 		propertyDescriptors[10] = createAllowOutputNullPD();
-		for (int i=0; i<inputParameters; i++) 
+		for (int i=0; i<inputParameters; i++)
 		{
 			int suffix = (i + 1);
 			String suffixID = String.valueOf(suffix);
@@ -127,41 +127,41 @@ extends AbstractPropertySource
 				readOnly);
 		desc.setCategory(CATEGORY_NAME);
 		return desc;
-	}	
+	}
 	
 	public static final String CATEGORY_PAGE = Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorCategoryPage.name"); //$NON-NLS-1$
 	
-	protected PropertyDescriptor createPageIndexPD() 
+	protected PropertyDescriptor createPageIndexPD()
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
 				ModelNotificationManager.PROP_PAGE_INDEX,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorPageIndex.name"), //$NON-NLS-1$
 				false);
 		desc.setCategory(CATEGORY_PAGE);
-		return desc;		
+		return desc;
 	}
 
-	protected PropertyDescriptor createPageRowPD() 
+	protected PropertyDescriptor createPageRowPD()
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
 				ModelNotificationManager.PROP_PAGE_ROW,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorPageRow.name"), //$NON-NLS-1$
 				false);
 		desc.setCategory(CATEGORY_PAGE);
-		return desc;		
-	}	
+		return desc;
+	}
 	
-	protected PropertyDescriptor createPageColumnPD() 
+	protected PropertyDescriptor createPageColumnPD()
 	{
 		PropertyDescriptor desc = new IntPropertyDescriptor(
 				ModelNotificationManager.PROP_PAGE_COLUMN,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorPageColumn.name"), //$NON-NLS-1$
 				false);
 		desc.setCategory(CATEGORY_PAGE);
-		return desc;		
+		return desc;
 	}
 	
-	protected PropertyDescriptor createOutputTypePD() 
+	protected PropertyDescriptor createOutputTypePD()
 	{
 		PropertyDescriptor pd = new XTextPropertyDescriptor(
 				ModelNotificationManager.PROP_OUTPUT_TYPE,
@@ -170,11 +170,11 @@ extends AbstractPropertySource
 		return pd;
 	}
 	
-	protected PropertyDescriptor createAllowOutputNullPD() 
+	protected PropertyDescriptor createAllowOutputNullPD()
 	{
 		List<Boolean> trueFalse = new ArrayList<Boolean>();
 		trueFalse.add(true);
-		trueFalse.add(false);		
+		trueFalse.add(false);
 		PropertyDescriptor pd = new CheckboxPropertyDescriptor(
 				ModelNotificationManager.PROP_ALLOW_OUTPUT_NULL_VALUE,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorAllowNull.name"), false //$NON-NLS-1$
@@ -182,11 +182,11 @@ extends AbstractPropertySource
 		return pd;
 	}
 	
-	protected PropertyDescriptor createShowMessageInHeaderPD() 
+	protected PropertyDescriptor createShowMessageInHeaderPD()
 	{
 		List<Boolean> trueFalse = new ArrayList<Boolean>();
 		trueFalse.add(true);
-		trueFalse.add(false);		
+		trueFalse.add(false);
 		PropertyDescriptor pd = new CheckboxPropertyDescriptor(
 				ModelNotificationManager.PROP_SHOW_MESSAGE_IN_HEADER,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorShowMessage.name"), false //$NON-NLS-1$
@@ -195,7 +195,7 @@ extends AbstractPropertySource
 		return pd;
 	}
 	
-	public Object getPropertyValue(Object id) 
+	public Object getPropertyValue(Object id)
 	{
 		if (id.equals(IGraphicalInfoProvider.PROP_X)) {
 			return getGraphicalInfoProvider().getX();
@@ -211,13 +211,13 @@ extends AbstractPropertySource
 		}
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_INDEX)) {
 			return valueProviderConfig.getPageIndex();
-		}						
+		}
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_ROW)) {
 			return valueProviderConfig.getPageRow();
-		}						
+		}
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_COLUMN)) {
 			return valueProviderConfig.getPageColumn();
-		}						
+		}
 		else if (id.equals(ModelNotificationManager.PROP_OUTPUT_TYPE)) {
 			return getValueProvider().getOutputType();
 		}
@@ -231,7 +231,7 @@ extends AbstractPropertySource
 		else if (id.equals(ModelNotificationManager.PROP_SHOW_MESSAGE_IN_HEADER)) {
 			return getValueProviderConfig().isShowMessageInHeader();
 		}
-		for (int i=staticPropertyDescriptorSize; i<staticPropertyDescriptorSize+getInpuParamterSize(); i++) 
+		for (int i=staticPropertyDescriptorSize; i<staticPropertyDescriptorSize+getInpuParamterSize(); i++)
 		{
 			int index = (i - staticPropertyDescriptorSize);
 			int suffix = (i + 1 - staticPropertyDescriptorSize);
@@ -245,68 +245,68 @@ extends AbstractPropertySource
 		return null;
 	}
 
-	public void setPropertyValue(Object id, Object value) 
+	public void setPropertyValue(Object id, Object value)
 	{
-		if (id.equals(IGraphicalInfoProvider.PROP_X)) 
+		if (id.equals(IGraphicalInfoProvider.PROP_X))
 		{
 			int x = ((Integer)value).intValue();
 			getGraphicalInfoProvider().setX(x);
 			ModelNotificationManager.sharedInstance().notify(
-					ObjectIDProvider.getObjectID(valueProviderConfig), 
-					IGraphicalInfoProvider.PROP_X, 
-					-1, 
+					ObjectIDProvider.getObjectID(valueProviderConfig),
+					IGraphicalInfoProvider.PROP_X,
+					-1,
 					x);
 			return;
 		}
-		else if (id.equals(IGraphicalInfoProvider.PROP_Y)) 
+		else if (id.equals(IGraphicalInfoProvider.PROP_Y))
 		{
 			int y = ((Integer)value).intValue();
 			getGraphicalInfoProvider().setY(y);
 			ModelNotificationManager.sharedInstance().notify(
-					ObjectIDProvider.getObjectID(valueProviderConfig), 
-					IGraphicalInfoProvider.PROP_Y, 
-					-1, 
-					y);			
+					ObjectIDProvider.getObjectID(valueProviderConfig),
+					IGraphicalInfoProvider.PROP_Y,
+					-1,
+					y);
 			return;
 		}
-		else if (id.equals(ModelNotificationManager.PROP_PAGE_INDEX)) 
+		else if (id.equals(ModelNotificationManager.PROP_PAGE_INDEX))
 		{
-			int pageIndex = ((Integer)value).intValue();			
+			int pageIndex = ((Integer)value).intValue();
 			valueProviderConfig.setPageIndex(pageIndex);
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_PAGE_INDEX,
-					-1, 
+					-1,
 					pageIndex);
 			return;
-		}						
+		}
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_ROW)) {
-			int pageRow = ((Integer)value).intValue();			
+			int pageRow = ((Integer)value).intValue();
 			valueProviderConfig.setPageRow(pageRow);
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_PAGE_ROW,
-					-1, 
+					-1,
 					pageRow);
 			return;
-		}		
+		}
 		else if (id.equals(ModelNotificationManager.PROP_PAGE_COLUMN)) {
-			int pageColumn = ((Integer)value).intValue();			
+			int pageColumn = ((Integer)value).intValue();
 			valueProviderConfig.setPageColumn(pageColumn);
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_PAGE_COLUMN,
-					-1, 
+					-1,
 					pageColumn);
 			return;
-		}		
+		}
 		else if (id.equals(ModelNotificationManager.PROP_ALLOW_OUTPUT_NULL_VALUE)) {
 			boolean oldVal = valueProviderConfig.isAllowNullOutputValue();
 			valueProviderConfig.setAllowNullOutputValue(((Boolean)value).booleanValue());
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_ALLOW_OUTPUT_NULL_VALUE,
-					oldVal, 
+					oldVal,
 					((Boolean)value).booleanValue());
 			return;
 		}
@@ -316,7 +316,7 @@ extends AbstractPropertySource
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_SHOW_MESSAGE_IN_HEADER,
-					oldVal, 
+					oldVal,
 					((Boolean)value).booleanValue());
 			return;
 		}
@@ -326,10 +326,10 @@ extends AbstractPropertySource
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_MESSAGE,
-					-1, 
+					-1,
 					text);
 			return;
-		}				
+		}
 	}
 
 }

@@ -14,8 +14,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueAcquisitionSetupTreeEditPart 
-extends AbstractReportTreeEditPart 
+public class ValueAcquisitionSetupTreeEditPart
+extends AbstractReportTreeEditPart
 {
 
 	/**
@@ -34,7 +34,7 @@ extends AbstractReportTreeEditPart
 		return new ValueAcquistionSetupPropertySource(getValueAcquisitionSetup());
 	}
 
-  @Override  
+  @Override
   protected List getModelChildren() {
   	List children = new ArrayList();
   	children.addAll(getValueAcquisitionSetup().getParameterConfigs());

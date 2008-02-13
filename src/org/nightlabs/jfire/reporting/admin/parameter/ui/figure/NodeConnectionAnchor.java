@@ -7,7 +7,6 @@ import org.eclipse.draw2d.AbstractConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.nightlabs.jfire.reporting.admin.parameter.ui.editpart.AbstractNodeReportEditPart;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -21,7 +20,7 @@ public class NodeConnectionAnchor extends AbstractConnectionAnchor {
 	/**
 	 * The number (1-based) of the input anchor of the associated {@link AbstractNodeReportEditPart}
 	 */
-	private int anchorNumber; 
+	private int anchorNumber;
 	
 	private int type;
 	
@@ -46,11 +45,11 @@ public class NodeConnectionAnchor extends AbstractConnectionAnchor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.draw2d.ConnectionAnchor#getLocation(org.eclipse.draw2d.geometry.Point)
 	 */
-	public Point getLocation(Point reference) {		
-		Rectangle rect = new Rectangle(getOwner().getBounds());		
+	public Point getLocation(Point reference) {
+		Rectangle rect = new Rectangle(getOwner().getBounds());
 		rect.y = rect.y + AbstractInputNodeFigure.nameHeight + AbstractInputNodeFigure.spacerHeight + (anchorNumber * AbstractInputNodeFigure.anchorHeight) - AbstractInputNodeFigure.anchorHeight / 2;
-		snapBox.y = rect.y - AbstractInputNodeFigure.anchorHeight / 2;		
-		snapBox.x = rect.x;		
+		snapBox.y = rect.y - AbstractInputNodeFigure.anchorHeight / 2;
+		snapBox.x = rect.x;
 		snapBox.width = 50;
 		snapBox.height = AbstractInputNodeFigure.anchorHeight;
 		if (type == TYPE_RIGHT)

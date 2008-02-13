@@ -24,8 +24,8 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.util.PageColorUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractInputNodeFigure 
-extends Figure 
+public abstract class AbstractInputNodeFigure
+extends Figure
 implements HandleBounds
 {
 	
@@ -35,11 +35,11 @@ implements HandleBounds
 	
 	private AbstractNodeReportEditPart reportEditPart;
 	
-	public AbstractInputNodeFigure(AbstractNodeReportEditPart reportEditPart) 
+	public AbstractInputNodeFigure(AbstractNodeReportEditPart reportEditPart)
 	{
-//		createInputConnectionAnchors(getInputAmount());	
+//		createInputConnectionAnchors(getInputAmount());
 		setOpaque(false);
-		this.reportEditPart = reportEditPart; 
+		this.reportEditPart = reportEditPart;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ implements HandleBounds
 	}
 		
 	@Override
-	protected void paintFigure(Graphics g) 
+	protected void paintFigure(Graphics g)
 	{
 		Rectangle bounds = getBounds();
 		g.setBackgroundColor(PageColorUtil.getPageColor(colorIndex));
@@ -72,25 +72,25 @@ implements HandleBounds
 		}
 		
 		drawInputConnectors(g, getBounds());
-	}		
+	}
 	
 	protected int connectorWidth = 6;
 	protected int getConnectorWidth() {
 		return connectorWidth;
-	}	
+	}
 	
 	private Map<Integer, Point> index2InputAnchorLocation = new HashMap<Integer, Point>();
 	protected Point getInputAnchorPoint(int index) {
 		return index2InputAnchorLocation.get(index);
 	}
 	
-	protected void drawInputConnectors(Graphics g, Rectangle rec) 
+	protected void drawInputConnectors(Graphics g, Rectangle rec)
 	{
 		int x1 = rec.x;
 		int y1 = rec.y;
 //		int height = rec.height - nameHeight;
 		List<ConnectionAnchor> anchors = reportEditPart.getTargetConnectionAnchors();
-		ConnectionAnchor highlightAnchor = null; 
+		ConnectionAnchor highlightAnchor = null;
 		if (highlightParameterID != null)
 			highlightAnchor = reportEditPart.getTargetConnectionAnchor(highlightParameterID);
 		
@@ -111,8 +111,8 @@ implements HandleBounds
 			
 			index2InputAnchorLocation.put(i, connectionLocation);
 			
-			// draw connector			
-			g.setForegroundColor(PageColorUtil.getFontColor(colorIndex));			
+			// draw connector
+			g.setForegroundColor(PageColorUtil.getFontColor(colorIndex));
 			g.drawPolygon(connector);
 			Color oldbgColor = PageColorUtil.getPageColor(colorIndex);
 			g.setBackgroundColor(PageColorUtil.getFontColor(colorIndex));
@@ -134,7 +134,7 @@ implements HandleBounds
 		}
 	}
 	
-	protected void drawOutputConnector(Graphics g, Rectangle rec) 
+	protected void drawOutputConnector(Graphics g, Rectangle rec)
 	{
 		int x1 = rec.x + rec.width - anchorHeight/3;
 		int y1 = rec.y;
@@ -148,12 +148,12 @@ implements HandleBounds
 		PointList connector = new PointList();
 		connector.addPoint(anchorHeight/3, 0);
 		connector.addPoint(anchorHeight/3, anchorHeight/3);
-		connector.addPoint(0, anchorHeight/3);			
-		connector.addPoint(0, 0);			
+		connector.addPoint(0, anchorHeight/3);
+		connector.addPoint(0, 0);
 		connector.translate(x1, y1 -anchorHeight/6);
 		
-		// draw connector			
-		g.setForegroundColor(PageColorUtil.getFontColor(colorIndex));			
+		// draw connector
+		g.setForegroundColor(PageColorUtil.getFontColor(colorIndex));
 		g.setBackgroundColor(PageColorUtil.getFontColor(colorIndex));
 		g.drawPolygon(connector);
 		Color oldbgColor = getBackgroundColor();
@@ -204,6 +204,6 @@ implements HandleBounds
 	public abstract String getName();
 	public abstract int getInputAmount();
 	public abstract String getInputString(int index);
-	protected abstract String getOutputString(); 
+	protected abstract String getOutputString();
 
 }

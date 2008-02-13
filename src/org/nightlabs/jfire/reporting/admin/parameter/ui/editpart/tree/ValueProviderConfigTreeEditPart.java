@@ -15,8 +15,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderConfigTreeEditPart 
-extends AbstractReportTreeEditPart 
+public class ValueProviderConfigTreeEditPart
+extends AbstractReportTreeEditPart
 {
 
 	/**
@@ -50,7 +50,7 @@ extends AbstractReportTreeEditPart
 		return getValueProvider().getName().getText();
 	}
 		
-	protected ValueProvider getValueProvider() 
+	protected ValueProvider getValueProvider()
 	{
 		return ValueProviderDAO.sharedInstance().getValueProvider(
 				getValueProviderConfig().getConfigValueProviderID(),

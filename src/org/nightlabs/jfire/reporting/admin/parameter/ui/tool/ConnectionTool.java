@@ -9,8 +9,8 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.request.ConnectionCreate
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ConnectionTool 
-//extends CreationTool 
+public class ConnectionTool
+//extends CreationTool
 extends ConnectionCreationTool
 {
 	public ConnectionTool(ModelCreationFactory factory) {
@@ -28,6 +28,6 @@ extends ConnectionCreationTool
 		request.setFactory(getFactory());
 		request.setValueAcquisitionSetup(getModelCreationFactory().getSetup());
 		return request;
-	}	
+	}
 
 }

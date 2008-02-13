@@ -8,11 +8,11 @@ import org.eclipse.gef.requests.GroupRequest;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AcquisitionParameterConfigEditPolicy 
-extends ComponentEditPolicy 
+public class AcquisitionParameterConfigEditPolicy
+extends ComponentEditPolicy
 {
 	@Override
-	protected Command createDeleteCommand(GroupRequest deleteRequest) 
+	protected Command createDeleteCommand(GroupRequest deleteRequest)
 	{
 		return null;
 	}

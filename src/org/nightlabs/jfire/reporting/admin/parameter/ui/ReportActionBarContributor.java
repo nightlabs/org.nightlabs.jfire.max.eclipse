@@ -21,15 +21,15 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReportActionBarContributor 
-extends ActionBarContributor 
+public class ReportActionBarContributor
+extends ActionBarContributor
 {
 
 	public ReportActionBarContributor() {
 	}
 
 	@Override
-	protected void buildActions() 
+	protected void buildActions()
 	{
 		addRetargetAction(new UndoRetargetAction());
 		addRetargetAction(new RedoRetargetAction());
@@ -49,22 +49,22 @@ extends ActionBarContributor
 	}
 
 	@Override
-	public void contributeToToolBar(IToolBarManager tbm) 
+	public void contributeToToolBar(IToolBarManager tbm)
 	{
 		tbm.add(getAction(ActionFactory.UNDO.getId()));
 		tbm.add(getAction(ActionFactory.REDO.getId()));
-		tbm.add(new Separator());	
-		String[] zoomStrings = new String[] {	ZoomManager.FIT_ALL, 
-												ZoomManager.FIT_HEIGHT, 
+		tbm.add(new Separator());
+		String[] zoomStrings = new String[] {	ZoomManager.FIT_ALL,
+												ZoomManager.FIT_HEIGHT,
 												ZoomManager.FIT_WIDTH	};
-		tbm.add(new ZoomComboContributionItem(getPage(), zoomStrings));		
+		tbm.add(new ZoomComboContributionItem(getPage(), zoomStrings));
 	}
 	
 	/**
 	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToMenu(IMenuManager)
 	 */
 	@Override
-	public void contributeToMenu(IMenuManager menubar) 
+	public void contributeToMenu(IMenuManager menubar)
 	{
 		super.contributeToMenu(menubar);
 		MenuManager viewMenu = new MenuManager(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.ReportActionBarContributor.viewMenu.name")); //$NON-NLS-1$
@@ -72,5 +72,5 @@ extends ActionBarContributor
 		viewMenu.add(getAction(GEFActionConstants.ZOOM_OUT));
 //		viewMenu.add(new Separator());
 		menubar.insertAfter(IWorkbenchActionConstants.M_EDIT, viewMenu);
-	}	
+	}
 }

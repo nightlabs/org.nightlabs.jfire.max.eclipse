@@ -11,7 +11,7 @@ import org.nightlabs.jdo.ObjectID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ModelNotificationManager 
+public class ModelNotificationManager
 {
 	public static final String PROP_CREATE = "Create"; //$NON-NLS-1$
 	public static final String PROP_DELETE = "Delete"; //$NON-NLS-1$
@@ -52,13 +52,13 @@ public class ModelNotificationManager
 	private Map<ObjectID, PropertyChangeSupport> objectID2Listener = new HashMap<ObjectID, PropertyChangeSupport>();
 	private PropertyChangeSupport globalPropertyChangeListener;
 	
-//	public void addPropertyChangeListener(Object model, PropertyChangeListener listener) 
+//	public void addPropertyChangeListener(Object model, PropertyChangeListener listener)
 //	{
-//		ObjectID objectID = (ObjectID) JDOHelper.getObjectId(model); 
+//		ObjectID objectID = (ObjectID) JDOHelper.getObjectId(model);
 //		addPropertyChangeListener(objectID, listener);
 //	}
 	
-	public void addPropertyChangeListener(ObjectID objectID, PropertyChangeListener listener) 
+	public void addPropertyChangeListener(ObjectID objectID, PropertyChangeListener listener)
 	{
 		if (objectID == null) {
 			globalPropertyChangeListener.addPropertyChangeListener(listener);
@@ -66,19 +66,19 @@ public class ModelNotificationManager
 		}
 		PropertyChangeSupport pcs = objectID2Listener.get(objectID);
 		if (pcs == null)
-			pcs = new PropertyChangeSupport(objectID);			
+			pcs = new PropertyChangeSupport(objectID);
 		
 		pcs.addPropertyChangeListener(listener);
-		objectID2Listener.put(objectID, pcs);		
+		objectID2Listener.put(objectID, pcs);
 	}
 
-//	public void removePropertyChangeListener(Object model, PropertyChangeListener listener) 
+//	public void removePropertyChangeListener(Object model, PropertyChangeListener listener)
 //	{
-//		ObjectID objectID = (ObjectID) JDOHelper.getObjectId(model); 
+//		ObjectID objectID = (ObjectID) JDOHelper.getObjectId(model);
 //		removePropertyChangeListener(objectID, listener);
 //	}
 	
-	public void removePropertyChangeListener(ObjectID objectID, PropertyChangeListener listener) 
+	public void removePropertyChangeListener(ObjectID objectID, PropertyChangeListener listener)
 	{
 		if (objectID == null) {
 			globalPropertyChangeListener.removePropertyChangeListener(listener);
@@ -88,21 +88,21 @@ public class ModelNotificationManager
 		if (pcs != null) {
 			pcs.removePropertyChangeListener(listener);
 			objectID2Listener.put(objectID, pcs);
-		}		
+		}
 	}
 	
-//	public void notify(Object model, String propertyName, Object oldValue, Object newValue) 
+//	public void notify(Object model, String propertyName, Object oldValue, Object newValue)
 //	{
 //		ObjectID objectID = (ObjectID) JDOHelper.getObjectId(model);
 //		notify(objectID, propertyName, oldValue, newValue);
 //	}
 	
-	public void notify(ObjectID objectID, String propertyName, Object oldValue, Object newValue) 
+	public void notify(ObjectID objectID, String propertyName, Object oldValue, Object newValue)
 	{
 		PropertyChangeSupport pcs = objectID2Listener.get(objectID);
 		if (pcs != null)
 			pcs.firePropertyChange(propertyName, oldValue, newValue);
-		globalPropertyChangeListener.firePropertyChange(propertyName, oldValue, newValue);		
+		globalPropertyChangeListener.firePropertyChange(propertyName, oldValue, newValue);
 	}
 	
 }

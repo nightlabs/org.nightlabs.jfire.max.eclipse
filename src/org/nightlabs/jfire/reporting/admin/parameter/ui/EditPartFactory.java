@@ -14,16 +14,16 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class EditPartFactory 
-implements org.eclipse.gef.EditPartFactory 
+public class EditPartFactory
+implements org.eclipse.gef.EditPartFactory
 {
 	private ReportParameterEditor editor;
-	public EditPartFactory(ReportParameterEditor editor) 
+	public EditPartFactory(ReportParameterEditor editor)
 	{
 		this.editor = editor;
 	}
 		
-	public EditPart createEditPart(EditPart context, Object model) 
+	public EditPart createEditPart(EditPart context, Object model)
 	{
 		if (model instanceof ValueProviderConfig)
 			return new ValueProviderConfigEditPart((ValueProviderConfig)model, editor.getValueAcquisitionSetup());

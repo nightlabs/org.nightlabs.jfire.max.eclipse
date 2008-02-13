@@ -20,8 +20,8 @@ import org.nightlabs.jfire.reporting.parameter.config.id.AcquisitionParameterCon
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AcquisitionParameterConfigEditPart 
-extends AbstractNodeReportEditPart 
+public class AcquisitionParameterConfigEditPart
+extends AbstractNodeReportEditPart
 {
 	public AcquisitionParameterConfigEditPart(AcquisitionParameterConfig model,
 			ValueAcquisitionSetup setup) {
@@ -34,7 +34,7 @@ extends AbstractNodeReportEditPart
 	}
 	
 	@Override
-	protected IFigure createFigure() 
+	protected IFigure createFigure()
 	{
 		AcquistionParameterConfigFigure nodeFigure = new AcquistionParameterConfigFigure(
 				this,
@@ -43,10 +43,10 @@ extends AbstractNodeReportEditPart
 		return nodeFigure;
 	}
 	
-	protected String getFigureText() 
+	protected String getFigureText()
 	{
-//		return "ParameterID " + getAcquisitionParameterConfig().getParameterID() + ", " + 
-//			"ParameterType " + getAcquisitionParameterConfig().getParameterType() + ", " + 
+//		return "ParameterID " + getAcquisitionParameterConfig().getParameterID() + ", " +
+//			"ParameterType " + getAcquisitionParameterConfig().getParameterType() + ", " +
 //			"ConsumerKey " + getAcquisitionParameterConfig().getConsumerKey();
 		return Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.editpart.AcquisitionParameterConfigEditPart.figureText.prefix") + getAcquisitionParameterConfig().getParameterID(); //$NON-NLS-1$
 	}
@@ -54,7 +54,7 @@ extends AbstractNodeReportEditPart
 	@Override
 	protected ObjectID getObjectID() {
 		return AcquisitionParameterConfigID.create(getAcquisitionParameterConfig());
-	}	
+	}
 	
 	@Override
 	protected IPropertySource createPropertySource() {
@@ -65,12 +65,12 @@ extends AbstractNodeReportEditPart
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new AcquisitionParameterConfigEditPolicy());
-	}	
+	}
 		
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected List getModelTargetConnections() 
-	{		
+	protected List getModelTargetConnections()
+	{
 		ValueConsumerBinding binding = getValueAcquisitionSetup().getValueConsumerBinding(
 				getAcquisitionParameterConfig(), getAcquisitionParameterConfig().getParameterID());
 		

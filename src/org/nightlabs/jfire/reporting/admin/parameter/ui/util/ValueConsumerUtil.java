@@ -12,11 +12,11 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.dao.ValueProviderDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
-public class ValueConsumerUtil 
+public class ValueConsumerUtil
 {
-	public List<String> getParameterIDs(ValueConsumer valueConsumer) 
+	public List<String> getParameterIDs(ValueConsumer valueConsumer)
 	{
-		List<String> parameterIDs = new ArrayList<String>();		
+		List<String> parameterIDs = new ArrayList<String>();
 		if (valueConsumer instanceof AcquisitionParameterConfig) {
 			AcquisitionParameterConfig acquisitionParameterConfig = (AcquisitionParameterConfig) valueConsumer;
 			parameterIDs.add(acquisitionParameterConfig.getParameterID());
@@ -31,12 +31,12 @@ public class ValueConsumerUtil
 				parameterIDs.add(inputParameter.getParameterID());
 			}
 		}
-		return parameterIDs;		
+		return parameterIDs;
 	}
 	
-	public List<String> getParameterTypes(ValueConsumer valueConsumer) 
+	public List<String> getParameterTypes(ValueConsumer valueConsumer)
 	{
-		List<String> parameterTypes = new ArrayList<String>();		
+		List<String> parameterTypes = new ArrayList<String>();
 		if (valueConsumer instanceof AcquisitionParameterConfig) {
 			AcquisitionParameterConfig acquisitionParameterConfig = (AcquisitionParameterConfig) valueConsumer;
 			parameterTypes.add(acquisitionParameterConfig.getParameterType());
@@ -51,6 +51,6 @@ public class ValueConsumerUtil
 				parameterTypes.add(inputParameter.getParameterType());
 			}
 		}
-		return parameterTypes;				
+		return parameterTypes;
 	}
 }

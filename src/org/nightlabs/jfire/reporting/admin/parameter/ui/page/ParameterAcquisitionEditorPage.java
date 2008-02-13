@@ -48,14 +48,13 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.editpart.ValueAcquisitionSetupEditPart;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.action.IActionUpdateDelegate;
-import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 
 /**
  * A page for the Report Designer that lets the user preview
  * his reports within the JFire server environment.
  * 
  * It uses an adapted {@link ReportViewer} to
- * view ReportLayouts.  
+ * view ReportLayouts.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
@@ -82,19 +81,19 @@ implements IReportEditorPage, IActionUpdateDelegate
 	
 	private int staleType;
 	private Control control;
-	private FormEditor editor;	
+	private FormEditor editor;
 	
 	private int index;
 	
 	@Override
-	public void createPartControl(Composite arg0) 
+	public void createPartControl(Composite arg0)
 	{
 		wrapper = new XComposite(arg0, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
 		wrapper.setLayout(new FillLayout());
 		super.createPartControl(wrapper);
 		control = wrapper;
 		getCommandStack().addCommandStackListener(new CommandStackListener() {
-			public void commandStackChanged(EventObject event) 
+			public void commandStackChanged(EventObject event)
 			{
 				if (getEditor() != null)
 					getEditor().editorDirtyStateChanged();
@@ -245,7 +244,7 @@ implements IReportEditorPage, IActionUpdateDelegate
 	 */
 	public void setIndex(int index) {
 		logger.debug("setIndex "+index); //$NON-NLS-1$
-		this.index = index;		
+		this.index = index;
 	}
 	
 	/*
@@ -281,7 +280,7 @@ implements IReportEditorPage, IActionUpdateDelegate
 	}
 	
 //	private ActionRegistry registry;
-//	
+//
 //	public Object getAdapter( Class required )
 //	{
 //		System.out.println("Get Adapter called for "+required);
@@ -332,7 +331,7 @@ implements IReportEditorPage, IActionUpdateDelegate
 //	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 //		super.setSite(site);
 //		setInput(input);
-//		initializeActionRegistry();		
+//		initializeActionRegistry();
 //	}
 
 //	@Override

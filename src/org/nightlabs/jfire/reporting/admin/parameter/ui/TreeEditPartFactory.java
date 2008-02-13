@@ -13,15 +13,15 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class TreeEditPartFactory 
-implements EditPartFactory 
+public class TreeEditPartFactory
+implements EditPartFactory
 {
 
 	public TreeEditPartFactory() {
 		super();
 	}
 
-	public EditPart createEditPart(EditPart context, Object model) 
+	public EditPart createEditPart(EditPart context, Object model)
 	{
 		if (model instanceof ValueAcquisitionSetup)
 			return new ValueAcquisitionSetupTreeEditPart((ValueAcquisitionSetup)model);

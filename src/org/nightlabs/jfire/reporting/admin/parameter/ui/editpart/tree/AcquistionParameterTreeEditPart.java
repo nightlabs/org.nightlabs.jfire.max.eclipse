@@ -11,8 +11,8 @@ import org.nightlabs.jfire.reporting.parameter.config.AcquisitionParameterConfig
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AcquistionParameterTreeEditPart 
-extends AbstractReportTreeEditPart 
+public class AcquistionParameterTreeEditPart
+extends AbstractReportTreeEditPart
 {
 
 	/**

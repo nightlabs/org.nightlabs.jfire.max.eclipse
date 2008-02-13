@@ -27,7 +27,7 @@ import org.nightlabs.jfire.reporting.parameter.config.id.ValueConsumerBindingID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueConsumerBindingEditPart 
+public class ValueConsumerBindingEditPart
 extends AbstractConnectionEditPart
 implements PropertyChangeListener
 {
@@ -50,7 +50,7 @@ implements PropertyChangeListener
 //		dead = new Color(Display.getDefault(),125,125,125);
 	
 	@Override
-	protected void createEditPolicies() 
+	protected void createEditPolicies()
 	{
 		installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new ConnectionEditPolicy() {
@@ -58,11 +58,11 @@ implements PropertyChangeListener
 			protected Command getDeleteCommand(GroupRequest request) {
 				return new DeleteConnectionCommand(getValueConsumerBinding(), setup);
 			}
-		});		
+		});
 	}
 	
 	@Override
-	protected IFigure createFigure() 
+	protected IFigure createFigure()
 	{
 		PolylineConnection connection = new PolylineConnection();
 //		connection.setTargetDecoration(new PolygonDecoration());
@@ -79,11 +79,11 @@ implements PropertyChangeListener
 	public void activateFigure()
 	{
 		super.activateFigure();
-		/*Once the figure has been added to the ConnectionLayer, 
+		/*Once the figure has been added to the ConnectionLayer,
 		 * start listening for its router to change.
 		 */
 		getFigure().addPropertyChangeListener(Connection.PROPERTY_CONNECTION_ROUTER, this);
-	}	
+	}
 
 	@Override
 	public void deactivateFigure(){
@@ -91,7 +91,7 @@ implements PropertyChangeListener
 		super.deactivateFigure();
 	}
 	
-	public void propertyChange(PropertyChangeEvent event) 
+	public void propertyChange(PropertyChangeEvent event)
 	{
 		logger.info("Property "+event.getPropertyName() +" changed!"); //$NON-NLS-1$ //$NON-NLS-2$
 		
@@ -103,7 +103,7 @@ implements PropertyChangeListener
 		if ("value".equals(property))   //$NON-NLS-1$
 			refreshVisuals();
 		if ("bendpoint".equals(property))   //$NON-NLS-1$
-			refreshBendpoints();     
+			refreshBendpoints();
 		
 		refresh();
 	}
@@ -111,7 +111,7 @@ implements PropertyChangeListener
 	/**
 	 * Updates the bendpoints, based on the model.
 	 */
-	protected void refreshBendpoints() 
+	protected void refreshBendpoints()
 	{
 		if (getConnectionFigure().getConnectionRouter() instanceof ManhattanConnectionRouter)
 			return;
@@ -149,51 +149,51 @@ implements PropertyChangeListener
 //			getWireFigure().setForegroundColor(alive);
 //		else
 //			getWireFigure().setForegroundColor(dead);
-	}	
+	}
 	
 	protected ObjectID getObjectID() {
 		return ValueConsumerBindingID.create(getValueConsumerBinding());
 	}
 	
 	@Override
-	public void deactivate() 
+	public void deactivate()
 	{
 		if (!isActive())
-			return;		
+			return;
 		super.deactivate();
-		ModelNotificationManager.sharedInstance().removePropertyChangeListener(getObjectID(), this);		
+		ModelNotificationManager.sharedInstance().removePropertyChangeListener(getObjectID(), this);
 	}
 	
 	@Override
-	public void activate() 
+	public void activate()
 	{
 		if (isActive())
-			return;		
+			return;
 		super.activate();
 		ModelNotificationManager.sharedInstance().addPropertyChangeListener(getObjectID(), this);
-	}	
+	}
 	
 	private IPropertySource propertySource;
 	public IPropertySource getPropertySource() {
 		if (propertySource == null) {
-			propertySource = new ValueConsumerBindingPropertySource(getValueConsumerBinding());			
+			propertySource = new ValueConsumerBindingPropertySource(getValueConsumerBinding());
 		}
 		return propertySource;
-	}	
+	}
 	
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
-  @Override  
+  @Override
   public Object getAdapter(Class key)
   {
     /* override the default behavior defined in AbstractEditPart
-     *  which would expect the model to be a property sourced. 
+     *  which would expect the model to be a property sourced.
      *  instead the editpart can provide a property source
      */
     if (IPropertySource.class == key) {
       return getPropertySource();
     }
     return super.getAdapter(key);
-  }		
+  }
 }

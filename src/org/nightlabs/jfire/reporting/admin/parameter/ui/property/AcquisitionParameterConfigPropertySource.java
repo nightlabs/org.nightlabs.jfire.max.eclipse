@@ -10,8 +10,8 @@ import org.nightlabs.jfire.reporting.parameter.config.IGraphicalInfoProvider;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AcquisitionParameterConfigPropertySource 
-extends AbstractPropertySource 
+public class AcquisitionParameterConfigPropertySource
+extends AbstractPropertySource
 {
 
 	public AcquisitionParameterConfigPropertySource(AcquisitionParameterConfig acquisitionParameterConfig) {
@@ -19,9 +19,9 @@ extends AbstractPropertySource
 		this.acquisitionParameterConfig = acquisitionParameterConfig;
 	}
 
-	private AcquisitionParameterConfig acquisitionParameterConfig;	
+	private AcquisitionParameterConfig acquisitionParameterConfig;
 	
-	public Object getEditableValue() {		
+	public Object getEditableValue() {
 		return acquisitionParameterConfig;
 	}
 
@@ -29,7 +29,7 @@ extends AbstractPropertySource
 		return acquisitionParameterConfig;
 	}
 	
-	public IPropertyDescriptor[] getPropertyDescriptors() 
+	public IPropertyDescriptor[] getPropertyDescriptors()
 	{
 		IPropertyDescriptor[] propertyDescriptors = new IPropertyDescriptor[4];
 		propertyDescriptors[0] = createXPD(true);
@@ -40,7 +40,7 @@ extends AbstractPropertySource
 		return propertyDescriptors;
 	}
 	
-	public Object getPropertyValue(Object id) 
+	public Object getPropertyValue(Object id)
 	{
 		if (id.equals(IGraphicalInfoProvider.PROP_X)) {
 			return getGraphicalInfoProvider().getX();
@@ -50,13 +50,13 @@ extends AbstractPropertySource
 		}
 //		else if (id.equals(ModelNotificationManager.PROP_CONSUMER_KEY)) {
 //			return acquisitionParameterConfig.getConsumerKey();
-//		}		
+//		}
 		else if (id.equals(ModelNotificationManager.PROP_PARAMETER_ID)) {
 			return acquisitionParameterConfig.getParameterID();
 		}
 		else if (id.equals(ModelNotificationManager.PROP_PARAMETER_TYPE)) {
 			return acquisitionParameterConfig.getParameterType();
-		}		
+		}
 		return null;
 	}
 
@@ -77,7 +77,7 @@ extends AbstractPropertySource
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(acquisitionParameterConfig),
 					ModelNotificationManager.PROP_PARAMETER_TYPE,
-					oldVal, 
+					oldVal,
 					value
 				);
 			return;

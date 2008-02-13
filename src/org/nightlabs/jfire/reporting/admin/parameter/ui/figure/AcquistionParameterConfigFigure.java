@@ -10,18 +10,18 @@ import org.nightlabs.jfire.reporting.parameter.config.AcquisitionParameterConfig
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AcquistionParameterConfigFigure  
+public class AcquistionParameterConfigFigure
 extends AbstractInputNodeFigure
 {
-	public AcquistionParameterConfigFigure(AbstractNodeReportEditPart editPart, AcquisitionParameterConfig acquisitionParameterConfig) 
-	{		
-		super(editPart);		
+	public AcquistionParameterConfigFigure(AbstractNodeReportEditPart editPart, AcquisitionParameterConfig acquisitionParameterConfig)
+	{
+		super(editPart);
 		this.acquisitionParameterConfig = acquisitionParameterConfig;
 		setColorIndex(-1);
 		LineBorder lineBorder = new LineBorder(1);
 		lineBorder.setColor(ColorConstants.black);
-		setBorder(lineBorder);		
-//		createInputConnectionAnchors(getInputAmount());		
+		setBorder(lineBorder);
+//		createInputConnectionAnchors(getInputAmount());
 	}
 
 	private AcquisitionParameterConfig acquisitionParameterConfig;
@@ -32,9 +32,9 @@ extends AbstractInputNodeFigure
 	}
 
 	@Override
-	public String getInputString(int index) 
+	public String getInputString(int index)
 	{
-		String s = acquisitionParameterConfig.getParameterType(); 
+		String s = acquisitionParameterConfig.getParameterType();
 		return acquisitionParameterConfig.getParameterID() + "(" + s.substring(s.lastIndexOf(".")+1)  + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 

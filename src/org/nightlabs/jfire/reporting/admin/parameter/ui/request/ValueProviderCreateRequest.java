@@ -8,8 +8,8 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueProviderCreateRequest 
-extends CreateRequest 
+public class ValueProviderCreateRequest
+extends CreateRequest
 {
 
 	public ValueProviderCreateRequest() {

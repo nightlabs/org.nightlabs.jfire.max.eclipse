@@ -22,11 +22,11 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class CreateValueProviderCommand 
-extends Command 
+public class CreateValueProviderCommand
+extends Command
 {
 	private ValueProviderCreateRequest request;
-	public CreateValueProviderCommand(ValueProviderCreateRequest request) 
+	public CreateValueProviderCommand(ValueProviderCreateRequest request)
 	{
 		super();
 		setLabel(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.command.CreateValueProviderCommand.label")); //$NON-NLS-1$
@@ -35,18 +35,18 @@ extends Command
 
 	private ValueProviderConfig vpc;
 	@Override
-	public void execute() 
+	public void execute()
 	{
 		ValueAcquisitionSetup setup = request.getValueAcquisitionSetup();
 		ValueProvider valueProvider = request.getValueProvider();
 		vpc = new ValueProviderConfig(setup, IDGenerator.nextID(ValueProviderConfig.class));
 		vpc.setValueProvider(valueProvider);
 		vpc.setX(request.getLocation().x);
-		vpc.setY(request.getLocation().y);		
+		vpc.setY(request.getLocation().y);
 		setup.getValueProviderConfigs().add(vpc);
 		ValueProvider provider = ValueProviderDAO.sharedInstance().getValueProvider(
-				(ValueProviderID) JDOHelper.getObjectId(valueProvider), 
-				new String[] {FetchPlan.DEFAULT, ValueProvider.FETCH_GROUP_DEFAULT_MESSAGE}, 
+				(ValueProviderID) JDOHelper.getObjectId(valueProvider),
+				new String[] {FetchPlan.DEFAULT, ValueProvider.FETCH_GROUP_DEFAULT_MESSAGE},
 				new NullProgressMonitor()
 			);
 		vpc.getMessage().copyFrom(provider.getDefaultMessage());
@@ -65,8 +65,8 @@ extends Command
 		setup.getValueProviderConfigs().add(vpc);
 		
 		ModelNotificationManager.sharedInstance().notify(
-				ObjectIDProvider.getObjectID(vpc), 
-				ModelNotificationManager.PROP_DELETE, null, vpc);		
+				ObjectIDProvider.getObjectID(vpc),
+				ModelNotificationManager.PROP_DELETE, null, vpc);
 	}
 
 	@Override
@@ -75,8 +75,8 @@ extends Command
 		setup.getValueProviderConfigs().remove(vpc);
 		
 		ModelNotificationManager.sharedInstance().notify(
-				ObjectIDProvider.getObjectID(vpc), 
-				ModelNotificationManager.PROP_CREATE, null, vpc);		
+				ObjectIDProvider.getObjectID(vpc),
+				ModelNotificationManager.PROP_CREATE, null, vpc);
 	}
 	
 }

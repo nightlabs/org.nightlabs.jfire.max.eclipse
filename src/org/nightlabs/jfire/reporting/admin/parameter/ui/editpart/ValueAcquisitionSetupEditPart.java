@@ -32,8 +32,8 @@ import org.nightlabs.jfire.reporting.parameter.config.id.ValueAcquisitionSetupID
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ValueAcquisitionSetupEditPart 
-extends AbstractReportParameterEditPart 
+public class ValueAcquisitionSetupEditPart
+extends AbstractReportParameterEditPart
 {
 
 	public ValueAcquisitionSetupEditPart(ValueAcquisitionSetup setup,
@@ -50,7 +50,7 @@ extends AbstractReportParameterEditPart
 	}
 	
 	/**
-	 * Returns a Figure to represent this. 
+	 * Returns a Figure to represent this.
 	 *
 	 * @return  Figure.
 	 */
@@ -63,7 +63,7 @@ extends AbstractReportParameterEditPart
 	}
 
 	/**
-	 * Installs EditPolicies specific to this. 
+	 * Installs EditPolicies specific to this.
 	 */
 	@Override
 	protected void createEditPolicies(){
@@ -82,11 +82,11 @@ extends AbstractReportParameterEditPart
 	@Override
 	protected ObjectID getObjectID() {
 		return ValueAcquisitionSetupID.create(getValueAcquisitionSetup());
-	}	
+	}
 		
-  @SuppressWarnings("unchecked") 
-	@Override  
-  protected List getModelChildren() 
+  @SuppressWarnings("unchecked")
+	@Override
+  protected List getModelChildren()
   {
   	List children = new ArrayList();
   	validateValueAcquisitionSetupParameterConfigs();
@@ -100,11 +100,11 @@ extends AbstractReportParameterEditPart
 	public void propertyChange(PropertyChangeEvent evt) {
 		super.propertyChange(evt);
 		clearAndRefresh();
-	} 
+	}
 	
 	public void clearAndRefresh() {
 		getValueAcquisitionSetup().clearBindingIndexes();
-		refreshChildren();		
+		refreshChildren();
 	}
     
 	@Override
@@ -112,10 +112,10 @@ extends AbstractReportParameterEditPart
 		return new ValueAcquistionSetupPropertySource(getValueAcquisitionSetup());
 	}
 	
-	@SuppressWarnings("unchecked") 
-	protected void validateValueAcquisitionSetupParameterConfigs() 
+	@SuppressWarnings("unchecked")
+	protected void validateValueAcquisitionSetupParameterConfigs()
 	{
-		List params = reportHandle.getAllParameters();		
+		List params = reportHandle.getAllParameters();
 		List<ScalarParameterHandle> reportParams = new ArrayList<ScalarParameterHandle>(params.size());
 		for (Object param : params) {
 			if (param instanceof ScalarParameterHandle)
@@ -130,8 +130,8 @@ extends AbstractReportParameterEditPart
 		for (ScalarParameterHandle reportParam : reportParams) {
 			if (!setupConfigs.containsKey(reportParam.getName())) {
 				AcquisitionParameterConfig newConfig = new AcquisitionParameterConfig(
-						getValueAcquisitionSetup(), 
-						reportParam.getName(), 
+						getValueAcquisitionSetup(),
+						reportParam.getName(),
 						reportParam.getDataType()
 					);
 				getValueAcquisitionSetup().getParameterConfigs().add(newConfig);

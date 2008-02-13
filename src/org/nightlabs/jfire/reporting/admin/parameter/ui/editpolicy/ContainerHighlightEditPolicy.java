@@ -14,8 +14,8 @@ import org.nightlabs.jfire.reporting.admin.parameter.ui.figure.AbstractInputNode
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ContainerHighlightEditPolicy 
-extends GraphicalEditPolicy 
+public class ContainerHighlightEditPolicy
+extends GraphicalEditPolicy
 {
 	private AbstractNodeReportEditPart reportEditPart;
 
