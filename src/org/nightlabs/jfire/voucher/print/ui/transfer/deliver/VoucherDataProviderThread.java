@@ -29,8 +29,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherDataProviderThread 
-extends AbstractScriptDataProviderThread 
+public class VoucherDataProviderThread
+extends AbstractScriptDataProviderThread
 {
 	private static final Logger logger = Logger.getLogger(VoucherDataProviderThread.class);
 	
@@ -42,7 +42,7 @@ extends AbstractScriptDataProviderThread
 	private static final String[] FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_2 = { FetchPlan.DEFAULT, VoucherLayout.FETCH_GROUP_FILE };
 
 //	@Override
-//	public File getLayoutFile(ProductID productID) 
+//	public File getLayoutFile(ProductID productID)
 //	{
 //		VoucherLayout voucherLayout;
 //		synchronized (layoutMapForArticleIDSetMutex) {
@@ -55,46 +55,46 @@ extends AbstractScriptDataProviderThread
 //		return getVoucherLayoutFile(voucherLayoutID);
 //	}
 
-	private VoucherManager getVoucherManager() 
+	private VoucherManager getVoucherManager()
 	{
 		try {
 			return VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 		} catch (Exception e) {
-			throw new RuntimeException(e); 
+			throw new RuntimeException(e);
 		}
 	}
 	
 	@Override
-	protected LayoutMapForArticleIDSet getLayoutMapForArticleIDSet(List<ArticleID> articleIDs) 
+	protected LayoutMapForArticleIDSet getLayoutMapForArticleIDSet(List<ArticleID> articleIDs)
 	{
 		VoucherManager voucherManager = getVoucherManager();
 		try {
 			return voucherManager.getVoucherLayoutMapForArticleIDSet(
-				articleIDs, 
-				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_1, 
+				articleIDs,
+				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_1,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 
 	@Override
-	protected List<ILayout> getLayouts(Set<ObjectID> layoutIDs) 
+	protected List<ILayout> getLayouts(Set<ObjectID> layoutIDs)
 	{
 		VoucherManager voucherManager = getVoucherManager();
 		Set<VoucherLayoutID> voucherLayoutIDs = CollectionUtil.castSet(layoutIDs);
 		try {
 			return voucherManager.getVoucherLayouts(
-				voucherLayoutIDs, 
-				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_2, 
+				voucherLayoutIDs,
+				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_2,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 
 	@Override
-	protected Map<ProductID, Map<ScriptRegistryItemID, Object>> getScriptingResults(List<ProductID> productIDs) 
+	protected Map<ProductID, Map<ScriptRegistryItemID, Object>> getScriptingResults(List<ProductID> productIDs)
 	{
 		VoucherManager voucherManager = getVoucherManager();
 		try {
@@ -113,8 +113,8 @@ extends AbstractScriptDataProviderThread
 			throw new IllegalArgumentException("Param layoutID "+layoutID+" is not a VoucherLayoutID!");
 
 		VoucherLayoutID voucherLayoutID = (VoucherLayoutID) layoutID;
-		return new File( 
+		return new File(
 				getCacheDir(),
-				voucherLayoutID.organisationID + File.separatorChar + voucherLayoutID.voucherLayoutID);			
-	}	
+				voucherLayoutID.organisationID + File.separatorChar + voucherLayoutID.voucherLayoutID);
+	}
 }

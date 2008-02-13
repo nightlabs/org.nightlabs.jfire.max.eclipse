@@ -18,15 +18,15 @@ import org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ClientDeliveryProcessorOSPrint 
-//extends AbstractClientDeliveryProcessorPrint 
+public class ClientDeliveryProcessorOSPrint
+//extends AbstractClientDeliveryProcessorPrint
 extends AbstractClientDeliveryProcessorOSPrint
 {
 	private static final Logger logger = Logger.getLogger(ClientDeliveryProcessorOSPrint.class);
 	
 	@Override
 	protected AbstractScriptDataProviderThread createScriptDataProviderThread(
-			AbstractClientDeliveryProcessor clientDeliveryProcessor) 
+			AbstractClientDeliveryProcessor clientDeliveryProcessor)
 	{
 		return new VoucherDataProviderThread(clientDeliveryProcessor);
 	}
@@ -66,10 +66,10 @@ extends AbstractClientDeliveryProcessorOSPrint
 //		} catch (Exception e) {
 //			throw new RuntimeException(e);
 //		}
-	}	
+	}
 
 	@Override
-	protected void printTickets(List<ScriptRootDrawComponent> tickets, PrinterJob printJob) 
+	protected void printTickets(List<ScriptRootDrawComponent> tickets, PrinterJob printJob)
 	{
 		long start = 0;
 		if (logger.isDebugEnabled()) {
@@ -86,11 +86,11 @@ extends AbstractClientDeliveryProcessorOSPrint
 			printJob.print();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}		
+		}
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!");			
-		}		
+			logger.debug("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!");
+		}
 	}
 	
 	public static final String PRINTER_USE_CASE_VOUCHER_PRINT = "PrinterUseCase-OSVoucherPrint";
@@ -100,7 +100,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 	}
 
 	@Override
-	protected ScriptRootDrawComponent getScriptRootDrawComponent(File file) 
+	protected ScriptRootDrawComponent getScriptRootDrawComponent(File file)
 	{
 		try {
 			InputStream in = new BufferedInputStream(new FileInputStream(
@@ -113,7 +113,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 				return scriptRootDrawComponent;
 			} finally {
 				in.close();
-			}			
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

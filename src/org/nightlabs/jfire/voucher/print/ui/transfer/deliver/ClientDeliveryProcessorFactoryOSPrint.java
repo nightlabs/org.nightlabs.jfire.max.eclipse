@@ -7,8 +7,8 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ClientDeliveryProcessorFactoryOSPrint 
-extends AbstractClientDeliveryProcessorFactory 
+public class ClientDeliveryProcessorFactoryOSPrint
+extends AbstractClientDeliveryProcessorFactory
 {
 
 	public ClientDeliveryProcessor createClientDeliveryProcessor() {
