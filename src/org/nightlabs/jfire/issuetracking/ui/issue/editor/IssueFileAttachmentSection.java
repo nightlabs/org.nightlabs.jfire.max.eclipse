@@ -129,7 +129,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 				InputStream is = fileComposite.getInputStreamMap().get(fileComposite.getFileListWidget().getItem(fileComposite.getFileListWidget().getSelectionIndex()));
 				if (is != null) {
 					try {
-						FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell(), SWT.SAVE);
+						FileDialog fileDialog = new FileDialog(RCPUtil.getActiveShell(), SWT.SAVE);
 						String selectedFile = fileDialog.open();
 						if (selectedFile != null) {
 							fileComposite.saveFile(is, selectedFile);
@@ -156,7 +156,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 		@Override
 		public void run() {
-			FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell(), SWT.OPEN);
+			FileDialog fileDialog = new FileDialog(RCPUtil.getActiveShell(), SWT.OPEN);
 			String selectedFile = fileDialog.open();
 			if (selectedFile != null) {
 				File file = new File(selectedFile);

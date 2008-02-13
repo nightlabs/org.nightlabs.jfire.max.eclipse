@@ -20,6 +20,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
@@ -55,7 +56,7 @@ extends AbstractIssueAction
 			JDOQuerySearchEntryViewer viewer = (JDOQuerySearchEntryViewer)editor.getEntryViewer();
 			List<JDOQuery> queries = viewer.getFilterComposite().getJDOQueries();
 			if (queries != null && queries.size() != 0) {
-				dialog = new IssueQuerySaveDialog(Display.getDefault().getActiveShell());
+				dialog = new IssueQuerySaveDialog(RCPUtil.getActiveShell());
 				if (dialog.open() == Dialog.OK) {
 					try {
 						Collection<JDOQuery> queryCollection = new HashSet<JDOQuery>();

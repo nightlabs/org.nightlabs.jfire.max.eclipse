@@ -24,6 +24,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.config.dao.ConfigModuleDAO;
@@ -75,7 +76,7 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
-			IssueQueryRenameDialog dialog = new IssueQueryRenameDialog(Display.getDefault().getActiveShell());
+			IssueQueryRenameDialog dialog = new IssueQueryRenameDialog(RCPUtil.getActiveShell());
 			
 			if (storedIssueQueryTable.getTable().getSelectionIndex() != -1) {
 				StoredIssueQuery selectedIssueQuery = storedIssueQueryTable.getFirstSelectedElement();
