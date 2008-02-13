@@ -155,7 +155,7 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 	}
 	
 	public static void open(ReportParameterAcquisitionSetup setup) {
-		ShowXMLInitialisationDialog dlg = new ShowXMLInitialisationDialog(RCPUtil.getActiveWorkbenchShell(), setup);
+		ShowXMLInitialisationDialog dlg = new ShowXMLInitialisationDialog(RCPUtil.getActiveShell(), setup);
 		dlg.open();
 	}
 
