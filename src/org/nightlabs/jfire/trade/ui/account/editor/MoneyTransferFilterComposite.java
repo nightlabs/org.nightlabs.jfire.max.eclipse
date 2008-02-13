@@ -31,7 +31,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
-/** 
+/**
  * @author Chairat Kongarayawetchakun <!-- chairatk [AT] nightlabs [DOT] de -->
  */
 public class MoneyTransferFilterComposite extends XComposite
@@ -56,7 +56,7 @@ public class MoneyTransferFilterComposite extends XComposite
 	 * Create the content for this composite.
 	 * @param parent The parent composite
 	 */
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		parent.setLayout(new GridLayout(2, false));
 
@@ -91,7 +91,7 @@ public class MoneyTransferFilterComposite extends XComposite
 		cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
-		createDTMax.setDate(cal.getTime());		
+		createDTMax.setDate(cal.getTime());
 		
 		/**********************************************************/
 		Group otherSideAccountGroup = new Group(parent, SWT.NONE);

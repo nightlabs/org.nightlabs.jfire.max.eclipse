@@ -12,8 +12,8 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OrderFilterComposite 
-extends AbstractArticleContainerFilterComposite 
+public class OrderFilterComposite
+extends AbstractArticleContainerFilterComposite
 {
 	/**
 	 * @param parent
@@ -34,10 +34,10 @@ extends AbstractArticleContainerFilterComposite
 	}
 	
 	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites() 
+	protected List<JDOQueryComposite> registerJDOQueryComposites()
 	{
 		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>(2);
 		queryComps.add(articleContainerFilterComposite);
 		return queryComps;
-	}	
+	}
 }

@@ -30,11 +30,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -49,7 +47,7 @@ public interface SegmentEdit
 	/**
 	 * This method is called by
 	 * {@link SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, String, ArticleSegmentGroup)}.
-	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>. 
+	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>.
 	 * @param generalEditorComposite TODO
 	 * @param segmentContext The segmentContext - one of
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_ORDER},
@@ -220,7 +218,7 @@ public interface SegmentEdit
 	 * </p>
 	 * <p>
 	 * The default implementation of this method in {@link AbstractSegmentEdit} iterates all its
-	 * {@link ArticleEdit}s and calls their 
+	 * {@link ArticleEdit}s and calls their
 	 * </p>
 	 *
 	 * @param articleCarriers The {@link ArticleCarrier}s referencing {@link Article}s which already have
@@ -306,7 +304,7 @@ public interface SegmentEdit
 
 //	/**
 //	 * This method iterates all {@link ArticleEdit}s and calls their
-//	 * {@link ArticleEdit#populateArticleEditContextMenu(IMenuManager)}. 
+//	 * {@link ArticleEdit#populateArticleEditContextMenu(IMenuManager)}.
 //	 *
 //	 * @param manager
 //	 */

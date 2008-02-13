@@ -13,8 +13,8 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class OrderIDQuickSearchEntry 
-extends AbstractArticleContainerQuickSearchEntry 
+public class OrderIDQuickSearchEntry
+extends AbstractArticleContainerQuickSearchEntry
 {
 	public OrderIDQuickSearchEntry(QuickSearchEntryFactory factory) {
 		super(factory);

@@ -21,7 +21,7 @@ import org.nightlabs.jfire.accounting.query.AbstractMoneyTransferQuery;
 import org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-/* 
+/*
 * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
 */
 public class MoneyTransferListSection extends RestorableSectionPart{
@@ -37,7 +37,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 		getSection().setLayout(new GridLayout());
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+		client.getGridLayout().numColumns = 1;
 		
 		moneyTransferTable = new MoneyTransferTable(
 				client, SWT.NONE);
@@ -58,7 +58,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 			{
 				Display.getDefault().asyncExec(new Runnable()
 				{
-					@SuppressWarnings("unchecked") 
+					@SuppressWarnings("unchecked")
 					public void run()
 					{
 						moneyTransferListChanged((List<MoneyTransfer>) modifyEvent.getNewObject());

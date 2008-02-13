@@ -91,7 +91,7 @@ extends EditorActionBarContributor
 
 	public GeneralEditorActionBarContributor()
 	{
-		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);		
+		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
 		RCPUtil.getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);
 	}
 
@@ -634,7 +634,7 @@ extends EditorActionBarContributor
 		public void partActivated(IWorkbenchPartReference partRef) {
 			if (activeGeneralEditor != null &&
 				(partRef.getPart(false) instanceof IEditorPart) &&
-				(!activeGeneralEditor.equals(partRef.getPart(false)))) 
+				(!activeGeneralEditor.equals(partRef.getPart(false))))
 			{
 				logger.debug("Part activated"); //$NON-NLS-1$
 				IActionBars2 actionBars = (IActionBars2) getActionBars();
@@ -668,12 +668,12 @@ extends EditorActionBarContributor
 		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
 			if (
-//					activeGeneralEditor != null 
+//					activeGeneralEditor != null
 //				 && System.identityHashCode(activeGeneralEditor) != System.identityHashCode(RCPUtil.getActiveWorkbenchPage().getActiveEditor())
 //				 &&	(!activeGeneralEditor.equals(RCPUtil.getActiveWorkbenchPage().getActiveEditor()))
-//				 && 
-				 (!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId()))))  
-				) 
+//				 &&
+				 (!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId()))))
+				)
 			{
 				logger.debug("Perspective activated");					 //$NON-NLS-1$
 				IActionBars2 actionBars = (IActionBars2) getActionBars();

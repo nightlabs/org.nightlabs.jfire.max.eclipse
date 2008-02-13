@@ -8,8 +8,8 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReceptionNoteFilterComposite 
-extends AbstractArticleContainerFilterComposite 
+public class ReceptionNoteFilterComposite
+extends AbstractArticleContainerFilterComposite
 {
 	/**
 	 * @param parent

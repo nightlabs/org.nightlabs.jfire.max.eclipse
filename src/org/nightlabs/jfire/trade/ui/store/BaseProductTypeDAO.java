@@ -90,7 +90,7 @@ extends BaseJDOObjectDAO<ProductTypeID, ProductType>  //JDOObjectDAO<ProductType
 
 	// TODO: Implement Authority checking (needs to be in the EJB!)
 	@Override
-	protected Collection<ProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, String[] fetchGroups, 
+	protected Collection<ProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, String[] fetchGroups,
 			int maxFetchDepth, ProgressMonitor progressMonitor)
 	throws Exception
 	{

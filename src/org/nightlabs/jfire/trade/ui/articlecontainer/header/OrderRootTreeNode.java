@@ -76,7 +76,7 @@ public class OrderRootTreeNode extends ArticleContainerRootTreeNode
 		return CollectionUtil.castList(
 				OrderDAO.sharedInstance().getOrders(vendorID, customerID,
 				rangeBeginIdx, rangeEndIdx,
-				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
 		);
 	}
@@ -88,7 +88,7 @@ public class OrderRootTreeNode extends ArticleContainerRootTreeNode
 		Set<OrderID> orderIDs = CollectionUtil.castSet(articleContainerIDs);
 		return CollectionUtil.castList(OrderDAO.sharedInstance().getOrders(
 				orderIDs,
-				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
 		);
 	}

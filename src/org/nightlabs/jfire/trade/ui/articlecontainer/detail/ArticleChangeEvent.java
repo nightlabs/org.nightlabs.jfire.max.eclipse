@@ -42,7 +42,7 @@ public class ArticleChangeEvent extends EventObject
 //	private NotificationEvent notificationEvent;
 
 	/**
-	 * @param source 
+	 * @param source
 	 * @param dirtyArticles Instances of {@link Article}.
 	 * @param dirtyArticleCarriers TODO
 	 * @param deletedArticles TODO

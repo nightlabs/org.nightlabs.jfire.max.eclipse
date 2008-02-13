@@ -37,16 +37,16 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ProductTypeDAO 
-extends BaseProductTypeDAO 
+public class ProductTypeDAO
+extends BaseProductTypeDAO
 {
 	public ProductTypeDAO() {
 		super();
 	}
 	
 	// TODO: Implement authority checking
-	public List<ProductType> getProductTypes(Set<ProductTypeID> productTypeIDs, String[] fetchGroups, 
-			int maxFetchDepth, ProgressMonitor progressMonitor) 
+	public List<ProductType> getProductTypes(Set<ProductTypeID> productTypeIDs, String[] fetchGroups,
+			int maxFetchDepth, ProgressMonitor progressMonitor)
 	{
 		return getJDOObjects(null, productTypeIDs, fetchGroups, maxFetchDepth, progressMonitor);
 	}

@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.order.action.ShowOrderAction;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OrderEntryEditorActionBarContributor 
-extends AbstractArticleContainerActionBarContributor 
+public class OrderEntryEditorActionBarContributor
+extends AbstractArticleContainerActionBarContributor
 {
 
 	public OrderEntryEditorActionBarContributor() {

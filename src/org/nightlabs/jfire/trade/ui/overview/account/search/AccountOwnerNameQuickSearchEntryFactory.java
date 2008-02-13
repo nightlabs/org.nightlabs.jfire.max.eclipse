@@ -11,8 +11,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class AccountOwnerNameQuickSearchEntryFactory 
-extends AbstractQuickSearchEntryFactory 
+public class AccountOwnerNameQuickSearchEntryFactory
+extends AbstractQuickSearchEntryFactory
 {
 	public QuickSearchEntry createQuickSearchEntry() {
 		return new AccountOwnerNameQuickSearchEntry(this);

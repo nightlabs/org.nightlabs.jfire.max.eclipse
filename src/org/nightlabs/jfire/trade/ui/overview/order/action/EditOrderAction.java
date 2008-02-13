@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainer
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class EditOrderAction 
-extends AbstractEditArticleContainerAction 
+public class EditOrderAction
+extends AbstractEditArticleContainerAction
 {
 
 	public EditOrderAction() {

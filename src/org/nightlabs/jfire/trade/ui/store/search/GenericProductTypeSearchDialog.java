@@ -8,8 +8,8 @@ import org.eclipse.swt.widgets.Shell;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GenericProductTypeSearchDialog 
-extends AbstractProductTypeSearchDialog 
+public class GenericProductTypeSearchDialog
+extends AbstractProductTypeSearchDialog
 {
 	/**
 	 * @param parentShell
@@ -20,7 +20,7 @@ extends AbstractProductTypeSearchDialog
 
 	@Override
 	protected AbstractProductTypeSearchComposite createProductTypeSearchComposite(
-			Composite parent) 
+			Composite parent)
 	{
 		return new GenericProductTypeSearchComposite(parent, SWT.NONE);
 	}

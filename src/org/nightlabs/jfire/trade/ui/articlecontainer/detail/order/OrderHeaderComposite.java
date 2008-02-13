@@ -58,7 +58,7 @@ extends HeaderComposite
 		timestamp = new Label(this, SWT.NONE);
 		timestamp.setText(DateFormatter.formatDateShortTimeHMS(order.getCreateDT(), false));
 		userName = new Label(this, SWT.NONE);
-		userName.setText(order.getCreateUser().getName()); 		
+		userName.setText(order.getCreateUser().getName());
 		
 		createArticleContainerContextMenu();
 	}

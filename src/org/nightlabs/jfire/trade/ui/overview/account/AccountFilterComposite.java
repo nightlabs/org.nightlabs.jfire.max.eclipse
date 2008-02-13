@@ -13,8 +13,8 @@ import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AccountFilterComposite 
-extends AbstractQueryFilterComposite 
+public class AccountFilterComposite
+extends AbstractQueryFilterComposite
 {
 	/**
 	 * @param parent
@@ -41,7 +41,7 @@ extends AbstractQueryFilterComposite
 	}
 
 	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites() 
+	protected List<JDOQueryComposite> registerJDOQueryComposites()
 	{
 		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>();
 		queryComps.add(accountSearchComposite);
@@ -54,9 +54,9 @@ extends AbstractQueryFilterComposite
 	}
 
 	private AccountSearchComposite accountSearchComposite;
-	protected Composite createAccountComp(Composite parent) 
+	protected Composite createAccountComp(Composite parent)
 	{
-		accountSearchComposite = new AccountSearchComposite(parent, SWT.NONE, 
+		accountSearchComposite = new AccountSearchComposite(parent, SWT.NONE,
 				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA);
 		accountSearchComposite.setToolkit(getToolkit());
 		return accountSearchComposite;

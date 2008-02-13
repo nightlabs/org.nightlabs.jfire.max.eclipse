@@ -66,7 +66,7 @@ public class DeliverAllAction extends ArticleContainerAction
 //			}
 //			return !allDelivered;
 //		}
-//		return false;		
+//		return false;
 //	}
 
 	@Override

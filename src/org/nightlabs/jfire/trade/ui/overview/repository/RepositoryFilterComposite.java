@@ -13,8 +13,8 @@ import org.nightlabs.jfire.store.Repository;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class RepositoryFilterComposite 
-extends AbstractQueryFilterComposite 
+public class RepositoryFilterComposite
+extends AbstractQueryFilterComposite
 {
 	/**
 	 * @param parent
@@ -41,7 +41,7 @@ extends AbstractQueryFilterComposite
 	}
 
 	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites() 
+	protected List<JDOQueryComposite> registerJDOQueryComposites()
 	{
 		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>();
 		queryComps.add(repositorySearchComposite);

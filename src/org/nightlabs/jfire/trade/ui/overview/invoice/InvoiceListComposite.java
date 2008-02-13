@@ -74,7 +74,7 @@ extends AbstractArticleContainerListComposite
 			break;
 			case 1:
 				if (invoice.getFinalizeUser() != null)
-					return invoice.getFinalizeUser().getName();	
+					return invoice.getFinalizeUser().getName();
 			break;
 			case 2:
 				if (invoice.getPrice() != null && invoice.getCurrency() != null)

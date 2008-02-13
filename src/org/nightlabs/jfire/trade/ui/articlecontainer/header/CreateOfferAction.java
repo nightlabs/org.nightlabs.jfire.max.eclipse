@@ -93,7 +93,7 @@ public class CreateOfferAction extends Action
 				}
 				
 				return Status.OK_STATUS;
-			}			
+			}
 		};
 		createOrderJob.schedule();
 		

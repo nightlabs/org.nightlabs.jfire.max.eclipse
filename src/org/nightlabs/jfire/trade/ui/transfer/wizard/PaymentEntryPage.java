@@ -439,7 +439,7 @@ implements IPaymentEntryPage
 //				if (selIdx  < 0) selIdx = 0;
 				
 				return Status.OK_STATUS;
-			}			
+			}
 		};
 		
 		loadModeOfPaymentsJob = loadJob;
@@ -464,7 +464,7 @@ implements IPaymentEntryPage
 //		}
 //		getPaymentWizardHop().setAmount(newAmount);
 //
-//		PaymentWizard wizard = (PaymentWizard)getWizard(); 
+//		PaymentWizard wizard = (PaymentWizard)getWizard();
 //		// create/remove additional PaymentEntryPage s for multi-payments
 //		int pageIndex = wizard.getDynamicWizardPageIndex(this);
 //		if (pageIndex >= 0)
@@ -498,7 +498,7 @@ implements IPaymentEntryPage
 //			nextPaymentEntryPage.adjustMaxAmount(diffMaxAmount - diffAmount);
 //		else {
 //			while (
-//					wizard.getDynamicWizardPageCount() > pageIndex && 
+//					wizard.getDynamicWizardPageCount() > pageIndex &&
 //					wizard.getDynamicWizardPage(pageIndex) instanceof PaymentEntryPage)
 //			{
 //				wizard.removeDynamicWizardPage(pageIndex);
@@ -510,7 +510,7 @@ implements IPaymentEntryPage
 
 	protected int getNextPaymentEntryPageIndex(PaymentEntryPage currentPage)
 	{
-		PaymentWizard wizard = (PaymentWizard)getWizard(); 
+		PaymentWizard wizard = (PaymentWizard)getWizard();
 		int pageIndex = wizard.getDynamicWizardPageIndex(currentPage);
 		if (pageIndex >= 0)
 			pageIndex += 1;
@@ -525,7 +525,7 @@ implements IPaymentEntryPage
 
 	protected PaymentEntryPage createNextPaymentEntryPage(PaymentEntryPage currentPage, String paymentDirection, long maxAmount)
 	{
-		PaymentWizard wizard = (PaymentWizard)getWizard(); 
+		PaymentWizard wizard = (PaymentWizard)getWizard();
 		// create/remove additional PaymentEntryPage s for multi-payments
 		int pageIndex = getNextPaymentEntryPageIndex(currentPage);
 
@@ -560,7 +560,7 @@ implements IPaymentEntryPage
 		return nextPaymentEntryPage;
 	}
 
-//	public static List<PaymentEntryPage> getPaymentEntryPages(IWizard wizard) 
+//	public static List<PaymentEntryPage> getPaymentEntryPages(IWizard wizard)
 //	{
 //		List<PaymentEntryPage> paymentEntryPages = new ArrayList<PaymentEntryPage>();
 //		IWizardPage page = wizard.getStartingPage();
@@ -683,7 +683,7 @@ implements IPaymentEntryPage
 		int pageIndex = getNextPaymentEntryPageIndex(this);
 		PaymentWizard wizard = (PaymentWizard)getWizard();
 		while (
-				wizard.getDynamicWizardPageCount() > pageIndex && 
+				wizard.getDynamicWizardPageCount() > pageIndex &&
 				wizard.getDynamicWizardPage(pageIndex) instanceof PaymentEntryPage)
 		{
 //			wizard.getPaymentEntryPages().remove(wizard.getDynamicWizardPage(pageIndex));
@@ -802,7 +802,7 @@ implements IPaymentEntryPage
 			clientPaymentProcessor.init();
 
 			String reqMsg = clientPaymentProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {				
+			if (reqMsg != null) {
 				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
 				return;
 			}
@@ -913,7 +913,7 @@ implements IPaymentEntryPage
 		if (idx >= 0) {
 			selectedServerPaymentProcessor = serverPaymentProcessorList.get(idx);
 			String reqMsg = selectedServerPaymentProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {				
+			if (reqMsg != null) {
 				this.setErrorMessage(reqMsg.trim());
 				wizard.updateDialog();
 				return;

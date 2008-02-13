@@ -48,7 +48,7 @@ public class ChangeTariffWizard
 				return Status.OK_STATUS;
 			}
 		};
-		setSelectedTariffJob.setPriority(Job.INTERACTIVE);
+		setSelectedTariffJob.setPriority(org.eclipse.core.runtime.jobs.Job.INTERACTIVE);
 		setSelectedTariffJob.setUser(true);
 		setSelectedTariffJob.schedule();
 

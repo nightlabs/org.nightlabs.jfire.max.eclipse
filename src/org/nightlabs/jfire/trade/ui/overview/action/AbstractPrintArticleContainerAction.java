@@ -16,8 +16,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractPrintArticleContainerAction 
-extends AbstractArticleContainerAction 
+public abstract class AbstractPrintArticleContainerAction
+extends AbstractArticleContainerAction
 {
 	public static final String ID = AbstractPrintArticleContainerAction.class.getName();
 
@@ -35,7 +35,7 @@ extends AbstractArticleContainerAction
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractPrintArticleContainerAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
-				TradePlugin.getDefault(), AbstractPrintArticleContainerAction.class));		
+				TradePlugin.getDefault(), AbstractPrintArticleContainerAction.class));
 	}
 	
 	protected AbstractPrintReportLayoutAction printReportAction = new AbstractPrintReportLayoutAction() {
@@ -47,10 +47,10 @@ extends AbstractArticleContainerAction
 	};
 	
 	@Override
-	public void run() 
-	{		
+	public void run()
+	{
 		Map <String, Object> params = new HashMap<String,Object>();
-		prepareParams(params);		
+		prepareParams(params);
 		ReportRegistryItemID selectedLayoutID = ReportConfigUtil.getReportLayoutID(getReportRegistryItemType());
 		if (selectedLayoutID == null) {
 			// the user canceled, abort
@@ -60,8 +60,8 @@ extends AbstractArticleContainerAction
 		itemIDs.add(selectedLayoutID);
 		printReportAction.setNextRunParams(params);
 		printReportAction.runWithRegistryItemIDs(itemIDs);
-	}	
+	}
 	
 	protected abstract void prepareParams(Map<String, Object> params);
-	protected abstract String getReportRegistryItemType();	
+	protected abstract String getReportRegistryItemType();
 }

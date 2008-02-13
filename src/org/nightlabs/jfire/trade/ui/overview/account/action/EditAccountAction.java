@@ -9,7 +9,7 @@ import org.nightlabs.jfire.trade.ui.account.editor.AccountEditor;
 import org.nightlabs.jfire.trade.ui.account.editor.AccountEditorInput;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
-public class EditAccountAction 
+public class EditAccountAction
 extends WorkbenchPartSelectionAction
 {
 	public boolean calculateEnabled() {

@@ -106,7 +106,7 @@ public class ManualMoneyTransferComposite extends XComposite {
 		reasonText.setLayoutData(gridData);
 		// reasonText.addModifyListener(new ModifyListener(){
 		// public void modifyText(ModifyEvent arg0) {
-		//				
+		//
 		// }
 		// });
 

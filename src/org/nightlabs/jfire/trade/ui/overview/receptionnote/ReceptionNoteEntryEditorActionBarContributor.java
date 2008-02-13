@@ -6,8 +6,8 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorActionBarContribu
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReceptionNoteEntryEditorActionBarContributor 
-extends OverviewEntryEditorActionBarContributor 
+public class ReceptionNoteEntryEditorActionBarContributor
+extends OverviewEntryEditorActionBarContributor
 {
 
 	public ReceptionNoteEntryEditorActionBarContributor() {

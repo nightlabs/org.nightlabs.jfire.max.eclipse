@@ -15,7 +15,7 @@ import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-public class AccountGeneralComposite 
+public class AccountGeneralComposite
 extends XComposite
 {
 	private Account account;
@@ -31,7 +31,7 @@ extends XComposite
 	
 //	private Label revenueInAccLbl;
 //	private Text revenueInAccText;
-//	
+//
 //	private Label revenueOutAccLbl;
 //	private Text revenueOutAccText;
 	
@@ -57,7 +57,7 @@ extends XComposite
 		
 		accountNameLbl = new Label(this, SWT.NONE);
 		accountNameLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.accountName")); //$NON-NLS-1$
-		accountNameEditor = new I18nTextEditor(this);		
+		accountNameEditor = new I18nTextEditor(this);
 		accountNameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		accountNameEditor.addModifyListener(nameModifyListener);
 		
@@ -75,7 +75,7 @@ extends XComposite
 //		revenueInAccLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.revenueInAcc")); //$NON-NLS-1$
 //		revenueInAccText = new Text(this, textStyle);
 //		revenueInAccText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		
+//
 //		revenueOutAccLbl = new Label(this, SWT.NONE);
 //		revenueOutAccLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.revenueOutAcc")); //$NON-NLS-1$
 //		revenueOutAccText = new Text(this, textStyle);
@@ -87,17 +87,17 @@ extends XComposite
 		balanceText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	
-	public void setAccount(Account account) 
+	public void setAccount(Account account)
 	{
-		this.account = account;		
-		if (account != null) 
+		this.account = account;
+		if (account != null)
 		{
 			accountNameEditor.setI18nText(account.getName(), EditMode.DIRECT);
 			ownerText.setText(account.getOwner() == null ? "" : account.getOwner().getAnchorID()); //$NON-NLS-1$
 			anchorTypeIDText.setText(account.getAnchorID());
 //			revenueInAccText.setText(account.getRevenueInAccount() == null ? "" : account.getRevenueInAccount().getName().getText()); //$NON-NLS-1$
 //			revenueOutAccText.setText(account.getRevenueOutAccount() == null ? "" : account.getRevenueOutAccount().getName().getText()); //$NON-NLS-1$
-			balanceText.setText(Long.toString(account.getBalance()));					
+			balanceText.setText(Long.toString(account.getBalance()));
 		}
 	}
 

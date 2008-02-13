@@ -31,7 +31,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 	public void addPages() {
 		personSearchWizardPage = new PersonSearchWizardPage(personSearchText) {
 			@Override
-			public void onNext() {				
+			public void onNext() {
 				Person selectedPerson = personSearchWizardPage.getSelectedPerson();
 				LegalEntity legalEntity;
 				try {
@@ -46,14 +46,14 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 				// Since we are only dealing with a single ArticleContainer here, we can safely remove all existing
 				// customer group IDs and then add the one of the selected user.
 				
-				clearCustomerGroupIDs();				
+				clearCustomerGroupIDs();
 				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(legalEntity.getDefaultCustomerGroup()));
 				
 				reloadPaymentDeliveryModes();
 			}
 		};
 		
-		addPage(personSearchWizardPage);	
+		addPage(personSearchWizardPage);
 		super.addPages();
 	}
 }

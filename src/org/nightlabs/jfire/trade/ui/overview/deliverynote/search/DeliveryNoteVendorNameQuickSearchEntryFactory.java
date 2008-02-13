@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearc
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class DeliveryNoteVendorNameQuickSearchEntryFactory 
-extends AbstractVendorNameQuickSearchEntryFactory 
+public class DeliveryNoteVendorNameQuickSearchEntryFactory
+extends AbstractVendorNameQuickSearchEntryFactory
 {
 	public QuickSearchEntry createQuickSearchEntry() {
 		return new DeliveryNoteVendorNameQuickSearchEntry(this);

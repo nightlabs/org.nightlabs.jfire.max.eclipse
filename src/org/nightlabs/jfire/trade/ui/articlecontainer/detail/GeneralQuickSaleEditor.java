@@ -16,7 +16,7 @@ import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GeneralQuickSaleEditor 
+public class GeneralQuickSaleEditor
 extends EditorPart
 implements IGeneralEditor
 {
@@ -41,7 +41,7 @@ implements IGeneralEditor
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
-	throws PartInitException 
+	throws PartInitException
 	{
 		if (!(input instanceof GeneralEditorInput))
 			throw new PartInitException("Invalid Input: Must be an instance of GeneralEditorInput! But is: " + (input == null ? null : input.getClass().getName())); //$NON-NLS-1$
@@ -80,21 +80,21 @@ implements IGeneralEditor
 
 	private IPartListener quickSaleEditorListener = new IPartListener()
 	{
-		public void partClosed(IWorkbenchPart part) 
+		public void partClosed(IWorkbenchPart part)
 		{
 			if (part.equals(GeneralQuickSaleEditor.this)) {
 				if (RCPUtil.getActiveWorkbenchPage() != null) {
 					QuickSalePerspective.checkOrderOpen(RCPUtil.getActivePerspectiveID());
 				}
 			}
-		}		
-		public void partOpened(IWorkbenchPart part) {			
-		}	
-		public void partDeactivated(IWorkbenchPart part) {			
-		}		
-		public void partBroughtToTop(IWorkbenchPart part) {			
-		}	
-		public void partActivated(IWorkbenchPart part) {			
-		}		
+		}
+		public void partOpened(IWorkbenchPart part) {
+		}
+		public void partDeactivated(IWorkbenchPart part) {
+		}
+		public void partBroughtToTop(IWorkbenchPart part) {
+		}
+		public void partActivated(IWorkbenchPart part) {
+		}
 	};
 }

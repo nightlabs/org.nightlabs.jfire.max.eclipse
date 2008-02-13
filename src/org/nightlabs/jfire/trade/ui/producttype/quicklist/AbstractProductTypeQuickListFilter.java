@@ -40,7 +40,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * 
  */
-public abstract class AbstractProductTypeQuickListFilter 
+public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
 	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
@@ -101,13 +101,13 @@ implements IProductTypeQuickListFilter
 	}
 
 	/**
-	 * At the moment (2007-03-27) this method only deselect everything. 
+	 * At the moment (2007-03-27) this method only deselect everything.
 	 *
 	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
 	public void setSelection(ISelection selection)
 	{
 	//TODO Implement setSelection()
-//		throw new UnsupportedOperationException("Not implemented!");		
+//		throw new UnsupportedOperationException("Not implemented!");
 	}
 }

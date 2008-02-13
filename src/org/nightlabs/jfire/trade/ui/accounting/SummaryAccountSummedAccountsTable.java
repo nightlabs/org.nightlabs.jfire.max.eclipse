@@ -55,7 +55,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * A Table to view the Accounts a SummaryAccount summarys.
- *  
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -143,7 +143,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.SummaryAccountSummedAccountsTable.summedAccountTableColumn.text")); //$NON-NLS-1$
-		table.setLayout(new WeightedTableLayout(new int[] {1}));		
+		table.setLayout(new WeightedTableLayout(new int[] {1}));
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 		if (selection.size() > 0)
 			return (Account)selection.getFirstElement();
 		return null;
-	}	
+	}
 
 	/**
 	 * @return All selected summed Accounts or null if none selected
@@ -205,7 +205,7 @@ public class SummaryAccountSummedAccountsTable extends AbstractTableComposite {
 			Account account = (Account) iter.next();
 			result.add(JDOHelper.getObjectId(account));
 		}
-		return result;	
+		return result;
 	}
 
 }

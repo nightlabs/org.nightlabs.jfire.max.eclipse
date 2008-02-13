@@ -53,7 +53,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 public class PriceFragmentTypeTable extends AbstractTableComposite {
 	
 	private static final String[] DEFAULT_FETCH_GROUPS = new String[]{
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 		PriceFragmentType.FETCH_GROUP_NAME
 	};
 	
@@ -83,7 +83,7 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 	 * @param style
 	 */
 	public PriceFragmentTypeTable(Composite parent, int style) {
-		super(parent, style);		
+		super(parent, style);
 	}
 	
 	/**

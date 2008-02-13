@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQu
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class OfferIDQuickSearchEntryFactory 
-extends AbstractArticleContainerIDQuickSearchEntryFactory 
+public class OfferIDQuickSearchEntryFactory
+extends AbstractArticleContainerIDQuickSearchEntryFactory
 {
 	public QuickSearchEntry createQuickSearchEntry() {
 		return new OfferIDQuickSearchEntry(this);

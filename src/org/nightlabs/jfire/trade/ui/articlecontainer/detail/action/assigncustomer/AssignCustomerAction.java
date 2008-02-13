@@ -44,6 +44,6 @@ public class AssignCustomerAction
 		AssignCustomerWizard wizard = new AssignCustomerWizard(orderID);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.setPageSize(600, 500);
-		dialog.open();		
+		dialog.open();
 	}
 }

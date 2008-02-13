@@ -11,8 +11,8 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainer
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractArticleContainerActionBarContributor 
-extends OverviewEntryEditorActionBarContributor 
+public abstract class AbstractArticleContainerActionBarContributor
+extends OverviewEntryEditorActionBarContributor
 {
 
 	public AbstractArticleContainerActionBarContributor() {
@@ -43,10 +43,10 @@ extends OverviewEntryEditorActionBarContributor
 		if (getShowAction() != null)
 			menuManager.add(getShowAction());
 		if (getPrintAction() != null)
-			menuManager.add(getPrintAction());		
-	}	
+			menuManager.add(getPrintAction());
+	}
 	
-	protected abstract AbstractShowArticleContainerAction createShowAction();	
+	protected abstract AbstractShowArticleContainerAction createShowAction();
 	private AbstractShowArticleContainerAction showAction = null;
 	public  AbstractShowArticleContainerAction getShowAction() {
 		if (showAction == null && getEditor() != null)
@@ -57,8 +57,8 @@ extends OverviewEntryEditorActionBarContributor
 	protected abstract AbstractPrintArticleContainerAction createPrintAction();
 	private AbstractPrintArticleContainerAction printAction = null;
 	public AbstractPrintArticleContainerAction getPrintAction() {
-		if (printAction == null && getEditor() != null)	
+		if (printAction == null && getEditor() != null)
 			printAction = createPrintAction();
-		return printAction; 
+		return printAction;
 	}
 }

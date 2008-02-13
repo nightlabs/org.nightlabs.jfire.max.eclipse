@@ -13,8 +13,8 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class DeliveryNoteVendorNameQuickSearchEntry 
-extends AbstractArticleContainerQuickSearchEntry 
+public class DeliveryNoteVendorNameQuickSearchEntry
+extends AbstractArticleContainerQuickSearchEntry
 {
 	public DeliveryNoteVendorNameQuickSearchEntry(QuickSearchEntryFactory factory) {
 		super(factory);
@@ -30,5 +30,5 @@ extends AbstractArticleContainerQuickSearchEntry
 	@Override
 	public String[] getFetchGroups() {
 		return DeliveryNoteEntryViewer.FETCH_GROUPS_DELIVERY_NOTES;
-	}	
+	}
 }

@@ -10,7 +10,7 @@ import org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class InvoiceEntryEditorActionBarContributor 
+public class InvoiceEntryEditorActionBarContributor
 //extends OverviewEntryEditorActionBarContributor
 extends AbstractArticleContainerActionBarContributor
 {

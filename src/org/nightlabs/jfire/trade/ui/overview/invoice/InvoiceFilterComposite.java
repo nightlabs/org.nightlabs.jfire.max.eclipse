@@ -8,7 +8,7 @@ public class InvoiceFilterComposite
 //extends XComposite
 extends AbstractArticleContainerFilterComposite
 {
-	public InvoiceFilterComposite(Composite parent, int style) { 
+	public InvoiceFilterComposite(Composite parent, int style) {
 		super(parent, style);
 	}
 	
@@ -44,7 +44,7 @@ extends AbstractArticleContainerFilterComposite
 //		{
 //			Group comp = new Group(this, SWT.NONE);
 //			comp.setText("Book Detail");
-//			comp.setLayout(new GridLayout(2, false));			
+//			comp.setLayout(new GridLayout(2, false));
 //
 //			booked = new Combo(comp, SWT.BORDER | SWT.READ_ONLY);
 //
@@ -87,8 +87,8 @@ extends AbstractArticleContainerFilterComposite
 //		{
 //			Group comp = new Group(this, SWT.NONE);
 //			comp.setText("Pay Detail");
-//			comp.setLayout(new GridLayout(4, false));						
-//			
+//			comp.setLayout(new GridLayout(4, false));
+//
 //			// TODO load the currencies ASYNCHRONOUSLY
 //			List<Currency> currencies = new CurrencyDAO().getCurrencies(new NullProgressMonitor());
 //			currencies.add(0, wildcardAllCurrencies);
@@ -108,7 +108,7 @@ extends AbstractArticleContainerFilterComposite
 //				public void widgetSelected(SelectionEvent e)
 //				{
 //					currencySelected();
-//				}				
+//				}
 //			});
 //
 //			GridData gd = new GridData(GridData.FILL_HORIZONTAL);

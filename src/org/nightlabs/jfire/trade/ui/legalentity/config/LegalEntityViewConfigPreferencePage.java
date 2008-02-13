@@ -44,7 +44,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class LegalEntityViewConfigPreferencePage 
+public class LegalEntityViewConfigPreferencePage
 extends AbstractUserConfigModulePreferencePage
 {
 	private XComposite wrapper;
@@ -106,7 +106,7 @@ extends AbstractUserConfigModulePreferencePage
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			} 
+			}
 		});
 		
 		upButton = new Button(buttonWrapper, SWT.PUSH);
@@ -120,7 +120,7 @@ extends AbstractUserConfigModulePreferencePage
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			} 
+			}
 			
 		});
 		
@@ -135,7 +135,7 @@ extends AbstractUserConfigModulePreferencePage
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			} 
+			}
 			
 		});
 	}
@@ -145,7 +145,7 @@ extends AbstractUserConfigModulePreferencePage
 //		structFieldTable.setInput(configModule);
 //	}
 	@Override
-	protected void updatePreferencePage() {		
+	protected void updatePreferencePage() {
 		structFieldTable.setInput(getConfigModuleController().getConfigModule());
 	}
 
@@ -161,9 +161,9 @@ extends AbstractUserConfigModulePreferencePage
 	}
 
 	@Override
-	public void updateConfigModule() 
+	public void updateConfigModule()
 	{
-		LegalEntityViewConfigModule configModule = (LegalEntityViewConfigModule) getConfigModuleController().getConfigModule(); 
+		LegalEntityViewConfigModule configModule = (LegalEntityViewConfigModule) getConfigModuleController().getConfigModule();
 		configModule.getStructFields().clear();
 		configModule.getStructFields().addAll(structFieldTable.getStructFields());
 		setConfigChanged(false);

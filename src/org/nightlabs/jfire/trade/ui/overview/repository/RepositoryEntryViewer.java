@@ -19,14 +19,14 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * implementation of a {@link JDOQuerySearchEntryViewer} for searching and 
+ * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
  * displaying {@link Repository}s
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
-public class RepositoryEntryViewer  
+public class RepositoryEntryViewer
 extends JDOQuerySearchEntryViewer
-{	
+{
 	public RepositoryEntryViewer(Entry entry) {
 		super(entry);
 	}
@@ -52,13 +52,13 @@ extends JDOQuerySearchEntryViewer
 	};
 
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
 			Collection<Repository> repositories = RepositoryDAO.sharedInstance().getRepositoriesForQueries(
-					queries, 
-					FETCH_GROUPS_REPOSITORIES, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					queries,
+					FETCH_GROUPS_REPOSITORIES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 			return repositories;
 		} catch (Exception e) {

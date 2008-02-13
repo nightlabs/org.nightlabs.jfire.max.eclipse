@@ -93,7 +93,7 @@ public class PaymentWizardHop extends WizardHop
 	/**
 	 * @param maxAmount maxAmount to set. This is the maximum amount that can be paid
 	 *		by this payment (this PaymentWizardHop). If <tt>amount > maxAmount</tt>,
-	 *		<tt>amount</tt> will be set to <tt>maxAmount</tt>. 
+	 *		<tt>amount</tt> will be set to <tt>maxAmount</tt>.
 	 */
 	public void setMaxAmount(long maxAmount)
 	{

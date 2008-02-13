@@ -8,15 +8,15 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ShowInvoiceAction 
-extends AbstractShowArticleContainerAction 
+public class ShowInvoiceAction
+extends AbstractShowArticleContainerAction
 {
 	public static final String ID = ShowInvoiceAction.class.getName();
 	
 //	public ShowInvoiceAction(OverviewEntryEditor editor) {
 //		super(editor);
 	public ShowInvoiceAction() {
-		super();	
+		super();
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction.text")); //$NON-NLS-1$
 		setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.action.ShowInvoiceAction.toolTipText")); //$NON-NLS-1$
@@ -28,10 +28,10 @@ extends AbstractShowArticleContainerAction
 	}
 
 //	@Override
-//	protected void prepareParams(Map<String, Object> params) 
+//	protected void prepareParams(Map<String, Object> params)
 //	{
 //		InvoiceID invoiceID = (InvoiceID) getArticleContainerID();
-//		params.put("invoiceID", invoiceID);		
-//	}	
+//		params.put("invoiceID", invoiceID);
+//	}
 	
 }

@@ -29,8 +29,8 @@ import org.nightlabs.util.Util;
  * 
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  */
-public abstract class AbstractAccountPageController 
-extends EntityEditorPageController 
+public abstract class AbstractAccountPageController
+extends EntityEditorPageController
 {
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
@@ -69,7 +69,7 @@ extends EntityEditorPageController
 		super(editor);
 		this.anchorID = (AnchorID)((JDOObjectEditorInput)editor.getEditorInput()).getJDOObjectID();
 		this.editor = editor;
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);		
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);
 	}
 
 	@Override
@@ -77,14 +77,14 @@ extends EntityEditorPageController
 	{
 		JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
 		super.dispose();
-	}	
+	}
 	
 	private NotificationListener accountChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingChangedAccountJob.name")) //$NON-NLS-1$
 	{
 		public void notify(NotificationEvent notificationEvent) {
 			doLoad(getProgressMonitor());
 		}
-	};	
+	};
 	
 	/**
 	 * Get the editor.
@@ -132,14 +132,14 @@ extends EntityEditorPageController
 			fireModifyEvent(null, account);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
-		} finally { 
+		} finally {
 			monitor.done();
-		}	
-	}		
+		}
+	}
 	
 	/**
 	 * may be overriden if other fetchGroups are needed than the default ones
-	 * @return the fetchGroups to use, for obtaining the account 
+	 * @return the fetchGroups to use, for obtaining the account
 	 */
 	protected String[] getFetchGroups() {
 		return FETCH_GROUPS;

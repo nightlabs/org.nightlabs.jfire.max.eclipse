@@ -27,10 +27,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
@@ -61,7 +57,7 @@ public interface ArticleEditFactory extends SegmentTypeProductTypeDependentFacto
 	/**
 	 * This method adds an <code>IArticleEditActionDelegate</code>, which is registered by
 	 * its <code>articleEditActionID</code> in a map. It must be retrievable by
-	 * {@link #getArticleEditActionDelegate(String)} afterwards. 
+	 * {@link #getArticleEditActionDelegate(String)} afterwards.
 	 *
 	 * @param delegate The delegate to add.
 	 *

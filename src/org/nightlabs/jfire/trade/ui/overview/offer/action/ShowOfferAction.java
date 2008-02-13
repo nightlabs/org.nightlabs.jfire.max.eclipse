@@ -7,8 +7,8 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainer
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ShowOfferAction 
-extends AbstractShowArticleContainerAction 
+public class ShowOfferAction
+extends AbstractShowArticleContainerAction
 {
 	public static final String ID = ShowOfferAction.class.getName();
 	
@@ -29,7 +29,7 @@ extends AbstractShowArticleContainerAction
 //	@Override
 //	protected void prepareParams(Map<String, Object> params) {
 //		OfferID offerID = (OfferID) getArticleContainerID();
-//		params.put("offerID", offerID);		
+//		params.put("offerID", offerID);
 //	}
 
 }

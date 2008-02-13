@@ -36,7 +36,7 @@ import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class HeaderTreeView 
+public class HeaderTreeView
 extends LSDViewPart
 {
 	public static final String ID_VIEW = HeaderTreeView.class.getName();

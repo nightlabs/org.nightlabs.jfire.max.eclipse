@@ -40,8 +40,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class TradePlugin 
-extends AbstractUIPlugin 
+public class TradePlugin
+extends AbstractUIPlugin
 {
 	public static final String ZONE_SALE = TradePlugin.class.getName() + "#ZONE_SALE"; //$NON-NLS-1$
 	public static final String ZONE_ADMIN = TradePlugin.class.getName() + "#ZONE_ADMIN"; //$NON-NLS-1$
@@ -88,15 +88,15 @@ extends AbstractUIPlugin
 //						QuickSalePerspective.checkPerspectiveListenerAdded();
 //					}
 //				});
-//			}			
-//		});		
+//			}
+//		});
 	}
 	
-//	public static final String OVERVIEW_EDITORS_ACTIVITY_ID = "org.nightlabs.jfire.trade.ui.overviewEditorHidding"; 
-//	private IPerspectiveListener4 activityPerspectiveListener = new PerspectiveAdapter() 
-//	{		
+//	public static final String OVERVIEW_EDITORS_ACTIVITY_ID = "org.nightlabs.jfire.trade.ui.overviewEditorHidding";
+//	private IPerspectiveListener4 activityPerspectiveListener = new PerspectiveAdapter()
+//	{
 //		public void perspectiveActivated(IWorkbenchPage page,
-//				IPerspectiveDescriptor perspective) 
+//				IPerspectiveDescriptor perspective)
 //		{
 //			IWorkbenchActivitySupport workbenchActivitySupport = PlatformUI.getWorkbench().getActivitySupport();
 //			IActivityManager activityManager = workbenchActivitySupport.getActivityManager();
@@ -110,23 +110,23 @@ extends AbstractUIPlugin
 //				logger.info(OVERVIEW_EDITORS_ACTIVITY_ID+" activity disabled");
 //			}
 //			workbenchActivitySupport.setEnabledActivityIds(enabledActivityIds);
-//			
+//
 //			Set<String> definedActivityIDs = activityManager.getDefinedActivityIds();
 //			for (String string : definedActivityIDs) {
 //				logger.info("defined activity id = "+string);
 //			}
-//			
+//
 //			Set<String> enabledActivityIDs = activityManager.getEnabledActivityIds();
 //			for (String string : enabledActivityIDs) {
 //				logger.info("enabled activity id = "+string);
 //			}
-//			
+//
 //			IActivity activity = activityManager.getActivity(OVERVIEW_EDITORS_ACTIVITY_ID);
 //			if (activity != null) {
 //				logger.info("activity "+OVERVIEW_EDITORS_ACTIVITY_ID+".isEnabled() = "+activity.isEnabled());
 //			} else {
 //				logger.info("activity "+OVERVIEW_EDITORS_ACTIVITY_ID+" is null!");
-//			}			
+//			}
 //		}
 //		public void perspectiveOpened(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
 //			IWorkbenchActivitySupport workbenchActivitySupport = PlatformUI.getWorkbench().getActivitySupport();
@@ -141,17 +141,17 @@ extends AbstractUIPlugin
 //				logger.info(OVERVIEW_EDITORS_ACTIVITY_ID+" activity disabled");
 //			}
 //			workbenchActivitySupport.setEnabledActivityIds(enabledActivityIds);
-//			
+//
 //			Set<String> definedActivityIDs = activityManager.getDefinedActivityIds();
 //			for (String string : definedActivityIDs) {
 //				logger.info("defined activity id = "+string);
 //			}
-//			
+//
 //			Set<String> enabledActivityIDs = activityManager.getEnabledActivityIds();
 //			for (String string : enabledActivityIDs) {
 //				logger.info("enabled activity id = "+string);
 //			}
-//			
+//
 //			IActivity activity = activityManager.getActivity(OVERVIEW_EDITORS_ACTIVITY_ID);
 //			if (activity != null) {
 //				logger.info("activity "+OVERVIEW_EDITORS_ACTIVITY_ID+".isEnabled() = "+activity.isEnabled());
@@ -159,8 +159,8 @@ extends AbstractUIPlugin
 //				logger.info("activity "+OVERVIEW_EDITORS_ACTIVITY_ID+" is null!");
 //			}
 //		}
-//		
-//	}; 
+//
+//	};
 	
 	/**
 	 * This method is called when the plug-in is stopped
@@ -215,31 +215,31 @@ extends AbstractUIPlugin
 		reg.put(IMAGE_DELIVERY_NOTE_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_DELIVERY_NOTE_16x16));
 	}
 	
-	public TradeManager getTradeManager() 
+	public TradeManager getTradeManager()
 	{
 		try {
 			return TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	public StoreManager getStoreManager() 
+	public StoreManager getStoreManager()
 	{
 		try {
 			return StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	public AccountingManager getAccountingManager() 
+	public AccountingManager getAccountingManager()
 	{
 		try {
 			return AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}

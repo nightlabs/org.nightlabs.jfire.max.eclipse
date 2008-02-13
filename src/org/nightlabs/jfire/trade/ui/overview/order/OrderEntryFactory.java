@@ -12,8 +12,8 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OrderEntryFactory 
-extends AbstractEntryFactory 
+public class OrderEntryFactory
+extends AbstractEntryFactory
 {
 
 	public OrderEntryFactory() {
@@ -29,7 +29,7 @@ extends AbstractEntryFactory
 			public void handleActivation() {
 				try {
 					RCPUtil.openEditor(
-							new OverviewEntryEditorInput(this), 
+							new OverviewEntryEditorInput(this),
 							OrderEntryEditor.EDITOR_ID);
 				} catch (PartInitException e) {
 					throw new RuntimeException(e);

@@ -75,7 +75,7 @@ extends AbstractEPProcessor
 			if (throwExceptionIfNotFound)
 				throw new IllegalStateException("No SegmentTypeProductTypeDependentFactory registered for segmentContext=\""+segmentContext+"\"!!!"); //$NON-NLS-1$ //$NON-NLS-2$
 			else
-				return null;			
+				return null;
 		}
 
 		SegmentTypeProductTypeDependentFactory factory = null;

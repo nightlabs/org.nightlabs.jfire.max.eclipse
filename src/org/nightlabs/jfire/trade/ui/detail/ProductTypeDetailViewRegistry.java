@@ -10,13 +10,13 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 
 /**
- * A Registry for {@link ProductTypeDetailViewFactory}s which ca be registered via the extension 
+ * A Registry for {@link ProductTypeDetailViewFactory}s which ca be registered via the extension
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeDetailViewRegistry 
-extends AbstractEPProcessor 
+public class ProductTypeDetailViewRegistry
+extends AbstractEPProcessor
 {
 	private static ProductTypeDetailViewRegistry sharedInstance;
 
@@ -42,9 +42,9 @@ extends AbstractEPProcessor
 
 	@Override
 	public void processElement(IExtension extension, IConfigurationElement element)
-	throws Exception 
+	throws Exception
 	{
-		if (element.getName().equals(ELEMENT_PRODUCT_TYPE_DETAIL_VIEW)) 
+		if (element.getName().equals(ELEMENT_PRODUCT_TYPE_DETAIL_VIEW))
 		{
 			String factoryClassName = element.getAttribute(ATTRIBUTE_PRODUCT_TYPE_DETAIL_VIEW_FACTORY);
 			if (checkString(factoryClassName)) {
@@ -53,15 +53,15 @@ extends AbstractEPProcessor
 					productTypeClass2DetailViewFactory.put(factory.getProductTypeClass(), factory);
 				} catch (CoreException e) {
 					throw new EPProcessorException("Could not create ProuctTypeDetailViewFactory class "+factoryClassName, e); //$NON-NLS-1$
-				}				
+				}
 			}
 		}
 	}
 
-	private Map<Class, ProductTypeDetailViewFactory> productTypeClass2DetailViewFactory = 
+	private Map<Class, ProductTypeDetailViewFactory> productTypeClass2DetailViewFactory =
 		new HashMap<Class, ProductTypeDetailViewFactory>();
 	
-	public IProductTypeDetailView getProductTypeDetailView(Class productTypeClass) 
+	public IProductTypeDetailView getProductTypeDetailView(Class productTypeClass)
 	{
 		if (!isProcessed())
 			checkProcessing();

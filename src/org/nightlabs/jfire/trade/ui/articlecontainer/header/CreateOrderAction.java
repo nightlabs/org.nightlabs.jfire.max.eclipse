@@ -97,11 +97,11 @@ public class CreateOrderAction extends Action
 						}
 					});
 				} catch (Exception x) {
-					throw new RuntimeException(x);					
+					throw new RuntimeException(x);
 				}
 
 				return Status.OK_STATUS;
-			}			
+			}
 		};
 		createOrderJob.schedule();
 	}

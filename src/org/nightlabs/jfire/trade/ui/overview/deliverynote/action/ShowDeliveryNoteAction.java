@@ -8,15 +8,15 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ShowDeliveryNoteAction 
-extends AbstractShowArticleContainerAction 
+public class ShowDeliveryNoteAction
+extends AbstractShowArticleContainerAction
 {
 	public static final String ID = ShowDeliveryNoteAction.class.getName();
 	
 //	public ShowDeliveryNoteAction(OverviewEntryEditor editor) {
 //		super(editor);
 	public ShowDeliveryNoteAction() {
-		super();	
+		super();
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction.text")); //$NON-NLS-1$
 		setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNoteAction.toolTipText"));		 //$NON-NLS-1$
@@ -30,7 +30,7 @@ extends AbstractShowArticleContainerAction
 //	@Override
 //	protected void prepareParams(Map<String, Object> params) {
 //		DeliveryNoteID deliveryNoteID = (DeliveryNoteID) getArticleContainerID();
-//		params.put("deliveryNoteID", deliveryNoteID);		
+//		params.put("deliveryNoteID", deliveryNoteID);
 //	}
 
 }

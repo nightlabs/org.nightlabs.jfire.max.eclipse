@@ -435,7 +435,7 @@ implements SegmentEdit
 		if (ignoreArticleEditArticleSelectionEvents)
 			return;
 
-		Set<? extends Article> articles = _articles instanceof Set ? (Set<? extends Article>)_articles : new HashSet<Article>(_articles); 
+		Set<? extends Article> articles = _articles instanceof Set ? (Set<? extends Article>)_articles : new HashSet<Article>(_articles);
 
 		ignoreArticleEditArticleSelectionEvents = true;
 		try {

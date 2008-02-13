@@ -33,10 +33,10 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 
-/** 
+/**
  * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
  */
-public class AccountGeneralPageController 
+public class AccountGeneralPageController
 extends AbstractAccountPageController
 {
 	private static final Logger logger = Logger.getLogger(AccountGeneralPageController.class);
@@ -59,10 +59,10 @@ extends AbstractAccountPageController
 			if (page instanceof AccountGeneralPage) {
 				final AccountGeneralPage gp = (AccountGeneralPage) page;
 				Account account = gp.getAccountGeneralSection().getAccountEditorComposite().getAccount();
-				this.account = AccountDAO.sharedInstance().storeAccount(account, 
-						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				this.account = AccountDAO.sharedInstance().storeAccount(account,
+						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new ProgressMonitorWrapper(monitor));
-				doLoad(new NullProgressMonitor());				
+				doLoad(new NullProgressMonitor());
 			}
 		}
 	}

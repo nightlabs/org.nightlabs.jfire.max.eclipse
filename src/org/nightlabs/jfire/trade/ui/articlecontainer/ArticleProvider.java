@@ -81,7 +81,7 @@ public class ArticleProvider extends JDOObjectProvider
 		return getArticles(null, articleIDs, fetchGroups, maxFetchDepth);
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public Collection<Article> getArticles(TradeManager tradeManager, Collection<ArticleID> articleIDs, String[] fetchGroups, int maxFetchDepth)
 	{
 		this.tradeManager = tradeManager;

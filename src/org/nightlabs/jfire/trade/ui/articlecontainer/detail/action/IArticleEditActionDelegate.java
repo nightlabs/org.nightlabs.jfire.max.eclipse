@@ -28,7 +28,6 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action;
 
 import java.util.Set;
 
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 
 

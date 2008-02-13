@@ -7,8 +7,8 @@ import org.nightlabs.base.ui.search.ISearchResultProviderFactory;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GenericProductTypeSearchResultProvider 
-extends AbstractProductTypeSearchResultProvider 
+public class GenericProductTypeSearchResultProvider
+extends AbstractProductTypeSearchResultProvider
 {
 	/**
 	 * @param factory

@@ -13,7 +13,6 @@ import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
 import org.nightlabs.jfire.store.deliver.id.DeliveryID;
-import org.nightlabs.jfire.transfer.TransferController;
 
 /**
  * A controller for the different stages of the delivery process as described in the
@@ -29,7 +28,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 	/**
 	 * Initialises a DeliveryControllerImpl with the list of tuples of the type ({@link DeliveryData}, {@link ClientDeliveryProcessor}). The controller
 	 * will process all given {@link DeliveryData}s using the respective {@link ClientDeliveryProcessor} in the client stages.
-	 * @param deliveryTuples A list of tuples of {@link DeliveryData} and a corresponding {@link ClientDeliveryProcessor}. 
+	 * @param deliveryTuples A list of tuples of {@link DeliveryData} and a corresponding {@link ClientDeliveryProcessor}.
 	 */
 //	public DeliveryControllerImpl(List<Tuple<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
 //		super();
@@ -56,7 +55,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		for (Pair<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
 			DeliveryData data = tuple.getFirst();
 			deliveryDatas.add(data);
-		}		
+		}
 		return deliveryDatas;
 	}
 	
@@ -107,7 +106,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 	public void _clientDoWork() {
 		List<DeliveryID> deliveryIDs = new ArrayList<DeliveryID>(getTransferDatas().size());
 		ArrayList<DeliveryResult> deliverDoWorkClientResults = new ArrayList<DeliveryResult>(getTransferDatas().size());
-		ClientDeliveryProcessor clientDeliveryProcessor = null;		
+		ClientDeliveryProcessor clientDeliveryProcessor = null;
 		
 		for (DeliveryData deliveryData : getTransferDatas()) {
 			Delivery delivery = deliveryData.getDelivery();
@@ -139,7 +138,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#clientEnd()
-	 */	
+	 */
 	@Override
 	public void _clientEnd() {
 		ClientDeliveryProcessor clientDeliveryProcessor = null;

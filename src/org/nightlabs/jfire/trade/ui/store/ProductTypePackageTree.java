@@ -108,12 +108,12 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 				NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) iter.next();
 				children.add(
 						new Node(
-								contentProvider, 
-								this, 
+								contentProvider,
+								this,
 								ProductTypeID.create(
-										nestedProductTypeLocal.getInnerProductTypeOrganisationID(), 
+										nestedProductTypeLocal.getInnerProductTypeOrganisationID(),
 										nestedProductTypeLocal.getInnerProductTypeProductTypeID()
-								) 
+								)
 						)
 				);
 			}
@@ -204,7 +204,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 			currentProductTypeID = productTypeID;
 			if (currentProductTypeID == null) {
 				rootNode = null;
-				rootElements = new Object[] {};				
+				rootElements = new Object[] {};
 			}
 		}
 
@@ -243,7 +243,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		 */
 		public ProductTypeID getCurrentProductTypeID() {
 			return currentProductTypeID;
-		}		
+		}
 
 		@Override
 		public void dispose() {
@@ -294,13 +294,13 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		super(parent, style, setLayoutData, init, headerVisible);
 	}
 	
-	/**	
-	 * Sets the ProductTypeID for the new top-level ProductType which 
-	 * nested types should be displayed. If null is passed, 
+	/**
+	 * Sets the ProductTypeID for the new top-level ProductType which
+	 * nested types should be displayed. If null is passed,
 	 * the tree will be flushed.
 	 * This can be called from a non-GUI thread it will do data-acquisition
 	 * on the calling thread, but display on the SWT-GUI thread.
-	 *  
+	 * 
 	 * @param productTypeID The ProductTypeID to set. (Might be null)
 	 */
 	public void setProductTypeID(ProductTypeID productTypeID) {
@@ -317,7 +317,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 	 */
 	public ProductTypeID getCurrentProductTypeID() {
 		return getContentProvider().getCurrentProductTypeID();
-	}		
+	}
 
 	private static Object dummyInput = new Object();
 	/**

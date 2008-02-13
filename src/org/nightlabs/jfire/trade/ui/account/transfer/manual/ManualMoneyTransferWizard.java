@@ -66,9 +66,9 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 			I18nText reason = moneyTransferPage.getReason();
 			
 			Account fromAccount = AccountDAO.sharedInstance().getAccount(moneyTransferPage.getFromAccount(), new String[]{Account.FETCH_GROUP_THIS_ACCOUNT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, null);
-			moneyTransfer = accountingManager.createManualMoneyTransfer(moneyTransferPage.getFromAccount(), 
+			moneyTransfer = accountingManager.createManualMoneyTransfer(moneyTransferPage.getFromAccount(),
 					toAccountID,
-					CurrencyID.create(fromAccount.getCurrency().getCurrencyID()), 
+					CurrencyID.create(fromAccount.getCurrency().getCurrencyID()),
 					moneyTransferPage.getAmount(),
 					reason,
 					true,

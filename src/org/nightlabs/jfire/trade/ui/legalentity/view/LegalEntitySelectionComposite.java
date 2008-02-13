@@ -38,7 +38,6 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
-import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
@@ -51,14 +50,14 @@ import org.nightlabs.util.Util;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class LegalEntitySelectionComposite 
+public class LegalEntitySelectionComposite
 extends XComposite
 {
 	
-	private static String[] FETCH_GROUPS_LEGALENTITY = new String[] { 
-		LegalEntity.FETCH_GROUP_PERSON, 
-		PropertySet.FETCH_GROUP_FULL_DATA, 
-		FetchPlan.DEFAULT 
+	private static String[] FETCH_GROUPS_LEGALENTITY = new String[] {
+		LegalEntity.FETCH_GROUP_PERSON,
+		PropertySet.FETCH_GROUP_FULL_DATA,
+		FetchPlan.DEFAULT
 		};
 	
 	private LegalEntityPersonEditor leEditor;
@@ -83,7 +82,7 @@ extends XComposite
 	};
 	
 	private Form form;
-	private Text quickSearchText;	
+	private Text quickSearchText;
 	private Button quickSearchButton;
 	private Section editorSection;
 
@@ -163,7 +162,7 @@ extends XComposite
 		searchSection.setLayout(new GridLayout());
 		
 //		quickSearchGroup = new Composite(wrapper, SWT.BORDER);
-		Composite quickSearchGroup = new XComposite(searchSection, SWT.NONE);		
+		Composite quickSearchGroup = new XComposite(searchSection, SWT.NONE);
 //		quickSearchGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchGroup.text")); //$NON-NLS-1$
 		quickSearchGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout gl = new GridLayout();
@@ -194,15 +193,15 @@ extends XComposite
 		editorSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.editorSection.text")); //$NON-NLS-1$
 		editorSection.setLayout(new GridLayout());
 		
-		// don't register this listener later! otherwise we'll miss the event sent by the AbstractEditArticleContainerAction 
+		// don't register this listener later! otherwise we'll miss the event sent by the AbstractEditArticleContainerAction
 		// this method triggers the given listener immediately
-		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, 
+		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE,
 				LegalEntity.class, notificationListenerCustomerSelected);
 
 
 		quickSearchGroup.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE, 
+				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						LegalEntity.class, notificationListenerCustomerSelected);
 			}
 		});
@@ -225,7 +224,7 @@ extends XComposite
 		return selectedLegalEntity;
 	}
 	
-	protected void setAnonymousVisualisation() 
+	protected void setAnonymousVisualisation()
 	{
 		if (leEditorControl != null) {
 			leEditor.disposeControl();
@@ -241,7 +240,7 @@ extends XComposite
 		redraw();
 	}
 	
-	protected void setLegalEntityVisualisation(LegalEntity legalEntity) 
+	protected void setLegalEntityVisualisation(LegalEntity legalEntity)
 	{
 		if (anonymousLegalEntityComposite != null) {
 			anonymousLegalEntityComposite.dispose();
@@ -258,7 +257,7 @@ extends XComposite
 		}
 		editorSection.setClient(leEditorControl);
 		String displayName = legalEntity.getPerson().getDisplayName();
-		if (displayName == null) 
+		if (displayName == null)
 			displayName = ""; //$NON-NLS-1$
 		editorSection.setText(displayName);
 		layout(true, true);
@@ -266,7 +265,7 @@ extends XComposite
 		redraw();
 	}
 
-	private void setSelectedLegalEntity(LegalEntity legalEntity) 
+	private void setSelectedLegalEntity(LegalEntity legalEntity)
 	{
 //		if (legalEntity == null)
 //			throw new IllegalArgumentException("legalEntity must not be null!"); //$NON-NLS-1$
@@ -292,7 +291,7 @@ extends XComposite
 			}
 		}
 		else {
-			if (legalEntity.isAnonymous()) 
+			if (legalEntity.isAnonymous())
 				setAnonymousVisualisation();
 			else
 				setLegalEntityVisualisation(legalEntity);
@@ -326,7 +325,7 @@ extends XComposite
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final LegalEntity entity = LegalEntityDAO.sharedInstance().getLegalEntity(
-						leID, 
+						leID,
 						FETCH_GROUPS_LEGALENTITY,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor
@@ -351,7 +350,7 @@ extends XComposite
 	}
 
 	/**
-	 * Listener setting the correct {@link LegalEntity}. This is used by the 
+	 * Listener setting the correct {@link LegalEntity}. This is used by the
 	 * {@link AbstractEditArticleContainerAction} which opens an editor from another perspective.
 	 */
 	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterCallerThread() {
@@ -373,6 +372,6 @@ extends XComposite
 	
 	public String getQuickSearchText() {
 //		return quickSearchText.getTextControl().getText();
-		return quickSearchText.getText();		
+		return quickSearchText.getText();
 	}
 }

@@ -12,8 +12,8 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class RepositoryEntryFactory 
-extends AbstractEntryFactory 
+public class RepositoryEntryFactory
+extends AbstractEntryFactory
 {
 
 	public RepositoryEntryFactory() {

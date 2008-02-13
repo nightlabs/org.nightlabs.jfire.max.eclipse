@@ -47,7 +47,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeSearchComposite 
+public abstract class AbstractProductTypeSearchComposite
 extends XComposite
 {
 	/**
@@ -59,8 +59,8 @@ extends XComposite
 		createComposite(this);
 	}
 
-	private ProductTypeTableComposite productTypeTableComposite;	
-	private Text searchText;	
+	private ProductTypeTableComposite productTypeTableComposite;
+	private Text searchText;
 	private ProductTypeSearchCriteriaComposite searchCriteriaComposite = null;
 	
 	public ProductTypeTableComposite getProductTypeTableComposite() {
@@ -71,7 +71,7 @@ extends XComposite
 		return searchCriteriaComposite;
 	}
 	
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		final Composite criteriaComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		criteriaComp.setLayout(new GridLayout(2, false));
@@ -98,7 +98,7 @@ extends XComposite
 			}
 			public void expansionStateChanged(ExpansionEvent e) {
 				layout(true, true);
-			}		
+			}
 		});
 		
 		productTypeTableComposite = new ProductTypeTableComposite(parent, SWT.NONE);
@@ -107,25 +107,25 @@ extends XComposite
 		searchText.addSelectionListener(searchTextListener);
 	}
 		
-	private SelectionListener searchTextListener = new SelectionListener(){	
+	private SelectionListener searchTextListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			searchPressed();
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 	};
 	
-	private ISelectionChangedListener productTypeSelectionListener = new ISelectionChangedListener(){	
-		public void selectionChanged(SelectionChangedEvent event) 
+	private ISelectionChangedListener productTypeSelectionListener = new ISelectionChangedListener(){
+		public void selectionChanged(SelectionChangedEvent event)
 		{
-			StructuredSelection sel = (StructuredSelection) event.getSelection(); 
+			StructuredSelection sel = (StructuredSelection) event.getSelection();
 			selectedProductType = (ProductType) sel.getFirstElement();
-		}	
+		}
 	};
 	
 	public static final String[] PRODUCT_TYPE_SEARCH_FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_THIS_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_NAME,
 		DeliveryConfiguration.FETCH_GROUP_NAME,
@@ -138,10 +138,10 @@ extends XComposite
 	};
  
 	protected String[] getFetchGroups() {
-		return PRODUCT_TYPE_SEARCH_FETCH_GROUPS; 
+		return PRODUCT_TYPE_SEARCH_FETCH_GROUPS;
 	}
 		
-	public void searchPressed() 
+	public void searchPressed()
 	{
 		final String searchStr = searchText.getText();
 		Job searchJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.searchJob.name")) { //$NON-NLS-1$
@@ -171,19 +171,19 @@ extends XComposite
 						throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
 				}
 
-				if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null) 
+				if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
 					query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
 
-				if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null) 
+				if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
 					query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
 
-				if (getSearchCriteriaComposite().getSelectedOwnerID() != null) 
+				if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
 					query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
 
-				if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null) 
+				if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
 					query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
 
-				if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null) 
+				if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
 					query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
 				
 				productTypeQueries.add(query);
@@ -194,12 +194,12 @@ extends XComposite
 					final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 							productTypeIDs,
 							getFetchGroups(),
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new ProgressMonitorWrapper(monitor));
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							productTypeTableComposite.getTableViewer().setInput(productTypes);							
+							productTypeTableComposite.getTableViewer().setInput(productTypes);
 							if (productTypeTableComposite.getTableViewer().getTable().getItemCount() == 1) {
 								productTypeTableComposite.getTableViewer().getTable().select(0);
 								productTypeTableComposite.getTableViewer().getTable().setFocus();
@@ -228,8 +228,8 @@ extends XComposite
 
 	protected abstract ProductTypeQuery createNewQuery();
 	
-	protected Collection<ProductType> retrieveProductTypes(Collection<ProductTypeQuery> queries, 
-			ProgressMonitor monitor) 
+	protected Collection<ProductType> retrieveProductTypes(Collection<ProductTypeQuery> queries,
+			ProgressMonitor monitor)
 	{
 		Set<ProductTypeID> productTypeIDs;
 		try {
@@ -237,9 +237,9 @@ extends XComposite
 			Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					productTypeIDs,
 					getFetchGroups(),
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-			return productTypes;			
+			return productTypes;
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
 		}

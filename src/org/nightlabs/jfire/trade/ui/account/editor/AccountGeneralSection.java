@@ -12,8 +12,8 @@ import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorUtil;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-public class AccountGeneralSection 
-extends RestorableSectionPart 
+public class AccountGeneralSection
+extends RestorableSectionPart
 {
 	private AccountGeneralComposite accountGeneralComposite;
 	
@@ -28,7 +28,7 @@ extends RestorableSectionPart
 	 * @param section The section to fill
 	 * @param toolkit The toolkit to use
 	 */
-	protected void createClient(Section section, FormToolkit toolkit) 
+	protected void createClient(Section section, FormToolkit toolkit)
 	{
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 

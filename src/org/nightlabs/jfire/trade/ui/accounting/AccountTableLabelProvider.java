@@ -42,9 +42,9 @@ import org.nightlabs.l10n.NumberFormatter;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class AccountTableLabelProvider 
-extends LabelProvider 
-implements ITableLabelProvider 
+public class AccountTableLabelProvider
+extends LabelProvider
+implements ITableLabelProvider
 {
 	public AccountTableLabelProvider() {
 		super();
@@ -80,7 +80,7 @@ implements ITableLabelProvider
 			switch (columnIndex) {
 				case 0:
 					return account.getName().getText(Locale.getDefault().getLanguage());
-				case 1:	
+				case 1:
 					return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
 			}
 		}

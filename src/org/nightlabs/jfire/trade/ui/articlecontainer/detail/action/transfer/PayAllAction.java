@@ -77,7 +77,7 @@ public class PayAllAction extends ArticleContainerAction
 //			}
 //			return !allPaid;
 //		}
-//		return false;		
+//		return false;
 //	}
 
 	@Override

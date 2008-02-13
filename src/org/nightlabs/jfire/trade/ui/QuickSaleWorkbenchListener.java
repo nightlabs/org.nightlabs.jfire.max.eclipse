@@ -7,8 +7,8 @@ import org.nightlabs.base.ui.util.RCPUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class QuickSaleWorkbenchListener 
-implements IWorkbenchListener 
+public class QuickSaleWorkbenchListener
+implements IWorkbenchListener
 {
 	public QuickSaleWorkbenchListener() {
 	}

@@ -46,8 +46,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class AccountCellEditor 
-extends DialogCellEditor 
+public class AccountCellEditor
+extends DialogCellEditor
 {
 	public static String[] DEFAULT_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
@@ -70,7 +70,7 @@ extends DialogCellEditor
 	 * @param anchorTypeID
 	 * @param parent
 	 */
-	public AccountCellEditor(AccountTypeID accountTypeID, Composite parent) {		
+	public AccountCellEditor(AccountTypeID accountTypeID, Composite parent) {
 		super(parent);
 		this.accountTypeID = accountTypeID;
 	}
@@ -93,8 +93,8 @@ extends DialogCellEditor
 			currValue = (Account)value;
 			Account account = AccountDAO.sharedInstance().getAccount(
 					(AnchorID) JDOHelper.getObjectId(currValue),
-					DEFAULT_FETCH_GROUPS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					DEFAULT_FETCH_GROUPS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor()
 				);
 			getDefaultLabel().setText(account.getName().getText(Locale.getDefault().getLanguage()));

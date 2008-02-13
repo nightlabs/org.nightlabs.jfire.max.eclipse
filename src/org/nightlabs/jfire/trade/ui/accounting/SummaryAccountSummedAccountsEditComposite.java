@@ -49,7 +49,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-public class SummaryAccountSummedAccountsEditComposite 
+public class SummaryAccountSummedAccountsEditComposite
 extends XComposite
 //implements IAccountContainer
 {
@@ -62,7 +62,7 @@ extends XComposite
 	private IDirtyStateManager dirtyStateManager = null;
 	private boolean showButtons = true;
 	
-	public void addAccount() 
+	public void addAccount()
 	{
 		if (currSummaryAccount == null)
 			return;
@@ -73,7 +73,7 @@ extends XComposite
 				Account account = (Account) iter.next();
 				summedAccountsTable.addAccount(account);
 			}
-			summedAccountsTable.refresh();			
+			summedAccountsTable.refresh();
 			if (dirtyStateManager != null)
 				dirtyStateManager.markDirty();
 		}
@@ -87,7 +87,7 @@ extends XComposite
 		}
 	};
 	
-	public void removeAccount() 
+	public void removeAccount()
 	{
 		if (!summedAccountsTable.getSelectedSummedAccounts().isEmpty()) {
 			for (Iterator iter = summedAccountsTable.getSelectedSummedAccounts().iterator(); iter.hasNext();) {
@@ -96,7 +96,7 @@ extends XComposite
 			}
 			summedAccountsTable.refresh();
 			if (dirtyStateManager != null)
-				dirtyStateManager.markDirty();			
+				dirtyStateManager.markDirty();
 		}
 	}
 	
@@ -117,10 +117,10 @@ extends XComposite
 	 * @param style
 	 * @param doSetLayoutData
 	 */
-	public SummaryAccountSummedAccountsEditComposite(Composite parent, int style, 
-			IDirtyStateManager dirtyStateManager, boolean showButtons) 
+	public SummaryAccountSummedAccountsEditComposite(Composite parent, int style,
+			IDirtyStateManager dirtyStateManager, boolean showButtons)
 	{
-		super(parent, style);		
+		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
 		this.showButtons = showButtons;
 		Label label = new Label(this, SWT.WRAP);
@@ -143,7 +143,7 @@ extends XComposite
 			removeButton = new Button(buttonWrapper, SWT.PUSH);
 			removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.SummaryAccountSummedAccountsEditComposite.removeButton.text")); //$NON-NLS-1$
 			removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			removeButton.addSelectionListener(removeButtonListener);			
+			removeButton.addSelectionListener(removeButtonListener);
 		}
 	}
 
@@ -154,7 +154,7 @@ extends XComposite
 				summedAccountsTable.setInput(currSummaryAccount);
 			}
 		});
-	}	
+	}
 	
 //	/**
 //	 * @deprecated use {@link #setSummaryAccount(SummaryAccount)} instead
@@ -178,7 +178,7 @@ extends XComposite
 //			throw new IllegalStateException("Passed anchorID in setEntity() was not the ID of a SummaryAccount, server returned "+account.getClass().getName()+" instead."); //$NON-NLS-1$ //$NON-NLS-2$
 //		setSummaryAccount((SummaryAccount)account);
 //	}
-//	
+//
 //	/**
 //	 * @deprecated
 //	 * @see org.nightlabs.base.ui.entitylist.EntityManager#save()

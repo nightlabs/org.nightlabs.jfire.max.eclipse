@@ -70,8 +70,8 @@ public class ProductTypeQuickListFilterFactoryRegistry extends AbstractEPProcess
 	}
 	
 	
-	public IProductTypeQuickListFilterFactory getProductQuickListFilterFactory(String id) 
-	throws EPProcessorException 
+	public IProductTypeQuickListFilterFactory getProductQuickListFilterFactory(String id)
+	throws EPProcessorException
 	{
 		checkProcessing();
 		return factories.get(id);
@@ -129,7 +129,7 @@ public class ProductTypeQuickListFilterFactoryRegistry extends AbstractEPProcess
 			}
 			addProductQuickListFilterFactory(factory);
 		}
-		else 
+		else
 			throw new EPProcessorException("element "+element.getName()+" not supported by extension-point "+EXTENSION_POINT_ID+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	

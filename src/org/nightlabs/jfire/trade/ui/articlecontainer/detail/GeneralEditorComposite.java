@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
@@ -139,7 +138,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marco Schulze - marco at nightlabs dot de
  */
 public class GeneralEditorComposite
-extends XComposite 
+extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(GeneralEditorComposite.class);
 
@@ -270,8 +269,8 @@ extends XComposite
 							public void widgetSelected(SelectionEvent e) {
 								updateActiveSegmentEdit();
 							}
-						});			
-					} 
+						});
+					}
 					else {
 						segmentCompositeFolder = new XComposite(GeneralEditorComposite.this, SWT.NONE);
 					}
@@ -407,7 +406,7 @@ extends XComposite
 		return input;
 	}
 	
-	protected boolean hasDifferentSegments() 
+	protected boolean hasDifferentSegments()
 	{
 		// TODO After initial creation of the GeneralEditorComposite, it is a bad idea
 		// to access the ArticleContainer! During initialisation, all the relevant data
@@ -433,13 +432,13 @@ extends XComposite
 		for (Iterator<Article> it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
 			Article article = it.next();
 			if (segment == null)
-				segment = article.getSegment(); 
+				segment = article.getSegment();
 			if (!segment.equals(article.getSegment()))
 				return true;
 		}
 
 		return false;
-	}	
+	}
 	
 	protected void updateHeaderAndFooter() {
 		headerComposite.refresh();
@@ -487,7 +486,7 @@ extends XComposite
 
 	private boolean segmentEditCompositesCreated = false;
 
-	protected void removeSegmentEditComposites() 
+	protected void removeSegmentEditComposites()
 	{
 		segmentEditCompositesCreated = false;
 		
@@ -496,8 +495,8 @@ extends XComposite
 			for (int i = 0; i < tabItems.length; ++i) {
 				tabItems[i].dispose();
 			}
-			segmentEditsByTabItem.clear();			
-		} 
+			segmentEditsByTabItem.clear();
+		}
 		else {
 			segmentCompositeFolder.dispose();
 		}
@@ -513,7 +512,7 @@ extends XComposite
 		}
 	};
 
-	protected void createSegmentEditComposite(ArticleSegmentGroup asg, SegmentEdit segmentEdit) 
+	protected void createSegmentEditComposite(ArticleSegmentGroup asg, SegmentEdit segmentEdit)
 	{
 		Segment segment = segmentEdit.getArticleSegmentGroup().getSegment();
 
@@ -533,14 +532,14 @@ extends XComposite
 		}
 
 		ScrolledComposite segmentCompositeScrollContainer;
-		// TODO do we really not want horizontal scrolling?		
+		// TODO do we really not want horizontal scrolling?
 		segmentCompositeScrollContainer = new ScrolledComposite(
-				segmentCompositeFolder, SWT.V_SCROLL); 
+				segmentCompositeFolder, SWT.V_SCROLL);
 		segmentCompositeScrollContainer.setExpandHorizontal(true);
 		segmentCompositeScrollContainer.setExpandVertical(true);
 		segmentCompositeScrollContainer.setLayoutData(new GridData(
 				GridData.FILL_BOTH));
-		// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true); 
+		// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true);
 		// TODO do we really want to ALWAYS display scroll bars?
 		
 		if (tabItem != null)
@@ -573,8 +572,8 @@ extends XComposite
 
 	private ClientArticleSegmentGroups articleSegmentGroups = null;
 
-	protected void createArticleSegmentGroups() 
-	throws EPProcessorException 
+	protected void createArticleSegmentGroups()
+	throws EPProcessorException
 	{
 		ArticleCreateListener[] articleCreateListenerArray = null;
 		ArticleChangeListener[] articleChangeListenerArray = null;
@@ -607,11 +606,11 @@ extends XComposite
 
 		articleSegmentGroups = new ClientArticleSegmentGroups(articleContainer,
 				articleCreateListenerArray,
-				articleChangeListenerArray);		
+				articleChangeListenerArray);
 	}
 	
-	protected void createSegmentEditComposites() 
-	throws EPProcessorException 
+	protected void createSegmentEditComposites()
+	throws EPProcessorException
 	{
 		segmentEditCompositesCreated = true;
 
@@ -731,7 +730,7 @@ extends XComposite
 		}
 	};
 
-	protected void updateActiveSegmentEdit() 
+	protected void updateActiveSegmentEdit()
 	{
 		if (hasDifferentSegments()) {
 			TabFolder tabFolder = ((TabFolder)segmentCompositeFolder);
@@ -741,7 +740,7 @@ extends XComposite
 			if (activeSegmentEdit == null && item != null && item.getControl() != null)
 				throw new IllegalStateException(
 						"TabItem is not registered in Map segmentEditsByTabItem!!!");			 //$NON-NLS-1$
-		} 
+		}
 		else {
 //			activeSegmentEdit = (SegmentEdit) segmentEditByComposite.get(segmentCompositeFolder);
 			activeSegmentEdit = singleSegmentSegmentEdit;
@@ -1013,7 +1012,7 @@ extends XComposite
 	public void addArticleChangeListener(ArticleChangeListener articleChangeListener) {
 		if (articleSegmentGroups != null) {
 			articleSegmentGroups.addArticleChangeListener(articleChangeListener);
-		} 
+		}
 		else {
 			earlyArticleChangeListeners.add(articleChangeListener);;
 		}
@@ -1034,7 +1033,7 @@ extends XComposite
 			articleSegmentGroups.addArticleCreateListener(articleCreateListener);
 		} else {
 			earlyArticleCreateListeners.add(articleCreateListener);
-		}		
+		}
 	}
 	
 	public void removeArticleCreateListener(ArticleCreateListener articleCreateListener) {
@@ -1042,7 +1041,7 @@ extends XComposite
 			articleSegmentGroups.removeArticleCreateListener(articleCreateListener);
 		} else {
 			logger.warn("ArticleCreateListener not removed because articleSegmentGroups == null!"); //$NON-NLS-1$
-		}				
+		}
 	}
 
 	public ClientArticleSegmentGroups getArticleSegmentGroups()

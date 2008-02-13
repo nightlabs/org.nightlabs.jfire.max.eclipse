@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractCustomerNameQuickSea
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-public class InvoiceCustomerNameQuickSearchEntryFactory 
-extends AbstractCustomerNameQuickSearchEntryFactory 
+public class InvoiceCustomerNameQuickSearchEntryFactory
+extends AbstractCustomerNameQuickSearchEntryFactory
 {
 	public QuickSearchEntry createQuickSearchEntry() {
 		return new InvoiceCustomerNameQuickSearchEntry(this);

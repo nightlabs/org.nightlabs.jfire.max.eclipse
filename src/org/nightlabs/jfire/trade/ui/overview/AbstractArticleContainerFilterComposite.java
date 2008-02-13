@@ -31,15 +31,15 @@ extends AbstractQueryFilterComposite
 	}
 
 	@Override
-	protected void createContents(Composite parent) 
+	protected void createContents(Composite parent)
 	{
 		createStatableComposite(parent);
-		createArticleContainerComposite(parent);		
+		createArticleContainerComposite(parent);
 	}
 	
-	protected Composite createStatableComposite(Composite parent) 
+	protected Composite createStatableComposite(Composite parent)
 	{
-		statableFilterComposite = new StatableFilterComposite(this,		
+		statableFilterComposite = new StatableFilterComposite(this,
 				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		statableFilterComposite.setStatableClass(getQueryClass());
 		statableFilterComposite.setToolkit(getToolkit());
@@ -47,9 +47,9 @@ extends AbstractQueryFilterComposite
 		return statableFilterComposite;
 	}
 	
-	protected Composite createArticleContainerComposite(Composite parent) 
+	protected Composite createArticleContainerComposite(Composite parent)
 	{
-		articleContainerFilterComposite = new ArticleContainerFilterComposite(this,		
+		articleContainerFilterComposite = new ArticleContainerFilterComposite(this,
 				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		articleContainerFilterComposite
 				.setArticleContainerClass(getQueryClass());
@@ -59,7 +59,7 @@ extends AbstractQueryFilterComposite
 	}
 	
 	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites() 
+	protected List<JDOQueryComposite> registerJDOQueryComposites()
 	{
 		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>(2);
 		queryComps.add(statableFilterComposite);
@@ -68,11 +68,11 @@ extends AbstractQueryFilterComposite
 	}
 
 //	@Override
-//	protected List<QuickSearchEntry> registerQuickSearchEntryTypes() 
+//	protected List<QuickSearchEntry> registerQuickSearchEntryTypes()
 //	{
 //		List<QuickSearchEntry> quickSearchEntries = new ArrayList<QuickSearchEntry>();
-//		quickSearchEntries.add(new DeliveryNoteIDQuickSearchEntry());		
-//		quickSearchEntries.add(new DeliveryNoteCustomerNameQuickSearchEntry());		
+//		quickSearchEntries.add(new DeliveryNoteIDQuickSearchEntry());
+//		quickSearchEntries.add(new DeliveryNoteCustomerNameQuickSearchEntry());
 //		quickSearchEntries.add(new DeliveryNoteVendorNameQuickSearchEntry());
 //		return quickSearchEntries;
 //	}

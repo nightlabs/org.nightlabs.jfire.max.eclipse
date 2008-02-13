@@ -45,8 +45,8 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
-public class AccountListComposite 
-extends AbstractTableComposite<Account> 
+public class AccountListComposite
+extends AbstractTableComposite<Account>
 {
 	private TableViewerColumn tableViewerColumn;
 	public static String[] FETCH_GROUPS_ACCOUNT = new String[] {
@@ -83,7 +83,7 @@ extends AbstractTableComposite<Account>
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) 
+	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		
@@ -107,7 +107,7 @@ extends AbstractTableComposite<Account>
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (!(element instanceof Account)) 
+				if (!(element instanceof Account))
 					return null;
 
 				final AccountName accountName = ((Account) element).getName();
@@ -124,7 +124,7 @@ extends AbstractTableComposite<Account>
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (!(element instanceof Account)) 
+				if (!(element instanceof Account))
 					return null;
 				
 				final LegalEntity owner = ((Account) element).getOwner();
@@ -142,7 +142,7 @@ extends AbstractTableComposite<Account>
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (!(element instanceof Account)) 
+				if (!(element instanceof Account))
 					return null;
 
 				return ((Account) element).getAccountType().getName().getText();
@@ -155,7 +155,7 @@ extends AbstractTableComposite<Account>
 		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (!(element instanceof Account)) 
+				if (!(element instanceof Account))
 					return null;
 				return NumberFormatter.formatCurrency(((Account) element).getBalance(), ((Account) element).getCurrency(), true);
 			}
@@ -183,24 +183,24 @@ extends AbstractTableComposite<Account>
 //			}
 		});
 
-		table.setLayout(new WeightedTableLayout(new int[] {30, 30, 20, 10, 10}));		
+		table.setLayout(new WeightedTableLayout(new int[] {30, 30, 20, 10, 10}));
 	}
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new TableContentProvider());
-//		tableViewer.setLabelProvider(new AccountTableLabelProvider());		
+//		tableViewer.setLabelProvider(new AccountTableLabelProvider());
 //		tableViewer.setLabelProvider(new AcountListLabelProvider());
 	}
 
 //	class AcountListLabelProvider
 //	extends TableLabelProvider
 //	{
-//		public String getColumnText(Object element, int columnIndex) 
+//		public String getColumnText(Object element, int columnIndex)
 //		{
 //			if (element instanceof Account) {
 //				Account account = (Account) element;
-//				switch (columnIndex) 
+//				switch (columnIndex)
 //				{
 //					case(0):
 //						return account.getAnchorID();
@@ -209,14 +209,14 @@ extends AbstractTableComposite<Account>
 //							return account.getName().getText();
 //					case(2):
 //						if (account.getOwner() != null && account.getOwner().getPerson() != null)
-//							return account.getOwner().getPerson().getDisplayName(); 
+//							return account.getOwner().getPerson().getDisplayName();
 //						break;
 //					case(3):
 //						return account.getAccountType().getName().getText();
 //					case(4):
 //						if (account.getCurrency() != null)
 //							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
-//						break;						
+//						break;
 //					default:
 //						return ""; //$NON-NLS-1$
 //				}
@@ -238,7 +238,7 @@ extends AbstractTableComposite<Account>
 ////						return new Color(getDisplay(), 0, 255, 0);
 ////				}
 ////			}
-////			return new Color(getDisplay(), 0, 255, 0);		
+////			return new Color(getDisplay(), 0, 255, 0);
 ////		}
 ////
 ////		public Color getForeground(Object element, int columnIndex) {
@@ -256,10 +256,10 @@ extends AbstractTableComposite<Account>
 ////				}
 ////			}
 ////			return new Color(getDisplay(), 0, 255, 0);
-////		}		
+////		}
 //	}
 	
-//	public static String getAnchorTypeIDName(String anchorTypeID ) 
+//	public static String getAnchorTypeIDName(String anchorTypeID )
 //	{
 ////		String anchorTypeID = account.getAnchorTypeID();
 //		if (anchorTypeID.equals(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE)) {
@@ -295,7 +295,7 @@ extends AbstractTableComposite<Account>
 //		else if (anchorTypeID.equals("Account.Voucher")) { //$NON-NLS-1$
 //			return "Voucher Account"; //$NON-NLS-1$
 //		}
-//			
+//
 //		return anchorTypeID;
 //	}
 	
@@ -338,7 +338,7 @@ extends AbstractTableComposite<Account>
 						loadAccountJob = job;
 						job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 						job.schedule();
-					}//if	
+					}//if
 				}//for
 			}//for
 		}

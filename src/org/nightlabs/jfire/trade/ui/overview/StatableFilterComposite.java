@@ -48,17 +48,17 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class StatableFilterComposite 
+public class StatableFilterComposite
 extends JDOQueryComposite
 {
 	private DateTimeEdit createDTMin = null;
 	private DateTimeEdit createDTMax = null;
-	private StatableQuery statableQuery = null;	
+	private StatableQuery statableQuery = null;
 	private Button activeButton = null;
 	private Button onlyInSelectedStateButton = null;
 	
 	public StatableFilterComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
@@ -70,8 +70,8 @@ extends JDOQueryComposite
 	}
 	
 	@Override
-	protected void createComposite(Composite parent) 
-	{		
+	protected void createComposite(Composite parent)
+	{
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.group.text"));		 //$NON-NLS-1$
 		group.setLayout(new GridLayout(3, false));
@@ -81,23 +81,23 @@ extends JDOQueryComposite
 		wrapper.setLayout(new GridLayout(2, true));
 		activeButton = new Button(wrapper, SWT.CHECK);
 		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
-		activeButton.addSelectionListener(new SelectionListener(){		
+		activeButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				stateDefinitions.setEnabled(((Button)e.getSource()).getSelection());
-			}		
+			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		onlyInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.onlyInSelectedStateButton.text")); //$NON-NLS-1$
-		onlyInSelectedStateButton.addSelectionListener(new SelectionListener(){		
+		onlyInSelectedStateButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				
-			}		
+			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 		
 		stateDefinitions = new ComboComposite<StateDefinition>(
@@ -127,13 +127,13 @@ extends JDOQueryComposite
 		cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
-		createDTMax.setDate(cal.getTime());		
+		createDTMax.setDate(cal.getTime());
 	}
 
 	private ComboComposite<StateDefinition> stateDefinitions;
 	private ILabelProvider labelProvider = new LabelProvider() {
 		@Override
-		public String getText(Object element) 
+		public String getText(Object element)
 		{
 			if (element instanceof StateDefinition) {
 				StateDefinition stateDefinition = (StateDefinition) element;
@@ -141,28 +141,28 @@ extends JDOQueryComposite
 			}
 			
 			return super.getText(element);
-		}		
+		}
 	};
 	
 	@Override
-	public JDOQuery getJDOQuery() 
+	public JDOQuery getJDOQuery()
 	{
 		statableQuery = new StatableQuery(getStatableClass());
-		StateDefinitionID stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());		
-		if (statableQuery != null) 
+		StateDefinitionID stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+		if (statableQuery != null)
 		{
 			if (activeButton.getSelection() && stateDefinitionID != null)
-				statableQuery.setStateDefinitionID(stateDefinitionID);	
+				statableQuery.setStateDefinitionID(stateDefinitionID);
 
 			if (onlyInSelectedStateButton.getSelection())
-				statableQuery.setOnlyInSelectedState(onlyInSelectedStateButton.getSelection());	
+				statableQuery.setOnlyInSelectedState(onlyInSelectedStateButton.getSelection());
 			
 			if (createDTMax.isActive())
-				statableQuery.setStateCreateDTMax(createDTMax.getDate());	
+				statableQuery.setStateCreateDTMax(createDTMax.getDate());
 			
 			if (createDTMin.isActive())
-				statableQuery.setStateCreateDTMin(createDTMin.getDate());			
-		}		
+				statableQuery.setStateCreateDTMin(createDTMin.getDate());
+		}
 		return statableQuery;
 	}
 		
@@ -170,7 +170,7 @@ extends JDOQueryComposite
 	public Class getStatableClass() {
 		return statableClass;
 	}
-	public void setStatableClass(final Class statableClass) 
+	public void setStatableClass(final Class statableClass)
 	{
 		this.statableClass = statableClass;
 		if (statableQuery == null)
@@ -178,7 +178,7 @@ extends JDOQueryComposite
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.loadProcessDefinitionsJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				String statableClassName = statableClass.getName(); 
+				String statableClassName = statableClass.getName();
 				try {
 					TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
 					JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
@@ -189,9 +189,9 @@ extends JDOQueryComposite
 							ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
 					};
 					Collection<ProcessDefinition> processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
-							processDefinitionIDs, 
-							PROCESS_DEFINITION_FETCH_GROUPS, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							processDefinitionIDs,
+							PROCESS_DEFINITION_FETCH_GROUPS,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
 					
 					String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
@@ -199,15 +199,15 @@ extends JDOQueryComposite
 							StateDefinition.FETCH_GROUP_NAME
 					};
 					final Set<StateDefinition> allStateDefinitions = new HashSet<StateDefinition>();
-					for (ProcessDefinition processDefinition : processDefinitions) 
+					for (ProcessDefinition processDefinition : processDefinitions)
 					{
 						Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
 						Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
-								statedDefinitionIDs, 
-								STATE_DEFINITION_FETCH_GROUPS, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								statedDefinitionIDs,
+								STATE_DEFINITION_FETCH_GROUPS,
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor);
-						allStateDefinitions.addAll(stateDefinitions);				
+						allStateDefinitions.addAll(stateDefinitions);
 					}
 					
 					Display.getDefault().asyncExec(new Runnable() {

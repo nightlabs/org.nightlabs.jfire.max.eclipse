@@ -9,7 +9,7 @@ import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jfire.accounting.Currency;
 
 /**
- * Base {@link Currency} label provider, which returns null as the image and 
+ * Base {@link Currency} label provider, which returns null as the image and
  * <!-- <pre> getCurrencyID() + " (" + getCurrencySymbol() +") " </pre> -->
  * the {@link Currency#getCurrencySymbol()}.
  * 

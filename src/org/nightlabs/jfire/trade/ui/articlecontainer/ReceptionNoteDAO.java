@@ -15,7 +15,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReceptionNoteDAO 
+public class ReceptionNoteDAO
 extends BaseJDOObjectDAO<ReceptionNoteID, ReceptionNote>
 {
 	private static ReceptionNoteDAO sharedInstance;
@@ -34,15 +34,15 @@ extends BaseJDOObjectDAO<ReceptionNoteID, ReceptionNote>
 
 	@Override
 	protected Collection<ReceptionNote> retrieveJDOObjects(Set<ReceptionNoteID> objectIDs, String[] fetchGroups,
-			int maxFetchDepth, ProgressMonitor monitor) 
-	throws Exception 
+			int maxFetchDepth, ProgressMonitor monitor)
+	throws Exception
 	{
 		TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 		return tm.getReceptionNotes(objectIDs, fetchGroups, maxFetchDepth);
 	}
 
 	public Collection<ReceptionNote> getReceptionNotes(Set<ReceptionNoteID> objectIDs, String[] fetchGroups,
-			int maxFetchDepth, ProgressMonitor monitor) 
+			int maxFetchDepth, ProgressMonitor monitor)
 	throws Exception
 	{
 		return retrieveJDOObjects(objectIDs, fetchGroups, maxFetchDepth, monitor);

@@ -356,7 +356,7 @@ implements ISelectionProvider
 				GeneralEditor ge = (GeneralEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
 //				TODO This was a workaround to NOT close the editor in the QuickSaleView, but now
-//							with the Editor<->Perspective Patch we only get editors for Trading Perspective.				
+//							with the Editor<->Perspective Patch we only get editors for Trading Perspective.
 //				if (ge.getGeneralEditorComposite().getArticleContainer() instanceof Order) {
 //					Order order = (Order) ge.getGeneralEditorComposite().getArticleContainer();
 //					if (order.isQuickSaleWorkOrder())

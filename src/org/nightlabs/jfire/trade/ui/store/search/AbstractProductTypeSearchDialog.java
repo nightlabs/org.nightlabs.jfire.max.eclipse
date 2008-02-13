@@ -21,8 +21,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeSearchDialog 
-extends CenteredDialog 
+public abstract class AbstractProductTypeSearchDialog
+extends CenteredDialog
 {
 	/**
 	 * @param parentShell
@@ -36,7 +36,7 @@ extends CenteredDialog
 	public void create() {
 		super.create();
 		getShell().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.title")); //$NON-NLS-1$
-//		getShell().setSize(800, 600);				
+//		getShell().setSize(800, 600);
 //		setToCenteredLocation();
 	}
 
@@ -49,13 +49,13 @@ extends CenteredDialog
 	private boolean earlySearchResult = false;
 	private AbstractProductTypeSearchComposite abstractProductTypeSearchComposite;
 	@Override
-	protected Control createDialogArea(Composite parent) 
+	protected Control createDialogArea(Composite parent)
 	{
 		abstractProductTypeSearchComposite = createProductTypeSearchComposite(parent);
 		if (earlySearchText != null) {
 			abstractProductTypeSearchComposite.setSearchText(earlySearchText);
 			if (!"".equals(earlySearchText.trim())) { //$NON-NLS-1$
-				abstractProductTypeSearchComposite.searchPressed();				
+				abstractProductTypeSearchComposite.searchPressed();
 			}
 			if (!abstractProductTypeSearchComposite.getProductTypeTableComposite().getTableViewer().getSelection().isEmpty())
 				if (getButton(SEARCH_ID) != null)
@@ -69,41 +69,41 @@ extends CenteredDialog
 	public static final int SEARCH_ID = IDialogConstants.CLIENT_ID + 1;
 	
 	@Override
-	protected void createButtonsForButtonBar(Composite parent) 
+	protected void createButtonsForButtonBar(Composite parent)
 	{
-		Button searchButton = createButton(parent, SEARCH_ID, 
+		Button searchButton = createButton(parent, SEARCH_ID,
 				Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.searchButton.text"), //$NON-NLS-1$
 				true);
 		searchButton.addSelectionListener(searchListener);
 		super.createButtonsForButtonBar(parent);
 		
-		getButton(Window.OK).setEnabled(earlySearchResult);	
+		getButton(Window.OK).setEnabled(earlySearchResult);
 		if (abstractProductTypeSearchComposite != null) {
 			abstractProductTypeSearchComposite.getProductTypeTableComposite().getTableViewer().
-			addSelectionChangedListener(okListener);			
+			addSelectionChangedListener(okListener);
 		}
 	}
 		
-	private SelectionListener searchListener = new SelectionListener(){	
+	private SelectionListener searchListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			abstractProductTypeSearchComposite.searchPressed();
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 	};
 	
 	private ISelectionChangedListener okListener = new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
 			ISelection selection = event.getSelection();
 			getButton(Window.OK).setEnabled(!selection.isEmpty());
-			selectedProductType = abstractProductTypeSearchComposite.getSelectedProductType(); 
+			selectedProductType = abstractProductTypeSearchComposite.getSelectedProductType();
 		}
 	};
 	
 	private ProductType selectedProductType;
 	public ProductType getProductType() {
-		return selectedProductType; 
+		return selectedProductType;
 	}
 	
 	private String earlySearchText;

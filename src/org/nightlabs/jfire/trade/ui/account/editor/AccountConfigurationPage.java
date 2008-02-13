@@ -21,8 +21,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class AccountConfigurationPage 
-extends EntityEditorPageWithProgress 
+public class AccountConfigurationPage
+extends EntityEditorPageWithProgress
 {
 	private static final Logger logger = Logger.getLogger(AccountConfigurationPage.class);
 	
@@ -33,7 +33,7 @@ extends EntityEditorPageWithProgress
 	
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link PersonPreferencesPage}. 
+	 * new instances of {@link PersonPreferencesPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -43,7 +43,7 @@ extends EntityEditorPageWithProgress
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
 			return new AccountConfigurationPageController(editor);
 		}
-	}	
+	}
 	
 	public AccountConfigurationPage(FormEditor editor) {
 		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountConfigurationPage.title")); //$NON-NLS-1$
@@ -83,7 +83,7 @@ extends EntityEditorPageWithProgress
 						account, account instanceof SummaryAccount);
 			}
 		});
-	}	
+	}
 	
 	@Override
 	protected String getPageFormTitle() {

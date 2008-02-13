@@ -17,7 +17,7 @@ import org.nightlabs.l10n.DateFormatter;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DeliveryNoteListComposite 
+public class DeliveryNoteListComposite
 extends AbstractArticleContainerListComposite
 {
 	public DeliveryNoteListComposite(Composite parent, int style) {

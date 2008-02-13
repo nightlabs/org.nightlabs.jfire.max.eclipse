@@ -12,7 +12,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractArticleContainerAction  
+public abstract class AbstractArticleContainerAction
 extends WorkbenchPartSelectionAction
 {
 	public AbstractArticleContainerAction() {
@@ -25,7 +25,7 @@ extends WorkbenchPartSelectionAction
 	}
 
 	@Override
-	public void setSelection(ISelection selection) 
+	public void setSelection(ISelection selection)
 	{
 		super.setSelection(selection);
 		if (!getSelection().isEmpty() && getSelection() instanceof StructuredSelection) {
@@ -44,7 +44,7 @@ extends WorkbenchPartSelectionAction
 		articleContainerID = (ArticleContainerID)objectID;
 	}
 	
-	public boolean calculateEnabled() {		
+	public boolean calculateEnabled() {
 		return articleContainerID != null;
 	}
 

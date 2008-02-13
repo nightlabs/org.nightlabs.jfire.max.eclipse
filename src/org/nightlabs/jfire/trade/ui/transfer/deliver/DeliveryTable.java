@@ -34,7 +34,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 				switch (columnIndex) {
 				case 0: return delivery.getPartner().getPerson().getDisplayName();
 				case 1: return dateTimeFormat.format(delivery.getEndDT());
-				case 2: return Integer.toString(delivery.getArticleIDs().size());				
+				case 2: return Integer.toString(delivery.getArticleIDs().size());
 				case 3: return Long.toString(delivery.getDeliveryID());
 				case 4: return delivery.getUser().getName();
 				default: return null;

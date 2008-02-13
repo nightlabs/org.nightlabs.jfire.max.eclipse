@@ -44,7 +44,7 @@ class SelectTargetDeliveryQueueWizardPage extends WizardHopPage {
 				return ""; //$NON-NLS-1$
 			}
 		};
-		queueCombo = new XComboComposite<DeliveryQueue>(comp, 
+		queueCombo = new XComboComposite<DeliveryQueue>(comp,
 				AbstractListComposite.getDefaultWidgetStyle(comp), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.SelectTargetDeliveryQueueWizardPage.queueCombo.caption"), labelProvider); //$NON-NLS-1$
 		queueCombo.setInput(visibleDeliveryQueues);
 		queueCombo.addSelectionListener(new SelectionListener() {

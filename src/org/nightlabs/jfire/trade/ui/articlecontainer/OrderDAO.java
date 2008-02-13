@@ -39,7 +39,7 @@ public class OrderDAO
 	protected OrderDAO() {}
 
 	@Override
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Implement
 	protected Collection<Order> retrieveJDOObjects(Set<OrderID> orderIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -59,7 +59,7 @@ public class OrderDAO
 		return getJDOObjects(null, orderIDs, fetchGroups, maxFetchDepth, monitor);
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public List<Order> getOrders(
 			AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

@@ -96,11 +96,11 @@ extends AbstractTableComposite<MoneyTransfer>
 	class MoneyTransferListLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof ManualMoneyTransfer) {
 				ManualMoneyTransfer manualMoneyTransfer = (ManualMoneyTransfer) element;
-				switch (columnIndex) 
+				switch (columnIndex)
 				{
 				case(0):
 					if (manualMoneyTransfer.getFrom().getAnchorID() != null)
@@ -108,7 +108,7 @@ extends AbstractTableComposite<MoneyTransfer>
 				break;
 				case(1):
 					if (manualMoneyTransfer.getTo().getAnchorID() != null)
-						return manualMoneyTransfer.getTo().getAnchorID(); 
+						return manualMoneyTransfer.getTo().getAnchorID();
 				break;
 				case(2):
 					return NumberFormatter.formatCurrency(manualMoneyTransfer.getAmount(), manualMoneyTransfer.getCurrency(), true);
@@ -121,7 +121,7 @@ extends AbstractTableComposite<MoneyTransfer>
 				}
 			}
 			return null;
-		}		
+		}
 	}
 
 	public void setLoadingStatus()

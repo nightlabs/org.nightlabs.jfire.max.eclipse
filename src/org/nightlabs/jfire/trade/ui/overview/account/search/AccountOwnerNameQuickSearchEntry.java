@@ -12,8 +12,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class AccountOwnerNameQuickSearchEntry 
-extends AbstractQuickSearchEntry 
+public class AccountOwnerNameQuickSearchEntry
+extends AbstractQuickSearchEntry
 {
 	public AccountOwnerNameQuickSearchEntry(QuickSearchEntryFactory factory) {
 		super(factory);
@@ -22,8 +22,8 @@ extends AbstractQuickSearchEntry
 	public Object search(ProgressMonitor monitor) {
 		AccountQuery query = new AccountQuery();
 		query.setOwnerName(getSearchText());
-		query.setFromInclude(getMinIncludeRange());		
-		query.setToExclude(getMaxExcludeRange());		
+		query.setFromInclude(getMinIncludeRange());
+		query.setToExclude(getMaxExcludeRange());
 		return query;
 	}
 }

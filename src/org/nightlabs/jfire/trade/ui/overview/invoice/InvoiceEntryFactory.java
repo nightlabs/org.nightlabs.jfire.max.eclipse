@@ -13,7 +13,7 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
  *
  */
 public class InvoiceEntryFactory
-extends AbstractEntryFactory 
+extends AbstractEntryFactory
 {
 
 	public InvoiceEntryFactory() {
@@ -30,7 +30,7 @@ extends AbstractEntryFactory
 			public void handleActivation() {
 				try {
 					RCPUtil.openEditor(
-							new OverviewEntryEditorInput(this), 
+							new OverviewEntryEditorInput(this),
 							InvoiceEntryEditor.EDITOR_ID);
 				} catch (PartInitException e) {
 					throw new RuntimeException(e);

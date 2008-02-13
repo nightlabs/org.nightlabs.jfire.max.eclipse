@@ -28,7 +28,7 @@ public class PaymentControllerImpl extends AbstractPaymentController {
 	/**
 	 * Initialises a PaymentControllerImpl with the list of tuples of the type ({@link PaymentData}, {@link ClientPaymentProcessor}). The controller
 	 * will process all given {@link PaymentData}s using the respective {@link ClientPaymentProcessor} in the client stages.
-	 * @param paymentTuples A list of tuples of {@link PaymentData} and a corresponding {@link ClientPaymentProcessor}. 
+	 * @param paymentTuples A list of tuples of {@link PaymentData} and a corresponding {@link ClientPaymentProcessor}.
 	 */
 	public PaymentControllerImpl(List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples) {
 		super(getPaymentDatas(paymentTuples));
@@ -44,7 +44,7 @@ public class PaymentControllerImpl extends AbstractPaymentController {
 		for (Pair<PaymentData, ClientPaymentProcessor> tuple : paymentTuples) {
 			PaymentData data = tuple.getFirst();
 			paymentDatas.add(data);
-		}		
+		}
 		return paymentDatas;
 	}
 	

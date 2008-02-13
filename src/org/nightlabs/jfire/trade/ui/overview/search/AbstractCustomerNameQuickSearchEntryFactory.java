@@ -11,7 +11,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  *
  */
 public abstract class AbstractCustomerNameQuickSearchEntryFactory
-extends AbstractQuickSearchEntryFactory  
+extends AbstractQuickSearchEntryFactory
 {
 	@Override
 	public String getName() {

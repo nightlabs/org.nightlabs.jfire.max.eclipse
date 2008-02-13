@@ -20,8 +20,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeTableComposite 
-extends AbstractTableComposite 
+public class ProductTypeTableComposite
+extends AbstractTableComposite
 {
 	/**
 	 * @param parent
@@ -32,7 +32,7 @@ extends AbstractTableComposite
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) 
+	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableLayout layout = new TableLayout();
 		
@@ -98,7 +98,7 @@ extends AbstractTableComposite
 	class ProductTypeLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof String) {
 				if (columnIndex == 0)
@@ -125,7 +125,7 @@ extends AbstractTableComposite
 					if (pt.getInnerPriceConfig() != null && pt.getInnerPriceConfig().getName() != null)
 						return pt.getInnerPriceConfig().getName().getText();
 //				case(7):
-//					if (pt.getLocalAccountantDelegate() != null && pt.getLocalAccountantDelegate().getName() != null) 
+//					if (pt.getLocalAccountantDelegate() != null && pt.getLocalAccountantDelegate().getName() != null)
 //						return pt.getLocalAccountantDelegate().getName().getText();
 				case(7):
 					if (pt.getOwner() != null && pt.getOwner().getPerson() != null)
@@ -138,7 +138,7 @@ extends AbstractTableComposite
 		}
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) 
+		public Image getColumnImage(Object element, int columnIndex)
 		{
 			if (element instanceof String)
 				return null;
@@ -147,35 +147,35 @@ extends AbstractTableComposite
 			switch (columnIndex) {
 				case(1):
 					if (pt.isPublished())
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 							ProductTypeTableComposite.class, "StatusTrue"); //$NON-NLS-1$
 					else
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 								ProductTypeTableComposite.class, "StatusFalse"); //$NON-NLS-1$
 				case(2):
 					if (pt.isConfirmed())
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 							ProductTypeTableComposite.class, "StatusTrue"); //$NON-NLS-1$
 					else
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 								ProductTypeTableComposite.class, "StatusFalse"); //$NON-NLS-1$
 				case(3):
 					if (pt.isPublished())
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 							ProductTypeTableComposite.class, "StatusTrue"); //$NON-NLS-1$
 					else
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 								ProductTypeTableComposite.class, "StatusFalse"); //$NON-NLS-1$
 				case(4):
 					if (pt.isClosed())
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 							ProductTypeTableComposite.class, "StatusTrue"); //$NON-NLS-1$
 					else
-						return SharedImages.getSharedImage(TradePlugin.getDefault(), 
+						return SharedImages.getSharedImage(TradePlugin.getDefault(),
 								ProductTypeTableComposite.class, "StatusFalse");						 //$NON-NLS-1$
 			}
 			return super.getColumnImage(element, columnIndex);
-		}		
+		}
 	}
 	
 	class ProductTypeContentProvider

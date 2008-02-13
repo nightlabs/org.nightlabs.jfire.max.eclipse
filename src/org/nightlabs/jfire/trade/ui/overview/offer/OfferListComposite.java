@@ -88,8 +88,8 @@ extends AbstractArticleContainerListComposite
 					return offer.getFinalizeUser().getName();
 			break;
 			case 2:
-				if (offer.getPrice() != null && offer.getCurrency() != null) 
-					return NumberFormatter.formatCurrency(offer.getPrice().getAmount(), offer.getCurrency());						
+				if (offer.getPrice() != null && offer.getCurrency() != null)
+					return NumberFormatter.formatCurrency(offer.getPrice().getAmount(), offer.getCurrency());
 			break;
 		}
 

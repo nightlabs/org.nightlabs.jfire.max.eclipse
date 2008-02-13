@@ -52,7 +52,7 @@ class ManualMoneyTransferWizardPage extends WizardHopPage{
 	public void createControl(Composite parent) {
 		// TODO Auto-generated method stub
 		super.createControl(parent);
-	}	
+	}
 
 	@Override
 	public void setVisible(boolean visible) {
@@ -95,7 +95,7 @@ class ManualMoneyTransferWizardPage extends WizardHopPage{
 	
 	public long getAmount(){
 		try{
-			return manualMoneyTransferComposite.getCurrencyEdit().getValue();		
+			return manualMoneyTransferComposite.getCurrencyEdit().getValue();
 		}
 		catch (NumberFormatException e) {
 			return 0;

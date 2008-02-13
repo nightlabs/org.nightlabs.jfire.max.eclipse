@@ -86,7 +86,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 	public SelectDeliveryNotePage()
 	{
 		super(SelectDeliveryNotePage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.SelectDeliveryNotePage.title")); //$NON-NLS-1$
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), 
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(),
 				SelectDeliveryNotePage.class, "", ImageDimension._75x70, ImageFormat.png)); //$NON-NLS-1$
 	}
 

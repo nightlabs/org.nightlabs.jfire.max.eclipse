@@ -41,7 +41,7 @@ import org.eclipse.ui.part.EditorPart;
  *
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class GeneralEditor 
+public class GeneralEditor
 extends EditorPart
 implements IGeneralEditor
 {
@@ -89,10 +89,10 @@ implements IGeneralEditor
 		ImageDescriptor img = input.getImageDescriptor();
 		if (img != null)
 			setTitleImage(img.createImage());
-//		
+//
 //		getSite().setSelectionProvider(new ISelectionProvider() {
 //			private LinkedList listeners = new LinkedList();
-//			
+//
 //			public void addSelectionChangedListener(ISelectionChangedListener listener)
 //			{
 //				listeners.add(listener);
@@ -114,7 +114,7 @@ implements IGeneralEditor
 //				// TODO Auto-generated method stub
 //				System.out.println("");
 //			}
-//			
+//
 //		});
 	}
 

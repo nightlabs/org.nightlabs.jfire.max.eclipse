@@ -106,6 +106,6 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	
 	@Override
 	protected String[] getFetchGroups() {
-		return new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};		
+		return new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};
 	}
 }

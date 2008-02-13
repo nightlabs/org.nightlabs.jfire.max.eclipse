@@ -88,7 +88,7 @@ public class RemoveAction extends ArticleEditAction
 			for (Iterator itA = articleSelection.getSelectedArticles().iterator(); itA.hasNext();) {
 				Article article = (Article) itA.next();
 
-				if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext) || 
+				if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext) ||
 						SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext)) {
 					// removal here means deletion => must NOT be allocated/allocationPending
 					if (!article.isReversing()) {

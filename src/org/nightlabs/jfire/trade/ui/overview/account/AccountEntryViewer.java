@@ -19,15 +19,15 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * implementation of a {@link JDOQuerySearchEntryViewer} for searching and 
+ * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
  * displaying {@link Account}s
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class AccountEntryViewer  
+public class AccountEntryViewer
 extends JDOQuerySearchEntryViewer
-{	
+{
 	public AccountEntryViewer(Entry entry) {
 		super(entry);
 	}
@@ -54,13 +54,13 @@ extends JDOQuerySearchEntryViewer
 	};
 
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
 			return AccountDAO.sharedInstance().getAccountsForQueries(
 					queries,
-					FETCH_GROUPS_ACCOUNTS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					FETCH_GROUPS_ACCOUNTS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

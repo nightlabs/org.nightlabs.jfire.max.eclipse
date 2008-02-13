@@ -14,8 +14,8 @@ import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class CreateQuickSaleOrder 
-implements IWorkbenchWindowActionDelegate 
+public class CreateQuickSaleOrder
+implements IWorkbenchWindowActionDelegate
 {
 
 	public void dispose() {

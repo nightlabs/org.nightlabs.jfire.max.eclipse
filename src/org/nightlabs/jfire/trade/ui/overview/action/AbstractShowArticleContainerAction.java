@@ -9,7 +9,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -17,18 +16,18 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractShowArticleContainerAction 
-extends AbstractArticleContainerAction 
+public abstract class AbstractShowArticleContainerAction
+extends AbstractArticleContainerAction
 {
 	public static final String ID = AbstractShowArticleContainerAction.class.getName();
 
-	public AbstractShowArticleContainerAction() 
+	public AbstractShowArticleContainerAction()
 	{
 		super();
 		init();
 	}
 		
-//	public AbstractShowArticleContainerAction(OverviewEntryEditor editor) 
+//	public AbstractShowArticleContainerAction(OverviewEntryEditor editor)
 //	{
 //		super(editor);
 //		init();
@@ -38,8 +37,8 @@ extends AbstractArticleContainerAction
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainerAction.text")); //$NON-NLS-1$
 		setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainerAction.toolTipText")); //$NON-NLS-1$
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), 
-				AbstractShowArticleContainerAction.class));		
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(),
+				AbstractShowArticleContainerAction.class));
 	}
 	
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
@@ -51,10 +50,10 @@ extends AbstractArticleContainerAction
 	};
 	
 	@Override
-	public void run() 
-	{		
+	public void run()
+	{
 		Map <String, Object> params = new HashMap<String,Object>();
-		prepareParams(params);		
+		prepareParams(params);
 		ReportRegistryItemID selectedLayoutID = ReportConfigUtil.getReportLayoutID(getReportRegistryItemType());
 		if (selectedLayoutID == null) {
 			// the user canceled, abort
@@ -64,7 +63,7 @@ extends AbstractArticleContainerAction
 		itemIDs.add(selectedLayoutID);
 		showReportAction.setNextRunParams(params);
 		showReportAction.runWithRegistryItemIDs(itemIDs);
-	}	
+	}
 	
 	/**
 	 * Prepare the parameter for the ReportLayout in order to view

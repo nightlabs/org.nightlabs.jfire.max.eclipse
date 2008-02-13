@@ -124,10 +124,10 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	 */
 	@Implement
 	public Collection<ArticleCarrier> removeArticles(Collection<ArticleCarrier> articleCarriers) {
-		for (Iterator<ArticleCarrier> it = articleCarriers.iterator(); it.hasNext(); ) { 
+		for (Iterator<ArticleCarrier> it = articleCarriers.iterator(); it.hasNext(); ) {
 			if (this.articleCarriers.remove(it.next()))
 				it.remove();
-		}		
+		}
 		
 		return articleCarriers;
 	}

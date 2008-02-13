@@ -12,8 +12,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class RepositoryNameQuickSearchEntry 
-extends AbstractQuickSearchEntry 
+public class RepositoryNameQuickSearchEntry
+extends AbstractQuickSearchEntry
 {
 	public RepositoryNameQuickSearchEntry(QuickSearchEntryFactory factory) {
 		super(factory);
@@ -22,8 +22,8 @@ extends AbstractQuickSearchEntry
 	public Object search(ProgressMonitor monitor) {
 		RepositoryQuery query = new RepositoryQuery();
 		query.setName(getSearchText());
-		query.setFromInclude(getMinIncludeRange());		
-		query.setToExclude(getMaxExcludeRange());		
+		query.setFromInclude(getMinIncludeRange());
+		query.setToExclude(getMaxExcludeRange());
 		return query;
 	}
 }

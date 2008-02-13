@@ -91,7 +91,7 @@ extends AbstractTableComposite<ProductTransfer>
 				case 2:
 					return direction.name();
 				case 3:
-					String otherStr = null; 
+					String otherStr = null;
 					
 					if (other instanceof Repository)
 						otherStr = ((Repository)other).getName().getText();

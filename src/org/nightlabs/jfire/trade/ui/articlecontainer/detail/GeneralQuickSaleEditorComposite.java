@@ -46,7 +46,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GeneralQuickSaleEditorComposite 
+public class GeneralQuickSaleEditorComposite
 extends XComposite
 {
 	private IWorkbenchPartSite site;
@@ -57,7 +57,7 @@ extends XComposite
 	 * @param input
 	 */
 	public GeneralQuickSaleEditorComposite(IWorkbenchPartSite site,
-			Composite parent, GeneralEditorInput input) 
+			Composite parent, GeneralEditorInput input)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.site = site;
@@ -65,7 +65,7 @@ extends XComposite
 	}
 	
 	private Composite buttonComp;
-	protected void createComposite(Composite parent, GeneralEditorInput input) 
+	protected void createComposite(Composite parent, GeneralEditorInput input)
 	{
 		generalEditorComposite = new GeneralEditorComposite(site, parent, input);
 		
@@ -93,7 +93,7 @@ extends XComposite
 		
 		okButtonCustomer = new Button(buttonComp, SWT.NONE);
 		okButtonCustomer.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonCustomer.text")); //$NON-NLS-1$
-		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), 
+		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(),
 				LegalEntityEditorView.class));
 		
 //		Label separator = new Label(buttonComp, SWT.SEPARATOR);
@@ -101,7 +101,7 @@ extends XComposite
 		okButtonCustomer.addSelectionListener(okListenerCustomer);
 		okButtonAnonymous = new Button(buttonComp, SWT.NONE);
 		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonAnonymous.text")); //$NON-NLS-1$
-		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), 
+		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(),
 				SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
 				
@@ -119,17 +119,17 @@ extends XComposite
 	private Button okButtonCustomer;
 	private Button okButtonAnonymous;
 	private Button deleteButton;
-	private Text customerSearchText;	
+	private Text customerSearchText;
 	
-	private SelectionListener okListenerCustomer = new SelectionListener(){	
+	private SelectionListener okListenerCustomer = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			String text = customerSearchText.getText();
 //			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(text, true);
 //			if (legalEntity != null) {
 //				assignToCustomer(legalEntity);
 //				if (payAndDeliverAll()) {
-//					createNewOrder();				
-//				}					
+//					createNewOrder();
+//				}
 //			}
 			CustomerPaymentDeliveryWizard wiz = new CustomerPaymentDeliveryWizard(
 					text,
@@ -137,37 +137,37 @@ extends XComposite
 					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 					TransferWizard.Side.Vendor);
 			new DynamicPathWizardDialog(wiz).open();
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 	};
 
-	private SelectionListener okListenerAnonymous = new SelectionListener(){	
+	private SelectionListener okListenerAnonymous = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(
 				new NullProgressMonitor()
 			);
 			assignToCustomer(legalEntity);
 			if (payAndDeliverAll()) {
-				createNewOrder();				
+				createNewOrder();
 			}
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
-	};	
+		}
+	};
 	
-	private SelectionListener deleteListener = new SelectionListener(){	
+	private SelectionListener deleteListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			deleteAll();
-		}	
+		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
-	}; 
+		}
+	};
 	
-	public static GeneralEditorInputOrder createEditorInput() 
+	public static GeneralEditorInputOrder createEditorInput()
 	{
 		// FIXME: add method in server which holds an order
 		TradeManager tm;
@@ -188,7 +188,7 @@ extends XComposite
 							null,
 							"EUR", //$NON-NLS-1$
 							new SegmentTypeID[] {null}); // null here is a shortcut for default segment type
-					return new GeneralEditorInputOrder(orderID);				
+					return new GeneralEditorInputOrder(orderID);
 			} catch (LoginException le) {
 				return null;
 			}
@@ -197,21 +197,21 @@ extends XComposite
 		}
 	}
 	
-	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){	
+	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
 		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
 			if (buttonComp != null && !buttonComp.isDisposed())
 				buttonComp.setEnabled(true);
-		}	
+		}
 	};
 	
-	private ArticleChangeListener articleChangeListener = new ArticleChangeListener(){	
+	private ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
 			// TODO: check if order is empty
-		}	
+		}
 	};
 	
-	protected void assignToCustomer(LegalEntity legalEntity)  
-	{		
+	protected void assignToCustomer(LegalEntity legalEntity)
+	{
 		TradeManager tm = TradePlugin.getDefault().getTradeManager();
 		AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
 		OrderID orderID = (OrderID) getGeneralEditorComposite().getArticleContainerID();
@@ -219,11 +219,11 @@ extends XComposite
 			tm.assignCustomer(orderID, customerID, true, null, 1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 	
-	protected boolean payAndDeliverAll() 
-	{		
+	protected boolean payAndDeliverAll()
+	{
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				getGeneralEditorComposite().getArticleContainerID(),
 				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
@@ -235,33 +235,33 @@ extends XComposite
 		return true;
 	}
 	
-	protected void deleteAll() 
+	protected void deleteAll()
 	{
 		try {
 			TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
 			Collection<Article> articles = tradeManager.releaseArticles(NLJDOHelper.getObjectIDSet(
-					getGeneralEditorComposite().getArticles()), true, false, null, 
+					getGeneralEditorComposite().getArticles()), true, false, null,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getGeneralEditorComposite().getArticles());
 			tradeManager.deleteArticles(articleIDs, true);
 			
 			createNewOrder();
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	protected void createGeneralEditorComposite(GeneralEditorInput input) 
+	protected void createGeneralEditorComposite(GeneralEditorInput input)
 	{
 		generalEditorComposite.dispose();
 		generalEditorComposite = new GeneralEditorComposite(site, this, input);
 		layout(true, true);
 	}
 	
-	protected void createNewOrder() 
+	protected void createNewOrder()
 	{
 		// only close open will occur automaticly because of partListener in GeneralQuickSaleEditor
-		RCPUtil.closeEditor(getGeneralEditorComposite().getInput(), false);		
+		RCPUtil.closeEditor(getGeneralEditorComposite().getInput(), false);
 	}
 }

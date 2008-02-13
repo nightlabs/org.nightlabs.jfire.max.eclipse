@@ -65,7 +65,7 @@ public class PriceFragmentTypeCombo extends XComposite {
 		} catch (Exception e) {
 			ExceptionHandlerRegistry.asyncHandleException(e);
 			return;
-		}		
+		}
 		priceFragmentTypes.addAll(pftCollection);
 		for (Iterator iter = priceFragmentTypes.iterator(); iter.hasNext();) {
 			PriceFragmentType pft = (PriceFragmentType) iter.next();
@@ -94,6 +94,6 @@ public class PriceFragmentTypeCombo extends XComposite {
 	}
 	
 	public Combo getCombo() {
-		return combo;		
+		return combo;
 	}
 }

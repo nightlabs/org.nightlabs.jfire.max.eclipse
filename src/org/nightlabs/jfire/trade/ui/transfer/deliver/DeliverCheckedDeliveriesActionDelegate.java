@@ -11,7 +11,7 @@ public class DeliverCheckedDeliveriesActionDelegate implements IViewActionDelega
 
 	public void init(IViewPart view) {
 		if (view instanceof DeliveryQueueBrowsingView) {
-			deliveryQueueBrowsingView = (DeliveryQueueBrowsingView) view;			
+			deliveryQueueBrowsingView = (DeliveryQueueBrowsingView) view;
 		} else
 			throw new IllegalArgumentException("Given IViewPart is no instance of DeliveryQueueBrowsingView."); //$NON-NLS-1$
 	}

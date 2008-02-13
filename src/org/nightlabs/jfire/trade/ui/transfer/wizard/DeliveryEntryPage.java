@@ -177,7 +177,7 @@ implements IDeliveryEntryPage
 //				String name2 = o2.getName().getText(Locale.getDefault().getLanguage());
 //				return name1.compareTo(name2);
 //			}
-//		});		
+//		});
 //	}
 
 	/**
@@ -394,7 +394,7 @@ implements IDeliveryEntryPage
 			clientDeliveryProcessor.init();
 
 			String reqMsg = clientDeliveryProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {				
+			if (reqMsg != null) {
 				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
 				return;
 			}
@@ -516,7 +516,7 @@ implements IDeliveryEntryPage
 					(ServerDeliveryProcessorID) JDOHelper.getObjectId(selectedServerDeliveryProcessor));
 
 			String reqMsg = selectedServerDeliveryProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {				
+			if (reqMsg != null) {
 				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
 //				wizard.updateDialog(); // this is already done be setErrorMessage(...)
 				return;
@@ -660,7 +660,7 @@ implements IDeliveryEntryPage
 				});
 				
 				return Status.OK_STATUS;
-			}			
+			}
 		};
 		
 		loadModeOfDeliveriesJob = loadJob;
@@ -671,7 +671,7 @@ implements IDeliveryEntryPage
 //	protected void modeOfDeliveryFlavourGUIListSelectionChanged()
 //	{
 //		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
-//		
+//
 ////	 remove all ClientPaymentProcessorFactory s as they will be fetched again
 //		clientDeliveryProcessorFactoryCombo.removeAll();
 //		clientDeliveryProcessorFactoryList = null; // will be replaced

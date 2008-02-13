@@ -8,7 +8,7 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
-public class ManualMoneyTransferAction 
+public class ManualMoneyTransferAction
 extends WorkbenchPartSelectionAction
 {
 	public boolean calculateEnabled() {

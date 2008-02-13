@@ -27,11 +27,9 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
@@ -191,7 +189,7 @@ public interface ArticleEdit
 //	 * </p>
 //	 * @param articles Instances of {@link org.nightlabs.jfire.trade.ui.Article} that shall be removed.
 //	 * @return Returns all those articles, that are not known to this {@link ArticleEdit} and therefore
-//	 *		could not be removed. 
+//	 *		could not be removed.
 //	 *
 //	 * @throws IllegalStateException Thrown if one of the <code>articles</code> cannot be removed (and should
 //	 *		therefore never be passed, because {@link #canRemoveArticles(Collection)} is called before).

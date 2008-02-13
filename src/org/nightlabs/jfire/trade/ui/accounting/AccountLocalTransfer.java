@@ -37,8 +37,8 @@ import org.nightlabs.jfire.accounting.Account;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class AccountLocalTransfer 
-extends LocalObjectTransfer 
+public class AccountLocalTransfer
+extends LocalObjectTransfer
 {
 	public AccountLocalTransfer() {
 		super();
@@ -54,7 +54,7 @@ extends LocalObjectTransfer
 		else if (object instanceof Collection) {
 			for (Iterator iter = ((Collection)object).iterator(); iter.hasNext();) {
 				if (! (iter.next() instanceof Account))
-					return false;				
+					return false;
 			}
 			return true;
 		}

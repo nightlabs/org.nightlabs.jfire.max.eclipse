@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractPrintArticleContaine
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class PrintOfferAction 
-extends AbstractPrintArticleContainerAction 
+public class PrintOfferAction
+extends AbstractPrintArticleContainerAction
 {
 	public static final String ID = PrintOfferAction.class.getName();
 	

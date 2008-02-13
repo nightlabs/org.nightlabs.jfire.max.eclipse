@@ -50,7 +50,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-public class AccountSummaryAccountsEditComposite 
+public class AccountSummaryAccountsEditComposite
 extends XComposite
 //implements IAccountContainer
 {
@@ -78,7 +78,7 @@ extends XComposite
 			if (account instanceof SummaryAccount) {
 				summaryAccountsTable.addSummaryAccount((SummaryAccount)account);
 				if (dirtyStateManager != null)
-					dirtyStateManager.markDirty();				
+					dirtyStateManager.markDirty();
 			}
 		}
 		summaryAccountsTable.refresh();
@@ -92,16 +92,16 @@ extends XComposite
 		}
 	};
 	
-	public void removeAccount() 
+	public void removeAccount()
 	{
 		if (!summaryAccountsTable.getSelectedSummaryAccounts().isEmpty()) {
 			for (Iterator iter = summaryAccountsTable.getSelectedSummaryAccounts().iterator(); iter.hasNext();) {
 				SummaryAccount summaryAccount = (SummaryAccount) iter.next();
 				summaryAccountsTable.removeSummaryAccount(summaryAccount);
 			}
-			summaryAccountsTable.refresh();					
+			summaryAccountsTable.refresh();
 			if (dirtyStateManager != null)
-				dirtyStateManager.markDirty();					
+				dirtyStateManager.markDirty();
 		}
 	}
 	
@@ -126,11 +126,11 @@ extends XComposite
 	 * @param style
 	 * @param doSetLayoutData
 	 */
-	public AccountSummaryAccountsEditComposite(Composite parent, int style, 
-			IDirtyStateManager dirtyStateManager, boolean showButtons) 
+	public AccountSummaryAccountsEditComposite(Composite parent, int style,
+			IDirtyStateManager dirtyStateManager, boolean showButtons)
 	{
 //		super(parent, style, true);
-		super(parent, style);		
+		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
 		this.showButtons = showButtons;
 		Label label = new Label(this, SWT.WRAP);
@@ -153,7 +153,7 @@ extends XComposite
 			removeButton = new Button(buttonWrapper, SWT.PUSH);
 			removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSummaryAccountsEditComposite.removeButton.text")); //$NON-NLS-1$
 			removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			removeButton.addSelectionListener(removeButtonListener);			
+			removeButton.addSelectionListener(removeButtonListener);
 		}
 	}
 
@@ -178,7 +178,7 @@ extends XComposite
 //		try {
 //			account = AccountingUtil.getAccountingManager().getAccount(accountID, new String[] {
 //					FetchPlan.DEFAULT,
-//					Account.FETCH_GROUP_SUMMARY_ACCOUNTS, 
+//					Account.FETCH_GROUP_SUMMARY_ACCOUNTS,
 //					Account.FETCH_GROUP_NAME
 //			}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //		} catch (Exception e) {
@@ -186,10 +186,10 @@ extends XComposite
 //		}
 //		setAccount(account);
 //	}
-//	
+//
 //	/**
-//	 * @deprecated 
-//	 * @see org.nightlabs.base.ui.entitylist.EntityManager#save() 
+//	 * @deprecated
+//	 * @see org.nightlabs.base.ui.entitylist.EntityManager#save()
 //	 */
 //	public void save() throws ModuleException, RemoteException {
 //		if (currAccount == null)

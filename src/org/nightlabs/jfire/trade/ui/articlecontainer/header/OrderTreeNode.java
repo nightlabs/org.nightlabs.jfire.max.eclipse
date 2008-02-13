@@ -121,7 +121,7 @@ public class OrderTreeNode extends HeaderTreeNode
 //			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 
 			OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
-			Order o = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER, 
+			Order o = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 //			Order o = tm.getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
@@ -198,7 +198,7 @@ public class OrderTreeNode extends HeaderTreeNode
 			}
 	
 			if (!offerIDsToLoad.isEmpty()) {
-				final List<Offer> offers = new OfferDAO().getOffers(offerIDsToLoad, FETCH_GROUPS_OFFER, 
+				final List<Offer> offers = new OfferDAO().getOffers(offerIDsToLoad, FETCH_GROUPS_OFFER,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	
 				OrderID orderID = (OrderID) JDOHelper.getObjectId(getOrder());

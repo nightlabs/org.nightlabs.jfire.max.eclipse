@@ -86,7 +86,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 	public SelectInvoicePage()
 	{
 		super(SelectInvoicePage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.SelectInvoicePage.title")); //$NON-NLS-1$
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), 
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(),
 				SelectInvoicePage.class, "", ImageDimension._75x70, ImageFormat.png)); //$NON-NLS-1$
 	}
 

@@ -35,7 +35,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractEditArticleContainerAction 
+public abstract class AbstractEditArticleContainerAction
 extends AbstractArticleContainerAction
 implements IOverviewEditAction
 {
@@ -53,7 +53,7 @@ implements IOverviewEditAction
 	};
 	
 	@Override
-	public void run() 
+	public void run()
 	{
 		try {
 			IEditorInput input = getEditorInput();
@@ -68,22 +68,22 @@ implements IOverviewEditAction
 			// TODO: try to create a generic solution with getArticleContainerID and some new ArticleContainerDAO
 			if (generalEditorInput instanceof GeneralEditorInputDeliveryNote) {
 				DeliveryNoteID noteID = ((GeneralEditorInputDeliveryNote) generalEditorInput).getDeliveryNoteID();
-				DeliveryNote note = DeliveryNoteDAO.sharedInstance().getDeliveryNote(noteID, FETCH_GROUPS, 
+				DeliveryNote note = DeliveryNoteDAO.sharedInstance().getDeliveryNote(noteID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = note.getCustomerID();
 			} else if (generalEditorInput instanceof GeneralEditorInputInvoice) {
 				InvoiceID invoiceID = ((GeneralEditorInputInvoice) generalEditorInput).getInvoiceID();
-				Invoice invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS, 
+				Invoice invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = invoice.getCustomerID();
 			} else if (generalEditorInput instanceof GeneralEditorInputOffer) {
 				OfferID offerID = ((GeneralEditorInputOffer) generalEditorInput).getOfferID();
-				Offer offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS, 
+				Offer offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = offer.getCustomerID();
 			} else if (generalEditorInput instanceof GeneralEditorInputOrder) {
 				OrderID orderID = ((GeneralEditorInputOrder) generalEditorInput).getOrderID();
-				Order order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS, 
+				Order order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = order.getCustomerID();
 			} else {
@@ -91,9 +91,9 @@ implements IOverviewEditAction
 			}
 			
 			// TODO: Which object should be set as source?
-			// TODO: maybe rewrite Editor2PerspectiveRegistry to automatically send an event to the perspective 
-			// 		with the new input so that all elements that need to be updated if an editor is updated can 
-			// 		listen for that event. => This would unify the handling of new editors in a perspective. 
+			// TODO: maybe rewrite Editor2PerspectiveRegistry to automatically send an event to the perspective
+			// 		with the new input so that all elements that need to be updated if an editor is updated can
+			// 		listen for that event. => This would unify the handling of new editors in a perspective.
 			NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class);
 			SelectionManager.sharedInstance().notify(event);
 			

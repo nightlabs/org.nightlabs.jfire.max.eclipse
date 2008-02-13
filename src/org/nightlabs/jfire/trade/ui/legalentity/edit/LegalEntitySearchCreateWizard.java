@@ -37,7 +37,7 @@ public class LegalEntitySearchCreateWizard extends DynamicPathWizard {
 		Person selectedPerson = personSearchWizardPage.getSelectedPerson();
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			legalEntity = tradeManager.storePersonAsLegalEntity(selectedPerson, true, LegalEntityPersonEditor.FETCH_GROUPS_FULL_LE_DATA, 
+			legalEntity = tradeManager.storePersonAsLegalEntity(selectedPerson, true, LegalEntityPersonEditor.FETCH_GROUPS_FULL_LE_DATA,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -56,7 +56,7 @@ public class LegalEntitySearchCreateWizard extends DynamicPathWizard {
 	}
 	
 	/**
-	 * Opens the wizard and returns the {@link LegalEntity} 
+	 * Opens the wizard and returns the {@link LegalEntity}
 	 * the user found or created.
 	 * 
 	 * @param quickSearchText The text to search for instantly.

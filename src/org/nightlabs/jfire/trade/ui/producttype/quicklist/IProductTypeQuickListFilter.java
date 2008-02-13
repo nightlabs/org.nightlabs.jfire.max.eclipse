@@ -46,7 +46,7 @@ extends ISelectionProvider
 	 * Creates the Control that displays the filtered results
 	 * to the user.
 	 * 
-	 * @param parent The parent composite of the ResultViewer 
+	 * @param parent The parent composite of the ResultViewer
 	 * @return The created Control
 	 */
 	Control createResultViewerControl(Composite parent);
@@ -74,7 +74,7 @@ extends ISelectionProvider
 	void addSelectionChangedListener(ISelectionChangedListener listener);
 
 	/**
-	 * This method should be implemented. Please check in your implementation if 
+	 * This method should be implemented. Please check in your implementation if
 	 * teh selection contains a ProductType which is displayed by your implementation,
 	 * and if so select it
 	 *

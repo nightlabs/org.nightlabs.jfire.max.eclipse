@@ -28,7 +28,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DeliveryNoteEntryViewer  
+public class DeliveryNoteEntryViewer
 extends ArticleContainerEntryViewer
 {
 	public static final String ID = DeliveryNoteEntryViewer.class.getName();
@@ -74,19 +74,19 @@ extends ArticleContainerEntryViewer
 
 	public String getID() {
 		return ID;
-	}	
+	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
 //			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<DeliveryNoteID> deliveryNoteIDs = tradeManager.getDeliveryNoteIDs(queries);			
+//			Set<DeliveryNoteID> deliveryNoteIDs = tradeManager.getDeliveryNoteIDs(queries);
 //			return DeliveryNoteDAO.sharedInstance().getDeliveryNotes(deliveryNoteIDs,
-//					FETCH_GROUPS_DELIVERY_NOTES, 
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//					FETCH_GROUPS_DELIVERY_NOTES,
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //					monitor);
-			return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(queries, 
+			return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(queries,
 					FETCH_GROUPS_DELIVERY_NOTES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

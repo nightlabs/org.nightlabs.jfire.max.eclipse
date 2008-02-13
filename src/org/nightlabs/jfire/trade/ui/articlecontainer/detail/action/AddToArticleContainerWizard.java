@@ -41,7 +41,6 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;

@@ -66,6 +66,6 @@ public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreference
 
 	@Override
 	protected void updatePreferencePage() {
-		tariffOrderCfModComposite.loadTariffs(getConfigModule());		
+		tariffOrderCfModComposite.loadTariffs(getConfigModule());
 	}
 }

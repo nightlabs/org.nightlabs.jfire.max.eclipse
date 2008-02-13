@@ -168,7 +168,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 								return Collator.getInstance().compare(s1, s2);
 							}
 						};
-					}						
+					}
 					Collections.sort(tariffs, tariffComparator);
 
 					Display.getDefault().asyncExec(new Runnable() {
@@ -206,7 +206,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 
 	/**
 	 * Keeps track of selected tariffs already before they are loaded from the server. This way, it is not necessary to wait or pass a callback, if the
-	 * API client wants to select tariffs. 
+	 * API client wants to select tariffs.
 	 */
 	private Set<Tariff> selectedTariffs = new HashSet<Tariff>();
 
@@ -236,7 +236,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		if (selected >= tariffs.size()-1)
 			return;
 		
-		Collections.swap(tariffs, selected, selected + 1);		
+		Collections.swap(tariffs, selected, selected + 1);
 		refresh();
 	}
 

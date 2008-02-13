@@ -24,8 +24,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeSearchCriteriaComposite 
-extends XComposite 
+public class ProductTypeSearchCriteriaComposite
+extends XComposite
 {
 	/**
 	 * @param parent
@@ -48,7 +48,7 @@ extends XComposite
 		createComposite(this);
 	}
 
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 //		parent.setLayout(new RowLayout());
 		parent.setLayout(new GridLayout(3, true));
@@ -68,7 +68,7 @@ extends XComposite
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}				
+		}
 	};
 
 	private SelectionListener innerPriceConfigListener = new SelectionListener() {
@@ -77,7 +77,7 @@ extends XComposite
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}				
+		}
 	};
 	
 	private SelectionListener localAccountDelegateListener = new SelectionListener() {
@@ -86,7 +86,7 @@ extends XComposite
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}				
+		}
 	};
 
 	private SelectionListener ownerListener = new SelectionListener() {
@@ -95,21 +95,21 @@ extends XComposite
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}				
+		}
 	};
 
 	private SelectionListener productTypeGroupListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
-			// TODO: select productType and set selectedLocalAccountDelegateID	
+			// TODO: select productType and set selectedLocalAccountDelegateID
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}				
+		}
 	};
 	
 	private Button activeButtonState = null;
 	private XComboComposite<SaleAccessState> stateCombo = null;
-	protected void createSaleAccessComp(Composite parent) 
+	protected void createSaleAccessComp(Composite parent)
 	{
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.saleAccessGroup.text")); //$NON-NLS-1$
@@ -118,13 +118,13 @@ extends XComposite
 				
 		activeButtonState = new Button(group, SWT.CHECK);
 		activeButtonState.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.activeStateButton.text")); //$NON-NLS-1$
-		activeButtonState.addSelectionListener(new SelectionListener(){		
+		activeButtonState.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
-				stateCombo.setEnabled(((Button)e.getSource()).getSelection());				
-			}		
+				stateCombo.setEnabled(((Button)e.getSource()).getSelection());
+			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 
 		stateCombo = new XComboComposite<SaleAccessState>(group, SWT.READ_ONLY, new LabelProvider() {
@@ -137,17 +137,17 @@ extends XComposite
 			}
 		});
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		stateCombo.setLayoutData(data);				
+		stateCombo.setLayoutData(data);
 		stateCombo.addElements(CollectionUtil.array2ArrayList(SaleAccessState.values()));
-		stateCombo.selectElement(selectedSaleAccessState);		
-		stateCombo.setEnabled(false);		
+		stateCombo.selectElement(selectedSaleAccessState);
+		stateCombo.setEnabled(false);
 		stateCombo.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				selectedSaleAccessState = stateCombo.getSelectedElement();
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 	}
 
@@ -155,36 +155,36 @@ extends XComposite
 		PUBLISHED, CONFIRMED, SALEABLE, CLOSED
 	}
 
-	protected void createTextComposite(Composite parent, String groupTitle, SelectionListener selectionListener) 
+	protected void createTextComposite(Composite parent, String groupTitle, SelectionListener selectionListener)
 	{
 		final Group group = new Group(parent, SWT.NONE);
 		group.setText(groupTitle);
-		group.setLayout(new GridLayout(2, false));	
+		group.setLayout(new GridLayout(2, false));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Button activeButton = new Button(group, SWT.CHECK);
 		GridData buttonData = new GridData(GridData.FILL_HORIZONTAL);
-		buttonData.horizontalSpan = 2;		
+		buttonData.horizontalSpan = 2;
 		activeButton.setLayoutData(buttonData);
 		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.activeButton.text"));		  //$NON-NLS-1$
-		Text textField = new Text(group, SWT.BORDER);		
+		Text textField = new Text(group, SWT.BORDER);
 		final Text text = textField;
 		text.setEnabled(false);
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(selectionListener);
 		final Button browseButton = new Button(group, SWT.NONE);
 		browseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.browseButton.text")); //$NON-NLS-1$
 		browseButton.addSelectionListener(selectionListener);
 		browseButton.setEnabled(false);
 		
-		activeButton.addSelectionListener(new SelectionListener(){		
+		activeButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				text.setEnabled(((Button)e.getSource()).getSelection());
 				browseButton.setEnabled(((Button)e.getSource()).getSelection());
-			}		
+			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
-		});		
+			}
+		});
 	}
 
 	private DeliveryConfigurationID selectedDeliveryConfigurationID = null;

@@ -46,7 +46,7 @@ class DeliveryQueueBrowsingComposite extends FadeableComposite {
 			public String getText(Object element) {
 				if (element instanceof DeliveryQueue) {
 					DeliveryQueue printQueue = (DeliveryQueue) element;
-					return printQueue.getName().getText();					
+					return printQueue.getName().getText();
 				}
 				return super.getText(element);
 			}
@@ -58,7 +58,7 @@ class DeliveryQueueBrowsingComposite extends FadeableComposite {
 		});
 		deliveryTable = new DeliveryTable(this, SWT.NONE);
 		
- 		refreshDeliveryQueues(); 		
+ 		refreshDeliveryQueues();
 	}
 	
 	private DeliveryQueueConfigModule getDeliveryQueueConfigModule () {
@@ -121,7 +121,7 @@ class DeliveryQueueBrowsingComposite extends FadeableComposite {
 						}
 						
 						setFaded(false);
-						refreshing = false;						
+						refreshing = false;
 					}
 				});
 				return Status.OK_STATUS;

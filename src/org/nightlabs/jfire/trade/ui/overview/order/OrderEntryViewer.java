@@ -31,7 +31,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OrderEntryViewer 
+public class OrderEntryViewer
 extends ArticleContainerEntryViewer
 {
 	public static final String ID = OrderEntryViewer.class.getName();
@@ -51,7 +51,7 @@ extends ArticleContainerEntryViewer
 	
 	@Override
 	public AbstractTableComposite createListComposite(Composite parent) {
-		list = new OrderListComposite(parent, SWT.NONE); 
+		list = new OrderListComposite(parent, SWT.NONE);
 		return list;
 	}
 	
@@ -74,19 +74,19 @@ extends ArticleContainerEntryViewer
 
 	public String getID() {
 		return ID;
-	}	
+	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();		
+			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			Set<OrderID> orderIDs = tradeManager.getOrderIDs(queries);
 			return OrderDAO.sharedInstance().getOrders(orderIDs,
-					FETCH_GROUPS_ORDERS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					FETCH_GROUPS_ORDERS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}

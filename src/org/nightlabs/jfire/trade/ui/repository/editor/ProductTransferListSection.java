@@ -50,7 +50,7 @@ extends RestorableSectionPart
 			{
 				Display.getDefault().asyncExec(new Runnable()
 				{
-					@SuppressWarnings("unchecked") 
+					@SuppressWarnings("unchecked")
 					public void run()
 					{
 						productTransferListChanged((List<ProductTransfer>) modifyEvent.getNewObject());

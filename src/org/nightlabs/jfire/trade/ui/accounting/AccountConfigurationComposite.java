@@ -36,11 +36,11 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 
 /**
- * @author Alexander Bieber <alex[AT]nightlabs[DOT]de> 
+ * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  */
-public class AccountConfigurationComposite 
+public class AccountConfigurationComposite
 extends XComposite
-{	
+{
 	private StackLayout stackLayout;
 	private XComposite normalAccountWrapper;
 	private AccountSummaryAccountsEditComposite normalSummaryAccountsComp;
@@ -65,7 +65,7 @@ extends XComposite
 	 * @param doSetLayoutData
 	 */
 	public AccountConfigurationComposite(Composite parent, int style,
-			IDirtyStateManager dirtyStateManager, boolean showButtons) 
+			IDirtyStateManager dirtyStateManager, boolean showButtons)
 	{
 		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
@@ -115,7 +115,7 @@ extends XComposite
 	 * 
 	 * @return the currently edited {@link Account}
 	 */
-	public Account getAccount() 
+	public Account getAccount()
 	{
 		if (!editingSummaryAccount) {
 			return normalSummaryAccountsComp.getAccount();
@@ -123,8 +123,8 @@ extends XComposite
 		else {
 //			summarySummedAccountsComp.setSummaryAccount((SummaryAccount)account);
 			return summarySummaryAccountsComp.getAccount();
-		}		
-	}	
+		}
+	}
 	
 //	public IAccountContainer getAccountContainer() {
 //		if (!editingSummaryAccount)

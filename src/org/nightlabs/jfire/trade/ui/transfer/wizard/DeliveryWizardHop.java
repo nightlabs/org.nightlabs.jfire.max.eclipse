@@ -90,7 +90,7 @@ public class DeliveryWizardHop extends WizardHop
 		if (!this.single)
 			throw new IllegalStateException("This DeliveryWizardHop has been created with multiple deliveries. Calling this method is thus not possible."); //$NON-NLS-1$
 		
-		return deliveryList.get(0);			
+		return deliveryList.get(0);
 	}
 	
 	public List<Delivery> getDeliveryList() {

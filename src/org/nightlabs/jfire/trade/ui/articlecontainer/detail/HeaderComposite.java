@@ -68,7 +68,7 @@ public class HeaderComposite extends XComposite
 	}
 
 //	protected Label label;
-//	public void setHeaderText(String text) 
+//	public void setHeaderText(String text)
 //	{
 //		label.setText(" "+text);
 //		label.setFont(font);
@@ -91,7 +91,7 @@ public class HeaderComposite extends XComposite
 	}
 
 	/**
-	 * This method adds context menus recursively. 
+	 * This method adds context menus recursively.
 	 */
 	protected void createArticleContainerContextMenu()
 	{
@@ -119,7 +119,7 @@ public class HeaderComposite extends XComposite
 		}
 	}
 
-	public void refresh() 
+	public void refresh()
 	{
 		
 	}

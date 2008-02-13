@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 
 /**
@@ -63,7 +61,7 @@ public interface SegmentEditFactory
 	String getName();
 
 	/**
-	 * @return the segmentContext that was previously set by {@link #setSegmentContext(String)} 
+	 * @return the segmentContext that was previously set by {@link #setSegmentContext(String)}
 	 */
 	String getSegmentContext();
 

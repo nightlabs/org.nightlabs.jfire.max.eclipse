@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.deliverynote.action.ShowDeliveryNot
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DeliveryNoteEntryEditorActionBarContributor 
-//extends OverviewEntryEditorActionBarContributor 
+public class DeliveryNoteEntryEditorActionBarContributor
+//extends OverviewEntryEditorActionBarContributor
 extends AbstractArticleContainerActionBarContributor
 {
 

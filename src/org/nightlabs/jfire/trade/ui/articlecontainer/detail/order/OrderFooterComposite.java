@@ -41,20 +41,20 @@ extends FooterComposite
 		super(parent, generalEditorComposite);
 	}
 
-//	public void refresh() 
-//	{		
+//	public void refresh()
+//	{
 //		long priceAmount = 0;
-//		if (order.getOffers() != null) {			
+//		if (order.getOffers() != null) {
 //			for (Offer offer : order.getOffers()) {
 //				if (offer.getArticles() != null) {
 //					for (Article article : offer.getArticles()) {
 //						ArticlePrice articlePrice = article.getPrice();
-//						priceAmount =+ articlePrice.getAmount(); 
-//					}					
+//						priceAmount =+ articlePrice.getAmount();
+//					}
 //				}
-//			}					
+//			}
 //		}
-//		String price = NumberFormatter.formatCurrency(priceAmount , order.getCurrency());		
-//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);				
+//		String price = NumberFormatter.formatCurrency(priceAmount , order.getCurrency());
+//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);
 //	}
 }

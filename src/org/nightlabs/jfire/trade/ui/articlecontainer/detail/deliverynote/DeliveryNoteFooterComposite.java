@@ -41,7 +41,7 @@ extends FooterComposite
 		super(parent, generalEditorComposite);
 	}
 
-//	public void refresh() 
+//	public void refresh()
 //	{
 //		long priceAmount = 0;
 //		Currency currency = null;
@@ -49,8 +49,8 @@ extends FooterComposite
 //			ArticlePrice articlePrice = article.getPrice();
 //			priceAmount =+ articlePrice.getAmount();
 //			currency = article.getCurrency();
-//		}		
-//		String price = NumberFormatter.formatCurrency(priceAmount, currency);		
-//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);				
+//		}
+//		String price = NumberFormatter.formatCurrency(priceAmount, currency);
+//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);
 //	}
 }

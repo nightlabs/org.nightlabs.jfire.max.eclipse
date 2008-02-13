@@ -192,7 +192,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					try {						
+					try {
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticlesWizard.processTransfersJobMonitor.task.name"), 3); //$NON-NLS-1$
 						monitor.worked(1);
 						if (invoiceIDs == null) {

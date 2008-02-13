@@ -41,7 +41,7 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	
 	public void showProductTypeDetail(ProductTypeID productTypeID) {
 		Class pTypeClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
-		IProductTypeDetailView detailView = detailViews.get(pTypeClass);		
+		IProductTypeDetailView detailView = detailViews.get(pTypeClass);
 		if (detailView == null) {
 			detailView = ProductTypeDetailViewRegistry.sharedInstance().getProductTypeDetailView(pTypeClass);
 			detailViews.put(pTypeClass, detailView);

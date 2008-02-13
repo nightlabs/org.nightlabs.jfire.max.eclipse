@@ -6,7 +6,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 /**
  * Implementations of this interface provide GUI (a {@link Composite})
  * to display details for the given {@link ProductTypeID}
- *  
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */

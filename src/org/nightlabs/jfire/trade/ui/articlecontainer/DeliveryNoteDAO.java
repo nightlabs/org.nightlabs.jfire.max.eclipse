@@ -33,7 +33,7 @@ public class DeliveryNoteDAO
 	}
 
 	@Override
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Implement
 	protected Collection<DeliveryNote> retrieveJDOObjects(Set<DeliveryNoteID> deliveryNoteIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -53,7 +53,7 @@ public class DeliveryNoteDAO
 		return getJDOObjects(null, deliveryNoteIDs, fetchGroups, maxFetchDepth, monitor);
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	public List<DeliveryNote> getDeliveryNotes(
 			AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

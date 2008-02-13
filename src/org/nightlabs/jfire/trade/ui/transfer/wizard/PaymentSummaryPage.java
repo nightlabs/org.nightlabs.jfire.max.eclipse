@@ -67,7 +67,7 @@ extends WizardHopPage
 		paymentText.setText(sb.toString());
 	}
 
-	public static PaymentSummaryPage getPaymentSummaryPage(IWizard wizard) 
+	public static PaymentSummaryPage getPaymentSummaryPage(IWizard wizard)
 	{
 		IWizardPage page = wizard.getStartingPage();
 		while (page != null) {

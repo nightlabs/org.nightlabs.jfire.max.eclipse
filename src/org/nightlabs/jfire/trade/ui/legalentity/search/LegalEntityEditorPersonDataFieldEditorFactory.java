@@ -34,7 +34,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class LegalEntityEditorPersonDataFieldEditorFactory 
+public class LegalEntityEditorPersonDataFieldEditorFactory
 extends AbstractDataFieldEditorFactory<TextDataField> {
 
 	/**

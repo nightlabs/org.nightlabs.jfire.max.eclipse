@@ -26,7 +26,7 @@ public class OfferDAO
 	}
 
 	@Override
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Implement
 	protected Collection<Offer> retrieveJDOObjects(Set<OfferID> offerIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

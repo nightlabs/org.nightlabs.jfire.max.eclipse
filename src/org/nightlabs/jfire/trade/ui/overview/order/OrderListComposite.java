@@ -20,7 +20,7 @@ import org.nightlabs.l10n.DateFormatter;
  *
  */
 public class OrderListComposite
-extends AbstractArticleContainerListComposite 
+extends AbstractArticleContainerListComposite
 {
 	public OrderListComposite(Composite parent, int style) {
 		super(parent, style);
@@ -66,25 +66,25 @@ extends AbstractArticleContainerListComposite
 	}
 
 	@Override
-	protected String getColumnText(Object element, int columnIndex) 
+	protected String getColumnText(Object element, int columnIndex)
 	{
-		int columnCount = getTable().getColumnCount();		
-		if (element instanceof DeliveryNote) 
+		int columnCount = getTable().getColumnCount();
+		if (element instanceof DeliveryNote)
 		{
 			Order order = (Order) element;
 
 			if (columnIndex == (columnCount-3)) {
 				if (order.getChangeDT() != null)
-					return DateFormatter.formatDateShort(order.getChangeDT(), false);				
-			}						
+					return DateFormatter.formatDateShort(order.getChangeDT(), false);
+			}
 			
 			if (columnIndex == (columnCount-2)) {
 				if (order.getChangeUser() != null)
 					return order.getChangeUser().getName();
-			}			
+			}
 			
 			if (columnIndex == (columnCount-1))
-				return order.getOrderIDPrefix();			
+				return order.getOrderIDPrefix();
 		}
 		return super.getColumnText(element, columnIndex);
 	}
@@ -101,7 +101,7 @@ extends AbstractArticleContainerListComposite
 		switch (additionalColumnIndex) {
 			case 0:
 				if (order.getChangeDT() != null)
-					return DateFormatter.formatDateShort(order.getChangeDT(), false);								
+					return DateFormatter.formatDateShort(order.getChangeDT(), false);
 			break;
 			case 1:
 				if (order.getChangeUser() != null)

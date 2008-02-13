@@ -122,7 +122,7 @@ extends Action implements IArticleContainerAction
 	}
 	
 	/**
-	 * Returns the {@link ArticleContainer} the Editor this actions was contributed to is associated with. 
+	 * Returns the {@link ArticleContainer} the Editor this actions was contributed to is associated with.
 	 * @return The {@link ArticleContainer} the Editor this actions was contributed to is associated with or null, if there is currently no editor active.
 	 */
 	public ArticleContainer getArticleContainer() {

@@ -78,14 +78,14 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 			return null;
 		}
 		
-		public void addSummaryAccount(SummaryAccount summaryAccount) 
+		public void addSummaryAccount(SummaryAccount summaryAccount)
 		{
 			// take summaryAccount form DAO to fetch with the right fetchGroups
 			// and make copy to avoid putting of wrong summaryAccount into cache
 			summaryAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
-					(AnchorID)JDOHelper.getObjectId(summaryAccount), 
-					AbstractAccountPageController.FETCH_GROUPS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					(AnchorID)JDOHelper.getObjectId(summaryAccount),
+					AbstractAccountPageController.FETCH_GROUPS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
 			summaryAccount = Util.cloneSerializable(summaryAccount);
 			account.addSummaryAccount(summaryAccount);
@@ -93,14 +93,14 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 		
 		public void removeSummaryAccount(SummaryAccount summaryAccount) {
 			// take summaryAccount form DAO to fetch with the right fetchGroups
-			// and make copy to avoid putting of wrong summaryAccount into cache			
+			// and make copy to avoid putting of wrong summaryAccount into cache
 			summaryAccount = (SummaryAccount) AccountDAO.sharedInstance().getAccount(
-					(AnchorID)JDOHelper.getObjectId(summaryAccount), 
-					AbstractAccountPageController.FETCH_GROUPS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					(AnchorID)JDOHelper.getObjectId(summaryAccount),
+					AbstractAccountPageController.FETCH_GROUPS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
-			summaryAccount = Util.cloneSerializable(summaryAccount);			
-			account.removeSummaryAccount(summaryAccount);			
+			summaryAccount = Util.cloneSerializable(summaryAccount);
+			account.removeSummaryAccount(summaryAccount);
 		}
 		
 		public Collection<SummaryAccount> getSummaryAccounts() {
@@ -218,6 +218,6 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 			SummaryAccount summaryAccount = (SummaryAccount) iter.next();
 			result.add(JDOHelper.getObjectId(summaryAccount));
 		}
-		return result;	
+		return result;
 	}
 }

@@ -32,9 +32,9 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class InvoiceEntryViewer 
+public class InvoiceEntryViewer
 extends ArticleContainerEntryViewer
-{	
+{
 	public static final String ID = InvoiceEntryViewer.class.getName();
 	
 	public static final String[] FETCH_GROUPS_INVOICES = new String[] {
@@ -76,19 +76,19 @@ extends ArticleContainerEntryViewer
 		
 	public String getID() {
 		return ID;
-	}		
+	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
 //			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //			Set<InvoiceID> invoiceIDs = tradeManager.getInvoiceIDs(queries);
 			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(queries);			
-			return InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, 
-					FETCH_GROUPS_INVOICES, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(queries);
+			return InvoiceDAO.sharedInstance().getInvoices(invoiceIDs,
+					FETCH_GROUPS_INVOICES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

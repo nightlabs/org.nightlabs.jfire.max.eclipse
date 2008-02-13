@@ -15,8 +15,8 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposi
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReceptionNoteListComposite 
-extends AbstractArticleContainerListComposite 
+public class ReceptionNoteListComposite
+extends AbstractArticleContainerListComposite
 {
 	public ReceptionNoteListComposite(Composite parent, int style) {
 		super(parent, style);

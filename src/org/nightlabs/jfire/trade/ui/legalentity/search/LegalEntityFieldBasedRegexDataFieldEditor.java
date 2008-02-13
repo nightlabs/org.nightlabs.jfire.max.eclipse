@@ -21,7 +21,7 @@ import org.nightlabs.jfire.prop.datafield.RegexDataField;
 public class LegalEntityFieldBasedRegexDataFieldEditor extends
 		RegexDataFieldEditor {
 
-	private TextDataFieldComposite<RegexDataField> textDataFieldComposite; 
+	private TextDataFieldComposite<RegexDataField> textDataFieldComposite;
 	
 	/**
 	 * 

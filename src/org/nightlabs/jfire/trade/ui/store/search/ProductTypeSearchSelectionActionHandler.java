@@ -7,8 +7,8 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ProductTypeSearchSelectionActionHandler 
-//extends AbstractSelectionZoneActionHandler 
+public class ProductTypeSearchSelectionActionHandler
+//extends AbstractSelectionZoneActionHandler
 extends AbstractJDOSelectionZoneActionHandler
 {
 	public ProductTypeSearchSelectionActionHandler() {

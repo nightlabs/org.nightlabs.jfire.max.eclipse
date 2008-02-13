@@ -61,7 +61,7 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 		
 		public Object[] getElements(Object inputElement) {
 			if (! (inputElement instanceof LegalEntityViewConfigModule))
-				return null;			
+				return null;
 			LegalEntityViewConfigModule cfMod = (LegalEntityViewConfigModule)inputElement;
 			if ((cfMod != null) && (cfMod != inputCfMod)) {
 				cfModFields.clear();
@@ -77,7 +77,7 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 		
-		public void add(String structFieldOID) 
+		public void add(String structFieldOID)
 		{
 			cfModFields.add(structFieldOID);
 		}
@@ -120,7 +120,7 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 			try {
 				fieldID = new StructFieldID((String)element);
 				
-			} catch (Exception e) {				
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 			IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(Person.class, LegalEntity.PROPERTY_SET_SCOPE, new NullProgressMonitor());
@@ -160,23 +160,23 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 	
 	public void moveSelectedUp() {
 		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
-		if ( selection.size() != 1) 
+		if ( selection.size() != 1)
 			return;
 		((ContentProvider)tableViewer.getContentProvider()).moveUp((String)selection.getFirstElement());
 	}
 	
 	public void moveSelectedDown() {
 		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
-		if ( selection.size() != 1) 
+		if ( selection.size() != 1)
 			return;
-		((ContentProvider)tableViewer.getContentProvider()).moveDown((String)selection.getFirstElement());	
+		((ContentProvider)tableViewer.getContentProvider()).moveDown((String)selection.getFirstElement());
 	}
 	
 	public void removeSelected() {
 		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
-		if ( selection.size() != 1) 
+		if ( selection.size() != 1)
 			return;
-		((ContentProvider)tableViewer.getContentProvider()).remove((String)selection.getFirstElement());	
+		((ContentProvider)tableViewer.getContentProvider()).remove((String)selection.getFirstElement());
 	}
 	
 	public List getStructFields() {

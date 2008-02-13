@@ -35,7 +35,7 @@ extends AbstractTableComposite<ArticleContainer>
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) 
+	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableLayout tableLayout = new TableLayout();
 		TableColumn c;
@@ -97,11 +97,11 @@ extends AbstractTableComposite<ArticleContainer>
 			public String getColumnText(Object element, int columnIndex) {
 				return AbstractArticleContainerListComposite.this.getColumnText(element, columnIndex);
 			}
-		});	
+		});
 	}
 
-	protected String getCreateUserName(ArticleContainer articleContainer) 
-	{ 
+	protected String getCreateUserName(ArticleContainer articleContainer)
+	{
 		if (articleContainer.getCreateUser() != null) {
 			return articleContainer.getCreateUser().getName();
 		}
@@ -109,7 +109,7 @@ extends AbstractTableComposite<ArticleContainer>
 		return ""; //$NON-NLS-1$
 	}
 	
-	protected String getStateName(Statable statable) 
+	protected String getStateName(Statable statable)
 	{
 		// I think we need to look for the newest State in both, statableLocal and statable! Marco.
 		StatableLocal statableLocal = statable.getStatableLocal();
@@ -128,7 +128,7 @@ extends AbstractTableComposite<ArticleContainer>
 		return ""; //$NON-NLS-1$
 	}
 
-	protected Image getColumnImage(Object element, int columnIndex) 
+	protected Image getColumnImage(Object element, int columnIndex)
 	{
 		int firstAdditionalColumnIndex = 8;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
@@ -141,7 +141,7 @@ extends AbstractTableComposite<ArticleContainer>
 		return getAdditionalColumnImage(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
 	}
 
-	protected String getColumnText(Object element, int columnIndex) 
+	protected String getColumnText(Object element, int columnIndex)
 	{
 		if (element instanceof ArticleContainer) {
 			ArticleContainer articleContainer = (ArticleContainer) element;
@@ -149,10 +149,10 @@ extends AbstractTableComposite<ArticleContainer>
 				case 0:
 					return articleContainer.getOrganisationID();
 				case 1:
-					return articleContainer.getArticleContainerIDPrefix();					
+					return articleContainer.getArticleContainerIDPrefix();
 				case 2:
 					return articleContainer.getArticleContainerIDAsString();
-//					return ""+articleContainer.getArticleContainerID();					
+//					return ""+articleContainer.getArticleContainerID();
 				case 3:
 					return articleContainer.getCustomer().getPerson().getDisplayName();
 				case 4:
@@ -163,14 +163,14 @@ extends AbstractTableComposite<ArticleContainer>
 					return getCreateUserName(articleContainer);
 				case 7:
 					return String.valueOf(articleContainer.getArticleCount());
-			} 
+			}
 		}
 		int firstAdditionalColumnIndex = 8;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
 			firstAdditionalColumnIndex = 9;
 
 		if (element instanceof Statable && columnIndex == 8) {
-			Statable statable = (Statable) element;		
+			Statable statable = (Statable) element;
 			return getStateName(statable);
 		}
 		if (columnIndex == 0)

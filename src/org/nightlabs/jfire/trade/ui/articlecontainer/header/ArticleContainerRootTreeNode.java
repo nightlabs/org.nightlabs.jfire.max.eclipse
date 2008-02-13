@@ -38,7 +38,6 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;

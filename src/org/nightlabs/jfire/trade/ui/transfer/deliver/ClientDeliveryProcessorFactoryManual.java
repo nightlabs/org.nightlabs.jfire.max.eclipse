@@ -30,7 +30,7 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
  * This implementation of
  * {@link org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory}
  * represents a manual delivery (hand-to-hand-delivery).
- * Hence, it is a dummy, which doesn't perform any action. 
+ * Hence, it is a dummy, which doesn't perform any action.
  *
  * @author Marco Schulze - marco at nightlabs dot de
  */

@@ -10,7 +10,7 @@ import org.nightlabs.jfire.store.ProductType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GenericProductTypeSearchResultProviderFactory  
+public class GenericProductTypeSearchResultProviderFactory
 extends AbstractSearchResultProviderFactory
 {
 	public GenericProductTypeSearchResultProviderFactory() {

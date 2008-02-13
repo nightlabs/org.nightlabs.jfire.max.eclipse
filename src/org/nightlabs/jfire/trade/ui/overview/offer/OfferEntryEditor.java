@@ -6,10 +6,10 @@ import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OfferEntryEditor 
-extends OverviewEntryEditor 
+public class OfferEntryEditor
+extends OverviewEntryEditor
 {
-	public static final String EDITOR_ID = OfferEntryEditor.class.getName(); 
+	public static final String EDITOR_ID = OfferEntryEditor.class.getName();
 	
 	public OfferEntryEditor() {
 		

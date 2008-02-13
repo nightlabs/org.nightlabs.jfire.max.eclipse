@@ -35,7 +35,6 @@ import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 
 

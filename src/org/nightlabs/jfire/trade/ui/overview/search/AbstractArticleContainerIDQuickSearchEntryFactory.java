@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public abstract class AbstractArticleContainerIDQuickSearchEntryFactory 
-extends AbstractQuickSearchEntryFactory 
+public abstract class AbstractArticleContainerIDQuickSearchEntryFactory
+extends AbstractQuickSearchEntryFactory
 {
 	@Override
 	public String getName() {

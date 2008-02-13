@@ -104,7 +104,7 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 	
 	protected void setStructFieldConfiguration() {
 		if (!doSetConfiguration)
-			return;		
+			return;
 
 		LegalEntityViewConfigModule cfMod = (LegalEntityViewConfigModule)ConfigUtil.getUserCfMod(
 				LegalEntityViewConfigModule.class,

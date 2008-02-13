@@ -55,11 +55,11 @@ public class FooterComposite extends XComposite
 
 	public FooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
 	{
-		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);		
+		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
 		this.generalEditorComposite = generalEditorComposite;
 //		this.articleContainer = articleContainer;
 		
-		setBackground(DEFAULT_BG_COLOR);	
+		setBackground(DEFAULT_BG_COLOR);
 		
 //		setLayout(new GridLayout(2, false));
 //		spacerLabel = new Label(this, SWT.NONE);
@@ -67,7 +67,7 @@ public class FooterComposite extends XComposite
 //		spacerLabel.setBackground(bgColor);
 
 		setLayout(new GridLayout(1, true));
-		label = new Label(this, SWT.RIGHT);		
+		label = new Label(this, SWT.RIGHT);
 		label.setBackground(bgColor);
 //		label.setText("                                                                    ");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL));
@@ -83,7 +83,7 @@ public class FooterComposite extends XComposite
 		
 //	private Label spacerLabel;
 	private Label label;
-	public void setFooterText(String text) 
+	public void setFooterText(String text)
 	{
 		if (label.isDisposed())
 			return;
@@ -114,12 +114,12 @@ public class FooterComposite extends XComposite
 	 * the default implementation shows the total price of all articles in the articleContainer
 	 */
 //	public abstract void refresh();
-	public void refresh() 
+	public void refresh()
 	{
 		long priceAmount = 0;
 		Currency currency = null;
 
-		for (Article article : generalEditorComposite.getArticles()) { 
+		for (Article article : generalEditorComposite.getArticles()) {
 			ArticlePrice articlePrice = article.getPrice();
 			priceAmount += articlePrice.getAmount();
 			if (currency == null)
@@ -132,12 +132,12 @@ public class FooterComposite extends XComposite
 //				logger.error("The articleID is "+article.getArticleID());
 //				setFooterText(TradePlugin.getResourceString("FooterComposite.errorMessage.differentCurrencies"));
 //				return;
-//			}				
+//			}
 		}
 		if (currency != null) {
-			String price = NumberFormatter.formatCurrency(priceAmount , currency);		
+			String price = NumberFormatter.formatCurrency(priceAmount , currency);
 			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), price));							 //$NON-NLS-1$
-		} 
+		}
 		else {
 			logger.info("currency == null!"); //$NON-NLS-1$
 			setFooterText(""); //$NON-NLS-1$

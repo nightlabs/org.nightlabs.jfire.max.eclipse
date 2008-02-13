@@ -55,7 +55,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-public class AccountSearchDialog 
+public class AccountSearchDialog
 extends CenteredDialog
 {
 //	private String anchorTypeID;
@@ -72,9 +72,9 @@ extends CenteredDialog
 
 	public AccountSearchDialog() {
 		super(RCPUtil.getActiveWorkbenchShell());
-	}	
+	}
 	
-	protected void applyAccountTypeID() 
+	protected void applyAccountTypeID()
 	{
 		AccountQuery query = new AccountQuery();
 //		query.setAnchorTypeID(anchorTypeID);
@@ -86,9 +86,9 @@ extends CenteredDialog
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final Collection<Account> accounts = AccountDAO.sharedInstance().getAccountsForQueries(
-						queries, 
-						AccountEntryViewer.FETCH_GROUPS_ACCOUNTS, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						queries,
+						AccountEntryViewer.FETCH_GROUPS_ACCOUNTS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor);
 				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
@@ -103,8 +103,8 @@ extends CenteredDialog
 	
 	private AccountEntryViewer accountEntryViewer;
 	@Override
-	protected Control createDialogArea(Composite parent) 
-	{		
+	protected Control createDialogArea(Composite parent)
+	{
 		accountEntryViewer = new AccountEntryViewer(
 				new AccountEntryFactory().createEntry());
 		Composite comp = accountEntryViewer.createComposite(parent);
@@ -114,9 +114,9 @@ extends CenteredDialog
 	}
 		
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
-		selectedAccounts = accountEntryViewer.getListComposite().getSelectedElements(); 
+		selectedAccounts = accountEntryViewer.getListComposite().getSelectedElements();
 		super.okPressed();
 	}
 	
@@ -133,7 +133,7 @@ extends CenteredDialog
 		Collection accountSet = searchAccounts(accountTypeID);
 		if (!accountSet.isEmpty())
 			return (Account)accountSet.iterator().next();
-		else 
+		else
 			return null;
 	}
 	
@@ -147,7 +147,7 @@ extends CenteredDialog
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
 			return dialog.getSelectedAccounts();
-		}		
+		}
 		return accountSet;
 	}
 	

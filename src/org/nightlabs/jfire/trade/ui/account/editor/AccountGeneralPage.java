@@ -51,7 +51,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link PersonPreferencesPage}. 
+	 * new instances of {@link PersonPreferencesPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -69,7 +69,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 	 * page extension system.
 	 * 
 	 * @param editor The editor for which to create this
-	 * 		form page. 
+	 * 		form page.
 	 */
 	public AccountGeneralPage(FormEditor editor) {
 		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountGeneralPage.title")); //$NON-NLS-1$
@@ -77,7 +77,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 
 	@Override
 	protected void addSections(Composite parent) {
-		accountGeneralSection = new AccountGeneralSection(this, parent); 
+		accountGeneralSection = new AccountGeneralSection(this, parent);
 		getManagedForm().addPart(accountGeneralSection);
 	}
 	
@@ -103,7 +103,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 //				switchToContent();
 			}
 		});
-	}		
+	}
 	
 	@Override
 	protected String getPageFormTitle() {

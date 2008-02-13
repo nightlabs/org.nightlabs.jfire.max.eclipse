@@ -17,12 +17,12 @@ import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 
 /**
  * This is the Composite which is used by the {@link GenericProductTypeDetailView}
- *  
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GenericProductTypeDetailViewComposite 
-extends XComposite 
+public class GenericProductTypeDetailViewComposite
+extends XComposite
 {
 
 	public GenericProductTypeDetailViewComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
@@ -37,17 +37,17 @@ extends XComposite
 	
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
 		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
-		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS}; 
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS};
 	
 	public void setProductTypeID(final ProductTypeID productTypeID) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.detail.GenericProductTypeDetailViewComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(productTypeID, 
+				final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(productTypeID,
 						FETCH_GROUP_PRODUCT_TYPE_DETAIL, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						productTypeName.setText(productType.getName().getText());		
+						productTypeName.setText(productType.getName().getText());
 					}
 				});
 				return Status.OK_STATUS;
@@ -56,8 +56,8 @@ extends XComposite
 		loadJob.schedule();
 	}
 	
-	private ReadOnlyLabeledText productTypeName;	
-	protected void createComposite(Composite parent) 
+	private ReadOnlyLabeledText productTypeName;
+	protected void createComposite(Composite parent)
 	{
 		productTypeName = new ReadOnlyLabeledText(parent, Messages.getString("org.nightlabs.jfire.trade.ui.detail.GenericProductTypeDetailViewComposite.productTypeName.caption")); //$NON-NLS-1$
 	}

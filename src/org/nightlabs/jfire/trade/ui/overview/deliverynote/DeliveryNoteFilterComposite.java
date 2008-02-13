@@ -8,8 +8,8 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DeliveryNoteFilterComposite 
-extends AbstractArticleContainerFilterComposite 
+public class DeliveryNoteFilterComposite
+extends AbstractArticleContainerFilterComposite
 {
 	/**
 	 * @param parent
@@ -22,6 +22,6 @@ extends AbstractArticleContainerFilterComposite
 	@Override
 	protected Class getQueryClass() {
 		return DeliveryNote.class;
-	}	
+	}
 			
 }

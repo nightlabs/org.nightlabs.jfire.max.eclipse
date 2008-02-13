@@ -10,17 +10,17 @@ import org.nightlabs.base.ui.util.RCPUtil;
  *
  */
 public class TradeOverviewPerspective
-implements IPerspectiveFactory 
+implements IPerspectiveFactory
 {
 	public static final String ID_PERSPECTIVE = TradeOverviewPerspective.class.getName();
 	
-	public void createInitialLayout(IPageLayout layout) 
+	public void createInitialLayout(IPageLayout layout)
 	{
 		layout.setEditorAreaVisible(true);
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f,	IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		left.addView(TradeOverviewView.VIEW_ID);
 		RCPUtil.addAllPerspectiveShortcuts(layout);
-		layout.addShowViewShortcut(TradeOverviewView.VIEW_ID);		
+		layout.addShowViewShortcut(TradeOverviewView.VIEW_ID);
 	}
 	
 }

@@ -50,7 +50,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class LegalEntityEditorWizard extends DynamicPathWizard {
 
-	public static final String WIZARD_EDITOR_DOMAIN = LegalEntityEditorWizard.class.getName(); 
+	public static final String WIZARD_EDITOR_DOMAIN = LegalEntityEditorWizard.class.getName();
 	
 	private LegalEntity legalEntity;
 	private Person lePerson;
@@ -62,7 +62,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		setNeedsProgressMonitor(false);
 		try {
 			Login.getLogin();
-		} catch (LoginException e1) {			
+		} catch (LoginException e1) {
 			throw new IllegalStateException("Could not get Login"); //$NON-NLS-1$
 		}
 		
@@ -72,7 +72,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 //				PersonManager pManager = PersonManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				lePerson = new Person(Login.getLogin().getOrganisationID(), IDGenerator.nextID(PropertySet.class));
 			} catch (Exception e) {
-				throw new RuntimeException(e);				
+				throw new RuntimeException(e);
 			}
 		}
 		else

@@ -137,7 +137,7 @@ public class ChangeTariffPage
 				return Status.OK_STATUS;
 			}
 		};
-		loadArticlesJob.setPriority(Job.INTERACTIVE);
+		loadArticlesJob.setPriority(org.eclipse.core.runtime.jobs.Job.INTERACTIVE);
 		loadArticlesJob.schedule();
 
 		return tariffList;

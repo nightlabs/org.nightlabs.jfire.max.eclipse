@@ -131,7 +131,7 @@ extends IDynamicPathWizard, TransferWizard
 //	 * @param newAmount The new amount to be paid.
 //	 */
 //	void setAmount(long newAmount);
-//	
+//
 //	/**
 //	 * @return Returns the maxAmount.
 //	 */

@@ -51,7 +51,7 @@ public interface SegmentTypeProductTypeDependentFactory
 
 	/**
 	 * This method is called by the SegmentEditFactoryRegistry while processing
-	 * the declaration. It passes 
+	 * the declaration. It passes
 	 * the name which is declared for the extension in the plugin.xml.
 	 *
 	 * @param name The name as declared for the extension in the plugin.xml.
@@ -64,7 +64,7 @@ public interface SegmentTypeProductTypeDependentFactory
 	String getName();
 
 	/**
-	 * This method is called by the SegmentEditFactoryRegistry, which passes 
+	 * This method is called by the SegmentEditFactoryRegistry, which passes
 	 * the segmentContext that is declared for the extension in the plugin.xml.
 	 * <p>
 	 * The registration of a <tt>SegmentEditFactory</tt> is dependent on two parameters:
@@ -80,16 +80,16 @@ public interface SegmentTypeProductTypeDependentFactory
 	void setSegmentContext(String segmentContext);
 
 	/**
-	 * @return the segmentContext that was previously set by {@link #setSegmentContext(String)} 
+	 * @return the segmentContext that was previously set by {@link #setSegmentContext(String)}
 	 */
 	String getSegmentContext();
 
 	/**
-	 * This method is called by the SegmentEditFactoryRegistry, which passes 
+	 * This method is called by the SegmentEditFactoryRegistry, which passes
 	 * the segmentTypeClass that is declared for the extension in the plugin.xml.
 	 * <p>
 	 * The registration of a <tt>SegmentEditFactory</tt> is dependent on two parameters:
-	 * The segmentContext and the class of the SegmentType.  
+	 * The segmentContext and the class of the SegmentType.
 	 *
 	 * @param segmentTypeClass The segmentTypeClass declared in the plugin.xml.
 	 */
@@ -101,11 +101,11 @@ public interface SegmentTypeProductTypeDependentFactory
 	String getSegmentTypeClass();
 
 	/**
-	 * This method is called by the SegmentEditFactoryRegistry, which passes 
+	 * This method is called by the SegmentEditFactoryRegistry, which passes
 	 * the productTypeClass that is declared for the extension in the plugin.xml.
 	 * <p>
 	 * The registration of a <tt>ArticleEditFactory</tt> is dependent on the class
-	 * of the ProductType and within the scope of a {@link SegmentEditFactory}.  
+	 * of the ProductType and within the scope of a {@link SegmentEditFactory}.
 	 *
 	 * @param productTypeClass The productTypeClass declared in the plugin.xml.
 	 */

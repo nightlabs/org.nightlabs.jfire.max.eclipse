@@ -46,8 +46,8 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
  * An editor page section to display manual money transfer components.
  * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
  */
-public class MoneyTransferFilterSection 
-extends RestorableSectionPart 
+public class MoneyTransferFilterSection
+extends RestorableSectionPart
 {
 	private MoneyTransferFilterComposite moneyTransferSearchComposite;
 	private MoneyTransferPageController controller;
@@ -56,7 +56,7 @@ extends RestorableSectionPart
 	public MoneyTransferFilterSection(FormPage page, Composite parent, MoneyTransferPageController _controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = _controller;
-		getSection().setText("Filter Money Transfer"); 
+		getSection().setText("Filter Money Transfer");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 

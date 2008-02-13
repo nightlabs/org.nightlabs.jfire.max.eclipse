@@ -25,8 +25,8 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class RepositoryListComposite 
-extends AbstractTableComposite 
+public class RepositoryListComposite
+extends AbstractTableComposite
 {
 
 	public RepositoryListComposite(Composite parent, int style) {
@@ -51,7 +51,7 @@ extends AbstractTableComposite
 	}
 
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table) 
+	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.idColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.repositoryNameTableColumn.text")); //$NON-NLS-1$
@@ -59,7 +59,7 @@ extends AbstractTableComposite
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.repositoryTypeNameTableColumn.text")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {
 				20, 20, 20, 20
-				}));		
+				}));
 	}
 
 	@Override
@@ -71,11 +71,11 @@ extends AbstractTableComposite
 	class RepositoryListLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof Repository) {
 				Repository repository = (Repository) element;
-				switch (columnIndex) 
+				switch (columnIndex)
 				{
 					case(0):
 						return repository.getAnchorID();
@@ -84,7 +84,7 @@ extends AbstractTableComposite
 							return repository.getName().getText();
 					case(2):
 						if (repository.getOwner() != null && repository.getOwner().getPerson() != null)
-							return repository.getOwner().getPerson().getDisplayName(); 
+							return repository.getOwner().getPerson().getDisplayName();
 						break;
 					case(3):
 						return repository.getRepositoryType().getName().getText();
@@ -93,10 +93,10 @@ extends AbstractTableComposite
 				}
 			}
 			return null;
-		}		
+		}
 	}
 	
-//	public static String getAnchorTypeIDName(String anchorTypeID) 
+//	public static String getAnchorTypeIDName(String anchorTypeID)
 //	{
 //		if (anchorTypeID.equals(Repository.ANCHOR_TYPE_ID_HOME)) {
 //			return Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositoryListComposite.homeRepositoryAnchorTypeIdName"); //$NON-NLS-1$

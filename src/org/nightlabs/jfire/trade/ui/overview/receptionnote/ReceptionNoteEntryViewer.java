@@ -25,8 +25,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ReceptionNoteEntryViewer 
-extends ArticleContainerEntryViewer 
+public class ReceptionNoteEntryViewer
+extends ArticleContainerEntryViewer
 {
 	
 	public ReceptionNoteEntryViewer(Entry entry) {
@@ -47,7 +47,7 @@ extends ArticleContainerEntryViewer
 	@Override
 	public AbstractTableComposite createListComposite(Composite parent) {
 		return new ReceptionNoteListComposite(parent, SWT.NONE);
-	}	
+	}
 	
 	public static final String[] FETCH_GROUPS_RECEPTION_NOTES = new String[] {
 		FetchPlan.DEFAULT,
@@ -55,16 +55,16 @@ extends ArticleContainerEntryViewer
 	};
 	
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();		
+			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			Set<ReceptionNoteID> receptionNoteIDs = tradeManager.getOrderIDs(queries);
 			return ReceptionNoteDAO.sharedInstance().getReceptionNotes(receptionNoteIDs,
-					FETCH_GROUPS_RECEPTION_NOTES, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					FETCH_GROUPS_RECEPTION_NOTES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}

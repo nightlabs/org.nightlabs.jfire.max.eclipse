@@ -41,14 +41,14 @@ extends FooterComposite
 		super(parent, generalEditorComposite);
 	}
 
-//	public void refresh() 
+//	public void refresh()
 //	{
 //		long priceAmount = 0;
 //		for (Article article : offer.getArticles()) {
 //			ArticlePrice articlePrice = article.getPrice();
-//			priceAmount =+ articlePrice.getAmount(); 
-//		}		
-//		String price = NumberFormatter.formatCurrency(priceAmount , offer.getCurrency());		
-//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);					
+//			priceAmount =+ articlePrice.getAmount();
+//		}
+//		String price = NumberFormatter.formatCurrency(priceAmount , offer.getCurrency());
+//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);
 //	}
 }

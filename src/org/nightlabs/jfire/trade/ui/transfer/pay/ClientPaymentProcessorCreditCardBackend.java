@@ -151,7 +151,7 @@ public class ClientPaymentProcessorCreditCardBackend extends AbstractClientPayme
 //						// TODO the person should store a special year and month field for expiry - not simply text.
 //						String expiryYearStr = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYYEAR)).getIntValue();
 //						String expiryMonthStr = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH)).getText();
-//						
+//
 //						try {
 //							expiryYear = Integer.parseInt(expiryYearStr);
 //						} catch (NumberFormatException x) {

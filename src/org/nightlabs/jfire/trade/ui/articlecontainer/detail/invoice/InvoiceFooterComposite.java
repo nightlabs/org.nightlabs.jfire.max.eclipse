@@ -44,10 +44,10 @@ extends FooterComposite
 		super(parent, generalEditorComposite);
 	}
 
-//	public void refresh() 
+//	public void refresh()
 //	{
-//		String price = NumberFormatter.formatCurrency(invoice.getPrice().getAmount(), invoice.getCurrency());		
-//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);				
+//		String price = NumberFormatter.formatCurrency(invoice.getPrice().getAmount(), invoice.getCurrency());
+//		setFooterText(TradePlugin.getResourceString("FooterComposite.totalPrice")+ " " + price);
 //	}
 	@Override
 	public void refresh()

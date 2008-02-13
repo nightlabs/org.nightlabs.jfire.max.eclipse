@@ -68,7 +68,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * A View for a configurable quick-list of sellable products.
- *  
+ * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -78,7 +78,7 @@ implements ISelectionProvider
 {
 	public static final String ID_VIEW = ProductTypeQuickListView.class.getName();
 
-	private XComposite wrapper;	 
+	private XComposite wrapper;
 	private List<Boolean> filterSearched = new LinkedList<Boolean>();
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
 
@@ -122,7 +122,7 @@ implements ISelectionProvider
 			tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 			for (IProductTypeQuickListFilter filter : filters) {
 				filter.addSelectionChangedListener(filterSelectionListener);
-				TabItem filterTabItem = new TabItem(tabFolder, SWT.BORDER);				
+				TabItem filterTabItem = new TabItem(tabFolder, SWT.BORDER);
 				filterTabItem.setText(filter.getDisplayName());
 				if (filter.createResultViewerControl(tabFolder) != null) {
 					filterTabItem.setControl(filter.createResultViewerControl(tabFolder));
@@ -132,11 +132,11 @@ implements ISelectionProvider
 			}
 			tabFolder.addSelectionListener(tabSelectionListener);
 		}
-		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, 
+		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE,
 				ProductType.class, selectionListener);
 		wrapper.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE, 
+				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						ProductType.class, selectionListener);
 			}
 		});
@@ -177,11 +177,11 @@ implements ISelectionProvider
 	// To listen for changes from outside
 	private NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
-			if (!notificationEvent.getSource().equals(ProductTypeQuickListView.this)) { 
+			if (!notificationEvent.getSource().equals(ProductTypeQuickListView.this)) {
 				Set subjects = notificationEvent.getSubjects();
 				setSelection(new StructuredSelection(subjects));
 			}
-		}	
+		}
 	};
 
 	private SelectionListener tabSelectionListener = new SelectionListener() {
@@ -224,7 +224,7 @@ implements ISelectionProvider
 	public void refresh(boolean force) {
 		final IProductTypeQuickListFilter filter = getSelectedFilter();
 		if (filter != null) {
-			if ((!didSelectedFilterSearch()) || force) {	
+			if ((!didSelectedFilterSearch()) || force) {
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
@@ -288,7 +288,7 @@ implements ISelectionProvider
 	{
 //		throw new UnsupportedOperationException("NYI");
 		if (getSelectedFilter() != null) {
-			// TODO: not only set selection for selected filter but all, and display this one 
+			// TODO: not only set selection for selected filter but all, and display this one
 			getSelectedFilter().setSelection(selection);
 		}
 	}

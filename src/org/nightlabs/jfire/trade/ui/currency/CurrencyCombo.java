@@ -67,7 +67,7 @@ implements ISelectionProvider
 	
 	public CurrencyCombo(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		setLayoutData( new GridData(GridData.FILL_HORIZONTAL));		
+		setLayoutData( new GridData(GridData.FILL_HORIZONTAL));
 		combo = new Combo(this, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -89,7 +89,7 @@ implements ISelectionProvider
 
 		org.nightlabs.base.ui.job.Job loadCurrenciesJob = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.loadCurrenciesJob.name")) { //$NON-NLS-1$
 			@Override
-			@SuppressWarnings("unchecked") 
+			@SuppressWarnings("unchecked")
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 //					final List<Currency> currencyList = new ArrayList<Currency>(
@@ -164,7 +164,7 @@ implements ISelectionProvider
 		int i = 0;
 		for (Currency currency : currencies) {
 			if (currency.getCurrencyID().equals(currencyID)) {
-				idx = i; 
+				idx = i;
 				break;
 			}
 			++i;
@@ -211,7 +211,7 @@ implements ISelectionProvider
 	}
 
 	/**
-	 * @param selection An instance of {@link IStructuredSelection} which is either empty or contains an instance of either {@link Currency} or {@link CurrencyID}. 
+	 * @param selection An instance of {@link IStructuredSelection} which is either empty or contains an instance of either {@link Currency} or {@link CurrencyID}.
 	 */
 	public void setSelection(ISelection selection)
 	{

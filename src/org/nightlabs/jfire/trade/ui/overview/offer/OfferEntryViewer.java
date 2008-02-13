@@ -32,12 +32,12 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class OfferEntryViewer 
+public class OfferEntryViewer
 extends ArticleContainerEntryViewer
 {
 	public static final String ID = OfferEntryViewer.class.getName();
 	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
-		FetchPlan.DEFAULT, 
+		FetchPlan.DEFAULT,
 //		Offer.FETCH_GROUP_ARTICLES,
 //		Offer.FETCH_GROUP_CREATE_USER,
 //		Offer.FETCH_GROUP_PRICE,
@@ -58,7 +58,7 @@ extends ArticleContainerEntryViewer
 	
 	@Override
 	public AbstractTableComposite createListComposite(Composite parent) {
-		list = new OfferListComposite(parent, SWT.NONE); 
+		list = new OfferListComposite(parent, SWT.NONE);
 		return list;
 	}
 
@@ -84,16 +84,16 @@ extends ArticleContainerEntryViewer
 	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor) 
+	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();		
+			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			Set<OfferID> offerIDs = tradeManager.getOfferIDs(queries);
 			return OfferDAO.sharedInstance().getOffers(offerIDs,
-					FETCH_GROUPS_OFFERS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					FETCH_GROUPS_OFFERS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-		} 
+		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}

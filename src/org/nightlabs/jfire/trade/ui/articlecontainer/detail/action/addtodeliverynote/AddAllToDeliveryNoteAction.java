@@ -52,7 +52,7 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 			}
 			return !allDelivered;
 		}
-		return false;		
+		return false;
 	}
 
 	@Override

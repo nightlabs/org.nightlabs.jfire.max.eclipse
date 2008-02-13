@@ -29,9 +29,7 @@ package org.nightlabs.jfire.trade.ui.transfer.pay;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
-import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentException;
@@ -48,14 +46,14 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 public interface ClientPaymentProcessor
 {
 	/**
-	 * This method is called once before the wizard page is created via {@link #createPaymentWizardPage()}. 
+	 * This method is called once before the wizard page is created via {@link #createPaymentWizardPage()}.
 	 *
 	 * @param clientPaymentProcessorFactory Points back to the {@link ClientPaymentProcessorFactory} that created this processor.
 	 */
 	void setClientPaymentProcessorFactory(ClientPaymentProcessorFactory clientPaymentProcessorFactory);
 
 	/**
-	 * This method is called once before the wizard page is created via {@link #createPaymentWizardPage()}. 
+	 * This method is called once before the wizard page is created via {@link #createPaymentWizardPage()}.
 	 *
 	 * @param partnerID Points to the <tt>LegalEntity</tt> which is about to pay or about to receive a payment.
 	 */
@@ -80,7 +78,7 @@ public interface ClientPaymentProcessor
 	void setPaymentEntryPage(IPaymentEntryPage paymentEntryPage);
 
 
-	IPaymentEntryPage getPaymentEntryPage(); 
+	IPaymentEntryPage getPaymentEntryPage();
 
 	long getAmount();
 	ClientPaymentProcessorFactory getClientPaymentProcessorFactory();

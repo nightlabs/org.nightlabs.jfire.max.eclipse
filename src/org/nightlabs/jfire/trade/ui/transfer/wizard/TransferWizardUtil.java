@@ -86,7 +86,7 @@ public class TransferWizardUtil
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
 		return AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//		
+//
 //		if (accountingManager == null)
 //			accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //
@@ -97,7 +97,7 @@ public class TransferWizardUtil
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
 		return StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//		
+//
 //		if (storeManager == null)
 //			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //
@@ -538,7 +538,7 @@ public class TransferWizardUtil
 		for (Iterator<?> it1 = list1.iterator(), it2 = list2.iterator(); it1.hasNext(); )
 			list.add(new Pair<T1, T2>((T1) it1.next(), (T2) it2.next()));
 		
-		return list;		
+		return list;
 	}
 
 }

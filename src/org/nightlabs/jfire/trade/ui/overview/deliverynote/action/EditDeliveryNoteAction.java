@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainer
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class EditDeliveryNoteAction 
-extends AbstractEditArticleContainerAction 
+public class EditDeliveryNoteAction
+extends AbstractEditArticleContainerAction
 {
 	public String getEditorID() {
 		return GeneralEditor.ID_EDITOR;

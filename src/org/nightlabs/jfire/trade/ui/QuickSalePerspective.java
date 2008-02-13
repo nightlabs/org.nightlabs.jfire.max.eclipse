@@ -33,8 +33,8 @@ import org.nightlabs.notification.NotificationListener;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * 
  */
-public class QuickSalePerspective 
-implements IPerspectiveFactory 
+public class QuickSalePerspective
+implements IPerspectiveFactory
 {
 	/**
 	 * LOG4J logger used by this class
@@ -43,7 +43,7 @@ implements IPerspectiveFactory
 
 	public static final String ID_PERSPECTIVE = QuickSalePerspective.class.getName();
 
-	public QuickSalePerspective() 
+	public QuickSalePerspective()
 	{
 		try {
 			Login.getLogin();
@@ -51,10 +51,10 @@ implements IPerspectiveFactory
 			logger.error("login failed", e); //$NON-NLS-1$
 		}
 		checkPerspectiveListenerAdded();
-		checkSelectionListenerAdded();		
+		checkSelectionListenerAdded();
 	}
 
-	public void createInitialLayout(IPageLayout layout) 
+	public void createInitialLayout(IPageLayout layout)
 	{
 		layout.setEditorAreaVisible(true);
 		layout.addView(ProductTypeDetailView.ID_VIEW, IPageLayout.TOP,
@@ -67,20 +67,20 @@ implements IPerspectiveFactory
 		layout.addShowViewShortcut(ProductTypeQuickListView.ID_VIEW);
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 
-		GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput(); 
+		GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput();
 		checkOrderOpen(ID_PERSPECTIVE);
 		checkPerspectiveListenerAdded();
 		checkSelectionListenerAdded();
 	}
 
-	public static void openEditor(final GeneralEditorInput editorInput, final boolean editor2Perspective) 
+	public static void openEditor(final GeneralEditorInput editorInput, final boolean editor2Perspective)
 	{
-			Display.getDefault().asyncExec(new Runnable(){				
+			Display.getDefault().asyncExec(new Runnable(){
 					public void run() {
-						try {						
+						try {
 							if (editor2Perspective) {
 								Editor2PerspectiveRegistry.sharedInstance().openEditor(
-										editorInput, GeneralQuickSaleEditor.ID_EDITOR);				
+										editorInput, GeneralQuickSaleEditor.ID_EDITOR);
 							}
 							else {
 								if (RCPUtil.getActiveWorkbenchPage() != null)
@@ -89,9 +89,9 @@ implements IPerspectiveFactory
 							}
 						} catch (Exception x) {
 							throw new RuntimeException(x);
-						} 					
+						}
 						logger.info("openEditor "+editorInput);								 //$NON-NLS-1$
-					}			
+					}
 			});
 	}
 
@@ -110,8 +110,8 @@ implements IPerspectiveFactory
 		}
 	}
 	
-	private static IPerspectiveListener4 quickSalePerspectiveListener = new PerspectiveAdapter() 
-	{		
+	private static IPerspectiveListener4 quickSalePerspectiveListener = new PerspectiveAdapter()
+	{
 		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
 			logger.info("perspectiveActivated "+perspective.getId()); //$NON-NLS-1$
@@ -124,16 +124,16 @@ implements IPerspectiveFactory
 		}
 	};
 			
-	public static synchronized void checkOrderOpen(String perspectiveID) 
+	public static synchronized void checkOrderOpen(String perspectiveID)
 	{
-		if (perspectiveID != null && perspectiveID.equals(QuickSalePerspective.ID_PERSPECTIVE)) 
-		{			
+		if (perspectiveID != null && perspectiveID.equals(QuickSalePerspective.ID_PERSPECTIVE))
+		{
 			final IWorkbenchPage page = RCPUtil.getActiveWorkbenchPage();
 			// open editor if necessary
-			if (page != null && page.getActiveEditor() == null && 
-					page.getEditorReferences().length == 0) 
+			if (page != null && page.getActiveEditor() == null &&
+					page.getEditorReferences().length == 0)
 			{
-				GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput(); 
+				GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput();
 				if (input != null) {
 					openEditor(input, false);
 				}
@@ -147,7 +147,7 @@ implements IPerspectiveFactory
 							IEditorInput activeInput = null;
 							if (page.getActiveEditor() != null) {
 								activeInput = page.getActiveEditor().getEditorInput();
-							}				
+							}
 							for (int i=0; i<references.length; i++) {
 								IEditorReference reference = references[i];
 								String editorID = reference.getId();
@@ -161,20 +161,20 @@ implements IPerspectiveFactory
 									}
 								} catch (PartInitException e) {
 									logger.error(e);
-								}						
+								}
 							}
-						}						
-					}				
+						}
+					}
 				});
-			}				
-		}			
+			}
+		}
 	}
 	private static boolean selectionListenerAdded = false;
 	public static void checkSelectionListenerAdded() {
 		if (!selectionListenerAdded) {
 			try {
-				SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, 
-						ProductType.class, selectionListener);	
+				SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE,
+						ProductType.class, selectionListener);
 				selectionListenerAdded = true;
 				logger.info("selectionListenerAdded added"); //$NON-NLS-1$
 			} catch (Exception e) {
@@ -183,14 +183,14 @@ implements IPerspectiveFactory
 				return;
 			}
 		}
-	}	
+	}
 	
 	private static NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
-			if (notificationEvent.getSource() instanceof ProductTypeQuickListView) { 
+			if (notificationEvent.getSource() instanceof ProductTypeQuickListView) {
 				Set subjects = notificationEvent.getSubjects();
 				checkOrderOpen(RCPUtil.getActivePerspectiveID());
 			}
-		}	
+		}
 	};
 }

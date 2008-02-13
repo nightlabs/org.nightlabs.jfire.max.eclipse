@@ -37,7 +37,7 @@ extends EntityEditor
 		super.init(site, input);
 		loadName();
 
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Repository.class, repositoryChangedListener);	
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Repository.class, repositoryChangedListener);
 	}
 
 	@Override
@@ -96,6 +96,6 @@ extends EntityEditor
 		};
 		loadNameJob = job;
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
-		job.schedule();	
+		job.schedule();
 	}
 }
