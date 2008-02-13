@@ -61,8 +61,8 @@ extends Thread
 			
 //	/**
 //	 * returns the Layout File of the ProductID
-//	 * 
-//	 * @param productID the ProductID 
+//	 *
+//	 * @param productID the ProductID
 //	 * @return the Layout File of the ProductID
 //	 */
 //	public abstract File getLayoutFile(ProductID productID);
@@ -136,7 +136,7 @@ extends Thread
 	@Override
 	public boolean isInterrupted() {
 		return interrupted || super.isInterrupted();
-	}	
+	}
 	
 	protected boolean isArticleIDsToProcessEmpty()
 	{
@@ -161,17 +161,17 @@ extends Thread
 	protected Map<ProductID, Map<ScriptRegistryItemID, Object>> getScriptingResult()
 	{
 		return scriptingResult;
-	}	
+	}
 	
 //	/**
 //	 * returns the corresponding {@link ProductID} for the given {@link ArticleID}
-//	 * 
-//	 * @param articleID the {@link ArticleID} 
-//	 * @param throwExceptionIfNotFound determines if a Exception should be thrown if no 
+//	 *
+//	 * @param articleID the {@link ArticleID}
+//	 * @param throwExceptionIfNotFound determines if a Exception should be thrown if no
 //	 * product could be found for the given articleID
 //	 * @return the corresponding {@link ProductID} for the given {@link ArticleID}
 //	 */
-//	public abstract ProductID getProductID(ArticleID articleID, boolean throwExceptionIfNotFound);	
+//	public abstract ProductID getProductID(ArticleID articleID, boolean throwExceptionIfNotFound);
 	protected ProductID getProductID(ArticleID articleID, boolean throwExceptionIfNotFound)
 	{
 		ProductID productID;
@@ -183,9 +183,9 @@ extends Thread
 			throw new IllegalArgumentException("No artcileID found for " + articleID); //$NON-NLS-1$
 
 		return productID;
-	}	
+	}
 	
-	private Object layoutMapForArticleIDSetMutex = new Object();	
+	private Object layoutMapForArticleIDSetMutex = new Object();
 	private LayoutMapForArticleIDSet layoutMapForArticleIDSet;
 	
 	private File cacheDir;
@@ -303,7 +303,7 @@ extends Thread
 
 						// store the files
 						for (ILayout layout : ilayouts) {
-							ObjectID layoutID = (ObjectID) JDOHelper.getObjectId(layout); 
+							ObjectID layoutID = (ObjectID) JDOHelper.getObjectId(layout);
 							File layoutFile = getLayoutFileByLayoutID(layoutID);
 
 							if (logger.isDebugEnabled())

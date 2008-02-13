@@ -25,8 +25,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractClientDeliveryProcessorOSPrint 
-extends AbstractClientDeliveryProcessorPrint 
+public abstract class AbstractClientDeliveryProcessorOSPrint
+extends AbstractClientDeliveryProcessorPrint
 {
 	private static final Logger logger = Logger.getLogger(AbstractClientDeliveryProcessorOSPrint.class);
 	
@@ -46,14 +46,14 @@ extends AbstractClientDeliveryProcessorPrint
 			throws DeliveryException
 	{
 		if (logger.isDebugEnabled()) {
-			long printDuration = System.currentTimeMillis() - printStart;			
+			long printDuration = System.currentTimeMillis() - printStart;
 			logger.debug("complete print took "+printDuration+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return null;
 	}
 
-	protected PageFormat pageFormat;	
-	protected PrinterJob configurePrinter() 
+	protected PageFormat pageFormat;
+	protected PrinterJob configurePrinter()
 	{
 		long start = System.currentTimeMillis();
 		AWTPrinter awtPrinter = getAWTPrinter();
@@ -88,25 +88,25 @@ extends AbstractClientDeliveryProcessorPrint
 			logger.debug("printJob.defaultPage(...) took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		return printJob;
-	}	
+	}
 	
-	protected AWTPrinter getAWTPrinter() 
+	protected AWTPrinter getAWTPrinter()
 	{
 		PrinterInterface printer;
 		try {
 			printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
 					org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
-					getPrinterUseCase() 
+					getPrinterUseCase()
 				);
 		} catch (PrinterException e) {
 			throw new RuntimeException(e);
 		}
 		return (AWTPrinter) printer;
-	}		
+	}
 	
 	protected abstract String getPrinterUseCase();
 	
-	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents) 
+	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
 	{
 		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
 		return new DrawComponentPrintable(dcs, PrintConstant.FIT_PAGE);

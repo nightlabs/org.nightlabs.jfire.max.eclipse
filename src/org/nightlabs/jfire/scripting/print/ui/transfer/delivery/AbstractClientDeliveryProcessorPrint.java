@@ -21,8 +21,8 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProce
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * 
  */
-public abstract class AbstractClientDeliveryProcessorPrint 
-extends AbstractClientDeliveryProcessor 
+public abstract class AbstractClientDeliveryProcessorPrint
+extends AbstractClientDeliveryProcessor
 {
 	private static final Logger logger = Logger.getLogger(AbstractClientDeliveryProcessorPrint.class);
 
@@ -227,15 +227,15 @@ extends AbstractClientDeliveryProcessor
 	protected abstract ScriptRootDrawComponent getScriptRootDrawComponent(File file);
 	
 	/**
-	 * This method returns the preferred count of documents that should 
+	 * This method returns the preferred count of documents that should
 	 * be passed to {@link #printDocuments(List, boolean)} at once.
 	 * <p>
 	 * If this returns a value greater than 0 the loop fetching the document data
 	 * will wait until the preferred count of documents could be fetched or no
-	 * more documents are in the queue. 
+	 * more documents are in the queue.
 	 * <p>
 	 * The implementation in {@link AbstractClientDeliveryProcessorPrint} returns <code>0</code>.
-	 *  
+	 * 
 	 * @return The preferred cound of documents that should be passed to {@link #printDocuments(List, boolean)}
 	 */
 	protected int getPreferredDocumentCount() {
