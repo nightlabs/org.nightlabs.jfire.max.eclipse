@@ -325,7 +325,7 @@ extends FadeableComposite
 				// Sort the tariffs according to the config module
 					String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
 					TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
-							fetchGroups, -1, new NullProgressMonitor());					
+							fetchGroups, -1, new NullProgressMonitor());
 					Collections.sort(tariffs, cfMod.getTariffComparator());
 					// Sorting done
 

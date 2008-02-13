@@ -9,8 +9,8 @@ import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchCompos
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DynamicProductTypeSearchComposite 
-extends AbstractProductTypeSearchComposite 
+public class DynamicProductTypeSearchComposite
+extends AbstractProductTypeSearchComposite
 {
 	/**
 	 * @param parent

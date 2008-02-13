@@ -62,7 +62,7 @@ extends AbstractProductTypeQuickListFilter
 					final Collection<DynamicProductType> dynamicProductTypes = DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
 							ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {			
+						public void run() {
 							dynamicProductTypeTable.setInput(dynamicProductTypes);
 						}
 					});

@@ -8,8 +8,8 @@ import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DynamicProductTypeSearchResultProviderFactory 
-extends AbstractSearchResultProviderFactory 
+public class DynamicProductTypeSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory
 {
 	public DynamicProductTypeSearchResultProviderFactory() {
 	}
