@@ -22,5 +22,5 @@ public interface ScriptRegistryListener {
 	 * This method is likely to be called from other threads
 	 * than the SWT GUI thread.
 	 */
-	public void scriptRegistryChanged();	
+	public void scriptRegistryChanged();
 }

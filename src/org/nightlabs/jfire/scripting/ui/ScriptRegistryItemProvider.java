@@ -54,27 +54,27 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**
  * Provides accesses to cached versions of
- * <code>ReportRegistryItem</code>s and holds a representation 
+ * <code>ReportRegistryItem</code>s and holds a representation
  * of the ReportRegistry structure. Register a {@link ScriptRegistryListener}
- * to be notified on changes to the structure. 
+ * to be notified on changes to the structure.
  *
- *  
+ * 
  * TODO: Implement correctly and move to server project
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ScriptRegistryItemProvider 
-extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem> 
+public class ScriptRegistryItemProvider
+extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 {
 
 	/**
 	 * LOG4J logger used by this class
 	 */
-	private static final Logger logger = Logger.getLogger(ScriptRegistryItemProvider.class); 
+	private static final Logger logger = Logger.getLogger(ScriptRegistryItemProvider.class);
 
 	/**
-	 * holds all top level nodes by their type 
+	 * holds all top level nodes by their type
 	 */
 	private Map<String,ScriptRegistryItemNode> topLevelNodesByType;
 	
@@ -86,7 +86,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	/**
 	 * A Map of all nodes in the structure with their IDs
 	 */
-	private Map<ScriptRegistryItemID, ScriptRegistryItemNode> allNodes; 
+	private Map<ScriptRegistryItemID, ScriptRegistryItemNode> allNodes;
 	
 	/**
 	 * The controller for the registry, changes when the structrue was changed
@@ -124,11 +124,11 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	}
 		
 //	/**
-//	 * Updates the structrue tree and notifies all listeners 
+//	 * Updates the structrue tree and notifies all listeners
 //	 * when the registry changed on the server.
 //	 */
 //	// TODO replace NotificationListener with JDOLifeCycleListener
-//	private NotificationListener registryChangeListener = new NotificationListenerWorkerThreadAsync() 
+//	private NotificationListener registryChangeListener = new NotificationListenerWorkerThreadAsync()
 //	{
 //		public void notify(NotificationEvent evt) {
 //			logger.info("registryChangeListener got notified with event "+evt);
@@ -143,13 +143,13 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 //					JDOManager jdoManager = null;
 //					try {
 //						jdoManager = JDOManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//					} catch (Exception e) {						
+//					} catch (Exception e) {
 //						throw new RuntimeException(e);
 //					}
 //					JDOObjectSyncResult syncResult = null;
 //					try {
 //						syncResult = jdoManager.syncJDOObjectChanges(
-//								ScriptRegistry.SINGLETON_ID, 
+//								ScriptRegistry.SINGLETON_ID,
 //								registryController.getControllerVersion(),
 //								null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 //							);
@@ -160,7 +160,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 //					boolean changed = false;
 //					for (JDOObjectChangeEvent event : syncResult.getChangeEvents()) {
 ////						if (event instanceof ScriptRegistryItemChangeEvent) {
-////							ScriptRegistryItemChangeEvent registryEvent = (ScriptRegistryItemChangeEvent)event;							
+////							ScriptRegistryItemChangeEvent registryEvent = (ScriptRegistryItemChangeEvent)event;
 ////							if (ScriptRegistryItemChangeEvent.EVENT_TYPE_ITEM_ADDED.equals(registryEvent.getEventType())) {
 ////								changed = true;
 ////								ScriptRegistryItemNode node = null;
@@ -195,14 +195,14 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 //						notifyRegistryListeners();
 //				}
 //			}
-//		}		
-//	};	
+//		}
+//	};
 
 	/**
 	 * Initially loads the structure from the server and puts all items into cache
 	 *
 	 */
-	private void loadAllRegistryItems() 
+	private void loadAllRegistryItems()
 	{
 		Login login = null;
 		try {
@@ -237,7 +237,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 			insertItemIDs(node, allItemIDs);
 		}
 		
-//		// Get the registry controller keeping 
+//		// Get the registry controller keeping
 //		// track of all changes
 //		JDOManager jdoManager = null;
 //		try {
@@ -265,14 +265,14 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 			ScriptRegistryItem item = (ScriptRegistryItem) iter.next();
 			Cache.sharedInstance().put(null, item, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		}
-	}	
+	}
 	
 	private void insertItemIDs(ScriptRegistryItemNode node, List<ScriptRegistryItemID> itemIDs) {
 		itemIDs.add(node.getRegistryItemID());
 		for (ScriptRegistryItemNode childNode : node.getChildNodes()) {
 			insertItemIDs(childNode, itemIDs);
 		}
-	}	
+	}
 
 	private static Collection<ScriptRegistryItemNode> EMPTY_COLLECTION;
 	
@@ -283,7 +283,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	 */
 	public Collection<ScriptRegistryItemNode> getTopLevelNodes() {
 		if (!wasLoaded())
-			loadAllRegistryItems();		
+			loadAllRegistryItems();
 		if (topLevelNodesByType == null)
 			return EMPTY_COLLECTION;
 		return topLevelNodesByType.values();
@@ -291,7 +291,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	
 	public ScriptRegistryItemNode getTopLevelNodeForType(String scriptRegistryItemType) {
 		if (!wasLoaded())
-			loadAllRegistryItems();		
+			loadAllRegistryItems();
 		if (topLevelNodesByType == null)
 			return null;
 		return topLevelNodesByType.get(scriptRegistryItemType);
@@ -300,10 +300,10 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	/**
 	 * Returns the top level nodes for the given set of ScriptRegistryItemIDs
 	 */
-	public Collection<ScriptRegistryItemNode> getNodes(Set<ScriptRegistryItemID> itemIDs) 
+	public Collection<ScriptRegistryItemNode> getNodes(Set<ScriptRegistryItemID> itemIDs)
 	{
 		if (!wasLoaded())
-			loadAllRegistryItems();		
+			loadAllRegistryItems();
 		if (topLevelNodesByType == null)
 			return EMPTY_COLLECTION;
 		
@@ -312,7 +312,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 			topLevelNodes.add(allNodes.get(itemID));
 		}
 		return topLevelNodes;
-	}	
+	}
 	
 	private static ScriptRegistryItemProvider sharedInstance;
 	
@@ -355,7 +355,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	
 	/**
 	 * Get the <code>ScriptRegistryItem</code> with the given itemID and
-	 * {@link #DEFAULT_FETCH_GROUPS}. 
+	 * {@link #DEFAULT_FETCH_GROUPS}.
 	 */
 	public ScriptRegistryItem getScriptRegistryItem(ScriptRegistryItemID itemID, IProgressMonitor monitor) {
 		return getJDOObject(null, itemID, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
@@ -369,12 +369,12 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 	}
 	
 	/**
-	 * Get the <code>ScriptRegistryItem</code> with the given id and 
+	 * Get the <code>ScriptRegistryItem</code> with the given id and
 	 * cast it to a Script.
 	 * @throws ClassCastException
 	 */
 	public Script getScript(ScriptRegistryItemID scriptLayoutID, IProgressMonitor monitor) {
-		return (Script)getScriptRegistryItem(scriptLayoutID, SCRIPT_FETCH_GROUPS, monitor); 
+		return (Script)getScriptRegistryItem(scriptLayoutID, SCRIPT_FETCH_GROUPS, monitor);
 	}
 
 	/**
@@ -392,12 +392,12 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 		registryListeners.remove(registryListener);
 	}
 	
-	private void notifyRegistryListeners() 
+	private void notifyRegistryListeners()
 	{
-		for (int i=0; i<registryListeners.size(); i++) 
+		for (int i=0; i<registryListeners.size(); i++)
 		{
-			ScriptRegistryListener listener = 
-				(ScriptRegistryListener) registryListeners.getListeners()[i]; 
+			ScriptRegistryListener listener =
+				(ScriptRegistryListener) registryListeners.getListeners()[i];
 			try {
 				listener.scriptRegistryChanged();
 			} catch (Exception e) {

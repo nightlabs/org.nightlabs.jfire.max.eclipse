@@ -8,7 +8,7 @@ import org.nightlabs.jfire.scripting.ScriptManagerUtil;
 import org.osgi.framework.BundleContext;
 
 /**
- * The main plugin class for this plugin. 
+ * The main plugin class for this plugin.
  */
 public class ScriptingPlugin extends AbstractUIPlugin {
 

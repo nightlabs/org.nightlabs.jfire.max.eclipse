@@ -24,7 +24,7 @@ import org.nightlabs.jfire.scripting.ui.resource.Messages;
  */
 public class ScriptParameterTable extends AbstractTableComposite {
 
-	private static class ContentProvider extends TableContentProvider {		
+	private static class ContentProvider extends TableContentProvider {
 	}
 	
 	private static class LabelProvider extends TableLabelProvider {

@@ -90,7 +90,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 	
 	
 	/**
-	 * Creates a new ScriptRegistryItemTree that will trigger 
+	 * Creates a new ScriptRegistryItemTree that will trigger
 	 * selection changes for the zone specified.
 	 * 
 	 * @param parent The trees parent
@@ -103,7 +103,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 	
 	/**
 	 * Creates a new ScriptRegistryItemTree with the possibility to choose
-	 * whether to set the selectionProxy that will trigger SelectionChanges 
+	 * whether to set the selectionProxy that will trigger SelectionChanges
 	 * through the NightLabs Notification framework.
 	 * 
 	 * @param parent The trees parent
@@ -115,11 +115,11 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 	}
 
 	/**
-	 * Create a new 
+	 * Create a new
 	 * 
 	 * @param parent The trees parent
 	 * @param style SWT style of the tree
-	 * @param setLayoutData Whether to set the layout data 
+	 * @param setLayoutData Whether to set the layout data
 	 * @param headerVisible Whether the trees header is visible
 	 * @param zone The zone notifications of selection changes will be made
 	 */
@@ -132,11 +132,11 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 	}
 	
 	/**
-	 * Create a new 
+	 * Create a new
 	 * 
 	 * @param parent The trees parent
 	 * @param style SWT style of the tree
-	 * @param setLayoutData Whether to set the layout data 
+	 * @param setLayoutData Whether to set the layout data
 	 * @param init Whether to init the tree (content and label provider)
 	 * @param headerVisible Whether the trees header is visible
 	 * @param zone The zone notifications of selection changes will be made
@@ -154,12 +154,12 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		initSelectionProxy();
 	}
 
-	protected void initSelectionProxy() 
+	protected void initSelectionProxy()
 	{
 		if (addSelectionProxy) {
-			selectionProxy = new SelectionProxy(this, selectionZone, IGNORE_INHERITANCE, false);			
+			selectionProxy = new SelectionProxy(this, selectionZone, IGNORE_INHERITANCE, false);
 			getTreeViewer().addSelectionChangedListener(selectionProxy);
-		}		
+		}
 	}
 
 	/* (non-Javadoc)

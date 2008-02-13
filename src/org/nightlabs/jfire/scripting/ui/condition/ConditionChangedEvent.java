@@ -6,7 +6,7 @@ import org.nightlabs.jfire.scripting.condition.ICondition;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ConditionChangedEvent 
+public class ConditionChangedEvent
 {
 	public ConditionChangedEvent(ICondition condition, SimpleConditionComposite conditionComp) {
 		this.condition = condition;

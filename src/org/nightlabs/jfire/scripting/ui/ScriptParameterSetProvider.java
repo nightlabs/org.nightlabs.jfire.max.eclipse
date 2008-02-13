@@ -47,7 +47,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 	private JDOObjectController registryController;
 	
 //	/**
-//	 * Updates the structrue tree and notifies all listeners 
+//	 * Updates the structrue tree and notifies all listeners
 //	 * when the registry changed on the server.
 //	 */
 //	private NotificationListener parameterSetChangeListener = new NotificationListenerWorkerThreadAsync() {
@@ -55,7 +55,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //			logger.info("registryChangeListener got notified with event "+evt);
 //			for (Object subject : evt.getSubjects()) {
 //				Object o = ((DirtyObjectID)subject).getObjectID();
-//				
+//
 //				logger.info("registryChangeListener with subject "+o);
 //				if (o instanceof JDOObjectControllerID) {
 //					if (registryController == null) {
@@ -65,13 +65,13 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //					JDOManager jdoManager = null;
 //					try {
 //						jdoManager = JDOManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//					} catch (Exception e) {						
+//					} catch (Exception e) {
 //						throw new RuntimeException(e);
 //					}
 //					JDOObjectSyncResult syncResult = null;
 //					try {
 //						syncResult = jdoManager.syncJDOObjectChanges(
-//								ScriptRegistry.SINGLETON_ID, 
+//								ScriptRegistry.SINGLETON_ID,
 //								registryController.getControllerVersion(),
 //								null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 //							);
@@ -82,7 +82,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //					boolean changed = false;
 //					for (JDOObjectChangeEvent event : syncResult.getChangeEvents()) {
 //						if (event instanceof ScriptParameterSetChangeEvent) {
-//							ScriptParameterSetChangeEvent parameterEvent = (ScriptParameterSetChangeEvent)event;							
+//							ScriptParameterSetChangeEvent parameterEvent = (ScriptParameterSetChangeEvent)event;
 //							if (ScriptParameterSetChangeEvent.EVENT_TYPE_SET_ADDED.equals(parameterEvent.getEventType())) {
 //								changed = true;
 //								if (parameterSets == null)
@@ -95,8 +95,8 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //						notifyRegistryListeners();
 //				}
 //			}
-//		}		
-//	};	
+//		}
+//	};
 	
 	
 	private Collection<ScriptParameterSet> parameterSets;
@@ -108,7 +108,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 	
 	/**
 	 * Returns the collection of all Parametersets
-	 * for the organisation of the currently logged in 
+	 * for the organisation of the currently logged in
 	 * user.
 	 */
 	public Collection<ScriptParameterSet> getParameterSets() {
@@ -124,7 +124,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 			throw new RuntimeException(e);
 		}
 		
-//		// Get the registry controller keeping 
+//		// Get the registry controller keeping
 //		// track of all changes
 //		JDOManager jdoManager = null;
 //		try {
@@ -149,7 +149,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 	 */
 	protected ScriptParameterSetProvider() {
 		super();
-	}	
+	}
 	
 	
 	@Override

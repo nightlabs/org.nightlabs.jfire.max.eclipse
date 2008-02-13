@@ -41,9 +41,9 @@ public class ScriptParameterSetTable extends AbstractTableComposite {
 			return ""; //$NON-NLS-1$
 		}
 		@Override
-		public String getText(Object element) {			
+		public String getText(Object element) {
 			return getColumnText(element, 0);
-		}		
+		}
 	}
 	
 	/**

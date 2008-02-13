@@ -26,10 +26,10 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleConditionComposite 
-extends XComposite 
-{ 
-	public SimpleConditionComposite(Collection<ScriptConditioner> scriptConditioners, Composite parent, int style) 
+public class SimpleConditionComposite
+extends XComposite
+{
+	public SimpleConditionComposite(Collection<ScriptConditioner> scriptConditioners, Composite parent, int style)
 	{
 		super(parent, style);
 		this.scriptConditioners = scriptConditioners;
@@ -37,7 +37,7 @@ extends XComposite
 	}
 
 	public SimpleConditionComposite(Collection<ScriptConditioner> scriptConditioners,
-			Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+			Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		this.scriptConditioners = scriptConditioners;
@@ -46,15 +46,15 @@ extends XComposite
 
 	private Collection<ScriptConditioner> scriptConditioners;
 	private Map<ScriptRegistryItemID, List<Object>> variable2PossibleValues;
-	private Map<ScriptRegistryItemID, List<CompareOperator>> variable2CompareOperators;	
+	private Map<ScriptRegistryItemID, List<CompareOperator>> variable2CompareOperators;
 	private Map<ScriptRegistryItemID, String> variable2Name;
 	private Map<Object, String> value2Name;
 	
 	private XComboComposite<ScriptRegistryItemID> variableCombo;
-	private XComboComposite<CompareOperator> operatorCombo;	
+	private XComboComposite<CompareOperator> operatorCombo;
 	private XComboComposite<Object> valueCombo;
 
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		GridLayout layout = new GridLayout(3, true);
 		XComposite.configureLayout(LayoutMode.TOP_BOTTOM_WRAPPER, layout);
@@ -68,11 +68,11 @@ extends XComposite
 		value2Name = new HashMap<Object, String>();
 		for (ScriptConditioner scriptConditioner : scriptConditioners) {
 			variableNames.add(scriptConditioner.getScriptRegistryItemID());
-			variable2PossibleValues.put(scriptConditioner.getScriptRegistryItemID(), 
+			variable2PossibleValues.put(scriptConditioner.getScriptRegistryItemID(),
 					new ArrayList(scriptConditioner.getPossibleValues()));
-			variable2CompareOperators.put(scriptConditioner.getScriptRegistryItemID(), 
+			variable2CompareOperators.put(scriptConditioner.getScriptRegistryItemID(),
 					scriptConditioner.getCompareOperators());
-			variable2Name.put(scriptConditioner.getScriptRegistryItemID(), 
+			variable2Name.put(scriptConditioner.getScriptRegistryItemID(),
 					scriptConditioner.getScript().getName().getText());
 			ILabelProvider labelProvider = scriptConditioner.getValueLabelProvider();
 			for (Object value : scriptConditioner.getPossibleValues()) {
@@ -80,9 +80,9 @@ extends XComposite
 			}
 		}
 
-		int defaultWidgetStyle = AbstractListComposite.getDefaultWidgetStyle(this); 
+		int defaultWidgetStyle = AbstractListComposite.getDefaultWidgetStyle(this);
 		
-		variableCombo = new XComboComposite<ScriptRegistryItemID>( parent, defaultWidgetStyle, 
+		variableCombo = new XComboComposite<ScriptRegistryItemID>( parent, defaultWidgetStyle,
 				(String) null, scriptLabelProvider );
 		variableCombo.setInput( variableNames );
 		variableCombo.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -98,58 +98,58 @@ extends XComposite
 		valueCombo = new XComboComposite<Object>(	parent, defaultWidgetStyle, (String) null,
 				valueLabelProvider );
 		valueCombo.setInput( variable2PossibleValues.get(selectedVariable) );
-		valueCombo.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		valueCombo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		valueCombo.addSelectionListener(valueListener);
 		
 		refresh();
 		variableCombo.selectElementByIndex(0);
 	}
 	
-	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){	
+	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){
 		@Override
 		public String getText(Object object) {
 			return variable2Name.get(object);
-		}	
+		}
 	};
 
-	private org.eclipse.jface.viewers.ILabelProvider valueLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){	
+	private org.eclipse.jface.viewers.ILabelProvider valueLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){
 		@Override
 		public String getText(Object object) {
 			return value2Name.get(object);
-		}	
+		}
 	};
 	
-	private SelectionListener operatorListener = new SelectionListener(){	
+	private SelectionListener operatorListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			condition = null;
 			selectedCompareOperator = operatorCombo.getSelectedElement();
 			fireConditionChanged();
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {			
-		}	
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+		}
 	};
 	
-	private SelectionListener valueListener = new SelectionListener(){	
+	private SelectionListener valueListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			condition = null;
 			selectedValue = valueCombo.getSelectedElement();
 			fireConditionChanged();
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {			
-		}	
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+		}
 	};
 
-	private SelectionListener variableListener = new SelectionListener(){	
-		public void widgetSelected(SelectionEvent e) { 
-			refresh();				
-		}	
-		public void widgetDefaultSelected(SelectionEvent e) {			
-		}	
+	private SelectionListener variableListener = new SelectionListener(){
+		public void widgetSelected(SelectionEvent e) {
+			refresh();
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+		}
 	};
 	
-	protected void refresh() 
+	protected void refresh()
 	{
-		condition = null; 
+		condition = null;
 		selectedVariable = variableCombo.getSelectedElement();
 		operatorCombo.setInput(variable2CompareOperators.get(selectedVariable));
 		valueCombo.setInput(variable2PossibleValues.get(selectedVariable));
@@ -189,16 +189,16 @@ extends XComposite
 	private Object selectedValue;
 	
 	private ISimpleCondition condition;
-	public ISimpleCondition getCondition() 
+	public ISimpleCondition getCondition()
 	{
-		if (condition == null) {			
-			condition = new SimpleCondition(selectedVariable, 
-					selectedCompareOperator, selectedValue);			
+		if (condition == null) {
+			condition = new SimpleCondition(selectedVariable,
+					selectedCompareOperator, selectedValue);
 		}
 		return condition;
-	}	
+	}
 
-	public void setSimpleCondition(ISimpleCondition simpleCondition) 
+	public void setSimpleCondition(ISimpleCondition simpleCondition)
 	{
 		selectVariable(simpleCondition.getScriptRegistryItemID());
 		selectCompareOperator(simpleCondition.getCompareOperator());
@@ -213,7 +213,7 @@ extends XComposite
 		listeners.remove(listener);
 	}
 	
-	private void fireConditionChanged() 
+	private void fireConditionChanged()
 	{
 		for (int i=0; i<listeners.getListeners().length; i++) {
 			ConditionChangeListener listener = (ConditionChangeListener) listeners.getListeners()[i];

@@ -54,7 +54,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * ContentProvider for a tree of <code>ScriptRegistryItemNode</code>s 
+	 * ContentProvider for a tree of <code>ScriptRegistryItemNode</code>s
 	 */
 	static class ContentProvider extends TreeContentProvider {
 		
@@ -95,7 +95,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	}
 
 	/**
-	 * Standard LabelProvider for a tree or table of <code>ScriptRegistryItemNode</code>s  
+	 * Standard LabelProvider for a tree or table of <code>ScriptRegistryItemNode</code>s
 	 */
 	static class LabelProvider extends TableLabelProvider {
 
@@ -111,7 +111,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 
 		@Override
 		public String getText(Object element) {
-			return getColumnText(element, 0); 
+			return getColumnText(element, 0);
 		}
 
 		@Override
@@ -141,7 +141,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 			return getColumnImage(element, 0);
 		}
 		
-	}	
+	}
 	
 	public static final ScriptRegistryItemNode STATUS_FETCHING_NODE = new ScriptRegistryItemNode() {
 		private static final long serialVersionUID = 1L;
@@ -159,7 +159,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		@Override
 		public boolean hasChildren() {
 			return false;
-		}		
+		}
 	};
 	
 	
@@ -172,7 +172,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	public ScriptRegistryItemNode(
 			ScriptRegistryItemCarrier parentCarrier,
 			ScriptRegistryItem item, boolean recurse
-		) 
+		)
 	{
 		super(parentCarrier, item, recurse);
 	}
@@ -185,7 +185,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	public ScriptRegistryItemNode(
 			ScriptRegistryItemCarrier parentCarrier,
 			ScriptRegistryItemID itemID
-		) 
+		)
 	{
 		super(parentCarrier, itemID);
 	}
@@ -197,12 +197,12 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	
 	
 	public ScriptRegistryItemNode(
-			ScriptRegistryItemNode parentNode, 
-			ScriptRegistryItemCarrier cloned, 
+			ScriptRegistryItemNode parentNode,
+			ScriptRegistryItemCarrier cloned,
 			boolean recurse,
 			Map<ScriptRegistryItemID, ScriptRegistryItemNode> allItems
-		) 
-	{		
+		)
+	{
 		this(parentNode, cloned);
 		allItems.put(getRegistryItemID(), this);
 		if (recurse) {

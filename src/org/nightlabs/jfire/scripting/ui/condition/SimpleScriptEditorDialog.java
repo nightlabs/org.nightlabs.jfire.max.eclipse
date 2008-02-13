@@ -14,11 +14,11 @@ import org.nightlabs.jfire.scripting.condition.Script;
 import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
 import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
-public class SimpleScriptEditorDialog 
-extends Dialog 
+public class SimpleScriptEditorDialog
+extends Dialog
 {
-	public SimpleScriptEditorDialog(Shell shell, 
-			Collection<ScriptConditioner> scriptConditioners, 
+	public SimpleScriptEditorDialog(Shell shell,
+			Collection<ScriptConditioner> scriptConditioners,
 			Script script)
 	{
 		super(shell);
@@ -29,7 +29,7 @@ extends Dialog
 
 	@Override
 	public void create() {
-		super.create();		
+		super.create();
 		getShell().setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog.shell.text")); //$NON-NLS-1$
 		getShell().setSize(500, 350);
 		getShell().setMinimumSize(400, 300);
@@ -40,8 +40,8 @@ extends Dialog
 	private Script script;
 	
 	@Override
-	protected Control createDialogArea(Composite comp) 
-	{		 
+	protected Control createDialogArea(Composite comp)
+	{
 		scriptEditorComp = new SimpleScriptEditorComposite(scriptConditioners, comp, SWT.NONE);
 		scriptEditorComp.setScript(script);
 		return scriptEditorComp;
@@ -56,18 +56,18 @@ extends Dialog
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
 		Button deleteScriptButton = createButton(
-				parent, ID_DELETE_SCRIPT, 
+				parent, ID_DELETE_SCRIPT,
 				Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog.deleteScriptButton.text"),  //$NON-NLS-1$
 				false);
-		deleteScriptButton.addSelectionListener(new SelectionListener() 
-		{		
+		deleteScriptButton.addSelectionListener(new SelectionListener()
+		{
 			public void widgetSelected(SelectionEvent e) {
 				setReturnCode(ID_DELETE_SCRIPT);
 				close();
-			}		
+			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 	}
 	
