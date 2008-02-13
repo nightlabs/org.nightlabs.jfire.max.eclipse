@@ -13,8 +13,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProv
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class NewVoucherFileAction 
-extends NewFileAction 
+public class NewVoucherFileAction
+extends NewFileAction
 {
 
 	public NewVoucherFileAction() {
@@ -22,12 +22,12 @@ extends NewFileAction
 	}
 
 	@Override
-	public void run() 
-	{		
+	public void run()
+	{
 		try {
 			Login.getLogin();
 			if (VoucherScriptResultProvider.sharedInstance().getScriptResults() == null) {
-				Runnable runnable = new Runnable() {		
+				Runnable runnable = new Runnable() {
 					public void run() {
 						VoucherChooseDialog voucherChooseDialog = new VoucherChooseDialog(
 								RCPUtil.getActiveWorkbenchShell());
@@ -43,6 +43,6 @@ extends NewFileAction
 			super.run();
 		} catch (LoginException e1) {
 
-		}		
+		}
 	}
 }

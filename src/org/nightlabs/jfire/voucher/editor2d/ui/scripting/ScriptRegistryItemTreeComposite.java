@@ -12,8 +12,8 @@ import org.nightlabs.jfire.voucher.scripting.VoucherScriptingConstants;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ScriptRegistryItemTreeComposite 
-extends AbstractScriptRegistryItemTreeComposite 
+public class ScriptRegistryItemTreeComposite
+extends AbstractScriptRegistryItemTreeComposite
 {
 
 	/**
@@ -31,17 +31,17 @@ extends AbstractScriptRegistryItemTreeComposite
 	 * @param layoutDataMode
 	 */
 	public ScriptRegistryItemTreeComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 	}
 
 	@Override
-	protected Set<ScriptRegistryItemID> getScriptRegistryItemIDs() 
+	protected Set<ScriptRegistryItemID> getScriptRegistryItemIDs()
 	{
 		Set<ScriptRegistryItemID> voucherNodes = new HashSet<ScriptRegistryItemID>();
 		voucherNodes.add(getVoucherNodeID());
-		return voucherNodes;		
+		return voucherNodes;
 	}
 
 	@Override
@@ -49,12 +49,12 @@ extends AbstractScriptRegistryItemTreeComposite
 		return VoucherScriptingConstants.VOUCHER_SCRIPTING_ZONE;
 	}
 
-	protected ScriptRegistryItemID getVoucherNodeID() 
+	protected ScriptRegistryItemID getVoucherNodeID()
 	{
 		return ScriptRegistryItemID.create(
 				getOrganisationID(),
 //				Organisation.DEV_ORGANISATION_ID,
-				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_TYPE_TRADE_VOUCHER,				
-				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_ID_CATEGORY_VOUCHER);		
-	}	
+				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_TYPE_TRADE_VOUCHER,
+				VoucherScriptingConstants.SCRIPT_REGISTRY_ITEM_ID_CATEGORY_VOUCHER);
+	}
 }

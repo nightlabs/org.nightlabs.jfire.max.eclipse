@@ -7,8 +7,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherXStreamFilter 
-extends XStreamFilter 
+public class VoucherXStreamFilter
+extends XStreamFilter
 {
 	public static final String FILE_EXTENSION = "v2d"; //$NON-NLS-1$
 	

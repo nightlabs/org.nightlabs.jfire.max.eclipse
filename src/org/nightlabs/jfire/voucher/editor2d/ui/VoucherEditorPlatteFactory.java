@@ -17,41 +17,41 @@ import org.nightlabs.jfire.voucher.editor2d.ui.tool.VoucherTextScriptToolEntry;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherEditorPlatteFactory 
-extends ScriptingEditorPaletteFactory 
+public class VoucherEditorPlatteFactory
+extends ScriptingEditorPaletteFactory
 {
 	public VoucherEditorPlatteFactory(ScriptEditor2DFactory factory) {
 		super(factory);
 	}
 
 	@Override
-	protected ToolEntry createBarcodeToolEntry() 
+	protected ToolEntry createBarcodeToolEntry()
  	{
  		return new VoucherBarcodeToolEntry
  	  (
  	  	Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlatteFactory.label.barcode"), //$NON-NLS-1$
  	  	Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlatteFactory.description.barcode"),  //$NON-NLS-1$
  	    BarcodeDrawComponent.class,
- 	    getCreationFactory(BarcodeDrawComponent.class), 
- 	    SharedImages.getSharedImageDescriptor(ScriptingEditor2DPlugin.getDefault(), 
- 	    		BarcodeTool.class),    
+ 	    getCreationFactory(BarcodeDrawComponent.class),
+ 	    SharedImages.getSharedImageDescriptor(ScriptingEditor2DPlugin.getDefault(),
+ 	    		BarcodeTool.class),
  	    null
- 	  ); 		
- 	}	
+ 	  );
+ 	}
 	
  	@Override
-	protected ToolEntry createTicketScriptTextToolEntry() 
+	protected ToolEntry createTicketScriptTextToolEntry()
  	{
  		return new VoucherTextScriptToolEntry
  	  (
  	  	Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlatteFactory.label.scriptText"), //$NON-NLS-1$
  	  	Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherEditorPlatteFactory.description.scriptText"),  //$NON-NLS-1$
  	    TextScriptDrawComponent.class,
- 	    getCreationFactory(TextScriptDrawComponent.class), 
- 	    SharedImages.getSharedImageDescriptor(ScriptingEditor2DPlugin.getDefault(), 
- 	    		TextScriptTool.class),    
+ 	    getCreationFactory(TextScriptDrawComponent.class),
+ 	    SharedImages.getSharedImageDescriptor(ScriptingEditor2DPlugin.getDefault(),
+ 	    		TextScriptTool.class),
  	    null
- 	  ); 		
+ 	  );
  	}
 
 }

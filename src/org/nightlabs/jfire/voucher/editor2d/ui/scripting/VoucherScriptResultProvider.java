@@ -20,7 +20,7 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherScriptResultProvider 
+public class VoucherScriptResultProvider
 extends AbstractScriptResultProvider<VoucherType>
 {
 	private static VoucherScriptResultProvider sharedInstance;
@@ -38,15 +38,15 @@ extends AbstractScriptResultProvider<VoucherType>
 	}
 
 	private Map<ScriptRegistryItemID, Object> scriptResults = null;
-	public Map<ScriptRegistryItemID, Object> getScriptResults() 
+	public Map<ScriptRegistryItemID, Object> getScriptResults()
 	{
-		if (scriptResults == null && getSelectedObject() != null && getSelectedCurrency() != null) 
+		if (scriptResults == null && getSelectedObject() != null && getSelectedCurrency() != null)
 		{
-			Map<ProductTypeID, Map<ScriptRegistryItemID, Object>> voucherScriptingResult = 
+			Map<ProductTypeID, Map<ScriptRegistryItemID, Object>> voucherScriptingResult =
 				getVoucherScriptingResult(getPreviewParameterSet(), new XProgressMonitor());
-			scriptResults = voucherScriptingResult.values().iterator().next(); 
+			scriptResults = voucherScriptingResult.values().iterator().next();
 			return scriptResults;
-		} 
+		}
 		return scriptResults;
 	}
 
@@ -54,7 +54,7 @@ extends AbstractScriptResultProvider<VoucherType>
 	public VoucherType getSelectedObject() {
 		return selectedVoucherType;
 	}
-	public void setSelectedObject(VoucherType selectedObject) 
+	public void setSelectedObject(VoucherType selectedObject)
 	{
 		this.selectedVoucherType = selectedObject;
 		getScriptResults();
@@ -69,15 +69,15 @@ extends AbstractScriptResultProvider<VoucherType>
 		this.selectedCurrency = selectedCurrency;
 	}
 	
-	protected PreviewParameterSet getPreviewParameterSet() 
+	protected PreviewParameterSet getPreviewParameterSet()
 	{
 		return new PreviewParameterSet(
 				(ProductTypeID)JDOHelper.getObjectId(getSelectedObject()),
 				(CurrencyID)JDOHelper.getObjectId(getSelectedCurrency()));
-	}	
+	}
 	
 	protected Map<ProductTypeID, Map<ScriptRegistryItemID, Object>> getVoucherScriptingResult(
-			PreviewParameterSet previewParameterSet, IProgressMonitor monitor) 
+			PreviewParameterSet previewParameterSet, IProgressMonitor monitor)
 	{
 		try {
 			monitor.beginTask("Loading VoucherScriptResult", 2);
@@ -88,10 +88,10 @@ extends AbstractScriptResultProvider<VoucherType>
 			return result;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		}  
+		}
 	}
 	
-	public PreviewParameterValuesResult getPreviewParameterValuesResult(VoucherType voucherType) 
+	public PreviewParameterValuesResult getPreviewParameterValuesResult(VoucherType voucherType)
 	{
 		ProductTypeID productTypeID = (ProductTypeID)JDOHelper.getObjectId(voucherType);
 		try {
@@ -99,6 +99,6 @@ extends AbstractScriptResultProvider<VoucherType>
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}	
+	}
 			
 }

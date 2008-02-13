@@ -11,8 +11,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProv
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherPartController 
-extends PartController 
+public class VoucherPartController
+extends PartController
 {
 	private static VoucherPartController sharedInstance;
 	public static VoucherPartController sharedInstance() {
@@ -29,17 +29,17 @@ extends PartController
 	protected VoucherPartController() {
 		super();
 		VoucherScriptResultProvider.sharedInstance().addScriptResultsChangedListener(
-				scriptResultChangedListener);		
+				scriptResultChangedListener);
 	}
 
 	@Override
-	protected Composite createNewConditionUnsatisfiedComposite(Composite parent) {		
+	protected Composite createNewConditionUnsatisfiedComposite(Composite parent) {
 		return new NeedVoucherComposite(parent, SWT.NONE);
 	}
 
-	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){	
+	protected IScriptResultChangedListener scriptResultChangedListener = new IScriptResultChangedListener(){
 		public void scriptResultsChanged(ScriptResultsChangedEvent event) {
 			updateParts();
 		}
-	};		
+	};
 }

@@ -16,8 +16,8 @@ import org.nightlabs.jfire.voucher.scripting.VoucherScriptingConstants;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class CreateVoucherBarcodeDialog 
-extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog 
+public class CreateVoucherBarcodeDialog
+extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog
 {
 
 	/**
@@ -32,7 +32,7 @@ extends org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog
 	protected void createScriptRegistryItemIDCombo(Composite parent) {
 		List<ScriptRegistryItemID> scriptIDs = new LinkedList<ScriptRegistryItemID>();
 		scriptIDs.add(VoucherScriptingConstants.OID.SCRIPT_REGISTRY_ITEM_ID_SCRIPT_VOUCHER_KEY);
-		scriptCombo = new XComboComposite<ScriptRegistryItemID>(parent, 
+		scriptCombo = new XComboComposite<ScriptRegistryItemID>(parent,
 				AbstractListComposite.getDefaultWidgetStyle(parent), (String) null,
 				scriptRegistryLabelProvider);
 		scriptCombo.setInput(scriptIDs);

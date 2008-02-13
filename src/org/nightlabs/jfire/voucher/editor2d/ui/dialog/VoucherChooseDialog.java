@@ -29,8 +29,8 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherChooseDialog 
-extends CenteredDialog 
+public class VoucherChooseDialog
+extends CenteredDialog
 {
 	/**
 	 * @param parentShell
@@ -41,19 +41,19 @@ extends CenteredDialog
 	}
 
 	@Override
-	protected void configureShell(Shell newShell) 
+	protected void configureShell(Shell newShell)
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.title")); //$NON-NLS-1$
 		newShell.setSize(600, 400);
 	}
 
-	private VoucherTypeTree voucherTypeTree = null;	
+	private VoucherTypeTree voucherTypeTree = null;
 	private Group detailGroup = null;
 	private VoucherDetailComposite detailComp = null;
 	@Override
-	protected Control createDialogArea(Composite parent) 
-	{		
+	protected Control createDialogArea(Composite parent)
+	{
 		Composite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp.setLayout(new GridLayout(2, false));
 		
@@ -65,9 +65,9 @@ extends CenteredDialog
 		Group voucherGroup = new Group(sash, SWT.NONE);
 		voucherGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.group.voucher")); //$NON-NLS-1$
 		voucherGroup.setLayout(new GridLayout());
-		voucherGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
-		voucherTypeTree = new VoucherTypeTree(voucherGroup, 
-				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.BORDER); 
+		voucherGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		voucherTypeTree = new VoucherTypeTree(voucherGroup,
+				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.BORDER);
 		voucherTypeTree.addSelectionChangedListener(voucherSelectionListener);
 //		voucherTypeTree.getTreeViewer().expandToLevel(2);
 		
@@ -75,7 +75,7 @@ extends CenteredDialog
 		detailGroup = new Group(sash, SWT.NONE);
 		detailGroup.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.group.details")); //$NON-NLS-1$
 		detailGroup.setLayout(new GridLayout());
-		detailGroup.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		detailGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		detailComp = new VoucherDetailComposite(detailGroup, SWT.NONE);
 				
@@ -83,11 +83,11 @@ extends CenteredDialog
 		RCPUtil.setControlEnabledRecursive(detailGroup, false);
 		
 		return comp;
-	}	
+	}
 	
-	private ISelectionChangedListener voucherSelectionListener = new ISelectionChangedListener(){	
+	private ISelectionChangedListener voucherSelectionListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
-			if (!event.getSelection().isEmpty()) 
+			if (!event.getSelection().isEmpty())
 			{
 				Object firstElement = ((StructuredSelection) event.getSelection()).getFirstElement();
 				if (firstElement instanceof VoucherTypeTreeNode) {
@@ -95,28 +95,28 @@ extends CenteredDialog
 					VoucherType selectedVoucherType = voucherTypeTreeNode.getJdoObject();
 					PreviewParameterValuesResult ppvr = VoucherScriptResultProvider.sharedInstance().
 						getPreviewParameterValuesResult(selectedVoucherType);
-					detailComp.setPreviewParameterValuesResult(ppvr);			
-					RCPUtil.setControlEnabledRecursive(detailGroup, true);				
-					getButton(IDialogConstants.OK_ID).setEnabled(true);									
+					detailComp.setPreviewParameterValuesResult(ppvr);
+					RCPUtil.setControlEnabledRecursive(detailGroup, true);
+					getButton(IDialogConstants.OK_ID).setEnabled(true);
 				}
 			}
-		}	
+		}
 	};
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
-		getButton(IDialogConstants.OK_ID).setEnabled(false);				
+		getButton(IDialogConstants.OK_ID).setEnabled(false);
 	}
 
 	@Override
-	protected void okPressed() 
+	protected void okPressed()
 	{
 		VoucherScriptResultProvider.sharedInstance().setSelectedCurrency(
-				detailComp.getSelectedCurrency());		
+				detailComp.getSelectedCurrency());
 		StructuredSelection selection = (StructuredSelection) voucherTypeTree.getSelection();
 		VoucherTypeTreeNode voucherTypeTreeNode = (VoucherTypeTreeNode) selection.getFirstElement();
-		VoucherType voucherType = voucherTypeTreeNode.getJdoObject();		
+		VoucherType voucherType = voucherTypeTreeNode.getJdoObject();
 		VoucherScriptResultProvider.sharedInstance().setSelectedObject(voucherType);
 		
 		super.okPressed();

@@ -9,8 +9,8 @@ import org.nightlabs.editor2d.ui.tools.EditorTemplateCreationEntry;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherBarcodeToolEntry 
-extends EditorTemplateCreationEntry 
+public class VoucherBarcodeToolEntry
+extends EditorTemplateCreationEntry
 {
 	/**
 	 * @param label
@@ -29,5 +29,5 @@ extends EditorTemplateCreationEntry
 	@Override
 	public Tool createTool() {
 		return new VoucherBarcodeTool(getModelCreationFactory());
-	}	
+	}
 }

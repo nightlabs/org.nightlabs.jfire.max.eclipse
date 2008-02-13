@@ -10,8 +10,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.dialog.CreateVoucherTextScriptDia
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTextScriptTool 
-extends TextScriptTool 
+public class VoucherTextScriptTool
+extends TextScriptTool
 {
 
 	/**
@@ -23,7 +23,7 @@ extends TextScriptTool
 
 	@Override
 	protected CreateTextScriptDialog createTextScriptDialog() {
-		return new CreateVoucherTextScriptDialog(RCPUtil.getActiveWorkbenchShell(), 
+		return new CreateVoucherTextScriptDialog(RCPUtil.getActiveWorkbenchShell(),
 				getScriptTextCreateRequest());
 	}
 

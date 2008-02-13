@@ -24,18 +24,18 @@ import org.nightlabs.jfire.voucher.scripting.PreviewParameterValuesResult;
 public class VoucherDetailComposite
 extends XComposite
 {
-	public VoucherDetailComposite(Composite parent, int style) 
+	public VoucherDetailComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		createComposite(this);
 	}
 	
 	private PreviewParameterValuesResult ppvr = null;
-	public void setPreviewParameterValuesResult(PreviewParameterValuesResult ppvr) 
+	public void setPreviewParameterValuesResult(PreviewParameterValuesResult ppvr)
 	{
-		this.ppvr = ppvr;		
+		this.ppvr = ppvr;
 		if (ppvr != null) {
-			populateCurrencies(ppvr);					
+			populateCurrencies(ppvr);
 		}
 	}
 
@@ -44,26 +44,26 @@ extends XComposite
 	}
 
 	private Combo currencyCombo = null;
-	private Currency selectedCurrency = null;	
+	private Currency selectedCurrency = null;
 	private SelectionListener currencyListener = new SelectionListener()
-	{	
+	{
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
-		}	
+		}
 		public void widgetSelected(SelectionEvent e) {
-			currencySelected();			
-		}	
+			currencySelected();
+		}
 	};
 	
 	private void currencySelected() {
 		selectedCurrency = currencies.get(currencyCombo.getSelectionIndex());
-	}	
+	}
 	
 //	private NightlabsFormsToolkit toolkit = null;
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 //		toolkit = new NightlabsFormsToolkit(Display.getCurrent());
-//		Composite comp = toolkit.createComposite(parent, SWT.NONE);		
+//		Composite comp = toolkit.createComposite(parent, SWT.NONE);
 		Composite comp = new XComposite(parent, SWT.NONE);
 		comp.setLayout(new GridLayout(2, false));
 		comp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -71,16 +71,16 @@ extends XComposite
 		Label customerGroupLabel = new Label(comp, SWT.NONE);
 		customerGroupLabel.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.VoucherDetailComposite.label.currency")); //$NON-NLS-1$
 		GridData labelData = new GridData();
-		labelData.widthHint = 100; 
+		labelData.widthHint = 100;
 		customerGroupLabel.setLayoutData(labelData);
 		int comboStyle = SWT.BORDER | SWT.READ_ONLY;
-		currencyCombo = new Combo(comp, comboStyle);				
+		currencyCombo = new Combo(comp, comboStyle);
 		currencyCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		currencyCombo.addSelectionListener(currencyListener);		
-	}	
+		currencyCombo.addSelectionListener(currencyListener);
+	}
 	
 	private List<Currency> currencies = null;
-	protected void populateCurrencies(PreviewParameterValuesResult ppvr) 
+	protected void populateCurrencies(PreviewParameterValuesResult ppvr)
 	{
 		currencyCombo.removeAll();
 		currencies = new ArrayList<Currency>(ppvr.getCurrencies());
@@ -90,5 +90,5 @@ extends XComposite
 		}
 		currencyCombo.select(0);
 		currencySelected();
-	}		
+	}
 }

@@ -17,8 +17,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.scripting.VoucherScriptResultProv
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class CreateVoucherTextScriptDialog 
-extends CreateTextScriptDialog 
+public class CreateVoucherTextScriptDialog
+extends CreateTextScriptDialog
 {
 
 	/**
@@ -41,13 +41,13 @@ extends CreateTextScriptDialog
 
 	@Override
 	protected AbstractScriptRegistryItemTreeComposite createScriptTreeComposite(
-			Composite parent) 
+			Composite parent)
 	{
 		return new ScriptRegistryItemTreeComposite(parent, SWT.NONE);
 	}
 
 	@Override
-	protected Map<ScriptRegistryItemID, Object> getScriptRegistryItemID2Result() 
+	protected Map<ScriptRegistryItemID, Object> getScriptRegistryItemID2Result()
 	{
 		return VoucherScriptResultProvider.sharedInstance().getScriptResults();
 	}

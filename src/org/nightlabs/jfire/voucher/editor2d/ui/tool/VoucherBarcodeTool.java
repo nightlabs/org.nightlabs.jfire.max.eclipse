@@ -10,8 +10,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.dialog.CreateVoucherBarcodeDialog
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherBarcodeTool 
-extends BarcodeTool 
+public class VoucherBarcodeTool
+extends BarcodeTool
 {
 	/**
 	 * @param factory

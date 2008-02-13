@@ -52,7 +52,7 @@ public class VoucherEditorPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public VoucherManager getVoucherManager() 
+	public VoucherManager getVoucherManager()
 	{
 		try {
 			return VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

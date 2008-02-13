@@ -16,8 +16,8 @@ import org.nightlabs.jfire.voucher.editor2d.ui.resource.Messages;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class NeedVoucherComposite 
-extends XComposite 
+public class NeedVoucherComposite
+extends XComposite
 {
 	public NeedVoucherComposite(Composite parent, int style) {
 		super(parent, style);
@@ -25,13 +25,13 @@ extends XComposite
 	}
 
 	public NeedVoucherComposite(Composite parent, int style, LayoutMode layoutMode,
-			LayoutDataMode layoutDataMode) 
+			LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
-		createComposite(this);		
+		createComposite(this);
 	}
 
-	protected void createComposite(Composite parent) 
+	protected void createComposite(Composite parent)
 	{
 		setLayoutData(new GridData(GridData.FILL_BOTH));;
 		
@@ -41,19 +41,19 @@ extends XComposite
 		
 		Button needVoucherButton = new Button(this, SWT.PUSH);
 		needVoucherButton.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.NeedVoucherComposite.button.selectVoucher")); //$NON-NLS-1$
-		needVoucherButton.addSelectionListener(new SelectionListener() 
+		needVoucherButton.addSelectionListener(new SelectionListener()
 		{
-			public void widgetSelected(SelectionEvent e) 
+			public void widgetSelected(SelectionEvent e)
 			{
-				Display.getDefault().asyncExec(new Runnable() 
-				{		
+				Display.getDefault().asyncExec(new Runnable()
+				{
 					public void run() {
 						VoucherChooseDialog voucherChooseDialog = new VoucherChooseDialog(getShell());
 						voucherChooseDialog.open();
 					}
-				});			
+				});
 			}
-			public void widgetDefaultSelected(SelectionEvent e) 
+			public void widgetDefaultSelected(SelectionEvent e)
 			{
 				widgetSelected(e);
 			}

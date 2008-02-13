@@ -9,8 +9,8 @@ import org.nightlabs.editor2d.ui.tools.EditorTemplateCreationEntry;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class VoucherTextScriptToolEntry 
-extends EditorTemplateCreationEntry 
+public class VoucherTextScriptToolEntry
+extends EditorTemplateCreationEntry
 {
 
 	/**
