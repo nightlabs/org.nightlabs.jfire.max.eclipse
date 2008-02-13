@@ -169,7 +169,7 @@ public class SelectReportLayoutDialog extends CenteredDialog {
 			ReportRegistryItemID defaultItemID
 	) {
 		SelectReportLayoutDialog dlg = new SelectReportLayoutDialog(
-				RCPUtil.getActiveWorkbenchShell(),
+				RCPUtil.getActiveShell(),
 				availableItemIDs, defaultItemID
 			);
 		if (dlg.open() == Window.OK) {

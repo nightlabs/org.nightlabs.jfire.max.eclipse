@@ -164,7 +164,7 @@ extends LSDPreferencePage
 		try {
 			Config.sharedInstance().save();
 		} catch (ConfigException e) {
-			MessageDialog dlg = new MessageDialog(RCPUtil.getActiveWorkbenchShell(), Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportViewPrintPreferencePage.savingFailedMessage"), null, e.getMessage(), 0, new String[]{Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportViewPrintPreferencePage.okButton.text")}, 0); //$NON-NLS-1$ //$NON-NLS-2$
+			MessageDialog dlg = new MessageDialog(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportViewPrintPreferencePage.savingFailedMessage"), null, e.getMessage(), 0, new String[]{Messages.getString("org.nightlabs.jfire.reporting.ui.config.ReportViewPrintPreferencePage.okButton.text")}, 0); //$NON-NLS-1$ //$NON-NLS-2$
 			dlg.open();
 		}
 		return super.performOk();

@@ -80,7 +80,7 @@ public class ValueProviderDialog extends CenteredDialog {
 	}
 	
 	public static ValueProvider openDialog() {
-		ValueProviderDialog dlg = new ValueProviderDialog(RCPUtil.getActiveWorkbenchShell());
+		ValueProviderDialog dlg = new ValueProviderDialog(RCPUtil.getActiveShell());
 		if (dlg.open() == Window.OK)
 			return dlg.selectedValueProvider;
 		return null;
