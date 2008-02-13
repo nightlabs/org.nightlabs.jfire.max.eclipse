@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
@@ -243,6 +244,9 @@ extends XComposite
 			{
 				public void run()
 				{
+					if (GeneralEditorComposite.this.isDisposed())
+						return;
+
 					loadingDataLabel.dispose();
 					loadingDataLabel = null;
 

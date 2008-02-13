@@ -65,13 +65,13 @@ extends CenteredDialog
 	 * @param anchorTypeID
 	 */
 	public AccountSearchDialog(AccountTypeID accountTypeID) {
-		super(RCPUtil.getActiveWorkbenchShell());
+		super(RCPUtil.getActiveShell());
 //		this.anchorTypeID = anchorTypeID;
 		this.accountTypeID = accountTypeID;
 	}
 
 	public AccountSearchDialog() {
-		super(RCPUtil.getActiveWorkbenchShell());
+		super(RCPUtil.getActiveShell());
 	}
 	
 	protected void applyAccountTypeID()

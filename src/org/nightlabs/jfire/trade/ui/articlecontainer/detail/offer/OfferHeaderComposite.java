@@ -37,6 +37,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -199,7 +200,7 @@ extends HeaderComposite
 //	private void finalizedCheckBoxSelectionChanged() {
 //		try {
 //			if (offer.isFinalized()) {
-//				MessageDialog.openError(Display.getDefault().getActiveShell(), "Cannot undo finalization!", "This offer is finalized. A finalization cannot be taken back.");
+//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo finalization!", "This offer is finalized. A finalization cannot be taken back.");
 //				finalizedCheckBox.setSelection(true);
 //			}
 //			else {
@@ -216,7 +217,7 @@ extends HeaderComposite
 //	private void acceptedCheckBoxSelectionChanged() {
 //		try {
 //			if (offer.getOfferLocal().isAccepted()) {
-//				MessageDialog.openError(Display.getDefault().getActiveShell(), "Cannot undo acceptance!", "This offer is accepted. An acceptance cannot be taken back.");
+//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo acceptance!", "This offer is accepted. An acceptance cannot be taken back.");
 //				acceptedCheckBox.setSelection(true);
 //			}
 //			else {
@@ -233,7 +234,7 @@ extends HeaderComposite
 //	private void rejectedCheckBoxSelectionChanged() {
 //		try {
 //			if (offer.getOfferLocal().isRejected()) {
-//				MessageDialog.openError(Display.getDefault().getActiveShell(), "Cannot undo rejection!", "This offer is rejected. A rejection cannot be taken back.");
+//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo rejection!", "This offer is rejected. A rejection cannot be taken back.");
 //				rejectedCheckBox.setSelection(true);
 //			}
 //			else {
@@ -250,7 +251,7 @@ extends HeaderComposite
 //	private void confirmedCheckBoxSelectionChanged() {
 //		try {
 //			if (offer.getOfferLocal().isConfirmed()) {
-//				MessageDialog.openError(Display.getDefault().getActiveShell(), "Cannot undo confirmation!", "This offer is confirmed. A confirmation cannot be taken back.");
+//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo confirmation!", "This offer is confirmed. A confirmation cannot be taken back.");
 //				confirmedCheckBox.setSelection(true);
 //			}
 //			else {

@@ -1643,6 +1643,14 @@ gibt's nimmer - oder?! Marco.
             name="Tariff order preference page">
       </page>
    </extension>
+   <extension
+         point="org.nightlabs.base.ui.exceptionhandler">
+      <exceptionHandler
+            class="org.nightlabs.jfire.trade.ui.exceptionhandler.NotAvailableExceptionHandler"
+            name="NotAvailableExceptionHandler"
+            targetType="org.nightlabs.jfire.store.NotAvailableException">
+      </exceptionHandler>
+   </extension>
 
 <!--   
    <extension

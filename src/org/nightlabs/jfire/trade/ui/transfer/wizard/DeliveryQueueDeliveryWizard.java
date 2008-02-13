@@ -70,7 +70,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 			}
 			if (alreadyDeliveredArticles > 0) {
 				String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogMessage"), alreadyDeliveredArticles); //$NON-NLS-1$
-				MessageDialog.openWarning(RCPUtil.getActiveWorkbenchShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogTitle"), message); //$NON-NLS-1$
+				MessageDialog.openWarning(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogTitle"), message); //$NON-NLS-1$
 			}
 		} catch (RuntimeException x) {
 			throw x;

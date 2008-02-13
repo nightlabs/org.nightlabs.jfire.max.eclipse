@@ -24,7 +24,7 @@ implements ISearchResultProvider<ProductType>
 	public Collection<ProductType> getSelectedObjects()
 	{
 		AbstractProductTypeSearchDialog dialog = createProductTypeSearchDialog(
-				RCPUtil.getActiveWorkbenchShell());
+				RCPUtil.getActiveShell());
 		dialog.setSearchText(searchText);
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {

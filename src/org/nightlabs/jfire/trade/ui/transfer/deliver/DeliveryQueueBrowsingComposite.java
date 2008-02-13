@@ -78,7 +78,7 @@ class DeliveryQueueBrowsingComposite extends FadeableComposite {
 
 		//		CombiTransferArticlesWizard transferArticlesWizard = new CombiTransferArticlesWizard(articleIDs, AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY, DeliveryWizard.SIDE_VENDOR);
 		DeliveryQueueDeliveryWizard deliverWizard = new DeliveryQueueDeliveryWizard(checkedDeliveries);
-		WizardDialog wizardDialog = new WizardDialog(RCPUtil.getActiveWorkbenchShell(), deliverWizard);
+		WizardDialog wizardDialog = new WizardDialog(RCPUtil.getActiveShell(), deliverWizard);
 		
 		final DeliveryQueue selectedDeliveryQueue = printQueueCombo.getSelectedElement();
 		wizardDialog.open();
