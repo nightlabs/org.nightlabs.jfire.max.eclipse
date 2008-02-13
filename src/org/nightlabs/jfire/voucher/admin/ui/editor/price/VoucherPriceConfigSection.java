@@ -315,9 +315,7 @@ extends ToolBarSectionPart
 		PriceVoucherTypeWizard priceVoucherTypeWizard = new PriceVoucherTypeWizard(voucherType.getExtendedProductTypeID() , voucherType);
 
 
-		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(
-				Display.getDefault().getActiveShell(),
-				priceVoucherTypeWizard);
+		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
 
 		if( wizardDialog.open() == Window.OK)
 		{
