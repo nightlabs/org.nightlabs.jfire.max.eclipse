@@ -108,7 +108,7 @@ public class SimpleTradeAdminPlugin extends AbstractUIPlugin {
 //	public ResourceBundle getResourceBundle() {
 //		return resourceBundle;
 //	}
-//	
+//
 //	/**
 //	 * Returns the string from the plugin's resource bundle,
 //	 * or 'key' if not found.
@@ -120,5 +120,5 @@ public class SimpleTradeAdminPlugin extends AbstractUIPlugin {
 //		} catch (MissingResourceException e) {
 //			return key;
 //		}
-//	}	
+//	}
 }

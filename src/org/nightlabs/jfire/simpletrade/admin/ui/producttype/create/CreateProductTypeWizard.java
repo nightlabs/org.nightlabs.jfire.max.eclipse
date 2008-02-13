@@ -209,7 +209,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 //							selectedNode.refreshLocal();
 //						}
 						
-						final ProductTypeID newProductTypeId = newProductType.getObjectId();						
+						final ProductTypeID newProductTypeId = newProductType.getObjectId();
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run()
 							{
@@ -254,5 +254,5 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 //	public ProductTypeTreeNode getSelectedNode()
 //	{
 //		return selectedNode;
-//	}	
+//	}
 }

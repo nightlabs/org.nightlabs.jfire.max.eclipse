@@ -13,12 +13,12 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSectio
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeNestedProductTypesSection  
+public class SimpleProductTypeNestedProductTypesSection
 extends AbstractNestedProductTypeSection
 {
 
 	public SimpleProductTypeNestedProductTypesSection(IFormPage page,
-			Composite parent, int style) 
+			Composite parent, int style)
 	{
 		super(
 				page, parent, style,
@@ -26,7 +26,7 @@ extends AbstractNestedProductTypeSection
 	}
 
 	@Override
-	protected void createNestedProductTypeClicked() 
+	protected void createNestedProductTypeClicked()
 	{
 		ProductType packageProductType = getProductType();
 		if (packageProductType == null)

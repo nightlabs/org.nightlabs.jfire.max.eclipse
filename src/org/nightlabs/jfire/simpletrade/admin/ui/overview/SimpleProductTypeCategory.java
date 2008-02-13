@@ -39,13 +39,13 @@ public class SimpleProductTypeCategory
 		productTypeTree.getTreeViewer().expandToLevel(3);
 		productTypeTree.getTreeViewer().addDoubleClickListener(doubleClickListener);
 		createProductAction = new CreateProductTypeAction(productTypeTree);
-		productTypeTree.addContextMenuContribution(createProductAction);		
+		productTypeTree.addContextMenuContribution(createProductAction);
 		return productTypeTree;
 	}
 
 	private CreateProductTypeAction createProductAction = null;
 
-	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){	
+	private IDoubleClickListener doubleClickListener = new IDoubleClickListener(){
 		public void doubleClick(DoubleClickEvent event) {
 			if (!event.getSelection().isEmpty() && event.getSelection() instanceof StructuredSelection) {
 				StructuredSelection sel = (StructuredSelection) event.getSelection();
@@ -59,6 +59,6 @@ public class SimpleProductTypeCategory
 					}
 				}
 			}
-		}	
+		}
 	};
 }

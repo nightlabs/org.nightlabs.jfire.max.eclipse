@@ -23,12 +23,12 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypePropertySetPage 
-extends EntityEditorPageWithProgress 
+public class SimpleProductTypePropertySetPage
+extends EntityEditorPageWithProgress
 {
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link EventDetailPage}. 
+	 * new instances of {@link EventDetailPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
@@ -60,17 +60,17 @@ extends EntityEditorPageWithProgress
 	private int sectionStyle = ExpandableComposite.TITLE_BAR;
 	
 	@Override
-	protected void addSections(Composite parent) 
+	protected void addSections(Composite parent)
 	{
-		structLocalScopeSection = new SimpleProductTypeStructLocalScopeSection(this, parent, sectionStyle); 
+		structLocalScopeSection = new SimpleProductTypeStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
 		
 		blockBaseEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBaseEditorSection.title"));  //$NON-NLS-1$
-		getManagedForm().addPart(blockBaseEditorSection);	
+		getManagedForm().addPart(blockBaseEditorSection);
 	}
 
 	@Override
-	protected void asyncCallback() 
+	protected void asyncCallback()
 	{
 		final SimpleProductTypePropertySetPageController controller = (SimpleProductTypePropertySetPageController) getPageController();
 		final SimpleProductType simpleProductType = controller.getProductType();
@@ -83,7 +83,7 @@ extends EntityEditorPageWithProgress
 					public void run() {
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
 						blockBaseEditorSection.setProperty(controller.getPropertySet(), structLocal);
-						switchToContent();				
+						switchToContent();
 					}
 				});
 				return Status.OK_STATUS;

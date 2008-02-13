@@ -16,13 +16,13 @@ import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeEditorInput;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeSearchAdminActionHandler 
-extends AbstractSearchResultActionHandler 
+public class SimpleProductTypeSearchAdminActionHandler
+extends AbstractSearchResultActionHandler
 {
-//	public void run() {		
+//	public void run() {
 //		Collection<ProductTypeID> selectedObjects = getSearchResultProvider().getSelectedObjects();
 //		if (selectedObjects != null) {
-//			for (ProductTypeID productTypeID : selectedObjects) {				
+//			for (ProductTypeID productTypeID : selectedObjects) {
 //				try {
 //					RCPUtil.openEditor(new ProductTypeEditorInput(productTypeID), SimpleProductTypeEditor.ID_EDITOR);
 //				} catch (PartInitException e) {
@@ -32,14 +32,14 @@ extends AbstractSearchResultActionHandler
 //		}
 //	}
 
-	public void run() 
-	{		
+	public void run()
+	{
 		Collection<SimpleProductType> selectedObjects = getSearchResultProvider().getSelectedObjects();
 		if (selectedObjects != null) {
-			for (SimpleProductType productType : selectedObjects) {				
+			for (SimpleProductType productType : selectedObjects) {
 				try {
 					RCPUtil.openEditor(new ProductTypeEditorInput(
-							(ProductTypeID) JDOHelper.getObjectId(productType)), 
+							(ProductTypeID) JDOHelper.getObjectId(productType)),
 							SimpleProductTypeEditor.ID_EDITOR);
 				} catch (PartInitException e) {
 					throw new RuntimeException(e);

@@ -17,8 +17,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeDetailPageController 
-//extends AbstractSimpleProductTypePageController 
+public class SimpleProductTypeDetailPageController
+//extends AbstractSimpleProductTypePageController
 extends AbstractProductTypeDetailPageController<SimpleProductType>
 {
 	private static final String[] FETCH_GROUPS;
@@ -59,8 +59,8 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 	 */
 	@Override
 	protected SimpleProductType retrieveProductType(ProgressMonitor monitor) {
-		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getProductTypeID(), 
-				getEntityFetchGroups(), 
+		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getProductTypeID(),
+				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
 	}
@@ -69,7 +69,7 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 	 * @see org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController#storeProductType(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	@Override
-	protected SimpleProductType storeProductType(SimpleProductType productType, ProgressMonitor monitor) 
+	protected SimpleProductType storeProductType(SimpleProductType productType, ProgressMonitor monitor)
 	{
 		try {
 			SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

@@ -16,8 +16,8 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypePropertySetPageController 
-extends AbstractProductTypePageController<SimpleProductType> 
+public class SimpleProductTypePropertySetPageController
+extends AbstractProductTypePageController<SimpleProductType>
 {
 	private static final String[] FETCH_GROUPS = new String[] {FetchPlan.DEFAULT, SimpleProductType.FETCH_GROUP_PROPERTY_SET, PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA};
 	/**
@@ -44,9 +44,9 @@ extends AbstractProductTypePageController<SimpleProductType>
 	@Override
 	protected SimpleProductType retrieveEntity(ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPageController.loadProductTypeMonitor.task.name"), 3); //$NON-NLS-1$
-		monitor.worked(1);		
+		monitor.worked(1);
 		SimpleProductType productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
-				getProductTypeID(), getEntityFetchGroups(), 
+				getProductTypeID(), getEntityFetchGroups(),
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 2));
 		monitor.worked(1);
 		return productType;
@@ -54,7 +54,7 @@ extends AbstractProductTypePageController<SimpleProductType>
 	
 	@Override
 	protected SimpleProductType storeEntity(SimpleProductType controllerObject,
-			ProgressMonitor monitor) {		
+			ProgressMonitor monitor) {
 		return SimpleProductTypeDAO.sharedInstance().storeJDOObject(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 	}
 	

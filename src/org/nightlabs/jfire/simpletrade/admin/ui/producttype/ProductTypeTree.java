@@ -33,7 +33,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 public class ProductTypeTree
 extends AbstractTreeComposite<SimpleProductType>
 {
-	protected static class ProductTypeTreeContentProvider 
+	protected static class ProductTypeTreeContentProvider
 	extends JDOObjectTreeContentProvider<ProductTypeID, SimpleProductType, ProductTypeTreeNode>
 	{
 		@Override
@@ -67,7 +67,7 @@ extends AbstractTreeComposite<SimpleProductType>
 
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
-	}	
+	}
 
 	public ProductTypeTree(Composite parent)
 	{
@@ -139,11 +139,11 @@ extends AbstractTreeComposite<SimpleProductType>
 		@Override
 		protected Image getJDOObjectImage(ProductType productType, int columnIndex) {
 			if (columnIndex == 0)
-				return SharedImages.getSharedImage(SimpleTradeAdminPlugin.getDefault(), 
+				return SharedImages.getSharedImage(SimpleTradeAdminPlugin.getDefault(),
 						ProductTypeTreeLabelProvider.class, productType.getInheritanceNatureString());
 
 			return super.getJDOObjectImage(productType, columnIndex);
-		}		
+		}
 	}
 
 	@Implement

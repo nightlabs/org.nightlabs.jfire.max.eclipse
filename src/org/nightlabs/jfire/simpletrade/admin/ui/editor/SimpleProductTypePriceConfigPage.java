@@ -16,13 +16,13 @@ import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypePriceConfigPageContr
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypePriceConfigPage 
-//extends EntityEditorPageWithProgress 
+public class SimpleProductTypePriceConfigPage
+//extends EntityEditorPageWithProgress
 extends AbstractGridPriceConfigPage
 {
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link PriceConfigPage}. 
+	 * new instances of {@link PriceConfigPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
@@ -40,7 +40,7 @@ extends AbstractGridPriceConfigPage
 	 * @param name
 	 */
 	public SimpleProductTypePriceConfigPage(FormEditor editor) {
-		super(editor, SimpleProductTypePriceConfigPage.class.getName(), 
+		super(editor, SimpleProductTypePriceConfigPage.class.getName(),
 				Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage.title")); //$NON-NLS-1$
 	}
 

@@ -10,7 +10,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypePriceConfigSection  
+public class SimpleProductTypePriceConfigSection
 extends AbstractGridPriceConfigSection
 {
 	/**

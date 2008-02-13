@@ -32,7 +32,7 @@ public class CreateNestedProductTypeWizard
 	{
 		if (packageProductType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) { //$NON-NLS-1$
 			ProductTypeLocalMapFieldMetaData fieldMetaData = (ProductTypeLocalMapFieldMetaData) packageProductType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals"); //$NON-NLS-1$
-			fieldMetaData.setValueInherited(false);			
+			fieldMetaData.setValueInherited(false);
 		}
 		NestedProductTypeLocal npt = packageProductType.getProductTypeLocal().createNestedProductTypeLocal(selectProductTypePage.getSelectedProductType().getProductTypeLocal());
 		npt.setQuantity(editNestedProductTypePage.getQuantity());

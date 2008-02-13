@@ -11,10 +11,10 @@ import org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlHelper;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeSaleAccessControlSection 
-extends AbstractSaleAccessControlSection 
+public class SimpleProductTypeSaleAccessControlSection
+extends AbstractSaleAccessControlSection
 {
-	public SimpleProductTypeSaleAccessControlSection(IProductTypeDetailPage page, Composite parent, int style) 
+	public SimpleProductTypeSaleAccessControlSection(IProductTypeDetailPage page, Composite parent, int style)
 	{
 		super(
 				page, parent, style,
@@ -31,7 +31,7 @@ extends AbstractSaleAccessControlSection
 //			public Set<String> getFetchGroupsProductType() {
 //				return super.getFetchGroupsProductType();
 //			}
-		};	
-	}	
+		};
+	}
 		
 }

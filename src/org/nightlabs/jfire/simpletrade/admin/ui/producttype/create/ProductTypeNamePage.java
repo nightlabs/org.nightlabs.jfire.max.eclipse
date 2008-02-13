@@ -60,7 +60,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class ProductTypeNamePage 
+public class ProductTypeNamePage
 extends DynamicPathWizardPage
 {
 	private Combo inheritanceNatureCombo;
@@ -249,11 +249,11 @@ extends DynamicPathWizardPage
 		return !productTypeNameBuffer.isEmpty();
 	}
 
-	private void setPackageNatureDescription() 
+	private void setPackageNatureDescription()
 	{
 		if (packageNatureCombo.getSelectionIndex() == 0)
 			packageNatureDescription.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.packageNatureDescription.text_inner")); //$NON-NLS-1$
-		if (packageNatureCombo.getSelectionIndex() == 1)		
+		if (packageNatureCombo.getSelectionIndex() == 1)
 			packageNatureDescription.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.packageNatureDescription.text_outer")); //$NON-NLS-1$
 
 		getShell().layout(true, true);

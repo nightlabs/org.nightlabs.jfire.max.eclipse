@@ -14,12 +14,12 @@ import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.*;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeDetailPage 
+public class SimpleProductTypeDetailPage
 extends AbstractProductTypeDetailPage
-{	
+{
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link EventDetailPage}. 
+	 * new instances of {@link EventDetailPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {

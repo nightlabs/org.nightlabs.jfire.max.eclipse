@@ -33,7 +33,7 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 		super(parent, dirtyStateManager);
 	}
 
-	@SuppressWarnings("unchecked") 
+	@SuppressWarnings("unchecked")
 	@Implement
 	@Override
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)

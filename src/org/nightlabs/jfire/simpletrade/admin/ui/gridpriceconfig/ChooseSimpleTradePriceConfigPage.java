@@ -23,15 +23,15 @@ extends AbstractChooseGridPriceConfigPage
 
 	@Override
 	@Implement
-	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor) 
+	protected List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor)
 	{
 		return FormulaPriceConfigDAO.sharedInstance().getFormulaPriceConfigs(
-				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG, 
+				AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 //		try {
 //			SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //			List<FormulaPriceConfig> pcs = new ArrayList<FormulaPriceConfig>(stm.getFormulaPriceConfigs(
-//					AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG, 
+//					AbstractChooseGridPriceConfigPage.FETCH_GROUPS_PRICE_CONFIG,
 //					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
 //			return pcs;
 //		} catch (Exception e) {
