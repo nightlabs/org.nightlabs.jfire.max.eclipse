@@ -51,15 +51,15 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class SimpleProductTypeDetailViewComposite 
-extends XComposite 
+public class SimpleProductTypeDetailViewComposite
+extends XComposite
 {
 
 	private Logger logger = Logger.getLogger(SimpleProductTypeDetailViewComposite.class);
 	
 	private XComposite textWrapper;
-	private ReadOnlyLabeledText productTypeName;	
-	private ReadOnlyLabeledText productTypeDescription;	
+	private ReadOnlyLabeledText productTypeName;
+	private ReadOnlyLabeledText productTypeDescription;
 	private XComposite imageWrapper;
 	private Label imageLabel;
 	private ImageData currImageData;
@@ -77,14 +77,14 @@ extends XComposite
 	
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
 		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
-		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS}; 
+		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS};
 
 	private volatile Job setProductTypeIDJob = null;
 	public void setProductTypeID(final ProductTypeID productTypeID) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.loadProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				final SimpleProductType productType = (SimpleProductType) ProductTypeDAO.sharedInstance().getProductType(productTypeID, 
+				final SimpleProductType productType = (SimpleProductType) ProductTypeDAO.sharedInstance().getProductType(productTypeID,
 						FETCH_GROUP_PRODUCT_TYPE_DETAIL, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Set<ProductTypeID> ids = new HashSet<ProductTypeID>(Arrays.asList(new ProductTypeID[] {productTypeID}));
 				Set<StructFieldID> fields = new HashSet<StructFieldID>(Arrays.asList(new StructFieldID[] {
@@ -97,7 +97,7 @@ extends XComposite
 						);
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
-				} 
+				}
 				final PropertySet props = propertySets.get(productTypeID);
 				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, productType.getStructLocalScope(), monitor);
 				if (props != null)
@@ -110,7 +110,7 @@ extends XComposite
 							return;
 
 						productTypeName.setText(productType.getName().getText());
-						currImageData = null; 
+						currImageData = null;
 
 						ImageDataField smallImg = null;
 						try {
@@ -142,7 +142,7 @@ extends XComposite
 								description = (I18nTextDataField) props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG);
 						} catch (Exception e) {
 							logger.warn("Loading image from propertySet failed!", e);
-						}							
+						}
 						productTypeDescription.setText(description == null ? "" : description.getI18nText().getText());
 					}
 				});
@@ -155,12 +155,12 @@ extends XComposite
 
 	private SashForm sashForm;
 
-	protected void createComposite(XComposite parent) 
+	protected void createComposite(XComposite parent)
 	{
 		parent.getGridLayout().numColumns = 2;
 		parent.getGridLayout().makeColumnsEqualWidth = false;
 		
-		sashForm = new SashForm(parent, SWT.HORIZONTAL);		
+		sashForm = new SashForm(parent, SWT.HORIZONTAL);
 		sashForm.setLayout(new FillLayout());
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 		textWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -247,14 +247,14 @@ extends XComposite
 		
 		if (width > maxThumbnailWidth || height > maxThumbnailHeight)
 			factor = Math.min(
-					height > maxThumbnailHeight ? 1.0*maxThumbnailHeight/height : 1.0, 
+					height > maxThumbnailHeight ? 1.0*maxThumbnailHeight/height : 1.0,
 					width > maxThumbnailWidth ? 1.0*maxThumbnailWidth/width : 1.0
 				);
 			
 		ImageData scaledData = currImageData.scaledTo((int) (factor*width), (int) (factor*height));
 		Image image = new Image(Display.getDefault(), scaledData);
 		imageLabel.setImage(image);
-		if (!layoutingImageWrapper) { 
+		if (!layoutingImageWrapper) {
 			imageLabel.getParent().layout(true, true);
 			imageLabel.getParent().getParent().layout(true, true);
 		}

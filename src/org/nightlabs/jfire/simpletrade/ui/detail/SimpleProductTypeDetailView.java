@@ -10,17 +10,17 @@ import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class SimpleProductTypeDetailView 
-implements IProductTypeDetailView 
+public class SimpleProductTypeDetailView
+implements IProductTypeDetailView
 {
 
-	public Composite createComposite(Composite parent) 
+	public Composite createComposite(Composite parent)
 	{
-		simpleProductTypeDetailViewComposite = new SimpleProductTypeDetailViewComposite(parent, SWT.NONE); 
-		return simpleProductTypeDetailViewComposite; 
+		simpleProductTypeDetailViewComposite = new SimpleProductTypeDetailViewComposite(parent, SWT.NONE);
+		return simpleProductTypeDetailViewComposite;
 	}
 
-	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;	
+	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;
 	
 	private ProductTypeID productTypeID;
 	public void setProductTypeID(ProductTypeID productTypeID) {

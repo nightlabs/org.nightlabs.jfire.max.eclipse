@@ -31,7 +31,6 @@ import java.util.Collection;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -120,7 +119,7 @@ public class ArticleAdder extends AbstractArticleAdder
 			this.productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
 					productTypeID,
 					new String[]{
-							FetchPlan.DEFAULT, 
+							FetchPlan.DEFAULT,
 							FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR,
 							ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new SubProgressMonitor(monitor, 1)

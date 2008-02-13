@@ -9,8 +9,8 @@ import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewFactory;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class SimpleProductTypeDetailViewFactory 
-implements ProductTypeDetailViewFactory 
+public class SimpleProductTypeDetailViewFactory
+implements ProductTypeDetailViewFactory
 {
 
 	public IProductTypeDetailView createProductTypeDetailView() {

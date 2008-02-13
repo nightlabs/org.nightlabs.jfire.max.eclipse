@@ -104,7 +104,7 @@ public class ArticleEdit extends AbstractArticleEdit
 
 //	/**
 //	 * This method is called by {@link RemoveActionDelegate#run(IArticleEditAction, ArticleSelection)}.
-//	 * 
+//	 *
 //	 * @param articles The {@link Article}s to be removed.
 //	 */
 //	public void removeArticles(Set<? extends Article> articles)

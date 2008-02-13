@@ -126,9 +126,9 @@ public class ArticleEditComposite extends XComposite
 //		//	manager.add(action2);
 //		//	manager.add(new Separator());
 ////			manager.add(createProductAction);
-//		
+//
 ////			manager.add(new TestAction());
-//			
+//
 ////			drillDownAdapter.addNavigationActions(manager);
 //			// Other plug-ins can contribute their actions here
 //		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));

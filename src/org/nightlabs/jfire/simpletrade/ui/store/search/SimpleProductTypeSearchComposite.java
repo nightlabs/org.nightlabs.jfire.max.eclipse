@@ -13,8 +13,8 @@ import org.nightlabs.util.CollectionUtil;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeSearchComposite 
-extends AbstractProductTypeSearchComposite 
+public class SimpleProductTypeSearchComposite
+extends AbstractProductTypeSearchComposite
 {
 	/**
 	 * @param parent

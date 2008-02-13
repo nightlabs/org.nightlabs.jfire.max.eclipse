@@ -35,7 +35,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class SimpletradePlugin extends AbstractUIPlugin 
+public class SimpletradePlugin extends AbstractUIPlugin
 {
 	public static final String ZONE_ADMIN = SimpletradePlugin.class.getName() + "#ZONE_ADMIN";	 //$NON-NLS-1$
 	//The shared instance.

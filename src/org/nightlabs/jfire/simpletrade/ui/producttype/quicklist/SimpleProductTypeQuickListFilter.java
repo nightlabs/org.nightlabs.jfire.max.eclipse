@@ -57,8 +57,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class SimpleProductTypeQuickListFilter 
-extends AbstractProductTypeQuickListFilter 
+public class SimpleProductTypeQuickListFilter
+extends AbstractProductTypeQuickListFilter
 //extends AbstractProductTypeViewerQuickListFilter
 {
 	/**
@@ -73,7 +73,7 @@ extends AbstractProductTypeQuickListFilter
 	private SimpleProductTypeTable resultTable;
 	
 	/**
-	 * Factory for extending org.nightlabs.jfire.trade.ui.producttype.quicklist.productTypeQuickListFilterFactory 
+	 * Factory for extending org.nightlabs.jfire.trade.ui.producttype.quicklist.productTypeQuickListFilterFactory
 	 */
 	public static class Factory extends AbstractProductTypeQuickListFilterFactory {
 		public IProductTypeQuickListFilter createProductTypeQuickListFilter() {
@@ -98,7 +98,7 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
-	public void search(ProgressMonitor monitor) { 
+	public void search(ProgressMonitor monitor) {
 		final SimpleProductTypeSearchFilter searchFilter = new SimpleProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 		
 		new Job(Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.searchProductTypesJob.name")) { //$NON-NLS-1$
@@ -108,7 +108,7 @@ extends AbstractProductTypeQuickListFilter
 					StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					final Collection productTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {			
+						public void run() {
 							resultTable.setInput(productTypes);
 						}
 					});

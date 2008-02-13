@@ -8,8 +8,8 @@ import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class SimpleProductTypeSearchResultProviderFactory 
-extends AbstractSearchResultProviderFactory 
+public class SimpleProductTypeSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory
 {
 	public SimpleProductTypeSearchResultProviderFactory() {
 	}

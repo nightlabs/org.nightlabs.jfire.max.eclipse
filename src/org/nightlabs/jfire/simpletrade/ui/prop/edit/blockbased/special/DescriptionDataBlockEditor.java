@@ -23,10 +23,10 @@ import org.nightlabs.jfire.simpletrade.store.prop.SimpleProductTypeStruct;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class DescriptionDataBlockEditor 
-extends AbstractDataBlockEditor 
+public class DescriptionDataBlockEditor
+extends AbstractDataBlockEditor
 {
-	public static class Factory implements DataBlockEditorFactory {  
+	public static class Factory implements DataBlockEditorFactory {
 		/**
 		 * @see org.nightlabs.jfire.base.ui.person.edit.blockbased.PersonDataBlockEditorFactory#getProviderStructBlockID()
 		 */
@@ -70,9 +70,9 @@ extends AbstractDataBlockEditor
 	private void createFieldEditors() {
 		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_SHORT, 2);
 		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_LONG, 2);
-	}	
+	}
 	
-	private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan) 
+	private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan)
 	{
 		DataField field = null;
 		try {
@@ -81,12 +81,12 @@ extends AbstractDataBlockEditor
 			logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+fieldID.toString(),e); //$NON-NLS-1$
 		}
 		DataFieldEditor editor = null;
-		if (!hasFieldEditorFor(field)) { 
+		if (!hasFieldEditorFor(field)) {
 			try {
 				editor = DataFieldEditorFactoryRegistry.sharedInstance().getNewEditorInstance(
 						getStruct(), ExpandableBlocksEditor.EDITORTYPE_BLOCK_BASED_EXPANDABLE,
 						"", // TODO: Context ?!? //$NON-NLS-1$
-						field					
+						field
 				);
 			} catch (DataFieldEditorNotFoundException e1) {
 				logger.error("addDataFieldEditor(StructFieldID fieldID) DataFieldEditor not found for fieldID continuing: "+fieldID.toString(),e1); //$NON-NLS-1$
@@ -104,5 +104,5 @@ extends AbstractDataBlockEditor
 		}
 		editor.setData(getStruct(), field);
 		editor.refresh();
-	}	
+	}
 }

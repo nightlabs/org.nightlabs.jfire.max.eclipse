@@ -227,7 +227,7 @@ implements ISelectionProvider
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
-	{		
+	{
 		TableColumn col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("Name");
@@ -252,7 +252,7 @@ implements ISelectionProvider
 		if (!articleEdit.isInInvoice()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Invoice");			
+//			col.setToolTipText("Invoice");
 		}
 
 		if (!articleEdit.isInDeliveryNote()) {
