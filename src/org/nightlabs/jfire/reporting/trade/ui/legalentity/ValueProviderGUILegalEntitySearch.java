@@ -27,7 +27,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
  */
 public class ValueProviderGUILegalEntitySearch extends AbstractValueProviderGUI<AnchorID> {
 
-	public static class Factory implements IValueProviderGUIFactory 
+	public static class Factory implements IValueProviderGUIFactory
 	{
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()

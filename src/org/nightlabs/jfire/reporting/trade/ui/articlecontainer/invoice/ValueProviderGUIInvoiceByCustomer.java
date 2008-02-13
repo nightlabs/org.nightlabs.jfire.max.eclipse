@@ -47,7 +47,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ValueProviderGUIInvoiceByCustomer 
+public class ValueProviderGUIInvoiceByCustomer
 extends AbstractValueProviderGUI<InvoiceID>
 {
 	public static final String[] FETCH_GROUPS_INVOICES = new String[] {
@@ -133,7 +133,7 @@ extends AbstractValueProviderGUI<InvoiceID>
 				Set<InvoiceID> invoiceIDs = null;
 				try {
 //					invoiceIDs = TradePlugin.getDefault().getTradeManager().getInvoiceIDs(qs);
-					invoiceIDs = TradePlugin.getDefault().getAccountingManager().getInvoiceIDs(qs);					
+					invoiceIDs = TradePlugin.getDefault().getAccountingManager().getInvoiceIDs(qs);
 				} catch (RemoteException e) {
 					throw new RuntimeException(e);
 				}

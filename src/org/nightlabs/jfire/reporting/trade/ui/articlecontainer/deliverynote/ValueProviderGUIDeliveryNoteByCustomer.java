@@ -47,8 +47,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class ValueProviderGUIDeliveryNoteByCustomer 
-extends AbstractValueProviderGUI<DeliveryNoteID> 
+public class ValueProviderGUIDeliveryNoteByCustomer
+extends AbstractValueProviderGUI<DeliveryNoteID>
 {
 	public static final String[] FETCH_GROUPS_DELIVERY_NOTES = new String[] {
 		FetchPlan.DEFAULT,
@@ -59,10 +59,10 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 		DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL
 	};
 	
-	public static class Factory implements IValueProviderGUIFactory 
+	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<DeliveryNoteID> createValueProviderGUI(
-				ValueProviderConfig valueProviderConfig) 
+				ValueProviderConfig valueProviderConfig)
 		{
 			return new ValueProviderGUIDeliveryNoteByCustomer(valueProviderConfig);
 		}
@@ -120,7 +120,7 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 					throw new RuntimeException(e);
 				}
 				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.
-					sharedInstance().getDeliveryNotes(deliveryNoteIDs, FETCH_GROUPS_DELIVERY_NOTES, 
+					sharedInstance().getDeliveryNotes(deliveryNoteIDs, FETCH_GROUPS_DELIVERY_NOTES,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {

@@ -82,7 +82,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 			public void selectionChanged(SelectionChangedEvent event) {
 				notifyOutputChanged();
 			}
-		});		
+		});
 		
 		return group;
 	}
@@ -92,7 +92,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
-		Collection<Anchor> anchors = accountEntryViewer.getListComposite().getSelectedElements();		
+		Collection<Anchor> anchors = accountEntryViewer.getListComposite().getSelectedElements();
 		if (anchors != null && anchors.size() > 0) {
 			Collection<AnchorID> result = new ArrayList<AnchorID>(anchors.size());
 			for (Anchor anchor : anchors) {

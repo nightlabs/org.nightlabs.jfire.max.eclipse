@@ -47,19 +47,19 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class ValueProviderGUIOfferByCustomer 
-extends AbstractValueProviderGUI<OfferID> 
+public class ValueProviderGUIOfferByCustomer
+extends AbstractValueProviderGUI<OfferID>
 {
 	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
 		FetchPlan.DEFAULT,
 		Offer.FETCH_GROUP_THIS_OFFER,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON, 
+		LegalEntity.FETCH_GROUP_PERSON,
 		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL
 	};
 	
-	public static class Factory implements IValueProviderGUIFactory 
+	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<OfferID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
 			return new ValueProviderGUIOfferByCustomer(valueProviderConfig);
@@ -70,8 +70,8 @@ extends AbstractValueProviderGUI<OfferID>
 		}
 
 		public void setInitializationData(IConfigurationElement config,
-				String propertyName, Object data) 
-		throws CoreException 
+				String propertyName, Object data)
+		throws CoreException
 		{
 
 		}
@@ -120,7 +120,7 @@ extends AbstractValueProviderGUI<OfferID>
 					throw new RuntimeException(e);
 				}
 				final Collection<Offer> offers = OfferDAO.
-					sharedInstance().getOffers(offerIDs, FETCH_GROUPS_OFFERS, 
+					sharedInstance().getOffers(offerIDs, FETCH_GROUPS_OFFERS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {

@@ -46,8 +46,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public class ValueProviderGUIOrderByCustomer 
-extends AbstractValueProviderGUI<OrderID> 
+public class ValueProviderGUIOrderByCustomer
+extends AbstractValueProviderGUI<OrderID>
 {
 	public static final String[] FETCH_GROUPS_ORDERS = new String[] {
 		FetchPlan.DEFAULT,
@@ -57,7 +57,7 @@ extends AbstractValueProviderGUI<OrderID>
 		LegalEntity.FETCH_GROUP_PERSON
 	};
 	
-	public static class Factory implements IValueProviderGUIFactory 
+	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<OrderID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
 			return new ValueProviderGUIOrderByCustomer(valueProviderConfig);
@@ -118,7 +118,7 @@ extends AbstractValueProviderGUI<OrderID>
 					throw new RuntimeException(e);
 				}
 				final Collection<Order> orders = OrderDAO.
-					sharedInstance().getOrders(orderIDs, FETCH_GROUPS_ORDERS, 
+					sharedInstance().getOrders(orderIDs, FETCH_GROUPS_ORDERS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {

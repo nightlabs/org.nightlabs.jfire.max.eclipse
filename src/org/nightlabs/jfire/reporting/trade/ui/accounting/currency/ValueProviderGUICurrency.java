@@ -108,7 +108,7 @@ extends AbstractValueProviderGUI<CurrencyID>
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public CurrencyID getOutputValue() {
-		Currency currency = currencyTable.getFirstSelectedElement(); 
+		Currency currency = currencyTable.getFirstSelectedElement();
 		if (currency != null)
 			return (CurrencyID) JDOHelper.getObjectId(currency);
 		return null;

@@ -79,7 +79,7 @@ extends AbstractValueProviderGUI<AnchorID>
 			public void selectionChanged(SelectionChangedEvent event) {
 				notifyOutputChanged();
 			}
-		});		
+		});
 		
 		return group;
 	}
@@ -88,7 +88,7 @@ extends AbstractValueProviderGUI<AnchorID>
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public AnchorID getOutputValue() {
-		Anchor anchor = (Anchor) accountEntryViewer.getListComposite().getFirstSelectedElement(); 
+		Anchor anchor = (Anchor) accountEntryViewer.getListComposite().getFirstSelectedElement();
 		if (anchor != null)
 			return (AnchorID) JDOHelper.getObjectId(anchor);
 		return null;

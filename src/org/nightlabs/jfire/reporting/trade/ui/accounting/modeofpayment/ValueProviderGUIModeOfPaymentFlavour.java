@@ -110,7 +110,7 @@ extends AbstractValueProviderGUI<ModeOfPaymentFlavourID>
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public ModeOfPaymentFlavourID getOutputValue() {
-		ModeOfPaymentFlavour mopf = modeOfPaymentFlavourTable.getFirstSelectedElement(); 
+		ModeOfPaymentFlavour mopf = modeOfPaymentFlavourTable.getFirstSelectedElement();
 		if (mopf != null)
 			return (ModeOfPaymentFlavourID) JDOHelper.getObjectId(mopf);
 		return null;
