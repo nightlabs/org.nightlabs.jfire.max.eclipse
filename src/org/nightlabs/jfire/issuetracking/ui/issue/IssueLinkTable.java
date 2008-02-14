@@ -65,6 +65,11 @@ extends AbstractTableComposite<ObjectID>{
 					return handler.getLinkObjectDescription(objectID);
 				}
 			}
+			
+			if (columnIndex == 1) {
+				return "Relation";
+			}
+			
 			return "";
 		}
 	}
@@ -79,8 +84,12 @@ extends AbstractTableComposite<ObjectID>{
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
 		tableColumn.setText("Link object");
+		
+		tableColumn = new TableColumn(table, SWT.NONE);
+		tableColumn.setMoveable(true);
+		tableColumn.setText("Relation");
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30});
 		table.setLayout(layout);
 	}
 
