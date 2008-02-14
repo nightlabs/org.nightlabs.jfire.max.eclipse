@@ -31,6 +31,10 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 			public void issueLinkSelectionChanged(
 					IssueLinkSelectionChangedEvent selectionChangedEvent) {
 				iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());	
+				
+				WizardHopPage page = new IssueLinkWizardRelationPage(iWizard);
+				getWizardHop().addHopPage(page);
+				
 				getContainer().updateButtons();
 			}
 		});
