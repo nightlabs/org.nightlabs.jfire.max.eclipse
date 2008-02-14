@@ -41,4 +41,8 @@ extends DynamicPathWizard
 	public void setIssueLinkObjectID(Set<ObjectID> issueLinkObjectID) {
 		this.issueLinkObjectID = issueLinkObjectID;
 	}
+	
+	public void setLinkRelation(String relationText) {
+		
+	}
 }
