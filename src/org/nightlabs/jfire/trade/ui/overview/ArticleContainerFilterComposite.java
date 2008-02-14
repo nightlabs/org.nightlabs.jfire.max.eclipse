@@ -221,7 +221,7 @@ extends JDOQueryComposite
 		public void widgetSelected(SelectionEvent e) {
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(customerText.getText(), false);
 			if (_legalEntity != null) {
-				selectedVendorID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+				selectedCustomerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedCustomerID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
