@@ -364,6 +364,10 @@ implements CombiTransferWizard
 	{
 		this.customerID = customerID;
 	}
+	
+	public AnchorID getCustomerID() {
+		return customerID;
+	}
 
 	@Implement
 	public Collection<CustomerGroupID> getCustomerGroupIDs()

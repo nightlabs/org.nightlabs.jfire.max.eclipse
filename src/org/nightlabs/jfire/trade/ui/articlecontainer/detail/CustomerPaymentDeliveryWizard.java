@@ -14,6 +14,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 
 public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainerWizard {
 
@@ -48,6 +49,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 				
 				clearCustomerGroupIDs();
 				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(legalEntity.getDefaultCustomerGroup()));
+				setCustomerID((AnchorID) JDOHelper.getObjectId(legalEntity));
 				
 				reloadPaymentDeliveryModes();
 			}
@@ -55,5 +57,19 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		
 		addPage(personSearchWizardPage);
 		super.addPages();
+	}
+	
+	@Override
+	public boolean performFinish() {
+		// Assign the customer ID
+		try {
+			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			tradeManager.assignCustomer(orderID, getCustomerID(), false, null, -1);
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		return super.performFinish();
 	}
 }
