@@ -67,7 +67,7 @@ extends AbstractTableComposite<ObjectID>{
 			}
 			
 			if (columnIndex == 1) {
-				return "Relation";
+				return "No Relation";
 			}
 			
 			return "";

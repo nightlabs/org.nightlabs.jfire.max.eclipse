@@ -88,23 +88,16 @@ extends AbstractTableComposite<Issue>
 		loadIssues();
 
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, changedIssueListener);
+		
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent event)
 			{
 				JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, changedIssueListener);
 			}
 		});
-
-		JDOLifecycleManager.sharedInstance().addNotificationListener(
-				Issue.class, changedIssueListener);
-		addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent event)
-			{
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(
-						Issue.class, changedIssueListener);
-			}
-		});
-
+		
 		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
@@ -160,34 +153,23 @@ extends AbstractTableComposite<Issue>
 
 	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-
 			for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = it.next();
 
-				switch (dirtyObjectID.getLifecycleState()) {
-				case DIRTY:
-					Issue issue = IssueDAO.sharedInstance().getIssue((IssueID)dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor());
-					issues.add(issue);
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {		
-							setIssues(null, null);
-							setIssues(null, issues);
-							refresh();
-						}
-					});
-					break;
-				case DELETED:
-					// - remove the object from the UI
-					break;
-				}
+					switch (dirtyObjectID.getLifecycleState()) {
+					case DIRTY:
+						loadIssues();
+						break;
+					case DELETED:
+						// - remove the object from the UI
+						break;
+					}
 			}
 		}
 	};
 
 	private void loadIssues(){
+		issues.clear();
 		issues.addAll(IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()));
@@ -195,6 +177,7 @@ extends AbstractTableComposite<Issue>
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {					
 				setIssues(null, issues);
+				update();
 			}
 		});
 	}
