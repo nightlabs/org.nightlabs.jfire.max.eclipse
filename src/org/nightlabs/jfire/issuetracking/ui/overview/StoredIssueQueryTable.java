@@ -68,6 +68,8 @@ extends AbstractTableComposite<StoredIssueQuery>
 				case DELETED:
 					// - remove the object from the UI
 					break;
+				default:
+					break;
 				}
 			}
 		}
