@@ -54,6 +54,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountSearchFilter;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -170,7 +171,15 @@ extends DynamicPathWizardPage
 
 				final List<Account> accounts = accountSearchFilter == null ? new ArrayList<Account>(0) : AccountDAO.sharedInstance().getAccounts(
 						accountSearchFilter,
-						new String[] { FetchPlan.DEFAULT, Account.FETCH_GROUP_NAME, Account.FETCH_GROUP_CURRENCY, Account.FETCH_GROUP_OWNER, LegalEntity.FETCH_GROUP_PERSON },
+						new String[] {
+								FetchPlan.DEFAULT,
+								Account.FETCH_GROUP_NAME,
+								Account.FETCH_GROUP_CURRENCY,
+								Account.FETCH_GROUP_OWNER,
+								Account.FETCH_GROUP_ACCOUNT_TYPE,
+								AccountType.FETCH_GROUP_NAME,
+								LegalEntity.FETCH_GROUP_PERSON
+						},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 				Display.getDefault().asyncExec(new Runnable()
