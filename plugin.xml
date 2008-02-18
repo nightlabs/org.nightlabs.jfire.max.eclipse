@@ -79,6 +79,14 @@
             name="Edit ReportLayout"
             scope="reporting.admin"
             tooltip="Edit ReportLayout"/>
+      <reportRegistryItemAction
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutAction"
+            contextmenuPath="reporting.admin"
+            icon="icons/layout/action/edit/EditReportLayoutAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.action.export.ExportReportLayoutAction"
+            name="Export ReportLayout"
+            scope="reporting.admin"
+            tooltip="Export ReportLayout"/>      
       <separator name="reporting.admin.separator"/>
    </extension>
    <extension

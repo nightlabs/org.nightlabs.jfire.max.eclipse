@@ -41,12 +41,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
@@ -59,7 +55,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
-import org.nightlabs.jfire.reporting.admin.ui.platform.ClientResourceLocator;
+import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
 import org.nightlabs.jfire.reporting.layout.ReportLayoutLocalisationData;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
@@ -101,54 +97,11 @@ implements IReportEditorPage, IReportLayoutL10nManager
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (editorInput instanceof JFireRemoteReportEditorInput) {
 			JFireRemoteReportEditorInput input = (JFireRemoteReportEditorInput) editorInput;
-			this.reportEditorInput = input;
-			this.reportLayoutID = input.getReportRegistryItemID();
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject("ReportLocalisation"); //$NON-NLS-1$
-			bundleFolder = ClientResourceLocator.getReportLayoutResourceFolder(input.getReportRegistryItemID());
-			if (bundleFolder.exists())
-				try {
-					bundleFolder.delete(true, new NullProgressMonitor());
-				} catch (CoreException e) {
-					throw new RuntimeException(e);
-				}
-				
-			try {
-				project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			} catch (CoreException e) {
-				throw new RuntimeException(e);
-			}
-			bundleFolder = ClientResourceLocator.getReportLayoutResourceFolder(input.getReportRegistryItemID());
-			try {
-				bundleFolder.create(true, true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				throw new RuntimeException(e);
-			}
-			try {
-				Collection<ReportLayoutLocalisationData> bundle = ReportingPlugin.getReportManager().getReportLayoutLocalisationBundle(
-						input.getReportRegistryItemID(),
-						new String[] {FetchPlan.DEFAULT, ReportLayoutLocalisationData.FETCH_GROUP_LOCALISATOIN_DATA},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
-					);
-				localisationBundle = new HashMap<String, ReportLayoutLocalisationData>();
-				for (ReportLayoutLocalisationData data : bundle) {
-					localisationBundle.put(data.getLocale(), data);
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-			for (ReportLayoutLocalisationData data : localisationBundle.values()) {
-				String fileName = ReportLayoutLocalisationData.PROPERIES_FILE_PREFIX;
-				if ("".equals(data.getLocale())) //$NON-NLS-1$
-						fileName = fileName + ".properties"; //$NON-NLS-1$
-				else
-					fileName = fileName + "_" + data.getLocale() + ".properties";  //$NON-NLS-1$ //$NON-NLS-2$
-				IFile dataFile = bundleFolder.getFile(fileName);
-				try {
-					dataFile.create(data.createLocalisationDataInputStream(), true, new NullProgressMonitor());
-				} catch (CoreException e) {
-					throw new RuntimeException(e);
-				}
-			}
+			reportLayoutID = input.getReportRegistryItemID();
+			PreparedLayoutL10nData l10nData = ReportLayoutL10nUtil.prepareReportLayoutL10nData(input);
+			bundleFolder = l10nData.getBundleFolder();
+			localisationBundle = l10nData.getLocalisationBundle();
+			
 			IFile file = bundleFolder.getFile(ReportLayoutLocalisationData.PROPERIES_FILE_PREFIX+".properties"); //$NON-NLS-1$
 			FileEditorInput newInput = new FileEditorInput(file);
 			addPropertyListener(new IPropertyListener() {
