@@ -157,6 +157,8 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 					
 					currentStateComposite.setStatable(issue);
 					nextTransitionComposite.setStatable(issue);
+
+					getController().setIssue(issue);
 				} catch (Exception x) {
 					throw new RuntimeException(x);
 				}
