@@ -50,7 +50,12 @@ extends AbstractProductTypeDetailPage
 	}
 
 	@Override
-	protected IProductTypeSectionPart createOwnerVendorSection(Composite parent) {
+	protected IProductTypeSectionPart createOwnerSection(Composite parent) {
+		return null;
+	}
+
+	@Override
+	protected IProductTypeSectionPart createVendorSection(Composite parent) {
 		return null;
 	}
 	
