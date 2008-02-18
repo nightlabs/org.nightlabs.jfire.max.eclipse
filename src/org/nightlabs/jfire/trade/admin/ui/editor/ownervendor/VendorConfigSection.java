@@ -1,12 +1,22 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.ownervendor;
 
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
+import org.nightlabs.base.ui.action.SelectionAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
+import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection;
+import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 
 /**
@@ -15,10 +25,7 @@ import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
  */
 
 
-
-
-
-public class OwnerVendorConfigSection
+public class VendorConfigSection  
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
@@ -33,35 +40,31 @@ implements IProductTypeSectionPart
 	 * @param title
 	 */
 
-	private OwnerVendorConfigComposite ownerVendorConfigComposite = null;
+	private LegalEntityEditComposite vendorEditComposite = null;
 
 
-	public OwnerVendorConfigSection(IFormPage page,
-			Composite parent, int style)
+	public VendorConfigSection(IFormPage page,
+			Composite parent, int style) 
 	{
 
 
-		super(page, parent, style, "Owner & Vendor");
-		this.ownerVendorConfigComposite = new OwnerVendorConfigComposite(getContainer(),
+		super(page, parent, style, "Vendor");
+		this.vendorEditComposite = new LegalEntityEditComposite(getContainer(), 
 				SWT.NONE, this, false);
 
-
-		ownerVendorConfigComposite.addLegalEntityValueChangedListener(
+		vendorEditComposite.addLegalEntityValueChangedListener( 
 				new ILegalEntityValueChangedListener()
 		  {
 			public void legalEntityValueChanged()
 			{
-				// if value has changed
+				// if value has changed 				
 					markDirty();
 				
 			}
 		});
 
 		
-		
-		
-		
-
+	
 		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
 		getToolBarManager().getControl().setBackground(getSection().getTitleBarGradientBackground());
@@ -76,8 +79,8 @@ implements IProductTypeSectionPart
 
 
 
-	public OwnerVendorConfigComposite getOwnerVendorConfigComposite() {
-		return ownerVendorConfigComposite;
+	public LegalEntityEditComposite getVendorEditComposite() {
+		return vendorEditComposite;
 	}
 
 
@@ -93,18 +96,16 @@ implements IProductTypeSectionPart
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set
 	 */
-	public void setProductType(ProductType productType)
+	public void setProductType(ProductType productType) 
 	{
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
 
 
 		this.productType = productType;
-		getOwnerVendorConfigComposite().setProductType(productType);
+		getVendorEditComposite().setLegalEntity(productType.getOwner());
 
 	}
-
-
 
 
 
@@ -114,11 +115,9 @@ implements IProductTypeSectionPart
 
 
 
-		if (ownerVendorConfigComposite != null && isDirty())
+		if (vendorEditComposite != null && isDirty())
 		{
-			productType.setOwner(ownerVendorConfigComposite.getOwnerLegalEntity());
-
-			productType.setVendor(ownerVendorConfigComposite.getVendorLegalEntity());
+			productType.setOwner(vendorEditComposite.getLegalEntity());
 		}
 
 
@@ -140,7 +139,7 @@ implements IProductTypeSectionPart
 	}
 	
 	
-	class InheritAction
+	class InheritAction 
 	extends InheritanceAction {
 		@Override
 		public void run() {
