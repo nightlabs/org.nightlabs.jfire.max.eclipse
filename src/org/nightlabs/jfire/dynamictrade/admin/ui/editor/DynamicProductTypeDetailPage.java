@@ -9,7 +9,9 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
-import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorConfigSection;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;;
+
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -49,11 +51,22 @@ extends AbstractProductTypeDetailPage
 	}
 
 	@Override
-	protected IProductTypeSectionPart createOwnerVendorSection(Composite parent)
+	protected IProductTypeSectionPart createOwnerSection(Composite parent)
 	{
-		return new OwnerVendorConfigSection(this, parent, getSectionStyle());
+		return new OwnerConfigSection(this, parent, getSectionStyle());
 
 	}
+	
+
+	@Override
+	protected IProductTypeSectionPart createVendorSection(Composite parent)
+	{
+		return new VendorConfigSection(this, parent, getSectionStyle());
+
+	}
+	
+	
+	
 	
 	
 	@Override
