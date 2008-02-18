@@ -52,9 +52,12 @@ extends AbstractProductTypeDetailPage
 	
 
 	@Override
-	protected IProductTypeSectionPart createOwnerVendorSection(Composite parent) {
-		return new OwnerVendorConfigSection(this, parent, getSectionStyle());
+	protected IProductTypeSectionPart createOwnerSection(Composite parent) {
+		return new OwnerConfigSection(this, parent, getSectionStyle());
 	}
 	
-
+	@Override
+	protected IProductTypeSectionPart createVendorSection(Composite parent) {
+		return new VendorConfigSection(this, parent, getSectionStyle());
+	}
 }
