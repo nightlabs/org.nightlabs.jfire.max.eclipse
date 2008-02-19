@@ -152,7 +152,8 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 			{
 				try {
 					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), JbpmConstants.TRANSITION_NAME_ASSIGN, 
+					Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
 							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					
 					currentStateComposite.setStatable(issue);
