@@ -43,14 +43,14 @@ implements IProductTypeDetailPage
 	public void setSectionStyle(int sectionStyle) {
 		this.sectionStyle = sectionStyle;
 	}
-	
-	
-	
 
-	
+
+
+
+
 //	private AbstractProductTypeNameSection nameSection = null;
 //	public AbstractProductTypeNameSection getNameSection() {
-//		return nameSection;
+//	return nameSection;
 //	}
 //	protected abstract AbstractProductTypeNameSection createNameSection();
 	private IProductTypeSectionPart nameSection = null;
@@ -58,23 +58,34 @@ implements IProductTypeDetailPage
 		return nameSection;
 	}
 	protected abstract IProductTypeSectionPart createNameSection(Composite parent);
-	
-	
-	
 
-	private IProductTypeSectionPart ownerVendorSection = null;
-	public IProductTypeSectionPart getOwnerVendorSection() {
-		return ownerVendorSection;
+
+
+
+	private IProductTypeSectionPart vendorSection = null;
+	public IProductTypeSectionPart getVendorSection() {
+		return vendorSection;
 	}
-	protected abstract IProductTypeSectionPart createOwnerVendorSection(Composite parent);
-	
-	
-	
-	
-	
+	protected abstract IProductTypeSectionPart createVendorSection(Composite parent);
+
+
+
+
+
+	private IProductTypeSectionPart ownerSection = null;
+	public IProductTypeSectionPart getOwnerSection() {
+		return ownerSection;
+	}
+	protected abstract IProductTypeSectionPart createOwnerSection(Composite parent);
+
+
+
+
+
+
 //	private AbstractNestedProductTypeSection nestedProductTypeSection = null;
 //	public AbstractNestedProductTypeSection getNestedProductTypeSection() {
-//		return nestedProductTypeSection;
+//	return nestedProductTypeSection;
 //	}
 //	protected abstract AbstractNestedProductTypeSection createNestedProductTypesSection();
 	private IProductTypeSectionPart nestedProductTypeSection = null;
@@ -82,10 +93,10 @@ implements IProductTypeDetailPage
 		return nestedProductTypeSection;
 	}
 	protected abstract IProductTypeSectionPart createNestedProductTypesSection(Composite parent);
-	
+
 //	private AbstractSaleAccessControlSection saleAccessControlSection = null;
 //	public AbstractSaleAccessControlSection getSaleAccessControlSection() {
-//		return saleAccessControlSection;
+//	return saleAccessControlSection;
 //	}
 //	protected abstract AbstractSaleAccessControlSection createSaleAccessControlSection();
 	private IProductTypeSectionPart saleAccessControlSection = null;
@@ -93,7 +104,7 @@ implements IProductTypeDetailPage
 		return saleAccessControlSection;
 	}
 	protected abstract IProductTypeSectionPart createSaleAccessControlSection(Composite parent);
-	
+
 
 	@Override
 	protected void addSections(Composite parent)
@@ -110,23 +121,36 @@ implements IProductTypeDetailPage
 			getManagedForm().addPart(nestedProductTypeSection);
 		}
 
-		
-		
-		ownerVendorSection = createOwnerVendorSection(parent);
-		if (ownerVendorSection != null) {
-			ownerVendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-			getManagedForm().addPart(ownerVendorSection);
+
+
+
+
+		ownerSection = createOwnerSection(parent);
+		if (ownerSection != null) {
+			//ownerSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
+			ownerSection.getSection().setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
+			getManagedForm().addPart(ownerSection);
 		}
-		
-		
+
+		vendorSection = createVendorSection(parent);
+		if (vendorSection != null) {
+			//vendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+			vendorSection.getSection().setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
+			getManagedForm().addPart(vendorSection);
+		}		
+
+
+
 		saleAccessControlSection = createSaleAccessControlSection(parent);
 		if (saleAccessControlSection != null) {
 			saleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			getManagedForm().addPart(saleAccessControlSection);
 		}
-	
-	
+
+
 	}
+
+
 
 	@Override
 	protected void asyncCallback()
@@ -162,17 +186,20 @@ implements IProductTypeDetailPage
 			getManagedForm().getForm().getForm().setMessage(null, IMessageProvider.INFORMATION);
 			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), true);
 		}
-		
+
 		if (nameSection != null)
 			nameSection.setProductType(productType);
 		if (nestedProductTypeSection != null)
 			nestedProductTypeSection.setProductType(productType);
 		if (saleAccessControlSection != null)
 			saleAccessControlSection.setProductType(productType);
-		if (ownerVendorSection != null)
-			ownerVendorSection.setProductType(productType);
-	
-		
+		if (ownerSection != null)
+			ownerSection.setProductType(productType);						
+		if (vendorSection != null)
+			vendorSection.setProductType(productType);						
+
+
+
 	}
 
 	/**
