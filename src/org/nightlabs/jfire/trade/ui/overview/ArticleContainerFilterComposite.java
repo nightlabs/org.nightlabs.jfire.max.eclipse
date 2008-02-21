@@ -239,7 +239,10 @@ extends JDOQueryComposite
 	@Override
 	public JDOQuery getJDOQuery()
 	{
-		articleContainerQuery = new ArticleContainerQuery(getArticleContainerClass());
+		if (articleContainerQuery == null)
+			throw new IllegalStateException("The field articleContainerQuery is not set!");
+
+//		articleContainerQuery = new ArticleContainerQuery(getArticleContainerClass());
 		if (articleContainerQuery != null)
 			prepareQuery(articleContainerQuery);
 		return articleContainerQuery;
@@ -272,10 +275,20 @@ extends JDOQueryComposite
 	public Class getArticleContainerClass() {
 		return articleContainerClass;
 	}
-	public void setArticleContainerClass(Class articleContainerClass) {
-		this.articleContainerClass = articleContainerClass;
+
+	public void setArticleContainerQuery(
+			ArticleContainerQuery articleContainerQuery)
+	{
+		this.articleContainerQuery = articleContainerQuery;
 		if (articleContainerQuery == null)
-			articleContainerQuery = new ArticleContainerQuery(articleContainerClass);
+			this.articleContainerClass = null;
+		else
+			this.articleContainerClass = articleContainerQuery.getArticleContainerClass();
 	}
-	
+//	public void setArticleContainerClass(Class articleContainerClass) {
+//		this.articleContainerClass = articleContainerClass;
+//		if (articleContainerQuery == null)
+//			articleContainerQuery = new ArticleContainerQuery(articleContainerClass);
+//	}
+
 }

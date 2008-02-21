@@ -3,9 +3,14 @@
  */
 package org.nightlabs.jfire.trade.ui.overview.repository.search;
 
+import java.util.Collections;
+
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.store.dao.RepositoryDAO;
 import org.nightlabs.jfire.store.query.RepositoryQuery;
+import org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -24,6 +29,9 @@ extends AbstractQuickSearchEntry
 		query.setOwnerName(getSearchText());
 		query.setFromInclude(getMinIncludeRange());
 		query.setToExclude(getMaxExcludeRange());
-		return query;
+		return RepositoryDAO.sharedInstance().getRepositoriesForQueries(
+				Collections.singleton(query),
+				RepositoryEntryViewer.FETCH_GROUPS_REPOSITORIES,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 }

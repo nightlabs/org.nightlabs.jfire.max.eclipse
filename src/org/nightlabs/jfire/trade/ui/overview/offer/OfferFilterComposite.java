@@ -2,6 +2,8 @@ package org.nightlabs.jfire.trade.ui.overview.offer;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
+import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
 /**
@@ -23,5 +25,10 @@ extends AbstractArticleContainerFilterComposite
 	protected Class getQueryClass() {
 		return Offer.class;
 	}
-	
+
+	@Override
+	protected ArticleContainerQuery createArticleContainerQuery()
+	{
+		return new OfferQuery();
+	}
 }

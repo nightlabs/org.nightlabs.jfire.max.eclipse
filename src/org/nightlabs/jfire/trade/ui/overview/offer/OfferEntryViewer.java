@@ -84,8 +84,14 @@ extends ArticleContainerEntryViewer
 	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
+	protected Object getQueryResult(Collection<? extends JDOQuery> queries, ProgressMonitor monitor)
 	{
+		if (queries == null)
+			throw new IllegalArgumentException("queries must not be null!");
+
+		if (queries.isEmpty())
+			throw new IllegalArgumentException("queries must not be empty!");
+
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			Set<OfferID> offerIDs = tradeManager.getOfferIDs(queries);

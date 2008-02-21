@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -51,13 +52,13 @@ extends AbstractQueryFilterComposite
 	{
 		articleContainerFilterComposite = new ArticleContainerFilterComposite(this,
 				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		articleContainerFilterComposite
-				.setArticleContainerClass(getQueryClass());
+//		articleContainerFilterComposite.setArticleContainerClass(getQueryClass());
+		articleContainerFilterComposite.setArticleContainerQuery(createArticleContainerQuery());
 		articleContainerFilterComposite.setToolkit(getToolkit());
 		articleContainerFilterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return articleContainerFilterComposite;
 	}
-	
+
 	@Override
 	protected List<JDOQueryComposite> registerJDOQueryComposites()
 	{
@@ -65,6 +66,11 @@ extends AbstractQueryFilterComposite
 		queryComps.add(statableFilterComposite);
 		queryComps.add(articleContainerFilterComposite);
 		return queryComps;
+	}
+
+	protected ArticleContainerQuery createArticleContainerQuery()
+	{
+		return new ArticleContainerQuery(getQueryClass());
 	}
 
 //	@Override

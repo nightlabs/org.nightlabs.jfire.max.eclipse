@@ -77,7 +77,7 @@ extends ArticleContainerEntryViewer
 	}
 		
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
+	protected Object getQueryResult(Collection<? extends JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();

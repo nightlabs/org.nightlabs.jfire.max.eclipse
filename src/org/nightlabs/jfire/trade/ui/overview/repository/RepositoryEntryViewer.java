@@ -52,11 +52,12 @@ extends JDOQuerySearchEntryViewer
 	};
 
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
+	protected Object getQueryResult(Collection<? extends JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
+			Collection<? extends JDOQuery<? extends Repository>> _queries = (Collection<? extends JDOQuery<? extends Repository>>) queries;
 			Collection<Repository> repositories = RepositoryDAO.sharedInstance().getRepositoriesForQueries(
-					queries,
+					_queries,
 					FETCH_GROUPS_REPOSITORIES,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);

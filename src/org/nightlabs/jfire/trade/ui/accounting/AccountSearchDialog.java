@@ -41,7 +41,6 @@ import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
@@ -79,9 +78,9 @@ extends CenteredDialog
 		AccountQuery query = new AccountQuery();
 //		query.setAnchorTypeID(anchorTypeID);
 		query.setAccountTypeID(accountTypeID);
-		final Collection<JDOQuery> queries = new ArrayList<JDOQuery>();
+		final Collection<AccountQuery> queries = new ArrayList<AccountQuery>(1);
 		queries.add(query);
-		
+
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSearchDialog.loadingAccountsJob.name")){ //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {

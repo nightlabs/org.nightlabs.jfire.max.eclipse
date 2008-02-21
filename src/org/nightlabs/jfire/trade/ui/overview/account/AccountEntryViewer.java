@@ -17,6 +17,7 @@ import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
@@ -54,11 +55,12 @@ extends JDOQuerySearchEntryViewer
 	};
 
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries, ProgressMonitor monitor)
+	protected Object getQueryResult(Collection<? extends JDOQuery> queries, ProgressMonitor monitor)
 	{
 		try {
+			Collection<? extends JDOQuery<? extends Account>> _queries = CollectionUtil.castCollection(queries);
 			return AccountDAO.sharedInstance().getAccountsForQueries(
-					queries,
+					_queries,
 					FETCH_GROUPS_ACCOUNTS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
