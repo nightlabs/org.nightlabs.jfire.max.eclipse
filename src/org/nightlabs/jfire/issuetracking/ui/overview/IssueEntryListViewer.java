@@ -83,7 +83,7 @@ extends JDOQuerySearchEntryViewer
 		, FetchPlan.DEFAULT };
 	
 	@Override
-	protected Object getQueryResult(Collection<JDOQuery> queries,
+	protected Object getQueryResult(Collection<? extends JDOQuery> queries,
 			ProgressMonitor monitor) {
 		try {
 			return IssueDAO.sharedInstance().getIssuesForQueries(

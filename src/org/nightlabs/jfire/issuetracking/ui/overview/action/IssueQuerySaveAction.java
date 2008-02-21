@@ -54,7 +54,7 @@ extends AbstractIssueAction
 		if (part instanceof IssueEntryListEditor) {
 			IssueEntryListEditor editor = (IssueEntryListEditor) part;
 			JDOQuerySearchEntryViewer viewer = (JDOQuerySearchEntryViewer)editor.getEntryViewer();
-			List<JDOQuery> queries = viewer.getFilterComposite().getJDOQueries();
+			List<? extends JDOQuery> queries = viewer.getFilterComposite().getJDOQueries();
 			if (queries != null && queries.size() != 0) {
 				dialog = new IssueQuerySaveDialog(RCPUtil.getActiveShell());
 				if (dialog.open() == Dialog.OK) {
