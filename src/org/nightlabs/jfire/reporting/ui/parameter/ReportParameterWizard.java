@@ -9,7 +9,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
@@ -195,16 +197,11 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		if (reportLayoutID == null)
 			throw new IllegalArgumentException("reportLayoutID must not be null!"); //$NON-NLS-1$
 
-		ReportParameterWizard wiz = new ReportParameterWizard(reportLayoutID);
-		final Dialog dlg = new Dialog(wiz);
+		final ReportParameterWizard wiz = new ReportParameterWizard(reportLayoutID);
 		final Result dialogResult = new Result();
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				dlg.open();
-			}
-		});
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
+				Dialog dlg = new Dialog(wiz);
 				dialogResult.setAcquisitionFinished(dlg.open() == Window.OK);
 			}
 		});
