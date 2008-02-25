@@ -5,8 +5,10 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.jfire.store.ProductType;
 
 /**
+ * Interface which describes a part which can return a {@link Section}
+ * which displays details for a given {@link ProductType}.
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public interface IProductTypeSectionPart
 extends IFormPart

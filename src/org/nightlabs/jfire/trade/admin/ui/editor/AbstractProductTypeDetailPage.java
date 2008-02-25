@@ -1,28 +1,33 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
+ * Abstract Base class which implements the {@link IProductTypeDetailPage} and
+ * should be used for all detail pages for {@link ProductType}s.
+ * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public abstract class AbstractProductTypeDetailPage
 extends EntityEditorPageWithProgress
 implements IProductTypeDetailPage
 {
 	/**
-	 * @param editor
-	 * @param id
-	 * @param name
+	 * @param editor the FormEditor the page belongs to
+	 * @param id the ID of the page
+	 * @param name the name of the page
 	 */
 	public AbstractProductTypeDetailPage(FormEditor editor, String id, String name) {
 		super(editor, id, name);
@@ -44,71 +49,76 @@ implements IProductTypeDetailPage
 		this.sectionStyle = sectionStyle;
 	}
 
-
-
-
-
-//	private AbstractProductTypeNameSection nameSection = null;
-//	public AbstractProductTypeNameSection getNameSection() {
-//	return nameSection;
-//	}
-//	protected abstract AbstractProductTypeNameSection createNameSection();
 	private IProductTypeSectionPart nameSection = null;
+	/**
+	 * Returns the {@link IProductTypeSectionPart} which is responsible for displaying the name
+	 * of the {@link ProductType}. 
+	 * Returns the {@link IProductTypeSectionPart} created by {@link #createNameSection(Composite)}.  
+	 * 
+	 * @return the IProductTypeSectionPart which is responsible for displaying the name
+	 * of the {@link ProductType}.
+	 */
 	public IProductTypeSectionPart getNameSection() {
 		return nameSection;
 	}
+	/**
+	 * Creates the {@link IProductTypeSectionPart} which is responsible for displaying the name
+	 * of the {@link ProductType}. 
+	 * @param parent the parent composite
+	 * @return the {@link IProductTypeSectionPart} which is responsible for displaying the name
+	 * of the {@link ProductType}. 
+	 */
 	protected abstract IProductTypeSectionPart createNameSection(Composite parent);
-
-
-
 
 	private IProductTypeSectionPart vendorSection = null;
 	public IProductTypeSectionPart getVendorSection() {
 		return vendorSection;
 	}
+	/**
+	 * Returns the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing the vendor of the {@link ProductType}. 
+	 * 
+	 * @param parent the parent composite
+	 * @return the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing the vendor of the {@link ProductType}. 
+	 */
 	protected abstract IProductTypeSectionPart createVendorSection(Composite parent);
-
-
-
-
 
 	private IProductTypeSectionPart ownerSection = null;
 	public IProductTypeSectionPart getOwnerSection() {
 		return ownerSection;
 	}
+	/**
+	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing the owner of the {@link ProductType}.
+	 * @param parent the parent composite
+	 * @return the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing the owner of the {@link ProductType}.
+	 */
 	protected abstract IProductTypeSectionPart createOwnerSection(Composite parent);
 
-
-
-
-
-
-//	private AbstractNestedProductTypeSection nestedProductTypeSection = null;
-//	public AbstractNestedProductTypeSection getNestedProductTypeSection() {
-//	return nestedProductTypeSection;
-//	}
-//	protected abstract AbstractNestedProductTypeSection createNestedProductTypesSection();
 	private IProductTypeSectionPart nestedProductTypeSection = null;
 	public IProductTypeSectionPart getNestedProductTypeSection() {
 		return nestedProductTypeSection;
 	}
 	protected abstract IProductTypeSectionPart createNestedProductTypesSection(Composite parent);
 
-//	private AbstractSaleAccessControlSection saleAccessControlSection = null;
-//	public AbstractSaleAccessControlSection getSaleAccessControlSection() {
-//	return saleAccessControlSection;
-//	}
-//	protected abstract AbstractSaleAccessControlSection createSaleAccessControlSection();
 	private IProductTypeSectionPart saleAccessControlSection = null;
 	public IProductTypeSectionPart getSaleAccessControlSection() {
 		return saleAccessControlSection;
 	}
+	/**
+	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing sale access states of the product type.
+	 * @param parent the parent composite
+	 * @return the {@link IProductTypeSectionPart} which is responsible for 
+	 * displaying and editing sale access states of the product type.
+	 */	
 	protected abstract IProductTypeSectionPart createSaleAccessControlSection(Composite parent);
-
 
 	@Override
 	protected void addSections(Composite parent)
-	{
+	{				
 		nameSection = createNameSection(parent);
 		if (nameSection != null) {
 			nameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -121,36 +131,28 @@ implements IProductTypeDetailPage
 			getManagedForm().addPart(nestedProductTypeSection);
 		}
 
-
-
-
-
-		ownerSection = createOwnerSection(parent);
+		Composite wrapper = new XComposite(parent, SWT.NONE);
+		wrapper.setLayout(new GridLayout(2, true));
+		wrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		ownerSection = createOwnerSection(wrapper);
 		if (ownerSection != null) {
-			//ownerSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));		
-			ownerSection.getSection().setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
+			ownerSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));	
 			getManagedForm().addPart(ownerSection);
 		}
 
-		vendorSection = createVendorSection(parent);
+		vendorSection = createVendorSection(wrapper);
 		if (vendorSection != null) {
-			//vendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-			vendorSection.getSection().setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
+			vendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));	
 			getManagedForm().addPart(vendorSection);
 		}		
-
-
 
 		saleAccessControlSection = createSaleAccessControlSection(parent);
 		if (saleAccessControlSection != null) {
 			saleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			getManagedForm().addPart(saleAccessControlSection);
 		}
-
-
 	}
-
-
 
 	@Override
 	protected void asyncCallback()
@@ -170,6 +172,10 @@ implements IProductTypeDetailPage
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.pageFormTitle"); //$NON-NLS-1$
 	}
 
+	/**
+	 * Sets the {@link ProductType}.
+	 * @param productType the {@link ProductType} to set
+	 */
 	protected void setProductType(ProductType productType)
 	{
 		if (productType == null) {
@@ -197,9 +203,6 @@ implements IProductTypeDetailPage
 			ownerSection.setProductType(productType);						
 		if (vendorSection != null)
 			vendorSection.setProductType(productType);						
-
-
-
 	}
 
 	/**
