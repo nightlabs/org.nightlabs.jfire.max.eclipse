@@ -21,7 +21,6 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  *
  */
 public class VoucherTypeDetailPage
-//extends EntityEditorPageWithProgress
 extends AbstractProductTypeDetailPage
 {
 	/**
@@ -37,7 +36,6 @@ extends AbstractProductTypeDetailPage
 			return new VoucherTypeDetailPageController(editor);
 		}
 	}
-	
 	
 	@Override
 	protected IProductTypeSectionPart createNameSection(Composite parent) {
@@ -73,29 +71,11 @@ extends AbstractProductTypeDetailPage
 	public VoucherLayoutSection getVoucherLayoutSection() {
 		return voucherLayoutSection;
 	}
-	
-//	private VoucherTypeNameSection voucherTypeNameSection = null;
-//	public VoucherTypeNameSection getVoucherTypeNameSection() {
-//		return voucherTypeNameSection;
-//	}
-//
-//	private VoucherTypeSaleAccessControlSection voucherTypeSaleAccessControlSection = null;
-//	public VoucherTypeSaleAccessControlSection getVoucherSaleAccessControlSection() {
-//		return voucherTypeSaleAccessControlSection;
-//	}
-	
+		
 	@Override
 	protected void addSections(Composite parent)
 	{
 		super.addSections(parent);
-//		voucherTypeNameSection = new VoucherTypeNameSection(this, parent, ExpandableComposite.TITLE_BAR,
-//				Messages.getString("VoucherTypeDetailPage.section.name.title"));		 //$NON-NLS-1$
-//		voucherTypeNameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		getManagedForm().addPart(voucherTypeNameSection);
-//
-//		voucherTypeSaleAccessControlSection = new VoucherTypeSaleAccessControlSection(this, parent);
-//		voucherTypeSaleAccessControlSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		getManagedForm().addPart(voucherTypeSaleAccessControlSection);
 		
 		voucherLayoutSection = new VoucherLayoutSection(this, parent);
 		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
