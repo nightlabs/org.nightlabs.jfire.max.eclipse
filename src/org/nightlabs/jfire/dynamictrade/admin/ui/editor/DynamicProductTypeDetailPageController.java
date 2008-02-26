@@ -59,8 +59,22 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
+	
 	}
 
+	@Override
+	protected DynamicProductType getExtendedProductType(ProgressMonitor monitor)
+	{
+		return  DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getExtendedProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
+				monitor);	
+		
+	}
+	
+	
+	
+	
 	@Override
 	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor)
 	{
