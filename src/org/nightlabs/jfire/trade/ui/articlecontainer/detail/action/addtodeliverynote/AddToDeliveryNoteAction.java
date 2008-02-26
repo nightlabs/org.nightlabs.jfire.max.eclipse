@@ -27,7 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
@@ -40,13 +40,21 @@ extends GenericArticleEditAction
 	{
 		IGeneralEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
 		return editor != null &&
-				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNote);
+				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNoteID);
 	}
-
+	
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return article.getDeliveryNoteID() != null;
+		// Exclude if the article is already in a delivery note
+		if (article.getDeliveryNoteID() != null)
+			return true;
+		
+		// Exclude if the article is a reversing article and the corresponding reversed article is not in a delivery note
+		if (article.isReversing() && article.getReversedArticle() != null && article.getReversedArticle().getDeliveryNoteID() == null)
+			return true;
+		
+		return false;
 	}
 
 	@Override

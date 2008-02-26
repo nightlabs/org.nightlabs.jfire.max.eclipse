@@ -34,6 +34,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 
 public abstract class ArticleContainerAction
@@ -132,5 +133,13 @@ extends Action implements IArticleContainerAction
 			return null;
 
 		return generalEditor.getGeneralEditorComposite().getArticleContainer();
+	}
+	
+	public ArticleContainerID getArticleContainerID() {
+		IGeneralEditor generalEditor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		if (generalEditor == null)
+			return null;
+		
+		return generalEditor.getGeneralEditorComposite().getArticleContainerID();
 	}
 }

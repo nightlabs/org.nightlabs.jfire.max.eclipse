@@ -31,6 +31,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 
 public class AddAllToInvoiceAction extends ArticleContainerAction
 {
@@ -46,10 +47,12 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		if (article.getInvoiceID() != null)
-			return true;
-
-		return false;
+		return !TransferUtil.isPayable(article);
+		
+//		if (article.getInvoiceID() != null)
+//			return true;
+//
+//		return false;
 	}
 
 	@Override

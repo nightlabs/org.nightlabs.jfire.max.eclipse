@@ -110,15 +110,15 @@ extends AbstractCombiTransferWizard
 		super(transferMode, side);
 
 		this.articleContainerID = articleContainerID;
-		if (articleContainerID instanceof OrderID)
+		if (articleContainerID instanceof OrderID) {
 			this.orderID = (OrderID) articleContainerID;
-		else if (articleContainerID instanceof OfferID)
+		} else if (articleContainerID instanceof OfferID) {
 			this.offerID = (OfferID) articleContainerID;
-		else if (articleContainerID instanceof InvoiceID)
+		} else if (articleContainerID instanceof InvoiceID) {
 			this.invoiceID = (InvoiceID) articleContainerID;
-		else if (articleContainerID instanceof DeliveryNoteID)
+		} else if (articleContainerID instanceof DeliveryNoteID) {
 			this.deliveryNoteID = (DeliveryNoteID) articleContainerID;
-		else
+		} else
 			throw new IllegalStateException("articleContainerID is of unknown type: " + articleContainerID.getClass().getName()); //$NON-NLS-1$
 
 		loadData();
@@ -272,7 +272,7 @@ extends AbstractCombiTransferWizard
 	{
 		try {
 			articlesToTransfer.clear();
-
+			
 			if (offerID != null) {
 				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				offer = tradeManager.getOffer(offerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -285,7 +285,7 @@ extends AbstractCombiTransferWizard
 						(CustomerGroupID) JDOHelper.getObjectId(offer.getOrder().getCustomerGroup()));
 				
 				this.setCurrency(offer.getCurrency());
-
+				
 				for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
 					Article article = (Article) it.next();
 					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&

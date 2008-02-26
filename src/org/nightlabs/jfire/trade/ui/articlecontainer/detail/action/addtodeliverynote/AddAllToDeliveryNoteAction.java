@@ -31,6 +31,7 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 
 public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 {
@@ -58,10 +59,12 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		if (article.getDeliveryNoteID() != null)
-			return true;
-
-		return false;
+		return !TransferUtil.isDeliverable(article);
+		
+//		if (article.getDeliveryNoteID() != null)
+//			return true;
+//
+//		return false;
 	}
 
 	@Override

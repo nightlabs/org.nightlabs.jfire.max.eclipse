@@ -27,10 +27,13 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
@@ -49,12 +52,26 @@ public class DeliverAllAction extends ArticleContainerAction
 	
 	@Override
 	protected boolean excludeArticle(Article article) {
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
-		if (articleContainerID instanceof DeliveryNoteID)
+		if (getArticleContainerID() instanceof DeliveryNoteID)
 			return article.getArticleLocal().isDelivered();
 
-		return article.getDeliveryNoteID() != null;
+		return !TransferUtil.isDeliverable(article);
+	}
+	
+	@Override
+	public boolean calculateEnabled() {
+		if (!super.calculateEnabled())
+			return false;
+		
+		ArticleContainer articleContainer = getArticleContainer();
+		if (!(articleContainer instanceof DeliveryNote))
+			return true;
+		
+		for (Article article : articleContainer.getArticles())
+			if (!article.getArticleLocal().isDelivered())
+				return true;
+
+		return false;
 	}
 
 //	@Override
@@ -72,8 +89,7 @@ public class DeliverAllAction extends ArticleContainerAction
 	@Override
 	public void run()
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-		.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerID();
 
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				articleContainerID,

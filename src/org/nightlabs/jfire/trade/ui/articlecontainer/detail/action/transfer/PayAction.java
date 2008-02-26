@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticlesWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
@@ -55,7 +56,7 @@ extends GenericArticleEditAction
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return article.getInvoiceID() != null;
+		return !TransferUtil.isPayable(article);
 	}
 
 	@Override

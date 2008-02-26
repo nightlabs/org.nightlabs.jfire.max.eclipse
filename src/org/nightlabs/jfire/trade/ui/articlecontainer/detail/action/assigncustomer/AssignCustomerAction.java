@@ -2,6 +2,9 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustom
 
 import org.eclipse.swt.widgets.Event;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
@@ -25,12 +28,25 @@ public class AssignCustomerAction
 		return true;
 	}
 
+	/**
+	 * Returns <code>true</code> if all {@link Offer}s of the {@link Order} are not finalized and <code>false</code> otherwise. 
+	 * @return <code>true</code> if all {@link Offer}s of the {@link Order} are not finalized and <code>false</code> otherwise.
+	 */
 	@Override
 	public boolean calculateEnabled()
-	{
-		// TODO check whether the Order has a finalized Offer
-
-		return true;
+	{		
+		ArticleContainer articleContainer = getArticleContainer();
+		if (articleContainer instanceof Order) {
+			Order order = (Order) articleContainer;
+			
+			for (Offer offer : order.getOffers())
+				if (offer.isFinalized())
+					return false;
+			
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override

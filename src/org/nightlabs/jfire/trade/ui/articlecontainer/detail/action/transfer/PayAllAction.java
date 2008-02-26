@@ -33,6 +33,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
@@ -46,39 +47,24 @@ public class PayAllAction extends ArticleContainerAction
 
 	@Override
 	protected boolean excludeArticle(Article article) {
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
-		if (articleContainerID instanceof InvoiceID)
+		if (getArticleContainerID() instanceof InvoiceID)
 			return false;
 
-		return article.getInvoiceID() != null;
+		return !TransferUtil.isPayable(article);
 	}
-
+	
 	@Override
 	public boolean calculateEnabled() {
 		if (!super.calculateEnabled())
 			return false;
 
-		ArticleContainer articleContainer = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainer();
+		ArticleContainer articleContainer = getArticleContainer();
 
 		if (!(articleContainer instanceof Invoice))
 			return true;
 
 		return ((Invoice)articleContainer).getInvoiceLocal().getAmountToPay() != 0;
 	}
-
-//	@Override
-//	public boolean calculateEnabled() {
-//		if (super.calculateEnabled()) {
-//			boolean allPaid = true;
-//			for (Article article : getArticles()) {
-//				allPaid &= article.getInvoiceID() != null;
-//			}
-//			return !allPaid;
-//		}
-//		return false;
-//	}
 
 	@Override
 	public void run()

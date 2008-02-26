@@ -27,7 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
@@ -40,13 +40,21 @@ extends GenericArticleEditAction
 	{
 		IGeneralEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
 		return editor != null &&
-				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof Invoice);
+				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof InvoiceID);
 	}
 
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return article.getInvoiceID() != null;
+		// Exclude if the article is already in an invoice or if it has been reversed
+		if (article.getInvoiceID() != null || article.isReversed())
+			return true;
+
+		// Exclude if the article is a reversing article and the corresponding reversed article is not in an invoice
+		if (article.isReversing() && article.getReversedArticle() != null && article.getReversedArticle().getInvoiceID() == null)
+			return true;
+		
+		return false;
 	}
 
 	@Override
