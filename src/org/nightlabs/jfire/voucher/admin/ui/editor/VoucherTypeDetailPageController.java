@@ -45,9 +45,9 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			FETCH_GROUPS_DEFAULT,
 			new String[] {FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
 					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
-				}
-		);
-	
+			}
+	);
+
 	protected void createVoucherLayout(VoucherTypeDetailPage page)
 	{
 		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
@@ -73,7 +73,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS_VOUCHER_TYPE;
 	}
-	
+
 	@Override
 	protected VoucherType retrieveProductType(ProgressMonitor monitor)
 	{
@@ -83,6 +83,28 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 				getEntityMaxFetchDepth(),
 				monitor);
 	}
+
+
+
+	protected VoucherType getExtendedProductType(ProgressMonitor monitor)
+	{
+
+		return VoucherTypeDAO.sharedInstance().getVoucherType(
+				getExtendedProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
+				monitor);
+
+
+	}
+
+
+
+
+
+
+
+
 
 	@Override
 	protected VoucherType storeProductType(VoucherType voucherType, ProgressMonitor monitor)
@@ -100,7 +122,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			throw new RuntimeException(t);
 		}
 	}
-	
+
 	protected VoucherType getVoucherType() {
 		return getProductType();
 	}
