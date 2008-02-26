@@ -89,14 +89,13 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 // TODO Please remove this comment when you continue working here.
 //
 // Marco :-)
-
-//	protected SimpleProductType getExtendedProductType(ProgressMonitor monitor)
-//	{
-//		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getExtendedProductTypeID(),
-//				getEntityFetchGroups(),
-//				getEntityMaxFetchDepth(),
-//				monitor);	
-//		
-//	}
+	protected SimpleProductType getExtendedProductType(ProgressMonitor monitor)
+	{
+		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getExtendedProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
+				monitor);	
+		
+	}
 
 }

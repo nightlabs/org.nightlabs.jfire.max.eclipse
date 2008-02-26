@@ -52,6 +52,19 @@ extends AbstractProductTypePageController<SimpleProductType>
 		return productType;
 	}
 	
+	
+	@Override
+	
+	protected SimpleProductType getExtendedProductType(ProgressMonitor monitor)
+	{
+		return  SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getExtendedProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
+				monitor);	
+		
+	}
+
+	
 	@Override
 	protected SimpleProductType storeEntity(SimpleProductType controllerObject,
 			ProgressMonitor monitor) {
