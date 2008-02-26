@@ -66,6 +66,19 @@ extends AbstractProductTypePageController<ProductTypeType>
 		return productType;
 	}
 
+	
+	@Override
+	
+	protected ProductTypeType getExtendedProductType(ProgressMonitor monitor)
+	{
+		return  (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(getExtendedProductTypeID(),
+				getEntityFetchGroups(),
+				getEntityMaxFetchDepth(),
+				monitor);	
+		
+	}
+	
+	
 	public LocalAccountantDelegate getLocalAccountantDelegate() {
 		return localAccountantDelegate;
 	}

@@ -4,6 +4,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * An abstract page controller for entity editor pages that holds a ProductType.
@@ -44,6 +45,13 @@ implements IProductTypePageController<ProductTypeType>
 	public ProductTypeID getProductTypeID() {
 		return productTypeID;
 	}
+	
+	public ProductTypeID getExtendedProductTypeID() {
+		return productType.getExtendedProductTypeID();
+	}
+		
+	
+	
 	/**
 	 * sets the productTypeID
 	 * @param productTypeID the productTypeID to set
@@ -51,7 +59,7 @@ implements IProductTypePageController<ProductTypeType>
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;
 	}
-	
+
 	private ProductTypeType productType;
 	/**
 	 * returns the productType
@@ -60,8 +68,13 @@ implements IProductTypePageController<ProductTypeType>
 	public ProductTypeType getProductType() {
 		return getControllerObject();
 	}
-	
+
 	protected void setProductType(ProductTypeType productType) {
 		this.productType = productType;
 	}
+
+
+	protected abstract ProductTypeType getExtendedProductType(ProgressMonitor monitor);
+
+
 }
