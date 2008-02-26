@@ -81,14 +81,8 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 		}
 	}
 
-// Hello Fitas,
-// you checked-in code that did not compile. Therefore, I commented out the following method. Now it compiles again.
-//
-// And please format your code nicely. Tons of empty lines are ugly. Thus, I removed the empty lines below (and Daniel beautified some other classes you changed, as well).
-//
-// TODO Please remove this comment when you continue working here.
-//
-// Marco :-)
+	@Override
+
 	protected SimpleProductType getExtendedProductType(ProgressMonitor monitor)
 	{
 		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getExtendedProductTypeID(),
