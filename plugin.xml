@@ -1528,7 +1528,8 @@ gibt's nimmer - oder?! Marco.
             class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener">
       </workbenchListener>
    </extension>
-   
+
+<!--
    <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
@@ -1552,6 +1553,8 @@ gibt's nimmer - oder?! Marco.
          <actionSet id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.quicksale.CreateQuickSaleOrder"/>
       </perspectiveExtension>
    </extension>
+-->
+
    <extension
          point="org.nightlabs.jfire.base.ui.quickSearchEntry">
       <quickSearchEntryFactory
@@ -1650,6 +1653,12 @@ gibt's nimmer - oder?! Marco.
             name="NotAvailableExceptionHandler"
             targetType="org.nightlabs.jfire.store.NotAvailableException">
       </exceptionHandler>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.loginstatelistener">
+      <loginStateListener
+            class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective">
+      </loginStateListener>
    </extension>
 
 <!--   

@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -93,16 +94,14 @@ extends XComposite
 		
 		okButtonCustomer = new Button(buttonComp, SWT.NONE);
 		okButtonCustomer.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonCustomer.text")); //$NON-NLS-1$
-		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(),
-				LegalEntityEditorView.class));
+		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), LegalEntityEditorView.class));
+		okButtonCustomer.addSelectionListener(okListenerCustomer);
 		
 //		Label separator = new Label(buttonComp, SWT.SEPARATOR);
 		
-		okButtonCustomer.addSelectionListener(okListenerCustomer);
 		okButtonAnonymous = new Button(buttonComp, SWT.NONE);
 		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonAnonymous.text")); //$NON-NLS-1$
-		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(),
-				SelectAnonymousViewAction.class));
+		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
 				
 		generalEditorComposite.addArticleChangeListener(articleChangeListener);
@@ -136,7 +135,8 @@ extends XComposite
 					(OrderID) getGeneralEditorComposite().getArticleContainerID(),
 					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 					TransferWizard.Side.Vendor);
-			new DynamicPathWizardDialog(wiz).open();
+			if (new DynamicPathWizardDialog(wiz).open() == Dialog.OK)
+				createNewOrder();
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -166,7 +166,7 @@ extends XComposite
 			widgetSelected(e);
 		}
 	};
-	
+
 	public static GeneralEditorInputOrder createEditorInput()
 	{
 		// FIXME: add method in server which holds an order
