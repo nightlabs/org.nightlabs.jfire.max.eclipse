@@ -30,6 +30,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  */
 public abstract class AbstractProductTypeDetailPageController<ProductTypeType extends ProductType>
 extends AbstractProductTypePageController<ProductTypeType>
+implements IProductTypeDetailPageController<ProductTypeType>
 {
 	/**
 	 * Create a new {@link AbstractProductTypeDetailPageController}.

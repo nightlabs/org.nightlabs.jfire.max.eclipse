@@ -167,7 +167,7 @@ extends ToolBarSectionPart
 		public void run() {
 			getMoneyFlowConfigComposite().openSelectedAccountDelegateWizard();
 			ProductType productType = getMoneyFlowConfigComposite().getProductType();
-			if (productType != null) {
+			if (productType != null && productType.getProductTypeLocal().getLocalAccountantDelegate() != null) {
 				getSection().setText(productType.getProductTypeLocal().getLocalAccountantDelegate().getName().getText());
 				getSection().layout();
 			}

@@ -3,6 +3,8 @@
  */
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
+import org.nightlabs.jfire.store.ProductType;
+
 /**
  * Extension for page controllers for ProductTypes that manage
  * the {@link ProductTypeSaleAccessStatus}.
@@ -10,7 +12,7 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public interface IProductTypeDetailPageController extends IProductTypePageController {
+public interface IProductTypeDetailPageController<ProductTypeType> extends IProductTypePageController<ProductTypeType> {
 	
 	/**
 	 * @return The sale access status of the ProductType this controller currently manages.
