@@ -192,7 +192,8 @@ public class SelectOfferPage extends DynamicPathWizardPage
 				{
 					offers.clear();
 					offers.addAll(l);
-					offerTable.refresh();
+					if (!offerTable.isDisposed())
+						offerTable.refresh();
 				}
 			});
 		} catch (Exception e) {
