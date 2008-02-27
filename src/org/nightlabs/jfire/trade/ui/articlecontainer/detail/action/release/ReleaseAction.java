@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -52,7 +51,7 @@ public class ReleaseAction extends ArticleEditAction
 		return true; // It must be always visible, because there might be a reversing article in the invoice/deliverynote
 	}
 
-	private List articles = null;
+	private List<Article> articles = null;
 
 	protected static final String[] FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID = new String[] {
 		FetchPlan.DEFAULT,
@@ -63,36 +62,34 @@ public class ReleaseAction extends ArticleEditAction
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
 		this.articles = null;
-		List articles = new ArrayList();
-		for (Iterator iter = articleSelections.iterator(); iter.hasNext();) {
-			ArticleSelection articleSelection = (ArticleSelection) iter.next();
+		List<Article> articles = new ArrayList<Article>();
+		for (ArticleSelection articleSelection : articleSelections) {
 
 //			SegmentEdit segmentEdit = articleSelection.getArticleEdit().getSegmentEdit();
 //			String segmentContext = segmentEdit.getSegmentContext();
 //			ArticleContainer articleContainer = segmentEdit.getArticleContainer();
 
-			for (Iterator it = articleSelection.getSelectedArticles().iterator(); it.hasNext(); ) {
-				Article article = (Article) it.next();
-
+			for (Article article : articleSelection.getSelectedArticles()) {
 				if (article.isAllocationPending() || article.isReleasePending() || !article.isAllocated())
 					return false;
 
 				if (article.isReversing()) {
 					// reversing article
+					Article reversingArticle = article; 
 
 					// If the reversed article is in a DeliveryNote, both - reversed and reversing - articles must be in a DeliveryNote.
 					// The DeliveryNotes must be booked!
 
 					Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
-							article.getReversedArticleID(), FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+							reversingArticle.getReversedArticleID(), FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					if (reversedArticle.getDeliveryNoteID() != null) {
-						if (article.getDeliveryNoteID() ==  null)
+						if (reversingArticle.getDeliveryNoteID() == null)
 							return false;
 
 						if (!ArticleUtil.isDeliveryNoteBooked(reversedArticle, new NullProgressMonitor())) // TODO real progress monitor
 							return false;
 
-						if (!ArticleUtil.isDeliveryNoteBooked(article, new NullProgressMonitor())) // TODO real progress monitor
+						if (!ArticleUtil.isDeliveryNoteBooked(reversingArticle, new NullProgressMonitor())) // TODO real progress monitor
 							return false;
 					}
 

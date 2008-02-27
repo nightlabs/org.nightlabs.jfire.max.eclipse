@@ -55,7 +55,7 @@ public class DeliverAllAction extends ArticleContainerAction
 		if (getArticleContainerID() instanceof DeliveryNoteID)
 			return article.getArticleLocal().isDelivered();
 
-		return !TransferUtil.isDeliverable(article);
+		return !TransferUtil.canAddToDeliveryNote(article);
 	}
 	
 	@Override

@@ -305,8 +305,9 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 				// find out, which ArticleID s are interesting (i.e. managed by us).
 				Set<ArticleID> dirtyArticleIDs = new HashSet<ArticleID>(notificationEvent.getSubjects().size());
 				Set<ArticleID> deletedArticleIDs = new HashSet<ArticleID>(notificationEvent.getSubjects().size());
-				for (Iterator it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
-					DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
+//				for (Iterator it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+//					DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
+				for (DirtyObjectID dirtyObjectID : (Collection<DirtyObjectID>) notificationEvent.getSubjects()) {
 					ArticleID articleID = (ArticleID) dirtyObjectID.getObjectID();
 					if (containsArticle(articleID)) {
 						if (JDOLifecycleState.DIRTY.equals(dirtyObjectID.getLifecycleState()))

@@ -43,11 +43,23 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 
 		return !(editor.getGeneralEditorComposite().getArticleContainerID() instanceof Invoice);
 	}
+	
+	@Override
+	public boolean calculateEnabled() {
+		if (super.calculateEnabled()) {
+			boolean allPaid = true;
+			for (Article article : getArticles()) {
+				allPaid &= article.getInvoiceID() != null;
+			}
+			return !allPaid;
+		}
+		return false;
+	}
 
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return !TransferUtil.isPayable(article);
+		return !TransferUtil.canAddToInvoice(article);
 		
 //		if (article.getInvoiceID() != null)
 //			return true;

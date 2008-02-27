@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
@@ -876,7 +875,7 @@ extends XComposite
 		StatableLocal.FETCH_GROUP_STATE
 	};
 
-	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTCILES = {
+	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTICLES = {
 			Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
 			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
@@ -935,7 +934,7 @@ extends XComposite
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			} else if (input instanceof GeneralEditorInputOffer) {
 				OfferID offerID = ((GeneralEditorInputOffer) input).getOfferID();
 				if (reloadArticleContainerWithoutArticles)

@@ -26,11 +26,16 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote;
 
+import javax.jdo.FetchPlan;
+
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 
 public class AddToDeliveryNoteAction
 extends GenericArticleEditAction
@@ -47,12 +52,16 @@ extends GenericArticleEditAction
 	protected boolean excludeArticle(Article article)
 	{
 		// Exclude if the article is already in a delivery note
-		if (article.getDeliveryNoteID() != null)
+		if (!TransferUtil.canAddToDeliveryNote(article))
 			return true;
 		
 		// Exclude if the article is a reversing article and the corresponding reversed article is not in a delivery note
-		if (article.isReversing() && article.getReversedArticle() != null && article.getReversedArticle().getDeliveryNoteID() == null)
-			return true;
+		if (article.isReversing() && article.getReversedArticleID() != null) {
+			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
+					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			if (reversedArticle.getDeliveryNoteID() == null)
+				return true;
+		}
 		
 		return false;
 	}

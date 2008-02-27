@@ -59,7 +59,7 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return !TransferUtil.isDeliverable(article);
+		return !TransferUtil.canAddToDeliveryNote(article);
 		
 //		if (article.getDeliveryNoteID() != null)
 //			return true;

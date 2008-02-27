@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
@@ -46,7 +47,8 @@ public class PayAndDeliverAllAction extends ArticleContainerAction
 	
 	@Override
 	protected boolean excludeArticle(Article article) {
-		return article.getDeliveryNoteID() != null && article.getInvoiceID() != null;
+//		return article.getDeliveryNoteID() != null && article.getInvoiceID() != null;
+		return ! (TransferUtil.canAddToDeliveryNote(article) && TransferUtil.canAddToInvoice(article));
 	}
 
 	@Override

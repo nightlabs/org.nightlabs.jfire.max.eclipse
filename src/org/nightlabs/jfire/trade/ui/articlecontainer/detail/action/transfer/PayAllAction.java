@@ -50,7 +50,7 @@ public class PayAllAction extends ArticleContainerAction
 		if (getArticleContainerID() instanceof InvoiceID)
 			return false;
 
-		return !TransferUtil.isPayable(article);
+		return !TransferUtil.canAddToInvoice(article);
 	}
 	
 	@Override

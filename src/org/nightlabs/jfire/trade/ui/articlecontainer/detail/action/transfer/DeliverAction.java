@@ -26,11 +26,14 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer;
 
+import java.util.Set;
+
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -56,14 +59,15 @@ extends GenericArticleEditAction
 	@Override
 	protected boolean excludeArticle(Article article)
 	{
-		return !TransferUtil.isDeliverable(article);
+		return !TransferUtil.canAddToDeliveryNote(article);
 	}
 
 	@Override
 	public void run()
 	{
+		Set<ArticleID> articleIDs = NLJDOHelper.getObjectIDSet(getArticles());
 		CombiTransferArticlesWizard wizard = new CombiTransferArticlesWizard(
-				NLJDOHelper.getObjectIDSet(getArticles()),
+				articleIDs,
 				AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY,
 				TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

@@ -30,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +72,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	 *		{@link AbstractCombiTransferWizard#TRANSFER_MODE_PAYMENT} or {@link AbstractCombiTransferWizard#TRANSFER_MODE_BOTH}.
 	 * @param side Specifying whether we (the local organisation) is the vendor or the customer.
 	 */
-	public CombiTransferArticlesWizard(Collection articleIDs, byte transferMode, Side side)
+	public CombiTransferArticlesWizard(Collection<ArticleID> articleIDs, byte transferMode, Side side)
 	{
 		super(transferMode, side);
 
@@ -111,8 +110,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 			long amountToPay = 0;
 
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			for (Iterator it = tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).iterator(); it.hasNext(); ) {
-				Article article = (Article) it.next();
+			for (Article article : (Collection<Article>) tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
 				if (isPaymentEnabled() && article.getInvoice() != null)
 					throw new IllegalStateException("isPaymentEnabled() && article.getInvoice() != null"); //$NON-NLS-1$
 
@@ -198,7 +196,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 						if (invoiceIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
 								AccountingManager accountingManager = TransferWizardUtil.getAccountingManager();
-								invoiceIDs = new ArrayList(1);
+								invoiceIDs = new ArrayList<InvoiceID>(1);
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
 								Invoice invoice = accountingManager.createInvoice(articleIDs, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								InvoiceID invoiceID = (InvoiceID) JDOHelper.getObjectId(invoice);
@@ -209,7 +207,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 						if (deliveryNoteIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
 								StoreManager storeManager = TransferWizardUtil.getStoreManager();
-								deliveryNoteIDs = new ArrayList(1);
+								deliveryNoteIDs = new ArrayList<DeliveryNoteID>(1);
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
 								DeliveryNote deliveryNote = storeManager.createDeliveryNote(articleIDs, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								DeliveryNoteID deliveryNoteID = (DeliveryNoteID) JDOHelper.getObjectId(deliveryNote);

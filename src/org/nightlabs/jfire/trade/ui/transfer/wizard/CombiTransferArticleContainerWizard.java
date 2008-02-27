@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.ui.transfer.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +64,7 @@ import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -205,6 +205,7 @@ extends AbstractCombiTransferWizard
 		Article.FETCH_GROUP_PRODUCT, // for delivery
 		Article.FETCH_GROUP_DELIVERY_NOTE_ID,
 		Article.FETCH_GROUP_INVOICE_ID,
+		Article.FETCH_GROUP_REVERSED_ARTICLE_ID,
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
@@ -222,6 +223,7 @@ extends AbstractCombiTransferWizard
 		Article.FETCH_GROUP_PRODUCT, // for delivery
 		Article.FETCH_GROUP_DELIVERY_NOTE_ID,
 		Article.FETCH_GROUP_INVOICE_ID,
+		Article.FETCH_GROUP_REVERSED_ARTICLE_ID,
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
@@ -240,6 +242,7 @@ extends AbstractCombiTransferWizard
 		Article.FETCH_GROUP_PRODUCT, // for delivery
 		Article.FETCH_GROUP_DELIVERY_NOTE_ID,
 		Article.FETCH_GROUP_INVOICE_ID,
+		Article.FETCH_GROUP_REVERSED_ARTICLE_ID,
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
@@ -261,13 +264,14 @@ extends AbstractCombiTransferWizard
 		Article.FETCH_GROUP_PRODUCT, // for delivery
 		Article.FETCH_GROUP_DELIVERY_NOTE_ID,
 		Article.FETCH_GROUP_INVOICE_ID,
+		Article.FETCH_GROUP_REVERSED_ARTICLE_ID,
 //		Article.FETCH_GROUP_DELIVERY_NOTE, // for delivery
 //		Article.FETCH_GROUP_INVOICE, // for payment
 		Article.FETCH_GROUP_PRICE, // for payment
 		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
-
+	
 	protected void loadData()
 	{
 		try {
@@ -286,10 +290,13 @@ extends AbstractCombiTransferWizard
 				
 				this.setCurrency(offer.getCurrency());
 				
-				for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-					Article article = (Article) it.next();
-					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&
-							(!isDeliveryEnabled() || article.getDeliveryNoteID() == null))
+				for (Article article : articleContainer.getArticles()) {
+					// If payment is enabled, we transfer only payable articles 
+					// If delivery is enabled, we transfer only deliverable articles
+//					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&
+//							(!isDeliveryEnabled() || article.getDeliveryNoteID() == null))
+					if ((!isPaymentEnabled() || TransferUtil.canAddToInvoice(article)) &&
+							(!isDeliveryEnabled() || TransferUtil.canAddToDeliveryNote(article)))
 						articlesToTransfer.add(article);
 				}
 			}
@@ -306,10 +313,13 @@ extends AbstractCombiTransferWizard
 
 				this.setCurrency(order.getCurrency());
 
-				for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-					Article article = (Article) it.next();
-					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&
-							(!isDeliveryEnabled() || article.getDeliveryNoteID() == null))
+				for (Article article : articleContainer.getArticles()) {
+					// If payment is enabled, we transfer only the articles without invoice
+					// If delivery is enabled, we transfer only the articles without delivery note
+//					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&
+//							(!isDeliveryEnabled() || article.getDeliveryNoteID() == null))
+					if ((!isPaymentEnabled() || TransferUtil.canAddToInvoice(article)) &&
+							(!isDeliveryEnabled() || TransferUtil.canAddToDeliveryNote(article)))
 						articlesToTransfer.add(article);
 				}
 			}
@@ -323,9 +333,11 @@ extends AbstractCombiTransferWizard
 
 				this.setCurrency(invoice.getCurrency());
 
-				for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-					Article article = (Article) it.next();
-					if (!isDeliveryEnabled() || article.getDeliveryNoteID() == null) {
+				for (Article article : articleContainer.getArticles()) {
+					// If delivery is enabled, we transfer only articles without delivery note
+					// otherwise, we transfer all articles
+//					if (!isDeliveryEnabled() || article.getDeliveryNoteID() == null) {
+					if (!isDeliveryEnabled() || TransferUtil.canAddToDeliveryNote(article)) {
 						this.addCustomerGroupID(
 								(CustomerGroupID) JDOHelper.getObjectId(article.getOrder().getCustomerGroup()));
 						articlesToTransfer.add(article);
@@ -343,9 +355,11 @@ extends AbstractCombiTransferWizard
 						(AnchorID) JDOHelper.getObjectId(deliveryNote.getCustomer()));
 
 				Currency currency = null;
-				for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-					Article article = (Article) it.next();
-					if (!isPaymentEnabled() || article.getInvoiceID() == null) {
+				for (Article article : articleContainer.getArticles()) {
+					// If payment is enabled, we transfer only articles without invoice
+					// otherwise, we transfer all articles
+//					if (!isPaymentEnabled() || article.getInvoiceID() == null) {
+					if (!isPaymentEnabled() || TransferUtil.canAddToInvoice(article)) {
 						this.addCustomerGroupID(
 								(CustomerGroupID) JDOHelper.getObjectId(article.getOrder().getCustomerGroup()));
 						articlesToTransfer.add(article);
@@ -365,8 +379,7 @@ extends AbstractCombiTransferWizard
 
 			if (invoiceID == null) {
 				long amountToPay = 0;
-				for (Iterator it = articlesToTransfer.iterator(); it.hasNext(); ) {
-					Article article = (Article) it.next();
+				for (Article article : articlesToTransfer) {
 					amountToPay += article.getPrice().getAmount();
 				}
 				this.setTotalAmount(amountToPay);
@@ -406,12 +419,11 @@ extends AbstractCombiTransferWizard
 
 						if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
 							// find out which articles still miss a DeliveryNote
-							LinkedList articlesWithoutDeliveryNote = null;
-							for (Iterator it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-								Article article = (Article) it.next();
+							List<Article> articlesWithoutDeliveryNote = null;
+							for (Article article : articleContainer.getArticles()) {
 								if (article.getDeliveryNoteID() == null) {
 									if (articlesWithoutDeliveryNote == null)
-										articlesWithoutDeliveryNote = new LinkedList();
+										articlesWithoutDeliveryNote = new LinkedList<Article>();
 				
 									articlesWithoutDeliveryNote.add(article);
 								}

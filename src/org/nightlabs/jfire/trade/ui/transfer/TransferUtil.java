@@ -1,10 +1,10 @@
 package org.nightlabs.jfire.trade.ui.transfer;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import javax.jdo.FetchPlan;
 
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
 
 /**
  * This class contains utility methods for handling transfers of articles.
@@ -14,50 +14,46 @@ import org.nightlabs.jfire.trade.Article;
 public class TransferUtil
 {
 	/**
-	 * Returns whether the given {@link Article} is deliverable.
+	 * Returns whether the given {@link Article} can be added to a delivery note, i.e. whether it is
+	 * allocated and not yet contained in a delivery note and not reversed.
 	 * @param article The {@link Article} to be checked.
-	 * @return whether the given {@link Article} is deliverable.
+	 * @return whether the given {@link Article} can be added to a delivery note.
 	 */
-	public static boolean isDeliverable(Article article) {
-		return article.isAllocated() && article.getDeliveryNoteID() != null;
+	public static boolean canAddToDeliveryNote(Article article) {
+		if (!article.isAllocated() || article.isReversed() || article.getDeliveryNoteID() != null)
+			return false;
+
+		// If the article is reversing, it can be added to an delivery note if the reversed article is in an delivery note, too
+		if (article.isReversing()) {
+			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
+					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			
+			if (reversedArticle.getDeliveryNoteID() == null)
+				return false;
+		}
+		
+		return true;
 	}
 	
 	/**
-	 * Returns whether the given {@link Article} is payable.
+	 * Returns whether the given {@link Article} can be added to an invoice, i.e. whether it is allocated
+	 * and not yet contained in a delivery note and not reversed.
 	 * @param article The {@link Article} to be checked.
-	 * @return whether the given {@link Article} is payable.
+	 * @return whether the given {@link Article} can be added to an invoice.
 	 */
-	public static boolean isPayable(Article article) {
-		return article.isAllocated() && article.getInvoiceID() != null;
-	}
-	
-	/**
-	 * Filters the given collection of the articles by returning a set that
-	 * contains only the articles that are payable.
-	 * @param articles The articles to be filtered.
-	 * @return a set that contains only the articles that are payable.
-	 */
-	public static Set<Article> getPayableArticles(Collection<Article> articles) {
-		Set<Article> filteredArticles = new HashSet<Article>();
-		for (Article article : articles)
-			if (isPayable(article))
-				filteredArticles.add(article);
+	public static boolean canAddToInvoice(Article article) {
+		if (!article.isAllocated() || article.isReversed() || article.getInvoiceID() != null)
+			return false;
+
+		// If the article is reversing, it can be added to an invoice if the reversed article is in an invoice, too
+		if (article.isReversing()) {
+			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
+					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_INVOICE_ID}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			
+			if (reversedArticle.getInvoiceID() == null)
+				return false;
+		}
 		
-		return filteredArticles;
-	}
-	
-	/**
-	 * Filters the given collection of the articles by returning a set that
-	 * contains only the articles that are deliverable.
-	 * @param articles The articles to be filtered.
-	 * @return a set that contains only the articles that are payable.
-	 */
-	public static Set<Article> getDeliverableArticles(Collection<Article> articles) {
-		Set<Article> filteredArticles = new HashSet<Article>();
-		for (Article article : articles)
-			if (isDeliverable(article))
-				filteredArticles.add(article);
-		
-		return filteredArticles;
+		return true;
 	}
 }
