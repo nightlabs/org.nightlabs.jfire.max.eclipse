@@ -86,7 +86,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 
 
-	protected VoucherType getExtendedProductType(ProgressMonitor monitor)
+	public VoucherType getExtendedProductType(ProgressMonitor monitor)
 	{
 
 		return VoucherTypeDAO.sharedInstance().getVoucherType(
