@@ -68,7 +68,7 @@ public class ArticleEditComposite extends XComposite
 		articleTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				if (!RCPUtil.isKeyDown(RCPUtil.KEY_CTRL)) {
+				if (!RCPUtil.isKeyDown(SWT.CTRL)) {
 					ignoreSetSelectedArticles = true;
 					try {
 						articleEdit.getSegmentEdit().setSelectedArticles(EMPTY_SET_ARTICLE);
