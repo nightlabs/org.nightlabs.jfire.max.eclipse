@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
@@ -647,89 +648,84 @@ extends XComposite
 	}
 
 	private ArticleCreateListener articleCreateListener = new ArticleCreateListener() {
-		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
-			Map<SegmentEdit, List<ArticleCarrier>> segmentEdit2ArticleCarriers = new HashMap<SegmentEdit, List<ArticleCarrier>>();
-			// Map<Segment, List<Article>> segment2ArticlesWithoutSegmentEdit = new
-			// HashMap<Segment, List<Article>>();
-			Set<ArticleSegmentGroup> articleSegmentGroupsWithoutSegmentEdit = new HashSet<ArticleSegmentGroup>();
+		public void articlesCreated(final ArticleCreateEvent articleCreateEvent) {
+			Runnable runnable = new Runnable() {
+				public void run()
+				{
+					Map<SegmentEdit, List<ArticleCarrier>> segmentEdit2ArticleCarriers = new HashMap<SegmentEdit, List<ArticleCarrier>>();
+					Set<ArticleSegmentGroup> articleSegmentGroupsWithoutSegmentEdit = new HashSet<ArticleSegmentGroup>();
 
-			for (ArticleCarrier articleCarrier : articleCreateEvent.getArticleCarriers()) {
-				Article article = articleCarrier.getArticle();
-				SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(article.getSegment().getPrimaryKey());
-				if (segmentEdit == null) {
-					// we do not yet have a SegmentEdit for article
-					articleSegmentGroupsWithoutSegmentEdit.add(articleCarrier.getArticleSegmentGroup());
+					for (ArticleCarrier articleCarrier : articleCreateEvent.getArticleCarriers()) {
+						Article article = articleCarrier.getArticle();
+						SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(article.getSegment().getPrimaryKey());
+						if (segmentEdit == null) {
+							// we do not yet have a SegmentEdit for article
+							articleSegmentGroupsWithoutSegmentEdit.add(articleCarrier.getArticleSegmentGroup());
 
-					// List<Article> articles =
-					// segment2ArticlesWithoutSegmentEdit.get(article.getSegment());
-					// if (articles == null) {
-					// articles = new ArrayList<Article>();
-					// segment2ArticlesWithoutSegmentEdit.put(article.getSegment(),
-					// articles);
-					// }
-					// articles.add(article);
-				} else {
-					// we do already have a SegmentEdit for article
-					List<ArticleCarrier> articleCarriers = segmentEdit2ArticleCarriers.get(segmentEdit);
-					if (articleCarriers == null) {
-						articleCarriers = new ArrayList<ArticleCarrier>();
-						segmentEdit2ArticleCarriers.put(segmentEdit, articleCarriers);
+						} else {
+							// we do already have a SegmentEdit for article
+							List<ArticleCarrier> articleCarriers = segmentEdit2ArticleCarriers.get(segmentEdit);
+							if (articleCarriers == null) {
+								articleCarriers = new ArrayList<ArticleCarrier>();
+								segmentEdit2ArticleCarriers.put(segmentEdit, articleCarriers);
+							}
+							articleCarriers.add(articleCarrier);
+						}
 					}
-					articleCarriers.add(articleCarrier);
+
+					for (Map.Entry<SegmentEdit, List<ArticleCarrier>> me : segmentEdit2ArticleCarriers.entrySet())
+						me.getKey().addArticles(me.getValue());
+
+					for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroupsWithoutSegmentEdit)
+						createSegmentEditAndComposite(articleSegmentGroup);
+
+
+					updateHeaderAndFooter();
 				}
+			};
+
+			if (segmentCompositeFolder == null) // too early - try again later
+				Display.getDefault().asyncExec(runnable);
+			else {
+				if (!segmentCompositeFolder.isDisposed()) // if we're not too late, do it now
+					runnable.run();
 			}
-
-			for (Map.Entry<SegmentEdit, List<ArticleCarrier>> me : segmentEdit2ArticleCarriers.entrySet())
-				me.getKey().addArticles(me.getValue());
-
-			for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroupsWithoutSegmentEdit)
-				createSegmentEditAndComposite(articleSegmentGroup);
-
-			// for (Map.Entry<Segment, List<Article>> me :
-			// segment2ArticlesWithoutSegmentEdit.entrySet()) {
-			// Segment segment = me.getKey();
-			// // List<Article> articles = me.getValue(); // currently not needed
-			//
-			// ArticleSegmentGroup asg =
-			// articleSegmentGroups.getArticleSegmentGroupForSegmentPK(segment.getPrimaryKey(),
-			// true);
-			// // TODO can we be sure that the articles we have here are identical
-			// with those Articles that are managed by asg???
-			// // imho, it should be the case...
-			// createSegmentEditAndComposite(asg);
-			// }
-			updateHeaderAndFooter();
 		}
 	};
 
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener() {
-		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-			if (articleChangeEvent.getDeletedArticles().isEmpty())
-				return;
+		public void articlesChanged(final ArticleChangeEvent articleChangeEvent) {
+			Runnable runnable = new Runnable() {
+				public void run()
+				{
+					if (articleChangeEvent.getDeletedArticles().isEmpty())
+						return;
 
-//			for (Article article : articleChangeEvent.getDeletedArticles()) {
-//				SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(article
-//						.getSegment().getPrimaryKey());
-//				 if (segmentEdit != null)
-//					 segmentEdit.r
-//			}
+					Map<SegmentEdit, Collection<ArticleCarrier>> segmentEdit2DeletedArticleCarriers = new HashMap<SegmentEdit, Collection<ArticleCarrier>>();
+					for (ArticleCarrier articleCarrier : articleChangeEvent.getDeletedArticleCarriers()) {
+						String segmentPK = articleCarrier.getArticle().getSegment().getPrimaryKey();
+						SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(segmentPK);
+						Collection<ArticleCarrier> deletedArticleCarriers = segmentEdit2DeletedArticleCarriers.get(segmentEdit);
+						if (deletedArticleCarriers == null) {
+							deletedArticleCarriers = new ArrayList<ArticleCarrier>();
+							segmentEdit2DeletedArticleCarriers.put(segmentEdit, deletedArticleCarriers);
+						}
+						deletedArticleCarriers.add(articleCarrier);
+					}
 
-			Map<SegmentEdit, Collection<ArticleCarrier>> segmentEdit2DeletedArticleCarriers = new HashMap<SegmentEdit, Collection<ArticleCarrier>>();
-			for (ArticleCarrier articleCarrier : articleChangeEvent.getDeletedArticleCarriers()) {
-				String segmentPK = articleCarrier.getArticle().getSegment().getPrimaryKey();
-				SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(segmentPK);
-				Collection<ArticleCarrier> deletedArticleCarriers = segmentEdit2DeletedArticleCarriers.get(segmentEdit);
-				if (deletedArticleCarriers == null) {
-					deletedArticleCarriers = new ArrayList<ArticleCarrier>();
-					segmentEdit2DeletedArticleCarriers.put(segmentEdit, deletedArticleCarriers);
+					for (Map.Entry<SegmentEdit, Collection<ArticleCarrier>> me : segmentEdit2DeletedArticleCarriers.entrySet())
+						me.getKey().removeArticles(me.getValue());
+
+					updateHeaderAndFooter();
 				}
-				deletedArticleCarriers.add(articleCarrier);
+			};
+
+			if (segmentCompositeFolder == null) // too early - try again later
+				Display.getDefault().asyncExec(runnable);
+			else {
+				if (!segmentCompositeFolder.isDisposed()) // if we're not too late, do it now
+					runnable.run();
 			}
-
-			for (Map.Entry<SegmentEdit, Collection<ArticleCarrier>> me : segmentEdit2DeletedArticleCarriers.entrySet())
-				me.getKey().removeArticles(me.getValue());
-
-			updateHeaderAndFooter();
 		}
 	};
 
@@ -779,8 +775,7 @@ extends XComposite
 	 * doesn't work correctly.
 	 */
 	public void calculateScrollContentSize() {
-		for (Iterator it = segmentEditsByTabItem.values().iterator(); it.hasNext();) {
-			SegmentEdit segmentEdit = (SegmentEdit) it.next();
+		for (SegmentEdit segmentEdit : segmentEditsByTabItem.values()) {
 			calculateScrollContentSize(segmentEdit);
 //			Composite segmentEditComposite = segmentEdit.getComposite();
 //			ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite) segmentEditComposite
