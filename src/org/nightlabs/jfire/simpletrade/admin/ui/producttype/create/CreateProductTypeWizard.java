@@ -138,6 +138,8 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	@Implement
 	public boolean performFinish()
 	{
+		
+		
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 
