@@ -13,6 +13,26 @@ import org.nightlabs.jfire.store.ProductType;
 public interface IProductTypeSectionPart
 extends IFormPart
 {
+	
+	
+	
+	/**
+	 * sets the productTypeController to display
+	 * @param productType the productType to set
+	 */
+	void setProductTypeController(AbstractProductTypePageController<ProductType> productTypeDetailPageController);
+	
+	
+	/**
+	 * returns the current displayed/edited productTypeController
+	 * @return the productType
+	 */
+	
+	AbstractProductTypePageController<ProductType> getProductTypeController();
+	
+	
+	
+	
 	/**
 	 * sets the productType to display
 	 * @param productType the productType to set

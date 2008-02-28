@@ -7,6 +7,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 
 
@@ -55,6 +56,33 @@ implements IProductTypeSectionPart
 		return productType;
 	}
 
+	
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+	
+	
+	
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	{
+		if (pageController == null || getSection() == null || getSection().isDisposed())
+			return;
+
+		productTypePageController = pageController; 
+		
+		this.productType = pageController.getProductType();
+		getOwnerEditComposite().setLegalEntity(pageController.getProductType().getOwner());
+	
+	
+	}
+	
+	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	{
+		
+		return productTypePageController;
+		
+	}
+	
+	
+	
 	/**
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set

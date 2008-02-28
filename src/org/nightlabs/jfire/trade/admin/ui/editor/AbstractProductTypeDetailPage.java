@@ -201,8 +201,13 @@ implements IProductTypeDetailPage
 			saleAccessControlSection.setProductType(productType);
 		if (ownerSection != null)
 			ownerSection.setProductType(productType);						
+	//	if (vendorSection != null)
+	//		vendorSection.setProductType(productType);						
 		if (vendorSection != null)
-			vendorSection.setProductType(productType);						
+			vendorSection.setProductTypeController((AbstractProductTypePageController)getPageController());
+		
+	
+	
 	}
 
 	/**

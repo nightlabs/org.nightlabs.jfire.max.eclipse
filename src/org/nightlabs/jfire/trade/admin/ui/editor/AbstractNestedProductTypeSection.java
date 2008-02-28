@@ -111,7 +111,27 @@ implements IProductTypeSectionPart
 		
 		nestedProductTypeTable.setInput(productType);
 	}
+	//TODO I have to implement those two methods
 
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+
+
+
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	{
+
+	}
+
+	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	{
+
+		return productTypePageController;
+
+	}
+
+	
+	
+	
 	private InheritanceAction inheritNestedProductTypesAction = null;
 	private NestedProductTypeTable nestedProductTypeTable = null;
 

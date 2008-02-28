@@ -69,7 +69,7 @@ extends AbstractProductTypePageController<ProductTypeType>
 	
 	@Override
 	
-	protected ProductTypeType getExtendedProductType(ProgressMonitor monitor)
+	public ProductTypeType getExtendedProductType(ProgressMonitor monitor)
 	{
 		return  (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(getExtendedProductTypeID(),
 				getEntityFetchGroups(),

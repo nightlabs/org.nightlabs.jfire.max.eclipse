@@ -1,13 +1,23 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.ownervendor;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection.InheritAction;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 
 /**
@@ -31,13 +41,13 @@ implements IProductTypeSectionPart
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorEditComposite.addLegalEntityValueChangedListener( 
 				new ILegalEntityValueChangedListener()
-		  {
-			public void legalEntityValueChanged()
-			{
-				// if value has changed 				
-					markDirty();
-			}
-		});
+				{
+					public void legalEntityValueChanged()
+					{
+						// if value has changed 				
+						markDirty();
+					}
+				});
 
 //		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 //		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
@@ -54,6 +64,31 @@ implements IProductTypeSectionPart
 	public ProductType getProductType() {
 		return productType;
 	}
+
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+
+
+
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	{
+		if (pageController == null || getSection() == null || getSection().isDisposed())
+			return;
+
+		productTypePageController = pageController; 
+
+		this.productType = pageController.getProductType();
+		getVendorEditComposite().setLegalEntity(pageController.getProductType().getVendor());
+
+
+	}
+
+	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	{
+
+		return productTypePageController;
+
+	}
+
 
 	/**
 	 * sets the {@link ProductType}
@@ -85,26 +120,28 @@ implements IProductTypeSectionPart
 	protected void inheritPressed() {
 		if( inheritAction.isChecked() )
 		{
+			ProductType inProductType =	productTypePageController.getExtendedProductType(new NullProgressMonitor());
 			
+			getVendorEditComposite().setLegalEntity(inProductType.getOwner());
+		
 		}
-	}
-	
-	class InheritAction 
-	extends InheritanceAction {
-		@Override
-		public void run() {
-			if (productType == null)
-				return;
-			
-			inheritPressed();
-			
-			updateToolBarManager();
-			markDirty();
-		}
+	}	
+			class InheritAction 
+			extends InheritanceAction {
+				@Override
+				public void run() {
+					if (productType == null)
+						return;
 
-		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").isValueInherited()); //$NON-NLS-1$
-		}
-	}
+					inheritPressed();
 
-}
+					updateToolBarManager();
+					markDirty();
+				}
+
+				public void updateState(ProductType productType) {
+					setChecked(productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").isValueInherited()); //$NON-NLS-1$
+				}
+			}
+
+		}

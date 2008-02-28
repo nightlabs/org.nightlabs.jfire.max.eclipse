@@ -61,6 +61,25 @@ implements IProductTypeSectionPart
 		saleAccessControlComposite.setProductType(productType);
 	}
 
+	//TODO I have to implement those two methods
+
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+
+
+
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	{
+
+	}
+
+	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	{
+
+		return productTypePageController;
+
+	}
+	
+	
 	@Override
 	public void commit(boolean save) {
 		if (isDirty()) {

@@ -42,7 +42,7 @@ implements IProductTypeSectionPart
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent, int style) {
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeNameSection.text")); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -63,7 +63,7 @@ implements IProductTypeSectionPart
 				markDirty();
 			}
 		});
-		
+
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -73,12 +73,12 @@ implements IProductTypeSectionPart
 		};
 		getToolBarManager().add(inheritanceAction);
 		updateToolBarManager();
-		
+
 //		inheritProductTypeName = new InheritanceToggleButton(getSection());
 //		inheritProductTypeName.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				inheritNamePressed();
-//			}
+//		public void widgetSelected(SelectionEvent e) {
+//		inheritNamePressed();
+//		}
 //		});
 //		getSection().setTextClient(inheritProductTypeName);
 	}
@@ -90,12 +90,12 @@ implements IProductTypeSectionPart
 //	private InheritanceToggleButton inheritProductTypeName = null;
 	private InheritanceAction inheritanceAction = null;
 	private boolean ignoreProductTypeNameModify = false;
-	
+
 	private ProductType productType = null;
 	public ProductType getProductType() {
 		return productType;
 	}
-	
+
 	public void setProductType(ProductType productType)
 	{
 		if (productType == null || getSection() == null || getSection().isDisposed())
@@ -112,11 +112,32 @@ implements IProductTypeSectionPart
 				setInheritanceSelection(productType.getFieldMetaData("name").isValueInherited()); //$NON-NLS-1$
 		}
 	}
-	
+
+	//TODO I have to implement those two methods
+
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+
+
+
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	{
+
+	}
+
+	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	{
+
+		return productTypePageController;
+
+	}
+
+
+
+
 	private II18nTextEditor productTypeName = null;
-	
+
 	protected abstract ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor);
-	
+
 	protected void inheritNamePressed()
 	{
 //		if (!getInheritanceSelection())
@@ -135,7 +156,7 @@ implements IProductTypeSectionPart
 								productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE},
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 4)
-								);
+						);
 						final ProductTypeHolder typeHolder = new ProductTypeHolder();
 						typeHolder.extendedProductType = productTypeWithExtended.getExtendedProductType();
 						if (typeHolder.extendedProductType != null) {
@@ -165,12 +186,12 @@ implements IProductTypeSectionPart
 			}
 		}
 	}
-	
+
 	protected boolean getInheritanceSelection() {
 //		return inheritProductTypeName.getSelection();
 		return inheritanceAction.isChecked();
 	}
-	
+
 	protected void setInheritanceSelection(boolean selection) {
 //		inheritProductTypeName.setSelection(selection);
 		inheritanceAction.setChecked(selection);
