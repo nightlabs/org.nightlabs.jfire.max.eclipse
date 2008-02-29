@@ -796,12 +796,14 @@ gibt's nimmer - oder?! Marco.
 
       <articleEditAction
             contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+            icon="icons/articlecontainer/detail/action/changetariff/ChangeTariffAction.16x16.png"
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="Change tariff..."
             tooltip="Change the tariff of the selected articles.">
       </articleEditAction>
       <articleEditAction
+            icon="icons/articlecontainer/detail/action/changetariff/ChangeTariffAction.24x24.png"
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
             name="Change tariff..."
             toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
