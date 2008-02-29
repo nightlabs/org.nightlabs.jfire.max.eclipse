@@ -13,7 +13,7 @@
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - Order"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
-            segmentContext="Order"
+            articleContainerClass="org.nightlabs.jfire.trade.Order"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
          <articleEditActionDelegate
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
@@ -38,7 +38,7 @@
 
       </articleEditFactory>
       <articleEditFactory
-            segmentContext="Offer"
+            articleContainerClass="org.nightlabs.jfire.trade.Offer"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
@@ -69,7 +69,7 @@
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - Invoice"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
-            segmentContext="Invoice"
+            articleContainerClass="org.nightlabs.jfire.accounting.Invoice"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
             <articleEditActionDelegate
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
@@ -84,7 +84,7 @@
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - DeliveryNote"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
-            segmentContext="DeliveryNote"
+            articleContainerClass="org.nightlabs.jfire.store.DeliveryNote"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType">
             <articleEditActionDelegate
                articleEditActionID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
@@ -99,13 +99,13 @@
    <extension
          point="org.nightlabs.jfire.trade.ui.articleAdderFactory">
       <articleAdderFactory
-            segmentContext="Order"
+            articleContainerClass="org.nightlabs.jfire.trade.Order"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Order"/>
       <articleAdderFactory
-            segmentContext="Offer"
+            articleContainerClass="org.nightlabs.jfire.trade.Offer"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
