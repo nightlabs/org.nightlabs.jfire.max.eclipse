@@ -34,7 +34,7 @@ public class AbstractSegmentTypeProductTypeDependentFactory
 implements SegmentTypeProductTypeDependentFactory
 {
 	private String name;
-	private String segmentContext;
+	private String articleContainerClass;
 	private String segmentTypeClass;
 	private String productTypeClass;
 
@@ -55,19 +55,19 @@ implements SegmentTypeProductTypeDependentFactory
 	}
 
 	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentTypeProductTypeDependentFactory#setSegmentContext(java.lang.String)
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentTypeProductTypeDependentFactory#setArticleContainerClass(java.lang.String)
 	 */
-	public void setSegmentContext(String segmentContext)
+	public void setArticleContainerClass(String articleContainerClass)
 	{
-		this.segmentContext = segmentContext;
+		this.articleContainerClass = articleContainerClass;
 	}
 
 	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentTypeProductTypeDependentFactory#getSegmentContext()
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentTypeProductTypeDependentFactory#getArticleContainerClass()
 	 */
-	public String getSegmentContext()
+	public String getArticleContainerClass()
 	{
-		return segmentContext;
+		return articleContainerClass;
 	}
 
 	/**

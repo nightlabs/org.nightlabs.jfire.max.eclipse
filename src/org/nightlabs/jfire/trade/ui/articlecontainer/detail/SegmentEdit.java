@@ -49,7 +49,7 @@ public interface SegmentEdit
 	 * {@link SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, String, ArticleSegmentGroup)}.
 	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>.
 	 * @param generalEditorComposite TODO
-	 * @param segmentContext The segmentContext - one of
+	 * @param articleContainerClass The articleContainerClass - one of
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_ORDER},
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_OFFER},
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_INVOICE} or
@@ -60,7 +60,7 @@ public interface SegmentEdit
 	void init(
 			SegmentEditFactory segmentEditFactory,
 			GeneralEditorComposite generalEditorComposite,
-			String segmentContext,
+			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 
 
@@ -151,7 +151,7 @@ public interface SegmentEdit
 	 */
 	void fireCompositeContentChangeEvent();
 
-	String getSegmentContext();
+	String getArticleContainerClass();
 
 	/**
 	 * This method iterates all {@link ArticleEdit}s, calls {@link ArticleEdit#getSelectedArticles()}

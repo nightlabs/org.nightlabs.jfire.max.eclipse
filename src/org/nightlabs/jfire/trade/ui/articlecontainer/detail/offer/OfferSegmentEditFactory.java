@@ -47,10 +47,10 @@ extends AbstractSegmentEditFactory
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, java.lang.String, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
 	 */
 	public SegmentEdit createSegmentEdit(GeneralEditorComposite generalEditorComposite,
-			String segmentContext, ArticleSegmentGroup articleSegmentGroup)
+			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
 	{
 		SegmentEdit segmentEdit = new OfferSegmentEdit();
-		segmentEdit.init(this, generalEditorComposite, segmentContext, articleSegmentGroup);
+		segmentEdit.init(this, generalEditorComposite, articleContainerClass, articleSegmentGroup);
 		return segmentEdit;
 	}
 

@@ -66,7 +66,7 @@ public class ReleaseAction extends ArticleEditAction
 		for (ArticleSelection articleSelection : articleSelections) {
 
 //			SegmentEdit segmentEdit = articleSelection.getArticleEdit().getSegmentEdit();
-//			String segmentContext = segmentEdit.getSegmentContext();
+//			String articleContainerClass = segmentEdit.getArticleContainerClass();
 //			ArticleContainer articleContainer = segmentEdit.getArticleContainer();
 
 			for (Article article : articleSelection.getSelectedArticles()) {

@@ -349,25 +349,25 @@ gibt's nimmer - oder?! Marco.
    <extension
          point="org.nightlabs.jfire.trade.ui.segmentEditFactory">
       <segmentEditFactory
-            segmentContext="Order"
+            articleContainerClass="org.nightlabs.jfire.trade.Order"
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderSegmentEditFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             name="Standard - Order">
       </segmentEditFactory>
       <segmentEditFactory
-            segmentContext="Offer"
+            articleContainerClass="org.nightlabs.jfire.trade.Offer"
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferSegmentEditFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             name="Standard - Offer"/>
       <segmentEditFactory
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceSegmentEditFactory"
             name="Standard - Invoice"
-            segmentContext="Invoice"
+            articleContainerClass="org.nightlabs.jfire.accounting.Invoice"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
       <segmentEditFactory
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteSegmentEditFactory"
             name="Standard - DeliveryNote"
-            segmentContext="DeliveryNote"
+            articleContainerClass="org.nightlabs.jfire.store.DeliveryNote"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
    </extension>
    <extension

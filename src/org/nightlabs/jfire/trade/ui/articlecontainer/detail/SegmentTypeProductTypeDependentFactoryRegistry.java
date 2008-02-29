@@ -33,6 +33,9 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.SegmentType;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -41,7 +44,7 @@ public abstract class SegmentTypeProductTypeDependentFactoryRegistry
 extends AbstractEPProcessor
 {
 	/**
-	 * key: String segmentContext<br/>
+	 * key: String articleContainerClass<br/>
 	 * value: Map {<br/>
 	 *		key: String segmentTypeClass<br/>
 	 *		value: Map {<br/>
@@ -50,7 +53,7 @@ extends AbstractEPProcessor
 	 *		}
 	 * }
 	 */
-	protected Map factories = new HashMap();
+	protected Map<String, Map<String, Map<String, SegmentTypeProductTypeDependentFactory>>> factories = new HashMap<String, Map<String,Map<String,SegmentTypeProductTypeDependentFactory>>>();
 
 	/**
 	 * This method finds a <tt>SegmentTypeProductTypeDependentFactory</tt> according to the given
@@ -60,20 +63,20 @@ extends AbstractEPProcessor
 	 * <tt>segmentTypeClass</tt>, then for the <tt>productTypeClass</tt>.
 	 * Note, that this behaviour might still change!!!
 	 *
-	 * @param segmentContext
+	 * @param articleContainerClass
 	 * @param segmentTypeClass
 	 * @param productTypeClass
 	 * @param throwExceptionIfNotFound Whether or not to throw an {@link IllegalStateException}. If <tt>false</tt>, <tt>null</tt> will be returned instead.
 	 * @return An instance of <tt>SegmentTypeProductTypeDependentFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	protected SegmentTypeProductTypeDependentFactory getFactory(
-			String segmentContext, Class segmentTypeClass,
-			Class productTypeClass, boolean throwExceptionIfNotFound)
+			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
-		Map aefsBySegmentTypeClass = (Map) factories.get(segmentContext);
+		Map<String, Map<String, SegmentTypeProductTypeDependentFactory>> aefsBySegmentTypeClass = factories.get(articleContainerClass);
 		if (aefsBySegmentTypeClass == null) {
 			if (throwExceptionIfNotFound)
-				throw new IllegalStateException("No SegmentTypeProductTypeDependentFactory registered for segmentContext=\""+segmentContext+"\"!!!"); //$NON-NLS-1$ //$NON-NLS-2$
+				throw new IllegalStateException("No SegmentTypeProductTypeDependentFactory registered for articleContainerClass=\""+articleContainerClass+"\"!!!"); //$NON-NLS-1$ //$NON-NLS-2$
 			else
 				return null;
 		}
@@ -82,16 +85,16 @@ extends AbstractEPProcessor
 
 		// We iterate first through the segmentType classes and second through
 		// the productType classes.
-		Class segmentTypeSearchC = segmentTypeClass;
+		Class<?> segmentTypeSearchC = segmentTypeClass;
 		do {
 
-			Class productTypeSearchC = productTypeClass;
+			Class<?> productTypeSearchC = productTypeClass;
 			do {
 
-				Map aefsByProductTypeClass = (Map) aefsBySegmentTypeClass.get(segmentTypeSearchC.getName());
+				Map<String, SegmentTypeProductTypeDependentFactory> aefsByProductTypeClass = aefsBySegmentTypeClass.get(segmentTypeSearchC.getName());
 				if (aefsByProductTypeClass != null) {
 
-					factory = (SegmentTypeProductTypeDependentFactory) aefsByProductTypeClass.get(productTypeSearchC.getName());
+					factory = aefsByProductTypeClass.get(productTypeSearchC.getName());
 
 				} // if (aefsByProductTypeClass != null) {
 
@@ -102,22 +105,22 @@ extends AbstractEPProcessor
 		} while (factory == null && segmentTypeSearchC != Object.class);
 
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("No SegmentTypeProductTypeDependentFactory registered for segmentTypeClass=\""+segmentTypeClass.getName()+"\" & productTypeClass=\""+productTypeClass.getName()+"\" within segmentContext=\""+segmentContext+"\"!!!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			throw new IllegalStateException("No SegmentTypeProductTypeDependentFactory registered for segmentTypeClass=\""+segmentTypeClass.getName()+"\" & productTypeClass=\""+productTypeClass.getName()+"\" within articleContainerClass=\""+articleContainerClass+"\"!!!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		return factory;
 	}
 
 	protected void addFactory(SegmentTypeProductTypeDependentFactory factory)
 	{
-		Map map1 = (Map) factories.get(factory.getSegmentContext());
+		Map<String, Map<String, SegmentTypeProductTypeDependentFactory>> map1 = factories.get(factory.getArticleContainerClass());
 		if (map1 == null) {
-			map1 = new HashMap();
-			factories.put(factory.getSegmentContext(), map1);
+			map1 = new HashMap<String, Map<String,SegmentTypeProductTypeDependentFactory>>();
+			factories.put(factory.getArticleContainerClass(), map1);
 		}
 
-		Map map2 = (Map) map1.get(factory.getSegmentTypeClass());
+		Map<String, SegmentTypeProductTypeDependentFactory> map2 = map1.get(factory.getSegmentTypeClass());
 		if (map2 == null) {
-			map2 = new HashMap();
+			map2 = new HashMap<String, SegmentTypeProductTypeDependentFactory>();
 			map1.put(factory.getSegmentTypeClass(), map2);
 		}
 
@@ -134,11 +137,11 @@ extends AbstractEPProcessor
 		try {
 			SegmentTypeProductTypeDependentFactory factory = (SegmentTypeProductTypeDependentFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			String segmentTypeClass = element.getAttribute("segmentTypeClass"); //$NON-NLS-1$
-			String segmentContext = element.getAttribute("segmentContext"); //$NON-NLS-1$
+			String articleContainerClass = element.getAttribute("articleContainerClass"); //$NON-NLS-1$
 			String productTypeClass = element.getAttribute("productTypeClass"); //$NON-NLS-1$
 			String factoryName = element.getAttribute("name"); //$NON-NLS-1$
 
-			SegmentEditFactoryRegistry.assertValidSegmentContext(segmentContext);
+//			SegmentEditFactoryRegistry.assertValidArticleContainerClass(articleContainerClass);
 			if (segmentTypeClass == null || "".equals(segmentTypeClass)) //$NON-NLS-1$
 				throw new EPProcessorException("segmentTypeClass undefined!"); //$NON-NLS-1$
 
@@ -146,7 +149,7 @@ extends AbstractEPProcessor
 				throw new EPProcessorException("productTypeClass undefined!"); //$NON-NLS-1$
 
 			factory.setSegmentTypeClass(segmentTypeClass);
-			factory.setSegmentContext(segmentContext);
+			factory.setArticleContainerClass(articleContainerClass);
 			factory.setProductTypeClass(productTypeClass);
 			factory.setName(factoryName);
 

@@ -69,24 +69,15 @@
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="segmentContext" use="required">
+         <attribute name="articleContainerClass" type="string" use="required">
             <annotation>
                <documentation>
-                  This can be one of &quot;Order&quot;, &quot;Offer&quot;, &quot;Invoice&quot; or &quot;DeliveryNote&quot;.
+                  This is usually one of &quot;Order&quot;, &quot;Offer&quot;, &quot;Invoice&quot; or &quot;DeliveryNote&quot;.
                </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ArticleContainer"/>
+               </appInfo>
             </annotation>
-            <simpleType>
-               <restriction base="string">
-                  <enumeration value="Order">
-                  </enumeration>
-                  <enumeration value="Offer">
-                  </enumeration>
-                  <enumeration value="Invoice">
-                  </enumeration>
-                  <enumeration value="DeliveryNote">
-                  </enumeration>
-               </restriction>
-            </simpleType>
          </attribute>
          <attribute name="name" type="string">
             <annotation>

@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.trade.SegmentType;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -61,44 +62,44 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 	}
 
 	/**
-	 * key: String segmentContext<br/>
+	 * key: String articleContainerClass<br/>
 	 * value: Map {<br/>
 	 *   key: String segmentTypeClass<br/>
 	 *   value: SegmentEditFactory editFactory<br/>
 	 * }
 	 */
-	protected Map segmentEditFactoriesBySegmentContext = new HashMap();
+	protected Map<String, Map<String, SegmentEditFactory>> segmentEditFactoriesByArticleContainerClass = new HashMap<String, Map<String,SegmentEditFactory>>();
 
-	protected static boolean isValidSegmentContext(String segmentContext)
+//	protected static boolean isValidArticleContainerClass(String articleContainerClass)
+//	{
+//		return
+//				Order.class.getName().equals(articleContainerClass) ||
+//				Offer.class.getName().equals(articleContainerClass) ||
+//				SegmentEditFactory.SEGMENTCONTEXT_INVOICE.equals(articleContainerClass) ||
+//				SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE.equals(articleContainerClass) ||
+//				SegmentEditFactory.SEGMENTCONTEXT_RECEPTION_NOTE.equals(articleContainerClass);
+//	}
+//
+//	protected static void assertValidArticleContainerClass(String articleContainerClass)
+//	{
+//		if (!isValidArticleContainerClass(articleContainerClass))
+//			throw new IllegalArgumentException("articleContainerClass \""+articleContainerClass+"\" is not valid!"); //$NON-NLS-1$ //$NON-NLS-2$
+//	}
+
+	protected Map<String, SegmentEditFactory> getSegmentEditFactories(String articleContainerClass)
 	{
-		return
-				SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext) ||
-				SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext) ||
-				SegmentEditFactory.SEGMENTCONTEXT_INVOICE.equals(segmentContext) ||
-				SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE.equals(segmentContext) ||
-				SegmentEditFactory.SEGMENTCONTEXT_RECEPTION_NOTE.equals(segmentContext);
-	}
+//		assertValidArticleContainerClass(articleContainerClass);
 
-	protected static void assertValidSegmentContext(String segmentContext)
-	{
-		if (!isValidSegmentContext(segmentContext))
-			throw new IllegalArgumentException("segmentContext \""+segmentContext+"\" is not valid!"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	protected Map getSegmentEditFactories(String segmentContext)
-	{
-		assertValidSegmentContext(segmentContext);
-
-		Map res = (Map) segmentEditFactoriesBySegmentContext.get(segmentContext);
+		Map<String, SegmentEditFactory> res = segmentEditFactoriesByArticleContainerClass.get(articleContainerClass);
 		if (res == null) {
-			res = new HashMap();
-			segmentEditFactoriesBySegmentContext.put(segmentContext, res);
+			res = new HashMap<String, SegmentEditFactory>();
+			segmentEditFactoriesByArticleContainerClass.put(articleContainerClass, res);
 		}
 		return res;
 	}
 
 	/**
-	 * @param segmentContext
+	 * @param articleContainerClass
 	 * @param segmentTypeClass This class will be resolved recursively. Means you can
 	 *		subclass a <tt>SegmentType</tt> and it will use the parent's factory, if you
 	 *		don't override it for your child.
@@ -108,26 +109,26 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 	 * @return
 	 */
 	public SegmentEditFactory getSegmentEditFactory(
-			String segmentContext, Class segmentTypeClass,
+			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
 			boolean throwExceptionIfNotFound)
 	{
-		Map m = getSegmentEditFactories(segmentContext);
+		Map<String, SegmentEditFactory> m = getSegmentEditFactories(articleContainerClass);
 		SegmentEditFactory factory = null;
-		Class clazz = segmentTypeClass;
+		Class<?> clazz = segmentTypeClass;
 		do {
-			factory = (SegmentEditFactory) m.get(clazz.getName());
+			factory = m.get(clazz.getName());
 			clazz = clazz.getSuperclass();
 		} while (factory == null && clazz != Object.class);
 
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("Nothing registered for segmentContext=\""+segmentContext+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		return factory;
 	}
 
 	protected void addSegmentEditFactory(SegmentEditFactory sef)
 	{
-		Map sefMap = getSegmentEditFactories(sef.getSegmentContext());
+		Map<String, SegmentEditFactory> sefMap = getSegmentEditFactories(sef.getArticleContainerClass());
 		sefMap.put(sef.getSegmentTypeClass(), sef);
 	}
 
@@ -150,14 +151,14 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 		try {
 			SegmentEditFactory segmentEditFactory = (SegmentEditFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			String segmentTypeClass = element.getAttribute("segmentTypeClass"); //$NON-NLS-1$
-			String segmentContext = element.getAttribute("segmentContext"); //$NON-NLS-1$
+			String articleContainerClass = element.getAttribute("articleContainerClass"); //$NON-NLS-1$
 			String segmentEditFactoryName = element.getAttribute("name"); //$NON-NLS-1$
 
-			assertValidSegmentContext(segmentContext);
+//			assertValidArticleContainerClass(articleContainerClass);
 			if (segmentTypeClass == null || "".equals(segmentTypeClass)) //$NON-NLS-1$
 				throw new EPProcessorException("segmentTypeClass undefined!"); //$NON-NLS-1$
 
-			segmentEditFactory.init(segmentEditFactoryName, segmentContext, segmentTypeClass);
+			segmentEditFactory.init(segmentEditFactoryName, articleContainerClass, segmentTypeClass);
 
 //			ArticleEditFactoryRegistry articleEditFactoryRegistry = new ArticleEditFactoryRegistry();
 //			SegmentEditFactoryRegistryEntry sefre = new SegmentEditFactoryRegistryEntry(

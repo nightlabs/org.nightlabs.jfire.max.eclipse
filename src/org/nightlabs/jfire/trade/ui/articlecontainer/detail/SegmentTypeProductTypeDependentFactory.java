@@ -32,22 +32,22 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
  */
 public interface SegmentTypeProductTypeDependentFactory
 {
-	/**
-	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_ORDER}.
-	 */
-	public static final String SEGMENTCONTEXT_ORDER = SegmentEditFactory.SEGMENTCONTEXT_ORDER;
-	/**
-	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_OFFER}.
-	 */
-	public static final String SEGMENTCONTEXT_OFFER = SegmentEditFactory.SEGMENTCONTEXT_OFFER;
-	/**
-	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_INVOICE}.
-	 */
-	public static final String SEGMENTCONTEXT_INVOICE = SegmentEditFactory.SEGMENTCONTEXT_INVOICE;
-	/**
-	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_DELIVERY_NOTE}.
-	 */
-	public static final String SEGMENTCONTEXT_DELIVERY = SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE;
+//	/**
+//	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_ORDER}.
+//	 */
+//	public static final String SEGMENTCONTEXT_ORDER = Order.class.getName();
+//	/**
+//	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_OFFER}.
+//	 */
+//	public static final String SEGMENTCONTEXT_OFFER = Offer.class.getName();
+//	/**
+//	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_INVOICE}.
+//	 */
+//	public static final String SEGMENTCONTEXT_INVOICE = SegmentEditFactory.SEGMENTCONTEXT_INVOICE;
+//	/**
+//	 * Same as {@link SegmentEditFactory#SEGMENTCONTEXT_DELIVERY_NOTE}.
+//	 */
+//	public static final String SEGMENTCONTEXT_DELIVERY = SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE;
 
 	/**
 	 * This method is called by the SegmentEditFactoryRegistry while processing
@@ -65,31 +65,31 @@ public interface SegmentTypeProductTypeDependentFactory
 
 	/**
 	 * This method is called by the SegmentEditFactoryRegistry, which passes
-	 * the segmentContext that is declared for the extension in the plugin.xml.
+	 * the articleContainerClass that is declared for the extension in the plugin.xml.
 	 * <p>
 	 * The registration of a <tt>SegmentEditFactory</tt> is dependent on two parameters:
-	 * The segmentContext and the class of the SegmentType.
+	 * The articleContainerClass and the class of the SegmentType.
 	 *
-	 * @param segmentContext The segmentContext declared in the plugin.xml.
+	 * @param articleContainerClass The articleContainerClass declared in the plugin.xml.
 	 *
 	 * @see #SEGMENTCONTEXT_ORDER
 	 * @see #SEGMENTCONTEXT_OFFER
 	 * @see #SEGMENTCONTEXT_INVOICE
 	 * @see #SEGMENTCONTEXT_DELIVERY_NOTE
 	 */
-	void setSegmentContext(String segmentContext);
+	void setArticleContainerClass(String articleContainerClass);
 
 	/**
-	 * @return the segmentContext that was previously set by {@link #setSegmentContext(String)}
+	 * @return the articleContainerClass that was previously set by {@link #setArticleContainerClass(String)}
 	 */
-	String getSegmentContext();
+	String getArticleContainerClass();
 
 	/**
 	 * This method is called by the SegmentEditFactoryRegistry, which passes
 	 * the segmentTypeClass that is declared for the extension in the plugin.xml.
 	 * <p>
 	 * The registration of a <tt>SegmentEditFactory</tt> is dependent on two parameters:
-	 * The segmentContext and the class of the SegmentType.
+	 * The articleContainerClass and the class of the SegmentType.
 	 *
 	 * @param segmentTypeClass The segmentTypeClass declared in the plugin.xml.
 	 */

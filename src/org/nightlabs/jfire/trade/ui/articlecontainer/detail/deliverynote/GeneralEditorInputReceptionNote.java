@@ -24,34 +24,75 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.trade.ui.articlecontainer.detail.order;
+package org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote;
 
-
-import org.nightlabs.jfire.trade.ArticleSegmentGroup;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEditFactory;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.store.id.ReceptionNoteID;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.util.Util;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class OrderSegmentEditFactory
-extends AbstractSegmentEditFactory
+public class GeneralEditorInputReceptionNote
+extends GeneralEditorInput
+implements IEditorInput
 {
+	private ReceptionNoteID receptionNoteID;
 
-	public OrderSegmentEditFactory()
+	public GeneralEditorInputReceptionNote()
 	{
+	}
+
+	public GeneralEditorInputReceptionNote(ReceptionNoteID receptionNoteID)
+	{
+		this.receptionNoteID = receptionNoteID;
 	}
 
 	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, java.lang.String, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
+	 * @return Returns the receptionNoteID.
 	 */
-	public SegmentEdit createSegmentEdit(GeneralEditorComposite generalEditorComposite,
-			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
+	public ReceptionNoteID getReceptionNoteID()
 	{
-		SegmentEdit segmentEdit = new OrderSegmentEdit();
-		segmentEdit.init(this, generalEditorComposite, articleContainerClass, articleSegmentGroup);
-		return segmentEdit;
+		return receptionNoteID;
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return receptionNoteID == null ? 0 : receptionNoteID.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == this) return true;
+
+		if (!(obj instanceof GeneralEditorInputReceptionNote))
+			return false;
+
+		GeneralEditorInputReceptionNote other = (GeneralEditorInputReceptionNote)obj;
+
+		return Util.equals(this.receptionNoteID, other.receptionNoteID);
+	}
+
+	public String getName()
+	{
+		return String.format(
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputReceptionNote.name"), //$NON-NLS-1$
+				(receptionNoteID == null ? "" : receptionNoteID.receptionNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(receptionNoteID.receptionNoteID))); //$NON-NLS-1$
+	}
+
+	private static final String IMAGE = "icons/articlecontainer/detail/deliverynote/GeneralEditorInputReceptionNote.16x16.png"; //$NON-NLS-1$
+
+	@Override
+	public ImageDescriptor getImageDescriptor()
+	{
+		return AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE);
+	}
 }

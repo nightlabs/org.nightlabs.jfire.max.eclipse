@@ -632,10 +632,9 @@ extends XComposite
 		Segment segment = asg.getSegment();
 		SegmentType segmentType = segment.getSegmentType();
 
-		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance()
-				.getSegmentEditFactory(input.getSegmentContext(), segmentType.getClass(), true);
+		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance().getSegmentEditFactory(input.getArticleContainerClass(), segmentType.getClass(), true);
 
-		SegmentEdit segmentEdit = sef.createSegmentEdit(this, input.getSegmentContext(), asg);
+		SegmentEdit segmentEdit = sef.createSegmentEdit(this, input.getArticleContainerClass(), asg);
 		segmentEdit.addCompositeContentChangeListener(segmentCompositeContentChangeListener);
 
 		createSegmentEditComposite(asg, segmentEdit);

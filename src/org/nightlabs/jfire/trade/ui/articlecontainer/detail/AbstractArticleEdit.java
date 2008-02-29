@@ -38,9 +38,14 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -65,8 +70,7 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 		this.segmentEdit = segmentEdit;
 		this.articleCarriers = articleCarriers;
 		this.articleProductTypeClassGroup = articleProductTypeClassGroup;
-		for (Iterator it = articleCarriers.iterator(); it.hasNext();) {
-			ArticleCarrier articleCarrier = (ArticleCarrier) it.next();
+		for (ArticleCarrier articleCarrier : articleCarriers) {
 			if (this.articleProductTypeClassGroup != articleCarrier.getArticleProductTypeClassGroup()) {
 				StringBuffer sb = new StringBuffer("All ArticleCarriers need to belong to the passed ArticleProductTypeClassGroup!"); //$NON-NLS-1$
 				for (ArticleCarrier ac : articleCarriers) {
@@ -172,8 +176,7 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	{
 //		if (articles == null) {
 			Set<Article> s = new HashSet<Article>(articleCarriers.size());
-			for (Iterator it = articleCarriers.iterator(); it.hasNext();) {
-				ArticleCarrier articleCarrier = (ArticleCarrier) it.next();
+			for (ArticleCarrier articleCarrier : articleCarriers) {
 				s.add(articleCarrier.getArticle());
 			}
 			return Collections.unmodifiableSet(s);
@@ -194,10 +197,10 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	 */
 	private Composite composite = null;
 	
-	/**
-	 * The parent of the composite
-	 */
-	private Composite parent = null;
+//	/**
+//	 * The parent of the composite
+//	 */
+//	private Composite parent = null;
 
 	/**
 	 * Important: Do NOT overwrite/extend this method, but implement {@link #_createComposite(Composite)} instead!
@@ -206,7 +209,7 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	 */
 	public Composite createComposite(Composite parent)
 	{
-		this.parent = parent;
+//		this.parent = parent;
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
@@ -285,18 +288,22 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 
 	public boolean isInOrder()
 	{
-		return SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(getSegmentEdit().getSegmentContext());
+		return Order.class.getName().equals(getSegmentEdit().getArticleContainerClass());
 	}
 	public boolean isInOffer()
 	{
-		return SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(getSegmentEdit().getSegmentContext());
+		return Offer.class.equals(getSegmentEdit().getArticleContainerClass());
 	}
 	public boolean isInInvoice()
 	{
-		return SegmentEditFactory.SEGMENTCONTEXT_INVOICE.equals(getSegmentEdit().getSegmentContext());
+		return Invoice.class.equals(getSegmentEdit().getArticleContainerClass());
 	}
 	public boolean isInDeliveryNote()
 	{
-		return SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE.equals(getSegmentEdit().getSegmentContext());
+		return DeliveryNote.class.equals(getSegmentEdit().getArticleContainerClass());
+	}
+	public boolean isInReceptionNote()
+	{
+		return ReceptionNote.class.equals(getSegmentEdit().getArticleContainerClass());
 	}
 }

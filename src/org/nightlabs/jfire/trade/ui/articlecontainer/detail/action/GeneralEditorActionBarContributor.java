@@ -506,8 +506,8 @@ extends EditorActionBarContributor
 				logger.info(
 						"No IArticleEditActionDelegate registered for articleEditFactory.productTypeClass=\"" + //$NON-NLS-1$
 						articleEdit.getArticleEditFactory().getProductTypeClass() +
-						"\" articleEditFactory.segmentContext=\"" + //$NON-NLS-1$
-						articleEdit.getArticleEditFactory().getSegmentContext() +
+						"\" articleEditFactory.articleContainerClass=\"" + //$NON-NLS-1$
+						articleEdit.getArticleEditFactory().getArticleContainerClass() +
 						"\" articleEditFactory.segmentTypeClass=\"" + //$NON-NLS-1$
 						articleEdit.getArticleEditFactory().getSegmentTypeClass() +
 						"\" articleEditActionID=\"" + action.getId() +"\""); //$NON-NLS-1$ //$NON-NLS-2$

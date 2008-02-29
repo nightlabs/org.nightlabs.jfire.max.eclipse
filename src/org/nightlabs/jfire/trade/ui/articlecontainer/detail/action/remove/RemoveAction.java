@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.jdo.JDOHelper;
@@ -44,16 +43,17 @@ import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -79,17 +79,14 @@ public class RemoveAction extends ArticleEditAction
 		//  * Removal from DeliveryNote is NOT possible, if
 		//    - DeliveryNote is finalized.
 
-		for (Iterator itS = articleSelections.iterator(); itS.hasNext(); ) {
-			ArticleSelection articleSelection = (ArticleSelection) itS.next();
-
+		for (ArticleSelection articleSelection : articleSelections) {
 			SegmentEdit segmentEdit = articleSelection.getArticleEdit().getSegmentEdit();
-			String segmentContext = segmentEdit.getSegmentContext();
+			String articleContainerClass = segmentEdit.getArticleContainerClass();
 
-			for (Iterator itA = articleSelection.getSelectedArticles().iterator(); itA.hasNext();) {
-				Article article = (Article) itA.next();
+			for (Article article : articleSelection.getSelectedArticles()) {
 
-				if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext) ||
-						SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext)) {
+				if (Offer.class.getName().equals(articleContainerClass) ||
+						Order.class.getName().equals(articleContainerClass)) {
 					// removal here means deletion => must NOT be allocated/allocationPending
 					if (!article.isReversing()) {
 						if (article.isAllocated() || article.isAllocationPending())
@@ -97,24 +94,24 @@ public class RemoveAction extends ArticleEditAction
 					}
 				}
 
-				if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext)) {
+				if (Offer.class.getName().equals(articleContainerClass)) {
 					if (((Offer)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}
-				else if (SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext)) {
+				else if (Order.class.getName().equals(articleContainerClass)) {
 					if (ArticleUtil.isOfferFinalized(article, new NullProgressMonitor())) // TODO real progress monitor
 						return false;
 				}
-				else if (SegmentEditFactory.SEGMENTCONTEXT_INVOICE.equals(segmentContext)) {
+				else if (Invoice.class.getName().equals(articleContainerClass)) {
 					if (((Invoice)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}
-				else if (SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE.equals(segmentContext)) {
+				else if (DeliveryNote.class.getName().equals(articleContainerClass)) {
 					if (((DeliveryNote)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}
 				else
-					throw new IllegalStateException("Unknown segmentContext: " + segmentContext); //$NON-NLS-1$
+					throw new IllegalStateException("Unknown articleContainerClass: " + articleContainerClass); //$NON-NLS-1$
 
 			}
 		}
@@ -128,10 +125,9 @@ public class RemoveAction extends ArticleEditAction
 	{
 		// We remove the lines from the server - therefore find out first, what lines shall be handled here.
 		SegmentEdit segmentEdit = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveSegmentEdit();
-		Set articleSelections = segmentEdit.getArticleSelections();
-		Set articleIDs = new HashSet();
-		for (Iterator itS = articleSelections.iterator(); itS.hasNext(); ) {
-			ArticleSelection articleSelection = (ArticleSelection) itS.next();
+		Set<? extends ArticleSelection> articleSelections = segmentEdit.getArticleSelections();
+		Set<ArticleID> articleIDs = new HashSet<ArticleID>();
+		for (ArticleSelection articleSelection : articleSelections) {
 			ArticleEdit articleEdit = articleSelection.getArticleEdit();
 
 			IArticleEditActionDelegate delegate = articleEdit.getArticleEditFactory().getArticleEditActionDelegate(this.getId());
@@ -141,9 +137,8 @@ public class RemoveAction extends ArticleEditAction
 			RemoveActionDelegate removeActionDelegate = (RemoveActionDelegate) delegate;
 
 			if (removeActionDelegate == null || !removeActionDelegate.isDelegateHandlingRemoteWork()) {
-				for (Iterator itA = articleSelection.getSelectedArticles().iterator(); itA.hasNext(); ) {
-					Article article = (Article) itA.next();
-					articleIDs.add(JDOHelper.getObjectId(article));
+				for (Article article : articleSelection.getSelectedArticles()) {
+					articleIDs.add((ArticleID) JDOHelper.getObjectId(article));
 				}
 			}
 		}

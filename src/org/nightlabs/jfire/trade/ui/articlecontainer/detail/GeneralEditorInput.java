@@ -29,7 +29,13 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.store.ReceptionNote;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputReceptionNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
@@ -41,18 +47,20 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorI
 public abstract class GeneralEditorInput
 implements IEditorInput
 {
-	private String segmentContext;
+	private String articleContainerClass;
 
 	public GeneralEditorInput()
 	{
 		if (this instanceof GeneralEditorInputOrder)
-			segmentContext = SegmentEditFactory.SEGMENTCONTEXT_ORDER;
+			articleContainerClass = Order.class.getName();
 		else if (this instanceof GeneralEditorInputOffer)
-			segmentContext = SegmentEditFactory.SEGMENTCONTEXT_OFFER;
+			articleContainerClass = Offer.class.getName();
 		else if (this instanceof GeneralEditorInputInvoice)
-			segmentContext = SegmentEditFactory.SEGMENTCONTEXT_INVOICE;
+			articleContainerClass = Invoice.class.getName();
 		else if (this instanceof GeneralEditorInputDeliveryNote)
-			segmentContext = SegmentEditFactory.SEGMENTCONTEXT_DELIVERY_NOTE;
+			articleContainerClass = DeliveryNote.class.getName();
+		else if (this instanceof GeneralEditorInputReceptionNote)
+			articleContainerClass = ReceptionNote.class.getName();
 		else
 			throw new UnsupportedOperationException("This class is not a supported child of " + GeneralEditorInput.class.getName()); //$NON-NLS-1$
 	}
@@ -78,7 +86,7 @@ implements IEditorInput
 //	 */
 //	public String getName()
 //	{
-//		return segmentContext;
+//		return articleContainerClass;
 //	}
 
 	/**
@@ -107,10 +115,10 @@ implements IEditorInput
 	}
 
 	/**
-	 * @return Returns the segmentContext.
+	 * @return Returns the articleContainerClass.
 	 */
-	public String getSegmentContext()
+	public String getArticleContainerClass()
 	{
-		return segmentContext;
+		return articleContainerClass;
 	}
 }

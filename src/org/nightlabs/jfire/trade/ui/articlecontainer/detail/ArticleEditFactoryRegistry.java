@@ -66,17 +66,17 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	 * <tt>productTypeClass</tt>, then for <tt>segmentTypeClass</tt>.
 	 * This behaviour might change!!!
 	 *
-	 * @param segmentContext
+	 * @param articleContainerClass
 	 * @param segmentTypeClass
 	 * @param productTypeClass
 	 * @param throwExceptionIfNotFound Whether or not to throw an {@link IllegalStateException}. If <tt>false</tt>, <tt>null</tt> will be returned instead.
 	 * @return An instance of <tt>ArticleEditFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	public ArticleEditFactory getArticleEditFactory(
-			String segmentContext, Class segmentTypeClass,
+			String articleContainerClass, Class segmentTypeClass,
 			Class productTypeClass, boolean throwExceptionIfNotFound)
 	{
-		return (ArticleEditFactory) super.getFactory(segmentContext, segmentTypeClass,
+		return (ArticleEditFactory) super.getFactory(articleContainerClass, segmentTypeClass,
 			productTypeClass, throwExceptionIfNotFound);
 	}
 

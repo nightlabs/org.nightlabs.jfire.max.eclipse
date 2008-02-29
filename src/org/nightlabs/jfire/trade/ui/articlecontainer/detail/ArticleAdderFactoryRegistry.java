@@ -27,6 +27,10 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.SegmentType;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -55,18 +59,17 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	 * <tt>productTypeClass</tt>, then for <tt>segmentTypeClass</tt>.
 	 * This behaviour might change!!!
 	 *
-	 * @param segmentContext
+	 * @param articleContainerClass
 	 * @param segmentTypeClass
 	 * @param productTypeClass
 	 * @param throwExceptionIfNotFound Whether or not to throw an {@link IllegalStateException}. If <tt>false</tt>, <tt>null</tt> will be returned instead.
 	 * @return An instance of <tt>ArticleAdderFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	public ArticleAdderFactory getArticleAdderFactory(
-			String segmentContext, Class segmentTypeClass,
-			Class productTypeClass, boolean throwExceptionIfNotFound)
+			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
-		return (ArticleAdderFactory) super.getFactory(segmentContext, segmentTypeClass,
-			productTypeClass, throwExceptionIfNotFound);
+		return (ArticleAdderFactory) super.getFactory(articleContainerClass, segmentTypeClass, productTypeClass, throwExceptionIfNotFound);
 	}
 
 	@Override
@@ -74,9 +77,9 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	{
 		if (!(factory instanceof ArticleAdderFactory))
 			throw new ClassCastException("Factory is an instance of \""+(factory == null ? "null" : factory.getClass().getName())+"\", but expected is \""+ArticleAdderFactory.class.getName()+"\"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		if (!SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(factory.getSegmentContext()) &&
-				!SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(factory.getSegmentContext()))
-			throw new IllegalArgumentException("Unsupported SegmentContext! Can only add Articles to Orders and Offers!"); //$NON-NLS-1$
+		if (!Order.class.getName().equals(factory.getArticleContainerClass()) &&
+				!Offer.class.getName().equals(factory.getArticleContainerClass()))
+			throw new IllegalArgumentException("Unsupported ArticleContainer class! Can only add Articles to Orders and Offers!"); //$NON-NLS-1$
 		super.addFactory(factory);
 	}
 

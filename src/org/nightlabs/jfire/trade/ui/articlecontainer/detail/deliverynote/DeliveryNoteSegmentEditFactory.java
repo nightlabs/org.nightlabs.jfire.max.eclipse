@@ -40,10 +40,10 @@ public class DeliveryNoteSegmentEditFactory extends AbstractSegmentEditFactory
 	}
 
 	public SegmentEdit createSegmentEdit(GeneralEditorComposite generalEditorComposite,
-			String segmentContext, ArticleSegmentGroup articleSegmentGroup)
+			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
 	{
 		SegmentEdit segmentEdit = new DeliveryNoteSegmentEdit();
-		segmentEdit.init(this, generalEditorComposite, segmentContext, articleSegmentGroup);
+		segmentEdit.init(this, generalEditorComposite, articleContainerClass, articleSegmentGroup);
 		return segmentEdit;
 	}
 

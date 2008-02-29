@@ -33,17 +33,17 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 public abstract class AbstractSegmentEditFactory implements SegmentEditFactory
 {
 	private String name;
-	private String segmentContext;
+	private String articleContainerClass;
 	private String segmentTypeClass;
 
 	public AbstractSegmentEditFactory()
 	{
 	}
 
-	public void init(String name, String segmentContext, String segmentTypeClass)
+	public void init(String name, String articleContainerClass, String segmentTypeClass)
 	{
 		this.name = name;
-		this.segmentContext = segmentContext;
+		this.articleContainerClass = articleContainerClass;
 		this.segmentTypeClass = segmentTypeClass;
 	}
 
@@ -52,9 +52,9 @@ public abstract class AbstractSegmentEditFactory implements SegmentEditFactory
 		return name;
 	}
 
-	public String getSegmentContext()
+	public String getArticleContainerClass()
 	{
-		return segmentContext;
+		return articleContainerClass;
 	}
 
 	public String getSegmentTypeClass()

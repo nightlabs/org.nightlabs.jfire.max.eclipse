@@ -58,6 +58,8 @@ import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.notification.NotificationEvent;
@@ -72,7 +74,7 @@ implements SegmentEdit
 {
 	private SegmentEditFactory segmentEditFactory;
 	private GeneralEditorComposite generalEditorComposite;
-	private String segmentContext;
+	private String articleContainerClass;
 	private ArticleSegmentGroup articleSegmentGroup;
 
 	protected Class segmentTypeClass;
@@ -84,12 +86,12 @@ implements SegmentEdit
 	public void init(
 			SegmentEditFactory segmentEditFactory,
 			GeneralEditorComposite generalEditorComposite,
-			String segmentContext,
+			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup)
 	{
 		this.segmentEditFactory = segmentEditFactory;
 		this.generalEditorComposite = generalEditorComposite;
-		this.segmentContext = segmentContext;
+		this.articleContainerClass = articleContainerClass;
 		this.articleSegmentGroup = articleSegmentGroup;
 
 		SelectionManager.sharedInstance().addNotificationListener(
@@ -113,12 +115,12 @@ implements SegmentEdit
 //			ArticleEditFactory aef;
 //			try {
 //				aef = articleEditFactoryRegistry.getArticleEditFactory(
-//						segmentContext, segmentTypeClass, Class.forName(aptg.getProductTypeClassName()), true);
+//						articleContainerClass, segmentTypeClass, Class.forName(aptg.getProductTypeClassName()), true);
 //			} catch (ClassNotFoundException e) {
 //				throw new RuntimeException(e);
 //			}
 			ArticleEditFactory aef = articleEditFactoryRegistry.getArticleEditFactory(
-					segmentContext, segmentTypeClass, aptg.getProductTypeClass(), true);
+					articleContainerClass, segmentTypeClass, aptg.getProductTypeClass(), true);
 
 			Collection _articleEdits = aef.createArticleEdits(this, aptg, aptg.getArticleCarriers());
 			for (Iterator itEdits = _articleEdits.iterator(); itEdits.hasNext(); ) {
@@ -314,11 +316,12 @@ implements SegmentEdit
 				this.selectedProductTypeID = productTypeID;
 				this.selectedProductTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 
-				if (SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext) ||
-						SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext))
+				// Only Order and Offer support ArticleAdders => manage ArticleAdders only for them
+				if (Order.class.getName().equals(articleContainerClass) ||
+						Offer.class.getName().equals(articleContainerClass))
 				{
 					ArticleAdderFactory factory = ArticleAdderFactoryRegistry.sharedInstance().getArticleAdderFactory(
-							segmentContext, articleSegmentGroup.getSegment().getSegmentType().getClass(),
+							articleContainerClass, articleSegmentGroup.getSegment().getSegmentType().getClass(),
 							selectedProductTypeClass, true);
 	
 					final ArticleAdder articleAdderToDispose = articleAdderForSelectedProductType;
@@ -339,7 +342,7 @@ implements SegmentEdit
 							fireCompositeContentChangeEvent();
 						}
 					});
-				} // segmentContext is Order or Offer
+				} // articleContainerClass is Order or Offer
 			} // if (productTypeID != null) {
 		} catch (Exception x) {
 			throw new RuntimeException(x);
@@ -409,9 +412,9 @@ implements SegmentEdit
 		}
 	}
 
-	public String getSegmentContext()
+	public String getArticleContainerClass()
 	{
-		return segmentContext;
+		return articleContainerClass;
 	}
 
 	public Set<ArticleSelection> getArticleSelections()
@@ -514,7 +517,7 @@ implements SegmentEdit
 
 			for (Map.Entry<Class, List<ArticleCarrier>> me : productTypeClass2articleCarriers.entrySet()) {
 				Class productTypeClass = me.getKey();
-				ArticleEditFactory aef = articleEditFactoryRegistry.getArticleEditFactory(segmentContext, segmentTypeClass, productTypeClass, true);
+				ArticleEditFactory aef = articleEditFactoryRegistry.getArticleEditFactory(articleContainerClass, segmentTypeClass, productTypeClass, true);
 
 				ArticleProductTypeClassGroup articleProductTypeClassGroup = articleSegmentGroup.getArticleProductTypeClassGroup(productTypeClass.getName(), true);
 
