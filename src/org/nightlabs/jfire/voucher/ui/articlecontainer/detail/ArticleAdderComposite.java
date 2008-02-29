@@ -23,11 +23,11 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.Segment;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory;
 import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
@@ -39,6 +39,7 @@ public class ArticleAdderComposite
 	private ArticleAdder articleAdder;
 
 	private Label productTypeNameLabel;
+	@SuppressWarnings("unused")
 	private QuantitySelector quantitySelector;
 
 	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder)
@@ -68,6 +69,19 @@ public class ArticleAdderComposite
 //		((GridData)productTypeNameLabel.getLayoutData()).horizontalSpan = this.getGridLayout().numColumns;
 	}
 
+	@SuppressWarnings("unchecked")
+	private Collection<Article> createArticles(SegmentID segmentID, OfferID offerID, ProductTypeID productTypeID, int qty, String fetchGroupTrade_article)
+	throws Exception
+	{
+		VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+
+		return vm.createArticles(
+					segmentID, offerID, productTypeID, qty,
+					new String[] {
+							fetchGroupTrade_article,
+							FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+	}
+
 	private void qtySelected(final int qty)
 	{
 			Job addJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleAdderComposite.addJob.name"), this, this) { //$NON-NLS-1$
@@ -85,24 +99,18 @@ public class ArticleAdderComposite
 					ProductType productType = articleAdder.getProductType();
 					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 
-					String segmentContext = articleAdder.getSegmentEdit().getSegmentContext();
+					String articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
 					String fetchGroupTrade_article;
-					if (SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext)) {
+					if (Order.class.getName().equals(articleContainerClass)) {
 						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
 					}
-					else if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext)) {
+					else if (Offer.class.getName().equals(articleContainerClass)) {
 						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
 					}
 					else
-						throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? segmentContext=" + segmentContext); //$NON-NLS-1$
+						throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
 
-					VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
-					Collection<Article> articles = vm.createArticles(
-								segmentID, offerID, productTypeID, qty,
-								new String[] {
-										fetchGroupTrade_article,
-										FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					Collection<Article> articles = createArticles(segmentID, offerID, productTypeID, qty, fetchGroupTrade_article);
 
 					segmentEdit.getClientArticleSegmentGroups().addArticles(articles);
 					return Status.OK_STATUS;
