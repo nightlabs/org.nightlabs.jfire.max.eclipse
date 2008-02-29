@@ -31,11 +31,11 @@ import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.Segment;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -115,16 +115,16 @@ extends ArticleBaseComposite
 					ProductType productType = articleAdder.getProductType();
 					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 
-					String segmentContext = articleAdder.getSegmentEdit().getSegmentContext();
+					String articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
 					String fetchGroupTrade_article;
-					if (SegmentEditFactory.SEGMENTCONTEXT_ORDER.equals(segmentContext)) {
+					if (Order.class.getName().equals(articleContainerClass)) {
 						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
 					}
-					else if (SegmentEditFactory.SEGMENTCONTEXT_OFFER.equals(segmentContext)) {
+					else if (Offer.class.getName().equals(articleContainerClass)) {
 						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
 					}
 					else
-						throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? segmentContext=" + segmentContext); //$NON-NLS-1$
+						throw new IllegalStateException("Why is this ArticleAdder used with an unknown ArticleContainer? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
 
 					DynamicTradeManager dm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					Article article = dm.createArticle(
