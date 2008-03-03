@@ -11,6 +11,7 @@ import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -63,9 +64,9 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 	}
 
 	@Override
-public  DynamicProductType getExtendedProductType(ProgressMonitor monitor)
+public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,ProductTypeID  extendedProductTypeID)
 	{
-		return  DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getExtendedProductTypeID(),
+		return  DynamicProductTypeDAO.sharedInstance().getDynamicProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);	
