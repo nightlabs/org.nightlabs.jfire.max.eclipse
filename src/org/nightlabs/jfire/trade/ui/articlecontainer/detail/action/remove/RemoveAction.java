@@ -85,14 +85,17 @@ public class RemoveAction extends ArticleEditAction
 
 			for (Article article : articleSelection.getSelectedArticles()) {
 
-				if (Offer.class.getName().equals(articleContainerClass) ||
-						Order.class.getName().equals(articleContainerClass)) {
-					// removal here means deletion => must NOT be allocated/allocationPending
-					if (!article.isReversing()) {
-						if (article.isAllocated() || article.isAllocationPending())
-							return false;
-					}
-				}
+				// Deletion is possible for allocated articles too since it 
+				// releases allocated articles before.
+				
+//				if (Offer.class.getName().equals(articleContainerClass) ||
+//						Order.class.getName().equals(articleContainerClass)) {
+//					// removal here means deletion => must NOT be allocated/allocationPending
+//					if (!article.isReversing()) {
+//						if (article.isAllocated() || article.isAllocationPending())
+//							return false;
+//					}
+//				}
 
 				if (Offer.class.getName().equals(articleContainerClass)) {
 					if (((Offer)segmentEdit.getArticleContainer()).isFinalized())
