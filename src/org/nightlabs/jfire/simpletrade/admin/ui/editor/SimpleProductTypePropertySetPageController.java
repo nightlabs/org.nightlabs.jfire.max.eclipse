@@ -8,6 +8,7 @@ import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -55,9 +56,9 @@ extends AbstractProductTypePageController<SimpleProductType>
 	
 	@Override
 	
-	public SimpleProductType getExtendedProductType(ProgressMonitor monitor)
+	public SimpleProductType getExtendedProductType(ProgressMonitor monitor , ProductTypeID extendedProductTypeID)
 	{
-		return  SimpleProductTypeDAO.sharedInstance().getSimpleProductType(getExtendedProductTypeID(),
+		return  SimpleProductTypeDAO.sharedInstance().getSimpleProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);	
