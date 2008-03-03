@@ -23,7 +23,9 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueLinkAdderComposite extends XComposite{
+public class IssueLinkAdderComposite 
+extends XComposite
+{
 	private IssueLinkTable issueLinkTable;
 	private ListenerList tableItemChangeListeners = new ListenerList();
 
@@ -32,6 +34,7 @@ public class IssueLinkAdderComposite extends XComposite{
 	/**
 	 * @param parent
 	 * @param style
+	 * @param haveButton the boolean flag uses for displaying button.
 	 */
 	public IssueLinkAdderComposite(Composite parent, int style, boolean haveButton) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
@@ -87,45 +90,53 @@ public class IssueLinkAdderComposite extends XComposite{
 		}
 	}
 
-	private Set<ObjectID> oItems = null;
-	private Set<ObjectID> mItems = new HashSet<ObjectID>();
+	/*
+	 * The old referenced object id set.
+	 */
+	private Set<ObjectID> oObjectIDs = null;
+	
+	/*
+	 * The modified referenced object id set.
+	 */
+	private Set<ObjectID> mObjectIDs = new HashSet<ObjectID>();
 
-	public void setItems(Set<ObjectID> newItems) {
-		mItems.addAll(newItems);
-		if (oItems == null) {
-			oItems = newItems;
+	
+	public void setObjectIDs(Set<ObjectID> newObjectIDs) {
+		mObjectIDs.addAll(newObjectIDs);
+		if (oObjectIDs == null) {
+			oObjectIDs = newObjectIDs;
 		}
-		issueLinkTable.setInput(mItems);
+		issueLinkTable.setInput(mObjectIDs);
 	}
 
-	public void addItems(Set<ObjectID> newItems) {
-		mItems.addAll(newItems);
-		if (oItems == null) {
-			oItems = newItems;
+	public void addObjectIDs(Set<ObjectID> objectIDs) {
+		mObjectIDs.addAll(objectIDs);
+		if (oObjectIDs == null) {
+			oObjectIDs = objectIDs;
 		} else {
-			if (!mItems.equals(oItems))
+			if (!mObjectIDs.equals(oObjectIDs))
 				notifyIssueLinkTableItemListeners();
 		}
-		issueLinkTable.setInput(mItems);
+		issueLinkTable.setInput(mObjectIDs);
 	}
 
 	public boolean removeItems(Collection<ObjectID> removedItems) {
-		if (mItems == null) {
-			mItems = new HashSet<ObjectID>();
-			mItems.addAll(oItems);
+		if (mObjectIDs == null) {
+			mObjectIDs = new HashSet<ObjectID>();
+			mObjectIDs.addAll(oObjectIDs);
 		}
 
-		boolean result = mItems.removeAll(removedItems);
+		boolean result = mObjectIDs.removeAll(removedItems);
 
-		if (!mItems.equals(oItems))
+		if (!mObjectIDs.equals(oObjectIDs))
 			notifyIssueLinkTableItemListeners();
 
-		issueLinkTable.setInput(mItems);
+		issueLinkTable.setInput(mObjectIDs);
 		return result;
 	}
 
 	public Set<ObjectID> getItems() {
-		return mItems;
+		return mObjectIDs;
 	}
 
 	public IssueLinkTable getIssueLinkTable() {

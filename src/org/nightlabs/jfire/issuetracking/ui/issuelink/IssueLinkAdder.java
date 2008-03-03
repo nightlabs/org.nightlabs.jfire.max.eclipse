@@ -16,6 +16,13 @@ public interface IssueLinkAdder
 
 	IssueLinkHandlerFactory getIssueLinkHandlerFactory();
 	
+	/**
+	 * Create the <tt>Composite</tt> which serves the functionality to add
+	 * a {@link org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer}.
+	 *
+	 * @param parent The parent composite into all GUI elements should be created.
+	 * @return The newly created <tt>Composite</tt>.
+	 */
 	Composite createComposite(Composite parent);
 
 	Composite getComposite();

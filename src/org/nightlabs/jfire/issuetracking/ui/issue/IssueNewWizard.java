@@ -56,7 +56,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 
 			if(objectIDs != null)
 				for (ObjectID objectID : objectIDs) {
-					issue.addReferencedObjectID(objectID);
+					issue.addLinkObjectID(objectID);
 				}
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
@@ -65,7 +65,7 @@ public class IssueNewWizard extends DynamicPathWizard{
 			issue.setAssignee(ic.getSelectedAssigntoUser());
 			
 			for (ObjectID oID : ic.getIssueLinkObjectIds()) {
-				issue.addReferencedObjectID(oID);
+				issue.addLinkObjectID(oID);
 			}
 			
 			if(ic.getSelectedAttachmentFileMap() != null){

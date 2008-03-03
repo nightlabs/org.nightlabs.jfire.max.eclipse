@@ -111,7 +111,7 @@ extends XComposite{
 		
 		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true);
 		if (objectIDs != null) {
-			adderComposite.addItems(objectIDs);
+			adderComposite.addObjectIDs(objectIDs);
 		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);

@@ -135,7 +135,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 			public void run() {
 				if (issueLinkListSection != null && !issueLinkListSection.getSection().isDisposed()) {
 					issueLinkListSection.setIssue(getController().getIssue());
-					if (getController().getIssue().getReferencedObjectIDs().size() == 0) {
+					if (getController().getIssue().getLinkObjectIDs().size() == 0) {
 						issueLinkListSection.getSection().setExpanded(false);
 					}
 				}
