@@ -28,6 +28,11 @@ implements LoginStateListener
 				String activePerspectiveID = RCPUtil.getActivePerspectiveID();
 				if (activePerspectiveID == null) {
 					logger.info("activePerspectiveID is null. Will re-enqueue this method into the event dispatcher and exit.");
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// ignore
+					}
 					checkOrderOpenAsynchronously();
 					return;
 				}
