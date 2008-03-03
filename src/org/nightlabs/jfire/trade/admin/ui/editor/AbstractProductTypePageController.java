@@ -74,7 +74,6 @@ implements IProductTypePageController<ProductTypeType>
 	}
 
 
-	public abstract ProductTypeType getExtendedProductType(ProgressMonitor monitor);
-
+	public abstract ProductTypeType getExtendedProductType(ProgressMonitor monitor , ProductTypeID extendedProductTypeID);
 
 }

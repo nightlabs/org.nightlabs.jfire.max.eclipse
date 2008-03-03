@@ -4,6 +4,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.base.jdo.IJDOObjectDAO;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowMappingTree;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
@@ -69,9 +70,9 @@ extends AbstractProductTypePageController<ProductTypeType>
 	
 	@Override
 	
-	public ProductTypeType getExtendedProductType(ProgressMonitor monitor)
+	public ProductTypeType getExtendedProductType(ProgressMonitor monitor, ProductTypeID extendedProductTypeID)
 	{
-		return  (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(getExtendedProductTypeID(),
+		return  (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);	

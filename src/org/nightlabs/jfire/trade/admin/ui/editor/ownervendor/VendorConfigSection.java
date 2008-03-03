@@ -14,6 +14,8 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 import org.nightlabs.progress.ProgressMonitor;
@@ -31,6 +33,9 @@ implements IProductTypeSectionPart
 	private FadeableComposite fadeableComposite;
 	private LegalEntityEditComposite vendorEditComposite = null;
 	private ProductType productType = null;
+
+	private LegalEntity originalEntity;
+
 
 	public VendorConfigSection(IFormPage page,
 			Composite parent, int style) 
@@ -65,6 +70,12 @@ implements IProductTypeSectionPart
 		return productType;
 	}
 
+
+	public ProductTypeID getExtendedProductTypeID() {
+		return productType.getExtendedProductTypeID();
+	}
+
+
 	private AbstractProductTypePageController<ProductType> productTypePageController;
 
 
@@ -77,7 +88,8 @@ implements IProductTypeSectionPart
 		productTypePageController = pageController; 
 
 		this.productType = pageController.getProductType();
-		getVendorEditComposite().setLegalEntity(pageController.getProductType().getVendor());
+		originalEntity = pageController.getProductType().getVendor();
+		getVendorEditComposite().setLegalEntity(originalEntity);
 
 
 	}
@@ -105,7 +117,6 @@ implements IProductTypeSectionPart
 
 	@Override
 	public void commit(boolean save) {
-		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
 
 		if (vendorEditComposite != null && isDirty())
 		{
@@ -120,12 +131,13 @@ implements IProductTypeSectionPart
 	protected void inheritPressed() {
 		if( inheritAction.isChecked() )
 		{
+
 			FadeableCompositeJob job = new FadeableCompositeJob("Loading extended product type", fadeableComposite, null) {
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source)
-						throws Exception
+				throws Exception
 				{
-					final ProductType extendedProductType = productTypePageController.getExtendedProductType(monitor); // since this monitor is not yet started, we can directly pass it
+					final ProductType extendedProductType = productTypePageController.getExtendedProductType(monitor , getExtendedProductTypeID()); // since this monitor is not yet started, we can directly pass it
 
 					Display.getDefault().syncExec(new Runnable()
 					{
@@ -141,7 +153,18 @@ implements IProductTypeSectionPart
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
+
+
 		}
+		else		
+			getVendorEditComposite().setLegalEntity(originalEntity);
+			
+
+
+
+		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$	
+
+
 	}
 
 	private class InheritAction 
@@ -153,6 +176,7 @@ implements IProductTypeSectionPart
 				return;
 
 			inheritPressed();
+
 
 			updateToolBarManager();
 			markDirty();
