@@ -2,21 +2,23 @@ package org.nightlabs.jfire.trade.ui.overview;
 
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marco Schulze - Marco at NightLabs dot de
  */
-public abstract class ArticleContainerEntryViewer
-extends JDOQuerySearchEntryViewer
+public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q extends AbstractArticleContainerQuickSearchQuery<R>>
+	extends JDOQuerySearchEntryViewer<R, Q>
 {
 	public ArticleContainerEntryViewer(Entry entry) {
 		super(entry);
 	}
 
-	@Override
-	protected void optimizeSearchResults(Object result)
-	{
+//	@Override
+//	protected void optimizeSearchResults(Object result)
+//	{
 //		if (result instanceof Collection) {
 //			Collection articleContainers = (Collection) result;
 //			Set<AnchorID> anchorIDs = new HashSet<AnchorID>(articleContainers.size() * 2);
@@ -38,6 +40,6 @@ extends JDOQuerySearchEntryViewer
 //					FETCH_GROUP_ARTICLE_CONTAINER_ANCHORS,
 //					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //		}
-	}
+//	}
 
 }

@@ -20,7 +20,7 @@ import org.nightlabs.l10n.NumberFormatter;
  *
  */
 public class OfferListComposite
-extends AbstractArticleContainerListComposite
+extends AbstractArticleContainerListComposite<Offer>
 {
 	public OfferListComposite(Composite parent, int style) {
 		super(parent, style);

@@ -54,8 +54,8 @@ extends AbstractTableComposite<ProductTransfer>
 			if (!(element instanceof ProductTransfer)) {
 				if (columnIndex == 0)
 					return String.valueOf(element);
-				else
-					return ""; //$NON-NLS-1$
+				
+				return ""; //$NON-NLS-1$
 			}
 
 			ProductTransfer productTransfer = (ProductTransfer) element;
@@ -100,6 +100,8 @@ extends AbstractTableComposite<ProductTransfer>
 
 					if (otherStr == null || "".equals(otherStr)) //$NON-NLS-1$
 						return String.valueOf(JDOHelper.getObjectId(other));
+					
+					return "";
 				case 4:
 					if (other instanceof Repository)
 						return ((Repository)other).getOwner().getPerson().getDisplayName();

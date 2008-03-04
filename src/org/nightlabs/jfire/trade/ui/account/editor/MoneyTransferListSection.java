@@ -16,14 +16,14 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageControllerModifyListener;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
-import org.nightlabs.jfire.accounting.query.AbstractMoneyTransferQuery;
 import org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-/*
-* @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
-*/
+/**
+ * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
+ */
 public class MoneyTransferListSection extends RestorableSectionPart{
 
 	private MoneyTransferTable moneyTransferTable;
@@ -49,7 +49,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 				if (ignoreMoneyTransferQueryChanged)
 					return;
 
-				moneyTransferQueryChanged((AbstractMoneyTransferQuery<?>) evt.getNewValue());
+				moneyTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
 			}
 		});
 
@@ -66,7 +66,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 				});
 			}
 		});
-		moneyTransferQueryChanged(this.controller.getMoneyTransferQuery());
+		moneyTransferQueryChanged(this.controller.getQueryWrapper());
 		
 		List<MoneyTransfer> moneyTransferList = this.controller.getMoneyTransferList();
 		if (moneyTransferList != null)
@@ -98,7 +98,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 	 * It is not called, if the change originated from here (i.e. {@link #fireProductTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void moneyTransferQueryChanged(AbstractMoneyTransferQuery<?> moneyTransferQuery)
+	private void moneyTransferQueryChanged(QueryCollection<?,?> queryCollection)
 	{
 		moneyTransferTable.setLoadingStatus();
 	}

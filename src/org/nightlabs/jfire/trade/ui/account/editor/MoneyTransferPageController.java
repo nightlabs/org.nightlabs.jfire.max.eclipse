@@ -25,7 +25,6 @@ package org.nightlabs.jfire.trade.ui.account.editor;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -37,6 +36,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
 import org.nightlabs.jfire.accounting.dao.MoneyTransferDAO;
 import org.nightlabs.jfire.accounting.query.MoneyTransferQuery;
@@ -51,6 +51,9 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class MoneyTransferPageController extends EntityEditorPageController
 {
 	private MoneyTransferQuery moneyTransferQuery = new MoneyTransferQuery();
+	private QueryCollection<MoneyTransfer, MoneyTransferQuery> queryWrapper =
+		new QueryCollection<MoneyTransfer, MoneyTransferQuery>(moneyTransferQuery);
+	
 	private List<MoneyTransfer> moneyTransferList = null;
 	
 	/**
@@ -61,7 +64,7 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	public MoneyTransferPageController(EntityEditor editor)
 	{
 		super(editor);
-		moneyTransferQuery.setToExclude(100);
+		queryWrapper.setToExclude(100);
 	}
 
 	@Override
@@ -75,12 +78,11 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferPageController.loadMoneyTransfersJob.name"), 100); //$NON-NLS-1$
 
-		List<MoneyTransferQuery> queryList = new LinkedList<MoneyTransferQuery>();
-		queryList.add(moneyTransferQuery);
-		List<MoneyTransfer> moneyTransfers = MoneyTransferDAO.sharedInstance().getMoneyTransfers(queryList,
-				MoneyTransferTable.FETCH_GROUPS,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
+		List<MoneyTransfer> moneyTransfers = MoneyTransferDAO.sharedInstance().getMoneyTransfers(
+			queryWrapper,
+			MoneyTransferTable.FETCH_GROUPS,
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+			new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
 
 		this.moneyTransferList = moneyTransfers;
 		monitor.done();
@@ -97,7 +99,7 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	 */
 	public void fireMoneyTransferQueryChange()
 	{
-		propertyChangeSupport.firePropertyChange(PROPERTY_MONEY_TRANSFER_QUERY, null, moneyTransferQuery);
+		propertyChangeSupport.firePropertyChange(PROPERTY_MONEY_TRANSFER_QUERY, null, queryWrapper);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferPageController.loadMoneyTransfersMonitor.task.name")) { //$NON-NLS-1$
 			@Override
@@ -133,7 +135,7 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	/**
 	 * Add a {@link PropertyChangeListener} which will be triggered on the UI thread. Currently,
 	 * the only property available is {@link #PROPERTY_MONEY_TRANSFER_QUERY} which
-	 * references the object returned by {@link #getMoneyTransferQuery()}.
+	 * references the object returned by {@link #getQueryWrapper()}.
 	 *
 	 * @param listener The listener to be added.
 	 */
@@ -154,5 +156,49 @@ public class MoneyTransferPageController extends EntityEditorPageController
 			PropertyChangeListener listener)
 	{
 		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * @return the queryWrapper
+	 */
+	public QueryCollection<MoneyTransfer, MoneyTransferQuery> getQueryWrapper()
+	{
+		return queryWrapper;
+	}
+
+	/**
+	 * @return
+	 * @see org.nightlabs.jdo.query.QueryCollection#getFromInclude()
+	 */
+	public long getFromInclude()
+	{
+		return queryWrapper.getFromInclude();
+	}
+
+	/**
+	 * @return
+	 * @see org.nightlabs.jdo.query.QueryCollection#getToExclude()
+	 */
+	public long getToExclude()
+	{
+		return queryWrapper.getToExclude();
+	}
+
+	/**
+	 * @param fromInclude
+	 * @see org.nightlabs.jdo.query.QueryCollection#setFromInclude(long)
+	 */
+	public void setFromInclude(long fromInclude)
+	{
+		queryWrapper.setFromInclude(fromInclude);
+	}
+
+	/**
+	 * @param toExclude
+	 * @see org.nightlabs.jdo.query.QueryCollection#setToExclude(long)
+	 */
+	public void setToExclude(long toExclude)
+	{
+		queryWrapper.setToExclude(toExclude);
 	}
 }

@@ -5,16 +5,18 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class AccountFilterComposite
-extends AbstractQueryFilterComposite
+	extends AbstractQueryFilterComposite<Account, AccountQuery>
 {
 	/**
 	 * @param parent
@@ -23,43 +25,51 @@ extends AbstractQueryFilterComposite
 	 * @param layoutDataMode
 	 */
 	public AccountFilterComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
-		super(parent, style, layoutMode, layoutDataMode);
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
+			QueryProvider<Account, ? super AccountQuery> queryProvider)
+	{
+		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public AccountFilterComposite(Composite parent, int style) {
-		super(parent, style);
-	}
-
-	@Override
-	protected Class getQueryClass() {
-		return Account.class;
-	}
-
-	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites()
+	public AccountFilterComposite(Composite parent, int style,
+		QueryProvider<Account, ? super AccountQuery> queryProvider)
 	{
-		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>();
+		super(parent, style, queryProvider);
+	}
+
+	@Override
+	protected Class<AccountQuery> getQueryClass() {
+		return AccountQuery.class;
+	}
+
+	@Override
+	protected List<JDOQueryComposite<Account, AccountQuery>> registerJDOQueryComposites()
+	{
+		List<JDOQueryComposite<Account, AccountQuery>> queryComps =
+			new ArrayList<JDOQueryComposite<Account, AccountQuery>>();
+		
 		queryComps.add(accountSearchComposite);
+		
 		return queryComps;
 	}
 
-	@Override
-	protected void createContents(Composite parent) {
-		createAccountComp(parent);
-	}
-
 	private AccountSearchComposite accountSearchComposite;
-	protected Composite createAccountComp(Composite parent)
+	protected Composite createAccountComp()
 	{
-		accountSearchComposite = new AccountSearchComposite(parent, SWT.NONE,
+		accountSearchComposite = new AccountSearchComposite(this, SWT.NONE,
 				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA);
 		accountSearchComposite.setToolkit(getToolkit());
 		return accountSearchComposite;
+	}
+
+	@Override
+	protected void createContents()
+	{
+		createAccountComp();
 	}
 
 }

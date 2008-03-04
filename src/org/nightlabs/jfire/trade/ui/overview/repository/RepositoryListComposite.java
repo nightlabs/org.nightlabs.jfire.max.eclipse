@@ -26,7 +26,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
  *
  */
 public class RepositoryListComposite
-extends AbstractTableComposite
+extends AbstractTableComposite<Repository>
 {
 
 	public RepositoryListComposite(Composite parent, int style) {
@@ -81,7 +81,10 @@ extends AbstractTableComposite
 						return repository.getAnchorID();
 					case(1):
 						if (repository.getName() != null)
+						{
 							return repository.getName().getText();
+						}
+						return ""; 
 					case(2):
 						if (repository.getOwner() != null && repository.getOwner().getPerson() != null)
 							return repository.getOwner().getPerson().getDisplayName();

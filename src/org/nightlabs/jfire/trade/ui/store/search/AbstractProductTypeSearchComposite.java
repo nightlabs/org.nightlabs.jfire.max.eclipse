@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -29,6 +28,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.store.ProductType;
@@ -36,7 +36,7 @@ import org.nightlabs.jfire.store.ProductTypeGroup;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.deliver.DeliveryConfiguration;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.store.search.ProductTypeQuery;
+import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -152,8 +152,10 @@ extends XComposite
 						productTypeTableComposite.setInput(new String[] {Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.productTypeTableComposite.input_searching")}); //$NON-NLS-1$
 					}
 				});
-				Collection<ProductTypeQuery> productTypeQueries = new ArrayList<ProductTypeQuery>();
-				ProductTypeQuery query = createNewQuery();
+				QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>> productTypeQueries =
+					new QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>>();
+				
+				AbstractProductTypeQuery<? extends ProductType> query = createNewQuery();
 
 //				if (!searchStr.trim().equals(""))
 					query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
@@ -226,9 +228,10 @@ extends XComposite
 		}
 	}
 
-	protected abstract ProductTypeQuery createNewQuery();
+	protected abstract AbstractProductTypeQuery<? extends ProductType> createNewQuery();
 	
-	protected Collection<ProductType> retrieveProductTypes(Collection<ProductTypeQuery> queries,
+	protected Collection<ProductType> retrieveProductTypes(
+		QueryCollection<? extends ProductType, ? extends AbstractProductTypeQuery<? extends ProductType>> queries,
 			ProgressMonitor monitor)
 	{
 		Set<ProductTypeID> productTypeIDs;

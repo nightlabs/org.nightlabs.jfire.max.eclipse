@@ -2,7 +2,8 @@ package org.nightlabs.jfire.trade.ui.store.search;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.search.ProductTypeQuery;
+import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
+import org.nightlabs.jfire.store.search.BaseProductTypeQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -20,8 +21,8 @@ extends AbstractProductTypeSearchComposite
 	}
 
 	@Override
-	protected ProductTypeQuery createNewQuery() {
-		return new ProductTypeQuery<ProductType>();
+	protected AbstractProductTypeQuery<ProductType> createNewQuery() {
+		return new BaseProductTypeQuery();
 	}
 
 }

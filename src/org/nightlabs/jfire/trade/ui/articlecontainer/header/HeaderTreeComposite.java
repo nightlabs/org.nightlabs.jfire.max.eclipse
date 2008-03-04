@@ -362,7 +362,9 @@ implements ISelectionProvider
 //					if (order.isQuickSaleWorkOrder())
 //						continue;
 //				}
-				if (!partnerAnchorID.equals(ac.getVendorID()) && !partnerAnchorID.equals(ac.getCustomerID()))
+//				if (!partnerAnchorID.equals(ac.getVendorID()) && !partnerAnchorID.equals(ac.getCustomerID()))
+				// partnerAnchorID may be null, hence use util class to cover null cases
+				if (!Util.equals(partnerAnchorID, ac.getVendorID()) && !Util.equals(partnerAnchorID, ac.getCustomerID()))
 						page.closeEditor(editor, true);
 			}
 //			else

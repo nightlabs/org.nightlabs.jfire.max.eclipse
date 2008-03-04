@@ -6,72 +6,95 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * 
  */
-public abstract class AbstractArticleContainerFilterComposite
-extends AbstractQueryFilterComposite
+public abstract class AbstractArticleContainerFilterComposite<R extends ArticleContainer, Q extends AbstractArticleContainerQuickSearchQuery<R>>
+	extends AbstractQueryFilterComposite<R, Q>
 {
-	public AbstractArticleContainerFilterComposite(Composite parent, int style) {
-		super(parent, style);
+	/**
+	 * @param parent
+	 * @param style
+	 * @param layoutMode
+	 * @param layoutDataMode
+	 * @param queryProvider
+	 */
+	public AbstractArticleContainerFilterComposite(Composite parent, int style,
+		LayoutMode layoutMode, LayoutDataMode layoutDataMode,
+		QueryProvider<R, ? super Q> queryProvider)
+	{
+		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 
-	protected StatableFilterComposite statableFilterComposite = null;
-	public StatableFilterComposite getStatableFilterComposite() {
-		return statableFilterComposite;
+	public AbstractArticleContainerFilterComposite(Composite parent, int style,
+		QueryProvider<R, ? super Q> queryProvider)
+	{
+		super(parent, style, queryProvider);
 	}
 
-	protected ArticleContainerFilterComposite articleContainerFilterComposite = null;
-	public ArticleContainerFilterComposite getArticleContainerFilterComposite() {
+//	protected StatableFilterComposite statableFilterComposite = null;
+//	public StatableFilterComposite getStatableFilterComposite() {AbstractArticleContainerQuickSearchQuery<R>
+//		return statableFilterComposite;
+//	}
+
+	protected ArticleContainerFilterComposite<R, Q> articleContainerFilterComposite = null;
+	public ArticleContainerFilterComposite<R, Q> getArticleContainerFilterComposite() {
 		return articleContainerFilterComposite;
 	}
 
 	@Override
-	protected void createContents(Composite parent)
+	protected void createContents()
 	{
-		createStatableComposite(parent);
-		createArticleContainerComposite(parent);
+//		createStatableComposite(parent);
+		articleContainerFilterComposite = createArticleContainerComposite();
 	}
 	
-	protected Composite createStatableComposite(Composite parent)
-	{
-		statableFilterComposite = new StatableFilterComposite(this,
-				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		statableFilterComposite.setStatableClass(getQueryClass());
-		statableFilterComposite.setToolkit(getToolkit());
-		statableFilterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		return statableFilterComposite;
-	}
+	// FIXME: Move StatableFilterComposite to a new Section! (marius)
+//	protected Composite createStatableComposite(Composite parent)
+//	{
+//		statableFilterComposite = new StatableFilterComposite(this,
+//				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
+//		statableFilterComposite.setStatableClass(getQueryClass());
+//		statableFilterComposite.setToolkit(getToolkit());
+//		statableFilterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		return statableFilterComposite;
+//	}
 	
-	protected Composite createArticleContainerComposite(Composite parent)
+	protected ArticleContainerFilterComposite<R, Q> createArticleContainerComposite()
 	{
-		articleContainerFilterComposite = new ArticleContainerFilterComposite(this,
+		articleContainerFilterComposite = new ArticleContainerFilterComposite<R, Q>(this,
 				SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 //		articleContainerFilterComposite.setArticleContainerClass(getQueryClass());
-		articleContainerFilterComposite.setArticleContainerQuery(createArticleContainerQuery());
+//		articleContainerFilterComposite.setArticleContainerQuery(createArticleContainerQuery());
 		articleContainerFilterComposite.setToolkit(getToolkit());
 		articleContainerFilterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return articleContainerFilterComposite;
 	}
 
 	@Override
-	protected List<JDOQueryComposite> registerJDOQueryComposites()
+	protected List<JDOQueryComposite<R, Q>> registerJDOQueryComposites()
 	{
-		List<JDOQueryComposite> queryComps = new ArrayList<JDOQueryComposite>(2);
-		queryComps.add(statableFilterComposite);
+		List<JDOQueryComposite<R, Q>> queryComps = new ArrayList<JDOQueryComposite<R, Q>>(1);
+		
+//		if (isArticleContainerStatable())
+//		{
+//			queryComps.add(statableFilterComposite);			
+//		}
 		queryComps.add(articleContainerFilterComposite);
 		return queryComps;
 	}
 
-	protected ArticleContainerQuery createArticleContainerQuery()
-	{
-		return new ArticleContainerQuery(getQueryClass());
-	}
+//	protected AbstractArticleContainerQuickSearchQuery<?> createArticleContainerQuery()
+//	{
+//		return new ArticleContainerQuery(getQueryClass());
+//	}
 
 //	@Override
 //	protected List<QuickSearchEntry> registerQuickSearchEntryTypes()

@@ -12,28 +12,34 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.store.ProductTransfer;
 import org.nightlabs.jfire.store.dao.ProductTransferDAO;
 import org.nightlabs.jfire.store.query.ProductTransferIDQuery;
 import org.nightlabs.jfire.trade.ui.repository.transfer.ProductTransferTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.jfire.transfer.id.TransferID;
 import org.nightlabs.progress.SubProgressMonitor;
 
 class ProductTransferPageController
 extends EntityEditorPageController
 {
 	private ProductTransferIDQuery productTransferQuery = new ProductTransferIDQuery();
+	private QueryCollection<TransferID, ProductTransferIDQuery> queryWrapper =
+		new QueryCollection<TransferID, ProductTransferIDQuery>(productTransferQuery);
+	
 	private List<ProductTransfer> productTransferList = null;
 
 	public ProductTransferPageController(EntityEditor editor)
 	{
 		super(editor);
+		
 		productTransferQuery.setCurrentAnchorID(getCurrentRepositoryID());
-		productTransferQuery.setToExclude(30); // load initially only the last 30 results
-
+		queryWrapper.setToExclude(30); // load initially only the last 30 results
 		// TODO add listener for new transfers (needs to check, whether the new transfers match the criteria before displaying them!)
 	}
+	
 	@Override
 	public void dispose()
 	{
@@ -45,8 +51,8 @@ extends EntityEditorPageController
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJobMonitor.task.name"), 100); //$NON-NLS-1$
 
-		List<ProductTransfer> productTransfers = ProductTransferDAO.sharedInstance().getProductTransfers(
-				productTransferQuery,
+		List<ProductTransfer> productTransfers = ProductTransferDAO.sharedInstance().getProductTransfersByIDQueries(
+				queryWrapper,
 				ProductTransferTable.FETCH_GROUPS_PRODUCT_TRANSFER,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
@@ -66,7 +72,7 @@ extends EntityEditorPageController
 	 */
 	public void fireProductTransferQueryChange()
 	{
-		propertyChangeSupport.firePropertyChange(PROPERTY_PRODUCT_TRANSFER_QUERY, null, productTransferQuery);
+		propertyChangeSupport.firePropertyChange(PROPERTY_PRODUCT_TRANSFER_QUERY, null, queryWrapper);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJob.name")) { //$NON-NLS-1$
 			@Override
@@ -102,7 +108,7 @@ extends EntityEditorPageController
 	/**
 	 * Add a {@link PropertyChangeListener} which will be triggered on the UI thread. Currently,
 	 * the only property available is {@link #PROPERTY_PRODUCT_TRANSFER_QUERY} which
-	 * references the object returned by {@link #getProductTransferQuery()}.
+	 * references the object returned by {@link #getQueryWrapper()}.
 	 *
 	 * @param listener The listener to be added.
 	 */
@@ -123,6 +129,50 @@ extends EntityEditorPageController
 			PropertyChangeListener listener)
 	{
 		propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * @param fromInclude
+	 * @see org.nightlabs.jdo.query.QueryCollection#setFromInclude(long)
+	 */
+	public void setFromInclude(long fromInclude)
+	{
+		queryWrapper.setFromInclude(fromInclude);
+	}
+
+	/**
+	 * @param toExclude
+	 * @see org.nightlabs.jdo.query.QueryCollection#setToExclude(long)
+	 */
+	public void setToExclude(long toExclude)
+	{
+		queryWrapper.setToExclude(toExclude);
+	}
+
+	/**
+	 * @return
+	 * @see org.nightlabs.jdo.query.QueryCollection#getFromInclude()
+	 */
+	public long getFromInclude()
+	{
+		return queryWrapper.getFromInclude();
+	}
+
+	/**
+	 * @return
+	 * @see org.nightlabs.jdo.query.QueryCollection#getToExclude()
+	 */
+	public long getToExclude()
+	{
+		return queryWrapper.getToExclude();
+	}
+
+	/**
+	 * @return the queryWrapper
+	 */
+	public QueryCollection<TransferID, ProductTransferIDQuery> getQueryWrapper()
+	{
+		return queryWrapper;
 	}
 
 }

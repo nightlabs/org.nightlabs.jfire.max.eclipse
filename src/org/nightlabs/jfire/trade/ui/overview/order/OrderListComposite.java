@@ -20,7 +20,7 @@ import org.nightlabs.l10n.DateFormatter;
  *
  */
 public class OrderListComposite
-extends AbstractArticleContainerListComposite
+extends AbstractArticleContainerListComposite<Order>
 {
 	public OrderListComposite(Composite parent, int style) {
 		super(parent, style);

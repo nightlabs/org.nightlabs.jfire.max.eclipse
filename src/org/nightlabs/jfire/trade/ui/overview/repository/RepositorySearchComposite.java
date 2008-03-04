@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -24,8 +25,9 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryTypeDAO;
 import org.nightlabs.jfire.store.id.RepositoryTypeID;
@@ -40,19 +42,21 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class RepositorySearchComposite
-extends JDOQueryComposite
+	extends JDOQueryComposite<Repository, RepositoryQuery>
 {
-	public RepositorySearchComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	public RepositorySearchComposite(AbstractQueryFilterComposite<Repository, RepositoryQuery> parent,
+		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
 	}
 
-	public RepositorySearchComposite(Composite parent, int style) {
+	public RepositorySearchComposite(AbstractQueryFilterComposite<Repository, RepositoryQuery> parent,
+		int style)
+	{
 		super(parent, style);
 		createComposite(this);
 	}
@@ -85,13 +89,22 @@ extends JDOQueryComposite
 		ownerBrowseButton.setText("Browse"); //$NON-NLS-1$
 		ownerBrowseButton.addSelectionListener(ownerSelectionListener);
 		ownerBrowseButton.setEnabled(false);
-		ownerActiveButton.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e) {
-				ownerText.setEnabled(((Button)e.getSource()).getSelection());
-				ownerBrowseButton.setEnabled(((Button)e.getSource()).getSelection());
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
+		ownerActiveButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				boolean active = ((Button)e.getSource()).getSelection();
+				ownerText.setEnabled(active);
+				ownerBrowseButton.setEnabled(active);
+				if (active)
+				{
+					getQuery().setOwnerID(selectedOwnerID);
+				}
+				else
+				{
+					getQuery().setOwnerID(null);
+				}
 			}
 		});
 
@@ -155,8 +168,19 @@ extends JDOQueryComposite
 		job.schedule();
 
 		repositoryTypeActiveButton.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e) {
-				repositoryTypeList.setEnabled(((Button)e.getSource()).getSelection());
+			public void widgetSelected(SelectionEvent e)
+			{
+				boolean active = ((Button)e.getSource()).getSelection();
+				repositoryTypeList.setEnabled(active);
+				if (active)
+				{
+					getQuery().setRepositoryTypeID((RepositoryTypeID)
+						JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+				}
+				else
+				{
+					getQuery().setRepositoryTypeID(null);
+				}
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -194,6 +218,7 @@ extends JDOQueryComposite
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+				getQuery().setOwnerID(selectedOwnerID);
 				// TODO perform this expensive code in a job
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
@@ -225,24 +250,38 @@ extends JDOQueryComposite
 //		}
 //	};
 	
-	@Override
-	public JDOQuery getJDOQuery()
-	{
-		RepositoryQuery repositoryQuery = new RepositoryQuery();
-
-		if (ownerActiveButton.getSelection())
-			repositoryQuery.setOwnerID(selectedOwnerID);
-
-		if (repositoryTypeActiveButton.getSelection() && repositoryTypeList.getSelectedElement() != null)
-			repositoryQuery.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
-
-//		if (activeNameButton.getSelection() && repositoryNameText.getText() != null && !repositoryNameText.getText().trim().equals(""))
-//			repositoryQuery.setName(repositoryNameText.getText());
+//	@Override
+//	public AbstractJDOQuery getJDOQuery()
+//	{
+//		RepositoryQuery repositoryQuery = new RepositoryQuery();
 //
-//		if (activeAnchorIDButton.getSelection() && anchorIDText.getText() != null && !anchorIDText.getText().trim().equals(""))
-//			repositoryQuery.setAnchorID(anchorIDText.getText());
-		
-		return repositoryQuery;
+//		if (ownerActiveButton.getSelection())
+//			repositoryQuery.setOwnerID(selectedOwnerID);
+//
+//		if (repositoryTypeActiveButton.getSelection() && repositoryTypeList.getSelectedElement() != null)
+//			repositoryQuery.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+//
+////		if (activeNameButton.getSelection() && repositoryNameText.getText() != null && !repositoryNameText.getText().trim().equals(""))
+////			repositoryQuery.setName(repositoryNameText.getText());
+////
+////		if (activeAnchorIDButton.getSelection() && anchorIDText.getText() != null && !anchorIDText.getText().trim().equals(""))
+////			repositoryQuery.setAnchorID(anchorIDText.getText());
+//		
+//		return repositoryQuery;
+//	}
+
+	@Override
+	protected void resetSearchQueryValues()
+	{
+		getQuery().setOwnerID(selectedOwnerID);
+		getQuery().setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+	}
+
+	@Override
+	protected void unsetSearchQueryValues()
+	{
+		getQuery().setOwnerID(null);
+		getQuery().setRepositoryTypeID(null);
 	}
 	
 //	private List<String> availableRepositoryAnchorTypeIDs = null;

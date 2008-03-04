@@ -15,7 +15,7 @@ import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
 
 public class InvoiceListComposite
-extends AbstractArticleContainerListComposite
+extends AbstractArticleContainerListComposite<Invoice>
 {
 	public InvoiceListComposite(Composite parent, int style) {
 		super(parent, style);

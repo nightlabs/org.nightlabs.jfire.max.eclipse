@@ -23,8 +23,8 @@ import org.nightlabs.l10n.DateFormatter;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractArticleContainerListComposite
-extends AbstractTableComposite<ArticleContainer>
+public abstract class AbstractArticleContainerListComposite<O extends ArticleContainer>
+extends AbstractTableComposite<O>
 {
 	/**
 	 * @param parent

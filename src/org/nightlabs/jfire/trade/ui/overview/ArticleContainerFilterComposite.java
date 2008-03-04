@@ -5,6 +5,9 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -16,14 +19,15 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.id.UserID;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
-import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -32,10 +36,10 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class ArticleContainerFilterComposite
-extends JDOQueryComposite
+public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extends AbstractArticleContainerQuickSearchQuery<R>>
+	extends JDOQueryComposite<R, Q>
 {
 	/**
 	 * @param parent
@@ -43,8 +47,10 @@ extends JDOQueryComposite
 	 * @param layoutMode
 	 * @param layoutDataMode
 	 */
-	public ArticleContainerFilterComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+	public ArticleContainerFilterComposite(
+		AbstractQueryFilterComposite<R, Q> parent, int style,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	{
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
 	}
@@ -53,7 +59,9 @@ extends JDOQueryComposite
 	 * @param parent
 	 * @param style
 	 */
-	public ArticleContainerFilterComposite(Composite parent, int style) {
+	public ArticleContainerFilterComposite(
+		AbstractQueryFilterComposite<R, Q> parent, int style)
+	{
 		super(parent, style);
 		createComposite(this);
 	}
@@ -86,8 +94,24 @@ extends JDOQueryComposite
 		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
 		createDTMin = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
 		createDTMin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createDTMin.addModifyListener(new ModifyListener()
+		{
+			@Override
+			public void modifyText(ModifyEvent e)
+			{
+				getQuery().setCreateDTMin(createDTMin.getDate());
+			}
+		});
 		createDTMax = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMax.caption")); //$NON-NLS-1$
 		createDTMax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createDTMax.addModifyListener(new ModifyListener()
+		{
+			@Override
+			public void modifyText(ModifyEvent e)
+			{
+				getQuery().setCreateDTMax(createDTMax.getDate());
+			}
+		});
 		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Composite wrapper = new XComposite(parent, SWT.NONE);
@@ -105,6 +129,14 @@ extends JDOQueryComposite
 		GridData userLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		userLabelData.horizontalSpan = 2;
 		userActiveButton.setLayoutData(userLabelData);
+		userActiveButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				setUserQueryAspect(userActiveButton.getSelection());
+			}
+		});
 		userText = new Text(userGroup, SWT.BORDER);
 		userText.setEnabled(false);
 		userText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -132,6 +164,17 @@ extends JDOQueryComposite
 		GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		vendorLabelData.horizontalSpan = 2;
 		vendorActiveButton.setLayoutData(vendorLabelData);
+		vendorActiveButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				final boolean active = ((Button)e.getSource()).getSelection();
+				vendorText.setEnabled(active);
+				vendorBrowseButton.setEnabled(active);
+				setVendorQueryAspect(active);
+			}
+		});
 		vendorText = new Text(vendorGroup, SWT.BORDER);
 		vendorText.setEnabled(false);
 		vendorText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -140,15 +183,6 @@ extends JDOQueryComposite
 		vendorBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.vendorBrowseButton.text")); //$NON-NLS-1$
 		vendorBrowseButton.addSelectionListener(vendorSelectionListener);
 		vendorBrowseButton.setEnabled(false);
-		vendorActiveButton.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e) {
-				vendorText.setEnabled(((Button)e.getSource()).getSelection());
-				vendorBrowseButton.setEnabled(((Button)e.getSource()).getSelection());
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
 
 		final Group customerGroup = new Group(wrapper, SWT.NONE);
 		customerGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerGroup.text")); //$NON-NLS-1$
@@ -169,8 +203,10 @@ extends JDOQueryComposite
 		customerBrowseButton.setEnabled(false);
 		customerActiveButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
-				customerText.setEnabled(((Button)e.getSource()).getSelection());
-				customerBrowseButton.setEnabled(((Button)e.getSource()).getSelection());
+				final boolean active = ((Button)e.getSource()).getSelection();
+				customerText.setEnabled(active);
+				customerBrowseButton.setEnabled(active);
+				setCustomerQueryAspect(active);
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -180,14 +216,51 @@ extends JDOQueryComposite
 		pack(true);
 	}
 	
+	protected void setCustomerQueryAspect(boolean active)
+	{
+		if (active)
+		{
+			getQuery().setCustomerID(selectedCustomerID);
+		}
+		else
+		{
+			getQuery().setCustomerID(null);
+		}
+	}
+
+	protected void setVendorQueryAspect(boolean active)
+	{
+		if (active)
+		{
+			getQuery().setVendorID(selectedVendorID);
+		}
+		else
+		{
+			getQuery().setVendorID(null);
+		}
+	}
+
+	protected void setUserQueryAspect(boolean active)
+	{
+		if (active)
+		{
+			getQuery().setCreateUserID(selectedUserID);
+		}
+		else
+		{
+			getQuery().setCreateUserID(null);
+		}
+	}
+
 	private UserID selectedUserID = null;
-	private SelectionListener userSelectionListener = new SelectionListener(){
+	private SelectionListener userSelectionListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
 			UserSearchDialog dialog = new UserSearchDialog(getShell(), userText.getText());
 			int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
 				User selectedUser = dialog.getSelectedUser();
 				selectedUserID = (UserID) JDOHelper.getObjectId(selectedUser);
+				getQuery().setCreateUserID(selectedUserID);
 				if (selectedUser != null)
 					userText.setText(selectedUser.getName());
 			}
@@ -203,6 +276,7 @@ extends JDOQueryComposite
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(vendorText.getText(), false);
 			if (_legalEntity != null) {
 				selectedVendorID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+				getQuery().setVendorID(selectedVendorID);
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedVendorID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -222,6 +296,7 @@ extends JDOQueryComposite
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(customerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedCustomerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+				getQuery().setCustomerID(selectedCustomerID);
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedCustomerID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -236,59 +311,79 @@ extends JDOQueryComposite
 		}
 	};
 	
-	@Override
-	public JDOQuery getJDOQuery()
-	{
-		if (articleContainerQuery == null)
-			throw new IllegalStateException("The field articleContainerQuery is not set!");
-
-//		articleContainerQuery = new ArticleContainerQuery(getArticleContainerClass());
-		if (articleContainerQuery != null)
-			prepareQuery(articleContainerQuery);
-		return articleContainerQuery;
-	}
+//	@Override
+//	public AbstractArticleContainerQuickSearchQuery<?> getJDOQuery()
+//	{
+//		if (articleContainerQuery == null)
+//			throw new IllegalStateException("The field articleContainerQuery is not set!");
+//
+////		articleContainerQuery = new ArticleContainerQuery(getArticleContainerClass());
+//		if (articleContainerQuery != null)
+//			prepareQuery(articleContainerQuery);
+//		return articleContainerQuery;
+//	}
 	
-	protected void prepareQuery(ArticleContainerQuery query)
-	{
-		if (createDTMax.isActive())
-			query.setCreateDTMax(createDTMax.getDate());
-		
-		if (createDTMin.isActive())
-			query.setCreateDTMin(createDTMin.getDate());
+//	protected void prepareQuery(AbstractArticleContainerQuickSearchQuery<?> query)
+//	{
+//		if (createDTMax.isActive())
+//			query.setCreateDTMax(createDTMax.getDate());
+//		
+//		if (createDTMin.isActive())
+//			query.setCreateDTMin(createDTMin.getDate());
+//	
+//		if (userActiveButton.getSelection() && selectedUserID != null)
+//			query.setCreateUserID(selectedUserID);
+//		
+//		if (vendorActiveButton.getSelection() && selectedVendorID != null)
+//			query.setVendorID(selectedVendorID);
+//		
+//		if (customerActiveButton.getSelection() && selectedCustomerID != null)
+//			query.setCustomerID(selectedCustomerID);
+//	}
 	
-		if (userActiveButton.getSelection() && selectedUserID != null)
-			query.setCreateUserID(selectedUserID);
-		
-		if (vendorActiveButton.getSelection() && selectedVendorID != null)
-			query.setVendorID(selectedVendorID);
-		
-		if (customerActiveButton.getSelection() && selectedCustomerID != null)
-			query.setCustomerID(selectedCustomerID);
-	}
-	
-	private ArticleContainerQuery articleContainerQuery = null;
+//	private AbstractArticleContainerQuickSearchQuery<?> articleContainerQuery = null;
 //	protected ArticleContainerQuery initArticleContainerQuery() {
 //		return new ArticleContainerQuery(getArticleContainerClass());
 //	}
 		
-	private Class articleContainerClass;
-	public Class getArticleContainerClass() {
-		return articleContainerClass;
-	}
+//	private Class articleContainerClass;
+//	public Class getArticleContainerClass() {
+//		return articleContainerClass;
+//	}
 
-	public void setArticleContainerQuery(
-			ArticleContainerQuery articleContainerQuery)
-	{
-		this.articleContainerQuery = articleContainerQuery;
-		if (articleContainerQuery == null)
-			this.articleContainerClass = null;
-		else
-			this.articleContainerClass = articleContainerQuery.getArticleContainerClass();
-	}
+//	public void setArticleContainerQuery(
+//		AbstractArticleContainerQuickSearchQuery<?> articleContainerQuery)
+//	{
+//		this.articleContainerQuery = articleContainerQuery;
+//		if (articleContainerQuery == null)
+//			this.articleContainerClass = null;
+//		else
+//			this.articleContainerClass = articleContainerQuery.getArticleContainerClass();
+//	}
 //	public void setArticleContainerClass(Class articleContainerClass) {
 //		this.articleContainerClass = articleContainerClass;
 //		if (articleContainerQuery == null)
 //			articleContainerQuery = new ArticleContainerQuery(articleContainerClass);
 //	}
+
+	@Override
+	protected void resetSearchQueryValues()
+	{
+		getQuery().setCreateDTMin(createDTMin.getDate());
+		getQuery().setCreateDTMax(createDTMax.getDate());
+		getQuery().setCreateUserID(selectedUserID);
+		getQuery().setVendorID(selectedVendorID);
+		getQuery().setCustomerID(selectedCustomerID);
+	}
+
+	@Override
+	protected void unsetSearchQueryValues()
+	{
+		getQuery().setCreateDTMin(null);
+		getQuery().setCreateDTMax(null);
+		getQuery().setCreateUserID(null);
+		getQuery().setVendorID(null);
+		getQuery().setCustomerID(null);
+	}
 
 }

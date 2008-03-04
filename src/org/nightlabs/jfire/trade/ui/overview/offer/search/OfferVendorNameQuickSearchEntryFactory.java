@@ -1,9 +1,7 @@
-/**
- * 
- */
 package org.nightlabs.jfire.trade.ui.overview.offer.search;
 
-import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearchEntryFactory;
 
 /**
@@ -11,9 +9,15 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearc
  *
  */
 public class OfferVendorNameQuickSearchEntryFactory
-extends AbstractVendorNameQuickSearchEntryFactory
+	extends AbstractVendorNameQuickSearchEntryFactory<Offer, OfferQuickSearchQuery>
 {
-	public QuickSearchEntry createQuickSearchEntry() {
+	public OfferVendorNameQuickSearchEntry createQuickSearchEntry() {
 		return new OfferVendorNameQuickSearchEntry(this);
+	}
+
+	@Override
+	public Class<? extends OfferQuickSearchQuery> getQueryType()
+	{
+		return OfferQuickSearchQuery.class;
 	}
 }

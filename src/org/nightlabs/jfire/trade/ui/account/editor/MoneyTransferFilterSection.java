@@ -39,7 +39,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jfire.accounting.query.AbstractMoneyTransferQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 
 /**
@@ -66,7 +66,7 @@ extends RestorableSectionPart
 				if (ignoreMoneyTransferQueryChanged)
 					return;
 
-				moneyTransferQueryChanged((AbstractMoneyTransferQuery<?>) evt.getNewValue());
+				moneyTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
 			}
 		});
 
@@ -85,7 +85,7 @@ extends RestorableSectionPart
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				controller.getMoneyTransferQuery().setFromInclude(moneyTransferSearchComposite.getTransferAmountEntry().getSpinnerComposite().getValue().longValue());
+				controller.setFromInclude(moneyTransferSearchComposite.getTransferAmountEntry().getSpinnerComposite().getValue().longValue());
 //				controller.getMoneyTransferQuery().setToExclude(Long.MAX_VALUE);
 				controller.getMoneyTransferQuery().setTimestampFromIncl(moneyTransferSearchComposite.getCreateDTMin().getDate());
 				controller.getMoneyTransferQuery().setTimestampToIncl(moneyTransferSearchComposite.getCreateDTMax().getDate());
@@ -117,7 +117,7 @@ extends RestorableSectionPart
 	 * It is not called, if the change originated from here (i.e. {@link #fireMoneyTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void moneyTransferQueryChanged(AbstractMoneyTransferQuery<?> moneyTransferQuery)
+	private void moneyTransferQueryChanged(QueryCollection<?, ?> queryCollection)
 	{
 		//do nothing
 	}

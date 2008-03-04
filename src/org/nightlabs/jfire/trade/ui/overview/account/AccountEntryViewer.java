@@ -8,26 +8,25 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
+import org.nightlabs.jdo.query.QueryMap;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.CollectionUtil;
 
 /**
  * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
  * displaying {@link Account}s
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class AccountEntryViewer
-extends JDOQuerySearchEntryViewer
+	extends JDOQuerySearchEntryViewer<Account, AccountQuery>
 {
 	public AccountEntryViewer(Entry entry) {
 		super(entry);
@@ -38,10 +37,10 @@ extends JDOQuerySearchEntryViewer
 		return new AccountListComposite(parent, SWT.NONE);
 	}
 	
-	@Override
-	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-		return new AccountFilterComposite(parent, SWT.NONE);
-	}
+//	@Override
+//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
+//		return new AccountFilterComposite(parent, SWT.NONE);
+//	}
 
 	public static final String[] FETCH_GROUPS_ACCOUNTS = new String[] {
 //		Account.FETCH_GROUP_THIS_ACCOUNT, // we don't need the summaryAccounts that are included in this - better specify individually
@@ -55,18 +54,21 @@ extends JDOQuerySearchEntryViewer
 	};
 
 	@Override
-	protected Object getQueryResult(Collection<? extends JDOQuery> queries, ProgressMonitor monitor)
+	protected Class<Account> getResultType()
 	{
-		try {
-			Collection<? extends JDOQuery<? extends Account>> _queries = CollectionUtil.castCollection(queries);
-			return AccountDAO.sharedInstance().getAccountsForQueries(
-					_queries,
-					FETCH_GROUPS_ACCOUNTS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					monitor);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return Account.class;
+	}
+
+	@Override
+	protected Collection<Account> doSearch(QueryMap<Account, ? extends AccountQuery> queryMap,
+		ProgressMonitor monitor)
+	{
+		return AccountDAO.sharedInstance().getAccountsForQueries(
+			queryMap,
+			FETCH_GROUPS_ACCOUNTS,
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+			monitor
+			);
 	}
 
 }

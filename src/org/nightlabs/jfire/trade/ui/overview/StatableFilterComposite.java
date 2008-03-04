@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,29 +12,34 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
 import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
 import org.nightlabs.jfire.jbpm.dao.StateDefinitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.jbpm.query.StatableQuery;
@@ -49,23 +55,26 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class StatableFilterComposite
-extends JDOQueryComposite
+	extends JDOQueryComposite<Statable, StatableQuery>
 {
 	private DateTimeEdit createDTMin = null;
 	private DateTimeEdit createDTMax = null;
 	private StatableQuery statableQuery = null;
-	private Button activeButton = null;
+//	private Button activeButton = null;
 	private Button onlyInSelectedStateButton = null;
 	
-	public StatableFilterComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	public StatableFilterComposite(
+		AbstractQueryFilterComposite<Statable, StatableQuery> filterComposite, 
+		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
 	{
-		super(parent, style, layoutMode, layoutDataMode);
+		super(filterComposite, style, layoutMode, layoutDataMode);
 		createComposite(this);
 	}
 
-	public StatableFilterComposite(Composite parent, int style) {
-		super(parent, style);
+	public StatableFilterComposite(AbstractQueryFilterComposite<Statable, StatableQuery> filterComposite,
+		int style)
+	{
+		super(filterComposite, style);
 		createComposite(this);
 	}
 	
@@ -79,33 +88,46 @@ extends JDOQueryComposite
 		
 		Composite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		wrapper.setLayout(new GridLayout(2, true));
-		activeButton = new Button(wrapper, SWT.CHECK);
-		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
-		activeButton.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e) {
-				stateDefinitions.setEnabled(((Button)e.getSource()).getSelection());
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
+//		activeButton = new Button(wrapper, SWT.CHECK);
+//		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
+//		activeButton.addSelectionListener(new SelectionListener(){
+//			public void widgetSelected(SelectionEvent e) {
+//				stateDefinitions.setEnabled(((Button)e.getSource()).getSelection());
+//				
+//			}
+//			public void widgetDefaultSelected(SelectionEvent e) {
+//				widgetSelected(e);
+//			}
+//		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		onlyInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.onlyInSelectedStateButton.text")); //$NON-NLS-1$
-		onlyInSelectedStateButton.addSelectionListener(new SelectionListener(){
-			public void widgetSelected(SelectionEvent e) {
-				
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
+		GridData selectedStateButtonData = new GridData();
+		selectedStateButtonData.horizontalSpan = 2;
+		onlyInSelectedStateButton.setLayoutData(selectedStateButtonData);
+		onlyInSelectedStateButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				onlyInSelectedState = onlyInSelectedStateButton.getSelection();
+				getQuery().setOnlyInSelectedState(onlyInSelectedState);
 			}
 		});
 		
-		stateDefinitions = new ComboComposite<StateDefinition>(
-				wrapper, SWT.NONE, labelProvider);
+		stateDefinitions = new XComboComposite<StateDefinition>(wrapper, SWT.NONE, labelProvider);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitions.setLayoutData(data);
 		stateDefinitions.setEnabled(false);
+		stateDefinitions.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent e)
+			{
+				stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+				getQuery().setStateDefinitionID(stateDefinitionID);
+			}
+		});
 		
 		createDTMin = new DateTimeEdit(
 				group,
@@ -117,6 +139,15 @@ extends JDOQueryComposite
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		createDTMin.setDate(cal.getTime());
+		createDTMin.addModifyListener(new ModifyListener()
+		{
+			@Override
+			public void modifyText(ModifyEvent me)
+			{
+				createDTMinDate = createDTMin.getDate();
+				getQuery().setStateCreateDTMin(createDTMinDate);
+			}
+		});
 		
 		createDTMax = new DateTimeEdit(
 				group,
@@ -128,9 +159,18 @@ extends JDOQueryComposite
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 		createDTMax.setDate(cal.getTime());
+		createDTMax.addModifyListener(new ModifyListener()
+		{
+			@Override
+			public void modifyText(ModifyEvent me)
+			{
+				createDTMaxDate = createDTMax.getDate();
+				getQuery().setStateCreateDTMax(createDTMaxDate);
+			}
+		});
 	}
 
-	private ComboComposite<StateDefinition> stateDefinitions;
+	private XComboComposite<StateDefinition> stateDefinitions;
 	private ILabelProvider labelProvider = new LabelProvider() {
 		@Override
 		public String getText(Object element)
@@ -144,33 +184,33 @@ extends JDOQueryComposite
 		}
 	};
 	
-	@Override
-	public JDOQuery getJDOQuery()
-	{
-		statableQuery = new StatableQuery(getStatableClass());
-		StateDefinitionID stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
-		if (statableQuery != null)
-		{
-			if (activeButton.getSelection() && stateDefinitionID != null)
-				statableQuery.setStateDefinitionID(stateDefinitionID);
-
-			if (onlyInSelectedStateButton.getSelection())
-				statableQuery.setOnlyInSelectedState(onlyInSelectedStateButton.getSelection());
-			
-			if (createDTMax.isActive())
-				statableQuery.setStateCreateDTMax(createDTMax.getDate());
-			
-			if (createDTMin.isActive())
-				statableQuery.setStateCreateDTMin(createDTMin.getDate());
-		}
-		return statableQuery;
-	}
+//	@Override
+//	public AbstractJDOQuery getJDOQuery()
+//	{
+//		statableQuery = new StatableQuery(getStatableClass());
+//		StateDefinitionID stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+//		if (statableQuery != null)
+//		{
+//			if (activeButton.getSelection() && stateDefinitionID != null)
+//				statableQuery.setStateDefinitionID(stateDefinitionID);
+//
+//			if (onlyInSelectedStateButton.getSelection())
+//				statableQuery.setOnlyInSelectedState(onlyInSelectedStateButton.getSelection());
+//			
+//			if (createDTMax.isActive())
+//				statableQuery.setStateCreateDTMax(createDTMax.getDate());
+//			
+//			if (createDTMin.isActive())
+//				statableQuery.setStateCreateDTMin(createDTMin.getDate());
+//		}
+//		return statableQuery;
+//	}
 		
-	private Class statableClass;
-	public Class getStatableClass() {
+	private Class<? extends Statable> statableClass;
+	public Class<? extends Statable> getStatableClass() {
 		return statableClass;
 	}
-	public void setStatableClass(final Class statableClass)
+	public void setStatableClass(final Class<? extends Statable> statableClass)
 	{
 		this.statableClass = statableClass;
 		if (statableQuery == null)
@@ -225,6 +265,29 @@ extends JDOQueryComposite
 			}
 		};
 		job.schedule();
+	}
+
+	private StateDefinitionID stateDefinitionID;
+	private boolean onlyInSelectedState;
+	private Date createDTMinDate;
+	private Date createDTMaxDate;
+	
+	@Override
+	protected void resetSearchQueryValues()
+	{
+		getQuery().setOnlyInSelectedState(onlyInSelectedState);
+		getQuery().setStateCreateDTMin(createDTMinDate);
+		getQuery().setStateCreateDTMax(createDTMaxDate);
+		getQuery().setStateDefinitionID(stateDefinitionID);
+	}
+
+	@Override
+	protected void unsetSearchQueryValues()
+	{
+		getQuery().setOnlyInSelectedState(false);
+		getQuery().setStateCreateDTMin(null);
+		getQuery().setStateCreateDTMax(null);
+		getQuery().setStateDefinitionID(null);
 	}
 	
 }

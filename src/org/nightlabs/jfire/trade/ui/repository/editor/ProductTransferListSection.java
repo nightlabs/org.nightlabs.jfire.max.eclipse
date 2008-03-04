@@ -16,8 +16,8 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageControllerModifyListener;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.store.ProductTransfer;
-import org.nightlabs.jfire.store.query.AbstractProductTransferQuery;
 import org.nightlabs.jfire.trade.ui.repository.transfer.ProductTransferTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -41,7 +41,7 @@ extends RestorableSectionPart
 				if (ignoreProductTransferQueryChanged)
 					return;
 
-				productTransferQueryChanged((AbstractProductTransferQuery<?>) evt.getNewValue());
+				productTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
 			}
 		});
 
@@ -64,14 +64,14 @@ extends RestorableSectionPart
 		productTransferTable = new ProductTransferTable(client, SWT.NONE);
 
 		getSection().setClient(client);
-		productTransferQueryChanged(this.controller.getProductTransferQuery());
+		productTransferQueryChanged(this.controller.getQueryWrapper());
 
 		List<ProductTransfer> productTransferList = this.controller.getProductTransferList();
 		if (productTransferList != null)
 			productTransferListChanged(productTransferList);
 	}
 
-	private boolean ignoreProductTransferQueryChanged = false;
+	protected boolean ignoreProductTransferQueryChanged = false;
 	
 	/**
 	 * must be called on UI thread!
@@ -91,7 +91,7 @@ extends RestorableSectionPart
 	 * It is not called, if the change originated from here (i.e. {@link #fireProductTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void productTransferQueryChanged(AbstractProductTransferQuery<?> productTransferQuery)
+	private void productTransferQueryChanged(QueryCollection<?, ?> queryCollection)
 	{
 		productTransferTable.setLoadingStatus();
 	}

@@ -18,14 +18,14 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jfire.store.query.AbstractProductTransferQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 class ProductTransferFilterSection
 extends RestorableSectionPart
 {
-	private ProductTransferPageController controller;
+	protected ProductTransferPageController controller;
 	private Spinner limit;
 	private Button refreshButton;
 
@@ -43,7 +43,7 @@ extends RestorableSectionPart
 				if (ignoreProductTransferQueryChanged)
 					return;
 
-				productTransferQueryChanged((AbstractProductTransferQuery<?>) evt.getNewValue());
+				productTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
 			}
 		});
 
@@ -51,7 +51,7 @@ extends RestorableSectionPart
 		client.getGridLayout().numColumns = 3; // TODO when adding more UI, we might want to switch to 1 and use wrapper-composites
 
 		new Label(client, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferFilterSection.resultLimitLabel.text")); //$NON-NLS-1$
-		limit = new Spinner(client, SWT.BORDER);
+		limit = new Spinner(client, getManagedForm().getToolkit().getBorderStyle());
 		limit.setMinimum(0);
 		limit.setMaximum(Integer.MAX_VALUE);
 		limit.setSelection(1000000000);
@@ -64,17 +64,17 @@ extends RestorableSectionPart
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				controller.getProductTransferQuery().setFromInclude(0);
-				controller.getProductTransferQuery().setToExclude(limit.getSelection() == 0 ? Long.MAX_VALUE : limit.getSelection());
+				controller.setFromInclude(0);
+				controller.setToExclude(limit.getSelection() == 0 ? Long.MAX_VALUE : limit.getSelection());
 				fireProductTransferQueryChanged();
 			}
 		});
 
 		getSection().setClient(client);
-		productTransferQueryChanged(this.controller.getProductTransferQuery());
+		productTransferQueryChanged(controller.getQueryWrapper());
 	}
 
-	private boolean ignoreProductTransferQueryChanged = false;
+	protected boolean ignoreProductTransferQueryChanged = false;
 	
 	/**
 	 * must be called on UI thread!
@@ -94,11 +94,11 @@ extends RestorableSectionPart
 	 * It is not called, if the change originated from here (i.e. {@link #fireProductTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void productTransferQueryChanged(AbstractProductTransferQuery<?> productTransferQuery)
+	private void productTransferQueryChanged(QueryCollection<?, ?> queryCollection)
 	{
-		if (productTransferQuery.getToExclude() > Integer.MAX_VALUE)
+		if (queryCollection.getToExclude() > Integer.MAX_VALUE)
 			limit.setSelection(0);
 		else
-			limit.setSelection((int)productTransferQuery.getToExclude());
+			limit.setSelection((int) queryCollection.getToExclude());
 	}
 }
