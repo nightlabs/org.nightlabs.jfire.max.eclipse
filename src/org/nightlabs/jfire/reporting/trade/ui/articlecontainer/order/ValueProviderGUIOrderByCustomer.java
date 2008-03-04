@@ -29,7 +29,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.query.OrderQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -101,10 +101,10 @@ extends AbstractValueProviderGUI<OrderID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				OrderQuickSearchQuery query = new OrderQuickSearchQuery();
+				OrderQuery query = new OrderQuery();
 //				ArticleContainerQuery query = new ArticleContainerQuery(Order.class);
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Order, OrderQuickSearchQuery> qs = new QueryCollection<Order, OrderQuickSearchQuery>();
+				QueryCollection<Order, OrderQuery> qs = new QueryCollection<Order, OrderQuery>();
 				qs.add(query);
 
 				final Collection<Order> orders = OrderDAO.sharedInstance().getOrdersByQueries(

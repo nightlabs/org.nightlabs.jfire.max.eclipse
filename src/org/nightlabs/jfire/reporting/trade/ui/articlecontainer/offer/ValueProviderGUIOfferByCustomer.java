@@ -33,7 +33,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -106,10 +106,10 @@ extends AbstractValueProviderGUI<OfferID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				OfferQuickSearchQuery query = new OfferQuickSearchQuery();
+				OfferQuery query = new OfferQuery();
 //				OfferQuery query = new OfferQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Offer, OfferQuickSearchQuery> qs = new QueryCollection<Offer, OfferQuickSearchQuery>();
+				QueryCollection<Offer, OfferQuery> qs = new QueryCollection<Offer, OfferQuery>();
 				qs.add(query);
 				
 				final Collection<Offer> offers = OfferDAO.sharedInstance().getOffersByQuery(

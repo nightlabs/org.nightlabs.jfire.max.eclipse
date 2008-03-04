@@ -30,7 +30,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -120,9 +120,9 @@ extends AbstractValueProviderGUI<InvoiceID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				InvoiceQuickSearchQuery query = new InvoiceQuickSearchQuery();
+				InvoiceQuery query = new InvoiceQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Invoice, InvoiceQuickSearchQuery> qs = new QueryCollection<Invoice, InvoiceQuickSearchQuery>();
+				QueryCollection<Invoice, InvoiceQuery> qs = new QueryCollection<Invoice, InvoiceQuery>();
 				qs.add(query);
 				
 				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(

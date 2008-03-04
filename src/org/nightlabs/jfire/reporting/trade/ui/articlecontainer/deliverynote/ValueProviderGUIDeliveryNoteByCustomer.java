@@ -30,7 +30,7 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.DeliveryNoteLocal;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -103,10 +103,10 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				DeliveryNoteQuickSearchQuery query = new DeliveryNoteQuickSearchQuery();
+				DeliveryNoteQuery query = new DeliveryNoteQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<DeliveryNote, DeliveryNoteQuickSearchQuery> qs =
-					new QueryCollection<DeliveryNote, DeliveryNoteQuickSearchQuery>();
+				QueryCollection<DeliveryNote, DeliveryNoteQuery> qs =
+					new QueryCollection<DeliveryNote, DeliveryNoteQuery>();
 				
 				qs.add(query);
 				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.sharedInstance()
