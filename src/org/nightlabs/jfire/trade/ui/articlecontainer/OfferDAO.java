@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Offer;
@@ -44,5 +46,22 @@ public class OfferDAO
 	public List<Offer> getOffers(Set<OfferID> offerIDs, String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		return getJDOObjects(null, offerIDs, fetchGroups, maxFetchDepth, monitor);
+	}
+	
+	public Collection<Offer> getOffersByQuery(
+		QueryCollection<? extends Offer, ? extends AbstractJDOQuery<? extends Offer>> queries, 
+			String[] fetchGroups,	int maxFetchDepth, ProgressMonitor monitor)
+//		throws Exception
+	{
+		try
+		{
+			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			Set<OfferID> offerIDs = tm.getOfferIDs(queries);
+			
+			return getJDOObjects(null, offerIDs, fetchGroups, maxFetchDepth, monitor);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Cannot fetch Offers via Queries.", e);
+		}
 	}
 }

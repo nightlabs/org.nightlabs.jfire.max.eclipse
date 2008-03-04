@@ -11,12 +11,14 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -55,7 +57,9 @@ public class InvoiceDAO
 	{
 		return getJDOObjects(null, invoiceIDs, fetchGroups, maxFetchDepth, monitor);
 	}
+	
 
+	@SuppressWarnings("unchecked")
 	public List<Invoice> getInvoices(
 			AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -77,6 +81,25 @@ public class InvoiceDAO
 			}
 
 			return res;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public Collection<Invoice> getInvoices(QueryCollection<Invoice, ? extends InvoiceQuickSearchQuery> queries,
+		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
+	{
+		try {
+//			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			Set<InvoiceID> invoiceIDs = tradeManager.getInvoiceIDs(queries);
+			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(queries);
+			return InvoiceDAO.sharedInstance().getInvoices(
+				invoiceIDs,
+				fetchGroups,
+				maxFetchDepth,
+				monitor
+				);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

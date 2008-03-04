@@ -3,6 +3,8 @@ package org.nightlabs.jfire.trade.ui.articlecontainer;
 import java.util.Collection;
 import java.util.Set;
 
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ReceptionNote;
@@ -46,5 +48,20 @@ extends BaseJDOObjectDAO<ReceptionNoteID, ReceptionNote>
 	throws Exception
 	{
 		return retrieveJDOObjects(objectIDs, fetchGroups, maxFetchDepth, monitor);
+	}
+	
+	public Collection<ReceptionNote> getReceptionNotesByQueries(
+		QueryCollection<? extends ReceptionNote, ? extends AbstractJDOQuery<? extends ReceptionNote>> queries,
+			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
+	{
+		try
+		{
+			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			Set<ReceptionNoteID> receptionNoteIDs = tm.getReceptionNoteIDs(queries);
+			return getJDOObjects(null, receptionNoteIDs, fetchGroups, maxFetchDepth, monitor);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Cannot fetch ReceptionNotes by Queries:", e);
+		}
 	}
 }

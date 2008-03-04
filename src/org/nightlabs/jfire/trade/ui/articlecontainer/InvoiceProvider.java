@@ -30,15 +30,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.accounting.query.InvoiceQuery;
-import org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
+import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
-public class InvoiceProvider extends JDOObjectProvider
+public class InvoiceProvider
+	extends BaseJDOObjectDAO<InvoiceID, Invoice>
 {
 	private static InvoiceProvider _sharedInstance;
 	public static InvoiceProvider sharedInstance()
@@ -53,53 +57,46 @@ public class InvoiceProvider extends JDOObjectProvider
 
 	public Invoice getInvoice(InvoiceID orderID, String[] fetchGroups, int maxFetchDepth)
 	{
-		return getInvoice(null, orderID, fetchGroups, maxFetchDepth);
+		return getJDOObject(null, orderID, fetchGroups, maxFetchDepth, new NullProgressMonitor());
 	}
 
-	private AccountingManager accountingManager;
-
-	public Invoice getInvoice(AccountingManager tradeManager, InvoiceID invoiceID, String[] fetchGroups, int maxFetchDepth)
+	public List<Invoice> getInvoicesByInvoiceQueries(
+		QueryCollection<Invoice, ? extends InvoiceQuickSearchQuery> invoiceQueries, 
+		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
-		this.accountingManager = tradeManager;
-		return (Invoice) getJDOObject(null, invoiceID, fetchGroups, maxFetchDepth);
-	}
-
-	@Override
-	protected Object retrieveJDOObject(String scope, Object objectID, String[] fetchGroups, int maxFetchDepth)
-	throws Exception
-	{
-		if (accountingManager == null)
-			accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
-		try {
-			return accountingManager.getInvoice((InvoiceID)objectID, fetchGroups, maxFetchDepth);
-		} finally {
-			accountingManager = null;
-		}
-	}
-
-	public List<Invoice> getInvoicesByInvoiceQueries(Collection<InvoiceQuery> invoiceQueries, String[] fetchGroups, int maxFetchDepth)
-	{
-		try {
-			this.accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		try
+		{
+			AccountingManager accountingManager =
+				AccountingManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+			
 			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(invoiceQueries);
-			return getInvoices(invoiceIDs, fetchGroups, maxFetchDepth);
-		} catch (Exception e) {
+			return getJDOObjects(null, invoiceIDs, fetchGroups, maxFetchDepth, monitor);
+		}
+		catch (Exception e)
+		{
 			throw new RuntimeException(e);
-		} finally {
-			this.accountingManager = null;
 		}
 	}
 
-	public List<Invoice> getInvoices(Collection<InvoiceID> invoiceIDs, String[] fetchGroups, int maxFetchDepth)
+	public List<Invoice> getInvoices(Collection<InvoiceID> invoiceIDs, String[] fetchGroups,
+		int maxFetchDepth, ProgressMonitor monitor)
 	{
-		return (List<Invoice>) getJDOObjects(null, invoiceIDs, fetchGroups, maxFetchDepth);
+		return getJDOObjects(null, invoiceIDs, fetchGroups, maxFetchDepth, monitor);
 	}
 
 	@Override
-	protected Collection retrieveJDOObjects(String scope, Set objectIDs, String[] fetchGroups, int maxFetchDepth)
-			throws Exception
+	protected Collection<Invoice> retrieveJDOObjects(Set<InvoiceID> invoiceIDs, String[] fetchGroups,
+		int maxFetchDepth, ProgressMonitor monitor) throws Exception
 	{
-		return accountingManager.getInvoices(objectIDs, fetchGroups, maxFetchDepth);
+		try
+		{
+			AccountingManager accountingManager =
+				AccountingManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+			
+			return accountingManager.getInvoices(invoiceIDs, fetchGroups, maxFetchDepth);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Problems fetching Invoices:", e);
+		}
 	}
 }

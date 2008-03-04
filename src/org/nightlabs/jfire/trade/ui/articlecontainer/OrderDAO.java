@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Order;
@@ -57,6 +59,22 @@ public class OrderDAO
 	public List<Order> getOrders(Set<OrderID> orderIDs, String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		return getJDOObjects(null, orderIDs, fetchGroups, maxFetchDepth, monitor);
+	}
+	
+	public Collection<Order> getOrdersByQueries(
+		QueryCollection<? extends Order, ? extends AbstractJDOQuery<? extends Order>> queries,
+			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
+	{
+		try
+		{
+			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			Set<OrderID> orderIDs = tm.getOrderIDs(queries);
+			
+			return getJDOObjects(null, orderIDs, fetchGroups, maxFetchDepth, monitor);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Cannot fetch Orders via Queries:" + e.getLocalizedMessage(), e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

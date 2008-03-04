@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -75,6 +77,22 @@ public class DeliveryNoteDAO
 			return res;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	public Collection<DeliveryNote> getDeliveryNotesByQueries(
+		QueryCollection<? extends DeliveryNote, ? extends AbstractJDOQuery<? extends DeliveryNote>> queries,
+		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
+	{
+		try
+		{
+			StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			Set<DeliveryNoteID> deliveryNoteIDs = sm.getDeliveryNoteIDs(queries);
+			
+			return getJDOObjects(null, deliveryNoteIDs, fetchGroups, maxFetchDepth, monitor);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("Couldn't retrieve DeliveryNotes by Queries:", e);
 		}
 	}
 }
