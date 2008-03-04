@@ -15,15 +15,15 @@ import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public class DeliveryQueueNameEditDialog extends CenteredDialog {
-	
+
 	private II18nTextEditor deliveryQueueNameEditor;
 	private DeliveryQueue deliveryQueue;
-	
+
 	public DeliveryQueueNameEditDialog(Shell shell, DeliveryQueue deliveryQueue) {
 		super(shell);
 		this.deliveryQueue = deliveryQueue;
 	}
-	
+
 	@Override
 	protected Point getInitialSize() {
 		Point s = super.getInitialSize();
@@ -42,6 +42,12 @@ public class DeliveryQueueNameEditDialog extends CenteredDialog {
 		deliveryQueueNameEditor.setI18nText(deliveryQueue.getName(), EditMode.BUFFERED);
 
 		return composite;
+	}
+
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		super.createButtonsForButtonBar(parent);
+		getShell().setDefaultButton(null);
 	}
 
 	@Override
