@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.deliverynote.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
 /**
@@ -10,17 +10,17 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class DeliveryNoteCustomerNameQuickSearchEntry
-	extends AbstractArticleContainerQuickSearchEntry<DeliveryNote, DeliveryNoteQuickSearchQuery>
+	extends AbstractArticleContainerQuickSearchEntry<DeliveryNote, DeliveryNoteQuery>
 {
-//	private DeliveryNoteQuickSearchQuery query = null;
+//	private DeliveryNoteQuery query = null;
 	
-	public DeliveryNoteCustomerNameQuickSearchEntry(QuickSearchEntryFactory<DeliveryNote, DeliveryNoteQuickSearchQuery> factory) {
-		super(factory, DeliveryNoteQuickSearchQuery.class);
+	public DeliveryNoteCustomerNameQuickSearchEntry(QuickSearchEntryFactory<DeliveryNote, DeliveryNoteQuery> factory) {
+		super(factory, DeliveryNoteQuery.class);
 	}
 
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery getQuery() {
-//		AbstractArticleContainerQuickSearchQuery query = new DeliveryNoteQuickSearchQuery();
+//	public AbstractArticleContainerQuery getQuery() {
+//		AbstractArticleContainerQuery query = new DeliveryNoteQuery();
 //		query.setCustomerName(getSearchText());
 //		return query;
 //	}
@@ -35,11 +35,11 @@ public class DeliveryNoteCustomerNameQuickSearchEntry
 //	{
 ////		if (query == null)
 ////		{
-////			query = getQueryRegistry().getQueryOfType(DeliveryNoteQuickSearchQuery.class);
+////			query = getQueryRegistry().getQueryOfType(DeliveryNoteQuery.class);
 ////		}
 ////		query.setCustomerName(searchText);
 //		
-//		getQueryOfType(DeliveryNoteQuickSearchQuery.class).setCustomerName(searchText);
+//		getQueryOfType(DeliveryNoteQuery.class).setCustomerName(searchText);
 //	}
 
 //	@Override
@@ -49,23 +49,23 @@ public class DeliveryNoteCustomerNameQuickSearchEntry
 ////			return;
 ////		
 ////		query.setCustomerName(null);
-//		getQueryOfType(DeliveryNoteQuickSearchQuery.class).setCustomerName(null);
+//		getQueryOfType(DeliveryNoteQuery.class).setCustomerName(null);
 //	}
 
 	@Override
-	protected void doSetSearchConditionValue(DeliveryNoteQuickSearchQuery query, String value)
+	protected void doSetSearchConditionValue(DeliveryNoteQuery query, String value)
 	{
 		query.setCustomerName(value);
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(DeliveryNoteQuickSearchQuery query)
+	protected void doUnsetSearchConditionValue(DeliveryNoteQuery query)
 	{
 		query.setCustomerName(null);
 	}
 
 //	@Override
-//	protected void doResetSearchCondition(DeliveryNoteQuickSearchQuery query, String lastValue)
+//	protected void doResetSearchCondition(DeliveryNoteQuery query, String lastValue)
 //	{
 //		query.setCustomerName(lastValue);
 //	}

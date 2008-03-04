@@ -7,20 +7,20 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterFactory;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.query.OrderQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OrderQuery;
 
 /**
  * 
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OrderSearchFilterFactory
-	extends AbstractQueryFilterFactory<Order, OrderQuickSearchQuery>
+	extends AbstractQueryFilterFactory<Order, OrderQuery>
 {
 
 	@Override
-	public AbstractQueryFilterComposite<Order, OrderQuickSearchQuery> createQueryFilter(
+	public AbstractQueryFilterComposite<Order, OrderQuery> createQueryFilter(
 		Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<Order, ? super OrderQuickSearchQuery> queryProvider)
+		QueryProvider<Order, ? super OrderQuery> queryProvider)
 	{
 		return new OrderFilterComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}

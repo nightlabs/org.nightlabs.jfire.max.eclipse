@@ -4,7 +4,7 @@ import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 
 /**
  * Abstract implementation of an {@link QuickSearchEntry} for
@@ -13,7 +13,7 @@ import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public abstract class AbstractArticleContainerQuickSearchEntry<R extends ArticleContainer, Q extends AbstractArticleContainerQuickSearchQuery<R>>
+public abstract class AbstractArticleContainerQuickSearchEntry<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
 	extends AbstractQuickSearchEntry<R, Q>
 {
 	public AbstractArticleContainerQuickSearchEntry(QuickSearchEntryFactory<R, Q> factory, Class<Q> queryType) {
@@ -21,11 +21,11 @@ public abstract class AbstractArticleContainerQuickSearchEntry<R extends Article
 	}
 
 //	/**
-//	 * return the {@link AbstractArticleContainerQuickSearchQuery} used for searching
-//	 * @return the {@link AbstractArticleContainerQuickSearchQuery} used for searching
+//	 * return the {@link AbstractArticleContainerQuery} used for searching
+//	 * @return the {@link AbstractArticleContainerQuery} used for searching
 //	 */
 //	@Override
-//	public abstract AbstractArticleContainerQuickSearchQuery getQuery();
+//	public abstract AbstractArticleContainerQuery getQuery();
 
 //	/**
 //	 * return the fetchGroups needed for the query
@@ -36,7 +36,7 @@ public abstract class AbstractArticleContainerQuickSearchEntry<R extends Article
 //	public Object search(ProgressMonitor monitor)
 //	{
 //		Collection<AbstractJDOQuery> queries = new ArrayList<AbstractJDOQuery>();
-//		AbstractArticleContainerQuickSearchQuery query = getQuery();
+//		AbstractArticleContainerQuery query = getQuery();
 //		query.setFromInclude(getMinIncludeRange());
 //		query.setToExclude(getMaxExcludeRange());
 //		queries.add(query);

@@ -18,7 +18,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -86,7 +86,7 @@ public class InvoiceDAO
 		}
 	}
 
-	public Collection<Invoice> getInvoices(QueryCollection<Invoice, ? extends InvoiceQuickSearchQuery> queries,
+	public Collection<Invoice> getInvoices(QueryCollection<Invoice, ? extends InvoiceQuery> queries,
 		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try {

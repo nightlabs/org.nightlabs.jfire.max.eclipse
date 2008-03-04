@@ -3,11 +3,11 @@ package org.nightlabs.jfire.trade.ui.overview.invoice;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
 public class InvoiceFilterComposite
-	extends AbstractArticleContainerFilterComposite<Invoice, InvoiceQuickSearchQuery>
+	extends AbstractArticleContainerFilterComposite<Invoice, InvoiceQuery>
 {
 	/**
 	 * @param parent
@@ -18,20 +18,20 @@ public class InvoiceFilterComposite
 	 */
 	public InvoiceFilterComposite(Composite parent, int style, LayoutMode layoutMode,
 		LayoutDataMode layoutDataMode,
-		QueryProvider<Invoice, ? super InvoiceQuickSearchQuery> queryProvider)
+		QueryProvider<Invoice, ? super InvoiceQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 
 	public InvoiceFilterComposite(Composite parent, int style,
-		QueryProvider<Invoice, InvoiceQuickSearchQuery> queryProvider)
+		QueryProvider<Invoice, InvoiceQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}
 	
 	@Override
-	protected Class<InvoiceQuickSearchQuery> getQueryClass() {
-		return InvoiceQuickSearchQuery.class;
+	protected Class<InvoiceQuery> getQueryClass() {
+		return InvoiceQuery.class;
 	}
 	
 //	private Combo booked;

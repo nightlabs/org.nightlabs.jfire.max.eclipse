@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.invoice.search;
 
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractCustomerNameQuickSearchEntryFactory;
 
 /**
@@ -10,15 +10,15 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractCustomerNameQuickSea
  *
  */
 public class InvoiceCustomerNameQuickSearchEntryFactory
-extends AbstractCustomerNameQuickSearchEntryFactory<Invoice, InvoiceQuickSearchQuery>
+extends AbstractCustomerNameQuickSearchEntryFactory<Invoice, InvoiceQuery>
 {
-	public QuickSearchEntry<Invoice, InvoiceQuickSearchQuery> createQuickSearchEntry() {
+	public QuickSearchEntry<Invoice, InvoiceQuery> createQuickSearchEntry() {
 		return new InvoiceCustomerNameQuickSearchEntry(this);
 	}
 
 	@Override
-	public Class<? extends InvoiceQuickSearchQuery> getQueryType()
+	public Class<? extends InvoiceQuery> getQueryType()
 	{
-		return InvoiceQuickSearchQuery.class;
+		return InvoiceQuery.class;
 	}
 }

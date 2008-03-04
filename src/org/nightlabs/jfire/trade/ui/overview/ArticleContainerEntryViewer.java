@@ -3,13 +3,13 @@ package org.nightlabs.jfire.trade.ui.overview;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marco Schulze - Marco at NightLabs dot de
  */
-public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q extends AbstractArticleContainerQuickSearchQuery<R>>
+public abstract class ArticleContainerEntryViewer<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
 	extends JDOQuerySearchEntryViewer<R, Q>
 {
 	public ArticleContainerEntryViewer(Entry entry) {

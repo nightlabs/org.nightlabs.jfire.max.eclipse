@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.offer.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
 /**
@@ -10,26 +10,26 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OfferIDQuickSearchEntry
-	extends AbstractArticleContainerQuickSearchEntry<Offer, OfferQuickSearchQuery>
+	extends AbstractArticleContainerQuickSearchEntry<Offer, OfferQuery>
 {
-	public OfferIDQuickSearchEntry(QuickSearchEntryFactory<Offer, OfferQuickSearchQuery> factory) {
-		super(factory, OfferQuickSearchQuery.class);
+	public OfferIDQuickSearchEntry(QuickSearchEntryFactory<Offer, OfferQuery> factory) {
+		super(factory, OfferQuery.class);
 	}
 
 //	@Override
-//	protected void doResetSearchCondition(OfferQuickSearchQuery query, String lastValue)
+//	protected void doResetSearchCondition(OfferQuery query, String lastValue)
 //	{
 //		query.setArticleContainerID(lastValue);
 //	}
 
 	@Override
-	protected void doSetSearchConditionValue(OfferQuickSearchQuery query, String value)
+	protected void doSetSearchConditionValue(OfferQuery query, String value)
 	{
 		query.setArticleContainerID(value);
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(OfferQuickSearchQuery query)
+	protected void doUnsetSearchConditionValue(OfferQuery query)
 	{
 		query.setArticleContainerID(null);
 	}
@@ -40,8 +40,8 @@ public class OfferIDQuickSearchEntry
 //	}
 //
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery getQuery() {
-//		AbstractArticleContainerQuickSearchQuery query = new OfferQuickSearchQuery();
+//	public AbstractArticleContainerQuery getQuery() {
+//		AbstractArticleContainerQuery query = new OfferQuery();
 //		query.setArticleContainerID(getSearchText());
 //		return query;
 //	}

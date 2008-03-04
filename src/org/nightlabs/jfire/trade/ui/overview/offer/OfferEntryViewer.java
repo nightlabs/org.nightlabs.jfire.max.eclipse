@@ -17,7 +17,7 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction;
@@ -28,7 +28,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OfferEntryViewer
-	extends ArticleContainerEntryViewer<Offer, OfferQuickSearchQuery>
+	extends ArticleContainerEntryViewer<Offer, OfferQuery>
 {
 	public static final String ID = OfferEntryViewer.class.getName();
 	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
@@ -101,7 +101,7 @@ public class OfferEntryViewer
 //	}
 
 	@Override
-	protected Collection<Offer> doSearch(QueryMap<Offer, ? extends OfferQuickSearchQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Offer> doSearch(QueryMap<Offer, ? extends OfferQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OfferDAO.sharedInstance().getOffersByQuery(
 			queryMap,

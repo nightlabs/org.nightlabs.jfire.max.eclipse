@@ -7,20 +7,20 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterFactory;
 import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.query.ReceptionNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
 
 /**
  * 
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class ReceptionNoteSearchFilterFactory
-	extends AbstractQueryFilterFactory<ReceptionNote, ReceptionNoteQuickSearchQuery>
+	extends AbstractQueryFilterFactory<ReceptionNote, ReceptionNoteQuery>
 {
 
 	@Override
-	public AbstractQueryFilterComposite<ReceptionNote, ReceptionNoteQuickSearchQuery> createQueryFilter(
+	public AbstractQueryFilterComposite<ReceptionNote, ReceptionNoteQuery> createQueryFilter(
 		Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<ReceptionNote, ? super ReceptionNoteQuickSearchQuery> queryProvider)
+		QueryProvider<ReceptionNote, ? super ReceptionNoteQuery> queryProvider)
 	{
 		return new ReceptionNoteFilterComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}

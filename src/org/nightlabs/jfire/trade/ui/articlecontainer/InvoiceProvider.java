@@ -37,7 +37,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.security.SecurityReflector;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -61,7 +61,7 @@ public class InvoiceProvider
 	}
 
 	public List<Invoice> getInvoicesByInvoiceQueries(
-		QueryCollection<Invoice, ? extends InvoiceQuickSearchQuery> invoiceQueries, 
+		QueryCollection<Invoice, ? extends InvoiceQuery> invoiceQueries, 
 		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try

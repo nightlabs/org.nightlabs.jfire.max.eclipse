@@ -17,7 +17,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction;
@@ -28,7 +28,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class InvoiceEntryViewer
-	extends ArticleContainerEntryViewer<Invoice, InvoiceQuickSearchQuery>
+	extends ArticleContainerEntryViewer<Invoice, InvoiceQuery>
 {
 	public static final String ID = InvoiceEntryViewer.class.getName();
 	
@@ -91,7 +91,7 @@ public class InvoiceEntryViewer
 //	}
 
 	@Override
-	protected Collection<Invoice> doSearch(QueryMap<Invoice, ? extends InvoiceQuickSearchQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Invoice> doSearch(QueryMap<Invoice, ? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
 	{
 		return InvoiceDAO.sharedInstance().getInvoices(
 			queryMap,

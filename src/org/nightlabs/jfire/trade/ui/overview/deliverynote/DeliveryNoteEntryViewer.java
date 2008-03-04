@@ -18,7 +18,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
-import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction;
 import org.nightlabs.progress.ProgressMonitor;
@@ -28,7 +28,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class DeliveryNoteEntryViewer
-	extends ArticleContainerEntryViewer<DeliveryNote, DeliveryNoteQuickSearchQuery>
+	extends ArticleContainerEntryViewer<DeliveryNote, DeliveryNoteQuery>
 {
 	public static final String ID = DeliveryNoteEntryViewer.class.getName();
 	public static String[] FETCH_GROUPS_DELIVERY_NOTES = new String[] {
@@ -93,7 +93,7 @@ public class DeliveryNoteEntryViewer
 //	}
 
 	@Override
-	protected Collection<DeliveryNote> doSearch(QueryMap<DeliveryNote, ? extends DeliveryNoteQuickSearchQuery> queryMap,
+	protected Collection<DeliveryNote> doSearch(QueryMap<DeliveryNote, ? extends DeliveryNoteQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(

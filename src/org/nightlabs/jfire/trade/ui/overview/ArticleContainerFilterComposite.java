@@ -27,7 +27,7 @@ import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -38,7 +38,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extends AbstractArticleContainerQuickSearchQuery<R>>
+public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extends AbstractArticleContainerQuery<R>>
 	extends JDOQueryComposite<R, Q>
 {
 	/**
@@ -312,7 +312,7 @@ public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extend
 	};
 	
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery<?> getJDOQuery()
+//	public AbstractArticleContainerQuery<?> getJDOQuery()
 //	{
 //		if (articleContainerQuery == null)
 //			throw new IllegalStateException("The field articleContainerQuery is not set!");
@@ -323,7 +323,7 @@ public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extend
 //		return articleContainerQuery;
 //	}
 	
-//	protected void prepareQuery(AbstractArticleContainerQuickSearchQuery<?> query)
+//	protected void prepareQuery(AbstractArticleContainerQuery<?> query)
 //	{
 //		if (createDTMax.isActive())
 //			query.setCreateDTMax(createDTMax.getDate());
@@ -341,7 +341,7 @@ public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extend
 //			query.setCustomerID(selectedCustomerID);
 //	}
 	
-//	private AbstractArticleContainerQuickSearchQuery<?> articleContainerQuery = null;
+//	private AbstractArticleContainerQuery<?> articleContainerQuery = null;
 //	protected ArticleContainerQuery initArticleContainerQuery() {
 //		return new ArticleContainerQuery(getArticleContainerClass());
 //	}
@@ -352,7 +352,7 @@ public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extend
 //	}
 
 //	public void setArticleContainerQuery(
-//		AbstractArticleContainerQuickSearchQuery<?> articleContainerQuery)
+//		AbstractArticleContainerQuery<?> articleContainerQuery)
 //	{
 //		this.articleContainerQuery = articleContainerQuery;
 //		if (articleContainerQuery == null)

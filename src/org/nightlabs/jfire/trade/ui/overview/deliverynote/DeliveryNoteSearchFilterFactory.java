@@ -7,20 +7,20 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterFactory;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 
 /**
  * 
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class DeliveryNoteSearchFilterFactory
-	extends AbstractQueryFilterFactory<DeliveryNote, DeliveryNoteQuickSearchQuery>
+	extends AbstractQueryFilterFactory<DeliveryNote, DeliveryNoteQuery>
 {
 
 	@Override
-	public AbstractQueryFilterComposite<DeliveryNote, DeliveryNoteQuickSearchQuery> createQueryFilter(
+	public AbstractQueryFilterComposite<DeliveryNote, DeliveryNoteQuery> createQueryFilter(
 		Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<DeliveryNote, ? super DeliveryNoteQuickSearchQuery> queryProvider)
+		QueryProvider<DeliveryNote, ? super DeliveryNoteQuery> queryProvider)
 	{
 		return new DeliveryNoteFilterComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}

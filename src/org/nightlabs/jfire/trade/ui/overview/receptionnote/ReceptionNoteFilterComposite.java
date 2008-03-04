@@ -3,8 +3,8 @@ package org.nightlabs.jfire.trade.ui.overview.receptionnote;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
-import org.nightlabs.jfire.trade.query.ReceptionNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
+import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
 /**
@@ -12,7 +12,7 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class ReceptionNoteFilterComposite
-	extends AbstractArticleContainerFilterComposite<ReceptionNote, ReceptionNoteQuickSearchQuery>
+	extends AbstractArticleContainerFilterComposite<ReceptionNote, ReceptionNoteQuery>
 {
 	/**
 	 * @param parent
@@ -23,7 +23,7 @@ public class ReceptionNoteFilterComposite
 	 */
 	public ReceptionNoteFilterComposite(Composite parent, int style, LayoutMode layoutMode,
 		LayoutDataMode layoutDataMode,
-		QueryProvider<ReceptionNote, ? super ReceptionNoteQuickSearchQuery> queryProvider)
+		QueryProvider<ReceptionNote, ? super ReceptionNoteQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
@@ -33,14 +33,14 @@ public class ReceptionNoteFilterComposite
 	 * @param style
 	 */
 	public ReceptionNoteFilterComposite(Composite parent, int style,
-		QueryProvider<ReceptionNote, AbstractArticleContainerQuickSearchQuery<ReceptionNote>> queryProvider)
+		QueryProvider<ReceptionNote, AbstractArticleContainerQuery<ReceptionNote>> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}
 
 	@Override
-	protected Class<ReceptionNoteQuickSearchQuery> getQueryClass() {
-		return ReceptionNoteQuickSearchQuery.class;
+	protected Class<ReceptionNoteQuery> getQueryClass() {
+		return ReceptionNoteQuery.class;
 	}
 	
 }

@@ -3,7 +3,7 @@ package org.nightlabs.jfire.trade.ui.overview.deliverynote;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
 /**
@@ -11,7 +11,7 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  *
  */
 public class DeliveryNoteFilterComposite
-	extends AbstractArticleContainerFilterComposite<DeliveryNote, DeliveryNoteQuickSearchQuery>
+	extends AbstractArticleContainerFilterComposite<DeliveryNote, DeliveryNoteQuery>
 {
 	/**
 	 * @param parent
@@ -25,7 +25,7 @@ public class DeliveryNoteFilterComposite
 		int style,
 		LayoutMode layoutMode,
 		LayoutDataMode layoutDataMode,
-		QueryProvider<DeliveryNote, ? super DeliveryNoteQuickSearchQuery> queryProvider)
+		QueryProvider<DeliveryNote, ? super DeliveryNoteQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
@@ -35,14 +35,14 @@ public class DeliveryNoteFilterComposite
 	 * @param style
 	 */
 	public DeliveryNoteFilterComposite(Composite parent, int style,
-		QueryProvider<DeliveryNote, ? super DeliveryNoteQuickSearchQuery> queryProvider)
+		QueryProvider<DeliveryNote, ? super DeliveryNoteQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}
 
 	@Override
-	protected Class<DeliveryNoteQuickSearchQuery> getQueryClass() {
-		return DeliveryNoteQuickSearchQuery.class;
+	protected Class<DeliveryNoteQuery> getQueryClass() {
+		return DeliveryNoteQuery.class;
 	}
 			
 }

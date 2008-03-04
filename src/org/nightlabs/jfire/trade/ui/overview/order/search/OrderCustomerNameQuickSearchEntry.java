@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.order.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.query.OrderQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
 /**
@@ -10,26 +10,26 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OrderCustomerNameQuickSearchEntry
-	extends AbstractArticleContainerQuickSearchEntry<Order, OrderQuickSearchQuery>
+	extends AbstractArticleContainerQuickSearchEntry<Order, OrderQuery>
 {
-	public OrderCustomerNameQuickSearchEntry(QuickSearchEntryFactory<Order, OrderQuickSearchQuery> factory) {
-		super(factory, OrderQuickSearchQuery.class);
+	public OrderCustomerNameQuickSearchEntry(QuickSearchEntryFactory<Order, OrderQuery> factory) {
+		super(factory, OrderQuery.class);
 	}
 
 //	@Override
-//	protected void doResetSearchCondition(OrderQuickSearchQuery query, String lastValue)
+//	protected void doResetSearchCondition(OrderQuery query, String lastValue)
 //	{
 //		query.setCustomerName(lastValue);
 //	}
 
 	@Override
-	protected void doSetSearchConditionValue(OrderQuickSearchQuery query, String value)
+	protected void doSetSearchConditionValue(OrderQuery query, String value)
 	{
 		query.setCustomerName(value);
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(OrderQuickSearchQuery query)
+	protected void doUnsetSearchConditionValue(OrderQuery query)
 	{
 		query.setCustomerName(null);
 	}
@@ -40,8 +40,8 @@ public class OrderCustomerNameQuickSearchEntry
 //	}
 //
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery getQuery() {
-//		AbstractArticleContainerQuickSearchQuery query = new OrderQuickSearchQuery();
+//	public AbstractArticleContainerQuery getQuery() {
+//		AbstractArticleContainerQuery query = new OrderQuery();
 //		query.setCustomerName(getSearchText());
 //		return query;
 //	}

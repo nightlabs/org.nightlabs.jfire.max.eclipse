@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.offer.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
 /**
@@ -10,26 +10,26 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OfferCustomerNameQuickSearchEntry
-extends AbstractArticleContainerQuickSearchEntry<Offer, OfferQuickSearchQuery>
+extends AbstractArticleContainerQuickSearchEntry<Offer, OfferQuery>
 {
-	public OfferCustomerNameQuickSearchEntry(QuickSearchEntryFactory<Offer, OfferQuickSearchQuery> factory) {
-		super(factory, OfferQuickSearchQuery.class);
+	public OfferCustomerNameQuickSearchEntry(QuickSearchEntryFactory<Offer, OfferQuery> factory) {
+		super(factory, OfferQuery.class);
 	}
 
 //	@Override
-//	protected void doResetSearchCondition(OfferQuickSearchQuery query, String lastValue)
+//	protected void doResetSearchCondition(OfferQuery query, String lastValue)
 //	{
 //		query.setCustomerName(lastValue);
 //	}
 
 	@Override
-	protected void doSetSearchConditionValue(OfferQuickSearchQuery query, String value)
+	protected void doSetSearchConditionValue(OfferQuery query, String value)
 	{
 		query.setCustomerName(value);
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(OfferQuickSearchQuery query)
+	protected void doUnsetSearchConditionValue(OfferQuery query)
 	{
 		query.setCustomerName(null);
 	}
@@ -40,8 +40,8 @@ extends AbstractArticleContainerQuickSearchEntry<Offer, OfferQuickSearchQuery>
 //	}
 //
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery getQuery() {
-//		AbstractArticleContainerQuickSearchQuery query = new OfferQuickSearchQuery();
+//	public AbstractArticleContainerQuery getQuery() {
+//		AbstractArticleContainerQuery query = new OfferQuery();
 //		query.setCustomerName(getSearchText());
 //		return query;
 //	}

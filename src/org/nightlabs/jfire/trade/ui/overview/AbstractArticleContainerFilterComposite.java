@@ -10,13 +10,13 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * 
  */
-public abstract class AbstractArticleContainerFilterComposite<R extends ArticleContainer, Q extends AbstractArticleContainerQuickSearchQuery<R>>
+public abstract class AbstractArticleContainerFilterComposite<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
 	extends AbstractQueryFilterComposite<R, Q>
 {
 	/**
@@ -40,7 +40,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	}
 
 //	protected StatableFilterComposite statableFilterComposite = null;
-//	public StatableFilterComposite getStatableFilterComposite() {AbstractArticleContainerQuickSearchQuery<R>
+//	public StatableFilterComposite getStatableFilterComposite() {AbstractArticleContainerQuery<R>
 //		return statableFilterComposite;
 //	}
 
@@ -91,7 +91,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		return queryComps;
 	}
 
-//	protected AbstractArticleContainerQuickSearchQuery<?> createArticleContainerQuery()
+//	protected AbstractArticleContainerQuery<?> createArticleContainerQuery()
 //	{
 //		return new ArticleContainerQuery(getQueryClass());
 //	}

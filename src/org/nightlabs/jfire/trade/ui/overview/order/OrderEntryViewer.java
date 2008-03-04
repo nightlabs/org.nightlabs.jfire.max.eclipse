@@ -16,7 +16,7 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.query.OrderQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction;
@@ -27,7 +27,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OrderEntryViewer
-	extends ArticleContainerEntryViewer<Order, OrderQuickSearchQuery>
+	extends ArticleContainerEntryViewer<Order, OrderQuery>
 {
 	public static final String ID = OrderEntryViewer.class.getName();
 	public static final String[] FETCH_GROUPS_ORDERS = new String[] {
@@ -88,7 +88,7 @@ public class OrderEntryViewer
 //	}
 
 	@Override
-	protected Collection<Order> doSearch(QueryMap<Order, ? extends OrderQuickSearchQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Order> doSearch(QueryMap<Order, ? extends OrderQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OrderDAO.sharedInstance().getOrdersByQueries(
 			queryMap,

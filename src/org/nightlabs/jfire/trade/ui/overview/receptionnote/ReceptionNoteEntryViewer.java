@@ -11,7 +11,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryMap;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.query.ReceptionNoteQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ReceptionNoteDAO;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;
@@ -21,7 +21,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class ReceptionNoteEntryViewer
-	extends ArticleContainerEntryViewer<ReceptionNote, ReceptionNoteQuickSearchQuery>
+	extends ArticleContainerEntryViewer<ReceptionNote, ReceptionNoteQuery>
 {
 	
 	public ReceptionNoteEntryViewer(Entry entry) {
@@ -67,7 +67,7 @@ public class ReceptionNoteEntryViewer
 
 	@Override
 	protected Collection<ReceptionNote> doSearch(
-		QueryMap<ReceptionNote, ? extends ReceptionNoteQuickSearchQuery> queryMap, ProgressMonitor monitor)
+		QueryMap<ReceptionNote, ? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
 	{
 		return ReceptionNoteDAO.sharedInstance().getReceptionNotesByQueries(
 			queryMap,

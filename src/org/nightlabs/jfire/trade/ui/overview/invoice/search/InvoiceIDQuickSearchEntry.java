@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.invoice.search;
 
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
-import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
+import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
 /**
@@ -10,26 +10,26 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuic
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class InvoiceIDQuickSearchEntry
-	extends AbstractArticleContainerQuickSearchEntry<Invoice, InvoiceQuickSearchQuery>
+	extends AbstractArticleContainerQuickSearchEntry<Invoice, InvoiceQuery>
 {
-	public InvoiceIDQuickSearchEntry(QuickSearchEntryFactory<Invoice, InvoiceQuickSearchQuery> factory) {
-		super(factory, InvoiceQuickSearchQuery.class);
+	public InvoiceIDQuickSearchEntry(QuickSearchEntryFactory<Invoice, InvoiceQuery> factory) {
+		super(factory, InvoiceQuery.class);
 	}
 
 //	@Override
-//	protected void doResetSearchCondition(InvoiceQuickSearchQuery query, String lastValue)
+//	protected void doResetSearchCondition(InvoiceQuery query, String lastValue)
 //	{
 //		query.setArticleContainerID(lastValue);
 //	}
 
 	@Override
-	protected void doSetSearchConditionValue(InvoiceQuickSearchQuery query, String value)
+	protected void doSetSearchConditionValue(InvoiceQuery query, String value)
 	{
 		query.setArticleContainerID(value);
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(InvoiceQuickSearchQuery query)
+	protected void doUnsetSearchConditionValue(InvoiceQuery query)
 	{
 		query.setArticleContainerID(null);
 	}
@@ -40,9 +40,9 @@ public class InvoiceIDQuickSearchEntry
 //	}
 //
 //	@Override
-//	public AbstractArticleContainerQuickSearchQuery getQuery()
+//	public AbstractArticleContainerQuery getQuery()
 //	{
-//		AbstractArticleContainerQuickSearchQuery query = new InvoiceQuickSearchQuery();
+//		AbstractArticleContainerQuery query = new InvoiceQuery();
 //		query.setArticleContainerID(getSearchText());
 //		return query;
 //	}
