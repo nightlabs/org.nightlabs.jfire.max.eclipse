@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
@@ -53,7 +54,7 @@ public class IssueIssueLinkAdder extends AbstractIssueLinkAdder {
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
-		Collection<Object> elements = iViewer.getListComposite().getSelectedElements();
+		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
 		for(Object o : elements) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}

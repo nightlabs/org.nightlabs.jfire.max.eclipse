@@ -12,13 +12,12 @@ import javax.jdo.JDOHelper;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,9 +36,11 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.JDOQuery;
-import org.nightlabs.jdo.ui.JDOQueryComposite;
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -65,11 +66,16 @@ import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
+ * FIXME: This composite won't work correctly as long as the gui changes are not immediately reflected
+ * 	by the Query. Chairat please update this composite to set the respective query aspects as soon
+ * 	as they change. (marius)
+ * 
  * @author Chairat Kongarayawetchakun 
  *
  */
-public class IssueSearchComposite extends JDOQueryComposite{
-	
+public class IssueSearchComposite
+	extends JDOQueryComposite<Issue, IssueQuery>
+{
 	private static final Logger logger = Logger.getLogger(IssueSearchComposite.class);
 	
 	private Text issueIDText;
@@ -120,8 +126,9 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	 * @param layoutMode
 	 * @param layoutDataMode
 	 */
-	public IssueSearchComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
+	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	{
 		super(parent, style, layoutMode, layoutDataMode);
 		
 		formToolkit = new FormToolkit(getShell().getDisplay());
@@ -134,7 +141,8 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	 * @param parent
 	 * @param style
 	 */
-	public IssueSearchComposite(Composite parent, int style) {
+	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style)
+	{
 		super(parent, style);
 		createComposite(this);
 		prepareProperties();
@@ -164,10 +172,12 @@ public class IssueSearchComposite extends JDOQueryComposite{
 		issueTypeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		issueTypeEC.setClient(issueTypeGroup);
-		issueTypeEC.addExpansionListener(new ExpansionAdapter() {
-			public void expansionStateChanged(ExpansionEvent e) {
-			}
-		});
+		// Why adding an empty Listener?
+//		issueTypeEC.addExpansionListener(new ExpansionAdapter() {
+//			@Override
+//			public void expansionStateChanged(ExpansionEvent e) {
+//			}
+//		});
 		
 		XComposite issueTypeComposite = new XComposite(issueTypeGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
@@ -242,6 +252,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 
 		userGroupEC.setClient(userGroup);
 		userGroupEC.addExpansionListener(new ExpansionAdapter() {
+			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
 				// resizes the application window.
 			}
@@ -283,7 +294,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			public void widgetSelected(SelectionEvent e) {
 				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedReporter == null ? "" : selectedReporter.getUserID());
 				int returnCode = userSearchDialog.open();
-				if (returnCode == Dialog.OK) {
+				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
 					if (selectedReporter != null)
 						reporterText.setText(selectedReporter.getName());
@@ -327,7 +338,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 			public void widgetSelected(SelectionEvent e) {
 				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssignee == null ? "" : selectedAssignee.getUserID());
 				int returnCode = userSearchDialog.open();
-				if (returnCode == Dialog.OK) {
+				if (returnCode == Window.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
 					if (selectedAssignee != null)
 						assigneeText.setText(selectedAssignee.getName());
@@ -349,6 +360,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 
 		timeGroupEC.setClient(timeGroup);
 		timeGroupEC.addExpansionListener(new ExpansionAdapter() {
+			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
 				// resizes the application window.
 			}
@@ -391,6 +403,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 
 		documentGroupEC.setClient(documentGroup);
 		documentGroupEC.addExpansionListener(new ExpansionAdapter() {
+			@Override
 			public void expansionStateChanged(ExpansionEvent e) {
 				// resizes the application window.
 			}
@@ -493,7 +506,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 				}
 			} 
 		};
-		loadJob.setPriority(Job.SHORT);
+		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
 	}
 
@@ -502,57 +515,57 @@ public class IssueSearchComposite extends JDOQueryComposite{
 	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
 	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All");
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
-	 */
-	@Override
-	public JDOQuery getJDOQuery() {
-		IssueQuery issueQuery = new IssueQuery();
-
-		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
-			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
-		}
-
-		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
-			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-		}
-
-		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
-			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
-		}
-
-		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
-			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
-		}
-
-		if (!selectedAllReporter && selectedReporter != null) {
-			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
-		}
-		else {
-			issueQuery.setReporterID(null);
-		}
-
-		if (!selectedAllAssignee && selectedAssignee != null) {
-			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
-		}
-		else {
-			issueQuery.setAssigneeID(null);
-		}
-
-		if (createdTimeEdit.isActive()) {
-			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
-		}
-
-		if (updatedTimeEdit.isActive()) {
-			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
-		}
-		
-		if (issueLinkAdderComposite.getItems().size() != 0) {
-			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
-		}
-
-		return issueQuery;
-	}
+//	/* (non-Javadoc)
+//	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
+//	 */
+//	@Override
+//	public AbstractJDOQuery getJDOQuery() {
+//		IssueQuery issueQuery = new IssueQuery();
+//
+//		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
+//			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
+//		}
+//
+//		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
+//			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+//		}
+//
+//		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
+//			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+//		}
+//
+//		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
+//			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+//		}
+//
+//		if (!selectedAllReporter && selectedReporter != null) {
+//			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
+//		}
+//		else {
+//			issueQuery.setReporterID(null);
+//		}
+//
+//		if (!selectedAllAssignee && selectedAssignee != null) {
+//			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+//		}
+//		else {
+//			issueQuery.setAssigneeID(null);
+//		}
+//
+//		if (createdTimeEdit.isActive()) {
+//			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+//		}
+//
+//		if (updatedTimeEdit.isActive()) {
+//			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+//		}
+//		
+//		if (issueLinkAdderComposite.getItems().size() != 0) {
+//			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
+//		}
+//
+//		return issueQuery;
+//	}
 
 	private SetStoredIssueQueryRunnable storedIssueQueryRunnable = null;
 	
@@ -565,7 +578,7 @@ public class IssueSearchComposite extends JDOQueryComposite{
 				
 		public void run(ProgressMonitor monitor) {
 			logger.debug("SetStoredIssueQueryRunnable started.");
-			for (JDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
+			for (AbstractJDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
 				if (jdoQuery instanceof IssueQuery) {
 					final IssueQuery issueQuery = (IssueQuery)jdoQuery;
 					clearData();
@@ -667,11 +680,74 @@ public class IssueSearchComposite extends JDOQueryComposite{
 				return Status.OK_STATUS;
 			}
 		};
-		setQueryJob.setPriority(Job.SHORT);
+		setQueryJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		setQueryJob.schedule();
 	}
 	
 	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
 		this.searchInvoker = searchInvoker;
+	}
+
+	@Override
+	protected void resetSearchQueryValues()
+	{
+		IssueQuery issueQuery = getQuery();
+
+		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
+			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
+		}
+
+		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
+			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+		}
+
+		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
+			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+		}
+
+		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
+			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+		}
+
+		if (!selectedAllReporter && selectedReporter != null) {
+			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
+		}
+		else {
+			issueQuery.setReporterID(null);
+		}
+
+		if (!selectedAllAssignee && selectedAssignee != null) {
+			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+		}
+		else {
+			issueQuery.setAssigneeID(null);
+		}
+
+		if (createdTimeEdit.isActive()) {
+			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+		}
+
+		if (updatedTimeEdit.isActive()) {
+			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+		}
+		
+		if (issueLinkAdderComposite.getItems().size() != 0) {
+			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
+		}
+	}
+
+	@Override
+	protected void unsetSearchQueryValues()
+	{
+		IssueQuery issueQuery = getQuery();
+		issueQuery.setIssueTypeID(null);
+		issueQuery.setIssueSeverityTypeID(null);
+		issueQuery.setIssuePriorityID(null);
+		issueQuery.setIssueResolutionID(null);
+		issueQuery.setReporterID(null);
+		issueQuery.setAssigneeID(null);
+		issueQuery.setCreateTimestamp(null);
+		issueQuery.setUpdateTimestamp(null);
+		issueQuery.setObjectIDs(null);
 	}
 }
