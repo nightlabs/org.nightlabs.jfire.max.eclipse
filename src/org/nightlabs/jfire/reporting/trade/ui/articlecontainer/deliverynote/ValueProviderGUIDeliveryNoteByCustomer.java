@@ -1,12 +1,6 @@
-/**
- * 
- */
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.deliverynote;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -23,6 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
@@ -35,8 +30,7 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.DeliveryNoteLocal;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.query.DeliveryNoteQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -109,19 +103,15 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				ArticleContainerQuery query = new ArticleContainerQuery(DeliveryNote.class);
+				DeliveryNoteQuickSearchQuery query = new DeliveryNoteQuickSearchQuery();
 				query.setCustomerID((AnchorID) value);
-				Collection<ArticleContainerQuery> qs = new HashSet<ArticleContainerQuery>();
+				QueryCollection<DeliveryNote, DeliveryNoteQuickSearchQuery> qs =
+					new QueryCollection<DeliveryNote, DeliveryNoteQuickSearchQuery>();
+				
 				qs.add(query);
-				Set<DeliveryNoteID> deliveryNoteIDs = null;
-				try {
-					deliveryNoteIDs = TradePlugin.getDefault().getTradeManager().getArticleContainerIDs(qs);
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
-				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.
-					sharedInstance().getDeliveryNotes(deliveryNoteIDs, FETCH_GROUPS_DELIVERY_NOTES,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.sharedInstance()
+					.getDeliveryNotesByQueries(
+						qs, FETCH_GROUPS_DELIVERY_NOTES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						deliveryNoteListComposite.setInput(deliveryNotes);

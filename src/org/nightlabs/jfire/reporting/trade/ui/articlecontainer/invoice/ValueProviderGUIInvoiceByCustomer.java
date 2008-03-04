@@ -1,12 +1,6 @@
-/**
- * 
- */
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.invoice;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -23,10 +17,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.accounting.query.InvoiceQuery;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
@@ -36,7 +30,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.query.InvoiceQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -126,18 +120,17 @@ extends AbstractValueProviderGUI<InvoiceID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				InvoiceQuery query = new InvoiceQuery();
+				InvoiceQuickSearchQuery query = new InvoiceQuickSearchQuery();
 				query.setCustomerID((AnchorID) value);
-				Collection<InvoiceQuery> qs = new HashSet<InvoiceQuery>();
+				QueryCollection<Invoice, InvoiceQuickSearchQuery> qs = new QueryCollection<Invoice, InvoiceQuickSearchQuery>();
 				qs.add(query);
-				Set<InvoiceID> invoiceIDs = null;
-				try {
-//					invoiceIDs = TradePlugin.getDefault().getTradeManager().getInvoiceIDs(qs);
-					invoiceIDs = TradePlugin.getDefault().getAccountingManager().getInvoiceIDs(qs);
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
-				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, FETCH_GROUPS_INVOICES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				
+				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(
+					qs, 
+					FETCH_GROUPS_INVOICES, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					monitor);
+				
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						invoiceListComposite.setInput(invoices);

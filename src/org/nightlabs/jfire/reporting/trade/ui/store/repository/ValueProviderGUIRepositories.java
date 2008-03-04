@@ -24,6 +24,7 @@ import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
+import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer;
 import org.nightlabs.jfire.transfer.Anchor;
@@ -92,7 +93,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
-		Collection<Anchor> anchors = repositoryEntryViewer.getListComposite().getSelectedElements();
+		Collection<Repository> anchors = repositoryEntryViewer.getListComposite().getSelectedElements();
 		if (anchors != null && anchors.size() > 0) {
 			Collection<AnchorID> result = new ArrayList<AnchorID>(anchors.size());
 			for (Anchor anchor : anchors) {

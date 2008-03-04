@@ -1,12 +1,6 @@
-/**
- * 
- */
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.order;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -23,6 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
@@ -34,8 +29,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.query.ArticleContainerQuery;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.query.OrderQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -107,19 +101,18 @@ extends AbstractValueProviderGUI<OrderID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				ArticleContainerQuery query = new ArticleContainerQuery(Order.class);
+				OrderQuickSearchQuery query = new OrderQuickSearchQuery();
+//				ArticleContainerQuery query = new ArticleContainerQuery(Order.class);
 				query.setCustomerID((AnchorID) value);
-				Collection<ArticleContainerQuery> qs = new HashSet<ArticleContainerQuery>();
+				QueryCollection<Order, OrderQuickSearchQuery> qs = new QueryCollection<Order, OrderQuickSearchQuery>();
 				qs.add(query);
-				Set<OrderID> orderIDs = null;
-				try {
-					orderIDs = TradePlugin.getDefault().getTradeManager().getArticleContainerIDs(qs);
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
-				final Collection<Order> orders = OrderDAO.
-					sharedInstance().getOrders(orderIDs, FETCH_GROUPS_ORDERS,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+
+				final Collection<Order> orders = OrderDAO.sharedInstance().getOrdersByQueries(
+					qs, 
+					FETCH_GROUPS_ORDERS, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					monitor);
+				
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						orderListComposite.setInput(orders);

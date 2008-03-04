@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
@@ -92,7 +93,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
-		Collection<Anchor> anchors = accountEntryViewer.getListComposite().getSelectedElements();
+		Collection<Account> anchors = accountEntryViewer.getListComposite().getSelectedElements();
 		if (anchors != null && anchors.size() > 0) {
 			Collection<AnchorID> result = new ArrayList<AnchorID>(anchors.size());
 			for (Anchor anchor : anchors) {

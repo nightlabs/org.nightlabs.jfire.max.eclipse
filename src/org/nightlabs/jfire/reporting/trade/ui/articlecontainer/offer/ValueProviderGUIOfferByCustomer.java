@@ -3,10 +3,7 @@
  */
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -23,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
@@ -35,8 +33,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.query.OfferQuery;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.query.OfferQuickSearchQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -109,19 +106,17 @@ extends AbstractValueProviderGUI<OfferID>
 			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
-				OfferQuery query = new OfferQuery();
+				OfferQuickSearchQuery query = new OfferQuickSearchQuery();
+//				OfferQuery query = new OfferQuery();
 				query.setCustomerID((AnchorID) value);
-				Collection<OfferQuery> qs = new HashSet<OfferQuery>();
+				QueryCollection<Offer, OfferQuickSearchQuery> qs = new QueryCollection<Offer, OfferQuickSearchQuery>();
 				qs.add(query);
-				Set<OfferID> offerIDs = null;
-				try {
-					offerIDs = TradePlugin.getDefault().getTradeManager().getArticleContainerIDs(qs);
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
-				final Collection<Offer> offers = OfferDAO.
-					sharedInstance().getOffers(offerIDs, FETCH_GROUPS_OFFERS,
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				
+				final Collection<Offer> offers = OfferDAO.sharedInstance().getOffersByQuery(
+					qs, 
+					FETCH_GROUPS_OFFERS, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						offerListComposite.setInput(offers);
