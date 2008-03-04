@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
@@ -17,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer;
 
@@ -31,7 +29,7 @@ public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
 	protected Composite doCreateComposite(Composite parent) {
 		oViewer = new OrderEntryViewer(new OrderEntryFactory().createEntry()) {
 			@Override
-			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+			protected void addResultTableListeners(AbstractTableComposite<Order> tableComposite) {
 				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
@@ -53,7 +51,7 @@ public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
-		Collection<Object> elements = oViewer.getListComposite().getSelectedElements();
+		Collection<Order> elements = oViewer.getListComposite().getSelectedElements();
 		for(Object o : elements) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}

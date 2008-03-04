@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
@@ -17,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
+import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer;
 
@@ -53,7 +51,7 @@ public class IssueOfferLinkAdder extends AbstractIssueLinkAdder {
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
-		Collection<Object> elements = oViewer.getListComposite().getSelectedElements();
+		Collection<Offer> elements = oViewer.getListComposite().getSelectedElements();
 		for(Object o : elements) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}

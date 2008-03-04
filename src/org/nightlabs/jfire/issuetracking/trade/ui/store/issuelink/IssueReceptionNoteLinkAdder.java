@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
+import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer;
 
@@ -30,7 +31,7 @@ public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
 	protected Composite doCreateComposite(Composite parent) {
 		rViewer = new ReceptionNoteEntryViewer(new ReceptionNoteEntryFactory().createEntry()) {
 			@Override
-			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
+			protected void addResultTableListeners(AbstractTableComposite<ReceptionNote> tableComposite) {
 				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
