@@ -13,13 +13,10 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
-
-import com.sun.corba.se.spi.ior.MakeImmutable;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->

@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,17 +11,20 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueLinkWizardRelationPage 
 extends WizardHopPage
 {
-	private IssueLinkWizard iWizard;
+	private IssueLinkAdder issueLinkAdder;
 	
 	private Text newRelationText;
 	
@@ -28,10 +33,10 @@ extends WizardHopPage
 	
 	private List predefinedRelationList;
 	
-	public IssueLinkWizardRelationPage(IssueLinkWizard iWizard) {
+	public IssueLinkWizardRelationPage(IssueLinkAdder issueLinkAdder) {
 		super("Select/Create the relation for links", "Select/Create the relation for links.");
 		setDescription("The relation for links");
-		this.iWizard = iWizard;
+		this.issueLinkAdder = issueLinkAdder;
 		
 		new WizardHop(this);
 	}
@@ -72,17 +77,17 @@ extends WizardHopPage
 		manageComposite.getGridLayout().numColumns = 1;
 		
 		predefinedRelationList = new List(manageComposite, SWT.NONE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		predefinedRelationList.add("No Relation");
-		predefinedRelationList.add("Relation 1");
-		predefinedRelationList.add("Relation 2");
-		predefinedRelationList.add("Relation 3");
-		predefinedRelationList.add("Relation 4");
-		predefinedRelationList.add("Relation 5");
-		predefinedRelationList.add("Relation 6");
-		predefinedRelationList.add("Relation 7");
-		predefinedRelationList.add("Relation 8");
-		predefinedRelationList.add("Relation 9");
-		predefinedRelationList.add("Relation 0");
+		java.util.List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(
+				issueLinkAdder.getIssueLinkHandlerFactory().getLinkObjectClass(), 
+				new String[] {IssueLinkType.FETCH_GROUP_THIS, FetchPlan.DEFAULT}, 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				new NullProgressMonitor());
+
+		
+		for (IssueLinkType issueLinkType : issueLinkTypes) {
+			predefinedRelationList.add(issueLinkType.getIssueLinkTypeName().getText());	
+		}
+		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		predefinedRelationList.setLayoutData(gridData);
 		
