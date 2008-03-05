@@ -3,7 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.trade.ui;singleton:=true
 Bundle-Version: 1.0.0
+Bundle-ClassPath: org.nightlabs.jfire.issuetracking.trade.ui.jar
 Bundle-Activator: org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin
+Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms,
@@ -17,4 +19,3 @@ Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.issuetracking.trade.ui,
  org.nightlabs.jfire.issuetracking.trade.ui.action,
  org.nightlabs.jfire.issuetracking.trade.ui.issuelink
-Bundle-ClassPath: org.nightlabs.jfire.issuetracking.trade.ui.jar
