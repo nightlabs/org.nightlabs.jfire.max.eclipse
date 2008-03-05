@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -111,7 +110,7 @@ public class IssueSearchComposite
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	
-	private FormToolkit formToolkit;
+//	private FormToolkit formToolkit;
 	
 	private Object mutex = new Object();
 	
@@ -131,7 +130,7 @@ public class IssueSearchComposite
 	{
 		super(parent, style, layoutMode, layoutDataMode);
 		
-		formToolkit = new FormToolkit(getShell().getDisplay());
+//		formToolkit = new FormToolkit(getShell().getDisplay());
 		
 		createComposite(this);
 		prepareProperties();
