@@ -59,8 +59,7 @@ public class StatableFilterComposite
 {
 	private DateTimeEdit createDTMin = null;
 	private DateTimeEdit createDTMax = null;
-	private StatableQuery statableQuery = null;
-//	private Button activeButton = null;
+	private Button activeButton = null;
 	private Button onlyInSelectedStateButton = null;
 	
 	public StatableFilterComposite(
@@ -87,18 +86,30 @@ public class StatableFilterComposite
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Composite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		wrapper.setLayout(new GridLayout(2, true));
-//		activeButton = new Button(wrapper, SWT.CHECK);
-//		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
-//		activeButton.addSelectionListener(new SelectionListener(){
-//			public void widgetSelected(SelectionEvent e) {
-//				stateDefinitions.setEnabled(((Button)e.getSource()).getSelection());
-//				
-//			}
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				widgetSelected(e);
-//			}
-//		});
+		wrapper.setLayout(new GridLayout(3, true));
+		activeButton = new Button(wrapper, SWT.CHECK);
+		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
+		activeButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				final boolean active = ((Button)e.getSource()).getSelection();
+				stateDefinitions.setEnabled(active);
+				onlyInSelectedStateButton.setEnabled(active);
+				
+				if (active)
+				{
+					getQuery().setOnlyInSelectedState(onlyInSelectedState);
+					getQuery().setStateDefinitionID(stateDefinitionID);
+				}
+				else
+				{
+					getQuery().setOnlyInSelectedState(false);
+					getQuery().setStateDefinitionID(null);					
+				}
+			}
+		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		onlyInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.onlyInSelectedStateButton.text")); //$NON-NLS-1$
 		GridData selectedStateButtonData = new GridData();
@@ -118,7 +129,6 @@ public class StatableFilterComposite
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitions.setLayoutData(data);
-		stateDefinitions.setEnabled(false);
 		stateDefinitions.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override
@@ -212,9 +222,13 @@ public class StatableFilterComposite
 	}
 	public void setStatableClass(final Class<? extends Statable> statableClass)
 	{
+		assert statableClass != null;
+		if (statableClass == this.statableClass)
+			return;
+		
 		this.statableClass = statableClass;
-		if (statableQuery == null)
-			statableQuery = new StatableQuery(statableClass);
+		getQuery().setStatableClass(statableClass);
+		
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.loadProcessDefinitionsJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
@@ -250,7 +264,7 @@ public class StatableFilterComposite
 						allStateDefinitions.addAll(stateDefinitions);
 					}
 					
-					Display.getDefault().asyncExec(new Runnable() {
+					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							if (stateDefinitions.isDisposed())
 								return;

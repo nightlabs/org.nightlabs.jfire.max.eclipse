@@ -22,6 +22,13 @@ public class StatableSearchFilterFactory
 		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 		QueryProvider<Statable, ? super StatableQuery> queryProvider)
 	{
+		StatableFilterSearchComposite filterComposite =
+			new StatableFilterSearchComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
+		
+		// set the class with which the JDOQuery will be instantiated and for which the 
+		// selectable states shall be retrieved. 
+//		filterComposite.setStatableClass(getViewerBaseClass());
+		
 		return new StatableFilterSearchComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 

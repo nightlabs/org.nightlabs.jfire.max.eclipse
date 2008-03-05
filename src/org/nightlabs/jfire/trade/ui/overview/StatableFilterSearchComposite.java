@@ -44,6 +44,7 @@ public class StatableFilterSearchComposite
 	}
 
 	private StatableFilterComposite statableComposite;
+	private Class<? extends Statable> statableClass;
 	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#createContents()
@@ -53,6 +54,7 @@ public class StatableFilterSearchComposite
 	{
 		statableComposite = new StatableFilterComposite(this, SWT.NONE,
 			LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA);
+		statableComposite.setStatableClass(getQueryProvider().getBaseViewerClass());
 	}
 
 	@Override
@@ -67,4 +69,23 @@ public class StatableFilterSearchComposite
 		return Collections.singletonList((JDOQueryComposite<Statable, StatableQuery>) statableComposite);
 	}
 
+	/**
+	 * Sets the class implementing {@link Statable} for which the states shall be retrieved and used
+	 * for filtering.
+	 *  
+	 * @param statableClass a class implementing Statable
+	 */
+	public void setStatableClass(Class<? extends Statable> statableClass)
+	{
+//		assert statableClass != null;
+//		if (statableComposite == null)
+//		{
+//			throw new IllegalStateException("Trying to the statable class though no " +
+//			"StatableFilterSection has been created!");
+//		}
+//		
+//		statableComposite.setStatableClass(statableClass);
+		this.statableClass = statableClass;
+	}
+	
 }
