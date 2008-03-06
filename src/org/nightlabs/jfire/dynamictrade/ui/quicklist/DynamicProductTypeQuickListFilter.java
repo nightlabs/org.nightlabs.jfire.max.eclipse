@@ -26,9 +26,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 public class DynamicProductTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
-//extends AbstractProductTypeViewerQuickListFilter
 {
-
 	public static String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_NO_LIMIT,
@@ -41,13 +39,7 @@ extends AbstractProductTypeQuickListFilter
 		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 		return dynamicProductTypeTable;
 	}
-	
-//	@Override
-//	public StructuredViewer createViewer(Composite parent) {
-//		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this);
-//		return dynamicProductTypeTable.getTableViewer();
-//	}
-	
+		
 	public String getDisplayName()
 	{
 		return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
@@ -58,9 +50,12 @@ extends AbstractProductTypeQuickListFilter
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					final Collection<DynamicProductType> dynamicProductTypes = DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
-							ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					StoreManager storeManager = StoreManagerUtil.getHome(
+							Login.getLogin().getInitialContextProperties()).create();
+					final Collection<DynamicProductType> dynamicProductTypes = 
+						DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
+							ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							dynamicProductTypeTable.setInput(dynamicProductTypes);
@@ -71,16 +66,7 @@ extends AbstractProductTypeQuickListFilter
 					throw new RuntimeException(x);
 				}
 			}
-		}.schedule();
-		
-//		DynamicProductTypeSearchFilter searchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-//		try {
-//			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Collection dynamicProductTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			dynamicProductTypeTable.setInput(dynamicProductTypes);
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
+		}.schedule();		
 	}
 
 }
