@@ -59,7 +59,6 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public class SimpleProductTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
-//extends AbstractProductTypeViewerQuickListFilter
 {
 	/**
 	 * LOG4J logger used by this class
