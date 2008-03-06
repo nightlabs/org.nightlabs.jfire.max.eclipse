@@ -81,23 +81,15 @@ implements ISelectionProvider
 	private XComposite wrapper;
 	private List<Boolean> filterSearched = new LinkedList<Boolean>();
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
-
 	private TabFolder tabFolder;
-
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 
 	public ProductTypeQuickListView() {
 		super();
-//		try {
-//		Login.getLogin();
-//		} catch (LoginException e) {
-//		throw new RuntimeException(e);
-//		}
 	}
 
 	public void createPartContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		wrapper = new XComposite(parent, SWT.NONE);
 		Collection<IProductTypeQuickListFilterFactory> factories = null;
 		try {
 			factories = ProductTypeQuickListFilterFactoryRegistry.sharedInstance().getProductQuickListFilterFactories();
@@ -286,10 +278,10 @@ implements ISelectionProvider
 	 */
 	public void setSelection(ISelection selection)
 	{
-//		throw new UnsupportedOperationException("NYI");
 		if (getSelectedFilter() != null) {
-			// TODO: not only set selection for selected filter but all, and display this one
-			getSelectedFilter().setSelection(selection);
+			for (IProductTypeQuickListFilter filter : filters) {
+				filter.setSelection(selection);
+			}
 		}
 	}
 

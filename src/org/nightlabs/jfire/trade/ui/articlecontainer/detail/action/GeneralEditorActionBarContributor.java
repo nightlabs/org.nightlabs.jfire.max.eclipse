@@ -82,7 +82,6 @@ extends EditorActionBarContributor
 {
 	private static final Logger logger = Logger.getLogger(GeneralEditorActionBarContributor.class);
 
-//	private GeneralEditor activeGeneralEditor = null;
 	private IGeneralEditor activeGeneralEditor = null;
 	private GeneralEditorComposite activeGeneralEditorComposite = null;
 	private SegmentEdit activeSegmentEdit = null;
@@ -212,8 +211,8 @@ extends EditorActionBarContributor
 			throw new RuntimeException(e);
 		}
 
-		for (Iterator it = articleContainerActionRegistry.getActionDescriptors().iterator(); it.hasNext(); ) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) it.next();
+		for (Iterator<ActionDescriptor> it = articleContainerActionRegistry.getActionDescriptors().iterator(); it.hasNext(); ) {
+			ActionDescriptor actionDescriptor = it.next();
 			if (!actionDescriptor.isVisible())
 				continue; // ignore invisible actions - enabled doesn't matter for them
 
@@ -239,7 +238,7 @@ extends EditorActionBarContributor
 	 * @param articleSelections Instances of {@link ArticleSelection} as returned by {@link SegmentEdit#getArticleSelections()}
 	 *		and {@link SegmentEditArticleSelectionEvent#getArticleSelections()}.
 	 */
-	protected void calculateArticleEditActionsEnabled(Set articleSelections)
+	protected void calculateArticleEditActionsEnabled(Set<ArticleSelection> articleSelections)
 	{
 		ArticleEditActionRegistry articleEditActionRegistry;
 		try {
@@ -248,8 +247,8 @@ extends EditorActionBarContributor
 			throw new RuntimeException(e);
 		}
 
-		for (Iterator itAC = articleEditActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) itAC.next();
+		for (Iterator<ActionDescriptor> itAC = articleEditActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
+			ActionDescriptor actionDescriptor = itAC.next();
 			if (!actionDescriptor.isVisible())
 				continue; // ignore invisible actions - enabled doesn't matter for them
 
@@ -398,8 +397,8 @@ extends EditorActionBarContributor
 		}
 
 		// disable all ArticleContainerActions and calculate which ones must be visible
-		for (Iterator itAC = articleContainerActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) itAC.next();
+		for (Iterator<ActionDescriptor> itAC = articleContainerActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
+			ActionDescriptor actionDescriptor = itAC.next();
 			IArticleContainerAction action = (IArticleContainerAction) actionDescriptor.getAction();
 			IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 			if (action != null) {
@@ -427,8 +426,8 @@ extends EditorActionBarContributor
 		}
 
 		// disable all ArticleEditActions and calculate which ones must be visible
-		for (Iterator itAC = articleEditActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) itAC.next();
+		for (Iterator<ActionDescriptor> itAC = articleEditActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
+			ActionDescriptor actionDescriptor = itAC.next();
 			IArticleEditAction action = (IArticleEditAction) actionDescriptor.getAction();
 			IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 			if (action != null) {
@@ -498,8 +497,8 @@ extends EditorActionBarContributor
 		if (activeSegmentEdit == null)
 			throw new IllegalStateException("No activeSegmentEdit set!"); //$NON-NLS-1$
 
-		for (Iterator it = activeSegmentEdit.getArticleSelections().iterator(); it.hasNext(); ) {
-			ArticleSelection selection = (ArticleSelection) it.next();
+		for (Iterator<ArticleSelection> it = activeSegmentEdit.getArticleSelections().iterator(); it.hasNext(); ) {
+			ArticleSelection selection = it.next();
 			ArticleEdit articleEdit = selection.getArticleEdit();
 			IArticleEditActionDelegate delegate = articleEdit.getArticleEditFactory().getArticleEditActionDelegate(action.getId());
 			if (delegate == null) {
@@ -667,23 +666,19 @@ extends EditorActionBarContributor
 	private IPerspectiveListener4 perspectiveListener = new PerspectiveAdapter() {
 		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-			if (
-//					activeGeneralEditor != null
-//				 && System.identityHashCode(activeGeneralEditor) != System.identityHashCode(RCPUtil.getActiveWorkbenchPage().getActiveEditor())
-//				 &&	(!activeGeneralEditor.equals(RCPUtil.getActiveWorkbenchPage().getActiveEditor()))
-//				 &&
-				 (!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId()))))
-				)
+			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || 
+				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
 			{
 				logger.debug("Perspective activated");					 //$NON-NLS-1$
 				IActionBars2 actionBars = (IActionBars2) getActionBars();
-				ICoolBarManager coolBarManager = actionBars.getCoolBarManager();
+				ICoolBarManager coolBarManager = actionBars.getCoolBarManager();				
 				try {
 					ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
 					ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
 				} catch (EPProcessorException e) {
 					throw new RuntimeException(e);
-				}
+				}				
+				
 				activeGeneralEditor = null;
 			}
 		}

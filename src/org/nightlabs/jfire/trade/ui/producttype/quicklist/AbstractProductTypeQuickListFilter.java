@@ -107,7 +107,7 @@ implements IProductTypeQuickListFilter
 	 */
 	public void setSelection(ISelection selection)
 	{
-	//TODO Implement setSelection()
-//		throw new UnsupportedOperationException("Not implemented!");
+		//TODO Implement setSelection()
+		
 	}
 }

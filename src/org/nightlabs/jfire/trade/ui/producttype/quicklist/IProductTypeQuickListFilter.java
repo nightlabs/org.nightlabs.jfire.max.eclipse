@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -50,7 +51,6 @@ extends ISelectionProvider
 	 * @return The created Control
 	 */
 	Control createResultViewerControl(Composite parent);
-
 
 	/**
 	 * Returns the display name of this filter
@@ -75,7 +75,7 @@ extends ISelectionProvider
 
 	/**
 	 * This method should be implemented. Please check in your implementation if
-	 * teh selection contains a ProductType which is displayed by your implementation,
+	 * the selection contains a {@link ProductTypeID} which is displayed by your implementation,
 	 * and if so select it
 	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
