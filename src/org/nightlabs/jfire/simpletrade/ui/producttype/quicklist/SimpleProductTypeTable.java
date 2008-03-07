@@ -33,29 +33,28 @@ import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTab
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Daniel Mazurel <daniel[AT]nightlabs[DOT]de>
  */
 public class SimpleProductTypeTable 
 extends AbstractProductTypeTable<SimpleProductType>
 {
-	/**
-	 * @param parent
-	 * @param filter
-	 * @param style
-	 */
-	public SimpleProductTypeTable(Composite parent,
-			AbstractProductTypeQuickListFilter filter, int style) {
-		super(parent, filter, style);
-	}
-
-	/**
-	 * @param parent
-	 * @param filter
-	 */
-	public SimpleProductTypeTable(Composite parent,
-			AbstractProductTypeQuickListFilter filter) {
+//	/**
+//	 * @param parent
+//	 * @param style
+//	 */
+//	public SimpleProductTypeTable(Composite parent, int style) {
+//		super(parent, style);
+//	}
+//
+//	/**
+//	 * @param parent
+//	 */
+//	public SimpleProductTypeTable(Composite parent) {
+//		super(parent);
+//	}
+	
+	public SimpleProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
 		super(parent, filter);
 	}
-	
 }
 
