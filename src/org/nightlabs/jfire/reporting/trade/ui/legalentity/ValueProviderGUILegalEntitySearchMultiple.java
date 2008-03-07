@@ -68,7 +68,7 @@ public class ValueProviderGUILegalEntitySearchMultiple extends AbstractValueProv
 	 */
 	public Control createGUI(Composite wrapper) {
 		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, ""); //$NON-NLS-1$
-		searchComposite.getResultTable().getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		searchComposite.getResultTable().addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				notifyOutputChanged();
 			}
