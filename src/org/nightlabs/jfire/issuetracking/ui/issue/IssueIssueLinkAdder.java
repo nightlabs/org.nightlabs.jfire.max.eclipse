@@ -33,7 +33,7 @@ public class IssueIssueLinkAdder extends AbstractIssueLinkAdder {
 		iViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
-				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
 						notifyIssueLinkDoubleClickListeners();

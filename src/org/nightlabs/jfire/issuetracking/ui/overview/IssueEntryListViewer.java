@@ -58,7 +58,7 @@ public class IssueEntryListViewer
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		issueTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())

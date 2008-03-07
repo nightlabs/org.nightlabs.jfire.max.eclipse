@@ -59,7 +59,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			}
 		});
 
-		issueLinkAdderComposite.getIssueLinkTable().getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueLinkAdderComposite.getIssueLinkTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
 				IssueLinkHandler linkHandler = 
@@ -107,7 +107,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		@Override
 		public void run() {
-			if (issueLinkAdderComposite.getIssueLinkTable().getTable().getSelectionIndex() != -1) {
+			if (issueLinkAdderComposite.getIssueLinkTable().getSelectionIndex() != -1) {
 				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
 				table.getIssueLinkHandler(table.getFirstSelectedElement()).openLinkObject(table.getFirstSelectedElement());
 			}

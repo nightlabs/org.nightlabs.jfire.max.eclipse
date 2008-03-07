@@ -77,7 +77,7 @@ extends ToolBarSectionPart
 		public void run() {
 			IssueQueryRenameDialog dialog = new IssueQueryRenameDialog(RCPUtil.getActiveShell());
 			
-			if (storedIssueQueryTable.getTable().getSelectionIndex() != -1) {
+			if (storedIssueQueryTable.getSelectionIndex() != -1) {
 				StoredIssueQuery selectedIssueQuery = storedIssueQueryTable.getFirstSelectedElement();
 				dialog.setNameString(selectedIssueQuery.getName());
 
