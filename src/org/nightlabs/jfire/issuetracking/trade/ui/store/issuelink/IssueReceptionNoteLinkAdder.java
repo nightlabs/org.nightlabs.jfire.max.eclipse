@@ -32,7 +32,7 @@ public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
 		rViewer = new ReceptionNoteEntryViewer(new ReceptionNoteEntryFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite<ReceptionNote> tableComposite) {
-				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
 						notifyIssueLinkDoubleClickListeners();

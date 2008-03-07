@@ -31,7 +31,7 @@ public class IssueDeliveryNoteLinkAdder extends AbstractIssueLinkAdder {
 		dViewer = new DeliveryNoteEntryViewer(new DeliveryNoteEntryFactory().createEntry()){
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
-				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
 						notifyIssueLinkDoubleClickListeners();
