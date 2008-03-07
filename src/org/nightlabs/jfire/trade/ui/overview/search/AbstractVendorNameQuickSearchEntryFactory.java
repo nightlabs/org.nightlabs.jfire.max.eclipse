@@ -12,7 +12,8 @@ public abstract class AbstractVendorNameQuickSearchEntryFactory<R, Q extends Abs
 	extends AbstractQuickSearchEntryFactory<R, Q>
 {
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return Messages.getString("org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearchEntry.name"); //$NON-NLS-1$
 	}
 }

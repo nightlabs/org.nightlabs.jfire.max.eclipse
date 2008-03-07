@@ -1561,6 +1561,7 @@ gibt's nimmer - oder?! Marco.
          point="org.nightlabs.jfire.base.ui.quickSearchEntry">
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.account.search.AccountNameQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer"
             name="Name">
       </quickSearchEntryFactory>
@@ -1571,6 +1572,7 @@ gibt's nimmer - oder?! Marco.
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteIDQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
@@ -1586,6 +1588,7 @@ gibt's nimmer - oder?! Marco.
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceIDQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
@@ -1601,6 +1604,7 @@ gibt's nimmer - oder?! Marco.
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferIDQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
@@ -1616,6 +1620,7 @@ gibt's nimmer - oder?! Marco.
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderIDQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer"
             name="ID">
       </quickSearchEntryFactory>
@@ -1630,7 +1635,24 @@ gibt's nimmer - oder?! Marco.
             name="Vendor Name">
       </quickSearchEntryFactory>
       <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.search.ReceptionNoteCreatorNameQuickSearchFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer"
+            name="Creator Name">
+      </quickSearchEntryFactory>
+      <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.search.ReceptionNoteCustomerNameQuickSearchFactory"
+            default="true"
+            id="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer"
+            name="Customer Name">
+      </quickSearchEntryFactory>
+      <quickSearchEntryFactory
+            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.search.ReceptionNoteVendorNameQuickSearchFactory"
+            id="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer"
+            name="Vendor Name">
+      </quickSearchEntryFactory>
+      <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryNameQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer"
             name="Name">
       </quickSearchEntryFactory>
