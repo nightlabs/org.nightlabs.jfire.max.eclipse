@@ -50,7 +50,7 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 		client.getGridLayout().numColumns = 1; 
 
 		issuePriorityTable = new IssuePriorityTable(client, SWT.NONE);
-		issuePriorityTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issuePriorityTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())

@@ -49,7 +49,7 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 		client.getGridLayout().numColumns = 1; 
 
 		issueResolutionTable = new IssueResolutionTable(client, SWT.NONE);
-		issueResolutionTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueResolutionTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())

@@ -105,7 +105,7 @@ extends WizardHopPage {
 				}
 			}
 		});
-		issueTypeResolutionTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueTypeResolutionTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				if (issueTypeResolutionTable.getFirstSelectedElement() != null) {
 					if (getContainer() instanceof WizardDialog) {

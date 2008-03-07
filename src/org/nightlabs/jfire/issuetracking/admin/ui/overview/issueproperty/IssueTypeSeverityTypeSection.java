@@ -49,7 +49,7 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 		client.getGridLayout().numColumns = 1; 
 
 		issueSeverityTypeTable = new IssueSeverityTypeTable(client, SWT.NONE);
-		issueSeverityTypeTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueSeverityTypeTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())

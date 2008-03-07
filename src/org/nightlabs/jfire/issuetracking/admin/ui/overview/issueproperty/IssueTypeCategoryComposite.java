@@ -28,7 +28,7 @@ extends XComposite {
 	{
 		IssueTypeTable issueTypeTable = new IssueTypeTable(this, SWT.NONE);
 		
-		issueTypeTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueTypeTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
 				if (s.isEmpty())

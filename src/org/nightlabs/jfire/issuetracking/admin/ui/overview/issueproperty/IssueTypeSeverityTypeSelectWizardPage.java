@@ -105,7 +105,7 @@ extends WizardHopPage {
 				}
 			}
 		});
-		issueTypeSeverityTypeTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		issueTypeSeverityTypeTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent arg0) {
 				if (issueTypeSeverityTypeTable.getFirstSelectedElement() != null) {
 					if (getContainer() instanceof WizardDialog) {
