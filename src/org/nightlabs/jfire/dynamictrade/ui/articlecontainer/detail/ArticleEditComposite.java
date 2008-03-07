@@ -84,7 +84,7 @@ public class ArticleEditComposite extends XComposite
 			}
 		});
 
-		articleTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		articleTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event)
 			{
 				Collection c = articleTable.getSelectedElements();

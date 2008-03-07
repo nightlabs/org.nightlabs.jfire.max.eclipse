@@ -28,8 +28,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.Locale;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -64,7 +62,6 @@ import org.nightlabs.l10n.NumberFormatter;
  */
 public class ArticleTable
 extends AbstractTableComposite
-implements ISelectionProvider
 {
 	protected static class ArticleContentProvider
 	implements IStructuredContentProvider
@@ -240,12 +237,8 @@ implements ISelectionProvider
 
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener() {
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-			if (!tableViewer.getTable().isDisposed())
-				tableViewer.refresh();
-//			for (Iterator it = articleChangeEvent.getArticles().iterator(); it.hasNext();) {
-//				Article article = (Article) it.next();
-//
-//			}
+			if (!getTableViewer().getTable().isDisposed())
+				getTableViewer().refresh();
 		}
 	};
 
@@ -325,47 +318,7 @@ implements ISelectionProvider
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
 	}
-
-//	private LinkedList selectionChangedListeners = new LinkedList();
 	
-	/**
-	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-	 */
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener)
-	{
-		tableViewer.addSelectionChangedListener(listener);
-//		selectionChangedListeners.add(listener);
-	}
-
-	/**
-	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
-	 */
-	@Override
-	public ISelection getSelection()
-	{
-		return tableViewer.getSelection();
-	}
-
-	/**
-	 * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-	 */
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener)
-	{
-		tableViewer.removeSelectionChangedListener(listener);
-//		selectionChangedListeners.remove(listener);
-	}
-
-	/**
-	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
-	 */
-	@Override
-	public void setSelection(ISelection selection)
-	{
-		tableViewer.setSelection(selection);
-	}
-
 	@Override
 	public void setMenu(Menu menu)
 	{

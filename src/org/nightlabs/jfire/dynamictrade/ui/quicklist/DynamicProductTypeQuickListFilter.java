@@ -13,13 +13,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -34,9 +31,11 @@ extends AbstractProductTypeQuickListFilter
 
 	private DynamicProductTypeTable dynamicProductTypeTable;
 	
-	public Control createResultViewerControl(Composite parent)
+//	public Control createResultViewerControl(Composite parent)
+	public Control doCreateResultViewerControl(Composite parent)
 	{
-		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
+//		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
+		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this);
 		return dynamicProductTypeTable;
 	}
 		
@@ -50,8 +49,6 @@ extends AbstractProductTypeQuickListFilter
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					StoreManager storeManager = StoreManagerUtil.getHome(
-							Login.getLogin().getInitialContextProperties()).create();
 					final Collection<DynamicProductType> dynamicProductTypes = 
 						DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
 							ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS, 
@@ -67,6 +64,11 @@ extends AbstractProductTypeQuickListFilter
 				}
 			}
 		}.schedule();		
+	}
+
+	@Override
+	public Control getResultViewerControl() {
+		return dynamicProductTypeTable;
 	}
 
 }
