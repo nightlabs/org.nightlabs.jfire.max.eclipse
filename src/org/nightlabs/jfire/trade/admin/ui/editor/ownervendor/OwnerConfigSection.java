@@ -45,7 +45,7 @@ implements IProductTypeSectionPart
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		this.ownerEditComposite = new LegalEntityEditComposite(fadeableComposite, 
-				SWT.NONE, this, false);
+				SWT.NONE);
 		this.ownerEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerEditComposite.addLegalEntityValueChangedListener( 
 				new ILegalEntityValueChangedListener()

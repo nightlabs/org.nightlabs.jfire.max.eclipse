@@ -42,7 +42,7 @@ implements IProductTypeSectionPart
 	{
 		super(page, parent, style, "Vendor");
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		this.vendorEditComposite = new LegalEntityEditComposite(fadeableComposite, SWT.NONE, this, false);
+		this.vendorEditComposite = new LegalEntityEditComposite(fadeableComposite, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorEditComposite.addLegalEntityValueChangedListener( 
 				new ILegalEntityValueChangedListener()

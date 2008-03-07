@@ -24,18 +24,13 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
 public class LegalEntityEditComposite 
 extends XComposite
 {	
-	private boolean showButtons = true;
 	private Text legalText;
 	private LegalEntity legalEntity;
-	private IDirtyStateManager dirtyStateManager;
 	private ListenerList legalEntityValueChangedListeners = new ListenerList();
 	
-	public LegalEntityEditComposite(Composite parent, int style, 
-			IDirtyStateManager dirtyStateManager, boolean showButtons) 
+	public LegalEntityEditComposite(Composite parent, int style) 
 	{
 		super(parent, style);
-		this.dirtyStateManager = dirtyStateManager;
-		this.showButtons = showButtons;
 		this.getGridLayout().numColumns = 2;
 		this.getGridData().grabExcessVerticalSpace = false;
 		legalText = new Text(this, XComposite.getBorderStyle(this) | SWT.SINGLE | SWT.READ_ONLY);
