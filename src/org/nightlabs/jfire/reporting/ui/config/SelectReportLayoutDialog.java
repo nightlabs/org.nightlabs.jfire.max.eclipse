@@ -123,7 +123,7 @@ public class SelectReportLayoutDialog extends CenteredDialog {
 				okButton.setEnabled(selectedRegistryItem != null && selectedRegistryItem instanceof ReportLayout);
 			}
 		});
-		itemTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		itemTable.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				selectedRegistryItem = itemTable.getFirstSelectedElement();
 				if (selectedRegistryItem != null && selectedRegistryItem instanceof ReportLayout) {
