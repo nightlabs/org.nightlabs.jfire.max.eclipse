@@ -84,8 +84,8 @@ implements IProductTypeSectionPart
 		menuManager.add(addNestedProductTypeAction);
 		menuManager.add(removeNestedProductTypeAction);
 		
-		Menu menu = menuManager.createContextMenu(nestedProductTypeTable.getTable());
-		nestedProductTypeTable.getTable().setMenu(menu);
+		Menu menu = menuManager.createContextMenu(nestedProductTypeTable.getControl());
+		nestedProductTypeTable.setMenu(menu);
 		
 		updateToolBarManager();
 	}
