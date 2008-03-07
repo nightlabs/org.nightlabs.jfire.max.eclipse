@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -25,18 +24,18 @@ import org.nightlabs.progress.ProgressMonitor;
 
 public class VoucherTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
-//extends AbstractProductTypeViewerQuickListFilter
 {
-
 	public static String[] DEFAULT_FETCH_GROUP = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
 
 	private VoucherTypeTable voucherTypeTable;
 
-	public Control createResultViewerControl(Composite parent)
+//  public Control createResultViewerControl(Composite parent)
+	protected Control doCreateResultViewerControl(Composite parent)
 	{
-		voucherTypeTable = new VoucherTypeTable(parent, this, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
+//		voucherTypeTable = new VoucherTypeTable(parent);
+		voucherTypeTable = new VoucherTypeTable(parent, this);
 		return voucherTypeTable;
 	}
 	
@@ -44,13 +43,7 @@ extends AbstractProductTypeQuickListFilter
 	{
 		return voucherTypeTable;
 	}
-	
-//	@Override
-//	public StructuredViewer createViewer(Composite parent) {
-//		voucherTypeTable = new VoucherTypeTable(parent, this);
-//		return voucherTypeTable.getTableViewer();
-//	}
-	
+		
 	public String getDisplayName()
 	{
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
@@ -63,8 +56,10 @@ extends AbstractProductTypeQuickListFilter
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					final Collection voucherTypes = storeManager.searchProductTypes(searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					StoreManager storeManager = StoreManagerUtil.getHome(
+							Login.getLogin().getInitialContextProperties()).create();
+					final Collection voucherTypes = storeManager.searchProductTypes(
+							searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							voucherTypeTable.setInput(voucherTypes);

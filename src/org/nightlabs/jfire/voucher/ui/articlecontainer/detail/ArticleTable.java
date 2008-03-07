@@ -28,8 +28,6 @@ package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
 import java.util.Locale;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -219,7 +217,7 @@ implements ISelectionProvider
 		this.articleContentProvider = new ArticleContentProvider(articleEdit);
 		this.articleLabelProvider = new ArticleLabelProvider();
 		initTable();
-		getTable().setHeaderVisible(true);
+		setHeaderVisible(true);
 		clientArticleSegmentGroups = ((ClientArticleSegmentGroups)articleEdit.getSegmentEdit().getArticleSegmentGroup().getArticleSegmentGroups());
 		clientArticleSegmentGroups.addArticleChangeListener(articleChangeListener);
 		addDisposeListener(new DisposeListener() {
@@ -231,12 +229,8 @@ implements ISelectionProvider
 
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener() {
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-			if (tableViewer != null && !tableViewer.getTable().isDisposed())
-				tableViewer.refresh();
-//			for (Iterator it = articleChangeEvent.getArticles().iterator(); it.hasNext();) {
-//				Article article = (Article) it.next();
-//
-//			}
+			if (getTableViewer() != null && !getTable().isDisposed())
+				refresh();
 		}
 	};
 
@@ -310,30 +304,6 @@ implements ISelectionProvider
 	{
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
-	}
-
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener)
-	{
-		tableViewer.addSelectionChangedListener(listener);
-	}
-
-	@Override
-	public ISelection getSelection()
-	{
-		return tableViewer.getSelection();
-	}
-
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener)
-	{
-		tableViewer.removeSelectionChangedListener(listener);
-	}
-
-	@Override
-	public void setSelection(ISelection selection)
-	{
-		tableViewer.setSelection(selection);
 	}
 
 	@Override
