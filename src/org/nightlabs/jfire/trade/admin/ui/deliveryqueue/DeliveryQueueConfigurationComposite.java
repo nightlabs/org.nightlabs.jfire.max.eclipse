@@ -77,7 +77,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 				DeliveryQueueConfigurationComposite.this.dirtyStateManager.markDirty();
 			}
 		});
-		pqTableComposite.getTableViewer().setComparator(new ViewerComparator() {
+		pqTableComposite.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
 				if (e1 instanceof DeliveryQueue && e2 instanceof DeliveryQueue) {
@@ -230,7 +230,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			// TODO WORKAROUND to circumvent the JFace bug that checkbox states are not correctly updated
 			// when an element is deleted or removed from the model and the view is refreshed.
 			// We therefore delete the element from the model and the view manually without refreshing the view.
-			pqTableComposite.getTableViewer().remove(selectedQueue);
+			pqTableComposite.removeElement(selectedQueue);
 			// END WORKAROUND
 			
 			updateGUI();

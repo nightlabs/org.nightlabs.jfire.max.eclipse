@@ -40,7 +40,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -74,10 +73,8 @@ extends DynamicPathWizardPage
 	public static final String PROPERTY_ACCOUNT = "account"; //$NON-NLS-1$
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-
 	private Label currencyLabel;
 	private CurrencyCombo currencyCombo;
-//	private AccountTable accountTable;
 	private AccountListComposite accountTable;
 	private boolean allowCurrencySelection;
 	private boolean optionalAccount;
@@ -97,12 +94,11 @@ extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		
-		SelectionListener selectionListener = new SelectionListener() {
-			public void widgetSelected(SelectionEvent e) {
+		ISelectionChangedListener selectionListener = new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
 				propertyChangeSupport.firePropertyChange(PROPERTY_ACCOUNT, null, getAccount());
 				getContainer().updateButtons();
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		};
 
@@ -140,11 +136,9 @@ extends DynamicPathWizardPage
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}
 		});
-//		currencyCombo.getGridData().grabExcessHorizontalSpace = false;
 
-//		accountTable = new AccountTable(wrapper, SWT.NONE, Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN);
 		accountTable = new AccountListComposite(wrapper, SWT.NONE);
-		accountTable.getTable().addSelectionListener(selectionListener);
+		accountTable.addSelectionChangedListener(selectionListener);
 
 		return wrapper;
 	}
