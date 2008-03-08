@@ -319,7 +319,7 @@
         </expressionProviderEntry>
         <expressionProviderEntry
               categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
-              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.dataSetParameter"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.resolveJDOObject"
               insertText="JFireReportingHelper.getJDOObject()"
               name="Resolve JDO object from its id"
               tooltip="Resolve JDO object from its id (Pass the String-representation of the id here).">

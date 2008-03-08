@@ -118,7 +118,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 	}
 	
 	public ContentProvider getContentProvider() {
-		return (ContentProvider)tableViewer.getContentProvider();
+		return (ContentProvider) getTableViewer().getContentProvider();
 	}
 
 
@@ -184,7 +184,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 		tableViewer.setLabelProvider(new LabelProvider());
 		
 		tableViewer.setColumnProperties(new String[] {COL_KEY, COL_VAL});
-		tableViewer.setCellEditors(new CellEditor[] {new TextCellEditor(table), new TextCellEditor(table)});
+		tableViewer.setCellEditors(new CellEditor[] {new TextCellEditor(getTable()), new TextCellEditor(getTable())});
 		tableViewer.setCellModifier(new CellModifier());
 	}
 
