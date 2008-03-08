@@ -142,7 +142,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 				});
 			}
 		};
-		offerTable.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		offerTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				IStructuredSelection sel = (IStructuredSelection) event.getSelection();

@@ -53,10 +53,10 @@ public class OrderEntryViewer
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<Order> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		list.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		list.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditOrderAction editAction = new EditOrderAction();
-				editAction.setSelection(list.getTableViewer().getSelection());
+				editAction.setSelection(list.getSelection());
 				editAction.run();
 			}
 		});

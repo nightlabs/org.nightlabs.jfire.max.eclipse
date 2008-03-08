@@ -201,10 +201,10 @@ extends XComposite
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							productTypeTableComposite.getTableViewer().setInput(productTypes);
-							if (productTypeTableComposite.getTableViewer().getTable().getItemCount() == 1) {
-								productTypeTableComposite.getTableViewer().getTable().select(0);
-								productTypeTableComposite.getTableViewer().getTable().setFocus();
+							productTypeTableComposite.setInput(productTypes);
+							if (productTypeTableComposite.getItemCount() == 1) {
+								productTypeTableComposite.select(0);
+								productTypeTableComposite.setFocus();
 							}
 						}
 					});

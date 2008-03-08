@@ -302,7 +302,7 @@ extends AbstractTableComposite<Account>
 	private NotificationListener accountChangedListener = new NotificationAdapterCallerThread()
 	{
 		public void notify(NotificationEvent notificationEvent) {
-			List<Account> accountList = (List<Account>)tableViewer.getInput();
+			List<Account> accountList = (List<Account>)getTableViewer().getInput();
 			for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
 				for(Account a : accountList){
@@ -327,8 +327,8 @@ extends AbstractTableComposite<Account>
 										if (loadAccountJob != thisJob)
 											return;
 										
-										if(!tableViewer.getTable().isDisposed())
-											tableViewer.update(newAccount, null);
+										if(!getTable().isDisposed())
+											getTableViewer().update(newAccount, null);
 									}
 								});
 								return Status.OK_STATUS;
@@ -347,7 +347,6 @@ extends AbstractTableComposite<Account>
 	private Job loadAccountJob = null;
 	private synchronized void loadAccount()
 	{
-//		final AccountEditorInput accountEditorInput = (AccountEditorInput) getEditorInput();
 		
 	}
 	
@@ -371,7 +370,7 @@ extends AbstractTableComposite<Account>
 					public void run()
 					{
 						getTableViewer().remove(account);
-						tableViewer.refresh();
+						getTableViewer().refresh();
 					}
 				});
 				return Status.OK_STATUS;

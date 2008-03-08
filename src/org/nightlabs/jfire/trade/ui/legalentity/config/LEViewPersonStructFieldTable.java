@@ -52,8 +52,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class LEViewPersonStructFieldTable extends AbstractTableComposite {
-
+public class LEViewPersonStructFieldTable 
+extends AbstractTableComposite 
+{
 	private static class ContentProvider implements IStructuredContentProvider {
 		
 		private List<String> cfModFields = new ArrayList<String>();
@@ -104,7 +105,7 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 			cfModFields.remove(structFieldOID);
 		}
 		
-		public List getCfModFields() {
+		public List<String> getCfModFields() {
 			return cfModFields;
 		}
 	}
@@ -140,10 +141,6 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 		}
 	}
 	
-	
-	/**
-	 * 
-	 */
 	public LEViewPersonStructFieldTable(Composite parent, int style) {
 		super(parent, style, true);
 	}
@@ -159,27 +156,27 @@ public class LEViewPersonStructFieldTable extends AbstractTableComposite {
 	}
 	
 	public void moveSelectedUp() {
-		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
-		((ContentProvider)tableViewer.getContentProvider()).moveUp((String)selection.getFirstElement());
+		((ContentProvider)getTableViewer().getContentProvider()).moveUp((String)selection.getFirstElement());
 	}
 	
 	public void moveSelectedDown() {
-		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
-		((ContentProvider)tableViewer.getContentProvider()).moveDown((String)selection.getFirstElement());
+		((ContentProvider)getTableViewer().getContentProvider()).moveDown((String)selection.getFirstElement());
 	}
 	
 	public void removeSelected() {
-		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
-		((ContentProvider)tableViewer.getContentProvider()).remove((String)selection.getFirstElement());
+		((ContentProvider)getTableViewer().getContentProvider()).remove((String)selection.getFirstElement());
 	}
 	
-	public List getStructFields() {
-		return ((ContentProvider)tableViewer.getContentProvider()).getCfModFields();
+	public List<String> getStructFields() {
+		return ((ContentProvider)getTableViewer().getContentProvider()).getCfModFields();
 	}
 }

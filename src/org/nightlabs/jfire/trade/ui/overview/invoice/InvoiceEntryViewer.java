@@ -55,10 +55,10 @@ public class InvoiceEntryViewer
 	@Override
 	protected void addResultTableListeners(final AbstractTableComposite<Invoice> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditInvoiceAction editAction = new EditInvoiceAction();
-				editAction.setSelection(tableComposite.getTableViewer().getSelection());
+				editAction.setSelection(tableComposite.getSelection());
 				editAction.run();
 			}
 		});

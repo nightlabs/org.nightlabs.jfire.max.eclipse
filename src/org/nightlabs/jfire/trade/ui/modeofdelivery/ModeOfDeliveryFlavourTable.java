@@ -20,7 +20,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 
 public class ModeOfDeliveryFlavourTable
-		extends AbstractTableComposite
+extends AbstractTableComposite
 {
 	private static class ContentProvider implements IStructuredContentProvider {
 
@@ -59,13 +59,13 @@ public class ModeOfDeliveryFlavourTable
 	public ModeOfDeliveryFlavourTable(Composite parent)
 	{
 		super(parent, SWT.NONE, true, DEFAULT_STYLE_SINGLE_BORDER);
-		table.setHeaderVisible(false); // if this is changed to true, we need to localise the tableColumns
+		setHeaderVisible(false); // if this is changed to true, we need to localize the tableColumns
 	}
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
-		// the header is not visible => no need to externalise
+		// the header is not visible => no need to externalize
 		new TableColumn(table, SWT.LEFT).setText("ModeOfDeliveryFlavour"); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));
 	}

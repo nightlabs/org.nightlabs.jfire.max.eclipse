@@ -64,8 +64,9 @@ import org.nightlabs.util.Util;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class AccountSummaryAccountsTable extends AbstractTableComposite {
-
+public class AccountSummaryAccountsTable 
+extends AbstractTableComposite<Account> 
+{
 	private class ContentProvider extends TableContentProvider {
 		private Account account;
 		
@@ -140,18 +141,6 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 		super(parent, style, initTable);
 	}
 
-//	/**
-//	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(TableViewer, org.eclipse.swt.widgets.Table)
-//	 */
-//	protected void createTableColumns(TableViewer tableViewer, Table table) {
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSummaryAccountsTable.summaryAccountTableColumn.text")); //$NON-NLS-1$
-////		table.setLayout(new WeightedTableLayout(new int[] {1}));
-//		TableLayout tl = new TableLayout();
-//		tl.addColumnData(new ColumnWeightData(1));
-//		table.setLayout(tl);
-//	}
-
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSummaryAccountsTable.summaryAccountTableColumn.text")); //$NON-NLS-1$
@@ -168,24 +157,24 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 	}
 	
 	public void setInput(Account account) {
-		tableViewer.setInput(account);
+		getTableViewer().setInput(account);
 	}
 	
 	public void addSummaryAccount(SummaryAccount summaryAccount) {
-		((ContentProvider)tableViewer.getContentProvider()).addSummaryAccount(summaryAccount);
-		tableViewer.refresh();
+		((ContentProvider)getTableViewer().getContentProvider()).addSummaryAccount(summaryAccount);
+		getTableViewer().refresh();
 	}
 	
 	public void removeSummaryAccount(SummaryAccount summaryAccount) {
-		((ContentProvider)tableViewer.getContentProvider()).removeSummaryAccount(summaryAccount);
-		tableViewer.refresh();
+		((ContentProvider)getTableViewer().getContentProvider()).removeSummaryAccount(summaryAccount);
+		getTableViewer().refresh();
 	}
 
 	/**
 	 * @return The first selected SummaryAccount or null if none selected
 	 */
 	public Account getSelectedSummaryAccount() {
-		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if (selection.size() > 0)
 			return (Account)selection.getFirstElement();
 		return null;
@@ -194,9 +183,9 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 	/**
 	 * @return All selected SummaryAccount or null if none selected
 	 */
-	public Collection getSelectedSummaryAccounts() {
-		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
-		List result = new ArrayList();
+	public Collection<Account> getSelectedSummaryAccounts() {
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
+		List<Account> result = new ArrayList<Account>();
 		if (selection.size() > 0) {
 			for (Iterator iter = selection.iterator(); iter.hasNext();) {
 				Account account = (Account) iter.next();
@@ -211,12 +200,12 @@ public class AccountSummaryAccountsTable extends AbstractTableComposite {
 	 * {@link org.nightlabs.jfire.accounting.AccountingManager#setAccountSummaryAccounts(org.nightlabs.jfire.transfer.id.AnchorID, java.util.Collection)}
 	 * to set the list of SummaryAccounts for the account set here with {@link #setInput(Account)}.
 	 */
-	public Collection getSummaryAccounts() {
-		Collection summaryAccounts = ((ContentProvider)tableViewer.getContentProvider()).getSummaryAccounts();
-		Collection result = new HashSet();
-		for (Iterator iter = summaryAccounts.iterator(); iter.hasNext();) {
-			SummaryAccount summaryAccount = (SummaryAccount) iter.next();
-			result.add(JDOHelper.getObjectId(summaryAccount));
+	public Collection<AnchorID> getSummaryAccounts() {
+		Collection<SummaryAccount> summaryAccounts = ((ContentProvider)getTableViewer().getContentProvider()).getSummaryAccounts();
+		Collection<AnchorID> result = new HashSet<AnchorID>();
+		for (Iterator<SummaryAccount> iter = summaryAccounts.iterator(); iter.hasNext();) {
+			SummaryAccount summaryAccount = iter.next();
+			result.add((AnchorID)JDOHelper.getObjectId(summaryAccount));
 		}
 		return result;
 	}

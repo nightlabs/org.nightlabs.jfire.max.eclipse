@@ -108,36 +108,26 @@ implements IDeliveryEntryPage
 {
 	private List<? extends ProductType> productTypes;
 	private org.eclipse.swt.widgets.List productTypeGUIList;
-
 	private List articles;
-
 	private List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours;
-//	private org.eclipse.swt.widgets.List modeOfDeliveryFlavourGUIList;
 	private ModeOfDeliveryFlavourTable modeOfDeliveryFlavourTable;
-	
 	private Label clientDeliveryProcessorFactoryLabel;
 	/**
 	 * Contains items of type {@link ClientDeliveryProcessorFactory}.
 	 */
-	private List clientDeliveryProcessorFactoryList = null;
+	private List<ClientDeliveryProcessorFactory> clientDeliveryProcessorFactoryList = null;
 	private Combo clientDeliveryProcessorFactoryCombo;
-
 	private Label serverDeliveryProcessorLabel;
 	/**
 	 * Contains items of type {@link ServerDeliveryProcessor}.
 	 */
-	private List serverDeliveryProcessorList = new ArrayList();
+	private List<ServerDeliveryProcessor> serverDeliveryProcessorList = new ArrayList<ServerDeliveryProcessor>();
 	private Combo serverDeliveryProcessorCombo;
-
-	public class Test {
-		
-	}
 	private ModeOfDeliveryFlavour selectedModeOfDeliveryFlavour = null;
 	private ClientDeliveryProcessorFactory selectedClientDeliveryProcessorFactory = null;
 	private ClientDeliveryProcessor clientDeliveryProcessor = null;
 	private ServerDeliveryProcessor selectedServerDeliveryProcessor = null;
 	
-//	private DeliveryWizardHop wizardHop;
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
 		return (DeliveryWizardHop) getWizardHop();
@@ -152,45 +142,16 @@ implements IDeliveryEntryPage
 		setMessage(null);
 		setDescription(
 				Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.description")); //$NON-NLS-1$
-
 		new DeliveryWizardHop(this, delivery); // self-registering
-
 		this.productTypes = productTypes;
 	}
 	
-//	public DeliveryEntryPage(List<Delivery> deliveryList, List<ProductType> productTypes, List<Article> articles, List<ModeOfDeliveryFlavour> modFlavours) {
-//		super(DeliveryEntryPage.class.getName() + '/' + deliveryList.get(0).getDeliveryID(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.title"), //$NON-NLS-1$
-//				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), DeliveryEntryPage.class, null, ImageDimension._75x70));
-//
-//		setMessage(null);
-//		setDescription(
-//				Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.description")); //$NON-NLS-1$
-//
-//		new DeliveryWizardHop(this, deliveryList); // self-registering
-//
-//		this.productTypes = productTypes;
-//		this.modeOfDeliveryFlavours = modFlavours;
-//
-//		Collections.sort(modeOfDeliveryFlavours, new Comparator<ModeOfDeliveryFlavour>() {
-//			public int compare(ModeOfDeliveryFlavour o1, ModeOfDeliveryFlavour o2) {
-//				String name1 = o1.getName().getText(Locale.getDefault().getLanguage());
-//				String name2 = o2.getName().getText(Locale.getDefault().getLanguage());
-//				return name1.compareTo(name2);
-//			}
-//		});
-//	}
-
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	public Control createPageContents(Composite parent)
-	{
-//	 TODO remove test stuff
-//		getWizardHop().addHopPage(new TestWizardPage1("test1", "Delivery - Test1", "This is step 1 of delivery"));
-//		getWizardHop().addHopPage(new TestWizardPage1("test2", "Delivery - Test2", "This is step 2 of delivery"));
-// end test
-		
+	{		
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.productTypesLabel.text")); //$NON-NLS-1$
@@ -209,14 +170,7 @@ implements IDeliveryEntryPage
 		modeOfDeliveryFlavourTable = new ModeOfDeliveryFlavourTable(page);
 		modeOfDeliveryFlavourTable.setInput(modeOfDeliveryFlavours);
 
-//		modeOfDeliveryFlavourGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-//		modeOfDeliveryFlavourGUIList.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		for (Iterator it = modeOfDeliveryFlavours.iterator(); it.hasNext(); ) {
-//			ModeOfDeliveryFlavour modeOfDeliveryFlavour = (ModeOfDeliveryFlavour) it.next();
-//			modeOfDeliveryFlavourGUIList.add(modeOfDeliveryFlavour.getName().getText(Locale.getDefault().getLanguage()));
-//		}
-
-		modeOfDeliveryFlavourTable.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		modeOfDeliveryFlavourTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent arg0)
 			{
 				try {
@@ -227,20 +181,6 @@ implements IDeliveryEntryPage
 				}
 			}
 		});
-//		modeOfDeliveryFlavourGUIList.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e)
-//			{
-//				try {
-//					setMessage(null);
-//					modeOfDeliveryFlavourGUIListSelectionChanged();
-//				} catch (Exception x) {
-//					throw new RuntimeException(x);
-//				}
-//			}
-//		});
-
-//		if (modeOfDeliveryFlavourGUIList.getItemCount() > 0)
-//			modeOfDeliveryFlavourGUIList.select(0);
 
 		spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		spacer.getGridData().grabExcessVerticalSpace = false;
@@ -308,7 +248,6 @@ implements IDeliveryEntryPage
 	protected void modeOfDeliveryFlavourGUIListSelectionChanged()
 	{
 		setErrorMessage(null);
-//		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
 
 		// remove all ClientDeliveryProcessorFactory s as they will be fetched again
 		clientDeliveryProcessorFactoryCombo.removeAll();
@@ -324,8 +263,6 @@ implements IDeliveryEntryPage
 
 		// set selectedModeOfDeliveryFlavour
 		selectedModeOfDeliveryFlavour = modeOfDeliveryFlavourTable.getSelectedModeOfDeliveryFlavour();
-//		int idx = modeOfDeliveryFlavourGUIList.getSelectionIndex();
-//		if (idx >= 0) {
 		if (selectedModeOfDeliveryFlavour != null) {
 //			selectedModeOfDeliveryFlavour = (ModeOfDeliveryFlavour) modeOfDeliveryFlavours.get(idx);
 			getDeliveryEntryPageCfMod().setModeOfDeliveryFlavourPK(selectedModeOfDeliveryFlavour.getPrimaryKey());
@@ -338,19 +275,17 @@ implements IDeliveryEntryPage
 				throw new RuntimeException(e);
 			}
 
-			Collections.sort(clientDeliveryProcessorFactoryList, new Comparator(){
-				public int compare(Object obj0, Object obj1)
+			Collections.sort(clientDeliveryProcessorFactoryList, new Comparator<ClientDeliveryProcessorFactory>(){
+				public int compare(ClientDeliveryProcessorFactory cppf0, ClientDeliveryProcessorFactory cppf1)
 				{
-					ClientDeliveryProcessorFactory cppf0 = (ClientDeliveryProcessorFactory)obj0;
-					ClientDeliveryProcessorFactory cppf1 = (ClientDeliveryProcessorFactory)obj1;
 					String name0 = cppf0.getName();
 					String name1 = cppf1.getName();
 					return name0.compareTo(name1);
 				}
 			});
 
-			for (Iterator it = clientDeliveryProcessorFactoryList.iterator(); it.hasNext(); ) {
-				ClientDeliveryProcessorFactory cppf = (ClientDeliveryProcessorFactory) it.next();
+			for (Iterator<ClientDeliveryProcessorFactory> it = clientDeliveryProcessorFactoryList.iterator(); it.hasNext(); ) {
+				ClientDeliveryProcessorFactory cppf = it.next();
 				clientDeliveryProcessorFactoryCombo.add(cppf.getName());
 			}
 
@@ -373,7 +308,6 @@ implements IDeliveryEntryPage
 		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
 	
 		removeDeliveryPages();
-//		wizard.removeAllDynamicWizardPages();
 		
 		selectedClientDeliveryProcessorFactory = null;
 		clientDeliveryProcessor = null;
@@ -463,19 +397,17 @@ implements IDeliveryEntryPage
 				serverDeliveryProcessorList.add(spp);
 			}
 
-			Collections.sort(serverDeliveryProcessorList, new Comparator(){
-				public int compare(Object obj0, Object obj1)
+			Collections.sort(serverDeliveryProcessorList, new Comparator<ServerDeliveryProcessor>(){
+				public int compare(ServerDeliveryProcessor spp0, ServerDeliveryProcessor spp1)
 				{
-					ServerDeliveryProcessor spp0 = (ServerDeliveryProcessor)obj0;
-					ServerDeliveryProcessor spp1 = (ServerDeliveryProcessor)obj1;
 					String name0 = spp0.getName().getText(Locale.getDefault().getLanguage());
 					String name1 = spp1.getName().getText(Locale.getDefault().getLanguage());
 					return name0.compareTo(name1);
 				}
 			});
 
-			for (Iterator it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
-				ServerDeliveryProcessor serverDeliveryProcessor = (ServerDeliveryProcessor)it.next();
+			for (Iterator<ServerDeliveryProcessor> it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
+				ServerDeliveryProcessor serverDeliveryProcessor = it.next();
 				serverDeliveryProcessorCombo.add(serverDeliveryProcessor.getName().getText(Locale.getDefault().getLanguage()));
 			}
 
@@ -498,8 +430,6 @@ implements IDeliveryEntryPage
 
 	protected void addDeliveryPage(IWizardHopPage deliveryPage)
 	{
-//		((IDynamicPathWizard)getWizard()).addDynamicWizardPage(paymentPage);
-//		paymentPage.setWizard(getWizard());
 		getWizardHop().addHopPage(deliveryPage);
 	}
 
@@ -667,102 +597,5 @@ implements IDeliveryEntryPage
 		loadJob.schedule();
 		
 	}
-
-//	protected void modeOfDeliveryFlavourGUIListSelectionChanged()
-//	{
-//		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
-//
-////	 remove all ClientPaymentProcessorFactory s as they will be fetched again
-//		clientDeliveryProcessorFactoryCombo.removeAll();
-//		clientDeliveryProcessorFactoryList = null; // will be replaced
-//		clientDeliveryProcessor = null;
-//
-//		// remove all ServerPaymentProcessor s as they will be fetched again
-//		serverDeliveryProcessorCombo.removeAll();
-//		serverDeliveryProcessorList.clear();
-//		selectedClientDeliveryProcessorFactory = null;
-//
-//		int idx = clientDeliveryProcessorFactoryCombo.getSelectionIndex();
-//		if (idx >= 0) {
-//			selectedClientDeliveryProcessorFactory = (ClientDeliveryProcessorFactory) clientDeliveryProcessorFactoryList.get(idx);
-//
-//			clientDeliveryProcessor = selectedClientDeliveryProcessorFactory.createClientDeliveryProcessor();
-//			clientDeliveryProcessor.setClientDeliveryProcessorFactory(selectedClientDeliveryProcessorFactory);
-//			clientDeliveryProcessor.setCustomerID(wizard.getCustomerID());
-//			clientDeliveryProcessor.setDelivery(delivery);
-//			clientDeliveryProcessor.init();
-//
-//			wizard.addDeliveryData(clientDeliveryProcessor.getDeliveryData());
-//
-//			Set includedSPPs = clientDeliveryProcessor.getIncludedServerDeliveryProcessorIDs();
-//			Set excludedSPPs = null;
-//			if (includedSPPs == null)
-//				excludedSPPs = clientDeliveryProcessor.getExcludedServerDeliveryProcessorIDs();
-//
-//			IWizardHopPage deliveryPage = clientDeliveryProcessor.createDeliveryWizardPage();
-//// TODO			if (deliveryPage != null)
-//// TODO				wizard.addDynamicWizardPage(deliveryPage);
-//
-//			// load ServerDeliveryProcessor s
-//			ModeOfDeliveryFlavourID modeOfDeliveryFlavourID = (ModeOfDeliveryFlavourID) JDOHelper.getObjectId(selectedModeOfDeliveryFlavour);
-////			Collection c = getStoreManager().getServerDeliveryProcessorsForOneModeOfDeliveryFlavour(
-////					modeOfDeliveryFlavourID,
-////					new String[] {
-////							FetchPlan.DEFAULT,
-////							FetchPlan.VALUES,
-////							ServerDeliveryProcessor.FETCH_GROUP_NAME,
-////							ServerDeliveryProcessorName.FETCH_GROUP_NAMES
-////					});
-//			Collection c = null;
-//
-//			String clientDeliveryProcessorFactoryID = selectedClientDeliveryProcessorFactory.getID();
-//			for (Iterator it = c.iterator(); it.hasNext(); ) {
-//				ServerDeliveryProcessor spp = (ServerDeliveryProcessor) it.next();
-//				ServerDeliveryProcessorID sppID = (ServerDeliveryProcessorID) JDOHelper.getObjectId(spp);
-//
-//				if (includedSPPs != null && !includedSPPs.contains(sppID))
-//						continue;
-//
-//				if (excludedSPPs != null && excludedSPPs.contains(sppID))
-//					continue;
-//
-//				Set includedCPPFs = spp.getIncludedClientDeliveryProcessorFactoryIDs();
-//				Set excludedCPPFs = null;
-//				if (includedCPPFs == null)
-//					excludedCPPFs = spp.getExcludedClientDeliveryProcessorFactoryIDs();
-//
-//				if (includedCPPFs != null && !includedCPPFs.contains(clientDeliveryProcessorFactoryID))
-//					continue;
-//
-//				if (excludedCPPFs != null && excludedCPPFs.contains(clientDeliveryProcessorFactoryID))
-//					continue;
-//
-//				serverDeliveryProcessorList.add(spp);
-//			}
-//
-//			Collections.sort(serverDeliveryProcessorList, new Comparator(){
-//				public int compare(Object obj0, Object obj1)
-//				{
-//					ServerDeliveryProcessor spp0 = (ServerDeliveryProcessor)obj0;
-//					ServerDeliveryProcessor spp1 = (ServerDeliveryProcessor)obj1;
-//					String name0 = spp0.getName().getText(Locale.getDefault().getLanguage());
-//					String name1 = spp1.getName().getText(Locale.getDefault().getLanguage());
-//					return name0.compareTo(name1);
-//				}
-//			});
-//
-//			for (Iterator it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
-//				ServerDeliveryProcessor serverDeliveryProcessor = (ServerDeliveryProcessor)it.next();
-//				serverDeliveryProcessorCombo.add(serverDeliveryProcessor.getName().getText(Locale.getDefault().getLanguage()));
-//			}
-//
-//			if (serverDeliveryProcessorCombo.getItemCount() > 0)
-//				serverDeliveryProcessorCombo.select(0);
-//			else
-//				setMessage("No ServerDeliveryProcessor registered for the selected ModeOfDeliveryFlavour!", IMessageProvider.ERROR);
-//		}
-//
-//		serverDeliveryProcessorComboSelectionChanged();
-//	}
 
 }

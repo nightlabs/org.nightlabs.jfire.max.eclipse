@@ -60,7 +60,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		priceFragmentTypeList = new PriceFragmentTypeTable(page, SWT.BORDER);
-		priceFragmentTypeList.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		priceFragmentTypeList.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				((DynamicPathWizard)getWizard()).updateDialog();
 			}

@@ -32,7 +32,7 @@ class AccountChooserWizardPage extends WizardHopPage {
 		mainComposite.getGridLayout().numColumns = 1;
 
 		accountChooserComposite = new AccountChooserComposite(mainComposite, SWT.NONE);
-		accountChooserComposite.getAccountListComposite().getTableViewer().addSelectionChangedListener(new ISelectionChangedListener(){
+		accountChooserComposite.getAccountListComposite().addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				if(accountChooserComposite.getAccountListComposite().getFirstSelectedElement() != null){
 					Account selectedAccount = accountChooserComposite.getAccountListComposite().getFirstSelectedElement();

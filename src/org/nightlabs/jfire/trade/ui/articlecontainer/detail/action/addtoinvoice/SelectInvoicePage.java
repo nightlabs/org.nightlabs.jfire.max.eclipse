@@ -147,7 +147,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 				});
 			}
 		};
-		invoiceTable.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		invoiceTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				IStructuredSelection sel = (IStructuredSelection) event.getSelection();

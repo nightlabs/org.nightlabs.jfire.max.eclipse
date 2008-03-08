@@ -283,7 +283,7 @@ implements IPaymentEntryPage
 			serverPaymentProcessorCombo = new Combo(page, SWT.BORDER | SWT.READ_ONLY);
 			serverPaymentProcessorCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-			modeOfPaymentFlavourTable.getTableViewer().addSelectionChangedListener(
+			modeOfPaymentFlavourTable.addSelectionChangedListener(
 					new ISelectionChangedListener() {
 						public void selectionChanged(SelectionChangedEvent event)
 						{

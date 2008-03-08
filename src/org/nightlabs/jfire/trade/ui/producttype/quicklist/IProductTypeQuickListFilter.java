@@ -38,7 +38,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * Interface for filtering products within the ProductTypeQuickListView.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public interface IProductTypeQuickListFilter
 extends ISelectionProvider
@@ -52,6 +52,15 @@ extends ISelectionProvider
 	 */
 	Control createResultViewerControl(Composite parent);
 
+	/**
+	 * Returns the Control that displays the filtered results
+	 * to the user.
+	 * 
+	 * @param parent The parent composite of the ResultViewer
+	 * @return The created Control
+	 */	
+	Control getResultViewerControl();
+	
 	/**
 	 * Returns the display name of this filter
 	 * @return The display name of this filter
@@ -82,4 +91,10 @@ extends ISelectionProvider
 	 */
 	public void setSelection(ISelection selection);
 
+//	/**
+//	 * Returns true if the filter can display the selection or not
+//	 * @param selection the ISelection to check for
+//	 * @return true if the filter can display the selection or not
+//	 */
+//	public boolean canHandleSelection(ISelection selection);
 }

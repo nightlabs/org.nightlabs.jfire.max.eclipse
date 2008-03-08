@@ -57,7 +57,7 @@ extends CenteredDialog
 			if (!"".equals(earlySearchText.trim())) { //$NON-NLS-1$
 				abstractProductTypeSearchComposite.searchPressed();
 			}
-			if (!abstractProductTypeSearchComposite.getProductTypeTableComposite().getTableViewer().getSelection().isEmpty())
+			if (!abstractProductTypeSearchComposite.getProductTypeTableComposite().getSelection().isEmpty())
 				if (getButton(SEARCH_ID) != null)
 					getButton(SEARCH_ID).setEnabled(true);
 				else
@@ -79,8 +79,8 @@ extends CenteredDialog
 		
 		getButton(Window.OK).setEnabled(earlySearchResult);
 		if (abstractProductTypeSearchComposite != null) {
-			abstractProductTypeSearchComposite.getProductTypeTableComposite().getTableViewer().
-			addSelectionChangedListener(okListener);
+			abstractProductTypeSearchComposite.getProductTypeTableComposite().
+				addSelectionChangedListener(okListener);
 		}
 	}
 		

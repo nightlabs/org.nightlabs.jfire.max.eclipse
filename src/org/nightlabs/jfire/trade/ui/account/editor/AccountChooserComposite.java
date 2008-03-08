@@ -42,12 +42,9 @@ public class AccountChooserComposite extends XComposite{
 
 	private String[] FETCH_GROUPS_ACCOUNT = {FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT , LegalEntity.FETCH_GROUP_PERSON};
 	private AccountListComposite accountListComposite;
-
 	private Label accountFilterLabel;
 	private Text accountFilterName;
-
 	private Combo columnNameCombo;
-
 	private AnchorID selectedAccountAnchorID;
 
 	public AccountChooserComposite(Composite parent, int style) {
@@ -78,7 +75,7 @@ public class AccountChooserComposite extends XComposite{
 						String filterName = columnNameCombo.getText();
 						Account account = (Account)element;
 
-						Table accountTable = accountListComposite.getTable();
+						Table accountTable = accountListComposite.getTableViewer().getTable();
 
 						int index = -1;
 						for(int i = 0; i < accountTable.getColumnCount(); i++){
@@ -123,7 +120,7 @@ public class AccountChooserComposite extends XComposite{
 		accountListComposite = new AccountListComposite(
 				listGroup, SWT.NONE);
 
-		TableColumn[] tableColumns = accountListComposite.getTable().getColumns();
+		TableColumn[] tableColumns = accountListComposite.getTableViewer().getTable().getColumns();
 		for(int i = 0; i < tableColumns.length; i++){
 			TableColumn tc = tableColumns[i];
 			columnNameCombo.add(tc.getText());
@@ -158,7 +155,7 @@ public class AccountChooserComposite extends XComposite{
 		job.schedule();
 
 		accountListComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		accountListComposite.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener(){
+		accountListComposite.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				if(accountListComposite.getFirstSelectedElement() != null){
 					Account selectedAccount = accountListComposite.getFirstSelectedElement();

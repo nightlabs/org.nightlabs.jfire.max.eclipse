@@ -147,7 +147,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 				});
 			}
 		};
-		deliveryNoteTable.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		deliveryNoteTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				IStructuredSelection sel = (IStructuredSelection) event.getSelection();

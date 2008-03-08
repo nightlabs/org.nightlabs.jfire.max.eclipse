@@ -57,10 +57,10 @@ public class DeliveryNoteEntryViewer
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<DeliveryNote> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		list.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		list.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditDeliveryNoteAction editAction = new EditDeliveryNoteAction();
-				editAction.setSelection(list.getTableViewer().getSelection());
+				editAction.setSelection(list.getSelection());
 				editAction.run();
 			}
 		});

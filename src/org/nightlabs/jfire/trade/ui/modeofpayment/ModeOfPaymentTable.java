@@ -41,7 +41,7 @@ public class ModeOfPaymentTable
 
 	public ModeOfPaymentTable(Composite parent, int style, int viewerStyle) {
 		super(parent, style, true, viewerStyle);
-		table.setHeaderVisible(false); // if this is set to true, then table-columns need to be externalised
+		setHeaderVisible(false); // if this is set to true, then table-columns need to be externalised
 	}
 	
 	public ModeOfPaymentTable(Composite parent)

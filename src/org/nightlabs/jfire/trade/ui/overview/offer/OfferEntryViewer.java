@@ -60,10 +60,10 @@ public class OfferEntryViewer
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<Offer> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		list.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+		list.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				EditOfferAction editAction = new EditOfferAction();
-				editAction.setSelection(list.getTableViewer().getSelection());
+				editAction.setSelection(list.getSelection());
 				editAction.run();
 			}
 		});

@@ -34,11 +34,13 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- * 
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
@@ -80,11 +82,9 @@ implements IProductTypeQuickListFilter
 		if (selectionChangedListeners.isEmpty())
 			return;
 
-		SelectionChangedEvent event = new SelectionChangedEvent(
-				this, selection);
-
-		for (Iterator it = selectionChangedListeners.iterator(); it.hasNext();) {
-			ISelectionChangedListener listener = (ISelectionChangedListener) it.next();
+		SelectionChangedEvent event = new SelectionChangedEvent(this, selection);
+		for (Iterator<ISelectionChangedListener> it = selectionChangedListeners.iterator(); it.hasNext();) {
+			ISelectionChangedListener listener = it.next();
 			listener.selectionChanged(event);
 		}
 	}
@@ -101,13 +101,40 @@ implements IProductTypeQuickListFilter
 	}
 
 	/**
-	 * At the moment (2007-03-27) this method only deselect everything.
-	 *
 	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
 	public void setSelection(ISelection selection)
 	{
-		//TODO Implement setSelection()
-		
+		if (getResultViewerControl() instanceof ISelectionHandler) {
+			ISelectionHandler selectionHandler = (ISelectionHandler) getResultViewerControl();
+			if (selectionHandler.canHandleSelection(selection)) {
+				selectionHandler.setSelection(selection);
+			}
+		}
 	}
+	
+	protected abstract Control doCreateResultViewerControl(Composite parent);
+
+	@Override
+	public Control createResultViewerControl(Composite parent) {
+		Control control = doCreateResultViewerControl(parent);
+//		if (control instanceof ISelectionProvider) {
+//			((ISelectionProvider)control).addSelectionChangedListener(new ISelectionChangedListener() {
+//				public void selectionChanged(SelectionChangedEvent event)
+//				{
+//					if (!(event.getSelection() instanceof IStructuredSelection))
+//						throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+//
+//					IStructuredSelection sel = (IStructuredSelection) event.getSelection();
+//					if (!sel.equals(setSelection)) {
+//						Object elem = sel.getFirstElement();
+//						ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);				
+//						setSelectedProductTypeID(productTypeID);						
+//					}
+//				}
+//			});				
+//		}
+		return control;
+	}
+	
 }

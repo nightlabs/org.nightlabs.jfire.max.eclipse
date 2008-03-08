@@ -163,9 +163,30 @@ implements ISelectionProvider
 					ProductTypeQuickListView.this, TradePlugin.ZONE_SALE, selectedProductTypeID,
 					selectedProductTypeID == null ? ProductTypeID.class : null);
 			SelectionManager.sharedInstance().notify(event);
+			
+			if (selEvent.getSource() instanceof IProductTypeQuickListFilter) {
+				IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter) selEvent.getSource();
+				// selected filter is not active filter
+				if (!getSelectedFilter().equals(filter)) {
+					for (int i=0; i<tabFolder.getItemCount(); i++) {
+						TabItem tabItem = tabFolder.getItem(i);
+						if (tabItem.getData() instanceof IProductTypeQuickListFilter) {
+							IProductTypeQuickListFilter f = (IProductTypeQuickListFilter) tabItem.getData();
+							if (f.equals(filter)) {
+								tabSelectProgrammtically = true;
+								tabFolder.setSelection(i);
+								refresh(false);
+								tabSelectProgrammtically = false;								
+							}
+						}
+					}
+				}				
+			}
 		}
 	};
 
+	private boolean tabSelectProgrammtically = false;
+	
 	// To listen for changes from outside
 	private NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
@@ -178,11 +199,13 @@ implements ISelectionProvider
 
 	private SelectionListener tabSelectionListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
-			TabItem selectedItem = tabFolder.getSelection()[0];
-			IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter) selectedItem.getData();
-			ISelection selection = filter.getSelection();
-			SelectionChangedEvent event = new SelectionChangedEvent(filter, selection);
-			filterSelectionListener.selectionChanged(event);
+			if (!tabSelectProgrammtically) {
+				TabItem selectedItem = tabFolder.getSelection()[0];
+				IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter) selectedItem.getData();
+				ISelection selection = filter.getSelection();
+				SelectionChangedEvent event = new SelectionChangedEvent(filter, selection);
+				filterSelectionListener.selectionChanged(event);
+			}
 			refresh(false);
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
@@ -230,16 +253,6 @@ implements ISelectionProvider
 		}
 	}
 
-//int selection = tabFolder.getSelectionIndex();
-//if (selection >= 0 && selection < filters.size()) {
-//IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter)filters.get(selection);
-//filter.search();
-//}
-//for (Iterator iter = filters.iterator(); iter.hasNext();) {
-//IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter) iter.next();
-//filter.search();
-//}
-
 	/**
 	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
 	 */
@@ -278,10 +291,9 @@ implements ISelectionProvider
 	 */
 	public void setSelection(ISelection selection)
 	{
-		if (getSelectedFilter() != null) {
-			for (IProductTypeQuickListFilter filter : filters) {
-				filter.setSelection(selection);
-			}
+		// Iterate over all filters and set the selection 
+		for (IProductTypeQuickListFilter filter : filters) {
+			filter.setSelection(selection);
 		}
 	}
 
