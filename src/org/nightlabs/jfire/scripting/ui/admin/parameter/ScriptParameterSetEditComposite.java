@@ -138,7 +138,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		parameterSetTable.getTableViewer().addDoubleClickListener(tableDoubleClickListener);
 		menuManager = new ScriptParameterSetTableMenuManager(
 				this.getClass().getName()+"#SetContextMenu",  //$NON-NLS-1$
-				parameterSetTable.getTable()
+				parameterSetTable.getControl()
 			);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptParameterSetID.class, setChangeListener);
 		fetchParameterSetsJob.schedule();
