@@ -42,7 +42,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.Article;
 
 /**
@@ -71,7 +70,7 @@ public class ArticleEditComposite extends XComposite
 		articleTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				if (!RCPUtil.isKeyDown(SWT.CTRL)) {
+				if (!articleEdit.isCtrlKeyDown()) {
 					ignoreSetSelectedArticles = true;
 					try {
 						articleEdit.getSegmentEdit().setSelectedArticles(EMPTY_SET_ARTICLE);
