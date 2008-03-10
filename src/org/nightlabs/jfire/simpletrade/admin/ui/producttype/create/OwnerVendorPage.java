@@ -35,6 +35,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.FadeableComposite;
+import org.nightlabs.base.ui.composite.InheritanceToggleButton;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
@@ -73,6 +75,12 @@ extends DynamicPathWizardPage
 	private ProductType parentProductType;
 	private LegalEntityEditComposite ownerEditComposite = null;
 	private LegalEntityEditComposite vendorEditComposite = null;	
+	private InheritanceToggleButton inheritButtonOwner = null;
+	private InheritanceToggleButton inheritButtonVendor = null;
+
+	private LegalEntity originEntityOwner = null;
+	private LegalEntity originEntityVendor = null;
+
 
 	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
@@ -87,7 +95,7 @@ extends DynamicPathWizardPage
 	 */
 	public OwnerVendorPage(ProductTypeID parentProductTypeID)
 	{
-		super(ProductTypeNamePage.class.getName(), "Owner //& Vendor"); //$NON-NLS-1$
+		super(ProductTypeNamePage.class.getName(), "Owner && Vendor"); //$NON-NLS-1$
 		this.setDescription("Please Define the Owner and Vendor"); //$NON-NLS-1$
 //		this.parentProductType = parentProductType;
 		this.parentProductTypeID = parentProductTypeID;
@@ -115,13 +123,11 @@ extends DynamicPathWizardPage
 		final FadeableComposite page = new FadeableComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		XComposite comp0 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp0.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comp0.getGridLayout().numColumns = 2;
-
+		comp0.getGridLayout().numColumns = 3;
 
 		Label labelOwner = new Label(comp0, SWT.NONE);
 		labelOwner.setText("Owner");
-		labelOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+//		labelOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		this.ownerEditComposite = new LegalEntityEditComposite(comp0, SWT.NONE);
 		this.ownerEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -130,10 +136,33 @@ extends DynamicPathWizardPage
 				{
 					public void legalEntityValueChanged()
 					{
+						inheritButtonOwner.setSelection(false);
 						// if value has changed 				
-						//markDirty();
+						originEntityOwner = getOwnerEntity();
 					}
 				});
+
+
+
+		inheritButtonOwner = new InheritanceToggleButton(comp0,null);
+//		inheritButtonOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		inheritButtonOwner.setSelection(true);
+		inheritButtonOwner.addSelectionListener(new SelectionListener(){
+			public void widgetSelected(SelectionEvent e) {
+
+				if(inheritButtonOwner.getSelection())	
+					getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
+				else
+				{    
+					if(originEntityOwner != null)
+						getOwnerEditComposite().setLegalEntity(originEntityOwner);
+				}
+
+			}
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
 
 
 
@@ -144,12 +173,12 @@ extends DynamicPathWizardPage
 
 		XComposite comp1 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comp1.getGridLayout().numColumns = 2;
+		comp1.getGridLayout().numColumns = 3;
 
 
 		Label labelVendor = new Label(comp1, SWT.NONE);
 		labelVendor.setText("Vendor");
-		labelVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		labelVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 
 		this.vendorEditComposite = new LegalEntityEditComposite(comp1, SWT.NONE);
@@ -159,10 +188,34 @@ extends DynamicPathWizardPage
 				{
 					public void legalEntityValueChanged()
 					{
+
+						inheritButtonVendor.setSelection(false);
 						// if value has changed 				
-						//markDirty();
+						originEntityVendor = getVendorEntity();
 					}
 				});
+
+		inheritButtonVendor = new InheritanceToggleButton(comp1,null);
+//		inheritButtonVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		inheritButtonVendor.setSelection(true);
+		inheritButtonVendor.addSelectionListener(new SelectionListener(){
+			public void widgetSelected(SelectionEvent e) {
+
+				if(inheritButtonVendor.getSelection())	
+					getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
+				else
+				{    
+					if(originEntityVendor != null)
+						getVendorEditComposite().setLegalEntity(originEntityVendor);
+				}
+
+			}
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+
+
 
 
 		page.setFaded(true);
@@ -188,7 +241,6 @@ extends DynamicPathWizardPage
 							getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
 
 							getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
-
 
 						}
 
