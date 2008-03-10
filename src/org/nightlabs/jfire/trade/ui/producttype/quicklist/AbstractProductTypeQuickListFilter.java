@@ -108,10 +108,15 @@ implements IProductTypeQuickListFilter
 	 */
 	public void setSelection(ISelection selection)
 	{
-		if (getResultViewerControl() instanceof ISelectionHandler) {
-			ISelectionHandler selectionHandler = (ISelectionHandler) getResultViewerControl();
-			if (selectionHandler.canHandleSelection(selection)) {
-				selectionHandler.setSelection(selection);
+		if (getResultViewerControl() instanceof ISelectionProvider) {
+			ISelectionProvider selectionProvider = (ISelectionProvider) getResultViewerControl();
+			if (selectionProvider instanceof ISelectionHandler) {
+				ISelectionHandler selectionHandler = (ISelectionHandler) selectionProvider;
+				if (selectionHandler.canHandleSelection(selection)) {
+					selectionHandler.setSelection(selection);
+				}				
+			} else {
+				selectionProvider.setSelection(selection);
 			}
 		}
 	}
