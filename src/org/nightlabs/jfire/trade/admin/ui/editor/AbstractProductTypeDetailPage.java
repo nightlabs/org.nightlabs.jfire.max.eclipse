@@ -161,6 +161,9 @@ implements IProductTypeDetailPage
 		final ProductType productType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				if (isDisposed())
+					return;
+
 				setProductType(productType);
 				switchToContent();
 			}

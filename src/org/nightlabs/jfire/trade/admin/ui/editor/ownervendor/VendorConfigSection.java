@@ -25,6 +25,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Fitas [at] NightLabs [dot] de
  *
  */
+
+
 public class VendorConfigSection  
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
@@ -42,6 +44,11 @@ implements IProductTypeSectionPart
 	{
 		super(page, parent, style, "Vendor");
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		inheritAction = new InheritAction();
+		registerAction(inheritAction);
+
+
 		this.vendorEditComposite = new LegalEntityEditComposite(fadeableComposite, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorEditComposite.addLegalEntityValueChangedListener( 
@@ -57,8 +64,7 @@ implements IProductTypeSectionPart
 //		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
 //		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
 //		getToolBarManager().getControl().setBackground(getSection().getTitleBarGradientBackground());
-		inheritAction = new InheritAction();
-		registerAction(inheritAction);
+
 		updateToolBarManager();
 	}
 
@@ -101,7 +107,6 @@ implements IProductTypeSectionPart
 
 	}
 
-
 	/**
 	 * sets the {@link ProductType}
 	 * @param productType the {@link ProductType} to set
@@ -111,21 +116,27 @@ implements IProductTypeSectionPart
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
 
-		this.productType = productType;
-		getVendorEditComposite().setLegalEntity(productType.getOwner());
+	//	this.productType = productType;
+		//getVendorEditComposite().setLegalEntity(productType.getOwner());
 	}
 
 	@Override
 	public void commit(boolean save) {
 
+		productType.getFieldMetaData("vendor").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
+
+		//getProductTypeLocal()
+
 		if (vendorEditComposite != null && isDirty())
 		{
-			productType.setOwner(vendorEditComposite.getLegalEntity());
+			productType.setVendor(vendorEditComposite.getLegalEntity());
 		}
 
 		// delegate itself was already set
 		//	productType.getProductTypeLocal().setLocalAccountantDelegate(moneyFlowConfigComposite.getProductTypeMappingTree().getDelegate());
+
 		super.commit(save);
+		
 	}
 
 	protected void inheritPressed() {
@@ -158,7 +169,7 @@ implements IProductTypeSectionPart
 		}
 		else		
 			getVendorEditComposite().setLegalEntity(originalEntity);
-			
+
 
 
 
@@ -166,6 +177,17 @@ implements IProductTypeSectionPart
 
 
 	}
+
+
+	protected boolean getInheritanceSelection() {
+		return inheritAction.isChecked();
+	}
+
+	protected void setInheritanceSelection(boolean selection) {
+		inheritAction.setChecked(selection);
+	}
+
+
 
 	private class InheritAction 
 	extends InheritanceAction
@@ -183,7 +205,7 @@ implements IProductTypeSectionPart
 		}
 
 		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").isValueInherited()); //$NON-NLS-1$
+			setChecked(productType.getProductTypeLocal().getFieldMetaData("vendor").isValueInherited()); //$NON-NLS-1$
 		}
 	}
 

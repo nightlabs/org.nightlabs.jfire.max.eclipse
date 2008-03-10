@@ -51,7 +51,7 @@ implements IProductTypeSectionPart
 				new ILegalEntityValueChangedListener()
 				{
 					public void legalEntityValueChanged()
-					{
+					{	
 						// if value has changed 				
 						markDirty();
 					}
@@ -112,8 +112,11 @@ implements IProductTypeSectionPart
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
 
-		this.productType = productType;
-		getOwnerEditComposite().setLegalEntity(productType.getOwner());
+	//	this.productType = productType;
+		//getOwnerEditComposite().setLegalEntity(productType.getOwner());
+	
+	
+	
 	}
 
 
@@ -125,16 +128,24 @@ implements IProductTypeSectionPart
 
 	@Override
 	public void commit(boolean save) {
-		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
-
+		
+		
+		productType.getFieldMetaData("owner").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
+		
+		//.getProductTypeLocal()
+		
+		boolean test  = inheritAction.isChecked();
+		
 		if (ownerEditComposite != null && isDirty())
 		{
 			productType.setOwner(ownerEditComposite.getLegalEntity());
 		}
-
-		// delegate itself was already set
-		//	productType.getProductTypeLocal().setLocalAccountantDelegate(moneyFlowConfigComposite.getProductTypeMappingTree().getDelegate());
+		//getProductTypeController().getProductType().setOwner(ownerEditComposite.getLegalEntity());
+	
+		
 		super.commit(save);
+		
+		
 	}
 
 	protected void inheritPressed() {
@@ -192,7 +203,7 @@ implements IProductTypeSectionPart
 		}
 
 		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").isValueInherited()); //$NON-NLS-1$
+			setChecked(productType.getProductTypeLocal().getFieldMetaData("owner").isValueInherited()); //$NON-NLS-1$
 		}
 	}
 
