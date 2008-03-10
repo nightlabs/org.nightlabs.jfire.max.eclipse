@@ -52,14 +52,10 @@ extends AbstractProductTypeTable<SimpleProductType>
 		super(parent);
 	}
 
-	@Override
-	public Class<SimpleProductType> getProductTypeClass() {
-		return SimpleProductType.class;
-	}
-	
-//	public SimpleProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-//		super(parent, filter);
+//	@Override
+//	public Class<SimpleProductType> getProductTypeClass() {
+//		return SimpleProductType.class;
 //	}
-	
+		
 }
 
