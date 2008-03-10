@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.voucher.ui.quicklist;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
@@ -38,17 +37,22 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
 public class VoucherTypeTable 
 extends AbstractProductTypeTable<VoucherType> 
 {
-//	public VoucherTypeTable(Composite parent) {
-//		super(parent);
-//	}
-//	
-//	public VoucherTypeTable(Composite parent, int viewerStyle) {
-//		super(parent, viewerStyle);
-//	}
-	
-	public VoucherTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-		super(parent, filter);
+	public VoucherTypeTable(Composite parent) {
+		super(parent);
 	}
+	
+	public VoucherTypeTable(Composite parent, int viewerStyle) {
+		super(parent, viewerStyle);
+	}
+
+	@Override
+	public Class<VoucherType> getProductTypeClass() {
+		return VoucherType.class;
+	}
+
+//	public VoucherTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
+//		super(parent, filter);
+//	}
 		
 }
 
