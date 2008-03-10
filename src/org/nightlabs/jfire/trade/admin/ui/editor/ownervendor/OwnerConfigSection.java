@@ -52,7 +52,8 @@ implements IProductTypeSectionPart
 				{
 					public void legalEntityValueChanged()
 					{	
-						// if value has changed 				
+						// if value has changed 		
+						setInheritanceSelection(false);
 						markDirty();
 					}
 				});
@@ -62,6 +63,7 @@ implements IProductTypeSectionPart
 //		getToolBarManager().getControl().setBackground(getSection().getTitleBarGradientBackground());
 		inheritAction = new InheritAction();
 		registerAction(inheritAction);
+		
 		updateToolBarManager();
 	}
 
@@ -89,7 +91,8 @@ implements IProductTypeSectionPart
 
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getOwner();
-		getOwnerEditComposite().setLegalEntity(originalEntity);
+		getOwnerEditComposite().setLegalEntity(originalEntity);	
+		setInheritanceSelection(productType.getFieldMetaData("owner").isValueInherited());
 
 
 	}
@@ -112,11 +115,11 @@ implements IProductTypeSectionPart
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
 
-	//	this.productType = productType;
+		//	this.productType = productType;
 		//getOwnerEditComposite().setLegalEntity(productType.getOwner());
-	
-	
-	
+
+
+
 	}
 
 
@@ -128,24 +131,31 @@ implements IProductTypeSectionPart
 
 	@Override
 	public void commit(boolean save) {
-		
-		
+
+
 		productType.getFieldMetaData("owner").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
-		
-		//.getProductTypeLocal()
-		
-		boolean test  = inheritAction.isChecked();
-		
+
+
 		if (ownerEditComposite != null && isDirty())
 		{
 			productType.setOwner(ownerEditComposite.getLegalEntity());
 		}
-		//getProductTypeController().getProductType().setOwner(ownerEditComposite.getLegalEntity());
-	
-		
+
 		super.commit(save);
+
 		
-		
+
+	}
+
+
+
+
+	protected boolean getInheritanceSelection() {
+		return inheritAction.isChecked();
+	}
+
+	protected void setInheritanceSelection(boolean selection) {
+		inheritAction.setChecked(selection);
 	}
 
 	protected void inheritPressed() {
@@ -181,11 +191,6 @@ implements IProductTypeSectionPart
 		}
 		else		
 			getOwnerEditComposite().setLegalEntity(originalEntity);
-
-
-
-
-
 
 
 	}

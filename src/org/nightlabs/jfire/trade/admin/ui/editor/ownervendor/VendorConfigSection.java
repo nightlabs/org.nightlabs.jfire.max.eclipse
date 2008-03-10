@@ -45,9 +45,6 @@ implements IProductTypeSectionPart
 		super(page, parent, style, "Vendor");
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		inheritAction = new InheritAction();
-		registerAction(inheritAction);
-
 
 		this.vendorEditComposite = new LegalEntityEditComposite(fadeableComposite, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -56,7 +53,8 @@ implements IProductTypeSectionPart
 				{
 					public void legalEntityValueChanged()
 					{
-						// if value has changed 				
+						// if value has changed 		
+						setInheritanceSelection(false);
 						markDirty();
 					}
 				});
@@ -65,6 +63,9 @@ implements IProductTypeSectionPart
 //		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
 //		getToolBarManager().getControl().setBackground(getSection().getTitleBarGradientBackground());
 
+		inheritAction = new InheritAction();
+		registerAction(inheritAction);
+		
 		updateToolBarManager();
 	}
 
@@ -96,6 +97,7 @@ implements IProductTypeSectionPart
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getVendor();
 		getVendorEditComposite().setLegalEntity(originalEntity);
+		setInheritanceSelection(productType.getFieldMetaData("vendor").isValueInherited());
 
 
 	}
@@ -116,7 +118,7 @@ implements IProductTypeSectionPart
 		if (productType == null || getSection() == null || getSection().isDisposed())
 			return;
 
-	//	this.productType = productType;
+		//	this.productType = productType;
 		//getVendorEditComposite().setLegalEntity(productType.getOwner());
 	}
 
@@ -132,11 +134,8 @@ implements IProductTypeSectionPart
 			productType.setVendor(vendorEditComposite.getLegalEntity());
 		}
 
-		// delegate itself was already set
-		//	productType.getProductTypeLocal().setLocalAccountantDelegate(moneyFlowConfigComposite.getProductTypeMappingTree().getDelegate());
-
 		super.commit(save);
-		
+
 	}
 
 	protected void inheritPressed() {
@@ -171,9 +170,6 @@ implements IProductTypeSectionPart
 			getVendorEditComposite().setLegalEntity(originalEntity);
 
 
-
-
-		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$	
 
 
 	}
