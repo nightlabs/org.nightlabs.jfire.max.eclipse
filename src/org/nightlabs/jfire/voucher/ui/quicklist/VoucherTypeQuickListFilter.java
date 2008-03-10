@@ -31,11 +31,9 @@ extends AbstractProductTypeQuickListFilter
 
 	private VoucherTypeTable voucherTypeTable;
 
-//  public Control createResultViewerControl(Composite parent)
 	protected Control doCreateResultViewerControl(Composite parent)
 	{
 		voucherTypeTable = new VoucherTypeTable(parent);
-//		voucherTypeTable = new VoucherTypeTable(parent, this);
 		return voucherTypeTable;
 	}
 	
