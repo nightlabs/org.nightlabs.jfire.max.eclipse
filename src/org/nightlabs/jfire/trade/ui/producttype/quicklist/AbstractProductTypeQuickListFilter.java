@@ -29,8 +29,11 @@ package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -118,23 +121,26 @@ implements IProductTypeQuickListFilter
 	@Override
 	public Control createResultViewerControl(Composite parent) {
 		Control control = doCreateResultViewerControl(parent);
-//		if (control instanceof ISelectionProvider) {
-//			((ISelectionProvider)control).addSelectionChangedListener(new ISelectionChangedListener() {
-//				public void selectionChanged(SelectionChangedEvent event)
-//				{
-//					if (!(event.getSelection() instanceof IStructuredSelection))
-//						throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-//
-//					IStructuredSelection sel = (IStructuredSelection) event.getSelection();
-//					if (!sel.equals(setSelection)) {
-//						Object elem = sel.getFirstElement();
-//						ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);				
-//						setSelectedProductTypeID(productTypeID);						
-//					}
-//				}
-//			});				
-//		}
+		if (control instanceof ISelectionProvider) {
+			((ISelectionProvider)control).addSelectionChangedListener(
+					getSelectionChangedListener());
+		}
 		return control;
 	}
 	
+	protected ISelectionChangedListener getSelectionChangedListener() 
+	{
+		return new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				if (!(event.getSelection() instanceof IStructuredSelection))
+					throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+
+				IStructuredSelection sel = (IStructuredSelection) event.getSelection();
+				Object elem = sel.getFirstElement();
+				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);				
+				setSelectedProductTypeID(productTypeID);						
+			}
+		};
+	}
 }

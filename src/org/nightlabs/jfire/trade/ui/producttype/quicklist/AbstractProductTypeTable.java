@@ -1,24 +1,18 @@
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -30,6 +24,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
@@ -48,17 +43,11 @@ implements ISelectionHandler
 	public class ContentProvider 
 	implements IStructuredContentProvider 
 	{
-		private Map<ProductTypeID, ProductType> map = new HashMap<ProductTypeID, ProductType>();
-		
 		public Object[] getElements(Object inputElement) 
 		{
 			if (inputElement instanceof Collection) 
 			{
 				Collection<P> collection = (Collection) inputElement;
-				for (Iterator<P> it = collection.iterator(); it.hasNext(); ) {
-					ProductType productType = it.next();
-					map.put((ProductTypeID)JDOHelper.getObjectId(productType), productType);
-				}
 				return collection.toArray();
 			}
 			else
@@ -69,11 +58,6 @@ implements ISelectionHandler
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			map.clear();
-		}
-		
-		public Map<ProductTypeID, ProductType> getMap() {
-			return map;
 		}
 	}
 	
@@ -91,13 +75,13 @@ implements ISelectionHandler
 	}	
 
 	private AbstractProductTypeQuickListFilter filter;
-	private ContentProvider contentProvider;
 	
 	/**
 	 * @param parent
 	 */
 	public AbstractProductTypeTable(Composite parent) {
-		this(parent, null, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+//		this(parent, null, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 	}
 
 	/**
@@ -105,41 +89,40 @@ implements ISelectionHandler
 	 * @param style
 	 */
 	public AbstractProductTypeTable(Composite parent, int style) {
-		this(parent, null, style);
-	}
-	
-	/**
-	 * @param parent
-	 * @param filter
-	 */
-	public AbstractProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-		this(parent, filter, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
-	}
-	
-	/**
-	 * @param parent
-	 * @param filter
-	 * @param style
-	 */
-	public AbstractProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter, int style) {
+//		this(parent, null, style);
 		super(parent, style);
-		this.filter = filter;
-		if (filter != null) {
-			getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-				public void selectionChanged(SelectionChangedEvent event)
-				{
-					if (!(event.getSelection() instanceof IStructuredSelection))
-						throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-
-					Object elem = getFirstSelectedElement();
-//					if (elem != null) {
-						ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);
-						AbstractProductTypeTable.this.filter.setSelectedProductTypeID(productTypeID);						
-//					}
-				}
-			});			
-		}
 	}
+	
+//	/**
+//	 * @param parent
+//	 * @param filter
+//	 */
+//	public AbstractProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
+//		this(parent, filter, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+//	}
+//	
+//	/**
+//	 * @param parent
+//	 * @param filter
+//	 * @param style
+//	 */
+//	public AbstractProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter, int style) {
+//		super(parent, style);
+//		this.filter = filter;
+//		if (filter != null) {
+//			getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+//				public void selectionChanged(SelectionChangedEvent event)
+//				{
+//					if (!(event.getSelection() instanceof IStructuredSelection))
+//						throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+//
+//					Object elem = getFirstSelectedElement();
+//					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);
+//					AbstractProductTypeTable.this.filter.setSelectedProductTypeID(productTypeID);						
+//				}
+//			});			
+//		}
+//	}
 
 	/**
 	 * By default creates only one {@link TableColumn} which displays the productType name
@@ -154,8 +137,7 @@ implements ISelectionHandler
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		contentProvider = new ContentProvider();
-		tableViewer.setContentProvider(contentProvider);
+		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 	
@@ -164,11 +146,9 @@ implements ISelectionHandler
 		Set<ProductTypeID> typeIDs = getProductTypesIDs(selection);
 		if (typeIDs.isEmpty()) {
 			super.setSelection(selection);
-		}		
+		}
 		else {
 			final Set<ProductTypeID> productTypeIDs = typeIDs;		
-			// TODO maybe just take the ProductTypes from the ContentProvider map,
-			// instead of taking them from the DAO, but this way no remote changes are notified
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
@@ -189,8 +169,13 @@ implements ISelectionHandler
 	{
 		Set<ProductTypeID> typeIDs = getProductTypesIDs(selection);
 		if (!typeIDs.isEmpty()) {
-			if (contentProvider != null && contentProvider.getMap() != null)
-				return contentProvider.getMap().keySet().containsAll(typeIDs);
+			for (ProductTypeID productTypeID : typeIDs) {
+				Class productTypeClass = JDOObjectID2PCClassMap.sharedInstance().
+					getPersistenceCapableClass(productTypeID);
+				if (getProductTypeClass().equals(productTypeClass)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -216,4 +201,10 @@ implements ISelectionHandler
 		}
 		return typeIDs;
 	}
+	
+	/**
+	 * Returns the Class of the {@link ProductType} this Table is displaying.
+	 * @return the Class of the {@link ProductType} this Table is displaying
+	 */
+	public abstract Class<P> getProductTypeClass();
 }
