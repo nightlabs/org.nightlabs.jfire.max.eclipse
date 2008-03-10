@@ -57,10 +57,10 @@ import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeEditorInput;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
-import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**

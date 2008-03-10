@@ -56,11 +56,11 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.ILegalEntityValueChangedListener;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.LegalEntityEditComposite;
-import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
