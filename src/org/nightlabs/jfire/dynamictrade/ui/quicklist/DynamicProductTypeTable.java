@@ -66,22 +66,28 @@ extends AbstractProductTypeTable<DynamicProductType>
 		}
 	}
 
-//	public DynamicProductTypeTable(Composite parent) {
-//		super(parent);
-//	}
-//	
-//	public DynamicProductTypeTable(Composite parent, int viewerStyle) {
-//		super(parent, viewerStyle);
-//	}
-
-	public DynamicProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-		super(parent, filter);
+	public DynamicProductTypeTable(Composite parent) {
+		super(parent);
 	}
+	
+	public DynamicProductTypeTable(Composite parent, int viewerStyle) {
+		super(parent, viewerStyle);
+	}
+
+//	public DynamicProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
+//		super(parent, filter);
+//	}
 		
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
+
+	@Override
+	public Class<DynamicProductType> getProductTypeClass() {
+		return DynamicProductType.class;
+	}
+	
 }
 

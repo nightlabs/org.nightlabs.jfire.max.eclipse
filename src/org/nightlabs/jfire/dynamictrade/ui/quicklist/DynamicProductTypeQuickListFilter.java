@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
@@ -34,8 +33,8 @@ extends AbstractProductTypeQuickListFilter
 //	public Control createResultViewerControl(Composite parent)
 	public Control doCreateResultViewerControl(Composite parent)
 	{
-//		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
-		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this);
+		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
+//		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this);
 		return dynamicProductTypeTable;
 	}
 		
