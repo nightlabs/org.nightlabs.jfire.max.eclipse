@@ -73,8 +73,10 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	private boolean priceConfigSelectionEnabled = true;
 
 	private ProductTypeNamePage productTypeNamePage;
+	private OwnerVendorPage ownerVendorPage;
+
 	private AbstractChooseGridPriceConfigPage selectPriceConfigPage;
-	
+
 	private StoreManager _storeManager = null;
 	protected StoreManager getStoreManager()
 	throws ModuleException
@@ -117,8 +119,14 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	{
 		productTypeNamePage = new ProductTypeNamePage(parentProductTypeID);
 		addPage(productTypeNamePage);
+
+
 		selectPriceConfigPage = new ChooseSimpleTradePriceConfigPage(parentProductTypeID);
 		addDynamicWizardPage(selectPriceConfigPage);
+
+		ownerVendorPage = new OwnerVendorPage(parentProductTypeID);
+		addDynamicWizardPage(ownerVendorPage);
+		//ownerVendorPage.se
 	}
 
 	public ProductTypeNamePage getProductTypeNamePage()
@@ -138,8 +146,8 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	@Implement
 	public boolean performFinish()
 	{
-		
-		
+
+
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 
@@ -169,31 +177,38 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 						}
 
 						switch (selectPriceConfigPage.getAction()) {
-							case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
-								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(true); //$NON-NLS-1$
-								newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
-								break;
-							case AbstractChooseGridPriceConfigPage.ACTION_LATER:
-								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
-								// nothing
-								break;
-							case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
-								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
-								IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
-								priceConfig = new FormulaPriceConfig(
-										IDGenerator.getOrganisationID(),
-										PriceConfig.createPriceConfigID());
-								priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
-								newProductType.setInnerPriceConfig(priceConfig);
-								break;
-							case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
-								newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
-								newProductType.setInnerPriceConfig(selectPriceConfigPage.getSelectedPriceConfig());
-								break;
-							default:
-								throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + selectPriceConfigPage.getAction()); //$NON-NLS-1$
+						case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
+							newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(true); //$NON-NLS-1$
+							newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
+							break;
+						case AbstractChooseGridPriceConfigPage.ACTION_LATER:
+							newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+							// nothing
+							break;
+						case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
+							newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+							IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
+							priceConfig = new FormulaPriceConfig(
+									IDGenerator.getOrganisationID(),
+									PriceConfig.createPriceConfigID());
+							priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
+							newProductType.setInnerPriceConfig(priceConfig);
+							break;
+						case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
+							newProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+							newProductType.setInnerPriceConfig(selectPriceConfigPage.getSelectedPriceConfig());
+							break;
+						default:
+							throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + selectPriceConfigPage.getAction()); //$NON-NLS-1$
 						} // switch (selectPriceConfigPage.getAction()) {
-						
+
+
+
+						newProductType.setOwner(ownerVendorPage.getOwnerEntity());
+
+						newProductType.setVendor(ownerVendorPage.getVendorEntity());
+
+
 						// TODO: Add Wizardhop for PropertySet inherit/createnew
 						SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, 1);
 						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, StructLocal.DEFAULT_SCOPE, subMonitor);
@@ -201,16 +216,16 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);
 //						newProductType = getSimpleTradeManager().storeProductType(
-//								newProductType, true,
-//								ProductTypeTreeNode.FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//						newProductType, true,
+//						ProductTypeTreeNode.FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 						monitor.worked(1);
-						
+
 //						if (selectedNode.isChildrenLoaded()) {
-//							new ProductTypeTreeNode(selectedNode, newProductType);
-//							selectedNode.refreshLocal();
+//						new ProductTypeTreeNode(selectedNode, newProductType);
+//						selectedNode.refreshLocal();
 //						}
-						
+
 						final ProductTypeID newProductTypeId = newProductType.getObjectId();
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run()
@@ -251,10 +266,10 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	}
 
 //	/**
-//	 * @return Returns the selectedNode.
-//	 */
+//	* @return Returns the selectedNode.
+//	*/
 //	public ProductTypeTreeNode getSelectedNode()
 //	{
-//		return selectedNode;
+//	return selectedNode;
 //	}
 }
