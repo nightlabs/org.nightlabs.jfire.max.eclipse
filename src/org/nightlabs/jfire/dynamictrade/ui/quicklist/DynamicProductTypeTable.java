@@ -34,7 +34,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable;
 
 /**
@@ -73,21 +72,17 @@ extends AbstractProductTypeTable<DynamicProductType>
 	public DynamicProductTypeTable(Composite parent, int viewerStyle) {
 		super(parent, viewerStyle);
 	}
-
-//	public DynamicProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-//		super(parent, filter);
-//	}
 		
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new ContentProvider());
+		super.setTableProvider(tableViewer);
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 
-	@Override
-	public Class<DynamicProductType> getProductTypeClass() {
-		return DynamicProductType.class;
-	}
+//	@Override
+//	public Class<DynamicProductType> getProductTypeClass() {
+//		return DynamicProductType.class;
+//	}
 	
 }
 
