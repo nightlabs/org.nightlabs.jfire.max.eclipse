@@ -1,13 +1,11 @@
 package org.nightlabs.jfire.voucher.ui.quicklist;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -18,6 +16,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.VoucherTypeSearchFilter;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
@@ -47,28 +46,29 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
-	public void search(ProgressMonitor monitor) {
+	@Override
+	protected void search(ProgressMonitor monitor) {
 		final VoucherTypeSearchFilter searchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-
-		new Job(Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.loadVoucherTypesJob.name")) { //$NON-NLS-1$
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					StoreManager storeManager = StoreManagerUtil.getHome(
-							Login.getLogin().getInitialContextProperties()).create();
-					final Collection voucherTypes = storeManager.searchProductTypes(
-							searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							voucherTypeTable.setInput(voucherTypes);
-						}
-					});
-					return Status.OK_STATUS;
-				} catch (Exception x) {
-					throw new RuntimeException(x);
+		try {
+			StoreManager storeManager = StoreManagerUtil.getHome(
+					Login.getLogin().getInitialContextProperties()).create();
+			final Collection voucherTypes = storeManager.searchProductTypes(
+					searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					voucherTypeTable.setInput(voucherTypes);
 				}
-			}
-		}.schedule();
+			});
+		} catch (Exception x) {
+			throw new RuntimeException(x);
+		}		
+	}
+	
+	@Override
+	public Set<Class> getClasses() {
+		Set<Class> classes = new HashSet<Class>();
+		classes.add(VoucherType.class);
+		return classes;
 	}
 
 }
