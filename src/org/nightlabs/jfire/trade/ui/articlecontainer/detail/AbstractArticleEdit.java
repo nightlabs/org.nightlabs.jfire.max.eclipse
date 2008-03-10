@@ -33,10 +33,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -202,6 +205,37 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 //	 */
 //	private Composite parent = null;
 
+	private boolean ctrlKeyDown = false;
+
+	/**
+	 * Find out whether the "Ctrl" key is currently pressed down.
+	 * <p>
+	 * It's urgently recommended to take the Ctrl key into account when selecting articles in an <code>ArticleEdit</code>'s composite. If this key is not pressed
+	 * down, all other currently selected articles (in all other <code>ArticleEdit</code> s should be deselected.
+	 * </p>
+	 *
+	 * @return <code>true</code>, if the Ctrl key is currently down.
+	 */
+	public boolean isCtrlKeyDown()
+	{
+		return ctrlKeyDown;
+	}
+
+	private Listener ctrlKeyDownListener = new Listener() {
+		public void handleEvent(Event event)
+		{
+			if (event.keyCode == SWT.CTRL)
+				ctrlKeyDown = true;
+		}
+	};
+	private Listener ctrlKeyUpListener = new Listener() {
+		public void handleEvent(Event event)
+		{
+			if (event.keyCode == SWT.CTRL)
+				ctrlKeyDown = false;
+		}
+	};
+
 	/**
 	 * Important: Do NOT overwrite/extend this method, but implement {@link #_createComposite(Composite)} instead!
 	 *
@@ -215,9 +249,15 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 
 		composite = _createComposite(parent);
 
+		Display.getDefault().addFilter(SWT.KeyDown, ctrlKeyDownListener);
+		Display.getDefault().addFilter(SWT.KeyUp, ctrlKeyUpListener);
+
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
+				Display.getDefault().removeFilter(SWT.KeyDown, ctrlKeyDownListener);
+				Display.getDefault().removeFilter(SWT.KeyUp, ctrlKeyUpListener);
+
 				((Composite)e.getSource()).removeDisposeListener(this);
 				onDispose();
 			}
