@@ -30,11 +30,9 @@ extends AbstractProductTypeQuickListFilter
 
 	private DynamicProductTypeTable dynamicProductTypeTable;
 	
-//	public Control createResultViewerControl(Composite parent)
 	public Control doCreateResultViewerControl(Composite parent)
 	{
 		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
-//		dynamicProductTypeTable = new DynamicProductTypeTable(parent, this);
 		return dynamicProductTypeTable;
 	}
 		
