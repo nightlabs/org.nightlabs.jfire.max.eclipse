@@ -27,19 +27,18 @@
 package org.nightlabs.jfire.simpletrade.ui.producttype.quicklist;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductTypeSearchFilter;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
@@ -89,28 +88,28 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
-	public void search(ProgressMonitor monitor) {
+	@Override
+	protected void search(ProgressMonitor monitor) {
 		final SimpleProductTypeSearchFilter searchFilter = new SimpleProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-		
-		new Job(Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.searchProductTypesJob.name")) { //$NON-NLS-1$
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					StoreManager storeManager = StoreManagerUtil.getHome(
-							Login.getLogin().getInitialContextProperties()).create();
-					final Collection productTypes = storeManager.searchProductTypes(
-							searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							resultTable.setInput(productTypes);
-						}
-					});
-					return Status.OK_STATUS;
-				} catch (Exception x) {
-					throw new RuntimeException(x);
+		try {
+			StoreManager storeManager = StoreManagerUtil.getHome(
+					Login.getLogin().getInitialContextProperties()).create();
+			final Collection productTypes = storeManager.searchProductTypes(
+					searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					resultTable.setInput(productTypes);
 				}
-			}
-		}.schedule();
+			});
+		} catch (Exception x) {
+			throw new RuntimeException(x);
+		}
 	}
 	
+	@Override
+	public Set<Class> getClasses() {
+		Set<Class> classes = new HashSet<Class>();
+		classes.add(SimpleProductType.class);
+		return classes;
+	}
 }
