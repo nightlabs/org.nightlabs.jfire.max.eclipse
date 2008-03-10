@@ -45,13 +45,9 @@ extends AbstractProductTypeTable<VoucherType>
 		super(parent, viewerStyle);
 	}
 
-	@Override
-	public Class<VoucherType> getProductTypeClass() {
-		return VoucherType.class;
-	}
-
-//	public VoucherTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-//		super(parent, filter);
+//	@Override
+//	public Class<VoucherType> getProductTypeClass() {
+//		return VoucherType.class;
 //	}
 		
 }
