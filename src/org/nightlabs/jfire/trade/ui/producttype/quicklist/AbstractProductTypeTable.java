@@ -92,7 +92,8 @@ implements ISelectionHandler
 	 * @param parent
 	 */
 	public AbstractProductTypeTable(Composite parent) {
-		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+//		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 	}
 
 	/**

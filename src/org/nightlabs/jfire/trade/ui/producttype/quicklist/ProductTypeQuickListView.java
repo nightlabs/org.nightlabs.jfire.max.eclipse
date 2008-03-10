@@ -156,9 +156,6 @@ implements ISelectionProvider
 			}
 			ProductTypeQuickListView.this.selection = sel;
 
-//			for (ISelectionChangedListener listener : selectionChangedListeners) {
-//				listener.selectionChanged(selEvent);
-//			}
 			for (int i=0; i<selectionChangedListeners.size(); i++) {
 				ISelectionChangedListener listener = (ISelectionChangedListener) selectionChangedListeners.getListeners()[i];
 				listener.selectionChanged(selEvent);
@@ -265,7 +262,6 @@ implements ISelectionProvider
 	public void setFocus() {
 	}
 
-//	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
 	private ListenerList selectionChangedListeners = new ListenerList();	
 
 	/**
@@ -299,7 +295,6 @@ implements ISelectionProvider
 	{
 		// Iterate over all filters and set the selection if they can handle it
 		for (IProductTypeQuickListFilter filter : filters) {
-//			filter.setSelection(selection);
 			if (filter.canHandleSelection(selection)) {
 				filter.setSelection(selection);
 			}
