@@ -26,9 +26,10 @@
 
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import java.util.Set;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -68,10 +69,12 @@ extends ISelectionHandler
 	 */
 	String getDisplayName();
 
-	/**
+	// TODO should return the result instead of void, otherwise check for already
+	// performed searches in setSelection() of ProductTypeQuickListView does not work reliably
+	/** 
 	 * Searches for <tt>ProductType</tt>s and refreshes the resultViewer.
 	 */
-	void search(ProgressMonitor monitor);
+	void search(ProgressMonitor monitor, boolean inJob);
 
 	/**
 	 * In your implementation of <tt>IProductTypeQuickListFilter</tt>, you must
@@ -98,4 +101,10 @@ extends ISelectionHandler
 	 * @return true if the filter can display the selection or not
 	 */
 	public boolean canHandleSelection(ISelection selection);
+	
+	/**
+	 * Returns the classes the filter is responsible for.
+	 * @return the classes the filter is responsible for
+	 */
+	Set<Class> getClasses();
 }

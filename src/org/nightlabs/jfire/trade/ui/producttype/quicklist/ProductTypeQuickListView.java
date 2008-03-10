@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +48,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -57,6 +57,8 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -80,7 +82,7 @@ implements ISelectionProvider
 	public static final String ID_VIEW = ProductTypeQuickListView.class.getName();
 
 	private XComposite wrapper;
-	private List<Boolean> filterSearched = new LinkedList<Boolean>();
+	private List<Boolean> filterSearched = new ArrayList<Boolean>();
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
 	private TabFolder tabFolder;
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
@@ -137,7 +139,7 @@ implements ISelectionProvider
 //		getSite().setSelectionProvider(this);
 	}
 
-	ISelectionChangedListener filterSelectionListener = new ISelectionChangedListener() {
+	private ISelectionChangedListener filterSelectionListener = new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent selEvent)
 		{
 			if (!(selEvent.getSelection() instanceof IStructuredSelection))
@@ -230,10 +232,14 @@ implements ISelectionProvider
 
 	public void setSelectedFilterSearched(boolean searched) {
 		int selection = tabFolder == null ? 0 : tabFolder.getSelectionIndex();
-		if (selection >= 0 && selection < filters.size())
-			filterSearched.set(selection, new Boolean(searched));
+		setSelectedFilterSearched(searched, selection);
 	}
 
+	private void setSelectedFilterSearched(boolean searched, int tabIndex) {
+		if (tabIndex >= 0 && tabIndex < filters.size())
+			filterSearched.set(tabIndex, new Boolean(searched));
+	}
+	
 	public void refresh() {
 		refresh(true);
 	}
@@ -245,7 +251,7 @@ implements ISelectionProvider
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
-						filter.search(monitor);
+						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}
 				}.schedule();
@@ -291,12 +297,46 @@ implements ISelectionProvider
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
-	public void setSelection(ISelection selection)
+	public void setSelection(final ISelection selection)
 	{
-		// Iterate over all filters and set the selection if they can handle it
-		for (IProductTypeQuickListFilter filter : filters) {
-			if (filter.canHandleSelection(selection)) {
-				filter.setSelection(selection);
+//		// Iterate over all filters and set the selection if they can handle it
+//		for (IProductTypeQuickListFilter filter : filters) {
+//			if (filter.canHandleSelection(selection)) {
+//				filter.setSelection(selection);
+//			}
+//		}
+		Set<ObjectID> objectIDs = SelectionUtil.getObjectIDs(selection);
+		if (!objectIDs.isEmpty()) {
+			for (ObjectID objectID : objectIDs) {
+				Class clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
+				for (int i=0; i<filters.size(); i++) {
+					final IProductTypeQuickListFilter filter = filters.get(i);
+					Set<Class> classes = filter.getClasses();
+					if (classes.contains(clazz)) {
+						// if not searched before, perform search first
+						if (!filterSearched.get(i)) 
+						{
+							final int index = i;
+							new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
+								@Override
+								protected IStatus run(ProgressMonitor monitor) {
+									filter.search(monitor, false);
+									setSelectedFilterSearched(true, index);
+									if (filter.canHandleSelection(selection)) {
+										filter.setSelection(selection);
+									}
+									return Status.OK_STATUS;
+								}
+							}.schedule();							
+						}
+						// already searched before, just check if can handle selection
+						else {
+							if (filter.canHandleSelection(selection)) {
+								filter.setSelection(selection);
+							}							
+						}
+					}
+				}
 			}
 		}
 	}

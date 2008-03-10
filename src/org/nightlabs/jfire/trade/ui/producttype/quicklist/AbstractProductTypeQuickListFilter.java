@@ -28,7 +28,11 @@ package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -37,7 +41,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -167,4 +173,19 @@ implements IProductTypeQuickListFilter
 			return false; 
 	}
 	
+	public void search(ProgressMonitor monitor, boolean inJob) {
+		if (inJob) {
+			new Job("Search") { 
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					search(new ProgressMonitorWrapper(monitor));
+					return Status.OK_STATUS;
+				}
+			}.schedule();			
+		} else {
+			search(monitor);
+		}
+	}
+	
+	protected abstract void search(ProgressMonitor monitor);
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
@@ -20,6 +21,36 @@ public class SelectionUtil {
 
 	protected SelectionUtil() {}
 
+	/**
+	 * Searches in the given {@link ISelection} for {@link ObjectID}s and returns
+	 * them.
+	 * 
+	 * @param selection the ISelection to search for contained {@link ObjectID}s 
+	 * @return a {@link Set} of all {@link ObjectID}s which were contained in 
+	 * the given {@link ISelection}
+	 */
+	public static Set<ObjectID> getObjectIDs(ISelection selection) 
+	{
+		Set<ObjectID> objectIDs = new HashSet<ObjectID>();
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection sel = (IStructuredSelection) selection;			
+			for (Object object : sel.toList()) {
+				if (object instanceof Collection) {
+					Collection set = (Collection) object;
+					for (Object setEntry : set) {
+						if (setEntry instanceof ObjectID) {
+							objectIDs.add((ObjectID)setEntry);
+						}
+					}
+				}
+				else if (object instanceof ObjectID) {
+					objectIDs.add((ProductTypeID)object);
+				}
+			}
+		}
+		return objectIDs;
+	}
+	
 	/**
 	 * Searches in the given {@link ISelection} for {@link ProductTypeID}s and returns
 	 * them.
