@@ -78,8 +78,8 @@ extends AbstractProductTypeQuickListFilter
 	
 //	public Control createResultViewerControl(Composite parent) {
 	protected Control doCreateResultViewerControl(Composite parent) {
-//		resultTable = new SimpleProductTypeTable(parent);
-		resultTable = new SimpleProductTypeTable(parent, this);
+		resultTable = new SimpleProductTypeTable(parent);
+//		resultTable = new SimpleProductTypeTable(parent, this);
 		return resultTable;
 	}
 

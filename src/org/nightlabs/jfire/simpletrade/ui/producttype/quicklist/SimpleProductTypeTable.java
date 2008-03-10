@@ -28,7 +28,6 @@ package org.nightlabs.jfire.simpletrade.ui.producttype.quicklist;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
-import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable;
 
 /**
@@ -38,23 +37,29 @@ import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTab
 public class SimpleProductTypeTable 
 extends AbstractProductTypeTable<SimpleProductType>
 {
-//	/**
-//	 * @param parent
-//	 * @param style
-//	 */
-//	public SimpleProductTypeTable(Composite parent, int style) {
-//		super(parent, style);
-//	}
-//
-//	/**
-//	 * @param parent
-//	 */
-//	public SimpleProductTypeTable(Composite parent) {
-//		super(parent);
+	/**
+	 * @param parent
+	 * @param style
+	 */
+	public SimpleProductTypeTable(Composite parent, int style) {
+		super(parent, style);
+	}
+
+	/**
+	 * @param parent
+	 */
+	public SimpleProductTypeTable(Composite parent) {
+		super(parent);
+	}
+
+	@Override
+	public Class<SimpleProductType> getProductTypeClass() {
+		return SimpleProductType.class;
+	}
+	
+//	public SimpleProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
+//		super(parent, filter);
 //	}
 	
-	public SimpleProductTypeTable(Composite parent, AbstractProductTypeQuickListFilter filter) {
-		super(parent, filter);
-	}
 }
 
