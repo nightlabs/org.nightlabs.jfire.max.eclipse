@@ -11,9 +11,9 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.store.ProductTypeDAO;
 
 /**
  * This is the Composite which is used by the {@link GenericProductTypeDetailView}

@@ -26,11 +26,9 @@
 
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -48,7 +46,8 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
-	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
+//	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
+	private ListenerList selectionChangedListeners = new ListenerList();
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
@@ -86,8 +85,8 @@ implements IProductTypeQuickListFilter
 			return;
 
 		SelectionChangedEvent event = new SelectionChangedEvent(this, selection);
-		for (Iterator<ISelectionChangedListener> it = selectionChangedListeners.iterator(); it.hasNext();) {
-			ISelectionChangedListener listener = it.next();
+		for (int i=0; i<selectionChangedListeners.size(); i++) {
+			ISelectionChangedListener listener = (ISelectionChangedListener) selectionChangedListeners.getListeners()[i]; 
 			listener.selectionChanged(event);
 		}
 	}
@@ -121,6 +120,11 @@ implements IProductTypeQuickListFilter
 		}
 	}
 	
+	/**
+	 * Creates the Control which is then returned in {@link #createResultViewerControl(Composite)}
+	 * @param parent the parent composite
+	 * @return the Control which is then returned in {@link #createResultViewerControl(Composite)}
+	 */
 	protected abstract Control doCreateResultViewerControl(Composite parent);
 
 	@Override
@@ -133,11 +137,15 @@ implements IProductTypeQuickListFilter
 		return control;
 	}
 	
+	/**
+	 * Subclasses can override this method if they need a special ISelectionChangedListener
+	 * for their implementation
+	 * @return the SelectionListener for your implementation 
+	 */
 	protected ISelectionChangedListener getSelectionChangedListener() 
 	{
 		return new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event)
-			{
+			public void selectionChanged(SelectionChangedEvent event) {
 				if (!(event.getSelection() instanceof IStructuredSelection))
 					throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
@@ -148,4 +156,15 @@ implements IProductTypeQuickListFilter
 			}
 		};
 	}
+
+	@Override
+	public boolean canHandleSelection(ISelection selection) {
+		if (getResultViewerControl() instanceof ISelectionHandler) {
+			ISelectionHandler selectionHandler = (ISelectionHandler) getResultViewerControl();
+			return selectionHandler.canHandleSelection(selection);
+		}
+		else
+			return false; 
+	}
+	
 }

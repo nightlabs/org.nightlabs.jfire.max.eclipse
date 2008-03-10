@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -155,7 +156,11 @@ implements ISelectionProvider
 			}
 			ProductTypeQuickListView.this.selection = sel;
 
-			for (ISelectionChangedListener listener : selectionChangedListeners) {
+//			for (ISelectionChangedListener listener : selectionChangedListeners) {
+//				listener.selectionChanged(selEvent);
+//			}
+			for (int i=0; i<selectionChangedListeners.size(); i++) {
+				ISelectionChangedListener listener = (ISelectionChangedListener) selectionChangedListeners.getListeners()[i];
 				listener.selectionChanged(selEvent);
 			}
 
@@ -260,7 +265,8 @@ implements ISelectionProvider
 	public void setFocus() {
 	}
 
-	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
+//	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
+	private ListenerList selectionChangedListeners = new ListenerList();	
 
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
@@ -291,9 +297,12 @@ implements ISelectionProvider
 	 */
 	public void setSelection(ISelection selection)
 	{
-		// Iterate over all filters and set the selection 
+		// Iterate over all filters and set the selection if they can handle it
 		for (IProductTypeQuickListFilter filter : filters) {
-			filter.setSelection(selection);
+//			filter.setSelection(selection);
+			if (filter.canHandleSelection(selection)) {
+				filter.setSelection(selection);
+			}
 		}
 	}
 

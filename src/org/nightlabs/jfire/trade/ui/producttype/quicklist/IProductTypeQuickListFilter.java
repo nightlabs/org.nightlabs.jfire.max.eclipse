@@ -41,7 +41,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public interface IProductTypeQuickListFilter
-extends ISelectionProvider
+//extends ISelectionProvider
+extends ISelectionHandler
 {
 	/**
 	 * Creates the Control that displays the filtered results
@@ -91,10 +92,10 @@ extends ISelectionProvider
 	 */
 	public void setSelection(ISelection selection);
 
-//	/**
-//	 * Returns true if the filter can display the selection or not
-//	 * @param selection the ISelection to check for
-//	 * @return true if the filter can display the selection or not
-//	 */
-//	public boolean canHandleSelection(ISelection selection);
+	/**
+	 * Returns true if the filter can display the selection or not
+	 * @param selection the ISelection to check for
+	 * @return true if the filter can display the selection or not
+	 */
+	public boolean canHandleSelection(ISelection selection);
 }
