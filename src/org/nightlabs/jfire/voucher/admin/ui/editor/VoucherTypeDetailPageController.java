@@ -44,7 +44,8 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = CollectionUtil.mergeArrays(
 			FETCH_GROUPS_DEFAULT,
-			new String[] {FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
+			new String[] {
+					FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
 					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
 			}
 	);
@@ -86,8 +87,8 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 	}
 
 
-
-	public VoucherType getExtendedProductType(ProgressMonitor monitor ,  ProductTypeID extendedProductTypeID)
+	@Override
+	public VoucherType getExtendedProductType(ProgressMonitor monitor, ProductTypeID extendedProductTypeID)
 	{
 
 		return VoucherTypeDAO.sharedInstance().getVoucherType(
@@ -118,7 +119,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 		}
 		try {
 			VoucherManager voucherManager = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			return voucherManager.storeVoucherType(voucherType, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}

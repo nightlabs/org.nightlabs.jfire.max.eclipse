@@ -7,6 +7,7 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
+ * @deprecated I think this class is not used at all. Delete it? Marco.
  */
 public abstract class AbstractVoucherTypePageController
 extends AbstractProductTypePageController

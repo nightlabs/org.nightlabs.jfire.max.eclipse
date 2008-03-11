@@ -96,8 +96,8 @@ extends AbstractProductTypeDetailPage
 
 					voucherLayoutSection.getVoucherLayoutComposite()
 							.setVoucherType(voucherType);
-					getNameSection().setProductTypeController((AbstractProductTypePageController)getPageController());
-					getSaleAccessControlSection().setProductTypeController((AbstractProductTypePageController)getPageController());
+					getNameSection().setProductTypePageController((AbstractProductTypePageController)getPageController());
+					getSaleAccessControlSection().setProductTypePageController((AbstractProductTypePageController)getPageController());
 
 				}
 				
