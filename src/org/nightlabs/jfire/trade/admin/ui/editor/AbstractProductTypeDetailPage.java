@@ -157,14 +157,14 @@ implements IProductTypeDetailPage
 	@Override
 	protected void asyncCallback()
 	{
-		final AbstractProductTypePageController controller = (AbstractProductTypePageController) getPageController();
-		final ProductType productType = controller.getProductType();
+		//final AbstractProductTypePageController controller = (AbstractProductTypePageController) getPageController();
+	//	final ProductType productType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (isDisposed())
 					return;
 
-				setProductType(productType);
+				setProductType((AbstractProductTypePageController) getPageController());
 				switchToContent();
 			}
 		});
@@ -179,13 +179,13 @@ implements IProductTypeDetailPage
 	 * Sets the {@link ProductType}.
 	 * @param productType the {@link ProductType} to set
 	 */
-	protected void setProductType(ProductType productType)
+	protected void setProductType(AbstractProductTypePageController<ProductType> pageController)
 	{
-		if (productType == null) {
+		if (pageController == null) {
 			getManagedForm().getForm().getForm().setMessage("No product type selected.", IMessageProvider.INFORMATION);
 			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
 		}
-		else if (productType.isClosed()) {
+		else if (pageController.getProductType().isClosed()) {
 			getManagedForm().getForm().getForm().setMessage(
 					Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.productTypeClosedMessage"),  //$NON-NLS-1$
 					IMessageProvider.INFORMATION);
@@ -197,15 +197,15 @@ implements IProductTypeDetailPage
 		}
 
 		if (nameSection != null)
-			nameSection.setProductType(productType);
+			nameSection.setProductTypeController(pageController);
 		if (nestedProductTypeSection != null)
-			nestedProductTypeSection.setProductType(productType);
+			nestedProductTypeSection.setProductTypeController(pageController);
 		if (saleAccessControlSection != null)
-			saleAccessControlSection.setProductType(productType);
+			saleAccessControlSection.setProductTypeController(pageController);
 		if (ownerSection != null)
-			ownerSection.setProductTypeController((AbstractProductTypePageController)getPageController());									
+			ownerSection.setProductTypeController(pageController);									
 		if (vendorSection != null)
-			vendorSection.setProductTypeController((AbstractProductTypePageController)getPageController());
+			vendorSection.setProductTypeController(pageController);
 		
 	
 	

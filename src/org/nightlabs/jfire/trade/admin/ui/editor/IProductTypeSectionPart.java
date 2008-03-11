@@ -25,11 +25,12 @@ extends IFormPart
 	 */
 	AbstractProductTypePageController<ProductType> getProductTypeController();
 
-	/**
-	 * sets the productType to display
-	 * @param productType the productType to set
-	 */
-	void setProductType(ProductType productType);
+//	/**
+//	 * sets the productType to display
+//	 * @param productType the productType to set
+//	 */
+//	void setProductType(ProductType productType);
+		
 	
 	/**
 	 * returns the current displayed/edited productType

@@ -94,12 +94,37 @@ implements IProductTypeSectionPart
 	public ProductType getProductType() {
 		return productType;
 	}
-	public void setProductType(ProductType productType)
+//	public void setProductType(ProductType productType)
+//	{
+//		if (productType == null || getSection() == null || getSection().isDisposed() || nestedProductTypeTable.isDisposed())
+//			return;
+//
+//		this.productType = productType;
+//		if (productType == null) {
+//			setInheritanceSelection(false);
+//		}
+//		else {
+//			if (productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) //$NON-NLS-1$
+//				setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").isValueInherited()); //$NON-NLS-1$
+////			 TODO sort nestedProductTypes alphabetically
+//		}
+//		
+//		nestedProductTypeTable.setInput(productType);
+//	}
+	//TODO I have to implement those two methods
+
+	private AbstractProductTypePageController<ProductType> productTypePageController;
+
+
+
+	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
 	{
-		if (productType == null || getSection() == null || getSection().isDisposed() || nestedProductTypeTable.isDisposed())
+		if (pageController == null || getSection() == null || getSection().isDisposed()|| nestedProductTypeTable.isDisposed())
 			return;
 
-		this.productType = productType;
+		productTypePageController = pageController; 
+
+		this.productType = pageController.getProductType();
 		if (productType == null) {
 			setInheritanceSelection(false);
 		}
@@ -110,15 +135,8 @@ implements IProductTypeSectionPart
 		}
 		
 		nestedProductTypeTable.setInput(productType);
-	}
-	//TODO I have to implement those two methods
-
-	private AbstractProductTypePageController<ProductType> productTypePageController;
-
-
-
-	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
-	{
+		
+		
 
 	}
 

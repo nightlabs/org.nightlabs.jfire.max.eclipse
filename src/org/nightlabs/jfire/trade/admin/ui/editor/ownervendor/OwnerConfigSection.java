@@ -58,9 +58,8 @@ implements IProductTypeSectionPart
 					}
 				});
 
-//		getSection().setBackgroundMode(SWT.INHERIT_FORCE);
-//		getToolBarManager().getControl().setBackgroundMode(SWT.INHERIT_FORCE);
-//		getToolBarManager().getControl().setBackground(getSection().getTitleBarGradientBackground());
+
+		
 		inheritAction = new InheritAction();
 		registerAction(inheritAction);
 		

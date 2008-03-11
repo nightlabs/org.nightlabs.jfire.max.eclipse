@@ -57,9 +57,9 @@ implements IProductTypeSectionPart
 		return saleAccessControlComposite.getSaleAccessControlHelper().getProductType();
 	}
 
-	public void setProductType(ProductType productType) {
-		saleAccessControlComposite.setProductType(productType);
-	}
+//	public void setProductType(ProductType productType) {
+//		saleAccessControlComposite.setProductType(productType);
+//	}
 
 	//TODO I have to implement those two methods
 
@@ -69,6 +69,13 @@ implements IProductTypeSectionPart
 
 	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
 	{
+		if (pageController == null || getSection() == null || getSection().isDisposed())
+			return;
+
+		productTypePageController = pageController; 
+
+		saleAccessControlComposite.setProductType(pageController.getProductType());
+		
 
 	}
 

@@ -33,6 +33,7 @@ public abstract class AbstractProductTypeNameSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
+	// TODO should be named FETCH_GROUPS_NAME (plural since it is an array) 
 	public String[] FETCH_GROUP_NAME = new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME};
 
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent) {
@@ -96,22 +97,22 @@ implements IProductTypeSectionPart
 		return productType;
 	}
 
-	public void setProductType(ProductType productType)
-	{
-		if (productType == null || getSection() == null || getSection().isDisposed())
-			return;
-
-		this.productType = productType;
-		if (productType == null) {
-			setInheritanceSelection(false);
-			productTypeName.setI18nText(null);
-		}
-		else {
-			productTypeName.setI18nText(productType.getName(), I18nTextEditor.EditMode.DIRECT);
-			if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
-				setInheritanceSelection(productType.getFieldMetaData("name").isValueInherited()); //$NON-NLS-1$
-		}
-	}
+//	public void setProductType(ProductType productType)
+//	{
+//		if (productType == null || getSection() == null || getSection().isDisposed())
+//			return;
+//
+//		this.productType = productType;
+//		if (productType == null) {
+//			setInheritanceSelection(false);
+//			productTypeName.setI18nText(null);
+//		}
+//		else {
+//			productTypeName.setI18nText(productType.getName(), I18nTextEditor.EditMode.DIRECT);
+//			if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
+//				setInheritanceSelection(productType.getFieldMetaData("name").isValueInherited()); //$NON-NLS-1$
+//		}
+//	}
 
 	//TODO I have to implement those two methods
 
@@ -121,6 +122,24 @@ implements IProductTypeSectionPart
 
 	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
 	{
+		
+		if (pageController == null || getSection() == null || getSection().isDisposed())
+			return;
+
+		productTypePageController = pageController; 
+
+		this.productType = pageController.getProductType();
+		
+		if (productType == null) {
+			setInheritanceSelection(false);
+			productTypeName.setI18nText(null);
+		}
+		else {
+			productTypeName.setI18nText(productType.getName(), I18nTextEditor.EditMode.DIRECT);
+			if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
+				setInheritanceSelection(productType.getFieldMetaData("name").isValueInherited()); //$NON-NLS-1$
+		}
+		
 
 	}
 
