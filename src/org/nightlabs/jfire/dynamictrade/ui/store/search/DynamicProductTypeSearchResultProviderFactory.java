@@ -9,16 +9,15 @@ import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
  *
  */
 public class DynamicProductTypeSearchResultProviderFactory
-extends AbstractSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory<DynamicProductType>
 {
-	public DynamicProductTypeSearchResultProviderFactory() {
-	}
-
-	public ISearchResultProvider createSearchResultProvider() {
+	@Override
+	public ISearchResultProvider<DynamicProductType> createSearchResultProvider() {
 		return new DynamicProductTypeSearchResultProvider(this);
 	}
 
-	public Class getResultTypeClass() {
+	@Override
+	public Class<DynamicProductType> getResultTypeClass() {
 		return DynamicProductType.class;
 	}
 
