@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.legalentity.search;
 
@@ -22,9 +22,9 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 		TextDataFieldEditor {
 
 	private TextDataFieldComposite<TextDataField> textDataFieldComposite;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public LegalEntityFieldBasedTextDataFieldEditor() {
 	}
@@ -37,13 +37,13 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);
 		gl.numColumns = 2;
-		
-		textDataFieldComposite = new TextDataFieldComposite<TextDataField>(this, parent, SWT.NONE, this, gl) {
+
+		textDataFieldComposite = new TextDataFieldComposite<TextDataField>(this, parent, SWT.NONE, getSwtModifyListener(), gl) {
 			@Override
 			protected int getTextBorderStyle() {
 				return SWT.READ_ONLY;
 			}
-			
+
 			@Override
 			protected Object createTitleLayoutData() {
 				GridData gd = new GridData();
@@ -60,5 +60,5 @@ public class LegalEntityFieldBasedTextDataFieldEditor extends
 		if (textDataFieldComposite != null)
 			textDataFieldComposite.refresh();
 	}
-	
+
 }

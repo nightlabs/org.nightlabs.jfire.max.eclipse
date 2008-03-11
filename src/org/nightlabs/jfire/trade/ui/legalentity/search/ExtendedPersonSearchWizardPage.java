@@ -83,7 +83,6 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 						if (thisJob != loadAdditionalDataJob)
 							return;
 
-						// update whatever UI
 						additionalDataLoaded = true;
 						setLegalEntity(_legalEntity);
 						getContainer().updateButtons();
@@ -106,7 +105,6 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 	}
 
 	private void setLegalEntity(LegalEntity legalEntity) {
-		System.out.println("LE loaded...");
 		this.legalEntity = legalEntity;
 		if (legalEntity != null)
 			defaultCustomerGroup = legalEntity.getDefaultCustomerGroup();
