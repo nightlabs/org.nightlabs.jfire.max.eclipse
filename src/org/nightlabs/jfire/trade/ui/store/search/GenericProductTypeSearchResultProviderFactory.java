@@ -11,18 +11,20 @@ import org.nightlabs.jfire.store.ProductType;
  *
  */
 public class GenericProductTypeSearchResultProviderFactory
-extends AbstractSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory<ProductType>
 {
 	public GenericProductTypeSearchResultProviderFactory() {
 		getName().setText(Locale.ENGLISH.getLanguage(), "Products"); //$NON-NLS-1$
 		getName().setText(Locale.GERMANY.getLanguage(), "Produkte"); //$NON-NLS-1$
 	}
 	
-	public ISearchResultProvider createSearchResultProvider() {
+	@Override
+	public ISearchResultProvider<ProductType> createSearchResultProvider() {
 		return new GenericProductTypeSearchResultProvider(this);
 	}
 
-	public Class getResultTypeClass() {
+	@Override
+	public Class<ProductType> getResultTypeClass() {
 		return ProductType.class;
 	}
 }

@@ -14,22 +14,22 @@ import org.nightlabs.jfire.store.ProductType;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractProductTypeSearchResultProvider
-implements ISearchResultProvider<ProductType>
+public abstract class AbstractProductTypeSearchResultProvider<P extends ProductType>
+implements ISearchResultProvider<P>
 {
-	public AbstractProductTypeSearchResultProvider(ISearchResultProviderFactory factory) {
+	public AbstractProductTypeSearchResultProvider(ISearchResultProviderFactory<P> factory) {
 		this.factory = factory;
 	}
 	
-	public Collection<ProductType> getSelectedObjects()
+	public Collection<P> getSelectedObjects()
 	{
 		AbstractProductTypeSearchDialog dialog = createProductTypeSearchDialog(
 				RCPUtil.getActiveShell());
 		dialog.setSearchText(searchText);
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
-			Collection<ProductType> productTypes = new ArrayList<ProductType>(1);
-			productTypes.add(dialog.getProductType());
+			Collection<P> productTypes = new ArrayList<P>(1);
+			productTypes.add((P) dialog.getProductType());
 			return productTypes;
 		}
 		return null;
@@ -40,8 +40,8 @@ implements ISearchResultProvider<ProductType>
 		this.searchText = text;
 	}
 	
-	private ISearchResultProviderFactory factory = null;
-	public ISearchResultProviderFactory getFactory() {
+	private ISearchResultProviderFactory<P> factory = null;
+	public ISearchResultProviderFactory<P> getFactory() {
 		return factory;
 	}
 	
