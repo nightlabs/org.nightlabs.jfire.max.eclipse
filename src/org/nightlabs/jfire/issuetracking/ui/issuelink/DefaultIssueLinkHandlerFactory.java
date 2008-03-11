@@ -3,10 +3,15 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author chairatk
@@ -20,18 +25,31 @@ implements IssueLinkHandlerFactory
 	}
 
 	public IssueLinkHandler createIssueLinkHandler() {
-		
 		return new IssueLinkHandler() {
 
-			public String getLinkObjectDescription(ObjectID objectID) {
-				return "Unknown Object Class";
-			}
-
-			public Image getLinkObjectImage(ObjectID objectID) {
+			@Override
+			public Image getLinkedObjectImage(IssueLink issueLink,
+					Object linkedObject) {
+				// TODO Auto-generated method stub
 				return null;
 			}
 
-			public void openLinkObject(ObjectID objectID) {
+			@Override
+			public String getLinkedObjectName(IssueLink issueLink,
+					Object linkedObject) {
+				return "Unknown Object Class";
+			}
+
+			@Override
+			public Map getLinkedObjects(Set issueLinks, ProgressMonitor monitor) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void openLinkedObject(IssueLink issueLink,
+					ObjectID linkedObjectID) {
+				// TODO Auto-generated method stub
 				
 			}
 		};

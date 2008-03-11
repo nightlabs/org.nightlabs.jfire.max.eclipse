@@ -3,17 +3,21 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 
 public class IssueLinkWizard 
 extends DynamicPathWizard
 {
-	private Set<ObjectID> issueLinkObjectID;
+	private Set<IssueLink> issueLinks;
 
+	private Issue issue;
 	private IssueLinkAdderComposite parent;
-	public IssueLinkWizard(IssueLinkAdderComposite parent) {
+	
+	public IssueLinkWizard(IssueLinkAdderComposite parent, Issue issue) {
 		this.parent = parent;
+		this.issue = issue;
 		setWindowTitle("Link Objects to Issue");
 	}
 
@@ -25,24 +29,24 @@ extends DynamicPathWizard
 
 	@Override
 	public boolean performFinish() {
-		parent.addObjectIDs(issueLinkObjectID);
+		parent.addIssueLinks(issueLinks);
 		return true;
 	}
 
 	@Override
 	public boolean canFinish() {
-		if(issueLinkObjectID != null && issueLinkObjectID.size() != 0) {
+		if(issueLinks != null && issueLinks.size() != 0) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public void setIssueLinkObjectID(Set<ObjectID> issueLinkObjectID) {
-		this.issueLinkObjectID = issueLinkObjectID;
+	public void setIssueLinks(Set<IssueLink> issueLinks) {
+		this.issueLinks = issueLinks;
 	}
 	
-	public void setLinkRelation(String relationText) {
-		
+	public Issue getIssue() {
+		return issue;
 	}
 }

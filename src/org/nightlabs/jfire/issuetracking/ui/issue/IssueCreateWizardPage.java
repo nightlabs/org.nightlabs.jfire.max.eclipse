@@ -8,19 +8,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueNewWizardPage extends WizardHopPage{
+public class IssueCreateWizardPage extends WizardHopPage{
+	private Issue issue;
 	private IssueCreateComposite issueCreateComposite;
-	private Set<ObjectID> objectIDs;
 	
-	public IssueNewWizardPage(Set<ObjectID> objectIDs){
-		super(IssueNewWizardPage.class.getName(), "New Issue");
-		this.objectIDs = objectIDs;
+	public IssueCreateWizardPage(Issue issue){
+		super(IssueCreateWizardPage.class.getName(), "New Issue");
 		setDescription("Create a new issue.");
+		this.issue = issue;
 	}
 
 	@Override
@@ -28,7 +29,7 @@ public class IssueNewWizardPage extends WizardHopPage{
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		issueCreateComposite = new IssueCreateComposite(mainComposite, SWT.NONE, objectIDs);
+		issueCreateComposite = new IssueCreateComposite(mainComposite, SWT.NONE, issue);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
@@ -36,10 +37,6 @@ public class IssueNewWizardPage extends WizardHopPage{
 
 		return mainComposite;
 	}
-	@Override
-	public void createControl(Composite parent) {
-		super.createControl(parent);
-	}	
 
 	@Override
 	public void setVisible(boolean visible) {
@@ -48,7 +45,7 @@ public class IssueNewWizardPage extends WizardHopPage{
 		}
 		super.setVisible(visible);
 	}
-	
+
 	private void updatePageComplete() {
 		setPageComplete(false);
 		

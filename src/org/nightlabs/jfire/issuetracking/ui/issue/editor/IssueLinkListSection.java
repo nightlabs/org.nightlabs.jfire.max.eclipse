@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.util.Set;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -14,8 +12,8 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
@@ -46,14 +44,14 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		client.getGridLayout().numColumns = 1; 
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(
-				client, SWT.NONE, false);
+				client, SWT.NONE, false, controller.getIssue());
 		issueLinkAdderComposite.getGridData().grabExcessHorizontalSpace = true;
 		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
 			public void issueLinkItemChanged(
 					IssueLinkItemChangedEvent itemChangedEvent) {
 				controller.getIssue().clearLinkObjectIDs();
-				for (ObjectID objectID : issueLinkAdderComposite.getItems()) {
-					controller.getIssue().addLinkObjectID(objectID);	
+				for (IssueLink issueLink : issueLinkAdderComposite.getItems()) {
+					controller.getIssue().getIssueLinks().add(issueLink);	
 				}
 				markDirty();
 			}
@@ -62,9 +60,10 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.getIssueLinkTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
+				IssueLink issueLink = issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement();
 				IssueLinkHandler linkHandler = 
-					issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement());
-				linkHandler.openLinkObject(issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement());
+					issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLink.getLinkedObjectID());
+				linkHandler.openLinkedObject(issueLink, issueLink.getLinkedObjectID());
 			}
 		});
 		
@@ -84,9 +83,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
-
-		Set<ObjectID> objectIDs = issue.getLinkObjectIDs();
-		issueLinkAdderComposite.setObjectIDs(objectIDs);
+		issueLinkAdderComposite.setIssueLinks(issue.getIssueLinks());
 	}
 	
 	public Issue getIssue() {
@@ -109,7 +106,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		public void run() {
 			if (issueLinkAdderComposite.getIssueLinkTable().getSelectionIndex() != -1) {
 				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-				table.getIssueLinkHandler(table.getFirstSelectedElement()).openLinkObject(table.getFirstSelectedElement());
+				table.getIssueLinkHandler(table.getFirstSelectedElement().getLinkedObjectID()).openLinkedObject(table.getFirstSelectedElement(), table.getFirstSelectedElement().getLinkedObjectID());
 			}
 		}		
 	}
@@ -129,7 +126,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		@Override
 		public void run() {
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
-					new IssueLinkWizard(issueLinkAdderComposite));
+					new IssueLinkWizard(issueLinkAdderComposite, issue));
 			dialog.open();
 		}		
 	}

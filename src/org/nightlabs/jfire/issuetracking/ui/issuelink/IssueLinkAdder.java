@@ -5,6 +5,10 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -42,4 +46,10 @@ public interface IssueLinkAdder
 	void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
 	
 	Set<ObjectID> getIssueLinkObjectIds();
+	
+	Set<IssueLink> createIssueLinks(
+			Issue issue,
+			IssueLinkType issueLinkType,
+//			Set<ObjectID> linkedObjectIDs,
+			ProgressMonitor monitor);
 }

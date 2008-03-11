@@ -16,6 +16,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ExpandAdapter;
+import org.eclipse.swt.events.ExpandEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,16 +28,19 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.resource.Messages;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.AbstractJDOQuery;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
@@ -44,10 +49,6 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
-import org.nightlabs.jfire.issue.config.StoredIssueQuery;
-import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
-import org.nightlabs.jfire.issue.dao.IssueResolutionDAO;
-import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssuePriorityID;
 import org.nightlabs.jfire.issue.id.IssueResolutionID;
@@ -58,9 +59,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -73,24 +72,49 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class IssueSearchComposite
-	extends JDOQueryComposite<Issue, IssueQuery>
+extends JDOQueryComposite<Issue, IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueSearchComposite.class);
-	
-	private Text issueIDText;
-	private Text subjectText;
-	private Text reporterText;
-	private Text assigneeText;
+	private FormToolkit formToolkit;
+	private Object mutex = new Object();
 
-	private Button allReporterButton;
-	private Button reporterButton;
-	private Button allAssigneeButton;
-	private Button assigneeButton;
-	
-	private List<IssueType> issueTypeList;
-	private List<IssuePriority> issuePriorityList;
-	private List<IssueSeverityType> issueSeverityTypeList;
-	private List<IssueResolution> issueResolutionList;
+//	private IIssueSearchInvoker searchInvoker;
+
+	private boolean selectedAllReporter = false;
+	private boolean selectedAllAssignee = false;
+
+	/**
+	 * @param parent
+	 * @param style
+	 * @param layoutMode
+	 * @param layoutDataMode
+	 */
+	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style,
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
+	{
+		super(parent, style, layoutMode, layoutDataMode);
+
+		formToolkit = new FormToolkit(getShell().getDisplay());
+		createComposite(this);
+		prepareIssueProperties();
+	}
+
+	/**
+	 * @param parent
+	 * @param style
+	 */
+	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style)
+	{
+		super(parent, style);
+
+		createComposite(this);
+		prepareIssueProperties();
+	}
+
+	/*******Issue Related Section**********/
+	private SectionPart issueRelatedSection;
+
+	private Text issueIDText;
 
 	private XComboComposite<IssueType> issueTypeCombo;
 	private XComboComposite<IssueSeverityType> issueSeverityCombo;
@@ -102,83 +126,49 @@ public class IssueSearchComposite
 	private IssuePriority selectedIssuePriority;
 	private IssueResolution selectedIssueResolution;
 
+	/************People Related Section****************/
+	private SectionPart peopleRelatedSection;
+
 	private User selectedReporter;
 	private User selectedAssignee;
+
+	private Text reporterText;
+	private Text assigneeText;
+
+	private Button allReporterButton;
+	private Button reporterButton;
+	private Button allAssigneeButton;
+	private Button assigneeButton;
+
+	/************Time Related Section****************/
+	private SectionPart timeRelatedSection;
 
 	private DateTimeEdit createdTimeEdit;
 	private DateTimeEdit updatedTimeEdit;
 
+	/**************Document Related Section************/
 	private IssueLinkAdderComposite issueLinkAdderComposite;
-	
-//	private FormToolkit formToolkit;
-	
-	private Object mutex = new Object();
-	
-	private IIssueSearchInvoker searchInvoker;
-	
-	private boolean selectedAllReporter = false;
-	private boolean selectedAllAssignee = false;
-	
-	/**
-	 * @param parent
-	 * @param style
-	 * @param layoutMode
-	 * @param layoutDataMode
-	 */
-	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode)
-	{
-		super(parent, style, layoutMode, layoutDataMode);
-		
-//		formToolkit = new FormToolkit(getShell().getDisplay());
-		
-		createComposite(this);
-		prepareProperties();
-	}
 
-	/**
-	 * @param parent
-	 * @param style
-	 */
-	public IssueSearchComposite(AbstractQueryFilterComposite<Issue, IssueQuery> parent, int style)
-	{
-		super(parent, style);
-		createComposite(this);
-		prepareProperties();
-	}
-
-	private void prepareProperties(){
-		ISSUE_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_SEVERITY_TYPE_ALL.getIssueSeverityTypeText().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_PRIORITY_ALL.getIssuePriorityText().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
-	}
-
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#createComposite(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
-	protected void createComposite(final Composite parent) {
+	protected void createComposite(Composite parent) {
 		parent.setLayout(new GridLayout(3, false));
-		
-		ExpandableComposite issueTypeEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
-		issueTypeEC.setText("Issue Related");
-		issueTypeEC.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		Group issueTypeGroup = new Group(issueTypeEC, SWT.NONE);
-		issueTypeGroup.setText("Issue Related");
-		issueTypeGroup.setLayout(new GridLayout(1, false));
-		issueTypeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		issueTypeEC.setClient(issueTypeGroup);
-		// Why adding an empty Listener?
-//		issueTypeEC.addExpansionListener(new ExpansionAdapter() {
-//			@Override
-//			public void expansionStateChanged(ExpansionEvent e) {
-//			}
-//		});
-		
-		XComposite issueTypeComposite = new XComposite(issueTypeGroup, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		issueRelatedSection = new RestorableSectionPart(parent, formToolkit, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		issueRelatedSection.getSection().setText("Issue Related");
+		issueRelatedSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+		issueRelatedSection.getSection().addExpansionListener(new IExpansionListener() {
+			@Override
+			public void expansionStateChanged(ExpansionEvent arg0) {
+				System.out.println("1111111111111111");
+			}
+			
+			@Override
+			public void expansionStateChanging(ExpansionEvent arg0) {
+				System.out.println("2222222222222222");
+			}
+		});
+
+		XComposite issueTypeComposite = new XComposite(issueRelatedSection.getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
 
 		new Label(issueTypeComposite, SWT.NONE).setText("Issue Type: ");
@@ -187,7 +177,7 @@ public class IssueSearchComposite
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
-				
+
 				if (selectedIssueType.equals(ISSUE_TYPE_ALL)) {
 					loadProperties();
 				}
@@ -238,34 +228,26 @@ public class IssueSearchComposite
 		});
 
 		//-----------------------------------------------------------
-		ExpandableComposite userGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
-		userGroupEC.setText("People Related");
-		userGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		Group userGroup = new Group(userGroupEC, SWT.NONE);
+		peopleRelatedSection =  new RestorableSectionPart(parent, formToolkit, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		peopleRelatedSection.getSection().setText("People Related");
+		peopleRelatedSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Group userGroup = new Group(peopleRelatedSection.getSection(), SWT.NONE);
 		userGroup.setText("People Related");
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		userGroupEC.setClient(userGroup);
-		userGroupEC.addExpansionListener(new ExpansionAdapter() {
-			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
-				// resizes the application window.
-			}
-		});
-		
 		Label rLabel = new Label(userGroup, SWT.NONE);
 		rLabel.setText("Reporter: ");
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.CENTER;
 		rLabel.setLayoutData(gridData);
-				
+
 		XComposite rComposite = new XComposite(userGroup, SWT.NONE);
 		rComposite.setLayout(new GridLayout(2, false));
-		
+
 		allReporterButton = new Button(rComposite, SWT.CHECK);
 		allReporterButton.setText("All");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -280,7 +262,7 @@ public class IssueSearchComposite
 			}
 		});
 		allReporterButton.setSelection(true);
-		
+
 		reporterText = new Text(rComposite, SWT.BORDER);
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -306,10 +288,10 @@ public class IssueSearchComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.verticalAlignment = GridData.CENTER;
 		aLabel.setLayoutData(gridData);
-		
+
 		XComposite aComposite = new XComposite(userGroup, SWT.NONE);
 		aComposite.setLayout(new GridLayout(2, false));
-		
+
 		allAssigneeButton = new Button(aComposite, SWT.CHECK);
 		allAssigneeButton.setText("All");
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -324,7 +306,7 @@ public class IssueSearchComposite
 			}
 		});
 		allAssigneeButton.setSelection(true);
-		
+
 		assigneeText = new Text(aComposite, SWT.BORDER);
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -344,27 +326,19 @@ public class IssueSearchComposite
 				}//if
 			}
 		});
-		
+
 		//-----------------------------------------------------------
-		ExpandableComposite timeGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
-		timeGroupEC.setText("Time Related");
-		timeGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		Group timeGroup = new Group(timeGroupEC, SWT.NONE);
+		timeRelatedSection = new RestorableSectionPart(parent, formToolkit, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		timeRelatedSection.getSection().setText("Time Related");
+		timeRelatedSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Group timeGroup = new Group(timeRelatedSection.getSection(), SWT.NONE);
 		timeGroup.setText("Time Related");
 		gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
 		timeGroup.setLayout(gridLayout);
 		timeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		timeGroupEC.setClient(timeGroup);
-		timeGroupEC.addExpansionListener(new ExpansionAdapter() {
-			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
-				// resizes the application window.
-			}
-		});
-		
 		new Label(timeGroup, SWT.NONE).setText("Created Time: ");
 		createdTimeEdit = new DateTimeEdit(
 				timeGroup,
@@ -390,40 +364,96 @@ public class IssueSearchComposite
 		updatedTimeEdit.setDate(cal.getTime());
 
 		//-------------------------------------------------------------
-		ExpandableComposite documentGroupEC = new ExpandableComposite(parent, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
-		documentGroupEC.setText("Document Related");
-		documentGroupEC.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		Group documentGroup = new Group(documentGroupEC, SWT.NONE);
-		documentGroup.setText("Related Documents");
-		gridLayout = new GridLayout(1, false);
-		documentGroup.setLayout(gridLayout);
-		documentGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		documentGroupEC.setClient(documentGroup);
-		documentGroupEC.addExpansionListener(new ExpansionAdapter() {
-			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
-				// resizes the application window.
-			}
-		});
-		
-		issueLinkAdderComposite = new IssueLinkAdderComposite(documentGroup, SWT.NONE, true);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 150;
-		issueLinkAdderComposite.setLayoutData(gridData);
-		
 		reporterText.setEnabled(false);
 		reporterButton.setEnabled(false);
 		assigneeText.setEnabled(false);
 		assigneeButton.setEnabled(false);
-		
-		loadProperties();
+
+		loadProperties();		
 	}
+
+	@Override
+	protected void resetSearchQueryValues() {
+		IssueQuery issueQuery = getQuery();
+
+		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
+			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
+		}
+
+		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
+			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+		}
+
+		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
+			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+		}
+
+		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
+			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+		}
+
+		if (!selectedAllReporter && selectedReporter != null) {
+			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
+		}
+		else {
+			issueQuery.setReporterID(null);
+		}
+
+		if (!selectedAllAssignee && selectedAssignee != null) {
+			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+		}
+		else {
+			issueQuery.setAssigneeID(null);
+		}
+
+		if (createdTimeEdit.isActive()) {
+			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+		}
+
+		if (updatedTimeEdit.isActive()) {
+			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+		}
+
+		if (issueLinkAdderComposite.getItems().size() != 0) {
+//			issueQuery.setIssueLinks(issueLinkAdderComposite.getItems());
+		}
+	}
+
+	@Override
+	protected void unsetSearchQueryValues() {
+		IssueQuery issueQuery = getQuery();
+		issueQuery.setIssueTypeID(null);
+		issueQuery.setIssueSeverityTypeID(null);
+		issueQuery.setIssuePriorityID(null);
+		issueQuery.setIssueResolutionID(null);
+		issueQuery.setReporterID(null);
+		issueQuery.setAssigneeID(null);
+		issueQuery.setCreateTimestamp(null);
+		issueQuery.setUpdateTimestamp(null);
+		issueQuery.setObjectIDs(null);
+	}
+
+	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
+	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All");
+	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
+	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All");
+
+	private void prepareIssueProperties(){
+		ISSUE_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_SEVERITY_TYPE_ALL.getIssueSeverityTypeText().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_PRIORITY_ALL.getIssuePriorityText().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+	}
+
 
 	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, IssueResolution.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	private boolean loadJobRunning = false;
+
+	private List<IssueType> issueTypeList;
+	private List<IssuePriority> issuePriorityList;
+	private List<IssueSeverityType> issueSeverityTypeList;
+	
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
@@ -494,11 +524,11 @@ public class IssueSearchComposite
 					return Status.OK_STATUS;
 				} finally {
 					synchronized (mutex) {
-						if (storedIssueQueryRunnable != null) {
-							logger.debug("Running storedIssueQueryRunnable from load Job.");
-							storedIssueQueryRunnable.run(monitor);
-							storedIssueQueryRunnable = null;
-						}
+//						if (storedIssueQueryRunnable != null) {
+//							logger.debug("Running storedIssueQueryRunnable from load Job.");
+//							storedIssueQueryRunnable.run(monitor);
+//							storedIssueQueryRunnable = null;
+//						}
 						loadJobRunning = false;
 						logger.debug("Load Job finished.");
 					}
@@ -509,244 +539,176 @@ public class IssueSearchComposite
 		loadJob.schedule();
 	}
 
-	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
-	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All");
-	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
-	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All");
+////	/* (non-Javadoc)
+////	* @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
+////	*/
+////	@Override
+////	public AbstractJDOQuery getJDOQuery() {
+////	IssueQuery issueQuery = new IssueQuery();
 
-//	/* (non-Javadoc)
-//	 * @see org.nightlabs.jdo.ui.JDOQueryComposite#getJDOQuery()
-//	 */
-//	@Override
-//	public AbstractJDOQuery getJDOQuery() {
-//		IssueQuery issueQuery = new IssueQuery();
-//
-//		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
-//			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
-//		}
-//
-//		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
-//			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-//		}
-//
-//		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
-//			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
-//		}
-//
-//		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
-//			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
-//		}
-//
-//		if (!selectedAllReporter && selectedReporter != null) {
-//			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
-//		}
-//		else {
-//			issueQuery.setReporterID(null);
-//		}
-//
-//		if (!selectedAllAssignee && selectedAssignee != null) {
-//			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
-//		}
-//		else {
-//			issueQuery.setAssigneeID(null);
-//		}
-//
-//		if (createdTimeEdit.isActive()) {
-//			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
-//		}
-//
-//		if (updatedTimeEdit.isActive()) {
-//			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
-//		}
-//		
-//		if (issueLinkAdderComposite.getItems().size() != 0) {
-//			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
-//		}
-//
-//		return issueQuery;
+////	if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
+////	issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
+////	}
+
+////	if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
+////	issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+////	}
+
+////	if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
+////	issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
+////	}
+
+////	if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
+////	issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+////	}
+
+////	if (!selectedAllReporter && selectedReporter != null) {
+////	issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
+////	}
+////	else {
+////	issueQuery.setReporterID(null);
+////	}
+
+////	if (!selectedAllAssignee && selectedAssignee != null) {
+////	issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
+////	}
+////	else {
+////	issueQuery.setAssigneeID(null);
+////	}
+
+////	if (createdTimeEdit.isActive()) {
+////	issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+////	}
+
+////	if (updatedTimeEdit.isActive()) {
+////	issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+////	}
+
+////	if (issueLinkAdderComposite.getItems().size() != 0) {
+////	issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
+////	}
+
+////	return issueQuery;
+////	}
+
+////	private SetStoredIssueQueryRunnable storedIssueQueryRunnable = null;
+
+//	private class SetStoredIssueQueryRunnable {
+////	private StoredIssueQuery storedIssueQuery;
+
+////	public SetStoredIssueQueryRunnable(StoredIssueQuery storedIssueQuery) {
+////	this.storedIssueQuery = storedIssueQuery;
+////	}
+
+////	public void run(ProgressMonitor monitor) {
+////	logger.debug("SetStoredIssueQueryRunnable started.");
+////	for (AbstractJDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
+////	if (jdoQuery instanceof IssueQuery) {
+////	final IssueQuery issueQuery = (IssueQuery)jdoQuery;
+////	clearData();
+
+////	if (issueQuery.getAssigneeID() != null) {
+////	selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
+////	new String[]{User.FETCH_GROUP_THIS_USER}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	if (issueQuery.getReporterID() != null) {
+////	selectedReporter = UserDAO.sharedInstance().getUser(issueQuery.getReporterID(), 
+////	new String[]{User.FETCH_GROUP_THIS_USER}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	if (issueQuery.getIssueTypeID() != null) {
+////	selectedIssueType = IssueTypeDAO.sharedInstance().getIssueType(issueQuery.getIssueTypeID(), 
+////	new String[]{IssueType.FETCH_GROUP_THIS}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	if (issueQuery.getIssuePriorityID() != null) {
+////	selectedIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(issueQuery.getIssuePriorityID(), 
+////	new String[]{IssuePriority.FETCH_GROUP_THIS}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	if (issueQuery.getIssueSeverityTypeID() != null) {
+////	selectedIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(issueQuery.getIssueSeverityTypeID(), 
+////	new String[]{IssueSeverityType.FETCH_GROUP_THIS}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	if (issueQuery.getIssueResolutionID() != null) {
+////	selectedIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(issueQuery.getIssueResolutionID(), 
+////	new String[]{IssueResolution.FETCH_GROUP_THIS}, 
+////	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+////	monitor);
+////	}
+
+////	Display.getDefault().asyncExec(new Runnable() {
+////	public void run() {
+////	issueTypeCombo.setSelection(selectedIssueType == null ? ISSUE_TYPE_ALL : selectedIssueType);
+////	issuePriorityCombo.setSelection(selectedIssuePriority == null ? ISSUE_PRIORITY_ALL : selectedIssuePriority);
+////	issueSeverityCombo.setSelection(selectedIssueSeverityType == null ? ISSUE_SEVERITY_TYPE_ALL : selectedIssueSeverityType);
+////	issueResolutionCombo.setSelection(selectedIssueResolution == null ? ISSUE_RESOLUTION_ALL : selectedIssueResolution);
+
+////	reporterText.setText(selectedReporter == null ? "" : selectedReporter.getName());
+////	assigneeText.setText(selectedAssignee == null ? "" : selectedAssignee.getName());
+////	createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
+////	updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
+
+////	allReporterButton.setSelection(selectedReporter == null);
+////	allAssigneeButton.setSelection(selectedAssignee == null);
+
+////	if (searchInvoker != null) {
+////	searchInvoker.search();
+////	}
+////	}
+////	});
+////	}
+////	logger.debug("SetStoredIssueQueryRunnable finished.");
+////	}
+////	}
+
 //	}
 
-	private SetStoredIssueQueryRunnable storedIssueQueryRunnable = null;
-	
-	private class SetStoredIssueQueryRunnable {
-		private StoredIssueQuery storedIssueQuery;
-		
-		public SetStoredIssueQueryRunnable(StoredIssueQuery storedIssueQuery) {
-			this.storedIssueQuery = storedIssueQuery;
-		}
-				
-		public void run(ProgressMonitor monitor) {
-			logger.debug("SetStoredIssueQueryRunnable started.");
-			for (AbstractJDOQuery jdoQuery : storedIssueQuery.getIssueQueries()) {
-				if (jdoQuery instanceof IssueQuery) {
-					final IssueQuery issueQuery = (IssueQuery)jdoQuery;
-					clearData();
-					
-					if (issueQuery.getAssigneeID() != null) {
-						selectedAssignee = UserDAO.sharedInstance().getUser(issueQuery.getAssigneeID(), 
-								new String[]{User.FETCH_GROUP_THIS_USER}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
+//	private void clearData() {
+////	selectedAssignee = null;
+////	selectedReporter = null;
+////	selectedIssueType = null;
+////	selectedIssuePriority = null;
+////	selectedIssueSeverityType = null;
+////	selectedIssueResolution = null;
+////	selectedAllAssignee = false;
+////	selectedAllReporter = false;
+//	}
 
-					if (issueQuery.getReporterID() != null) {
-						selectedReporter = UserDAO.sharedInstance().getUser(issueQuery.getReporterID(), 
-								new String[]{User.FETCH_GROUP_THIS_USER}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
+//	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {
+////	synchronized (mutex) {
+////	logger.debug("setStoredIssueQuery started.");
+////	if (loadJobRunning) { 
+////	logger.debug("setStoredIssueQuery: load Job is running, setting the runnable.");
+////	storedIssueQueryRunnable = new SetStoredIssueQueryRunnable(storedIssueQuery);
+////	return;
+////	}			
+////	}
+////	logger.debug("setStoredIssueQuery: load Job is NOT running, starting runnable Job.");
+////	Job setQueryJob = new Job("Setting Issue Query") {
+////	@Override
+////	protected IStatus run(ProgressMonitor monitor) throws Exception {
+////	new SetStoredIssueQueryRunnable(storedIssueQuery).run(monitor);
+////	return Status.OK_STATUS;
+////	}
+////	};
+////	setQueryJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
+////	setQueryJob.schedule();
+////	}
 
-					if (issueQuery.getIssueTypeID() != null) {
-						selectedIssueType = IssueTypeDAO.sharedInstance().getIssueType(issueQuery.getIssueTypeID(), 
-								new String[]{IssueType.FETCH_GROUP_THIS}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
-
-					if (issueQuery.getIssuePriorityID() != null) {
-						selectedIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(issueQuery.getIssuePriorityID(), 
-								new String[]{IssuePriority.FETCH_GROUP_THIS}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
-
-					if (issueQuery.getIssueSeverityTypeID() != null) {
-						selectedIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(issueQuery.getIssueSeverityTypeID(), 
-								new String[]{IssueSeverityType.FETCH_GROUP_THIS}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
-
-					if (issueQuery.getIssueResolutionID() != null) {
-						selectedIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(issueQuery.getIssueResolutionID(), 
-								new String[]{IssueResolution.FETCH_GROUP_THIS}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								monitor);
-					}
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							issueTypeCombo.setSelection(selectedIssueType == null ? ISSUE_TYPE_ALL : selectedIssueType);
-							issuePriorityCombo.setSelection(selectedIssuePriority == null ? ISSUE_PRIORITY_ALL : selectedIssuePriority);
-							issueSeverityCombo.setSelection(selectedIssueSeverityType == null ? ISSUE_SEVERITY_TYPE_ALL : selectedIssueSeverityType);
-							issueResolutionCombo.setSelection(selectedIssueResolution == null ? ISSUE_RESOLUTION_ALL : selectedIssueResolution);
-							
-							reporterText.setText(selectedReporter == null ? "" : selectedReporter.getName());
-							assigneeText.setText(selectedAssignee == null ? "" : selectedAssignee.getName());
-							createdTimeEdit.setDate(issueQuery.getCreateTimestamp());
-							updatedTimeEdit.setDate(issueQuery.getUpdateTimestamp());
-							
-							allReporterButton.setSelection(selectedReporter == null);
-							allAssigneeButton.setSelection(selectedAssignee == null);
-							
-							if (searchInvoker != null) {
-								searchInvoker.search();
-							}
-						}
-					});
-				}
-				logger.debug("SetStoredIssueQueryRunnable finished.");
-			}
-		}
-		
-	}
-	
-	private void clearData() {
-		selectedAssignee = null;
-		selectedReporter = null;
-		selectedIssueType = null;
-		selectedIssuePriority = null;
-		selectedIssueSeverityType = null;
-		selectedIssueResolution = null;
-		selectedAllAssignee = false;
-		selectedAllReporter = false;
-	}
-	
-	public void setStoredIssueQuery(final StoredIssueQuery storedIssueQuery) {
-		synchronized (mutex) {
-			logger.debug("setStoredIssueQuery started.");
-			if (loadJobRunning) { 
-				logger.debug("setStoredIssueQuery: load Job is running, setting the runnable.");
-				storedIssueQueryRunnable = new SetStoredIssueQueryRunnable(storedIssueQuery);
-				return;
-			}			
-		}
-		logger.debug("setStoredIssueQuery: load Job is NOT running, starting runnable Job.");
-		Job setQueryJob = new Job("Setting Issue Query") {
-			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				new SetStoredIssueQueryRunnable(storedIssueQuery).run(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		setQueryJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
-		setQueryJob.schedule();
-	}
-	
-	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
-		this.searchInvoker = searchInvoker;
-	}
-
-	@Override
-	protected void resetSearchQueryValues()
-	{
-		IssueQuery issueQuery = getQuery();
-
-		if (selectedIssueType != null && !selectedIssueType.equals(ISSUE_TYPE_ALL)) {
-			issueQuery.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
-		}
-
-		if (selectedIssueSeverityType != null && !selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
-			issueQuery.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-		}
-
-		if (selectedIssuePriority != null && !selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
-			issueQuery.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
-		}
-
-		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
-			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
-		}
-
-		if (!selectedAllReporter && selectedReporter != null) {
-			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
-		}
-		else {
-			issueQuery.setReporterID(null);
-		}
-
-		if (!selectedAllAssignee && selectedAssignee != null) {
-			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
-		}
-		else {
-			issueQuery.setAssigneeID(null);
-		}
-
-		if (createdTimeEdit.isActive()) {
-			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
-		}
-
-		if (updatedTimeEdit.isActive()) {
-			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
-		}
-		
-		if (issueLinkAdderComposite.getItems().size() != 0) {
-			issueQuery.setObjectIDs(issueLinkAdderComposite.getItems());
-		}
-	}
-
-	@Override
-	protected void unsetSearchQueryValues()
-	{
-		IssueQuery issueQuery = getQuery();
-		issueQuery.setIssueTypeID(null);
-		issueQuery.setIssueSeverityTypeID(null);
-		issueQuery.setIssuePriorityID(null);
-		issueQuery.setIssueResolutionID(null);
-		issueQuery.setReporterID(null);
-		issueQuery.setAssigneeID(null);
-		issueQuery.setCreateTimestamp(null);
-		issueQuery.setUpdateTimestamp(null);
-		issueQuery.setObjectIDs(null);
-	}
+////	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
+////	this.searchInvoker = searchInvoker;
+//	}
 }

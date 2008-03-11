@@ -57,14 +57,14 @@ extends AbstractEPProcessor
 		return Collections.unmodifiableList(cats);
 	}
 	
-	public IssueLinkHandlerFactory getIssueLinkHandlerFactory(Class<?> linkObjectClass) {
+	public IssueLinkHandlerFactory getIssueLinkHandlerFactory(Class<?> linkedObjectClass) {
 		// Check for direct class
-		IssueLinkHandlerFactory factory = factories.get(linkObjectClass);
+		IssueLinkHandlerFactory factory = factories.get(linkedObjectClass);
 		if (factory == null) {
 			// check hierarchy here			
-			Class sClass = linkObjectClass.getSuperclass();
+			Class<?> sClass = linkedObjectClass.getSuperclass();
 			while (!sClass.equals(Object.class)) {
-				factory = factories.get(linkObjectClass);
+				factory = factories.get(linkedObjectClass);
 				if (factory != null)
 					break;
 			}

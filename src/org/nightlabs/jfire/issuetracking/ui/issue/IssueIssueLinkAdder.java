@@ -7,27 +7,31 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueIssueLinkAdder extends AbstractIssueLinkAdder {
-
+public class IssueIssueLinkAdder 
+extends AbstractIssueLinkAdder 
+{
 	private IssueEntryListViewer iViewer;
+
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		iViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
@@ -53,18 +57,28 @@ public class IssueIssueLinkAdder extends AbstractIssueLinkAdder {
 	}
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
-		Set<ObjectID> result = new HashSet<ObjectID>();
 		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
-		for(Object o : elements) {
-			result.add((ObjectID)JDOHelper.getObjectId(o));
-		}
-		return result;
+		return NLJDOHelper.getObjectIDSet(elements);
 	}
 
 	public boolean isComplete() {
-		if(getIssueLinkObjectIds() == null || getIssueLinkObjectIds().size() <= 0) {
+		if (iViewer == null)
 			return false;
+
+		return !iViewer.getListComposite().getSelectedElements().isEmpty();
+	}
+
+	@Override
+	public Set<IssueLink> createIssueLinks(
+			Issue issue,
+			IssueLinkType issueLinkType,
+			ProgressMonitor monitor)
+	{
+		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
+		for (Issue linkedIssue : iViewer.getListComposite().getSelectedElements()) {
+			issueLinks.add(
+					issue.createIssueLink(issueLinkType, linkedIssue));
 		}
-		return true; 
+		return issueLinks;
 	}
 }

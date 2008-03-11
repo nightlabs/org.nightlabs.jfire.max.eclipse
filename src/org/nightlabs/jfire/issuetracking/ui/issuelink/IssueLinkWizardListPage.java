@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
@@ -14,36 +15,35 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 public class IssueLinkWizardListPage extends WizardHopPage {
 
 	private Composite objectListComposite;
-	private IssueLinkAdder adder;
-	private IssueLinkWizard iWizard;
+	private IssueLinkAdder issueLinkAdder;
+	private IssueLinkWizard issueLinkWizard;
 	
 	public IssueLinkWizardListPage(IssueLinkWizard iWizard, IssueLinkAdder adder) {
-		super("Page", "Title");
-		this.adder = adder;
-		this.iWizard = iWizard;
+		super("List of object that you want to link", "Object list");
+		this.issueLinkAdder = adder;
+		this.issueLinkWizard = iWizard;
 	}
 
 	@Override
 	public Control createPageContents(Composite parent) {
-		this.objectListComposite = adder.createComposite(parent);
-		adder.addIssueLinkSelectionListener(new IssueLinkSelectionAdapter() {
+		this.objectListComposite = issueLinkAdder.createComposite(parent);
+		issueLinkAdder.addIssueLinkSelectionListener(new IssueLinkSelectionAdapter() {
 			@Override
 			public void issueLinkSelectionChanged(
 					IssueLinkSelectionChangedEvent selectionChangedEvent) {
-				iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());	
-				
-				WizardHopPage page = new IssueLinkWizardRelationPage(adder);
-				getWizardHop().addHopPage(page);
-				
-				getContainer().updateButtons();
+//				issueLinkAdder.createIssueLinks(issueLinkWizard.getIssue(), issueLinkType, monitor)getIssueLinkObjectIds());	
+//				WizardHopPage page = new IssueLinkWizardRelationPage(issueLinkWizard, issueLinkAdder);
+//				getWizardHop().addHopPage(page);
+//				
+//				getContainer().updateButtons();
 			}
 		});
 		
-		adder.addIssueLinkDoubleClickListener(new IssueLinkDoubleClickListener() {
+		issueLinkAdder.addIssueLinkDoubleClickListener(new IssueLinkDoubleClickListener() {
 			@Override
 			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
-				iWizard.setIssueLinkObjectID(adder.getIssueLinkObjectIds());
-				iWizard.finish();
+//				issueLinkWizard.setIssueLinkObjectIDssueLinkObjectID(issueLinkAdder.getIssueLinkObjectIds());
+				issueLinkWizard.finish();
 			}
 		});
 		
@@ -52,6 +52,6 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 	
 	@Override
 	public boolean isPageComplete() {
-		return adder.isComplete(); 
+		return issueLinkAdder.isComplete(); 
 	}
 }

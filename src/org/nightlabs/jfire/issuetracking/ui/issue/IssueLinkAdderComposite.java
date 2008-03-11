@@ -16,7 +16,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
@@ -31,15 +32,18 @@ extends XComposite
 
 	private boolean haveButton;
 	
+	private Issue issue;
 	/**
 	 * @param parent
 	 * @param style
 	 * @param haveButton the boolean flag uses for displaying button.
 	 */
-	public IssueLinkAdderComposite(Composite parent, int style, boolean haveButton) {
+	public IssueLinkAdderComposite(Composite parent, int style, boolean haveButton, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
 		this.haveButton = haveButton;
+		this.issue = issue;
+		
 		createComposite();
 	}
 
@@ -76,7 +80,7 @@ extends XComposite
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
-							new IssueLinkWizard(IssueLinkAdderComposite.this));
+							new IssueLinkWizard(IssueLinkAdderComposite.this, issue));
 					dialog.open();
 				}
 			});
@@ -93,50 +97,50 @@ extends XComposite
 	/*
 	 * The old referenced object id set.
 	 */
-	private Set<ObjectID> oObjectIDs = null;
+	private Set<IssueLink> oIssueLinks = null;
 	
 	/*
 	 * The modified referenced object id set.
 	 */
-	private Set<ObjectID> mObjectIDs = new HashSet<ObjectID>();
+	private Set<IssueLink> mIssueLinks = new HashSet<IssueLink>();
 
 	
-	public void setObjectIDs(Set<ObjectID> newObjectIDs) {
-		mObjectIDs.addAll(newObjectIDs);
-		if (oObjectIDs == null) {
-			oObjectIDs = newObjectIDs;
+	public void setIssueLinks(Set<IssueLink> newIssueLinks) {
+		mIssueLinks.addAll(newIssueLinks);
+		if (oIssueLinks == null) {
+			oIssueLinks = newIssueLinks;
 		}
-		issueLinkTable.setInput(mObjectIDs);
+		issueLinkTable.setInput(mIssueLinks);
 	}
 
-	public void addObjectIDs(Set<ObjectID> objectIDs) {
-		mObjectIDs.addAll(objectIDs);
-		if (oObjectIDs == null) {
-			oObjectIDs = objectIDs;
+	public void addIssueLinks(Set<IssueLink> issueLinks) {
+		mIssueLinks.addAll(issueLinks);
+		if (oIssueLinks == null) {
+			oIssueLinks = issueLinks;
 		} else {
-			if (!mObjectIDs.equals(oObjectIDs))
+			if (!mIssueLinks.equals(oIssueLinks))
 				notifyIssueLinkTableItemListeners();
 		}
-		issueLinkTable.setInput(mObjectIDs);
+//		issueLinkTable.setInput(mIssueLinks);
 	}
 
-	public boolean removeItems(Collection<ObjectID> removedItems) {
-		if (mObjectIDs == null) {
-			mObjectIDs = new HashSet<ObjectID>();
-			mObjectIDs.addAll(oObjectIDs);
+	public boolean removeItems(Collection<IssueLink> removedItems) {
+		if (mIssueLinks == null) {
+			mIssueLinks = new HashSet<IssueLink>();
+			mIssueLinks.addAll(oIssueLinks);
 		}
 
-		boolean result = mObjectIDs.removeAll(removedItems);
+		boolean result = mIssueLinks.removeAll(removedItems);
 
-		if (!mObjectIDs.equals(oObjectIDs))
+		if (!mIssueLinks.equals(oIssueLinks))
 			notifyIssueLinkTableItemListeners();
 
-		issueLinkTable.setInput(mObjectIDs);
+		issueLinkTable.setInput(mIssueLinks);
 		return result;
 	}
 
-	public Set<ObjectID> getItems() {
-		return mObjectIDs;
+	public Set<IssueLink> getItems() {
+		return mIssueLinks;
 	}
 
 	public IssueLinkTable getIssueLinkTable() {

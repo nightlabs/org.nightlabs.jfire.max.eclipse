@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,9 +35,12 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
@@ -46,8 +50,8 @@ import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class IssueCreateComposite
-extends XComposite{
-
+extends XComposite
+{
 	private List<IssueType> issueTypes = new ArrayList<IssueType>();
 
 	private IssueType selectedIssueType;
@@ -89,12 +93,14 @@ extends XComposite{
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
-	private Set<ObjectID> objectIDs;
+//	private Set<IssueLink> issueLinks;
+	private Issue issue;
 	
-	public IssueCreateComposite(Composite parent, int style, Set<ObjectID> objectIDs) {
+	public IssueCreateComposite(Composite parent, int style, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
-		this.objectIDs = objectIDs;
+//		this.issueLinks = issueLinks;
+		this.issue = issue;
 		createComposite(this);
 	}
 
@@ -109,9 +115,9 @@ extends XComposite{
 		linkedObjectLbl = new Label(this, SWT.NONE);
 		linkedObjectLbl.setText("Linked Object");
 		
-		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true);
-		if (objectIDs != null) {
-			adderComposite.addObjectIDs(objectIDs);
+		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
+		if (issue != null) {
+			adderComposite.addIssueLinks(issue.getIssueLinks());
 		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
@@ -350,7 +356,41 @@ extends XComposite{
 		return selectedIssueType;
 	}
 
-	public Set<ObjectID> getIssueLinkObjectIds() {
+	public Set<IssueLink> getIssueLinks() {
 		return adderComposite.getItems();
+	}
+	
+	
+	
+	@Override
+	public boolean setFocus() {
+		issue.setIssueType(getSelectedIssueType());
+		issue.setIssueSeverityType(getSelectedIssueSeverityType());
+		issue.setIssuePriority(getSelectedIssuePriority());
+		issue.setReporter(getSelectedReporter());
+		issue.setAssignee(getSelectedAssigntoUser());
+		
+		if(getSelectedAttachmentFileMap() != null){
+			Map<String, InputStream> fileMap = getSelectedAttachmentFileMap();
+			for(String name : fileMap.keySet()){
+				if (fileMap.get(name) != null) {
+					try {
+						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
+						issueFileAttachment.loadStream(fileMap.get(name), name);
+						issue.getFileList().add(issueFileAttachment);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					} finally {
+						try {
+							fileMap.get(name).close();
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				}
+			}
+		}//if
+		
+		return super.setFocus();
 	}
 }

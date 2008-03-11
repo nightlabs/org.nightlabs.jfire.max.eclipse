@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
@@ -24,6 +25,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueLinkWizardRelationPage 
 extends WizardHopPage
 {
+	private IssueLinkWizard iWizard;
 	private IssueLinkAdder issueLinkAdder;
 	
 	private Text newRelationText;
@@ -33,10 +35,10 @@ extends WizardHopPage
 	
 	private List predefinedRelationList;
 	
-	public IssueLinkWizardRelationPage(IssueLinkAdder issueLinkAdder) {
+	public IssueLinkWizardRelationPage(IssueLinkWizard iWizard, IssueLinkAdder issueLinkAdder) {
 		super("Select/Create the relation for links", "Select/Create the relation for links.");
 		setDescription("The relation for links");
-		this.issueLinkAdder = issueLinkAdder;
+		this.iWizard = iWizard;
 		
 		new WizardHop(this);
 	}
@@ -77,19 +79,34 @@ extends WizardHopPage
 		manageComposite.getGridLayout().numColumns = 1;
 		
 		predefinedRelationList = new List(manageComposite, SWT.NONE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		java.util.List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(
-				issueLinkAdder.getIssueLinkHandlerFactory().getLinkObjectClass(), 
-				new String[] {IssueLinkType.FETCH_GROUP_THIS, FetchPlan.DEFAULT}, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-				new NullProgressMonitor());
 
-		
-		for (IssueLinkType issueLinkType : issueLinkTypes) {
-			predefinedRelationList.add(issueLinkType.getIssueLinkTypeName().getText());	
-		}
-		
+		Display.getCurrent().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				final java.util.List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(
+						issueLinkAdder.getIssueLinkHandlerFactory().getLinkObjectClass(), 
+						new String[] {IssueLinkType.FETCH_GROUP_THIS, FetchPlan.DEFAULT}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+
+				
+				for (IssueLinkType issueLinkType : issueLinkTypes) {
+					predefinedRelationList.add(issueLinkType.getName().getText());	
+				}
+				
+				predefinedRelationList.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+//						IssueLinkType issueLinkType = 
+//							iWizardissueLinkTypes.get(predefinedRelationList.getSelectionIndex());
+					}
+				});
+			}
+		});
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		predefinedRelationList.setLayoutData(gridData);
+		
 		
 		setCreateNew(false, false);
 		

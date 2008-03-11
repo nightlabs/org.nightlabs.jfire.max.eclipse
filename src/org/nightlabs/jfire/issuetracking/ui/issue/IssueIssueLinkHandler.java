@@ -5,42 +5,63 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+
+import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author chairatk
  *
  */
 public class IssueIssueLinkHandler 
-implements IssueLinkHandler 
+extends AbstractIssueLinkHandler<IssueID, Issue>
 {
-	public String getLinkObjectDescription(ObjectID objectID) {
-		IssueID issueID = (IssueID)objectID;
+	@Override
+	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
 		return String.format(
 				"Issue %s",
-				(issueID == null ? "" : issueID.issueID));
-		
+				(linkedObject == null ? "" : linkedObject.getIssueID()));
 	}
 
-	public Image getLinkObjectImage(ObjectID objectID) {
+	@Override
+	public Image getLinkedObjectImage(IssueLink issueLink, Issue linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				IssueIssueLinkHandler.class, 
 				"LinkObject").createImage();
 	}
 
-	public void openLinkObject(ObjectID objectID) {
+
+	@Override
+	public void openLinkedObject(IssueLink issueLink, IssueID objectID) {
 		EditIssueAction editAction = new EditIssueAction();
 		Collection<IssueID> ids = new ArrayList<IssueID>();
-		ids.add((IssueID)objectID);
+		ids.add(objectID);
 		editAction.setSelectedIssueIDs(ids);
 		editAction.run();	
+	}
+
+	@Override
+	protected Collection<Issue> _getLinkedObjects(
+			Set<IssueLink> issueLinks, Set<IssueID> linkedObjectIDs,
+			ProgressMonitor monitor)
+	{
+		return IssueDAO.sharedInstance().getIssues(
+				linkedObjectIDs,
+				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
 	}
 }
