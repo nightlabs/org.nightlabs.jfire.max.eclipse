@@ -9,17 +9,15 @@ import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
  *
  */
 public class SimpleProductTypeSearchResultProviderFactory
-extends AbstractSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory<SimpleProductType>
 {
-	public SimpleProductTypeSearchResultProviderFactory() {
-	}
-
-	public ISearchResultProvider createSearchResultProvider() {
+	@Override
+	public ISearchResultProvider<SimpleProductType> createSearchResultProvider() {
 		return new SimpleProductTypeSearchResultProvider(this);
 	}
 
-	public Class getResultTypeClass() {
+	@Override
+	public Class<SimpleProductType> getResultTypeClass() {
 		return SimpleProductType.class;
 	}
-
 }
