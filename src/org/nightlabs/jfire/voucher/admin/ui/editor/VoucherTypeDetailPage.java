@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
+import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -95,8 +96,8 @@ extends AbstractProductTypeDetailPage
 
 					voucherLayoutSection.getVoucherLayoutComposite()
 							.setVoucherType(voucherType);
-					getNameSection().setProductType(voucherType);
-					getSaleAccessControlSection().setProductType(voucherType);
+					getNameSection().setProductTypeController((AbstractProductTypePageController)getPageController());
+					getSaleAccessControlSection().setProductTypeController((AbstractProductTypePageController)getPageController());
 
 				}
 				
