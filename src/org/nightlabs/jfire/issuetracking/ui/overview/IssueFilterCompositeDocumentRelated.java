@@ -9,11 +9,10 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.config.StoredIssueQuery;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 
-public class IssueFilterComposite 
-	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
+public class IssueFilterCompositeDocumentRelated 
+extends AbstractQueryFilterComposite<Issue, IssueQuery> 
 {	
 	/**
 	 * @param parent
@@ -21,21 +20,21 @@ public class IssueFilterComposite
 	 * @param layoutMode
 	 * @param layoutDataMode
 	 */
-	public IssueFilterComposite(Composite parent, int style,
+	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 			QueryProvider<Issue, ? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
-	
-	public IssueFilterComposite(Composite parent, int style,
-		QueryProvider<Issue, ? super IssueQuery> queryProvider)
+
+	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
+			QueryProvider<Issue, ? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}
 
-	private IssueSearchComposite issueSearchComposite;
-	
+	private IssueSearchCompositeDocumentRelated issueSearchCompositeDocumentRelated;
+
 	@Override
 	protected Class<IssueQuery> getQueryClass() {
 		return IssueQuery.class;
@@ -45,25 +44,18 @@ public class IssueFilterComposite
 	protected List<JDOQueryComposite<Issue, IssueQuery>> registerJDOQueryComposites() {
 		List<JDOQueryComposite<Issue, IssueQuery>> queryComps =
 			new ArrayList<JDOQueryComposite<Issue, IssueQuery>>();
+
+		queryComps.add(issueSearchCompositeDocumentRelated);
 		
-		queryComps.add(issueSearchComposite);
 		return queryComps;
 	}
-	
-	
-//	public void setStoredIssueQuery(StoredIssueQuery query) {
-//		issueSearchComposite.setStoredIssueQuery(query);
-//	}
-//	
-//	public void setSearchInvoker(IIssueSearchInvoker searchInvoker) {
-//		issueSearchComposite.setSearchInvoker(searchInvoker);
-//	}
+
 
 	@Override
 	protected void createContents()
 	{
-		issueSearchComposite = new IssueSearchComposite(this, SWT.NONE, 
-			LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA);
-		issueSearchComposite.setToolkit(getToolkit());
+		issueSearchCompositeDocumentRelated = new IssueSearchCompositeDocumentRelated(this, SWT.NONE, 
+				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA);
+		issueSearchCompositeDocumentRelated.setToolkit(getToolkit());
 	}
 }

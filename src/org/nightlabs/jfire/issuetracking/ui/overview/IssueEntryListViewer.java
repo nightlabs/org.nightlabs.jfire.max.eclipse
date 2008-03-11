@@ -46,7 +46,7 @@ public class IssueEntryListViewer
 	
 //	@Override
 //	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new IssueFilterComposite(parent, SWT.NONE);
+//		return new IssueFilterCompositeIssueRelated(parent, SWT.NONE);
 //	}
 
 	@Override

@@ -158,8 +158,23 @@
          point="org.nightlabs.jfire.base.ui.queryFilterComposite">
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
-            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactory"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueRelated"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterSectionTitle">
+      </QueryFilter>
+      <QueryFilter
+            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryPeopleRelated"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle">
+      </QueryFilter>
+      <QueryFilter
+            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryTimeRelated"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle">
+      </QueryFilter>
+      <QueryFilter
+            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryDocumentRelated"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle">
       </QueryFilter>
    </extension>
 </plugin>

@@ -13,16 +13,15 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
  * 
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class IssueSearchFilterFactory
-	extends AbstractQueryFilterFactory<Issue, IssueQuery>
+public class IssueSearchFilterFactoryDocumentRelated
+extends AbstractQueryFilterFactory<Issue, IssueQuery>
 {
-
 	@Override
 	public AbstractQueryFilterComposite<Issue, IssueQuery> createQueryFilter(Composite parent,
-		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<Issue, ? super IssueQuery> queryProvider)
-	{
-		return new IssueFilterComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
-	}
+			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
+			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			{
+		return new IssueFilterCompositeDocumentRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
+			}
 
 }

@@ -123,7 +123,7 @@ extends AbstractTableComposite<StoredIssueQuery>
 
 							StructuredSelection ss = (StructuredSelection)e.getSelection();
 //	TODO: Is this SearchInvoker necessary? The usual work flow is that the user sets the filters, which shall be used, and when he is ready fires the search by clicking on the search button. So what's this for? Please contact me chairat and we'll discuss what to do. (marius) 
-//							IssueFilterComposite searchComposite = (IssueFilterComposite)viewer.getSearchComposite();
+//							IssueFilterCompositeIssueRelated searchComposite = (IssueFilterCompositeIssueRelated)viewer.getSearchComposite();
 //							searchComposite.setSearchInvoker(new IIssueSearchInvoker() {
 //								@Override
 //								public void search() {
