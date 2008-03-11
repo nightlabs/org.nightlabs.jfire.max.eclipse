@@ -183,5 +183,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	@Override
 	protected void unsetSearchQueryValues() {
 		IssueQuery issueQuery = getQuery();
+		issueQuery.setAssigneeID(null);
+		issueQuery.setReporterID(null);
 	}
 }

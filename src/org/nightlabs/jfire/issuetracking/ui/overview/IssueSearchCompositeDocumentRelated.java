@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
@@ -43,13 +43,12 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		createComposite(this);
 	}
 
-	/**************Document Related Section************/
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 
 	@Override
 	protected void createComposite(Composite parent) {
-		parent.setLayout(new GridLayout(3, false));
-
+		IssueLinkAdderComposite issueLinkAdderComposite = 
+			new IssueLinkAdderComposite(parent, SWT.NONE, true, null);
 	}
 
 	@Override

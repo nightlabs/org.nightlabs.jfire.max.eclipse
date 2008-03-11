@@ -79,13 +79,24 @@ extends JDOQueryComposite<Issue, IssueQuery>
 
 	@Override
 	protected void resetSearchQueryValues() {
-		// TODO Auto-generated method stub
+		IssueQuery issueQuery = getQuery();
 		
+		if (createdTimeEdit.getDate() != null) {
+			issueQuery.setCreateTimestamp(createdTimeEdit.getDate());
+		}
+		
+		if (updatedTimeEdit.getDate() != null) {
+			issueQuery.setUpdateTimestamp(updatedTimeEdit.getDate());
+		}
+//		if (selectedIssueResolution != null && !selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL)) {
+//			issueQuery.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
+//		}
 	}
 
 	@Override
 	protected void unsetSearchQueryValues() {
-		// TODO Auto-generated method stub
-		
+		IssueQuery issueQuery = getQuery();
+		issueQuery.setCreateTimestamp(null);
+		issueQuery.setUpdateTimestamp(null);
 	}
 }

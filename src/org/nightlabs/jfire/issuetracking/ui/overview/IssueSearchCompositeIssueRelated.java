@@ -194,8 +194,6 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		issueQuery.setIssueSeverityTypeID(null);
 		issueQuery.setIssuePriorityID(null);
 		issueQuery.setIssueResolutionID(null);
-		issueQuery.setReporterID(null);
-		issueQuery.setAssigneeID(null);
 		issueQuery.setCreateTimestamp(null);
 		issueQuery.setUpdateTimestamp(null);
 		issueQuery.setObjectIDs(null);
