@@ -9,16 +9,15 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  *
  */
 public class VoucherTypeSearchResultProviderFactory
-extends AbstractSearchResultProviderFactory
+extends AbstractSearchResultProviderFactory<VoucherType>
 {
-	public VoucherTypeSearchResultProviderFactory() {
-	}
-
-	public ISearchResultProvider createSearchResultProvider() {
+	@Override
+	public ISearchResultProvider<VoucherType> createSearchResultProvider() {
 		return new VoucherTypeSearchResultProvider(this);
 	}
 
-	public Class getResultTypeClass() {
+	@Override
+	public Class<VoucherType> getResultTypeClass() {
 		return VoucherType.class;
 	}
 
