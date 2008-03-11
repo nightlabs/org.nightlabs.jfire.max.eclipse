@@ -13,18 +13,24 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.order.OrderEntryViewer;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
-
+public class IssueLinkAdderOrder
+extends AbstractIssueLinkAdder 
+{
 	private OrderEntryViewer oViewer;
+
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		oViewer = new OrderEntryViewer(new OrderEntryFactory().createEntry()) {
@@ -59,9 +65,23 @@ public class IssueOrderLinkAdder extends AbstractIssueLinkAdder {
 	}
 
 	public boolean isComplete() {
-		if(getIssueLinkObjectIds() == null || getIssueLinkObjectIds().size() <= 0) {
+		if (oViewer == null)
 			return false;
+
+		return !oViewer.getListComposite().getSelectedElements().isEmpty();
+	}
+	
+	@Override
+	public Set<IssueLink> createIssueLinks(
+			Issue issue,
+			IssueLinkType issueLinkType,
+			ProgressMonitor monitor)
+	{
+		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
+		for (Order linkedOrder : oViewer.getListComposite().getSelectedElements()) {
+			issueLinks.add(
+					issue.createIssueLink(issueLinkType, linkedOrder));
 		}
-		return true; 
+		return issueLinks;
 	}
 }

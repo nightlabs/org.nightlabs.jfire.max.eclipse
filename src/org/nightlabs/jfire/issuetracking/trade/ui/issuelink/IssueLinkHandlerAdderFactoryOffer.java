@@ -9,11 +9,11 @@ import org.nightlabs.jfire.trade.Offer;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueOfferLinkHandlerAdderFactory 
+public class IssueLinkHandlerAdderFactoryOffer 
 extends AbstractIssueLinkHandlerFactory
 {
 	public IssueLinkAdder createIssueLinkAdder() {
-		IssueLinkAdder adder = new IssueOfferLinkAdder();
+		IssueLinkAdder adder = new IssueLinkAdderOffer();
 		adder.init(this);
 		
 		return adder;
@@ -24,6 +24,6 @@ extends AbstractIssueLinkHandlerFactory
 	}
 
 	public IssueLinkHandler createIssueLinkHandler() {
-		return new IssueOfferLinkHandler();
+		return new IssueLinkHandlerOffer();
 	}
 }

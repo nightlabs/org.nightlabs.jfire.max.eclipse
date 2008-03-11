@@ -15,23 +15,29 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
-import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory;
-import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer;
+import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryFactory;
+import org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
+public class IssueLinkAdderDeliveryNote 
+extends AbstractIssueLinkAdder 
+{
+	private DeliveryNoteEntryViewer dViewer;
 
-	private ReceptionNoteEntryViewer rViewer;
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
-		rViewer = new ReceptionNoteEntryViewer(new ReceptionNoteEntryFactory().createEntry()) {
+		dViewer = new DeliveryNoteEntryViewer(new DeliveryNoteEntryFactory().createEntry()){
 			@Override
-			protected void addResultTableListeners(AbstractTableComposite<ReceptionNote> tableComposite) {
+			protected void addResultTableListeners(AbstractTableComposite<DeliveryNote> tableComposite) {
 				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
@@ -46,23 +52,37 @@ public class IssueReceptionNoteLinkAdder extends AbstractIssueLinkAdder {
 				});
 			}
 		};
-		
-		rViewer.createComposite(parent);
-		return rViewer.getComposite();
+
+		dViewer.createComposite(parent);
+		return dViewer.getComposite();
 	}
 
 	public Set<ObjectID> getIssueLinkObjectIds() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
-		for(Object o : rViewer.getListComposite().getSelectedElements()) {
+		for(Object o : dViewer.getListComposite().getSelectedElements()) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));
 		}
 		return result;
 	}
 
 	public boolean isComplete() {
-		if(getIssueLinkObjectIds() == null || getIssueLinkObjectIds().size() <= 0) {
+		if (dViewer == null)
 			return false;
+
+		return !dViewer.getListComposite().getSelectedElements().isEmpty();
+	}
+	
+	@Override
+	public Set<IssueLink> createIssueLinks(
+			Issue issue,
+			IssueLinkType issueLinkType,
+			ProgressMonitor monitor)
+	{
+		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
+		for (DeliveryNote linkedDeliveryNote : dViewer.getListComposite().getSelectedElements()) {
+			issueLinks.add(
+					issue.createIssueLink(issueLinkType, linkedDeliveryNote));
 		}
-		return true; 
+		return issueLinks;
 	}
 }
