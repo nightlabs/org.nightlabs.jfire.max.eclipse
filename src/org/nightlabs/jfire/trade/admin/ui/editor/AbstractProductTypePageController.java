@@ -45,22 +45,7 @@ implements IProductTypePageController<ProductTypeType>
 	public ProductTypeID getProductTypeID() {
 		return productTypeID;
 	}
-	
-	public ProductTypeID getExtendedProductTypeID() {
-		return productType.getExtendedProductTypeID();
-	}
-		
-	
-	
-	/**
-	 * sets the productTypeID
-	 * @param productTypeID the productTypeID to set
-	 */
-	public void setProductTypeID(ProductTypeID productTypeID) {
-		this.productTypeID = productTypeID;
-	}
 
-	private ProductTypeType productType;
 	/**
 	 * returns the productType
 	 * @return the productType
@@ -69,11 +54,5 @@ implements IProductTypePageController<ProductTypeType>
 		return getControllerObject();
 	}
 
-	protected void setProductType(ProductTypeType productType) {
-		this.productType = productType;
-	}
-
-
-	public abstract ProductTypeType getExtendedProductType(ProgressMonitor monitor , ProductTypeID extendedProductTypeID);
-
+	public abstract ProductTypeType getExtendedProductType(ProgressMonitor monitor, ProductTypeID extendedProductTypeID);
 }

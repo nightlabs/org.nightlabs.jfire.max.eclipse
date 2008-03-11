@@ -164,7 +164,7 @@ implements IProductTypeDetailPage
 				if (isDisposed())
 					return;
 
-				setProductType((AbstractProductTypePageController) getPageController());
+				setProductTypePageController((AbstractProductTypePageController) getPageController());
 				switchToContent();
 			}
 		});
@@ -176,10 +176,11 @@ implements IProductTypeDetailPage
 	}
 
 	/**
-	 * Sets the {@link ProductType}.
-	 * @param productType the {@link ProductType} to set
+	 * Sets the {@link AbstractProductTypePageController}. This method is called whenever the ProductType changes - even if the controller is the same.
+	 *
+	 * @param pageController the controller.
 	 */
-	protected void setProductType(AbstractProductTypePageController<ProductType> pageController)
+	protected void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
 		if (pageController == null) {
 			getManagedForm().getForm().getForm().setMessage("No product type selected.", IMessageProvider.INFORMATION);
@@ -197,18 +198,15 @@ implements IProductTypeDetailPage
 		}
 
 		if (nameSection != null)
-			nameSection.setProductTypeController(pageController);
+			nameSection.setProductTypePageController(pageController);
 		if (nestedProductTypeSection != null)
-			nestedProductTypeSection.setProductTypeController(pageController);
+			nestedProductTypeSection.setProductTypePageController(pageController);
 		if (saleAccessControlSection != null)
-			saleAccessControlSection.setProductTypeController(pageController);
+			saleAccessControlSection.setProductTypePageController(pageController);
 		if (ownerSection != null)
-			ownerSection.setProductTypeController(pageController);									
+			ownerSection.setProductTypePageController(pageController);									
 		if (vendorSection != null)
-			vendorSection.setProductTypeController(pageController);
-		
-	
-	
+			vendorSection.setProductTypePageController(pageController);
 	}
 
 	/**

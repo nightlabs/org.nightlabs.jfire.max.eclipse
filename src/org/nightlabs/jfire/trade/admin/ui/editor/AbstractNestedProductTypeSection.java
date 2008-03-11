@@ -117,7 +117,7 @@ implements IProductTypeSectionPart
 
 
 
-	public void setProductTypeController(AbstractProductTypePageController<ProductType> pageController)
+	public void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
 		if (pageController == null || getSection() == null || getSection().isDisposed()|| nestedProductTypeTable.isDisposed())
 			return;
@@ -140,7 +140,7 @@ implements IProductTypeSectionPart
 
 	}
 
-	public AbstractProductTypePageController<ProductType> getProductTypeController()
+	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
 
 		return productTypePageController;
