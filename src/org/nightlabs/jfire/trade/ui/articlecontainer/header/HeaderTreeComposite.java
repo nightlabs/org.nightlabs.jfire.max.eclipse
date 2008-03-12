@@ -186,8 +186,14 @@ implements ISelectionProvider
 				else
 					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();
 
+				//PurchaseRootTreeNode
+				//SaleRootTreeNode
+				
+				
 				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
 
+						
+				
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(
 							HeaderTreeComposite.this, getSelection());

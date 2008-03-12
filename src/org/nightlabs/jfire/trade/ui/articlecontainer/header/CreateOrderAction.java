@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
@@ -80,10 +81,31 @@ public class CreateOrderAction extends Action
 //					TODO where do we get the currency from? User prefs?
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(headerTreeComposite.getPartner());
 //					FIXME IDPREFIX (next line) should be asked from user if necessary!
-					final Order order = tm.createOrder(
-							customerID, null, CurrencyID.create("EUR"), //$NON-NLS-1$
-							new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
-							OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
+					HeaderTreeNode selectedNode  = (HeaderTreeNode)headerTreeComposite.getSelectedNode();
+					// define a sale order 
+					boolean SaleOrder = true;
+
+					while(selectedNode != null)
+					{
+						if(selectedNode instanceof PurchaseRootTreeNode)
+							SaleOrder = false; //purchase order
+						selectedNode = (HeaderTreeNode) selectedNode.getParent();
+					}
+
+					final Order order;
+
+					if(SaleOrder)
+						order= tm.createSaleOrder(
+								customerID, null, CurrencyID.create("EUR"), //$NON-NLS-1$
+								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
+								OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					else
+						order= tm.createPurchaseOrder(
+								customerID, null, CurrencyID.create("EUR"), //$NON-NLS-1$
+								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
+								OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
 //					OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
 //					tm.createSegment(orderID, null, null);
 
