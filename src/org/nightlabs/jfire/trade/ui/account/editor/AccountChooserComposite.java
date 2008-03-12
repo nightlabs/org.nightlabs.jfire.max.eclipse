@@ -35,6 +35,7 @@ import org.nightlabs.jfire.accounting.AccountSearchFilter;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -58,7 +59,7 @@ public class AccountChooserComposite extends XComposite{
 		filterComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		accountFilterLabel = new Label(filterComposite, SWT.NONE);
-		accountFilterLabel.setText("Filter: ");
+		accountFilterLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountChooserComposite.labe.text.filter")); //$NON-NLS-1$
 
 		accountFilterName = new Text(filterComposite, SWT.BORDER | SWT.SINGLE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -85,7 +86,7 @@ public class AccountChooserComposite extends XComposite{
 							}
 						}//for
 						if (index == -1)
-							throw new IllegalStateException("The Filtercombo contains Strings that do not match the column titles!");
+							throw new IllegalStateException("The Filtercombo contains Strings that do not match the column titles!"); //$NON-NLS-1$
 
 						ColumnLabelProvider labelProvider = (ColumnLabelProvider) accountListComposite.getTableViewer().getLabelProvider(index);
 						if (labelProvider.getText(element).startsWith(s))
@@ -114,7 +115,7 @@ public class AccountChooserComposite extends XComposite{
 		});
 
 		Group listGroup = new Group(parent, SWT.NONE);
-		listGroup.setText("Account List");
+		listGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountChooserComposite.group.text.accountList")); //$NON-NLS-1$
 		listGroup.setLayout(new GridLayout());
 
 		accountListComposite = new AccountListComposite(
@@ -127,7 +128,7 @@ public class AccountChooserComposite extends XComposite{
 		}//for
 		columnNameCombo.setText(columnNameCombo.getItem(0));
 
-		Job job = new Job("Loading...") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountChooserComposite.job.loading")) { //$NON-NLS-1$
 			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) {

@@ -126,12 +126,12 @@ public class RepositorySearchComposite
 		);
 		repositoryTypeList.setEnabled(false);
 
-		RepositoryType dummy = new RepositoryType("a.b.c", "a.b.c", false);
-		dummy.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+		RepositoryType dummy = new RepositoryType(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), false); //$NON-NLS-1$ //$NON-NLS-2$
+		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.name.loadingData")); //$NON-NLS-1$
 		repositoryTypeList.setInput(Collections.singletonList(dummy));
 		repositoryTypeList.setSelection(0);
 
-		Job job = new Job("Loading repository types") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.job.loadingRepositoryTypes")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception

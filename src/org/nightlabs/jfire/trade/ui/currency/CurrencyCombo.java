@@ -89,7 +89,7 @@ implements ISelectionProvider
 
 		org.nightlabs.base.ui.job.Job loadCurrenciesJob = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.loadCurrenciesJob.name")) { //$NON-NLS-1$
 			@Override
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings("unchecked") //$NON-NLS-1$
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 //					final List<Currency> currencyList = new ArrayList<Currency>(

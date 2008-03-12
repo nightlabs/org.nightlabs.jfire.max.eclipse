@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class TariffOrderCfModComposite extends XComposite {
 
@@ -31,13 +32,13 @@ public class TariffOrderCfModComposite extends XComposite {
 		gd.widthHint = 40;
 		final Button upButton = new Button(buttonComp, SWT.PUSH);
 		upButton.setLayoutData(gd);
-		upButton.setText("Up");
+		upButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModComposite.button.text.up")); //$NON-NLS-1$
 		
 		gd = new GridData();
 		gd.widthHint = 40;
 		final Button downButton = new Button(buttonComp, SWT.PUSH);
 		downButton.setLayoutData(gd);
-		downButton.setText("Down");
+		downButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModComposite.button.text.down")); //$NON-NLS-1$
 		
 		SelectionListener buttonListener = new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {

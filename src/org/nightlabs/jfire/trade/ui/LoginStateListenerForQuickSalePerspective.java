@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.LoginStateListener;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener
@@ -27,7 +28,7 @@ implements LoginStateListener
 
 				String activePerspectiveID = RCPUtil.getActivePerspectiveID();
 				if (activePerspectiveID == null) {
-					logger.info("activePerspectiveID is null. Will re-enqueue this method into the event dispatcher and exit.");
+					logger.info("activePerspectiveID is null. Will re-enqueue this method into the event dispatcher and exit."); //$NON-NLS-1$
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -37,7 +38,7 @@ implements LoginStateListener
 					return;
 				}
 
-				logger.info("Calling QuickSalePerspective.checkOrderOpen(...) with activePerspectiveID=" + activePerspectiveID);
+				logger.info("Calling QuickSalePerspective.checkOrderOpen(...) with activePerspectiveID=" + activePerspectiveID); //$NON-NLS-1$
 				QuickSalePerspective.checkOrderOpen(activePerspectiveID);
 			}
 		});

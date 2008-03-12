@@ -66,7 +66,7 @@ public class CreateOfferAction extends Action
 	@Override
 	public void run()
 	{
-		Job createOrderJob = new Job("Creating order...") {
+		Job createOrderJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOfferAction.job.creatingOrder")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				try {

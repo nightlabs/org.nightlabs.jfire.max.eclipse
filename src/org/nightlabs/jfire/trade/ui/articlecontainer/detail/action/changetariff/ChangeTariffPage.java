@@ -26,6 +26,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter;
 import org.nightlabs.progress.ProgressMonitor;
@@ -44,10 +45,10 @@ public class ChangeTariffPage
 
 	public ChangeTariffPage(String pageName,  Set<ArticleID> selectedArticleIDs)
 	{
-		super(pageName, "Change tariff");
-		setDescription("Please select the desired tariff.");
+		super(pageName, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffPage.title.changeTariff")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffPage.desciption.changeTariff")); //$NON-NLS-1$
 
-		assert selectedArticleIDs != null : "selectedArticleIDs != null";
+		assert selectedArticleIDs != null : "selectedArticleIDs != null"; //$NON-NLS-1$
 		this.selectedArticleIDs = selectedArticleIDs;
 	}
 
@@ -66,7 +67,7 @@ public class ChangeTariffPage
 
 		// find out the articles' currently assigned tariffs and the available tariffs (in their assigned price configs)
 		// TODO we need to filter the tariffs according to the CustomerGroup as well - as soon as it defines available tariffs
-		Job loadArticlesJob = new Job("Loading articles") {
+		Job loadArticlesJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffPage.job.loadingArticles")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception

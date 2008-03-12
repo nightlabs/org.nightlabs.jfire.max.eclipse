@@ -38,6 +38,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -96,7 +97,7 @@ public class InvoiceProvider
 			return accountingManager.getInvoices(invoiceIDs, fetchGroups, maxFetchDepth);
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Problems fetching Invoices:", e);
+			throw new RuntimeException("Problems fetching Invoices:", e); //$NON-NLS-1$
 		}
 	}
 }

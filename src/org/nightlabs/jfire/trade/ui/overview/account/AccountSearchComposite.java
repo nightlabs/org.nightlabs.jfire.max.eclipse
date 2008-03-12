@@ -239,7 +239,7 @@ public class AccountSearchComposite
 			}
 		});
 
-		Job job = new Job("Loading account types") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.job.loadingAccountTypes")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception

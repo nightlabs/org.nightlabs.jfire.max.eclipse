@@ -48,7 +48,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -73,7 +72,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * A View for a configurable quick-list of sellable products.
  * 
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public class ProductTypeQuickListView
 extends LSDViewPart

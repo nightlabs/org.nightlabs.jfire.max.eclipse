@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -42,7 +43,7 @@ public class CurrencyTable extends AbstractTableComposite<Currency> {
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText("Currency");
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.currency.CurrencyTable.column.currency")); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));
 	}
 

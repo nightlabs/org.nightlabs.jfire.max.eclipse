@@ -20,6 +20,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 {
@@ -52,11 +53,11 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 	private Job loadAdditionalDataJob;
 	private Job getLoadAdditionalDataJob(final Runnable runOnLoaded) {
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread! This method must be called on the UI thread!");
+			throw new IllegalStateException("Wrong thread! This method must be called on the UI thread!"); //$NON-NLS-1$
 
 		final Person selectedPerson = getSelectedPerson();
 
-		loadAdditionalDataJob = new Job("Loading customer data") {
+		loadAdditionalDataJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.search.ExtendedPersonSearchWizardPage.job.loadingCustomerData")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				additionalDataLoaded = false;
@@ -116,7 +117,7 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 						new String[] { CustomerGroup.FETCH_GROUP_THIS_CUSTOMER_GROUP },	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 				if (customerGroups.isEmpty())
-					throw new IllegalStateException("DefaultCustomerGroup does not exist.");
+					throw new IllegalStateException("DefaultCustomerGroup does not exist."); //$NON-NLS-1$
 
 				defaultCustomerGroup = customerGroups.iterator().next();
 			} catch (Exception e) {

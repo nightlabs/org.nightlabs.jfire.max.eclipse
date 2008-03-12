@@ -214,7 +214,7 @@ extends XComposite
 		this.site = site;
 
 		loadingDataLabel = new Label(this, SWT.NONE);
-		loadingDataLabel.setText("Loading data...");
+		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite.label.loadingData")); //$NON-NLS-1$
 
 		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(generalEditorInput);
 		loadInitialArticleContainerJob.schedule();
@@ -228,9 +228,9 @@ extends XComposite
 
 		public LoadInitialArticleContainerJob(GeneralEditorInput generalEditorInput)
 		{
-			super("Loading article container");
+			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite.job.loadingArticleContainer")); //$NON-NLS-1$
 			this.generalEditorInput = generalEditorInput;
-			assert generalEditorInput != null : "generalEditorInput != null";
+			assert generalEditorInput != null : "generalEditorInput != null"; //$NON-NLS-1$
 		}
 		
 		@Override
@@ -468,7 +468,7 @@ extends XComposite
 			GeneralEditorActionBarContributor generalEditorActionBarContributor) {
 		this.generalEditorActionBarContributor = generalEditorActionBarContributor;
 
-		assert Display.getCurrent() != null : "*NOT* called on UI thread! This method must be called on the UI thread!";
+		assert Display.getCurrent() != null : "*NOT* called on UI thread! This method must be called on the UI thread!"; //$NON-NLS-1$
 
 		// not yet initialised - will initialise in the callback
 		if (loadingDataLabel != null)
@@ -951,7 +951,7 @@ extends XComposite
 				throw new IllegalArgumentException("input type \"" + input.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (logger.isDebugEnabled())
-				logger.debug("initGeneralEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer));
+				logger.debug("initGeneralEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer)); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (!reloadArticleContainerWithoutArticles)
 				createArticleSegmentGroups();

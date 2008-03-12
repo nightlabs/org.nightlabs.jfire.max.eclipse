@@ -361,7 +361,7 @@ implements IPaymentEntryPage
 	private volatile Job loadModeOfPaymentsJob = null;
 	
 	public void loadModeOfPayments() {
-		Job loadJob = new Job("Loading mode of payments") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.job.loadingModesOfPayment")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				PaymentWizard wizard = (PaymentWizard) getWizard();

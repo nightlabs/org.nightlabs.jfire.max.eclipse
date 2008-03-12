@@ -65,6 +65,7 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.notification.ArticleLifecycleListenerFilter;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -149,7 +150,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR
 	};
 
-	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob("Loading new articles") {
+	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroups.job.loadingNewArticles")) { //$NON-NLS-1$
 //	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
 		private ArticleLifecycleListenerFilter filter = null;
 

@@ -19,6 +19,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -41,7 +42,7 @@ public class OrderDAO
 	protected OrderDAO() {}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Implement
 	protected Collection<Order> retrieveJDOObjects(Set<OrderID> orderIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -73,11 +74,11 @@ public class OrderDAO
 			return getJDOObjects(null, orderIDs, fetchGroups, maxFetchDepth, monitor);
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Cannot fetch Orders via Queries:" + e.getLocalizedMessage(), e);
+			throw new RuntimeException("Cannot fetch Orders via Queries:" + e.getLocalizedMessage(), e); //$NON-NLS-1$
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public List<Order> getOrders(
 			AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)

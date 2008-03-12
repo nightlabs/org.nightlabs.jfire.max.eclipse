@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -52,7 +53,6 @@ import org.nightlabs.progress.ProgressMonitor;
 public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
-//	private LinkedList<ISelectionChangedListener> selectionChangedListeners = new LinkedList<ISelectionChangedListener>();
 	private ListenerList selectionChangedListeners = new ListenerList();
 
 	/**
@@ -175,7 +175,7 @@ implements IProductTypeQuickListFilter
 	
 	public void search(ProgressMonitor monitor, boolean inJob) {
 		if (inJob) {
-			new Job("Search") { 
+			new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.search")) {  //$NON-NLS-1$
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					search(new ProgressMonitorWrapper(monitor));

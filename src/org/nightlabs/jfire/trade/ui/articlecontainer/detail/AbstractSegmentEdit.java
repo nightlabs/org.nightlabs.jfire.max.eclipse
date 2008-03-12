@@ -62,6 +62,7 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -238,7 +239,7 @@ implements SegmentEdit
 		// it may obviously happen that the productTypeSelected(...) method below is called before this createComposite(...) => select it now
 		final ProductTypeID selProductTypeID = selectedProductTypeID;
 		if (selProductTypeID != null) {
-			new Job("Select product type") {
+			new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEdit.job.selectProductType")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor)
 						throws Exception

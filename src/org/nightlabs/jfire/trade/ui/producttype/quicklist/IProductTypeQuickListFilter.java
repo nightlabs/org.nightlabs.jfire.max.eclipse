@@ -69,8 +69,6 @@ extends ISelectionHandler
 	 */
 	String getDisplayName();
 
-	// TODO should return the result instead of void, otherwise check for already
-	// performed searches in setSelection() of ProductTypeQuickListView does not work reliably
 	/** 
 	 * Searches for <tt>ProductType</tt>s and refreshes the resultViewer.
 	 */
@@ -107,4 +105,6 @@ extends ISelectionHandler
 	 * @return the classes the filter is responsible for
 	 */
 	Set<Class> getClasses();
+		
+//	IFilterSettingProvider getFilterSettingProvider();
 }

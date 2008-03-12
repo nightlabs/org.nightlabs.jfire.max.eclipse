@@ -35,6 +35,7 @@ import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.SelectionUtil.SelectionContainment;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -311,7 +312,7 @@ implements ISelectionHandler
 	@Override
 	public void createTreeColumns(Tree tree) {
 		TreeColumn col = new TreeColumn(tree, SWT.LEFT);
-		col.setText("Name");
+		col.setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeGroupTree.column.name")); //$NON-NLS-1$
 		TableLayout tableLayout = new TableLayout();
 		tableLayout.addColumnData(new ColumnWeightData(1));
 		tree.setLayout(tableLayout);

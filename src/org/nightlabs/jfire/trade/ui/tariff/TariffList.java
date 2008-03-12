@@ -49,7 +49,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	private LabelProvider labelProvider = new TableLabelProvider() {
 		public String getColumnText(Object element, int columnIndex) {
 			Tariff tariff = (Tariff) element;
-			return tariff.getName().getText() + (organisationVisible ? (" (" + tariff.getOrganisationID() + ")") : "");
+			return tariff.getName().getText() + (organisationVisible ? (" (" + tariff.getOrganisationID() + ")") : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	};
 
@@ -139,7 +139,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter) {
 		this.tariffFilter = tariffFilter;
 
-		setLoadingMessage("Loading tariffs...");
+		setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.message.loadingTariffs")); //$NON-NLS-1$
 		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.loadTariffsJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -214,7 +214,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	public void setSelectedElements(Collection<Tariff> elements)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!");
+			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!"); //$NON-NLS-1$
 
 		this.selectedTariffs.clear();
 		this.selectedTariffs.addAll(elements);

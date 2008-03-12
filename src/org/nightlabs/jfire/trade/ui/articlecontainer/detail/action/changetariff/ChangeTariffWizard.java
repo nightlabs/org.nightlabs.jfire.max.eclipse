@@ -12,6 +12,7 @@ import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class ChangeTariffWizard
@@ -22,7 +23,7 @@ public class ChangeTariffWizard
 
 	public ChangeTariffWizard(Set<ArticleID> selectedArticleIDs)
 	{
-		assert selectedArticleIDs != null : "selectedArticleIDs != null";
+		assert selectedArticleIDs != null : "selectedArticleIDs != null"; //$NON-NLS-1$
 		this.selectedArticleIDs = selectedArticleIDs;
 	}
 
@@ -38,7 +39,7 @@ public class ChangeTariffWizard
 	{
 		final TariffID selectedTariffID = (TariffID) JDOHelper.getObjectId(changeTariffPage.getSelectedTariff());
 
-		Job setSelectedTariffJob = new Job("Set tariff") {
+		Job setSelectedTariffJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffWizard.job.setTariff")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception

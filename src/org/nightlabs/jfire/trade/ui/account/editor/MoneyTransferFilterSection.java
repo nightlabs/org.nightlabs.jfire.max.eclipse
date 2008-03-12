@@ -41,6 +41,7 @@ import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * An editor page section to display manual money transfer components.
@@ -56,7 +57,7 @@ extends RestorableSectionPart
 	public MoneyTransferFilterSection(FormPage page, Composite parent, MoneyTransferPageController _controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = _controller;
-		getSection().setText("Filter Money Transfer");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferFilterSection.section.text.filterMoneyTransfer")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
@@ -79,8 +80,8 @@ extends RestorableSectionPart
 		
 		refreshButton = new Button(client, SWT.NONE);
 		refreshButton.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), MoneyTransferFilterSection.class, "refreshButton")); //$NON-NLS-1$
-		refreshButton.setText("Refresh");
-		refreshButton.setToolTipText("Refresh");
+		refreshButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferFilterSection.button.refresh")); //$NON-NLS-1$
+		refreshButton.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferFilterSection.button.refresh.tooltip")); //$NON-NLS-1$
 		refreshButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)

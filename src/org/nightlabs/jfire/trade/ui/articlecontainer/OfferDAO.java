@@ -13,6 +13,7 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class OfferDAO
@@ -28,7 +29,7 @@ public class OfferDAO
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Implement
 	protected Collection<Offer> retrieveJDOObjects(Set<OfferID> offerIDs,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
@@ -61,7 +62,7 @@ public class OfferDAO
 			return getJDOObjects(null, offerIDs, fetchGroups, maxFetchDepth, monitor);
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Cannot fetch Offers via Queries.", e);
+			throw new RuntimeException("Cannot fetch Offers via Queries.", e); //$NON-NLS-1$
 		}
 	}
 }

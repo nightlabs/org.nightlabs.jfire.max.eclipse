@@ -35,6 +35,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ArticleProvider extends JDOObjectProvider
 {
@@ -81,7 +82,7 @@ public class ArticleProvider extends JDOObjectProvider
 		return getArticles(null, articleIDs, fetchGroups, maxFetchDepth);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public Collection<Article> getArticles(TradeManager tradeManager, Collection<ArticleID> articleIDs, String[] fetchGroups, int maxFetchDepth)
 	{
 		this.tradeManager = tradeManager;

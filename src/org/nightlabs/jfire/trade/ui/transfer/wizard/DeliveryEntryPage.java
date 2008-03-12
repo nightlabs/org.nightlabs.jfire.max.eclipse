@@ -509,7 +509,7 @@ implements IDeliveryEntryPage
 	
 	public void loadModeOfDeliveries() {
 		
-		Job loadJob = new Job("Loading mode of deliveries...") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.job.loadingDeliveryModes")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				DeliveryWizard deliveryWizard = (DeliveryWizard) getWizard();

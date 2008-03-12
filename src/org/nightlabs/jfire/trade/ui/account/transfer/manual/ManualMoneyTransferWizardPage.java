@@ -20,7 +20,7 @@ class ManualMoneyTransferWizardPage extends WizardHopPage{
 	
 	public ManualMoneyTransferWizardPage(){
 		super(ManualMoneyTransferWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizardPage.title")); //$NON-NLS-1$
-		setDescription("Transfer money from one account to another account with these information.");
+		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizardPage.description.transferMoney")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -78,11 +78,11 @@ class ManualMoneyTransferWizardPage extends WizardHopPage{
 
 		long amount = manualMoneyTransferComposite.getCurrencyEdit().getValue();
 		if(amount <= 0){
-			setMessage("This money will transfer from \"TO-Account\" to \"FROM-Account\"");
+			setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizardPage.message.transferMoney")); //$NON-NLS-1$
 		}//if
 		
 		if(getReason() == null){
-			setMessage("Should enter the reason why transfer money manually.");
+			setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizardPage.message.reasonForTransfer")); //$NON-NLS-1$
 		}
 		else{
 			setMessage(null);

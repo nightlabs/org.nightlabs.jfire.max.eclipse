@@ -29,6 +29,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -109,7 +110,7 @@ implements ISelectionHandler
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText("Name"); 
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
 		TableLayout l = new TableLayout();
 		l.addColumnData(new ColumnWeightData(1));
 		table.setLayout(l);

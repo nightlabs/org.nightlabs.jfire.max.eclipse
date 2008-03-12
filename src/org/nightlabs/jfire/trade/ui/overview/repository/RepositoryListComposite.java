@@ -84,7 +84,7 @@ extends AbstractTableComposite<Repository>
 						{
 							return repository.getName().getText();
 						}
-						return ""; 
+						return "";  //$NON-NLS-1$
 					case(2):
 						if (repository.getOwner() != null && repository.getOwner().getPerson() != null)
 							return repository.getOwner().getPerson().getDisplayName();

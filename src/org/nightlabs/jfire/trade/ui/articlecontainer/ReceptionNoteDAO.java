@@ -11,6 +11,7 @@ import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.store.id.ReceptionNoteID;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -61,7 +62,7 @@ extends BaseJDOObjectDAO<ReceptionNoteID, ReceptionNote>
 			return getJDOObjects(null, receptionNoteIDs, fetchGroups, maxFetchDepth, monitor);
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Cannot fetch ReceptionNotes by Queries:", e);
+			throw new RuntimeException("Cannot fetch ReceptionNotes by Queries:", e); //$NON-NLS-1$
 		}
 	}
 }

@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -32,7 +33,7 @@ extends AbstractArticleContainerListComposite<ReceptionNote>
 			TableViewer tableViewer, Table table, TableLayout tableLayout)
 	{
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Prefix");
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteListComposite.column.prefix")); //$NON-NLS-1$
 		tableLayout.addColumnData(new ColumnWeightData(10));
 	}
 
@@ -41,7 +42,7 @@ extends AbstractArticleContainerListComposite<ReceptionNote>
 			Table table, TableLayout tableLayout)
 	{
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("RepositoryID");
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteListComposite.column.repositoryID")); //$NON-NLS-1$
 		tableLayout.addColumnData(new ColumnWeightData(10));
 	}
 

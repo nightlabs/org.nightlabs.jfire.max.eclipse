@@ -178,7 +178,7 @@ public class ManualMoneyTransferComposite extends XComposite {
 		fOrganizationDataLabel.setLayoutData(gridData);
 
 		transferButton = new Button(bottomComposite, SWT.PUSH);
-		transferButton.setText("<----->");
+		transferButton.setText("<----->"); //$NON-NLS-1$
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER,
 				GridData.VERTICAL_ALIGN_CENTER);
 		gridData.heightHint = 20;

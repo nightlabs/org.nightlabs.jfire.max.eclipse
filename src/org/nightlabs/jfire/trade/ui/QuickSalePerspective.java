@@ -21,6 +21,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -91,7 +92,7 @@ implements IPerspectiveFactory
 	private static void openEditor(final GeneralEditorInput editorInput, final boolean editor2Perspective)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!");
+			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!"); //$NON-NLS-1$
 
 		try {
 			if (editor2Perspective) {
@@ -110,7 +111,7 @@ implements IPerspectiveFactory
 	private static void checkPerspectiveListenerAdded()
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!");
+			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!"); //$NON-NLS-1$
 
 		if (!perspectiveListenerAdded) {
 			try {
@@ -140,7 +141,7 @@ implements IPerspectiveFactory
 	public static void checkOrderOpen(String perspectiveID)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!");
+			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!"); //$NON-NLS-1$
 
 		if (perspectiveID != null && perspectiveID.equals(QuickSalePerspective.ID_PERSPECTIVE))
 		{
@@ -150,11 +151,11 @@ implements IPerspectiveFactory
 			{
 				GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput();
 				if (input != null) {
-					logger.info("Opening QuickSaleEditor: input=" + input);
+					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
 					openEditor(input, false);
 				}
 				else
-					logger.warn("Opening QuickSaleEditor not possible, because input is null!");
+					logger.warn("Opening QuickSaleEditor not possible, because input is null!"); //$NON-NLS-1$
 			}
 			if (page != null) {
 				// close additional editors if more than one is open
@@ -168,17 +169,17 @@ implements IPerspectiveFactory
 						IEditorReference reference = references[i];
 						String editorID = reference.getId();
 						if (!editorID.equals(GeneralQuickSaleEditor.ID_EDITOR)) {
-							logger.info("Closing editor (because it is no GeneralQuickSaleEditor): editorID=" + editorID);
+							logger.info("Closing editor (because it is no GeneralQuickSaleEditor): editorID=" + editorID); //$NON-NLS-1$
 							page.closeEditor(reference.getEditor(false), true);
 						}
 						try {
 							IEditorInput input = reference.getEditorInput();
 							if (activeInput != null && !activeInput.equals(input)) {
-								logger.info("Closing editor (because it is not showing the active one): input=" + input);
+								logger.info("Closing editor (because it is not showing the active one): input=" + input); //$NON-NLS-1$
 								page.closeEditor(reference.getEditor(false), true);
 							}
 						} catch (PartInitException e) {
-							logger.error("PartInitException: " + e.getLocalizedMessage(), e);
+							logger.error("PartInitException: " + e.getLocalizedMessage(), e); //$NON-NLS-1$
 						}
 					}
 				}
