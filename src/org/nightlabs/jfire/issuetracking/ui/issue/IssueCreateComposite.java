@@ -93,13 +93,11 @@ extends XComposite
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
-//	private Set<IssueLink> issueLinks;
 	private Issue issue;
 	
 	public IssueCreateComposite(Composite parent, int style, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
-//		this.issueLinks = issueLinks;
 		this.issue = issue;
 		createComposite(this);
 	}
@@ -113,7 +111,7 @@ extends XComposite
 		getGridLayout().numColumns = 2;
 
 		linkedObjectLbl = new Label(this, SWT.NONE);
-		linkedObjectLbl.setText("Linked Object");
+		linkedObjectLbl.setText("Linked object");
 		
 		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
 		if (issue != null) {

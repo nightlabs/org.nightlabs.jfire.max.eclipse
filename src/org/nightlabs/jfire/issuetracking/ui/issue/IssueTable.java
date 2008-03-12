@@ -323,10 +323,4 @@ extends AbstractTableComposite<Issue>
 		this.currentIssueID = null;
 		super.setInput("Loading message");
 	}
-
-	@Override
-	public void setInput(Object input)
-	{
-		throw new UnsupportedOperationException("Use setIssues(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
-	}
 }

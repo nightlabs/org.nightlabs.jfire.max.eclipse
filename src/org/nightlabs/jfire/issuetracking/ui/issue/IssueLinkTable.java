@@ -86,11 +86,6 @@ extends AbstractTableComposite<IssueLink>{
 //		
 //	}
 
-	@Override
-	public void setInput(Object input) {
-		throw new UnsupportedOperationException("Use setIssueID(...) or addIssueLink instead.");
-	}
-
 	public void setIssueID(final IssueID issueID)
 	{
 		Job job = new Job("Loading issue links") {
