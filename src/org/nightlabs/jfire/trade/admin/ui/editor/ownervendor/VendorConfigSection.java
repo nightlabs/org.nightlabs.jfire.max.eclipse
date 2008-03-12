@@ -18,6 +18,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 
@@ -42,7 +43,7 @@ implements IProductTypeSectionPart
 	public VendorConfigSection(IFormPage page,
 			Composite parent, int style) 
 	{
-		super(page, parent, style, "Vendor");
+		super(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.title")); //$NON-NLS-1$
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 
@@ -97,7 +98,7 @@ implements IProductTypeSectionPart
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getVendor();
 		getVendorEditComposite().setLegalEntity(originalEntity);
-		setInheritanceSelection(productType.getFieldMetaData("vendor").isValueInherited());
+		setInheritanceSelection(productType.getFieldMetaData("vendor").isValueInherited()); //$NON-NLS-1$
 
 
 	}
@@ -142,7 +143,7 @@ implements IProductTypeSectionPart
 		if( inheritAction.isChecked() )
 		{
 
-			FadeableCompositeJob job = new FadeableCompositeJob("Loading extended product type", fadeableComposite, null) {
+			FadeableCompositeJob job = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.loadExtendedProductTypeJob.name"), fadeableComposite, null) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source)
 				throws Exception

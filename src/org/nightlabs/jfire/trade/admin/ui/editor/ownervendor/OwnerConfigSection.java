@@ -18,6 +18,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -40,7 +41,7 @@ implements IProductTypeSectionPart
 	public OwnerConfigSection(IFormPage page,
 			Composite parent, int style) 
 	{
-		super(page, parent, style, "Owner");
+		super(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection.title")); //$NON-NLS-1$
 
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
@@ -91,7 +92,7 @@ implements IProductTypeSectionPart
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getOwner();
 		getOwnerEditComposite().setLegalEntity(originalEntity);	
-		setInheritanceSelection(productType.getFieldMetaData("owner").isValueInherited());
+		setInheritanceSelection(productType.getFieldMetaData("owner").isValueInherited()); //$NON-NLS-1$
 
 
 	}
@@ -165,7 +166,7 @@ implements IProductTypeSectionPart
 			//final ProductType extendedProductType = productTypePageController.getExtendedProductType(new NullProgressMonitor(), getExtendedProductTypeID()); // since this monitor is not yet started, we can directly pass it
 
 
-			FadeableCompositeJob job = new FadeableCompositeJob("Loading extended product type", fadeableComposite, null) {
+			FadeableCompositeJob job = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection.loadExtendedProductTypeJob.name"), fadeableComposite, null) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source)
 				throws Exception
