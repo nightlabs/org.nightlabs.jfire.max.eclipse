@@ -126,7 +126,7 @@ extends DynamicPathWizardPage
 		comp0.getGridLayout().numColumns = 3;
 
 		Label labelOwner = new Label(comp0, SWT.NONE);
-		labelOwner.setText("Owner");
+		labelOwner.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.OwnerVendorPage.labelOwner.text")); //$NON-NLS-1$
 //		labelOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		this.ownerEditComposite = new LegalEntityEditComposite(comp0, SWT.NONE);
@@ -177,7 +177,7 @@ extends DynamicPathWizardPage
 
 
 		Label labelVendor = new Label(comp1, SWT.NONE);
-		labelVendor.setText("Vendor");
+		labelVendor.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.OwnerVendorPage.labelVendor.text")); //$NON-NLS-1$
 //		labelVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 
