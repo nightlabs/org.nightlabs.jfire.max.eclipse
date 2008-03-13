@@ -24,7 +24,7 @@ public class IssueTypeEditorPageController extends EntityEditorPageController {
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
 		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
-		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY};
+		IssuePriority.FETCH_GROUP_NAME};
 	
 	
 	private IssueTypeID issueTypeID;
