@@ -11,7 +11,7 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.issue.Issue;
@@ -100,7 +100,7 @@ public class IssueEntryListViewer
 	}
 
 	@Override
-	protected Collection<Issue> doSearch(QueryMap<Issue, ? extends IssueQuery> queryMap,
+	protected Collection<Issue> doSearch(QueryCollection<Issue, ? extends IssueQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return IssueDAO.sharedInstance().getIssuesForQueries(

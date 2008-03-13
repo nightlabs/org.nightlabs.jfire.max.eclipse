@@ -36,7 +36,7 @@ extends AbstractQueryFilterComposite<Issue, IssueQuery>
 	private IssueSearchCompositeTimeRelated issueSearchCompositeTimeRelated;
 
 	@Override
-	protected Class<IssueQuery> getQueryClass() {
+	public Class<IssueQuery> getQueryClass() {
 		return IssueQuery.class;
 	}
 

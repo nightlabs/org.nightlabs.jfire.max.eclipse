@@ -1,8 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,18 +15,21 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueSearchCompositePeopleRelated
-extends JDOQueryComposite<Issue, IssueQuery>
+	extends JDOQueryComposite<Issue, IssueQuery>
 {
-	
 	/**
 	 * @param parent
 	 * @param style
@@ -46,11 +49,6 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		super(filterComposite, style);
 		createComposite(this);
 	}
-
-	private static final Logger logger = Logger.getLogger(IssueSearchCompositeIssueRelated.class);
-	
-	private boolean selectedAllReporter = false;
-	private boolean selectedAllAssignee = false;
 
 	private User selectedReporter;
 	private User selectedAssignee;
@@ -88,10 +86,11 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		allReporterButton.setLayoutData(gridData);
 		allReporterButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedAllReporter = allReporterButton.getSelection();
-				reporterText.setEnabled(!selectedAllReporter);
-				reporterButton.setEnabled(!selectedAllReporter);
+			public void widgetSelected(SelectionEvent e)
+			{
+				final boolean selectAll = ((Button) e.getSource()).getSelection();
+				reporterText.setEnabled(!selectAll);
+				reporterButton.setEnabled(!selectAll);
 			}
 		});
 		allReporterButton.setSelection(true);
@@ -110,6 +109,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
+					getQuery().setReporterID((UserID) JDOHelper.getObjectId(selectedReporter));
 					if (selectedReporter != null)
 						reporterText.setText(selectedReporter.getName());
 				}//if
@@ -130,12 +130,14 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		allAssigneeButton.setLayoutData(gridData);
-		allAssigneeButton.addSelectionListener(new SelectionAdapter() {
+		allAssigneeButton.addSelectionListener(new SelectionAdapter()
+		{
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				selectedAllAssignee = allAssigneeButton.getSelection();
-				assigneeText.setEnabled(!selectedAllAssignee);
-				assigneeButton.setEnabled(!selectedAllAssignee);
+			public void widgetSelected(SelectionEvent e)
+			{
+				final boolean selectAll = ((Button) e.getSource()).getSelection();
+				assigneeText.setEnabled(!selectAll);
+				assigneeButton.setEnabled(!selectAll);
 			}
 		});
 		allAssigneeButton.setSelection(true);
@@ -154,6 +156,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
+					getQuery().setAssigneeID((UserID) JDOHelper.getObjectId(selectedAssignee));
 					if (selectedAssignee != null)
 						assigneeText.setText(selectedAssignee.getName());
 				}//if
@@ -162,28 +165,53 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 	@Override
-	protected void resetSearchQueryValues() {
-		IssueQuery issueQuery = getQuery();
-		
-		if (!selectedAllReporter && selectedReporter != null) {
-			issueQuery.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));
-		}
-		else {
-			issueQuery.setReporterID(null);
-		}
-
-		if (!selectedAllAssignee && selectedAssignee != null) {
-			issueQuery.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
-		}
-		else {
-			issueQuery.setAssigneeID(null);
-		}
+	protected void resetSearchQueryValues(IssueQuery query)
+	{
+		query.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));		
+		query.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
 	}
 
 	@Override
-	protected void unsetSearchQueryValues() {
-		IssueQuery issueQuery = getQuery();
-		issueQuery.setAssigneeID(null);
-		issueQuery.setReporterID(null);
+	protected void unsetSearchQueryValues(IssueQuery query)
+	{
+		query.setAssigneeID(null);
+		query.setReporterID(null);
+	}
+
+	@Override
+	protected void doUpdateUI(QueryEvent event)
+	{
+		boolean allChanged = isWholeQueryChanged(event);
+		
+		final IssueQuery changedQuery = (IssueQuery) event.getChangedQuery();
+		
+		if (changedQuery == null)
+		{
+			selectedAssignee = null;
+			selectedReporter = null;
+		}
+		else
+		{
+			if (allChanged || IssueQuery.PROPERTY_ASSIGNEE_ID.equals(event.getPropertyName()))
+			{
+				selectedAssignee = (changedQuery.getAssigneeID() == null) ? null :
+					UserDAO.sharedInstance().getUser(changedQuery.getAssigneeID(),
+						new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+			}
+			
+			if (allChanged || IssueQuery.PROPERTY_REPORTER_ID.equals(event.getPropertyName()))
+			{
+				selectedReporter = (changedQuery.getReporterID() == null) ? null : 
+					UserDAO.sharedInstance().getUser(changedQuery.getReporterID(),
+						new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+			}
+		}
+		
+		reporterText.setText(selectedReporter != null ? selectedReporter.getName() : "");
+		reporterButton.setSelection(selectedReporter != null);
+		assigneeText.setText(selectedAssignee != null ? selectedAssignee.getName() : "");
+		assigneeButton.setSelection(selectedAssignee != null);
 	}
 }
