@@ -42,7 +42,7 @@ public class AccountFilterComposite
 	}
 
 	@Override
-	protected Class<AccountQuery> getQueryClass() {
+	public Class<AccountQuery> getQueryClass() {
 		return AccountQuery.class;
 	}
 

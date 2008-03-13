@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
@@ -81,6 +82,8 @@ public class AccountSearchComposite
 	
 	private Button accountTypeActiveButton = null;
 	private XComboComposite<AccountType> accountTypeList = null;
+	private static final String[] ACCOUNT_TYPE_FETCH_GROUPS = 
+		new String[] { FetchPlan.DEFAULT, AccountType.FETCH_GROUP_NAME };
 	protected AccountTypeID selectedAccountTypeID;
 	
 	@Override
@@ -96,6 +99,9 @@ public class AccountSearchComposite
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				int numDigits = minBalanceEntry.getSpinnerComposite().getNumDigits();
 				double multiplier = Math.pow(10, numDigits);
 				Number number = minBalanceEntry.getSpinnerComposite().getValue();
@@ -105,13 +111,16 @@ public class AccountSearchComposite
 			}
 		});
 		maxBalanceEntry = new SpinnerSearchEntry(parent, SWT.NONE, Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.maxBalanceEntry.caption")); //$NON-NLS-1$
-		maxBalanceEntry.getSpinnerComposite().setMinimum(-Integer.MAX_VALUE);
+		maxBalanceEntry.getSpinnerComposite().setMinimum(Integer.MIN_VALUE);
 		maxBalanceEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		maxBalanceEntry.getSpinnerComposite().addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent arg0)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				int numDigits = maxBalanceEntry.getSpinnerComposite().getNumDigits();
 				double multiplier = Math.pow(10, numDigits);
 				Number number = maxBalanceEntry.getSpinnerComposite().getValue();
@@ -137,6 +146,9 @@ public class AccountSearchComposite
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				selectedCurrencyID = (CurrencyID)JDOHelper.getObjectId(currencyCombo.getSelectedCurrency());
 				getQuery().setCurrencyID(selectedCurrencyID);
 			}
@@ -159,6 +171,9 @@ public class AccountSearchComposite
 				boolean active = ownerActiveButton.getSelection();
 				ownerText.setEnabled(active);
 				ownerBrowseButton.setEnabled(active);
+				if (isUpdatingUI())
+					return;
+				
 				if (active)
 				{
 					getQuery().setOwnerID(selectedOwnerID);
@@ -172,20 +187,10 @@ public class AccountSearchComposite
 		ownerText = new Text(ownerGroup, SWT.BORDER);
 		ownerText.setEnabled(false);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		ownerText.addSelectionListener(ownerSelectionListener);
 		ownerBrowseButton = new Button(ownerGroup, SWT.NONE);
 		ownerBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.ownerBrowseButton.text")); //$NON-NLS-1$
 		ownerBrowseButton.addSelectionListener(ownerSelectionListener);
 		ownerBrowseButton.setEnabled(false);
-//		ownerActiveButton.addSelectionListener(new SelectionListener(){
-//			public void widgetSelected(SelectionEvent e) {
-//				ownerText.setEnabled(((Button)e.getSource()).getSelection());
-//				ownerBrowseButton.setEnabled(((Button)e.getSource()).getSelection());
-//			}
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				widgetSelected(e);
-//			}
-//		});
 		
 		final Group accountTypeGroup = new Group(parent, SWT.NONE);
 		accountTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeGroup.text")); //$NON-NLS-1$
@@ -201,6 +206,10 @@ public class AccountSearchComposite
 			{
 				boolean active = accountTypeActiveButton.getSelection();
 				accountTypeList.setEnabled(active);
+				
+				if (isUpdatingUI())
+					return;
+				
 				if (active)
 				{
 					getQuery().setAccountTypeID(selectedAccountTypeID);
@@ -234,6 +243,9 @@ public class AccountSearchComposite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				selectedAccountTypeID = (AccountTypeID) JDOHelper.getObjectId(accountTypeList.getSelectedElement());
 				getQuery().setAccountTypeID(selectedAccountTypeID);
 			}
@@ -245,7 +257,7 @@ public class AccountSearchComposite
 					throws Exception
 			{
 				final List<AccountType> accountTypes = AccountTypeDAO.sharedInstance().getAccountTypes(
-						new String[] { FetchPlan.DEFAULT, AccountType.FETCH_GROUP_NAME },
+						ACCOUNT_TYPE_FETCH_GROUPS,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor
 				);
@@ -263,45 +275,18 @@ public class AccountSearchComposite
 			}
 		};
 		job.schedule();
-		
-//		accountTypeActiveButton.addSelectionListener(new SelectionListener(){
-//			public void widgetSelected(SelectionEvent e) {
-//				accountTypeList.setEnabled(((Button)e.getSource()).getSelection());
-//			}
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				widgetSelected(e);
-//			}
-//		});
-		
-//		Group nameGroup = new Group(parent, SWT.NONE);
-//		nameGroup.setText("Account Name");
-//		nameGroup.setLayout(new GridLayout());
-//		nameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeNameButton = new Button(nameGroup, SWT.CHECK);
-//		activeNameButton.setText("Active");
-//		activeNameButton.addSelectionListener(activeNameListener);
-//		accountNameText = new Text(nameGroup, SWT.BORDER);
-//		accountNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeNameButton.setSelection(false);
-//		accountNameText.setEnabled(false);
-//
-//		Group anchorIDGroup = new Group(parent, SWT.NONE);
-//		anchorIDGroup.setText("Account ID");
-//		anchorIDGroup.setLayout(new GridLayout());
-//		anchorIDGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeAnchorIDButton = new Button(anchorIDGroup, SWT.CHECK);
-//		activeAnchorIDButton.setText("Active");
-//		activeAnchorIDButton.addSelectionListener(activeNameListener);
-//		anchorIDText = new Text(anchorIDGroup, SWT.BORDER);
-//		anchorIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeAnchorIDButton.setSelection(false);
-//		anchorIDText.setEnabled(false);
 	}
 	
-	private SelectionListener activeCurrencyListener = new SelectionListener(){
-		public void widgetSelected(SelectionEvent e) {
+	private SelectionListener activeCurrencyListener = new SelectionAdapter()
+	{
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
 			boolean active = activeCurrencyButton.getSelection();
 			currencyCombo.setEnabled(active);
+			if (isUpdatingUI())
+				return;
+			
 			if (active)
 			{
 				getQuery().setCurrencyID(selectedCurrencyID);
@@ -311,18 +296,17 @@ public class AccountSearchComposite
 				getQuery().setCurrencyID(null);
 			}
 		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
 	};
 
 	private AnchorID selectedOwnerID = null;
-	private SelectionListener ownerSelectionListener = new SelectionListener(){
-		public void widgetSelected(SelectionEvent e) {
+	private SelectionListener ownerSelectionListener = new SelectionAdapter()
+	{
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
-				getQuery().setOwnerID(selectedOwnerID);
 				getQuery().setOwnerID(selectedOwnerID);
 				// TODO perform this expensive code asynchronously
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
@@ -331,110 +315,95 @@ public class AccountSearchComposite
 				ownerText.setText(legalEntity.getPerson().getDisplayName());
 			}
 		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
 	};
 	
-//	private SelectionListener activeNameListener = new SelectionListener(){
-//		public void widgetSelected(SelectionEvent e) {
-//			accountNameText.setEnabled(activeNameButton.getSelection());
-//		}
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}
-//	};
-//
-//	private SelectionListener activeAnchorIDListener = new SelectionListener(){
-//		public void widgetSelected(SelectionEvent e) {
-//			anchorIDText.setEnabled(activeAnchorIDButton.getSelection());
-//		}
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}
-//	};
-	
-//	@Override
-//	public AbstractJDOQuery getJDOQuery()
-//	{
-//		AccountQuery accountQuery = new AccountQuery();
-//		
-//		if (minBalanceEntry.isActive()) {
-//			int numDigits = minBalanceEntry.getSpinnerComposite().getNumDigits();
-//			double multiplier = Math.pow(10, numDigits);
-//			Number number = minBalanceEntry.getSpinnerComposite().getValue();
-//			double val = number.doubleValue() * multiplier;
-//			long value = new Double(val).longValue();
-//			accountQuery.setMinBalance(value);
-//		}
-//
-//		if (maxBalanceEntry.isActive()) {
-//			int numDigits = maxBalanceEntry.getSpinnerComposite().getNumDigits();
-//			double multiplier = Math.pow(10, numDigits);
-//			Number number = maxBalanceEntry.getSpinnerComposite().getValue();
-//			double val = number.doubleValue() * multiplier;
-//			long value = new Double(val).longValue();
-//			accountQuery.setMaxBalance(value);
-//		}
-//		
-//		if (activeCurrencyButton.getSelection())
-//			accountQuery.setCurrencyID((CurrencyID)JDOHelper.getObjectId(currencyCombo.getSelectedCurrency()));
-//		
-//		if (ownerActiveButton.getSelection())
-//			accountQuery.setOwnerID(selectedOwnerID);
-//		
-//		if (accountTypeActiveButton.getSelection() && accountTypeList.getSelectedElement() != null)
-//			accountQuery.setAccountTypeID((AccountTypeID) JDOHelper.getObjectId(accountTypeList.getSelectedElement()));
-//
-////		if (activeNameButton.getSelection() && accountNameText.getText() != null && !accountNameText.getText().trim().equals(""))
-////			accountQuery.setName(accountNameText.getText());
-////
-////		if (activeAnchorIDButton.getSelection() && anchorIDText.getText() != null && !anchorIDText.getText().trim().equals(""))
-////			accountQuery.setAnchorID(anchorIDText.getText());
-//		
-//		return accountQuery;
-//	}
-
 	@Override
-	protected void resetSearchQueryValues()
+	protected void resetSearchQueryValues(AccountQuery query)
 	{
-		getQuery().setMinBalance(minBalance);		
-		getQuery().setMaxBalance(maxBalance);
-		getQuery().setCurrencyID(selectedCurrencyID);
-		getQuery().setOwnerID(selectedOwnerID);
-		getQuery().setAccountTypeID(selectedAccountTypeID);
+		query.setMinBalance(minBalance);		
+		query.setMaxBalance(maxBalance);
+		query.setCurrencyID(selectedCurrencyID);
+		query.setOwnerID(selectedOwnerID);
+		query.setAccountTypeID(selectedAccountTypeID);
 	}
 
 	@Override
-	protected void unsetSearchQueryValues()
+	protected void unsetSearchQueryValues(AccountQuery query)
 	{
-		getQuery().setMinBalance(Long.MIN_VALUE);
-		getQuery().setMaxBalance(Long.MAX_VALUE);
-		getQuery().setCurrencyID(null);
-		getQuery().setOwnerID(null);
-		getQuery().setAccountTypeID(null);
+		query.setMinBalance(Long.MIN_VALUE);
+		query.setMaxBalance(Long.MAX_VALUE);
+		query.setCurrencyID(null);
+		query.setOwnerID(null);
+		query.setAccountTypeID(null);
 	}
-	
-//	private List<String> availableAccountAnchorTypeIDs = null;
-//	protected List<String> getAvailableAccountAnchorTypeIDs()
-//	{
-//		if (availableAccountAnchorTypeIDs == null) {
-//			List<String> list = new ArrayList<String>();
-//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_EXPENSE);
-//			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE);
-////			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN);
-////			list.add(Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_OUT);
-//			list.add(Account.ANCHOR_TYPE_ID_OUTSIDE);
-//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_CUSTOMER);
-//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_NEUTRAL);
-//			list.add(Account.ANCHOR_TYPE_ID_PARTNER_VENDOR);
-//			list.add(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);
-//			// WORKAROUND: Cannot use VoucherLocalAccountantDelegate.ACCOUNT_ANCHOR_TYPE_ID_VOUCHER
-//			// as no dependency exists
-//			// TODO Information should come from an extension point
-//			list.add("Account.Voucher"); //$NON-NLS-1$
-//			availableAccountAnchorTypeIDs = list;
-//		}
-//		return availableAccountAnchorTypeIDs;
-//	}
+
+	@Override
+	protected void doUpdateUI(QueryEvent event)
+	{
+		boolean wholeQueryChanged = isWholeQueryChanged(event);
+		
+		final AccountQuery changedQuery = (AccountQuery) event.getChangedQuery();
+		if (changedQuery == null)
+		{
+			minBalance = Long.MIN_VALUE;
+			maxBalance = Long.MAX_VALUE;
+			selectedCurrencyID = null;
+			selectedOwnerID = null;
+			selectedAccountTypeID = null;
+		}
+		else
+		{
+			if (wholeQueryChanged || AccountQuery.PROPERTY_MAX_BALANCE.equals(event.getPropertyName()))
+			{
+				maxBalance = changedQuery.getMaxBalance();
+			}
+			if (wholeQueryChanged || AccountQuery.PROPERTY_MIN_BALANCE.equals(event.getPropertyName()))
+			{
+				minBalance = changedQuery.getMinBalance();				
+			}
+			if (wholeQueryChanged || AccountQuery.PROPERTY_CURRENCY_ID.equals(event.getPropertyName()))
+			{
+				selectedCurrencyID = changedQuery.getCurrencyID();				
+			}
+			if (wholeQueryChanged || AccountQuery.PROPERTY_ACCOUNT_TYPE_ID.equals(event.getPropertyName()))
+			{
+				selectedAccountTypeID = changedQuery.getAccountTypeID();				
+			}
+			if (wholeQueryChanged || AccountQuery.PROPERTY_OWNER_ID.equals(event.getPropertyName()))
+			{
+				selectedOwnerID = changedQuery.getOwnerID();				
+			}
+		}
+		
+		minBalanceEntry.getSpinnerComposite().setValue(Double.valueOf(minBalance));
+		maxBalanceEntry.getSpinnerComposite().setValue(Double.valueOf(maxBalance));
+		currencyCombo.setSelectedCurrency(selectedCurrencyID);
+		activeCurrencyButton.setSelection(selectedCurrencyID != null);
+		if (selectedOwnerID != null)
+		{
+			final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
+				new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			ownerText.setText(legalEntity.getPerson().getDisplayName());
+		}
+		else
+		{
+			ownerText.setText("");
+		}
+		ownerActiveButton.setSelection(selectedOwnerID != null);
+		
+		if (selectedAccountTypeID != null)
+		{
+			final AccountType newAccountType = AccountTypeDAO.sharedInstance().getAccountType(
+				selectedAccountTypeID, ACCOUNT_TYPE_FETCH_GROUPS,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+				);
+			accountTypeList.setSelection(newAccountType);
+		}
+		else
+		{
+			accountTypeList.setSelection((AccountType)null);
+		}
+		accountTypeActiveButton.setSelection(selectedAccountTypeID != null);
+	}
 }

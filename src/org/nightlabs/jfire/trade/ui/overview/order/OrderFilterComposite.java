@@ -39,7 +39,7 @@ public class OrderFilterComposite
 	}
 
 	@Override
-	protected Class<OrderQuery> getQueryClass() {
+	public Class<OrderQuery> getQueryClass() {
 		return OrderQuery.class;
 	}
 

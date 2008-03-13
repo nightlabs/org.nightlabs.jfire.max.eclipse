@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
@@ -60,7 +60,7 @@ public class AccountEntryViewer
 	}
 
 	@Override
-	protected Collection<Account> doSearch(QueryMap<Account, ? extends AccountQuery> queryMap,
+	protected Collection<Account> doSearch(QueryCollection<Account, ? extends AccountQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return AccountDAO.sharedInstance().getAccountsForQueries(

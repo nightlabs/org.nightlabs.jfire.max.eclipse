@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.ui.overview.receptionnote;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
@@ -33,13 +32,13 @@ public class ReceptionNoteFilterComposite
 	 * @param style
 	 */
 	public ReceptionNoteFilterComposite(Composite parent, int style,
-		QueryProvider<ReceptionNote, AbstractArticleContainerQuery<ReceptionNote>> queryProvider)
+		QueryProvider<ReceptionNote, ? super ReceptionNoteQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}
 
 	@Override
-	protected Class<ReceptionNoteQuery> getQueryClass() {
+	public Class<ReceptionNoteQuery> getQueryClass() {
 		return ReceptionNoteQuery.class;
 	}
 	

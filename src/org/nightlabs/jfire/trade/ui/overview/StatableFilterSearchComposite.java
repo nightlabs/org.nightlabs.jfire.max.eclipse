@@ -58,7 +58,7 @@ public class StatableFilterSearchComposite
 	}
 
 	@Override
-	protected Class<StatableQuery> getQueryClass()
+	public Class<StatableQuery> getQueryClass()
 	{
 		return StatableQuery.class;
 	}

@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -69,39 +69,13 @@ public class OfferEntryViewer
 		});
 	}
 	
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new OfferFilterComposite(parent, SWT.NONE);
-//	}
-
 	public String getID() {
 		return ID;
 	}
 		
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries, ProgressMonitor monitor)
-//	{
-//		if (queries == null)
-//			throw new IllegalArgumentException("queries must not be null!");
-//
-//		if (queries.isEmpty())
-//			throw new IllegalArgumentException("queries must not be empty!");
-//
-//		try {
-//			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<OfferID> offerIDs = tradeManager.getOfferIDs(queries);
-//			return OfferDAO.sharedInstance().getOffers(offerIDs,
-//					FETCH_GROUPS_OFFERS,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					monitor);
-//		}
-//		catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	@Override
-	protected Collection<Offer> doSearch(QueryMap<Offer, ? extends OfferQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Offer> doSearch(
+		QueryCollection<Offer, ? extends OfferQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OfferDAO.sharedInstance().getOffersByQuery(
 			queryMap,

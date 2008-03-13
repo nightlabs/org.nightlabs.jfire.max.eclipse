@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -66,35 +66,13 @@ public class DeliveryNoteEntryViewer
 		});
 	}
 	
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new DeliveryNoteFilterComposite(parent, SWT.NONE);
-//	}
-
 	public String getID() {
 		return ID;
 	}
 		
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries, ProgressMonitor monitor)
-//	{
-//		try {
-////			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-////			Set<DeliveryNoteID> deliveryNoteIDs = tradeManager.getDeliveryNoteIDs(queries);
-////			return DeliveryNoteDAO.sharedInstance().getDeliveryNotes(deliveryNoteIDs,
-////					FETCH_GROUPS_DELIVERY_NOTES,
-////					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-////					monitor);
-//			return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(queries,
-//					FETCH_GROUPS_DELIVERY_NOTES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	@Override
-	protected Collection<DeliveryNote> doSearch(QueryMap<DeliveryNote, ? extends DeliveryNoteQuery> queryMap,
-		ProgressMonitor monitor)
+	protected Collection<DeliveryNote> doSearch(
+		QueryCollection<DeliveryNote, ? extends DeliveryNoteQuery> queryMap, ProgressMonitor monitor)
 	{
 		return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(
 			queryMap,

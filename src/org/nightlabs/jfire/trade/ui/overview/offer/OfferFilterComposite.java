@@ -37,7 +37,7 @@ public class OfferFilterComposite
 	}
 
 	@Override
-	protected Class<OfferQuery> getQueryClass() {
+	public Class<OfferQuery> getQueryClass() {
 		return OfferQuery.class;
 	}
 

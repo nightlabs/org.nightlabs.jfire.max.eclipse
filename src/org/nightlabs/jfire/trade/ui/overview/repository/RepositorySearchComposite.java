@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
 import org.nightlabs.jfire.store.Repository;
@@ -97,6 +98,9 @@ public class RepositorySearchComposite
 				boolean active = ((Button)e.getSource()).getSelection();
 				ownerText.setEnabled(active);
 				ownerBrowseButton.setEnabled(active);
+				if (isUpdatingUI())
+					return;
+				
 				if (active)
 				{
 					getQuery().setOwnerID(selectedOwnerID);
@@ -129,7 +133,6 @@ public class RepositorySearchComposite
 		RepositoryType dummy = new RepositoryType(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), false); //$NON-NLS-1$ //$NON-NLS-2$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.name.loadingData")); //$NON-NLS-1$
 		repositoryTypeList.setInput(Collections.singletonList(dummy));
-		repositoryTypeList.setSelection(0);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.job.loadingRepositoryTypes")) { //$NON-NLS-1$
 			@Override
@@ -158,7 +161,6 @@ public class RepositorySearchComposite
 					public void run()
 					{
 						repositoryTypeList.setInput(repositoryTypes);
-						repositoryTypeList.setSelection(0);
 					}
 				});
 
@@ -167,11 +169,16 @@ public class RepositorySearchComposite
 		};
 		job.schedule();
 
-		repositoryTypeActiveButton.addSelectionListener(new SelectionListener(){
+		repositoryTypeActiveButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				boolean active = ((Button)e.getSource()).getSelection();
 				repositoryTypeList.setEnabled(active);
+				if (isUpdatingUI())
+					return;
+				
 				if (active)
 				{
 					getQuery().setRepositoryTypeID((RepositoryTypeID)
@@ -182,39 +189,15 @@ public class RepositorySearchComposite
 					getQuery().setRepositoryTypeID(null);
 				}
 			}
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
 		});
-		
-//		Group nameGroup = new Group(parent, SWT.NONE);
-//		nameGroup.setText("Repository Name");
-//		nameGroup.setLayout(new GridLayout());
-//		nameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeNameButton = new Button(nameGroup, SWT.CHECK);
-//		activeNameButton.setText("Active");
-//		activeNameButton.addSelectionListener(activeNameListener);
-//		repositoryNameText = new Text(nameGroup, SWT.BORDER);
-//		repositoryNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeNameButton.setSelection(false);
-//		repositoryNameText.setEnabled(false);
-//
-//		Group anchorIDGroup = new Group(parent, SWT.NONE);
-//		anchorIDGroup.setText("Repository ID");
-//		anchorIDGroup.setLayout(new GridLayout());
-//		anchorIDGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeAnchorIDButton = new Button(anchorIDGroup, SWT.CHECK);
-//		activeAnchorIDButton.setText("Active");
-//		activeAnchorIDButton.addSelectionListener(activeNameListener);
-//		anchorIDText = new Text(anchorIDGroup, SWT.BORDER);
-//		anchorIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		activeAnchorIDButton.setSelection(false);
-//		anchorIDText.setEnabled(false);
 	}
 	
 	private AnchorID selectedOwnerID = null;
-	private SelectionListener ownerSelectionListener = new SelectionListener(){
-		public void widgetSelected(SelectionEvent e) {
+	private SelectionListener ownerSelectionListener = new SelectionAdapter()
+	{
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
@@ -227,72 +210,77 @@ public class RepositorySearchComposite
 				ownerText.setText(legalEntity.getPerson().getDisplayName());
 			}
 		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
 	};
 
-//	private SelectionListener activeNameListener = new SelectionListener(){
-//		public void widgetSelected(SelectionEvent e) {
-//			repositoryNameText.setEnabled(activeNameButton.getSelection());
-//		}
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}
-//	};
-//
-//	private SelectionListener activeAnchorIDListener = new SelectionListener(){
-//		public void widgetSelected(SelectionEvent e) {
-//			anchorIDText.setEnabled(activeAnchorIDButton.getSelection());
-//		}
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}
-//	};
-	
-//	@Override
-//	public AbstractJDOQuery getJDOQuery()
-//	{
-//		RepositoryQuery repositoryQuery = new RepositoryQuery();
-//
-//		if (ownerActiveButton.getSelection())
-//			repositoryQuery.setOwnerID(selectedOwnerID);
-//
-//		if (repositoryTypeActiveButton.getSelection() && repositoryTypeList.getSelectedElement() != null)
-//			repositoryQuery.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
-//
-////		if (activeNameButton.getSelection() && repositoryNameText.getText() != null && !repositoryNameText.getText().trim().equals(""))
-////			repositoryQuery.setName(repositoryNameText.getText());
-////
-////		if (activeAnchorIDButton.getSelection() && anchorIDText.getText() != null && !anchorIDText.getText().trim().equals(""))
-////			repositoryQuery.setAnchorID(anchorIDText.getText());
-//		
-//		return repositoryQuery;
-//	}
-
 	@Override
-	protected void resetSearchQueryValues()
+	protected void resetSearchQueryValues(RepositoryQuery query)
 	{
-		getQuery().setOwnerID(selectedOwnerID);
-		getQuery().setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+		query.setOwnerID(selectedOwnerID);
+		query.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
 	}
 
 	@Override
-	protected void unsetSearchQueryValues()
+	protected void unsetSearchQueryValues(RepositoryQuery query)
 	{
-		getQuery().setOwnerID(null);
-		getQuery().setRepositoryTypeID(null);
+		query.setOwnerID(null);
+		query.setRepositoryTypeID(null);
+	}
+
+	@Override
+	protected void doUpdateUI(QueryEvent event)
+	{
+		final boolean wholeQueryChanged = isWholeQueryChanged(event);		
+		final RepositoryQuery changedQuery = (RepositoryQuery) event.getChangedQuery();
+		
+		RepositoryTypeID repositoryTypeID = 
+			(RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement());
+		
+		if (changedQuery == null)
+		{
+			selectedOwnerID = null;
+			repositoryTypeID = null;
+		}
+		else
+		{
+			if (wholeQueryChanged || RepositoryQuery.PROPERTY_OWNER_ID.equals(event.getPropertyName()))
+			{
+				selectedOwnerID = changedQuery.getOwnerID();
+			}
+			
+			if (wholeQueryChanged || RepositoryQuery.PROPERTY_REPOSITORY_TYPE_ID.equals(event.getPropertyName()))
+			{
+				repositoryTypeID = changedQuery.getRepositoryTypeID();
+			}
+		}
+		
+		ownerActiveButton.setSelection(selectedOwnerID != null);
+		if (selectedOwnerID != null)
+		{
+			final LegalEntity owner = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
+				new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor()
+			);
+			ownerText.setText(owner.getPerson().getDisplayName());
+		}
+		else
+		{
+			ownerText.setText("");
+		}
+		
+		repositoryTypeActiveButton.setSelection(repositoryTypeID != null);
+		if (repositoryTypeID != null)
+		{
+			RepositoryType repoType = RepositoryTypeDAO.sharedInstance().getRepositoryType(
+				repositoryTypeID, new String[] { FetchPlan.DEFAULT, RepositoryType.FETCH_GROUP_NAME	},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+				);
+			repositoryTypeList.setSelection(repoType);
+		}
+		else
+		{
+			repositoryTypeList.setSelection((RepositoryType)null);
+		}
 	}
 	
-//	private List<String> availableRepositoryAnchorTypeIDs = null;
-//	protected List<String> getAvailableRepositoryAnchorTypeIDs()
-//	{
-//		if (availableRepositoryAnchorTypeIDs == null) {
-//			List<String> list = new ArrayList<String>();
-//			list.add(Repository.ANCHOR_TYPE_ID_HOME);
-//			list.add(Repository.ANCHOR_TYPE_ID_OUTSIDE);
-//			availableRepositoryAnchorTypeIDs = list;
-//		}
-//		return availableRepositoryAnchorTypeIDs;
-//	}
 }

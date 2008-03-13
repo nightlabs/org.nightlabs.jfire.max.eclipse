@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -62,33 +62,13 @@ public class OrderEntryViewer
 		});
 	}
 	
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new OrderFilterComposite(parent, SWT.NONE);
-//	}
-
 	public String getID() {
 		return ID;
 	}
 		
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries, ProgressMonitor monitor)
-//	{
-//		try {
-//			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<OrderID> orderIDs = tradeManager.getOrderIDs(queries);
-//			return OrderDAO.sharedInstance().getOrders(orderIDs,
-//					FETCH_GROUPS_ORDERS,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					monitor);
-//		}
-//		catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	@Override
-	protected Collection<Order> doSearch(QueryMap<Order, ? extends OrderQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Order> doSearch(
+		QueryCollection<Order, ? extends OrderQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OrderDAO.sharedInstance().getOrdersByQueries(
 			queryMap,

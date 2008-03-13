@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +32,7 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
@@ -48,11 +50,12 @@ import org.nightlabs.jfire.trade.state.id.StateDefinitionID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class StatableFilterComposite
 	extends JDOQueryComposite<Statable, StatableQuery>
@@ -61,7 +64,12 @@ public class StatableFilterComposite
 	private DateTimeEdit createDTMax = null;
 	private Button activeButton = null;
 	private Button onlyInSelectedStateButton = null;
-	
+
+	private static final String[] FETCH_GROUPS_STATE_DEFINITON = new String[] {
+		FetchPlan.DEFAULT,
+		StateDefinition.FETCH_GROUP_NAME
+	};
+ 
 	public StatableFilterComposite(
 		AbstractQueryFilterComposite<Statable, StatableQuery> filterComposite, 
 		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode)
@@ -98,6 +106,9 @@ public class StatableFilterComposite
 				stateDefinitions.setEnabled(active);
 				onlyInSelectedStateButton.setEnabled(active);
 				
+				if (isUpdatingUI())
+					return;
+				
 				if (active)
 				{
 					getQuery().setOnlyInSelectedState(onlyInSelectedState);
@@ -120,6 +131,9 @@ public class StatableFilterComposite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				onlyInSelectedState = onlyInSelectedStateButton.getSelection();
 				getQuery().setOnlyInSelectedState(onlyInSelectedState);
 			}
@@ -134,6 +148,9 @@ public class StatableFilterComposite
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
 				getQuery().setStateDefinitionID(stateDefinitionID);
 			}
@@ -154,8 +171,29 @@ public class StatableFilterComposite
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				createDTMinDate = createDTMin.getDate();
 				getQuery().setStateCreateDTMin(createDTMinDate);
+			}
+		});
+		createDTMin.addActiveChangeListener(new SelectionAdapter() 
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				if (isUpdatingUI())
+					return;
+				
+				if (((Button) e.getSource()).getSelection())
+				{
+					getQuery().setStateCreateDTMin(createDTMin.getDate());
+				}
+				else
+				{
+					getQuery().setStateCreateDTMin(null);
+				}
 			}
 		});
 		
@@ -174,8 +212,29 @@ public class StatableFilterComposite
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
+				if (isUpdatingUI())
+					return;
+				
 				createDTMaxDate = createDTMax.getDate();
 				getQuery().setStateCreateDTMax(createDTMaxDate);
+			}
+		});
+		createDTMax.addActiveChangeListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				if (isUpdatingUI())
+					return;
+				
+				if (((Button) e.getSource()).getSelection())
+				{
+					getQuery().setStateCreateDTMax(createDTMax.getDate());
+				}
+				else
+				{
+					getQuery().setStateCreateDTMax(null);
+				}
 			}
 		});
 	}
@@ -194,28 +253,6 @@ public class StatableFilterComposite
 		}
 	};
 	
-//	@Override
-//	public AbstractJDOQuery getJDOQuery()
-//	{
-//		statableQuery = new StatableQuery(getStatableClass());
-//		StateDefinitionID stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
-//		if (statableQuery != null)
-//		{
-//			if (activeButton.getSelection() && stateDefinitionID != null)
-//				statableQuery.setStateDefinitionID(stateDefinitionID);
-//
-//			if (onlyInSelectedStateButton.getSelection())
-//				statableQuery.setOnlyInSelectedState(onlyInSelectedStateButton.getSelection());
-//			
-//			if (createDTMax.isActive())
-//				statableQuery.setStateCreateDTMax(createDTMax.getDate());
-//			
-//			if (createDTMin.isActive())
-//				statableQuery.setStateCreateDTMin(createDTMin.getDate());
-//		}
-//		return statableQuery;
-//	}
-		
 	private Class<? extends Statable> statableClass;
 	public Class<? extends Statable> getStatableClass() {
 		return statableClass;
@@ -248,17 +285,13 @@ public class StatableFilterComposite
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
 					
-					String[] STATE_DEFINITION_FETCH_GROUPS = new String[] {
-							FetchPlan.DEFAULT,
-							StateDefinition.FETCH_GROUP_NAME
-					};
 					final Set<StateDefinition> allStateDefinitions = new HashSet<StateDefinition>();
 					for (ProcessDefinition processDefinition : processDefinitions)
 					{
 						Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
 						Collection<StateDefinition> stateDefinitions = StateDefinitionDAO.sharedInstance().getStateDefintions(
 								statedDefinitionIDs,
-								STATE_DEFINITION_FETCH_GROUPS,
+								FETCH_GROUPS_STATE_DEFINITON,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor);
 						allStateDefinitions.addAll(stateDefinitions);
@@ -266,7 +299,7 @@ public class StatableFilterComposite
 					
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
-							if (stateDefinitions.isDisposed())
+							if (stateDefinitions == null || stateDefinitions.isDisposed())
 								return;
 
 							stateDefinitions.addElements(allStateDefinitions);
@@ -282,26 +315,109 @@ public class StatableFilterComposite
 	}
 
 	private StateDefinitionID stateDefinitionID;
-	private boolean onlyInSelectedState;
+	private boolean onlyInSelectedState = false;
 	private Date createDTMinDate;
 	private Date createDTMaxDate;
 	
 	@Override
-	protected void resetSearchQueryValues()
+	protected void resetSearchQueryValues(StatableQuery query)
 	{
-		getQuery().setOnlyInSelectedState(onlyInSelectedState);
-		getQuery().setStateCreateDTMin(createDTMinDate);
-		getQuery().setStateCreateDTMax(createDTMaxDate);
-		getQuery().setStateDefinitionID(stateDefinitionID);
+		query.setOnlyInSelectedState(onlyInSelectedState);
+		query.setStateCreateDTMin(createDTMinDate);
+		query.setStateCreateDTMax(createDTMaxDate);
+		query.setStateDefinitionID(stateDefinitionID);
 	}
 
 	@Override
-	protected void unsetSearchQueryValues()
+	protected void unsetSearchQueryValues(StatableQuery query)
 	{
-		getQuery().setOnlyInSelectedState(false);
-		getQuery().setStateCreateDTMin(null);
-		getQuery().setStateCreateDTMax(null);
-		getQuery().setStateDefinitionID(null);
+		query.setOnlyInSelectedState(false);
+		query.setStateCreateDTMin(null);
+		query.setStateCreateDTMax(null);
+		query.setStateDefinitionID(null);
+	}
+
+	@Override
+	protected void doUpdateUI(QueryEvent event)
+	{
+		final boolean wholeQueryChanged = isWholeQueryChanged(event);
+		final StatableQuery changedQuery = (StatableQuery) event.getChangedQuery();
+		
+		if (changedQuery == null)
+		{
+			stateDefinitionID = null;
+			onlyInSelectedState = false;
+			createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
+			createDTMin.setActive(false);
+			createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
+			createDTMax.setActive(false);
+		}
+		else
+		{
+			if (wholeQueryChanged || StatableQuery.PROPERTY_ONLY_IN_SELECTED_STATE.equals(event.getPropertyName()))
+			{
+				onlyInSelectedState = changedQuery.isOnlyInSelectedState();
+			}
+			
+			if (wholeQueryChanged || StatableQuery.PROPERTY_STATE_CREATE_DATE_MAX.equals(event.getPropertyName()))
+			{
+				if (changedQuery.getStateCreateDTMax() == null)
+				{
+					createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
+					createDTMax.setActive(false);
+				}
+				else
+				{
+					createDTMax.setDate(changedQuery.getStateCreateDTMax());
+					createDTMax.setActive(true);
+				}
+			}
+			
+			if (wholeQueryChanged || StatableQuery.PROPERTY_STATE_CREATE_DATE_MIN.equals(event.getPropertyName()))
+			{
+				if (changedQuery.getStateCreateDTMin() == null)
+				{
+					createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
+					createDTMin.setActive(false);
+				}
+				else
+				{
+					createDTMin.setDate(changedQuery.getStateCreateDTMin());
+					createDTMin.setActive(true);
+				}
+			}
+
+			if (wholeQueryChanged || StatableQuery.PROPERTY_STATE_DEFINITION_ID.equals(event.getPropertyName()))
+			{
+				stateDefinitionID = changedQuery.getStateDefinitionID();				
+			}
+		}
+		
+		onlyInSelectedStateButton.setSelection(onlyInSelectedState);
+		if (stateDefinitionID != null)
+		{
+			StateDefinition selection;
+			try
+			{
+				selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
+					Collections.singleton(stateDefinitionID), FETCH_GROUPS_STATE_DEFINITON, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					).iterator().next();
+			} catch (Exception e)
+			{
+				if (e instanceof RuntimeException)
+				{
+					throw (RuntimeException) e;
+				}
+				
+				throw new RuntimeException(e);
+			}
+			stateDefinitions.setSelection(selection);
+		}
+		else
+		{
+			stateDefinitions.setSelection((StateDefinition) null);
+		}
 	}
 	
 }

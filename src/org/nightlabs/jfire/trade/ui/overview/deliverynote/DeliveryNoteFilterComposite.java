@@ -41,7 +41,7 @@ public class DeliveryNoteFilterComposite
 	}
 
 	@Override
-	protected Class<DeliveryNoteQuery> getQueryClass() {
+	public Class<DeliveryNoteQuery> getQueryClass() {
 		return DeliveryNoteQuery.class;
 	}
 			

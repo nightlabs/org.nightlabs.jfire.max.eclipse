@@ -56,7 +56,7 @@ public interface SegmentEditFactory
 	void init(String name, String articleContainerClass, String segmentTypeClass);
 
 	/**
-	 * @return the name which was previously set by {@link #setName(String)}.
+	 * @return the name which was previously set by {@link #setAccountName(String)}.
 	 */
 	String getName();
 

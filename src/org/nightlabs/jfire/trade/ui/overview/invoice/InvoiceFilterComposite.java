@@ -30,7 +30,7 @@ public class InvoiceFilterComposite
 	}
 	
 	@Override
-	protected Class<InvoiceQuery> getQueryClass() {
+	public Class<InvoiceQuery> getQueryClass() {
 		return InvoiceQuery.class;
 	}
 	

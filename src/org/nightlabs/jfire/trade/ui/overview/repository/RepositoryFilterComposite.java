@@ -42,7 +42,7 @@ public class RepositoryFilterComposite
 	}
 
 	@Override
-	protected Class<RepositoryQuery> getQueryClass() {
+	public Class<RepositoryQuery> getQueryClass() {
 		return RepositoryQuery.class;
 	}
 

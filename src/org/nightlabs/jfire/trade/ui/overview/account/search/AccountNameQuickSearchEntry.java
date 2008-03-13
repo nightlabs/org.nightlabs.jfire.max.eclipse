@@ -25,13 +25,13 @@ public class AccountNameQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(AccountQuery query, String value)
 	{
-		query.setName(value);
+		query.setAccountName(value);
 	}
 
 	@Override
 	protected void doUnsetSearchConditionValue(AccountQuery query)
 	{
-		query.setName(null);
+		query.setAccountName(null);
 	}
 
 //	public Object search(ProgressMonitor monitor)

@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
@@ -28,11 +28,6 @@ public class ReceptionNoteEntryViewer
 		super(entry);
 	}
 
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new ReceptionNoteFilterComposite(parent, SWT.NONE);
-//	}
-
 	public static final String ID = ReceptionNoteEntryViewer.class.getName();
 	public String getID() {
 		return ID;
@@ -49,25 +44,9 @@ public class ReceptionNoteEntryViewer
 		ReceptionNote.FETCH_GROUP_THIS_RECEPTION_NOTE
 	};
 	
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries, ProgressMonitor monitor)
-//	{
-//		try {
-//			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<ReceptionNoteID> receptionNoteIDs = tradeManager.getOrderIDs(queries);
-//			return ReceptionNoteDAO.sharedInstance().getReceptionNotes(receptionNoteIDs,
-//					FETCH_GROUPS_RECEPTION_NOTES,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					monitor);
-//		}
-//		catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	@Override
 	protected Collection<ReceptionNote> doSearch(
-		QueryMap<ReceptionNote, ? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<ReceptionNote, ? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
 	{
 		return ReceptionNoteDAO.sharedInstance().getReceptionNotesByQueries(
 			queryMap,

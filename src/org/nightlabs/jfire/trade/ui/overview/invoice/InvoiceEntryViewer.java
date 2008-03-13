@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.query.QueryMap;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -64,34 +64,13 @@ public class InvoiceEntryViewer
 		});
 	}
 
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new InvoiceFilterComposite(parent, SWT.NONE);
-//	}
-		
 	public String getID() {
 		return ID;
 	}
 		
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries, ProgressMonitor monitor)
-//	{
-//		try {
-////			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-////			Set<InvoiceID> invoiceIDs = tradeManager.getInvoiceIDs(queries);
-//			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(queries);
-//			return InvoiceDAO.sharedInstance().getInvoices(invoiceIDs,
-//					FETCH_GROUPS_INVOICES,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					monitor);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	@Override
-	protected Collection<Invoice> doSearch(QueryMap<Invoice, ? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
+	protected Collection<Invoice> doSearch(
+		QueryCollection<Invoice, ? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
 	{
 		return InvoiceDAO.sharedInstance().getInvoices(
 			queryMap,
