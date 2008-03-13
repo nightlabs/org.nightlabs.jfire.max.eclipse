@@ -78,12 +78,12 @@ public class IssueEntryListViewer
 	}
 	
 	private static final String[] FETCH_GROUPS_ISSUES = { 
-		Issue.FETCH_GROUP_THIS,
-		IssueType.FETCH_GROUP_THIS,
-		IssueSeverityType.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS,
-		IssueDescription.FETCH_GROUP_THIS,
-		IssueSubject.FETCH_GROUP_THIS,
+		Issue.FETCH_GROUP_THIS_ISSUE,
+		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
+		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
+		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
 		FetchPlan.DEFAULT
 		};
 	

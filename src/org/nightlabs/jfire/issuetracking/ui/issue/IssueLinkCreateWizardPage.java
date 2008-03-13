@@ -5,7 +5,13 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.List;
 
+import javax.jdo.FetchPlan;
+
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,8 +26,11 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
@@ -38,13 +47,19 @@ extends WizardHopPage
 	private Button createNewCheckBox;
 	private Button selectFromCheckBox;
 	
+	private IssueEntryListViewer issueEntryViewer;
+	
 	private ObjectID linkedObjectID;
 	
 	public IssueLinkCreateWizardPage(ObjectID linkedObjectID) {
 		super("Create link to issue", "Create link to issue");
 		this.linkedObjectID = linkedObjectID;
+		
+		new WizardHop(this);
 	}
 
+	private String[] FETCH_GROUP = new String[] { IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT };
+	
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
@@ -69,10 +84,13 @@ extends WizardHopPage
 		});
 
 		issueLinkTypeCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		
 		Display.getCurrent().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(new NullProgressMonitor());
+				Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(linkedObjectID);
+				List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(pcClass, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueLinkTypeCombo.setInput(issueLinkTypes);
 				issueLinkTypeCombo.setSelection(0);
 			}
@@ -98,21 +116,22 @@ extends WizardHopPage
 			}
 		});
 		
-		IssueEntryListViewer issueEntryViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
+		issueEntryViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
-//				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
-//					@Override
-//					public void doubleClick(DoubleClickEvent evt) {
-////						notifyIssueLinkDoubleClickListeners();
-//					}
-//				});
-//				
-//				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
-//					public void selectionChanged(SelectionChangedEvent e) {
-////						notifyIssueLinkSelectionListeners();
-//					}
-//				});
+				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
+					@Override
+					public void doubleClick(DoubleClickEvent evt) {
+//						notifyIssueLinkDoubleClickListeners();
+					}
+				});
+				
+				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent e) {
+						getContainer().updateButtons();
+//						notifyIssueLinkSelectionListeners();
+					}
+				});
 			}
 		};
 		
@@ -128,18 +147,22 @@ extends WizardHopPage
 	
 	@Override
 	public boolean isPageComplete() {
-		return false;//issueLinkAdder.isComplete(); 
+		return issueEntryViewer.getIssueTable().getSelection() != null;//issueLinkAdder.isComplete(); 
 	}
 	
-	public void setCreateNewIssue(boolean b, boolean updateButtons) {
-		createNewCheckBox.setSelection(b);
-		selectFromCheckBox.setSelection(!b);
-		if (b) {
-//			getWizardHop().addHopPage(createPage);
+	public void setCreateNewIssue(boolean isCreateNew, boolean isUpdateButton) {
+		createNewCheckBox.setSelection(isCreateNew);
+		selectFromCheckBox.setSelection(!isCreateNew);
+		
+		
+		issueEntryViewer.getIssueTable().setEnabled(!isCreateNew);
+		
+		if (isCreateNew) {
+			getWizardHop().addHopPage(new IssueCreateWizardPage(null));
 		} else {
-//			getWizardHop().removeAllHopPages();
+			getWizardHop().removeAllHopPages();
 		}
-		if (updateButtons)
+		if (isUpdateButton)
 			getContainer().updateButtons();
 	}
 }

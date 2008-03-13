@@ -85,7 +85,7 @@ extends WizardHopPage
 			public void run() {
 				final java.util.List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(
 						issueLinkAdder.getIssueLinkHandlerFactory().getLinkObjectClass(), 
-						new String[] {IssueLinkType.FETCH_GROUP_THIS, FetchPlan.DEFAULT}, 
+						new String[] {IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new NullProgressMonitor());
 

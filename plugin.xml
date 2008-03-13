@@ -143,7 +143,7 @@
       </issueLinkHandlerCategory>
       <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
-            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueIssueLinkHandlerAdderFactory"
+            class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue"
             name="Issue">
       </issueLinkHandlerFactory>
    </extension>

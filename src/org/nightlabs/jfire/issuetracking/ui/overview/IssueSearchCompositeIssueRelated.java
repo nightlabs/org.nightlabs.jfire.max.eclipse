@@ -196,7 +196,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 		issueQuery.setIssueResolutionID(null);
 		issueQuery.setCreateTimestamp(null);
 		issueQuery.setUpdateTimestamp(null);
-		issueQuery.setObjectIDs(null);
+//		issueQuery.setObjectIDs(null);
 	}
 
 	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
@@ -212,7 +212,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 
-	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS, IssueSeverityType.FETCH_GROUP_THIS, IssuePriority.FETCH_GROUP_THIS, IssueResolution.FETCH_GROUP_THIS, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE, IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY, IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION, FetchPlan.DEFAULT };
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	private boolean loadJobRunning = false;
 

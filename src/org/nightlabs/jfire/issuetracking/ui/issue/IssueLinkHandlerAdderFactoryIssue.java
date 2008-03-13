@@ -9,7 +9,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueIssueLinkHandlerAdderFactory 
+public class IssueLinkHandlerAdderFactoryIssue 
 extends AbstractIssueLinkHandlerFactory
 {
 	public IssueLinkAdder createIssueLinkAdder() {

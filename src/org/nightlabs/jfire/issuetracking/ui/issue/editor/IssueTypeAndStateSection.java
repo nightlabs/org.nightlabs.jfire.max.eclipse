@@ -108,14 +108,14 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_THIS,
-		IssueType.FETCH_GROUP_THIS,
-		IssueDescription.FETCH_GROUP_THIS, 
-		IssueSubject.FETCH_GROUP_THIS,
-		IssueFileAttachment.FETCH_GROUP_THIS,
-		IssueSeverityType.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS,
-		IssueLocal.FETCH_GROUP_THIS,
+		Issue.FETCH_GROUP_THIS_ISSUE,
+		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
+		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
+		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
+		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
+		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
 	
