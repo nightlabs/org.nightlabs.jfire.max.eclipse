@@ -212,7 +212,10 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 
-	private static final String[] FETCH_GROUPS_ISSUE = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE, IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY, IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS_ISSUE_TYPE = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, 
+		IssuePriority.FETCH_GROUP_NAME, 
+		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION, FetchPlan.DEFAULT };
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	private boolean loadJobRunning = false;
 
@@ -230,7 +233,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 				}
 				try {
 					try {
-						issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+						issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 						issuePriorityList = new ArrayList<IssuePriority>();
 						issueSeverityTypeList = new ArrayList<IssueSeverityType>();
 

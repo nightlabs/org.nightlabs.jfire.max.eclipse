@@ -43,7 +43,7 @@ public class IssueSubjectQuickSearchEntry
 //		IssueQuery query = new IssueQuery();
 //		query.setIssueSubject(getSearchText());
 //		queries.add(query);
-//		return IssueDAO.sharedInstance().getIssuesForQueries(queries, IssueTable.FETCH_GROUPS,
+//		return IssueDAO.sharedInstance().getIssuesForQueries(queries, IssueTable.FETCH_GROUPS_ISSUE,
 //			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 //	}
 }

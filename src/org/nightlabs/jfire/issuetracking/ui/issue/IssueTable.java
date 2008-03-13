@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,9 +37,6 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueDescription;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
-import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
@@ -51,6 +49,7 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
+import org.nightlabs.jfire.jdo.notification.JDOLifecycleRemoteEvent;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 import org.nightlabs.notification.NotificationListener;
@@ -69,27 +68,44 @@ extends AbstractTableComposite<Issue>
 	/**
 	 * The fetch groups of issue data.
 	 */
-	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
-		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
-		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
+	public static final String[] FETCH_GROUPS_ISSUE = new String[] {
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		IssueType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		IssuePriority.FETCH_GROUP_NAME,
+		Statable.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE,
-		StatableLocal.FETCH_GROUP_STATES,
 		State.FETCH_GROUP_STATE_DEFINITION,
-		State.FETCH_GROUP_STATABLE,
-		StateDefinition.FETCH_GROUP_NAME};
+		StateDefinition.FETCH_GROUP_NAME,
+
+//		Issue.FETCH_GROUP_THIS_ISSUE,
+//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+//		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
+//		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
+//		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
+//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+//		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
+//		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
+//		Statable.FETCH_GROUP_STATE,
+//		Statable.FETCH_GROUP_STATES,
+//		StatableLocal.FETCH_GROUP_STATE,
+//		StatableLocal.FETCH_GROUP_STATES,
+//		State.FETCH_GROUP_STATE_DEFINITION,
+//		State.FETCH_GROUP_STATABLE,
+//		StateDefinition.FETCH_GROUP_NAME
+	};
 
 	public IssueTable(Composite parent, int style)
 	{
 		super(parent, style);
 
-		loadIssues();
+//		loadIssues();
 
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, changedIssueListener);
@@ -118,7 +134,15 @@ extends AbstractTableComposite<Issue>
 		private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 				Issue.class,
 				true,
-				JDOLifecycleState.NEW);
+				JDOLifecycleState.NEW)
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Collection<DirtyObjectID> filter(JDOLifecycleRemoteEvent event) {
+				return super.filter(event);
+			}
+		};
 
 		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 		{
@@ -131,7 +155,13 @@ extends AbstractTableComposite<Issue>
 			for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs())
 				issueIDs.add((IssueID) dirtyObjectID.getObjectID());
 
-			final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(issueIDs, IssueTable.FETCH_GROUPS,
+			// we should filter the new issueIDs against the conditions defined by the UI (i.e. the QueryMap that is managed by IssueEntryListViewer).
+			// TODO or even better we embed the JDOQueryMap in our IJDOLifecycleListenerFilter (which needs to be updated whenever we press the search button),
+			// since this would be more efficient than first sending all new issueIDs to the client and then again run the queries on the server (the filter
+			// is already on the server and could run the queries with 1 less round-trip to the client).
+			// We'll do this filtering thing for JFire 1.2 ;-) or later. It's fine for the beginning, if all new issues pop up.
+
+			final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(issueIDs, IssueTable.FETCH_GROUPS_ISSUE,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					getProgressMontitorWrapper());
 
@@ -149,65 +179,75 @@ extends AbstractTableComposite<Issue>
 	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
 		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
 			ProgressMonitor monitor = getProgressMonitorWrapper();
-			Set<DirtyObjectID> dirtyIssueIDsSet = notificationEvent.getSubjects();
-			for (DirtyObjectID dirtyObjectID : dirtyIssueIDsSet) {
+			Set<IssueID> dirtyIssueIDs = new HashSet<IssueID>();
+			for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+				DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
 				switch (dirtyObjectID.getLifecycleState()) {
-				case DIRTY:
-					issueID2issue.put((IssueID) dirtyObjectID.getObjectID(), 
-							IssueDAO.sharedInstance().getIssue((IssueID) dirtyObjectID.getObjectID(), IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-									getProgressMonitorWrapper()));
-					break;
-				case DELETED:
-					// TODO remove the object from the UI
-					break;
-				default:
-					break;
+					case DIRTY:
+						dirtyIssueIDs.add((IssueID) dirtyObjectID.getObjectID());
+						break;
+					case DELETED:
+						// TODO remove the object from the UI
+						break;
+					default:
+						break;
 				}
 			}
-			
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					refresh();
-				}
-			});
+
+			if (!dirtyIssueIDs.isEmpty()) {
+				final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(
+						dirtyIssueIDs,
+						IssueTable.FETCH_GROUPS_ISSUE,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor);
+
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						for (Issue issue : issues)
+							issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+
+						refresh();
+					}
+				});
+			}
 		}
 	};
 
-	private void loadIssues()
-	{
-		Job job = new Job("Loading issues") {
-			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				loadIssues(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-	}
-
-	private void loadIssues(ProgressMonitor monitor)
-	{
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {					
-				setInput("Loading data...");
-			}
-		});
-
-		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
-
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				issueID2issue.clear();
-				for (Issue issue : issues) {
-					issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-				}
-
-				setInput(issueID2issue.values());
-			}
-		});
-	}
+//	private void loadIssues()
+//	{
+//		Job job = new Job("Loading issues") {
+//			@Override
+//			protected IStatus run(ProgressMonitor monitor) throws Exception {
+//				loadIssues(monitor);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.schedule();
+//	}
+//
+//	private void loadIssues(ProgressMonitor monitor)
+//	{
+//		Display.getDefault().syncExec(new Runnable() {
+//			public void run() {					
+//				setInput("Loading data...");
+//			}
+//		});
+//
+//		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS_ISSUE,
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//				monitor);
+//
+//		Display.getDefault().asyncExec(new Runnable() {
+//			public void run() {
+//				issueID2issue.clear();
+//				for (Issue issue : issues) {
+//					issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+//				}
+//
+//				setInput(issueID2issue.values());
+//			}
+//		});
+//	}
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)

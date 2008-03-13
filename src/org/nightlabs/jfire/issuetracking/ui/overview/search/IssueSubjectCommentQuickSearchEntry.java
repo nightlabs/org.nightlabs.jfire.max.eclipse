@@ -42,6 +42,6 @@ extends AbstractQuickSearchEntry<Issue, IssueQuery>
 //		query.setIssueSubjectNComment(getSearchText());
 //		queries.add(query);
 //		return IssueDAO.sharedInstance().getIssuesForQueries(queries, 
-//				IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+//				IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 //	}
 }

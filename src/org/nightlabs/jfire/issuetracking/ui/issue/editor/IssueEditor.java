@@ -20,7 +20,6 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -46,7 +45,7 @@ public class IssueEditor extends EntityEditor{
 			{
 				final Issue issue = IssueDAO.sharedInstance().getIssue(
 						issueEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS_ISSUE, IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT },
+						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS_ISSUE},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable()
 				{

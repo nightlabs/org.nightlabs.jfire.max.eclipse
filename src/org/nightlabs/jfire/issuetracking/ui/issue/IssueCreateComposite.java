@@ -89,7 +89,7 @@ extends XComposite
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
-	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE, IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE, IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, IssuePriority.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	

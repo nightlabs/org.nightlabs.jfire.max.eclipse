@@ -2,8 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -17,11 +15,6 @@ import org.nightlabs.jdo.query.QueryMap;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueDescription;
-import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueSubject;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
@@ -51,6 +44,7 @@ public class IssueEntryListViewer
 
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
+//		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
 		issueTable = new IssueTable(parent, SWT.NONE);
 		return issueTable;
 	}
@@ -77,15 +71,15 @@ public class IssueEntryListViewer
 
 	}
 	
-	private static final String[] FETCH_GROUPS_ISSUES = { 
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
-		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-		FetchPlan.DEFAULT
-		};
+//	private static final String[] FETCH_GROUPS_ISSUES = { 
+//		Issue.FETCH_GROUP_THIS_ISSUE,
+//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+////		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
+////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
+////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
+//		FetchPlan.DEFAULT
+//		};
 	
 //	@Override
 //	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries,
@@ -111,7 +105,7 @@ public class IssueEntryListViewer
 	{
 		return IssueDAO.sharedInstance().getIssuesForQueries(
 			queryMap,
-			FETCH_GROUPS_ISSUES, 
+			IssueTable.FETCH_GROUPS_ISSUE,
 			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 			monitor);
 	}

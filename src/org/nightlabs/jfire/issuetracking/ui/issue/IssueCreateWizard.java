@@ -130,7 +130,7 @@ extends DynamicPathWizard
 				issue.getDescription().setText(languageID, description.getText(languageID));
 			}//for
 
-			Issue newIssue = issueDAO.storeIssue(issue, true, IssueTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			Issue newIssue = issueDAO.storeIssue(issue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(newIssue));
 			try {
 				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
