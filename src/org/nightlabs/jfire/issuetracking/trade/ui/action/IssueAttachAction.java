@@ -11,7 +11,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContai
 
 public class IssueAttachAction extends ArticleContainerAction
 {
-//	@Override
 	public boolean calculateVisible()
 	{
 		return true;
