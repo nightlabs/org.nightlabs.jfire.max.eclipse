@@ -31,7 +31,7 @@ public class IssueTypeEditor extends EntityEditor{
 			{
 				final IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(
 						issueTypeEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, IssueType.FETCH_GROUP_THIS },
+						new String[] { FetchPlan.DEFAULT, IssueType.FETCH_GROUP_THIS_ISSUE_TYPE },
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable()
 				{

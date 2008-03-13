@@ -21,10 +21,10 @@ public class IssueTypeEditorPageController extends EntityEditorPageController {
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		IssueType.FETCH_GROUP_THIS,
-		IssueSeverityType.FETCH_GROUP_THIS,
-		IssueResolution.FETCH_GROUP_THIS,
-		IssuePriority.FETCH_GROUP_THIS};
+		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY};
 	
 	
 	private IssueTypeID issueTypeID;
