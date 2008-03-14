@@ -41,6 +41,7 @@ import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMoneyFlowMapping;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.accounting.id.PriceFragmentTypeID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
@@ -48,7 +49,6 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
-import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeProvider;
 import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -57,9 +57,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class PFLocalAccountantDelegateType implements
-		LocalAccountantDelegateType {
-
+public class PFLocalAccountantDelegateType 
+implements LocalAccountantDelegateType 
+{
 	/**
 	 * 
 	 */
@@ -115,7 +115,11 @@ public class PFLocalAccountantDelegateType implements
 		PriceFragmentType pType = null;
 		if (pTypeStr != null) {
 			PriceFragmentTypeID pTypeID = PriceFragmentType.primaryKeyToPriceFragmentTypeID(pTypeStr);
-			pType = PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(pTypeID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			pType = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(
+					pTypeID, 
+					new String[] {FetchPlan.DEFAULT}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor());
 		}
 		PFMoneyFlowMapping mapping = new PFMoneyFlowMapping(
 				IDGenerator.getOrganisationID(),
@@ -158,9 +162,11 @@ public class PFLocalAccountantDelegateType implements
 		PFMoneyFlowMapping pfMapping = (PFMoneyFlowMapping)mapping;
 //		AnchorID anchorID = Anchor.primaryKeyToAnchorID(pfMapping.getOwnerPK());
 		PriceFragmentTypeID priceFragmentTypeID = (PriceFragmentTypeID) JDOHelper.getObjectId(pfMapping.getPriceFragmentType());
-		PriceFragmentType priceFragmentType = PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(
-				priceFragmentTypeID, new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME},
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+		PriceFragmentType priceFragmentType = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(
+				priceFragmentTypeID, 
+				new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor()
 			);
 //		LegalEntityProvider.sharedInstance().getLegalEntity(anchorID,
 //				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT

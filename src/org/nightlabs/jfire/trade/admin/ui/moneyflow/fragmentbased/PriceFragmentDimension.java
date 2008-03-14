@@ -38,11 +38,12 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMoneyFlowMapping;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.accounting.id.PriceFragmentTypeID;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimensionWizardPage;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.accounting.PriceFragmentTypeProvider;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -84,12 +85,11 @@ public class PriceFragmentDimension implements MappingDimension {
 			throw new IllegalArgumentException("PriceFragmentDimension needs a PFMoneyFlowMapping as input for getValueText, but received: "+mapping.getClass().getName()); //$NON-NLS-1$
 		PFMoneyFlowMapping pfMapping = (PFMoneyFlowMapping)mapping;
 		PriceFragmentTypeID typeID = (PriceFragmentTypeID) JDOHelper.getObjectId(pfMapping.getPriceFragmentType());
-		return PriceFragmentTypeProvider.sharedInstance().getPriceFragmentType(
+		return PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(
 				typeID,
-				new String[] {
-					FetchPlan.DEFAULT,
-					PriceFragmentType.FETCH_GROUP_NAME
-				}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+				new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME}, 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor()
 			).getName().getText(Locale.getDefault().getLanguage());
 	}
 	
