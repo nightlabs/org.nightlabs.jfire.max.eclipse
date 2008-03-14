@@ -57,7 +57,6 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountSearchDialog
 extends CenteredDialog
 {
-//	private String anchorTypeID;
 	private AccountTypeID accountTypeID;
 
 	/**
@@ -65,7 +64,6 @@ extends CenteredDialog
 	 */
 	public AccountSearchDialog(AccountTypeID accountTypeID) {
 		super(RCPUtil.getActiveShell());
-//		this.anchorTypeID = anchorTypeID;
 		this.accountTypeID = accountTypeID;
 	}
 
@@ -76,7 +74,6 @@ extends CenteredDialog
 	protected void applyAccountTypeID()
 	{
 		AccountQuery query = new AccountQuery();
-//		query.setAnchorTypeID(anchorTypeID);
 		query.setAccountTypeID(accountTypeID);
 		final QueryCollection<Account, AccountQuery> queries = new QueryCollection<Account, AccountQuery>();
 		queries.add(query);
@@ -120,7 +117,7 @@ extends CenteredDialog
 	}
 	
 	private Collection<Account> selectedAccounts = null;
-	public Collection getSelectedAccounts() {
+	public Collection<Account> getSelectedAccounts() {
 		return selectedAccounts;
 	}
 		
@@ -129,7 +126,7 @@ extends CenteredDialog
 	 * @return One selected Account.
 	 */
 	public static Account searchAccount(AccountTypeID accountTypeID) {
-		Collection accountSet = searchAccounts(accountTypeID);
+		Collection<Account> accountSet = searchAccounts(accountTypeID);
 		if (!accountSet.isEmpty())
 			return (Account)accountSet.iterator().next();
 		else
@@ -140,8 +137,8 @@ extends CenteredDialog
 	 * Opens a new AccountSearchDialog and returns all selected Account.
 	 * @return All selected Account.
 	 */
-	public static Collection searchAccounts(AccountTypeID accountTypeID) {
-		final Set accountSet = new HashSet();
+	public static Collection<Account> searchAccounts(AccountTypeID accountTypeID) {
+		final Set<Account> accountSet = new HashSet<Account>();
 		AccountSearchDialog dialog = new AccountSearchDialog(accountTypeID);
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {

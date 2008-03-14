@@ -29,10 +29,12 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import java.util.EventObject;
 import java.util.Set;
 
+import org.nightlabs.jfire.trade.Article;
+
 public class ArticleEditArticleSelectionEvent extends EventObject
 {
 	private static final long serialVersionUID = 1L;
-	private Set selectedArticles;
+	private Set<? extends Article> selectedArticles;
 
 	public ArticleEditArticleSelectionEvent(ArticleEdit articleEdit)
 	{
@@ -40,7 +42,7 @@ public class ArticleEditArticleSelectionEvent extends EventObject
 		selectedArticles = articleEdit.getSelectedArticles();
 	}
 
-	public Set getSelectedArticles()
+	public Set<? extends Article> getSelectedArticles()
 	{
 		return selectedArticles;
 	}

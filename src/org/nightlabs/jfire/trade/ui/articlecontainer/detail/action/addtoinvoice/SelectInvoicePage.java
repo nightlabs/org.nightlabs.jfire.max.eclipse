@@ -79,8 +79,8 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 	private Button createInvoiceRadio;
 	private Button selectInvoiceRadio;
 
-	private AbstractTableComposite invoiceTable;
-	private List invoices = new ArrayList(0);
+	private AbstractTableComposite<Invoice> invoiceTable;
+	private List<Object> invoices = new ArrayList<Object>(0); // holds either a String or instances of Invoice
 	private Invoice selectedInvoice = null;
 
 	public SelectInvoicePage()
@@ -109,7 +109,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 			}
 		});
 
-		invoiceTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+		invoiceTable = new AbstractTableComposite<Invoice>(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{
@@ -188,7 +188,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 	{
 		try {
 			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			final List l = accountingManager.getNonFinalizedInvoices(
+			final List<Invoice> l = accountingManager.getNonFinalizedInvoices(
 					getAddToInvoiceWizard().getVendorID(),
 					getAddToInvoiceWizard().getCustomerID(),
 					FETCH_GROUPS_INVOICES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

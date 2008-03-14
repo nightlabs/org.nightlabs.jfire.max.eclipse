@@ -59,7 +59,7 @@ public class SimpleNode extends HeaderTreeNode
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#loadChildData(ProgressMonitor)
 	 */
 	@Override
-	protected List loadChildData(ProgressMonitor monitor)
+	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		return null;
 	}
@@ -68,7 +68,7 @@ public class SimpleNode extends HeaderTreeNode
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#createChildNodes(java.util.List)
 	 */
 	@Override
-	protected List<HeaderTreeNode> createChildNodes(List childData)
+	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		return null;
 	}

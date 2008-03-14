@@ -180,8 +180,8 @@ extends AbstractTableComposite<Account>
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		List<Account> result = new ArrayList<Account>();
 		if (selection.size() > 0) {
-			for (Iterator iter = selection.iterator(); iter.hasNext();) {
-				Account account = (Account) iter.next();
+			for (Iterator<Account> iter = selection.iterator(); iter.hasNext();) {
+				Account account = iter.next();
 				result.add(account);
 			}
 			return result;

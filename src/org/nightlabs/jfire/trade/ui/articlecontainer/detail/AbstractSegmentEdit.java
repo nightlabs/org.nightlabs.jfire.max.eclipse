@@ -60,6 +60,7 @@ import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.SegmentType;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -78,7 +79,7 @@ implements SegmentEdit
 	private String articleContainerClass;
 	private ArticleSegmentGroup articleSegmentGroup;
 
-	protected Class segmentTypeClass;
+	protected Class<? extends SegmentType> segmentTypeClass;
 	protected ArticleEditFactoryRegistry articleEditFactoryRegistry;
 	protected List<ArticleEdit> articleEdits;
 	protected List<ArticleEdit> articleEditsReadOnly;
@@ -109,9 +110,9 @@ implements SegmentEdit
 		articleEdits = new ArrayList<ArticleEdit>();
 		articleEditsReadOnly = Collections.unmodifiableList(articleEdits);
 
-		Collection aptgs = articleSegmentGroup.getArticleProductTypeGroups();
-		for (Iterator itAPTGroups = aptgs.iterator(); itAPTGroups.hasNext(); ) {
-			ArticleProductTypeClassGroup aptg = (ArticleProductTypeClassGroup) itAPTGroups.next();
+		Collection<ArticleProductTypeClassGroup> aptgs = articleSegmentGroup.getArticleProductTypeGroups();
+		for (Iterator<ArticleProductTypeClassGroup> itAPTGroups = aptgs.iterator(); itAPTGroups.hasNext(); ) {
+			ArticleProductTypeClassGroup aptg = itAPTGroups.next();
 
 //			ArticleEditFactory aef;
 //			try {
@@ -123,9 +124,9 @@ implements SegmentEdit
 			ArticleEditFactory aef = articleEditFactoryRegistry.getArticleEditFactory(
 					articleContainerClass, segmentTypeClass, aptg.getProductTypeClass(), true);
 
-			Collection _articleEdits = aef.createArticleEdits(this, aptg, aptg.getArticleCarriers());
-			for (Iterator itEdits = _articleEdits.iterator(); itEdits.hasNext(); ) {
-				ArticleEdit edit = (ArticleEdit) itEdits.next();
+			Collection<? extends ArticleEdit> _articleEdits = aef.createArticleEdits(this, aptg, aptg.getArticleCarriers());
+			for (Iterator<? extends ArticleEdit> itEdits = _articleEdits.iterator(); itEdits.hasNext(); ) {
+				ArticleEdit edit = itEdits.next();
 				edit.addArticleEditArticleSelectionListener(articleEditArticleSelectionListener);
 				articleEdits.add(edit);
 				// cannot create composites in init! Must first create this edit's composite before
@@ -218,8 +219,8 @@ implements SegmentEdit
 		if (res == null)
 			throw new NullPointerException("_createComposite(...) returned null!"); //$NON-NLS-1$
 
-		for (Iterator it = articleEdits.iterator(); it.hasNext(); ) {
-			ArticleEdit articleEdit = (ArticleEdit) it.next();
+		for (Iterator<ArticleEdit> it = articleEdits.iterator(); it.hasNext(); ) {
+			ArticleEdit articleEdit = it.next();
 			createArticleEditComposite(articleEdit);
 		}
 		fireCompositeContentChangeEvent();
@@ -494,8 +495,8 @@ implements SegmentEdit
 //		articleSegmentGroup.addArticles(articles);
 
 		// now we try to add the articles to the existing ArticleEdits (they may accept or refuse)
-		for (Iterator it = articleEdits.iterator(); it.hasNext(); ) {
-			ArticleEdit edit = (ArticleEdit) it.next();
+		for (Iterator<ArticleEdit> it = articleEdits.iterator(); it.hasNext(); ) {
+			ArticleEdit edit = it.next();
 			articleCarriers = edit.addArticles(articleCarriers);
 			if (articleCarriers == null || articleCarriers.isEmpty())
 				break;
@@ -504,10 +505,10 @@ implements SegmentEdit
 		// If there are still articles left that have not been accepted by the existing ArticleEdits, we create a new
 		// ArticleEdit.
 		if (articleCarriers != null && !articleCarriers.isEmpty()) {
-			Map<Class, List<ArticleCarrier>> productTypeClass2articleCarriers = new HashMap<Class, List<ArticleCarrier>>();
+			Map<Class<? extends ProductType>, List<ArticleCarrier>> productTypeClass2articleCarriers = new HashMap<Class<? extends ProductType>, List<ArticleCarrier>>();
 			for (ArticleCarrier articleCarrier : articleCarriers) {
 				Article article = articleCarrier.getArticle();
-				Class productTypeClass = article.getProductType().getClass();
+				Class<? extends ProductType> productTypeClass = article.getProductType().getClass();
 				List<ArticleCarrier> acList = productTypeClass2articleCarriers.get(productTypeClass);
 				if (acList == null) {
 					acList = new ArrayList<ArticleCarrier>();
@@ -516,8 +517,8 @@ implements SegmentEdit
 				acList.add(articleCarrier);
 			}
 
-			for (Map.Entry<Class, List<ArticleCarrier>> me : productTypeClass2articleCarriers.entrySet()) {
-				Class productTypeClass = me.getKey();
+			for (Map.Entry<Class<? extends ProductType>, List<ArticleCarrier>> me : productTypeClass2articleCarriers.entrySet()) {
+				Class<? extends ProductType> productTypeClass = me.getKey();
 				ArticleEditFactory aef = articleEditFactoryRegistry.getArticleEditFactory(articleContainerClass, segmentTypeClass, productTypeClass, true);
 
 				ArticleProductTypeClassGroup articleProductTypeClassGroup = articleSegmentGroup.getArticleProductTypeClassGroup(productTypeClass.getName(), true);
@@ -525,9 +526,9 @@ implements SegmentEdit
 //				ArticleProductTypeClassGroup articleProductTypeClassGroup = articleSegmentGroup.createArticleProductTypeClassGroup(firstArticle.getProductType().getClass());
 //				Collection articleCarriers = articleProductTypeClassGroup.addArticles(articles);
 //				Collection edits = aef.createArticleEdits(this, articleProductTypeClassGroup, articleCarriers); // articleCarriers here is wrong!
-				Collection edits = aef.createArticleEdits(this, articleProductTypeClassGroup, me.getValue());
-				for (Iterator it = edits.iterator(); it.hasNext(); ) {
-					ArticleEdit edit = (ArticleEdit) it.next();
+				Collection<? extends ArticleEdit> edits = aef.createArticleEdits(this, articleProductTypeClassGroup, me.getValue());
+				for (Iterator<? extends ArticleEdit> it = edits.iterator(); it.hasNext(); ) {
+					ArticleEdit edit = it.next();
 					edit.addArticleEditArticleSelectionListener(articleEditArticleSelectionListener);
 					articleEdits.add(edit);
 					createArticleEditComposite(edit);
@@ -599,7 +600,7 @@ implements SegmentEdit
 	{
 		createArticleEditListeners.remove(listener);
 	}
-	public void fireCreateArticleEditEvent(Collection createdArticleEdits)
+	public void fireCreateArticleEditEvent(Collection<? extends ArticleEdit> createdArticleEdits)
 	{
 		CreateArticleEditEvent event = null;
 

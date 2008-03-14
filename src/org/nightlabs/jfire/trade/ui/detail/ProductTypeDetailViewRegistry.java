@@ -8,9 +8,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.store.ProductType;
 
 /**
- * A Registry for {@link ProductTypeDetailViewFactory}s which ca be registered via the extension
+ * A Registry for {@link ProductTypeDetailViewFactory}s which can be 
+ * registered via the extension org.nightlabs.jfire.productTypeDetailView
  * 
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
@@ -58,10 +60,10 @@ extends AbstractEPProcessor
 		}
 	}
 
-	private Map<Class, ProductTypeDetailViewFactory> productTypeClass2DetailViewFactory =
-		new HashMap<Class, ProductTypeDetailViewFactory>();
+	private Map<Class<? extends ProductType>, ProductTypeDetailViewFactory> productTypeClass2DetailViewFactory =
+		new HashMap<Class<? extends ProductType>, ProductTypeDetailViewFactory>();
 	
-	public IProductTypeDetailView getProductTypeDetailView(Class productTypeClass)
+	public IProductTypeDetailView getProductTypeDetailView(Class<? extends ProductType> productTypeClass)
 	{
 		if (!isProcessed())
 			checkProcessing();

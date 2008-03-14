@@ -21,7 +21,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class TransferTreeComposite
-extends AbstractTreeComposite
+extends AbstractTreeComposite<TransferTreeNode>
 {
 	private static class TransferLabelProvider
 	extends TableLabelProvider
@@ -50,13 +50,14 @@ extends AbstractTreeComposite
 	private static class TransferContentProvider
 	extends TreeContentProvider
 	{
+		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object inputElement)
 		{
 			if (inputElement instanceof TransferTreeNode)
 				return ((TransferTreeNode)inputElement).getChildren();
 
 			if (inputElement instanceof Object[]) {
-				List result = new ArrayList();
+				List<TransferTreeNode> result = new ArrayList<TransferTreeNode>();
 				Object[] oa = (Object[]) inputElement;
 				for (Object object : oa) {
 					if (object instanceof Collection) {

@@ -74,7 +74,7 @@ implements ClientPaymentProcessorFactory
 	}
 
 
-	private Set modeOfPaymentRefs = new HashSet();
+	private Set<ModeOfPaymentRef> modeOfPaymentRefs = new HashSet<ModeOfPaymentRef>();
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory#addModeOfPaymentRef(org.nightlabs.jfire.trade.ui.pay.ClientPaymentProcessorFactory.ModeOfPaymentRef)
@@ -94,11 +94,11 @@ implements ClientPaymentProcessorFactory
 		unmodifiableModeOfPaymentRefs = null;
 	}
 
-	private Collection unmodifiableModeOfPaymentRefs = null;
+	private Collection<ModeOfPaymentRef> unmodifiableModeOfPaymentRefs = null;
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory#getModeOfPaymentRefs()
 	 */
-	public Collection getModeOfPaymentRefs()
+	public Collection<ModeOfPaymentRef> getModeOfPaymentRefs()
 	{
 		if (unmodifiableModeOfPaymentRefs == null)
 			unmodifiableModeOfPaymentRefs = Collections.unmodifiableCollection(modeOfPaymentRefs);
@@ -107,7 +107,7 @@ implements ClientPaymentProcessorFactory
 	}
 
 
-	private Set modeOfPaymentFlavourRefs = new HashSet();
+	private Set<ModeOfPaymentFlavourRef> modeOfPaymentFlavourRefs = new HashSet<ModeOfPaymentFlavourRef>();
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory#addModeOfPaymentFlavourRef(org.nightlabs.jfire.trade.ui.pay.ClientPaymentProcessorFactory.ModeOfPaymentFlavourRef)
@@ -129,12 +129,12 @@ implements ClientPaymentProcessorFactory
 		unmodifiableModeOfPaymentFlavourRefs = null;
 	}
 
-	private Collection unmodifiableModeOfPaymentFlavourRefs = null;
+	private Collection<ModeOfPaymentFlavourRef> unmodifiableModeOfPaymentFlavourRefs = null;
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory#getModeOfPaymentFlavourRefs()
 	 */
-	public Collection getModeOfPaymentFlavourRefs()
+	public Collection<ModeOfPaymentFlavourRef> getModeOfPaymentFlavourRefs()
 	{
 		if (unmodifiableModeOfPaymentFlavourRefs == null)
 			unmodifiableModeOfPaymentFlavourRefs = Collections.unmodifiableCollection(modeOfPaymentFlavourRefs);

@@ -4,7 +4,8 @@ import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * This class contains utility methods for handling transfers of articles.
@@ -25,8 +26,11 @@ public class TransferUtil
 
 		// If the article is reversing, it can be added to an delivery note if the reversed article is in an delivery note, too
 		if (article.isReversing()) {
-			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
-					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Article reversedArticle = ArticleDAO.sharedInstance().getArticle(
+					article.getReversedArticleID(), 
+					new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor());
 			
 			if (reversedArticle.getDeliveryNoteID() == null)
 				return false;
@@ -47,8 +51,11 @@ public class TransferUtil
 
 		// If the article is reversing, it can be added to an invoice if the reversed article is in an invoice, too
 		if (article.isReversing()) {
-			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
-					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_INVOICE_ID}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Article reversedArticle = ArticleDAO.sharedInstance().getArticle(
+					article.getReversedArticleID(), 
+					new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_INVOICE_ID}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor());
 			
 			if (reversedArticle.getInvoiceID() == null)
 				return false;

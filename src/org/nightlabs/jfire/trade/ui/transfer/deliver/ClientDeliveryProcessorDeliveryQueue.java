@@ -26,7 +26,7 @@ public class ClientDeliveryProcessorDeliveryQueue extends AbstractClientDelivery
 
 	private SelectTargetDeliveryQueueWizardPage wizardPage;
 	private DeliveryQueueID targetQueueId;
-	private DeliveryQueue targetQueue;
+//	private DeliveryQueue targetQueue;
 
 	public static class Factory extends AbstractClientDeliveryProcessorFactory {
 		public ClientDeliveryProcessor createClientDeliveryProcessor() {
@@ -87,7 +87,7 @@ public class ClientDeliveryProcessorDeliveryQueue extends AbstractClientDelivery
 	}
 
 	@Override
-	public Set getIncludedServerDeliveryProcessorIDs() {
+	public Set<ServerDeliveryProcessorID> getIncludedServerDeliveryProcessorIDs() {
 		Set<ServerDeliveryProcessorID> ids = new HashSet<ServerDeliveryProcessorID>();
 		ids.add(ServerDeliveryProcessorID.create(Organisation.DEV_ORGANISATION_ID, ServerDeliveryProcessorDeliveryQueue.class.getName()));
 		return ids;

@@ -32,7 +32,7 @@ import java.util.Set;
 public class SegmentEditArticleSelectionEvent extends EventObject
 {
 	private static final long serialVersionUID = 1L;
-	private Set articleSelections;
+	private Set<ArticleSelection> articleSelections;
 
 	public SegmentEditArticleSelectionEvent(SegmentEdit segmentEdit)
 	{
@@ -40,7 +40,7 @@ public class SegmentEditArticleSelectionEvent extends EventObject
 		articleSelections = segmentEdit.getArticleSelections();
 	}
 
-	public Set getArticleSelections()
+	public Set<ArticleSelection> getArticleSelections()
 	{
 		return articleSelections;
 	}

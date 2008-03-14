@@ -53,6 +53,7 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -115,15 +116,12 @@ public class OrderTreeNode extends HeaderTreeNode
 
 	@Override
 	@Implement
-	protected List loadChildData(ProgressMonitor monitor)
+	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		try {
-//			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
 			OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
 			Order o = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//			Order o = tm.getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTCILES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 			ArrayList<Offer> res = new ArrayList<Offer>(o.getOffers());
 
@@ -143,7 +141,7 @@ public class OrderTreeNode extends HeaderTreeNode
 				}
 			});
 
-			return res;
+			return CollectionUtil.castList(res);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -151,10 +149,10 @@ public class OrderTreeNode extends HeaderTreeNode
 
 	@Override
 	@Implement
-	protected List<HeaderTreeNode> createChildNodes(List childData)
+	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		ArrayList<HeaderTreeNode> res = new ArrayList<HeaderTreeNode>();
-		for (Iterator it = childData.iterator(); it.hasNext(); ) {
+		for (Iterator<Object> it = childData.iterator(); it.hasNext(); ) {
 			Offer offer = (Offer) it.next();
 			OfferID offerID = (OfferID) JDOHelper.getObjectId(offer);
 			synchronized (offerIDsLoaded) {

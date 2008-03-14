@@ -32,10 +32,11 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class AddToDeliveryNoteAction
 extends GenericArticleEditAction
@@ -57,8 +58,11 @@ extends GenericArticleEditAction
 		
 		// Exclude if the article is a reversing article and the corresponding reversed article is not in a delivery note
 		if (article.isReversing() && article.getReversedArticleID() != null) {
-			Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
-					article.getReversedArticleID(), new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			Article reversedArticle = ArticleDAO.sharedInstance().getArticle(
+					article.getReversedArticleID(), 
+					new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_DELIVERY_NOTE_ID }, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new NullProgressMonitor());
 			if (reversedArticle.getDeliveryNoteID() == null)
 				return true;
 		}

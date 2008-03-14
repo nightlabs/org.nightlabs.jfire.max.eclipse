@@ -59,16 +59,17 @@ import org.nightlabs.jfire.trade.ArticleSegmentGroups;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.notification.ArticleLifecycleListenerFilter;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * New (2007-06-07): Since this class is used in the client with Jobs, it is now Thread-safe.
@@ -203,7 +204,8 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 				if (logger.isDebugEnabled())
 					logger.debug("JDOLifecycleAdapterJob.notify: loading Articles for " + articleIDs.size() + " ArticleIDs..."); //$NON-NLS-1$ //$NON-NLS-2$
 
-				final Collection<Article> articles = ArticleProvider.sharedInstance().getArticles(articleIDs, fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				final Collection<Article> articles = ArticleDAO.sharedInstance().getArticles(
+						articleIDs, fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
 				ArticleContainerID articleContainerID = getArticleContainerID();
 				if (!(articleContainerID instanceof OrderID || articleContainerID instanceof OfferID)) {
@@ -350,7 +352,8 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 				}
 
 				// reload the Article s and update the ArticleCarrier s
-				final Collection<Article> dirtyArticles = ArticleProvider.sharedInstance().getArticles(dirtyArticleIDs, fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				final Collection<Article> dirtyArticles = ArticleDAO.sharedInstance().getArticles(
+						dirtyArticleIDs, fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				final ArrayList<ArticleCarrier> dirtyArticleCarriers = new ArrayList<ArticleCarrier>(dirtyArticles.size());
 				ArticleContainerID articleContainerID = getArticleContainerID();
 				for (Iterator<Article> itArticle = dirtyArticles.iterator(); itArticle.hasNext(); ) {

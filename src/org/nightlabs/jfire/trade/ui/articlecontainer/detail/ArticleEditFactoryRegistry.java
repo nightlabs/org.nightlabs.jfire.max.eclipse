@@ -28,6 +28,8 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.SegmentType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
 
 /**
@@ -61,7 +63,7 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	/**
 	 * This method finds a <tt>ArticleEditFactory</tt> according to the given
 	 * parameters. For <tt>segmentTypeClass</tt> and <tt>productTypeClass</tt>,
-	 * the inheritence tree will be iterated in case no direct match exists.
+	 * the inheritance tree will be iterated in case no direct match exists.
 	 * The inheritance search will first try to find a closer match for the
 	 * <tt>productTypeClass</tt>, then for <tt>segmentTypeClass</tt>.
 	 * This behaviour might change!!!
@@ -73,8 +75,8 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	 * @return An instance of <tt>ArticleEditFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	public ArticleEditFactory getArticleEditFactory(
-			String articleContainerClass, Class segmentTypeClass,
-			Class productTypeClass, boolean throwExceptionIfNotFound)
+			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
 		return (ArticleEditFactory) super.getFactory(articleContainerClass, segmentTypeClass,
 			productTypeClass, throwExceptionIfNotFound);

@@ -6,7 +6,6 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.LoginStateListener;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener

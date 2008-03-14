@@ -369,7 +369,7 @@ implements IPaymentEntryPage
 				
 				// load ModeOfPaymentFlavour s
 				// AnchorID legalEntityID = (AnchorID) JDOHelper.getObjectId(offer.getOrder().getCustomer());
-				Collection c;
+				Collection<ModeOfPaymentFlavour> c;
 				try {
 					c = getAccountingManager().getAvailableModeOfPaymentFlavoursForAllCustomerGroups(
 							wizard.getCustomerGroupIDs(),
@@ -387,11 +387,9 @@ implements IPaymentEntryPage
 
 				modeOfPaymentFlavourList.clear();
 				modeOfPaymentFlavourList.addAll(c);
-				Collections.sort(modeOfPaymentFlavourList, new Comparator() {
-					public int compare(Object obj0, Object obj1)
+				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
+					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
 					{
-						ModeOfPaymentFlavour mopf0 = (ModeOfPaymentFlavour)obj0;
-						ModeOfPaymentFlavour mopf1 = (ModeOfPaymentFlavour)obj1;
 						String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
 						String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
 						return name0.compareTo(name1);
@@ -814,8 +812,8 @@ implements IPaymentEntryPage
 				paymentData = new PaymentData(getPaymentWizardHop().getPayment());
 			paymentWizardHop.setPaymentData(paymentData);
 
-			Set includedSPPs = clientPaymentProcessor.getIncludedServerPaymentProcessorIDs();
-			Set excludedSPPs = null;
+			Set<ServerPaymentProcessorID> includedSPPs = clientPaymentProcessor.getIncludedServerPaymentProcessorIDs();
+			Set<ServerPaymentProcessorID> excludedSPPs = null;
 			if (includedSPPs == null)
 				excludedSPPs = clientPaymentProcessor.getExcludedServerPaymentProcessorIDs();
 
@@ -829,7 +827,7 @@ implements IPaymentEntryPage
 
 			// load ServerPaymentProcessor s
 			ModeOfPaymentFlavourID modeOfPaymentFlavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(selectedModeOfPaymentFlavour);
-			Collection c = getAccountingManager().getServerPaymentProcessorsForOneModeOfPaymentFlavour(
+			Collection<ServerPaymentProcessor> c = getAccountingManager().getServerPaymentProcessorsForOneModeOfPaymentFlavour(
 					modeOfPaymentFlavourID,
 					checkRequirementsEnvironment,
 					new String[] {
@@ -839,8 +837,8 @@ implements IPaymentEntryPage
 					}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 			String clientPaymentProcessorFactoryID = selectedClientPaymentProcessorFactory.getID();
-			for (Iterator it = c.iterator(); it.hasNext(); ) {
-				ServerPaymentProcessor spp = (ServerPaymentProcessor) it.next();
+			for (Iterator<ServerPaymentProcessor> it = c.iterator(); it.hasNext(); ) {
+				ServerPaymentProcessor spp = it.next();
 				ServerPaymentProcessorID sppID = (ServerPaymentProcessorID) JDOHelper.getObjectId(spp);
 
 				if (includedSPPs != null && !includedSPPs.contains(sppID))
@@ -849,8 +847,8 @@ implements IPaymentEntryPage
 				if (excludedSPPs != null && excludedSPPs.contains(sppID))
 					continue;
 
-				Set includedCPPFs = spp.getIncludedClientPaymentProcessorFactoryIDs();
-				Set excludedCPPFs = null;
+				Set<String> includedCPPFs = spp.getIncludedClientPaymentProcessorFactoryIDs();
+				Set<String> excludedCPPFs = null;
 				if (includedCPPFs == null)
 					excludedCPPFs = spp.getExcludedClientPaymentProcessorFactoryIDs();
 
@@ -863,11 +861,9 @@ implements IPaymentEntryPage
 				serverPaymentProcessorList.add(spp);
 			}
 
-			Collections.sort(serverPaymentProcessorList, new Comparator(){
-				public int compare(Object obj0, Object obj1)
+			Collections.sort(serverPaymentProcessorList, new Comparator<ServerPaymentProcessor>(){
+				public int compare(ServerPaymentProcessor spp0, ServerPaymentProcessor spp1)
 				{
-					ServerPaymentProcessor spp0 = (ServerPaymentProcessor)obj0;
-					ServerPaymentProcessor spp1 = (ServerPaymentProcessor)obj1;
 					String name0 = spp0.getName().getText(Locale.getDefault().getLanguage());
 					String name1 = spp1.getName().getText(Locale.getDefault().getLanguage());
 					return name0.compareTo(name1);

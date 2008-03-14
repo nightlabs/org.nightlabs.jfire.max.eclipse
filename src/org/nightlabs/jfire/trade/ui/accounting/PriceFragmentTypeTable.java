@@ -44,13 +44,17 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class PriceFragmentTypeTable extends AbstractTableComposite {
+public class PriceFragmentTypeTable 
+extends AbstractTableComposite<PriceFragmentType> 
+{
 	
 	private static final String[] DEFAULT_FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT,
@@ -63,7 +67,11 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 		 */
 		@Override
 		public Object[] getElements(Object inputElement) {
-			return PriceFragmentTypeProvider.sharedInstance().getPriceFragmentTypes(DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).toArray(); // TODO load asynchronously in a Job!!! And not in the ContentProvider!
+			// TODO load asynchronously in a Job!!! And not in the ContentProvider!			
+			return PriceFragmentTypeDAO.sharedInstance().getPriceFragmentTypes(
+					DEFAULT_FETCH_GROUPS, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					new NullProgressMonitor()).toArray();
 		}
 	}
 
@@ -101,11 +109,11 @@ public class PriceFragmentTypeTable extends AbstractTableComposite {
 	 * Returns all selected PriceFragmentType in a Set.
 	 * @return All selected PriceFragmentType in a Set.
 	 */
-	public Set getSelectedPriceFragmentTypes() {
-		Set result = new HashSet();
+	public Set<PriceFragmentType> getSelectedPriceFragmentTypes() {
+		Set<PriceFragmentType> result = new HashSet<PriceFragmentType>();
 		TableItem[] items = getTable().getSelection();
 		for (int i = 0; i < items.length; i++) {
-			result.add(items[i].getData());
+			result.add((PriceFragmentType)items[i].getData());
 		}
 		return result;
 	}

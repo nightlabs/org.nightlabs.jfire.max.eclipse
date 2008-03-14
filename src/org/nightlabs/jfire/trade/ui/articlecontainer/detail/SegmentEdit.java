@@ -300,7 +300,7 @@ public interface SegmentEdit
 
 	void addCreateArticleEditListener(CreateArticleEditListener listener);
 	void removeCreateArticleEditListener(CreateArticleEditListener listener);
-	void fireCreateArticleEditEvent(Collection createdArticleEdits);
+	void fireCreateArticleEditEvent(Collection<? extends ArticleEdit> createdArticleEdits);
 
 //	/**
 //	 * This method iterates all {@link ArticleEdit}s and calls their

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 
@@ -37,6 +38,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.AddToArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
@@ -46,33 +48,12 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 {
 	private SelectDeliveryNotePage selectDeliveryNotePage;
 
-	public AddToDeliveryNoteWizard(Collection articles)
+	public AddToDeliveryNoteWizard(Collection<Article> articles)
 	{
 		super(articles);
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteWizard.windowTitle")); //$NON-NLS-1$
 	}
-//	/**
-//	 * @see AddToArticleContainerWizard#AddToArticleContainerWizard(ArticleContainer)
-//	 */
-//	public AddToDeliveryNoteWizard(ArticleContainer articleContainer)
-//	{
-//		super(articleContainer);
-//	}
-//
-//	/**
-//	 * @see AddToArticleContainerWizard#AddToArticleContainerWizard(Collection)
-//	 */
-//	public AddToDeliveryNoteWizard(Collection articles)
-//	{
-//		super(articles);
-//
-//		for (Iterator it = articles.iterator(); it.hasNext(); ) {
-//			Article article = (Article) it.next();
-//			if (article.getDeliveryNoteID() != null)
-//				throw new IllegalArgumentException("At least one Article (" + article.getPrimaryKey() + ") is already in a delivery note! An Article can only be in one invoice!");
-//		}
-//	}
-
+	
 	@Override
 	public void addPages()
 	{
@@ -80,22 +61,22 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 		addPage(selectDeliveryNotePage);
 	}
 
-	private Collection articlesToAdd = null;
+	private Collection<Article> articlesToAdd = null;
 
 	/**
 	 * @return Returns all those {@link Article}s that need to be added to the invoice. This is either the
 	 *		articles passed to the constructor or the ones from the articleContainer which are not yet assigned
 	 *		to an invoice.
 	 */
-	protected Collection getArticlesToAdd()
+	protected Collection<Article> getArticlesToAdd()
 	{
 		if (articlesToAdd != null)
 			return articlesToAdd;
 		else {
-			Collection articles = getArticles();
-			Collection res = new ArrayList(articles.size());
-			for (Iterator it = articles.iterator(); it.hasNext(); ) {
-				Article article = (Article) it.next();
+			Collection<Article> articles = getArticles();
+			Collection<Article> res = new ArrayList<Article>(articles.size());
+			for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
+				Article article = it.next();
 				if (article.getDeliveryNoteID() == null)
 					res.add(article);
 			}
@@ -109,9 +90,9 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 	{
 		try {
 			// get ArticleIDs from Articles
-			LinkedList articleIDs = new LinkedList();
-			for (Iterator it = getArticlesToAdd().iterator(); it.hasNext(); )
-				articleIDs.add(JDOHelper.getObjectId(it.next()));
+			List<ArticleID> articleIDs = new LinkedList<ArticleID>();
+			for (Iterator<Article> it = getArticlesToAdd().iterator(); it.hasNext(); )
+				articleIDs.add((ArticleID)JDOHelper.getObjectId(it.next()));
 
 			// either create a new delivery note or add the articles to an existing.
 			DeliveryNoteID deliveryNoteID;

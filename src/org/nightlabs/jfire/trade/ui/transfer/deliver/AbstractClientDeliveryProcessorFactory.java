@@ -74,7 +74,7 @@ implements ClientDeliveryProcessorFactory
 	}
 
 
-	private Set modeOfDeliveryRefs = new HashSet();
+	private Set<ModeOfDeliveryRef> modeOfDeliveryRefs = new HashSet<ModeOfDeliveryRef>();
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#addModeOfDeliveryRef(org.nightlabs.jfire.trade.ui.deliver.ClientDeliveryProcessorFactory.ModeOfDeliveryRef)
@@ -94,11 +94,11 @@ implements ClientDeliveryProcessorFactory
 		unmodifiableModeOfDeliveryRefs = null;
 	}
 
-	private Collection unmodifiableModeOfDeliveryRefs = null;
+	private Collection<ModeOfDeliveryRef> unmodifiableModeOfDeliveryRefs = null;
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#getModeOfDeliveryRefs()
 	 */
-	public Collection getModeOfDeliveryRefs()
+	public Collection<ModeOfDeliveryRef> getModeOfDeliveryRefs()
 	{
 		if (unmodifiableModeOfDeliveryRefs == null)
 			unmodifiableModeOfDeliveryRefs = Collections.unmodifiableCollection(modeOfDeliveryRefs);
@@ -107,7 +107,7 @@ implements ClientDeliveryProcessorFactory
 	}
 
 
-	private Set modeOfDeliveryFlavourRefs = new HashSet();
+	private Set<ModeOfDeliveryFlavourRef> modeOfDeliveryFlavourRefs = new HashSet<ModeOfDeliveryFlavourRef>();
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#addModeOfDeliveryFlavourRef(org.nightlabs.jfire.trade.ui.deliver.ClientDeliveryProcessorFactory.ModeOfDeliveryFlavourRef)
@@ -129,12 +129,12 @@ implements ClientDeliveryProcessorFactory
 		unmodifiableModeOfDeliveryFlavourRefs = null;
 	}
 
-	private Collection unmodifiableModeOfDeliveryFlavourRefs = null;
+	private Collection<ModeOfDeliveryFlavourRef> unmodifiableModeOfDeliveryFlavourRefs = null;
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#getModeOfDeliveryFlavourRefs()
 	 */
-	public Collection getModeOfDeliveryFlavourRefs()
+	public Collection<ModeOfDeliveryFlavourRef> getModeOfDeliveryFlavourRefs()
 	{
 		if (unmodifiableModeOfDeliveryFlavourRefs == null)
 			unmodifiableModeOfDeliveryFlavourRefs = Collections.unmodifiableCollection(modeOfDeliveryFlavourRefs);

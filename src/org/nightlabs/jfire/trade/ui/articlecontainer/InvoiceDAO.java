@@ -19,7 +19,6 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.jdo.BaseJDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -91,8 +90,6 @@ public class InvoiceDAO
 		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try {
-//			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Set<InvoiceID> invoiceIDs = tradeManager.getInvoiceIDs(queries);
 			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			Set<InvoiceID> invoiceIDs = accountingManager.getInvoiceIDs(queries);
 			return InvoiceDAO.sharedInstance().getInvoices(

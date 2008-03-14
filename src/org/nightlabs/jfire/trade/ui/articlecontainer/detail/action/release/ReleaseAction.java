@@ -37,7 +37,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction;
@@ -80,8 +80,11 @@ public class ReleaseAction extends ArticleEditAction
 					// If the reversed article is in a DeliveryNote, both - reversed and reversing - articles must be in a DeliveryNote.
 					// The DeliveryNotes must be booked!
 
-					Article reversedArticle = ArticleProvider.sharedInstance().getArticle(
-							reversingArticle.getReversedArticleID(), FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					Article reversedArticle = ArticleDAO.sharedInstance().getArticle(
+							reversingArticle.getReversedArticleID(), 
+							FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor());
 					if (reversedArticle.getDeliveryNoteID() != null) {
 						if (reversingArticle.getDeliveryNoteID() == null)
 							return false;

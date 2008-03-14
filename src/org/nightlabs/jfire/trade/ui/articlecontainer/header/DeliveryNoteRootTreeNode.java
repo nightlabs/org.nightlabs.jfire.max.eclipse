@@ -70,7 +70,7 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 
 	@Override
 	@Implement
-	protected List<ArticleContainer> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
+	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
 		return CollectionUtil.castList(
@@ -91,7 +91,7 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 
 	@Override
 	@Implement
-	protected Class getArticleContainerIDClass()
+	protected Class<? extends ArticleContainerID> getArticleContainerIDClass()
 	{
 		return DeliveryNoteID.class;
 	}

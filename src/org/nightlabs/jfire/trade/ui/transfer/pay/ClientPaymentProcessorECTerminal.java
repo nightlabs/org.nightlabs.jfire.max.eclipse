@@ -50,16 +50,16 @@ public class ClientPaymentProcessorECTerminal extends AbstractClientPaymentProce
 	{
 	}
 
-	private static Set includedServerPaymentProcessorIDs = null;
+	private static Set<ServerPaymentProcessorID> includedServerPaymentProcessorIDs = null;
 
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.pay.AbstractClientPaymentProcessor#getIncludedServerPaymentProcessorIDs()
 	 */
 	@Override
-	public Set getIncludedServerPaymentProcessorIDs()
+	public Set<ServerPaymentProcessorID> getIncludedServerPaymentProcessorIDs()
 	{
 		if (includedServerPaymentProcessorIDs == null) {
-			HashSet set = new HashSet();
+			Set<ServerPaymentProcessorID> set = new HashSet<ServerPaymentProcessorID>();
 			set.add(
 					ServerPaymentProcessorID.create(
 							Organisation.DEV_ORGANISATION_ID,

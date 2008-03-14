@@ -75,7 +75,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 	private Button createOfferRadio;
 	private Button selectOfferRadio;
 
-	private AbstractTableComposite offerTable;
+	private AbstractTableComposite<Offer> offerTable;
 	private List<Object> offers = new ArrayList<Object>(0); // holds either a String or instances of Offer
 	private Offer selectedOffer = null;
 
@@ -104,7 +104,7 @@ public class SelectOfferPage extends DynamicPathWizardPage
 			}
 		});
 
-		offerTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+		offerTable = new AbstractTableComposite<Offer>(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{

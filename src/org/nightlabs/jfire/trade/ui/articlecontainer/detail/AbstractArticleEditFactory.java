@@ -43,7 +43,8 @@ implements ArticleEditFactory
 	 * key: String articleEditActionID<br/>
 	 * value: IArticleEditActionDelegate
 	 */
-	private Map articleEditActionDelegates = new HashMap();
+	private Map<String, IArticleEditActionDelegate> articleEditActionDelegates = 
+		new HashMap<String, IArticleEditActionDelegate>();
 
 	public void addArticleEditActionDelegate(IArticleEditActionDelegate delegate)
 	{

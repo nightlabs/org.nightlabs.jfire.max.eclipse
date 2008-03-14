@@ -79,8 +79,8 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 	private Button createDeliveryNoteRadio;
 	private Button selectDeliveryNoteRadio;
 
-	private AbstractTableComposite deliveryNoteTable;
-	private List deliveryNotes = new ArrayList(0);
+	private AbstractTableComposite<DeliveryNote> deliveryNoteTable;
+	private List<Object> deliveryNotes = new ArrayList<Object>(0);  // holds either a String or instances of DeliveryNote
 	private DeliveryNote selectedDeliveryNote = null;
 
 	public SelectDeliveryNotePage()
@@ -109,7 +109,8 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 			}
 		});
 
-		deliveryNoteTable = new AbstractTableComposite(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+		deliveryNoteTable = new AbstractTableComposite<DeliveryNote>(page, 
+				SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{
@@ -188,7 +189,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 	{
 		try {
 			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			final List l = storeManager.getNonFinalizedDeliveryNotes(
+			final List<DeliveryNote> l = storeManager.getNonFinalizedDeliveryNotes(
 					getAddToDeliveryNoteWizard().getVendorID(),
 					getAddToDeliveryNoteWizard().getCustomerID(),
 					FETCH_GROUPS_DELIVERY_NOTES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

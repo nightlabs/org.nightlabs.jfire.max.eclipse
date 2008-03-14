@@ -233,7 +233,7 @@ public abstract class HeaderTreeNode
 	 * @return Returns a <tt>List</tt> of <tt>Object</tt>. These objects
 	 *		are passed to {@link #createChildNodes(List)} afterwards.
 	 */
-	protected abstract List loadChildData(ProgressMonitor monitor);
+	protected abstract List<Object> loadChildData(ProgressMonitor monitor);
 
 	/**
 	 * This method is called on the SWT GUI thread. You must implement this
@@ -243,7 +243,7 @@ public abstract class HeaderTreeNode
 	 * @param childData The result of the method {@link #loadChildData(ProgressMonitor)}.
 	 * @return Returns instances of <code>HeaderTreeNode</code>.
 	 */
-	protected abstract List<HeaderTreeNode> createChildNodes(List childData);
+	protected abstract List<HeaderTreeNode> createChildNodes(List<Object> childData);
 
 	private Job currentJob = null;
 
@@ -261,7 +261,7 @@ public abstract class HeaderTreeNode
 				@Override
 				protected IStatus run(ProgressMonitor monitor)
 				{
-					final List c = loadChildData(monitor);
+					final List<Object> c = loadChildData(monitor);
 
 					final Job thisJob = this;
 					Display.getDefault().asyncExec(new Runnable() {

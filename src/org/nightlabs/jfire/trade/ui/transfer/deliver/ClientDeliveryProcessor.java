@@ -33,6 +33,7 @@ import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
+import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IDeliveryEntryPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -109,7 +110,7 @@ public interface ClientDeliveryProcessor
 	 *		<tt>ServerDeliveryProcessorID</tt>s for non-existent (non-installed) processors
 	 *		without causing a problem.
 	 */
-	Set getIncludedServerDeliveryProcessorIDs();
+	Set<ServerDeliveryProcessorID> getIncludedServerDeliveryProcessorIDs();
 
 	/**
 	 * This method is called after {@link #init()}.
@@ -126,7 +127,7 @@ public interface ClientDeliveryProcessor
 	 *		or a {@link Set} of {@link org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID}s
 	 *		to exclude certain processors.
 	 */
-	Set getExcludedServerDeliveryProcessorIDs();
+	Set<ServerDeliveryProcessorID> getExcludedServerDeliveryProcessorIDs();
 
 	/**
 	 * This method is called after {@link #init()}. You should not replace

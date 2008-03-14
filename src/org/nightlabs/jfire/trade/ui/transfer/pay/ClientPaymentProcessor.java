@@ -34,6 +34,7 @@ import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentException;
 import org.nightlabs.jfire.accounting.pay.PaymentResult;
+import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IPaymentEntryPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -77,7 +78,6 @@ public interface ClientPaymentProcessor
 
 	void setPaymentEntryPage(IPaymentEntryPage paymentEntryPage);
 
-
 	IPaymentEntryPage getPaymentEntryPage();
 
 	long getAmount();
@@ -113,7 +113,7 @@ public interface ClientPaymentProcessor
 	 *		<tt>ServerPaymentProcessorID</tt>s for non-existent (non-installed) processors
 	 *		without causing a problem.
 	 */
-	Set getIncludedServerPaymentProcessorIDs();
+	Set<ServerPaymentProcessorID> getIncludedServerPaymentProcessorIDs();
 
 	/**
 	 * This method may be called after the parameters have been set (i.e. the above setters have been called
@@ -133,7 +133,7 @@ public interface ClientPaymentProcessor
 	 *		or a {@link Set} of {@link org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID}s
 	 *		to exclude certain processors.
 	 */
-	Set getExcludedServerPaymentProcessorIDs();
+	Set<ServerPaymentProcessorID> getExcludedServerPaymentProcessorIDs();
 
 	/**
  	 * This method is called after the parameters have been set (i.e. the above setters have been called

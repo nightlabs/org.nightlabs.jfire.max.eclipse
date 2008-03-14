@@ -194,7 +194,7 @@ implements ISelectionProvider
 	private NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
 			if (!notificationEvent.getSource().equals(ProductTypeQuickListView.this)) {
-				Set subjects = notificationEvent.getSubjects();
+				Set<Object> subjects = notificationEvent.getSubjects();
 				setSelection(new StructuredSelection(subjects));
 			}
 		}
@@ -307,10 +307,10 @@ implements ISelectionProvider
 		Set<ObjectID> objectIDs = SelectionUtil.getObjectIDs(selection);
 		if (!objectIDs.isEmpty()) {
 			for (ObjectID objectID : objectIDs) {
-				Class clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
+				Class<? extends Object> clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
 				for (int i=0; i<filters.size(); i++) {
 					final IProductTypeQuickListFilter filter = filters.get(i);
-					Set<Class> classes = filter.getClasses();
+					Set<Class<? extends Object>> classes = filter.getClasses();
 					if (classes.contains(clazz)) {
 						// if not searched before, perform search first
 						if (!filterSearched.get(i)) 

@@ -38,6 +38,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
@@ -46,19 +47,17 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
 public class ReverseWizard extends DynamicPathWizard
 {
 	private OrderID orderID = null;
-
 	private SelectOfferPage selectOfferPage;
+	private Collection<Article> articles;
+	private Collection<ArticleID> articleIDs;
 
-	private Collection articles;
-	private Collection articleIDs;
-
-	public ReverseWizard(Collection _articles)
+	public ReverseWizard(Collection<Article> _articles)
 	{
 		this.articles = _articles;
-		articleIDs = new ArrayList(articles.size());
-		for (Iterator it = articles.iterator(); it.hasNext(); ) {
-			Article article = (Article) it.next();
-			articleIDs.add(JDOHelper.getObjectId(article));
+		articleIDs = new ArrayList<ArticleID>(articles.size());
+		for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
+			Article article = it.next();
+			articleIDs.add((ArticleID)JDOHelper.getObjectId(article));
 
 			if (orderID == null)
 				orderID = article.getOrderID();

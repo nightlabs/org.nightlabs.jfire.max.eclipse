@@ -14,6 +14,7 @@ import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
+import org.nightlabs.jfire.config.ConfigModule;
 
 public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreferencePage {
 
@@ -24,7 +25,7 @@ public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreference
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
 		return new AbstractConfigModuleController(this) {
-			public Class getConfigModuleClass() {
+			public Class<? extends ConfigModule> getConfigModuleClass() {
 				return TariffOrderConfigModule.class;
 			}
 			

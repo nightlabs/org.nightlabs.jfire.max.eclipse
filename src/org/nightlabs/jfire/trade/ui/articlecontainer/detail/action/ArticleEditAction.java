@@ -74,8 +74,8 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 
 		SegmentEdit activeSegmentEdit = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveSegmentEdit();
 		boolean visible = false;
-		for (Iterator itAE = activeSegmentEdit.getArticleEdits().iterator(); itAE.hasNext(); ) {
-			ArticleEdit articleEdit = (ArticleEdit) itAE.next();
+		for (Iterator<ArticleEdit> itAE = activeSegmentEdit.getArticleEdits().iterator(); itAE.hasNext(); ) {
+			ArticleEdit articleEdit = itAE.next();
 			if (articleEdit.getArticleEditFactory().getArticleEditActionDelegate(this.getId()) != null)
 				visible = true;
 		}
@@ -87,8 +87,8 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 		boolean enabled = true;
 
 		// Iterate all ArticleSelections.
-		for (Iterator itAS = articleSelections.iterator(); itAS.hasNext(); ) {
-			ArticleSelection articleSelection = (ArticleSelection) itAS.next();
+		for (Iterator<ArticleSelection> itAS = articleSelections.iterator(); itAS.hasNext(); ) {
+			ArticleSelection articleSelection = itAS.next();
 			ArticleEditFactory articleEditFactory = articleSelection.getArticleEdit().getArticleEditFactory();
 
 			// get the ActionDelegate for the ArticleEdit

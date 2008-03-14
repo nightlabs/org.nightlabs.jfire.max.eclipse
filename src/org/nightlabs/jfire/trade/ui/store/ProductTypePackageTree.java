@@ -58,8 +58,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ProductTypePackageTree extends AbstractTreeComposite {
-	
+public class ProductTypePackageTree 
+extends AbstractTreeComposite<ProductTypePackageTree.Node> 
+{
 	public static final String[] DEFAULT_FETCH_GROUPS = new String[]{
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS,
@@ -74,7 +75,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * A list of Nodes
 		 */
-		private List children;
+		private List<Node> children;
 		/**
 		 * This nodes name in the current language
 		 */
@@ -104,9 +105,9 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 			} catch (JDODetachedFieldAccessException e) {
 				text = nodeProductType.toString();
 			}
-			children = new LinkedList();
-			for (Iterator iter = productType.getProductTypeLocal().getNestedProductTypeLocals().iterator(); iter.hasNext();) {
-				NestedProductTypeLocal nestedProductTypeLocal = (NestedProductTypeLocal) iter.next();
+			children = new LinkedList<Node>();
+			for (Iterator<NestedProductTypeLocal> iter = productType.getProductTypeLocal().getNestedProductTypeLocals().iterator(); iter.hasNext();) {
+				NestedProductTypeLocal nestedProductTypeLocal = iter.next();
 				children.add(
 						new Node(
 								contentProvider,
@@ -137,7 +138,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		/**
 		 * @return Returns the children.
 		 */
-		public List getChildren() {
+		public List<Node> getChildren() {
 			return children;
 		}
 		
@@ -182,7 +183,7 @@ public class ProductTypePackageTree extends AbstractTreeComposite {
 		 * key: ProductTypeID nodeProductTypeID
 		 * value: Node node
 		 */
-		private Map nodesByProductTypeID = new HashMap();
+		private Map<ProductTypeID, Node> nodesByProductTypeID = new HashMap<ProductTypeID, Node>();
 		
 		/**
 		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)

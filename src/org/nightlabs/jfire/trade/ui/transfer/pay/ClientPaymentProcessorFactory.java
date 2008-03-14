@@ -163,7 +163,8 @@ public interface ClientPaymentProcessorFactory
 	 * this method!
 	 */
 	void removeModeOfPaymentRef(ModeOfPaymentRef modeOfPaymentRef);
-	Collection getModeOfPaymentRefs();
+	
+	Collection<ModeOfPaymentRef> getModeOfPaymentRefs();
 
 	/**
 	 * This method is called before {@link #init()}.
@@ -176,7 +177,8 @@ public interface ClientPaymentProcessorFactory
 	 * this method!
 	 */
 	void removeModeOfPaymentFlavourRef(ModeOfPaymentFlavourRef modeOfPaymentFlavourRef);
-	Collection getModeOfPaymentFlavourRefs();
+	
+	Collection<ModeOfPaymentFlavourRef> getModeOfPaymentFlavourRefs();
 
 	/**
 	 * This method is called after the parameters are set. It might be called multiple

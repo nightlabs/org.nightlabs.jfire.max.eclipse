@@ -24,11 +24,12 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleProvider;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList;
 import org.nightlabs.jfire.trade.ui.tariff.TariffList.TariffFilter;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -72,7 +73,7 @@ public class ChangeTariffPage
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception
 			{
-				Collection<? extends Article> articles = ArticleProvider.sharedInstance().getArticles(
+				Collection<? extends Article> articles = ArticleDAO.sharedInstance().getArticles(
 						selectedArticleIDs,
 						new String[] {
 								FetchPlan.DEFAULT,
@@ -81,7 +82,8 @@ public class ChangeTariffPage
 								ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
 								GridPriceConfig.FETCH_GROUP_TARIFFS
 						},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
 
 				Set<GridPriceConfig> packagePriceConfigs = new HashSet<GridPriceConfig>();
 				for (Article article : articles)

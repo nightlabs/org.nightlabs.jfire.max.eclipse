@@ -62,19 +62,22 @@ public class ClientPaymentProcessorFactoryRegistry extends AbstractEPProcessor
 	 * key: String id (the id of the extension)<br/>
 	 * value: ClientPaymentProcessorFactory clientPaymentProcessorFactory
 	 */
-	protected Map clientPaymentProcessorFactoriesByID = new HashMap();
+	protected Map<String, ClientPaymentProcessorFactory> clientPaymentProcessorFactoriesByID = 
+		new HashMap<String, ClientPaymentProcessorFactory>();
 
 	/**
 	 * key: {@link ClientPaymentProcessorFactory.ModeOfPaymentRef} modeOfPaymentRef<br/>
 	 * value: List of ClientPaymentProcessorFactory clientPaymentProcessorFactory
 	 */
-	protected Map clientPaymentProcessorFactoriesByModeOfPaymentRef = new HashMap();
+	protected Map<ClientPaymentProcessorFactory.ModeOfPaymentRef, List<ClientPaymentProcessorFactory>> clientPaymentProcessorFactoriesByModeOfPaymentRef = 
+		new HashMap<ModeOfPaymentRef, List<ClientPaymentProcessorFactory>>();
 
 	/**
 	 * key: {@link ClientPaymentProcessorFactory.ModeOfPaymentFlavourRef} modeOfPaymentFlavourRef<br/>
 	 * value: List of ClientPaymentProcessorFactory clientPaymentProcessorFactory
 	 */
-	protected Map clientPaymentProcessorFactoriesByModeOfPaymentFlavourRef = new HashMap();
+	protected Map<ClientPaymentProcessorFactory.ModeOfPaymentFlavourRef, List<ClientPaymentProcessorFactory>> clientPaymentProcessorFactoriesByModeOfPaymentFlavourRef = 
+		new HashMap<ModeOfPaymentFlavourRef, List<ClientPaymentProcessorFactory>>();
 
 	/**
 	 * @see org.nightlabs.base.ui.extensionpoint.IEPProcessor#getExtensionPointID()
@@ -90,7 +93,7 @@ public class ClientPaymentProcessorFactoryRegistry extends AbstractEPProcessor
 	 * type {@link ClientPaymentProcessorFactory}. This method never returns <tt>null</tt>.
 	 * If no factory is found, the resulting <tt>List</tt> is empty.
 	 */
-	public List getClientPaymentProcessorFactories(ModeOfPaymentFlavour modeOfPaymentFlavour)
+	public List<ClientPaymentProcessorFactory> getClientPaymentProcessorFactories(ModeOfPaymentFlavour modeOfPaymentFlavour)
 	{
 		ModeOfPaymentFlavourRef modeOfPaymentFlavourRef = new ModeOfPaymentFlavourRef(
 				modeOfPaymentFlavour.getOrganisationID(),
@@ -101,13 +104,13 @@ public class ClientPaymentProcessorFactoryRegistry extends AbstractEPProcessor
 				modeOfPayment.getOrganisationID(),
 				modeOfPayment.getModeOfPaymentID());
 
-		ArrayList res = new ArrayList();
+		List<ClientPaymentProcessorFactory> res = new ArrayList<ClientPaymentProcessorFactory>();
 
-		List factoriesForModeOfPaymentFlavour = (List) clientPaymentProcessorFactoriesByModeOfPaymentFlavourRef.get(modeOfPaymentFlavourRef);
+		List<ClientPaymentProcessorFactory> factoriesForModeOfPaymentFlavour = clientPaymentProcessorFactoriesByModeOfPaymentFlavourRef.get(modeOfPaymentFlavourRef);
 		if (factoriesForModeOfPaymentFlavour != null)
 			res.addAll(factoriesForModeOfPaymentFlavour);
 
-		List factoriesForModeOfPayment = (List) clientPaymentProcessorFactoriesByModeOfPaymentRef.get(modeOfPaymentRef);
+		List<ClientPaymentProcessorFactory> factoriesForModeOfPayment = clientPaymentProcessorFactoriesByModeOfPaymentRef.get(modeOfPaymentRef);
 		if (factoriesForModeOfPayment != null)
 			res.addAll(factoriesForModeOfPayment);
 
@@ -154,9 +157,9 @@ public class ClientPaymentProcessorFactoryRegistry extends AbstractEPProcessor
 				else
 					throw new IllegalStateException("unknown child \""+childName+"\"!"); //$NON-NLS-1$ //$NON-NLS-2$
 
-				List list = (List) map.get(key);
+				List<Object> list = (List<Object>) map.get(key);
 				if (list == null) {
-					list = new ArrayList();
+					list = new ArrayList<Object>();
 					map.put(key, list);
 				}
 				list.add(clientPaymentProcessorFactory);

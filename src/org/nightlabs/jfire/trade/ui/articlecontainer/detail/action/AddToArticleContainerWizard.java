@@ -49,7 +49,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 {
 //	private ArticleContainer articleContainer;
-	private Collection articles;
+	private Collection<Article> articles;
 
 //	/**
 //	 * This constructor calls {@link #AddToDeliveryNoteWizard(ArticleContainer, Collection)} with
@@ -66,7 +66,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	 * <code>articleContainer = null</code>. It is meant to be extended in child classes and then used
 	 * in {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction}s.
 	 */
-	public AddToArticleContainerWizard(Collection articles)
+	public AddToArticleContainerWizard(Collection<Article> articles)
 	{
 //		this(null, articles);
 		this.articles = articles;
@@ -161,7 +161,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 //					throw new IllegalArgumentException("articleContainer is an instance of " + articleContainer.getClass().getName() + ", but must be either Order, Offer or DeliveryNote!");
 //			}
 //			else {
-				Article article = (Article) articles.iterator().next();
+				Article article = articles.iterator().next();
 				article = getTradeManager().getArticle((ArticleID)JDOHelper.getObjectId(article), FETCH_GROUPS_ARTICLE_FOR_VENDOR_ID_AND_CUSTOMER_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				vendorID = article.getVendorID();
 				customerID = article.getCustomerID();
@@ -247,6 +247,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 
 		return vendorID;
 	}
+	
 	public AnchorID getCustomerID()
 	{
 		if (customerID == null)
@@ -291,7 +292,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	 *
 	 * @see #getArticleContainer()
 	 */
-	public Collection getArticles()
+	public Collection<Article> getArticles()
 	{
 		return articles;
 	}

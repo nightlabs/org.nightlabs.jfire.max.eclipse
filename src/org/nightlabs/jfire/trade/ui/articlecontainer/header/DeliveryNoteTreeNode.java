@@ -82,14 +82,14 @@ public class DeliveryNoteTreeNode extends HeaderTreeNode
 
 	@Override
 	@Implement
-	protected List loadChildData(ProgressMonitor monitor)
+	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		return null;
 	}
 
 	@Override
 	@Implement
-	protected List<HeaderTreeNode> createChildNodes(List childData)
+	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		return null;
 	}

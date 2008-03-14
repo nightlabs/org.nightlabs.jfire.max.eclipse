@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.detail;
 
+import org.nightlabs.jfire.store.ProductType;
+
 
 /**
  * This Factory creates {@link IProductTypeDetailView}s for a certain kind of {@link ProductType}
@@ -26,5 +28,5 @@ public interface ProductTypeDetailViewFactory
 	 * @return the Class which represents the kind of {@link ProductType} for which
 	 * details should be displayed
 	 */
-	Class getProductTypeClass();
+	Class<? extends ProductType> getProductTypeClass();
 }

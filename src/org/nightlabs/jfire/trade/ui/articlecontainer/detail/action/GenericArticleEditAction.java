@@ -33,10 +33,10 @@ public abstract class GenericArticleEditAction
 	{
 		this.articles = null;
 		Set<Article> articles = new HashSet<Article>();
-		for (Iterator itAS = articleSelections.iterator(); itAS.hasNext(); ) {
-			ArticleSelection articleSelection = (ArticleSelection) itAS.next();
-			for (Iterator itSA = articleSelection.getSelectedArticles().iterator(); itSA.hasNext(); ) {
-				Article article = (Article) itSA.next();
+		for (Iterator<ArticleSelection> itAS = articleSelections.iterator(); itAS.hasNext(); ) {
+			ArticleSelection articleSelection = itAS.next();
+			for (Iterator<? extends Article> itSA = articleSelection.getSelectedArticles().iterator(); itSA.hasNext(); ) {
+				Article article = itSA.next();
 				if (excludeArticle(article))
 					return false;
 

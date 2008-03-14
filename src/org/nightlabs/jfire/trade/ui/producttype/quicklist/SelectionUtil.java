@@ -14,6 +14,9 @@ import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 /**
+ * Utility class which checks the containment of {@link ISelection}s for
+ * occurrences of {@link ProductTypeID}s and {@link ProductTypeGroupID}s.
+ *  
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
@@ -29,6 +32,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ObjectID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
+	@SuppressWarnings("unchecked")
 	public static Set<ObjectID> getObjectIDs(ISelection selection) 
 	{
 		Set<ObjectID> objectIDs = new HashSet<ObjectID>();
@@ -36,7 +40,7 @@ public class SelectionUtil {
 			IStructuredSelection sel = (IStructuredSelection) selection;			
 			for (Object object : sel.toList()) {
 				if (object instanceof Collection) {
-					Collection set = (Collection) object;
+					Collection<Object> set = (Collection) object;
 					for (Object setEntry : set) {
 						if (setEntry instanceof ObjectID) {
 							objectIDs.add((ObjectID)setEntry);
@@ -59,6 +63,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
+	@SuppressWarnings("unchecked")
 	public static Set<ProductTypeID> getProductTypesIDs(ISelection selection) 
 	{
 		Set<ProductTypeID> typeIDs = new HashSet<ProductTypeID>();
@@ -66,7 +71,7 @@ public class SelectionUtil {
 			IStructuredSelection sel = (IStructuredSelection) selection;			
 			for (Object object : sel.toList()) {
 				if (object instanceof Collection) {
-					Collection set = (Collection) object;
+					Collection<Object> set = (Collection) object;
 					for (Object setEntry : set) {
 						if (setEntry instanceof ProductTypeID) {
 							typeIDs.add((ProductTypeID)setEntry);
@@ -89,6 +94,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeGroupID}s which were contained in 
 	 * the given {@link ISelection}
 	 */	
+	@SuppressWarnings("unchecked")
 	public static Set<ProductTypeGroupID> getProductTypeGroupsIDs(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> typeIDs = new HashSet<ProductTypeGroupID>();
@@ -96,7 +102,7 @@ public class SelectionUtil {
 			IStructuredSelection sel = (IStructuredSelection) selection;			
 			for (Object object : sel.toList()) {
 				if (object instanceof Collection) {
-					Collection set = (Collection) object;
+					Collection<Object> set = (Collection) object;
 					for (Object setEntry : set) {
 						if (setEntry instanceof ProductTypeGroupID) {
 							typeIDs.add((ProductTypeGroupID)setEntry);
@@ -120,6 +126,7 @@ public class SelectionUtil {
 	 * @return a {@link SelectionContainment} of all {@link ProductTypeGroupID}s 
 	 * and {@link ProductTypeID}s which were contained in the given {@link ISelection}
 	 */	
+	@SuppressWarnings("unchecked")
 	public static SelectionContainment getSelectionContainment(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> productTypeGroupIDs = new HashSet<ProductTypeGroupID>();
@@ -128,7 +135,7 @@ public class SelectionUtil {
 			IStructuredSelection sel = (IStructuredSelection) selection;			
 			for (Object object : sel.toList()) {
 				if (object instanceof Collection) {
-					Collection set = (Collection) object;
+					Collection<Object> set = (Collection) object;
 					for (Object setEntry : set) {
 						if (setEntry instanceof ProductTypeGroupID) {
 							productTypeGroupIDs.add((ProductTypeGroupID)setEntry);

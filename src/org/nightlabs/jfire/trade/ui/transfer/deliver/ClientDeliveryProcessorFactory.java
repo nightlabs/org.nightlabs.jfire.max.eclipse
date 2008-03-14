@@ -149,9 +149,7 @@ public interface ClientDeliveryProcessorFactory
 			return organisationID.hashCode() ^ modeOfDeliveryFlavourID.hashCode();
 		}
 	}
-
 	
-
 	/**
 	 * This method is called before {@link #init()}.
 	 */
@@ -163,7 +161,8 @@ public interface ClientDeliveryProcessorFactory
 	 * this method!
 	 */
 	void removeModeOfDeliveryRef(ModeOfDeliveryRef modeOfDeliveryRef);
-	Collection getModeOfDeliveryRefs();
+	
+	Collection<ModeOfDeliveryRef> getModeOfDeliveryRefs();
 
 	/**
 	 * This method is called before {@link #init()}.
@@ -176,7 +175,8 @@ public interface ClientDeliveryProcessorFactory
 	 * this method!
 	 */
 	void removeModeOfDeliveryFlavourRef(ModeOfDeliveryFlavourRef modeOfDeliveryFlavourRef);
-	Collection getModeOfDeliveryFlavourRefs();
+	
+	Collection<ModeOfDeliveryFlavourRef> getModeOfDeliveryFlavourRefs();
 
 	/**
 	 * This method is called after the parameters are set. It might be called multiple

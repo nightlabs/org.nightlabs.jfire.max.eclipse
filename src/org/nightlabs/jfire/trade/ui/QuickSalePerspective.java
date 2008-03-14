@@ -21,7 +21,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 

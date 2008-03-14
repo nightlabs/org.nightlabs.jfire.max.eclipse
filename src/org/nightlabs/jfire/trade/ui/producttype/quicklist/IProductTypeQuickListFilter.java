@@ -104,7 +104,7 @@ extends ISelectionHandler
 	 * Returns the classes the filter is responsible for.
 	 * @return the classes the filter is responsible for
 	 */
-	Set<Class> getClasses();
+	Set<Class<? extends Object>> getClasses();
 		
 //	IFilterSettingProvider getFilterSettingProvider();
 }

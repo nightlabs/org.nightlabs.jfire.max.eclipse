@@ -21,7 +21,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  *
  */
 public class ProductTypeTableComposite
-extends AbstractTableComposite
+extends AbstractTableComposite<ProductType>
 {
 	/**
 	 * @param parent

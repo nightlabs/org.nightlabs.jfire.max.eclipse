@@ -38,6 +38,7 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
@@ -80,7 +81,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	 */
 	@Override
 	@Implement
-	protected List loadChildData(ProgressMonitor monitor)
+	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		try {
 			AnchorID vendorID = getHeaderTreeComposite().getMyOrganisationLegalEntityID();
@@ -93,7 +94,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 
 			if (vendorID == null || customerID == null) {
 				logger.warn("loadChildData: vendorID or customerID undefined! vendorID=\""+vendorID+"\" customerID=\""+customerID+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				return new ArrayList<ArticleContainer>();
+				return new ArrayList<Object>();
 			}
 
 			return doLoadChildElements(vendorID, customerID, nextRangeBeginIdx, nextRangeBeginIdx += rangeLength, monitor);
@@ -102,7 +103,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 		}
 	}
 
-	protected abstract List<ArticleContainer> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
+	protected abstract List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 	throws Exception;
 
 	/**
@@ -110,10 +111,10 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	 */
 	@Override
 	@Implement
-	protected List<HeaderTreeNode> createChildNodes(List childData)
+	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		ArrayList<HeaderTreeNode> res = new ArrayList<HeaderTreeNode>();
-		for (Iterator it = childData.iterator(); it.hasNext(); ) {
+		for (Iterator<Object> it = childData.iterator(); it.hasNext(); ) {
 			ArticleContainer articleContainer = (ArticleContainer) it.next();
 			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
 			synchronized(articleContainerIDsLoaded) {
@@ -130,19 +131,19 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	protected abstract HeaderTreeNode createArticleContainerNode(
 			byte position, ArticleContainer articleContainer);
 
-	protected void createMoreNode(List childData, List childNodes)
+	protected void createMoreNode(List<Object> childData, List<HeaderTreeNode> childNodes)
 	{
 		if (childData.size() < rangeLength)
 			return;
 
 		SimpleNode moreNode = new SimpleNode(this, POSITION_LAST_CHILD, "...", true) { //$NON-NLS-1$
 			@Override
-			public List loadChildData(ProgressMonitor monitor)
+			public List<Object> loadChildData(ProgressMonitor monitor)
 			{
 				return ArticleContainerRootTreeNode.this.loadChildData(monitor);
 			}
 			@Override
-			public List<HeaderTreeNode> createChildNodes(List childData)
+			public List<HeaderTreeNode> createChildNodes(List<Object> childData)
 			{
 				ArticleContainerRootTreeNode.this.removeChildNode(this);
 				ArticleContainerRootTreeNode.this.createChildNodes(childData);
@@ -157,7 +158,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 		return purchase;
 	}
 
-	protected abstract Class getArticleContainerIDClass();
+	protected abstract Class<? extends ArticleContainerID> getArticleContainerIDClass();
 
 	private Set<ArticleContainerID> articleContainerIDsLoaded = new HashSet<ArticleContainerID>();
 

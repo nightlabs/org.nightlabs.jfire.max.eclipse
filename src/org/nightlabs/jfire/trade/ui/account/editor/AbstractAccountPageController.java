@@ -25,7 +25,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
- * Abstract base class for creating accountbased Page Controllers
+ * Abstract base class for creating account based Page Controllers
  * 
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  */

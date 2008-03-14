@@ -71,10 +71,9 @@ extends XComposite
 		if (currAccount == null)
 			return;
 
-//		Set accounts = AccountSearchDialog.searchAccounts(SummaryAccount.ANCHOR_TYPE_ID_SUMMARY);
-		Collection accounts = AccountSearchDialog.searchAccounts(AccountType.ACCOUNT_TYPE_ID_SUMMARY);
-		for (Iterator iter = accounts.iterator(); iter.hasNext();) {
-			Account account = (Account) iter.next();
+		Collection<Account> accounts = AccountSearchDialog.searchAccounts(AccountType.ACCOUNT_TYPE_ID_SUMMARY);
+		for (Iterator<Account> iter = accounts.iterator(); iter.hasNext();) {
+			Account account = iter.next();
 			if (account instanceof SummaryAccount) {
 				summaryAccountsTable.addSummaryAccount((SummaryAccount)account);
 				if (dirtyStateManager != null)
@@ -95,7 +94,7 @@ extends XComposite
 	public void removeAccount()
 	{
 		if (!summaryAccountsTable.getSelectedSummaryAccounts().isEmpty()) {
-			for (Iterator iter = summaryAccountsTable.getSelectedSummaryAccounts().iterator(); iter.hasNext();) {
+			for (Iterator<Account> iter = summaryAccountsTable.getSelectedSummaryAccounts().iterator(); iter.hasNext();) {
 				SummaryAccount summaryAccount = (SummaryAccount) iter.next();
 				summaryAccountsTable.removeSummaryAccount(summaryAccount);
 			}

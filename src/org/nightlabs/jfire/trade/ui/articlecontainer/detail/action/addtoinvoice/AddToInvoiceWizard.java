@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.jdo.JDOHelper;
 
@@ -37,6 +38,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.AddToArticleContainerWizard;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
@@ -57,11 +59,11 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 	/**
 	 * @see AddToArticleContainerWizard#AddToArticleContainerWizard(Collection)
 	 */
-	public AddToInvoiceWizard(Collection articles)
+	public AddToInvoiceWizard(Collection<Article> articles)
 	{
 		super(articles);
-		for (Iterator it = articles.iterator(); it.hasNext(); ) {
-			Article article = (Article) it.next();
+		for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
+			Article article = it.next();
 			if (article.getInvoiceID() != null)
 				throw new IllegalArgumentException("At least one Article (" + article.getPrimaryKey() + ") is already in an invoice! An Article can only be in one invoice!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -75,22 +77,22 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 		addPage(selectInvoicePage);
 	}
 
-	private Collection articlesToAdd = null;
+	private Collection<Article> articlesToAdd = null;
 
 	/**
 	 * @return Returns all those {@link Article}s that need to be added to the invoice. This is either the
 	 *		articles passed to the constructor or the ones from the articleContainer which are not yet assigned
 	 *		to an invoice.
 	 */
-	protected Collection getArticlesToAdd()
+	protected Collection<Article> getArticlesToAdd()
 	{
 		if (articlesToAdd != null)
 			return articlesToAdd;
 		else {
-			Collection articles = getArticles();
-			Collection res = new ArrayList(articles.size());
-			for (Iterator it = articles.iterator(); it.hasNext(); ) {
-				Article article = (Article) it.next();
+			Collection<Article> articles = getArticles();
+			Collection<Article> res = new ArrayList<Article>(articles.size());
+			for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
+				Article article = it.next();
 				if (article.getInvoiceID() == null)
 					res.add(article);
 			}
@@ -103,9 +105,9 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 	public boolean performFinish()
 	{
 		try {
-			LinkedList articleIDs = new LinkedList();
-			for (Iterator it = getArticlesToAdd().iterator(); it.hasNext(); )
-				articleIDs.add(JDOHelper.getObjectId(it.next()));
+			List<ArticleID> articleIDs = new LinkedList<ArticleID>();
+			for (Iterator<Article> it = getArticlesToAdd().iterator(); it.hasNext(); )
+				articleIDs.add((ArticleID)JDOHelper.getObjectId(it.next()));
 
 			InvoiceID invoiceID;
 			switch (selectInvoicePage.getAction()) {

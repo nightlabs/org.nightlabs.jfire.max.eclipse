@@ -20,10 +20,11 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 
 public class ModeOfDeliveryFlavourTable
-extends AbstractTableComposite
+extends AbstractTableComposite<ModeOfDeliveryFlavour>
 {
 	private static class ContentProvider implements IStructuredContentProvider {
 
+		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Collection) {
 				return ((Collection)inputElement).toArray();

@@ -197,8 +197,8 @@ implements ISelectionProvider
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(
 							HeaderTreeComposite.this, getSelection());
-					for (Iterator it = selectionChangedListeners.iterator(); it.hasNext(); ) {
-						ISelectionChangedListener listener = (ISelectionChangedListener) it.next();
+					for (Iterator<ISelectionChangedListener> it = selectionChangedListeners.iterator(); it.hasNext(); ) {
+						ISelectionChangedListener listener = it.next();
 						listener.selectionChanged(newEvent);
 					}
 				} // if (!selectionChangedListeners.isEmpty()) {
@@ -442,7 +442,8 @@ implements ISelectionProvider
 		return headerTreeViewer;
 	}
 
-	private LinkedList selectionChangedListeners = new LinkedList();
+	private java.util.List<ISelectionChangedListener> selectionChangedListeners = 
+		new LinkedList<ISelectionChangedListener>();
 
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)

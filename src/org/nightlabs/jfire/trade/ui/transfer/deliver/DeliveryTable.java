@@ -49,7 +49,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
-				Arrays.sort(elements, new Comparator() {
+				Arrays.sort(elements, new Comparator<Object>() {
 					public int compare(Object o1, Object o2) {
 						return ((Delivery)o1).getEndDT().compareTo(((Delivery)o2).getEndDT());
 					}

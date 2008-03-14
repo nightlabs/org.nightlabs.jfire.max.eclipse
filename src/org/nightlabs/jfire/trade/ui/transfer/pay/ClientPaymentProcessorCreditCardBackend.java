@@ -62,7 +62,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  *
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class ClientPaymentProcessorCreditCardBackend extends AbstractClientPaymentProcessor
+public class ClientPaymentProcessorCreditCardBackend 
+extends AbstractClientPaymentProcessor
 {
 	private PaymentDataCreditCard paymentData;
 
@@ -70,14 +71,14 @@ public class ClientPaymentProcessorCreditCardBackend extends AbstractClientPayme
 	{
 	}
 
-	private static Set excludedServerPaymentProcessorIDs = null;
+	private static Set<ServerPaymentProcessorID> excludedServerPaymentProcessorIDs = null;
 
 	@Override
 	@Implement
-	public Set getExcludedServerPaymentProcessorIDs()
+	public Set<ServerPaymentProcessorID> getExcludedServerPaymentProcessorIDs()
 	{
 		if (excludedServerPaymentProcessorIDs == null) {
-			HashSet set = new HashSet();
+			Set<ServerPaymentProcessorID> set = new HashSet<ServerPaymentProcessorID>();
 			set.add(
 					ServerPaymentProcessorID.create(
 							Organisation.DEV_ORGANISATION_ID,

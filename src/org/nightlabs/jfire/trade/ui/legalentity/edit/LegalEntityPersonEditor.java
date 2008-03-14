@@ -125,8 +125,8 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 			cfMod.getStructFields().add(PersonStruct.POSTADDRESS_CITY.toString());
 			cfMod.getStructFields().add(PersonStruct.INTERNET_EMAIL.toString());
 		}
-		for (Iterator iter = cfMod.getStructFields().iterator(); iter.hasNext();) {
-			String structFieldID = (String) iter.next();
+		for (Iterator<String> iter = cfMod.getStructFields().iterator(); iter.hasNext();) {
+			String structFieldID = iter.next();
 			try {
 				EditorStructFieldRegistry.sharedInstance().addEditorStructFieldID(EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY, new StructFieldID(structFieldID));
 			} catch (Exception e) {

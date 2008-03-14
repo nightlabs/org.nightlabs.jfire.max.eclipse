@@ -99,7 +99,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceProvider;
+import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor;
@@ -938,9 +938,9 @@ extends XComposite
 			} else if (input instanceof GeneralEditorInputInvoice) {
 				InvoiceID invoiceID = ((GeneralEditorInputInvoice) input).getInvoiceID();
 				if (reloadArticleContainerWithoutArticles)
-					articleContainer = invoice = InvoiceProvider.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-				articleContainer = invoice = InvoiceProvider.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			} else if (input instanceof GeneralEditorInputDeliveryNote) {
 				DeliveryNoteID deliveryNoteID = ((GeneralEditorInputDeliveryNote) input).getDeliveryNoteID();
 				if (reloadArticleContainerWithoutArticles)

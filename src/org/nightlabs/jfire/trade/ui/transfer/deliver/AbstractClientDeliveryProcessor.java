@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
 import java.util.Set;
 
 import org.nightlabs.jfire.store.deliver.Delivery;
+import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IDeliveryEntryPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -140,7 +141,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getIncludedServerDeliveryProcessorIDs()
 	 */
-	public Set getIncludedServerDeliveryProcessorIDs()
+	public Set<ServerDeliveryProcessorID> getIncludedServerDeliveryProcessorIDs()
 	{
 		return null;
 	}
@@ -149,7 +150,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getExcludedServerDeliveryProcessorIDs()
 	 */
-	public Set getExcludedServerDeliveryProcessorIDs()
+	public Set<ServerDeliveryProcessorID> getExcludedServerDeliveryProcessorIDs()
 	{
 		return null;
 	}

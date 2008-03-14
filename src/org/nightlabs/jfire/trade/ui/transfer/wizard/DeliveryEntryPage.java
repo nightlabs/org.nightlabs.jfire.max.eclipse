@@ -83,6 +83,7 @@ import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFla
 import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.modeofdelivery.ModeOfDeliveryFlavourTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -108,7 +109,7 @@ implements IDeliveryEntryPage
 {
 	private List<? extends ProductType> productTypes;
 	private org.eclipse.swt.widgets.List productTypeGUIList;
-	private List articles;
+//	private List articles;
 	private List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours;
 	private ModeOfDeliveryFlavourTable modeOfDeliveryFlavourTable;
 	private Label clientDeliveryProcessorFactoryLabel;
@@ -135,7 +136,7 @@ implements IDeliveryEntryPage
 
 	public DeliveryEntryPage(Delivery delivery,
 			List<? extends ProductType> productTypes,
-			List articles)
+			List<Article> articles)
 	{
 		super(DeliveryEntryPage.class.getName() + '/' + delivery.getDeliveryID(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.title"), //$NON-NLS-1$
 				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), DeliveryEntryPage.class, null, ImageDimension._75x70));
@@ -157,8 +158,8 @@ implements IDeliveryEntryPage
 		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.productTypesLabel.text")); //$NON-NLS-1$
 		productTypeGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		productTypeGUIList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		for (Iterator it = productTypes.iterator(); it.hasNext(); ) {
-			ProductType productType = (ProductType) it.next();
+		for (Iterator<? extends ProductType> it = productTypes.iterator(); it.hasNext(); ) {
+			ProductType productType = it.next();
 			productTypeGUIList.add(productType.getName().getText(Locale.getDefault().getLanguage()));
 		}
 
@@ -343,8 +344,8 @@ implements IDeliveryEntryPage
 					selectedClientDeliveryProcessorFactory.getID());
 			getDeliveryWizardHop().setDeliveryData(deliveryData);
 
-			Set includedSPPs = clientDeliveryProcessor.getIncludedServerDeliveryProcessorIDs();
-			Set excludedSPPs = null;
+			Set<ServerDeliveryProcessorID> includedSPPs = clientDeliveryProcessor.getIncludedServerDeliveryProcessorIDs();
+			Set<ServerDeliveryProcessorID> excludedSPPs = null;
 			if (includedSPPs == null)
 				excludedSPPs = clientDeliveryProcessor.getExcludedServerDeliveryProcessorIDs();
 
@@ -358,7 +359,7 @@ implements IDeliveryEntryPage
 
 			// load ServerDeliveryProcessor s
 			ModeOfDeliveryFlavourID modeOfDeliveryFlavourID = (ModeOfDeliveryFlavourID) JDOHelper.getObjectId(selectedModeOfDeliveryFlavour);
-			Collection c;
+			Collection<ServerDeliveryProcessor> c;
 			try {
 				c = getStoreManager().getServerDeliveryProcessorsForOneModeOfDeliveryFlavour(
 						modeOfDeliveryFlavourID,
@@ -373,8 +374,8 @@ implements IDeliveryEntryPage
 			}
 
 			String clientDeliveryProcessorFactoryID = selectedClientDeliveryProcessorFactory.getID();
-			for (Iterator it = c.iterator(); it.hasNext(); ) {
-				ServerDeliveryProcessor spp = (ServerDeliveryProcessor) it.next();
+			for (Iterator<ServerDeliveryProcessor> it = c.iterator(); it.hasNext(); ) {
+				ServerDeliveryProcessor spp = it.next();
 				ServerDeliveryProcessorID sppID = (ServerDeliveryProcessorID) JDOHelper.getObjectId(spp);
 
 				if (includedSPPs != null && !includedSPPs.contains(sppID))
@@ -383,8 +384,8 @@ implements IDeliveryEntryPage
 				if (excludedSPPs != null && excludedSPPs.contains(sppID))
 					continue;
 
-				Set includedCPPFs = spp.getIncludedClientDeliveryProcessorFactoryIDs();
-				Set excludedCPPFs = null;
+				Set<String> includedCPPFs = spp.getIncludedClientDeliveryProcessorFactoryIDs();
+				Set<String> excludedCPPFs = null;
 				if (includedCPPFs == null)
 					excludedCPPFs = spp.getExcludedClientDeliveryProcessorFactoryIDs();
 
@@ -550,11 +551,9 @@ implements IDeliveryEntryPage
 					}
 				}
 				
-				Collections.sort(modeOfDeliveryFlavours, new Comparator() {
-					public int compare(Object obj0, Object obj1)
+				Collections.sort(modeOfDeliveryFlavours, new Comparator<ModeOfDeliveryFlavour>() {
+					public int compare(ModeOfDeliveryFlavour mopf0, ModeOfDeliveryFlavour mopf1)
 					{
-						ModeOfDeliveryFlavour mopf0 = (ModeOfDeliveryFlavour)obj0;
-						ModeOfDeliveryFlavour mopf1 = (ModeOfDeliveryFlavour)obj1;
 						String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
 						String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
 						return name0.compareTo(name1);

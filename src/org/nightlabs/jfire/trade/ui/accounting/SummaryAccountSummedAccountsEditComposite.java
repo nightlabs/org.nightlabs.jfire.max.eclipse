@@ -67,10 +67,10 @@ extends XComposite
 		if (currSummaryAccount == null)
 			return;
 
-		Collection accounts = AccountSearchDialog.searchAccounts(null); // Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN); // TODO Account: Type?
+		Collection<Account> accounts = AccountSearchDialog.searchAccounts(null); // Account.ANCHOR_TYPE_ID_LOCAL_REVENUE_IN); // TODO Account: Type?
 		if (accounts != null && !accounts.isEmpty()) {
-			for (Iterator iter = accounts.iterator(); iter.hasNext();) {
-				Account account = (Account) iter.next();
+			for (Iterator<Account> iter = accounts.iterator(); iter.hasNext();) {
+				Account account = iter.next();
 				summedAccountsTable.addAccount(account);
 			}
 			summedAccountsTable.refresh();
@@ -90,8 +90,8 @@ extends XComposite
 	public void removeAccount()
 	{
 		if (!summedAccountsTable.getSelectedSummedAccounts().isEmpty()) {
-			for (Iterator iter = summedAccountsTable.getSelectedSummedAccounts().iterator(); iter.hasNext();) {
-				Account account = (Account) iter.next();
+			for (Iterator<Account> iter = summedAccountsTable.getSelectedSummedAccounts().iterator(); iter.hasNext();) {
+				Account account = iter.next();
 				summedAccountsTable.removeAccount(account);
 			}
 			summedAccountsTable.refresh();

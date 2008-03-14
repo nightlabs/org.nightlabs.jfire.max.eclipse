@@ -65,14 +65,14 @@ public class CreditCardPage extends WizardHopPage
 	/**
 	 * Instances of {@link Integer} representing the month of year from 1 to 12
 	 */
-	private List expiryMonthList = new ArrayList();
+	private List<Integer> expiryMonthList = new ArrayList<Integer>();
 	private Combo expiryMonth;
 
 	/**
 	 * Instances of {@link Integer} representing the year in full format (e.g. "2005"),
 	 * that means no abbreviation (NOT "97", but "1997").
 	 */
-	private List expiryYearList = new ArrayList();
+	private List<Integer> expiryYearList = new ArrayList<Integer>();
 	private Combo expiryYear;
 
 	private ClientPaymentProcessorCreditCardBackend clientPaymentProcessor;

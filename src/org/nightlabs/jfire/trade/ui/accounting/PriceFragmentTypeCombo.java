@@ -50,7 +50,7 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 public class PriceFragmentTypeCombo extends XComposite {
 	
 	private static final String[] FETCH_GROUPS = new String[]{FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME};
-	private List priceFragmentTypes = new ArrayList();
+	private List<PriceFragmentType> priceFragmentTypes = new ArrayList<PriceFragmentType>();
 	private Combo combo;
 	
 	public PriceFragmentTypeCombo(Composite parent, int style) {
@@ -59,7 +59,7 @@ public class PriceFragmentTypeCombo extends XComposite {
 		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo = new Combo(this, SWT.NONE);
 		
-		Collection pftCollection;
+		Collection<PriceFragmentType> pftCollection;
 		try {
 			pftCollection = AccountingUtil.getAccountingManager().getPriceFragmentTypes(null, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Exception e) {
@@ -67,8 +67,8 @@ public class PriceFragmentTypeCombo extends XComposite {
 			return;
 		}
 		priceFragmentTypes.addAll(pftCollection);
-		for (Iterator iter = priceFragmentTypes.iterator(); iter.hasNext();) {
-			PriceFragmentType pft = (PriceFragmentType) iter.next();
+		for (Iterator<PriceFragmentType> iter = priceFragmentTypes.iterator(); iter.hasNext();) {
+			PriceFragmentType pft = iter.next();
 			combo.add(pft.getName().getText(Locale.getDefault().getLanguage()));
 		}
 	}
@@ -81,8 +81,8 @@ public class PriceFragmentTypeCombo extends XComposite {
 	
 	public void setSelectedPriceFragmentType(String priceFragmentTypePK) {
 		int i = 0;
-		for (Iterator iter = priceFragmentTypes.iterator(); iter.hasNext();) {
-			PriceFragmentType cur = (PriceFragmentType) iter.next();
+		for (Iterator<PriceFragmentType> iter = priceFragmentTypes.iterator(); iter.hasNext();) {
+			PriceFragmentType cur = iter.next();
 			if (cur.getPrimaryKey().equals(priceFragmentTypePK) )
 				getCombo().select(i);
 			i++;

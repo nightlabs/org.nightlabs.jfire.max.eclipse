@@ -10,6 +10,7 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 /**
@@ -18,7 +19,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
  */
 public class ProductTypeDetailViewComposite extends XComposite {
 
-	private Map<Class, IProductTypeDetailView> detailViews = new HashMap<Class, IProductTypeDetailView>();
+	private Map<Class<? extends ProductType>, IProductTypeDetailView> detailViews = new HashMap<Class<? extends ProductType>, IProductTypeDetailView>();
 	private Map<IProductTypeDetailView, Composite> detailComposites = new HashMap<IProductTypeDetailView, Composite>();
 	
 	/**
@@ -40,7 +41,7 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	}
 	
 	public void showProductTypeDetail(ProductTypeID productTypeID) {
-		Class pTypeClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
+		Class<? extends ProductType> pTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 		IProductTypeDetailView detailView = detailViews.get(pTypeClass);
 		if (detailView == null) {
 			detailView = ProductTypeDetailViewRegistry.sharedInstance().getProductTypeDetailView(pTypeClass);

@@ -32,13 +32,13 @@ import java.util.EventObject;
 public class CreateArticleEditEvent extends EventObject
 {
 	private static final long serialVersionUID = 1L;
-	private Collection createdArticleEdits;
+	private Collection<? extends ArticleEdit> createdArticleEdits;
 
 	/**
 	 * @param segmentEdit The {@link SegmentEdit} which fires this event.
 	 * @param createdArticleEdits The newly created instances of {@link ArticleEdit}.
 	 */
-	public CreateArticleEditEvent(SegmentEdit segmentEdit, Collection createdArticleEdits)
+	public CreateArticleEditEvent(SegmentEdit segmentEdit, Collection<? extends ArticleEdit> createdArticleEdits)
 	{
 		super(segmentEdit);
 
@@ -51,7 +51,7 @@ public class CreateArticleEditEvent extends EventObject
 	/**
 	 * @return Returns instances of {@link ArticleEdit}.
 	 */
-	public Collection getCreatedArticleEdits()
+	public Collection<? extends ArticleEdit> getCreatedArticleEdits()
 	{
 		return createdArticleEdits;
 	}

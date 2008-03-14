@@ -44,10 +44,10 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-//public abstract class AbstractProductTypeTree<P extends ProductType>
+//public abstract class AbstractProductTypeGroupTree<P extends ProductType>
 //extends AbstractTreeComposite<P>
 public abstract class AbstractProductTypeGroupTree
-extends AbstractTreeComposite
+extends AbstractTreeComposite<AbstractProductTypeGroupTree.ProductTypeGroupNode>
 implements ISelectionHandler
 {
 	public static String[] PRODUCT_TYPE_GROUP_FETCH_GROUPS = new String[] {
@@ -67,7 +67,7 @@ implements ISelectionHandler
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 *
 	 */
-	public class ContentProvider extends TreeContentProvider 
+	public static class ContentProvider extends TreeContentProvider 
 	{		
 		private ProductTypeGroupSearchResult searchResult;
 		
@@ -93,6 +93,7 @@ implements ISelectionHandler
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
+//			if (parentElement instanceof AbstractProductTypeGroupTree<?>.ProductTypeGroupNode)
 			if (parentElement instanceof ProductTypeGroupNode)
 				return ((ProductTypeGroupNode)parentElement).getChildren();
 			return super.getChildren(parentElement);
@@ -139,7 +140,7 @@ implements ISelectionHandler
 	 * {@link ProductType}s 
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 */
-	public class LabelProvider extends TableLabelProvider 
+	public static class LabelProvider extends TableLabelProvider 
 	{	
 		public String getColumnText(Object element, int columnIndex) {
 			if (!(element instanceof ProductTypeGroupNode))
@@ -177,7 +178,8 @@ implements ISelectionHandler
 	 * Node object for {@link AbstractProductTypeGroupTree}
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 */
-	public class ProductTypeGroupNode 
+//	public class ProductTypeGroupNode 
+	public static class ProductTypeGroupNode
 	{
 		public static final int NODE_TYPE_GROUP = 1;
 		public static final int NODE_TYPE_SINGLE = 2;

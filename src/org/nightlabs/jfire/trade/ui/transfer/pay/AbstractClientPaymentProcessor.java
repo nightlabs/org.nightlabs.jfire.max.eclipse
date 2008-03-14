@@ -31,6 +31,7 @@ import java.util.Set;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.pay.Payment;
+import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IPaymentEntryPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -120,6 +121,7 @@ implements ClientPaymentProcessor
 	{
 		this.paymentEntryPage = paymentEntryPage;
 	}
+	
 	@Implement
 	public IPaymentEntryPage getPaymentEntryPage()
 	{
@@ -148,12 +150,13 @@ implements ClientPaymentProcessor
 //	}
 
 	@Implement
-	public Set getIncludedServerPaymentProcessorIDs()
+	public Set<ServerPaymentProcessorID> getIncludedServerPaymentProcessorIDs()
 	{
 		return null;
 	}
+	
 	@Implement
-	public Set getExcludedServerPaymentProcessorIDs()
+	public Set<ServerPaymentProcessorID> getExcludedServerPaymentProcessorIDs()
 	{
 		return null;
 	}

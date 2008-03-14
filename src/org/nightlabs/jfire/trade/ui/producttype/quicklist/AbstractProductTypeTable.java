@@ -51,7 +51,7 @@ implements ISelectionHandler
 		{
 			if (inputElement instanceof Collection) 
 			{
-				Collection<P> collection = (Collection) inputElement;
+				Collection<P> collection = (Collection<P>) inputElement;
 				for (Iterator<P> it = collection.iterator(); it.hasNext(); ) {
 					ProductType productType = it.next();
 					productTypeID2ProductType.put((ProductTypeID)JDOHelper.getObjectId(productType), productType);
