@@ -65,8 +65,8 @@ extends AbstractProductTypeQuickListFilter
 	}
 	
 	@Override
-	public Set<Class> getClasses() {
-		Set<Class> classes = new HashSet<Class>();
+	public Set<Class<? extends Object>> getClasses() {
+		Set<Class<? extends Object>> classes = new HashSet<Class<? extends Object>>();
 		classes.add(VoucherType.class);
 		return classes;
 	}
