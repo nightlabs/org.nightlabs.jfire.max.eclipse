@@ -687,53 +687,53 @@ gibt's nimmer - oder?! Marco.
 -->
     <extension point="org.nightlabs.jfire.trade.ui.tradeOverview">
         <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.ui.overview" index="0" name="Trade Overview"/>
+            categoryID="org.nightlabs.jfire.trade.ui.overview" index="0" name="%org.nightlabs.jfire.trade.ui.overview.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryFactory"
             icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
-            index="0" name="DeliveryNote"/>
+            index="0" name="%org.nightlabs.jfire.trade.ui.overview.deliveryNote.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.invoice"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory"
             icon="icons/overview/invoice/InvoiceListView.16x16.png"
-            index="1" name="Invoice"/>
+            index="1" name="%org.nightlabs.jfire.trade.ui.overview.invoice.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.offer"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory"
             icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
-            index="2" name="Offer"/>
+            index="2" name="%org.nightlabs.jfire.trade.ui.overview.offer.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.order"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
-            index="3" name="Order"/>
+            index="3" name="%org.nightlabs.jfire.trade.ui.overview.order.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-            index="1" name="Accounting"/>
+            index="1" name="%org.nightlabs.jfire.trade.ui.overview.accounting.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
             categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
             class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
             icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
-            index="0" name="Accounts"/>
+            index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.receptionnote"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory"
             icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
-            index="4" name="Reception Note"/>
+            index="4" name="%org.nightlabs.jfire.trade.ui.overview.receptionnote.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-            class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory" name="Repositories"/>
+            class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-            index="2" name="Store"/>
+            index="2" name="%org.nightlabs.jfire.trade.ui.overview.store.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editorActionBarContribution">
         <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
