@@ -64,6 +64,7 @@ import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
+import org.nightlabs.jfire.accounting.dao.LocalAccountantDelegateDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -71,6 +72,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.accounting.AccountCellEditor;
 import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -87,7 +89,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		private MoneyFlowMapping mapping = null;
 		private Object nodeObject = null;
 		
-		private List children = new LinkedList();
+		private List<Node> children = new LinkedList<Node>();
 		private Node parent;
 		
 		private Node(Node parent, int mode, Object nodeObject) {
@@ -145,7 +147,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			return !children.isEmpty();
 		}
 		
-		public List getChildren() {
+		public List<Node> getChildren() {
 			return children;
 		}
 		
@@ -162,12 +164,12 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		
 		private LocalAccountantDelegate currDelegate;
 		private ProductTypeID currProductTypeID;
-		private Map nodesByMappings = new HashMap();
+		private Map<MoneyFlowMapping, Node> nodesByMappings = new HashMap<MoneyFlowMapping, Node>();
 		
 		/**
 		 * value Node delegateNode
 		 */
-		private List delegateNodes;
+		private List<Node> delegateNodes;
 		
 		public ContentProvider() {
 		}
@@ -181,11 +183,11 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			while (delegateRun != null) {
 				Node delegateNode = Node.delegateNode(null, delegateRun);
 				if (delegateNodes == null)
-					delegateNodes = new LinkedList();
+					delegateNodes = new LinkedList<Node>();
 				delegateNodes.add(delegateNode);
 				if (delegateRun instanceof PFMappingAccountantDelegate) {
-					for (Iterator iter = ((PFMappingAccountantDelegate) delegateRun).getMoneyFlowMappings().iterator(); iter.hasNext();) {
-						MoneyFlowMapping mapping = (MoneyFlowMapping) iter.next();
+					for (Iterator<MoneyFlowMapping> iter = ((PFMappingAccountantDelegate) delegateRun).getMoneyFlowMappings().iterator(); iter.hasNext();) {
+						MoneyFlowMapping mapping = iter.next();
 						Node mappingNode = Node.mappingNode(delegateNode, mapping);
 						nodesByMappings.put(mapping, mappingNode);
 					}
@@ -193,8 +195,10 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				// TODO IMPROVE: when fetch-depth works change this
 				delegateRun = delegateRun.getExtendedAccountantDelegate();
 				if (delegateRun != null)
-					delegateRun = LocalAccountantDelegateProvider.sharedInstance()
-					.getDelegate((LocalAccountantDelegateID)JDOHelper.getObjectId(delegateRun), DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					delegateRun = LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+							(LocalAccountantDelegateID)JDOHelper.getObjectId(delegateRun), 
+							DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor());
 			}
 		}
 		
@@ -460,7 +464,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	
 	private PFMappingAccountantDelegate delegate;
 	private Class currDelegateClass;
-	private List currDimensionIDs;
+	private List<String> currDimensionIDs;
 	private CellModifier cellModifier;
 	
 	/**
@@ -501,7 +505,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	}
 	
 	public void setDelegateID(LocalAccountantDelegateID delegateID) {
-		setDelegate((PFMappingAccountantDelegate) LocalAccountantDelegateProvider.sharedInstance().getDelegate(delegateID, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
+		setDelegate((PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().
+				getDelegate(delegateID, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 	}
 
 	/**
@@ -521,9 +526,9 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 					productTypeID, DEFAULT_PTYPE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 			if (productType != null && productType.getProductTypeLocal().getLocalAccountantDelegate() != null)
-				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateProvider.sharedInstance().getDelegate(
+				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
-						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 		}
 		setDelegate(dDelegate);
@@ -541,9 +546,9 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		}
 		else {
 			if (productType.getProductTypeLocal().getLocalAccountantDelegate() != null) {
-				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateProvider.sharedInstance().getDelegate(
+				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
-						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
 			}
 		}
@@ -564,8 +569,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			}
 			currDimensionIDs = delegate.getMoneyFlowDimensionIDs();
 			addLeadingColumns();
-			for (Iterator iter = currDimensionIDs.iterator(); iter.hasNext();) {
-				String moneyFlowDimensionID = (String) iter.next();
+			for (Iterator<String> iter = currDimensionIDs.iterator(); iter.hasNext();) {
+				String moneyFlowDimensionID = iter.next();
 				MappingDimension dimension = MappingDimensionRegistry.sharedInstance().getDimension(moneyFlowDimensionID);
 				if (dimension == null)
 					throw new IllegalStateException("Could not find MappingDimension with moneyFlowDimensionID "+moneyFlowDimensionID+". Maybe it was not registered as extension to "+MappingDimensionRegistry.EXTENSION_POINT_ID); //$NON-NLS-1$ //$NON-NLS-2$
@@ -639,8 +644,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		result[result.length-1] = COLUMN_REVERSE_EXPENSE_ACCOUNT;
 		int i = 2;
 		if (currDimensionIDs != null) {
-			for (Iterator iter = currDimensionIDs.iterator(); iter.hasNext();) {
-				String moneyFlowDimensionID = (String) iter.next();
+			for (Iterator<String> iter = currDimensionIDs.iterator(); iter.hasNext();) {
+				String moneyFlowDimensionID = iter.next();
 				MappingDimension dimension = MappingDimensionRegistry.sharedInstance().getDimension(moneyFlowDimensionID);
 				result[i++] = dimension.getCellEditorPropertyName();
 			}
@@ -659,8 +664,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		result[result.length-1] = new AccountCellEditor(AccountType.ACCOUNT_TYPE_ID_LOCAL_EXPENSE, getTree());
 		int i = 2;
 		if (currDimensionIDs != null) {
-			for (Iterator iter = currDimensionIDs.iterator(); iter.hasNext();) {
-				String moneyFlowDimensionID = (String) iter.next();
+			for (Iterator<String> iter = currDimensionIDs.iterator(); iter.hasNext();) {
+				String moneyFlowDimensionID = iter.next();
 				MappingDimension dimension = MappingDimensionRegistry.sharedInstance().getDimension(moneyFlowDimensionID);
 				result[i++] = dimension.getCellEditor();
 			}
@@ -784,8 +789,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 
 		public void dragSetData(DragSourceEvent event) {
 			IStructuredSelection selection = (IStructuredSelection) getTreeViewer().getSelection();
-			List mappings = new ArrayList(selection.size());
-			for (Iterator it = selection.iterator(); it.hasNext(); ) {
+			List<MoneyFlowMapping> mappings = new ArrayList<MoneyFlowMapping>(selection.size());
+			for (Iterator<Object> it = selection.iterator(); it.hasNext(); ) {
 				Object o = it.next();
 				if (o instanceof Node) {
 					if (((Node)o).getMode() == NODE_MODE_MAPPING)

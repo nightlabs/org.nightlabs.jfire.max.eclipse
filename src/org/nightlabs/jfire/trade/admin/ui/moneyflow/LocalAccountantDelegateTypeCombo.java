@@ -46,7 +46,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 public class LocalAccountantDelegateTypeCombo extends XComposite {
 
 	private Combo combo;
-	private List types = new ArrayList();
+	private List<LocalAccountantDelegateType> types = new ArrayList<LocalAccountantDelegateType>();
 	
 	/**
 	 * @param parent
@@ -56,9 +56,9 @@ public class LocalAccountantDelegateTypeCombo extends XComposite {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		combo = new Combo(this, SWT.READ_ONLY);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Collection _types = LocalAccountantDelegateRegistry.sharedInstance().getTypes();
-		for (Iterator iter = _types.iterator(); iter.hasNext();) {
-			LocalAccountantDelegateType type = (LocalAccountantDelegateType) iter.next();
+		Collection<LocalAccountantDelegateType> _types = LocalAccountantDelegateRegistry.sharedInstance().getTypes();
+		for (Iterator<LocalAccountantDelegateType> iter = _types.iterator(); iter.hasNext();) {
+			LocalAccountantDelegateType type = iter.next();
 			combo.add(type.getName());
 			types.add(type);
 		}

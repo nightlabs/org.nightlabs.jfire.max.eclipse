@@ -49,13 +49,13 @@ public class MappingDimensionRegistry extends AbstractEPProcessor {
 	 * key: String moneyFlowDimensionID
 	 * value: MappingDimension dimension
 	 */
-	private Map dimensionsByID = new HashMap();
+	private Map<String, MappingDimension> dimensionsByID = new HashMap<String, MappingDimension>();
 	
 	/**
 	 * key: String cellEditorPropertyName
 	 * value: MappingDimension dimension
 	 */
-	private Map dimensionsByCellProperty = new HashMap();
+	private Map<String, MappingDimension> dimensionsByCellProperty = new HashMap<String, MappingDimension>();
 	
 	/**
 	 * 
@@ -67,7 +67,7 @@ public class MappingDimensionRegistry extends AbstractEPProcessor {
 	/**
 	 * Returns all registered Dimensions.
 	 */
-	public Collection getDimensions() {
+	public Collection<MappingDimension> getDimensions() {
 		checkProcessing();
 		return dimensionsByID.values();
 	}

@@ -41,6 +41,8 @@ import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
+import org.nightlabs.jfire.accounting.dao.LocalAccountantDelegateDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -65,8 +67,11 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 			if (delegateClass == null)
 				return EMPTY_DATA;
 			return
-				LocalAccountantDelegateProvider.sharedInstance()
-				.getTopLevelDelegates(delegateClass, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).toArray();
+				LocalAccountantDelegateDAO.sharedInstance().getTopLevelDelegates(
+						delegateClass, 
+						DEFAULT_DELEGATE_FETCH_GROUPS, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()).toArray();
 		}
 
 		/**
@@ -76,10 +81,9 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof LocalAccountantDelegate)
 				return
-					LocalAccountantDelegateProvider.sharedInstance()
-					.getChildDelegates(
+				LocalAccountantDelegateDAO.sharedInstance().getChildDelegates(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(parentElement),
-						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					).toArray();
 			return EMPTY_DATA;
 		}

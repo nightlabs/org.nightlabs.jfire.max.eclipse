@@ -45,7 +45,7 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class TariffMappingTable
-extends AbstractTableComposite
+extends AbstractTableComposite<TariffMapping>
 {
 	private static class MyLabelProvider extends TableLabelProvider
 	{
