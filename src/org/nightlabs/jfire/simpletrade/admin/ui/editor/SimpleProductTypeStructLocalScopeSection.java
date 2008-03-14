@@ -23,10 +23,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart {
 
-	private SimpleProductType productType;
-	private boolean doInheritStructLocalScope;
+//	private SimpleProductType productType;
+//	private boolean doInheritStructLocalScope;
 	private String structLocalScope;
-	
 	private Text structLocalScopeText;
 	
 	/**
