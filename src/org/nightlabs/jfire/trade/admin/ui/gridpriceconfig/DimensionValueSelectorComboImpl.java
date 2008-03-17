@@ -65,7 +65,7 @@ public class DimensionValueSelectorComboImpl
 //			new MappingDimension.PriceFragmentTypeDimension()
 //		};
 
-	private Dimension[] dimensions;
+	private Dimension<?>[] dimensions;
 	private Label[] dimensionLabels;
 	private Combo[] dimensionCombos;
 
@@ -74,9 +74,9 @@ public class DimensionValueSelectorComboImpl
 	/**
 	 * @return Returns instances of {@link MappingDimension}.
 	 */
-	protected List<Dimension> createDimensions()
+	protected List<Dimension<?>> createDimensions()
 	{
-		ArrayList<Dimension> res = new ArrayList<Dimension>();
+		ArrayList<Dimension<?>> res = new ArrayList<Dimension<?>>();
 		res.add(new Dimension.CustomerGroupDimension());
 		res.add(new Dimension.TariffDimension());
 		res.add(new Dimension.CurrencyDimension());
@@ -92,7 +92,7 @@ public class DimensionValueSelectorComboImpl
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
-		List<Dimension> dimensionList = createDimensions();
+		List<Dimension<?>> dimensionList = createDimensions();
 		dimensions = new Dimension[dimensionList.size()];
 		dimensions = dimensionList.toArray(dimensions);
 //		int i = 0;
@@ -105,7 +105,7 @@ public class DimensionValueSelectorComboImpl
 		this.getGridLayout().numColumns = 2;
 		this.getGridData().grabExcessVerticalSpace = false;
 		for (int dimensionIdx = 0; dimensionIdx < dimensions.length; ++dimensionIdx) {
-			final Dimension dimension = dimensions[dimensionIdx];
+			final Dimension<?> dimension = dimensions[dimensionIdx];
 			createDimensionUIElements(dimensionLabels, dimensionCombos, dimensionIdx, dimension);
 			final Combo dimensionCombo = dimensionCombos[dimensionIdx];
 
@@ -126,7 +126,7 @@ public class DimensionValueSelectorComboImpl
 		}
 	}
 
-	protected void createDimensionUIElements(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, Dimension dimension)
+	protected void createDimensionUIElements(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, Dimension<?> dimension)
 	{
 		dimensionLabels[dimensionIdx] = new Label(this, SWT.NONE);
 		Label dimensionLabel = dimensionLabels[dimensionIdx];
@@ -148,7 +148,7 @@ public class DimensionValueSelectorComboImpl
 		createDimensionUIElements_createAddButton(dimensionLabels, dimensionCombos, dimensionIdx, dimension);
 	}
 
-	protected void createDimensionUIElements_createAddButton(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, final Dimension dimension)
+	protected void createDimensionUIElements_createAddButton(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, final Dimension<?> dimension)
 	{
 		Button addButton = new Button(this, SWT.NONE);
 		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValueSelectorComboImpl.addButton.text")); //$NON-NLS-1$
@@ -163,11 +163,11 @@ public class DimensionValueSelectorComboImpl
 	}
 
 
-	protected void fillDimensionCombo(Dimension dimension, Combo dimensionCombo)
+	protected void fillDimensionCombo(Dimension<?> dimension, Combo dimensionCombo)
 	{
 		dimensionCombo.removeAll();
-		for (Iterator it = dimension.getValues().iterator(); it.hasNext(); ) {
-			DimensionValue dimVal = (DimensionValue) it.next();
+		for (Iterator<? extends DimensionValue> it = dimension.getValues().iterator(); it.hasNext(); ) {
+			DimensionValue dimVal = it.next();
 			dimensionCombo.add(dimVal.getName());
 		}
 		dimensionCombo.select(0);
@@ -183,7 +183,7 @@ public class DimensionValueSelectorComboImpl
 //			throw new IllegalArgumentException("packagePriceConfig \"" + gridPriceConfig.getPrimaryKey() + "\" does not implement interface \"" + IPackagePriceConfig.class.getName() + "\"!");
 
 		for (int dimensionIdx = 0; dimensionIdx < dimensions.length; ++dimensionIdx) {
-			Dimension dim = dimensions[dimensionIdx];
+			Dimension<?> dim = dimensions[dimensionIdx];
 			dim.setGridPriceConfig(gridPriceConfig);
 			fillDimensionCombo(dim, dimensionCombos[dimensionIdx]);
 		}
@@ -239,7 +239,7 @@ public class DimensionValueSelectorComboImpl
 			return null;
 		}
 
-		return (DimensionValue) dimensions[dimensionIdx].getValues().get(combo.getSelectionIndex());
+		return dimensions[dimensionIdx].getValues().get(combo.getSelectionIndex());
 	}
 
 	@Implement
@@ -256,7 +256,7 @@ public class DimensionValueSelectorComboImpl
 	}
 
 	@Implement
-	public Dimension[] getDimensions()
+	public Dimension<?>[] getDimensions()
 	{
 		return dimensions;
 	}
@@ -329,7 +329,7 @@ public class DimensionValueSelectorComboImpl
 	public int getDimensionIdxPriceFragmentType()
 	{
 		if (dimensionIdxPriceFragmentType < 0) {
-			Dimension[] dimensions = getDimensions();
+			Dimension<?>[] dimensions = getDimensions();
 			for (int i = 0; i < dimensions.length; ++i) {
 				if (dimensions[i] instanceof Dimension.PriceFragmentTypeDimension) {
 					dimensionIdxPriceFragmentType = i;

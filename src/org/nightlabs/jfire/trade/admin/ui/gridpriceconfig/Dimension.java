@@ -34,7 +34,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
@@ -267,7 +266,7 @@ public abstract class Dimension<DV extends DimensionValue>
 	{
 		this.valueCache = valueCache;
 	}
-	
+
 	public void addValueCacheItem(DV object)
 	{
 		valueCache.add(object);
