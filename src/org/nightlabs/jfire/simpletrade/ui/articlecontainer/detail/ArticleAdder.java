@@ -34,6 +34,7 @@ import javax.jdo.JDOHelper;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
@@ -89,8 +90,8 @@ public class ArticleAdder extends AbstractArticleAdder
 //		articleAdderComposite.dispose();
 //	}
 
-	private Collection tariffPricePairs = null;
-	
+	private Collection<TariffPricePair> tariffPricePairs = null;
+
 	private ProductType productType = null;
 
 	public static final String[] FETCH_GROUPS_ORDER = new String[] {

@@ -5,7 +5,7 @@ import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewFactory;
 
 /**
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -17,7 +17,7 @@ implements ProductTypeDetailViewFactory
 		return new SimpleProductTypeDetailView();
 	}
 
-	public Class getProductTypeClass() {
+	public Class<SimpleProductType> getProductTypeClass() {
 		return SimpleProductType.class;
 	}
 

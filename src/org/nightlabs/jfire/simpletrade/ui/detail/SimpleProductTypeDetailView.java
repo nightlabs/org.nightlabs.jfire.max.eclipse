@@ -6,7 +6,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 
 /**
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -21,7 +21,8 @@ implements IProductTypeDetailView
 	}
 
 	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;
-	
+
+	@SuppressWarnings("unused")
 	private ProductTypeID productTypeID;
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;

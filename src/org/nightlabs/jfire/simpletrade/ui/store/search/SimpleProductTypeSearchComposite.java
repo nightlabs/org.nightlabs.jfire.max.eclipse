@@ -3,6 +3,7 @@ package org.nightlabs.jfire.simpletrade.ui.store.search;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeQuery;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
@@ -25,7 +26,7 @@ extends AbstractProductTypeSearchComposite
 	}
 
 	@Override
-	protected AbstractProductTypeQuery createNewQuery() {
+	protected AbstractProductTypeQuery<SimpleProductType> createNewQuery() {
 		return new SimpleProductTypeQuery();
 	}
 

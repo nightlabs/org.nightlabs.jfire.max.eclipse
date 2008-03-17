@@ -60,7 +60,7 @@ import org.nightlabs.l10n.NumberFormatter;
  * @author Marco Schulze - marco at nightlabs dot de
  */
 public class ArticleTable
-extends AbstractTableComposite
+extends AbstractTableComposite<Article>
 implements ISelectionProvider
 {
 	protected static class ArticleContentProvider
@@ -72,7 +72,7 @@ implements ISelectionProvider
 		{
 			this.articleEdit = articleEdit;
 		}
-		
+
 		public Object[] getElements(Object inputElement)
 		{
 			return articleEdit.getArticles().toArray();
@@ -86,7 +86,7 @@ implements ISelectionProvider
 		{
 		}
 	}
-	
+
 	protected class ArticleLabelProvider
 	extends LabelProvider
 	implements ITableLabelProvider
@@ -229,11 +229,11 @@ implements ISelectionProvider
 		TableColumn col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("Name");
-		
+
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
 //		col.setToolTipText("Allocation Status");
-		
+
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);

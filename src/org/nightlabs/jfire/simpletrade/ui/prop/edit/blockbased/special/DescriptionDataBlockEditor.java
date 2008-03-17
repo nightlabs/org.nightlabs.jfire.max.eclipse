@@ -33,7 +33,7 @@ extends AbstractDataBlockEditor
 		public StructBlockID getProviderStructBlockID() {
 			return SimpleProductTypeStruct.DESCRIPTION;
 		}
-		
+
 		/**
 		 * @see org.nightlabs.jfire.base.ui.person.edit.blockbased.PersonDataBlockEditorFactory#createPersonDataBlockEditor(org.nightlabs.jfire.base.ui.person.PersonDataBlock, org.eclipse.swt.widgets.Composite, int)
 		 */
@@ -41,9 +41,9 @@ extends AbstractDataBlockEditor
 			return new DescriptionDataBlockEditor(struct, dataBlock, parent, style);
 		}
 	}
-	
+
 	private static final Logger logger = Logger.getLogger(DescriptionDataBlockEditor.class);
-	
+
 	/**
 	 * @param struct
 	 * @param dataBlock
@@ -53,11 +53,11 @@ extends AbstractDataBlockEditor
 	public DescriptionDataBlockEditor(IStruct struct, DataBlock dataBlock,
 			Composite parent, int style) {
 		super(struct, dataBlock, parent, style);
-		
+
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridLayout thisLayout = new GridLayout(2, true);
 		this.setLayout(thisLayout);
-		
+
 		createFieldEditors();
 	}
 
@@ -71,7 +71,7 @@ extends AbstractDataBlockEditor
 		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_SHORT, 2);
 		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_LONG, 2);
 	}
-	
+
 	private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan)
 	{
 		DataField field = null;
@@ -80,7 +80,7 @@ extends AbstractDataBlockEditor
 		} catch (DataFieldNotFoundException e) {
 			logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+fieldID.toString(),e); //$NON-NLS-1$
 		}
-		DataFieldEditor editor = null;
+		DataFieldEditor<DataField> editor = null;
 		if (!hasFieldEditorFor(field)) {
 			try {
 				editor = DataFieldEditorFactoryRegistry.sharedInstance().getNewEditorInstance(

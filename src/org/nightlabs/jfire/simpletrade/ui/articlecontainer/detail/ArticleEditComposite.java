@@ -95,7 +95,7 @@ public class ArticleEditComposite extends XComposite
 //		// add some logic.
 ////		site.registerContextMenu(menuMgr, articleTable);
 //	}
-	
+
 //	private void fillContextMenu(IMenuManager manager)
 //	{
 //		boolean hasRemovableItems = false;
@@ -160,8 +160,8 @@ public class ArticleEditComposite extends XComposite
 			return EMPTY_SET_ARTICLE;
 
 		Set<Article> res = new HashSet<Article>();
-		for (Iterator it = sel.iterator(); it.hasNext(); ) {
-			Article article = (Article) it.next();
+		for (Iterator<Article> it = sel.iterator(); it.hasNext(); ) {
+			Article article = it.next();
 			res.add(article);
 		}
 		return res;
@@ -182,7 +182,7 @@ public class ArticleEditComposite extends XComposite
 			return articles;
 
 		articleTable.setSelection(new StructuredSelection(new ArrayList<Article>(articles)));
-		for (Iterator it = getSelectedArticles().iterator(); it.hasNext(); ) {
+		for (Iterator<Article> it = getSelectedArticles().iterator(); it.hasNext(); ) {
 			articles.remove(it.next());
 		}
 		return articles;

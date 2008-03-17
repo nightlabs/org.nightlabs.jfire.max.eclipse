@@ -43,9 +43,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.QuantitySelector;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
@@ -80,8 +80,8 @@ public class ArticleAdderComposite extends FadeableComposite
 	private ArticleAdder articleAdder;
 	private Label productTypeNameLabel;
 
-	private ComboComposite<TariffPricePair> tariffCombo;
-	private QuantitySelector quantitySelector;
+	private XComboComposite<TariffPricePair> tariffCombo;
+//	private QuantitySelector quantitySelector;
 
 	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder, Collection<TariffPricePair> tariffPricePairsCollection)
 	{
@@ -97,7 +97,7 @@ public class ArticleAdderComposite extends FadeableComposite
 		productTypeNameLabel.setText(
 				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
 
-		tariffCombo = new ComboComposite<TariffPricePair>(this, SWT.NONE, new LabelProvider() {
+		tariffCombo = new XComboComposite<TariffPricePair>(this, SWT.NONE, new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof TariffPricePair) {
@@ -110,26 +110,27 @@ public class ArticleAdderComposite extends FadeableComposite
 		});
 		tariffCombo.setLayoutData(new GridData());
 		List<TariffPricePair> tariffPricePairs = new LinkedList<TariffPricePair>(tariffPricePairsCollection);
-		
+
 		// TODO This should be done in a job :)
 		String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
 		TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
 				fetchGroups, -1, new NullProgressMonitor());
-		
+
 		final Comparator<Tariff> tariffComparator = cfMod.getTariffComparator();
-		
+
 		Collections.sort(tariffPricePairs, new Comparator<TariffPricePair>() {
 			public int compare(TariffPricePair o1, TariffPricePair o2) {
 				return tariffComparator.compare(o1.getTariff(), o2.getTariff());
 			}
 		});
-		
+
 		tariffCombo.setInput(tariffPricePairs);
-		
+
 		if (tariffPricePairs.size() > 0)
 			tariffCombo.setSelection(0); // TODO later on we need to store a priority in the server
 
-		quantitySelector = new QuantitySelector(this) {
+//		quantitySelector =
+			new QuantitySelector(this) {
 			@Override
 			protected void quantitySelected(int qty)
 			{

@@ -61,7 +61,7 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_NAME};
 
 	private SimpleProductTypeTable resultTable;
-	
+
 	/**
 	 * Factory for extending org.nightlabs.jfire.trade.ui.producttype.quicklist.productTypeQuickListFilterFactory
 	 */
@@ -74,7 +74,8 @@ extends AbstractProductTypeQuickListFilter
 	public SimpleProductTypeQuickListFilter() {
 		super();
 	}
-	
+
+	@Override
 	protected Control doCreateResultViewerControl(Composite parent) {
 		resultTable = new SimpleProductTypeTable(parent);
 		return resultTable;
@@ -94,7 +95,7 @@ extends AbstractProductTypeQuickListFilter
 		try {
 			StoreManager storeManager = StoreManagerUtil.getHome(
 					Login.getLogin().getInitialContextProperties()).create();
-			final Collection productTypes = storeManager.searchProductTypes(
+			final Collection<ProductType> productTypes = storeManager.searchProductTypes(
 					searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
@@ -105,7 +106,7 @@ extends AbstractProductTypeQuickListFilter
 			throw new RuntimeException(x);
 		}
 	}
-	
+
 	@Override
 	public Set<Class<? extends Object>> getClasses() {
 		Set<Class<? extends Object>> classes = new HashSet<Class<? extends Object>>();
