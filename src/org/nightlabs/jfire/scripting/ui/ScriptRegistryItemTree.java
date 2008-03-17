@@ -49,7 +49,7 @@ import org.nightlabs.jfire.scripting.ScriptRegistryItem;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ScriptRegistryItemTree extends AbstractTreeComposite<ScriptRegistryItem> {
+public class ScriptRegistryItemTree extends AbstractTreeComposite<ScriptRegistryItemNode> {
 
 	public static class SelectionProxy extends SelectionNotificationProxy {
 
