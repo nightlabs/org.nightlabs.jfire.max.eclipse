@@ -28,9 +28,6 @@ package org.nightlabs.jfire.scripting.admin.ui.parameter.action.add;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.scripting.ScriptManager;
-import org.nightlabs.jfire.scripting.ScriptParameterSet;
-import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -39,9 +36,9 @@ import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 public class AddScriptParameterSetWizard extends DynamicPathWizard {
 
 	private AddScriptParameterSetWizardPage wizardPage;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public AddScriptParameterSetWizard() {
 		super();
@@ -54,11 +51,11 @@ public class AddScriptParameterSetWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		ScriptManager rm = ScriptingPlugin.getScriptManager();
-		ScriptParameterSet parameterSet;
+//		ScriptManager rm = ScriptingPlugin.getScriptManager();
+//		ScriptParameterSet parameterSet;
 		return true;
 	}
-	
+
 	public static int show() {
 		AddScriptParameterSetWizard wizard = new AddScriptParameterSetWizard();
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

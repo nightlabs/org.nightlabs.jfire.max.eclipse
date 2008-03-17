@@ -67,7 +67,7 @@ import org.nightlabs.notification.NotificationListener;
 /**
  * A View of all scripts and categories of the local organisation
  * and providing actions for manipulating them.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -83,13 +83,13 @@ implements
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ScriptView.class);
-	
+
 	public static final String ID_VIEW = ScriptView.class.getName();
-	
+
 	private XComposite wrapper;
 	private ScriptRegistryItemTree registryItemTree;
 	private ScriptRegistryItemTreeMenuManager contextMenuManager;
-	
+
 	private Job fetchTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.fetchTreeNodesJob.name")){ //$NON-NLS-1$
 
 		@Override
@@ -103,9 +103,9 @@ implements
 			});
 			return Status.OK_STATUS;
 		}
-		
+
 	};
-	
+
 	private Job refreshTreeNodesJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.admin.ui.script.ScriptView.refreshTreeNodesJob.name")){ //$NON-NLS-1$
 
 		@Override
@@ -118,9 +118,9 @@ implements
 			});
 			return Status.OK_STATUS;
 		}
-		
+
 	};
-	
+
 	private IDoubleClickListener treeDoubleClickListener = new IDoubleClickListener () {
 
 		public void doubleClick(DoubleClickEvent event) {
@@ -131,9 +131,9 @@ implements
 			}
 		}
 	};
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ScriptView() {
 		super();
@@ -167,36 +167,36 @@ implements
 		SelectionManager.sharedInstance().addNotificationListener(ScriptingAdminPlugin.ZONE_ADMIN, ScriptRegistryItem.class, selectionListener);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptRegistryItemID.class, changeListener);
 		ScriptRegistryItemProvider.sharedInstance().addScriptRegistryListener(registryListener);
-		
+
 		wrapper.addDisposeListener( new DisposeListener() {
-		
+
 			public void widgetDisposed(DisposeEvent e) {
 				SelectionManager.sharedInstance().removeNotificationListener(ScriptingAdminPlugin.ZONE_ADMIN, ScriptRegistryItem.class, selectionListener);
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(ScriptRegistryItemID.class, changeListener);
 				ScriptRegistryItemProvider.sharedInstance().removeScriptRegistryListener(registryListener);
 			}
-		
+
 		} );
 	}
-	
+
 	private NotificationListener selectionListener = new NotificationAdapterSWTThreadSync() {
 
 		public void notify(NotificationEvent evt) {
-			Set subjects = evt.getSubjects();
+			Set<ScriptRegistryItemID> subjects = evt.getSubjects();
 			contextMenuManager.setSelectedRegistryItemIDs(subjects, true, true);
 //			if (subjects.isEmpty())
-				
+
 		}
-		
+
 	};
-	
+
 	private NotificationListener changeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			registryItemTree.refresh(true);
 		}
 	};
-	
+
 	private ScriptRegistryListener registryListener = new ScriptRegistryListener() {
 		public void scriptRegistryChanged() {
 			refreshTreeNodesJob.schedule();

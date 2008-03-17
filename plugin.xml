@@ -48,8 +48,7 @@
         <editor
             class="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            default="false"
-            icon="icons/editor/ScriptingJSEditor.16x16.png"
+            default="false"            
             id="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor" name="%org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor.name"/>
     </extension>
     <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptEditor">

@@ -39,14 +39,14 @@ import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
 
 /**
  * Base class for all actions that manipulate <code>ReportRegistryItem</code>s.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public abstract class ScriptRegistryItemAction extends Action implements IScriptRegistryItemAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public ScriptRegistryItemAction() {
 		super();
@@ -74,8 +74,8 @@ public abstract class ScriptRegistryItemAction extends Action implements IScript
 	public ScriptRegistryItemAction(String text, int style) {
 		super(text, style);
 	}
-	
-	
+
+
 	private Collection<ScriptRegistryItem> scriptRegistryItems = new HashSet<ScriptRegistryItem>();
 
 	/*
@@ -94,17 +94,17 @@ public abstract class ScriptRegistryItemAction extends Action implements IScript
 		return scriptRegistryItems;
 	}
 
-	
+
 	/**
 	 * All <code>ScriptParameterSetAction</code>s should do their work
 	 * in this method as they can be passed <code>ScriptRegistryItem</code>s
 	 * to interact with.
-	 * 
+	 *
 	 * @param scriptRegistryItems The <code>ScriptRegistryItem</code>s this action was invoked on
 	 * @see #setScriptRegistryItems(Collection)
 	 */
 	public abstract void run(Collection<ScriptRegistryItem> reportRegistryItems);
-	
+
 
 	/**
 	 * Runs the action with {@link #run(ReportRegistryItem)} passing
@@ -112,7 +112,7 @@ public abstract class ScriptRegistryItemAction extends Action implements IScript
 	 * was performed the current <code>ReportRegistryItem</code> is
 	 * set back to <code>null</code> so {@link #setReportRegistryItem(ReportRegistryItem)}
 	 * has to be invoked again before rerunning the action.
-	 * 
+	 *
 	 */
 	@Override
 	public void run() {
@@ -135,8 +135,8 @@ public abstract class ScriptRegistryItemAction extends Action implements IScript
 		return true;
 	}
 
-	
-	
+
+
 	/**
 	 * Get the cached instance fo ScriptRegistryItem if only one
 	 * can be found in the passed selection subjects. Expects
@@ -144,15 +144,14 @@ public abstract class ScriptRegistryItemAction extends Action implements IScript
 	 * Returns null if either no or more than one entry is found
 	 * in the given set.
 	 */
-	public ScriptRegistryItem getSingleSelectionRegistryItem(Set subjects) {
+	public ScriptRegistryItem getSingleSelectionRegistryItem(Set<ScriptRegistryItemID> subjects) {
 		if (subjects.size() != 1)
 			return null;
-		Object o = subjects.iterator().next();
-		if (o instanceof ScriptRegistryItemID)
-			// TODO remove NullProgressMonitor
-			ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
-					(ScriptRegistryItemID)o, new NullProgressMonitor());
+		ScriptRegistryItemID itemID = subjects.iterator().next();
+		// TODO remove NullProgressMonitor
+		ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
+				itemID, new NullProgressMonitor());
 		return null;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.ui.admin.parameter;
 
@@ -36,13 +36,13 @@ import org.nightlabs.notification.NotificationListener;
 public class ScriptParameterSetEditComposite extends XComposite {
 
 
-	private ScriptParameterSetID selectedParameterSetID;
-	
+//	private ScriptParameterSetID selectedParameterSetID;
+
 	private XComposite wrapper;
 	private ScriptParameterSetTable parameterSetTable;
-	private ScriptParameterSetTableMenuManager menuManager;
-	private ScriptParameterSetDetailComposite detailComposite;
-	
+//	private ScriptParameterSetTableMenuManager menuManager;
+//	private ScriptParameterSetDetailComposite detailComposite;
+
 	private Job fetchParameterSetsJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetEditComposite.fetchParameterSetsJob.name")){ //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
@@ -56,34 +56,34 @@ public class ScriptParameterSetEditComposite extends XComposite {
 			return Status.OK_STATUS;
 		}
 	};
-	
+
 	private NotificationListener setChangeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
 			parameterSetTable.refresh(true);
 		}
 	};
-	
+
 	private ScriptRegistryListener registryListener = new ScriptRegistryListener() {
 		public void scriptRegistryChanged() {
 			fetchParameterSetsJob.schedule();
 		}
 	};
-	
+
 	private DisposeListener disposeListener = new DisposeListener() {
 		public void widgetDisposed(DisposeEvent e) {
 			ScriptParameterSetProvider.sharedInstance().remveReportRegistryListener(registryListener);
 			JDOLifecycleManager.sharedInstance().removeNotificationListener(ScriptParameterSetID.class, setChangeListener);
 		}
 	};
-	
-	
+
+
 	private IDoubleClickListener tableDoubleClickListener = new IDoubleClickListener () {
 
 		public void doubleClick(DoubleClickEvent event) {
 		}
 	};
 
-	
+
 	/**
 	 * @param parent
 	 * @param style
@@ -126,7 +126,7 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		super(parent, style, layoutMode, layoutDataMode);
 		init();
 	}
-	
+
 	private void init() {
 		wrapper = new XComposite(this, SWT.NONE);
 		wrapper.getGridLayout().numColumns = 2;
@@ -136,13 +136,15 @@ public class ScriptParameterSetEditComposite extends XComposite {
 		input.add(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetEditComposite.fetchParameterSets.loadingMessage")); //$NON-NLS-1$
 		parameterSetTable.setInput(input);
 		parameterSetTable.getTableViewer().addDoubleClickListener(tableDoubleClickListener);
-		menuManager = new ScriptParameterSetTableMenuManager(
+//		menuManager =
+			new ScriptParameterSetTableMenuManager(
 				this.getClass().getName()+"#SetContextMenu",  //$NON-NLS-1$
 				parameterSetTable.getControl()
 			);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptParameterSetID.class, setChangeListener);
 		fetchParameterSetsJob.schedule();
-		detailComposite = new ScriptParameterSetDetailComposite(wrapper, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
+//		detailComposite =
+			new ScriptParameterSetDetailComposite(wrapper, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
 		ScriptParameterSetProvider.sharedInstance().addScriptRegistryListener(registryListener);
 		addDisposeListener(disposeListener);
 	}

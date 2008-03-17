@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.admin.ui.script.jscript;
 
@@ -27,23 +27,23 @@ import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 /**
  * EditorInut that fetches the script from the server and
  * serves as a wrapper to the local copy.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[dot]de>
  *
  */
 public class ScriptingJScriptEditorInput implements IPathEditorInput {
 
 	private ExternalFileEditorInput localInput;
-	
+
 	private ScriptRegistryItemID registryItemID;
-	 
+
 	/**
 	 * @param file
 	 */
 	public ScriptingJScriptEditorInput(ScriptRegistryItemID registryItemID) {
 		this.registryItemID = registryItemID;
 	}
-	
+
 	private ExternalFileEditorInput getLocalInput() {
 		if (localInput == null) {
 			// TODO remove NullProgressMonitor
@@ -79,86 +79,60 @@ public class ScriptingJScriptEditorInput implements IPathEditorInput {
 		return localInput;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object o) {
 		return getLocalInput().equals(o);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#exists()
-	 */
+	@Override
 	public boolean exists() {
 		return getLocalInput().exists();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getAdapter(java.lang.Class)
-	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public Object getAdapter(Class adapter) {
 		return getLocalInput().getAdapter(adapter);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getImageDescriptor()
-	 */
 	public ImageDescriptor getImageDescriptor() {
 		return getLocalInput().getImageDescriptor();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getName()
-	 */
+	@Override
 	public String getName() {
 		return getLocalInput().getName();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getPath()
-	 */
+	@Override
 	public IPath getPath() {
 		return getLocalInput().getPath();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getPath(java.lang.Object)
-	 */
 	public IPath getPath(Object element) {
 		return getLocalInput().getPath(element);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getPersistable()
-	 */
+	@Override
 	public IPersistableElement getPersistable() {
 		return getLocalInput().getPersistable();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#getToolTipText()
-	 */
+	@Override
 	public String getToolTipText() {
 		return getLocalInput().getToolTipText();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.scripting.admin.ui.script.jscript.ExternalFileEditorInput#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		return getLocalInput().hashCode();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return getLocalInput().toString();
 	}
-	
+
 	public static void saveScript(ScriptingJScriptEditorInput input, IDocument document)
 	{
 		// TODO remove NullProgressMonitor

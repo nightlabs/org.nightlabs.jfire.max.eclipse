@@ -60,7 +60,7 @@ import org.nightlabs.notification.NotificationListener;
 /**
  * A View displaying the parameter-Sets of the local organisation
  * and providing actions to manipulate them.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -76,13 +76,14 @@ implements
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(ParameterView.class);
-	
+
 	public static final String ID_VIEW = ParameterView.class.getName();
-	
+
 	private XComposite wrapper;
 	private ScriptParameterSetTable parameterSetTable;
+	@SuppressWarnings("unused")
 	private ScriptParameterSetTableMenuManager menuManager;
-	
+
 	private Job fetchParameterSetsJob = new Job(Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ParameterView.fetchParameterSetsJob.name")){ //$NON-NLS-1$
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
@@ -95,17 +96,17 @@ implements
 			});
 			return Status.OK_STATUS;
 		}
-		
+
 	};
-	
+
 	private IDoubleClickListener tableDoubleClickListener = new IDoubleClickListener () {
 
 		public void doubleClick(DoubleClickEvent event) {
 		}
 	};
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ParameterView() {
 		super();
@@ -145,14 +146,14 @@ implements
 			);
 		JDOLifecycleManager.sharedInstance().addNotificationListener(ScriptParameterSetID.class, changeListener);
 	}
-	
+
 	private NotificationListener changeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			parameterSetTable.refresh(true);
 		}
 	};
-	
+
 	public boolean canDisplayPart() {
 		return Login.isLoggedIn();
 	}

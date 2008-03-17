@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.admin.ui.script;
 
@@ -13,22 +13,22 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 
 /**
  * Accessor for the registration of editors to languages of JFireScripting scripts.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *
  */
 public class ScriptEditorRegistry extends AbstractEPProcessor {
 
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.admin.ui.scriptEditor"; //$NON-NLS-1$
-	
+
 	/**
 	 * key: language
 	 * value: editorID
 	 */
 	private Map<String, String> scriptEditors = new HashMap<String, String>();
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ScriptEditorRegistry() {
 		super();
@@ -50,14 +50,14 @@ public class ScriptEditorRegistry extends AbstractEPProcessor {
 		if (element.getName().equalsIgnoreCase("scriptEditor")) { //$NON-NLS-1$
 			String language = element.getAttribute("scriptLanguage"); //$NON-NLS-1$
 			if (language == null || "".equals(language)) //$NON-NLS-1$
-				throw new EPProcessorException("scriptEditor extension has not defined the scriptLanugage attribute. Extension namespace: "+extension.getNamespace()); //$NON-NLS-1$
+				throw new EPProcessorException("scriptEditor extension has not defined the scriptLanugage attribute. Extension namespace: "+extension.getNamespaceIdentifier()); //$NON-NLS-1$
 			String editorID = element.getAttribute("editorID"); //$NON-NLS-1$
 			if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
-				throw new EPProcessorException("scriptEditor extension has not defined the editorID attribute. Extension namespace: "+extension.getNamespace()); //$NON-NLS-1$
+				throw new EPProcessorException("scriptEditor extension has not defined the editorID attribute. Extension namespace: "+extension.getNamespaceIdentifier()); //$NON-NLS-1$
 			scriptEditors.put(language, editorID);
 		}
 	}
-	
+
 	public String getEditorID(String language) {
 		checkProcessing();
 		String editorID = scriptEditors.get(language);
@@ -65,9 +65,9 @@ public class ScriptEditorRegistry extends AbstractEPProcessor {
 			throw new IllegalStateException("No scriptEditor was registered for the language: "+language); //$NON-NLS-1$
 		return editorID;
 	}
-	
+
 	private static ScriptEditorRegistry sharedInstance;
-	
+
 	public static ScriptEditorRegistry sharedInstance() {
 		if (sharedInstance == null)
 			sharedInstance = new ScriptEditorRegistry();

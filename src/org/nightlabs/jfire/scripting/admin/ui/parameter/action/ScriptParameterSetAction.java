@@ -40,14 +40,14 @@ import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemProvider;
 
 /**
  * Base class for all actions that manipulate <code>ReportRegistryItem</code>s.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public abstract class ScriptParameterSetAction extends Action implements IScriptParameterSetAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public ScriptParameterSetAction() {
 		super();
@@ -75,8 +75,8 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 	public ScriptParameterSetAction(String text, int style) {
 		super(text, style);
 	}
-	
-	
+
+
 	private Collection<ScriptParameterSet> scriptParameterSets = new HashSet<ScriptParameterSet>();
 
 	/*
@@ -95,17 +95,17 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 		return scriptParameterSets;
 	}
 
-	
+
 	/**
 	 * All <code>ScriptParameterSetAction</code>s should do their work
 	 * in this method as they can be passed <code>ScriptParameterSet</code>s
 	 * to interact with.
-	 * 
+	 *
 	 * @param scriptParameterSets The <code>ScriptParameterSet</code>s this action was invoked on
 	 * @see #setScriptParameterSets(Collection)
 	 */
 	public abstract void run(Collection<ScriptParameterSet> scriptParameterSets);
-	
+
 
 	/**
 	 * Runs the action with {@link #run(Collection)} passing
@@ -133,8 +133,8 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 		return true;
 	}
 
-	
-	
+
+
 	/**
 	 * Get the cached instance fo ScriptRegistryItem if only one
 	 * can be found in the passed selection subjects. Expects
@@ -142,15 +142,14 @@ public abstract class ScriptParameterSetAction extends Action implements IScript
 	 * Returns null if either no or more than one entry is found
 	 * in the given set.
 	 */
-	public ScriptRegistryItem getSingleSelectionRegistryItem(Set subjects) {
+	public ScriptRegistryItem getSingleSelectionRegistryItem(Set<ScriptRegistryItemID> subjects) {
 		if (subjects.size() != 1)
 			return null;
-		Object o = subjects.iterator().next();
-		if (o instanceof ScriptRegistryItemID)
-			// TODO remove NullProgressMonitor
-			ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
-					(ScriptRegistryItemID)o, new NullProgressMonitor());
+		ScriptRegistryItemID itemID = subjects.iterator().next();
+		// TODO remove NullProgressMonitor
+		ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
+				itemID, new NullProgressMonitor());
 		return null;
 	}
-	
+
 }

@@ -63,7 +63,7 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 	public ScriptParameterSetTableMenuManager(String name, Control control) {
 		this(name, control, true);
 	}
-	
+
 	/**
 	 */
 	public ScriptParameterSetTableMenuManager(String name, Control control, boolean createContextMenu) {
@@ -80,7 +80,7 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 			control.setMenu(menu);
 		}
 	}
-	
+
 	public ScriptParameterSetTableMenuManager(String name, Control control, IViewPart viewPart, ISelectionProvider selectionProvider) {
 		this(name, control);
 		viewPart.getSite().registerContextMenu(this, selectionProvider);
@@ -95,14 +95,14 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public void fillToolBar(IViewPart viewPart) {
 		IToolBarManager toolBarManager = viewPart.getViewSite().getActionBars().getToolBarManager();
 		fillToolBar(toolBarManager);
 	}
-	
+
 	private void fillContextMenu(IMenuManager manager) {
-	
+
 		try {
 			manager.removeAll();
 			ScriptParameterSetActionRegistry.sharedInstance().contributeToContextMenu(manager);
@@ -111,35 +111,34 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 		}
 		// Other plug-ins can contribute their actions here
 //		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-		
+
 	}
-	
+
 //	public ScriptParameterSetTable getParameterSetTable() {
 //		return parameterSetTable;
 //	}
-	
-	public void setSelectedRegistryItemIDs(Set itemIDs, boolean calculateEnabled, boolean calculateVisible) {
+
+	public void setSelectedRegistryItemIDs(Set<ScriptRegistryItemID> itemIDs, boolean calculateEnabled, boolean calculateVisible) {
 		Collection<ScriptRegistryItem> scriptRegistryItems = new HashSet<ScriptRegistryItem>();
-		for (Iterator iter = itemIDs.iterator(); iter.hasNext();) {
-			Object o = iter.next();
-			if (o instanceof ScriptRegistryItemID)
-				// TODO remove NullProgressMonitor
-				scriptRegistryItems.add(ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
-						(ScriptRegistryItemID)o, new NullProgressMonitor()));
+		for (Iterator<ScriptRegistryItemID> iter = itemIDs.iterator(); iter.hasNext();) {
+			ScriptRegistryItemID itemID = iter.next();
+			// TODO remove NullProgressMonitor
+			scriptRegistryItems.add(ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
+					itemID, new NullProgressMonitor()));
 		}
 		setSelectedRegistryItems(scriptRegistryItems, calculateEnabled, calculateVisible);
 	}
-	
-	
+
+
 	public void setSelectedRegistryItems(Collection<ScriptRegistryItem> items, boolean calculateEnabled, boolean calculateVisible) {
-		Collection actionDescriptors = null;
+		Collection<ActionDescriptor> actionDescriptors = null;
 		try {
 			actionDescriptors = ScriptParameterSetActionRegistry.sharedInstance().getActionDescriptors();
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
-		for (Iterator iter = actionDescriptors.iterator(); iter.hasNext();) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) iter.next();
+		for (Iterator<ActionDescriptor> iter = actionDescriptors.iterator(); iter.hasNext();) {
+			ActionDescriptor actionDescriptor = iter.next();
 			if (actionDescriptor.getAction() instanceof IScriptRegistryItemAction) {
 				IScriptRegistryItemAction itemAction = (IScriptRegistryItemAction)actionDescriptor.getAction();
 				itemAction.setScriptRegistryItems(items);
@@ -150,7 +149,7 @@ public class ScriptParameterSetTableMenuManager extends MenuManager {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }

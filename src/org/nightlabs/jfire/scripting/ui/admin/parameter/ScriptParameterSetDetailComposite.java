@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.ui.admin.parameter;
 
@@ -17,10 +17,10 @@ import org.nightlabs.jfire.scripting.ui.ScriptParameterTable;
 public class ScriptParameterSetDetailComposite extends XComposite {
 
 	private XComposite wrapper;
-	private I18nTextEditor nameEditor;
-	private ScriptParameterTable parameterTable;
-	
-	
+//	private I18nTextEditor nameEditor;
+//	private ScriptParameterTable parameterTable;
+
+
 	/**
 	 * @param parent
 	 * @param style
@@ -63,11 +63,14 @@ public class ScriptParameterSetDetailComposite extends XComposite {
 		super(parent, style, layoutMode, layoutDataMode);
 		init();
 	}
-	
+
 	private void init() {
 		wrapper = new XComposite(this, SWT.NONE, XComposite.LayoutMode.ORDINARY_WRAPPER);
-		nameEditor = new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetDetailComposite.nameEditor.caption")); //$NON-NLS-1$
-		parameterTable = new ScriptParameterTable(wrapper, SWT.NONE);
+//		nameEditor =
+			new I18nTextEditor(wrapper, Messages.getString("org.nightlabs.jfire.scripting.ui.admin.parameter.ScriptParameterSetDetailComposite.nameEditor.caption")); //$NON-NLS-1$
+
+//		parameterTable =
+			new ScriptParameterTable(wrapper, SWT.NONE);
 	}
 
 }

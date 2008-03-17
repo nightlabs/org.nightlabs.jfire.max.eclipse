@@ -74,7 +74,7 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 		menu = createContextMenu(registryItemTree.getTreeViewer().getControl());
 		registryItemTree.getTreeViewer().getControl().setMenu(menu);
 	}
-	
+
 	public ScriptRegistryItemTreeMenuManager(ScriptRegistryItemTree registryItemTree, IViewPart viewPart) {
 		this(registryItemTree);
 		viewPart.getSite().registerContextMenu(this, registryItemTree.getTreeViewer());
@@ -90,9 +90,9 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	private void fillContextMenu(IMenuManager manager) {
-	
+
 		try {
 			manager.removeAll();
 			ScriptRegistryItemActionRegistry.sharedInstance().contributeToContextMenu(manager);
@@ -101,40 +101,39 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 		}
 		// Other plug-ins can contribute their actions here
 //		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-		
+
 		drillDownAdapter.addNavigationActions(manager);
 	}
-	
+
 	public ScriptRegistryItemTree getRegistryItemTree() {
 		return registryItemTree;
 	}
-	
+
 	public DrillDownAdapter getDrillDownAdapter() {
 		return drillDownAdapter;
 	}
-	
-	public void setSelectedRegistryItemIDs(Set itemIDs, boolean calculateEnabled, boolean calculateVisible) {
+
+	public void setSelectedRegistryItemIDs(Set<ScriptRegistryItemID> itemIDs, boolean calculateEnabled, boolean calculateVisible) {
 		Collection<ScriptRegistryItem> scriptRegistryItems = new HashSet<ScriptRegistryItem>();
-		for (Iterator iter = itemIDs.iterator(); iter.hasNext();) {
-			Object o = iter.next();
-			if (o instanceof ScriptRegistryItemID)
-				// TODO remove NullProgressMonitor
-				scriptRegistryItems.add(ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
-						(ScriptRegistryItemID)o, new NullProgressMonitor()));
+		for (Iterator<ScriptRegistryItemID> iter = itemIDs.iterator(); iter.hasNext();) {
+			ScriptRegistryItemID itemID = iter.next();
+			// TODO remove NullProgressMonitor
+			scriptRegistryItems.add(ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
+					itemID, new NullProgressMonitor()));
 		}
 		setSelectedRegistryItems(scriptRegistryItems, calculateEnabled, calculateVisible);
 	}
-	
-	
+
+
 	public void setSelectedRegistryItems(Collection<ScriptRegistryItem> items, boolean calculateEnabled, boolean calculateVisible) {
-		Collection actionDescriptors = null;
+		Collection<ActionDescriptor> actionDescriptors = null;
 		try {
 			actionDescriptors = ScriptRegistryItemActionRegistry.sharedInstance().getActionDescriptors();
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
-		for (Iterator iter = actionDescriptors.iterator(); iter.hasNext();) {
-			ActionDescriptor actionDescriptor = (ActionDescriptor) iter.next();
+		for (Iterator<ActionDescriptor> iter = actionDescriptors.iterator(); iter.hasNext();) {
+			ActionDescriptor actionDescriptor = iter.next();
 			if (actionDescriptor.getAction() instanceof IScriptRegistryItemAction) {
 				IScriptRegistryItemAction itemAction = (IScriptRegistryItemAction)actionDescriptor.getAction();
 				itemAction.setScriptRegistryItems(items);
@@ -145,7 +144,7 @@ public class ScriptRegistryItemTreeMenuManager extends MenuManager {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }
