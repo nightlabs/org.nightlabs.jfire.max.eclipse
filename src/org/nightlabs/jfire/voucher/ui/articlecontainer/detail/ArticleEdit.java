@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleEdit;
@@ -25,7 +26,7 @@ public class ArticleEdit extends AbstractArticleEdit
 	@Implement
 	public Set<? extends ArticleCarrier> addArticles(Set<? extends ArticleCarrier> articleCarriers)
 	{
-		Class productTypeClass = getArticleProductTypeClassGroup().getProductTypeClass();
+		Class<? extends ProductType> productTypeClass = getArticleProductTypeClassGroup().getProductTypeClass();
 
 		Set<ArticleCarrier> accepted = null;
 		for (Iterator<? extends ArticleCarrier> it = articleCarriers.iterator(); it.hasNext(); ) {

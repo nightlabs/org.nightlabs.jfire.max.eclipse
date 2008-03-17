@@ -71,11 +71,8 @@ extends AbstractTableComposite<VoucherRedemption>
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 
-	private VoucherKey voucherKey;
-
 	protected void setVoucherKey(VoucherKey voucherKey)
 	{
-		this.voucherKey = voucherKey;
 		setInput(voucherKey == null ? null : voucherKey.getRedemptions());
 	}
 }

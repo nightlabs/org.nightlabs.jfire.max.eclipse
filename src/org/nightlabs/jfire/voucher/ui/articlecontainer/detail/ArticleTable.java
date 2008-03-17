@@ -63,7 +63,7 @@ import org.nightlabs.l10n.NumberFormatter;
  * @author Marco Schulze - marco at nightlabs dot de
  */
 public class ArticleTable
-extends AbstractTableComposite
+extends AbstractTableComposite<Article>
 implements ISelectionProvider
 {
 	protected static class ArticleContentProvider
@@ -75,7 +75,7 @@ implements ISelectionProvider
 		{
 			this.articleEdit = articleEdit;
 		}
-		
+
 		public Object[] getElements(Object inputElement)
 		{
 			return articleEdit.getArticles().toArray();
@@ -252,7 +252,7 @@ implements ISelectionProvider
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
 //		col.setToolTipText("Status of the allocation");
-		
+
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);

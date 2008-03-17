@@ -30,17 +30,18 @@ extends AbstractProductTypeQuickListFilter
 
 	private VoucherTypeTable voucherTypeTable;
 
+	@Override
 	protected Control doCreateResultViewerControl(Composite parent)
 	{
 		voucherTypeTable = new VoucherTypeTable(parent);
 		return voucherTypeTable;
 	}
-	
+
 	public Control getResultViewerControl()
 	{
 		return voucherTypeTable;
 	}
-		
+
 	public String getDisplayName()
 	{
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
@@ -52,7 +53,7 @@ extends AbstractProductTypeQuickListFilter
 		try {
 			StoreManager storeManager = StoreManagerUtil.getHome(
 					Login.getLogin().getInitialContextProperties()).create();
-			final Collection voucherTypes = storeManager.searchProductTypes(
+			final Collection<ProductType> voucherTypes = storeManager.searchProductTypes(
 					searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
@@ -61,9 +62,9 @@ extends AbstractProductTypeQuickListFilter
 			});
 		} catch (Exception x) {
 			throw new RuntimeException(x);
-		}		
+		}
 	}
-	
+
 	@Override
 	public Set<Class<? extends Object>> getClasses() {
 		Set<Class<? extends Object>> classes = new HashSet<Class<? extends Object>>();
