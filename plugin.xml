@@ -52,7 +52,7 @@
             class="org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleEditFactory"
             name="Default - ReceptionNote"
             productTypeClass="org.nightlabs.jfire.dynamictrade.store.DynamicProductType"
-            articleContainerClass="ReceptionNote"
+            articleContainerClass="org.nightlabs.jfire.store.ReceptionNote"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
    </extension>
    <extension

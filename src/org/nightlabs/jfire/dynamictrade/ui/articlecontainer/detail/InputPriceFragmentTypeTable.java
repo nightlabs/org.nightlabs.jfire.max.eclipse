@@ -21,7 +21,7 @@ import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
 
 public abstract class InputPriceFragmentTypeTable
-extends AbstractTableComposite
+extends AbstractTableComposite<InputPriceFragmentType>
 {
 	private Currency currency;
 

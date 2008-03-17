@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.store.search.DynamicProductTypeQuery;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite;
@@ -21,7 +22,7 @@ extends AbstractProductTypeSearchComposite
 	}
 
 	@Override
-	protected AbstractProductTypeQuery createNewQuery() {
+	protected AbstractProductTypeQuery<DynamicProductType> createNewQuery() {
 		return new DynamicProductTypeQuery();
 	}
 

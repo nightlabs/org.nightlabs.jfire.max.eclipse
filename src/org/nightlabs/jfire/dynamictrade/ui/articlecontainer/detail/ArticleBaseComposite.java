@@ -31,8 +31,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.FadeableComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.i18n.I18nTextBuffer;
@@ -87,9 +87,9 @@ extends FadeableComposite
 	protected ProductTypeID productTypeID;
 
 	protected Label productTypeNameLabel;
-	protected ComboComposite<Tariff> tariffCombo;
+	protected XComboComposite<Tariff> tariffCombo;
 	protected Text quantity;
-	protected ComboComposite<Unit> unitCombo;
+	protected XComboComposite<Unit> unitCombo;
 	protected Text productNameText;
 	protected Button productNameDialogButton;
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
@@ -112,7 +112,14 @@ extends FadeableComposite
 		productTypeNameLabel = new Label(comp1, SWT.NONE);
 		productTypeNameLabel.setLayoutData(new GridData());
 
-		tariffCombo = new ComboComposite<Tariff>(comp1, SWT.BORDER | SWT.READ_ONLY , new LabelProvider() {
+//		tariffCombo = new ComboComposite<Tariff>(comp1, SWT.BORDER | SWT.READ_ONLY , new LabelProvider() {
+//			@Override
+//			public String getText(Object element)
+//			{
+//				return ((Tariff)element).getName().getText();
+//			}
+//		});
+		tariffCombo = new XComboComposite<Tariff>(comp1, SWT.BORDER | SWT.READ_ONLY , new LabelProvider() {
 			@Override
 			public String getText(Object element)
 			{
@@ -201,7 +208,14 @@ extends FadeableComposite
 		gd.widthHint = 200;
 		quantity.setLayoutData(gd);
 
-		unitCombo = new ComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
+//		unitCombo = new ComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
+//			@Override
+//			public String getText(Object element)
+//			{
+//				return ((Unit)element).getName().getText();
+//			}
+//		});
+		unitCombo = new XComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element)
 			{
@@ -321,7 +335,7 @@ extends FadeableComposite
 							return u1.getName().getText().compareTo(u2.getName().getText());
 						}
 					});
-					
+
 				// Sort the tariffs according to the config module
 					String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
 					TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
@@ -454,7 +468,7 @@ extends FadeableComposite
 
 				ipft.setAmount(amount);
 			}
-	
+
 			inputPriceFragmentTypeTable.refresh();
 			inputPriceFragmentTypeModified = false;
 		} catch (JDODetachedFieldAccessException x) {

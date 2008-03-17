@@ -27,13 +27,14 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_NAME};
 
 	private DynamicProductTypeTable dynamicProductTypeTable;
-	
+
+	@Override
 	public Control doCreateResultViewerControl(Composite parent)
 	{
 		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
 		return dynamicProductTypeTable;
 	}
-		
+
 	public String getDisplayName()
 	{
 		return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
@@ -54,9 +55,9 @@ extends AbstractProductTypeQuickListFilter
 	@Override
 	protected void search(ProgressMonitor monitor) {
 		try {
-			final Collection<DynamicProductType> dynamicProductTypes = 
+			final Collection<DynamicProductType> dynamicProductTypes =
 				DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
-					ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS, 
+					ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {

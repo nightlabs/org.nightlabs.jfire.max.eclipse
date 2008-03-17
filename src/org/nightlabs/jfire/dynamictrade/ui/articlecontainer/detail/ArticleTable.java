@@ -28,7 +28,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.util.Locale;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -61,7 +60,7 @@ import org.nightlabs.l10n.NumberFormatter;
  * @author Marco Schulze - marco at nightlabs dot de
  */
 public class ArticleTable
-extends AbstractTableComposite
+extends AbstractTableComposite<Article>
 {
 	protected static class ArticleContentProvider
 	implements IStructuredContentProvider
@@ -72,7 +71,7 @@ extends AbstractTableComposite
 		{
 			this.articleEdit = articleEdit;
 		}
-		
+
 		public Object[] getElements(Object inputElement)
 		{
 			return articleEdit.getArticles().toArray();
@@ -86,7 +85,7 @@ extends AbstractTableComposite
 		{
 		}
 	}
-	
+
 	protected class ArticleLabelProvider
 	extends LabelProvider
 	implements ITableLabelProvider
@@ -107,10 +106,10 @@ extends AbstractTableComposite
 
 			if (++ci == columnIndex)
 				return null; // qty
-			
+
 			if (++ci == columnIndex)
 				return null; // unit
-			
+
 			if (++ci == columnIndex) {
 				return AllocationStatusImageUtil.getAllocationStatusImage(article);
 //				if (article.isAllocationAbandoned())
@@ -252,7 +251,7 @@ extends AbstractTableComposite
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.productNameTableColumn.text")); //$NON-NLS-1$
 //		col.setToolTipText("ProductName");
-		
+
 		col = new TableColumn(table, SWT.RIGHT);
 		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.quantityTableColumn.text")); //$NON-NLS-1$
 
@@ -262,7 +261,7 @@ extends AbstractTableComposite
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.statusTableColumn.text"));		 //$NON-NLS-1$
 //		col.setToolTipText("Status");
-		
+
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
@@ -318,7 +317,7 @@ extends AbstractTableComposite
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
 	}
-	
+
 	@Override
 	public void setMenu(Menu menu)
 	{
