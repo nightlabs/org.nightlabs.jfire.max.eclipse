@@ -52,7 +52,7 @@ extends TableLabelProvider
 	}
 
 	protected Map<ScriptRegistryItemID, Object> scriptRegistryItemID2Result = null;
-	
+
 	public String getColumnText(Object element, int columnIndex)
 	{
 		if (element instanceof ScriptRegistryItemNode && columnIndex == 1) {
@@ -72,12 +72,12 @@ extends TableLabelProvider
 
 		return ""; //$NON-NLS-1$
 	}
-		
+
 	@Override
 	public String getText(Object element) {
 		return getColumnText(element, 0);
 	}
-	
+
 	@Override
 	public Image getColumnImage(Object element, int columnIndex)
 	{
@@ -87,7 +87,7 @@ extends TableLabelProvider
 			ScriptRegistryItemNode node = (ScriptRegistryItemNode)element;
 			if (node.getRegistryItem() == null)
 				return null;
-			Class clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(node.getRegistryItemID());
+			Class<?> clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(node.getRegistryItemID());
 			if (clazz == null)
 				return null;
 			if (clazz.equals(ScriptCategory.class))
@@ -97,7 +97,7 @@ extends TableLabelProvider
 		}
 		return super.getColumnImage(element, columnIndex);
 	}
-	
+
 	@Override
 	public Image getImage(Object element) {
 		return getColumnImage(element, 0);

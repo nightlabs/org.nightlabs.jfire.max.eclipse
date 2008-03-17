@@ -31,13 +31,13 @@ package org.nightlabs.jfire.scripting.editor2d.ui.script;
  */
 public class ScriptResultsChangedEvent
 {
-	public ScriptResultsChangedEvent(IScriptResultProvider scriptResultProvider) {
+	public ScriptResultsChangedEvent(IScriptResultProvider<?> scriptResultProvider) {
 		this.scriptResultProvider = scriptResultProvider;
 	}
-	
-	private IScriptResultProvider scriptResultProvider;
-	public IScriptResultProvider getScriptResultProvider() {
+
+	private IScriptResultProvider<?> scriptResultProvider;
+	public IScriptResultProvider<?> getScriptResultProvider() {
 		return scriptResultProvider;
 	}
-	
+
 }

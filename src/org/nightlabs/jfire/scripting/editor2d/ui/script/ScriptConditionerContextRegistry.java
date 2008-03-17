@@ -28,7 +28,6 @@ package org.nightlabs.jfire.scripting.editor2d.ui.script;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
@@ -41,15 +40,13 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 public class ScriptConditionerContextRegistry
 extends AbstractEPProcessor
 {
-	private static final Logger logger = Logger.getLogger(ScriptConditionerContextRegistry.class);
-	
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.scripting.editor2d.ui.scriptConditionerContext"; //$NON-NLS-1$
-	
+
 	public static final String ELEMENT_SCRIPT_CONDITIONER_CONTEXT = "scriptConditionerContext";	 //$NON-NLS-1$
 	public static final String ATTRIBUTE_ORGANISATION_ID = "organisationID"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_CONDITION_CONTEXT_PROVIDER_ID = "conditionContextProviderID";	 //$NON-NLS-1$
 	public static final String ATTRIBUTE_SCRIPT_DRAWCOMPONENT_CLASS = "scriptDrawComponentClass";	 //$NON-NLS-1$
-	
+
 	private static ScriptConditionerContextRegistry sharedInstance;
 	public static ScriptConditionerContextRegistry sharedInstance() {
 		if (sharedInstance == null) {
@@ -57,10 +54,10 @@ extends AbstractEPProcessor
 		}
 		return sharedInstance;
 	}
-	
+
 	protected ScriptConditionerContextRegistry() {
 	}
-	
+
 	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -75,7 +72,7 @@ extends AbstractEPProcessor
 			String organisationID = element.getAttribute(ATTRIBUTE_ORGANISATION_ID);
 			if (!checkString(organisationID))
 				throw new EPProcessorException("Attribute "+ATTRIBUTE_ORGANISATION_ID+" must not be empty!");  //$NON-NLS-1$//$NON-NLS-2$
-			
+
 			String conditionContextProviderID = element.getAttribute(ATTRIBUTE_CONDITION_CONTEXT_PROVIDER_ID);
 			if (!checkString(conditionContextProviderID))
 				throw new EPProcessorException("Attribute "+ATTRIBUTE_CONDITION_CONTEXT_PROVIDER_ID+" must not be empty!"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -83,15 +80,15 @@ extends AbstractEPProcessor
 			String scriptDrawComponentName = element.getAttribute(ATTRIBUTE_SCRIPT_DRAWCOMPONENT_CLASS);
 			if (!checkString(conditionContextProviderID))
 				throw new EPProcessorException("Attribute "+ATTRIBUTE_SCRIPT_DRAWCOMPONENT_CLASS+" must not be empty!"); //$NON-NLS-1$ //$NON-NLS-2$
-						
+
 			ScriptConditionerContext context = new ScriptConditionerContext(organisationID, conditionContextProviderID);
 			scriptDrawComponentClass2ScriptConditionerContext.put(scriptDrawComponentName, context);
 		}
 	}
-	
+
 	private Map<String, ScriptConditionerContext> scriptDrawComponentClass2ScriptConditionerContext =
 		new HashMap<String, ScriptConditionerContext>();
-	
+
 	public ScriptConditionerContext getScriptConditionerContext(String scriptDrawComponentClass)
 	{
 		checkProcessing();

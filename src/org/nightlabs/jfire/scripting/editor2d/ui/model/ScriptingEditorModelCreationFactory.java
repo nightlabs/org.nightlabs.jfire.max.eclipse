@@ -37,14 +37,14 @@ import org.nightlabs.jfire.scripting.editor2d.TextScriptDrawComponent;
 public class ScriptingEditorModelCreationFactory
 extends ModelCreationFactory
 {
-	public ScriptingEditorModelCreationFactory(Class targetClass, ScriptEditor2DFactory factory) {
+	public ScriptingEditorModelCreationFactory(Class<?> targetClass, ScriptEditor2DFactory factory) {
 		super(targetClass, factory);
 	}
-	
+
 	protected ScriptEditor2DFactory getScriptingEditor2DFactory() {
 		return (ScriptEditor2DFactory) factory;
 	}
-	
+
   /**
    * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
    */
@@ -54,7 +54,7 @@ extends ModelCreationFactory
 //    if( targetClass.equals(ScriptRootDrawComponent.class)) {
 //      return getScriptingEditor2DFactory().createScriptRootDrawComponent();
 //    }
-    
+
     if( targetClass.equals(TextScriptDrawComponent.class)) {
       return getScriptingEditor2DFactory().createTextScriptDrawComponent();
     }
@@ -62,7 +62,7 @@ extends ModelCreationFactory
     if( targetClass.equals(BarcodeDrawComponent.class)) {
       return getScriptingEditor2DFactory().createBarcode();
     }
-    
+
     return super.getNewObject();
   }
 }

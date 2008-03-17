@@ -49,7 +49,7 @@ extends AbstractPaletteFactory
 	protected ScriptEditor2DFactory getScriptEditor2DFactory() {
 		return (ScriptEditor2DFactory) factory;
 	}
-	
+
 	 /**
 	  * Creates the PaletteRoot and adds all palette elements.
 	  * Use this factory method to create a new palette for your graphical editor.
@@ -63,12 +63,12 @@ extends AbstractPaletteFactory
 		 palette.add(createPaletteContainer());
 		 return palette;
 	 }
-	 
+
 	/**
 	 * @see org.nightlabs.editor2d.ui.AbstractPaletteFactory#getCreationFactory(java.lang.Class)
 	 */
 	@Override
-	public IModelCreationFactory getCreationFactory(Class targetClass) {
+	public IModelCreationFactory getCreationFactory(Class<?> targetClass) {
 		return new ScriptingEditorModelCreationFactory(targetClass, getScriptEditor2DFactory());
 	}
 
@@ -88,7 +88,7 @@ extends AbstractPaletteFactory
 	  // add Line Tool
 	  toolEntry = createLineToolEntry();
 	  componentsDrawer.add(toolEntry);
-	  
+
 	  // add Text Tool
 	  toolEntry = createTextToolEntry();
 	  componentsDrawer.add(toolEntry);
@@ -96,19 +96,19 @@ extends AbstractPaletteFactory
 	  // add Ticket Text Tool
 	  toolEntry = createTicketScriptTextToolEntry();
 	  componentsDrawer.add(toolEntry);
-	  
+
 	  // add Image Tool
 	  toolEntry = createImageToolEntry();
 	  componentsDrawer.add(toolEntry);
-	  
+
 	  // add Barcode Tool
 	  toolEntry = createBarcodeToolEntry();
 	  componentsDrawer.add(toolEntry);
-	  
+
 	  return componentsDrawer;
 	}
-	
+
  	protected abstract ToolEntry createBarcodeToolEntry();
-	
+
  	protected abstract ToolEntry createTicketScriptTextToolEntry();
 }

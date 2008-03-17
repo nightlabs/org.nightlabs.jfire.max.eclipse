@@ -38,7 +38,7 @@ public class ScriptingEditor2DNameProvider
 extends EditorNameProvider
 {
 	@Override
-	public String getTypeName(Class c)
+	public String getTypeName(Class<?> c)
 	{
 		if (TextScriptDrawComponent.class.isAssignableFrom(c)) {
 			return Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.ScriptingEditor2DNameProvider.textScript"); //$NON-NLS-1$
