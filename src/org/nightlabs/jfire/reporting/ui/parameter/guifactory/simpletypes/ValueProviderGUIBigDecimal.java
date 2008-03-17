@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes;
 
@@ -25,10 +25,10 @@ import org.nightlabs.jfire.reporting.ui.parameter.ValueProviderConfigUtil;
  *
  */
 public class ValueProviderGUIBigDecimal extends AbstractValueProviderGUI<BigDecimal> {
-	
+
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<BigDecimal> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
 			return new ValueProviderGUIBigDecimal(valueProviderConfig);
 		}
 
@@ -38,9 +38,9 @@ public class ValueProviderGUIBigDecimal extends AbstractValueProviderGUI<BigDeci
 
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		}
-		
+
 	}
-	
+
 	private LabeledText labeledText;
 
 	public ValueProviderGUIBigDecimal(ValueProviderConfig valueProviderConfig) {

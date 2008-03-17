@@ -39,11 +39,11 @@ public class ReportUseCase {
 	private String description;
 	private String reportLayoutType;
 	private String defaultPrinterUseCase;
-	private Set<Class> minAdapterClasses;
-	
-	
+	private Set<Class<?>> minAdapterClasses;
+
+
 	/**
-	 * 
+	 *
 	 */
 	public ReportUseCase() {
 		// TODO Auto-generated constructor stub
@@ -125,12 +125,12 @@ public class ReportUseCase {
 	public void setDefaultPrinterUseCase(String defaultPrinterUseCase) {
 		this.defaultPrinterUseCase = defaultPrinterUseCase;
 	}
-	
-	public Set<Class> getMinAdapterClasses() {
+
+	public Set<Class<?>> getMinAdapterClasses() {
 		return minAdapterClasses;
 	}
-	
-	public void setMinAdapterClasses(Set<Class> minAdapterClasses) {
+
+	public void setMinAdapterClasses(Set<Class<?>> minAdapterClasses) {
 		this.minAdapterClasses = minAdapterClasses;
 	}
 }

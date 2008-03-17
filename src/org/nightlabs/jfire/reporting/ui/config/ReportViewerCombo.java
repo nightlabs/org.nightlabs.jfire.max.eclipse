@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.composite.ComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry.ReportViewerEntry;
@@ -40,31 +40,31 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry.ReportViewer
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ReportViewerCombo extends ComboComposite<ReportViewerEntry> {
+public class ReportViewerCombo extends XComboComposite<ReportViewerEntry> {
 
 	private static class LabelProvider extends TableLabelProvider {
 
 		public String getColumnText(Object element, int arg1) {
 			return ((ReportViewerEntry)element).getName();
 		}
-		
+
 		@Override
 		public String getText(Object element) {
 			return getColumnText(element, 0);
 		}
-		
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ReportViewerCombo(Composite parent, int style) {
 		super(
 				parent,
 				SWT.READ_ONLY,
-				ReportViewerRegistry.sharedInstance().getReportViewerEntries(),
 				new LabelProvider()
 			);
+		setInput(ReportViewerRegistry.sharedInstance().getReportViewerEntries());
 	}
 
 	public void refresh(ReportUseCase useCase) {
@@ -73,7 +73,7 @@ public class ReportViewerCombo extends ComboComposite<ReportViewerEntry> {
 		if (useCase != null && useCase.getMinAdapterClasses() != null) {
 			List<ReportViewerEntry> filteredEntries = new LinkedList<ReportViewerEntry>();
 			entryLoop: for (ReportViewerEntry entry : entries) {
-				for (Class useCaseAdapter : useCase.getMinAdapterClasses()) {
+				for (Class<?> useCaseAdapter : useCase.getMinAdapterClasses()) {
 					if (!entry.getReportViewerFactory().isAdaptable(useCaseAdapter))
 						continue entryLoop;
 				}
@@ -84,5 +84,5 @@ public class ReportViewerCombo extends ComboComposite<ReportViewerEntry> {
 		else
 			setInput(entries);
 	}
-	
+
 }

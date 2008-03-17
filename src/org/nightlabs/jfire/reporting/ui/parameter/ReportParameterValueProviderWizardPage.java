@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.parameter;
 
@@ -43,7 +43,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 	private IReportParameterController parameterController;
 	private Map<ValueProviderID, IValueProviderGUI<?>> valueProviderGUIs = new HashMap<ValueProviderID, IValueProviderGUI<?>>();
 	private Set<IValueProviderGUIListener> valueProviderGUIListeners = new HashSet<IValueProviderGUIListener>();
-	
+
 	/**
 	 * @param pageName
 	 */
@@ -85,7 +85,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 		if (titleImage != null)
 			setImageDescriptor(titleImage);
 	}
-	
+
 	protected void init(SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, ValueAcquisitionSetup valueAcquisitionSetup, IReportParameterController parameterController)  {
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(ReportingPlugin.getDefault(), ReportParameterValueProviderWizardPage.class, null, ImageDimension._75x70));
 		this.pageProviderConfigs = pageProviderConfigs;
@@ -93,7 +93,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 		this.parameterController = parameterController;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -110,7 +110,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 			rowWrapper.getGridLayout().makeColumnsEqualWidth = true;
 			// now create the contents of this row
 			for (final ValueProviderConfig config : configRow) {
-				
+
 				final ValueProviderID providerID = ValueProviderID.create(
 						config.getValueProviderOrganisationID(),
 						config.getValueProviderCategoryID(),
@@ -123,8 +123,8 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 					configLabel.setLayoutData(new GridData());
 					continue;
 				}
-				
-				final IValueProviderGUI gui = factory.createValueProviderGUI(config);
+
+				final IValueProviderGUI<?> gui = factory.createValueProviderGUI(config);
 				valueProviderGUIs.put(providerID, gui);
 				Control guiControl = gui.createGUI(rowWrapper);
 				final IValueProviderGUIListener listener = new IValueProviderGUIListener() {
@@ -143,7 +143,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 											providerConfig.getValueProviderID()
 									);
 									if (valueProviderGUIs.containsKey(bindingProviderID)) {
-										IValueProviderGUI providerGUI = valueProviderGUIs.get(bindingProviderID);
+										IValueProviderGUI<?> providerGUI = valueProviderGUIs.get(bindingProviderID);
 										providerGUI.setInputParameterValue(binding.getParameterID(), output);
 									}
 								} else if (binding.getConsumer() instanceof AcquisitionParameterConfig) {
@@ -186,7 +186,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 		for (SortedSet<ValueProviderConfig> configRows : pageProviderConfigs.values()) {
 			for (ValueProviderConfig providerConfig : configRows) {
 				ValueProviderID providerID = providerConfig.getConfigValueProviderID();
-				IValueProviderGUI providerGUI = valueProviderGUIs.get(providerID);
+				IValueProviderGUI<?> providerGUI = valueProviderGUIs.get(providerID);
 				Map<String, ValueConsumerBinding> bindings = valueAcquisitionSetup.getValueConsumerBindings(providerConfig);
 				if (bindings == null)
 					continue; // This provider has no input values. TODO: Verify this!
@@ -200,7 +200,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onHide() {
 		for (IValueProviderGUIListener listener : valueProviderGUIListeners) {
@@ -208,12 +208,12 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 		}
 		super.onHide();
 	}
-	
+
 	@Override
 	public boolean isPageComplete() {
 		if (!contentsCreated)
 			return false;
-		for (IValueProviderGUI gui : valueProviderGUIs.values()) {
+		for (IValueProviderGUI<?> gui : valueProviderGUIs.values()) {
 			if (!gui.isAcquisitionComplete())
 				return false;
 		}

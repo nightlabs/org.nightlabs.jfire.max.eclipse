@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.config;
 
@@ -30,12 +30,12 @@ public class ReportLayoutConfigController extends
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.config.IConfigModuleController#getConfigModuleClass()
 	 */
-	public Class getConfigModuleClass() {
+	public Class<ReportLayoutConfigModule> getConfigModuleClass() {
 		return ReportLayoutConfigModule.class;
 	}
 
 	private static final Set<String> REPORT_LAYOUT_FETCH_GROUPS = new HashSet<String>();
-	
+
 	@Implement
 	public Set<String> getConfigModuleFetchGroups() {
 		if (REPORT_LAYOUT_FETCH_GROUPS.isEmpty()) {

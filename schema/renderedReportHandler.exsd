@@ -6,7 +6,7 @@
          <meta.schema plugin="org.nightlabs.jfire.reporting.ui" id="renderedReportHandler" name="RenderedReportHandler Extension Point"/>
       </appInfo>
       <documentation>
-         Extension point for hanlding rendered reports coming from the server. &lt;br/&gt;
+         Extension point for hanlding rendered reports coming from the server. &lt;br&gt;
 Each format has its own renderer that will put content into the rendered
 layout that is specific to the Birt format so a corresponding handler has
 to exist on the client that can manage the specialized content.

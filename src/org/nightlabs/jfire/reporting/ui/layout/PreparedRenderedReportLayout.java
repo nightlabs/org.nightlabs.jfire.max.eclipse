@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.layout;
 
@@ -14,7 +14,7 @@ import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
  * is created by a {@link RenderedReportHandler} and
  * references a file that represents the entry for the
  * given rendered report layout ready for use (unpacked and stored on disk).
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -22,9 +22,9 @@ public class PreparedRenderedReportLayout {
 
 	private File entryFile;
 	private RenderedReportLayout renderedReportLayout;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public PreparedRenderedReportLayout() {
 	}
@@ -38,7 +38,7 @@ public class PreparedRenderedReportLayout {
 		this.renderedReportLayout = layout;
 		this.entryFile = entryFile;
 	}
-	
+
 	/**
 	 * @return the entryFile
 	 */
@@ -66,17 +66,17 @@ public class PreparedRenderedReportLayout {
 	public void setRenderedReportLayout(RenderedReportLayout renderedReportLayout) {
 		this.renderedReportLayout = renderedReportLayout;
 	}
-	
+
 	/**
 	 * Get the {@link #entryFile} of this
 	 * prepared layout as {@link URL}.
-	 * 
+	 *
 	 * @return The entry file as {@link URL}.
 	 */
 	public URL getEntryFileAsURL() {
 		URL fileURL = null;
 		try {
-			fileURL = entryFile.toURL();
+			fileURL = entryFile.toURI().toURL();
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}

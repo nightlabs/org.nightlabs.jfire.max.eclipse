@@ -48,9 +48,9 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 
 	private Map<String, ReportUseCase> reportUseCases = new HashMap<String, ReportUseCase>();
 	private Map<String, ReportUseCase> reportUseCasesByLayoutType = new HashMap<String, ReportUseCase>();
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ReportUseCaseRegistry() {
 	}
@@ -81,11 +81,11 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 			String description = element.getAttribute("description"); //$NON-NLS-1$
 			if (description == null)
 				description = ""; //$NON-NLS-1$
-			
+
 			String defaultPrinterUseCase = element.getAttribute("defaultPrinterUseCase"); //$NON-NLS-1$
 			if (defaultPrinterUseCase == null)
 				defaultPrinterUseCase = ""; //$NON-NLS-1$
-			
+
 			String reportLayoutType = element.getAttribute("reportLayoutType"); //$NON-NLS-1$
 			ReportUseCase useCase = new ReportUseCase();
 			useCase.setId(id);
@@ -97,12 +97,12 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 				reportLayoutType = ""; //$NON-NLS-1$
 			useCase.setReportLayoutType(reportLayoutType);
 			useCase.setDefaultPrinterUseCase(defaultPrinterUseCase);
-			
+
 			String minAdapterClasses = element.getAttribute("minAdaptableClasses"); //$NON-NLS-1$
 			if (checkString(minAdapterClasses)) {
 				try {
 					String[] classes = minAdapterClasses.split(","); //$NON-NLS-1$
-					Set<Class> minClasses = new HashSet<Class>();
+					Set<Class<?>> minClasses = new HashSet<Class<?>>();
 					for (String className : classes) {
 						Class clazz = Class.forName(className);
 						minClasses.add(clazz);
@@ -114,7 +114,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 				}
 			} else
 				useCase.setMinAdapterClasses(null);
-			
+
 			reportUseCases.put(useCase.getId(), useCase);
 		}
 	}
@@ -122,7 +122,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 	/**
 	 * Returns the {@link ReportUseCase} with the given id, or
 	 * <code>null</code> if it was not found.
-	 * 
+	 *
 	 * @param id The id of the ReportUseCase to search.
 	 * @return The {@link ReportUseCase} with the given id, or
 	 * <code>null</code> if it was not found.
@@ -134,7 +134,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 
 	/**
 	 * Returns all registered {@link ReportUseCase}s.
-	 * 
+	 *
 	 * @return All registered {@link ReportUseCase}s.
 	 */
 	public List<ReportUseCase> getReportUseCases() {
@@ -147,7 +147,7 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 	/**
 	 * Returns the {@link ReportUseCase} registered to the given
 	 * reportLayoutType or <code>null</code> if none was found.
-	 * 
+	 *
 	 * @param reportLayoutType The reportLayoutType a registration should be searched for.
 	 * @return The {@link ReportUseCase} registered to the given
 	 * reportLayoutType or <code>null</code> if none was found.
@@ -156,10 +156,10 @@ public class ReportUseCaseRegistry extends AbstractEPProcessor {
 		checkProcessing();
 		return reportUseCasesByLayoutType.get(reportLayoutType);
 	}
-	
-	
+
+
 	private static ReportUseCaseRegistry sharedInstance;
-	
+
 	/**
 	 * Returns and layzily creates a static instance of {@link ReportUseCaseRegistry}
 	 */

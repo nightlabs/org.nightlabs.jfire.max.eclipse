@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes;
 
@@ -24,10 +24,10 @@ import org.nightlabs.l10n.DateFormatter;
  *
  */
 public class ValueProviderGUIDate extends AbstractValueProviderGUI<Date> {
-	
+
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Date> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
 			return new ValueProviderGUIDate(valueProviderConfig);
 		}
 
@@ -37,12 +37,12 @@ public class ValueProviderGUIDate extends AbstractValueProviderGUI<Date> {
 
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		}
-		
+
 	}
-	
+
 	private DateTimeEdit dateTimeEdit;
 
-	
+
 	public ValueProviderGUIDate(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}

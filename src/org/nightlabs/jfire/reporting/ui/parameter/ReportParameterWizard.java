@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.parameter;
 
@@ -9,9 +9,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
@@ -33,7 +31,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * but it is then a good idea to use the {@link Dialog} defined here
  * as WizardDialog.
  * </p>
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -50,7 +48,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	public static class Result {
 		private boolean acquisitionFinished;
 		private Map<String, Object> parameters;
-		
+
 		/**
 		 * @return the acquisitionFinished
 		 */
@@ -105,10 +103,10 @@ public class ReportParameterWizard extends DynamicPathWizard{
 			return super.open();
 		}
 	};
-	
+
 	private ReportRegistryItemID reportLayoutID;
 	private ReportParameterWizardHop wizardHop;
-	
+
 	/**
 	 * Creates a new {@link ReportParameterWizard} for the given reportLayoutID.
 	 * @param reportLayoutID The id of the ReportLayout this wizard should query parameters from the user.
@@ -140,18 +138,18 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		if (wizardHop != null)
 			addPage(wizardHop.getEntryPage());
 	}
-	
-	
+
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
 		return true;
 	}
-	
+
 	/**
 	 * @return the reportLayoutID
 	 */
@@ -167,7 +165,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	public String getIdentifier() {
 		return super.getIdentifier()+'#'+reportLayoutID.toString();
 	}
-	
+
 	/**
 	 * Returns the parameters this wizard gathered by now.
 	 * This should actually only be called after the wizard has finished.
@@ -178,7 +176,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 			return null;
 		return wizardHop.getParameters();
 	}
-	
+
 	/**
 	 * Opens the {@link ReportParameterWizard} for the given report layout
 	 * and returns its {@link Result}. The Result will indicate whether the
@@ -189,7 +187,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * or the ReportLayout has no {@link ReportParameterAcquisitionSetup} assigned, or the
 	 * Report has not parameters.
 	 * </p>
-	 * 
+	 *
 	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
 	 * @return The {@link Result} of the parameter acquisition process.
 	 */
@@ -209,7 +207,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 			dialogResult.setParameters(wiz.getParameters());
 		else
 			dialogResult.setParameters(null);
-		
+
 		return dialogResult;
 	}
 
@@ -220,7 +218,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * The result of this method might be <code>null</code>, if the user
 	 * aborts the wizard, or the Report layout has no {@link ReportParameterAcquisitionSetup}
 	 * assigned, or the ReportLayout has no parameters.
-	 * 
+	 *
 	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
 	 * @return The acquired parameters or <code>null</code>.
 	 */
@@ -229,5 +227,5 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		return result.getParameters();
 	}
 
-	
+
 }

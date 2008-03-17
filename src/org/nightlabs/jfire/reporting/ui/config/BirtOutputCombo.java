@@ -27,17 +27,17 @@
 package org.nightlabs.jfire.reporting.ui.config;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.base.ui.composite.ComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.util.CollectionUtil;
 
 /**
  * A Combo showing all BIRT outputtypes supported by JFire.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class BirtOutputCombo extends ComboComposite<Birt.OutputFormat> {
+public class BirtOutputCombo extends XComboComposite<Birt.OutputFormat> {
 
 	/**
 	 * @param types
@@ -45,7 +45,8 @@ public class BirtOutputCombo extends ComboComposite<Birt.OutputFormat> {
 	 * @param style
 	 */
 	public BirtOutputCombo(Composite parent, int style) {
-		super(parent, style, CollectionUtil.array2ArrayList(Birt.OutputFormat.values()));
+		super(parent, style);
+		setInput(CollectionUtil.array2ArrayList(Birt.OutputFormat.values()));
 	}
 
 }

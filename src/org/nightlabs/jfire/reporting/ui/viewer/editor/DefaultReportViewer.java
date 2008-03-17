@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
@@ -16,16 +16,16 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
  * The default report viewer is based an editor base report viewer
  * that supports html (by internal browser widget) and pdf
  * (by either the internal browser or a java pdf viewer by adobe)
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
 public class DefaultReportViewer extends AbstractEditorReportViewer {
 
 	public static final String ID_REPORT_VIEWER = DefaultReportViewer.class.getName();
-	
+
 	public DefaultReportViewerComposite compositeAdapter;
-	
+
 	public static class Factory implements ReportViewerFactory {
 
 		public ReportViewer createReportViewer() {
@@ -35,14 +35,14 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 			// Nothing to do here
 		}
-		
-		public boolean isAdaptable(Class adapter) {
+
+		public boolean isAdaptable(Class<?> adapter) {
 			return Composite.class.isAssignableFrom(adapter);
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public DefaultReportViewer() {
 	}
@@ -66,7 +66,7 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 		return null;
 	}
 
-	
+
 	@Override
 	public void showReport(RenderReportRequest renderRequest) {
 		if (compositeAdapter == null)
@@ -75,7 +75,7 @@ public class DefaultReportViewer extends AbstractEditorReportViewer {
 			compositeAdapter.showReport(renderRequest);
 	}
 
-	
+
 	@Override
 	public void showReport(RenderedReportLayout renderedReportLayout)
 	{
