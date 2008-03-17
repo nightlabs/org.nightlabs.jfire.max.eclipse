@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -32,8 +31,6 @@ import org.nightlabs.util.CollectionUtil;
 public class VoucherDataProviderThread
 extends AbstractScriptDataProviderThread
 {
-	private static final Logger logger = Logger.getLogger(VoucherDataProviderThread.class);
-	
 	public VoucherDataProviderThread(AbstractClientDeliveryProcessor clientDeliveryProcessor) {
 		super(clientDeliveryProcessor);
 	}
@@ -63,7 +60,7 @@ extends AbstractScriptDataProviderThread
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	protected LayoutMapForArticleIDSet getLayoutMapForArticleIDSet(List<ArticleID> articleIDs)
 	{
