@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.trade.ui.accounting.account;
 
@@ -34,7 +34,7 @@ public class ValueProviderGUIAccount
 extends AbstractValueProviderGUI<AnchorID>
 {
 	public static class Factory implements IValueProviderGUIFactory {
-		
+
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
@@ -56,9 +56,9 @@ extends AbstractValueProviderGUI<AnchorID>
 				Object arg2) throws CoreException {
 		}
 	}
-	
+
 	private AccountEntryViewer accountEntryViewer;
-	
+
 	public ValueProviderGUIAccount(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
@@ -71,7 +71,7 @@ extends AbstractValueProviderGUI<AnchorID>
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		group.setLayout(new GridLayout());
 		group.setText(getValueProviderConfig().getMessage().getText());
-		
+
 		accountEntryViewer = new AccountEntryViewer(new AccountEntryFactory().createEntry());
 		accountEntryViewer.createComposite(group);
 		accountEntryViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
@@ -80,7 +80,7 @@ extends AbstractValueProviderGUI<AnchorID>
 				notifyOutputChanged();
 			}
 		});
-		
+
 		return group;
 	}
 
@@ -88,7 +88,7 @@ extends AbstractValueProviderGUI<AnchorID>
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
 	public AnchorID getOutputValue() {
-		Anchor anchor = (Anchor) accountEntryViewer.getListComposite().getFirstSelectedElement();
+		Anchor anchor = accountEntryViewer.getListComposite().getFirstSelectedElement();
 		if (anchor != null)
 			return (AnchorID) JDOHelper.getObjectId(anchor);
 		return null;
