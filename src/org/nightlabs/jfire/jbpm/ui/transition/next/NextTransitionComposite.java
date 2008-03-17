@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.base.ui.composite.ComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -35,7 +35,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class NextTransitionComposite
 		extends XComposite
 {
-	private ComboComposite<Transition> nextTransitionCombo;
+	private XComboComposite<Transition> nextTransitionCombo;
 	private Button signalButton;
 
 	public NextTransitionComposite(Composite parent, int style)
@@ -45,7 +45,7 @@ public class NextTransitionComposite
 		getGridData().grabExcessVerticalSpace = false;
 		getGridData().verticalAlignment = SWT.BEGINNING;
 
-		nextTransitionCombo = new ComboComposite<Transition>(this, SWT.DROP_DOWN | SWT.READ_ONLY, new LabelProvider() {
+		nextTransitionCombo = new XComboComposite<Transition>(this, SWT.DROP_DOWN | SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element)
 			{

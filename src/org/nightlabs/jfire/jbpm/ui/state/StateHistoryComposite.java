@@ -23,7 +23,6 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.jbpm.dao.StateDAO;
-import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.ui.resource.Messages;
@@ -99,7 +98,7 @@ extends AbstractTableComposite<State>
 		StateDefinition.FETCH_GROUP_NAME
 	};
 
-	private Statable statable;
+//	private Statable statable;
 
 	public void setStatableID(final ObjectID statableID)
 	{
