@@ -46,7 +46,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -67,7 +67,7 @@ extends DynamicPathWizardPage
 	private ProductTypeID parentProductTypeID;
 	private ProductType parentProductType;
 	private LegalEntityEditComposite ownerEditComposite = null;
-	private LegalEntityEditComposite vendorEditComposite = null;	
+	private LegalEntityEditComposite vendorEditComposite = null;
 	private InheritanceToggleButton inheritButtonOwner = null;
 	private InheritanceToggleButton inheritButtonVendor = null;
 
@@ -80,7 +80,7 @@ extends DynamicPathWizardPage
 		ProductType.FETCH_GROUP_OWNER,
 		ProductType.FETCH_GROUP_VENDOR,
 		LegalEntity.FETCH_GROUP_PERSON,
-		Person.FETCH_GROUP_FULL_DATA
+		PropertySet.FETCH_GROUP_FULL_DATA
 	};
 
 	/**
@@ -124,13 +124,13 @@ extends DynamicPathWizardPage
 
 		this.ownerEditComposite = new LegalEntityEditComposite(comp0, SWT.NONE);
 		this.ownerEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		ownerEditComposite.addLegalEntityValueChangedListener( 
+		ownerEditComposite.addLegalEntityValueChangedListener(
 				new ILegalEntityValueChangedListener()
 				{
 					public void legalEntityValueChanged()
 					{
 						inheritButtonOwner.setSelection(false);
-						// if value has changed 				
+						// if value has changed
 						originEntityOwner = getOwnerEntity();
 					}
 				});
@@ -143,10 +143,10 @@ extends DynamicPathWizardPage
 		inheritButtonOwner.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 
-				if(inheritButtonOwner.getSelection())	
+				if(inheritButtonOwner.getSelection())
 					getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
 				else
-				{    
+				{
 					if(originEntityOwner != null)
 						getOwnerEditComposite().setLegalEntity(originEntityOwner);
 				}
@@ -176,14 +176,14 @@ extends DynamicPathWizardPage
 
 		this.vendorEditComposite = new LegalEntityEditComposite(comp1, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		vendorEditComposite.addLegalEntityValueChangedListener( 
+		vendorEditComposite.addLegalEntityValueChangedListener(
 				new ILegalEntityValueChangedListener()
 				{
 					public void legalEntityValueChanged()
 					{
 
 						inheritButtonVendor.setSelection(false);
-						// if value has changed 				
+						// if value has changed
 						originEntityVendor = getVendorEntity();
 					}
 				});
@@ -194,10 +194,10 @@ extends DynamicPathWizardPage
 		inheritButtonVendor.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 
-				if(inheritButtonVendor.getSelection())	
+				if(inheritButtonVendor.getSelection())
 					getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
 				else
-				{    
+				{
 					if(originEntityVendor != null)
 						getVendorEditComposite().setLegalEntity(originEntityVendor);
 				}
@@ -228,7 +228,7 @@ extends DynamicPathWizardPage
 					{
 						page.setFaded(false);
 
-						if (parentProductType != null)			
+						if (parentProductType != null)
 						{
 
 							getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
