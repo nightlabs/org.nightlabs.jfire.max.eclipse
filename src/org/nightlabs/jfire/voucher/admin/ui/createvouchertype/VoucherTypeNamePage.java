@@ -53,6 +53,7 @@ import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
  */
 public class VoucherTypeNamePage extends DynamicPathWizardPage
 {
+	@SuppressWarnings("unused")
 	private ProductTypeID parentVoucherTypeID;
 	private Combo inheritanceNatureCombo;
 
@@ -66,7 +67,7 @@ public class VoucherTypeNamePage extends DynamicPathWizardPage
 		this.setDescription(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeNamePage.description")); //$NON-NLS-1$
 		this.parentVoucherTypeID = parentVoucherTypeID;
 	}
- 
+
 	@Override
 	public Control createPageContents(Composite parent)
 	{

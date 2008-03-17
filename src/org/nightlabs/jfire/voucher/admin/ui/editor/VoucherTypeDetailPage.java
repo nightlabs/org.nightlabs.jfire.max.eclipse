@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
@@ -37,7 +38,7 @@ extends AbstractProductTypeDetailPage
 			return new VoucherTypeDetailPageController(editor);
 		}
 	}
-	
+
 	@Override
 	protected IProductTypeSectionPart createNameSection(Composite parent) {
 		return new VoucherTypeNameSection(this, parent, ExpandableComposite.TITLE_BAR);
@@ -57,7 +58,7 @@ extends AbstractProductTypeDetailPage
 	protected IProductTypeSectionPart createVendorSection(Composite parent) {
 		return null;
 	}
-	
+
 	@Override
 	protected IProductTypeSectionPart createSaleAccessControlSection(Composite parent) {
 		return new VoucherTypeSaleAccessControlSection(this, parent);
@@ -67,17 +68,17 @@ extends AbstractProductTypeDetailPage
 		super(editor, VoucherTypeDetailPage.class.getName(),
 				Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.title")); //$NON-NLS-1$
 	}
-	
+
 	private VoucherLayoutSection voucherLayoutSection = null;
 	public VoucherLayoutSection getVoucherLayoutSection() {
 		return voucherLayoutSection;
 	}
-		
+
 	@Override
 	protected void addSections(Composite parent)
 	{
 		super.addSections(parent);
-		
+
 		voucherLayoutSection = new VoucherLayoutSection(this, parent);
 		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getManagedForm().addPart(voucherLayoutSection);
@@ -90,17 +91,17 @@ extends AbstractProductTypeDetailPage
 		final VoucherType voucherType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				
+
 				if (voucherLayoutSection != null
 						&& !voucherLayoutSection.getSection().isDisposed()) {
 
 					voucherLayoutSection.getVoucherLayoutComposite()
 							.setVoucherType(voucherType);
-					getNameSection().setProductTypePageController((AbstractProductTypePageController)getPageController());
-					getSaleAccessControlSection().setProductTypePageController((AbstractProductTypePageController)getPageController());
+					getNameSection().setProductTypePageController((AbstractProductTypePageController<ProductType>)getPageController());
+					getSaleAccessControlSection().setProductTypePageController((AbstractProductTypePageController<ProductType>)getPageController());
 
 				}
-				
+
 				if (voucherType.isClosed()) {
 					getManagedForm().getForm().getForm().setMessage(
 							Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.productTypeClosedMessage"), //$NON-NLS-1$
@@ -116,5 +117,5 @@ extends AbstractProductTypeDetailPage
 	protected String getPageFormTitle() {
 		return Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.pageFormTitle"); //$NON-NLS-1$
 	}
-	
+
 }

@@ -3,7 +3,9 @@ package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.Window;
@@ -14,7 +16,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
@@ -29,7 +30,6 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.priceconfig.CurrencyAmountTable;
@@ -213,7 +213,7 @@ extends ToolBarSectionPart
 
 			voucherType.setPackagePriceConfig(parentVoucherType.getPackagePriceConfig());
 
-			
+
 		}
 		else
 			voucherType.setPackagePriceConfig(originalVoucherConfig);
@@ -257,10 +257,10 @@ extends ToolBarSectionPart
 		updatePricesTable();
 
 		inheritanceAction.setChecked(voucherType.getFieldMetaData("packagePriceConfig").isValueInherited()); //$NON-NLS-1$
-		
-		
-			
-		
+
+
+
+
 	}
 
 
@@ -294,8 +294,8 @@ extends ToolBarSectionPart
 	}
 
 
-	
-	
+
+
 
 	protected void removeCurrencyPressed()
 	{

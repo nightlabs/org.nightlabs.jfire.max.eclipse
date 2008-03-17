@@ -117,7 +117,7 @@ implements ISelectionProvider
 		}
 	};
 
-	private DialogCellEditor cellEditor;
+//	private DialogCellEditor cellEditor;
 
 	private DialogCellEditor createDialogCellEditor(Table table)
 	{
