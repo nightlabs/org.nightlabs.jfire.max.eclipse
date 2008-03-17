@@ -71,7 +71,7 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 
 	@Override
 	@Implement
-	protected Class getJDOObjectClass()
+	protected Class<DynamicProductType> getJDOObjectClass()
 	{
 		return DynamicProductType.class;
 	}

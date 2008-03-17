@@ -9,8 +9,9 @@ import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageControll
  *
  * @deprecated I think this class is not used at all. Delete it? Marco.
  */
+@Deprecated
 public abstract class AbstractDynamicProductTypePageController
- extends AbstractProductTypePageController
+ extends AbstractProductTypePageController<DynamicProductType>
 {
 	/**
 	 * @param editor
@@ -28,7 +29,7 @@ public abstract class AbstractDynamicProductTypePageController
 	}
 
 	public DynamicProductType getDynamicProductType() {
-		return (DynamicProductType) getProductType();
+		return getProductType();
 	}
-	
+
 }

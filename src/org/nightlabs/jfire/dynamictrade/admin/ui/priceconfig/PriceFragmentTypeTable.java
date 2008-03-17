@@ -24,7 +24,7 @@ import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePrice
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 
 public class PriceFragmentTypeTable
-extends AbstractTableComposite
+extends AbstractTableComposite<InputPriceFragmentType>
 {
 	private ICellModifier cellModifier = new ICellModifier() {
 		public boolean canModify(Object element, String property)

@@ -15,6 +15,7 @@ import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePrice
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValueSelectorComboImpl;
+import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue.PriceFragmentTypeDimensionValue;
 
 public class DimensionValueSelectorImpl
 extends DimensionValueSelectorComboImpl
@@ -29,7 +30,7 @@ extends DimensionValueSelectorComboImpl
 	private PriceFragmentTypeTable priceFragmentTypeTable;
 
 	@Override
-	protected void createDimensionUIElements(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, Dimension dimension)
+	protected void createDimensionUIElements(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, Dimension<?> dimension)
 	{
 		if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
 			priceFragmentTypeTable = new PriceFragmentTypeTable(this);
@@ -49,15 +50,15 @@ extends DimensionValueSelectorComboImpl
 	List<InputPriceFragmentType> inputPriceFragmentTypes;
 
 	@Override
-	protected void fillDimensionCombo(Dimension dimension, Combo dimensionCombo)
+	protected void fillDimensionCombo(Dimension<?> dimension, Combo dimensionCombo)
 	{
 		DynamicTradePriceConfig dynamicTradePriceConfig = (DynamicTradePriceConfig) getGridPriceConfig();
 
 		if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
-			List priceFragmentTypes = dimension.getValues();
+			List<PriceFragmentTypeDimensionValue> priceFragmentTypes = ((Dimension.PriceFragmentTypeDimension)dimension).getValues();
 			inputPriceFragmentTypes = new ArrayList<InputPriceFragmentType>(priceFragmentTypes.size());
-			for (Iterator it = priceFragmentTypes.iterator(); it.hasNext();) {
-				DimensionValue.PriceFragmentTypeDimensionValue priceFragmentTypeDimensionValue = (DimensionValue.PriceFragmentTypeDimensionValue)it.next();
+			for (Iterator<PriceFragmentTypeDimensionValue> it = priceFragmentTypes.iterator(); it.hasNext();) {
+				PriceFragmentTypeDimensionValue priceFragmentTypeDimensionValue = it.next();
 //				PriceFragmentType priceFragmentType = (PriceFragmentType) it.next();
 				InputPriceFragmentType inputPriceFragmentType = new InputPriceFragmentType(priceFragmentTypeDimensionValue);
 				inputPriceFragmentType.setInput(dynamicTradePriceConfig.getInputPriceFragmentTypes().contains(priceFragmentTypeDimensionValue.getObject()));
@@ -74,7 +75,7 @@ extends DimensionValueSelectorComboImpl
 	{
 		if (priceFragmentTypeDimensionIndex < 0) {
 			int index = 0;
-			for (Dimension dimension : getDimensions()) {
+			for (Dimension<?> dimension : getDimensions()) {
 				if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
 					priceFragmentTypeDimensionIndex = index;
 					break;
@@ -95,7 +96,7 @@ extends DimensionValueSelectorComboImpl
 		if (dimensionIdx != getPriceFragmentTypeDimensionIndex())
 			return super.getSelectedDimensionValue(dimensionIdx, throwExceptionIfNothingSelected);
 
-		Collection c = priceFragmentTypeTable.getSelectedElements();
+		Collection<InputPriceFragmentType> c = priceFragmentTypeTable.getSelectedElements();
 		if (c.isEmpty()) {
 			if (inputPriceFragmentTypes == null)
 				return null;
@@ -103,7 +104,7 @@ extends DimensionValueSelectorComboImpl
 				return inputPriceFragmentTypes.isEmpty() ? null : inputPriceFragmentTypes.get(0).getPriceFragmentTypeDimensionValue();
 		}
 
-		return ((InputPriceFragmentType)c.iterator().next()).getPriceFragmentTypeDimensionValue();
+		return (c.iterator().next()).getPriceFragmentTypeDimensionValue();
 	}
 
 	@Override

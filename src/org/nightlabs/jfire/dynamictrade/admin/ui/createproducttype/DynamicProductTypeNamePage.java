@@ -53,7 +53,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
  */
 public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 {
-	private ProductTypeID parentDynamicProductTypeID;
+//	private ProductTypeID parentDynamicProductTypeID;
 	private Combo inheritanceNatureCombo;
 
 	private I18nTextBuffer dynamicProductTypeNameBuffer;
@@ -65,9 +65,9 @@ public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 				Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeNamePage.title"), //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(DynamicTradeAdminPlugin.getDefault(), DynamicProductTypeNamePage.class));
 		this.setDescription(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeNamePage.description")); //$NON-NLS-1$
-		this.parentDynamicProductTypeID = parentDynamicProductTypeID;
+//		this.parentDynamicProductTypeID = parentDynamicProductTypeID;
 	}
- 
+
 	@Override
 	public Control createPageContents(Composite parent)
 	{

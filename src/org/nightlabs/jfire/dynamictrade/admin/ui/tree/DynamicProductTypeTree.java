@@ -30,7 +30,7 @@ import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 public class DynamicProductTypeTree
-extends AbstractTreeComposite
+extends AbstractTreeComposite<DynamicProductType>
 {
 	protected static class DynamicProductTypeTreeContentProvider
 	extends JDOObjectTreeContentProvider<ProductTypeID, DynamicProductType, DynamicProductTypeTreeNode>
@@ -67,7 +67,7 @@ extends AbstractTreeComposite
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
 	}
-	
+
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
@@ -156,11 +156,12 @@ extends AbstractTreeComposite
 	}
 
 	@Override
-	protected Object getSelectionObject(Object obj)
+	protected DynamicProductType getSelectionObject(Object obj)
 	{
-		if (obj instanceof DynamicProductTypeTreeNode)
-			return ((DynamicProductTypeTreeNode)obj).getJdoObject();
-
-		return null;
+		return ((DynamicProductTypeTreeNode)obj).getJdoObject();
+//		if (obj instanceof DynamicProductTypeTreeNode)
+//			return ((DynamicProductTypeTreeNode)obj).getJdoObject();
+//
+//		return null;
 	}
 }
