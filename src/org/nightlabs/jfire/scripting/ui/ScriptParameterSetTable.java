@@ -1,9 +1,8 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.ui;
 
-import java.util.Collection;
 import java.util.Locale;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -16,21 +15,21 @@ import org.nightlabs.jfire.scripting.ScriptParameterSet;
 
 /**
  * A table displaying a Collection ScriptParameterSets.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *
  */
-public class ScriptParameterSetTable extends AbstractTableComposite {
+public class ScriptParameterSetTable extends AbstractTableComposite<ScriptParameterSet> {
 
-	private static class ContentProvider extends TableContentProvider {
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof Collection)
-				return ((Collection)inputElement).toArray();
-			return super.getElements(inputElement);
-		}
-	}
-	
+//	private static class ContentProvider extends TableContentProvider {
+//		@Override
+//		public Object[] getElements(Object inputElement) {
+//			if (inputElement instanceof Collection)
+//				return ((Collection)inputElement).toArray();
+//			return super.getElements(inputElement);
+//		}
+//	}
+
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof ScriptParameterSet) {
@@ -45,7 +44,7 @@ public class ScriptParameterSetTable extends AbstractTableComposite {
 			return getColumnText(element, 0);
 		}
 	}
-	
+
 	/**
 	 * @param parent
 	 * @param style
@@ -86,7 +85,7 @@ public class ScriptParameterSetTable extends AbstractTableComposite {
 	 */
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new ContentProvider());
+		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 

@@ -45,11 +45,11 @@ import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 /**
  * Tree of <code>ScriptRegistryItemNode</code>s with one column
  * and a default ContentProvider and LabelProvider.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class ScriptRegistryItemTree extends AbstractTreeComposite {
+public class ScriptRegistryItemTree extends AbstractTreeComposite<ScriptRegistryItem> {
 
 	public static class SelectionProxy extends SelectionNotificationProxy {
 
@@ -77,35 +77,35 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 				return ((ScriptRegistryItemNode)selectionObject).getRegistryItem();
 			return super.getPersistenceCapable(selectionObject);
 		}
-		
+
 	}
-	
+
 	private SelectionProxy selectionProxy;
 	private String selectionZone;
 	private boolean addSelectionProxy;
-	
+
 	// TODO: ignoreinheritance ?
 	private static final boolean IGNORE_INHERITANCE = false;
-	
-	
-	
+
+
+
 	/**
 	 * Creates a new ScriptRegistryItemTree that will trigger
 	 * selection changes for the zone specified.
-	 * 
+	 *
 	 * @param parent The trees parent
 	 * @param zone The zone notifications of selection changes will be made
 	 */
 	public ScriptRegistryItemTree(Composite parent, String zone) {
 		this(parent, SWT.FULL_SELECTION, true, true, zone, true);
 	}
-	
-	
+
+
 	/**
 	 * Creates a new ScriptRegistryItemTree with the possibility to choose
 	 * whether to set the selectionProxy that will trigger SelectionChanges
 	 * through the NightLabs Notification framework.
-	 * 
+	 *
 	 * @param parent The trees parent
 	 * @param zone The zone notifications of selection changes will be made
 	 * @param addSelectionProxy whether to set the selectionProxy
@@ -116,7 +116,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 
 	/**
 	 * Create a new
-	 * 
+	 *
 	 * @param parent The trees parent
 	 * @param style SWT style of the tree
 	 * @param setLayoutData Whether to set the layout data
@@ -130,10 +130,10 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		this.addSelectionProxy = addSelectionProxy;
 		init();
 	}
-	
+
 	/**
 	 * Create a new
-	 * 
+	 *
 	 * @param parent The trees parent
 	 * @param style SWT style of the tree
 	 * @param setLayoutData Whether to set the layout data
@@ -220,5 +220,5 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite {
 		}
 		return result;
 	}
-	
+
 }

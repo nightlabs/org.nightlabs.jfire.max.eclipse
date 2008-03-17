@@ -57,7 +57,7 @@ public class SimpleScriptEditorComposite
 extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(SimpleScriptEditorComposite.class);
-	
+
 	public SimpleScriptEditorComposite(Collection<ScriptConditioner> scriptConditioners,
 			Composite parent, int style) {
 		super(parent, style);
@@ -72,7 +72,7 @@ extends XComposite
 		this.scriptConditioners = scriptConditioners;
 		createComposite(this);
 	}
- 
+
 	private Collection<ScriptConditioner> scriptConditioners;
 	private Composite conditionArea;
 	private TreeViewer treeViewer;
@@ -84,7 +84,7 @@ extends XComposite
 //	private Map<ICondition, IConditionContainer> condition2Container = new HashMap<ICondition, IConditionContainer>();
 	private Map<SimpleConditionComposite, ISimpleCondition> conditionComp2SimpleCondition = new HashMap<SimpleConditionComposite, ISimpleCondition>();
 	private ICondition condition = null;
-	
+
 	public ICondition getCondition() {
 		return condition;
 	}
@@ -115,7 +115,7 @@ extends XComposite
 	private void createComposite(Composite parent)
 	{
 		initScriptConditioner();
-		
+
 		this.parent = parent;
 		final Composite comp = new XComposite(parent, SWT.BORDER);
 		comp.setLayout(new GridLayout(3, false));
@@ -123,30 +123,30 @@ extends XComposite
 		compData.minimumHeight = 100;
 		compData.minimumWidth = 200;
 		comp.setLayoutData (compData);
-				
+
 		final Sash sash = new Sash(comp, SWT.VERTICAL);
 		final FormLayout form = new FormLayout ();
 		comp.setLayout(form);
-		
+
 		FormData treeData = new FormData ();
 		treeData.left = new FormAttachment (0, 0);
 		treeData.right = new FormAttachment (sash, 0);
 		treeData.top = new FormAttachment (0, 0);
 		treeData.bottom = new FormAttachment (100, 0);
-		
+
 		treeViewer = new TreeViewer(comp, SWT.SINGLE | SWT.FULL_SELECTION);
 		treeViewer.setContentProvider(new ConditionContentProvider());
 		treeViewer.setLabelProvider(new ConditionLabelProvider());
 		treeViewer.addSelectionChangedListener(treeSelectionListener);
 		treeViewer.getControl().setLayoutData(treeData);
-		
+
 		final int limit = 20, percent = 50;
 		final FormData sashData = new FormData ();
 		sashData.left = new FormAttachment (percent, 0);
 		sashData.top = new FormAttachment (0, 0);
 		sashData.bottom = new FormAttachment (100, 0);
 		sash.setLayoutData (sashData);
-		
+
 		sash.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				Rectangle sashRect = sash.getBounds();
@@ -159,7 +159,7 @@ extends XComposite
 				}
 			}
 		});
-				
+
 		text = new Text(comp, SWT.BORDER | SWT.WRAP);
 		text.setEnabled(false);
 		FormData textData = new FormData ();
@@ -168,7 +168,7 @@ extends XComposite
 		textData.top = new FormAttachment (0, 0);
 		textData.bottom = new FormAttachment (100, 0);
 		text.setLayoutData(textData);
-						
+
 		setCondition(createSimpleCondition());
 	}
 
@@ -189,7 +189,7 @@ extends XComposite
 		container.setCombineOperator(currentCombineOperator);
 		return container;
 	}
-	
+
 	public void setCondition(ICondition condition)
 	{
 		if (condition != null) {
@@ -208,7 +208,7 @@ extends XComposite
 //		condition2Container.clear();
 		conditionComp2SimpleCondition.clear();
 	}
-	
+
 	private ISelectionChangedListener treeSelectionListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
 			StructuredSelection selection = (StructuredSelection) event.getSelection();
@@ -219,7 +219,7 @@ extends XComposite
 			}
 		}
 	};
-	 
+
 	private void conditionSelected(ICondition condition) {
 		if (conditionArea != null)
 			conditionArea.dispose();
@@ -227,7 +227,7 @@ extends XComposite
 		GridData data = new GridData(GridData.FILL_BOTH);
 		data.minimumHeight = 150;
 		conditionArea.setLayoutData(data);
-		
+
 		createContainerComp(conditionArea, condition);
 		setScriptText(condition);
 		parent.layout(true, true);
@@ -267,15 +267,15 @@ extends XComposite
 		deleteButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteButton.text")); //$NON-NLS-1$
 		if (container == null)
 			deleteButton.setEnabled(false);
-				
+
 		button2Condition.put(addButton, container);
 		button2Condition.put(deleteButton, condition);
 		conditionComp2SimpleCondition.put(simpleComp, condition);
-		
+
 		addButton.addSelectionListener(addSimpleConditionListener);
 		deleteButton.addSelectionListener(deleteConditionListener);
 	}
-	
+
 	private SelectionListener addSimpleConditionListener = new SelectionAdapter(){
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -298,7 +298,7 @@ extends XComposite
 			setCondition(condition);
 		}
 	};
-	
+
 	private SelectionListener deleteConditionListener = new SelectionAdapter(){
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -320,7 +320,7 @@ extends XComposite
 							condition = con2;
 						if (con2.equals(con))
 							condition = con1;
-						
+
 						container.removeCondition(condition);
 					}
 				}
@@ -328,7 +328,7 @@ extends XComposite
 			setCondition(condition);
 		}
 	};
-		
+
 	private SelectionListener addContainerListener = new SelectionAdapter(){
 		@Override
 		public void widgetSelected(SelectionEvent e)
@@ -340,7 +340,7 @@ extends XComposite
 			setCondition(condition);
 		}
 	};
-	
+
 	private SelectionListener deleteContainerListener = new SelectionAdapter(){
 		@Override
 		public void widgetSelected(SelectionEvent e)
@@ -350,11 +350,11 @@ extends XComposite
 			IConditionContainer parent = container.getParent();
 			if (parent != null)
 				parent.removeCondition(container);
-			
+
 			setCondition(condition);
 		}
 	};
-	
+
 	private void createContainerComp(Composite parent, ICondition condition)
 	{
 		parent.setLayout(new GridLayout(1, true));
@@ -383,7 +383,7 @@ extends XComposite
 					label.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.containerCompLabel.text")); //$NON-NLS-1$
 					Label spacer = new Label(containerComp, SWT.NONE);
 					spacer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					
+
 					Button deleteContainer = new Button(containerComp, SWT.NONE);
 					deleteContainer.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.deleteContainerButton.text")); //$NON-NLS-1$
 					deleteContainer.addSelectionListener(deleteContainerListener);
@@ -393,10 +393,10 @@ extends XComposite
 			createContainerDetailComp(parent, container);
 		}
 	}
-			
+
 	private Map<XComboComposite<CombineOperator>, IConditionContainer> combineCombo2Container =
 		new HashMap<XComboComposite<CombineOperator>, IConditionContainer>();
-	
+
 	private void createContainerDetailComp(Composite parent, IConditionContainer container)
 	{
 		Group containerComp = new Group(parent, SWT.NONE);
@@ -410,10 +410,10 @@ extends XComposite
 		combineCombo2Container.put(combineOperatorCombo, container);
 		Label l = new Label(containerComp, SWT.NONE);
 		l.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.combineOperatorLabel.text")); //$NON-NLS-1$
-		
+
 		Label spacer = new Label(containerComp, SWT.NONE);
 		spacer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		Button addContainerButton = new Button(containerComp, SWT.NONE);
 		addContainerButton.setText(Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.accContainerButton.text")); //$NON-NLS-1$
 		Button deleteContainerButton = new Button(containerComp, SWT.NONE);
@@ -421,12 +421,12 @@ extends XComposite
 
 		button2Condition.put(addContainerButton, condition);
 		button2Condition.put(deleteContainerButton, condition);
-		
+
 		addContainerButton.addSelectionListener(addContainerListener);
 		deleteContainerButton.addSelectionListener(deleteContainerListener);
 		combineOperatorCombo.addSelectionListener(combineComboListener);
 	}
-	
+
 	private SelectionListener combineComboListener = new SelectionAdapter(){
 		@Override
 		public void widgetSelected(SelectionEvent e)
@@ -438,7 +438,7 @@ extends XComposite
 			setScriptText(condition);
 		}
 	};
-	
+
 	class ConditionContentProvider
 	implements ITreeContentProvider
 	{
@@ -449,7 +449,7 @@ extends XComposite
 			}
 			return new Object[] {};
 		}
-		
+
 		public Object getParent(Object element) {
 			if (element instanceof ICondition) {
 				ICondition condition = (ICondition) element;
@@ -457,7 +457,7 @@ extends XComposite
 			}
 			return null;
 		}
-		
+
 		public boolean hasChildren(Object element)
 		{
 			if (element instanceof IConditionContainer) {
@@ -465,24 +465,24 @@ extends XComposite
 			}
 			return false;
 		}
-		
+
 		public Object[] getElements(Object inputElement)
 		{
 			if (inputElement instanceof Collection) {
-				return ((Collection) inputElement).toArray();
+				return ((Collection<Object>) inputElement).toArray();
 			}
 			return new Object[] {inputElement};
 		}
-		
+
 		public void dispose() {
-			
+
 		}
-		
+
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			
+
 		}
 	}
-	
+
 //	class ConditionLabelProvider
 //	extends LabelProvider
 //	{
@@ -497,7 +497,7 @@ extends XComposite
 //			return super.getText(element);
 //		}
 //	}
-	
+
 	class ConditionLabelProvider
 	extends LabelProvider
 	{
@@ -516,7 +516,7 @@ extends XComposite
 			return super.getText(element);
 		}
 	}
-	
+
 	private ConditionChangeListener conditionChangeListener = new ConditionChangeListener()
 	{
 		public void conditonChanged(ConditionChangedEvent event) {
@@ -534,7 +534,7 @@ extends XComposite
 			}
 			treeViewer.setInput(CollectionUtil.createArrayList(condition));
 			setScriptText(condition);
-			
+
 			if (logger.isDebugEnabled()) {
 				logger.debug("conditonChanged"); //$NON-NLS-1$
 				logger.debug("oldSimpleCondition = "+getGenerator().getScriptText(oldSimpleCondition)); //$NON-NLS-1$
@@ -545,7 +545,7 @@ extends XComposite
 			}
 		}
 	};
-	
+
 	private boolean replaceCondition(IConditionContainer container, ISimpleCondition original,
 			ISimpleCondition replace)
 	{
@@ -563,14 +563,14 @@ extends XComposite
 		}
 		return false;
 	}
-	
+
 	private void setScriptText(ICondition condition)
 	{
 		String scriptText = getGenerator().getScriptText(condition);
 		if (scriptText != null)
 			text.setText(scriptText);
 	}
-		
+
 	private IConditionGenerator generator;
 	private IConditionGenerator getGenerator()
 	{
@@ -581,12 +581,12 @@ extends XComposite
 		}
 		return generator;
 	}
-	
+
 	private String language = ScriptExecutorJavaScript.LANGUAGE_JAVA_SCRIPT;;
 	protected String getLanguage() {
 		return language;
 	}
-	
+
 	public Script getScript()
 	{
 		Map<String, ScriptRegistryItemID> imports = new HashMap<String, ScriptRegistryItemID>();
@@ -594,7 +594,7 @@ extends XComposite
 		Script script = new Script(getLanguage(), getGenerator().getScriptText(condition), imports);
 		return script;
 	}
-	
+
 	public void setScript(Script script)
 	{
 		if (script != null) {
@@ -604,7 +604,7 @@ extends XComposite
 			setCondition(condition);
 		}
 	}
-	
+
 	private Map<ScriptRegistryItemID, String> allImports = new HashMap<ScriptRegistryItemID, String>();
 	private void initScriptConditioner()
 	{
@@ -613,7 +613,7 @@ extends XComposite
 			allImports.put(scriptConditioner.getScriptRegistryItemID(), scriptConditioner.getVariableName());
 		}
 	}
-	
+
 	private Map<String, ScriptRegistryItemID> getImports(ICondition condition, Map<String, ScriptRegistryItemID> imports)
 	{
 		if (condition instanceof ISimpleCondition) {
@@ -629,5 +629,5 @@ extends XComposite
 		}
 		return imports;
 	}
-	
+
 }

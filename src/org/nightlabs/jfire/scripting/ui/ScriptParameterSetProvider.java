@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.ui;
 
@@ -9,43 +9,36 @@ import java.util.HashSet;
 import javax.jdo.FetchPlan;
 import javax.security.auth.login.LoginException;
 
-import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectProvider;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.jdo.controller.JDOObjectController;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.id.ScriptParameterSetID;
 
 /**
  * Accessor for ScriptParameterSets.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *
  */
 public class ScriptParameterSetProvider extends JDOObjectProvider {
-	
-	/**
-	 * LOG4J logger used by this class
-	 */
-	private static final Logger logger = Logger.getLogger(ScriptParameterSetProvider.class);
 
 	public static String[] DEFAULT_FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT,
 		ScriptParameterSet.FETCH_GROUP_NAME,
 		ScriptParameterSet.FETCH_GROUP_PARAMETERS
 	};
-	
+
 	/**
 	 * Listeners to structure change
 	 */
 	private Collection<ScriptRegistryListener> registryListeners = new HashSet<ScriptRegistryListener>();
-	
-	/**
-	 * The controller for the registry, changes when the structrue was changed
-	 */
-	private JDOObjectController registryController;
-	
+
+//	/**
+//	 * The controller for the registry, changes when the structrue was changed
+//	 */
+//	private JDOObjectController registryController;
+
 //	/**
 //	 * Updates the structrue tree and notifies all listeners
 //	 * when the registry changed on the server.
@@ -97,15 +90,15 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //			}
 //		}
 //	};
-	
-	
+
+
 	private Collection<ScriptParameterSet> parameterSets;
 	// TODO: listen to login-state
-	
+
 	protected boolean isLoaded() {
 		return parameterSets != null;
 	}
-	
+
 	/**
 	 * Returns the collection of all Parametersets
 	 * for the organisation of the currently logged in
@@ -114,7 +107,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 	public Collection<ScriptParameterSet> getParameterSets() {
 		if (isLoaded())
 			return parameterSets;
-		
+
 		try {
 			parameterSets = ScriptingPlugin.getScriptManager().getScriptParameterSets(
 					Login.getLogin().getOrganisationID(),
@@ -123,7 +116,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+
 //		// Get the registry controller keeping
 //		// track of all changes
 //		JDOManager jdoManager = null;
@@ -139,26 +132,26 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 //		}
 //		Cache.sharedInstance().put(null, registryController, JDOObjectController.DEFAULT_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //		JDOLifecycleManager.sharedInstance().addNotificationListener(JDOObjectController.class, parameterSetChangeListener);
-		
-		
+
+
 		return parameterSets;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	protected ScriptParameterSetProvider() {
 		super();
 	}
-	
-	
+
+
 	@Override
 	protected Object retrieveJDOObject(String scope, Object objectID, String[] fetchGroups, int maxFetchDepth) throws Exception {
 		if (objectID instanceof ScriptParameterSetID)
 			return ScriptingPlugin.getScriptManager().getScriptParameterSet((ScriptParameterSetID)objectID, fetchGroups, maxFetchDepth);
 		return null;
 	}
-	
+
 	public ScriptParameterSet getScriptParameterSet(String organisationID, long parameterSetID, String[] fetchGroups, int maxFetchDepth) {
 		return (ScriptParameterSet)getJDOObject(null, ScriptParameterSetID.create(organisationID, parameterSetID), fetchGroups, maxFetchDepth);
 	}
@@ -174,7 +167,7 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Add a listener to changes of the ScriptRegistry structure
 	 * @param registryListener The listener to add
@@ -182,27 +175,27 @@ public class ScriptParameterSetProvider extends JDOObjectProvider {
 	public void addScriptRegistryListener(ScriptRegistryListener registryListener) {
 		registryListeners.add(registryListener);
 	}
-	
+
 	/**
 	 * Removes the given listener
 	 */
 	public void remveReportRegistryListener(ScriptRegistryListener registryListener) {
 		registryListeners.remove(registryListener);
 	}
-	
-	private void notifyRegistryListeners() {
-		for (ScriptRegistryListener listener : new HashSet<ScriptRegistryListener>(registryListeners)) {
-			try {
-				listener.scriptRegistryChanged();
-			} catch (Exception e) {
-				logger.error(e);
-			}
-		}
-	}
 
-	
+//	private void notifyRegistryListeners() {
+//		for (ScriptRegistryListener listener : new HashSet<ScriptRegistryListener>(registryListeners)) {
+//			try {
+//				listener.scriptRegistryChanged();
+//			} catch (Exception e) {
+//				logger.error(e);
+//			}
+//		}
+//	}
+
+
 	private static ScriptParameterSetProvider sharedInstance;
-	
+
 	public static ScriptParameterSetProvider sharedInstance() {
 		if (sharedInstance == null)
 			sharedInstance = new ScriptParameterSetProvider();

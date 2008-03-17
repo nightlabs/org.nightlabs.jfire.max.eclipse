@@ -49,7 +49,7 @@ extends XComposite
 	private Map<ScriptRegistryItemID, List<CompareOperator>> variable2CompareOperators;
 	private Map<ScriptRegistryItemID, String> variable2Name;
 	private Map<Object, String> value2Name;
-	
+
 	private XComboComposite<ScriptRegistryItemID> variableCombo;
 	private XComboComposite<CompareOperator> operatorCombo;
 	private XComboComposite<Object> valueCombo;
@@ -59,7 +59,7 @@ extends XComposite
 		GridLayout layout = new GridLayout(3, true);
 		XComposite.configureLayout(LayoutMode.TOP_BOTTOM_WRAPPER, layout);
 		parent.setLayout(layout);
-		
+
 		int size = scriptConditioners.size();
 		List<ScriptRegistryItemID> variableNames = new ArrayList<ScriptRegistryItemID>(size);
 		variable2PossibleValues = new HashMap<ScriptRegistryItemID, List<Object>>(size);
@@ -69,7 +69,7 @@ extends XComposite
 		for (ScriptConditioner scriptConditioner : scriptConditioners) {
 			variableNames.add(scriptConditioner.getScriptRegistryItemID());
 			variable2PossibleValues.put(scriptConditioner.getScriptRegistryItemID(),
-					new ArrayList(scriptConditioner.getPossibleValues()));
+					new ArrayList<Object>(scriptConditioner.getPossibleValues()));
 			variable2CompareOperators.put(scriptConditioner.getScriptRegistryItemID(),
 					scriptConditioner.getCompareOperators());
 			variable2Name.put(scriptConditioner.getScriptRegistryItemID(),
@@ -81,7 +81,7 @@ extends XComposite
 		}
 
 		int defaultWidgetStyle = AbstractListComposite.getDefaultWidgetStyle(this);
-		
+
 		variableCombo = new XComboComposite<ScriptRegistryItemID>( parent, defaultWidgetStyle,
 				(String) null, scriptLabelProvider );
 		variableCombo.setInput( variableNames );
@@ -100,11 +100,11 @@ extends XComposite
 		valueCombo.setInput( variable2PossibleValues.get(selectedVariable) );
 		valueCombo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		valueCombo.addSelectionListener(valueListener);
-		
+
 		refresh();
 		variableCombo.selectElementByIndex(0);
 	}
-	
+
 	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){
 		@Override
 		public String getText(Object object) {
@@ -118,7 +118,7 @@ extends XComposite
 			return value2Name.get(object);
 		}
 	};
-	
+
 	private SelectionListener operatorListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			condition = null;
@@ -128,7 +128,7 @@ extends XComposite
 		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	};
-	
+
 	private SelectionListener valueListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			condition = null;
@@ -146,14 +146,14 @@ extends XComposite
 		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	};
-	
+
 	protected void refresh()
 	{
 		condition = null;
 		selectedVariable = variableCombo.getSelectedElement();
 		operatorCombo.setInput(variable2CompareOperators.get(selectedVariable));
 		valueCombo.setInput(variable2PossibleValues.get(selectedVariable));
-		
+
 		operatorCombo.selectElementByIndex(0);
 		if (valueCombo.getElements().size() > 0)
 			valueCombo.selectElementByIndex(0);
@@ -164,11 +164,11 @@ extends XComposite
 			selectedValue = valueCombo.getSelectedElement();
 		else
 			selectedValue = "";		 //$NON-NLS-1$
-		
+
 		fireConditionChanged();
 		layout(true, true);
 	}
-	
+
 	private void selectVariable(ScriptRegistryItemID scriptID) {
 		variableCombo.selectElement(scriptID);
 		refresh();
@@ -183,11 +183,11 @@ extends XComposite
 		valueCombo.selectElement(value);
 		selectedValue = value;
 	}
-	
+
 	private ScriptRegistryItemID selectedVariable;
 	private CompareOperator selectedCompareOperator;
 	private Object selectedValue;
-	
+
 	private ISimpleCondition condition;
 	public ISimpleCondition getCondition()
 	{
@@ -204,7 +204,7 @@ extends XComposite
 		selectCompareOperator(simpleCondition.getCompareOperator());
 		selectValue(simpleCondition.getValue());
 	}
-		
+
 	private ListenerList listeners = new ListenerList();
 	public void addConditionChangedListener(ConditionChangeListener listener) {
 		listeners.add(listener);
@@ -212,7 +212,7 @@ extends XComposite
 	public void removeConditionChangedListener(ConditionChangeListener listener) {
 		listeners.remove(listener);
 	}
-	
+
 	private void fireConditionChanged()
 	{
 		for (int i=0; i<listeners.getListeners().length; i++) {
@@ -220,5 +220,5 @@ extends XComposite
 			listener.conditonChanged(new ConditionChangedEvent(getCondition(), this));
 		}
 	}
-	
+
 }

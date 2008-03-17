@@ -46,7 +46,7 @@ import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * Node object to be used when displaying ScriptRegistryItems in trees.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -57,15 +57,15 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	 * ContentProvider for a tree of <code>ScriptRegistryItemNode</code>s
 	 */
 	static class ContentProvider extends TreeContentProvider {
-		
+
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Collection)
-				return ((Collection)inputElement).toArray();
+				return ((Collection<Object>)inputElement).toArray();
 			else if (inputElement instanceof ScriptRegistryItemNode)
 				return ((ScriptRegistryItemNode)inputElement).getChildren();
 			return new Object[] { inputElement };
 		}
-		
+
 		@Override
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof ScriptRegistryItemNode)
@@ -91,7 +91,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		@Override
 		public void dispose() {
 		}
-		
+
 	}
 
 	/**
@@ -140,9 +140,9 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		public Image getImage(Object element) {
 			return getColumnImage(element, 0);
 		}
-		
+
 	}
-	
+
 	public static final ScriptRegistryItemNode STATUS_FETCHING_NODE = new ScriptRegistryItemNode() {
 		private static final long serialVersionUID = 1L;
 
@@ -161,9 +161,9 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 			return false;
 		}
 	};
-	
-	
-	
+
+
+
 	/**
 	 * @param parentCarrier
 	 * @param item
@@ -189,13 +189,13 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	{
 		super(parentCarrier, itemID);
 	}
-	
+
 	public ScriptRegistryItemNode(ScriptRegistryItemNode parentNode, ScriptRegistryItemCarrier cloned) {
 		setParentCarrier(parentNode);
 		setRegistryItemID(cloned.getRegistryItemID());
 	}
-	
-	
+
+
 	public ScriptRegistryItemNode(
 			ScriptRegistryItemNode parentNode,
 			ScriptRegistryItemCarrier cloned,
@@ -211,20 +211,20 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 			}
 		}
 	}
-	
+
 	protected ScriptRegistryItemNode() {
 		super();
 	}
-	
-	
+
+
 	public boolean hasChildren() {
 		return getChildCarriers().size() > 0;
 	}
-	
+
 	public Object[] getChildren() {
 		return getChildCarriers().toArray();
 	}
-	
+
 	public Collection<ScriptRegistryItemNode> getChildNodes() {
 		Collection<ScriptRegistryItemCarrier> carriers = getChildCarriers();
 		Collection<ScriptRegistryItemNode> result = new HashSet<ScriptRegistryItemNode>();
@@ -233,16 +233,16 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 		}
 		return result;
 	}
-	
+
 	public ScriptRegistryItem getRegistryItem() {
 		// TODO remove NullProgressMonitor
 		ScriptRegistryItem item = ScriptRegistryItemProvider.sharedInstance().getScriptRegistryItem(
 				getRegistryItemID(), new NullProgressMonitor());
 		return item;
 	}
-	
+
 	public String getName() {
 		return getRegistryItem().getName().getText(Locale.getDefault().getLanguage());
 	}
-	
+
 }

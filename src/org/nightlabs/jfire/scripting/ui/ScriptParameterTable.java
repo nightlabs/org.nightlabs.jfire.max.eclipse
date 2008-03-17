@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.ui;
 
@@ -18,15 +18,15 @@ import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * A table displaying ScriptParameters.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
  *
  */
-public class ScriptParameterTable extends AbstractTableComposite {
+public class ScriptParameterTable extends AbstractTableComposite<ScriptParameter> {
 
-	private static class ContentProvider extends TableContentProvider {
-	}
-	
+//	private static class ContentProvider extends TableContentProvider {
+//	}
+
 	private static class LabelProvider extends TableLabelProvider {
 
 		public String getColumnText(Object element, int columnIndex) {
@@ -45,7 +45,7 @@ public class ScriptParameterTable extends AbstractTableComposite {
 			return getColumnText(element,0);
 		}
 	}
-	
+
 	/**
 	 * @param parent
 	 * @param style
@@ -89,17 +89,17 @@ public class ScriptParameterTable extends AbstractTableComposite {
 	 */
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setContentProvider(new ContentProvider());
+		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 
 	/**
 	 * Sets the input to the parameters of the given ScriptParameterSet.
-	 * 
+	 *
 	 * @param scriptParameterSet
 	 */
 	public void setInput(ScriptParameterSet scriptParameterSet) {
 		setInput(scriptParameterSet.getParameters());
 	}
-	
+
 }
