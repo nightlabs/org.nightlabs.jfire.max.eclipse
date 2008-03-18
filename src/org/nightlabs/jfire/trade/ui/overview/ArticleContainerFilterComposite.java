@@ -23,7 +23,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
@@ -42,6 +42,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
+@Deprecated
 public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extends AbstractArticleContainerQuery<R>>
 	extends JDOQueryComposite<R, Q>
 {
@@ -381,7 +382,7 @@ public class ArticleContainerFilterComposite<R extends ArticleContainer,Q extend
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		boolean wholeQueryChanged = isWholeQueryChanged(event);
 		final AbstractArticleContainerQuery<R> changedQuery =

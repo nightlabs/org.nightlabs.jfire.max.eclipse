@@ -27,11 +27,9 @@ public class StatableSearchFilterFactory
 		
 		// set the class with which the JDOQuery will be instantiated and for which the 
 		// selectable states shall be retrieved.
-		// FIXME: this doesn't work! The correct elements are retrieved and set to the combo but none are shown!! (marius)
-		// 	The strange thing is that if done like right now (the composite fetches the base class from the QueryProvider, it works!
-//		filterComposite.setStatableClass(getViewerBaseClass());
+		filterComposite.setStatableClass(getViewerBaseClass());
 		
-		return new StatableFilterSearchComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
+		return filterComposite;
 	}
 
 }

@@ -27,7 +27,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryTypeDAO;
@@ -45,6 +45,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
+@Deprecated
 public class RepositorySearchComposite
 	extends JDOQueryComposite<Repository, RepositoryQuery>
 {
@@ -227,7 +228,7 @@ public class RepositorySearchComposite
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		final boolean wholeQueryChanged = isWholeQueryChanged(event);		
 		final RepositoryQuery changedQuery = (RepositoryQuery) event.getChangedQuery();

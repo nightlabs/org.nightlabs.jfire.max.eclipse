@@ -39,14 +39,13 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
@@ -63,12 +62,12 @@ implements ISelectionProvider
 {
 
 	private List<Currency> currencies = new ArrayList<Currency>(0);
-	private Combo combo;
+	private XCombo combo;
 	
 	public CurrencyCombo(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		setLayoutData( new GridData(GridData.FILL_HORIZONTAL));
-		combo = new Combo(this, SWT.NONE);
+		combo = new XCombo(this, getBorderStyle());
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -84,7 +83,7 @@ implements ISelectionProvider
 			}
 		});
 
-		combo.add(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.pseudoEntry_loading")); //$NON-NLS-1$
+		combo.add(null, Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.pseudoEntry_loading")); //$NON-NLS-1$
 		combo.select(0);
 
 		org.nightlabs.base.ui.job.Job loadCurrenciesJob = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.CurrencyCombo.loadCurrenciesJob.name")) { //$NON-NLS-1$
@@ -118,7 +117,7 @@ implements ISelectionProvider
 							}
 
 							for (Currency currency : currencies) {
-								combo.add(currency.getCurrencySymbol());
+								combo.add(null, currency.getCurrencySymbol());
 								if (selectedCurrency != null && selectedCurrency.equals(currency)) {
 									idx = i;
 								}
