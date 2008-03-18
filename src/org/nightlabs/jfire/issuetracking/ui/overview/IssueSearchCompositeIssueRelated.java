@@ -25,7 +25,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
@@ -49,6 +49,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun 
  *
  */
+@Deprecated
 public class IssueSearchCompositeIssueRelated
 extends JDOQueryComposite<Issue, IssueQuery>
 {
@@ -238,7 +239,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		boolean wholeQueryChanged = isWholeQueryChanged(event);
 		final IssueQuery changedQuery = (IssueQuery) event.getChangedQuery();

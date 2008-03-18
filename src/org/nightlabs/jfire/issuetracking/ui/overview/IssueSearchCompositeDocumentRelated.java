@@ -6,7 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
@@ -17,6 +17,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 /**
  * @author Chairat Kongarayawetchakun 
  */
+@Deprecated
 public class IssueSearchCompositeDocumentRelated
 extends JDOQueryComposite<Issue, IssueQuery>
 {
@@ -80,7 +81,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		final IssueQuery changedQuery = (IssueQuery) event.getChangedQuery();
 		if (changedQuery == null)

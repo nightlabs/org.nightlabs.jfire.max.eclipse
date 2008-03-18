@@ -18,7 +18,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
@@ -27,6 +27,7 @@ import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
 
+@Deprecated
 public class IssueSearchCompositePeopleRelated
 	extends JDOQueryComposite<Issue, IssueQuery>
 {
@@ -179,7 +180,7 @@ public class IssueSearchCompositePeopleRelated
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		boolean allChanged = isWholeQueryChanged(event);
 		

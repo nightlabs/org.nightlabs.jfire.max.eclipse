@@ -17,11 +17,12 @@ import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.resource.Messages;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.base.ui.search.JDOQueryComposite;
+import org.nightlabs.jfire.base.ui.overview.search.JDOQueryComposite;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.l10n.DateFormatter;
 
+@Deprecated
 public class IssueSearchCompositeTimeRelated
 extends JDOQueryComposite<Issue, IssueQuery>
 {
@@ -162,7 +163,7 @@ extends JDOQueryComposite<Issue, IssueQuery>
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		boolean wholeQueryChanged = isWholeQueryChanged(event);
 		final IssueQuery changedQuery = (IssueQuery) event.getChangedQuery();
