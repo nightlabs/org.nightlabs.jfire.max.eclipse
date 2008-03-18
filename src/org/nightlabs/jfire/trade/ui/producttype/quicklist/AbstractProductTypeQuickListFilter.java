@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -111,17 +112,28 @@ implements IProductTypeQuickListFilter
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#setSelection(org.eclipse.jface.viewers.ISelection)
 	 */
-	public void setSelection(ISelection selection)
+	public void setSelection(final ISelection selection)
 	{
 		if (getResultViewerControl() instanceof ISelectionProvider) {
-			ISelectionProvider selectionProvider = (ISelectionProvider) getResultViewerControl();
+			final ISelectionProvider selectionProvider = (ISelectionProvider) getResultViewerControl();
 			if (selectionProvider instanceof ISelectionHandler) {
-				ISelectionHandler selectionHandler = (ISelectionHandler) selectionProvider;
+				final ISelectionHandler selectionHandler = (ISelectionHandler) selectionProvider;
 				if (selectionHandler.canHandleSelection(selection)) {
-					selectionHandler.setSelection(selection);
+					Display.getDefault().syncExec(new Runnable(){
+						@Override
+						public void run() {
+							selectionHandler.setSelection(selection);
+						}
+					});
 				}				
-			} else {
-				selectionProvider.setSelection(selection);
+			} 
+			else {
+				Display.getDefault().syncExec(new Runnable(){
+					@Override
+					public void run() {
+						selectionProvider.setSelection(selection);
+					}
+				});
 			}
 		}
 	}
