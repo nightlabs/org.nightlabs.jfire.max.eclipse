@@ -29,12 +29,8 @@ import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueComment;
-import org.nightlabs.jfire.issue.IssueDescription;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
-import org.nightlabs.jfire.issue.IssueLocal;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueSubject;
 import org.nightlabs.jfire.issue.IssueType;
@@ -52,21 +48,45 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueEditorPageController extends ActiveEntityEditorPageController<Issue> {
 
 	private static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-//		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
-//		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
-		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-//		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
-		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
-		IssueComment.FETCH_GROUP_THIS_COMMENT,
-		StatableLocal.FETCH_GROUP_STATE,
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		IssueType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_SUBJECT,
+		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT_NAMES,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
+		Issue.FETCH_GROUP_ISSUE_REPORTER,
+		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
+		Issue.FETCH_GROUP_ISSUE_FILELIST,
+		IssuePriority.FETCH_GROUP_NAME,
 		Statable.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
+		Issue.FETCH_GROUP_ISSUE_LINKS,
+		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
+		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME};
+		StateDefinition.FETCH_GROUP_NAME,
+		
+		
+//		FetchPlan.DEFAULT, 
+//		Issue.FETCH_GROUP_THIS_ISSUE,
+//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
+////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
+//		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
+//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+////		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
+//		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+//		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
+//		IssueComment.FETCH_GROUP_THIS_COMMENT,
+//		StatableLocal.FETCH_GROUP_STATE,
+//		Statable.FETCH_GROUP_STATE,
+//		State.FETCH_GROUP_STATE_DEFINITION,
+//		StateDefinition.FETCH_GROUP_NAME};
+	};
 
 	public IssueEditorPageController(EntityEditor editor)
 	{
