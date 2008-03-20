@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -53,7 +54,6 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * 
@@ -62,10 +62,10 @@ import org.nightlabs.util.Util;
 public class StatableFilterSearchComposite
 	extends AbstractQueryFilterComposite<Statable, StatableQuery>
 {
-	private DateTimeEdit createDTMin = null;
-	private DateTimeEdit createDTMax = null;
-	private Button activeButton = null;
-	private Button onlyInSelectedStateButton = null;
+	private DateTimeEdit createDTMin;
+	private DateTimeEdit createDTMax;
+	private Button stateDefinitionActiveButton;
+	private Button onlyInSelectedStateButton;
 	private StateDefinitionID stateDefinitionID;
 	private boolean onlyInSelectedState = false;
 	private Date createDTMinDate;
@@ -129,44 +129,46 @@ public class StatableFilterSearchComposite
 	{
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.group.text"));		 //$NON-NLS-1$
-		group.setLayout(new GridLayout(3, false));
+		group.setLayout(new GridLayout(4, false));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Composite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		wrapper.setLayout(new GridLayout(3, true));
-		activeButton = new Button(wrapper, SWT.CHECK);
-		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
-		activeButton.addSelectionListener(new SelectionAdapter()
+		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
+			LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
+		wrapper.getGridLayout().makeColumnsEqualWidth = true;
+		wrapper.getGridData().horizontalSpan = 2;
+		stateDefinitionActiveButton = new Button(wrapper, SWT.CHECK);
+		stateDefinitionActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.activeButton.text")); //$NON-NLS-1$
+		stateDefinitionActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				stateDefinitions.setEnabled(active);
-				onlyInSelectedStateButton.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setOnlyInSelectedState(onlyInSelectedState);
-					getQuery().setStateDefinitionID(stateDefinitionID);
+					if (stateDefinitionID == null)
+					{
+						initialValue = true;
+						getQuery().setOnlyInSelectedState(onlyInSelectedState);
+						getQuery().setStateDefinitionID(stateDefinitionID);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setOnlyInSelectedState(onlyInSelectedState);
+						getQuery().setStateDefinitionID(stateDefinitionID);
+					}
 				}
 				else
 				{
 					getQuery().setOnlyInSelectedState(false);
 					getQuery().setStateDefinitionID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
 		onlyInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.onlyInSelectedStateButton.text")); //$NON-NLS-1$
 		GridData selectedStateButtonData = new GridData();
-		selectedStateButtonData.horizontalSpan = 2;
+//		selectedStateButtonData.horizontalSpan = 2;
 		onlyInSelectedStateButton.setLayoutData(selectedStateButtonData);
 		onlyInSelectedStateButton.setEnabled(false);
 		onlyInSelectedStateButton.addSelectionListener(new SelectionAdapter()
@@ -175,17 +177,11 @@ public class StatableFilterSearchComposite
 			public void widgetSelected(SelectionEvent e)
 			{
 				onlyInSelectedState = onlyInSelectedStateButton.getSelection();
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				getQuery().setOnlyInSelectedState(onlyInSelectedState);
-				setUIChangedQuery(false);
 			}
 		});
 		
-		stateDefinitions = new XComboComposite<StateDefinition>(wrapper, SWT.NONE, labelProvider);
+		stateDefinitions = new XComboComposite<StateDefinition>(wrapper, getBorderStyle(), labelProvider);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitions.setLayoutData(data);
@@ -195,12 +191,7 @@ public class StatableFilterSearchComposite
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				getQuery().setStateDefinitionID(stateDefinitionID);
-				setUIChangedQuery(false);
 			}
 		});
 		
@@ -214,40 +205,41 @@ public class StatableFilterSearchComposite
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		createDTMin.setDate(cal.getTime());
+		createDTMin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createDTMin.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
-				if (isUpdatingUI())
-					return;
-				
 				createDTMinDate = createDTMin.getDate();
-				setUIChangedQuery(true);
 				getQuery().setStateCreateDTMin(createDTMinDate);
-				setUIChangedQuery(false);
 			}
 		});
-		createDTMin.addActiveChangeListener(new SelectionAdapter() 
+		createDTMin.addActiveChangeListener(new ButtonSelectionListener() 
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button) e.getSource()).getSelection();
-				setSearchSectionActive(active);
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setStateCreateDTMin(createDTMin.getDate());
+					if (createDTMinDate == null)
+					{
+						initialValue = true;
+						// for consistency we need to update the field according to the initial value of
+						// the date edit composites.
+						createDTMinDate = createDTMin.getDate();
+						getQuery().setStateCreateDTMin(createDTMinDate);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setStateCreateDTMin(createDTMinDate);
+					}
 				}
 				else
 				{
 					getQuery().setStateCreateDTMin(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 		
@@ -261,41 +253,41 @@ public class StatableFilterSearchComposite
 		cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
 		createDTMax.setDate(cal.getTime());
+		createDTMax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createDTMax.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
-				if (isUpdatingUI())
-					return;
-				
 				createDTMaxDate = createDTMax.getDate();
-				setUIChangedQuery(true);
 				getQuery().setStateCreateDTMax(createDTMaxDate);
-				setUIChangedQuery(false);
 			}
 		});
-		createDTMax.addActiveChangeListener(new SelectionAdapter()
+		createDTMax.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button) e.getSource()).getSelection();
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setStateCreateDTMax(createDTMax.getDate());
+					if (createDTMaxDate == null)
+					{
+						initialValue = true;
+						// for consistency we need to update the field according to the initial value of
+						// the date edit composites.
+						createDTMaxDate = createDTMax.getDate();
+						getQuery().setStateCreateDTMax(createDTMaxDate);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setStateCreateDTMax(createDTMaxDate);
+					}
 				}
 				else
 				{
 					getQuery().setStateCreateDTMax(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 	}
@@ -391,6 +383,20 @@ public class StatableFilterSearchComposite
 	@Override
 	protected void unsetSearchQueryValues(StatableQuery query)
 	{
+		if (! stateDefinitionActiveButton.getSelection())
+		{
+			stateDefinitionID = null;
+			onlyInSelectedState = false;
+		}
+		if (! createDTMax.isActive())
+		{
+			createDTMaxDate = null;
+		}
+		if (! createDTMin.isActive())
+		{
+			createDTMinDate = null;
+		}
+		
 		query.setOnlyInSelectedState(false);
 		query.setStateCreateDTMin(null);
 		query.setStateCreateDTMax(null);
@@ -398,26 +404,37 @@ public class StatableFilterSearchComposite
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
-		if (uIChangedQuery())
-			return;
-		
 		if (event.getChangedQuery() == null)
 		{
-			stateDefinitions.setSelection((StateDefinition) null);
+			onlyInSelectedState = false;
 			onlyInSelectedStateButton.setSelection(false);
-			activeButton.setSelection(false);
+			stateDefinitionID = null;
+			stateDefinitions.setSelection((StateDefinition) null);
+			setSearchSectionActive(stateDefinitionActiveButton, false);
+
+			createDTMinDate = null;
 			createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			createDTMin.setActive(false);
+			if (createDTMin.isActive())
+			{
+				createDTMin.setActive(false);
+				setSearchSectionActive(false);
+			}
+
+			createDTMaxDate = null;
 			createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			createDTMax.setActive(false);
+			if (createDTMax.isActive())
+			{
+				createDTMax.setActive(false);
+				setSearchSectionActive(false);
+			}
 		}
 		else
 		{
-			
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
+				boolean active = initialValue;
 				if (StatableQuery.PROPERTY_ONLY_IN_SELECTED_STATE.equals(fieldChange.getPropertyName()))
 				{
 					onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
@@ -425,63 +442,63 @@ public class StatableFilterSearchComposite
 				
 				if (StatableQuery.PROPERTY_STATE_CREATE_DATE_MAX.equals(fieldChange.getPropertyName()))
 				{
-					if (fieldChange.getNewValue() == null)
+					Date maxDate = (Date) fieldChange.getNewValue();
+					createDTMax.setDate(maxDate);
+					
+					active |= maxDate != null;
+					if (createDTMax.isActive() != active)
 					{
-						createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
-						createDTMax.setActive(false);
-					}
-					else
-					{
-						createDTMax.setDate((Date) fieldChange.getNewValue());
-						createDTMax.setActive(true);
+						createDTMax.setActive(active);
+						setSearchSectionActive(active);
 					}
 				}
 				
 				if (StatableQuery.PROPERTY_STATE_CREATE_DATE_MIN.equals(fieldChange.getPropertyName()))
 				{
-					if (fieldChange.getNewValue() == null)
+					Date minDate = (Date) fieldChange.getNewValue();
+					createDTMin.setDate(minDate);
+					active |= minDate != null;
+					if (createDTMin.isActive() != active)
 					{
-						createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
-						createDTMin.setActive(false);
-					}
-					else
-					{
-						createDTMin.setDate((Date) fieldChange.getNewValue());
-						createDTMin.setActive(true);
+						createDTMin.setActive(active);
+						setSearchSectionActive(active);
 					}
 				}
 				
 				if (StatableQuery.PROPERTY_STATE_DEFINITION_ID.equals(fieldChange.getPropertyName()))
 				{
 					StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
-					if (! Util.equals(stateDefinitionID, tmpID))
+					if (tmpID == null)
 					{
-						if (tmpID == null)
-						{
-							stateDefinitions.setSelection((StateDefinition) null);
-							activeButton.setSelection(false);
-						}
-						else
-						{
-							StateDefinition selection;
-							try
-							{
-								selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
-									Collections.singleton(stateDefinitionID), FETCH_GROUPS_STATE_DEFINITON, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-								).iterator().next();
-							} catch (Exception e)
-							{
-								if (e instanceof RuntimeException)
-								{
-									throw (RuntimeException) e;
-								}
-								
-								throw new RuntimeException(e);
-							}
-							stateDefinitions.setSelection(selection);
-						}
+						stateDefinitions.setSelection((StateDefinition) null);
 					}
+					else
+					{
+						StateDefinition selection;
+						try
+						{
+							selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
+								Collections.singleton(stateDefinitionID), FETCH_GROUPS_STATE_DEFINITON, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							).iterator().next();
+						}
+						catch (Exception e)
+						{
+							if (e instanceof RuntimeException)
+							{
+								throw (RuntimeException) e;
+							}
+
+							throw new RuntimeException(e);
+						}						
+						stateDefinitions.setSelection(selection);
+					}
+					
+					active |= tmpID != null;
+					stateDefinitions.setEnabled(active);
+					onlyInSelectedStateButton.setEnabled(active);
+					setSearchSectionActive(stateDefinitionActiveButton, active);
+//					initialValue = false;
 				}
 			} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 		} // else (changedQuery != null)

@@ -111,11 +111,6 @@ implements ISelectionProvider
 								selectedCurrency = null;
 							}
 
-							if (selectedCurrency == null && !currencies.isEmpty()) {
-								selectedCurrency = currencies.get(0);
-//								fireSelectionChangedEvent = true;
-							}
-
 							for (Currency currency : currencies) {
 								combo.add(null, currency.getCurrencySymbol());
 								if (selectedCurrency != null && selectedCurrency.equals(currency)) {
@@ -126,8 +121,16 @@ implements ISelectionProvider
 							if (idx >= 0)
 								combo.select(idx);
 
+//							if (selectedCurrency == null && !currencies.isEmpty()) {
+//								selectedCurrency = currencies.get(0);
+////								fireSelectionChangedEvent = true;
+//							}
+							
+//							TODO: do not fire this selection event, since other listeners added from outside are
+//								also triggered and hence we cannot know what will happen by doing so. (marius)	
+//								Maybe a callback hook is what would be best here.
 //							if (fireSelectionChangedEvent)
-							fireSelectionChangedEvent();
+//							fireSelectionChangedEvent();
 						}
 					});
 

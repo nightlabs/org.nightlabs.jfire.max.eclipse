@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.trade.ui.legalentity.view;
 
 import javax.jdo.FetchPlan;
@@ -27,6 +24,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -38,6 +36,7 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
+import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
@@ -144,7 +143,7 @@ extends XComposite
 	
 	private void initGUI() {
 		FormToolkit toolkit = new FormToolkit(Display.getDefault());
-//		setToolkit(new NightlabsFormsToolkit(Display.getDefault()));
+		setToolkit(new NightlabsFormsToolkit(toolkit.getColors()));
 //		adaptToToolkit();
 		form = toolkit.createForm(this);
 //		form = new Form(this, SWT.BORDER);
@@ -162,7 +161,7 @@ extends XComposite
 		searchSection.setLayout(new GridLayout());
 		
 //		quickSearchGroup = new Composite(wrapper, SWT.BORDER);
-		Composite quickSearchGroup = new XComposite(searchSection, SWT.NONE);
+		XComposite quickSearchGroup = new XComposite(searchSection, SWT.NONE);
 //		quickSearchGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchGroup.text")); //$NON-NLS-1$
 		quickSearchGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout gl = new GridLayout();
@@ -294,7 +293,10 @@ extends XComposite
 			if (legalEntity.isAnonymous())
 				setAnonymousVisualisation();
 			else
+			{
 				setLegalEntityVisualisation(legalEntity);
+				adaptToToolkit();
+			}
 		}
 
 		AnchorID anchorID = (AnchorID) (selectedLegalEntity == null ? null : JDOHelper.getObjectId(selectedLegalEntity));

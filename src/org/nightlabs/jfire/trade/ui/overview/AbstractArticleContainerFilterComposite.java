@@ -39,7 +39,6 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -48,18 +47,22 @@ import org.nightlabs.util.Util;
 public abstract class AbstractArticleContainerFilterComposite<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
 	extends AbstractQueryFilterComposite<R, Q>
 {
-	private DateTimeEdit createDTMin = null;
-	private DateTimeEdit createDTMax = null;
-	private Text userText = null;
-	private Button userBrowseButton = null;
-	private Text vendorText = null;
-	private Button vendorBrowseButton = null;
-	private Text customerText = null;
-	private Button customerBrowseButton = null;
+	private DateTimeEdit createDTMin;
+	private DateTimeEdit createDTMax;
+	private Date createMinDate;
+	private Date createMaxDate;
 	
-	private Button userActiveButton = null;
-	private Button customerActiveButton = null;
-	private Button vendorActiveButton = null;
+	private Button userActiveButton;
+	private Text userText;
+	private Button userBrowseButton;
+
+	private Button vendorActiveButton;
+	private Text vendorText;
+	private Button vendorBrowseButton;
+
+	private Button customerActiveButton;
+	private Text customerText;
+	private Button customerBrowseButton;
 	
 	/**
 	 * @param parent
@@ -82,6 +85,15 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		createComposite(this);
 	}
 
+	/**
+	 * @param parent
+	 *          The parent to instantiate this filter into.
+	 * @param style
+	 *          The style to apply.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
+	 */
 	public AbstractArticleContainerFilterComposite(Composite parent, int style,
 		QueryProvider<R, ? super Q> queryProvider)
 	{
@@ -92,15 +104,12 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	@Override
 	protected void createComposite(Composite parent)
 	{
-		GridLayout layout = new GridLayout();
-		XComposite.getLayout(LayoutMode.TIGHT_WRAPPER, layout);
-		parent.setLayout(layout);
-		
 		Group createDTGroup = new Group(parent, SWT.NONE);
 		createDTGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateGroup.text")); //$NON-NLS-1$
 		createDTGroup.setLayout(new GridLayout(2, true));
 		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
 		createDTMin = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
+		createMinDate = createDTMin.getDate();
 		createDTMin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createDTMin.setActive(false);
 		createDTMin.addModifyListener(new ModifyListener()
@@ -108,38 +117,39 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
-				getQuery().setCreateDTMin(createDTMin.getDate());
-				setUIChangedQuery(false);
+				createMinDate = createDTMin.getDate();
+				getQuery().setCreateDTMin(createMinDate);
 			}
 		});
-		createDTMin.addActiveChangeListener(new SelectionAdapter() 
+		createDTMin.addActiveChangeListener(new ButtonSelectionListener() 
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setCreateDTMin(createDTMin.getDate());					
+					if (createMinDate == null)
+					{
+						initialValue = true;
+						// for consistency we need to update the field according to the initial value of
+						// the date edit composites.
+						createMinDate = createDTMin.getDate();
+						getQuery().setCreateDTMin(createMinDate);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setCreateDTMin(createMinDate);						
+					}
 				}
 				else
 				{
 					getQuery().setCreateDTMin(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 		createDTMax = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMax.caption")); //$NON-NLS-1$
+		createMaxDate = createDTMax.getDate();
 		createDTMax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createDTMax.setActive(false);
 		createDTMax.addModifyListener(new ModifyListener()
@@ -147,44 +157,41 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
-				getQuery().setCreateDTMax(createDTMax.getDate());
-				setUIChangedQuery(false);
+				createMaxDate = createDTMax.getDate();
+				getQuery().setCreateDTMax(createMaxDate);
 			}
 		});
-		createDTMax.addActiveChangeListener(new SelectionAdapter() 
+		createDTMax.addActiveChangeListener(new ButtonSelectionListener() 
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setCreateDTMax(createDTMax.getDate());					
+					if (createMaxDate == null)
+					{
+						initialValue = true;
+						// for consistency we need to update the field according to the initial value of
+						// the date edit composites.
+						createMaxDate = createDTMax.getDate();
+						getQuery().setCreateDTMax(createMaxDate);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setCreateDTMax(createMaxDate);
+					}
 				}
 				else
 				{
 					getQuery().setCreateDTMax(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Composite wrapper = new XComposite(parent, SWT.NONE);
-		GridLayout wrapperLayout = new GridLayout(3, true);
-		wrapperLayout = XComposite.getLayout(LayoutMode.TOP_BOTTOM_WRAPPER, wrapperLayout);
-		wrapper.setLayout(wrapperLayout);
-		wrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
+			LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
 		
 		final Group userGroup = new Group(wrapper, SWT.NONE);
 		userGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userGroup.text")); //$NON-NLS-1$
@@ -195,32 +202,31 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		GridData userLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		userLabelData.horizontalSpan = 2;
 		userActiveButton.setLayoutData(userLabelData);
-		userActiveButton.addSelectionListener(new SelectionAdapter()
+		userActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				userBrowseButton.setEnabled(active);
-				userText.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setCreateUserID(selectedUserID);
+					if (selectedUserID == null)
+					{
+						initialValue = true;
+						getQuery().setCreateUserID(selectedUserID);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setCreateUserID(selectedUserID);
+					}
 				}
 				else
 				{
 					getQuery().setCreateUserID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
-		userText = new Text(userGroup, SWT.BORDER);
+		userText = new Text(userGroup, getBorderStyle());
 		userText.setEnabled(false);
 		userText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		userText.addSelectionListener(userSelectionListener);
@@ -228,24 +234,6 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		userBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userBrowseButton.text")); //$NON-NLS-1$
 		userBrowseButton.addSelectionListener(userSelectionListener);
 		userBrowseButton.setEnabled(false);
-		userActiveButton.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				final boolean active = ((Button)e.getSource()).getSelection(); 
-				userText.setEnabled(active);
-				userBrowseButton.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
-				getQuery().setCreateUserID(selectedUserID);
-				setUIChangedQuery(false);
-			}
-		});
 		
 		final Group vendorGroup = new Group(wrapper, SWT.NONE);
 		vendorGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.vendorGroup.text")); //$NON-NLS-1$
@@ -256,32 +244,31 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		vendorLabelData.horizontalSpan = 2;
 		vendorActiveButton.setLayoutData(vendorLabelData);
-		vendorActiveButton.addSelectionListener(new SelectionAdapter()
+		vendorActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				vendorText.setEnabled(active);
-				vendorBrowseButton.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setVendorID(selectedVendorID);
+					if (selectedVendorID == null)
+					{
+						initialValue = true;
+						getQuery().setVendorID(selectedVendorID);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setVendorID(selectedVendorID);
+					}
 				}
 				else
 				{
 					getQuery().setVendorID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
-		vendorText = new Text(vendorGroup, SWT.BORDER);
+		vendorText = new Text(vendorGroup, getBorderStyle());
 		vendorText.setEnabled(false);
 		vendorText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorText.addSelectionListener(vendorSelectionListener);
@@ -299,7 +286,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		GridData customerLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		customerLabelData.horizontalSpan = 2;
 		customerActiveButton.setLayoutData(customerLabelData);
-		customerText = new Text(customerGroup, SWT.BORDER);
+		customerText = new Text(customerGroup, getBorderStyle());
 		customerText.setEnabled(false);
 		customerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		customerText.addSelectionListener(customerSelectionListener);
@@ -307,33 +294,26 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		customerBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerBrowseButton.text")); //$NON-NLS-1$
 		customerBrowseButton.addSelectionListener(customerSelectionListener);
 		customerBrowseButton.setEnabled(false);
-		customerActiveButton.addSelectionListener(new SelectionAdapter()
+		customerActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				final boolean active = ((Button)e.getSource()).getSelection();
-				customerText.setEnabled(active);
-				customerBrowseButton.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setCustomerID(selectedCustomerID);
+					if (selectedCustomerID == null)
+					{
+						initialValue = true;
+						getQuery().setCustomerID(selectedCustomerID);
+						initialValue = false;
+					}
 				}
 				else
 				{
 					getQuery().setCustomerID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
-		
-		pack(true);
 	}
 
 	private UserID selectedUserID = null;
@@ -347,9 +327,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			if (returnCode == Window.OK) {
 				User selectedUser = dialog.getSelectedUser();
 				selectedUserID = (UserID) JDOHelper.getObjectId(selectedUser);
-				setUIChangedQuery(true);
 				getQuery().setCreateUserID(selectedUserID);
-				setUIChangedQuery(false);
 				if (selectedUser != null)
 					userText.setText(selectedUser.getName());
 			}
@@ -365,9 +343,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(vendorText.getText(), false);
 			if (_legalEntity != null) {
 				selectedVendorID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
-				setUIChangedQuery(true);
 				getQuery().setVendorID(selectedVendorID);
-				setUIChangedQuery(false);
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedVendorID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -387,9 +363,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(customerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedCustomerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
-				setUIChangedQuery(true);
 				getQuery().setCustomerID(selectedCustomerID);
-				setUIChangedQuery(false);
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedCustomerID,
 						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
@@ -404,8 +378,8 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	@Override
 	protected void resetSearchQueryValues(Q query)
 	{
-		query.setCreateDTMin(createDTMin.getDate());
-		query.setCreateDTMax(createDTMax.getDate());
+		query.setCreateDTMin(createMinDate);
+		query.setCreateDTMax(createMaxDate);
 		query.setCreateUserID(selectedUserID);
 		query.setVendorID(selectedVendorID);
 		query.setCustomerID(selectedCustomerID);
@@ -414,6 +388,27 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	@Override
 	protected void unsetSearchQueryValues(Q query)
 	{
+		if (! createDTMax.isActive())
+		{
+			createMaxDate = null;
+		}
+		if (! createDTMin.isActive())
+		{
+			createMinDate = null;
+		}
+		if (! userActiveButton.getSelection())
+		{
+			selectedUserID = null;
+		}
+		if (! customerActiveButton.getSelection())
+		{
+			selectedCustomerID = null;
+		}
+		if (! vendorActiveButton.getSelection())
+		{
+			selectedVendorID = null;
+		}
+		
 		query.setCreateDTMin(null);
 		query.setCreateDTMax(null);
 		query.setCreateUserID(null);
@@ -422,124 +417,137 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		if (event.getChangedQuery() == null)
 		{
+			createMinDate = null;
 			createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			createDTMin.setActive(false);
+			if (createDTMin.isActive())
+			{
+				createDTMin.setActive(false);
+				setSearchSectionActive(false);
+			}
+			
+			createMaxDate = null;
 			createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			createDTMax.setActive(false);
+			if (createDTMax.isActive())
+			{
+				createDTMax.setActive(false);
+				setSearchSectionActive(false);
+			}
+			
 			selectedUserID = null;
 			userText.setText("");
+			userBrowseButton.setEnabled(false);
+			setSearchSectionActive(userActiveButton, false);
+			
 			selectedVendorID = null;
 			vendorText.setText("");
+			vendorBrowseButton.setEnabled(false);
+			setSearchSectionActive(vendorActiveButton, false);
+			
 			selectedCustomerID = null;
 			customerText.setText("");
+			customerBrowseButton.setEnabled(false);
+			setSearchSectionActive(customerActiveButton, false);			
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
+				boolean active = initialValue;
 				if (AbstractArticleContainerQuery.PROPERTY_CREATE_DATE_MAX.equals(changedField.getPropertyName()))
 				{
-					if (changedField.getNewValue() == null)
+					Date maxDate = (Date) changedField.getNewValue();
+					createDTMax.setDate(maxDate);
+					active |= maxDate != null;
+					if (createDTMax.isActive() != active)
 					{
-						createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
-						createDTMax.setActive(false);
-					}
-					else
-					{
-						createDTMax.setDate((Date) changedField.getNewValue());
-						createDTMax.setActive(true);
+						createDTMax.setActive(active);
+						setSearchSectionActive(active);
 					}
 				}
 				
 				if (AbstractArticleContainerQuery.PROPERTY_CREATE_DATE_MIN.equals(changedField.getPropertyName()))
 				{
-					if (changedField.getNewValue() == null)
+					Date minDate = (Date) changedField.getNewValue();
+					createDTMin.setDate(minDate);
+					active |= minDate != null;
+					if (createDTMin.isActive() != active)
 					{
-						createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
-						createDTMin.setActive(false);
-					}
-					else
-					{
-						createDTMin.setDate((Date) changedField.getNewValue());
-						createDTMin.setActive(true);
+						createDTMin.setActive(active);
+						setSearchSectionActive(active);
 					}
 				}
 				
 				if (AbstractArticleContainerQuery.PROPERTY_CREATE_USER_ID.equals(changedField.getPropertyName()))
 				{
-					UserID tmpUserID = (UserID) changedField.getNewValue();
-					if (! Util.equals(selectedUserID, tmpUserID))
+					UserID userID = (UserID) changedField.getNewValue();
+					if (userID == null)
 					{
-						selectedUserID = tmpUserID;
-						if (selectedUserID == null)
-						{
-							userText.setText("");
-						}
-						else
-						{
-							final User selectedUser = UserDAO.sharedInstance().getUser(
-								selectedUserID, new String[] { FetchPlan.DEFAULT }, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-								);
-							
-							userText.setText(selectedUser.getName());							
-						}
-						userActiveButton.setSelection(selectedUserID != null);
+						userText.setText("");
 					}
+					else
+					{
+						final User selectedUser = UserDAO.sharedInstance().getUser(
+							userID, new String[] { FetchPlan.DEFAULT }, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+
+						userText.setText(selectedUser.getName());							
+					}
+					active |= userID != null;
+					userText.setEnabled(active);
+					userBrowseButton.setEnabled(active);
+					setSearchSectionActive(userActiveButton, active);
 				}
 				
 				if (AbstractArticleContainerQuery.PROPERTY_CUSTOMER_ID.equals(changedField.getPropertyName()))
 				{
-					AnchorID tmpCustomerID = (AnchorID) changedField.getNewValue();
-					if (! Util.equals(selectedCustomerID, tmpCustomerID))
+					AnchorID customerID = (AnchorID) changedField.getNewValue();
+					if (customerID == null)
 					{
-						selectedCustomerID = tmpCustomerID;
-						if (tmpCustomerID == null)
-						{
-							customerText.setText("");
-						}
-						else
-						{
-							final LegalEntity customer = LegalEntityDAO.sharedInstance().getLegalEntity(
-								selectedVendorID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-								);
-
-							customerText.setText(customer.getPerson().getDisplayName());
-						}
-						customerActiveButton.setSelection(selectedCustomerID != null);
+						customerText.setText("");
 					}
+					else
+					{
+						final LegalEntity customer = LegalEntityDAO.sharedInstance().getLegalEntity(
+							customerID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+
+						customerText.setText(customer.getPerson().getDisplayName());
+					}
+					active |= customerID != null;
+					customerText.setEnabled(active);
+					customerBrowseButton.setEnabled(active);
+					setSearchSectionActive(customerActiveButton, active);
 				}
 				
 				if (AbstractArticleContainerQuery.PROPERTY_VENDOR_ID.equals(changedField.getPropertyName()))
 				{
-					AnchorID tmpVendorID = (AnchorID) changedField.getNewValue();
-					if (! Util.equals(selectedVendorID, tmpVendorID))
+					AnchorID vendorID = (AnchorID) changedField.getNewValue();
+					if (vendorID == null)
 					{
-						selectedVendorID = tmpVendorID;
-						if (tmpVendorID == null)
-						{
-							vendorText.setText("");
-						}
-						else
-						{
-							final LegalEntity vendor = LegalEntityDAO.sharedInstance().getLegalEntity(
-								selectedVendorID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-								);
-							
-							vendorText.setText(vendor.getPerson().getDisplayName());							
-						}
-						vendorActiveButton.setSelection(tmpVendorID != null);
+						vendorText.setText("");
 					}
+					else
+					{
+						final LegalEntity vendor = LegalEntityDAO.sharedInstance().getLegalEntity(
+							vendorID, new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+
+						vendorText.setText(vendor.getPerson().getDisplayName());							
+					}
+					active |= vendorID != null;
+					vendorText.setEnabled(active);
+					vendorBrowseButton.setEnabled(active);
+					setSearchSectionActive(vendorActiveButton, active);
 				}
-				
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		} // (event.getChangedQuery() != null)
+		} // (event.getChangedQuery() != null)		
 	}
 	
 }

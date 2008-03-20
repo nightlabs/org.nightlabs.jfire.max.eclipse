@@ -10,7 +10,9 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,6 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComboComposite;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -41,7 +44,6 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -50,17 +52,25 @@ import org.nightlabs.util.Util;
 public class RepositoryFilterComposite
 	extends AbstractQueryFilterComposite<Repository, RepositoryQuery>
 {
-	private Button ownerActiveButton = null;
-	private Text ownerText = null;
-	private Button ownerBrowseButton = null;
-	private Button repositoryTypeActiveButton = null;
-	private XComboComposite<RepositoryType> repositoryTypeList = null;
+	private Button ownerActiveButton;
+	private Text ownerText;
+	private Button ownerBrowseButton;
+	private Button repositoryTypeActiveButton;
+	private XComboComposite<RepositoryType> repositoryTypeList;
+	protected RepositoryTypeID selectedRepositoryTypeID;
 	
 	/**
 	 * @param parent
+	 *          The parent to instantiate this filter into.
 	 * @param style
+	 *          The style to apply.
 	 * @param layoutMode
+	 *          The layout mode to use. See {@link XComposite.LayoutMode}.
 	 * @param layoutDataMode
+	 *          The layout data mode to use. See {@link XComposite.LayoutDataMode}.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public RepositoryFilterComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
@@ -72,7 +82,12 @@ public class RepositoryFilterComposite
 
 	/**
 	 * @param parent
+	 *          The parent to instantiate this filter into.
 	 * @param style
+	 *          The style to apply.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public RepositoryFilterComposite(Composite parent, int style,
 		QueryProvider<Repository, ? super RepositoryQuery> queryProvider)
@@ -100,7 +115,7 @@ public class RepositoryFilterComposite
 		GridData vendorLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		vendorLabelData.horizontalSpan = 2;
 		ownerActiveButton.setLayoutData(vendorLabelData);
-		ownerText = new Text(ownerGroup, SWT.BORDER);
+		ownerText = new Text(ownerGroup, getBorderStyle());
 		ownerText.setEnabled(false);
 		ownerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerText.addSelectionListener(ownerSelectionListener);
@@ -108,28 +123,28 @@ public class RepositoryFilterComposite
 		ownerBrowseButton.setText("Browse"); //$NON-NLS-1$
 		ownerBrowseButton.addSelectionListener(ownerSelectionListener);
 		ownerBrowseButton.setEnabled(false);
-		ownerActiveButton.addSelectionListener(new SelectionAdapter()
+		ownerActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				boolean active = ((Button)e.getSource()).getSelection();
-				ownerText.setEnabled(active);
-				ownerBrowseButton.setEnabled(active);
-				setSearchSectionActive(active);
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setOwnerID(selectedOwnerID);
+					if (selectedOwnerID == null)
+					{
+						initialValue = true;
+						getQuery().setOwnerID(selectedOwnerID);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setOwnerID(selectedOwnerID);
+					}
 				}
 				else
 				{
 					getQuery().setOwnerID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 
@@ -141,7 +156,7 @@ public class RepositoryFilterComposite
 		repositoryTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdActiveButton.text")); //$NON-NLS-1$
 		repositoryTypeActiveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		repositoryTypeList = new XComboComposite<RepositoryType>(
-				repositoryTypeGroup, SWT.BORDER,
+				repositoryTypeGroup, getBorderStyle(),
 				new LabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -154,6 +169,16 @@ public class RepositoryFilterComposite
 		RepositoryType dummy = new RepositoryType(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), false); //$NON-NLS-1$ //$NON-NLS-2$
 		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.name.loadingData")); //$NON-NLS-1$
 		repositoryTypeList.setInput(Collections.singletonList(dummy));
+		repositoryTypeList.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				selectedRepositoryTypeID = (RepositoryTypeID) 
+					JDOHelper.getObjectId(repositoryTypeList.getSelectedElement());
+				getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
+			}
+		});
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.job.loadingRepositoryTypes")) { //$NON-NLS-1$
 			@Override
@@ -190,34 +215,33 @@ public class RepositoryFilterComposite
 		};
 		job.schedule();
 
-		repositoryTypeActiveButton.addSelectionListener(new SelectionAdapter()
+		repositoryTypeActiveButton.addSelectionListener(new ButtonSelectionListener()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			protected void handleSelection(boolean active)
 			{
-				boolean active = ((Button)e.getSource()).getSelection();
-				repositoryTypeList.setEnabled(active);
-				setSearchSectionActive(active);
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				if (active)
 				{
-					getQuery().setRepositoryTypeID((RepositoryTypeID)
-						JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+					if (selectedRepositoryTypeID == null)
+					{
+						initialValue = true;
+						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
+						initialValue = false;
+					}
+					else
+					{
+						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
+					}
 				}
 				else
 				{
 					getQuery().setRepositoryTypeID(null);
 				}
-				setUIChangedQuery(false);
 			}
 		});
 	}
 	
-	private AnchorID selectedOwnerID = null;
+	protected AnchorID selectedOwnerID = null;
 	private SelectionListener ownerSelectionListener = new SelectionAdapter()
 	{
 		@Override
@@ -226,9 +250,7 @@ public class RepositoryFilterComposite
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 			if (_legalEntity != null) {
 				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
-				setUIChangedQuery(true);
 				getQuery().setOwnerID(selectedOwnerID);
-				setUIChangedQuery(false);
 
 				// TODO perform this expensive code in a job
 				LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
@@ -244,74 +266,85 @@ public class RepositoryFilterComposite
 	protected void resetSearchQueryValues(RepositoryQuery query)
 	{
 		query.setOwnerID(selectedOwnerID);
-		query.setRepositoryTypeID((RepositoryTypeID) JDOHelper.getObjectId(repositoryTypeList.getSelectedElement()));
+		query.setRepositoryTypeID(selectedRepositoryTypeID);
 	}
 
 	@Override
 	protected void unsetSearchQueryValues(RepositoryQuery query)
 	{
+		if (! ownerActiveButton.getSelection())
+		{
+			selectedOwnerID = null;			
+		}
+		if (! repositoryTypeActiveButton.getSelection())
+		{
+			selectedRepositoryTypeID = null;			
+		}
+		
 		query.setOwnerID(null);
 		query.setRepositoryTypeID(null);
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		if (event.getChangedQuery() == null)
 		{
 			selectedOwnerID = null;
 			ownerText.setText("");
-			ownerActiveButton.setSelection(false);
+			ownerBrowseButton.setEnabled(false);
+			setSearchSectionActive(ownerActiveButton, false);
+			
+			selectedRepositoryTypeID = null;
 			repositoryTypeList.setSelection((RepositoryType) null);
-			repositoryTypeActiveButton.setSelection(false);
+			setSearchSectionActive(repositoryTypeActiveButton, false);
 		}
 		else
 		{
+			boolean active = initialValue;
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
 				if (RepositoryQuery.PROPERTY_OWNER_ID.equals(fieldChange.getPropertyName()))
 				{
 					AnchorID tmpOwnerID = (AnchorID) fieldChange.getNewValue();
-					if (! Util.equals(selectedOwnerID, tmpOwnerID))
+					if (tmpOwnerID == null)
 					{
-						selectedOwnerID = tmpOwnerID;
-						if (selectedOwnerID == null)
-						{
-							ownerText.setText("");
-						}
-						else
-						{
-							final LegalEntity owner = LegalEntityDAO.sharedInstance().getLegalEntity(
-								selectedOwnerID,
-								new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new NullProgressMonitor()
-							);
-							ownerText.setText(owner.getPerson().getDisplayName());
-						}
+						ownerText.setText("");
 					}
-					ownerActiveButton.setSelection(selectedOwnerID != null);
+					else
+					{
+						final LegalEntity owner = LegalEntityDAO.sharedInstance().getLegalEntity(
+							selectedOwnerID,
+							new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor()
+						);
+						ownerText.setText(owner.getPerson().getDisplayName());
+					}
+					active |= tmpOwnerID != null;
+					ownerText.setEnabled(active);
+					ownerBrowseButton.setEnabled(active);
+					setSearchSectionActive(ownerActiveButton, active);
 				}
 				
 				if (RepositoryQuery.PROPERTY_REPOSITORY_TYPE_ID.equals(fieldChange.getPropertyName()))
 				{
 					RepositoryTypeID repoTypeID = (RepositoryTypeID) fieldChange.getNewValue();
-					if (! Util.equals(repoTypeID, JDOHelper.getObjectId(repositoryTypeList.getSelectedElement())) )
+					if (repoTypeID == null)
 					{
-						if (repoTypeID == null)
-						{
-							repositoryTypeList.setSelection((RepositoryType) null);
-						}
-						else
-						{
-							RepositoryType repoType = RepositoryTypeDAO.sharedInstance().getRepositoryType(
-								repoTypeID, new String[] { FetchPlan.DEFAULT, RepositoryType.FETCH_GROUP_NAME	},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-								);
-							repositoryTypeList.setSelection(repoType);
-						}
-						repositoryTypeActiveButton.setSelection(repoTypeID != null);
+						repositoryTypeList.setSelection((RepositoryType) null);
 					}
+					else
+					{
+						RepositoryType repoType = RepositoryTypeDAO.sharedInstance().getRepositoryType(
+							repoTypeID, new String[] { FetchPlan.DEFAULT, RepositoryType.FETCH_GROUP_NAME	},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+						repositoryTypeList.setSelection(repoType);
+					}
+					active |= repoTypeID != null;
+					repositoryTypeList.setEnabled(active);
+					setSearchSectionActive(repositoryTypeActiveButton, active);
 				}
 				
 			} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
