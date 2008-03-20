@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
@@ -14,7 +15,6 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
-import org.nightlabs.util.Util;
 
 public class IssueFilterCompositeDocumentRelated 
 	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
@@ -24,9 +24,16 @@ public class IssueFilterCompositeDocumentRelated
 
 	/**
 	 * @param parent
+	 *          The parent to instantiate this filter into.
 	 * @param style
+	 *          The style to apply.
 	 * @param layoutMode
+	 *          The layout mode to use. See {@link XComposite.LayoutMode}.
 	 * @param layoutDataMode
+	 *          The layout data mode to use. See {@link XComposite.LayoutDataMode}.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
@@ -36,6 +43,15 @@ public class IssueFilterCompositeDocumentRelated
 		createComposite(this);
 	}
 
+	/**
+	 * @param parent
+	 *          The parent to instantiate this filter into.
+	 * @param style
+	 *          The style to apply.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
+	 */
 	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
 			QueryProvider<Issue, ? super IssueQuery> queryProvider)
 	{
@@ -57,13 +73,8 @@ public class IssueFilterCompositeDocumentRelated
 			@Override
 			public void issueLinkItemChanged(IssueLinkItemChangedEvent itemChangedEvent)
 			{
-				if (isUpdatingUI())
-					return;
-				
 				issueLinks = issueLinkAdderComposite.getItems();
-				setUIChangedQuery(true);
 				getQuery().setIssueLinks( issueLinks );
-				setUIChangedQuery(false);
 			}
 		});
 	}
@@ -82,7 +93,7 @@ public class IssueFilterCompositeDocumentRelated
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		if (event.getChangedQuery() == null)
 		{
@@ -95,12 +106,8 @@ public class IssueFilterCompositeDocumentRelated
 			{
 				if (IssueQuery.PROPERTY_ISSUE_LINKS.equals(changedField.getPropertyName()))
 				{
-					Set<IssueLink> tmpIssueLinks = (Set<IssueLink>) changedField.getNewValue();
-					if (! Util.equals(issueLinks, tmpIssueLinks))
-					{
-						issueLinks = tmpIssueLinks;
-						issueLinkAdderComposite.setIssueLinks(tmpIssueLinks);
-					}
+					issueLinks = (Set<IssueLink>) changedField.getNewValue();
+					issueLinkAdderComposite.setIssueLinks(issueLinks);
 				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null		

@@ -65,9 +65,16 @@ public class IssueFilterCompositeIssueRelated
 
 	/**
 	 * @param parent
+	 *          The parent to instantiate this filter into.
 	 * @param style
+	 *          The style to apply.
 	 * @param layoutMode
+	 *          The layout mode to use. See {@link XComposite.LayoutMode}.
 	 * @param layoutDataMode
+	 *          The layout data mode to use. See {@link XComposite.LayoutDataMode}.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public IssueFilterCompositeIssueRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
@@ -78,6 +85,15 @@ public class IssueFilterCompositeIssueRelated
 		prepareIssueProperties();
 	}
 
+	/**
+	 * @param parent
+	 *          The parent to instantiate this filter into.
+	 * @param style
+	 *          The style to apply.
+	 * @param queryProvider
+	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
+	 *          ensure, that it is set before {@link #getQuery()} is called!
+	 */
 	public IssueFilterCompositeIssueRelated(Composite parent, int style,
 			QueryProvider<Issue, ? super IssueQuery> queryProvider)
 	{
@@ -96,11 +112,12 @@ public class IssueFilterCompositeIssueRelated
 	{
 		parent.setLayout(new GridLayout(3, false));
 
-		XComposite issueTypeComposite = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		XComposite issueTypeComposite = new XComposite(parent, SWT.NONE,
+			LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
 
 		new Label(issueTypeComposite, SWT.NONE).setText("Issue Type: ");
-		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, SWT.NONE);
+		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, getBorderStyle());
 		issueTypeCombo.setLabelProvider(labelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
@@ -108,17 +125,13 @@ public class IssueFilterCompositeIssueRelated
 			{
 				selectedIssueType = issueTypeCombo.getSelectedElement();
 
-				if (selectedIssueType.equals(ISSUE_TYPE_ALL)) {
-					loadProperties();
-					return;
-				}
-
 				issueSeverityCombo.removeAll();
 				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
 				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
 					issueSeverityCombo.addElement(is);
 				}
-//				selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
+				selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
+				getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
 
 				issuePriorityCombo.removeAll();
 				issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
@@ -126,73 +139,45 @@ public class IssueFilterCompositeIssueRelated
 					issuePriorityCombo.addElement(ip);
 				}
 				selectedIssuePriority = ISSUE_PRIORITY_ALL;
-				
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
-				getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
 				getQuery().setIssuePriorityID(null); // null <=> ISSUE_PRIORITY_ALL
-				setUIChangedQuery(false);
 			}
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText("Severity: ");
-		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, SWT.NONE);
+		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, getBorderStyle());
 		issueSeverityCombo.setLabelProvider(labelProvider);
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-				if (isUpdatingUI())
-					return;
-
-				setUIChangedQuery(true);
 				getQuery().setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-				setUIChangedQuery(false);
 			}
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText("Priority: ");
-		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, SWT.NONE);
+		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, getBorderStyle());
 		issuePriorityCombo.setLabelProvider(labelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
-				if (isUpdatingUI())
-					return;
-				
-				setUIChangedQuery(true);
 				getQuery().setIssuePriorityID((IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
-				setUIChangedQuery(false);
 			}
 		});
 
 		new Label(issueTypeComposite, SWT.NONE).setText("Resolution: ");
-		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, SWT.NONE);
+		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, getBorderStyle());
 		issueResolutionCombo.setLabelProvider(labelProvider);
 		issueResolutionCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssueResolution = issueResolutionCombo.getSelectedElement();
-				if (isUpdatingUI())
-					return;
-
-				setUIChangedQuery(true);
 				getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
-				setUIChangedQuery(false);
 			}
 		});
-
-//		//-------------------------------------------------------------
-//		reporterText.setEnabled(false);
-//		reporterButton.setEnabled(false);
-//		assigneeText.setEnabled(false);
-//		assigneeButton.setEnabled(false);
 
 		loadProperties();
 	}
@@ -248,7 +233,7 @@ public class IssueFilterCompositeIssueRelated
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		if (event.getChangedQuery() == null)
 		{
@@ -394,9 +379,8 @@ public class IssueFilterCompositeIssueRelated
 									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
 										issueSeverityTypeList.add(s);
 								}
-//								issueTypeCombo.selectElementByIndex(0);
-//								selectedIssueType = ISSUE_TYPE_ALL;
-								getQuery().setIssueTypeID(null); // null <=> ISSUE_TYPE_ALL
+								selectedIssueType = ISSUE_TYPE_ALL;
+//								getQuery().setIssueTypeID(null); // null <=> ISSUE_TYPE_ALL
 
 								/**************************************************/
 								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
@@ -409,9 +393,8 @@ public class IssueFilterCompositeIssueRelated
 									if (!issueSeverityCombo.contains(is))
 										issueSeverityCombo.addElement(is);
 								}
-//								issueSeverityCombo.selectElementByIndex(0);
-//								selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
-								getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
+								selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
+//								getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
 
 								issuePriorityCombo.removeAll();
 								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
@@ -419,8 +402,7 @@ public class IssueFilterCompositeIssueRelated
 									if (!issuePriorityCombo.contains(ip))
 										issuePriorityCombo.addElement(ip);
 								}
-//								issuePriorityCombo.selectElementByIndex(0);
-//								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 
 								issueResolutionCombo.removeAll();
 								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
@@ -428,9 +410,8 @@ public class IssueFilterCompositeIssueRelated
 									if (!issueResolutionCombo.contains(ir))
 										issueResolutionCombo.addElement(ir);
 								}
-//								issueResolutionCombo.selectElementByIndex(0);
-//								selectedIssueResolution = ISSUE_RESOLUTION_ALL;
-								getQuery().setIssueResolutionID(null); // null <=> ISSUE_RESOLUTION_ALL
+								selectedIssueResolution = ISSUE_RESOLUTION_ALL;
+//								getQuery().setIssueResolutionID(null); // null <=> ISSUE_RESOLUTION_ALL
 							}
 						});
 					}catch (Exception e1) {

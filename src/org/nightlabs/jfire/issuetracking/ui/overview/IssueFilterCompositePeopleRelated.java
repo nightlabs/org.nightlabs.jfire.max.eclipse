@@ -104,7 +104,7 @@ public class IssueFilterCompositePeopleRelated
 		});
 		allReporterButton.setSelection(true);
 
-		reporterText = new Text(rComposite, SWT.BORDER);
+		reporterText = new Text(rComposite, getBorderStyle());
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -151,7 +151,7 @@ public class IssueFilterCompositePeopleRelated
 		});
 		allAssigneeButton.setSelection(true);
 
-		assigneeText = new Text(aComposite, SWT.BORDER);
+		assigneeText = new Text(aComposite, getBorderStyle());
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -188,7 +188,7 @@ public class IssueFilterCompositePeopleRelated
 	}
 
 	@Override
-	protected void doUpdateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event)
 	{
 		if (event.getChangedQuery() == null)
 		{
