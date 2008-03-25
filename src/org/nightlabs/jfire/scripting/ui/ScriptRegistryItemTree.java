@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
-import org.nightlabs.jdo.ui.notification.SelectionNotificationProxy;
+import org.nightlabs.jfire.base.ui.jdo.notification.SelectionNotificationProxy;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 
 /**
