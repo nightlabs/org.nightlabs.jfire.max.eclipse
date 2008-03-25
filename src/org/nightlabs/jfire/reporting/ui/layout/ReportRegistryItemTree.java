@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jdo.ui.notification.SelectionNotificationProxy;
+import org.nightlabs.jfire.base.ui.jdo.notification.SelectionNotificationProxy;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
