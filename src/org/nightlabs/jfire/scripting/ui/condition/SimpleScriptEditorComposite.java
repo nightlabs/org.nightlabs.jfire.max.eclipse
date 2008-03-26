@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -394,6 +395,22 @@ extends XComposite
 		}
 	}
 
+	private ILabelProvider combineOperatorLabelProvider = new LabelProvider() {
+		@Override
+		public String getText(Object element) {
+			if (element instanceof CombineOperator) {
+				CombineOperator combineOperator = (CombineOperator) element;
+				switch (combineOperator) {
+					case LOGICAL_AND:
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.combineOperator.and"); //$NON-NLS-1$
+					case LOGICAL_OR:
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorComposite.combineOperator.or");				 //$NON-NLS-1$
+				}				
+			}
+			return super.getText(element);
+		}
+	};
+	
 	private Map<XComboComposite<CombineOperator>, IConditionContainer> combineCombo2Container =
 		new HashMap<XComboComposite<CombineOperator>, IConditionContainer>();
 
@@ -404,7 +421,8 @@ extends XComposite
 		containerComp.setLayout(new GridLayout(5, false));
 		containerComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		XComboComposite<CombineOperator> combineOperatorCombo = new XComboComposite<CombineOperator>(
-				containerComp, AbstractListComposite.getDefaultWidgetStyle(parent), (String) null);
+				containerComp, AbstractListComposite.getDefaultWidgetStyle(parent), 
+				(String) null, combineOperatorLabelProvider);
 		combineOperatorCombo.setInput( CollectionUtil.enum2List(CombineOperator.LOGICAL_AND) );
 		combineOperatorCombo.selectElement(container.getCombineOperator());
 		combineCombo2Container.put(combineOperatorCombo, container);

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -21,6 +22,7 @@ import org.nightlabs.jfire.scripting.condition.ISimpleCondition;
 import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
 import org.nightlabs.jfire.scripting.condition.SimpleCondition;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
+import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -90,13 +92,14 @@ extends XComposite
 		variableCombo.selectElementByIndex(0);
 		selectedVariable = variableCombo.getSelectedElement();
 
-		operatorCombo = new XComboComposite<CompareOperator>(	parent, defaultWidgetStyle, (String) null );
+		operatorCombo = new XComboComposite<CompareOperator>(	parent, defaultWidgetStyle, 
+				(String) null , compareOperatorLableProvider );
 		operatorCombo.setInput( variable2CompareOperators.get(selectedVariable) );
 		operatorCombo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		operatorCombo.addSelectionListener(operatorListener);
 
-		valueCombo = new XComboComposite<Object>(	parent, defaultWidgetStyle, (String) null,
-				valueLabelProvider );
+		valueCombo = new XComboComposite<Object>(	parent, defaultWidgetStyle, 
+				(String) null, valueLabelProvider );
 		valueCombo.setInput( variable2PossibleValues.get(selectedVariable) );
 		valueCombo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		valueCombo.addSelectionListener(valueListener);
@@ -105,20 +108,44 @@ extends XComposite
 		variableCombo.selectElementByIndex(0);
 	}
 
-	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){
+	private org.eclipse.jface.viewers.ILabelProvider scriptLabelProvider = new LabelProvider(){
 		@Override
 		public String getText(Object object) {
 			return variable2Name.get(object);
 		}
 	};
 
-	private org.eclipse.jface.viewers.ILabelProvider valueLabelProvider = new org.eclipse.jface.viewers.LabelProvider(){
+	private org.eclipse.jface.viewers.ILabelProvider valueLabelProvider = new LabelProvider(){
 		@Override
 		public String getText(Object object) {
 			return value2Name.get(object);
 		}
 	};
 
+	private org.eclipse.jface.viewers.ILabelProvider compareOperatorLableProvider = new LabelProvider() {
+		@Override
+		public String getText(Object object) {
+			if (object instanceof CompareOperator) {
+				CompareOperator compareOperator = (CompareOperator) object;
+				switch (compareOperator) {
+					case EQUAL:
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.equal"); //$NON-NLS-1$
+					case NOT_EQUAL: 
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.notEqual"); //$NON-NLS-1$
+					case GREATER_THEN: 
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.greaterThen"); //$NON-NLS-1$
+					case SMALLER_THEN: 
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.smallerThen"); //$NON-NLS-1$
+					case GREATER_OR_EQUAL_THEN: 
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.greaterOrEqualThen"); //$NON-NLS-1$
+					case SMALLER_OR_EQUAL_THEN: 
+						return Messages.getString("org.nightlabs.jfire.scripting.ui.condition.SimpleConditionComposite.compareOperator.smallerOrEqualThen"); //$NON-NLS-1$
+				}
+			}
+			return super.getText(object);
+		}		
+	};
+	
 	private SelectionListener operatorListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			condition = null;
