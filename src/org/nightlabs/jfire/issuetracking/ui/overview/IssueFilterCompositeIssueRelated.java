@@ -361,76 +361,76 @@ public class IssueFilterCompositeIssueRelated
 					loadJobRunning = true;
 					logger.debug("Load Job running....");
 				}
-				try {
-					try {
-						final List<IssueType> issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
-						final List<IssuePriority> issuePriorityList = new ArrayList<IssuePriority>();
-						final List<IssueSeverityType> issueSeverityTypeList = new ArrayList<IssueSeverityType>();
-
-						Display.getDefault().syncExec(new Runnable() {
-							public void run() {
-								issueTypeCombo.removeAll();
-								issueTypeCombo.addElement(ISSUE_TYPE_ALL);
-								for (Iterator<IssueType> it = issueTypeList.iterator(); it.hasNext(); ) {
-									IssueType issueType = it.next();
-									issueTypeCombo.addElement(issueType);
-									for (IssuePriority p : issueType.getIssuePriorities())
-										issuePriorityList.add(p);
-									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
-										issueSeverityTypeList.add(s);
-								}
-								selectedIssueType = ISSUE_TYPE_ALL;
-//								getQuery().setIssueTypeID(null); // null <=> ISSUE_TYPE_ALL
-
-								/**************************************************/
-								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
-								ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
-								/**************************************************/
-
-								issueSeverityCombo.removeAll();
-								issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
-								for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-									if (!issueSeverityCombo.contains(is))
-										issueSeverityCombo.addElement(is);
-								}
-								selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
-//								getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
-
-								issuePriorityCombo.removeAll();
-								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
-								for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-									if (!issuePriorityCombo.contains(ip))
-										issuePriorityCombo.addElement(ip);
-								}
-								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
-
-								issueResolutionCombo.removeAll();
-								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
-								for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
-									if (!issueResolutionCombo.contains(ir))
-										issueResolutionCombo.addElement(ir);
-								}
-								selectedIssueResolution = ISSUE_RESOLUTION_ALL;
-//								getQuery().setIssueResolutionID(null); // null <=> ISSUE_RESOLUTION_ALL
-							}
-						});
-					}catch (Exception e1) {
-						ExceptionHandlerRegistry.asyncHandleException(e1);
-						throw new RuntimeException(e1);
-					}
+//				try {
+//					try {
+//						final List<IssueType> issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS_ISSUE_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+//						final List<IssuePriority> issuePriorityList = new ArrayList<IssuePriority>();
+//						final List<IssueSeverityType> issueSeverityTypeList = new ArrayList<IssueSeverityType>();
+//
+//						Display.getDefault().syncExec(new Runnable() {
+//							public void run() {
+//								issueTypeCombo.removeAll();
+//								issueTypeCombo.addElement(ISSUE_TYPE_ALL);
+//								for (Iterator<IssueType> it = issueTypeList.iterator(); it.hasNext(); ) {
+//									IssueType issueType = it.next();
+//									issueTypeCombo.addElement(issueType);
+//									for (IssuePriority p : issueType.getIssuePriorities())
+//										issuePriorityList.add(p);
+//									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
+//										issueSeverityTypeList.add(s);
+//								}
+//								selectedIssueType = ISSUE_TYPE_ALL;
+////								getQuery().setIssueTypeID(null); // null <=> ISSUE_TYPE_ALL
+//
+//								/**************************************************/
+//								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
+//								ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
+//								/**************************************************/
+//
+//								issueSeverityCombo.removeAll();
+//								issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
+//								for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+//									if (!issueSeverityCombo.contains(is))
+//										issueSeverityCombo.addElement(is);
+//								}
+//								selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
+////								getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
+//
+//								issuePriorityCombo.removeAll();
+//								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
+//								for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+//									if (!issuePriorityCombo.contains(ip))
+//										issuePriorityCombo.addElement(ip);
+//								}
+//								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+//
+//								issueResolutionCombo.removeAll();
+//								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
+//								for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+//									if (!issueResolutionCombo.contains(ir))
+//										issueResolutionCombo.addElement(ir);
+//								}
+//								selectedIssueResolution = ISSUE_RESOLUTION_ALL;
+////								getQuery().setIssueResolutionID(null); // null <=> ISSUE_RESOLUTION_ALL
+//							}
+//						});
+//					}catch (Exception e1) {
+//						ExceptionHandlerRegistry.asyncHandleException(e1);
+//						throw new RuntimeException(e1);
+//					}
 
 					return Status.OK_STATUS;
-				} finally {
-					synchronized (mutex) {
-//						if (storedIssueQueryRunnable != null) {
-//							logger.debug("Running storedIssueQueryRunnable from load Job.");
-//							storedIssueQueryRunnable.run(monitor);
-//							storedIssueQueryRunnable = null;
-//						}
-						loadJobRunning = false;
-						logger.debug("Load Job finished.");
-					}
-				}
+//				} finally {
+//					synchronized (mutex) {
+////						if (storedIssueQueryRunnable != null) {
+////							logger.debug("Running storedIssueQueryRunnable from load Job.");
+////							storedIssueQueryRunnable.run(monitor);
+////							storedIssueQueryRunnable = null;
+////						}
+//						loadJobRunning = false;
+//						logger.debug("Load Job finished.");
+//					}
+//				}
 			} 
 		};
 		

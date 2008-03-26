@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueCreateComposite
 extends XComposite
 {
-	private List<IssueType> issueTypes = new ArrayList<IssueType>();
+	private List<IssueType> issueTypes;
 
 	private IssueType selectedIssueType;
 	private IssueSeverityType selectedIssueSeverityType;
@@ -60,7 +59,7 @@ extends XComposite
 	private IssuePriority selectedIssuePriority;
 
 	private Label linkedObjectLbl;
-	private IssueLinkAdderComposite adderComposite;
+	private IssueLinkAdderComposite issueLinkAdderComposite;
 	
 	private Label issueTypeLbl;
 	private XComboComposite<IssueType> issueTypeCombo;
@@ -113,16 +112,14 @@ extends XComposite
 		linkedObjectLbl = new Label(this, SWT.NONE);
 		linkedObjectLbl.setText("Linked object");
 		
-		adderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
+		issueLinkAdderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
 		if (issue != null) {
-			adderComposite.addIssueLinks(issue.getIssueLinks());
+			issueLinkAdderComposite.addIssueLinks(issue.getIssueLinks());
 		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
 		issueTypeCombo = new XComboComposite<IssueType>(this, SWT.NONE, labelProvider);
-
-		List<IssueType> issueTypeList = new ArrayList<IssueType>();
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
@@ -229,7 +226,6 @@ extends XComposite
 				}//if
 			}
 		});
-		/************************/
 
 		subjectLabel = new Label(this, SWT.NONE);
 		subjectLabel.setText("Subject: ");
@@ -261,7 +257,10 @@ extends XComposite
 //					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
 //					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					
-					issueTypes = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
+					issueTypes = IssueTypeDAO.sharedInstance().getIssueTypes(null, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					
+//					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					issueTypes = im.getIssueTypes(null, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
@@ -270,22 +269,22 @@ extends XComposite
 								IssueType issueType = (IssueType) it.next();
 								issueTypeCombo.addElement(issueType);
 							}
-							issueTypeCombo.selectElementByIndex(0);
-							selectedIssueType = issueTypeCombo.getSelectedElement();
-							
-							issueSeverityCombo.removeAll();
-							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-								issueSeverityCombo.addElement(is);
-							}
-							issueSeverityCombo.selectElementByIndex(0);
-							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-							
-							issuePriorityCombo.removeAll();
-							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-								issuePriorityCombo.addElement(ip);
-							}
-							issuePriorityCombo.selectElementByIndex(0);
-							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+//							issueTypeCombo.selectElementByIndex(0);
+//							selectedIssueType = issueTypeCombo.getSelectedElement();
+//							
+//							issueSeverityCombo.removeAll();
+//							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+//								issueSeverityCombo.addElement(is);
+//							}
+//							issueSeverityCombo.selectElementByIndex(0);
+//							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+//							
+//							issuePriorityCombo.removeAll();
+//							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+//								issuePriorityCombo.addElement(ip);
+//							}
+//							issuePriorityCombo.selectElementByIndex(0);
+//							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						}
 					});
 					
@@ -355,7 +354,7 @@ extends XComposite
 	}
 
 	public Set<IssueLink> getIssueLinks() {
-		return adderComposite.getItems();
+		return issueLinkAdderComposite.getItems();
 	}
 	
 	

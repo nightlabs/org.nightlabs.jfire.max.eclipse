@@ -50,6 +50,5 @@ public interface IssueLinkAdder
 	Set<IssueLink> createIssueLinks(
 			Issue issue,
 			IssueLinkType issueLinkType,
-//			Set<ObjectID> linkedObjectIDs,
 			ProgressMonitor monitor);
 }
