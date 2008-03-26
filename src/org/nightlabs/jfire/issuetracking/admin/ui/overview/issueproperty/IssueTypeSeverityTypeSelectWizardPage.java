@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.annotations.FetchGroup;
+
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -28,6 +31,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
@@ -62,6 +66,7 @@ extends WizardHopPage {
 	    setDescription("Description");
 	}
 	
+	public static final String[] FETCH_GROUP = {FetchPlan.DEFAULT, IssueSeverityType.FETCH_GROUP_NAME};
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -91,7 +96,7 @@ extends WizardHopPage {
 		issueTypeSeverityTypeTable = new IssueSeverityTypeTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
-				List<IssueSeverityType> issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(new NullProgressMonitor());
+				List<IssueSeverityType> issueSeverityTypes = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityTypes(null, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueSeverityTypes.removeAll(issueType.getIssueSeverityTypes());
 				
 				issueTypeSeverityTypeTable.setInput(issueSeverityTypes);

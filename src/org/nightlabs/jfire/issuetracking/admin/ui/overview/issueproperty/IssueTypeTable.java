@@ -14,10 +14,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
-import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
@@ -29,7 +30,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueTypeTable 
-extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
+extends AbstractTableComposite<IssueType> 
+{//ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 
 	/**
 	 * The fetch groups of issue data.
@@ -41,40 +43,40 @@ extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 	public IssueTypeTable(Composite parent, int style)
 	{
 		super(parent, style);
-		load();
+//		load();
 	}
 	
-	@Override
-	protected ActiveJDOObjectController<IssueTypeID, IssueType> createActiveJDOObjectController() {
-		return new ActiveJDOObjectController<IssueTypeID, IssueType>() {
-
-			@Override
-			protected Class<? extends IssueType> getJDOObjectClass() {
-				return IssueType.class;
-			}
-
-			@Override
-			protected Collection<IssueType> retrieveJDOObjects(
-					Set<IssueTypeID> objectIDs, ProgressMonitor monitor) {
-				 
-				return IssueTypeDAO.sharedInstance().getIssueTypes(objectIDs, IssueTypeTable.FETCH_GROUPS,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor());
-			}
-
-			@Override
-			protected Collection<IssueType> retrieveJDOObjects(
-					ProgressMonitor monitor) {
-				return IssueTypeDAO.sharedInstance().getIssueTypes(IssueTypeTable.FETCH_GROUPS,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor());
-			}
-
-			@Override
-			protected void sortJDOObjects(List<IssueType> objects) {
-			}
-		};
-	}
+//	@Override
+//	protected ActiveJDOObjectController<IssueTypeID, IssueType> createActiveJDOObjectController() {
+//		return new ActiveJDOObjectController<IssueTypeID, IssueType>() {
+//
+//			@Override
+//			protected Class<? extends IssueType> getJDOObjectClass() {
+//				return IssueType.class;
+//			}
+//
+//			@Override
+//			protected Collection<IssueType> retrieveJDOObjects(
+//					Set<IssueTypeID> objectIDs, ProgressMonitor monitor) {
+//				 
+//				return IssueTypeDAO.sharedInstance().getIssueTypes(objectIDs, IssueTypeTable.FETCH_GROUPS,
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						new NullProgressMonitor());
+//			}
+//
+//			@Override
+//			protected Collection<IssueType> retrieveJDOObjects(
+//					ProgressMonitor monitor) {
+//				return IssueTypeDAO.sharedInstance().getIssueTypes(IssueTypeTable.FETCH_GROUPS,
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						new NullProgressMonitor());
+//			}
+//
+//			@Override
+//			protected void sortJDOObjects(List<IssueType> objects) {
+//			}
+//		};
+//	}
 	
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
@@ -89,10 +91,10 @@ extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 		table.setHeaderVisible(false);
 	}
 
-	@Override
-	protected ITableLabelProvider createLabelProvider() {
-		return new IssueTypeLabelProvider();
-	}
+//	@Override
+//	protected ITableLabelProvider createLabelProvider() {
+//		return new IssueTypeLabelProvider();
+//	}
 	
 	class IssueTypeLabelProvider
 	extends TableLabelProvider
@@ -111,5 +113,11 @@ extends ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
 			}
 			return null;
 		}		
+	}
+
+	@Override
+	protected void setTableProvider(TableViewer tableViewer) {
+		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setLabelProvider(new IssueTypeLabelProvider());
 	}
 }
