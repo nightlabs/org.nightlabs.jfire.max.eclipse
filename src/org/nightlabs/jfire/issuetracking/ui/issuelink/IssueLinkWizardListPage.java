@@ -64,10 +64,10 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 			public void issueLinkSelectionChanged(IssueLinkSelectionChangedEvent selectionChangedEvent) {
 //				issueLinkAdder.createIssueLinks(issueLinkWizard.getIssue(), issueLinkType, monitor)
 //				issueLinkAdder.createIssueLinks(issueLinkWizard.getIssue(), issueLinkType, monitor)getIssueLinkObjectIds());	
-//				WizardHopPage page = new IssueLinkWizardRelationPage(issueLinkWizard, issueLinkAdder);
-//				getWizardHop().addHopPage(page);
+				WizardHopPage page = new IssueLinkWizardRelationPage(issueLinkWizard, issueLinkAdder);
+				getWizardHop().addHopPage(page);
 //				
-//				getContainer().updateButtons();
+				getContainer().updateButtons();
 			}
 		});
 		
