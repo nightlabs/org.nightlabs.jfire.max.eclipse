@@ -28,9 +28,12 @@ package org.nightlabs.jfire.scripting.editor2d.ui.property;
 import java.util.Collection;
 
 import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.scripting.condition.Script;
 import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
 import org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog;
@@ -39,7 +42,12 @@ import org.nightlabs.jfire.scripting.ui.condition.SimpleScriptEditorDialog;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class ConditionScriptCellEditor extends DialogCellEditor {
+public class ConditionScriptCellEditor 
+extends DialogCellEditor 
+{
+	private Collection<ScriptConditioner> scriptConditioners;
+	private Label label;
+	private ILabelProvider labelProvider;
 
 	public ConditionScriptCellEditor(Composite parent, Collection<ScriptConditioner> scriptConditioners) {
 		super(parent);
@@ -51,7 +59,6 @@ public class ConditionScriptCellEditor extends DialogCellEditor {
 		this.scriptConditioners = scriptConditioners;
 	}
 
-	private Collection<ScriptConditioner> scriptConditioners;
 	@Override
 	protected Object openDialogBox(Control cellEditorWindow)
 	{
@@ -64,11 +71,29 @@ public class ConditionScriptCellEditor extends DialogCellEditor {
 		if (returnCode == Window.OK) {
 			return dialog.getScript();
 		}
+		// To workaround not possible returned null values for cellEditors
 		if (returnCode == SimpleScriptEditorDialog.ID_DELETE_SCRIPT) {
 			return -1;
 		}
 		return null;
 	}
 	
+	@Override
+	protected Control createContents(Composite cell) {
+		label = new Label(cell, SWT.NONE);
+		return label;
+	}
+
+	@Override
+	protected void updateContents(Object value) {
+		label.setText(getLabelProvider().getText(value));
+	}
+	
+	private ILabelProvider getLabelProvider() {
+		if (labelProvider == null) {
+			labelProvider = new ConditionScriptLabelProvider();
+		}
+		return labelProvider;
+	}
 }
 

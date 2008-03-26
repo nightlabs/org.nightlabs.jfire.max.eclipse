@@ -39,12 +39,14 @@ import org.nightlabs.jfire.scripting.condition.ScriptConditioner;
 public class ConditionScriptPropertyDescriptor
 extends XPropertyDescriptor
 {
-
+	private Collection<ScriptConditioner> scriptConditioners;
+	
 	public ConditionScriptPropertyDescriptor(Object id, String displayName, boolean readOnly,
 			Collection<ScriptConditioner> scriptConditioners)
 	{
 		super(id, displayName, readOnly);
 		this.scriptConditioners = scriptConditioners;
+		setLabelProvider(new ConditionScriptLabelProvider());
 	}
 
 	public ConditionScriptPropertyDescriptor(Object id, String displayName,
@@ -52,9 +54,9 @@ extends XPropertyDescriptor
 	{
 		super(id, displayName);
 		this.scriptConditioners = scriptConditioners;
+		setLabelProvider(new ConditionScriptLabelProvider());
 	}
 
-	private Collection<ScriptConditioner> scriptConditioners;
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		return new ConditionScriptCellEditor(parent, scriptConditioners);

@@ -113,10 +113,13 @@ extends AbstractDrawComponentProperty
 
 	public void setPropertyValue(Object value)
 	{
+//		Script script = (Script) value;
+//		getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, script);
 		if (value instanceof Script) {
 			Script script = (Script) value;
 			getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, script);
 		}
+		// To workaround not possible returned null values for cellEditors
 		if (value instanceof Number) {
 			getDrawComponent().getProperties().put(ScriptingConstants.PROP_VISIBLE_SCRIPT, null);
 		}
