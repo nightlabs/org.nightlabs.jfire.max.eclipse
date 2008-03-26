@@ -53,15 +53,14 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class VisibleScriptProperty
 extends AbstractDrawComponentProperty
 {
-	private static final Logger logger = Logger.getLogger(VisibleScriptProperty.class);
-	
+	private static final Logger logger = Logger.getLogger(VisibleScriptProperty.class);	
 	public static final String CATEGORY_SCRIPT = Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.VisibleScriptProperty.category.script"); //$NON-NLS-1$
+	private Collection<ScriptConditioner> scriptConditioner;	
 	
 	public String getID() {
 		return ScriptingConstants.PROP_VISIBLE_SCRIPT;
 	}
 
-	private Collection<ScriptConditioner> scriptConditioner;
 	protected Collection<ScriptConditioner> getScriptConditioner()
 	{
 		if (scriptConditioner == null)

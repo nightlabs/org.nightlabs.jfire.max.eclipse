@@ -28,8 +28,7 @@
             description="Barcode Renderer"
             drawComponentClass="org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent"
             mode="default"
-            name="%org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer.name"
-            renderer="org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer">
+            name="%org.nightlabs.jfire.scripting.editor2d.ui.render.BarcodeRenderer.name">
          <renderContext
                renderContext="org.nightlabs.jfire.scripting.editor2d.render.j2d.J2DBarcodeDefaultRenderer"
                renderContextType="Java2D"/>

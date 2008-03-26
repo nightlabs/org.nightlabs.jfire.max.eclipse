@@ -30,7 +30,6 @@ import org.nightlabs.base.ui.property.XTextPropertyDescriptor;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.TextDrawComponent;
 import org.nightlabs.editor2d.ui.model.TextPropertySource;
-import org.nightlabs.editor2d.ui.properties.NamePropertyDescriptor;
 import org.nightlabs.jfire.scripting.editor2d.TextScriptDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.ui.resource.Messages;
 
@@ -83,9 +82,11 @@ extends TextPropertySource
 	@Override
 	protected PropertyDescriptor createNamePD()
 	{
-		PropertyDescriptor desc = new NamePropertyDescriptor(drawComponent,
-				DrawComponent.PROP_NAME,
-				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource.name"), true);		 //$NON-NLS-1$
+//		PropertyDescriptor desc = new NamePropertyDescriptor(drawComponent,
+//				DrawComponent.PROP_NAME,
+//				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource.name"), true);		 //$NON-NLS-1$
+		PropertyDescriptor desc = new XTextPropertyDescriptor(TextDrawComponent.PROP_NAME,
+				Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.model.TextScriptPropertySource.name"), true);		 //$NON-NLS-1$		
 		desc.setCategory(CATEGORY_NAME);
 		return desc;
 	}

@@ -85,9 +85,10 @@ extends DrawComponentPropertySource
 		descriptors.add(createOrientationPD());
 		// Visible
 		descriptors.add(createVisiblePD());
-//		// Visible Script
+		// Visible Script
+		// comes from extension point
 //		descriptors.add(createVisibleConditionScriptPD());
-		descriptors.addAll(getExtensionPointProperties());
+//		descriptors.addAll(getExtensionPointProperties());
 		
 		return descriptors;
 	}

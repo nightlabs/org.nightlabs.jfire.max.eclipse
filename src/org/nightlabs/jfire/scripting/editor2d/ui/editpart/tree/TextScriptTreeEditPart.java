@@ -56,7 +56,11 @@ extends TextTreeEditPart
 	
 	@Override
 	public IPropertySource getPropertySource() {
-		return new TextScriptPropertySource(getTextScript());
+    if (propertySource == null) {
+      propertySource =
+      	new TextScriptPropertySource(getTextScript());
+    }
+    return propertySource;		
 	}
 
 	@Override
