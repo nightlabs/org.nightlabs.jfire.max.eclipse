@@ -8,7 +8,7 @@
     <ant path="org.nightlabs.jfire.issuetracking.trade.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.issuetracking.trade.ui/dist/org.nightlabs.jfire.issuetracking.trade.ui_0.9.1.tar.gz"/>
+    <publishes description="..." location="org.nightlabs.jfire.issuetracking.trade.ui/dist/org.nightlabs.jfire.issuetracking.trade.ui_0.9.1.jar"/>
     <javadoc path="org.nightlabs.jfire.issuetracking.trade.ui/src"/>
   </project>
 
