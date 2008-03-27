@@ -3,13 +3,13 @@
 
 <nightlybuild>
 
-  <project name="org.nightlabs.jfire.issuetracking">
+  <project name="org.nightlabs.jfire.issuetracking.ui">
 	<plugin/>
-    <ant path="org.nightlabs.jfire.issuetracking" file="build-nightlabs.xml" target="deploy"/>
+    <ant path="org.nightlabs.jfire.issuetracking.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.issuetracking/dist/org.nightlabs.jfire.issuetracking_0.9.3.tar.gz"/>
-    <javadoc path="org.nightlabs.jfire.issuetracking/src"/>
+    <publishes description="..." location="org.nightlabs.jfire.issuetracking.ui/dist/org.nightlabs.jfire.issuetracking.ui_0.9.3.tar.gz"/>
+    <javadoc path="org.nightlabs.jfire.issuetracking.ui/src"/>
   </project>
 
 </nightlybuild>
