@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import org.eclipse.core.runtime.IStatus;
@@ -90,6 +87,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		});
 	}
 
+	@Override
 	protected void doSetIssue(final Issue issue) {
 		loadProperties(issue);
 
@@ -139,7 +137,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 				return Status.OK_STATUS;
 			} 
 		};
-		loadJob.setPriority(Job.SHORT);
+		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
 	}
 

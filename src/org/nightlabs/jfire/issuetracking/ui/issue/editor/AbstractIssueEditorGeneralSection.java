@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import org.eclipse.swt.SWT;
@@ -46,7 +43,6 @@ public abstract class AbstractIssueEditorGeneralSection extends ToolBarSectionPa
 		client.getGridLayout().numColumns = 1; 
 		
 		getSection().setClient(client);
-		
 	}
 	
 	public IssueEditorPageController getController() {

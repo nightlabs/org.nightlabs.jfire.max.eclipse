@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,9 +12,9 @@ import javax.jdo.FetchPlan;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -88,7 +87,12 @@ extends XComposite
 	private User selectedReporter;
 	private User selectedAssigntoUser;
 
-	private static final String[] FETCH_GROUPS = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE, IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, IssuePriority.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
+	private static final String[] FETCH_GROUPS = {
+		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
+		IssuePriority.FETCH_GROUP_NAME,
+		FetchPlan.DEFAULT
+		};
 
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
@@ -185,7 +189,7 @@ extends XComposite
 			public void widgetSelected(SelectionEvent e) {
 				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedReporter == null ? "" : selectedReporter.getUserID());
 				int returnCode = userSearchDialog.open();
-				if (returnCode == Dialog.OK) {
+				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
 					if (selectedReporter != null)
 						reporterText.setText(selectedReporter.getName());
@@ -218,7 +222,7 @@ extends XComposite
 			public void widgetSelected(SelectionEvent e) {
 				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssigntoUser == null ? "" : selectedAssigntoUser.getUserID());
 				int returnCode = userSearchDialog.open();
-				if (returnCode == Dialog.OK) {
+				if (returnCode == Window.OK) {
 					selectedAssigntoUser = userSearchDialog.getSelectedUser();
 //					userID = (UserID) JDOHelper.getObjectId(selectedUser);
 					if (selectedAssigntoUser != null)
@@ -240,6 +244,7 @@ extends XComposite
 		descriptionText.setI18nText(null, EditMode.BUFFERED);
 
 		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.minimumHeight = 100;
 		descriptionText.setLayoutData(gridData);
 
 		fileLabel = new Label(this, SWT.NONE);
@@ -247,26 +252,20 @@ extends XComposite
 
 		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, FileListSelectionComposite.ADD);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 100;
+//		gridData.heightHint = 100;
+		gridData.minimumHeight = 80;
 		fileComposite.setLayoutData(gridData);
 
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
-//					final TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
-//					final JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					
-					issueTypes = IssueTypeDAO.sharedInstance().getIssueTypes(null, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-					
-//					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//					issueTypes = im.getIssueTypes(null, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							issueTypeCombo.removeAll();
-							for (Iterator it = issueTypes.iterator(); it.hasNext(); ) {
-								IssueType issueType = (IssueType) it.next();
+							for (IssueType issueType : issueTypes) {
 								issueTypeCombo.addElement(issueType);
 							}
 							issueTypeCombo.selectElementByIndex(0);
@@ -296,7 +295,7 @@ extends XComposite
 				return Status.OK_STATUS;
 			} 
 		};
-		loadJob.setPriority(Job.SHORT);
+		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
 	}
 
