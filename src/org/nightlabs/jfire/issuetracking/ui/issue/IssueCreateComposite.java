@@ -269,22 +269,22 @@ extends XComposite
 								IssueType issueType = (IssueType) it.next();
 								issueTypeCombo.addElement(issueType);
 							}
-//							issueTypeCombo.selectElementByIndex(0);
-//							selectedIssueType = issueTypeCombo.getSelectedElement();
-//							
-//							issueSeverityCombo.removeAll();
-//							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-//								issueSeverityCombo.addElement(is);
-//							}
-//							issueSeverityCombo.selectElementByIndex(0);
-//							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-//							
-//							issuePriorityCombo.removeAll();
-//							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-//								issuePriorityCombo.addElement(ip);
-//							}
-//							issuePriorityCombo.selectElementByIndex(0);
-//							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+							issueTypeCombo.selectElementByIndex(0);
+							selectedIssueType = issueTypeCombo.getSelectedElement();
+							
+							issueSeverityCombo.removeAll();
+							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+								issueSeverityCombo.addElement(is);
+							}
+							issueSeverityCombo.selectElementByIndex(0);
+							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+							
+							issuePriorityCombo.removeAll();
+							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+								issuePriorityCombo.addElement(ip);
+							}
+							issuePriorityCombo.selectElementByIndex(0);
+							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						}
 					});
 					

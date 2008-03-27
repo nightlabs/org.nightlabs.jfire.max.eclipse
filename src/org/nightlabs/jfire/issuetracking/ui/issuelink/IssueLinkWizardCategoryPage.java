@@ -21,12 +21,12 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 public class IssueLinkWizardCategoryPage 
 extends WizardHopPage
 {
-	private IssueLinkWizard iWizard;
+	private IssueLinkWizard issueLinkWizard;
 	
-	public IssueLinkWizardCategoryPage(IssueLinkWizard iWizard) {
+	public IssueLinkWizardCategoryPage(IssueLinkWizard issueLinkWizard) {
 		super("Select an Object", "Select an object to link this issue with.");
 		setDescription("Link an object to the issue.");
-		this.iWizard = iWizard;
+		this.issueLinkWizard = issueLinkWizard;
 		
 		new WizardHop(this);
 	}
@@ -82,8 +82,8 @@ extends WizardHopPage
 	}
 
 	private IssueLinkWizardListPage issueLinkWizardListPage;
-	private WizardHopPage createAdderWizardPage(IssueLinkAdder adder){
-		issueLinkWizardListPage = new IssueLinkWizardListPage(iWizard, adder);
+	private WizardHopPage createAdderWizardPage(IssueLinkAdder issueLinkAdder){
+		issueLinkWizardListPage = new IssueLinkWizardListPage(issueLinkWizard, issueLinkAdder);
 		return issueLinkWizardListPage;
 	}
 	

@@ -41,19 +41,6 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 //			public void selectionChanged(SelectionChangedEvent e) {
 //				selectedIssueType = issueTypeCombo.getSelectedElement();
 //				
-//				issueSeverityCombo.removeAll();
-//				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-//					issueSeverityCombo.addElement(is);
-//				}
-//				issueSeverityCombo.selectElementByIndex(0);
-//				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-//				
-//				issuePriorityCombo.removeAll();
-//				for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-//					issuePriorityCombo.addElement(ip);
-//				}
-//				issuePriorityCombo.selectElementByIndex(0);
-//				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 //			}
 //		});
 		

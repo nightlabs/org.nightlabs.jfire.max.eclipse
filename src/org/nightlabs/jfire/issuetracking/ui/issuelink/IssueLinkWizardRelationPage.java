@@ -25,7 +25,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueLinkWizardRelationPage 
 extends WizardHopPage
 {
-	private IssueLinkWizard iWizard;
+	private IssueLinkWizard issueLinkWizard;
 	private IssueLinkAdder issueLinkAdder;
 	
 	private Text newRelationText;
@@ -35,11 +35,11 @@ extends WizardHopPage
 	
 	private List predefinedRelationList;
 	
-	public IssueLinkWizardRelationPage(IssueLinkWizard iWizard, IssueLinkAdder issueLinkAdder) {
+	public IssueLinkWizardRelationPage(IssueLinkWizard issueLinkWizard, IssueLinkAdder issueLinkAdder) {
 		super("Select/Create the relation for links", "Select/Create the relation for links.");
 		setDescription("The relation for links");
-		this.iWizard = iWizard;
-		
+		this.issueLinkWizard = issueLinkWizard;
+		this.issueLinkAdder = issueLinkAdder;
 		new WizardHop(this);
 	}
 
