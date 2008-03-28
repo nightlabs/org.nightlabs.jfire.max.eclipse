@@ -1,8 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 import javax.jdo.FetchPlan;
@@ -16,11 +13,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -185,7 +180,7 @@ public class IssueFilterCompositeIssueRelated
 	@Override
 	protected void resetSearchQueryValues(IssueQuery query)
 	{
-		if (selectedIssueType.equals(ISSUE_TYPE_ALL))
+		if (ISSUE_TYPE_ALL.equals(selectedIssueType))
 		{
 			query.setIssueTypeID(null);
 		}
@@ -194,7 +189,7 @@ public class IssueFilterCompositeIssueRelated
 			query.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
 		}
 		
-		if (selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL))
+		if (ISSUE_SEVERITY_TYPE_ALL.equals(selectedIssueSeverityType))
 		{
 			query.setIssueSeverityTypeID(null);
 		}
@@ -203,7 +198,7 @@ public class IssueFilterCompositeIssueRelated
 			query.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
 		}
 
-		if (selectedIssuePriority.equals(ISSUE_PRIORITY_ALL))
+		if (ISSUE_PRIORITY_ALL.equals(selectedIssuePriority))
 		{
 			query.setIssuePriorityID(null);
 		}
@@ -212,7 +207,7 @@ public class IssueFilterCompositeIssueRelated
 			query.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
 		}
 
-		if (selectedIssueResolution.equals(ISSUE_RESOLUTION_ALL))
+		if (ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution))
 		{
 			query.setIssueResolutionID(null);
 		}

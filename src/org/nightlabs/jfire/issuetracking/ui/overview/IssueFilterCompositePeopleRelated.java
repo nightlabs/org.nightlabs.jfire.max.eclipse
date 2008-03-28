@@ -27,7 +27,6 @@ import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.util.Util;
 
 public class IssueFilterCompositePeopleRelated 
 	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
@@ -102,7 +101,6 @@ public class IssueFilterCompositePeopleRelated
 				reporterButton.setEnabled(!selectAll);
 			}
 		});
-		allReporterButton.setSelection(true);
 
 		reporterText = new Text(rComposite, getBorderStyle());
 		reporterText.setEditable(false);
@@ -124,6 +122,9 @@ public class IssueFilterCompositePeopleRelated
 				}//if
 			}
 		});
+		allReporterButton.setSelection(true);
+		reporterButton.setEnabled(false);
+		reporterText.setEnabled(false);
 
 		Label aLabel = new Label(userGroup, SWT.NONE);
 		aLabel.setText("Assignee: ");
@@ -170,7 +171,9 @@ public class IssueFilterCompositePeopleRelated
 						assigneeText.setText(selectedAssignee.getName());
 				}//if
 			}
-		});		
+		});
+		assigneeButton.setEnabled(false);
+		assigneeText.setEnabled(false);
 	}
 	
 	@Override
@@ -193,56 +196,61 @@ public class IssueFilterCompositePeopleRelated
 		if (event.getChangedQuery() == null)
 		{
 			selectedAssignee = null;
+			allAssigneeButton.setSelection(true);
+			assigneeButton.setEnabled(false);
+			assigneeText.setEnabled(false);
 			assigneeText.setText("");
 
 			selectedReporter = null;
+			allReporterButton.setSelection(true);
+			reporterButton.setEnabled(false);
+			reporterText.setEnabled(false);			
 			reporterText.setText("");
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
+				boolean all = initialValue;
 				if (IssueQuery.PROPERTY_ASSIGNEE_ID.equals(changedField.getPropertyName()))
 				{
 					UserID tmpAssigneeID = (UserID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedAssignee), tmpAssigneeID) )
+					if (tmpAssigneeID == null)
 					{
-						if (tmpAssigneeID == null)
-						{
-							selectedAssignee = null;
-							assigneeText.setText("");
-						}
-						else
-						{
-							selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
-									new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-									new NullProgressMonitor());
-							assigneeText.setText(selectedAssignee.getName());
-						}
-						allAssigneeButton.setSelection(selectedAssignee != null);
+						assigneeText.setText("");
 					}
+					else
+					{
+						selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
+							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+						assigneeText.setText(selectedAssignee.getName());
+					}
+					all |= tmpAssigneeID == null;
+					setSearchSectionActive(allAssigneeButton, all);
+					assigneeButton.setEnabled(!all);
+					assigneeText.setEnabled(!all);
 				}
 				
 				if (IssueQuery.PROPERTY_REPORTER_ID.equals(changedField.getPropertyName()))
 				{
 					UserID tmpReporterID = (UserID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedReporter), tmpReporterID) )
+					if (tmpReporterID == null)
 					{
-						if (tmpReporterID == null)
-						{
-							selectedReporter = null;
-							reporterText.setText("");
-						}
-						else
-						{
-							selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
-								new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-								new NullProgressMonitor());
-							reporterText.setText(selectedReporter.getName());
-						}
+						reporterText.setText("");
 					}
-					allReporterButton.setSelection(selectedReporter != null);
-				}				
+					else
+					{
+						selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
+							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+						reporterText.setText(selectedReporter.getName());
+					}
+					all |= tmpReporterID == null;
+					allReporterButton.setSelection(all);
+					reporterText.setEnabled(! all);
+					reporterButton.setEnabled(! all);
+				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null		
 	}

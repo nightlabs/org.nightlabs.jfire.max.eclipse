@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -106,6 +107,10 @@ extends XComposite
 
 	
 	public void setIssueLinks(Set<IssueLink> newIssueLinks) {
+		if (newIssueLinks == null)
+		{
+			newIssueLinks = Collections.emptySet();
+		}
 		mIssueLinks.addAll(newIssueLinks);
 		if (oIssueLinks == null) {
 			oIssueLinks = newIssueLinks;
