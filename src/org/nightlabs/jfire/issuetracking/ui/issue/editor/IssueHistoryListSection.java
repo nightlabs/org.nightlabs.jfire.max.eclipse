@@ -6,8 +6,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 
@@ -20,19 +18,18 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 	private IssueEditorPageController controller;
 	
 	public IssueHistoryListSection(FormPage page, Composite parent, IssueEditorPageController controller) {
-		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = controller;
 		getSection().setText("Issue History");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+//		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		client.getGridLayout().numColumns = 1; 
 		
-		issueHistoryTable = new IssueHistoryTable(
-				client, SWT.NONE);
+		issueHistoryTable = new IssueHistoryTable(getSection(), SWT.NONE);
 		issueHistoryTable.getGridData().grabExcessHorizontalSpace = true;
 		
-		getSection().setClient(client);
+		getSection().setClient(issueHistoryTable);
 	}
 }

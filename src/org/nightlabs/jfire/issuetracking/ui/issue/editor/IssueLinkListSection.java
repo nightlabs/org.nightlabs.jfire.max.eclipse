@@ -22,9 +22,9 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
-/* 
-* @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
-*/
+/** 
+ * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
+ */
 public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
@@ -86,6 +86,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.setIssueLinks(issue.getIssueLinks());
 	}
 	
+	@Override
 	public Issue getIssue() {
 		return issue;
 	}
