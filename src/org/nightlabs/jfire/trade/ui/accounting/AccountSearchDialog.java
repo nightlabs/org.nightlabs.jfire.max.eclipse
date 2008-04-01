@@ -75,7 +75,8 @@ extends CenteredDialog
 	{
 		AccountQuery query = new AccountQuery();
 		query.setAccountTypeID(accountTypeID);
-		final QueryCollection<Account, AccountQuery> queries = new QueryCollection<Account, AccountQuery>();
+		final QueryCollection<Account, AccountQuery> queries =
+			new QueryCollection<Account, AccountQuery>(Account.class);
 		queries.add(query);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSearchDialog.loadingAccountsJob.name")){ //$NON-NLS-1$
@@ -128,7 +129,7 @@ extends CenteredDialog
 	public static Account searchAccount(AccountTypeID accountTypeID) {
 		Collection<Account> accountSet = searchAccounts(accountTypeID);
 		if (!accountSet.isEmpty())
-			return (Account)accountSet.iterator().next();
+			return accountSet.iterator().next();
 		else
 			return null;
 	}

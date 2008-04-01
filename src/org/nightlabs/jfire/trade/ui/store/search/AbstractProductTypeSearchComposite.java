@@ -153,7 +153,7 @@ extends XComposite
 					}
 				});
 				QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>> productTypeQueries =
-					new QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>>();
+					new QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>>(ProductType.class);
 				
 				AbstractProductTypeQuery<? extends ProductType> query = createNewQuery();
 

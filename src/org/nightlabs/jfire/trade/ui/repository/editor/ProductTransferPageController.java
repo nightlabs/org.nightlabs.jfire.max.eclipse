@@ -27,7 +27,7 @@ extends EntityEditorPageController
 {
 	private ProductTransferIDQuery productTransferQuery = new ProductTransferIDQuery();
 	private QueryCollection<TransferID, ProductTransferIDQuery> queryWrapper =
-		new QueryCollection<TransferID, ProductTransferIDQuery>(productTransferQuery);
+		new QueryCollection<TransferID, ProductTransferIDQuery>(TransferID.class, productTransferQuery);
 	
 	private List<ProductTransfer> productTransferList = null;
 

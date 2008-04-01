@@ -52,7 +52,7 @@ public class MoneyTransferPageController extends EntityEditorPageController
 {
 	private MoneyTransferQuery moneyTransferQuery = new MoneyTransferQuery();
 	private QueryCollection<MoneyTransfer, MoneyTransferQuery> queryWrapper =
-		new QueryCollection<MoneyTransfer, MoneyTransferQuery>(moneyTransferQuery);
+		new QueryCollection<MoneyTransfer, MoneyTransferQuery>(MoneyTransfer.class, moneyTransferQuery);
 	
 	private List<MoneyTransfer> moneyTransferList = null;
 	
