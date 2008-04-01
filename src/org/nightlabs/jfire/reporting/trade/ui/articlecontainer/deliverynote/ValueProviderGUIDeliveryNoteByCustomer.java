@@ -106,7 +106,7 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 				DeliveryNoteQuery query = new DeliveryNoteQuery();
 				query.setCustomerID((AnchorID) value);
 				QueryCollection<DeliveryNote, DeliveryNoteQuery> qs =
-					new QueryCollection<DeliveryNote, DeliveryNoteQuery>();
+					new QueryCollection<DeliveryNote, DeliveryNoteQuery>(DeliveryNote.class);
 				
 				qs.add(query);
 				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.sharedInstance()

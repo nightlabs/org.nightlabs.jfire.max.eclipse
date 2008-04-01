@@ -104,7 +104,8 @@ extends AbstractValueProviderGUI<OrderID>
 				OrderQuery query = new OrderQuery();
 //				ArticleContainerQuery query = new ArticleContainerQuery(Order.class);
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Order, OrderQuery> qs = new QueryCollection<Order, OrderQuery>();
+				QueryCollection<Order, OrderQuery> qs =
+					new QueryCollection<Order, OrderQuery>(Order.class);
 				qs.add(query);
 
 				final Collection<Order> orders = OrderDAO.sharedInstance().getOrdersByQueries(

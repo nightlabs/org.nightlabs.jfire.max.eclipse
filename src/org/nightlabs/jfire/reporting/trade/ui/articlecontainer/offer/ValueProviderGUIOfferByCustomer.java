@@ -109,7 +109,8 @@ extends AbstractValueProviderGUI<OfferID>
 				OfferQuery query = new OfferQuery();
 //				OfferQuery query = new OfferQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Offer, OfferQuery> qs = new QueryCollection<Offer, OfferQuery>();
+				QueryCollection<Offer, OfferQuery> qs =
+					new QueryCollection<Offer, OfferQuery>(Offer.class);
 				qs.add(query);
 				
 				final Collection<Offer> offers = OfferDAO.sharedInstance().getOffersByQuery(
