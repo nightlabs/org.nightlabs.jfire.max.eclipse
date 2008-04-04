@@ -54,7 +54,7 @@ public class AccountEntryViewer
 	};
 
 	@Override
-	protected Class<Account> getResultType()
+	public Class<Account> getResultType()
 	{
 		return Account.class;
 	}

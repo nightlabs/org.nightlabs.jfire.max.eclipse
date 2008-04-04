@@ -83,7 +83,7 @@ public class DeliveryNoteEntryViewer
 	}
 
 	@Override
-	protected Class<DeliveryNote> getResultType()
+	public Class<DeliveryNote> getResultType()
 	{
 		return DeliveryNote.class;
 	}

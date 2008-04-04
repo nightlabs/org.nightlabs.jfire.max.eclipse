@@ -1,7 +1,8 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -34,55 +36,102 @@ extends AbstractTableComposite<O>
 		super(parent, style);
 	}
 
+	private LinkedList<Integer> weightedColumns;
+	private LinkedList<Integer> fixedColumns;
+	
+	protected void addFixedColumn(int columnWidth)
+	{
+		if (weightedColumns == null)
+		{
+			weightedColumns = new LinkedList<Integer>();
+			fixedColumns = new LinkedList<Integer>();
+		}
+		weightedColumns.add(Integer.valueOf(-1));
+		fixedColumns.add(Integer.valueOf(columnWidth));
+	}
+	
+	protected void addWeightedColumn(int columnWeight)
+	{
+		if (weightedColumns == null)
+		{
+			weightedColumns = new LinkedList<Integer>();
+			fixedColumns = new LinkedList<Integer>();
+		}
+		weightedColumns.add(Integer.valueOf(columnWeight));
+		fixedColumns.add(Integer.valueOf(-1));
+	}
+	
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
-		TableLayout tableLayout = new TableLayout();
+//		This layout is simply to buggy (columns may be resized to size = 0 => they disappear!
+//		And not like the other layouts where you can make them visible again by pulling the divider in the reverse direction.)
+//		TableColumnLayout tableLayout = new TableColumnLayout();
 		TableColumn c;
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(10, 50));
+		addWeightedColumn(10);
 
-		createArticleContainerIDPrefixTableColumn(tableViewer, table, tableLayout);
-		createArticleContainerIDTableColumn(tableViewer, table, tableLayout);
+		createArticleContainerIDPrefixTableColumn(tableViewer, table);
+		createArticleContainerIDTableColumn(tableViewer, table);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.customerTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(8, 50));
+		addWeightedColumn(8);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.vendorTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(9, 50));
+		addWeightedColumn(9);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createDateTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(10));
+		addWeightedColumn(9);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createUserTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(10));
+		addWeightedColumn(10);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.amountTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(c, new ColumnWeightData(10));
+		addWeightedColumn(8);
 
 		if (Statable.class.isAssignableFrom(getArticleContainerClass())) {
 			c = new TableColumn(table, SWT.LEFT);
 			c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.currentStateTableColumn.text")); //$NON-NLS-1$
-			tableLayout.addColumnData(new ColumnWeightData(10));
+//			tableLayout.setColumnData(c, new ColumnWeightData(10));
+			addWeightedColumn(10);
 		}
 
 //		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10, 10, 10}));
-		createAdditionalTableColumns(tableViewer, table, tableLayout);
+		
+		createAdditionalTableColumns(tableViewer, table);
 
-		table.setLayout(tableLayout);
+		getTable().setLayout( new WeightedTableLayout(getPrimitiveArray(weightedColumns), getPrimitiveArray(fixedColumns)) );
+	}
+
+	private int[] getPrimitiveArray(List<Integer> list)
+	{
+		int[] primitiveArray = new int[list.size()];
+		int i = 0;
+		for (Integer value : list)
+		{
+			primitiveArray[i] = (value == null || value < 0) ? -1 : value;
+			i++;
+		}
+		return primitiveArray;
 	}
 
 	protected abstract Class<? extends ArticleContainer> getArticleContainerClass();
-	protected abstract void createArticleContainerIDPrefixTableColumn(TableViewer tableViewer, Table table, TableLayout tableLayout);
-	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table, TableLayout tableLayout);
-	protected abstract void createAdditionalTableColumns(TableViewer tableViewer, Table table, TableLayout tableLayout);
+	protected abstract void createArticleContainerIDPrefixTableColumn(TableViewer tableViewer, Table table);
+	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table);
+	protected abstract void createAdditionalTableColumns(TableViewer tableViewer, Table table);
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)

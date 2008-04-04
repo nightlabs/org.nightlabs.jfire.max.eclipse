@@ -185,6 +185,7 @@ public class StatableFilterSearchComposite
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		stateDefinitions.setLayoutData(data);
+		stateDefinitions.setEnabled(false);
 		stateDefinitions.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override

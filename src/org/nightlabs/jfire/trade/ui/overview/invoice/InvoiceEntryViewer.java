@@ -80,7 +80,7 @@ public class InvoiceEntryViewer
 	}
 
 	@Override
-	protected Class<Invoice> getResultType()
+	public Class<Invoice> getResultType()
 	{
 		return Invoice.class;
 	}

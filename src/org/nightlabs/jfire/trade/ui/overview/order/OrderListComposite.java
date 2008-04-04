@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.trade.ui.overview.order;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -34,35 +32,39 @@ extends AbstractArticleContainerListComposite<Order>
 	@Implement
 	@Override
 	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table, TableLayout tableLayout)
+			TableViewer tableViewer, Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDPrefixTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 
 	@Implement
 	@Override
 	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table, TableLayout tableLayout)
+			Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 
 	@Implement
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
-			Table table, TableLayout tableLayout)
+			Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.changeDateTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 
 		tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.changeUserTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 
 	@Override

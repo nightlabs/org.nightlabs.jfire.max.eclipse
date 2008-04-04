@@ -78,7 +78,7 @@ public class OrderEntryViewer
 	}
 
 	@Override
-	protected Class<Order> getResultType()
+	public Class<Order> getResultType()
 	{
 		return Order.class;
 	}

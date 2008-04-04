@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -23,40 +21,46 @@ extends AbstractArticleContainerListComposite<Invoice>
 
 	@Override
 	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table, TableLayout tableLayout)
+			TableViewer tableViewer, Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDPrefixTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 	@Override
 	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table, TableLayout tableLayout)
+			Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
-			Table table, TableLayout tableLayout)
+			Table table)
 	{
 		TableColumn tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.finalizeDateTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.finalizeUserTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.priceTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.amountToPayTableColumn.text")); //$NON-NLS-1$
-		tableLayout.addColumnData(new ColumnWeightData(10));
+//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+		addWeightedColumn(10);
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public class OfferEntryViewer
 	}
 
 	@Override
-	protected Class<Offer> getResultType()
+	public Class<Offer> getResultType()
 	{
 		return Offer.class;
 	}

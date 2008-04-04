@@ -15,6 +15,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -80,6 +82,14 @@ extends AbstractTableComposite<Account>
 		});
 		
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Account.class, accountChangedListener);
+		addDisposeListener(new DisposeListener()
+		{
+			@Override
+			public void widgetDisposed(DisposeEvent e)
+			{
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);				
+			}
+		});
 	}
 
 	@Override
