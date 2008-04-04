@@ -111,7 +111,7 @@ public class IssueEntryListViewer
 	}
 
 	@Override
-	protected Class<Issue> getResultType()
+	public Class<Issue> getResultType()
 	{
 		return Issue.class;
 	}
