@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
+import org.nightlabs.jfire.scripting.editor2d.util.VisibleScriptUtil;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
@@ -141,10 +142,11 @@ extends AbstractClientDeliveryProcessor
 
 					Map<ScriptRegistryItemID, Object> scriptResultMap = abstractScriptDataProviderThread.getScriptResultMap(productID, true);
 					// inject the data into the TicketDrawComponent
-					// and evaluate all local scripts (e.g. for visibility) // still TODO
-					// visibility and more
+					// and evaluate all local scripts
 					ticketDrawComponent.assignScriptResults(scriptResultMap);
-
+					// evaluate visible scripts
+					VisibleScriptUtil.assignVisibleScriptResults(ticketDrawComponent, scriptResultMap);
+					
 					ticketDrawComponents.add(ticketDrawComponent);
 				}
 				if (waitUntilPreferredCountFetched) {
