@@ -80,7 +80,7 @@
                tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip">
          </editorActionBarContribution>
          <editorActionBarContribution
-               class="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
+               class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
                id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
                name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
