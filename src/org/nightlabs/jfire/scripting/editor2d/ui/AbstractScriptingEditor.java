@@ -25,10 +25,7 @@
  ******************************************************************************/
 package org.nightlabs.jfire.scripting.editor2d.ui;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.login.LoginException;
@@ -43,18 +40,13 @@ import org.nightlabs.editor2d.Editor2DFactory;
 import org.nightlabs.editor2d.NameProvider;
 import org.nightlabs.editor2d.ui.AbstractEditor;
 import org.nightlabs.editor2d.ui.EditorContextMenuProvider;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
-import org.nightlabs.jfire.scripting.IScript;
-import org.nightlabs.jfire.scripting.ScriptRegistry;
-import org.nightlabs.jfire.scripting.condition.Script;
-import org.nightlabs.jfire.scripting.dao.ScriptRegistryDAO;
 import org.nightlabs.jfire.scripting.editor2d.ScriptEditor2DFactory;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.impl.ScriptEditor2DFactoryImpl;
+import org.nightlabs.jfire.scripting.editor2d.util.VisibleScriptUtil;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -107,51 +99,52 @@ implements ControllablePart
 	
 	public void assignVisibleScriptResults()
 	{
-			if (logger.isDebugEnabled())
-				logger.debug("assignVisibleScriptResults()"); //$NON-NLS-1$
-			Map<Long, Script> id2VisibleScript = getScriptRootDrawComponent().getVisibleScripts();
-			for (Map.Entry<Long, Script> entry : id2VisibleScript.entrySet()) {
-				Script script = entry.getValue();
-				for (Map.Entry<String, ScriptRegistryItemID> entry2 : script.getVariableName2ScriptID().entrySet()) {
-					Object result = getScriptResult(entry2.getValue());
-					script.getVariableName2Value().put(entry2.getKey(), result);
-				}
-			}
-			ScriptRegistry scriptRegistry = ScriptRegistryDAO.sharedInstance().getScriptRegistry(
-					new String[] {ScriptRegistry.FETCH_GROUP_THIS_SCRIPT_REGISTRY},
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			Map<Long, Boolean> id2Result = getConditonScriptResults(id2VisibleScript, scriptRegistry);
-			getScriptRootDrawComponent().assignVisibleScriptResults(id2Result);
+		VisibleScriptUtil.assignVisibleScriptResults(getScriptRootDrawComponent(), getScriptResults());
+//			if (logger.isDebugEnabled())
+//				logger.debug("assignVisibleScriptResults()"); //$NON-NLS-1$
+//			Map<Long, Script> id2VisibleScript = getScriptRootDrawComponent().getVisibleScripts();
+//			for (Map.Entry<Long, Script> entry : id2VisibleScript.entrySet()) {
+//				Script script = entry.getValue();
+//				for (Map.Entry<String, ScriptRegistryItemID> entry2 : script.getVariableName2ScriptID().entrySet()) {
+//					Object result = getScriptResult(entry2.getValue());
+//					script.getVariableName2Value().put(entry2.getKey(), result);
+//				}
+//			}
+//			ScriptRegistry scriptRegistry = ScriptRegistryDAO.sharedInstance().getScriptRegistry(
+//					new String[] {ScriptRegistry.FETCH_GROUP_THIS_SCRIPT_REGISTRY},
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//			Map<Long, Boolean> id2Result = getConditonScriptResults(id2VisibleScript, scriptRegistry);
+//			getScriptRootDrawComponent().assignVisibleScriptResults(id2Result);
 	}
 	
-	protected Map<Long, Boolean> getConditonScriptResults(Map<Long, Script> id2ConditionScript,
-			ScriptRegistry scriptRegistry)
-	{
-		int size = id2ConditionScript.values().size();
-		List<IScript> scripts = new ArrayList<IScript>(size);
-		List<Map<String, Object>> parameters = new ArrayList<Map<String, Object>>(size);
-		for (Map.Entry<Long, Script> entry : id2ConditionScript.entrySet()) {
-			Script visibleScript = entry.getValue();
-			scripts.add(visibleScript);
-			parameters.add(visibleScript.getVariableName2Value());
-		}
-		try {
-			List<Object> results = scriptRegistry.executeScripts(scripts, parameters);
-			Map<Long, Boolean> id2Result = new HashMap<Long, Boolean>();
-			for (Map.Entry<Long, Script> entry : id2ConditionScript.entrySet()) {
-				Script visibleScript = entry.getValue();
-				long id = entry.getKey();
-				Boolean result = (Boolean) results.get(scripts.indexOf(visibleScript));
-				id2Result.put(id, result);
-				if (logger.isDebugEnabled()) {
-					logger.debug("result for script = "+visibleScript.getText()+" == "+result); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-			return id2Result;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	protected Map<Long, Boolean> getConditonScriptResults(Map<Long, Script> id2ConditionScript,
+//			ScriptRegistry scriptRegistry)
+//	{
+//		int size = id2ConditionScript.values().size();
+//		List<IScript> scripts = new ArrayList<IScript>(size);
+//		List<Map<String, Object>> parameters = new ArrayList<Map<String, Object>>(size);
+//		for (Map.Entry<Long, Script> entry : id2ConditionScript.entrySet()) {
+//			Script visibleScript = entry.getValue();
+//			scripts.add(visibleScript);
+//			parameters.add(visibleScript.getVariableName2Value());
+//		}
+//		try {
+//			List<Object> results = scriptRegistry.executeScripts(scripts, parameters);
+//			Map<Long, Boolean> id2Result = new HashMap<Long, Boolean>();
+//			for (Map.Entry<Long, Script> entry : id2ConditionScript.entrySet()) {
+//				Script visibleScript = entry.getValue();
+//				long id = entry.getKey();
+//				Boolean result = (Boolean) results.get(scripts.indexOf(visibleScript));
+//				id2Result.put(id, result);
+//				if (logger.isDebugEnabled()) {
+//					logger.debug("result for script = "+visibleScript.getText()+" == "+result); //$NON-NLS-1$ //$NON-NLS-2$
+//				}
+//			}
+//			return id2Result;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 	
 	public ScriptRootDrawComponent getScriptRootDrawComponent() {
 		return (ScriptRootDrawComponent) getRootDrawComponent();
