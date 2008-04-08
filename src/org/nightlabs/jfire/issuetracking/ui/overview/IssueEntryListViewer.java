@@ -14,6 +14,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -114,5 +115,11 @@ public class IssueEntryListViewer
 	public Class<Issue> getResultType()
 	{
 		return Issue.class;
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<Issue, IssueQuery>> getViewerClass()
+	{
+		return IssueEntryListViewer.class;
 	}
 }
