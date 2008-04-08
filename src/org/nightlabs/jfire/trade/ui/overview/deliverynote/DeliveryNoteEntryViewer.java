@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -86,6 +87,12 @@ public class DeliveryNoteEntryViewer
 	public Class<DeliveryNote> getResultType()
 	{
 		return DeliveryNote.class;
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<DeliveryNote, DeliveryNoteQuery>> getViewerClass()
+	{
+		return DeliveryNoteEntryViewer.class;
 	}
 
 }

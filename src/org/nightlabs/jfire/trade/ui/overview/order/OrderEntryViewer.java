@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -81,6 +82,12 @@ public class OrderEntryViewer
 	public Class<Order> getResultType()
 	{
 		return Order.class;
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<Order, OrderQuery>> getViewerClass()
+	{
+		return OrderEntryViewer.class;
 	}
 
 }

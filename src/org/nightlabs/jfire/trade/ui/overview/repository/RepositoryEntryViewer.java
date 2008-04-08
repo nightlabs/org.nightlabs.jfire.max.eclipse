@@ -11,6 +11,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryDAO;
@@ -62,6 +63,12 @@ public class RepositoryEntryViewer
 	public Class<Repository> getResultType()
 	{
 		return Repository.class;
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<Repository, RepositoryQuery>> getViewerClass()
+	{
+		return RepositoryEntryViewer.class;
 	}
 
 }

@@ -15,6 +15,7 @@ import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -69,6 +70,12 @@ public class AccountEntryViewer
 			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 			monitor
 			);
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<Account, AccountQuery>> getViewerClass()
+	{
+		return AccountEntryViewer.class;
 	}
 
 }

@@ -13,6 +13,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.Entry;
+import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -83,5 +84,11 @@ public class InvoiceEntryViewer
 	public Class<Invoice> getResultType()
 	{
 		return Invoice.class;
+	}
+
+	@Override
+	protected Class<? extends SearchEntryViewer<Invoice, InvoiceQuery>> getViewerClass()
+	{
+		return InvoiceEntryViewer.class;
 	}
 }
