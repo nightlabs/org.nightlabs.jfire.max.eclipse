@@ -687,7 +687,10 @@ gibt's nimmer - oder?! Marco.
 -->
     <extension point="org.nightlabs.jfire.trade.ui.tradeOverview">
         <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.ui.overview" index="0" name="%org.nightlabs.jfire.trade.ui.overview.name"/>
+              categoryID="org.nightlabs.jfire.trade.ui.overview"
+              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+              index="0"
+              name="%org.nightlabs.jfire.trade.ui.overview.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
