@@ -39,6 +39,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.General
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 
 /**
@@ -109,7 +110,7 @@ implements IEditorInput
 	/**
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public Object getAdapter(Class adapter)
 	{
 		return null;

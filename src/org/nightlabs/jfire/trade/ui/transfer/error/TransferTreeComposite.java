@@ -50,7 +50,7 @@ extends AbstractTreeComposite<TransferTreeNode>
 	private static class TransferContentProvider
 	extends TreeContentProvider
 	{
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public Object[] getElements(Object inputElement)
 		{
 			if (inputElement instanceof TransferTreeNode)

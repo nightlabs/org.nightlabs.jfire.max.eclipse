@@ -18,13 +18,14 @@ import org.eclipse.ui.internal.forms.widgets.SWTUtil;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ModeOfDeliveryFlavourTable
 extends AbstractTableComposite<ModeOfDeliveryFlavour>
 {
 	private static class ContentProvider implements IStructuredContentProvider {
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked") //$NON-NLS-1$
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof Collection) {
 				return ((Collection)inputElement).toArray();

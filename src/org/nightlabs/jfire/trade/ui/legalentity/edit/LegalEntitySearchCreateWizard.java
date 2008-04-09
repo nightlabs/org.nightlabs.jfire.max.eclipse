@@ -13,6 +13,7 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -28,6 +29,7 @@ public class LegalEntitySearchCreateWizard extends DynamicPathWizard {
 	public LegalEntitySearchCreateWizard(String quickSearchText, boolean allowNewLegalEntityCreation) {
 		personSearchWizardPage = new PersonSearchWizardPage(quickSearchText);
 		addPage(personSearchWizardPage);
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard.windowsTitle")); //$NON-NLS-1$
 	}
 
 	/** {@inheritDoc}

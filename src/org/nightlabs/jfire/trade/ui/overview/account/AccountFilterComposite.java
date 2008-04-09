@@ -472,7 +472,7 @@ public class AccountFilterComposite
 			setSearchSectionActive(activeCurrencyButton, false);
 			
 			selectedOwnerID = null;
-			ownerText.setText("");
+			ownerText.setText(""); //$NON-NLS-1$
 			setSearchSectionActive(ownerActiveButton, false);
 			
 			selectedAccountTypeID = null;
@@ -548,7 +548,7 @@ public class AccountFilterComposite
 					AnchorID ownerID = (AnchorID) changedField.getNewValue();
 					if (ownerID == null)
 					{
-						ownerText.setText("");
+						ownerText.setText(""); //$NON-NLS-1$
 					}
 					else
 					{

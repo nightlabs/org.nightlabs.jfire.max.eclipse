@@ -291,7 +291,7 @@ public class RepositoryFilterComposite
 		if (event.getChangedQuery() == null)
 		{
 			selectedOwnerID = null;
-			ownerText.setText("");
+			ownerText.setText(""); //$NON-NLS-1$
 			ownerBrowseButton.setEnabled(false);
 			setSearchSectionActive(ownerActiveButton, false);
 			
@@ -309,7 +309,7 @@ public class RepositoryFilterComposite
 					AnchorID tmpOwnerID = (AnchorID) fieldChange.getNewValue();
 					if (tmpOwnerID == null)
 					{
-						ownerText.setText("");
+						ownerText.setText(""); //$NON-NLS-1$
 					}
 					else
 					{

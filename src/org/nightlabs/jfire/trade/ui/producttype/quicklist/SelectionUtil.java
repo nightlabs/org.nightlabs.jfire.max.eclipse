@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Utility class which checks the containment of {@link ISelection}s for
@@ -32,7 +33,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ObjectID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public static Set<ObjectID> getObjectIDs(ISelection selection) 
 	{
 		Set<ObjectID> objectIDs = new HashSet<ObjectID>();
@@ -63,7 +64,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeID}s which were contained in 
 	 * the given {@link ISelection}
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public static Set<ProductTypeID> getProductTypesIDs(ISelection selection) 
 	{
 		Set<ProductTypeID> typeIDs = new HashSet<ProductTypeID>();
@@ -94,7 +95,7 @@ public class SelectionUtil {
 	 * @return a {@link Set} of all {@link ProductTypeGroupID}s which were contained in 
 	 * the given {@link ISelection}
 	 */	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public static Set<ProductTypeGroupID> getProductTypeGroupsIDs(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> typeIDs = new HashSet<ProductTypeGroupID>();
@@ -126,7 +127,7 @@ public class SelectionUtil {
 	 * @return a {@link SelectionContainment} of all {@link ProductTypeGroupID}s 
 	 * and {@link ProductTypeID}s which were contained in the given {@link ISelection}
 	 */	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public static SelectionContainment getSelectionContainment(ISelection selection) 
 	{
 		Set<ProductTypeGroupID> productTypeGroupIDs = new HashSet<ProductTypeGroupID>();

@@ -438,17 +438,17 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			}
 			
 			selectedUserID = null;
-			userText.setText("");
+			userText.setText(""); //$NON-NLS-1$
 			userBrowseButton.setEnabled(false);
 			setSearchSectionActive(userActiveButton, false);
 			
 			selectedVendorID = null;
-			vendorText.setText("");
+			vendorText.setText(""); //$NON-NLS-1$
 			vendorBrowseButton.setEnabled(false);
 			setSearchSectionActive(vendorActiveButton, false);
 			
 			selectedCustomerID = null;
-			customerText.setText("");
+			customerText.setText(""); //$NON-NLS-1$
 			customerBrowseButton.setEnabled(false);
 			setSearchSectionActive(customerActiveButton, false);			
 		}
@@ -486,7 +486,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 					UserID userID = (UserID) changedField.getNewValue();
 					if (userID == null)
 					{
-						userText.setText("");
+						userText.setText(""); //$NON-NLS-1$
 					}
 					else
 					{
@@ -508,7 +508,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 					AnchorID customerID = (AnchorID) changedField.getNewValue();
 					if (customerID == null)
 					{
-						customerText.setText("");
+						customerText.setText(""); //$NON-NLS-1$
 					}
 					else
 					{
@@ -530,7 +530,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 					AnchorID vendorID = (AnchorID) changedField.getNewValue();
 					if (vendorID == null)
 					{
-						vendorText.setText("");
+						vendorText.setText(""); //$NON-NLS-1$
 					}
 					else
 					{

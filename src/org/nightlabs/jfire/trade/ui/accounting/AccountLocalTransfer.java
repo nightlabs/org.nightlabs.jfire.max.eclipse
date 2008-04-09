@@ -32,6 +32,7 @@ import java.util.Iterator;
 import org.eclipse.swt.dnd.Transfer;
 import org.nightlabs.base.ui.dnd.LocalObjectTransfer;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -47,7 +48,7 @@ extends LocalObjectTransfer
 	/**
 	 * @see org.nightlabs.base.ui.dnd.LocalObjectTransfer#validate(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Override
 	protected boolean validate(Object object) {
 		if (object instanceof Account)

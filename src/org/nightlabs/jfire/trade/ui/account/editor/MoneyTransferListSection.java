@@ -32,7 +32,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 	public MoneyTransferListSection(FormPage page, Composite parent, MoneyTransferPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
 		this.controller = controller;
-		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.sectionTitle"));
+		getSection().setText(Messages.getString(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.sectionTitle"))); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
@@ -58,7 +58,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 			{
 				Display.getDefault().asyncExec(new Runnable()
 				{
-					@SuppressWarnings("unchecked")
+					@SuppressWarnings("unchecked") //$NON-NLS-1$
 					public void run()
 					{
 						moneyTransferListChanged((List<MoneyTransfer>) modifyEvent.getNewObject());
