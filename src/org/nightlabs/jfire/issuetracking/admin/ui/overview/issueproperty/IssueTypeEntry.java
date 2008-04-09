@@ -4,10 +4,14 @@ import javax.security.auth.login.LoginException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.overview.AbstractEntry;
 import org.nightlabs.jfire.base.ui.overview.EntryFactory;
 import org.nightlabs.jfire.base.ui.overview.EntryViewer;
+import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
 
 public class IssueTypeEntry extends AbstractEntry{
 
@@ -35,9 +39,16 @@ public class IssueTypeEntry extends AbstractEntry{
 		return composite;
 	}
 
-	public void handleActivation() {
-		// TODO Auto-generated method stub
-		
+	public IWorkbenchPart handleActivation()
+	{
+		try
+		{
+			return RCPUtil.openEditor(new OverviewEntryEditorInput(this), IssueTypeEditor.EDITOR_ID);
+		}
+		catch (PartInitException e)
+		{
+			throw new RuntimeException(e);
+		}	
 	}
 
 }
