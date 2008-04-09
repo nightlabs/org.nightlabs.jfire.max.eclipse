@@ -26,13 +26,22 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.nightlabs.base.ui.util.RCPUtil;
 
 /**
  * This editor is the frame for editing <tt>Order</tt>s, <tt>Offer</tt>s,
@@ -47,11 +56,17 @@ implements IGeneralEditor
 {
 	public static final String ID_EDITOR = GeneralEditor.class.getName();
 
+	private static final Logger logger = Logger.getLogger(GeneralEditor.class);
+
 	private GeneralEditorComposite generalEditorComposite;
 	private GeneralEditorInput input;
-
+	private boolean focusReleased = true;
+	private static boolean partInitialized = false;
+	
 	public GeneralEditor()
 	{
+	registerActivatePartListener();
+	
 	}
 
 	/**
@@ -75,11 +90,12 @@ implements IGeneralEditor
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException
+	throws PartInitException
 	{
+		
 		if (!(input instanceof GeneralEditorInput))
 			throw new PartInitException("Invalid Input: Must be an instance of GeneralEditorInput but is "+input); //$NON-NLS-1$
-		
+
 		this.input = (GeneralEditorInput) input;
 
 		setSite(site);
@@ -89,32 +105,32 @@ implements IGeneralEditor
 		ImageDescriptor img = input.getImageDescriptor();
 		if (img != null)
 			setTitleImage(img.createImage());
-//
+
 //		getSite().setSelectionProvider(new ISelectionProvider() {
-//			private LinkedList listeners = new LinkedList();
-//
-//			public void addSelectionChangedListener(ISelectionChangedListener listener)
-//			{
-//				listeners.add(listener);
-//			}
-//
-//			public ISelection getSelection()
-//			{
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//
-//			public void removeSelectionChangedListener(ISelectionChangedListener listener)
-//			{
-//				listeners.remove(listener);
-//			}
-//
-//			public void setSelection(ISelection selection)
-//			{
-//				// TODO Auto-generated method stub
-//				System.out.println("");
-//			}
-//
+//		private LinkedList listeners = new LinkedList();
+
+//		public void addSelectionChangedListener(ISelectionChangedListener listener)
+//		{
+//		listeners.add(listener);
+//		}
+
+//		public ISelection getSelection()
+//		{
+//		// TODO Auto-generated method stub
+//		return null;
+//		}
+
+//		public void removeSelectionChangedListener(ISelectionChangedListener listener)
+//		{
+//		listeners.remove(listener);
+//		}
+
+//		public void setSelection(ISelection selection)
+//		{
+//		// TODO Auto-generated method stub
+//		System.out.println("");
+//		}
+
 //		});
 	}
 
@@ -143,7 +159,7 @@ implements IGeneralEditor
 	public void createPartControl(Composite parent)
 	{
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromFile(
-//				TradePlugin.class, "../../../../../icons/submit16.gif");
+//		TradePlugin.class, "../../../../../icons/submit16.gif");
 //		setTitleImage(imageDescriptor.createImage());
 		generalEditorComposite = new GeneralEditorComposite(getSite(), parent, input);
 	}
@@ -161,19 +177,66 @@ implements IGeneralEditor
 	{
 	}
 
+
+
+
+	protected synchronized static void registerActivatePartListener()
+	{
+		if(partInitialized)
+			return;
+		
+		RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
+		partInitialized = true;
+
+	}
+
+
+
+	protected static class ActivateListener implements IPartListener {
+
+		public void partActivated(final IWorkbenchPart part) {
+	
+			String str = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getTitle();
+			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", str);
+			
+			
+		
+		}
+
+		@Override
+		public void partBroughtToTop(final IWorkbenchPart part) {
+		}
+
+		@Override
+		public void partClosed(final IWorkbenchPart part) {
+		}
+
+
+		@Override
+		public void partDeactivated(final IWorkbenchPart part) {
+		}
+		@Override
+		public void partOpened(final IWorkbenchPart part) {
+		}
+	}
+
+
+
+
+
 //	/**
-//	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
-//	 */
+//	* @see org.eclipse.ui.part.WorkbenchPart#dispose()
+//	*/
 //	public void dispose()
 //	{
-//		LOGGER.debug("dispose() entered. generalEditorComposite.isDisposed()=" + generalEditorComposite.isDisposed());
-//
-//		// TODO the following line should NOT be necessary, but the dispose method of
-//		// our composite is never called.
-//		LOGGER.debug("manually calling generalEditorComposite.dispose()");
-//		generalEditorComposite.dispose();
-//
-//		LOGGER.debug("dispose() calling super.dispose()");
-//		super.dispose();
+//	LOGGER.debug("dispose() entered. generalEditorComposite.isDisposed()=" + generalEditorComposite.isDisposed());
+
+//	// TODO the following line should NOT be necessary, but the dispose method of
+//	// our composite is never called.
+//	LOGGER.debug("manually calling generalEditorComposite.dispose()");
+//	generalEditorComposite.dispose();
+
+//	LOGGER.debug("dispose() calling super.dispose()");
+//	super.dispose();
 //	}
 }
