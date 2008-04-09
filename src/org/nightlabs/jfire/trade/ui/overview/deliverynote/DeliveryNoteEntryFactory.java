@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.ui.overview.deliverynote;
 
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.overview.AbstractEntryFactory;
@@ -26,9 +27,9 @@ extends AbstractEntryFactory
 				return new DeliveryNoteEntryViewer(this);
 			}
 
-			public void handleActivation() {
+			public IWorkbenchPart handleActivation() {
 				try {
-					RCPUtil.openEditor(
+					return RCPUtil.openEditor(
 							new OverviewEntryEditorInput(this),
 							DeliveryNoteEntryEditor.EDITOR_ID);
 				} catch (PartInitException e) {
