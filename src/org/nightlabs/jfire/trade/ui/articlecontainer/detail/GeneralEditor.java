@@ -70,8 +70,7 @@ implements IGeneralEditor
 
 	public GeneralEditor()
 	{
-		registerActivatePartListener();
-
+//		registerActivatePartListener();
 	}
 
 	/**
@@ -182,9 +181,6 @@ implements IGeneralEditor
 	{
 	}
 
-
-
-
 	protected synchronized static void registerActivatePartListener()
 	{
 		if(partInitialized)
@@ -192,16 +188,10 @@ implements IGeneralEditor
 
 		RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
 		partInitialized = true;
-
 	}
 
-
-
 	protected static class ActivateListener implements IPartListener {
-
 		public void partActivated(final IWorkbenchPart part) {
-
-
 			IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 			if (editor == null)
@@ -210,34 +200,21 @@ implements IGeneralEditor
 			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", editor.getTitle());
 			
 			if (editor instanceof GeneralEditor) {
-
 				GeneralEditor ge = (GeneralEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
-
 				NotificationEvent event = new NotificationEvent(
 						this, TradePlugin.ZONE_SALE, 
 						ac.getVendorID());
-
-
 				//SelectionManager.sharedInstance().notify(event);
 			}
-
-
-
-
-
-
 		}
 
 		@Override
 		public void partBroughtToTop(final IWorkbenchPart part) {
 		}
-
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
 		}
-
-
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
 		}
@@ -245,10 +222,6 @@ implements IGeneralEditor
 		public void partOpened(final IWorkbenchPart part) {
 		}
 	}
-
-
-
-
 
 //	/**
 //	* @see org.eclipse.ui.part.WorkbenchPart#dispose()
