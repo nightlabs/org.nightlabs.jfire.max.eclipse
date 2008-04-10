@@ -715,28 +715,32 @@ gibt's nimmer - oder?! Marco.
             class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
             index="3" name="%org.nightlabs.jfire.trade.ui.overview.order.name"/>
-        <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-            index="1" name="%org.nightlabs.jfire.trade.ui.overview.accounting.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
-            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-            class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
-            icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
-            index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.receptionnote"
             categoryID="org.nightlabs.jfire.trade.ui.overview"
             class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory"
             icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
             index="4" name="%org.nightlabs.jfire.trade.ui.overview.receptionnote.name"/>
+        <categoryFactory
+              categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+              index="1"
+              name="%org.nightlabs.jfire.trade.ui.overview.accounting.name"/>
+        <entryFactory
+            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
+            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+            class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
+            icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
+            index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
+        <categoryFactory
+              categoryID="org.nightlabs.jfire.trade.ui.overview.store"
+              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+              index="2"
+              name="%org.nightlabs.jfire.trade.ui.overview.store.name"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
             class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory.name"/>
-        <categoryFactory
-            categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-            index="2" name="%org.nightlabs.jfire.trade.ui.overview.store.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editorActionBarContribution">
         <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
@@ -769,17 +773,7 @@ gibt's nimmer - oder?! Marco.
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -817,17 +811,7 @@ gibt's nimmer - oder?! Marco.
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -865,17 +849,7 @@ gibt's nimmer - oder?! Marco.
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -913,17 +887,7 @@ gibt's nimmer - oder?! Marco.
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -940,17 +904,7 @@ gibt's nimmer - oder?! Marco.
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.search.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -981,17 +935,7 @@ gibt's nimmer - oder?! Marco.
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%org.nightlabs.jfire.trade.ui.overview.account.action.ManualMoneyTransferAction.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
@@ -1025,7 +969,6 @@ gibt's nimmer - oder?! Marco.
             </editorActionBarContribution>
             <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   name="%overview.action.saveQuery.name"
