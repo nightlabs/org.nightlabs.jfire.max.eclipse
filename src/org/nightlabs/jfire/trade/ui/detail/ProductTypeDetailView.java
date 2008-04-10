@@ -4,6 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
@@ -36,6 +39,13 @@ extends LSDViewPart
 		super();
 	}
 
+	private IMemento initMemento = null;
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		this.initMemento = memento;
+	}
+	
 	@Implement
 	public void createPartContents(Composite parent)
 	{
@@ -44,6 +54,9 @@ extends LSDViewPart
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE, ProductType.class, productTypeSelectionListener);
 
+		if (initMemento != null)
+			productTypeDetailComposite.init(initMemento);
+		
 		productTypeDetailComposite.addDisposeListener(new DisposeListener() {
 			
 			public void widgetDisposed(DisposeEvent e) {
@@ -71,4 +84,12 @@ extends LSDViewPart
 		}
 	};
 
+	
+	@Override
+	public void saveState(IMemento memento) {
+		super.saveState(memento);
+		productTypeDetailComposite.saveState(memento);
+	}
+	
+	
 }

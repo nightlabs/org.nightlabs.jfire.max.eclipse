@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.detail;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 
 /**
@@ -28,6 +29,13 @@ implements IProductTypeDetailView
 		this.productTypeID = productTypeID;
 		if (genericProductTypeDetailViewComposite != null)
 			genericProductTypeDetailViewComposite.setProductTypeID(productTypeID);
+	}
+	@Override
+	public void init(IMemento memento) {
+	}
+	
+	@Override
+	public void saveState(IMemento memento) {
 	}
 
 }

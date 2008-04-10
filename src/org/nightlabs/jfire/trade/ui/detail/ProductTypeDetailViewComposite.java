@@ -5,9 +5,11 @@ package org.nightlabs.jfire.trade.ui.detail;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
@@ -19,6 +21,8 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
  */
 public class ProductTypeDetailViewComposite extends XComposite {
 
+	private IMemento restoreMemento = null;
+	
 	private Map<Class<? extends ProductType>, IProductTypeDetailView> detailViews = new HashMap<Class<? extends ProductType>, IProductTypeDetailView>();
 	private Map<IProductTypeDetailView, Composite> detailComposites = new HashMap<IProductTypeDetailView, Composite>();
 	
@@ -29,6 +33,7 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	public ProductTypeDetailViewComposite(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new StackLayout());
+		
 	}
 
 	protected void createComposite(XComposite parent) {
@@ -46,6 +51,12 @@ public class ProductTypeDetailViewComposite extends XComposite {
 		if (detailView == null) {
 			detailView = ProductTypeDetailViewRegistry.sharedInstance().getProductTypeDetailView(pTypeClass);
 			detailViews.put(pTypeClass, detailView);
+			if (restoreMemento != null) {
+				IMemento detailViewMemento = restoreMemento.getChild(getXMLClassName(pTypeClass));
+				if (detailViewMemento != null) {
+					detailView.init(detailViewMemento);
+				}
+			}
 			Composite composite = detailView.createComposite(this);
 			detailComposites.put(detailView, composite);
 		}
@@ -57,4 +68,20 @@ public class ProductTypeDetailViewComposite extends XComposite {
 		
 		detailView.setProductTypeID(productTypeID);
 	}
+	
+	public void saveState(IMemento memento) {
+		for (Entry<Class<? extends ProductType>, IProductTypeDetailView> entry : detailViews.entrySet()) {
+			IMemento detailViewMemento = memento.createChild(getXMLClassName(entry.getKey()));
+			entry.getValue().saveState(detailViewMemento);
+		}
+	}
+	
+	private String getXMLClassName(Class<?> clazz) {
+		return clazz.getName().replaceAll("\\.", "_");
+	}
+	
+	public void init(IMemento memento) {
+		this.restoreMemento = memento;
+	}
+		
 }
