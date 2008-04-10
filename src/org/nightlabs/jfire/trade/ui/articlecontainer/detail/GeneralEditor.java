@@ -34,6 +34,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartListener2;
@@ -41,7 +42,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.notification.NotificationEvent;
 
 /**
  * This editor is the frame for editing <tt>Order</tt>s, <tt>Offer</tt>s,
@@ -62,11 +67,11 @@ implements IGeneralEditor
 	private GeneralEditorInput input;
 	private boolean focusReleased = true;
 	private static boolean partInitialized = false;
-	
+
 	public GeneralEditor()
 	{
-	registerActivatePartListener();
-	
+		registerActivatePartListener();
+
 	}
 
 	/**
@@ -92,7 +97,7 @@ implements IGeneralEditor
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException
 	{
-		
+
 		if (!(input instanceof GeneralEditorInput))
 			throw new PartInitException("Invalid Input: Must be an instance of GeneralEditorInput but is "+input); //$NON-NLS-1$
 
@@ -184,7 +189,7 @@ implements IGeneralEditor
 	{
 		if(partInitialized)
 			return;
-		
+
 		RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
 		partInitialized = true;
 
@@ -195,12 +200,33 @@ implements IGeneralEditor
 	protected static class ActivateListener implements IPartListener {
 
 		public void partActivated(final IWorkbenchPart part) {
-	
-			String str = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getTitle();
-			//MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", str);
+
+
+			IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+
+			if (editor == null)
+				return;
+
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", editor.getTitle());
 			
-			
-		
+			if (editor instanceof GeneralEditor) {
+
+				GeneralEditor ge = (GeneralEditor) editor;
+				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
+
+				NotificationEvent event = new NotificationEvent(
+						this, TradePlugin.ZONE_SALE, 
+						ac.getVendorID());
+
+
+				//SelectionManager.sharedInstance().notify(event);
+			}
+
+
+
+
+
+
 		}
 
 		@Override
