@@ -26,6 +26,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IMemento;
 import org.nightlabs.base.ui.composite.ReadOnlyLabeledText;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -54,6 +55,13 @@ import org.nightlabs.progress.ProgressMonitor;
 public class SimpleProductTypeDetailViewComposite
 extends XComposite
 {
+
+	private static final String ATTR_NAME_WEIGHT_2 = "weight_2";
+	private static final String ATTR_NAME_WEIGHT_1 = "weight_1";
+	private static final String ATTR_NAME_SASH_ORIENTATION = "sashOrientation";
+	
+	private static final int defaultImageHeight = 200;
+	private static final int defaultImageWidth = 200;
 
 	private Logger logger = Logger.getLogger(SimpleProductTypeDetailViewComposite.class);
 	
@@ -181,8 +189,8 @@ extends XComposite
 			}
 		};
 		imageWrapper.getGridData().grabExcessHorizontalSpace = false;
-		imageWrapper.getGridData().heightHint = 150;
-		imageWrapper.getGridData().widthHint = 150;
+		imageWrapper.getGridData().heightHint = defaultImageHeight;
+		imageWrapper.getGridData().widthHint = defaultImageWidth;
 		imageLabel = new Label(imageWrapper, SWT.NONE);
 		imageLabel.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
@@ -195,6 +203,13 @@ extends XComposite
 			}
 			public void controlResized(ControlEvent e) {
 				displayImage();
+				int orientation = (restoredOrientation != null && restoredWeights != null) ? restoredOrientation : sashForm.getOrientation();
+				if (getSize().x < 350 && orientation != SWT.VERTICAL) {
+					setOrientation(SWT.VERTICAL);
+				}
+				if (getSize().x > 400 && orientation != SWT.HORIZONTAL) {
+					setOrientation(SWT.HORIZONTAL);
+				}
 			}
 		});
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
@@ -210,11 +225,25 @@ extends XComposite
 
 	private Runnable sash_setWeights_runnable = new Runnable() {
 		public void run() {
+			
+			if (restoredOrientation != null && restoredWeights != null) {
+				sashForm.setOrientation(restoredOrientation);
+				sashForm.setWeights(restoredWeights);
+				restoredOrientation = null;
+				restoredWeights = null;
+				return;
+			}
+			
 			++sash_setWeights_counter;
-			int leftWeight = (100 * (getSize().x - 150) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
-			int rightWeight = (100 * 150 / getSize().x);
-			if (leftWeight > 0 && rightWeight > 0)
-				sashForm.setWeights(new int[] {leftWeight, rightWeight});
+			int leftWeight = (100 * (getSize().x - defaultImageWidth) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
+			int rightWeight = (100 * defaultImageWidth / getSize().x);
+			
+			
+			if (leftWeight > 0 && rightWeight > 0) {
+				int[] weights = new int[] {leftWeight, rightWeight};
+				logger.info("Setting weights to " + weights[0] + ", " + weights[1]);
+				sashForm.setWeights(weights);
+			}
 			else {
 				logger.warn("Weights are out of range! leftWeight=" + leftWeight + " rightWeight=" + rightWeight);
 
@@ -240,8 +269,9 @@ extends XComposite
 		int width = currImageData.width;
 		int height = currImageData.height;
 		double factor = 1.0;
-		int maxThumbnailHeight = imageWrapper.getSize().y;
-		int maxThumbnailWidth = Math.min(Math.max(imageWrapper.getSize().x / 2, 145), 145);
+		int imgMaxWidth = defaultImageWidth - 5;
+		int maxThumbnailHeight = imageWrapper.getSize().y;		
+		int maxThumbnailWidth = Math.min(Math.max(imageWrapper.getSize().x / 2, imgMaxWidth), imgMaxWidth);
 		if (maxThumbnailWidth > imageWrapper.getSize().x)
 			maxThumbnailWidth = imageWrapper.getSize().x;
 		
@@ -257,6 +287,41 @@ extends XComposite
 		if (!layoutingImageWrapper) {
 			imageLabel.getParent().layout(true, true);
 			imageLabel.getParent().getParent().layout(true, true);
+		}
+	}
+	
+	public void setOrientation(int orientation) {
+		sashForm.setOrientation(orientation);
+		getDisplay().asyncExec(sash_setWeights_runnable);
+	}
+	
+	public void saveState(IMemento memento) {
+		int[] weights = sashForm.getWeights();
+		if (weights.length != 2)
+			return;
+		IMemento element = memento.createChild(this.getClass().getSimpleName());
+		element.putInteger(ATTR_NAME_SASH_ORIENTATION, sashForm.getOrientation());
+		logger.info("Storing weights to " + weights[0] + ", " + weights[1]);
+		element.putInteger(ATTR_NAME_WEIGHT_1, weights[0]);
+		element.putInteger(ATTR_NAME_WEIGHT_2, weights[1]);
+	}
+	
+	private Integer restoredOrientation = null;
+	private int[] restoredWeights = null;
+	
+	public void restoreState(IMemento memento) {
+		IMemento element = memento.getChild(this.getClass().getSimpleName());
+		restoredOrientation = element.getInteger(ATTR_NAME_SASH_ORIENTATION);
+		if (restoredOrientation != null) {
+			Integer weight_1 = element.getInteger(ATTR_NAME_WEIGHT_1);
+			Integer weight_2 = element.getInteger(ATTR_NAME_WEIGHT_2);
+			if (weight_1 != null && weight_2 != null) {
+				restoredWeights = new int[2];
+				restoredWeights[0] = weight_1;
+				restoredWeights[1] = weight_2;
+			} else {
+				restoredOrientation = null;
+			}
 		}
 	}
 }
