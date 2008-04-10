@@ -29,6 +29,7 @@ import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
@@ -40,6 +41,7 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -55,11 +57,13 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssuePriority.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+		IssueComment.FETCH_GROUP_THIS_COMMENT,
 		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
 		Statable.FETCH_GROUP_STATE,
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
+		User.FETCH_GROUP_THIS_USER,
 		
 //		Issue.FETCH_GROUP_SUBJECT,
 //		Issue.FETCH_GROUP_ISSUE_TYPE,
