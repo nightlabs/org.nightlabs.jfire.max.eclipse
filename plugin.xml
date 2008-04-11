@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-	<extension-point id="issueOverview" name="Issue Overview Extension-Point" schema="schema/issueOverview.exsd"/>
 	<extension-point id="issueLinkHandlerFactory" name="Issue Link Handler Factory Extension-Point" schema="schema/issueLinkHandlerFactory.exsd"/>
     <extension 
    		point="org.eclipse.ui.perspectives">
@@ -20,23 +19,6 @@
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="Issue View"/>
     </extension>
 
-	<extension
-         point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
-      <categoryFactory
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
-            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueDefaultCategoryFactory"
-            index="0"
-            name="Issue">
-      </categoryFactory>
-      <entryFactory
-            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
-            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
-            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
-            index="0"
-            name="Issue List">
-      </entryFactory>
-   </extension>
    
    <extension
          point="org.eclipse.ui.editors">
@@ -176,5 +158,23 @@
             queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryDocumentRelated"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle">
       </QueryFilter>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.overview">
+      <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+            index="0"
+            name="Issue"
+            scope="IssueShelf">
+      </categoryFactory>
+      <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
+            class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
+            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
+            index="0"
+            name="Issue List">
+      </entryFactory>
    </extension>
 </plugin>
