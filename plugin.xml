@@ -959,15 +959,6 @@ gibt's nimmer - oder?! Marco.
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                  class="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-                  icon="icons/overview/Overview-Load.16x16.png"
-                  id="org.nightlabs.jfire.base.ui.querystore.LoadQueryCollectionAction"
-                  name="%overview.action.loadQuery.name"
-                  toolbarPath="org.nightlabs.jfire.trade.ui.overview"
-                  tooltip="%overview.action.loadQuery.tooltip">
-            </editorActionBarContribution>
-            <editorActionBarContribution
                   class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
                   icon="icons/overview/Overview-Save.16x16.png"
                   id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
