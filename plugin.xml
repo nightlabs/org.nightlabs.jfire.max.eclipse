@@ -18,8 +18,6 @@
         name="ArticleContainerAction Extension-Point" schema="schema/articleContainerAction.exsd"/>
     <extension-point id="productTypeDetailView"
         name="productTypeDetailView" schema="schema/productTypeDetailView.exsd"/>
-    <extension-point id="tradeOverview"
-        name="Trade Overview Extension-Point" schema="schema/tradeOverview.exsd"/>
     <extension point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonDataFieldEditorFactory"/>
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonRegexDataFieldEditorFactory"/>
@@ -685,63 +683,6 @@ gibt's nimmer - oder?! Marco.
       </searchResultActionHandler>
    </extension>
 -->
-    <extension point="org.nightlabs.jfire.trade.ui.tradeOverview">
-        <categoryFactory
-              categoryID="org.nightlabs.jfire.trade.ui.overview"
-              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
-              index="0"
-              name="%org.nightlabs.jfire.trade.ui.overview.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
-            categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryFactory"
-            icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
-            index="0" name="%org.nightlabs.jfire.trade.ui.overview.deliveryNote.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.invoice"
-            categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory"
-            icon="icons/overview/invoice/InvoiceListView.16x16.png"
-            index="1" name="%org.nightlabs.jfire.trade.ui.overview.invoice.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.offer"
-            categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory"
-            icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
-            index="2" name="%org.nightlabs.jfire.trade.ui.overview.offer.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.order"
-            categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
-            icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
-            index="3" name="%org.nightlabs.jfire.trade.ui.overview.order.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.receptionnote"
-            categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory"
-            icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
-            index="4" name="%org.nightlabs.jfire.trade.ui.overview.receptionnote.name"/>
-        <categoryFactory
-              categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
-              index="1"
-              name="%org.nightlabs.jfire.trade.ui.overview.accounting.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
-            categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-            class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
-            icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
-            index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
-        <categoryFactory
-              categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-              class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
-              index="2"
-              name="%org.nightlabs.jfire.trade.ui.overview.store.name"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
-            categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-            class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory.name"/>
-    </extension>
     <extension point="org.nightlabs.base.ui.editorActionBarContribution">
         <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
             <editorActionBarContribution
@@ -1444,6 +1385,84 @@ gibt's nimmer - oder?! Marco.
         <QueryFilter
             baseElementClass="org.nightlabs.jfire.store.Repository"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"/>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.base.ui.overview">
+       <categoryFactory
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+             index="0"
+             name="%org.nightlabs.jfire.trade.ui.overview.name"
+             scope="TradeShelf">
+       </categoryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryFactory"
+             icon="icons/overview/deliverynote/DeliveryNoteOverviewPerspective.16x16.png"
+             index="0"
+             name="%org.nightlabs.jfire.trade.ui.overview.deliveryNote.name">
+       </entryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.invoice"
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory"
+             icon="icons/overview/invoice/InvoiceListView.16x16.png"
+             index="1"
+             name="%org.nightlabs.jfire.trade.ui.overview.invoice.name">
+       </entryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.offer"
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory"
+             icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
+             index="2"
+             name="%org.nightlabs.jfire.trade.ui.overview.offer.name">
+       </entryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.order"
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
+             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
+             index="3"
+             name="%org.nightlabs.jfire.trade.ui.overview.order.name">
+       </entryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.receptionnote"
+             categoryID="org.nightlabs.jfire.trade.ui.overview"
+             class="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory"
+             icon="icons/overview/receptionnote/ReceptionNoteEntryEditor.16x16.png"
+             index="4"
+             name="%org.nightlabs.jfire.trade.ui.overview.receptionnote.name">
+       </entryFactory>
+       <categoryFactory
+             categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+             class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+             index="1"
+             name="%org.nightlabs.jfire.trade.ui.overview.accounting.name"
+             scope="TradeShelf">
+       </categoryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
+             categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
+             class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory"
+             icon="icons/accounting/AccountTableLabelProvider-normal.16x16.png"
+             index="0"
+             name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name">
+       </entryFactory>
+       <categoryFactory
+             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
+             class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+             index="2"
+             name="%org.nightlabs.jfire.trade.ui.overview.store.name"
+             scope="TradeShelf">
+       </categoryFactory>
+       <entryFactory
+             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
+             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
+             class="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory"
+             name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory.name">
+       </entryFactory>
     </extension>
     <!--   
    <extension
