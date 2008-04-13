@@ -66,7 +66,7 @@ extends AbstractPropertySource
 		return valueProviderConfig;
 	}
 	
-	private int staticPropertyDescriptorSize = 11;
+	private int staticPropertyDescriptorSize = 12;
 	private int getInpuParamterSize() {
 		return getValueProvider().getInputParameters().size();
 	}
@@ -81,11 +81,12 @@ extends AbstractPropertySource
 		propertyDescriptors[3] = createDescriptionPD(true);
 		propertyDescriptors[4] = createMessagePD(false);
 		propertyDescriptors[5] = createShowMessageInHeaderPD();
-		propertyDescriptors[6] = createPageIndexPD();
-		propertyDescriptors[7] = createPageRowPD();
-		propertyDescriptors[8] = createPageColumnPD();
-		propertyDescriptors[9] = createOutputTypePD();
-		propertyDescriptors[10] = createAllowOutputNullPD();
+		propertyDescriptors[6] = createGrowVerticallyPD();
+		propertyDescriptors[7] = createPageIndexPD();
+		propertyDescriptors[8] = createPageRowPD();
+		propertyDescriptors[9] = createPageColumnPD();
+		propertyDescriptors[10] = createOutputTypePD();
+		propertyDescriptors[11] = createAllowOutputNullPD();
 		for (int i=0; i<inputParameters; i++)
 		{
 			int suffix = (i + 1);
@@ -195,6 +196,19 @@ extends AbstractPropertySource
 		return pd;
 	}
 	
+	protected PropertyDescriptor createGrowVerticallyPD()
+	{
+		List<Boolean> trueFalse = new ArrayList<Boolean>();
+		trueFalse.add(true);
+		trueFalse.add(false);
+		PropertyDescriptor pd = new CheckboxPropertyDescriptor(
+				ModelNotificationManager.PROP_GROW_VERTICALLY,
+				Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyGrowVertically.name"), false //$NON-NLS-1$
+			);
+		pd.setCategory(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.property.ValueProviderConfigPropertySource.propertyDescriptorCategoryName.name")); //$NON-NLS-1$
+		return pd;
+	}
+	
 	public Object getPropertyValue(Object id)
 	{
 		if (id.equals(IGraphicalInfoProvider.PROP_X)) {
@@ -230,6 +244,9 @@ extends AbstractPropertySource
 		}
 		else if (id.equals(ModelNotificationManager.PROP_SHOW_MESSAGE_IN_HEADER)) {
 			return getValueProviderConfig().isShowMessageInHeader();
+		}
+		else if (id.equals(ModelNotificationManager.PROP_GROW_VERTICALLY)) {
+			return getValueProviderConfig().isGrowVertically();
 		}
 		for (int i=staticPropertyDescriptorSize; i<staticPropertyDescriptorSize+getInpuParamterSize(); i++)
 		{
@@ -316,6 +333,16 @@ extends AbstractPropertySource
 			ModelNotificationManager.sharedInstance().notify(
 					ObjectIDProvider.getObjectID(valueProviderConfig),
 					ModelNotificationManager.PROP_SHOW_MESSAGE_IN_HEADER,
+					oldVal,
+					((Boolean)value).booleanValue());
+			return;
+		}
+		else if (id.equals(ModelNotificationManager.PROP_GROW_VERTICALLY)) {
+			boolean oldVal = valueProviderConfig.isGrowVertically();
+			valueProviderConfig.setGrowVertically(((Boolean)value).booleanValue());
+			ModelNotificationManager.sharedInstance().notify(
+					ObjectIDProvider.getObjectID(valueProviderConfig),
+					ModelNotificationManager.PROP_GROW_VERTICALLY,
 					oldVal,
 					((Boolean)value).booleanValue());
 			return;

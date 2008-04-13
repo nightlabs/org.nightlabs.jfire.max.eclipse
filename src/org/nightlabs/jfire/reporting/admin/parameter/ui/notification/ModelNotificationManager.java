@@ -33,6 +33,7 @@ public class ModelNotificationManager
 	public static final String PROP_OUTPUT_TYPE = "OutputType"; //$NON-NLS-1$
 	public static final String PROP_ALLOW_OUTPUT_NULL_VALUE = "AllowOutputNullValue"; //$NON-NLS-1$
 	public static final String PROP_SHOW_MESSAGE_IN_HEADER = "ShowMessageInHeader"; //$NON-NLS-1$
+	public static final String PROP_GROW_VERTICALLY = "GrowVertically"; //$NON-NLS-1$
 
 	private static ModelNotificationManager sharedInstance;
 	public static ModelNotificationManager sharedInstance() {

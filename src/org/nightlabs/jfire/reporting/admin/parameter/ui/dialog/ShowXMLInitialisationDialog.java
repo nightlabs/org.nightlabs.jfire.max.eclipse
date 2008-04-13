@@ -117,6 +117,7 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 						"pageColumn=\""+String.valueOf(providerConfig.getPageColumn())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"allowNullOutputValue=\""+String.valueOf(providerConfig.isAllowNullOutputValue())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"showMessageInHeader=\""+String.valueOf(providerConfig.isShowMessageInHeader())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
+						"growVertically=\""+String.valueOf(providerConfig.isGrowVertically())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"x=\""+String.valueOf(providerConfig.getX())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						"y=\""+String.valueOf(providerConfig.getY())+"\" " + //$NON-NLS-1$ //$NON-NLS-2$
 						">"); //$NON-NLS-1$
