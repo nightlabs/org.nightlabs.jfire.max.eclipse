@@ -26,16 +26,17 @@
 
 package org.nightlabs.jfire.trade.ui.legalentity.view;
 
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IViewActionDelegate;
-import org.eclipse.ui.IViewPart;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class SelectAnonymousViewAction implements IViewActionDelegate {
+public class SelectAnonymousViewAction extends Action {
 
 	/**
 	 * 
@@ -48,21 +49,29 @@ public class SelectAnonymousViewAction implements IViewActionDelegate {
 	/**
 	 * @see org.eclipse.ui.IViewActionDelegate#init(org.eclipse.ui.IViewPart)
 	 */
-	public void init(IViewPart view) {
-		this.view = (LegalEntityEditorView)view;
+	public void init(LegalEntityEditorView view) {
+		this.view = view;
 	}
 
 	/**
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
-	public void run(IAction action) {
+	public void run() {
 		view.setSelectedLegalEntityID(null);
 	}
 
-	/**
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
-	public void selectionChanged(IAction action, ISelection selection) {
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		return SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), this.getClass());
 	}
-
+	
+	@Override
+	public String getText() {
+		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction.text"); //$NON-NLS-1$
+	}
+	
+	@Override
+	public String getToolTipText() {
+		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction.tooltip"); //$NON-NLS-1$
+	}
 }

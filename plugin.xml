@@ -85,28 +85,7 @@ gibt's nimmer - oder?! Marco.
             class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView"
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView" name="%org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView.name"/>
     </extension>
-    <extension point="org.eclipse.ui.viewActions">
-        <viewContribution
-            id="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorViewContribution" targetID="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView">
-            <action
-                class="org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction"
-                icon="icons/legalentity/view/SearchLegalEntityViewAction.16x16.png"
-                id="org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction"
-                label="%SearchLegalEntityViewAction.label" style="push"
-                toolbarPath="additions" tooltip="%SearchLegalEntityViewAction.tooltip"/>
-            <action
-                class="org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction"
-                icon="icons/legalentity/view/EditLegalEntityViewAction.16x16.png"
-                id="org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction"
-                label="%EditLegalEntityViewAction.label" style="push"
-                toolbarPath="additions" tooltip="%EditLegalEntityViewAction.tooltip"/>
-            <action
-                class="org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction"
-                icon="icons/legalentity/view/SelectAnonymousViewAction.16x16.png"
-                id="org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction"
-                label="%SelectAnonymousViewAction.label" style="push"
-                toolbarPath="additions" tooltip="%SelectAnonymousViewAction.tooltip"/>
-        </viewContribution>
+    <extension point="org.eclipse.ui.viewActions">        
         <viewContribution
             id="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListViewContribution" targetID="org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView">
             <action
