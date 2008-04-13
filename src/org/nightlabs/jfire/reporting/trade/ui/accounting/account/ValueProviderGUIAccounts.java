@@ -77,13 +77,14 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 		group.setText(getValueProviderConfig().getMessage().getText());
 		
 		accountEntryViewer = new AccountEntryViewer(new AccountEntryFactory().createEntry());
-		accountEntryViewer.createComposite(group);
+		Composite composite = accountEntryViewer.createComposite(group);
 		accountEntryViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				notifyOutputChanged();
 			}
 		});
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		return group;
 	}
