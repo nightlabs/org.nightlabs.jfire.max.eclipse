@@ -12,6 +12,7 @@ import java.util.SortedSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
@@ -105,12 +107,16 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 		// iterate throw the rows
 		for (SortedSet<ValueProviderConfig> configRow : pageProviderConfigs.values()) {
 			// each row gets its own grid-layout-composite
-			XComposite rowWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-			rowWrapper.getGridLayout().numColumns = configRow.size();
-			rowWrapper.getGridLayout().makeColumnsEqualWidth = true;
+//			XComposite rowWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
+			SashForm rowWrapper = new SashForm(wrapper, SWT.HORIZONTAL);
+			rowWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//			rowWrapper.getGridLayout().numColumns = configRow.size();
+//			rowWrapper.getGridLayout().makeColumnsEqualWidth = true;
 			// now create the contents of this row
 			for (final ValueProviderConfig config : configRow) {
-
+				if (config.isGrowVertically()) {
+					rowWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
+				}
 				final ValueProviderID providerID = ValueProviderID.create(
 						config.getValueProviderOrganisationID(),
 						config.getValueProviderCategoryID(),
@@ -175,6 +181,9 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 				}
 				setDescription(description);
 			}
+			int[] weights = new int[configRow.size()];
+			for (int i = 0; i < weights.length; i++) { weights[i] = 1;}
+			rowWrapper.setWeights(weights);
 		}
 		contentsCreated = true;
 		return wrapper;
