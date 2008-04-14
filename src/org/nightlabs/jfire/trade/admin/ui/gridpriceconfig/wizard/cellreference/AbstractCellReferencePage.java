@@ -86,7 +86,7 @@ extends WizardHopPage
 		scriptPreviewGroup.setLayoutData(gridData);
 		scriptPreviewGroup.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.AbstractCellReferencePage.scriptPreviewGroup.text")); //$NON-NLS-1$
 		
-		scriptPreviewComposite = new JSEditorComposite(RCPUtil.getActiveWorkbenchWindow(), scriptPreviewGroup);
+		scriptPreviewComposite = new JSEditorComposite(scriptPreviewGroup);
 		scriptPreviewComposite.setLayoutData(gridData);
 		
 		return tabFolder;

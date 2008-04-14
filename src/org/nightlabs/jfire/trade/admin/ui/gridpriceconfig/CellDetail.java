@@ -130,14 +130,14 @@ public class CellDetail extends XComposite
 		tabItemFallback = new TabItem(cellDetailFolder, SWT.NONE);
 		tabItemFallback.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.CellDetail.fallbackTabItem.text")); //$NON-NLS-1$
 
-		cellDetailText = new JSEditorComposite(RCPUtil.getActiveWorkbenchWindow(), cellDetailFolder);
+		cellDetailText = new JSEditorComposite(cellDetailFolder);
 		cellDetailText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cellDetailText.addFocusListener(cellDetailTextFocusListener);
 		cellDetailText.getSourceViewer().getTextWidget().addMouseListener(cellDetailTextMouseListener); //TODO
 		cellDetailText.setEnabled(false);
 		tabItemCell.setControl(cellDetailText);
 
-		cellDetailFallbackText = new JSEditorComposite(RCPUtil.getActiveWorkbenchWindow(), cellDetailFolder);
+		cellDetailFallbackText = new JSEditorComposite(cellDetailFolder);
 		cellDetailFallbackText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		cellDetailFallbackText.addFocusListener(cellDetailFallbackTextFocusListener);
 		cellDetailFallbackText.getSourceViewer().getTextWidget().addMouseListener(cellDetailFallbackTextMouseListener);	//TODO
