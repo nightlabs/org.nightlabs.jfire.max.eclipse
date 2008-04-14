@@ -63,18 +63,34 @@ extends DialogCellEditor
 	protected Object openDialogBox(Control cellEditorWindow)
 	{
 		Script script = (Script) doGetValue();
-		SimpleScriptEditorDialog dialog = new SimpleScriptEditorDialog(
-				cellEditorWindow.getShell(),
-				scriptConditioners,
-				script);
-		int returnCode = dialog.open();
-		if (returnCode == Window.OK) {
-			return dialog.getScript();
-		}
-		// To workaround not possible returned null values for cellEditors
-		if (returnCode == SimpleScriptEditorDialog.ID_DELETE_SCRIPT) {
-			return -1;
-		}
+//		if (script.isSimpleScript()) {
+//			SimpleScriptEditorDialog dialog = new SimpleScriptEditorDialog(
+//					cellEditorWindow.getShell(),
+//					scriptConditioners,
+//					script);
+			VisibleScriptTextDialog dialog = new VisibleScriptTextDialog(
+					cellEditorWindow.getShell(), script);
+			int returnCode = dialog.open();
+			if (returnCode == Window.OK) {
+				return dialog.getScript();
+			}
+			// To workaround not possible returned null values for cellEditors
+			if (returnCode == SimpleScriptEditorDialog.ID_DELETE_SCRIPT) {
+				return -1;
+			}			
+//		}
+//		else if (!script.isSimpleScript()) {
+//			VisibleScriptTextDialog dialog = new VisibleScriptTextDialog(
+//					cellEditorWindow.getShell(), script);
+//			int returnCode = dialog.open();
+//			if (returnCode == Window.OK) {
+//				return dialog.getScript();
+//			}
+//			// To workaround not possible returned null values for cellEditors
+//			if (returnCode == SimpleScriptEditorDialog.ID_DELETE_SCRIPT) {
+//				return -1;
+//			}
+//		}
 		return null;
 	}
 	

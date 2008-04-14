@@ -33,31 +33,33 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public interface IScriptResultProvider<T>
+public interface IScriptResultProvider
 {
 	/**
 	 * returns the script results for the current selected object
 	 * 
 	 * @return the script results for the current selected object
 	 */
-//	Map<ScriptRegistryItemID, Object> getScriptResults(Collection<ScriptRegistryItemID> scriptIDs);
+//	Map<ScriptRegistryItemID, Object> getScriptResults(Set<ScriptRegistryItemID> scriptIDs,
+//			IParameterProvider parameterProvider, ProgressMonitor monitor);
+
 	Map<ScriptRegistryItemID, Object> getScriptResults();
 	
 	Object getScriptResult(ScriptRegistryItemID scriptRegistryItemID);
 	
-	/**
-	 * sets the selected object for which scriptResults should be obtained
-	 * 
-	 * @param selectedObject the object to select
-	 */
-	void setSelectedObject(T selectedObject);
-	
-	/**
-	 * returns the selected object
-	 * 
-	 * @return the selected object
-	 */
-	T getSelectedObject();
+//	/**
+//	 * sets the selected object for which scriptResults should be obtained
+//	 * 
+//	 * @param selectedObject the object to select
+//	 */
+//	void setSelectedObject(T selectedObject);
+//	
+//	/**
+//	 * returns the selected object
+//	 * 
+//	 * @return the selected object
+//	 */
+//	T getSelectedObject();
 	
 	/**
 	 * adds an {@link IScriptResultChangedListener} to listen for script result changes
@@ -67,7 +69,7 @@ public interface IScriptResultProvider<T>
 	void addScriptResultsChangedListener(IScriptResultChangedListener listener);
 	
 	/**
-	 * removes an previously addded {@link IScriptResultChangedListener}
+	 * removes an previously added {@link IScriptResultChangedListener}
 	 * 
 	 * @param listener listener the {@link IScriptResultChangedListener} to remove
 	 */

@@ -32,10 +32,9 @@ import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public abstract class AbstractScriptResultProvider<T>
-implements IScriptResultProvider<T>
+public abstract class AbstractScriptResultProvider
+implements IScriptResultProvider
 {
-
 	private ListenerList listenerList = null;
 	protected ListenerList getListenerList() {
 		if (listenerList == null)
@@ -66,5 +65,5 @@ implements IScriptResultProvider<T>
 		}
 		return null;
 	}
-		
+
 }
