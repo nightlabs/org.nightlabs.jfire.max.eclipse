@@ -211,7 +211,7 @@ public class IssueFilterCompositePeopleRelated
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean all = initialValue;
+				boolean all = isInitialValue();
 				if (IssueQuery.PROPERTY_ASSIGNEE_ID.equals(changedField.getPropertyName()))
 				{
 					UserID tmpAssigneeID = (UserID) changedField.getNewValue();

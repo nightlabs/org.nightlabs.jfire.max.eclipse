@@ -112,12 +112,12 @@ public class IssueFilterCompositeTimeRelated
 				{
 					if (createDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDate = createdTimeEdit.getDate();
 						getQuery().setCreateTimestamp(createDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -160,12 +160,12 @@ public class IssueFilterCompositeTimeRelated
 				{
 					if (updateDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						updateDate = updatedTimeEdit.getDate();
 						getQuery().setUpdateTimestamp(updateDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -228,7 +228,7 @@ public class IssueFilterCompositeTimeRelated
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = initialValue;
+				boolean active = isInitialValue();
 				if (IssueQuery.PROPERTY_CREATE_TIMESTAMP.equals(changedField.getPropertyName()))
 				{
 					final Date tmpCreateDate = (Date) changedField.getNewValue();
