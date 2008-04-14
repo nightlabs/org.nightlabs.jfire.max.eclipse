@@ -21,7 +21,7 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  *
  */
 public class VoucherScriptResultProvider
-extends AbstractScriptResultProvider<VoucherType>
+extends AbstractScriptResultProvider
 {
 	private static VoucherScriptResultProvider sharedInstance;
 	public static VoucherScriptResultProvider sharedInstance() {
@@ -38,6 +38,8 @@ extends AbstractScriptResultProvider<VoucherType>
 	}
 
 	private Map<ScriptRegistryItemID, Object> scriptResults = null;
+//	public Map<ScriptRegistryItemID, Object> getScriptResults(Set<ScriptRegistryItemID> scriptIDs,
+//			IParameterProvider parameterProvider, ProgressMonitor monitor)
 	public Map<ScriptRegistryItemID, Object> getScriptResults()
 	{
 		if (scriptResults == null && getSelectedObject() != null && getSelectedCurrency() != null)
@@ -57,6 +59,7 @@ extends AbstractScriptResultProvider<VoucherType>
 	public void setSelectedObject(VoucherType selectedObject)
 	{
 		this.selectedVoucherType = selectedObject;
+//		getScriptResults(Collections.emptySet(), null, new NullProgressMonitor());
 		getScriptResults();
 		notifyListener();
 	}
@@ -77,7 +80,7 @@ extends AbstractScriptResultProvider<VoucherType>
 	}
 	
 	protected Map<ProductTypeID, Map<ScriptRegistryItemID, Object>> getVoucherScriptingResult(
-			PreviewParameterSet previewParameterSet, IProgressMonitor monitor)
+			PreviewParameterSet previewParameterSet, IProgressMonitor monitor)	
 	{
 		try {
 			monitor.beginTask("Loading VoucherScriptResult", 2);
