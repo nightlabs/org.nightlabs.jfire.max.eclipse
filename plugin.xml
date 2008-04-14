@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-	<extension
-         point="org.nightlabs.jfire.issuetracking.ui.issueOverview">
-      	<categoryFactory
-            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory"
-            index="10" name="Issue Types"/>
-        <entryFactory
-            categoryEntryID="org.nightlabs.jfire.pissuetracking.admin.ui.overview.issueproperty.IssueTypeEntry"
-            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
-            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
-            index="0" name="Issue Types"/>
-    </extension>
     
     <extension
          point="org.eclipse.ui.editors">
