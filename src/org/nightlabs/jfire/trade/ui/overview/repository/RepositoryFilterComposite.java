@@ -132,9 +132,9 @@ public class RepositoryFilterComposite
 				{
 					if (selectedOwnerID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setOwnerID(selectedOwnerID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -224,9 +224,9 @@ public class RepositoryFilterComposite
 				{
 					if (selectedRepositoryTypeID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -301,7 +301,7 @@ public class RepositoryFilterComposite
 		}
 		else
 		{
-			boolean active = initialValue;
+			boolean active = isInitialValue();
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
 				if (RepositoryQuery.PROPERTY_OWNER_ID.equals(fieldChange.getPropertyName()))

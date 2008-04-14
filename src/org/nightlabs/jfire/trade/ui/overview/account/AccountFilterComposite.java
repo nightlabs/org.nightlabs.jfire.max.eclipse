@@ -147,12 +147,12 @@ public class AccountFilterComposite
 				{
 					if (minBalance == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the spinner.
 						minBalance = computeValue(minBalanceEntry.getSpinnerComposite());
 						getQuery().setMinBalance( minBalance );
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -188,12 +188,12 @@ public class AccountFilterComposite
 				{
 					if (maxBalance == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the spinner.
 						maxBalance = computeValue(maxBalanceEntry.getSpinnerComposite());
 						getQuery().setMaxBalance( maxBalance );
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -222,9 +222,9 @@ public class AccountFilterComposite
 				{
 					if (selectedCurrencyID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setCurrencyID(selectedCurrencyID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -268,9 +268,9 @@ public class AccountFilterComposite
 				{
 					if (selectedOwnerID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setOwnerID(selectedOwnerID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -323,9 +323,9 @@ public class AccountFilterComposite
 				{
 					if (selectedAccountTypeID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setAccountTypeID(selectedAccountTypeID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -483,7 +483,7 @@ public class AccountFilterComposite
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = initialValue;
+				boolean active = isInitialValue();
 				if (AccountQuery.PROPERTY_MAX_BALANCE.equals(changedField.getPropertyName()))
 				{
 					Long tmpMaxBalance = (Long) changedField.getNewValue();

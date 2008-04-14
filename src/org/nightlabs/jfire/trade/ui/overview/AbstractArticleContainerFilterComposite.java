@@ -130,12 +130,12 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (createMinDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createMinDate = createDTMin.getDate();
 						getQuery().setCreateDTMin(createMinDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -170,12 +170,12 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (createMaxDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createMaxDate = createDTMax.getDate();
 						getQuery().setCreateDTMax(createMaxDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -211,9 +211,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (selectedUserID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setCreateUserID(selectedUserID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -253,9 +253,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (selectedVendorID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setVendorID(selectedVendorID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -303,9 +303,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (selectedCustomerID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setCustomerID(selectedCustomerID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 				}
 				else
@@ -456,7 +456,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = initialValue;
+				boolean active = isInitialValue();
 				if (AbstractArticleContainerQuery.PROPERTY_CREATE_DATE_MAX.equals(changedField.getPropertyName()))
 				{
 					Date maxDate = (Date) changedField.getNewValue();

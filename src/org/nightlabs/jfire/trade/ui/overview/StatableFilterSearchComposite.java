@@ -147,10 +147,10 @@ public class StatableFilterSearchComposite
 				{
 					if (stateDefinitionID == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						getQuery().setOnlyInSelectedState(onlyInSelectedState);
 						getQuery().setStateDefinitionID(stateDefinitionID);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -225,12 +225,12 @@ public class StatableFilterSearchComposite
 				{
 					if (createDTMinDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDTMinDate = createDTMin.getDate();
 						getQuery().setStateCreateDTMin(createDTMinDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -273,12 +273,12 @@ public class StatableFilterSearchComposite
 				{
 					if (createDTMaxDate == null)
 					{
-						initialValue = true;
+						setInitialValue(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDTMaxDate = createDTMax.getDate();
 						getQuery().setStateCreateDTMax(createDTMaxDate);
-						initialValue = false;
+						setInitialValue(false);
 					}
 					else
 					{
@@ -435,7 +435,7 @@ public class StatableFilterSearchComposite
 		{
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
-				boolean active = initialValue;
+				boolean active = isInitialValue();
 				if (StatableQuery.PROPERTY_ONLY_IN_SELECTED_STATE.equals(fieldChange.getPropertyName()))
 				{
 					onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
