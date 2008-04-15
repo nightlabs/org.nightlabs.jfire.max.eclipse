@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -24,12 +25,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.ModuleException;
+import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.notification.NotificationAdapterWorkerThreadAsync;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -95,6 +105,11 @@ implements ISelectionHandler
 	public AbstractProductTypeTable(Composite parent) {
 //		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
+
+		SelectionManager.sharedInstance().addNotificationListener(
+				TradePlugin.ZONE_SALE,
+				GeneralEditor.class, notificationListenerVendorSelected);
+	
 	}
 
 	/**
@@ -103,6 +118,11 @@ implements ISelectionHandler
 	 */
 	public AbstractProductTypeTable(Composite parent, int style) {
 		super(parent, style);
+		
+		SelectionManager.sharedInstance().addNotificationListener(
+				TradePlugin.ZONE_SALE,
+				GeneralEditor.class, notificationListenerVendorSelected);
+		
 	}
 	
 	/**
@@ -143,6 +163,26 @@ implements ISelectionHandler
 		}
 	}
 
+	private NotificationListener notificationListenerVendorSelected = new NotificationAdapterWorkerThreadAsync() {
+		public void notify(NotificationEvent event) {
+			
+//			
+//			try {
+//				//if (event.getSubjects().isEmpty())
+//				
+//			} catch (ModuleException x) {
+//				throw new RuntimeException(x);
+//									
+//			}
+			
+		     MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
+				
+			
+		}
+	};
+	
+	
+	
 	protected void superSetSelection(List<P> elements) {
 		super.setSelection(elements, true);
 	}

@@ -27,6 +27,8 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 
+import javax.jdo.JDOHelper;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -197,15 +199,24 @@ implements IGeneralEditor
 			if (editor == null)
 				return;
 
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", editor.getTitle());
 			
 			if (editor instanceof GeneralEditor) {
 				GeneralEditor ge = (GeneralEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
+
+				if (ac == null)
+					return;
+				
+				
 				NotificationEvent event = new NotificationEvent(
-						this, TradePlugin.ZONE_SALE, 
-						ac.getVendorID());
-				//SelectionManager.sharedInstance().notify(event);
+						GeneralEditor.class, TradePlugin.ZONE_SALE, 
+						JDOHelper.getObjectId(ac));
+				
+				
+				SelectionManager.sharedInstance().notify(event);
+				
+				
+				
 			}
 		}
 
