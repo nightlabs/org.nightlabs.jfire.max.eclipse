@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -50,9 +51,13 @@ public class ExportReportLayoutDialog extends CenteredDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText("Export layout");
-		setToCenteredLocationPreferredSize(newShell, 400, 400);
 	}
 
+	@Override
+	protected Point getInitialSize() {
+		return new Point(400, 400);
+	}
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);

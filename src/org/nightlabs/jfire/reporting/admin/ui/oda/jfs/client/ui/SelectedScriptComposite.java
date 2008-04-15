@@ -15,6 +15,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -70,7 +71,11 @@ public class SelectedScriptComposite extends XComposite {
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.title")); //$NON-NLS-1$
-			setToCenteredLocationPreferredSize(newShell, 300, 400);
+		}
+		
+		@Override
+		protected Point getInitialSize() {
+			return new Point(300, 400);
 		}
 		
 		@Override
