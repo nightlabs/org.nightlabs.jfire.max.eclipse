@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,7 +25,6 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
  */
 public class ShowXMLInitialisationDialog extends CenteredDialog {
 
@@ -39,11 +39,9 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 		this.acquisitionSetup = acquisitionSetup;
 	}
 	
-	
 	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		setToCenteredLocationPreferredSize(newShell, 400, 500);
+	protected Point getInitialSize() {
+		return new Point(400, 500);
 	}
 	
 	protected void addLine(StringBuffer buffer, int indent, String line) {
@@ -159,5 +157,4 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 		ShowXMLInitialisationDialog dlg = new ShowXMLInitialisationDialog(RCPUtil.getActiveShell(), setup);
 		dlg.open();
 	}
-
 }
