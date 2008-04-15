@@ -29,10 +29,18 @@ import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -51,6 +59,14 @@ public abstract class AbstractProductTypeTable<P extends ProductType>
 extends AbstractTableComposite<P> 
 implements ISelectionHandler
 {
+	
+	public static String[] FETCH_GROUPS_VENDOR = new String[] {
+		FetchPlan.DEFAULT,
+		LegalEntity.FETCH_GROUP_PERSON
+	};
+	
+	
+	
 	public class ContentProvider 
 	implements IStructuredContentProvider 
 	{
@@ -174,7 +190,14 @@ implements ISelectionHandler
 //				throw new RuntimeException(x);
 //									
 //			}
-			
+			if (!event.getSubjects().isEmpty())
+			{
+				
+				ArticleContainer ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(), FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
+				
+				
+			}
+				
 		     MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
 				
 			

@@ -72,7 +72,7 @@ implements IGeneralEditor
 
 	public GeneralEditor()
 	{
-//		registerActivatePartListener();
+		registerActivatePartListener();
 	}
 
 	/**
@@ -211,7 +211,7 @@ implements IGeneralEditor
 				NotificationEvent event = new NotificationEvent(
 						GeneralEditor.class, TradePlugin.ZONE_SALE, 
 						JDOHelper.getObjectId(ac));
-				
+	
 				
 				SelectionManager.sharedInstance().notify(event);
 				
