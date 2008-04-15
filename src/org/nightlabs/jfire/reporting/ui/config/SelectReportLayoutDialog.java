@@ -38,6 +38,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -90,20 +91,17 @@ public class SelectReportLayoutDialog extends CenteredDialog {
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Sets default size.
-	 * </p>
-	 * @see org.nightlabs.base.ui.dialog.CenteredDialog#configureShell(org.eclipse.swt.widgets.Shell)
-	 */
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.newShell.text")); //$NON-NLS-1$
-		setToCenteredLocationPreferredSize(newShell, 300, 400);
 	}
 
+	@Override
+	protected Point getInitialSize() {
+		return new Point(300, 400);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 * 

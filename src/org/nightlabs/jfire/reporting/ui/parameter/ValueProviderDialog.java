@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -21,7 +22,6 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
  */
 public class ValueProviderDialog extends CenteredDialog {
 
@@ -51,9 +51,8 @@ public class ValueProviderDialog extends CenteredDialog {
 	}
 	
 	@Override
-	public void create() {
-		super.create();
-		setToCenteredLocationPreferredSize(400, 500);
+	protected Point getInitialSize() {
+		return new Point(400, 500);
 	}
 	
 	@Override
@@ -85,5 +84,4 @@ public class ValueProviderDialog extends CenteredDialog {
 			return dlg.selectedValueProvider;
 		return null;
 	}
-	
 }
