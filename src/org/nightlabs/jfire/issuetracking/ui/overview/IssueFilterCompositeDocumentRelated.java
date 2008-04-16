@@ -9,7 +9,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
@@ -17,7 +16,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListe
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 
 public class IssueFilterCompositeDocumentRelated 
-	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
+	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	private Set<IssueLink> issueLinks;
@@ -37,7 +36,7 @@ public class IssueFilterCompositeDocumentRelated
 	 */
 	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -53,7 +52,7 @@ public class IssueFilterCompositeDocumentRelated
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);

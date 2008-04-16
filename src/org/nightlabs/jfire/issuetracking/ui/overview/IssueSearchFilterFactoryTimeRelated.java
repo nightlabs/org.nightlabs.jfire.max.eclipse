@@ -6,7 +6,6 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterFactory;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 
 /**
@@ -14,14 +13,13 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class IssueSearchFilterFactoryTimeRelated
-extends AbstractQueryFilterFactory<Issue, IssueQuery>
+extends AbstractQueryFilterFactory<IssueQuery>
 {
 	@Override
-	public AbstractQueryFilterComposite<Issue, IssueQuery> createQueryFilter(Composite parent,
+	public AbstractQueryFilterComposite<IssueQuery> createQueryFilter(Composite parent,
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
-			{
+			QueryProvider<? super IssueQuery> queryProvider)
+	{
 		return new IssueFilterCompositeTimeRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
-			}
-
+	}
 }

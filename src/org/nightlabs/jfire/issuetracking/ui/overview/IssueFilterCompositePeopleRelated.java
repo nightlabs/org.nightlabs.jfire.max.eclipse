@@ -21,7 +21,6 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
@@ -29,7 +28,7 @@ import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueFilterCompositePeopleRelated 
-	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
+	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private User selectedReporter;
 	private User selectedAssignee;
@@ -50,14 +49,14 @@ public class IssueFilterCompositePeopleRelated
 	 */
 	public IssueFilterCompositePeopleRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
 	}
 
 	public IssueFilterCompositePeopleRelated(Composite parent, int style,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -211,7 +210,7 @@ public class IssueFilterCompositePeopleRelated
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean all = isInitialValue();
+				boolean all = isValueIntentionallySet();
 				if (IssueQuery.PROPERTY_ASSIGNEE_ID.equals(changedField.getPropertyName()))
 				{
 					UserID tmpAssigneeID = (UserID) changedField.getNewValue();

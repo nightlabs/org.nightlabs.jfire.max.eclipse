@@ -18,12 +18,11 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.l10n.DateFormatter;
 
 public class IssueFilterCompositeTimeRelated 
-	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
+	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private DateTimeEdit createdTimeEdit;
 	private Date createDate;
@@ -45,7 +44,7 @@ public class IssueFilterCompositeTimeRelated
 	 */
 	public IssueFilterCompositeTimeRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -61,7 +60,7 @@ public class IssueFilterCompositeTimeRelated
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public IssueFilterCompositeTimeRelated(Composite parent, int style,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -112,12 +111,12 @@ public class IssueFilterCompositeTimeRelated
 				{
 					if (createDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDate = createdTimeEdit.getDate();
 						getQuery().setCreateTimestamp(createDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -160,12 +159,12 @@ public class IssueFilterCompositeTimeRelated
 				{
 					if (updateDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						updateDate = updatedTimeEdit.getDate();
 						getQuery().setUpdateTimestamp(updateDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -228,7 +227,7 @@ public class IssueFilterCompositeTimeRelated
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = isInitialValue();
+				boolean active = isValueIntentionallySet();
 				if (IssueQuery.PROPERTY_CREATE_TIMESTAMP.equals(changedField.getPropertyName()))
 				{
 					final Date tmpCreateDate = (Date) changedField.getNewValue();

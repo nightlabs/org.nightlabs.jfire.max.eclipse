@@ -22,7 +22,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -43,7 +42,7 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 public class IssueFilterCompositeIssueRelated 
-	extends AbstractQueryFilterComposite<Issue, IssueQuery> 
+	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeIssueRelated.class);
 	private Object mutex = new Object();
@@ -73,7 +72,7 @@ public class IssueFilterCompositeIssueRelated
 	 */
 	public IssueFilterCompositeIssueRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -90,7 +89,7 @@ public class IssueFilterCompositeIssueRelated
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public IssueFilterCompositeIssueRelated(Composite parent, int style,
-			QueryProvider<Issue, ? super IssueQuery> queryProvider)
+			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);

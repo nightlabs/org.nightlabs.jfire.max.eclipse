@@ -101,7 +101,7 @@ public class IssueEntryListViewer
 	}
 
 	@Override
-	protected Collection<Issue> doSearch(QueryCollection<Issue, ? extends IssueQuery> queryMap,
+	protected Collection<Issue> doSearch(QueryCollection<? extends IssueQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return IssueDAO.sharedInstance().getIssuesForQueries(
