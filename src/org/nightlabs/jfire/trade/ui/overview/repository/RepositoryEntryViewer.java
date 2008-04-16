@@ -49,7 +49,7 @@ public class RepositoryEntryViewer
 	};
 
 	@Override
-	protected Collection<Repository> doSearch(QueryCollection<Repository, ? extends RepositoryQuery> queryMap,
+	protected Collection<Repository> doSearch(QueryCollection<? extends RepositoryQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return RepositoryDAO.sharedInstance().getRepositoriesForQueries(

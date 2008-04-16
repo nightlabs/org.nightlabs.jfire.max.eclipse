@@ -13,10 +13,12 @@ import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  *
  */
-public abstract class AbstractArticleContainerQuickSearchEntry<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
-	extends AbstractQuickSearchEntry<R, Q>
+public abstract class AbstractArticleContainerQuickSearchEntry<Q extends AbstractArticleContainerQuery>
+	extends AbstractQuickSearchEntry<Q>
 {
-	public AbstractArticleContainerQuickSearchEntry(QuickSearchEntryFactory<R, Q> factory, Class<Q> queryType) {
+	public AbstractArticleContainerQuickSearchEntry(QuickSearchEntryFactory<Q> factory,
+		Class<Q> queryType)
+	{
 		super(factory, queryType);
 	}
 

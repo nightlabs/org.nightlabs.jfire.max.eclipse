@@ -60,7 +60,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class StatableFilterSearchComposite
-	extends AbstractQueryFilterComposite<Statable, StatableQuery>
+	extends AbstractQueryFilterComposite<StatableQuery>
 {
 	private DateTimeEdit createDTMin;
 	private DateTimeEdit createDTMax;
@@ -102,7 +102,7 @@ public class StatableFilterSearchComposite
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public StatableFilterSearchComposite(Composite parent, int style, LayoutMode layoutMode,
-		LayoutDataMode layoutDataMode, QueryProvider<Statable, ? super StatableQuery> queryProvider)
+		LayoutDataMode layoutDataMode, QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -112,7 +112,7 @@ public class StatableFilterSearchComposite
 	 * Delegates to {@link StatableFilterComposite#StatableFilterComposite(AbstractQueryFilterComposite, int, XComposite.LayoutMode, LayoutDataMode)}
 	 */
 	public StatableFilterSearchComposite(Composite parent, int style,
-		QueryProvider<Statable, ? super StatableQuery> queryProvider)
+		QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -147,10 +147,10 @@ public class StatableFilterSearchComposite
 				{
 					if (stateDefinitionID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setOnlyInSelectedState(onlyInSelectedState);
 						getQuery().setStateDefinitionID(stateDefinitionID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -225,12 +225,12 @@ public class StatableFilterSearchComposite
 				{
 					if (createDTMinDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDTMinDate = createDTMin.getDate();
 						getQuery().setStateCreateDTMin(createDTMinDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -273,12 +273,12 @@ public class StatableFilterSearchComposite
 				{
 					if (createDTMaxDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createDTMaxDate = createDTMax.getDate();
 						getQuery().setStateCreateDTMax(createDTMaxDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -435,7 +435,7 @@ public class StatableFilterSearchComposite
 		{
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
-				boolean active = isInitialValue();
+				boolean active = isValueIntentionallySet();
 				if (StatableQuery.PROPERTY_ONLY_IN_SELECTED_STATE.equals(fieldChange.getPropertyName()))
 				{
 					onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());

@@ -71,7 +71,7 @@ public class InvoiceEntryViewer
 		
 	@Override
 	protected Collection<Invoice> doSearch(
-		QueryCollection<Invoice, ? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
 	{
 		return InvoiceDAO.sharedInstance().getInvoices(
 			queryMap,

@@ -32,7 +32,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
-import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
@@ -55,7 +54,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class AccountFilterComposite
-	extends AbstractQueryFilterComposite<Account, AccountQuery>
+	extends AbstractQueryFilterComposite<AccountQuery>
 {
 	/**
 	 * @param parent
@@ -72,7 +71,7 @@ public class AccountFilterComposite
 	 */
 	public AccountFilterComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Account, ? super AccountQuery> queryProvider)
+			QueryProvider<? super AccountQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -88,7 +87,7 @@ public class AccountFilterComposite
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public AccountFilterComposite(Composite parent, int style,
-		QueryProvider<Account, ? super AccountQuery> queryProvider)
+		QueryProvider<? super AccountQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -147,12 +146,12 @@ public class AccountFilterComposite
 				{
 					if (minBalance == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the spinner.
 						minBalance = computeValue(minBalanceEntry.getSpinnerComposite());
 						getQuery().setMinBalance( minBalance );
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -188,12 +187,12 @@ public class AccountFilterComposite
 				{
 					if (maxBalance == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the spinner.
 						maxBalance = computeValue(maxBalanceEntry.getSpinnerComposite());
 						getQuery().setMaxBalance( maxBalance );
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -222,9 +221,9 @@ public class AccountFilterComposite
 				{
 					if (selectedCurrencyID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setCurrencyID(selectedCurrencyID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -268,9 +267,9 @@ public class AccountFilterComposite
 				{
 					if (selectedOwnerID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setOwnerID(selectedOwnerID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -323,9 +322,9 @@ public class AccountFilterComposite
 				{
 					if (selectedAccountTypeID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setAccountTypeID(selectedAccountTypeID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -483,7 +482,7 @@ public class AccountFilterComposite
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = isInitialValue();
+				boolean active = isValueIntentionallySet();
 				if (AccountQuery.PROPERTY_MAX_BALANCE.equals(changedField.getPropertyName()))
 				{
 					Long tmpMaxBalance = (Long) changedField.getNewValue();

@@ -7,8 +7,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 /**
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  */
-public abstract class AbstractCustomerNameQuickSearchEntryFactory<R, Q extends AbstractSearchQuery<R>>
-	extends AbstractQuickSearchEntryFactory<R, Q>
+public abstract class AbstractCustomerNameQuickSearchEntryFactory<Q extends AbstractSearchQuery>
+	extends AbstractQuickSearchEntryFactory<Q>
 {
 	@Override
 	public String getName()

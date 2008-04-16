@@ -62,7 +62,7 @@ public class OrderDAO
 	}
 	
 	public Collection<Order> getOrdersByQueries(
-		QueryCollection<? extends Order, ? extends AbstractJDOQuery<? extends Order>> queries,
+		QueryCollection<? extends AbstractJDOQuery> queries,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try

@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.overview.deliverynote.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
-import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQuickSearchEntryFactory;
 
@@ -10,9 +9,10 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQu
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class DeliveryNoteIDQuickSearchEntryFactory
-	extends AbstractArticleContainerIDQuickSearchEntryFactory<DeliveryNote, DeliveryNoteQuery>
+	extends AbstractArticleContainerIDQuickSearchEntryFactory<DeliveryNoteQuery>
 {
-	public QuickSearchEntry<DeliveryNote, DeliveryNoteQuery> createQuickSearchEntry() {
+	public QuickSearchEntry<DeliveryNoteQuery> createQuickSearchEntry()
+	{
 		return new DeliveryNoteIDQuickSearchEntry(this);
 	}
 

@@ -32,7 +32,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryTypeDAO;
 import org.nightlabs.jfire.store.id.RepositoryTypeID;
@@ -50,7 +49,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class RepositoryFilterComposite
-	extends AbstractQueryFilterComposite<Repository, RepositoryQuery>
+	extends AbstractQueryFilterComposite<RepositoryQuery>
 {
 	private Button ownerActiveButton;
 	private Text ownerText;
@@ -74,7 +73,7 @@ public class RepositoryFilterComposite
 	 */
 	public RepositoryFilterComposite(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-			QueryProvider<Repository, ? super RepositoryQuery> queryProvider)
+			QueryProvider<? super RepositoryQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -90,7 +89,7 @@ public class RepositoryFilterComposite
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public RepositoryFilterComposite(Composite parent, int style,
-		QueryProvider<Repository, ? super RepositoryQuery> queryProvider)
+		QueryProvider<? super RepositoryQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -132,9 +131,9 @@ public class RepositoryFilterComposite
 				{
 					if (selectedOwnerID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setOwnerID(selectedOwnerID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -224,9 +223,9 @@ public class RepositoryFilterComposite
 				{
 					if (selectedRepositoryTypeID == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -301,7 +300,7 @@ public class RepositoryFilterComposite
 		}
 		else
 		{
-			boolean active = isInitialValue();
+			boolean active = isValueIntentionallySet();
 			for (FieldChangeCarrier fieldChange : event.getChangedFields())
 			{
 				if (RepositoryQuery.PROPERTY_OWNER_ID.equals(fieldChange.getPropertyName()))

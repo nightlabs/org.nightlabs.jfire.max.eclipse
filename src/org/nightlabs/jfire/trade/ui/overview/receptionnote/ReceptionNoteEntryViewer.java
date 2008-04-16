@@ -47,7 +47,7 @@ public class ReceptionNoteEntryViewer
 	
 	@Override
 	protected Collection<ReceptionNote> doSearch(
-		QueryCollection<ReceptionNote, ? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
 	{
 		return ReceptionNoteDAO.sharedInstance().getReceptionNotesByQueries(
 			queryMap,

@@ -51,7 +51,7 @@ extends BaseJDOObjectDAO<ReceptionNoteID, ReceptionNote>
 	}
 	
 	public Collection<ReceptionNote> getReceptionNotesByQueries(
-		QueryCollection<? extends ReceptionNote, ? extends AbstractJDOQuery<? extends ReceptionNote>> queries,
+		QueryCollection<? extends AbstractJDOQuery> queries,
 			String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try

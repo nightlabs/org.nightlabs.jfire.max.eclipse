@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice.search;
 
-import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearchEntryFactory;
 
@@ -9,9 +8,10 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractVendorNameQuickSearc
  *
  */
 public class InvoiceVendorNameQuickSearchEntryFactory
-	extends AbstractVendorNameQuickSearchEntryFactory<Invoice, InvoiceQuery>
+	extends AbstractVendorNameQuickSearchEntryFactory<InvoiceQuery>
 {
-	public InvoiceVendorNameQuickSearchEntry createQuickSearchEntry() {
+	public InvoiceVendorNameQuickSearchEntry createQuickSearchEntry()
+	{
 		return new InvoiceVendorNameQuickSearchEntry(this);
 	}
 

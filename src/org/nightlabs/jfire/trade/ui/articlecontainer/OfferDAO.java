@@ -49,7 +49,7 @@ public class OfferDAO
 	}
 	
 	public Collection<Offer> getOffersByQuery(
-		QueryCollection<? extends Offer, ? extends AbstractJDOQuery<? extends Offer>> queries, 
+		QueryCollection<? extends AbstractJDOQuery> queries, 
 			String[] fetchGroups,	int maxFetchDepth, ProgressMonitor monitor)
 //		throws Exception
 	{

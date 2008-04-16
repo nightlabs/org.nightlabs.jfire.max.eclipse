@@ -14,20 +14,20 @@ import org.nightlabs.jfire.jbpm.query.StatableQuery;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class StatableSearchFilterFactory
-	extends AbstractQueryFilterFactory<Statable, StatableQuery>
+	extends AbstractQueryFilterFactory<StatableQuery>
 {
 
 	@Override
-	public AbstractQueryFilterComposite<Statable, StatableQuery> createQueryFilter(Composite parent,
+	public AbstractQueryFilterComposite<StatableQuery> createQueryFilter(Composite parent,
 		int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<Statable, ? super StatableQuery> queryProvider)
+		QueryProvider<? super StatableQuery> queryProvider)
 	{
 		StatableFilterSearchComposite filterComposite =
 			new StatableFilterSearchComposite(parent, style, layoutMode, layoutDataMode, queryProvider);
 		
 		// set the class with which the JDOQuery will be instantiated and for which the 
 		// selectable states shall be retrieved.
-		filterComposite.setStatableClass(getViewerBaseClass());
+		filterComposite.setStatableClass((Class<? extends Statable>) getViewerBaseClass());
 		
 		return filterComposite;
 	}

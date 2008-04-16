@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.overview.order;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
@@ -13,7 +12,7 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class OrderFilterComposite
-	extends AbstractArticleContainerFilterComposite<Order, OrderQuery>
+	extends AbstractArticleContainerFilterComposite<OrderQuery>
 {
 	/**
 	 * @param parent
@@ -23,7 +22,7 @@ public class OrderFilterComposite
 	 * @param queryProvider
 	 */
 	public OrderFilterComposite(Composite parent, int style, LayoutMode layoutMode,
-		LayoutDataMode layoutDataMode, QueryProvider<Order, ? super OrderQuery> queryProvider)
+		LayoutDataMode layoutDataMode, QueryProvider<? super OrderQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
@@ -33,7 +32,7 @@ public class OrderFilterComposite
 	 * @param style
 	 */
 	public OrderFilterComposite(Composite parent, int style,
-		QueryProvider<Order, ? super OrderQuery> queryProvider)
+		QueryProvider<? super OrderQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}

@@ -81,7 +81,7 @@ public class DeliveryNoteDAO
 	}
 	
 	public Collection<DeliveryNote> getDeliveryNotesByQueries(
-		QueryCollection<? extends DeliveryNote, ? extends AbstractJDOQuery<? extends DeliveryNote>> queries,
+		QueryCollection<? extends AbstractJDOQuery> queries,
 		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try

@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.overview.account.search;
 
-import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
@@ -10,9 +9,9 @@ import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class AccountNameQuickSearchEntry
-	extends AbstractQuickSearchEntry<Account, AccountQuery>
+	extends AbstractQuickSearchEntry<AccountQuery>
 {
-	public AccountNameQuickSearchEntry(QuickSearchEntryFactory<Account, AccountQuery> factory) {
+	public AccountNameQuickSearchEntry(QuickSearchEntryFactory<AccountQuery> factory) {
 		super(factory, AccountQuery.class);
 	}
 

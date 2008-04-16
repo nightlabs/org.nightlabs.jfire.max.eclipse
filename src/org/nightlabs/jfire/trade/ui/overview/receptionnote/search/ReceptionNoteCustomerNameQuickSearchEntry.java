@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.overview.receptionnote.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
-import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
 
 /**
@@ -10,11 +9,10 @@ import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class ReceptionNoteCustomerNameQuickSearchEntry
-	extends AbstractQuickSearchEntry<ReceptionNote, ReceptionNoteQuery>
+	extends AbstractQuickSearchEntry<ReceptionNoteQuery>
 {
 	public ReceptionNoteCustomerNameQuickSearchEntry(
-		QuickSearchEntryFactory<ReceptionNote, ReceptionNoteQuery> factory
-		)
+		QuickSearchEntryFactory<ReceptionNoteQuery> factory)
 	{
 		super(factory, ReceptionNoteQuery.class);
 	}

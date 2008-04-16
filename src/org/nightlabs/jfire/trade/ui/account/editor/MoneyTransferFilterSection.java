@@ -67,7 +67,7 @@ extends RestorableSectionPart
 				if (ignoreMoneyTransferQueryChanged)
 					return;
 
-				moneyTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
+				moneyTransferQueryChanged((QueryCollection<?>) evt.getNewValue());
 			}
 		});
 
@@ -118,7 +118,7 @@ extends RestorableSectionPart
 	 * It is not called, if the change originated from here (i.e. {@link #fireMoneyTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void moneyTransferQueryChanged(QueryCollection<?, ?> queryCollection)
+	private void moneyTransferQueryChanged(QueryCollection<?> queryCollection)
 	{
 		//do nothing
 	}

@@ -69,7 +69,7 @@ public class OrderEntryViewer
 		
 	@Override
 	protected Collection<Order> doSearch(
-		QueryCollection<Order, ? extends OrderQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<? extends OrderQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OrderDAO.sharedInstance().getOrdersByQueries(
 			queryMap,

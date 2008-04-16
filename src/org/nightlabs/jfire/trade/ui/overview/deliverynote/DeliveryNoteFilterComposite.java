@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.overview.deliverynote;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.query.QueryProvider;
-import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterComposite;
 
@@ -11,7 +10,7 @@ import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerFilterCompo
  *
  */
 public class DeliveryNoteFilterComposite
-	extends AbstractArticleContainerFilterComposite<DeliveryNote, DeliveryNoteQuery>
+	extends AbstractArticleContainerFilterComposite<DeliveryNoteQuery>
 {
 	/**
 	 * @param parent
@@ -25,7 +24,7 @@ public class DeliveryNoteFilterComposite
 		int style,
 		LayoutMode layoutMode,
 		LayoutDataMode layoutDataMode,
-		QueryProvider<DeliveryNote, ? super DeliveryNoteQuery> queryProvider)
+		QueryProvider<? super DeliveryNoteQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
@@ -35,7 +34,7 @@ public class DeliveryNoteFilterComposite
 	 * @param style
 	 */
 	public DeliveryNoteFilterComposite(Composite parent, int style,
-		QueryProvider<DeliveryNote, ? super DeliveryNoteQuery> queryProvider)
+		QueryProvider<? super DeliveryNoteQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
 	}

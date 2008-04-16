@@ -32,11 +32,11 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -55,7 +55,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public class AccountSearchDialog
-extends CenteredDialog
+	extends Dialog
 {
 	private AccountTypeID accountTypeID;
 
@@ -75,8 +75,7 @@ extends CenteredDialog
 	{
 		AccountQuery query = new AccountQuery();
 		query.setAccountTypeID(accountTypeID);
-		final QueryCollection<Account, AccountQuery> queries =
-			new QueryCollection<Account, AccountQuery>(Account.class);
+		final QueryCollection<AccountQuery> queries =	new QueryCollection<AccountQuery>(Account.class);
 		queries.add(query);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.accounting.AccountSearchDialog.loadingAccountsJob.name")){ //$NON-NLS-1$
@@ -130,8 +129,8 @@ extends CenteredDialog
 		Collection<Account> accountSet = searchAccounts(accountTypeID);
 		if (!accountSet.isEmpty())
 			return accountSet.iterator().next();
-		else
-			return null;
+		
+		return null;
 	}
 	
 	/**

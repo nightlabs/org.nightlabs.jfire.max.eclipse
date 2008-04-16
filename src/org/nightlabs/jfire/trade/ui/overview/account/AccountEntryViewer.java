@@ -61,7 +61,7 @@ public class AccountEntryViewer
 	}
 
 	@Override
-	protected Collection<Account> doSearch(QueryCollection<Account, ? extends AccountQuery> queryMap,
+	protected Collection<Account> doSearch(QueryCollection<? extends AccountQuery> queryMap,
 		ProgressMonitor monitor)
 	{
 		return AccountDAO.sharedInstance().getAccountsForQueries(

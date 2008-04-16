@@ -73,9 +73,10 @@ public class DeliveryNoteEntryViewer
 		
 	@Override
 	protected Collection<DeliveryNote> doSearch(
-		QueryCollection<DeliveryNote, ? extends DeliveryNoteQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<? extends DeliveryNoteQuery> queryMap, ProgressMonitor monitor)
 	{
-		return ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(
+		return (Collection<DeliveryNote>)
+			ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(
 			queryMap,
 			FETCH_GROUPS_DELIVERY_NOTES, 
 			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 

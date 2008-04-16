@@ -86,7 +86,7 @@ public class InvoiceDAO
 		}
 	}
 
-	public Collection<Invoice> getInvoices(QueryCollection<Invoice, ? extends InvoiceQuery> queries,
+	public Collection<Invoice> getInvoices(QueryCollection<? extends InvoiceQuery> queries,
 		String[] fetchGroups, int maxFetchDepth, ProgressMonitor monitor)
 	{
 		try {

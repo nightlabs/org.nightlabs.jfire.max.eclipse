@@ -51,8 +51,8 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class MoneyTransferPageController extends EntityEditorPageController
 {
 	private MoneyTransferQuery moneyTransferQuery = new MoneyTransferQuery();
-	private QueryCollection<MoneyTransfer, MoneyTransferQuery> queryWrapper =
-		new QueryCollection<MoneyTransfer, MoneyTransferQuery>(MoneyTransfer.class, moneyTransferQuery);
+	private QueryCollection<MoneyTransferQuery> queryWrapper =
+		new QueryCollection<MoneyTransferQuery>(MoneyTransfer.class, moneyTransferQuery);
 	
 	private List<MoneyTransfer> moneyTransferList = null;
 	
@@ -161,7 +161,7 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	/**
 	 * @return the queryWrapper
 	 */
-	public QueryCollection<MoneyTransfer, MoneyTransferQuery> getQueryWrapper()
+	public QueryCollection<MoneyTransferQuery> getQueryWrapper()
 	{
 		return queryWrapper;
 	}

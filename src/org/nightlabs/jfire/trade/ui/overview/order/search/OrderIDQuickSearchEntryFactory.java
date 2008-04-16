@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.overview.order.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntry;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQuickSearchEntryFactory;
 
@@ -10,9 +9,10 @@ import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerIDQu
  *
  */
 public class OrderIDQuickSearchEntryFactory
-extends AbstractArticleContainerIDQuickSearchEntryFactory<Order, OrderQuery>
+extends AbstractArticleContainerIDQuickSearchEntryFactory<OrderQuery>
 {
-	public QuickSearchEntry<Order, OrderQuery> createQuickSearchEntry() {
+	public QuickSearchEntry<OrderQuery> createQuickSearchEntry()
+	{
 		return new OrderIDQuickSearchEntry(this);
 	}
 

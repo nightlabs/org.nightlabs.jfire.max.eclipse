@@ -76,7 +76,7 @@ public class OfferEntryViewer
 		
 	@Override
 	protected Collection<Offer> doSearch(
-		QueryCollection<Offer, ? extends OfferQuery> queryMap, ProgressMonitor monitor)
+		QueryCollection<? extends OfferQuery> queryMap, ProgressMonitor monitor)
 	{
 		return OfferDAO.sharedInstance().getOffersByQuery(
 			queryMap,

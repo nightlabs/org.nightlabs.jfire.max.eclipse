@@ -41,7 +41,7 @@ extends RestorableSectionPart
 				if (ignoreProductTransferQueryChanged)
 					return;
 
-				productTransferQueryChanged((QueryCollection<?, ?>) evt.getNewValue());
+				productTransferQueryChanged((QueryCollection<?>) evt.getNewValue());
 			}
 		});
 
@@ -91,7 +91,7 @@ extends RestorableSectionPart
 	 * It is not called, if the change originated from here (i.e. {@link #fireProductTransferQueryChanged()} in
 	 * this object).
 	 */
-	private void productTransferQueryChanged(QueryCollection<?, ?> queryCollection)
+	private void productTransferQueryChanged(QueryCollection<?> queryCollection)
 	{
 		productTransferTable.setLoadingStatus();
 	}

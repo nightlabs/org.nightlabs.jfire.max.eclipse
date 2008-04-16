@@ -30,7 +30,6 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
@@ -42,10 +41,10 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- * 
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public abstract class AbstractArticleContainerFilterComposite<R extends ArticleContainer, Q extends AbstractArticleContainerQuery<R>>
-	extends AbstractQueryFilterComposite<R, Q>
+public abstract class AbstractArticleContainerFilterComposite<Q extends AbstractArticleContainerQuery>
+	extends AbstractQueryFilterComposite<Q>
 {
 	private DateTimeEdit createDTMin;
 	private DateTimeEdit createDTMax;
@@ -79,7 +78,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	 */
 	public AbstractArticleContainerFilterComposite(Composite parent, int style,
 		LayoutMode layoutMode, LayoutDataMode layoutDataMode,
-		QueryProvider<R, ? super Q> queryProvider)
+		QueryProvider<? super Q> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		createComposite(this);
@@ -95,7 +94,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
 	public AbstractArticleContainerFilterComposite(Composite parent, int style,
-		QueryProvider<R, ? super Q> queryProvider)
+		QueryProvider<? super Q> queryProvider)
 	{
 		super(parent, style, queryProvider);
 		createComposite(this);
@@ -130,12 +129,12 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (createMinDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createMinDate = createDTMin.getDate();
 						getQuery().setCreateDTMin(createMinDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -170,12 +169,12 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 				{
 					if (createMaxDate == null)
 					{
-						setInitialValue(true);
+						setValueIntentionally(true);
 						// for consistency we need to update the field according to the initial value of
 						// the date edit composites.
 						createMaxDate = createDTMax.getDate();
 						getQuery().setCreateDTMax(createMaxDate);
-						setInitialValue(false);
+						setValueIntentionally(false);
 					}
 					else
 					{
@@ -209,16 +208,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			{
 				if (active)
 				{
-					if (selectedUserID == null)
-					{
-						setInitialValue(true);
-						getQuery().setCreateUserID(selectedUserID);
-						setInitialValue(false);
-					}
-					else
-					{
-						getQuery().setCreateUserID(selectedUserID);
-					}
+					setValueIntentionally(true);
+					getQuery().setCreateUserID(selectedUserID);
+					setValueIntentionally(false);
 				}
 				else
 				{
@@ -251,16 +243,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			{
 				if (active)
 				{
-					if (selectedVendorID == null)
-					{
-						setInitialValue(true);
-						getQuery().setVendorID(selectedVendorID);
-						setInitialValue(false);
-					}
-					else
-					{
-						getQuery().setVendorID(selectedVendorID);
-					}
+					setValueIntentionally(true);
+					getQuery().setVendorID(selectedVendorID);
+					setValueIntentionally(false);
 				}
 				else
 				{
@@ -301,12 +286,9 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 			{
 				if (active)
 				{
-					if (selectedCustomerID == null)
-					{
-						setInitialValue(true);
-						getQuery().setCustomerID(selectedCustomerID);
-						setInitialValue(false);
-					}
+					setValueIntentionally(true);
+					getQuery().setCustomerID(selectedCustomerID);
+					setValueIntentionally(false);
 				}
 				else
 				{
@@ -456,7 +438,7 @@ public abstract class AbstractArticleContainerFilterComposite<R extends ArticleC
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean active = isInitialValue();
+				boolean active = isValueIntentionallySet();
 				if (AbstractArticleContainerQuery.PROPERTY_CREATE_DATE_MAX.equals(changedField.getPropertyName()))
 				{
 					Date maxDate = (Date) changedField.getNewValue();

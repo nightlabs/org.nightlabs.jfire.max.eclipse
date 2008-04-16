@@ -152,10 +152,10 @@ extends XComposite
 						productTypeTableComposite.setInput(new String[] {Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.productTypeTableComposite.input_searching")}); //$NON-NLS-1$
 					}
 				});
-				QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>> productTypeQueries =
-					new QueryCollection<ProductType, AbstractProductTypeQuery<? extends ProductType>>(ProductType.class);
+				QueryCollection<AbstractProductTypeQuery> productTypeQueries =
+					new QueryCollection<AbstractProductTypeQuery>(ProductType.class);
 				
-				AbstractProductTypeQuery<? extends ProductType> query = createNewQuery();
+				AbstractProductTypeQuery query = createNewQuery();
 
 //				if (!searchStr.trim().equals(""))
 					query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
@@ -228,10 +228,10 @@ extends XComposite
 		}
 	}
 
-	protected abstract AbstractProductTypeQuery<? extends ProductType> createNewQuery();
+	protected abstract AbstractProductTypeQuery createNewQuery();
 	
 	protected Collection<ProductType> retrieveProductTypes(
-		QueryCollection<? extends ProductType, ? extends AbstractProductTypeQuery<? extends ProductType>> queries,
+		QueryCollection<? extends AbstractProductTypeQuery> queries,
 			ProgressMonitor monitor)
 	{
 		Set<ProductTypeID> productTypeIDs;
