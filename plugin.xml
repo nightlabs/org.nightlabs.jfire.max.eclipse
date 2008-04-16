@@ -140,23 +140,39 @@
          point="org.nightlabs.jfire.base.ui.queryFilterComposite">
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
-            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueRelated"
-            sectionTitle="%queryfilterComposite.AdvancedIssueFilterSectionTitle">
-      </QueryFilter>
-      <QueryFilter
-            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="10"
             queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryPeopleRelated"
-            sectionTitle="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle">
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue"
+            title="%queryfilterComposite.AdvancedIssueFilterPeopleSectionTitle">
       </QueryFilter>
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="20"
             queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryTimeRelated"
-            sectionTitle="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle">
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue"
+            title="%queryfilterComposite.AdvancedIssueFilterTimeSectionTitle">
       </QueryFilter>
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="30"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue"
+            title="%queryfilterComposite.AdvancedIssueFilterSectionTitle">
+      </QueryFilter>
+      <QueryFilter
+            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="40"
             queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryDocumentRelated"
-            sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle">
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue"
+            title="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle">
       </QueryFilter>
    </extension>
    <extension

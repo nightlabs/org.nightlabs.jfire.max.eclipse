@@ -112,7 +112,7 @@ public class IssueEntryListViewer
 	}
 
 	@Override
-	public Class<Issue> getResultType()
+	public Class<Issue> getTargetType()
 	{
 		return Issue.class;
 	}
