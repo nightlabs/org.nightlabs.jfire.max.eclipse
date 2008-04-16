@@ -60,7 +60,7 @@ public class RepositoryEntryViewer
 	}
 
 	@Override
-	public Class<Repository> getResultType()
+	public Class<Repository> getTargetType()
 	{
 		return Repository.class;
 	}

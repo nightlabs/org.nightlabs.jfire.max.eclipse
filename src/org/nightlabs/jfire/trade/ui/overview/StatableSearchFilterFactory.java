@@ -27,7 +27,7 @@ public class StatableSearchFilterFactory
 		
 		// set the class with which the JDOQuery will be instantiated and for which the 
 		// selectable states shall be retrieved.
-		filterComposite.setStatableClass((Class<? extends Statable>) getViewerBaseClass());
+		filterComposite.setStatableClass((Class<? extends Statable>) getTargetClass());
 		
 		return filterComposite;
 	}

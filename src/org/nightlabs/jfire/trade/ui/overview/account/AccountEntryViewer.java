@@ -55,7 +55,7 @@ public class AccountEntryViewer
 	};
 
 	@Override
-	public Class<Account> getResultType()
+	public Class<Account> getTargetType()
 	{
 		return Account.class;
 	}

@@ -79,7 +79,7 @@ public class OrderEntryViewer
 	}
 
 	@Override
-	public Class<Order> getResultType()
+	public Class<Order> getTargetType()
 	{
 		return Order.class;
 	}

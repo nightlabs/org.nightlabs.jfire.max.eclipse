@@ -57,7 +57,7 @@ public class ReceptionNoteEntryViewer
 	}
 
 	@Override
-	public Class<ReceptionNote> getResultType()
+	public Class<ReceptionNote> getTargetType()
 	{
 		return ReceptionNote.class;
 	}

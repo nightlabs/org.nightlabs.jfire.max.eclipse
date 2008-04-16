@@ -1334,36 +1334,91 @@ gibt's nimmer - oder?! Marco.
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.accounting.Account"
-            label="%queryfilterComposite.AdvancedAccountFilter"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.account.AdvancedAccountSearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedAccountFilterSectionTitle"/>
+              orderHint="10"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.account.AdvancedAccountSearchFilterFactory"
+              scope="global"
+              targetClass="org.nightlabs.jfire.accounting.Account"
+              title="%queryfilterComposite.AdvancedAccountFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.store.DeliveryNote"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory" sectionTitle="%queryfilterComposite.DeliveryStateFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.store.DeliveryNote"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.DeliveryStateFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.store.DeliveryNote"
+              title="%queryfilterComposite.DeliveryStateFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.store.DeliveryNote"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteSearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedDeliveryFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.store.DeliveryNote"
+              orderHint="10"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.AdvancedDeliveryFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.store.DeliveryNote"
+              title="%queryfilterComposite.AdvancedDeliveryFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.accounting.Invoice"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory" sectionTitle="%queryfilterComposite.InvoiceStateFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.accounting.Invoice"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.InvoiceStateFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.accounting.Invoice"
+              title="%queryfilterComposite.InvoiceStateFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.accounting.Invoice"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceSearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedInvoiceFilterSectionTitle"/>
-        <QueryFilter baseElementClass="org.nightlabs.jfire.trade.Offer"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory" sectionTitle="%queryfilterComposite.OfferStateFilterSectionTitle"/>
-        <QueryFilter baseElementClass="org.nightlabs.jfire.trade.Offer"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.offer.OfferSearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedOfferFilterSectionTitle"/>
-        <QueryFilter baseElementClass="org.nightlabs.jfire.trade.Order"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.order.OrderSearchFilterFactory" sectionTitle="%queryfilterComposite.OrderStateFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.accounting.Invoice"
+              orderHint="10"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.AdvancedInvoiceFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.accounting.Invoice"
+              title="%queryfilterComposite.AdvancedInvoiceFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.store.ReceptionNote"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory" sectionTitle="%queryfilterComposite.ReceptionNoteStateFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.trade.Offer"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.OfferStateFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.trade.Offer"
+              title="%queryfilterComposite.OfferStateFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.store.ReceptionNote"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteSearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedReceptionNoteFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.trade.Offer"
+              orderHint="10"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.offer.OfferSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.AdvancedOfferFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.trade.Offer"
+              title="%queryfilterComposite.AdvancedOfferFilterSectionTitle"/>
         <QueryFilter
-            baseElementClass="org.nightlabs.jfire.store.Repository"
-            queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchFilterFactory" sectionTitle="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"/>
+              baseElementClass="org.nightlabs.jfire.trade.Order"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.order.OrderSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.OrderStateFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.trade.Order"
+              title="%queryfilterComposite.OrderStateFilterSectionTitle"/>
+        <QueryFilter
+              baseElementClass="org.nightlabs.jfire.store.ReceptionNote"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.ReceptionNoteStateFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.store.ReceptionNote"
+              title="%queryfilterComposite.ReceptionNoteStateFilterSectionTitle"/>
+        <QueryFilter
+              baseElementClass="org.nightlabs.jfire.store.ReceptionNote"
+              orderHint="10"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteSearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.AdvancedReceptionNoteFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.store.ReceptionNote"
+              title="%queryfilterComposite.AdvancedReceptionNoteFilterSectionTitle"/>
+        <QueryFilter
+              baseElementClass="org.nightlabs.jfire.store.Repository"
+              orderHint="0"
+              queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchFilterFactory"
+              scope="global"
+              sectionTitle="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"
+              targetClass="org.nightlabs.jfire.store.Repository"
+              title="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"/>
     </extension>
     <extension
           point="org.nightlabs.jfire.base.ui.overview">

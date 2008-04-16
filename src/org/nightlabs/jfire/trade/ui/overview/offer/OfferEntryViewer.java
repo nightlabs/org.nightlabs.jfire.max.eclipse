@@ -86,7 +86,7 @@ public class OfferEntryViewer
 	}
 
 	@Override
-	public Class<Offer> getResultType()
+	public Class<Offer> getTargetType()
 	{
 		return Offer.class;
 	}

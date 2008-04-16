@@ -81,7 +81,7 @@ public class InvoiceEntryViewer
 	}
 
 	@Override
-	public Class<Invoice> getResultType()
+	public Class<Invoice> getTargetType()
 	{
 		return Invoice.class;
 	}
