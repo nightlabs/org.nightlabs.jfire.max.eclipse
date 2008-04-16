@@ -105,8 +105,8 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 			protected IStatus run(ProgressMonitor monitor) {
 				DeliveryNoteQuery query = new DeliveryNoteQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<DeliveryNote, DeliveryNoteQuery> qs =
-					new QueryCollection<DeliveryNote, DeliveryNoteQuery>(DeliveryNote.class);
+				QueryCollection<DeliveryNoteQuery> qs =
+					new QueryCollection<DeliveryNoteQuery>(DeliveryNote.class);
 				
 				qs.add(query);
 				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.sharedInstance()

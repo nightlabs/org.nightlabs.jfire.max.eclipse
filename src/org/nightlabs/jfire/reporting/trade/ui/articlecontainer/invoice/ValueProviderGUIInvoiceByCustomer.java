@@ -122,8 +122,7 @@ extends AbstractValueProviderGUI<InvoiceID>
 			protected IStatus run(ProgressMonitor monitor) {
 				InvoiceQuery query = new InvoiceQuery();
 				query.setCustomerID((AnchorID) value);
-				QueryCollection<Invoice, InvoiceQuery> qs =
-					new QueryCollection<Invoice, InvoiceQuery>(Invoice.class);
+				QueryCollection<InvoiceQuery> qs = new QueryCollection<InvoiceQuery>(Invoice.class);
 				qs.add(query);
 				
 				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(
