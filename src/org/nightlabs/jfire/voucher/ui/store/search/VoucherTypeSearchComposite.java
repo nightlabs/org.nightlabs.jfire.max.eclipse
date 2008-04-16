@@ -3,7 +3,6 @@ package org.nightlabs.jfire.voucher.ui.store.search;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite;
-import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.search.VoucherTypeQuery;
 
 /**
@@ -22,7 +21,7 @@ extends AbstractProductTypeSearchComposite
 	}
 
 	@Override
-	protected AbstractProductTypeQuery<VoucherType> createNewQuery() {
+	protected AbstractProductTypeQuery createNewQuery() {
 		return new VoucherTypeQuery();
 	}
 
