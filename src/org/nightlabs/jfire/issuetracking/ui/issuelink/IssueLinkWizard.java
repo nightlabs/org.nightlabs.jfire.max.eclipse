@@ -7,9 +7,6 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 public class IssueLinkWizard 
 extends DynamicPathWizard
 {
-	
-//	private Map<ObjectID, IssueLinkType> objectID2TypeMap = new HashMap<ObjectID, IssueLinkType>();
-//	private IssueLinkType issueLinkType;
 	private Issue issue;
 	
 	private IssueLinkAdderComposite linkAdderComposite;
@@ -31,42 +28,19 @@ extends DynamicPathWizard
 	 */
 	@Override
 	public boolean performFinish() {
-//		linkAdderComposite.getIssueLinkTable().setInput(objectID2TypeMap.entrySet());
 		return true;
 	}
 
 	@Override
 	public boolean canFinish() {
-//		if(objectID2TypeMap != null && objectID2TypeMap.size() != 0) {
-//			for (Entry<ObjectID, IssueLinkType> entry : objectID2TypeMap.entrySet()) {
-//				linkAdderComposite.addObjectID(entry.getKey(), entry.getValue());
-//			}
-//			return true;
-//		}
 		return true;
 	}
 
-//	/**
-//	 * The method that should be used in IssueLinkWizardListPage
-//	 * @param objectIDs
-//	 */
-//	public void setIssueLinkObjectIDs(Set<ObjectID> objectIDs) {
-//		for(ObjectID objectID : objectIDs) {
-//			objectID2TypeMap.put(objectID, null);
-//		}
-//	}
-//	
-//	/**
-//	 * The method that should be used in IssueLinkWizardRelationPage
-//	 * @param issueLinkType
-//	 */
-//	public void setIssueLinkType(IssueLinkType issueLinkType) {
-//		for(ObjectID key : objectID2TypeMap.keySet()) {
-//			objectID2TypeMap.put(key, issueLinkType);
-//		}
-//	}
-	
 	public Issue getIssue() {
 		return issue;
+	}
+	
+	public IssueLinkAdderComposite getLinkAdderComposite() {
+		return linkAdderComposite;
 	}
 }
