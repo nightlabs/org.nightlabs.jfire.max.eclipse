@@ -98,17 +98,17 @@ extends AbstractProductTypeQuickListFilter
 		public void notify(NotificationEvent event) {
 
 			ArticleContainer ac = null;
-			
+
 			if (!event.getSubjects().isEmpty())			
 			{			
-				 ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
-					
+				ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
+
 			}
-			
+
 			if(ac == null)	
-			 return;
-			
-			
+				return;
+
+
 			final SimpleProductTypeSearchFilter searchFilter = new SimpleProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 			searchFilter.setVendorID(ac.getVendorID());
 			try {
@@ -124,8 +124,8 @@ extends AbstractProductTypeQuickListFilter
 			} catch (Exception x) {
 				throw new RuntimeException(x);
 			}
-			
-		
+
+
 
 		}
 	};
