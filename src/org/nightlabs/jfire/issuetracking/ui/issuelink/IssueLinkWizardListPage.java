@@ -53,8 +53,6 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 				Set<IssueLinkTableItem> linkItems = new HashSet<IssueLinkTableItem>();
 				IssueLinkTableItem linkItem = new IssueLinkTableItem(objectIDs.iterator().next(), null);
 				linkItems.add(linkItem);
-
-				issueLinkWizard.getLinkAdderComposite().getIssueLinkTable().setInput(linkItems);
 				issueLinkWizard.finish();
 			}
 		});
