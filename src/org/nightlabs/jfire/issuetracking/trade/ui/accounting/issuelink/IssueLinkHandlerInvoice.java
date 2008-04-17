@@ -30,11 +30,10 @@ public class IssueLinkHandlerInvoice
 extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 {
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, Invoice linkedObject) {
-		InvoiceID invoiceID = (InvoiceID) issueLink.getLinkedObjectID();
+	public String getLinkedObjectName(InvoiceID linkedObjectID) {
 		return String.format(
 				"Invoice  %s",
-				(issueLink.getLinkedObjectID() == null ? "" : invoiceID.invoiceIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(invoiceID.invoiceID)));
+				(linkedObjectID == null ? "" : linkedObjectID.invoiceIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.invoiceID)));
 	}
 
 	@Override

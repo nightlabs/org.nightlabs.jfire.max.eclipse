@@ -54,11 +54,10 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 	}
 
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink,
-			ReceptionNote receptionNote) {
+	public String getLinkedObjectName(ReceptionNoteID linkedObjectID) {
 		return String.format(
 				"Reception Note  %s",
-				(receptionNote == null ? "" : receptionNote.getReceptionNoteIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(receptionNote.getReceptionNoteID())));
+				(linkedObjectID == null ? "" : linkedObjectID.receptionNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.receptionNoteID)));
 	}
 
 	@Override

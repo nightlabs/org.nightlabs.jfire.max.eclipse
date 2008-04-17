@@ -29,11 +29,10 @@ public class IssueLinkHandlerDeliveryNote
 extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 {
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, DeliveryNote linkedObject) {
-		DeliveryNoteID deliveryNoteID = (DeliveryNoteID) issueLink.getLinkedObjectID();
+	public String getLinkedObjectName(DeliveryNoteID linkedObjectID) {
 		return String.format(
 				"Delivery Note  %s",
-				(issueLink.getLinkedObjectID() == null ? "" : deliveryNoteID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)));
+				(linkedObjectID == null ? "" : linkedObjectID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.deliveryNoteID)));
 	}
 
 	@Override

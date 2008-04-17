@@ -47,10 +47,10 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 	}
 
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, Order order) {
+	public String getLinkedObjectName(OrderID linkedObjectID) {
 		return String.format(
 				"Order  %s",
-				(order == null ? "" : order.getOrderIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(order.getOrderID())));
+				(linkedObjectID == null ? "" : linkedObjectID.orderIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.orderID)));
 	}
 
 	@Override
