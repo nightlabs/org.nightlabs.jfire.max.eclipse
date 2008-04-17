@@ -54,7 +54,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 	}
 
 	@Override
-	public void openLinkedObject(IssueLink issueLink, OrderID linkedObjectID) {
+	public void openLinkedObject(OrderID linkedObjectID) {
 		EditOrderAction editAction = new EditOrderAction();
 		editAction.setArticleContainerID(linkedObjectID);
 		editAction.run();			

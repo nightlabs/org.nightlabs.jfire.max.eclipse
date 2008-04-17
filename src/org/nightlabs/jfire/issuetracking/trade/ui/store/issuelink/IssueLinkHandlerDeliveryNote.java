@@ -45,7 +45,7 @@ extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 
 
 	@Override
-	public void openLinkedObject(IssueLink issueLink, DeliveryNoteID objectID) {
+	public void openLinkedObject(DeliveryNoteID objectID) {
 		EditDeliveryNoteAction editAction = new EditDeliveryNoteAction();
 		editAction.setArticleContainerID(objectID);
 		editAction.run();

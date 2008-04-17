@@ -61,7 +61,6 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 	}
 
 	@Override
-	public void openLinkedObject(IssueLink issueLink,
-			ReceptionNoteID linkedObjectID) {
+	public void openLinkedObject(ReceptionNoteID linkedObjectID) {
 	}
 }
