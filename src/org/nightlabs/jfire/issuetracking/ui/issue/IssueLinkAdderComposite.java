@@ -104,15 +104,6 @@ extends XComposite
 	
 	public void addObjectID(ObjectID objectID, IssueLinkType issueLinkType) {
 		objectIDMap.put(objectID, issueLinkType);
-		
-//		mObjectIDs.addAll(objectIDs);
-//		if (oObjectIDMap == null) {
-//			oObjectIDMap = objectIDs;
-//		} else {
-//			if (!mObjectIDs.equals(oObjectIDMap))
-//				notifyIssueLinkTableItemListeners();
-//		}
-//		issueLinkTable.setInput(mIssueLinks);
 	}
 
 	public boolean removeIssueLinks(Collection<IssueLink> issueLinks) {

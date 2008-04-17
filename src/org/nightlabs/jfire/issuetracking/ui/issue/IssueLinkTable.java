@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.jdo.FetchPlan;
 
@@ -32,6 +33,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
@@ -45,7 +47,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  *
  */
 public class IssueLinkTable 
-extends AbstractTableComposite<IssueLink>{
+extends AbstractTableComposite<Object>{
 
 	private class LabelProvider extends TableLabelProvider {
 
@@ -55,7 +57,14 @@ extends AbstractTableComposite<IssueLink>{
 				if (element instanceof IssueLink) {
 					IssueLink issueLink = (IssueLink)element;
 					IssueLinkHandler handler = getIssueLinkHandler(issueLink.getLinkedObjectID());
-					return handler.getLinkedObjectImage(issueLink, issueLink.getLinkedObject());
+					return handler.getLinkedObjectImage();
+				}
+				if (element instanceof Entry) {
+					Entry entry = (Entry)element;
+					if (entry.getKey() instanceof ObjectID) {
+						IssueLinkHandler handler = getIssueLinkHandler((ObjectID)entry.getKey());
+						return handler.getLinkedObjectImage();
+					}
 				}
 			}
 			return null;

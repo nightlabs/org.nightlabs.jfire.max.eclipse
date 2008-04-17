@@ -60,10 +60,14 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.getIssueLinkTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
-				IssueLink issueLink = issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement();
-				IssueLinkHandler linkHandler = 
-					issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLink.getLinkedObjectID());
-				linkHandler.openLinkedObject(issueLink, issueLink.getLinkedObjectID());
+				
+				Object object = issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement();
+				if (object instanceof IssueLink) {
+					IssueLink issueLink = (IssueLink)object;
+					IssueLinkHandler linkHandler = 
+						issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLink.getLinkedObjectID());
+					linkHandler.openLinkedObject(issueLink, issueLink.getLinkedObjectID());
+				}
 			}
 		});
 		
@@ -107,7 +111,10 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		public void run() {
 			if (issueLinkAdderComposite.getIssueLinkTable().getSelectionIndex() != -1) {
 				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-				table.getIssueLinkHandler(table.getFirstSelectedElement().getLinkedObjectID()).openLinkedObject(table.getFirstSelectedElement(), table.getFirstSelectedElement().getLinkedObjectID());
+				if (table.getFirstSelectedElement() instanceof IssueLink) {
+					IssueLink issueLink = (IssueLink) table.getFirstSelectedElement();
+					table.getIssueLinkHandler(issueLink.getLinkedObjectID()).openLinkedObject(issueLink, issueLink.getLinkedObjectID());
+				}
 			}
 		}		
 	}

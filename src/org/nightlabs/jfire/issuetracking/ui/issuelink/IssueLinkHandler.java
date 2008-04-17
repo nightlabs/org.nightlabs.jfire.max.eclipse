@@ -81,7 +81,7 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * @return <code>null</code> (to not show any image) or an image symbolising the given <code>linkedObject</code>.
 	 * @see #getLinkedObjectName(IssueLink, Object)
 	 */
-	Image getLinkedObjectImage(IssueLink issueLink, LinkedObject linkedObject);
+	Image getLinkedObjectImage();
 
 	/**
 	 * Get the name of the object linked to the given <code>issueLink</code>

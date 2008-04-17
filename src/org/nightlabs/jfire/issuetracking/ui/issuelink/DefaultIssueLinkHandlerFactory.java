@@ -28,8 +28,7 @@ implements IssueLinkHandlerFactory
 		return new IssueLinkHandler() {
 
 			@Override
-			public Image getLinkedObjectImage(IssueLink issueLink,
-					Object linkedObject) {
+			public Image getLinkedObjectImage() {
 				// TODO Auto-generated method stub
 				return null;
 			}

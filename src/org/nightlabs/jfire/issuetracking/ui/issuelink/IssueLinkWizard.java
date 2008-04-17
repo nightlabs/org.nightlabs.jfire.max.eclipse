@@ -18,20 +18,23 @@ extends DynamicPathWizard
 	private IssueLinkType issueLinkType;
 	private Issue issue;
 	
-	private IssueLinkAdderComposite parent;
+	private IssueLinkAdderComposite linkAdderComposite;
 	
-	public IssueLinkWizard(IssueLinkAdderComposite parent, Issue issue) {
-		this.parent = parent;
+	public IssueLinkWizard(IssueLinkAdderComposite linkAdderComposite, Issue issue) {
+		this.linkAdderComposite = linkAdderComposite;
 		this.issue = issue;
 		setWindowTitle("Link Objects to Issue");
 	}
 
 	@Override
 	public void addPages() {
-		IssueLinkWizardCategoryPage page = new IssueLinkWizardCategoryPage(this);
-		addPage(page);
+		IssueLinkWizardCategoryPage categoryPage = new IssueLinkWizardCategoryPage(this);
+		addPage(categoryPage);
 	}
 
+	/**
+	 * This method is used for adding issueLink to IssueLinkAdderComposite.
+	 */
 	@Override
 	public boolean performFinish() {
 		return true;
@@ -41,19 +44,27 @@ extends DynamicPathWizard
 	public boolean canFinish() {
 		if(objectID2TypeMap != null && objectID2TypeMap.size() != 0) {
 			for (Entry<ObjectID, IssueLinkType> entry : objectID2TypeMap.entrySet()) {
-				parent.addObjectID(entry.getKey(), entry.getValue());
+				linkAdderComposite.addObjectID(entry.getKey(), entry.getValue());
 			}
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * The method that should be used in IssueLinkWizardListPage
+	 * @param objectIDs
+	 */
 	public void setIssueLinkObjectIDs(Set<ObjectID> objectIDs) {
 		for(ObjectID objectID : objectIDs) {
 			objectID2TypeMap.put(objectID, null);
 		}
 	}
 	
+	/**
+	 * The method that should be used in IssueLinkWizardRelationPage
+	 * @param issueLinkType
+	 */
 	public void setIssueLinkType(IssueLinkType issueLinkType) {
 		for(ObjectID key : objectID2TypeMap.keySet()) {
 			objectID2TypeMap.put(key, issueLinkType);
