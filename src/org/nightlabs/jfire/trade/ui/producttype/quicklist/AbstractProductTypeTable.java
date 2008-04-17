@@ -24,29 +24,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.ModuleException;
-import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
-import org.nightlabs.jfire.jbpm.graph.def.State;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
-import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.notification.NotificationAdapterWorkerThreadAsync;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -58,11 +42,6 @@ public abstract class AbstractProductTypeTable<P extends ProductType>
 extends AbstractTableComposite<P> 
 implements ISelectionHandler
 {
-	
-
-	
-	
-	
 	public class ContentProvider 
 	implements IStructuredContentProvider 
 	{
@@ -86,7 +65,6 @@ implements ISelectionHandler
 
 		public void dispose() {
 			
-		
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -119,7 +97,6 @@ implements ISelectionHandler
 	public AbstractProductTypeTable(Composite parent) {
 //		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
-
 	}
 
 	/**
@@ -128,8 +105,6 @@ implements ISelectionHandler
 	 */
 	public AbstractProductTypeTable(Composite parent, int style) {
 		super(parent, style);
-		
-		
 	}
 	
 	/**
@@ -139,8 +114,9 @@ implements ISelectionHandler
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
 		TableLayout l = new TableLayout();
-		l.addColumnData(new ColumnWeightData(1));
+		l.addColumnData(new ColumnWeightData(1, true));
 		table.setLayout(l);
+//		table.setLayout(new WeightedTableLayout(new int[1]));
 	}
 
 	@Override
@@ -170,9 +146,6 @@ implements ISelectionHandler
 		}
 	}
 
-
-	
-	
 	protected void superSetSelection(List<P> elements) {
 		super.setSelection(elements, true);
 	}
