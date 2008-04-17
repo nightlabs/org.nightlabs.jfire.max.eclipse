@@ -38,11 +38,6 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_NAME};
 
 
-	public static String[] FETCH_GROUPS_VENDOR = new String[] {
-		FetchPlan.DEFAULT,
-		ArticleContainer.FETCH_GROUP_VENDOR_ID,
-	};
-
 
 	public VoucherTypeQuickListFilter() {
 		SelectionManager.sharedInstance().addNotificationListener(
