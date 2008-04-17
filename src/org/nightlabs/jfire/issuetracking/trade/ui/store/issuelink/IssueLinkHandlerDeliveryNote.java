@@ -37,7 +37,7 @@ extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 	}
 
 	@Override
-	public Image getLinkedObjectImage(IssueLink issueLink, DeliveryNote linkedObject) {
+	public Image getLinkedObjectImage() {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerDeliveryNote.class, 
