@@ -34,12 +34,6 @@ implements IssueLinkHandlerFactory
 			}
 
 			@Override
-			public String getLinkedObjectName(IssueLink issueLink,
-					Object linkedObject) {
-				return "Unknown Object Class";
-			}
-
-			@Override
 			public Map getLinkedObjects(Set issueLinks, ProgressMonitor monitor) {
 				// TODO Auto-generated method stub
 				return null;
@@ -50,6 +44,12 @@ implements IssueLinkHandlerFactory
 					ObjectID linkedObjectID) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public String getLinkedObjectName(ObjectID linkedObjectID) {
+				// TODO Auto-generated method stub
+				return "Unknown Object Class";
 			}
 		};
 	}

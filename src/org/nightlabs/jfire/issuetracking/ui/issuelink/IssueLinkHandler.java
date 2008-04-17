@@ -76,8 +76,8 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * This method is called on the SWT GUI thread.
 	 * </p>
 	 *
-	 * @param issueLink the instance to be displayed in the UI.
-	 * @param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
+	 * param issueLink the instance to be displayed in the UI.
+	 * param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
 	 * @return <code>null</code> (to not show any image) or an image symbolising the given <code>linkedObject</code>.
 	 * @see #getLinkedObjectName(IssueLink, Object)
 	 */
@@ -97,12 +97,11 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * This method is called on the SWT GUI thread.
 	 * </p> 
 	 * 
-	 * @param issueLink the instance to be displayed in the UI.
 	 * @param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
 	 * @return the text to be shown as name of the linked object. Must never be <code>null</code>.
 	 * @see #getLinkedObjectImage(IssueLink, Object)
 	 */
-	String getLinkedObjectName(IssueLink issueLink, LinkedObject linkedObject);
+	String getLinkedObjectName(LinkedObjectID linkedObjectID);
 
 	/**
 	 * Open an editor for the linked object of the given <code>issueLink</code>.

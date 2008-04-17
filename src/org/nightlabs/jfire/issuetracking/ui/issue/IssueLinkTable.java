@@ -75,11 +75,24 @@ extends AbstractTableComposite<Object>{
 				IssueLink issueLink = (IssueLink)element;
 				if (columnIndex == 0) {
 					IssueLinkHandler handler = getIssueLinkHandler(issueLink.getLinkedObjectID());
-					return handler.getLinkedObjectName(issueLink, issueLink.getLinkedObject());
+					return handler.getLinkedObjectName(issueLink.getLinkedObjectID());
 				}
 				
 				if (columnIndex == 1) {
 					return issueLink.getIssueLinkType().getName().getText();
+				}
+			}
+			
+			if (element instanceof Entry) {
+				Entry entry = (Entry)element;
+				if (columnIndex == 0) {
+					IssueLinkHandler handler = getIssueLinkHandler((ObjectID)entry.getKey());
+					return handler.getLinkedObjectName((ObjectID)entry.getKey());
+				}
+				
+				if (columnIndex == 1) {
+					IssueLinkType issueLinkType = (IssueLinkType)entry.getValue();
+					return issueLinkType == null ? "" : issueLinkType.getName().getText();
 				}
 			}
 			return "";

@@ -37,18 +37,19 @@ extends DynamicPathWizard
 	 */
 	@Override
 	public boolean performFinish() {
+		linkAdderComposite.getIssueLinkTable().setInput(objectID2TypeMap.entrySet());
 		return true;
 	}
 
 	@Override
 	public boolean canFinish() {
-		if(objectID2TypeMap != null && objectID2TypeMap.size() != 0) {
-			for (Entry<ObjectID, IssueLinkType> entry : objectID2TypeMap.entrySet()) {
-				linkAdderComposite.addObjectID(entry.getKey(), entry.getValue());
-			}
-			return true;
-		}
-		return false;
+//		if(objectID2TypeMap != null && objectID2TypeMap.size() != 0) {
+//			for (Entry<ObjectID, IssueLinkType> entry : objectID2TypeMap.entrySet()) {
+//				linkAdderComposite.addObjectID(entry.getKey(), entry.getValue());
+//			}
+//			return true;
+//		}
+		return true;
 	}
 
 	/**

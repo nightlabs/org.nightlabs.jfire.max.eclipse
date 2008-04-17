@@ -28,11 +28,12 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueIssueLinkHandler 
 extends AbstractIssueLinkHandler<IssueID, Issue>
 {
+	
 	@Override
-	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
+	public String getLinkedObjectName(IssueID issueID) {
 		return String.format(
 				"Issue %s",
-				(linkedObject == null ? "" : linkedObject.getIssueID()));
+				(issueID == null ? "" : issueID.issueID));
 	}
 
 	@Override
