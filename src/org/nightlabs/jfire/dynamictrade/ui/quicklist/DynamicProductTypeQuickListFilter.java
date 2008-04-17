@@ -40,7 +40,7 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_NAME};
 
 	private DynamicProductTypeTable dynamicProductTypeTable;
-	
+
 	public DynamicProductTypeQuickListFilter() {
 		super();
 
@@ -48,7 +48,7 @@ extends AbstractProductTypeQuickListFilter
 				TradePlugin.ZONE_SALE,
 				ArticleContainer.class, notificationListenerVendorSelected);
 	}
-	
+
 	@Override
 	public Control doCreateResultViewerControl(Composite parent)
 	{
@@ -56,22 +56,22 @@ extends AbstractProductTypeQuickListFilter
 		return dynamicProductTypeTable;
 	}
 
-		
+
 	private NotificationListener notificationListenerVendorSelected = new NotificationAdapterWorkerThreadAsync() {
 		public void notify(NotificationEvent event) {
 
 			ArticleContainer ac = null;
-			
+
 			if (!event.getSubjects().isEmpty())			
 			{			
-				 ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
-					
+				ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
+
 			}
-			
+
 			if(ac == null)	
-			 return;
-			
-			
+				return;
+
+
 			final DynamicProductTypeSearchFilter searchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 			searchFilter.setVendorID(ac.getVendorID());
 			try {
@@ -87,13 +87,13 @@ extends AbstractProductTypeQuickListFilter
 			} catch (Exception x) {
 				throw new RuntimeException(x);
 			}
-			
-		
+
+
 
 		}
 	};
-	
-	
+
+
 	public String getDisplayName()
 	{
 		return Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
@@ -116,8 +116,8 @@ extends AbstractProductTypeQuickListFilter
 		try {
 			final Collection<DynamicProductType> dynamicProductTypes =
 				DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
-					ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						ProductType.INHERITANCE_NATURE_LEAF, Boolean.TRUE, FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					dynamicProductTypeTable.setInput(dynamicProductTypes);
