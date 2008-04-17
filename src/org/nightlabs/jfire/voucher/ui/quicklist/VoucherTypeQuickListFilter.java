@@ -17,7 +17,6 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
