@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -60,10 +59,7 @@ extends AbstractTableComposite<P>
 implements ISelectionHandler
 {
 	
-	public static String[] FETCH_GROUPS_VENDOR = new String[] {
-		FetchPlan.DEFAULT,
-		LegalEntity.FETCH_GROUP_PERSON
-	};
+
 	
 	
 	
@@ -89,6 +85,8 @@ implements ISelectionHandler
 		}
 
 		public void dispose() {
+			
+		
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -122,10 +120,6 @@ implements ISelectionHandler
 //		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 
-		SelectionManager.sharedInstance().addNotificationListener(
-				TradePlugin.ZONE_SALE,
-				GeneralEditor.class, notificationListenerVendorSelected);
-	
 	}
 
 	/**
@@ -135,9 +129,6 @@ implements ISelectionHandler
 	public AbstractProductTypeTable(Composite parent, int style) {
 		super(parent, style);
 		
-		SelectionManager.sharedInstance().addNotificationListener(
-				TradePlugin.ZONE_SALE,
-				GeneralEditor.class, notificationListenerVendorSelected);
 		
 	}
 	
@@ -179,31 +170,7 @@ implements ISelectionHandler
 		}
 	}
 
-	private NotificationListener notificationListenerVendorSelected = new NotificationAdapterWorkerThreadAsync() {
-		public void notify(NotificationEvent event) {
-			
-//			
-//			try {
-//				//if (event.getSubjects().isEmpty())
-//				
-//			} catch (ModuleException x) {
-//				throw new RuntimeException(x);
-//									
-//			}
-			if (!event.getSubjects().isEmpty())
-			{
-				
-				ArticleContainer ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(), FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
-				
-				
-			}
-				
-		     MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "test", "test");
-				
-			
-		}
-	};
-	
+
 	
 	
 	protected void superSetSelection(List<P> elements) {
