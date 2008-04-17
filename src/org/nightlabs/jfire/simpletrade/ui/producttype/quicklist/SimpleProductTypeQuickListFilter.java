@@ -72,10 +72,6 @@ extends AbstractProductTypeQuickListFilter
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
 
-	public static String[] FETCH_GROUPS_VENDOR = new String[] {
-		FetchPlan.DEFAULT,
-		ArticleContainer.FETCH_GROUP_VENDOR_ID,
-	};
 
 
 	private SimpleProductTypeTable resultTable;
