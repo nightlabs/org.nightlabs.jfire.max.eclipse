@@ -207,7 +207,6 @@ implements IGeneralEditor
 				if (ac == null)
 					return;
 				
-				
 				NotificationEvent event = new NotificationEvent(
 						GeneralEditor.class, TradePlugin.ZONE_SALE, 
 						JDOHelper.getObjectId(ac));
@@ -215,8 +214,11 @@ implements IGeneralEditor
 				
 				SelectionManager.sharedInstance().notify(event);
 				
-				
-				
+//				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Activated", "test");
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("partActivated: " + ge.getTitle());
+				}
 			}
 		}
 
@@ -231,6 +233,9 @@ implements IGeneralEditor
 		}
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
+		//	MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Opened", "test");
+
+		
 		}
 	}
 
