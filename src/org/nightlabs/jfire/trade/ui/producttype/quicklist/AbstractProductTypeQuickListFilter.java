@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,6 +45,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -54,6 +56,13 @@ import org.nightlabs.progress.ProgressMonitor;
 public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
+	
+	public static String[] FETCH_GROUPS_VENDOR = new String[] {
+		FetchPlan.DEFAULT,
+		ArticleContainer.FETCH_GROUP_VENDOR_ID,
+	};
+	
+	
 	private ListenerList selectionChangedListeners = new ListenerList();
 
 	/**
