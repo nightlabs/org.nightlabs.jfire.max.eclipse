@@ -10,7 +10,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -40,8 +39,7 @@ implements IssueLinkHandlerFactory
 			}
 
 			@Override
-			public void openLinkedObject(IssueLink issueLink,
-					ObjectID linkedObjectID) {
+			public void openLinkedObject(ObjectID linkedObjectID) {
 				// TODO Auto-generated method stub
 				
 			}

@@ -112,5 +112,5 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * @param issueLink the {@link IssueLink} whose linked object shall be opened.
 	 * @param linkedObjectID the linked object - i.e. the same as {@link IssueLink#getLinkedObjectID() issueLink.getLinkedObjectID()} (convenience parameter).
 	 */
-	void openLinkedObject(IssueLink issueLink, LinkedObjectID linkedObjectID);
+	void openLinkedObject(LinkedObjectID linkedObjectID);
 }

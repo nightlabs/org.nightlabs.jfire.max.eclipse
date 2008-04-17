@@ -46,7 +46,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 
 
 	@Override
-	public void openLinkedObject(IssueLink issueLink, IssueID objectID) {
+	public void openLinkedObject(IssueID objectID) {
 		EditIssueAction editAction = new EditIssueAction();
 		Collection<IssueID> ids = new ArrayList<IssueID>();
 		ids.add(objectID);

@@ -155,6 +155,6 @@ extends WizardHopPage
 	
 	@Override
 	public void onFinish() {
-		issueLinkWizard.setIssueLinkType(issueLinkType);
+//		issueLinkWizard.setIssueLinkType(issueLinkType);
 	}
 }

@@ -42,7 +42,7 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 				getWizardHop().addHopPage(page);
 				
 				Set<ObjectID> objectIDs = issueLinkAdder.getIssueLinkObjectIds();
-				issueLinkWizard.setIssueLinkObjectIDs(objectIDs);
+//				issueLinkWizard.setIssueLinkObjectIDs(objectIDs);
 				
 				getContainer().updateButtons();
 			}
@@ -52,7 +52,7 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 			@Override
 			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
 				Set<ObjectID> objectIDs = issueLinkAdder.getIssueLinkObjectIds();
-				issueLinkWizard.setIssueLinkObjectIDs(objectIDs);
+//				issueLinkWizard.setIssueLinkObjectIDs(objectIDs);
 				issueLinkWizard.finish();
 			}
 		});

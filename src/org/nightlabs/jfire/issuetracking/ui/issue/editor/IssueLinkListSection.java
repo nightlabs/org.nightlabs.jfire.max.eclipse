@@ -13,10 +13,10 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
@@ -62,11 +62,11 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			public void doubleClick(DoubleClickEvent e) {
 				
 				Object object = issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement();
-				if (object instanceof IssueLink) {
-					IssueLink issueLink = (IssueLink)object;
+				if (object instanceof IssueLinkTableItem) {
+					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem)object;
 					IssueLinkHandler linkHandler = 
-						issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLink.getLinkedObjectID());
-					linkHandler.openLinkedObject(issueLink, issueLink.getLinkedObjectID());
+						issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
+					linkHandler.openLinkedObject(issueLinkTableItem.getLinkObjectID());
 				}
 			}
 		});
@@ -111,9 +111,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		public void run() {
 			if (issueLinkAdderComposite.getIssueLinkTable().getSelectionIndex() != -1) {
 				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-				if (table.getFirstSelectedElement() instanceof IssueLink) {
-					IssueLink issueLink = (IssueLink) table.getFirstSelectedElement();
-					table.getIssueLinkHandler(issueLink.getLinkedObjectID()).openLinkedObject(issueLink, issueLink.getLinkedObjectID());
+				if (table.getFirstSelectedElement() instanceof IssueLinkTableItem) {
+					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) table.getFirstSelectedElement();
+					table.getIssueLinkHandler(issueLinkTableItem.getLinkObjectID()).openLinkedObject(issueLinkTableItem.getLinkObjectID());
 				}
 			}
 		}		

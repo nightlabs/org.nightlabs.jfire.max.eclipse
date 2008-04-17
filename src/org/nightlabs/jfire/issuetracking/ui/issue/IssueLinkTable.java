@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.jdo.FetchPlan;
 
@@ -33,7 +32,6 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
@@ -47,52 +45,31 @@ import org.nightlabs.progress.SubProgressMonitor;
  *
  */
 public class IssueLinkTable 
-extends AbstractTableComposite<Object>{
+extends AbstractTableComposite<IssueLinkTableItem>{
 
 	private class LabelProvider extends TableLabelProvider {
-
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (columnIndex == 0) {
-				if (element instanceof IssueLink) {
-					IssueLink issueLink = (IssueLink)element;
-					IssueLinkHandler handler = getIssueLinkHandler(issueLink.getLinkedObjectID());
+				if (element instanceof IssueLinkTableItem) {
+					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
+					IssueLinkHandler handler = getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
 					return handler.getLinkedObjectImage();
-				}
-				if (element instanceof Entry) {
-					Entry entry = (Entry)element;
-					if (entry.getKey() instanceof ObjectID) {
-						IssueLinkHandler handler = getIssueLinkHandler((ObjectID)entry.getKey());
-						return handler.getLinkedObjectImage();
-					}
 				}
 			}
 			return null;
 		}
 		
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof IssueLink) {
-				IssueLink issueLink = (IssueLink)element;
+			if (element instanceof IssueLinkTableItem) {
+				IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
 				if (columnIndex == 0) {
-					IssueLinkHandler handler = getIssueLinkHandler(issueLink.getLinkedObjectID());
-					return handler.getLinkedObjectName(issueLink.getLinkedObjectID());
+					IssueLinkHandler handler = getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
+					return handler.getLinkedObjectName(issueLinkTableItem.getLinkObjectID());
 				}
-				
+
 				if (columnIndex == 1) {
-					return issueLink.getIssueLinkType().getName().getText();
-				}
-			}
-			
-			if (element instanceof Entry) {
-				Entry entry = (Entry)element;
-				if (columnIndex == 0) {
-					IssueLinkHandler handler = getIssueLinkHandler((ObjectID)entry.getKey());
-					return handler.getLinkedObjectName((ObjectID)entry.getKey());
-				}
-				
-				if (columnIndex == 1) {
-					IssueLinkType issueLinkType = (IssueLinkType)entry.getValue();
-					return issueLinkType == null ? "" : issueLinkType.getName().getText();
+					return issueLinkTableItem.getIssueLinkType() == null ? "" : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
 			}
 			return "";
@@ -103,11 +80,6 @@ extends AbstractTableComposite<Object>{
 		super(parent, style);
 	}
 	
-//	public void addIssueLink(IssueLink issueLink)
-//	{
-//		
-//	}
-
 	public void setIssueID(final IssueID issueID)
 	{
 		Job job = new Job("Loading issue links") {
@@ -165,16 +137,6 @@ extends AbstractTableComposite<Object>{
 			}
 		};
 		job.schedule();
-	}
-
-	public void addIssueLink(IssueLink issueLink)
-	{
-		
-	}
-
-	public void removeIssueLink(IssueLink issueLink)
-	{
-		
 	}
 
 	@Override

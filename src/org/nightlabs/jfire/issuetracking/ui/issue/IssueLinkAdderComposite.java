@@ -3,9 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.ListenerList;
@@ -17,10 +15,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
@@ -91,7 +86,7 @@ extends XComposite
 			removeLinkButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-//					removeObjectIDs(issueLinkTable.getSelectedElements());
+//					removeItems(issueLinkTable.getSelectedElements());
 				}
 			});
 		}
@@ -100,21 +95,14 @@ extends XComposite
 	/*
 	 * The old referenced object id set.
 	 */
-	private Map<ObjectID, IssueLinkType> objectIDMap = new HashMap<ObjectID, IssueLinkType>();
+	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 	
-	public void addObjectID(ObjectID objectID, IssueLinkType issueLinkType) {
-		objectIDMap.put(objectID, issueLinkType);
+	public void addItem(IssueLinkTableItem item) {
+		issueLinkTableItems.add(item);
 	}
 
-	public boolean removeIssueLinks(Collection<IssueLink> issueLinks) {
-		for (IssueLink issueLink : issueLinks) {
-			objectIDMap.remove(issueLink);
-		}
-		return false;
-	}
-
-	public Set<ObjectID> getObjectIDs() {
-		return null;
+	public void removeItem(IssueLinkTableItem item) {
+		issueLinkTableItems.remove(item);
 	}
 
 	public IssueLinkTable getIssueLinkTable() {
