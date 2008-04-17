@@ -1,18 +1,23 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 
 public class IssueLinkWizard 
 extends DynamicPathWizard
 {
-	private Set<IssueLink> issueLinks;
-
+	private Map<ObjectID, IssueLinkType> objectID2TypeMap = new HashMap<ObjectID, IssueLinkType>();
+	private IssueLinkType issueLinkType;
 	private Issue issue;
+	
 	private IssueLinkAdderComposite parent;
 	
 	public IssueLinkWizard(IssueLinkAdderComposite parent, Issue issue) {
@@ -29,21 +34,30 @@ extends DynamicPathWizard
 
 	@Override
 	public boolean performFinish() {
-		parent.addIssueLinks(issueLinks);
 		return true;
 	}
 
 	@Override
 	public boolean canFinish() {
-		if(issueLinks != null && issueLinks.size() != 0) {
+		if(objectID2TypeMap != null && objectID2TypeMap.size() != 0) {
+			for (Entry<ObjectID, IssueLinkType> entry : objectID2TypeMap.entrySet()) {
+				parent.addObjectID(entry.getKey(), entry.getValue());
+			}
 			return true;
 		}
-
 		return false;
 	}
 
-	public void setIssueLinks(Set<IssueLink> issueLinks) {
-		this.issueLinks = issueLinks;
+	public void setIssueLinkObjectIDs(Set<ObjectID> objectIDs) {
+		for(ObjectID objectID : objectIDs) {
+			objectID2TypeMap.put(objectID, null);
+		}
+	}
+	
+	public void setIssueLinkType(IssueLinkType issueLinkType) {
+		for(ObjectID key : objectID2TypeMap.keySet()) {
+			objectID2TypeMap.put(key, issueLinkType);
+		}
 	}
 	
 	public Issue getIssue() {

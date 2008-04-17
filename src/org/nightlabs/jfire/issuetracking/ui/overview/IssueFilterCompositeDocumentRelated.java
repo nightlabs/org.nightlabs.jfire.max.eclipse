@@ -72,8 +72,8 @@ public class IssueFilterCompositeDocumentRelated
 			@Override
 			public void issueLinkItemChanged(IssueLinkItemChangedEvent itemChangedEvent)
 			{
-				issueLinks = issueLinkAdderComposite.getItems();
-				getQuery().setIssueLinks( issueLinks );
+//				issueLinks = issueLinkAdderComposite.getItems();
+//				getQuery().setIssueLinks( issueLinks );
 			}
 		});
 	}
@@ -97,7 +97,7 @@ public class IssueFilterCompositeDocumentRelated
 		if (event.getChangedQuery() == null)
 		{
 			issueLinks = null;
-			issueLinkAdderComposite.setIssueLinks(null);
+//			issueLinkAdderComposite.setIssueLinks(null);
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
@@ -106,7 +106,7 @@ public class IssueFilterCompositeDocumentRelated
 				if (IssueQuery.PROPERTY_ISSUE_LINKS.equals(changedField.getPropertyName()))
 				{
 					issueLinks = (Set<IssueLink>) changedField.getNewValue();
-					issueLinkAdderComposite.setIssueLinks(issueLinks);
+//					issueLinkAdderComposite.setIssueLinks(issueLinks);
 				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null		

@@ -50,9 +50,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			public void issueLinkItemChanged(
 					IssueLinkItemChangedEvent itemChangedEvent) {
 				controller.getIssue().clearLinkObjectIDs();
-				for (IssueLink issueLink : issueLinkAdderComposite.getItems()) {
-					controller.getIssue().getIssueLinks().add(issueLink);	
-				}
+//				for (IssueLink issueLink : issueLinkAdderComposite.getObjectIDs()) {
+//					controller.getIssue().getIssueLinks().add(issueLink);	
+//				}
 				markDirty();
 			}
 		});
@@ -83,7 +83,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
-		issueLinkAdderComposite.setIssueLinks(issue.getIssueLinks());
+//		issueLinkAdderComposite.setObjectIDs(issue.getIssueLinks());
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		@Override
 		public void run() {
-			issueLinkAdderComposite.removeItems(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
+//			issueLinkAdderComposite.removeObjectIDs(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
 		}		
 	}
 }

@@ -118,7 +118,7 @@ extends XComposite
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
 		if (issue != null) {
-			issueLinkAdderComposite.addIssueLinks(issue.getIssueLinks());
+//			issueLinkAdderComposite.addObjectIDs(issue.getIssueLinks());
 		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
@@ -352,9 +352,9 @@ extends XComposite
 		return selectedIssueType;
 	}
 
-	public Set<IssueLink> getIssueLinks() {
-		return issueLinkAdderComposite.getItems();
-	}
+//	public Set<IssueLink> getIssueLinks() {
+//		return issueLinkAdderComposite.getObjectIDs();
+//	}
 	
 	
 	

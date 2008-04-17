@@ -1,8 +1,12 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
+import java.util.Locale;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -18,6 +22,8 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -34,6 +40,9 @@ extends WizardHopPage
 	private Button selectFromCheckBox;
 	
 	private List predefinedRelationList;
+	
+	private IssueLinkType issueLinkType;
+	private IssueLinkType newIssueLinkType;
 	
 	public IssueLinkWizardRelationPage(IssueLinkWizard issueLinkWizard, IssueLinkAdder issueLinkAdder) {
 		super("Select/Create the relation for links", "Select/Create the relation for links.");
@@ -59,6 +68,17 @@ extends WizardHopPage
 		
 		newRelationText = new Text(mainComposite, SWT.SINGLE | SWT.BORDER);
 		newRelationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		newRelationText.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(newIssueLinkType == null) {
+					newIssueLinkType = new IssueLinkType(
+							Login.sharedInstance().getOrganisationID(), 
+							Long.toString(IDGenerator.nextID(IssueLinkType.class)));
+				}
+				newIssueLinkType.getName().setText(Locale.getDefault().getLanguage(), newRelationText.getText());
+			}
+		});
 		
 		selectFromCheckBox = new Button(mainComposite, SWT.RADIO);
 		selectFromCheckBox.setText("Select a relation from the list");
@@ -97,8 +117,9 @@ extends WizardHopPage
 				predefinedRelationList.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-//						IssueLinkType issueLinkType = 
-//							iWizardissueLinkTypes.get(predefinedRelationList.getSelectionIndex());
+						issueLinkType = 
+							issueLinkTypes.get(predefinedRelationList.getSelectionIndex());
+						getContainer().updateButtons();
 					}
 				});
 			}
@@ -106,7 +127,6 @@ extends WizardHopPage
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		predefinedRelationList.setLayoutData(gridData);
-		
 		
 		setCreateNew(false, false);
 		
@@ -126,6 +146,12 @@ extends WizardHopPage
 	
 	@Override
 	public boolean isPageComplete() {
-		return getWizardHop().getHopPages() != null && getWizardHop().getHopPages().size() != 0;
+		return issueLinkType != null;
+	}
+	
+	@Override
+	public void onFinish() {
+//		super.onFinish();
+		issueLinkWizard.setIssueLinkType(issueLinkType);
 	}
 }

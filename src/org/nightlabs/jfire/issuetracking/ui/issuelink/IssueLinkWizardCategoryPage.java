@@ -2,6 +2,9 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -22,6 +25,7 @@ public class IssueLinkWizardCategoryPage
 extends WizardHopPage
 {
 	private IssueLinkWizard issueLinkWizard;
+	private TreeViewer categoryTreeViewer;
 	
 	public IssueLinkWizardCategoryPage(IssueLinkWizard issueLinkWizard) {
 		super("Select an Object", "Select an object to link this issue with.");
@@ -36,9 +40,18 @@ extends WizardHopPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		TreeViewer categoryTreeViewer = new TreeViewer(mainComposite, SWT.NONE);
+		categoryTreeViewer = new TreeViewer(mainComposite, SWT.NONE);
 		categoryTreeViewer.setContentProvider(new IssueLinkCategoryContentProvider());
 		categoryTreeViewer.setLabelProvider(new IssueLinkCategoryLabelProvider());
+		categoryTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent e) {
+//				ISelection selection = categoryTreeViewer.getSelection();
+//				if(selection instanceof IssueLinkHandlerFactory) {
+//					
+//				}
+			}
+		});
 		
 		List<IssueLinkHandlerCategory> categoryItems = null;
 		try {
@@ -73,8 +86,8 @@ extends WizardHopPage
 			IssueLinkAdder adder = iFactory.createIssueLinkAdder();
 			
 			WizardHopPage page = createAdderWizardPage(adder);
-			page.setTitle(iFactory.getLinkObjectClass().getName());
-			page.setDescription("Select the " + iFactory.getLinkObjectClass().getName() + "(s) to add to the issue.");
+			page.setTitle(iFactory.getLinkObjectClass().getSimpleName());
+			page.setDescription("Select the " + iFactory.getLinkObjectClass().getSimpleName() + "(s) to link to the issue.");
 			getWizardHop().addHopPage(page);
 		}
 		

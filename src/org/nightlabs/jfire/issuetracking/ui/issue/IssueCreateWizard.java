@@ -85,11 +85,11 @@ extends DynamicPathWizard
 				throw new RuntimeException(e1);
 			}
 
-			Set<IssueLink> issueLinks = ic.getIssueLinks();
-			if(issueLinks != null)
-				for (IssueLink	issueLink : issueLinks) {
-					issue.getIssueLinks().add(issueLink);
-				}
+//			Set<IssueLink> issueLinks = ic.getIssueLinks();
+//			if(issueLinks != null)
+//				for (IssueLink	issueLink : issueLinks) {
+//					issue.getIssueLinks().add(issueLink);
+//				}
 
 			issue.setIssueType(ic.getSelectedIssueType());
 			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
