@@ -39,7 +39,7 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_NO_LIMIT,
 		ProductType.FETCH_GROUP_NAME};
 
-	private DynamicProductTypeTable dynamicProductTypeTable;
+	private DynamicProductTypeTable dynamicProductTypeTable =null;
 
 	public DynamicProductTypeQuickListFilter() {
 		super();
@@ -68,8 +68,9 @@ extends AbstractProductTypeQuickListFilter
 
 			}
 
-			if(ac == null)	
+			if(ac == null || dynamicProductTypeTable.isDisposed() || dynamicProductTypeTable==null)	
 				return;
+
 
 
 			final DynamicProductTypeSearchFilter searchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
@@ -79,6 +80,7 @@ extends AbstractProductTypeQuickListFilter
 						Login.getLogin().getInitialContextProperties()).create();
 				final Collection<ProductType> productTypes = storeManager.searchProductTypes(
 						searchFilter, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						dynamicProductTypeTable.setInput(productTypes);
