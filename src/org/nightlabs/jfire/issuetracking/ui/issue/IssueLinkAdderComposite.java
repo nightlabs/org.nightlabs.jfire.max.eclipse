@@ -31,6 +31,7 @@ extends XComposite
 	private boolean haveButton;
 	
 	private Issue issue;
+	
 	/**
 	 * @param parent
 	 * @param style
@@ -92,17 +93,16 @@ extends XComposite
 		}
 	}
 
-	/*
-	 * The old referenced object id set.
-	 */
 	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 	
 	public void addItem(IssueLinkTableItem item) {
 		issueLinkTableItems.add(item);
+		issueLinkTable.addElement(item);
 	}
 
 	public void removeItem(IssueLinkTableItem item) {
 		issueLinkTableItems.remove(item);
+		issueLinkTable.removeElement(item);
 	}
 
 	public IssueLinkTable getIssueLinkTable() {

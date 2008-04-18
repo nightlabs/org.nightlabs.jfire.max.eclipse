@@ -32,11 +32,14 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -69,7 +72,11 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 				}
 
 				if (columnIndex == 1) {
-					return issueLinkTableItem.getIssueLinkType() == null ? "" : issueLinkTableItem.getIssueLinkType().getName().getText();
+					IssueLinkType defaultType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class, 
+							new String[]{IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor()).get(0); 
+					return issueLinkTableItem.getIssueLinkType() == null ? defaultType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
 			}
 			return "";

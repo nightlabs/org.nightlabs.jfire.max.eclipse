@@ -49,6 +49,7 @@ extends WizardHopPage
 		setDescription("The relation for links");
 		this.issueLinkWizard = issueLinkWizard;
 		this.issueLinkAdder = issueLinkAdder;
+		new WizardHop(this);
 	}
 
 	@Override
@@ -143,18 +144,8 @@ extends WizardHopPage
 			getContainer().updateButtons();
 	}
 	
-	@Override
-	public boolean isPageComplete() {
-		return issueLinkType != null;
-	}
-	
-	@Override
-	public boolean canBeLastPage() {
-		return true;
-	}
-	
-	@Override
-	public void onFinish() {
-//		issueLinkWizard.setIssueLinkType(issueLinkType);
-	}
+//	@Override
+//	public boolean canBeLastPage() {
+//		return true;
+//	}
 }

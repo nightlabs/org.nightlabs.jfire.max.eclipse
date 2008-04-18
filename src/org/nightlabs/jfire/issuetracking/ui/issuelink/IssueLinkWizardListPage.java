@@ -50,9 +50,8 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 			@Override
 			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
 				Set<ObjectID> objectIDs = issueLinkAdder.getIssueLinkObjectIds();
-				Set<IssueLinkTableItem> linkItems = new HashSet<IssueLinkTableItem>();
 				IssueLinkTableItem linkItem = new IssueLinkTableItem(objectIDs.iterator().next(), null);
-				linkItems.add(linkItem);
+				issueLinkWizard.getLinkAdderComposite().addItem(linkItem);
 				issueLinkWizard.finish();
 			}
 		});
@@ -63,6 +62,16 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 	@Override
 	public boolean isPageComplete() {
 		return issueLinkAdder.isComplete(); 
+	}
+	
+	@Override
+	public void onNext() {
+		Set<IssueLinkTableItem> linkItems = new HashSet<IssueLinkTableItem>();
+		for (ObjectID objectID : issueLinkAdder.getIssueLinkObjectIds()) {
+			IssueLinkTableItem linkItem = new IssueLinkTableItem(objectID, null);
+			linkItems.add(linkItem);
+		}
+		issueLinkWizard.setLinkItems(linkItems);
 	}
 }
 
