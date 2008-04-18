@@ -56,7 +56,11 @@ import org.nightlabs.notification.NotificationEvent;
  * {@link GeneralEditorComposite}.
  *
  * @author Marco Schulze - marco at nightlabs dot de
+ * 
+ * @author Fitas Amine - fitas at nightlabs dot de
+ * 
  */
+
 public class GeneralEditor
 extends EditorPart
 implements IGeneralEditor
@@ -68,6 +72,7 @@ implements IGeneralEditor
 	private GeneralEditorComposite generalEditorComposite;
 	private GeneralEditorInput input;
 	private boolean focusReleased = true;
+	private static int numEditorsOpen = 0;
 	private static boolean partInitialized = false;
 
 	public GeneralEditor()
@@ -188,9 +193,20 @@ implements IGeneralEditor
 		if(partInitialized)
 			return;
 
-		RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
+		//RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
+
+		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
+		
+		MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Added", "test");
+		
 		partInitialized = true;
 	}
+
+
+
+
+	private static ActivateListener partListener = new ActivateListener();
+
 
 	protected static class ActivateListener implements IPartListener {
 		public void partActivated(final IWorkbenchPart part) {
@@ -199,22 +215,20 @@ implements IGeneralEditor
 			if (editor == null)
 				return;
 
-			
+
 			if (editor instanceof GeneralEditor) {
 				GeneralEditor ge = (GeneralEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
 
 				if (ac == null)
 					return;
-				
+
 				NotificationEvent event = new NotificationEvent(
 						GeneralEditor.class, TradePlugin.ZONE_SALE, 
 						JDOHelper.getObjectId(ac));
-	
-				
+
+
 				SelectionManager.sharedInstance().notify(event);
-				
-//				MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Activated", "test");
 
 				if (logger.isDebugEnabled()) {
 					logger.debug("partActivated: " + ge.getTitle());
@@ -227,15 +241,26 @@ implements IGeneralEditor
 		}
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
+
+			if(numEditorsOpen != 0)
+				numEditorsOpen--;
+
+			if(numEditorsOpen == 0)
+			{
+				RCPUtil.getActiveWorkbenchPage().removePartListener(partListener);
+				partInitialized = false;
+			}
+
+
 		}
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
 		}
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
-		//	MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Opened", "test");
-
-		
+			//	MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Opened", "test");
+			numEditorsOpen++;
+			registerActivatePartListener();
 		}
 	}
 
