@@ -12,7 +12,9 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
@@ -21,6 +23,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListe
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /** 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -49,10 +52,18 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
 			public void issueLinkItemChanged(
 					IssueLinkItemChangedEvent itemChangedEvent) {
-				controller.getIssue().clearLinkObjectIDs();
-//				for (IssueLink issueLink : issueLinkAdderComposite.getObjectIDs()) {
-//					controller.getIssue().getIssueLinks().add(issueLink);	
-//				}
+				controller.getIssue().clearIssueLinks();
+				
+				for (IssueLinkTableItem linkItem : issueLinkAdderComposite.getIssueLinkTableItems()) {
+					IssueLinkHandler handler = issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
+					IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
+							IDGenerator.nextID(IssueLink.class), 
+							issue, 
+							linkItem.getIssueLinkType(),
+							handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
+					controller.getIssue().getIssueLinks().add(issueLink);
+				}
+
 				markDirty();
 			}
 		});
@@ -87,6 +98,17 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
+		for (IssueLink issueLink : issue.getIssueLinks()) {
+			IssueLinkTableItem linkItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
+			issueLinkAdderComposite.addIssueLinkTableItem(linkItem);
+//			IssueLinkHandler handler = issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
+//			IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
+//					IDGenerator.nextID(IssueLink.class), 
+//					issue, 
+//					linkItem.getIssueLinkType(),
+//					handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
+//			controller.getIssue().getIssueLinks().add(issueLink);
+		}
 //		issueLinkAdderComposite.setObjectIDs(issue.getIssueLinks());
 	}
 	

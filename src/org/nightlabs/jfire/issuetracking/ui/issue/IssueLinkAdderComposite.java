@@ -95,12 +95,12 @@ extends XComposite
 
 	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 	
-	public void addItem(IssueLinkTableItem item) {
+	public void addIssueLinkTableItem(IssueLinkTableItem item) {
 		issueLinkTableItems.add(item);
 		issueLinkTable.addElement(item);
 	}
 
-	public void removeItem(IssueLinkTableItem item) {
+	public void removeIssueLinkTableItem(IssueLinkTableItem item) {
 		issueLinkTableItems.remove(item);
 		issueLinkTable.removeElement(item);
 	}

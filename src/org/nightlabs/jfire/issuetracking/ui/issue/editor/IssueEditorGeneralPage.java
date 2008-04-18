@@ -80,7 +80,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	 */
 	public IssueEditorGeneralPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Issue Details");
+		super(editor, ID_PAGE, IssueEditorGeneralPage.class.getName());
 	}
 
 	@Override

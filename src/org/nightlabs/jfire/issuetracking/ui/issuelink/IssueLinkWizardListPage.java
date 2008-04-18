@@ -51,7 +51,7 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
 				Set<ObjectID> objectIDs = issueLinkAdder.getIssueLinkObjectIds();
 				IssueLinkTableItem linkItem = new IssueLinkTableItem(objectIDs.iterator().next(), null);
-				issueLinkWizard.getLinkAdderComposite().addItem(linkItem);
+				issueLinkWizard.getLinkAdderComposite().addIssueLinkTableItem(linkItem);
 				issueLinkWizard.finish();
 			}
 		});

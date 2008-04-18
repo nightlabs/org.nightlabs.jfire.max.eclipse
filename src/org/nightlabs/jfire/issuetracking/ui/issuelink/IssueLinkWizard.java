@@ -44,7 +44,7 @@ extends DynamicPathWizard
 			
 			for (IssueLinkTableItem linkItem : linkItems) {
 				linkItem.setIssueLinkType(issueLinkType);
-				parent.addItem(linkItem);
+				parent.addIssueLinkTableItem(linkItem);
 			}
 		}
 		return true;
