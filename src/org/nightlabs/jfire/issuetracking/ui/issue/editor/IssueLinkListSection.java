@@ -101,15 +101,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		for (IssueLink issueLink : issue.getIssueLinks()) {
 			IssueLinkTableItem linkItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
 			issueLinkAdderComposite.addIssueLinkTableItem(linkItem);
-//			IssueLinkHandler handler = issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
-//			IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
-//					IDGenerator.nextID(IssueLink.class), 
-//					issue, 
-//					linkItem.getIssueLinkType(),
-//					handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
-//			controller.getIssue().getIssueLinks().add(issueLink);
 		}
-//		issueLinkAdderComposite.setObjectIDs(issue.getIssueLinks());
 	}
 	
 	@Override
