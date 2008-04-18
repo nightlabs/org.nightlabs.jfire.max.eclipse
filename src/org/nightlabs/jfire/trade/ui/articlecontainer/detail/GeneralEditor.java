@@ -31,15 +31,12 @@ import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -196,8 +193,6 @@ implements IGeneralEditor
 		//RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
 
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
-		
-		MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Added", "test");
 		
 		partInitialized = true;
 	}
