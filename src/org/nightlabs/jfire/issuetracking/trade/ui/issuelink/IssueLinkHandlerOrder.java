@@ -59,4 +59,14 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 		editAction.setArticleContainerID(linkedObjectID);
 		editAction.run();			
 	}
+	
+	@Override
+	public Order getLinkedObject(OrderID linkedObjectID,
+			ProgressMonitor monitor) {
+		return OrderDAO.sharedInstance().getOrder(
+				linkedObjectID,
+				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+	}
 }

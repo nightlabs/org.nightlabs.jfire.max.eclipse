@@ -62,4 +62,14 @@ extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
+	
+	@Override
+	public Object getLinkedObject(DeliveryNoteID linkedObjectID,
+			ProgressMonitor monitor) {
+		return DeliveryNoteDAO.sharedInstance().getDeliveryNote(
+				linkedObjectID,
+				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+	}
 }

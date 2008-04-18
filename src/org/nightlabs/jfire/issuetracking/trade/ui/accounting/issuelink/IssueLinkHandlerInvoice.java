@@ -63,4 +63,13 @@ extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
+	
+	@Override
+	public Object getLinkedObject(InvoiceID objectID, ProgressMonitor monitor) {
+		return InvoiceDAO.sharedInstance().getInvoice(
+				objectID,
+				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+	}
 }

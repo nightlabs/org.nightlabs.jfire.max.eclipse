@@ -63,4 +63,15 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 	@Override
 	public void openLinkedObject(ReceptionNoteID linkedObjectID) {
 	}
+	
+	@Override
+	public Object getLinkedObject(ReceptionNoteID linkedObjectID,
+			ProgressMonitor monitor) {
+		return null;
+//		return ReceptionNoteDAO.sharedInstance().getReceptionNote(
+//				linkedObjectID, 
+//				new String[] { FetchPlan.DEFAULT }, 
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//				monitor);
+	}
 }
