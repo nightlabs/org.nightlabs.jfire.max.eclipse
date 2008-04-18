@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 
@@ -33,7 +34,16 @@ extends DynamicPathWizard
 	@Override
 	public boolean performFinish() {
 		if (linkItems != null) {
+			IssueLinkType issueLinkType = null;
+			
+			if (getPage(IssueLinkWizardRelationPage.class.getName()) != null) {
+				IssueLinkWizardRelationPage relationPage = (IssueLinkWizardRelationPage)getPage(IssueLinkWizardRelationPage.class.getName());
+				issueLinkType = relationPage.getIssueLinkType();
+				
+			}
+			
 			for (IssueLinkTableItem linkItem : linkItems) {
+				linkItem.setIssueLinkType(issueLinkType);
 				parent.addItem(linkItem);
 			}
 		}
@@ -62,5 +72,14 @@ extends DynamicPathWizard
 	
 	public void setLinkItems(Set<IssueLinkTableItem> linkItems) {
 		this.linkItems = linkItems;
+	}
+	
+	private Class linkedClass;
+	public void setLinkedClass(Class c) {
+		this.linkedClass = c;
+	}
+	
+	public Class getLinkedClass() {
+		return linkedClass;
 	}
 }

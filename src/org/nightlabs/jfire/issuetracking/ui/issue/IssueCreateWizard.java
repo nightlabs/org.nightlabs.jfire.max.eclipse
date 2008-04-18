@@ -23,6 +23,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -78,27 +79,32 @@ extends DynamicPathWizard
 		if (nextPage instanceof IssueCreateWizardPage) {
 			IssueCreateWizardPage issueCreateWizardPage = (IssueCreateWizardPage) nextPage;
 		
-			IssueCreateComposite ic = issueCreateWizardPage.getIssueCreateComposite();
+			IssueCreateComposite icc = issueCreateWizardPage.getIssueCreateComposite();
 			try {
 				issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 			} catch (LoginException e1) {
 				throw new RuntimeException(e1);
 			}
 
-//			Set<IssueLink> issueLinks = ic.getIssueLinks();
-//			if(issueLinks != null)
-//				for (IssueLink	issueLink : issueLinks) {
-//					issue.getIssueLinks().add(issueLink);
-//				}
-
-			issue.setIssueType(ic.getSelectedIssueType());
-			issue.setIssueSeverityType(ic.getSelectedIssueSeverityType());
-			issue.setIssuePriority(ic.getSelectedIssuePriority());
-			issue.setReporter(ic.getSelectedReporter());
-			issue.setAssignee(ic.getSelectedAssigntoUser());
+			Set<IssueLinkTableItem> linkItems = icc.getIssueLinkAdderComposite().getIssueLinkTableItems();
+			for (IssueLinkTableItem linkItem : linkItems) {
+				IssueLinkHandler handler = icc.getIssueLinkAdderComposite().getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
+				IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
+						IDGenerator.nextID(IssueLink.class), 
+						issue, 
+						linkItem.getIssueLinkType(),
+						handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
+				issue.getIssueLinks().add(issueLink);
+			}
+				
+			issue.setIssueType(icc.getSelectedIssueType());
+			issue.setIssueSeverityType(icc.getSelectedIssueSeverityType());
+			issue.setIssuePriority(icc.getSelectedIssuePriority());
+			issue.setReporter(icc.getSelectedReporter());
+			issue.setAssignee(icc.getSelectedAssigntoUser());
 			
-			if(ic.getSelectedAttachmentFileMap() != null){
-				Map<String, InputStream> fileMap = ic.getSelectedAttachmentFileMap();
+			if(icc.getSelectedAttachmentFileMap() != null){
+				Map<String, InputStream> fileMap = icc.getSelectedAttachmentFileMap();
 				for(String name : fileMap.keySet()){
 					if (fileMap.get(name) != null) {
 						try {

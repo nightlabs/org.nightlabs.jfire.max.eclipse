@@ -24,6 +24,6 @@ extends AbstractIssueLinkHandlerFactory
 	}
 
 	public IssueLinkHandler createIssueLinkHandler() {
-		return new IssueIssueLinkHandler();
+		return new IssueLinkHandlerIssue();
 	}
 }

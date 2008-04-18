@@ -49,6 +49,12 @@ implements IssueLinkHandlerFactory
 				// TODO Auto-generated method stub
 				return "Unknown Object Class";
 			}
+			
+			@Override
+			public Object getLinkedObject(ObjectID linkedObjectID,
+					ProgressMonitor monitor) {
+				return null;
+			}
 		};
 	}
 

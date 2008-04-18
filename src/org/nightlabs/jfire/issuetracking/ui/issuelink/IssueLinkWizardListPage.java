@@ -26,7 +26,7 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 	private IssueLinkWizard issueLinkWizard;
 	
 	public IssueLinkWizardListPage(IssueLinkWizard issueLinkWizard, IssueLinkAdder issueLinkAdder) {
-		super("Object List Page");
+		super(IssueLinkWizardListPage.class.getName());
 		this.issueLinkAdder = issueLinkAdder;
 		this.issueLinkWizard = issueLinkWizard;
 		

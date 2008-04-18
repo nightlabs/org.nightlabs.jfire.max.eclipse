@@ -105,6 +105,10 @@ extends XComposite
 		issueLinkTable.removeElement(item);
 	}
 
+	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
+		return issueLinkTableItems;
+	}
+	
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;
 	}

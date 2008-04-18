@@ -62,6 +62,8 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 */
 	Map<IssueLink, LinkedObject> getLinkedObjects(Set<IssueLink> issueLinks, ProgressMonitor monitor);
 
+	Object getLinkedObject(LinkedObjectID linkedObjectID, ProgressMonitor monitor);
+	
 	/**
 	 * Get the image of the object linked to the given <code>issueLink</code>
 	 * (passed as <code>linkedObject</code>).

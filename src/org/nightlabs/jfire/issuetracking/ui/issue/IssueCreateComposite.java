@@ -352,11 +352,9 @@ extends XComposite
 		return selectedIssueType;
 	}
 
-//	public Set<IssueLink> getIssueLinks() {
-//		return issueLinkAdderComposite.getObjectIDs();
-//	}
-	
-	
+	public IssueLinkAdderComposite getIssueLinkAdderComposite() {
+		return issueLinkAdderComposite;
+	}
 	
 	@Override
 	public boolean setFocus() {

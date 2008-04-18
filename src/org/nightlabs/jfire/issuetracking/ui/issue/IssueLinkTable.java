@@ -136,7 +136,12 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 				// display data
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						setInput(issueLinks);
+						Set<IssueLinkTableItem> linkItems = new HashSet<IssueLinkTableItem>();
+						for (IssueLink issueLink : issueLinks) {
+							IssueLinkTableItem linkItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
+							linkItems.add(linkItem);
+						}
+						setInput(linkItems);
 					}
 				});
 				

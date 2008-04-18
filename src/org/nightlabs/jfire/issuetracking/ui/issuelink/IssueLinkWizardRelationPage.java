@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -41,15 +40,15 @@ extends WizardHopPage
 	
 	private List predefinedRelationList;
 	
-	private IssueLinkType issueLinkType;
+	private IssueLinkType selectedIssueLinkType;
 	private IssueLinkType newIssueLinkType;
 	
 	public IssueLinkWizardRelationPage(IssueLinkWizard issueLinkWizard, IssueLinkAdder issueLinkAdder) {
-		super("Select/Create the relation for links", "Select/Create the relation for links.");
+		super(IssueLinkWizardRelationPage.class.getName(), "Select/Create the relation for links.");
 		setDescription("The relation for links");
 		this.issueLinkWizard = issueLinkWizard;
+		issueLinkWizard.addPage(this);
 		this.issueLinkAdder = issueLinkAdder;
-		new WizardHop(this);
 	}
 
 	@Override
@@ -76,7 +75,6 @@ extends WizardHopPage
 							Login.sharedInstance().getOrganisationID(), 
 							Long.toString(IDGenerator.nextID(IssueLinkType.class)));
 				}
-				newIssueLinkType.getName().setText(Locale.getDefault().getLanguage(), newRelationText.getText());
 			}
 		});
 		
@@ -117,11 +115,13 @@ extends WizardHopPage
 				predefinedRelationList.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						issueLinkType = 
+						selectedIssueLinkType = 
 							issueLinkTypes.get(predefinedRelationList.getSelectionIndex());
 						getContainer().updateButtons();
 					}
 				});
+				
+				predefinedRelationList.setSelection(0);
 			}
 		});
 
@@ -132,7 +132,12 @@ extends WizardHopPage
 		
 		return mainComposite;
 	}
-	
+
+	@Override
+	public boolean canFlipToNextPage() {
+		return false;
+	}
+
 	public void setCreateNew(boolean b, boolean updateButtons) {
 		createNewCheckBox.setSelection(b);
 		selectFromCheckBox.setSelection(!b);
@@ -144,8 +149,17 @@ extends WizardHopPage
 			getContainer().updateButtons();
 	}
 	
-//	@Override
-//	public boolean canBeLastPage() {
-//		return true;
-//	}
+	public IssueLinkType getIssueLinkType() {
+		if (createNewCheckBox.getSelection()) {
+			newIssueLinkType.getName().setText(Locale.getDefault().getLanguage(), newRelationText.getText());
+			newIssueLinkType.getLinkableObjectClassNames().add(issueLinkWizard.getLinkedClass().getName());
+			return newIssueLinkType;
+		}
+		
+		if (selectFromCheckBox.getSelection()) {
+			return selectedIssueLinkType;
+		}
+		
+		return null;
+	}
 }

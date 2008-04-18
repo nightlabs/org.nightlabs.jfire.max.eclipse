@@ -25,7 +25,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author chairatk
  *
  */
-public class IssueIssueLinkHandler 
+public class IssueLinkHandlerIssue 
 extends AbstractIssueLinkHandler<IssueID, Issue>
 {
 	
@@ -40,7 +40,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	public Image getLinkedObjectImage() {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
-				IssueIssueLinkHandler.class, 
+				IssueLinkHandlerIssue.class, 
 				"LinkObject").createImage();
 	}
 
@@ -61,6 +61,16 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	{
 		return IssueDAO.sharedInstance().getIssues(
 				linkedObjectIDs,
+				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+	}
+	
+	@Override
+	public Object getLinkedObject(IssueID linkedObjectID,
+			ProgressMonitor monitor) {
+		return IssueDAO.sharedInstance().getIssue(
+				linkedObjectID,
 				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
