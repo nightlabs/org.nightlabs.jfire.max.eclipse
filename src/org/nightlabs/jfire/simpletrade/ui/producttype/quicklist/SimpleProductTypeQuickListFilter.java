@@ -118,7 +118,7 @@ extends AbstractProductTypeQuickListFilter
 						searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						resultTable.setInput(productTypes);
+					  resultTable.setInput(productTypes);
 					}
 				});
 			} catch (Exception x) {
