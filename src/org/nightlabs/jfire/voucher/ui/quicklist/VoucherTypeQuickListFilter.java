@@ -50,6 +50,7 @@ extends AbstractProductTypeQuickListFilter
 
 			ArticleContainer ac = null;
 
+
 			if (!event.getSubjects().isEmpty())			
 			{			
 				ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
@@ -67,6 +68,7 @@ extends AbstractProductTypeQuickListFilter
 						Login.getLogin().getInitialContextProperties()).create();
 				final Collection<ProductType> voucherTypes = storeManager.searchProductTypes(
 						searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						voucherTypeTable.setInput(voucherTypes);
