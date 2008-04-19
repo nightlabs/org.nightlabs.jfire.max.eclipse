@@ -5,6 +5,7 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -67,13 +68,18 @@ extends XComposite
 	private AnchorID selectedLegalEntityID = null;
 	private LegalEntity selectedLegalEntity = null;
 	
+	private IAction searchAction; 
 	private SelectionListener searchListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
-			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(getQuickSearchText(), true);
-			if (legalEntity != null) {
-				setSelectedLegalEntityID(
-					(AnchorID) JDOHelper.getObjectId(legalEntity)
-				);
+			if (searchAction != null) {
+				searchAction.run();
+			} else {
+				LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(getQuickSearchText(), true);
+				if (legalEntity != null) {
+					setSelectedLegalEntityID(
+							(AnchorID) JDOHelper.getObjectId(legalEntity)
+					);
+				}
 			}
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
@@ -221,6 +227,10 @@ extends XComposite
 	
 	protected LegalEntity getSelectedLegalEntity() {
 		return selectedLegalEntity;
+	}
+	
+	public void setSearchAction(IAction searchAction) {
+		this.searchAction = searchAction;
 	}
 	
 	protected void setAnonymousVisualisation()

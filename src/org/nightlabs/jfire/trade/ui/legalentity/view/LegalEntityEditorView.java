@@ -93,6 +93,7 @@ implements
 	public void createPartContents(Composite parent) {
 		selectionComposite = new LegalEntitySelectionComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		contributeToActionBars();
+		selectionComposite.setSearchAction(searchLegalEntityAction);
 		setSelectedLegalEntityID(null);
 	}
 	
