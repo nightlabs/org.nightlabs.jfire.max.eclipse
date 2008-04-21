@@ -50,12 +50,12 @@ implements IPerspectiveFactory
 		}
 	};
 
-//	private static boolean selectionListenerAdded = false;
-//	private static NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
-//		public void notify(NotificationEvent notificationEvent) {
-//			checkOrderOpen(RCPUtil.getActivePerspectiveID());
-//		}
-//	};
+	private static boolean selectionListenerAdded = false;
+	private static NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
+		public void notify(NotificationEvent notificationEvent) {
+			checkOrderOpen(RCPUtil.getActivePerspectiveID());
+		}
+	};
 
 	static {
 		if (Display.getCurrent() == null) {
@@ -64,13 +64,13 @@ implements IPerspectiveFactory
 				public void run()
 				{
 					checkPerspectiveListenerAdded();
-//					checkSelectionListenerAdded();
+					checkSelectionListenerAdded();
 				}
 			});
 		}
 		else {
 			checkPerspectiveListenerAdded();
-//			checkSelectionListenerAdded();
+			checkSelectionListenerAdded();
 		}
 	}
 
@@ -186,20 +186,20 @@ implements IPerspectiveFactory
 		}
 	}
 
-//	private static void checkSelectionListenerAdded() {
-//		if (!selectionListenerAdded) {
-//			try {
-//				// removed because sometimes caused ClassNotFoundException for ProductType
-//				// when trying to switch open the perspective, but also works without
-////				SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, ProductType.class, selectionListener);
-////				selectionListenerAdded = true;
-////				logger.info("selectionListener added"); //$NON-NLS-1$
-//			} catch (Exception e) {
-//				selectionListenerAdded = false;
-//				logger.info("adding selectionListener failed"); //$NON-NLS-1$
-//				return;
-//			}
-//		}
-//	}
+	private static void checkSelectionListenerAdded() {
+		if (!selectionListenerAdded) {
+			try {
+				// sometimes causes a ClassNotFoundException for ProductType
+				// when trying to switch open the perspective
+				SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, ProductType.class, selectionListener);
+				selectionListenerAdded = true;
+				logger.info("selectionListener added"); //$NON-NLS-1$
+			} catch (Exception e) {
+				selectionListenerAdded = false;
+				logger.info("adding selectionListener failed"); //$NON-NLS-1$
+				return;
+			}
+		}
+	}
 
 }
