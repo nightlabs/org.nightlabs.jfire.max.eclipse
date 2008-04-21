@@ -32,7 +32,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class IssueCreateWizard 
 extends DynamicPathWizard
 {
-	private Issue issue;
+	private Issue newIssue;
 	private WizardHopPage nextPage;
 	private ObjectID linkedObjectID;
 	
@@ -57,7 +57,7 @@ extends DynamicPathWizard
 			setWindowTitle("Create new issue");	
 		}
 		
-		issue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 	}
 
 	/**
@@ -65,9 +65,9 @@ extends DynamicPathWizard
 	 */
 	public void addPages() {
 		if (linkedObjectID != null)
-			nextPage = new IssueLinkCreateWizardPage(linkedObjectID);
+			nextPage = new IssueLinkAttachWizardPage(linkedObjectID);
 		else
-			nextPage = new IssueCreateWizardPage(issue);
+			nextPage = new IssueCreateWizardPage(newIssue);
 		
 		addPage(nextPage);
 	}
@@ -76,41 +76,42 @@ extends DynamicPathWizard
 	public boolean performFinish() {
 		IssueDAO issueDAO = IssueDAO.sharedInstance();
 
+		/************Create New Issue***************/
 		if (nextPage instanceof IssueCreateWizardPage) {
 			IssueCreateWizardPage issueCreateWizardPage = (IssueCreateWizardPage) nextPage;
 		
-			IssueCreateComposite icc = issueCreateWizardPage.getIssueCreateComposite();
+			IssueCreateComposite issueCreateCompoosite = issueCreateWizardPage.getIssueCreateComposite();
 			try {
-				issue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
+				newIssue = new Issue(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Issue.class));
 			} catch (LoginException e1) {
 				throw new RuntimeException(e1);
 			}
 
-			Set<IssueLinkTableItem> linkItems = icc.getIssueLinkAdderComposite().getIssueLinkTableItems();
+			Set<IssueLinkTableItem> linkItems = issueCreateCompoosite.getIssueLinkAdderComposite().getIssueLinkTableItems();
 			for (IssueLinkTableItem linkItem : linkItems) {
-				IssueLinkHandler handler = icc.getIssueLinkAdderComposite().getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
-				IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
+				IssueLinkHandler handler = issueCreateCompoosite.getIssueLinkAdderComposite().getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
+				IssueLink issueLink = new IssueLink(newIssue.getOrganisationID(), 
 						IDGenerator.nextID(IssueLink.class), 
-						issue, 
+						newIssue, 
 						linkItem.getIssueLinkType(),
 						handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
-				issue.getIssueLinks().add(issueLink);
+				newIssue.getIssueLinks().add(issueLink);
 			}
 				
-			issue.setIssueType(icc.getSelectedIssueType());
-			issue.setIssueSeverityType(icc.getSelectedIssueSeverityType());
-			issue.setIssuePriority(icc.getSelectedIssuePriority());
-			issue.setReporter(icc.getSelectedReporter());
-			issue.setAssignee(icc.getSelectedAssigntoUser());
+			newIssue.setIssueType(issueCreateCompoosite.getSelectedIssueType());
+			newIssue.setIssueSeverityType(issueCreateCompoosite.getSelectedIssueSeverityType());
+			newIssue.setIssuePriority(issueCreateCompoosite.getSelectedIssuePriority());
+			newIssue.setReporter(issueCreateCompoosite.getSelectedReporter());
+			newIssue.setAssignee(issueCreateCompoosite.getSelectedAssigntoUser());
 			
-			if(icc.getSelectedAttachmentFileMap() != null){
-				Map<String, InputStream> fileMap = icc.getSelectedAttachmentFileMap();
+			if(issueCreateCompoosite.getSelectedAttachmentFileMap() != null){
+				Map<String, InputStream> fileMap = issueCreateCompoosite.getSelectedAttachmentFileMap();
 				for(String name : fileMap.keySet()){
 					if (fileMap.get(name) != null) {
 						try {
-							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
+							IssueFileAttachment issueFileAttachment = new IssueFileAttachment(newIssue, IDGenerator.nextID(IssueFileAttachment.class));
 							issueFileAttachment.loadStream(fileMap.get(name), name);
-							issue.getFileList().add(issueFileAttachment);
+							newIssue.getFileList().add(issueFileAttachment);
 						} catch (IOException e) {
 							throw new RuntimeException(e);
 						} finally {
@@ -127,26 +128,30 @@ extends DynamicPathWizard
 			I18nText subject = issueCreateWizardPage.getIssueCreateComposite().getSubjectText().getI18nText();
 			Set<String> languageIDs = subject.getLanguageIDs();
 			for(String languageID : languageIDs){
-				issue.getSubject().setText(languageID, subject.getText(languageID));
+				newIssue.getSubject().setText(languageID, subject.getText(languageID));
 			}//for
 
 			I18nText description = issueCreateWizardPage.getIssueCreateComposite().getDescriptionText().getI18nText();
 			languageIDs = description.getLanguageIDs();
 			for(String languageID : languageIDs){
-				issue.getDescription().setText(languageID, description.getText(languageID));
+				newIssue.getDescription().setText(languageID, description.getText(languageID));
 			}//for
-
-			Issue newIssue = issueDAO.storeIssue(issue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(newIssue));
-			try {
-				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
 		}
 		
-		if (nextPage instanceof IssueLinkCreateWizardPage) {
-			IssueLinkCreateWizardPage issueLinkCreateWizardPage = (IssueLinkCreateWizardPage)nextPage;
+		/**********Attach Objects to an issue**********/
+		if (nextPage instanceof IssueLinkAttachWizardPage) {
+			IssueLinkAttachWizardPage issueLinkCreateWizardPage = (IssueLinkAttachWizardPage)nextPage;
+			
+			
+		}
+		
+		/*****Open the created issue*****/
+		Issue createdIssue = issueDAO.storeIssue(newIssue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
+		try {
+			Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 
 		return true;
@@ -154,6 +159,6 @@ extends DynamicPathWizard
 	
 	@Override
 	public boolean canFinish() {
-		return true;
+		return nextPage.canBeLastPage();
 	}
 }

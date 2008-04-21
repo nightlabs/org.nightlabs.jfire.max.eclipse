@@ -39,7 +39,6 @@ extends DynamicPathWizard
 			if (getPage(IssueLinkWizardRelationPage.class.getName()) != null) {
 				IssueLinkWizardRelationPage relationPage = (IssueLinkWizardRelationPage)getPage(IssueLinkWizardRelationPage.class.getName());
 				issueLinkType = relationPage.getIssueLinkType();
-				
 			}
 			
 			for (IssueLinkTableItem linkItem : linkItems) {

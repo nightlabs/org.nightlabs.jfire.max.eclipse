@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -38,7 +37,6 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
