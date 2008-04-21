@@ -190,8 +190,6 @@ implements IGeneralEditor
 		if(partInitialized)
 			return;
 
-		//RCPUtil.getActiveWorkbenchPage().addPartListener(new ActivateListener());
-
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
 		
 		partInitialized = true;
@@ -234,26 +232,27 @@ implements IGeneralEditor
 		@Override
 		public void partBroughtToTop(final IWorkbenchPart part) {
 		}
-		@Override
-		public void partClosed(final IWorkbenchPart part) {
 
-			if(numEditorsOpen != 0)
+		@Override
+		public void partClosed(final IWorkbenchPart part)
+		{
+			if(numEditorsOpen > 0)
 				numEditorsOpen--;
 
 			if(numEditorsOpen == 0)
 			{
-				RCPUtil.getActiveWorkbenchPage().removePartListener(partListener);
+				if (RCPUtil.getActiveWorkbenchPage() != null)
+					RCPUtil.getActiveWorkbenchPage().removePartListener(partListener);
+
 				partInitialized = false;
 			}
-
-
 		}
+
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
 		}
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
-			//	MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Opened", "test");
 			numEditorsOpen++;
 			registerActivatePartListener();
 		}
