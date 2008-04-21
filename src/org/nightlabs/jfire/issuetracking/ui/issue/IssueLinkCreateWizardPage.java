@@ -63,12 +63,12 @@ extends WizardHopPage
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
-		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
+		XComposite mainComposite = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		
-		XComposite c = new XComposite(comp, SWT.NONE);
-		c.getGridLayout().numColumns = 2;
-		new Label(c, SWT.NONE).setText("Issue link types: ");
-		final XComboComposite<IssueLinkType> issueLinkTypeCombo = new XComboComposite<IssueLinkType>(c, SWT.NONE);
+		XComposite issueLinkTypeChooserComposite = new XComposite(mainComposite, SWT.NONE);
+		issueLinkTypeChooserComposite.getGridLayout().numColumns = 2;
+		new Label(issueLinkTypeChooserComposite, SWT.NONE).setText("Issue link types: ");
+		final XComboComposite<IssueLinkType> issueLinkTypeCombo = new XComboComposite<IssueLinkType>(issueLinkTypeChooserComposite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		issueLinkTypeCombo.setLayoutData(gridData);
@@ -82,7 +82,8 @@ extends WizardHopPage
 				return "";
 			}
 		});
-
+		issueLinkTypeChooserComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		issueLinkTypeCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		
@@ -96,11 +97,11 @@ extends WizardHopPage
 			}
 		});
 
-		createNewCheckBox = new Button(comp, SWT.RADIO);		
+		createNewCheckBox = new Button(mainComposite, SWT.RADIO);		
 		createNewCheckBox.setText("Create new issue");
 		createNewCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		selectFromCheckBox = new Button(comp, SWT.RADIO);
+		selectFromCheckBox = new Button(mainComposite, SWT.RADIO);
 		selectFromCheckBox.setText("Select issue");
 		selectFromCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -135,7 +136,7 @@ extends WizardHopPage
 			}
 		};
 		
-		Composite issueEntryViewerComposite = issueEntryViewer.createComposite(comp);
+		Composite issueEntryViewerComposite = issueEntryViewer.createComposite(mainComposite);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		
