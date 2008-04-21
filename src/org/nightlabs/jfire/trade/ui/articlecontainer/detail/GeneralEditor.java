@@ -191,7 +191,6 @@ implements IGeneralEditor
 			return;
 
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
-		
 		partInitialized = true;
 	}
 
