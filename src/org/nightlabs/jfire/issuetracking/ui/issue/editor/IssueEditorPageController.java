@@ -31,6 +31,7 @@ import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageControlle
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -64,7 +65,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		User.FETCH_GROUP_THIS_USER,
-		
+		IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE,
 //		Issue.FETCH_GROUP_SUBJECT,
 //		Issue.FETCH_GROUP_ISSUE_TYPE,
 //		Issue.FETCH_GROUP_DESCRIPTION,

@@ -27,7 +27,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueIssueLinkAdder 
+public class IssueLinkAdderIssue 
 extends AbstractIssueLinkAdder 
 {
 	private IssueEntryListViewer iViewer;
