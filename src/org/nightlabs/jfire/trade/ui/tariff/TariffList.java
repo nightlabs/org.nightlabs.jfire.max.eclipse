@@ -144,10 +144,6 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				try {
-					// TODO create a TariffProvider in order to use the Cache
-					//					AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					//					final List<Tariff> _tariffs = new ArrayList<Tariff>(
-					//							accountingManager.getTariffs(FETCH_GROUPS_TARIFFS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT));
 					tariffs = TariffDAO.sharedInstance().getTariffs(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
