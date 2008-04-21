@@ -11,11 +11,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -64,11 +67,13 @@ extends AbstractProductTypeQuickListFilter
 			searchFilter.setVendorID(ac.getVendorID());
 
 			try {
-				StoreManager storeManager = StoreManagerUtil.getHome(
-						Login.getLogin().getInitialContextProperties()).create();
-				final Collection<ProductType> voucherTypes = storeManager.searchProductTypes(
-						searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+					
+				QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
+				productTypeQueries.add(searchFilter);
 				
+				final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						voucherTypeTable.setInput(voucherTypes);
