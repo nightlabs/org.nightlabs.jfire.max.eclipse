@@ -57,7 +57,7 @@ public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
 	
-	public static String[] FETCH_GROUPS_VENDOR = new String[] {
+	public static String[] FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR = new String[] {
 		FetchPlan.DEFAULT,
 		ArticleContainer.FETCH_GROUP_VENDOR_ID,
 	};

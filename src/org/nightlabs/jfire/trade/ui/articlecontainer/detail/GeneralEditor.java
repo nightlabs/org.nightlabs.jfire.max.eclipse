@@ -194,38 +194,29 @@ implements IGeneralEditor
 		partInitialized = true;
 	}
 
-
-
-
 	private static ActivateListener partListener = new ActivateListener();
 
+	protected static class ActivateListener implements IPartListener
+	{
+		private void fireEvent(GeneralEditor generalEditor)
+		{
+			
+		     ArticleContainer ac = generalEditor == null ? null : generalEditor.getGeneralEditorComposite().getArticleContainer();
 
-	protected static class ActivateListener implements IPartListener {
+			NotificationEvent event = new NotificationEvent(
+					this, TradePlugin.ZONE_SALE,
+					JDOHelper.getObjectId(ac),
+					ArticleContainer.class);
+
+			if (logger.isDebugEnabled() && generalEditor != null)
+				logger.debug("fireEvent: " + generalEditor.getTitle());
+
+			SelectionManager.sharedInstance().notify(event);
+		}
+
 		public void partActivated(final IWorkbenchPart part) {
-			IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-
-			if (editor == null)
-				return;
-
-
-			if (editor instanceof GeneralEditor) {
-				GeneralEditor ge = (GeneralEditor) editor;
-				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
-
-				if (ac == null)
-					return;
-
-				NotificationEvent event = new NotificationEvent(
-						GeneralEditor.class, TradePlugin.ZONE_SALE, 
-						JDOHelper.getObjectId(ac));
-
-
-				SelectionManager.sharedInstance().notify(event);
-
-				if (logger.isDebugEnabled()) {
-					logger.debug("partActivated: " + ge.getTitle());
-				}
-			}
+			if (part instanceof GeneralEditor)
+				fireEvent((GeneralEditor) part);
 		}
 
 		@Override
@@ -235,11 +226,20 @@ implements IGeneralEditor
 		@Override
 		public void partClosed(final IWorkbenchPart part)
 		{
-			if(numEditorsOpen > 0)
-				numEditorsOpen--;
+			if (!(part instanceof GeneralEditor))
+				return;
 
-			if(numEditorsOpen == 0)
+			GeneralEditor generalEditor = (GeneralEditor) part;
+
+			if (numEditorsOpen <= 0)
+				throw new IllegalStateException("Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: " + generalEditor.getEditorInput());
+
+			--numEditorsOpen;
+
+			if (numEditorsOpen == 0)
 			{
+				fireEvent(null);
+
 				if (RCPUtil.getActiveWorkbenchPage() != null)
 					RCPUtil.getActiveWorkbenchPage().removePartListener(partListener);
 
@@ -250,10 +250,15 @@ implements IGeneralEditor
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
 		}
+
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
+			if (!(part instanceof GeneralEditor))
+				return;
+
 			numEditorsOpen++;
 			registerActivatePartListener();
+			fireEvent((GeneralEditor) part);
 		}
 	}
 
