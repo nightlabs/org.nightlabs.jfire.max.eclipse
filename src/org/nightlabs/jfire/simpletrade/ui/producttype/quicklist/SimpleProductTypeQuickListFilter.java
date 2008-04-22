@@ -60,7 +60,10 @@ import org.nightlabs.progress.SubProgressMonitor;
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
+ * @author Fitas Amine <fitas[AT]nightlabs[DOT]de>
  */
+
+
 public class SimpleProductTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
 {
