@@ -177,7 +177,7 @@ public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEn
 		JDOQLParameterEntry entry = getFirstSelectedElement();
 		if (entry == null)
 			return;
-		entries.remove(entry);
+//		entries.remove(entry);
 		EditEntryDialog dlg = new EditEntryDialog(RCPUtil.getActiveShell(), entry);
 		dlg.open();
 		getTableViewer().setInput(entries);
