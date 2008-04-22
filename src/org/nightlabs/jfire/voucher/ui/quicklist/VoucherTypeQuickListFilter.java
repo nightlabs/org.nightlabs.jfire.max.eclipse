@@ -14,12 +14,8 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jdo.search.SearchFilter;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
-import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -28,10 +24,8 @@ import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQui
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.VoucherTypeSearchFilter;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
-import org.nightlabs.notification.NotificationAdapterWorkerThreadAsync;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
