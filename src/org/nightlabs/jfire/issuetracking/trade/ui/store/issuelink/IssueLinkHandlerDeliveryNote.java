@@ -6,70 +6,55 @@ package org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.ui.overview.deliverynote.action.EditDeliveryNoteAction;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author chairatk
- *
  */
 public class IssueLinkHandlerDeliveryNote 
 extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 {
 	@Override
-	public String getLinkedObjectName(DeliveryNoteID linkedObjectID) {
+	public String getLinkedObjectName(IssueLink issueLink, DeliveryNote deliveryNote) {
+		DeliveryNoteID deliveryNoteID = (DeliveryNoteID) issueLink.getLinkedObjectID();
 		return String.format(
 				"Delivery Note  %s",
-				(linkedObjectID == null ? "" : linkedObjectID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.deliveryNoteID)));
+				deliveryNoteID.organisationID + '/' + deliveryNoteID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID));
+//				deliveryNote.getPrimaryKey());
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, DeliveryNote deliveryNote) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerDeliveryNote.class, 
 				"LinkObject").createImage();
 	}
 
-
 	@Override
-	public void openLinkedObject(DeliveryNoteID objectID) {
+	public void openLinkedObject(IssueLink issueLink, DeliveryNoteID deliveryNoteID) {
 		EditDeliveryNoteAction editAction = new EditDeliveryNoteAction();
-		editAction.setArticleContainerID(objectID);
+		editAction.setArticleContainerID(deliveryNoteID);
 		editAction.run();
 	}
 
 	@Override
-	protected Collection<DeliveryNote> _getLinkedObjects(
-			Set<IssueLink> issueLinks, Set<DeliveryNoteID> linkedObjectIDs,
-			ProgressMonitor monitor)
+	protected Collection<DeliveryNote> _getLinkedObjects(Set<IssueLink> issueLinks, Set<DeliveryNoteID> deliveryNoteIDs, ProgressMonitor monitor)
 	{
-		return DeliveryNoteDAO.sharedInstance().getDeliveryNotes(
-				linkedObjectIDs,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
-	}
-	
-	@Override
-	public Object getLinkedObject(DeliveryNoteID linkedObjectID,
-			ProgressMonitor monitor) {
-		return DeliveryNoteDAO.sharedInstance().getDeliveryNote(
-				linkedObjectID,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
+		return null;
+//		return DeliveryNoteDAO.sharedInstance().getDeliveryNotes(
+//				deliveryNoteIDs,
+//				new String[] { FetchPlan.DEFAULT },
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//				monitor);
 	}
 }

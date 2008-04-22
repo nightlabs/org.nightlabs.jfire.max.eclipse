@@ -11,7 +11,6 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
@@ -29,17 +28,14 @@ public class IssueLinkHandlerOrder
 extends AbstractIssueLinkHandler<OrderID, Order> 
 {
 	@Override
-	protected Collection<Order> _getLinkedObjects(Set<IssueLink> issueLinks,
-			Set<OrderID> linkedObjectIDs, ProgressMonitor monitor) {
-		return OrderDAO.sharedInstance().getOrders(
-				linkedObjectIDs,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
+	public String getLinkedObjectName(IssueLink issueLink, Order linkedObject) {
+		return String.format(
+				"Order  %s",
+				linkedObject.getPrimaryKey());
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, Order linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerOrder.class, 
@@ -47,24 +43,17 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 	}
 
 	@Override
-	public String getLinkedObjectName(OrderID linkedObjectID) {
-		return String.format(
-				"Order  %s",
-				(linkedObjectID == null ? "" : linkedObjectID.orderIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.orderID)));
-	}
-
-	@Override
-	public void openLinkedObject(OrderID linkedObjectID) {
+	public void openLinkedObject(IssueLink issueLink, OrderID linkedObjectID) {
 		EditOrderAction editAction = new EditOrderAction();
 		editAction.setArticleContainerID(linkedObjectID);
 		editAction.run();			
 	}
-	
+
 	@Override
-	public Order getLinkedObject(OrderID linkedObjectID,
-			ProgressMonitor monitor) {
-		return OrderDAO.sharedInstance().getOrder(
-				linkedObjectID,
+	protected Collection<Order> _getLinkedObjects(Set<IssueLink> issueLinks,
+			Set<OrderID> linkedObjectIDs, ProgressMonitor monitor) {
+		return OrderDAO.sharedInstance().getOrders(
+				linkedObjectIDs,
 				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);

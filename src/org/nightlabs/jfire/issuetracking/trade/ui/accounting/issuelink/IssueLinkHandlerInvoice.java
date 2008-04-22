@@ -11,7 +11,6 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.issue.IssueLink;
@@ -30,23 +29,25 @@ public class IssueLinkHandlerInvoice
 extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 {
 	@Override
-	public String getLinkedObjectName(InvoiceID linkedObjectID) {
+	public String getLinkedObjectName(IssueLink issueLink, Invoice invoice) {
+		// TODO Here we should return more information about the invoice - e.g. vendor, customer
+
 		return String.format(
-				"Invoice  %s",
-				(linkedObjectID == null ? "" : linkedObjectID.invoiceIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.invoiceID)));
+				"Invoice %s (%s)",
+				invoice.getPrimaryKey(),
+				invoice.getFinalizeDT());
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, Invoice linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerDeliveryNote.class, 
 				"LinkObject").createImage();
 	}
 
-
 	@Override
-	public void openLinkedObject(InvoiceID objectID) {
+	public void openLinkedObject(IssueLink issueLink, InvoiceID objectID) {
 		EditInvoiceAction editAction = new EditInvoiceAction();
 		editAction.setArticleContainerID(objectID);
 		editAction.run();
@@ -63,13 +64,5 @@ extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
 	}
-	
-	@Override
-	public Object getLinkedObject(InvoiceID objectID, ProgressMonitor monitor) {
-		return InvoiceDAO.sharedInstance().getInvoice(
-				objectID,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
-	}
+
 }

@@ -11,7 +11,6 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
@@ -28,9 +27,7 @@ public class IssueLinkHandlerReceptionNote
 extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 {
 	@Override
-	protected Collection<ReceptionNote> _getLinkedObjects(
-			Set<IssueLink> issueLinks, Set<ReceptionNoteID> linkedObjectIDs,
-			ProgressMonitor monitor) {
+	protected Collection<ReceptionNote> _getLinkedObjects(Set<IssueLink> issueLinks, Set<ReceptionNoteID> linkedObjectIDs, ProgressMonitor monitor) {
 		Collection<ReceptionNote> receptionNoteSet = null;
 		try {
 			receptionNoteSet = ReceptionNoteDAO.sharedInstance().getReceptionNotes(
@@ -41,12 +38,12 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		return receptionNoteSet;
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, ReceptionNote linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerReceptionNote.class, 
@@ -54,24 +51,17 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 	}
 
 	@Override
-	public String getLinkedObjectName(ReceptionNoteID linkedObjectID) {
-		return String.format(
-				"Reception Note  %s",
-				(linkedObjectID == null ? "" : linkedObjectID.receptionNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.receptionNoteID)));
+	public String getLinkedObjectName(IssueLink issueLink, ReceptionNote linkedObject) {
+//		return String.format(
+//				"Reception Note  %s",
+//				linkedObject.getPrimaryKey());
+		throw new UnsupportedOperationException("NYI");
 	}
 
 	@Override
-	public void openLinkedObject(ReceptionNoteID linkedObjectID) {
+	public void openLinkedObject(IssueLink issueLink, ReceptionNoteID linkedObjectID) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("NYI");
 	}
-	
-	@Override
-	public Object getLinkedObject(ReceptionNoteID linkedObjectID,
-			ProgressMonitor monitor) {
-		return null;
-//		return ReceptionNoteDAO.sharedInstance().getReceptionNote(
-//				linkedObjectID, 
-//				new String[] { FetchPlan.DEFAULT }, 
-//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//				monitor);
-	}
+
 }

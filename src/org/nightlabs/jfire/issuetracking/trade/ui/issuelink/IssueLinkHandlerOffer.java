@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -29,17 +30,14 @@ public class IssueLinkHandlerOffer
 extends AbstractIssueLinkHandler<OfferID, Offer>
 {
 	@Override
-	protected Collection<Offer> _getLinkedObjects(Set<IssueLink> issueLinks,
-			Set<OfferID> linkedObjectIDs, ProgressMonitor monitor) {
-		return OfferDAO.sharedInstance().getOffers(
-				linkedObjectIDs,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
+	public String getLinkedObjectName(IssueLink issueLink, Offer linkedObject) {
+		return String.format(
+				"Offer %s",
+				linkedObject.getPrimaryKey());
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, Offer linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerOffer.class, 
@@ -47,24 +45,17 @@ extends AbstractIssueLinkHandler<OfferID, Offer>
 	}
 
 	@Override
-	public String getLinkedObjectName(OfferID linkedObjectID) {
-		return String.format(
-				"Offer %s",
-				(linkedObjectID == null ? "" : linkedObjectID.offerIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(linkedObjectID.offerID)));
-	}
-
-	@Override
-	public void openLinkedObject(OfferID linkedObjectID) {
+	public void openLinkedObject(IssueLink issueLink, OfferID linkedObjectID) {
 		EditOfferAction editAction = new EditOfferAction();
 		editAction.setArticleContainerID(linkedObjectID);
 		editAction.run();
 	}
-	
+
 	@Override
-	public Object getLinkedObject(OfferID linkedObjectID,
-			ProgressMonitor monitor) {
-		return OfferDAO.sharedInstance().getOffer(
-				linkedObjectID,
+	protected Collection<Offer> _getLinkedObjects(Set<IssueLink> issueLinks,
+			Set<OfferID> linkedObjectIDs, ProgressMonitor monitor) {
+		return OfferDAO.sharedInstance().getOffers(
+				linkedObjectIDs,
 				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
