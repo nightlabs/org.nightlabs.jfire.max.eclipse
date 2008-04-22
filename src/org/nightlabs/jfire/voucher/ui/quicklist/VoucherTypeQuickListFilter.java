@@ -9,6 +9,7 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
@@ -32,11 +33,12 @@ import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class VoucherTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
 {
-	public static String[] DEFAULT_FETCH_GROUP = new String[] {
+	public static String[] DEFAULT_FETCH_VOUCHER_TYPE_GROUP = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
 
@@ -45,34 +47,47 @@ extends AbstractProductTypeQuickListFilter
 	public VoucherTypeQuickListFilter() {
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
-				ArticleContainer.class, notificationListenerVendorSelected);
+				ArticleContainer.class, notificationListenerArticleContainerSelected);
 	}
 
-	private NotificationListener notificationListenerVendorSelected = new NotificationAdapterWorkerThreadAsync() {
+
+	// TODO temporary workaround - this should come from the query store. 
+	private VoucherTypeSearchFilter voucherProductTypeSearchFilter;
+	private VoucherTypeSearchFilter getVoucherTypeSearchFilter() {
+		if (voucherProductTypeSearchFilter == null)
+			voucherProductTypeSearchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
+
+		return voucherProductTypeSearchFilter;
+	}
+
+
+
+	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor")  {
 		public void notify(NotificationEvent event) {
 
-			ArticleContainer ac = null;
+			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
 
+			ArticleContainer articleContainer = null;
 
-			if (!event.getSubjects().isEmpty())			
-			{			
-				ac = ArticleContainerDAO.sharedInstance().getArticleContainer((ArticleContainerID)event.getFirstSubject(),FETCH_GROUPS_VENDOR, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,new NullProgressMonitor());
+			if (event.getSubjects().isEmpty())
+				getProgressMonitorWrapper().worked(30);
+			else
+				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
+						(ArticleContainerID)event.getFirstSubject(),
+						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
 
-			}
-
-			if(ac == null)	
-				return;
-
-			final VoucherTypeSearchFilter searchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-			searchFilter.setVendorID(ac.getVendorID());
+			final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
+			searchFilter.setVendorID(articleContainer == null ? null : articleContainer.getVendorID());
 
 			try {
-					
+
 				QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
 				productTypeQueries.add(searchFilter);
-				
-				final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new NullProgressMonitor());
+
+				final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_VOUCHER_TYPE_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new SubProgressMonitor(getProgressMonitorWrapper(), 70));
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
@@ -110,12 +125,16 @@ extends AbstractProductTypeQuickListFilter
 
 	@Override
 	protected void search(ProgressMonitor monitor) {
-		final VoucherTypeSearchFilter searchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
+		
+		final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
 		try {
-			StoreManager storeManager = StoreManagerUtil.getHome(
-					Login.getLogin().getInitialContextProperties()).create();
-			final Collection<ProductType> voucherTypes = storeManager.searchProductTypes(
-					searchFilter, DEFAULT_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
+			productTypeQueries.add(searchFilter);
+			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
+					DEFAULT_FETCH_VOUCHER_TYPE_GROUP, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					monitor);
+			
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					voucherTypeTable.setInput(voucherTypes);
