@@ -97,12 +97,12 @@ extends XComposite
 	
 	public void addIssueLinkTableItem(IssueLinkTableItem item) {
 		issueLinkTableItems.add(item);
-		issueLinkTable.addElement(item);
+		issueLinkTable.setInput(issueLinkTableItems);
 	}
 
 	public void removeIssueLinkTableItem(IssueLinkTableItem item) {
 		issueLinkTableItems.remove(item);
-		issueLinkTable.removeElement(item);
+		issueLinkTable.setInput(issueLinkTableItems);
 	}
 
 	public Set<IssueLinkTableItem> getIssueLinkTableItems() {

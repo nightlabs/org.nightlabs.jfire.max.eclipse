@@ -120,8 +120,10 @@ extends WizardHopPage
 						getContainer().updateButtons();
 					}
 				});
-				
-				predefinedRelationList.setSelection(0);
+
+//				if (issueLinkTypes.get(0) != null) {
+//					selectedIssueLinkType = issueLinkTypes.get(0);
+//				}
 			}
 		});
 
@@ -138,6 +140,16 @@ extends WizardHopPage
 		return false;
 	}
 
+	@Override
+	public boolean isPageComplete() {
+		return newIssueLinkType != null || selectedIssueLinkType !=null;
+	}
+	
+	@Override
+	public boolean canBeLastPage() {
+return true;
+	}
+	
 	public void setCreateNew(boolean b, boolean updateButtons) {
 		createNewCheckBox.setSelection(b);
 		selectFromCheckBox.setSelection(!b);
@@ -152,7 +164,7 @@ extends WizardHopPage
 	public IssueLinkType getIssueLinkType() {
 		if (createNewCheckBox.getSelection()) {
 			newIssueLinkType.getName().setText(Locale.getDefault().getLanguage(), newRelationText.getText());
-			newIssueLinkType.getLinkableObjectClassNames().add(issueLinkWizard.getLinkedClass().getName());
+			newIssueLinkType.addLinkableObjectClass(issueLinkWizard.getLinkedClass());
 			return newIssueLinkType;
 		}
 		
