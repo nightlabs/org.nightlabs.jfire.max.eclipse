@@ -32,11 +32,11 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 		
 		new WizardHop(this);
 	}
-	
+
 	@Override
 	public Control createPageContents(Composite parent) {
 		objectListComposite = issueLinkAdder.createComposite(parent);
-		
+
 		issueLinkAdder.addIssueLinkSelectionListener(new IssueLinkSelectionAdapter() {
 			@Override
 			public void issueLinkSelectionChanged(IssueLinkSelectionChangedEvent selectionChangedEvent) {
@@ -45,13 +45,13 @@ public class IssueLinkWizardListPage extends WizardHopPage {
 				getContainer().updateButtons();
 			}
 		});
-		
+
 		issueLinkAdder.addIssueLinkDoubleClickListener(new IssueLinkDoubleClickListener() {
 			@Override
 			public void issueLinkDoubleClicked(IssueLinkDoubleClickedEvent event) {
 				Set<ObjectID> objectIDs = issueLinkAdder.getIssueLinkObjectIds();
 				IssueLinkTableItem linkItem = new IssueLinkTableItem(objectIDs.iterator().next(), null);
-				issueLinkWizard.getLinkAdderComposite().addIssueLinkTableItem(linkItem);
+				issueLinkWizard.getIssueLinkTable().addElement(linkItem);
 				issueLinkWizard.finish();
 			}
 		});

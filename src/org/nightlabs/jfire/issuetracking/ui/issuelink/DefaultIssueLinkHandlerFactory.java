@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -27,32 +28,22 @@ implements IssueLinkHandlerFactory
 		return new IssueLinkHandler() {
 
 			@Override
-			public Image getLinkedObjectImage() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Map getLinkedObjects(Set issueLinks, ProgressMonitor monitor) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public void openLinkedObject(ObjectID linkedObjectID) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public String getLinkedObjectName(ObjectID linkedObjectID) {
-				// TODO Auto-generated method stub
+			public String getLinkedObjectName(IssueLink issueLink, Object linkedObject) {
 				return "Unknown Object Class";
 			}
 			
 			@Override
-			public Object getLinkedObject(ObjectID linkedObjectID,
-					ProgressMonitor monitor) {
+			public Image getLinkedObjectImage(IssueLink issueLink, Object linkedObject) {
+				return null;
+			}
+			
+			@Override
+			public void openLinkedObject(IssueLink issueLink, ObjectID linkedObjectID) {
+				
+			}
+			
+			@Override
+			public Map getLinkedObjects(Set issueLinks, ProgressMonitor monitor) {
 				return null;
 			}
 		};

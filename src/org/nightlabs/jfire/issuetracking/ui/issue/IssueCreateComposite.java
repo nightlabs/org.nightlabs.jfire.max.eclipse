@@ -70,8 +70,8 @@ extends XComposite
 	private Button reporterButton;
 
 	private Label assigntoUserLbl;
-	private Text assigntoUserText;
-	private Button assigntoUserButton;
+	private Text assignToUserText;
+	private Button assignToUserButton;
 
 	private Label subjectLabel;
 	private I18nTextEditor subjectText;
@@ -83,7 +83,7 @@ extends XComposite
 	private I18nTextEditorMultiLine descriptionText;
 
 	private User selectedReporter;
-	private User selectedAssigntoUser;
+	private User selectedAssignToUser;
 
 	private static final String[] FETCH_GROUPS = {
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
@@ -115,9 +115,6 @@ extends XComposite
 		linkedObjectLbl.setText("Linked object");
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(this, SWT.NONE, true, issue);
-		if (issue != null) {
-//			issueLinkAdderComposite.addObjectIDs(issue.getIssueLinks());
-		}
 		
 		issueTypeLbl = new Label(this, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
@@ -125,6 +122,7 @@ extends XComposite
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
+				issue.setIssueType(selectedIssueType);
 				
 				issueSeverityCombo.removeAll();
 				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
@@ -148,6 +146,7 @@ extends XComposite
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+				issue.setIssueSeverityType(selectedIssueSeverityType);
 			}
 		});
 
@@ -157,6 +156,7 @@ extends XComposite
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+				issue.setIssuePriority(selectedIssuePriority);
 			}
 		});
 
@@ -171,11 +171,10 @@ extends XComposite
 		gridData.grabExcessHorizontalSpace = true;
 		reporterComposite.setLayoutData(gridData);
 
-		reporterText = new Text(reporterComposite, SWT.BORDER);
+		reporterText = new Text(reporterComposite, SWT.BORDER | SWT.READ_ONLY);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterText.setLayoutData(gridData);
-		reporterText.setEditable(false);
 		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		reporterText.setText(selectedReporter.getName());
 
@@ -189,8 +188,8 @@ extends XComposite
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
-					if (selectedReporter != null)
-						reporterText.setText(selectedReporter.getName());
+					reporterText.setText(selectedReporter == null ? "" : selectedReporter.getName());
+					issue.setReporter(selectedReporter);
 				}//if
 			}
 		});
@@ -206,25 +205,23 @@ extends XComposite
 		gridData.grabExcessHorizontalSpace = true;
 		toUserComposite.setLayoutData(gridData);
 
-		assigntoUserText = new Text(toUserComposite, SWT.BORDER);
-		assigntoUserText.setEditable(false);
+		assignToUserText = new Text(toUserComposite, SWT.BORDER | SWT.READ_ONLY);
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
-		assigntoUserText.setLayoutData(gridData);
+		assignToUserText.setLayoutData(gridData);
 
-		assigntoUserButton = new Button(toUserComposite, SWT.PUSH);
-		assigntoUserButton.setText("Choose User");
+		assignToUserButton = new Button(toUserComposite, SWT.PUSH);
+		assignToUserButton.setText("Choose User");
 
-		assigntoUserButton.addSelectionListener(new SelectionAdapter(){
+		assignToUserButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssigntoUser == null ? "" : selectedAssigntoUser.getUserID());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssignToUser == null ? "" : selectedAssignToUser.getUserID());
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
-					selectedAssigntoUser = userSearchDialog.getSelectedUser();
-//					userID = (UserID) JDOHelper.getObjectId(selectedUser);
-					if (selectedAssigntoUser != null)
-						assigntoUserText.setText(selectedAssigntoUser.getName());
+					selectedAssignToUser = userSearchDialog.getSelectedUser();
+					assignToUserText.setText(selectedAssignToUser == null ? "" : selectedAssignToUser.getName());
+					issue.setAssignee(selectedAssignToUser);
 				}//if
 			}
 		});
@@ -233,13 +230,13 @@ extends XComposite
 		subjectLabel.setText("Subject: ");
 
 		subjectText = new I18nTextEditor(this);
-		subjectText.setI18nText(null, EditMode.BUFFERED);
+		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
 
 		descriptionLabel = new Label(this, SWT.NONE);
 		descriptionLabel.setText("Description: ");
 
 		descriptionText = new I18nTextEditorMultiLine(this);
-		descriptionText.setI18nText(null, EditMode.BUFFERED);
+		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
 
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.minimumHeight = 100;
@@ -256,39 +253,34 @@ extends XComposite
 
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
-			protected IStatus run(final ProgressMonitor monitor) {
-				try {
-					issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-					
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							issueTypeCombo.removeAll();
-							for (IssueType issueType : issueTypes) {
-								issueTypeCombo.addElement(issueType);
-							}
-							issueTypeCombo.selectElementByIndex(0);
-							selectedIssueType = issueTypeCombo.getSelectedElement();
-							
-							issueSeverityCombo.removeAll();
-							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-								issueSeverityCombo.addElement(is);
-							}
-							issueSeverityCombo.selectElementByIndex(0);
-							selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-							
-							issuePriorityCombo.removeAll();
-							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-								issuePriorityCombo.addElement(ip);
-							}
-							issuePriorityCombo.selectElementByIndex(0);
-							selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+			protected IStatus run(final ProgressMonitor monitor) throws Exception
+			{
+				issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						issueTypeCombo.removeAll();
+						for (IssueType issueType : issueTypes) {
+							issueTypeCombo.addElement(issueType);
 						}
-					});
-					
-				}catch (Exception e1) {
-					ExceptionHandlerRegistry.asyncHandleException(e1);
-					throw new RuntimeException(e1);
-				}
+						issueTypeCombo.selectElementByIndex(0);
+						selectedIssueType = issueTypeCombo.getSelectedElement();
+
+						issueSeverityCombo.removeAll();
+						for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+							issueSeverityCombo.addElement(is);
+						}
+						issueSeverityCombo.selectElementByIndex(0);
+						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+
+						issuePriorityCombo.removeAll();
+						for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+							issuePriorityCombo.addElement(ip);
+						}
+						issuePriorityCombo.selectElementByIndex(0);
+						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+					}
+				});
 
 				return Status.OK_STATUS;
 			} 
@@ -326,8 +318,8 @@ extends XComposite
 		return selectedReporter;
 	}
 
-	public User getSelectedAssigntoUser() {
-		return selectedAssigntoUser;
+	public User getSelectedAssignToUser() {
+		return selectedAssignToUser;
 	}
 
 	public I18nTextEditorMultiLine getDescriptionText() {
@@ -356,33 +348,34 @@ extends XComposite
 	
 	@Override
 	public boolean setFocus() {
-		issue.setIssueType(getSelectedIssueType());
-		issue.setIssueSeverityType(getSelectedIssueSeverityType());
-		issue.setIssuePriority(getSelectedIssuePriority());
-		issue.setReporter(getSelectedReporter());
-		issue.setAssignee(getSelectedAssigntoUser());
-		
-		if(getSelectedAttachmentFileMap() != null){
-			Map<String, InputStream> fileMap = getSelectedAttachmentFileMap();
-			for(String name : fileMap.keySet()){
-				if (fileMap.get(name) != null) {
-					try {
-						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
-						issueFileAttachment.loadStream(fileMap.get(name), name);
-						issue.getFileList().add(issueFileAttachment);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					} finally {
-						try {
-							fileMap.get(name).close();
-						} catch (IOException e) {
-							throw new RuntimeException(e);
-						}
-					}
-				}
-			}
-		}//if
-		
-		return super.setFocus();
+//		issue.setIssueType(getSelectedIssueType());
+//		issue.setIssueSeverityType(getSelectedIssueSeverityType());
+//		issue.setIssuePriority(getSelectedIssuePriority());
+//		issue.setReporter(getSelectedReporter());
+//		issue.setAssignee(getSelectedAssignToUser());
+//
+//		if(getSelectedAttachmentFileMap() != null){
+//			Map<String, InputStream> fileMap = getSelectedAttachmentFileMap();
+//			for(String name : fileMap.keySet()){
+//				if (fileMap.get(name) != null) {
+//					try {
+//						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
+//						issueFileAttachment.loadStream(fileMap.get(name), name);
+//						issue.getFileList().add(issueFileAttachment);
+//					} catch (IOException e) {
+//						throw new RuntimeException(e);
+//					} finally {
+//						try {
+//							fileMap.get(name).close();
+//						} catch (IOException e) {
+//							throw new RuntimeException(e);
+//						}
+//					}
+//				}
+//			}
+//		}//if
+//		
+//		return super.setFocus();
+		return subjectText.setFocus();
 	}
 }

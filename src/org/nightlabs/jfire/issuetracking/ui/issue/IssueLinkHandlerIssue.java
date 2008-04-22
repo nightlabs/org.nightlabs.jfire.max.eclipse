@@ -28,28 +28,26 @@ import org.nightlabs.progress.ProgressMonitor;
 public class IssueLinkHandlerIssue 
 extends AbstractIssueLinkHandler<IssueID, Issue>
 {
-	
 	@Override
-	public String getLinkedObjectName(IssueID issueID) {
+	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
 		return String.format(
 				"Issue %s",
-				(issueID == null ? "" : issueID.issueID));
+				linkedObject.getPrimaryKey()); // TODO there must be the subject and maybe some other data be shown
 	}
 
 	@Override
-	public Image getLinkedObjectImage() {
+	public Image getLinkedObjectImage(IssueLink issueLink, Issue linkedObject) {
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				IssueLinkHandlerIssue.class, 
-				"LinkObject").createImage();
+		"LinkObject").createImage();
 	}
 
-
 	@Override
-	public void openLinkedObject(IssueID objectID) {
+	public void openLinkedObject(IssueLink issueLink, IssueID linkedObjectID) {
 		EditIssueAction editAction = new EditIssueAction();
 		Collection<IssueID> ids = new ArrayList<IssueID>();
-		ids.add(objectID);
+		ids.add(linkedObjectID);
 		editAction.setSelectedIssueIDs(ids);
 		editAction.run();	
 	}
@@ -58,21 +56,11 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	protected Collection<Issue> _getLinkedObjects(
 			Set<IssueLink> issueLinks, Set<IssueID> linkedObjectIDs,
 			ProgressMonitor monitor)
-	{
+			{
 		return IssueDAO.sharedInstance().getIssues(
 				linkedObjectIDs,
 				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
-	}
-	
-	@Override
-	public Object getLinkedObject(IssueID linkedObjectID,
-			ProgressMonitor monitor) {
-		return IssueDAO.sharedInstance().getIssue(
-				linkedObjectID,
-				new String[] { FetchPlan.DEFAULT }, // TODO do we need more?
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor);
-	}
+			}
 }

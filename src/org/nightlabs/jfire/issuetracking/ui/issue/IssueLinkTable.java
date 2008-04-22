@@ -11,7 +11,9 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -34,12 +36,11 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
-import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -48,7 +49,9 @@ import org.nightlabs.progress.SubProgressMonitor;
  *
  */
 public class IssueLinkTable 
-extends AbstractTableComposite<IssueLinkTableItem>{
+extends AbstractTableComposite<IssueLinkTableItem>
+{
+	private static final Logger logger = Logger.getLogger(IssueLinkTable.class);
 
 	private class LabelProvider extends TableLabelProvider {
 		@Override
@@ -56,8 +59,14 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 			if (columnIndex == 0) {
 				if (element instanceof IssueLinkTableItem) {
 					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
-					IssueLinkHandler handler = getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
-					return handler.getLinkedObjectImage();
+					IssueLinkHandler<ObjectID, Object> handler = getIssueLinkHandler(issueLinkTableItem.getLinkedObjectID());
+					IssueLink issueLink = issueLinkTableItem.getIssueLink();
+					if (issueLink == null)
+						return null; // TODO we should return an image symbolising that currently data is loaded. issueLinkTableItem.getIssueLink() is only null, if there is currently a Jab running in the background loading data for a newly created IssueLink.
+
+					Object linkedObject = issueLink2LinkedObjectMap.get(issueLink);
+
+					return handler.getLinkedObjectImage(issueLink, linkedObject);
 				}
 			}
 			return null;
@@ -66,17 +75,28 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof IssueLinkTableItem) {
 				IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
+				IssueLinkHandler<ObjectID, Object> handler = getIssueLinkHandler(issueLinkTableItem.getLinkedObjectID());
+				IssueLink issueLink = issueLinkTableItem.getIssueLink();
+				Object linkedObject = issueLink2LinkedObjectMap.get(issueLink);
+
 				if (columnIndex == 0) {
-					IssueLinkHandler handler = getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
-					return handler.getLinkedObjectName(issueLinkTableItem.getLinkObjectID());
+					if (issueLink == null)
+						return "Loading data...";
+
+					return handler.getLinkedObjectName(issueLink, linkedObject);
 				}
 
+				if (issueLink == null)
+					return "";
+
 				if (columnIndex == 1) {
-					IssueLinkType defaultType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class, 
-							new String[]{IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor()).get(0); 
-					return issueLinkTableItem.getIssueLinkType() == null ? defaultType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
+					return issueLink.getIssueLinkType().getName().getText();
+
+//					IssueLinkType issueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class, 
+//							new String[]{IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT},
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//							new NullProgressMonitor()).get(0); 
+//					return issueLinkTableItem.getIssueLinkType() == null ? issueLinkType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
 			}
 			return "";
@@ -86,62 +106,130 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 	public IssueLinkTable(Composite parent, int style) {
 		super(parent, style);
 	}
-	
+
+	/**
+	 * Set the issue to work with. This method is used by editor(page)s in order to have the data-loading-work
+	 * to be done by the editor's page-controller. If you don't have a page-controller, but are working in
+	 * another situation, you better use {@link #setIssueID(IssueID)}.
+	 *
+	 * @param issue An instance of <code>Issue</code> which must have at least those fields detached that are referenced by the following fetch-groups:
+	 * <ul>
+	 *		<li>{@link FetchPlan#DEFAULT}</li>
+	 *		<li>{@link Issue#FETCH_GROUP_ISSUE_LINKS}</li>
+	 *		<li>{@link IssueLink#FETCH_GROUP_ISSUE_LINK_TYPE}</li>
+	 *		<li>{@link IssueLinkType#FETCH_GROUP_NAME}</li>
+	 *		<li>{@link IssueLink#FETCH_GROUP_LINKED_OBJECT_CLASS}</li>
+	 * </ul>
+	 */
+	public void setIssue(final Issue issue)
+	{
+		setIssue(
+				IssueID.create(issue.getOrganisationID(), issue.getIssueID()),
+				issue
+		);
+	}
+
+	/**
+	 * Set the issue to work with. This method should normally used. It causes this table to load all its
+	 * data itself, so you don't need to care about fetch-groups. The IssueID
+	 *
+	 * @param issueID
+	 */
 	public void setIssueID(final IssueID issueID)
+	{
+		setIssue(issueID, null);
+	}
+
+	private void setIssue(final IssueID $issueID, final Issue $issue)
 	{
 		Job job = new Job("Loading issue links") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						issue = null;
+						issueLink2LinkedObjectMap = null;
+						setLoadingMessage("Loading issue links...");
+					}
+				});
+
 				int monitorTicksLeft = 100;
 				monitor.beginTask("Loading issue links", monitorTicksLeft);
 
 				// (1) load IssueLinks without linkedObjects but with linkedObjectClasses and linkedObjectIDs
-				Issue issue = IssueDAO.sharedInstance().getIssue(
-						issueID, 
+				final Issue _issue;
+
+				// When we use this table in an editor, the Issue instance is loaded by the page-controller
+				// and we must not load it again. In this case, $issue will be initialised - otherwise, it's null.
+				if ($issue != null) {
+					_issue = $issue;
+					monitor.worked(20);
+				}
+				else {
+					_issue = IssueDAO.sharedInstance().getIssue(
+						$issueID, 
 						new String[] {
 								FetchPlan.DEFAULT,
 								Issue.FETCH_GROUP_ISSUE_LINKS,
+								IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE,
+								IssueLinkType.FETCH_GROUP_NAME,
 								IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS
 						}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 20));
+				}
 				monitorTicksLeft -= 20;
 
 
 				// (2) resolve IssueLinkHandlers and group IssueLinks by IssueLinkHandler
-				//     => Map<IssueLinkHandlerFactory, Set<IssueLink>>
-				Map<IssueLinkHandlerFactory, Set<IssueLink>> handlerFactory2issueLink = 
-					new HashMap<IssueLinkHandlerFactory, Set<IssueLink>>();
-				
-				for (IssueLink il : issue.getIssueLinks()) {
-					IssueLinkHandlerFactory factory = IssueLinkHandlerFactoryRegistry.sharedInstance().getIssueLinkHandlerFactory(il.getLinkedObjectClass());
+				//     => Map<IssueLinkHandler, Set<IssueLink>>
+				Map<IssueLinkHandler<?, ?>, Set<IssueLink>> handler2issueLinks = new HashMap<IssueLinkHandler<?, ?>, Set<IssueLink>>();
 
-					Set<IssueLink> issueLinks = handlerFactory2issueLink.get(factory);
+				for (IssueLink il : _issue.getIssueLinks()) {
+					IssueLinkHandler<?, ?> handler = getIssueLinkHandler(il.getLinkedObjectClass());
+
+					Set<IssueLink> issueLinks = handler2issueLinks.get(handler);
 					if (issueLinks == null) {
 						issueLinks = new HashSet<IssueLink>();
-						handlerFactory2issueLink.put(factory, issueLinks);
+						handler2issueLinks.put(handler, issueLinks);
 					}
 					issueLinks.add(il);
 				}
 
 				// (3) obtain linked objects via their IssueLinkHandlers
-				final Collection<IssueLink> issueLinks = new HashSet<IssueLink>();
-				int monitorTick = monitorTicksLeft / handlerFactory2issueLink.keySet().size();
-				for (IssueLinkHandlerFactory factory : handlerFactory2issueLink.keySet()) {
-					issueLinks.addAll(factory.createIssueLinkHandler().getLinkedObjects(
-							issue.getIssueLinks(), 
-							new SubProgressMonitor(monitor, monitorTick)).values());
+				final Map<IssueLink, Object> _issueLink2LinkedObjectMap = new HashMap<IssueLink, Object>();
+
+				if (handler2issueLinks.isEmpty())
+					monitor.worked(monitorTicksLeft);
+				else {
+					int monitorTick = monitorTicksLeft / handler2issueLinks.keySet().size();
+
+					for (Map.Entry<IssueLinkHandler<?, ?>, Set<IssueLink>> me : handler2issueLinks.entrySet()) {
+						IssueLinkHandler<?, ?> handler = me.getKey();
+						Set<IssueLink> issueLinks = me.getValue();
+						Map<IssueLink, ?> il2loMap = handler.getLinkedObjects(issueLinks, new SubProgressMonitor(monitor, monitorTick));
+						_issueLink2LinkedObjectMap.putAll(il2loMap);
+					}
 				}
+
+
+				// TODO remove this sleep!
+				Thread.sleep(15000);
+
 
 				// display data
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						Set<IssueLinkTableItem> linkItems = new HashSet<IssueLinkTableItem>();
-						for (IssueLink issueLink : issueLinks) {
+						issue = _issue;
+						issueLink2LinkedObjectMap = _issueLink2LinkedObjectMap;
+						issueLinkTableItems.clear();
+						for (Map.Entry<IssueLink, Object> me : _issueLink2LinkedObjectMap.entrySet()) {
+							IssueLink issueLink = me.getKey();
 							IssueLinkTableItem linkItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
-							linkItems.add(linkItem);
+							linkItem.initIssueLink(issueLink);
+							issueLinkTableItems.add(linkItem);
 						}
-						setInput(linkItems);
+						setInput(issueLinkTableItems);
 					}
 				});
 				
@@ -150,6 +238,13 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 		};
 		job.schedule();
 	}
+
+	// only modified on the SWT UI thread!
+	private Issue issue;
+	// only modified on the SWT UI thread!
+	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
+	// only modified on the SWT UI thread!
+	private Map<IssueLink, Object> issueLink2LinkedObjectMap;
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
@@ -171,21 +266,21 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 		tableViewer.setContentProvider(new TableContentProvider());
 	}
 	
-	public IssueLinkHandler getIssueLinkHandler(String idStr) {
+	public IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(String idStr) {
 		return getIssueLinkHandler(ObjectIDUtil.createObjectID(idStr));
 	}
 	
-	public IssueLinkHandler getIssueLinkHandler(ObjectID objectID) {
+	public IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(ObjectID objectID) {
 		Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
 		return getIssueLinkHandler(pcClass);
 	}
 	
-	private Map<Class<?>, IssueLinkHandler> class2IssueLinkHandler = new HashMap<Class<?>, IssueLinkHandler>();	
+	private Map<Class<?>, IssueLinkHandler<ObjectID, Object>> class2IssueLinkHandler = new HashMap<Class<?>, IssueLinkHandler<ObjectID, Object>>();	
 	
-	protected IssueLinkHandler getIssueLinkHandler(Class<?> linkObjectClass) {
-		IssueLinkHandler handler = class2IssueLinkHandler.get(linkObjectClass);
+	public synchronized IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(Class<?> linkObjectClass) {
+		IssueLinkHandler<ObjectID, Object> handler = class2IssueLinkHandler.get(linkObjectClass);
 		if (handler == null) {
-			IssueLinkHandlerFactory factory = null;
+			IssueLinkHandlerFactory<ObjectID, Object> factory = null;
 			try {
 				factory = IssueLinkHandlerFactoryRegistry.sharedInstance().getIssueLinkHandlerFactory(linkObjectClass);
 			} catch (EPProcessorException e) {
@@ -196,4 +291,149 @@ extends AbstractTableComposite<IssueLinkTableItem>{
 		}
 		return handler;
 	}
+
+	private ListenerList tableItemChangeListeners = new ListenerList();
+
+	public void addIssueLinkTableItemChangeListener(IssueLinkTableItemChangeListener listener) {
+		tableItemChangeListeners.add(listener);
+	}
+
+	public void removeIssueLinkTableItemChangeListener(IssueLinkTableItemChangeListener listener) {
+		tableItemChangeListeners.remove(listener);
+	}
+
+	protected void notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType changeType, Collection<IssueLinkTableItem> items) {
+		Object[] listeners = tableItemChangeListeners.getListeners();
+		IssueLinkItemChangeEvent evt = new IssueLinkItemChangeEvent(this, changeType, items);
+		for (Object l : listeners) {
+			if (l instanceof IssueLinkTableItemChangeListener) {
+				((IssueLinkTableItemChangeListener) l)
+						.issueLinkItemChanged(evt);
+			}
+		}
+	}
+
+	/**
+	 * Add new instances of {@link IssueLinkTableItem} representing new {@link IssueLink}s that must be created.
+	 * Therefore, the {@link IssueLinkTableItem#getIssueLink()} property is not yet assigned (i.e. still returning <code>null</code>).
+	 *
+	 * @param items the new <code>IssueLinkTableItem</code>
+	 */
+	public void addIssueLinkTableItems(final Collection<IssueLinkTableItem> items)
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("This method must be called on the SWT UI thread!");
+
+		if (issue == null)
+			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!");
+
+		if (items.isEmpty())
+			return;
+
+		// check whether the new items are really new and have no IssueLink assigned yet
+		for (IssueLinkTableItem issueLinkTableItem : items) {
+			if (issueLinkTableItem.getIssueLink() != null)
+				throw new IllegalArgumentException("issueLinkTableItem.getIssueLink() != null !!! The IssueLink instance must not yet exist!");
+		}
+
+		// add them to the table (the LabelProvider will show "Loading data..." as long as there is no IssueLink assigned)
+		issueLinkTableItems.addAll(items);
+		this.refresh();
+
+		// create IssueLink instances - since the Issue is not thread-safe, we call this method on the UI thread before spawning a job.
+		final Map<IssueLinkTableItem, IssueLink> issueLinkTableItem2issueLinkMap = new HashMap<IssueLinkTableItem, IssueLink>();
+		for (IssueLinkTableItem issueLinkTableItem : items) {
+			IssueLink issueLink = issue.createIssueLink(issueLinkTableItem.getIssueLinkType(), issueLinkTableItem.getLinkedObjectID());
+			issueLinkTableItem2issueLinkMap.put(issueLinkTableItem, issueLink);
+		}
+
+		Job job = new Job("Loading linked objects") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception
+			{
+				int monitorTicksLeft = 100;
+				monitor.beginTask("Loading linked objects", monitorTicksLeft);
+
+				// resolve IssueLinkHandlers and group IssueLinks by IssueLinkHandler
+				//     => Map<IssueLinkHandler, Set<IssueLink>>
+				Map<IssueLinkHandler<?, ?>, Set<IssueLink>> handler2issueLinks = new HashMap<IssueLinkHandler<?, ?>, Set<IssueLink>>();
+
+				for (Map.Entry<IssueLinkTableItem, IssueLink> me : issueLinkTableItem2issueLinkMap.entrySet()) {
+					IssueLinkHandler<?, ?> handler = getIssueLinkHandler(me.getKey().getLinkedObjectID());
+
+					Set<IssueLink> issueLinks = handler2issueLinks.get(handler);
+					if (issueLinks == null) {
+						issueLinks = new HashSet<IssueLink>();
+						handler2issueLinks.put(handler, issueLinks);
+					}
+					issueLinks.add(me.getValue());
+				}
+
+				monitor.worked(5);
+				monitorTicksLeft -= 5;
+
+				// obtain linked objects via their IssueLinkHandlers
+				final Map<IssueLink, Object> _issueLink2LinkedObjectMap = new HashMap<IssueLink, Object>();
+				int monitorTick = monitorTicksLeft / handler2issueLinks.keySet().size();
+
+				for (Map.Entry<IssueLinkHandler<?, ?>, Set<IssueLink>> me : handler2issueLinks.entrySet()) {
+					IssueLinkHandler<?, ?> handler = me.getKey();
+					Set<IssueLink> issueLinks = me.getValue();
+
+					Map<IssueLink, ?> il2loMap = handler.getLinkedObjects(issueLinks, new SubProgressMonitor(monitor, monitorTick));
+					_issueLink2LinkedObjectMap.putAll(il2loMap);
+				}
+
+				// TODO remove this sleep!
+				Thread.sleep(15000);
+
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (issue == null)
+							return; // silently return, if setIssueID(...) has been called in the meantime
+
+						issueLink2LinkedObjectMap.putAll(_issueLink2LinkedObjectMap);
+
+						for (Map.Entry<IssueLinkTableItem, IssueLink> me : issueLinkTableItem2issueLinkMap.entrySet()) {
+							me.getKey().initIssueLink(me.getValue());
+						}
+
+						refresh();
+
+						notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.add, items);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(true);
+		job.schedule();
+	}
+
+	public void removeIssueLinkTableItems(Collection<IssueLinkTableItem> items) {
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("This method must be called on the SWT UI thread!");
+
+		if (issue == null)
+			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!");
+
+		Collection<IssueLinkTableItem> removedItems = new HashSet<IssueLinkTableItem>(items.size());
+		for (IssueLinkTableItem issueLinkTableItem : items) {
+			IssueLink issueLink = issueLinkTableItem.getIssueLink();
+			if (issueLink != null) {
+				if (issueLinkTableItems.remove(issueLinkTableItem)) {
+					issue.removeIssueLink(issueLink);
+					issueLink2LinkedObjectMap.remove(issueLink);
+					removedItems.add(issueLinkTableItem);
+				}
+			}
+		}
+
+		this.refresh();
+		notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.remove, removedItems);
+	}
+
+//	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
+//		return Collections.unmodifiableSet(issueLinkTableItems);
+//	}
 }

@@ -65,7 +65,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		User.FETCH_GROUP_THIS_USER,
-		IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE,
+		IssueLinkType.FETCH_GROUP_NAME,
 //		Issue.FETCH_GROUP_SUBJECT,
 //		Issue.FETCH_GROUP_ISSUE_TYPE,
 //		Issue.FETCH_GROUP_DESCRIPTION,

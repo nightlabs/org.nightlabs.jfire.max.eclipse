@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import java.util.Map;
@@ -51,6 +48,10 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * map.
 	 * </p>
 	 * <p>
+	 * This method is executed when new {@link IssueLink}s are created, as well, before the {@link IssueLink}s are persisted.
+	 * That means, your implementation must not rely on the {@link IssueLink} having an object-id assigned!
+	 * </p>
+	 * <p>
 	 * This method is called asynchronously in a {@link Job}.
 	 * </p>
 	 *
@@ -62,8 +63,6 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 */
 	Map<IssueLink, LinkedObject> getLinkedObjects(Set<IssueLink> issueLinks, ProgressMonitor monitor);
 
-	Object getLinkedObject(LinkedObjectID linkedObjectID, ProgressMonitor monitor);
-	
 	/**
 	 * Get the image of the object linked to the given <code>issueLink</code>
 	 * (passed as <code>linkedObject</code>).
@@ -78,12 +77,12 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * This method is called on the SWT GUI thread.
 	 * </p>
 	 *
-	 * param issueLink the instance to be displayed in the UI.
-	 * param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
+	 * @param issueLink the instance to be displayed in the UI.
+	 * @param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
 	 * @return <code>null</code> (to not show any image) or an image symbolising the given <code>linkedObject</code>.
 	 * @see #getLinkedObjectName(IssueLink, Object)
 	 */
-	Image getLinkedObjectImage();
+	Image getLinkedObjectImage(IssueLink issueLink, LinkedObject linkedObject);
 
 	/**
 	 * Get the name of the object linked to the given <code>issueLink</code>
@@ -99,11 +98,12 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * This method is called on the SWT GUI thread.
 	 * </p> 
 	 * 
+	 * @param issueLink the instance to be displayed in the UI.
 	 * @param linkedObject the object linked to the given <code>issueLink</code> or <code>null</code> iff {@link #getLinkedObjects(Set, ProgressMonitor)} didn't retrieve it.
 	 * @return the text to be shown as name of the linked object. Must never be <code>null</code>.
 	 * @see #getLinkedObjectImage(IssueLink, Object)
 	 */
-	String getLinkedObjectName(LinkedObjectID linkedObjectID);
+	String getLinkedObjectName(IssueLink issueLink, LinkedObject linkedObject);
 
 	/**
 	 * Open an editor for the linked object of the given <code>issueLink</code>.
@@ -114,5 +114,5 @@ public interface IssueLinkHandler<LinkedObjectID extends ObjectID, LinkedObject>
 	 * @param issueLink the {@link IssueLink} whose linked object shall be opened.
 	 * @param linkedObjectID the linked object - i.e. the same as {@link IssueLink#getLinkedObjectID() issueLink.getLinkedObjectID()} (convenience parameter).
 	 */
-	void openLinkedObject(LinkedObjectID linkedObjectID);
+	void openLinkedObject(IssueLink issueLink, LinkedObjectID linkedObjectID);
 }

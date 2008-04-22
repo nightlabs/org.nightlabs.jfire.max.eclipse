@@ -12,8 +12,6 @@ import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 
 public class IssueFilterCompositeDocumentRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
@@ -67,15 +65,15 @@ public class IssueFilterCompositeDocumentRelated
 	protected void createComposite(Composite parent)
 	{
 		issueLinkAdderComposite = new IssueLinkAdderComposite(parent, SWT.NONE, true, null);
-		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener()
-		{
-			@Override
-			public void issueLinkItemChanged(IssueLinkItemChangedEvent itemChangedEvent)
-			{
+//		issueLinkAdderComposite.addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener()
+//		{
+//			@Override
+//			public void issueLinkItemChanged(IssueLinkItemChangeEvent itemChangedEvent)
+//			{
 //				issueLinks = issueLinkAdderComposite.getItems();
 //				getQuery().setIssueLinks( issueLinks );
-			}
-		});
+//			}
+//		});
 	}
 	
 	@Override

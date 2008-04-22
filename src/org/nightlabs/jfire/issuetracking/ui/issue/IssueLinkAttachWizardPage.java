@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -31,6 +32,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
@@ -59,7 +61,7 @@ extends WizardHopPage
 		new WizardHop(this);
 	}
 
-	private String[] ISSUE_LINK_TYPE_FETCH_GROUP = new String[] { IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT };
+	private String[] FETCH_GROUPS_ISSUE_LINK_TYPE = new String[] { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
 	
 	@Override
 	public Control createPageContents(Composite parent) {
@@ -92,7 +94,7 @@ extends WizardHopPage
 			@Override
 			public void run() {
 				Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(linkedObjectID);
-				List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(pcClass, ISSUE_LINK_TYPE_FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(pcClass, FETCH_GROUPS_ISSUE_LINK_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueLinkTypeCombo.setInput(issueLinkTypes);
 				issueLinkTypeCombo.setSelection(0);
 			}
@@ -124,8 +126,9 @@ extends WizardHopPage
 				tableComposite.getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
-						tableComposite.getSelectedElements();
-//						notifyIssueLinkDoubleClickListeners();
+						Collection<Issue> issueCollection = tableComposite.getSelectedElements();
+						Issue selectedIssue = issueCollection.iterator().next();
+						selectedIssue.createIssueLink(issueLinkTypeCombo.getSelectedElement(), linkedObjectID);
 					}
 				});
 				

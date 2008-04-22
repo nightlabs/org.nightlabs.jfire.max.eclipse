@@ -5,21 +5,21 @@ import java.util.Set;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 
 public class IssueLinkWizard 
 extends DynamicPathWizard
 {
 	private Issue issue;
-	
-	private IssueLinkAdderComposite parent;
+
+	private IssueLinkTable issueLinkTable;
 	private Set<IssueLinkTableItem> linkItems;
-	
-	public IssueLinkWizard(IssueLinkAdderComposite linkAdderComposite, Issue issue) {
-		this.parent = linkAdderComposite;
+
+	public IssueLinkWizard(IssueLinkTable issueLinkTable, Issue issue) {
+		this.issueLinkTable = issueLinkTable;
 		this.issue = issue;
-		setWindowTitle("Link Objects to Issue");
+		setWindowTitle("Link objects to an issue");
 	}
 
 	@Override
@@ -41,10 +41,7 @@ extends DynamicPathWizard
 				issueLinkType = relationPage.getIssueLinkType();
 			}
 			
-			for (IssueLinkTableItem linkItem : linkItems) {
-				linkItem.setIssueLinkType(issueLinkType);
-				parent.addIssueLinkTableItem(linkItem);
-			}
+			issueLinkTable.addIssueLinkTableItems(linkItems);
 		}
 		return true;
 	}
@@ -61,8 +58,8 @@ extends DynamicPathWizard
 		return issue;
 	}
 	
-	public IssueLinkAdderComposite getLinkAdderComposite() {
-		return parent;
+	public IssueLinkTable getIssueLinkTable() {
+		return issueLinkTable;
 	}
 	
 	public Set<IssueLinkTableItem> getLinkItems() {
@@ -73,12 +70,12 @@ extends DynamicPathWizard
 		this.linkItems = linkItems;
 	}
 	
-	private Class linkedClass;
+	private Class linkedObjectClass;
 	public void setLinkedClass(Class c) {
-		this.linkedClass = c;
+		this.linkedObjectClass = c;
 	}
 	
-	public Class getLinkedClass() {
-		return linkedClass;
+	public Class getLinkedObjectClass() {
+		return linkedObjectClass;
 	}
 }

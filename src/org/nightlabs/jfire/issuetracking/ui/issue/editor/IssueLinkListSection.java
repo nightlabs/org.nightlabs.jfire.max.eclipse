@@ -12,18 +12,16 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangedListener;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangeListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /** 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -33,7 +31,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	private IssueLinkAdderComposite issueLinkAdderComposite;
 	private Issue issue;
 	
-	private OpenLinkAction openLinkAction;
+	private OpenLinkedObjectAction openLinkedObjectAction;
 	private AddLinkAction addLinkAction;
 	private RemoveLinkAction removeLinkAction;
 	
@@ -49,21 +47,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite = new IssueLinkAdderComposite(
 				client, SWT.NONE, false, controller.getIssue());
 		issueLinkAdderComposite.getGridData().grabExcessHorizontalSpace = true;
-		issueLinkAdderComposite.addIssueLinkTableItemListener(new IssueLinkTableItemChangedListener() {
-			public void issueLinkItemChanged(
-					IssueLinkItemChangedEvent itemChangedEvent) {
-				controller.getIssue().clearIssueLinks();
-				
-				for (IssueLinkTableItem linkItem : issueLinkAdderComposite.getIssueLinkTableItems()) {
-					IssueLinkHandler handler = issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(linkItem.getLinkObjectID());
-					IssueLink issueLink = new IssueLink(issue.getOrganisationID(), 
-							IDGenerator.nextID(IssueLink.class), 
-							issue, 
-							linkItem.getIssueLinkType(),
-							handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor())); 
-					controller.getIssue().getIssueLinks().add(issueLink);
-				}
-
+		issueLinkAdderComposite.getIssueLinkTable().addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener() {
+			public void issueLinkItemChanged(final IssueLinkItemChangeEvent itemChangedEvent)
+			{
 				markDirty();
 			}
 		});
@@ -71,24 +57,17 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.getIssueLinkTable().addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
-				
-				Object object = issueLinkAdderComposite.getIssueLinkTable().getFirstSelectedElement();
-				if (object instanceof IssueLinkTableItem) {
-					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem)object;
-					IssueLinkHandler linkHandler = 
-						issueLinkAdderComposite.getIssueLinkTable().getIssueLinkHandler(issueLinkTableItem.getLinkObjectID());
-					linkHandler.openLinkedObject(issueLinkTableItem.getLinkObjectID());
-				}
+				openLinkedObjectAction.run();
 			}
 		});
 		
 		getSection().setClient(client);
 		
-		openLinkAction = new OpenLinkAction();
+		openLinkedObjectAction = new OpenLinkedObjectAction();
 		addLinkAction = new AddLinkAction();
 		removeLinkAction = new RemoveLinkAction();
 		
-		getToolBarManager().add(openLinkAction);
+		getToolBarManager().add(openLinkedObjectAction);
 		getToolBarManager().add(addLinkAction);
 		getToolBarManager().add(removeLinkAction);
 		
@@ -98,36 +77,37 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
-		for (IssueLink issueLink : issue.getIssueLinks()) {
-			IssueLinkTableItem linkItem = new IssueLinkTableItem(issueLink.getLinkedObjectID(), issueLink.getIssueLinkType());
-			issueLinkAdderComposite.addIssueLinkTableItem(linkItem);
-		}
+		issueLinkAdderComposite.getIssueLinkTable().setIssue(issue);
 	}
 	
 	@Override
 	public Issue getIssue() {
 		return issue;
 	}
-	
-	public class OpenLinkAction extends Action {		
-		public OpenLinkAction() {
-			super();
-			setId(OpenLinkAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueLinkListSection.class, 
-			"Open"));
-			setToolTipText("Open Link(s)");
+
+	public class OpenLinkedObjectAction extends Action {		
+		public OpenLinkedObjectAction() {
+			setId(OpenLinkedObjectAction.class.getName());
+			setImageDescriptor(
+					SharedImages.getSharedImageDescriptor(
+							IssueTrackingPlugin.getDefault(), 
+							IssueLinkListSection.class, 
+							"Open"
+					)
+			);
+			setToolTipText("Open linked object(s)");
 			setText("Open");
 		}
 
 		@Override
 		public void run() {
-			if (issueLinkAdderComposite.getIssueLinkTable().getSelectionIndex() != -1) {
-				IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-				if (table.getFirstSelectedElement() instanceof IssueLinkTableItem) {
-					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) table.getFirstSelectedElement();
-					table.getIssueLinkHandler(issueLinkTableItem.getLinkObjectID()).openLinkedObject(issueLinkTableItem.getLinkObjectID());
+			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
+			if (!table.getSelectedElements().isEmpty()) {
+				for (IssueLinkTableItem issueLinkTableItem : table.getSelectedElements()) {
+					if (issueLinkTableItem.getIssueLink() != null) {
+						IssueLinkHandler<ObjectID, Object> handler = table.getIssueLinkHandler(issueLinkTableItem.getLinkedObjectID());
+						handler.openLinkedObject(issueLinkTableItem.getIssueLink(), issueLinkTableItem.getLinkedObjectID());
+					}
 				}
 			}
 		}		
@@ -135,7 +115,6 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	
 	public class AddLinkAction extends Action {		
 		public AddLinkAction() {
-			super();
 			setId(AddLinkAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
@@ -147,15 +126,14 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		@Override
 		public void run() {
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
-					new IssueLinkWizard(issueLinkAdderComposite, issue));
+			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard(table, issue));
 			dialog.open();
 		}		
 	}
 	
 	public class RemoveLinkAction extends Action {		
 		public RemoveLinkAction() {
-			super();
 			setId(RemoveLinkAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
@@ -167,7 +145,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 		@Override
 		public void run() {
-//			issueLinkAdderComposite.removeObjectIDs(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
+			issueLinkAdderComposite.getIssueLinkTable().removeIssueLinkTableItems(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
 		}		
 	}
 }

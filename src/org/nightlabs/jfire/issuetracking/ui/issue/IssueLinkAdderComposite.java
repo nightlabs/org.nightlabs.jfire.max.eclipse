@@ -3,10 +3,6 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangedEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
 
 /**
@@ -26,7 +21,6 @@ public class IssueLinkAdderComposite
 extends XComposite
 {
 	private IssueLinkTable issueLinkTable;
-	private ListenerList tableItemChangeListeners = new ListenerList();
 
 	private boolean haveButton;
 	
@@ -79,7 +73,7 @@ extends XComposite
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
-							new IssueLinkWizard(IssueLinkAdderComposite.this, issue));
+							new IssueLinkWizard(issueLinkTable, issue));
 					dialog.open();
 				}
 			});
@@ -91,46 +85,14 @@ extends XComposite
 				}
 			});
 		}
+
+		if (issue != null)
+			issueLinkTable.setIssue(issue);
 	}
 
-	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
-	
-	public void addIssueLinkTableItem(IssueLinkTableItem item) {
-		issueLinkTableItems.add(item);
-		issueLinkTable.setInput(issueLinkTableItems);
-	}
+//	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 
-	public void removeIssueLinkTableItem(IssueLinkTableItem item) {
-		issueLinkTableItems.remove(item);
-		issueLinkTable.setInput(issueLinkTableItems);
-	}
-
-	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
-		return issueLinkTableItems;
-	}
-	
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;
-	}
-
-	public void addIssueLinkTableItemListener(
-			IssueLinkTableItemChangedListener listener) {
-		tableItemChangeListeners.add(listener);
-	}
-
-	public void removeIssueLinkTableItemListener(
-			IssueLinkTableItemChangedListener listener) {
-		tableItemChangeListeners.remove(listener);
-	}
-
-	protected void notifyIssueLinkTableItemListeners() {
-		Object[] listeners = tableItemChangeListeners.getListeners();
-		IssueLinkItemChangedEvent evt = new IssueLinkItemChangedEvent(this);
-		for (Object l : listeners) {
-			if (l instanceof IssueLinkTableItemChangedListener) {
-				((IssueLinkTableItemChangedListener) l)
-						.issueLinkItemChanged(evt);
-			}
-		}
 	}
 }

@@ -20,7 +20,7 @@ implements IssueLinkHandler<LinkedObjectID, LinkedObject>
 	@Override
 	public Map<IssueLink, LinkedObject> getLinkedObjects(Set<IssueLink> issueLinks, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading delivery notes", 100);
+		monitor.beginTask("Loading objects linked to issues", 100);
 
 		Set<LinkedObjectID> linkedObjectIDs = new HashSet<LinkedObjectID>(issueLinks.size());
 		for (IssueLink issueLink : issueLinks)
@@ -28,22 +28,29 @@ implements IssueLinkHandler<LinkedObjectID, LinkedObject>
 
 		monitor.worked(10);
 
+		Map<IssueLink, LinkedObject> linkedObjectMap = new HashMap<IssueLink, LinkedObject>(issueLinks.size());
+
 		Collection<? extends LinkedObject> linkedObjects = _getLinkedObjects(
 				issueLinks,
 				linkedObjectIDs,
 				new SubProgressMonitor(monitor, 80));
 
-		Map<ObjectID, LinkedObject> objectID2objectMap = new HashMap<ObjectID, LinkedObject>(linkedObjects.size());
-		for (LinkedObject lo : linkedObjects)
-			objectID2objectMap.put((ObjectID) JDOHelper.getObjectId(lo), lo);
+		if (linkedObjects == null) {
+			for (IssueLink issueLink : issueLinks)
+				linkedObjectMap.put(issueLink, null);
+		}
+		else {
+			Map<ObjectID, LinkedObject> objectID2objectMap = new HashMap<ObjectID, LinkedObject>(linkedObjects.size());
+			for (LinkedObject lo : linkedObjects)
+				objectID2objectMap.put((ObjectID) JDOHelper.getObjectId(lo), lo);
 
-		Map<IssueLink, LinkedObject> linkedObjectMap = new HashMap<IssueLink, LinkedObject>(issueLinks.size());
-		for (IssueLink issueLink : issueLinks) {
-			LinkedObject lo = objectID2objectMap.get(issueLink.getLinkedObjectID());
-			if (lo == null)
-				throw new IllegalStateException("Object missing in result set! " + issueLink.getLinkedObjectID());
-			
-			linkedObjectMap.put(issueLink, lo);
+			for (IssueLink issueLink : issueLinks) {
+				LinkedObject lo = objectID2objectMap.get(issueLink.getLinkedObjectID());
+				if (lo == null)
+					throw new IllegalStateException("Object missing in result set! " + issueLink.getLinkedObjectID());
+
+				linkedObjectMap.put(issueLink, lo);
+			}
 		}
 
 		monitor.worked(10);

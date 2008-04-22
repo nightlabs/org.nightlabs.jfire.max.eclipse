@@ -2,8 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -42,15 +40,15 @@ extends WizardHopPage
 		categoryTreeViewer = new TreeViewer(mainComposite, SWT.NONE);
 		categoryTreeViewer.setContentProvider(new IssueLinkCategoryContentProvider());
 		categoryTreeViewer.setLabelProvider(new IssueLinkCategoryLabelProvider());
-		categoryTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent e) {
-//				ISelection selection = categoryTreeViewer.getSelection();
-//				if(selection instanceof IssueLinkHandlerFactory) {
-//					
-//				}
-			}
-		});
+//		categoryTreeViewer.addDoubleClickListener(new IDoubleClickListener() {
+//			@Override
+//			public void doubleClick(DoubleClickEvent e) {
+////				ISelection selection = categoryTreeViewer.getSelection();
+////				if(selection instanceof IssueLinkHandlerFactory) {
+////					
+////				}
+//			}
+//		});
 		
 		List<IssueLinkHandlerCategory> categoryItems = null;
 		try {
