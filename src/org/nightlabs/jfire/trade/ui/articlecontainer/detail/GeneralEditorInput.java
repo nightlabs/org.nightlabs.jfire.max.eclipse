@@ -34,12 +34,12 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputReceptionNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 
 /**
@@ -123,4 +123,6 @@ implements IEditorInput
 	{
 		return articleContainerClass;
 	}
+
+	public abstract ArticleContainerID getArticleContainerID();
 }

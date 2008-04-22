@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
@@ -94,6 +95,12 @@ implements IEditorInput
 	public ImageDescriptor getImageDescriptor()
 	{
 		return AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE);
+	}
+
+	@Override
+	public ArticleContainerID getArticleContainerID() {
+		// TODO Auto-generated method stub
+		return getOfferID();
 	}
 
 }
