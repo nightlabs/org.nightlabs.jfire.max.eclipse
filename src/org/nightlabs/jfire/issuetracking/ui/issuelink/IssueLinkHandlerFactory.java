@@ -13,7 +13,7 @@ public interface IssueLinkHandlerFactory<LinkedObjectID extends ObjectID, Linked
 {
 	String getCategoryId();
 	
-	Class<? extends Object> getLinkObjectClass();
+	Class<? extends Object> getLinkedObjectClass();
 	
 	String getName();
 	

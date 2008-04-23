@@ -40,7 +40,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				IssueLinkHandlerIssue.class, 
-		"LinkObject").createImage();
+		"LinkedObject").createImage();
 	}
 
 	@Override

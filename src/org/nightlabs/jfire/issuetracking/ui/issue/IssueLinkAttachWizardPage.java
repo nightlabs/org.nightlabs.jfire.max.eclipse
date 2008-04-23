@@ -4,7 +4,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -94,7 +94,7 @@ extends WizardHopPage
 			@Override
 			public void run() {
 				Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(linkedObjectID);
-				List<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(pcClass, FETCH_GROUPS_ISSUE_LINK_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				Collection<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(pcClass, FETCH_GROUPS_ISSUE_LINK_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issueLinkTypeCombo.setInput(issueLinkTypes);
 				issueLinkTypeCombo.setSelection(0);
 			}

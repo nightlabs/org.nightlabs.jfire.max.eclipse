@@ -10,14 +10,14 @@ public class IssueLinkTableItem {
 	private IssueLinkType issueLinkType;
 	private IssueLink issueLink;
 
-	public IssueLinkTableItem(ObjectID linkObjectID, IssueLinkType issueLinkType) {
-		if (linkObjectID == null)
-			throw new IllegalArgumentException("linkObjectID == null");
+	public IssueLinkTableItem(ObjectID linkedObjectID, IssueLinkType issueLinkType) {
+		if (linkedObjectID == null)
+			throw new IllegalArgumentException("linkedObjectID == null");
 
 		if (issueLinkType == null)
 			throw new IllegalArgumentException("issueLinkType == null");
 
-		this.linkedObjectID = linkObjectID;
+		this.linkedObjectID = linkedObjectID;
 		this.issueLinkType = issueLinkType;
 	}
 	
@@ -29,10 +29,10 @@ public class IssueLinkTableItem {
 		return issueLinkType;
 	}
 
-//	public void setLinkObjectID(ObjectID linkedObjectID) {
-//	if (linkObjectID == null)
-//		throw new IllegalArgumentException("linkObjectID == null");
-//		this.linkObjectID = linkedObjectID;
+//	public void setLinkedObjectID(ObjectID linkedObjectID) {
+//	if (linkedObjectID == null)
+//		throw new IllegalArgumentException("linkedObjectID == null");
+//		this.linkedObjectID = linkedObjectID;
 //	}
 
 	public void setIssueLinkType(IssueLinkType issueLinkType) {

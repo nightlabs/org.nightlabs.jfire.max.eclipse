@@ -38,14 +38,14 @@ extends DynamicPathWizard
 	 */
 	public IssueCreateWizard(ObjectID linkedObjectID)
 	{
-		this.linkedObjectID = linkedObjectID;
-		
-		if (linkedObjectID != null) {
-			setWindowTitle("Create link to issue");
-		}
-		else {
-			setWindowTitle("Create new issue");	
-		}
+//		this.linkedObjectID = linkedObjectID;
+//		
+//		if (linkedObjectID != null) {
+//			setWindowTitle("Create link to issue");
+//		}
+//		else {
+//			setWindowTitle("Create new issue");	
+//		}
 
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 	}
@@ -79,7 +79,7 @@ extends DynamicPathWizard
 ////						IDGenerator.nextID(IssueLink.class), 
 ////						newIssue, 
 ////						linkItem.getIssueLinkType(),
-////						handler.getLinkedObject(linkItem.getLinkObjectID(), new NullProgressMonitor()));
+////						handler.getLinkedObject(linkItem.getLinkedObjectID(), new NullProgressMonitor()));
 //
 ////				newIssue.getIssueLinks().add(issueLink);
 //			}
@@ -134,8 +134,8 @@ extends DynamicPathWizard
 		
 		/*****Open the created issue*****/
 		// TODO this should be done on a worker thread! Use the Wizard.getContainer().run(...) method!
-		Issue createdIssue = IssueDAO.sharedInstance().storeIssue(newIssue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-		IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
+		Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
 		try {
 			Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
 		} catch (Exception e) {

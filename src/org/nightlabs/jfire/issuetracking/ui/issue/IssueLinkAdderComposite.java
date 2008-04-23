@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -73,7 +73,7 @@ extends XComposite
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(
-							new IssueLinkWizard(issueLinkTable, issue));
+							new CreateIssueLinkWizard(issueLinkTable, issue));
 					dialog.open();
 				}
 			});

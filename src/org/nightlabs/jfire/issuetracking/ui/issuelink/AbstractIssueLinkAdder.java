@@ -4,19 +4,22 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
- *
  */
 public abstract class AbstractIssueLinkAdder 
 implements IssueLinkAdder 
 {
 	private IssueLinkHandlerFactory issueLinkHandlerFactory;
-	private ListenerList selectionChangeListeners = new ListenerList();
 	private ListenerList selectionDoubleClickListeners = new ListenerList();
 	
 	public void init(IssueLinkHandlerFactory issueLinkHandlerFactory) 
@@ -69,31 +72,35 @@ implements IssueLinkAdder
 		return composite;
 	}
 
-	
-
 	public void onDispose() 
 	{
 		composite = null;
 	}
-	
-	public void addIssueLinkSelectionListener(IssueLinkSelectionListener listener) {
-		selectionChangeListeners.add(listener);
+
+	private ListenerList selectionChangedListeners = new ListenerList();
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.add(listener);
 	}
-	
-	public void removeIssueLinkSelectionListener(IssueLinkSelectionListener listener) {
-		selectionChangeListeners.remove(listener);
+	@Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListeners.remove(listener);
 	}
-	
-	protected void notifyIssueLinkSelectionListeners() {
-		Object[] listeners = selectionChangeListeners.getListeners();
-		IssueLinkSelectionChangedEvent evt = new IssueLinkSelectionChangedEvent(this);
-		for (Object l : listeners) {
-			if (l instanceof IssueLinkSelectionListener) {
-				((IssueLinkSelectionListener) l).issueLinkSelectionChanged(evt);
-			}
-		}
+	@Override
+	public IStructuredSelection getSelection() {
+		return new StructuredSelection(getLinkedObjectIDs());
 	}
-	
+	@Override
+	public void setSelection(ISelection selection) {
+		// no-op
+	}
+
+	protected void fireSelectionChangedEvent() {
+		SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
+		for (Object l : selectionChangedListeners.getListeners())
+			((ISelectionChangedListener ) l).selectionChanged(event);
+	}
+
 	public void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
 		selectionDoubleClickListeners.add(listener);
 	}

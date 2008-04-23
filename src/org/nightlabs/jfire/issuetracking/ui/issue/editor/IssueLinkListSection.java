@@ -21,7 +21,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangeListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 
 /** 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -127,7 +127,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		@Override
 		public void run() {
 			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueLinkWizard(table, issue));
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateIssueLinkWizard(table, issue));
 			dialog.open();
 		}		
 	}

@@ -171,7 +171,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 						new String[] {
 								FetchPlan.DEFAULT,
 								Issue.FETCH_GROUP_ISSUE_LINKS,
-								IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE,
+								IssueLink.FETCH_GROUP_ISSUE_LINKED_OBJECT_ID,
 								IssueLinkType.FETCH_GROUP_NAME,
 								IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS
 						}, 
@@ -211,11 +211,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 						_issueLink2LinkedObjectMap.putAll(il2loMap);
 					}
 				}
-
-
-				// TODO remove this sleep!
-				Thread.sleep(15000);
-
 
 				// display data
 				Display.getDefault().asyncExec(new Runnable() {
@@ -277,17 +272,17 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	
 	private Map<Class<?>, IssueLinkHandler<ObjectID, Object>> class2IssueLinkHandler = new HashMap<Class<?>, IssueLinkHandler<ObjectID, Object>>();	
 	
-	public synchronized IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(Class<?> linkObjectClass) {
-		IssueLinkHandler<ObjectID, Object> handler = class2IssueLinkHandler.get(linkObjectClass);
+	public synchronized IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(Class<?> linkedObjectClass) {
+		IssueLinkHandler<ObjectID, Object> handler = class2IssueLinkHandler.get(linkedObjectClass);
 		if (handler == null) {
 			IssueLinkHandlerFactory<ObjectID, Object> factory = null;
 			try {
-				factory = IssueLinkHandlerFactoryRegistry.sharedInstance().getIssueLinkHandlerFactory(linkObjectClass);
+				factory = IssueLinkHandlerFactoryRegistry.sharedInstance().getIssueLinkHandlerFactory(linkedObjectClass);
 			} catch (EPProcessorException e) {
 				throw new RuntimeException(e);
 			}
 			handler = factory.createIssueLinkHandler();
-			class2IssueLinkHandler.put(linkObjectClass, handler);
+			class2IssueLinkHandler.put(linkedObjectClass, handler);
 		}
 		return handler;
 	}
@@ -383,9 +378,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 					Map<IssueLink, ?> il2loMap = handler.getLinkedObjects(issueLinks, new SubProgressMonitor(monitor, monitorTick));
 					_issueLink2LinkedObjectMap.putAll(il2loMap);
 				}
-
-				// TODO remove this sleep!
-				Thread.sleep(15000);
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {

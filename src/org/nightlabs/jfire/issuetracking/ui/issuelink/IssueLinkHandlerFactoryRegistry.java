@@ -40,12 +40,12 @@ extends AbstractEPProcessor
 	
 	private Map<String, List<IssueLinkHandlerFactory>> parentCategoryId2Factories = new HashMap<String, List<IssueLinkHandlerFactory>>();
 		
-	protected IssueLinkHandlerFactory getFactory(Class<? extends Object> linkObjectClass,
+	protected IssueLinkHandlerFactory getFactory(Class<? extends Object> linkedObjectClass,
 			boolean throwExceptionIfNotFound)
 	{
-		IssueLinkHandlerFactory factory = factories.get(linkObjectClass);
+		IssueLinkHandlerFactory factory = factories.get(linkedObjectClass);
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("No IssueLinkHandlerFactory registered for linkObjectClass=\""+ linkObjectClass +"\"");
+			throw new IllegalStateException("No IssueLinkHandlerFactory registered for linkedObjectClass=\""+ linkedObjectClass +"\"");
 
 		return factory;
 	}
@@ -78,7 +78,7 @@ extends AbstractEPProcessor
 	
 	protected void addFactory(IssueLinkHandlerFactory factory)
 	{
-		factories.put(factory.getLinkObjectClass(), factory);
+		factories.put(factory.getLinkedObjectClass(), factory);
 		List<IssueLinkHandlerFactory> cats = parentCategoryId2Factories.get(factory.getCategoryId());
 		if (cats == null) {
 			cats = new ArrayList<IssueLinkHandlerFactory>();

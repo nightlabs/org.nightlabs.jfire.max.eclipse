@@ -53,7 +53,7 @@ implements IssueLinkHandlerFactory
 		return null;
 	}
 
-	public Class<? extends Object> getLinkObjectClass() {
+	public Class<? extends Object> getLinkedObjectClass() {
 		return null;
 	}
 
