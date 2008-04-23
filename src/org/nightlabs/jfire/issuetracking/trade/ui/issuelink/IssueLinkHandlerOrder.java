@@ -39,7 +39,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerOrder.class, 
-				"LinkObject").createImage();
+				"LinkedObject").createImage();
 	}
 
 	@Override

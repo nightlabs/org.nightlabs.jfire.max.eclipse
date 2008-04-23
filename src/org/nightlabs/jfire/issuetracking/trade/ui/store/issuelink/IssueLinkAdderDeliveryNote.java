@@ -47,7 +47,7 @@ extends AbstractIssueLinkAdder
 				
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
-						notifyIssueLinkSelectionListeners();
+						fireSelectionChangedEvent();
 					}
 				});
 			}
@@ -57,7 +57,7 @@ extends AbstractIssueLinkAdder
 		return dViewer.getComposite();
 	}
 
-	public Set<ObjectID> getIssueLinkObjectIds() {
+	public Set<ObjectID> getLinkedObjectIDs() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
 		for(Object o : dViewer.getListComposite().getSelectedElements()) {
 			result.add((ObjectID)JDOHelper.getObjectId(o));

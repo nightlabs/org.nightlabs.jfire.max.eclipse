@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -12,7 +11,6 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
@@ -41,7 +39,7 @@ extends AbstractIssueLinkHandler<OfferID, Offer>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerOffer.class, 
-				"LinkObject").createImage();
+				"LinkedObject").createImage();
 	}
 
 	@Override

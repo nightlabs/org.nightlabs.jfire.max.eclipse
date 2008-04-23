@@ -19,7 +19,7 @@ extends AbstractIssueLinkHandlerFactory
 		return adder;
 	}
 
-	public Class<? extends Object> getLinkObjectClass() {
+	public Class<? extends Object> getLinkedObjectClass() {
 		return Order.class;
 	}
 
