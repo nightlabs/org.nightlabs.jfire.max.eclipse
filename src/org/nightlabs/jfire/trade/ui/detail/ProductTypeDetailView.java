@@ -88,7 +88,8 @@ extends LSDViewPart
 	@Override
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
-		productTypeDetailComposite.saveState(memento);
+		if (productTypeDetailComposite != null)
+			productTypeDetailComposite.saveState(memento);
 	}
 	
 	
