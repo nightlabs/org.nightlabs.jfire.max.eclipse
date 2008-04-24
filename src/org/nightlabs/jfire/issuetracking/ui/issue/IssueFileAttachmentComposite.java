@@ -3,6 +3,8 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
@@ -15,14 +17,17 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.issue.Issue;
 
 public class IssueFileAttachmentComposite 
 extends XComposite 
 {
 	private ListComposite<IssueFileAttachmentItem> issueFileAttachmentItemListComposite;
-
-	public IssueFileAttachmentComposite(Composite parent, int compositeStyle, LayoutMode layoutMode) {
+	private Issue issue;
+	
+	public IssueFileAttachmentComposite(Composite parent, int compositeStyle, LayoutMode layoutMode, Issue issue) {
 		super(parent, compositeStyle, layoutMode);
+		this.issue = issue;
 		createContents();
 	}
 
@@ -59,6 +64,8 @@ extends XComposite
 						try {
 							fis = new FileInputStream(file);
 							FileDescriptor fd = fis.getFD();
+							issue.addIssueFileAttachmentDescriptor(fd, file.getName());
+							
 							IssueFileAttachmentItem issueFileAttachmentItem = new IssueFileAttachmentItem(file.getName(), fd);
 							issueFileAttachmentItemListComposite.addElement(issueFileAttachmentItem);
 						} catch (Exception e) {
@@ -81,6 +88,7 @@ extends XComposite
 		removeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
+				issue.removeIssueFileAttachmentDescriptor(issueFileAttachmentItemListComposite.getSelectedElement().getFileDescriptor());
 				issueFileAttachmentItemListComposite.removeAllSelected();
 			}
 		});
@@ -91,18 +99,29 @@ extends XComposite
 		fileListComposite.setLayoutData(gridData);
 	}
 
-
+	public List<FileDescriptor> getFileDescriptors() {
+		List<FileDescriptor> fileDescriptors = new ArrayList<FileDescriptor>();
+		for (IssueFileAttachmentItem issueFileAttachmentItem : issueFileAttachmentItemListComposite.getElements()) {
+			fileDescriptors.add(issueFileAttachmentItem.getFileDescriptor());
+		}
+		return fileDescriptors;
+	}
+	
+	// TODO there is no need to manage IssueFileAttachmentItem instead of IssueFileAttachment - remove this class and directly manage IssueFileAttachment.
+	// Additionally, note that you NEVER keep files (or other resources) open any longer as you really really really need. A java.io.File is used
+	// as an address of a file (without opening it!) while a FileDescriptor references an OPEN file.
 	class IssueFileAttachmentItem {
 		private String fileName;
-		private FileDescriptor fd;
+		private FileDescriptor fileDescriptor;
+		private File file;
 
-		public IssueFileAttachmentItem(String fileName, FileDescriptor fd) {
+		public IssueFileAttachmentItem(String fileName, FileDescriptor fileDescritor) {
 			this.fileName = fileName;
-			this.fd = fd;
+			this.fileDescriptor = fileDescritor;
 		}
 
-		public FileDescriptor getFd() {
-			return fd;
+		public FileDescriptor getFileDescriptor() {
+			return fileDescriptor;
 		}
 
 		public String getFileName() {

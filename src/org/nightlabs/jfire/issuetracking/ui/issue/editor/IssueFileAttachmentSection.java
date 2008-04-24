@@ -55,7 +55,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		fileLabel.setText("Files: ");
 		
 		fileComposite = 
-			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, controller.getIssue());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.heightHint = 100;
 		fileComposite.setLayoutData(gridData);

@@ -20,8 +20,8 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 
@@ -45,7 +45,7 @@ public class IssueEditor extends EntityEditor{
 			{
 				final Issue issue = IssueDAO.sharedInstance().getIssue(
 						issueEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS_ISSUE},
+						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS_ISSUE, IssueLink.FETCH_GROUP_LINKED_OBJECT, IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable()
 				{
@@ -56,14 +56,16 @@ public class IssueEditor extends EntityEditor{
 					}
 				});
 				
-				editLockHandle = EditLockMan.sharedInstance().acquireEditLock(EditLockTypeIssue.EDIT_LOCK_TYPE_ID, (ObjectID)JDOHelper.getObjectId(issue), "TODO", // TODO description //$NON-NLS-1$
-//						null,
+				editLockHandle = EditLockMan.sharedInstance().acquireEditLock(
+						EditLockTypeIssue.EDIT_LOCK_TYPE_ID, 
+						(ObjectID)JDOHelper.getObjectId(issue), 
+						"TODO",
 						new EditLockCallback() {
 					@Override
 					public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
 						return InactivityAction.REFRESH_LOCK;
 					}
-				}, getSite().getShell(), new NullProgressMonitor());
+				}, getSite().getShell(), monitor);
 				
 				return Status.OK_STATUS;
 			}

@@ -49,13 +49,28 @@ extends DynamicPathWizard
 		addPage(issueCreateWizardPage);
 	}
 
+	private static String[] FETCH_GROUP = new String[]{
+//		FetchPlan.DEFAULT,
+//		Issue.FETCH_GROUP_ISSUE_LINKS,
+//		IssueLink.FETCH_GROUP_ISSUE_LINKED_OBJECT_ID,
+//		IssueLinkType.FETCH_GROUP_NAME,
+//		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
+//		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
+//		Issue.FETCH_GROUP_ISSUE_REPORTER,
+//		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+//		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+//		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
+//		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_THIS_ISSUE,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS};
 	@Override
 	public boolean performFinish() {
 		// TODO this should be done on a worker thread! Use the Wizard.getContainer().run(...) method!
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-					Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, IssueTable.FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
 					try {
 						Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);

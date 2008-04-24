@@ -237,7 +237,7 @@ extends XComposite
 		fileLabel = new Label(this, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new IssueFileAttachmentComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		fileComposite = new IssueFileAttachmentComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, issue);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 //		gridData.heightHint = 100;
 		gridData.minimumHeight = 80;
@@ -257,6 +257,7 @@ extends XComposite
 						}
 						issueTypeCombo.selectElementByIndex(0);
 						selectedIssueType = issueTypeCombo.getSelectedElement();
+						issue.setIssueType(selectedIssueType);
 
 						issueSeverityCombo.removeAll();
 						for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
@@ -264,6 +265,7 @@ extends XComposite
 						}
 						issueSeverityCombo.selectElementByIndex(0);
 						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+						issue.setIssueSeverityType(selectedIssueSeverityType);
 
 						issuePriorityCombo.removeAll();
 						for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
@@ -271,6 +273,7 @@ extends XComposite
 						}
 						issuePriorityCombo.selectElementByIndex(0);
 						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+						issue.setIssuePriority(selectedIssuePriority);
 					}
 				});
 
@@ -322,14 +325,6 @@ extends XComposite
 		return subjectText;
 	}
 
-//	public List<FileInputStream> getSelectedAttachmentFiles(){
-//		return fileComposite.getFileInputStreamList();
-//	}
-//	
-//	public Map<String, InputStream> getSelectedAttachmentFileMap(){
-//		return fileComposite.getInputStreamMap();
-//	}
-	
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
 	}
@@ -340,34 +335,6 @@ extends XComposite
 	
 	@Override
 	public boolean setFocus() {
-//		issue.setIssueType(getSelectedIssueType());
-//		issue.setIssueSeverityType(getSelectedIssueSeverityType());
-//		issue.setIssuePriority(getSelectedIssuePriority());
-//		issue.setReporter(getSelectedReporter());
-//		issue.setAssignee(getSelectedAssignToUser());
-//
-//		if(getSelectedAttachmentFileMap() != null){
-//			Map<String, InputStream> fileMap = getSelectedAttachmentFileMap();
-//			for(String name : fileMap.keySet()){
-//				if (fileMap.get(name) != null) {
-//					try {
-//						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
-//						issueFileAttachment.loadStream(fileMap.get(name), name);
-//						issue.getFileList().add(issueFileAttachment);
-//					} catch (IOException e) {
-//						throw new RuntimeException(e);
-//					} finally {
-//						try {
-//							fileMap.get(name).close();
-//						} catch (IOException e) {
-//							throw new RuntimeException(e);
-//						}
-//					}
-//				}
-//			}
-//		}//if
-//		
-//		return super.setFocus();
 		return subjectText.setFocus();
 	}
 }
