@@ -1,9 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import javax.jdo.FetchPlan;
 
@@ -22,7 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.ui.composite.FileListSelectionComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -73,7 +69,7 @@ extends XComposite
 	private I18nTextEditor subjectText;
 
 	private Label fileLabel;
-	private FileListSelectionComposite fileComposite;
+	private IssueFileAttachmentComposite fileComposite;
 
 	private Label descriptionLabel;
 	private I18nTextEditorMultiLine descriptionText;
@@ -241,7 +237,7 @@ extends XComposite
 		fileLabel = new Label(this, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new FileListSelectionComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, FileListSelectionComposite.ADD);
+		fileComposite = new IssueFileAttachmentComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 //		gridData.heightHint = 100;
 		gridData.minimumHeight = 80;
@@ -326,13 +322,13 @@ extends XComposite
 		return subjectText;
 	}
 
-	public List<FileInputStream> getSelectedAttachmentFiles(){
-		return fileComposite.getFileInputStreamList();
-	}
-	
-	public Map<String, InputStream> getSelectedAttachmentFileMap(){
-		return fileComposite.getInputStreamMap();
-	}
+//	public List<FileInputStream> getSelectedAttachmentFiles(){
+//		return fileComposite.getFileInputStreamList();
+//	}
+//	
+//	public Map<String, InputStream> getSelectedAttachmentFileMap(){
+//		return fileComposite.getInputStreamMap();
+//	}
 	
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;

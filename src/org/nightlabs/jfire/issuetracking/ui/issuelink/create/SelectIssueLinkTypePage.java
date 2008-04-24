@@ -127,7 +127,7 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		newIssueLinkTypeNameEditor = new I18nTextEditor(mainComposite); //new Text(mainComposite, SWT.SINGLE | SWT.BORDER);
+		newIssueLinkTypeNameEditor = new I18nTextEditor(mainComposite);
 		newIssueLinkTypeNameEditor.setI18nText(newIssueLinkTypeName);
 		newIssueLinkTypeNameEditor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		newIssueLinkTypeNameEditor.addModifyListener(new ModifyListener() {
@@ -155,7 +155,6 @@ extends DynamicPathWizardPage
 		manageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		manageComposite.getGridLayout().numColumns = 1;
 		
-//		issueLinkTypeList = new List(manageComposite, SWT.NONE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		issueLinkTypeList = new ListComposite<IssueLinkType>(manageComposite, SWT.SINGLE);
 		issueLinkTypeList.setLabelProvider(new LabelProvider() {
 			@Override

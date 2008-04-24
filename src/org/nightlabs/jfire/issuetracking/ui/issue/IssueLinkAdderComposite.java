@@ -23,9 +23,9 @@ extends XComposite
 	private IssueLinkTable issueLinkTable;
 
 	private boolean haveButton;
-	
+
 	private Issue issue;
-	
+
 	/**
 	 * @param parent
 	 * @param style
@@ -36,7 +36,7 @@ extends XComposite
 
 		this.haveButton = haveButton;
 		this.issue = issue;
-		
+
 		createComposite();
 	}
 
@@ -81,7 +81,7 @@ extends XComposite
 			removeLinkButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-//					removeItems(issueLinkTable.getSelectedElements());
+					issueLinkTable.removeElement(issueLinkTable.getFirstSelectedElement());
 				}
 			});
 		}
@@ -89,8 +89,6 @@ extends XComposite
 		if (issue != null)
 			issueLinkTable.setIssue(issue);
 	}
-
-//	private Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;

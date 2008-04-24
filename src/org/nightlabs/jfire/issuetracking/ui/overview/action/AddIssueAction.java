@@ -17,7 +17,7 @@ extends WorkbenchPartSelectionAction
 
 	@Override
 	public void run() {
-		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueCreateWizard(null));
+		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new IssueCreateWizard());
 		dialog.open();
 	}
 }

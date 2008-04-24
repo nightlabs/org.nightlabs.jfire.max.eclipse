@@ -11,7 +11,9 @@ import org.nightlabs.jfire.issue.Issue;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueCreateWizardPage extends WizardHopPage{
+public class IssueCreateWizardPage 
+extends WizardHopPage
+{
 	private Issue issue;
 	private IssueCreateComposite issueCreateComposite;
 	
