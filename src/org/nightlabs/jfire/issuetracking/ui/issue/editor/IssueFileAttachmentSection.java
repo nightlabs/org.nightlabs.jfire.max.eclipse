@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -94,18 +93,18 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	
 	@Override
 	protected void doSetIssue(Issue newIssue) {
-		if (issue != null && newIssue.getFileList().size() == nFile) {
+		if (issue != null && newIssue.getIssueFileAttachments().size() == nFile) {
 			return;
 		}
 		
 		issue = newIssue;
-		nFile = issue.getFileList().size();
+		nFile = issue.getIssueFileAttachments().size();
 		
-		List<IssueFileAttachment> fileAttachments = newIssue.getFileList();
-		List<File> fileList = new ArrayList<File>();
-		for(IssueFileAttachment isa : fileAttachments) {
+//		List<IssueFileAttachment> fileAttachments = newIssue.getIssueFileAttachments();
+//		List<File> fileList = new ArrayList<File>();
+//		for(IssueFileAttachment isa : fileAttachments) {
 //			fileComposite.addFile(isa.getFileName(), isa.createFileAttachmentInputStream());
-		}
+//		}
 	}
 	
 	public class DownloadFileAction extends Action {		
@@ -163,7 +162,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 					IssueFileAttachment fileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
 					fileAttachment.loadFile(file);
 //					fileAttachment.loadFile((fileComposite.getInputStreamMap().get(selectedFile), selectedFile);
-					issue.getFileList().add(fileAttachment);
+					issue.getIssueFileAttachments().add(fileAttachment);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -187,7 +186,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 		@Override
 		public void run() {
-			List<IssueFileAttachment> fileList = issue.getFileList();
+//			List<IssueFileAttachment> fileList = issue.getIssueFileAttachments();
 //			fileComposite.removeFiles(fileComposite.getFileListWidget().getSelection());
 //			for (int i = 0; i < fileComposite.getFileListWidget().getSelection().length; i++) {
 //				String fileName = fileComposite.getFileListWidget().getSelection()[i];
@@ -198,8 +197,8 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 //				}
 //			}
 			
-			issue.getFileList().clear();
-			issue.getFileList().addAll(fileList);
+//			issue.getIssueFileAttachments().clear();
+//			issue.getIssueFileAttachments().addAll(fileList);
 			
 			markDirty();
 		}		

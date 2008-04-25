@@ -149,7 +149,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 					issuePropertySection.setIssue(getController().getIssue());
 				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed()) {
 					issueFileAttachmentSection.setIssue(getController().getIssue());
-					if (getController().getIssue().getFileList().size() == 0) {
+					if (getController().getIssue().getIssueFileAttachments().size() == 0) {
 						issueFileAttachmentSection.getSection().setExpanded(false);
 					}
 				}
