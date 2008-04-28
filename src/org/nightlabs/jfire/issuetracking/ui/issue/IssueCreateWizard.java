@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,6 +14,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
@@ -50,23 +52,21 @@ extends DynamicPathWizard
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
-//		FetchPlan.DEFAULT,
-//		Issue.FETCH_GROUP_ISSUE_LINKS,
-//		IssueLink.FETCH_GROUP_ISSUE_LINKED_OBJECT_ID,
-//		IssueLinkType.FETCH_GROUP_NAME,
-//		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
-//		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
-//		Issue.FETCH_GROUP_ISSUE_REPORTER,
-//		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-//		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-//		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
-//		Issue.FETCH_GROUP_SUBJECT,
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_LINKS,
+		IssueLinkType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
+		Issue.FETCH_GROUP_ISSUE_REPORTER,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
+		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS};
+		IssueLink.FETCH_GROUP_LINKED_OBJECT};
+	
 	@Override
 	public boolean performFinish() {
-		// TODO this should be done on a worker thread! Use the Wizard.getContainer().run(...) method!
+		// this should be done on a worker thread! Use the Wizard.getContainer().run(...) method!
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {

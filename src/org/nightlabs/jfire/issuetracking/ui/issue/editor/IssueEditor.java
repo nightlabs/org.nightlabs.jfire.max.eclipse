@@ -20,8 +20,19 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
 
@@ -29,9 +40,29 @@ public class IssueEditor extends EntityEditor{
 	
 	public static final String EDITOR_ID = IssueEditor.class.getName();
 	
+	private static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_THIS_ISSUE,
+		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
+		IssuePriority.FETCH_GROUP_NAME,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+		IssueComment.FETCH_GROUP_THIS_COMMENT,
+		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
+		Statable.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		StateDefinition.FETCH_GROUP_NAME,
+		User.FETCH_GROUP_THIS_USER,
+		IssueLinkType.FETCH_GROUP_NAME,
+	};
+	
 	private EditLockHandle editLockHandle;
 	
 	private IssueEditorInput issueEditorInput;
+	
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException
 	{
@@ -45,7 +76,7 @@ public class IssueEditor extends EntityEditor{
 			{
 				final Issue issue = IssueDAO.sharedInstance().getIssue(
 						issueEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, Issue.FETCH_GROUP_THIS_ISSUE, IssueLink.FETCH_GROUP_LINKED_OBJECT, IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS},
+						FETCH_GROUPS,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				Display.getDefault().asyncExec(new Runnable()
 				{

@@ -171,7 +171,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 						new String[] {
 								FetchPlan.DEFAULT,
 								Issue.FETCH_GROUP_ISSUE_LINKS,
-								IssueLink.FETCH_GROUP_ISSUE_LINKED_OBJECT_ID,
 								IssueLinkType.FETCH_GROUP_NAME,
 								IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS
 						}, 
