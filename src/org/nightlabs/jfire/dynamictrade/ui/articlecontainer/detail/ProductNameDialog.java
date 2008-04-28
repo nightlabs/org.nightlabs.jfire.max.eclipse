@@ -17,10 +17,12 @@ extends CenteredDialog
 {
 	private I18nText productName;
 	private II18nTextEditor productNameEditor;
-
-	public ProductNameDialog(Shell parentShell, I18nText productName)
+	private boolean editable;
+	
+	public ProductNameDialog(Shell parentShell, I18nText productName, boolean editable)
 	{
 		super(parentShell);
+		this.editable = editable;
 		this.productName = productName;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
@@ -37,6 +39,7 @@ extends CenteredDialog
 		getShell().setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.title")); //$NON-NLS-1$
 		Composite area = (Composite) super.createDialogArea(parent);
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
+		this.productNameEditor.setEditable(editable);
 		this.productNameEditor.setI18nText(productName, EditMode.BUFFERED);
 		return area;
 	}

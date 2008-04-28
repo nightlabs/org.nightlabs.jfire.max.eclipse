@@ -198,7 +198,7 @@ extends FadeableComposite
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				if (Window.OK == new ProductNameDialog(getShell(), productName).open()) {
+				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable).open())) {
 					updateProductNameUI();
 					productNameModified = true;
 				}
