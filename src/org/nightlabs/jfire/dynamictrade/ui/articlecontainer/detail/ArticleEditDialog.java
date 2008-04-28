@@ -5,12 +5,11 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
-import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.trade.Article;
 
 public class ArticleEditDialog
-extends CenteredDialog
+extends ResizableTrayDialog
 {
 	private ArticleEditDialogComposite articleEditDialogComposite;
 	private ArticleEdit articleEdit;
@@ -18,7 +17,7 @@ extends CenteredDialog
 
 	public ArticleEditDialog(Shell parentShell, ArticleEdit articleEdit, Article article)
 	{
-		super(parentShell);
+		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.articleEdit = articleEdit;
 		this.article = article;
@@ -29,9 +28,8 @@ extends CenteredDialog
 	{
 		Composite area = (Composite) super.createDialogArea(parent);
 		articleEditDialogComposite = new ArticleEditDialogComposite(
-				area, articleEdit.getSegmentEdit().getArticleContainer(), (DynamicProductType) article.getProductType());
+				area, articleEdit.getSegmentEdit().getArticleContainer(), article);
 
-		articleEditDialogComposite.setArticle(article);
 		return articleEditDialogComposite;
 	}
 

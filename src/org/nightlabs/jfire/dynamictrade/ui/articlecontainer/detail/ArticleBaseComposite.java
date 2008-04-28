@@ -38,6 +38,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.Tariff;
@@ -73,11 +74,13 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.Util;
 
 public abstract class ArticleBaseComposite
@@ -95,12 +98,47 @@ extends FadeableComposite
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
 
 	protected XComposite comp1;
+	
+	/**
+	 * Used for {@link #createPriceCoordinate()} if it could be set
+	 * and for the price fragment table.
+	 */
+	private Currency currency;
+	/**
+	 * Used for {@link #createPriceCoordinate()} if it could be set.
+	 */
+	private CustomerGroupID customerGroupID;
+	/**
+	 * Set when the Composite was created with an article.
+	 * Will be nulled again after {@link #_setArticle(Article)} was called 
+	 * with it.
+	 */
+	private Article createArticle;
 
+	/**
+	 * Whether to check if the composite should be editable.
+	 */
+	private boolean checkForEditable = false;
+	
+	/**
+	 * Create a new {@link ArticleBaseComposite} with a {@link DynamicProductType}.
+	 * 
+	 * @param parent
+	 * @param articleContainer
+	 * @param productType
+	 */
 	public ArticleBaseComposite(Composite parent, ArticleContainer articleContainer, DynamicProductType productType)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.articleContainer = articleContainer;
 		this.productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
+	}
+	
+	public ArticleBaseComposite(Composite parent, ArticleContainer articleContainer, Article article)
+	{
+		this(parent, articleContainer, (DynamicProductType) article.getProductType());
+		createArticle = article;
+		checkForEditable = true;
 	}
 
 	protected void createUI()
@@ -137,16 +175,6 @@ extends FadeableComposite
 			}
 		});
 
-		ArticleContainer ac = articleContainer;
-		Currency currency;
-		if (ac instanceof Order)
-			currency = ((Order)ac).getCurrency();
-		else if (ac instanceof Offer)
-			currency = ((Offer)ac).getCurrency();
-		else
-			throw new IllegalStateException("articleAdder.getSegmentEdit().getArticleContainer() is an unsupported type: " + (ac == null ? null : ac.getClass().getName())); //$NON-NLS-1$
-
-
 		SashForm comp2 = new SashForm(this, SWT.HORIZONTAL);
 //		comp2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comp2.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -177,7 +205,7 @@ extends FadeableComposite
 			}
 		});
 
-		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2, currency) {
+		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2) {
 			@Override
 			@Implement
 			protected void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType)
@@ -224,9 +252,8 @@ extends FadeableComposite
 		});
 
 		createUI_additionalElements_comp1(comp1);
-
+		
 		loadDynamicProductType();
-		setFaded(true);
 	}
 
 	protected boolean inputPriceFragmentTypeModified = false;
@@ -244,20 +271,77 @@ extends FadeableComposite
 
 	protected I18nTextBuffer productName = new I18nTextBuffer();
 
+	private boolean editable = true;
+	
+	protected void setEditable(boolean editable) {
+		if (this.editable == editable)
+			return;
+		this.editable = editable;
+		if (isFaded())
+			return;
+		applyEditableState();
+	}
+	
+	protected boolean isEditable() {
+		return editable;
+	}
+	
+	@Override
+	public void setFaded(boolean faded) {
+		super.setFaded(faded);
+		if (!faded) {
+			applyEditableState();
+		}
+	}
+	
+	private void applyEditableState() {
+		tariffCombo.setEnabled(editable);
+		quantity.setEditable(editable);
+		unitCombo.setEnabled(editable);
+		productNameText.setEditable(editable);
+		inputPriceFragmentTypeTable.setEditable(editable);
+	}
+	
+	/**
+	 * Creates a new {@link PriceCoordinate} for the customerGroupID,
+	 * the tariffID and the currencyID found in the ArticleContainer.
+	 * <p>
+	 * Note, that this method only creates a valid {@link PriceCoordinate}
+	 * if the {@link ArticleContainer} passed is either an {@link Order} 
+	 * or an {@link Offer}.
+	 * </p>
+	 * 
+	 * @return A new {@link PriceCoordinate}.
+	 */
 	protected IPriceCoordinate createPriceCoordinate()
 	{
 		Order order = (Order) (articleContainer instanceof Order ? articleContainer : null);
 		Offer offer = (Offer) (articleContainer instanceof Offer ? articleContainer : null);
-
-		Currency currency = order != null ? order.getCurrency() : null;
-		CustomerGroup customerGroup = order != null ? order.getCustomerGroup() : null;
-		if (offer != null) {
-			customerGroup = offer.getOrder().getCustomerGroup();
-			currency = offer.getCurrency();
+		
+		CurrencyID currencyID = null;
+		if (this.currency != null) 
+			currencyID = (CurrencyID) JDOHelper.getObjectId(this.currency);
+		else {
+			Currency currency = order != null ? order.getCurrency() : null;
+			if (offer != null) {
+				currency = offer.getCurrency();
+			}
+			if (currency != null)
+				currencyID = (CurrencyID) JDOHelper.getObjectId(currency);
 		}
-
-		CurrencyID currencyID = (CurrencyID) JDOHelper.getObjectId(currency);
-		CustomerGroupID customerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroup);
+		CustomerGroupID customerGroupID = null;
+		if (this.customerGroupID != null)
+			customerGroupID = this.customerGroupID;
+		else {
+			CustomerGroup customerGroup = order != null ? order.getCustomerGroup() : null;
+			customerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroup);
+			if (offer != null) {
+				customerGroup = offer.getOrder().getCustomerGroup();
+			}
+			if (customerGroup != null)
+				customerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroup);
+		}
+		
 		Tariff tariff = tariffCombo.getSelectedElement();
 		TariffID tariffID = (TariffID) JDOHelper.getObjectId(tariff);
 
@@ -271,20 +355,31 @@ extends FadeableComposite
 //	private static long temporaryResultPriceConfigID = IDGenerator.nextID(PriceConfig.class);
 	private static String temporaryResultPriceConfigID = "temporary.resultPriceConfigID";
 
-	private volatile boolean loadDynamicProductType_inProcess = false;
+	/**
+	 * Though it was volatile I had strange timing issues and changed to synchronizing.
+	 * I also initialized the value to true, because in theory (and unfortunately it also happened to me)
+	 * setArticle can be called in the time the load job is scheduled (in the constructor)
+	 * and the time the Job actually starts.
+	 */
+//	private volatile boolean loadDynamicProductType_inProcess = false;
+	private boolean[] loadDynamicProductType_inProcess = new boolean[] {true};
 
 	private void loadDynamicProductType()
 	{
+		setFaded(true);
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				if (loadDynamicProductType_inProcess)
-					throw new IllegalStateException("Why the hell is this Job executed twice at the same time?!"); //$NON-NLS-1$
-
 				boolean error = true;
-				loadDynamicProductType_inProcess = true;
+				
+				synchronized (loadDynamicProductType_inProcess) {
+//					if (loadDynamicProductType_inProcess[0])
+//						throw new IllegalStateException("Why the hell is this Job executed twice at the same time?!"); //$NON-NLS-1$
+					loadDynamicProductType_inProcess[0] = true;
+				}
+
 				try {
 
 					dynamicProductType = (DynamicProductType) Util.cloneSerializable(
@@ -336,17 +431,31 @@ extends FadeableComposite
 						}
 					});
 
-				// Sort the tariffs according to the config module
+					// Sort the tariffs according to the config module
 					String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
 					TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
 							fetchGroups, -1, new NullProgressMonitor());
 					Collections.sort(tariffs, cfMod.getTariffComparator());
 					// Sorting done
 
+					
+					// check for the currencyID, that is needed for the 
+					// labelprovider of the table.
+					checkCurrency(monitor);
+					
+					// check for the customerGroupID
+					checkCustomerGroup(monitor);
+					
+					// check if the composite should be editable
+					// with the data it has loaded
+					final boolean shouldBeEditable = checkEditable(monitor);
+					
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run()
 						{
+							setEditable(shouldBeEditable);
+							Article deferredArticle = null;
 							try {
 								if (tariffCombo.isDisposed())
 									return;
@@ -360,6 +469,7 @@ extends FadeableComposite
 									tariffCombo.setSelection(0);
 
 								inputPriceFragmentTypes = ipfts;
+								inputPriceFragmentTypeTable.setCurrency(currency);
 								inputPriceFragmentTypeTable.setInput(ipfts);
 								fireCompositeContentChangeEvent();
 
@@ -373,18 +483,27 @@ extends FadeableComposite
 								updateInputPriceFragmentTypes();
 								setFaded(false);
 
-								if (deferredArticleAssignment != null)
-									_setArticle(deferredArticleAssignment);
 							} finally {
-								loadDynamicProductType_inProcess = false;
+								synchronized (loadDynamicProductType_inProcess) {
+									deferredArticle = deferredArticleAssignment;
+									deferredArticleAssignment = null;
+									loadDynamicProductType_inProcess[0] = false;
+								}
 							}
+							if (createArticle != null)
+								_setArticle(createArticle);
+							else if (deferredArticle != null)
+								_setArticle(deferredArticle);
 						}
 					});
 
 					error = false;
 				} finally {
-					if (error)
-						loadDynamicProductType_inProcess = false;
+					if (error) {
+						synchronized (loadDynamicProductType_inProcess) {
+							loadDynamicProductType_inProcess[0] = false;
+						}
+					}
 				}
 
 				return Status.OK_STATUS;
@@ -394,6 +513,97 @@ extends FadeableComposite
 		job.schedule();
 	}
 
+	private boolean checkEditable(ProgressMonitor monitor) {
+		if (!checkForEditable)
+			return true;
+		boolean finalized = true;
+		if (articleContainer instanceof Offer) {
+			finalized = ((Offer) articleContainer).isFinalized();
+		} else if (createArticle != null) {
+			finalized = getArticleContainerFinalized(createArticle, monitor);
+		} else if (deferredArticleAssignment != null) {
+			finalized = getArticleContainerFinalized(deferredArticleAssignment, monitor);
+		} else if (article != null) {
+			finalized = getArticleContainerFinalized(article, monitor);
+		}
+		return !finalized;
+	}
+	
+	private boolean getArticleContainerFinalized(Article article, ProgressMonitor monitor) {
+		try {
+			// try to get the offer#finalized value
+			return article.getOffer().isFinalized();
+		} catch (JDODetachedFieldAccessException ex) {
+			// it was not detached, we get the article with the offer
+			Article _article = ArticleDAO.sharedInstance().getArticle(
+					(ArticleID) JDOHelper.getObjectId(article), new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_OFFER}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 100));
+			return _article.getOffer().isFinalized();
+		}
+	}
+	
+	
+	private void checkCurrency(ProgressMonitor monitor) {
+		if (currency == null) {
+			ArticleContainer ac = articleContainer;
+			if (ac instanceof Order)
+				currency = ((Order) ac).getCurrency();
+			else if (ac instanceof Offer)
+				currency = ((Offer) ac).getCurrency();
+			else if (ac instanceof Invoice) {
+				currency = ((Invoice) ac).getCurrency();
+			} else {
+				// try to get the Currency from the deferredArticle, very ugly, but should work
+				if (createArticle != null) {
+					/* Hmm, this was instantiated with an article, 
+					 * but strangely the Currency was not set.
+					 * To be sure, we get the Article with correct fetch-groups.
+					 */
+					Article article = ArticleDAO.sharedInstance().getArticle(
+							(ArticleID) JDOHelper.getObjectId(createArticle), 
+							new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_CURRENCY}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 100));
+					currency = article.getCurrency(); 
+				} else if (deferredArticleAssignment != null) {
+					// we are lucky ;-) 
+					// Seems that setArticle was called while we were loading other stuff
+					currency = deferredArticleAssignment.getCurrency();
+				}
+				throw new IllegalStateException("Could not determine the Currency for the given articleContainer or article, this is a programming 'mistake' and timing issue!"); //$NON-NLS-1$	
+			}
+		}		
+	}
+	
+	private void checkCustomerGroup(ProgressMonitor monitor) {
+		if (customerGroupID == null) {
+			CustomerGroup customerGroup = null;
+			if (articleContainer instanceof Order) {
+				customerGroup = ((Order) articleContainer).getCustomerGroup();
+			} else if (articleContainer instanceof Offer) {
+				customerGroup = ((Offer) articleContainer).getOrder().getCustomerGroup(); 
+			} else if (createArticle != null) {
+				customerGroup = getArticleCustomerGroup(createArticle, monitor);
+			} else if (deferredArticleAssignment != null) {
+				customerGroup = getArticleCustomerGroup(deferredArticleAssignment, monitor);
+			}
+			if (customerGroup != null)
+				customerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroup);
+		}		
+	}
+	
+	private CustomerGroup getArticleCustomerGroup(Article article, ProgressMonitor monitor) {
+		try {
+			return article.getOrder().getCustomerGroup();
+		} catch (JDODetachedFieldAccessException ex) {
+			// not detached, need to access it
+			Article _article = ArticleDAO.sharedInstance().getArticle(
+					(ArticleID) JDOHelper.getObjectId(article), 
+					new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_ORDER, Order.FETCH_GROUP_CUSTOMER_GROUP}, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			return _article.getOrder().getCustomerGroup();
+		}
+	}
+	
 	protected abstract void fireCompositeContentChangeEvent();
 
 	private void updateInputPriceFragmentTypes()
@@ -424,12 +634,13 @@ extends FadeableComposite
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("This method must be called on the UI Thread! Wrong Thread!"); //$NON-NLS-1$
 
-		if (loadDynamicProductType_inProcess) {
-			deferredArticleAssignment = article;
+		synchronized (loadDynamicProductType_inProcess) {
+			if (loadDynamicProductType_inProcess[0]) {
+				deferredArticleAssignment = article;
+				return;
+			}
 		}
-		else {
-			_setArticle(article);
-		}
+		_setArticle(article);
 	}
 
 	protected void updateProductNameUI()
@@ -442,7 +653,7 @@ extends FadeableComposite
 	protected void _setArticle(Article _article)
 	{
 		if (!_article.getProductType().equals(dynamicProductType))
-			throw new IllegalArgumentException("article.productType != this.productType"); //$NON-NLS-1$
+			throw new IllegalArgumentException("article.productType != this.productType : " + _article.getProductType() + " != " + dynamicProductType); //$NON-NLS-1$
 
 		this.article = _article;
 

@@ -13,9 +13,9 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
-import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.UnitID;
+import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.NumberFormatter;
@@ -25,9 +25,9 @@ extends ArticleBaseComposite
 {
 
 	public ArticleEditDialogComposite(Composite parent,
-			ArticleContainer articleContainer, DynamicProductType productType)
+			ArticleContainer articleContainer, Article article)
 	{
-		super(parent, articleContainer, productType);
+		super(parent, articleContainer, article);
 
 		createUI();
 	}
@@ -41,7 +41,10 @@ extends ArticleBaseComposite
 
 	public void submit()
 	{
-		try {
+		if (!isEditable())
+			return; // If the Composite is not editable we do nothing here.
+		
+		try {			
 			ArticleID articleID = (ArticleID) JDOHelper.getObjectId(this.article);
 			Long quantity = null;
 			UnitID unitID = null;

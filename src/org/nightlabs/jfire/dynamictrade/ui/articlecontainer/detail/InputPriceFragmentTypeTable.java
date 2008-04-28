@@ -83,12 +83,36 @@ extends AbstractTableComposite<InputPriceFragmentType>
 
 	protected abstract void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType);
 
-	public InputPriceFragmentTypeTable(Composite parent, Currency currency)
+	/**
+	 * Create a new {@link InputPriceFragmentTypeTable} for the given parent.
+	 * <p>
+	 * Note, that {@link #setCurrency(Currency)} still needs to be called 
+	 * when using this constructor as the Table won't work otherwise.
+	 * </p>
+	 * @param parent The parent to use.
+	 */
+	public InputPriceFragmentTypeTable(Composite parent)
 	{
 		super(parent, SWT.NONE, false);
-		this.currency = currency;
 		initTable();
 		getTable().setHeaderVisible(false);
+	}
+	/**
+	 * Create a new {@link InputPriceFragmentType} for the given parent.
+	 * @param parent The parent to use.
+	 * @param currency The currency to use.
+	 */
+	public InputPriceFragmentTypeTable(Composite parent, Currency currency) {
+		this(parent);
+		setCurrency(currency);
+	}
+	
+	/**
+	 * Set the {@link Currency} used by this table. 
+	 * @param currency The {@link Currency} to set.
+	 */
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	@Override
@@ -112,13 +136,29 @@ extends AbstractTableComposite<InputPriceFragmentType>
 	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setColumnProperties(new String[] { PROPERTY_NAME, PROPERTY_AMOUNT });
-		tableViewer.setCellModifier(cellModifier);
-		tableViewer.setCellEditors(new CellEditor[] {
-				null,
-				new TextCellEditor(tableViewer.getTable())
-		});
+		setEditable(true);
 		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(labelProvider);
+	}
+	
+	public void setEditable(boolean editable) {
+		CellEditor[] editors = getTableViewer().getCellEditors();
+		if (editable) {
+			getTableViewer().setColumnProperties(new String[] { PROPERTY_NAME, PROPERTY_AMOUNT });
+			getTableViewer().setCellModifier(cellModifier);
+			getTableViewer().setCellEditors(new CellEditor[] {
+					null,
+					new TextCellEditor(getTableViewer().getTable())
+			});
+		}
+		else {
+			if (editors != null) {
+				for (CellEditor cellEditor : editors) {
+					if (cellEditor != null)
+						cellEditor.dispose();
+				}
+			}
+			getTableViewer().setCellEditors(new CellEditor[] {null, null});
+		}
 	}
 }
