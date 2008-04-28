@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import java.util.List;
 
@@ -33,11 +33,14 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class IssueCreateComposite
+public class CreateIssueComposite
 extends XComposite
 {
 	private List<IssueType> issueTypes;
@@ -88,7 +91,7 @@ extends XComposite
 	
 	private Issue issue;
 	
-	public IssueCreateComposite(Composite parent, int style, Issue issue) {
+	public CreateIssueComposite(Composite parent, int style, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
 		this.issue = issue;

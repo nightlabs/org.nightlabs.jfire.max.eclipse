@@ -46,7 +46,7 @@
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="10" />
 		<pageFactory
-			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorHistoryPage$Factory"
+			class="org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="20" />
    </extension>  

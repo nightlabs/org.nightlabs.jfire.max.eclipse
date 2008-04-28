@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,20 +24,20 @@ import org.nightlabs.progress.NullProgressMonitor;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueCreateWizard 
+public class CreateIssueWizard 
 extends DynamicPathWizard
 {
 	private Issue newIssue;
 	private ObjectID linkedObjectID;
 
-	private IssueCreateWizardPage issueCreateWizardPage;
+	private CreateIssueWizardPage issueCreateWizardPage;
 	
 	/**
 	 * Launch the wizard with a linkedObject for which to immediately create a new {@link IssueLink}.
 	 *
 	 * @param linkedObjectID
 	 */
-	public IssueCreateWizard()
+	public CreateIssueWizard()
 	{
 		setWindowTitle("Create new issue");	
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
@@ -47,7 +47,7 @@ extends DynamicPathWizard
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		issueCreateWizardPage = new IssueCreateWizardPage(newIssue);
+		issueCreateWizardPage = new CreateIssueWizardPage(newIssue);
 		addPage(issueCreateWizardPage);
 	}
 

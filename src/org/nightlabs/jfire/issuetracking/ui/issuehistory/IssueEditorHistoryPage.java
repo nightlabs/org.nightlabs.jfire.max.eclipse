@@ -21,7 +21,7 @@
  * Or get it online :                                                          *
  *     http://opensource.org/licenses/lgpl-license.php                         *
  ******************************************************************************/
-package org.nightlabs.jfire.issuetracking.ui.issue.editor;
+package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -31,6 +31,8 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueHistoryListSection;
 
 /**
  * An editor page for issue tracking overview.

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -11,14 +11,14 @@ import org.nightlabs.jfire.issue.Issue;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueCreateWizardPage 
+public class CreateIssueWizardPage 
 extends WizardHopPage
 {
 	private Issue issue;
-	private IssueCreateComposite issueCreateComposite;
+	private CreateIssueComposite issueCreateComposite;
 	
-	public IssueCreateWizardPage(Issue issue){
-		super(IssueCreateWizardPage.class.getName(), "New Issue");
+	public CreateIssueWizardPage(Issue issue){
+		super(CreateIssueWizardPage.class.getName(), "New Issue");
 		setDescription("Create a new issue.");
 		this.issue = issue;
 	}
@@ -28,7 +28,7 @@ extends WizardHopPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		issueCreateComposite = new IssueCreateComposite(mainComposite, SWT.NONE, issue);
+		issueCreateComposite = new CreateIssueComposite(mainComposite, SWT.NONE, issue);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
@@ -65,7 +65,7 @@ extends WizardHopPage
 		
 	}
 	
-	public IssueCreateComposite getIssueCreateComposite(){
+	public CreateIssueComposite getIssueCreateComposite(){
 		return issueCreateComposite;
 	}
 }
