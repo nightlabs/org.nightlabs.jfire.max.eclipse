@@ -179,7 +179,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 				}
 				monitorTicksLeft -= 20;
 
-
 				// (2) resolve IssueLinkHandlers and group IssueLinks by IssueLinkHandler
 				//     => Map<IssueLinkHandler, Set<IssueLink>>
 				Map<IssueLinkHandler<?, ?>, Set<IssueLink>> handler2issueLinks = new HashMap<IssueLinkHandler<?, ?>, Set<IssueLink>>();
