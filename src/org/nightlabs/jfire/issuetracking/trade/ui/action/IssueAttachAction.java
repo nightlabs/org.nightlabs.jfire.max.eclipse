@@ -26,7 +26,7 @@ public class IssueAttachAction extends ArticleContainerAction
 		ArticleContainer articleContainer = this.getArticleContainer();
 		ObjectID objectID = (ObjectID)JDOHelper.getObjectId(articleContainer);
 		
-//		IssueCreateWizard issueCreateWizard = new IssueCreateWizard();
+//		CreateIssueWizard issueCreateWizard = new CreateIssueWizard();
 //		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(issueCreateWizard);
 //		dialog.open();
 	}
