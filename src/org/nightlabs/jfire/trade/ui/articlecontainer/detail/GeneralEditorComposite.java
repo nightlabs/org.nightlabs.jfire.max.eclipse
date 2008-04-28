@@ -412,36 +412,7 @@ extends XComposite
 	
 	protected boolean hasDifferentSegments()
 	{
-		// TODO After initial creation of the GeneralEditorComposite, it is a bad idea
-		// to access the ArticleContainer! During initialisation, all the relevant data
-		// (i.e. all the Articles) are loaded into an instance of ClientArticleSegmentGroups
-		// which is manipulated afterwards. That means, while the result of
-		// this.articleContainer.getArticles() does NOT change until the editor is closed and
-		// reopened, the method this.articleSegmentGroups.getArticles() will return up-to-date
-		// information. It even provides this info structured
-		// (see e.g. ArticleSegmentGroups.getArticleSegmentGroups()).
-
-		Segment segment = null;
-
-		if (articleContainer instanceof SegmentContainer) {
-			SegmentContainer segmentContainer = (SegmentContainer) articleContainer;
-			Collection<? extends Segment> segments = segmentContainer.getSegments();
-
-			if (segments.size() > 1)
-				return true;
-			else if (segments.size() == 1)
-				segment = segments.iterator().next();
-		}
-
-		for (Iterator<Article> it = articleContainer.getArticles().iterator(); it.hasNext(); ) {
-			Article article = it.next();
-			if (segment == null)
-				segment = article.getSegment();
-			if (!segment.equals(article.getSegment()))
-				return true;
-		}
-
-		return false;
+		return articleSegmentGroups.getArticleSegmentGroups().size() > 1;
 	}
 	
 	protected void updateHeaderAndFooter() {
