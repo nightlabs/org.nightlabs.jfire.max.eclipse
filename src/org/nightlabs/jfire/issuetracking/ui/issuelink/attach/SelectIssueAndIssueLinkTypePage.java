@@ -31,6 +31,8 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
@@ -220,5 +222,42 @@ extends DynamicPathWizardPage
 			}
 		else 
 			return false;
+	}
+
+	public Object getAttachedObject() {
+		return attachedObject;
+	}
+
+	public IssueLinkType getSelectedIssueLinkType() {
+		return selectedIssueLinkType;
+	}
+
+	public Issue getSelectedIssue() {
+		return selectedIssue;
+	}
+	
+	private IssueLinkType newIssueLinkType;
+	
+	public IssueLinkType getIssueLinkType() {
+		switch (action) {
+			case createNewIssueLinkType:
+				if (newIssueLinkType == null) {
+					newIssueLinkType = new IssueLinkType(
+							IDGenerator.getOrganisationID(),
+							ObjectIDUtil.longObjectIDFieldToString(IDGenerator.nextID(IssueLinkType.class))
+					);
+				}
+
+				newIssueLinkType.getName().copyFrom(newIssueLinkTypeName);
+				newIssueLinkType.clearLinkedObjectClasses();
+				newIssueLinkType.addLinkedObjectClass(attachedObject.getClass());
+				return newIssueLinkType;
+
+			case selectExistingIssueLinkType:
+				return selectedIssueLinkType;
+
+			default:
+				throw new IllegalStateException("Unknown action: " + action);
+		}
 	}
 }
