@@ -1,5 +1,11 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 
+import java.util.Collection;
+
+import javax.jdo.FetchPlan;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -19,31 +25,37 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class SelectIssueAndIssueLinkTypePage 
 extends DynamicPathWizardPage
 {
 	private Button createNewIssueLinkTypeRadio;
 	private Button selectExistingIssueLinkTypeRadio;
-	
+
 	private I18nTextEditor newIssueLinkTypeNameEditor;
 	private I18nTextBuffer newIssueLinkTypeName = new I18nTextBuffer();
-	
+
 	private ListComposite<IssueLinkType> issueLinkTypeList;
-	
+
 	private IssueEntryListViewer issueEntryListViewer;
-	
+
 	private IssueLinkType selectedIssueLinkType;
 	private Issue selectedIssue;
-	
+	private Object attachedObject;
+
 	public static enum Action {
 		createNewIssueLinkType,
 		selectExistingIssueLinkType
@@ -54,7 +66,7 @@ extends DynamicPathWizardPage
 	public Action getAction() {
 		return action;
 	}
-	
+
 	public void setAction(Action action) {
 		this.action = action;
 		createNewIssueLinkTypeRadio.setSelection(false);
@@ -73,9 +85,10 @@ extends DynamicPathWizardPage
 
 		getContainer().updateButtons();
 	}
-	
-	public SelectIssueAndIssueLinkTypePage() {
+
+	public SelectIssueAndIssueLinkTypePage(Object attachedObject) {
 		super(SelectIssueAndIssueLinkTypePage.class.getName());
+		this.attachedObject = attachedObject;
 		setDescription("");
 	}
 
@@ -116,11 +129,11 @@ extends DynamicPathWizardPage
 		manageRelationGroup.setLayout(new GridLayout(1, false));
 		manageRelationGroup.setText("Predefined Relations");
 		manageRelationGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		XComposite manageComposite = new XComposite(manageRelationGroup, SWT.NONE);
 		manageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		manageComposite.getGridLayout().numColumns = 1;
-		
+
 		issueLinkTypeList = new ListComposite<IssueLinkType>(manageComposite, SWT.SINGLE);
 		issueLinkTypeList.setLabelProvider(new LabelProvider() {
 			@Override
@@ -138,6 +151,27 @@ extends DynamicPathWizardPage
 			}
 		});
 
+		Job job = new Job("Loading IssueLinkTypes...") {
+			@Override
+			protected IStatus run(final ProgressMonitor monitor) throws Exception {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						IssueLinkTypeDAO issueLinkTypeDAO = IssueLinkTypeDAO.sharedInstance();
+						Collection<IssueLinkType> issueLinkTypes = issueLinkTypeDAO.getIssueLinkTypes(
+								attachedObject.getClass(), 
+								new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+								new SubProgressMonitor(monitor, 10));
+						issueLinkTypeList.setInput(issueLinkTypes);
+						
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
@@ -147,7 +181,7 @@ extends DynamicPathWizardPage
 						//do nothing!!!
 					}
 				});
-				
+
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement(); 
@@ -155,17 +189,17 @@ extends DynamicPathWizardPage
 				});
 			}
 		};	
-		
+
 		issueEntryListViewer.createComposite(mainComposite);
 		issueEntryListViewer.search();
 		issueEntryListViewer.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				setAction(Action.selectExistingIssueLinkType);
 			}
 		});
-		
+
 		return mainComposite;
 	}
 
