@@ -184,7 +184,8 @@ extends DynamicPathWizardPage
 
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
-						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement(); 
+						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement();
+						getContainer().updateButtons();
 					}
 				});
 			}
