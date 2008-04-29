@@ -28,7 +28,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
-public class SelectIssueLinkTypePage 
+public class SelectIssueAndIssueLinkTypePage 
 extends DynamicPathWizardPage
 {
 	private Button createNewIssueLinkTypeRadio;
@@ -74,8 +74,8 @@ extends DynamicPathWizardPage
 		getContainer().updateButtons();
 	}
 	
-	public SelectIssueLinkTypePage() {
-		super(SelectIssueLinkTypePage.class.getName());
+	public SelectIssueAndIssueLinkTypePage() {
+		super(SelectIssueAndIssueLinkTypePage.class.getName());
 		setDescription("");
 	}
 
@@ -138,12 +138,6 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				setAction(Action.selectExistingIssueLinkType);
-			}
-		});
-		
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
@@ -166,6 +160,12 @@ extends DynamicPathWizardPage
 		issueEntryListViewer.search();
 		issueEntryListViewer.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				setAction(Action.selectExistingIssueLinkType);
+			}
+		});
+		
 		return mainComposite;
 	}
 
@@ -174,13 +174,16 @@ extends DynamicPathWizardPage
 		if (createNewIssueLinkTypeRadio == null) // check if UI is already created
 			return false;
 
-		switch (action) {
-			case createNewIssueLinkType:
-				return !newIssueLinkTypeName.isEmpty() && selectedIssue != null;
-			case selectExistingIssueLinkType:
-				return selectedIssueLinkType != null && selectedIssue != null;
-			default:
-				throw new IllegalStateException("Unknown action: " + action);
-		}
+		if (action != null)
+			switch (action) {
+				case createNewIssueLinkType:
+					return !newIssueLinkTypeName.isEmpty() && selectedIssue != null;
+				case selectExistingIssueLinkType:
+					return selectedIssueLinkType != null && selectedIssue != null;
+				default:
+					throw new IllegalStateException("Unknown action: " + action);
+			}
+		else 
+			return false;
 	}
 }

@@ -7,7 +7,7 @@ public class AttachIssueToObjectWizard
 extends DynamicPathWizard
 {
 	private ObjectID objectID;
-	private SelectIssueLinkTypePage selectIssueLinkTypePage;
+	private SelectIssueAndIssueLinkTypePage selectIssueAndIssueLinkTypePage;
 	
 	public AttachIssueToObjectWizard(ObjectID objectID) {
 		this.objectID = objectID;
@@ -16,8 +16,8 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		selectIssueLinkTypePage = new SelectIssueLinkTypePage();
-		addPage(selectIssueLinkTypePage);
+		selectIssueAndIssueLinkTypePage = new SelectIssueAndIssueLinkTypePage();
+		addPage(selectIssueAndIssueLinkTypePage);
 	}
 
 	@Override
