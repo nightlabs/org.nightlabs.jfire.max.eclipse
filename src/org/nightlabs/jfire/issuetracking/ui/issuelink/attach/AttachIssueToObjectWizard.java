@@ -1,22 +1,21 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.jdo.ObjectID;
 
 public class AttachIssueToObjectWizard 
 extends DynamicPathWizard
 {
-	private ObjectID objectID;
+	private Object attachedObject;
 	private SelectIssueAndIssueLinkTypePage selectIssueAndIssueLinkTypePage;
 	
-	public AttachIssueToObjectWizard(ObjectID objectID) {
-		this.objectID = objectID;
+	public AttachIssueToObjectWizard(Object attacedObject) {
+		this.attachedObject = attacedObject;
 		setWindowTitle("Attach Issue(s) to Objects");
 	}
 
 	@Override
 	public void addPages() {
-		selectIssueAndIssueLinkTypePage = new SelectIssueAndIssueLinkTypePage();
+		selectIssueAndIssueLinkTypePage = new SelectIssueAndIssueLinkTypePage(attachedObject);
 		addPage(selectIssueAndIssueLinkTypePage);
 	}
 
