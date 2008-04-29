@@ -23,11 +23,12 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
-public class SelectIssueAndIssueLinkTypePage 
+public class SelectIssueLinkTypePage 
 extends DynamicPathWizardPage
 {
 	private Button createNewIssueLinkTypeRadio;
@@ -37,7 +38,11 @@ extends DynamicPathWizardPage
 	private I18nTextBuffer newIssueLinkTypeName = new I18nTextBuffer();
 	
 	private ListComposite<IssueLinkType> issueLinkTypeList;
+	
+	private IssueEntryListViewer issueEntryListViewer;
+	
 	private IssueLinkType selectedIssueLinkType;
+	private Issue selectedIssue;
 	
 	public static enum Action {
 		createNewIssueLinkType,
@@ -49,6 +54,7 @@ extends DynamicPathWizardPage
 	public Action getAction() {
 		return action;
 	}
+	
 	public void setAction(Action action) {
 		this.action = action;
 		createNewIssueLinkTypeRadio.setSelection(false);
@@ -68,8 +74,8 @@ extends DynamicPathWizardPage
 		getContainer().updateButtons();
 	}
 	
-	public SelectIssueAndIssueLinkTypePage() {
-		super(SelectIssueAndIssueLinkTypePage.class.getName());
+	public SelectIssueLinkTypePage() {
+		super(SelectIssueLinkTypePage.class.getName());
 		setDescription("");
 	}
 
@@ -138,40 +144,43 @@ extends DynamicPathWizardPage
 			}
 		});
 		
-		IssueEntryListViewer iViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
+		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
 				tableComposite.addDoubleClickListener(new IDoubleClickListener() {
 					@Override
 					public void doubleClick(DoubleClickEvent evt) {
+						//do nothing!!!
 					}
 				});
 				
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
+						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement(); 
 					}
 				});
 			}
 		};	
 		
-		iViewer.createComposite(mainComposite);
-		iViewer.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+		issueEntryListViewer.createComposite(mainComposite);
+		issueEntryListViewer.search();
+		issueEntryListViewer.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		return mainComposite;
 	}
 
 	@Override
 	public boolean isPageComplete() {
-//		if (createNewIssueLinkTypeRadio == null) // check if UI is already created
-//			return false;
-//
-//		switch (action) {
-//			case createNewIssueLinkType:
-//				return !newIssueLinkTypeName.isEmpty();
-//			case selectExistingIssueLinkType:
-//				return selectedIssueLinkType != null;
-//			default:
-//				throw new IllegalStateException("Unknown action: " + action);
-		return true;
+		if (createNewIssueLinkTypeRadio == null) // check if UI is already created
+			return false;
+
+		switch (action) {
+			case createNewIssueLinkType:
+				return !newIssueLinkTypeName.isEmpty() && selectedIssue != null;
+			case selectExistingIssueLinkType:
+				return selectedIssueLinkType != null && selectedIssue != null;
+			default:
+				throw new IllegalStateException("Unknown action: " + action);
 		}
+	}
 }

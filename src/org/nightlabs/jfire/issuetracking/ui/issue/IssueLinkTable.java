@@ -422,8 +422,4 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		this.refresh();
 		notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.remove, removedItems);
 	}
-
-//	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
-//		return Collections.unmodifiableSet(issueLinkTableItems);
-//	}
 }
