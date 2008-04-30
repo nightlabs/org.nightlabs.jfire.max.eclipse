@@ -53,7 +53,7 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AllocationStatusImageUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroups;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.l10n.NumberFormatter;
 
 /**
@@ -192,7 +192,7 @@ implements ISelectionProvider
 	private ArticleEdit articleEdit;
 	private ArticleContentProvider articleContentProvider;
 	private ArticleLabelProvider articleLabelProvider;
-	private ClientArticleSegmentGroups clientArticleSegmentGroups;
+	private ClientArticleSegmentGroupSet clientArticleSegmentGroupSet;
 
 	/**
 	 * @param parent
@@ -207,11 +207,11 @@ implements ISelectionProvider
 		this.articleLabelProvider = new ArticleLabelProvider();
 		initTable();
 		getTable().setHeaderVisible(true);
-		clientArticleSegmentGroups = ((ClientArticleSegmentGroups)articleEdit.getSegmentEdit().getArticleSegmentGroup().getArticleSegmentGroups());
-		clientArticleSegmentGroups.addArticleChangeListener(articleChangeListener);
+		clientArticleSegmentGroupSet = ((ClientArticleSegmentGroupSet)articleEdit.getSegmentEdit().getArticleSegmentGroup().getArticleSegmentGroups());
+		clientArticleSegmentGroupSet.addArticleChangeListener(articleChangeListener);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				clientArticleSegmentGroups.removeArticleChangeListener(articleChangeListener);
+				clientArticleSegmentGroupSet.removeArticleChangeListener(articleChangeListener);
 			}
 		});
 	}
