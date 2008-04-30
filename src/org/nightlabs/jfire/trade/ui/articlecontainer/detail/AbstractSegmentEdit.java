@@ -585,6 +585,7 @@ implements SegmentEdit
 	{
 		SelectionManager.sharedInstance().removeNotificationListener(
 				TradePlugin.ZONE_SALE, ProductTypeID.class, notificationListenerProductTypeSelected);
+		composite = null;
 	}
 
 	protected abstract void createArticleEditComposite(ArticleEdit articleEdit);
