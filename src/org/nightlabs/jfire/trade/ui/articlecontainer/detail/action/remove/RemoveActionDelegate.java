@@ -120,7 +120,7 @@ public abstract class RemoveActionDelegate extends ArticleEditActionDelegate
 	/**
 	 * This implementation removes the {@link org.nightlabs.jfire.trade.ui.Article}s specified by the {@link ArticleSelection}
 	 * from the {@link org.nightlabs.jfire.trade.ui.ArticleProductTypeClassGroup} by calling {@link ArticleEdit#removeArticles(Set)}.
-	 * This keeps the {@link org.nightlabs.jfire.trade.ui.ArticleSegmentGroups}
+	 * This keeps the {@link org.nightlabs.jfire.trade.ui.ArticleSegmentGroupSet}
 	 * up to date. You should update your GUI in {@link ArticleEdit#removeArticles(Set)}.
 	 *
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate#run(org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction, org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection)

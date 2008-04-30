@@ -374,9 +374,9 @@ implements SegmentEdit
 		return articleSegmentGroup;
 	}
 
-	public ClientArticleSegmentGroups getClientArticleSegmentGroups()
+	public ClientArticleSegmentGroupSet getClientArticleSegmentGroups()
 	{
-		return (ClientArticleSegmentGroups)getArticleSegmentGroup().getArticleSegmentGroups();
+		return (ClientArticleSegmentGroupSet)getArticleSegmentGroup().getArticleSegmentGroups();
 	}
 
 	private ListenerList compositeContentChangeListeners = new ListenerList();
@@ -490,7 +490,7 @@ implements SegmentEdit
 //			}
 //		}
 
-		// We don't need to add it here anymore, because it's done by a JDOLifecycleListener in ClientArticleSegmentGroups.
+		// We don't need to add it here anymore, because it's done by a JDOLifecycleListener in ClientArticleSegmentGroupSet.
 		// 2006-11-24 Marco.
 //		articleSegmentGroup.addArticles(articles);
 

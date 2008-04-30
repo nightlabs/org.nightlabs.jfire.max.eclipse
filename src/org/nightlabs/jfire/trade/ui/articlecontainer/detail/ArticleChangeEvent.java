@@ -66,7 +66,7 @@ public class ArticleChangeEvent extends EventObject
 	 * @return Instances of {@link Article}. Note, that this <code>Collection</code>
 	 *		does not have an <code>Article</code> for every <code>ArticleID</code> in the
 	 *		<code>ChangeEvent</code> (see {@link #getChangeEvent()}), but only for those that
-	 *		are managed by the instance of {@link org.nightlabs.jfire.trade.ui.ArticleSegmentGroups}.
+	 *		are managed by the instance of {@link org.nightlabs.jfire.trade.ui.ArticleSegmentGroupSet}.
 	 */
 	public Collection<Article> getDirtyArticles()
 	{

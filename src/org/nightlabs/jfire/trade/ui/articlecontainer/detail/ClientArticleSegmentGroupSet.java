@@ -55,7 +55,7 @@ import org.nightlabs.jfire.store.id.ReceptionNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.ArticleSegmentGroups;
+import org.nightlabs.jfire.trade.ArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
@@ -77,24 +77,24 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Marco Schulze - Marco at NightLabs dot de
  *
  */
-public class ClientArticleSegmentGroups extends ArticleSegmentGroups
+public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 {
-	private static final Logger logger = Logger.getLogger(ClientArticleSegmentGroups.class);
+	private static final Logger logger = Logger.getLogger(ClientArticleSegmentGroupSet.class);
 
 	private String[] fetchGroupsArticle;
 
-	public ClientArticleSegmentGroups(ArticleContainer articleContainer,
+	public ClientArticleSegmentGroupSet(ArticleContainer articleContainer,
 			ArticleCreateListener ... articleCreateListeners)
 	{
 		this(articleContainer, articleCreateListeners, null);
 	}
-	public ClientArticleSegmentGroups(ArticleContainer articleContainer,
+	public ClientArticleSegmentGroupSet(ArticleContainer articleContainer,
 			ArticleChangeListener ... articleChangeListeners)
 	{
 		this(articleContainer, null, articleChangeListeners);
 	}
 
-	public ClientArticleSegmentGroups(ArticleContainer articleContainer,
+	public ClientArticleSegmentGroupSet(ArticleContainer articleContainer,
 			ArticleCreateListener[] articleCreateListeners, ArticleChangeListener[] articleChangeListeners)
 	{
 		super(articleContainer);
@@ -151,7 +151,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR
 	};
 
-	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroups.job.loadingNewArticles")) { //$NON-NLS-1$
+	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet.job.loadingNewArticles")) { //$NON-NLS-1$
 //	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
 		private ArticleLifecycleListenerFilter filter = null;
 
@@ -173,7 +173,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 
 		public void notify(final JDOLifecycleEvent event)
 		{
-			synchronized (ClientArticleSegmentGroups.this) {
+			synchronized (ClientArticleSegmentGroupSet.this) {
 				if (logger.isDebugEnabled())
 					logger.debug("JDOLifecycleAdapterJob.notify: begin"); //$NON-NLS-1$
 
@@ -268,7 +268,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 			articles = nArticles;
 		}
 
-		final ArticleCreateEvent articleCreateEvent = new ArticleCreateEvent(ClientArticleSegmentGroups.this, articles, articleCarriers);
+		final ArticleCreateEvent articleCreateEvent = new ArticleCreateEvent(ClientArticleSegmentGroupSet.this, articles, articleCarriers);
 
 		final Object[] listeners = articleCreateListeners.getListeners();
 		Display.getDefault().asyncExec(new Runnable()
@@ -297,7 +297,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 	private NotificationListener notificationListenerArticlesChanged = new NotificationAdapterCallerThread() { // TODO this must not be called on the caller thread - only temporarily for debugging!
 		public void notify(final NotificationEvent notificationEvent)
 		{
-			synchronized (ClientArticleSegmentGroups.this) { // there is no guarantee, that a job enqueued first is executed first or is there?!???!???
+			synchronized (ClientArticleSegmentGroupSet.this) { // there is no guarantee, that a job enqueued first is executed first or is there?!???!???
 				if (getActiveNotificationEvent() != notificationEvent) {
 					logger.error("Job executed too late!!! How do we prevent this??? getActiveNotificationEvent()=" + getActiveNotificationEvent() + " event=" + notificationEvent); //$NON-NLS-1$ //$NON-NLS-2$
 				}
@@ -392,10 +392,10 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 				// listeners are triggered with the new situation in place. In case they still need
 				// the deleted articles/articleCarriers, they can access the references passed in the
 				// event. Marco.
-				ClientArticleSegmentGroups.super.removeArticles(deletedArticles);
+				ClientArticleSegmentGroupSet.super.removeArticles(deletedArticles);
 
 				final ArticleChangeEvent articleChangeEvent = new ArticleChangeEvent(
-						ClientArticleSegmentGroups.this,
+						ClientArticleSegmentGroupSet.this,
 						dirtyArticles, dirtyArticleCarriers,
 						deletedArticles, deletedArticleCarriers);
 
@@ -450,7 +450,7 @@ public class ClientArticleSegmentGroups extends ArticleSegmentGroups
 		super.removeArticles(deletedArticles);
 
 		final ArticleChangeEvent articleChangeEvent = new ArticleChangeEvent(
-				ClientArticleSegmentGroups.this,
+				ClientArticleSegmentGroupSet.this,
 				new ArrayList<Article>(0), new ArrayList<ArticleCarrier>(0),
 				deletedArticles, deletedArticleCarriers);
 

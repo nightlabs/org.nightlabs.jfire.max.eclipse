@@ -545,7 +545,7 @@ extends XComposite
 		layout(true, true);
 	}
 
-	private ClientArticleSegmentGroups articleSegmentGroups = null;
+	private ClientArticleSegmentGroupSet articleSegmentGroups = null;
 
 	protected void createArticleSegmentGroups()
 	throws EPProcessorException
@@ -579,7 +579,7 @@ extends XComposite
 			articleChangeListenerArray = new ArticleChangeListener[] { articleChangeListener };
 		}
 
-		articleSegmentGroups = new ClientArticleSegmentGroups(articleContainer,
+		articleSegmentGroups = new ClientArticleSegmentGroupSet(articleContainer,
 				articleCreateListenerArray,
 				articleChangeListenerArray);
 	}
@@ -589,7 +589,7 @@ extends XComposite
 	{
 		segmentEditCompositesCreated = true;
 
-		// ArticleSegmentGroups asgs = new ArticleSegmentGroups(articleContainer);
+		// ArticleSegmentGroupSet asgs = new ArticleSegmentGroupSet(articleContainer);
 		for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroups.getArticleSegmentGroups())
 			createSegmentEditAndComposite(articleSegmentGroup);
 
@@ -870,7 +870,7 @@ extends XComposite
 	/**
 	 * Initialise this instance of <code>GeneralEditorComposite</code> or reload the {@link ArticleContainer} referenced
 	 * by the <code>generalEditorInput</code> parameter. In case of reloading, the articles are not fetched again
-	 * (they're managed separately by the {@link ClientArticleSegmentGroups} in {@link #articleSegmentGroups})
+	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroups})
 	 *
 	 * @param generalEditorInput the input to be set.
 	 * @param monitor the monitor to provide feedback.
@@ -1012,7 +1012,7 @@ extends XComposite
 		}
 	}
 
-	public ClientArticleSegmentGroups getArticleSegmentGroups()
+	public ClientArticleSegmentGroupSet getArticleSegmentGroups()
 	{
 		return articleSegmentGroups;
 	}

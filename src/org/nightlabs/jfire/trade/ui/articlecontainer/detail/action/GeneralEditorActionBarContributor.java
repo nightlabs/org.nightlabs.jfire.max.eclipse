@@ -67,7 +67,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroups;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
@@ -173,7 +173,7 @@ extends EditorActionBarContributor
 
 	private void contributeActionsIfArticleCarriersAffectActiveSegmentEdit(Collection<ArticleCarrier> articleCarriers)
 	{
-//	 This listener is subscribed to the whole ClientArticleSegmentGroups and therefore not all Articles
+//	 This listener is subscribed to the whole ClientArticleSegmentGroupSet and therefore not all Articles
 		// in the current event are necessarily in the currently active SegmentEdit.
 		if (activeSegmentEdit == null)
 			return;
@@ -302,17 +302,17 @@ extends EditorActionBarContributor
 			}
 		}
 
-		ClientArticleSegmentGroups oldClientArticleSegmentGroups = oldActiveSegmentEdit == null ? null : oldActiveSegmentEdit.getClientArticleSegmentGroups();
-		ClientArticleSegmentGroups clientArticleSegmentGroups = activeSegmentEdit == null ? null : activeSegmentEdit.getClientArticleSegmentGroups();
+		ClientArticleSegmentGroupSet oldClientArticleSegmentGroups = oldActiveSegmentEdit == null ? null : oldActiveSegmentEdit.getClientArticleSegmentGroups();
+		ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = activeSegmentEdit == null ? null : activeSegmentEdit.getClientArticleSegmentGroups();
 
-		if (oldClientArticleSegmentGroups != clientArticleSegmentGroups) {
+		if (oldClientArticleSegmentGroups != clientArticleSegmentGroupSet) {
 			if (oldClientArticleSegmentGroups != null) {
 				oldClientArticleSegmentGroups.removeArticleCreateListener(articleCreateListener);
 				oldClientArticleSegmentGroups.removeArticleChangeListener(articleChangeListener);
 			}
-			if (clientArticleSegmentGroups != null) {
-				clientArticleSegmentGroups.addArticleCreateListener(articleCreateListener);
-				clientArticleSegmentGroups.addArticleChangeListener(articleChangeListener);
+			if (clientArticleSegmentGroupSet != null) {
+				clientArticleSegmentGroupSet.addArticleCreateListener(articleCreateListener);
+				clientArticleSegmentGroupSet.addArticleChangeListener(articleChangeListener);
 			}
 		}
 

@@ -104,13 +104,13 @@ public interface SegmentEdit
 	 * This is a convenience method to avoid casting and shorten method calls. It
 	 * does the following:
 	 * <code>
-	 * return (ClientArticleSegmentGroups)getArticleSegmentGroup().getArticleSegmentGroups();
+	 * return (ClientArticleSegmentGroupSet)getArticleSegmentGroup().getArticleSegmentGroups();
 	 * </code>
 	 *
-	 * @return Returns the {@link ClientArticleSegmentGroups} instance which is the main container
+	 * @return Returns the {@link ClientArticleSegmentGroupSet} instance which is the main container
 	 *		holding all {@link Article}s in a grouped tree.
 	 */
-	ClientArticleSegmentGroups getClientArticleSegmentGroups();
+	ClientArticleSegmentGroupSet getClientArticleSegmentGroups();
 
 	/**
 	 * @return Returns all {@link ArticleEdit}s of this <code>SegmentEdit</code>.
@@ -180,11 +180,11 @@ public interface SegmentEdit
 	 * <p>
 	 * The {@link ArticleAdder} does not need to add articles locally anymore. It only needs
 	 * to add them on the server side. The client is automatically notified about this via
-	 * a {@link JDOLifecycleListener} which is registered by the {@link ClientArticleSegmentGroups}.
+	 * a {@link JDOLifecycleListener} which is registered by the {@link ClientArticleSegmentGroupSet}.
 	 * </p>
 	 * <p>
 	 * Hence, this method is now called by the {@link GeneralEditorComposite} (which is notified
-	 * by the {@link ClientArticleSegmentGroups}) and it needs to update its UI (i.e. its {@link Composite}).
+	 * by the {@link ClientArticleSegmentGroupSet}) and it needs to update its UI (i.e. its {@link Composite}).
 	 * </p>
 	 * <p>
 	 * If you do not override the default implementation in {@link AbstractSegmentEdit}, this method
@@ -207,9 +207,9 @@ public interface SegmentEdit
 	/**
 	 * <p>
 	 * This method is called by the {@link GeneralEditorComposite} (which is notified
-	 * by the {@link ClientArticleSegmentGroups}), whenever articles are removed from an {@link ArticleContainer}.
+	 * by the {@link ClientArticleSegmentGroupSet}), whenever articles are removed from an {@link ArticleContainer}.
 	 * Note, that the {@link ArticleCarrier}s passed to this method have already been removed from
-	 * the {@link ClientArticleSegmentGroups} when this method is called.
+	 * the {@link ClientArticleSegmentGroupSet} when this method is called.
 	 * </p>
 	 * <p>
 	 * The client is notified about this kind of change by the server. Therefore, the UI does not need
