@@ -67,7 +67,7 @@ public class DeliverAllAction extends ArticleContainerAction
 		if (!(articleContainer instanceof DeliveryNote))
 			return true;
 		
-		for (Article article : articleContainer.getArticles())
+		for (Article article : getArticles())
 			if (!article.getArticleLocal().isDelivered())
 				return true;
 
