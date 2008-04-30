@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
