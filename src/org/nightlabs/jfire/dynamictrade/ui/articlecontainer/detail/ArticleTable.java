@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -55,6 +53,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -163,10 +162,10 @@ extends AbstractTableComposite<Article>
 
 			int ci = 0;
 			if (ci == columnIndex)
-				return dynamicProductType.getName().getText(Locale.getDefault().getLanguage());
+				return dynamicProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return dynamicProduct.getName().getText(Locale.getDefault().getLanguage());
+				return dynamicProduct.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
 				return NumberFormatter.formatFloat(dynamicProduct.getQuantityAsDouble(), 2);

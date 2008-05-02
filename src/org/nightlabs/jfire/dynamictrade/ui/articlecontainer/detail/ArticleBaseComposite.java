@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -81,6 +80,7 @@ import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
 
 public abstract class ArticleBaseComposite
@@ -165,7 +165,7 @@ extends FadeableComposite
 			}
 		});
 		Tariff dummy = new Tariff("dummy", "_dummy_"); //$NON-NLS-1$ //$NON-NLS-2$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.pseudoTariff_loading")); //$NON-NLS-1$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.pseudoTariff_loading")); //$NON-NLS-1$
 		tariffCombo.addElement(dummy);
 		tariffCombo.selectElement(dummy);
 		tariffCombo.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -186,7 +186,7 @@ extends FadeableComposite
 		productNameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
 			{
-				productName.setText(Locale.getDefault().getLanguage(), productNameText.getText());
+				productName.setText(NLLocale.getDefault().getLanguage(), productNameText.getText());
 				productNameModified = true;
 			}
 		});
@@ -461,7 +461,7 @@ extends FadeableComposite
 									return;
 
 								productTypeNameLabel.setText(
-										dynamicProductType.getName().getText(Locale.getDefault().getLanguage()));
+										dynamicProductType.getName().getText(NLLocale.getDefault().getLanguage()));
 
 								tariffCombo.removeAll();
 								tariffCombo.addElements(tariffs);
@@ -645,7 +645,7 @@ extends FadeableComposite
 
 	protected void updateProductNameUI()
 	{
-		productNameText.setText(productName.getText(Locale.getDefault().getLanguage()));
+		productNameText.setText(productName.getText(NLLocale.getDefault().getLanguage()));
 	}
 
 	protected Article article = null;

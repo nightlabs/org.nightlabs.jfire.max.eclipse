@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.dynamictrade.ui.quicklist;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
@@ -35,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -55,7 +54,7 @@ extends AbstractProductTypeTable<DynamicProductType>
 			ProductType pt = (DynamicProductType)element;
 			StringBuffer sb = new StringBuffer();
 			while (pt.getExtendedProductType() != null) {
-				sb.insert(0, pt.getName().getText(Locale.getDefault().getLanguage()));
+				sb.insert(0, pt.getName().getText(NLLocale.getDefault().getLanguage()));
 				pt = pt.getExtendedProductType();
 				if (pt.getExtendedProductType() != null)
 					sb.insert(0, " / "); //$NON-NLS-1$

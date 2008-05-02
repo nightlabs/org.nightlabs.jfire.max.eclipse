@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
-import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
