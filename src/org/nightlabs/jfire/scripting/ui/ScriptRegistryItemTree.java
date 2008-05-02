@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.notification.SelectionNotificationProxy;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
-import org.nightlabs.jfire.scripting.ui.resource.Messages;
 
 /**
  * Tree of <code>ScriptRegistryItemNode</code>s with one column

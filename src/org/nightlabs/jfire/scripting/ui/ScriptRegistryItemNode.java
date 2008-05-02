@@ -28,7 +28,6 @@ package org.nightlabs.jfire.scripting.ui;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -43,6 +42,7 @@ import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.ScriptRegistryItemCarrier;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * Node object to be used when displaying ScriptRegistryItems in trees.
@@ -242,7 +242,7 @@ public class ScriptRegistryItemNode extends ScriptRegistryItemCarrier {
 	}
 
 	public String getName() {
-		return getRegistryItem().getName().getText(Locale.getDefault().getLanguage());
+		return getRegistryItem().getName().getText(NLLocale.getDefault().getLanguage());
 	}
 
 }

@@ -3,8 +3,6 @@
  */
 package org.nightlabs.jfire.scripting.ui;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -12,6 +10,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
+import org.nightlabs.util.NLLocale;
 
 /**
  * A table displaying a Collection ScriptParameterSets.
@@ -33,7 +32,7 @@ public class ScriptParameterSetTable extends AbstractTableComposite<ScriptParame
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof ScriptParameterSet) {
-				return ((ScriptParameterSet)element).getName().getText(Locale.getDefault().getLanguage());
+				return ((ScriptParameterSet)element).getName().getText(NLLocale.getDefault().getLanguage());
 			}
 			else if (element instanceof String)
 				return (String)element;
