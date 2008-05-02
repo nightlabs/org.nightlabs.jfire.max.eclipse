@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -58,6 +56,7 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.ui.detail.VoucherKeyDetailComposite;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -159,7 +158,7 @@ implements ISelectionProvider
 
 			int ci = 0;
 			if (ci == columnIndex)
-				return simpleProductType.getName().getText(Locale.getDefault().getLanguage());
+				return simpleProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
 				return voucher.getVoucherKey() == null ? "" : voucher.getVoucherKey().getVoucherKey(); //$NON-NLS-1$

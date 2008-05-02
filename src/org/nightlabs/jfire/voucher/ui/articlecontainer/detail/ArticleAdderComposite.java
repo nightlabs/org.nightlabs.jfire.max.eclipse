@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -32,6 +31,7 @@ import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class ArticleAdderComposite
 		extends FadeableComposite
@@ -50,7 +50,7 @@ public class ArticleAdderComposite
 		productTypeNameLabel = new Label(this, SWT.NONE);
 		productTypeNameLabel.setLayoutData(new GridData());
 		productTypeNameLabel.setText(
-				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
+				articleAdder.getProductType().getName().getText(NLLocale.getDefault().getLanguage()));
 
 		quantitySelector = new QuantitySelector(this) {
 			@Override
