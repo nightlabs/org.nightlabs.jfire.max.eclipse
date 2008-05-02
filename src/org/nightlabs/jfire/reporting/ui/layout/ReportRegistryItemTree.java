@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.reporting.ui.layout;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
@@ -23,6 +21,7 @@ import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.util.NLLocale;
 
 public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
@@ -62,7 +61,7 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 
 		@Override
 		protected String getJDOObjectText(ReportRegistryItem jdoObject, int columnIndex) {
-			return jdoObject.getName().getText(Locale.getDefault().getLanguage());
+			return jdoObject.getName().getText(NLLocale.getDefault().getLanguage());
 		}
 		
 		@Override

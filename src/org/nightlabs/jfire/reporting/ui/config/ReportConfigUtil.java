@@ -35,6 +35,8 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutAvailEntry;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
+import org.nightlabs.jfire.reporting.layout.ReportCategory;
+import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.progress.NullProgressMonitor;

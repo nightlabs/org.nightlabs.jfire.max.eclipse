@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMenuManager;
 
 /**

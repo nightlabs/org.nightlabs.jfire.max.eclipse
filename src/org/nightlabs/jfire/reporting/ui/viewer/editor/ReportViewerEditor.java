@@ -5,6 +5,7 @@ import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
+import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 
 /**
  * Interfaced used by the {@link AbstractEditorReportViewer}

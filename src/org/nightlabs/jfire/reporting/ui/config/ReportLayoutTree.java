@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.reporting.ui.config;
 
-import java.util.Locale;
-
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
@@ -62,6 +60,7 @@ import org.nightlabs.jfire.reporting.ui.layout.ActiveReportRegistryItemTreeContr
 import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemNode;
 import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemTree;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -124,7 +123,7 @@ implements ICellModifier
 			if (element instanceof ReportRegistryItemNode) {
 				ReportRegistryItem item = ((ReportRegistryItemNode)element).getJdoObject();
 				switch(columnIndex) {
-					case 0: return item.getName().getText(Locale.getDefault().getLanguage());
+					case 0: return item.getName().getText(NLLocale.getDefault().getLanguage());
 					case 1:
 					case 2:
 						return ""; //$NON-NLS-1$

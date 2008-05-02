@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.reporting.ui.parameter;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
@@ -21,6 +19,7 @@ import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEventHandler;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.ValueProviderCategory;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.util.NLLocale;
 
 /**
  * Active tree displaying {@link ValueProviderCategory}s and {@link ValueProvider}.
@@ -43,13 +42,13 @@ public class ValueProviderTree extends ActiveJDOObjectTreeComposite<ObjectID, Ob
 		@Override
 		protected String getJDOObjectText(Object jdoObject, int columnIndex) {
 			if (jdoObject instanceof ValueProviderCategory) {
-				return ((ValueProviderCategory)jdoObject).getName().getText(Locale.getDefault().getLanguage());
+				return ((ValueProviderCategory)jdoObject).getName().getText(NLLocale.getDefault().getLanguage());
 			}
 			else if (jdoObject instanceof ValueProvider) {
-				return ((ValueProvider)jdoObject).getName().getText(Locale.getDefault().getLanguage());
+				return ((ValueProvider)jdoObject).getName().getText(NLLocale.getDefault().getLanguage());
 			}
 			return jdoObject.toString();
-//			return jdoObject.getName().getText(Locale.getDefault().getLanguage());
+//			return jdoObject.getName().getText(NLLocale.getDefault().getLanguage());
 		}
 		
 		@Override

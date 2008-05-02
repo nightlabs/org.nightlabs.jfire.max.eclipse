@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
+import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 
 /**
  * A {@link PreparedRenderedReportLayout} references
