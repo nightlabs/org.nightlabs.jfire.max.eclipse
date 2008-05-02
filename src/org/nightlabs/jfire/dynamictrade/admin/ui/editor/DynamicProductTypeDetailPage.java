@@ -10,7 +10,7 @@ import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection;
-import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;
 
 
 /**
