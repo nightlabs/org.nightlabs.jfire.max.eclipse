@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.add;
 
-import java.util.Locale;
-
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -44,6 +42,7 @@ import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -61,7 +60,7 @@ public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 	private ModifyListener modifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent arg0) {
 			String editLang = getTextEditor().getLanguageChooser().getLanguage().getLanguageID();
-			if (editLang.equals(Locale.getDefault().getLanguage()))
+			if (editLang.equals(NLLocale.getDefault().getLanguage()))
 				registryItemID.getTextControl().setText(ObjectIDUtil.makeValidIDString(getTextEditor().getEditText()));
 			getWizard().getContainer().updateButtons();
 		}

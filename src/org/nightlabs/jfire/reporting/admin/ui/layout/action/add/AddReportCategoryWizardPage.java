@@ -26,11 +26,10 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.add;
 
-import java.util.Locale;
-
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -47,7 +46,7 @@ public class AddReportCategoryWizardPage extends I18nTextEditorWizardPage {
 	}
 	
 	public String getReportCategoryID() {
-		String name = getI18nText().getText(Locale.getDefault().getLanguage());
+		String name = getI18nText().getText(NLLocale.getDefault().getLanguage());
 		String id = ObjectIDUtil.makeValidIDString(name);
 		return id;
 	}

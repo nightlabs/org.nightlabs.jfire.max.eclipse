@@ -77,6 +77,7 @@ import org.nightlabs.jfire.reporting.ui.viewer.NoReportViewerFoundException;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
+import org.nightlabs.util.NLLocale;
 
 /**
  * A page for the Report Designer that lets the user preview
@@ -225,15 +226,15 @@ implements IReportEditorPage
 				Collection<Locale> locales = l10nManager.getBundleLocales();
 				if (locales == null || locales.size() == 0) {
 					locales = new ArrayList<Locale>(1);
-					selLocale = Locale.getDefault();
+					selLocale = NLLocale.getDefault();
 					locales.add(selLocale);
 				}
-				if (!locales.contains(Locale.getDefault()))
-					locales.add(Locale.getDefault());
+				if (!locales.contains(NLLocale.getDefault()))
+					locales.add(NLLocale.getDefault());
 				
 				localeCombo.addElements(locales);
 				if (selLocale == null)
-					selLocale = Locale.getDefault();
+					selLocale = NLLocale.getDefault();
 				localeCombo.setSelection(selLocale);
 			}
 		}

@@ -32,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -53,6 +52,7 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.IOUtil;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
@@ -163,7 +163,7 @@ implements IJFireRemoteReportEditorInput
 	@Override
 	public String getName() {
 		getLocalInput();
-		return layoutName.getText(Locale.getDefault().getLanguage());
+		return layoutName.getText(NLLocale.getDefault().getLanguage());
 	}
 
 	/* (non-Javadoc)
