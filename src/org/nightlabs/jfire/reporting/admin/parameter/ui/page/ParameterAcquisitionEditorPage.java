@@ -48,6 +48,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.editpart.ValueAcquisitionSetupEditPart;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.action.IActionUpdateDelegate;
+import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 
 /**
  * A page for the Report Designer that lets the user preview
