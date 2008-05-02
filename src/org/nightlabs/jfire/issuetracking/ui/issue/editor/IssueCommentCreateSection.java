@@ -3,8 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Font;

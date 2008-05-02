@@ -5,9 +5,6 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView;
-import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
-import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
 
 public class IssuePerspective implements IPerspectiveFactory{
 	

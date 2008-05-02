@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
