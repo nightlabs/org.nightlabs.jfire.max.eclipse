@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.admin.ui.createvouchertype;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -39,6 +38,7 @@ import org.nightlabs.jfire.voucher.dao.VoucherPriceConfigDAO;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class SelectVoucherPriceConfigPage
 extends WizardHopPage
@@ -192,7 +192,7 @@ extends WizardHopPage
 			}
 		});
 		VoucherPriceConfig dummy = new VoucherPriceConfig("dummy", "dummy"); //$NON-NLS-1$  //$NON-NLS-2$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.priceConfigList.item_loadingData")); //$NON-NLS-1$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.priceConfigList.item_loadingData")); //$NON-NLS-1$
 		priceConfigList.addElement(dummy);
 
 		priceConfigList.addSelectionChangedListener(new ISelectionChangedListener() {

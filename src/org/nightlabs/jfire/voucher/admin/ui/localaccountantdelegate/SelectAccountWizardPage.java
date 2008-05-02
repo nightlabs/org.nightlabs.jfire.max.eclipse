@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -37,6 +36,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class SelectAccountWizardPage
 extends WizardHopPage
@@ -111,7 +111,7 @@ extends WizardHopPage
 		});
 
 		Account dummy = new Account("a", "a", new AccountType("a", "a", false), new LegalEntity("a", "a"), new Currency("a", "a", 0)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.accountList.item_loadingData")); //$NON-NLS-1$
 		accountList.addElement(dummy);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.loadJob.name")) { //$NON-NLS-1$

@@ -3,7 +3,6 @@ package org.nightlabs.jfire.voucher.admin.ui.createvouchertype;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -40,6 +39,7 @@ import org.nightlabs.jfire.voucher.dao.VoucherLocalAccountantDelegateDAO;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class SelectLocalAccountantDelegatePage
 extends WizardHopPage
@@ -128,7 +128,7 @@ extends WizardHopPage
 		});
 
 		VoucherLocalAccountantDelegate dummy = new VoucherLocalAccountantDelegate("", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectLocalAccountantDelegatePage.accountantDelegateList.item_loadingData")); //$NON-NLS-1$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectLocalAccountantDelegatePage.accountantDelegateList.item_loadingData")); //$NON-NLS-1$
 		accountantDelegateList.addElement(dummy);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectLocalAccountantDelegatePage.loadJob.name")) { //$NON-NLS-1$
