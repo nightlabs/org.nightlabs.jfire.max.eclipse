@@ -21,22 +21,23 @@ import org.nightlabs.jfire.simpletrade.store.prop.SimpleProductTypeStruct;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class DescriptionDataBlockEditor
 extends AbstractDataBlockEditor
 {
 	public static class Factory implements DataBlockEditorFactory {
-		/**
-		 * @see org.nightlabs.jfire.base.ui.person.edit.blockbased.PersonDataBlockEditorFactory#getProviderStructBlockID()
+		/* (non-Javadoc)
+		 * @see org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory#getProviderStructBlockID()
 		 */
+		@Override
 		public StructBlockID getProviderStructBlockID() {
 			return SimpleProductTypeStruct.DESCRIPTION;
 		}
 
-		/**
-		 * @see org.nightlabs.jfire.base.ui.person.edit.blockbased.PersonDataBlockEditorFactory#createPersonDataBlockEditor(org.nightlabs.jfire.base.ui.person.PersonDataBlock, org.eclipse.swt.widgets.Composite, int)
+		/* (non-Javadoc)
+		 * @see org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory#createPropDataBlockEditor(org.nightlabs.jfire.prop.IStruct, org.nightlabs.jfire.prop.DataBlock, org.eclipse.swt.widgets.Composite, int)
 		 */
+		@Override
 		public AbstractDataBlockEditor createPropDataBlockEditor(IStruct struct, DataBlock dataBlock, Composite parent, int style) {
 			return new DescriptionDataBlockEditor(struct, dataBlock, parent, style);
 		}
@@ -44,18 +45,14 @@ extends AbstractDataBlockEditor
 
 	private static final Logger logger = Logger.getLogger(DescriptionDataBlockEditor.class);
 
-	/**
-	 * @param struct
-	 * @param dataBlock
-	 * @param parent
-	 * @param style
-	 */
 	public DescriptionDataBlockEditor(IStruct struct, DataBlock dataBlock,
 			Composite parent, int style) {
 		super(struct, dataBlock, parent, style);
 
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridLayout thisLayout = new GridLayout(2, true);
+		thisLayout.marginWidth = 0;
+		thisLayout.marginHeight = 0;
 		this.setLayout(thisLayout);
 
 		createFieldEditors();
