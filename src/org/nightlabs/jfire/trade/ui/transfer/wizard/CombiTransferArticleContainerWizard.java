@@ -47,6 +47,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
@@ -57,6 +58,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -103,11 +105,10 @@ extends AbstractCombiTransferWizard
 	 *		will of course be processed).
 	 * @param transferMode One of {@link AbstractCombiTransferWizard#TRANSFER_MODE_DELIVERY},
 	 *		{@link AbstractCombiTransferWizard#TRANSFER_MODE_PAYMENT} or {@link AbstractCombiTransferWizard#TRANSFER_MODE_BOTH}.
-	 * @param side Specifying whether we (the local organisation) is the vendor or the customer.
 	 */
-	public CombiTransferArticleContainerWizard(ArticleContainerID articleContainerID, byte transferMode, Side side)
+	public CombiTransferArticleContainerWizard(ArticleContainerID articleContainerID, byte transferMode)
 	{
-		super(transferMode, side);
+		super(transferMode);
 
 		this.articleContainerID = articleContainerID;
 		if (articleContainerID instanceof OrderID) {
@@ -384,6 +385,17 @@ extends AbstractCombiTransferWizard
 				}
 				this.setTotalAmount(amountToPay);
 			}
+			
+			// The LegalEntityID of the local organisation
+			AnchorID mandatorID = AnchorID.create(
+					SecurityReflector.getUserDescriptor().getOrganisationID(), 
+					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());
+			
+			if (mandatorID.equals(getCustomerID()))
+				setSide(Side.Customer);
+			else
+				setSide(Side.Vendor);
+			
 		} catch (RuntimeException x) {
 			throw x;
 		} catch (Exception x) {

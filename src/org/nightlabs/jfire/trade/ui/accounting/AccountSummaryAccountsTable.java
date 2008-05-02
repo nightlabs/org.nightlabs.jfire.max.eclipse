@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.JDOHelper;
 
@@ -56,6 +55,7 @@ import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
 
 /**
@@ -119,7 +119,7 @@ extends AbstractTableComposite<Account>
 
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof SummaryAccount)
-				return ((SummaryAccount)element).getName().getText(Locale.getDefault().getLanguage());
+				return ((SummaryAccount)element).getName().getText(NLLocale.getDefault().getLanguage());
 			return null;
 		}
 	}

@@ -29,12 +29,14 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
+import org.nightlabs.jfire.accounting.pay.PaymentException;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IDeliveryEntryPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 

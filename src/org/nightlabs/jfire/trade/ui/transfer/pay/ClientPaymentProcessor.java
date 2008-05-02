@@ -29,7 +29,9 @@ package org.nightlabs.jfire.trade.ui.transfer.pay;
 import java.util.Set;
 
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
+import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentException;

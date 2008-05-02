@@ -3,7 +3,6 @@ package org.nightlabs.jfire.trade.ui.overview.repository;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -43,6 +42,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -166,7 +166,7 @@ public class RepositoryFilterComposite
 		repositoryTypeList.setEnabled(false);
 
 		RepositoryType dummy = new RepositoryType(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.repositoryType.abc"), false); //$NON-NLS-1$ //$NON-NLS-2$
-		dummy.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.name.loadingData")); //$NON-NLS-1$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.name.loadingData")); //$NON-NLS-1$
 		repositoryTypeList.setInput(Collections.singletonList(dummy));
 		repositoryTypeList.addSelectionChangedListener(new ISelectionChangedListener()
 		{

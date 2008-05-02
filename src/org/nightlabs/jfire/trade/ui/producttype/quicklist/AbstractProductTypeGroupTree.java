@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -37,6 +36,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.SelectionUtil.SelectionContainment;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * Abstract base implementation for trees which display {@link ProductTypeGroup}s.
@@ -155,7 +155,7 @@ implements ISelectionHandler
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new NullProgressMonitor()
 					);
-					return group.getName().getText(Locale.getDefault().getLanguage());
+					return group.getName().getText(NLLocale.getDefault().getLanguage());
 				}
 				return ""; //$NON-NLS-1$
 			}

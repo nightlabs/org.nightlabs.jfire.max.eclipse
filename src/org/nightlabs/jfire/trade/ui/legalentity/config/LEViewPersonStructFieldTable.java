@@ -28,7 +28,6 @@ package org.nightlabs.jfire.trade.ui.legalentity.config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -47,6 +46,7 @@ import org.nightlabs.jfire.prop.id.StructFieldID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -137,7 +137,7 @@ extends AbstractTableComposite
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			return field.getName().getText(Locale.getDefault().getLanguage());
+			return field.getName().getText(NLLocale.getDefault().getLanguage());
 		}
 	}
 	

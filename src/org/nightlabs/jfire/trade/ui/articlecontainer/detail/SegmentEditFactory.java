@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 
 /**

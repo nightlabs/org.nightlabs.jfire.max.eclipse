@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -32,6 +31,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 public class CustomerGroupListComposite
 extends XComposite
@@ -130,8 +130,8 @@ implements ISelectionProvider
 					Collections.sort(_customerGroups, new Comparator<CustomerGroup>() {
 						public int compare(CustomerGroup o1, CustomerGroup o2)
 						{
-							String s1 = o1.getName().getText(Locale.getDefault().getLanguage());
-							String s2 = o2.getName().getText(Locale.getDefault().getLanguage());
+							String s1 = o1.getName().getText(NLLocale.getDefault().getLanguage());
+							String s2 = o2.getName().getText(NLLocale.getDefault().getLanguage());
 							return Collator.getInstance().compare(s1, s2);
 						}
 					});
@@ -146,7 +146,7 @@ implements ISelectionProvider
 							customerGroupList.removeAll();
 							customerGroups = _customerGroups;
 							for (CustomerGroup customerGroup : _customerGroups) {
-								customerGroupList.add(customerGroup.getName().getText(Locale.getDefault().getLanguage()) + (organisationVisible ? (" (" + customerGroup.getOrganisationID() + ")") : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								customerGroupList.add(customerGroup.getName().getText(NLLocale.getDefault().getLanguage()) + (organisationVisible ? (" (" + customerGroup.getOrganisationID() + ")") : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							}
 							CustomerGroupListComposite.this.getParent().layout(true);
 							fireSelectionChangedEvent();

@@ -12,7 +12,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Utility class which checks the containment of {@link ISelection}s for

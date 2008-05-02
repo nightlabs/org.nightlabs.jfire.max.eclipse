@@ -38,7 +38,7 @@ extends AbstractTableComposite<MoneyTransfer>
 		FetchPlan.DEFAULT,
 		Transfer.FETCH_GROUP_THIS_TRANSFER,
 		MoneyTransfer.FETCH_GROUP_CURRENCY,
-		ManualMoneyTransfer.FETCH_GROUP_REASON}	;
+		ManualMoneyTransfer.FETCH_GROUP_DESCRIPTION};
 
 	public MoneyTransferTable(Composite parent, int style)
 	{
@@ -98,24 +98,22 @@ extends AbstractTableComposite<MoneyTransfer>
 	{
 		public String getColumnText(Object element, int columnIndex)
 		{
-			if (element instanceof ManualMoneyTransfer) {
-				ManualMoneyTransfer manualMoneyTransfer = (ManualMoneyTransfer) element;
+			if (element instanceof MoneyTransfer) {
+				MoneyTransfer moneyTransfer = (MoneyTransfer) element;
 				switch (columnIndex)
 				{
 				case(0):
-					if (manualMoneyTransfer.getFrom().getAnchorID() != null)
-						return manualMoneyTransfer.getFrom().getAnchorID();
+					if (moneyTransfer.getFrom().getAnchorID() != null)
+						return moneyTransfer.getFrom().getAnchorID();
 				break;
 				case(1):
-					if (manualMoneyTransfer.getTo().getAnchorID() != null)
-						return manualMoneyTransfer.getTo().getAnchorID();
+					if (moneyTransfer.getTo().getAnchorID() != null)
+						return moneyTransfer.getTo().getAnchorID();
 				break;
 				case(2):
-					return NumberFormatter.formatCurrency(manualMoneyTransfer.getAmount(), manualMoneyTransfer.getCurrency(), true);
+					return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);
 				case(3):
-					if (manualMoneyTransfer.getReason() != null)
-						return manualMoneyTransfer.getReason().getText();
-				break;
+					return moneyTransfer.getDescription();	
 				default:
 					return ""; //$NON-NLS-1$
 				}

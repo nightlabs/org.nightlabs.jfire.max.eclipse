@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.dao.TariffDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class TariffList extends AbstractTableComposite<Tariff> {
 	public static interface TariffFilter {
@@ -159,8 +160,8 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 					if (tariffComparator == null) {
 						tariffComparator = new Comparator<Tariff>() {
 							public int compare(Tariff o1, Tariff o2) {
-								String s1 = o1.getName().getText(Locale.getDefault().getLanguage());
-								String s2 = o2.getName().getText(Locale.getDefault().getLanguage());
+								String s1 = o1.getName().getText(NLLocale.getDefault().getLanguage());
+								String s2 = o2.getName().getText(NLLocale.getDefault().getLanguage());
 								return Collator.getInstance().compare(s1, s2);
 							}
 						};
@@ -177,7 +178,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 								setSelectedElements(selectedTariffs);
 
 //							for (Tariff tariff : _tariffs) {
-//								tariffList.add(tariff.getName().getText(Locale.getDefault().getLanguage())
+//								tariffList.add(tariff.getName().getText(NLLocale.getDefault().getLanguage())
 //										+ (organisationVisible ? (" (" + tariff.getOrganisationID() + ")") : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 //							}
 							TariffList.this.getParent().layout(true);

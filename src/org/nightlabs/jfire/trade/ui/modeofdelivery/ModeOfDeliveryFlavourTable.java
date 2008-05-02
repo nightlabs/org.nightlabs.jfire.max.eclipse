@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.modeofdelivery;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
-import java.util.Locale;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -18,7 +17,7 @@ import org.eclipse.ui.internal.forms.widgets.SWTUtil;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 public class ModeOfDeliveryFlavourTable
 extends AbstractTableComposite<ModeOfDeliveryFlavour>
@@ -54,7 +53,7 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			return ((ModeOfDeliveryFlavour)element).getName().getText(Locale.getDefault().getLanguage());
+			return ((ModeOfDeliveryFlavour)element).getName().getText(NLLocale.getDefault().getLanguage());
 		}
 	}
 

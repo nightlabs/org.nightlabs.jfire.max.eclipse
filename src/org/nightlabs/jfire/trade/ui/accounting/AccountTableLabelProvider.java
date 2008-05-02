@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.accounting;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -37,6 +35,7 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -79,7 +78,7 @@ implements ITableLabelProvider
 			Account account = (Account) element;
 			switch (columnIndex) {
 				case 0:
-					return account.getName().getText(Locale.getDefault().getLanguage());
+					return account.getName().getText(NLLocale.getDefault().getLanguage());
 				case 1:
 					return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
 			}

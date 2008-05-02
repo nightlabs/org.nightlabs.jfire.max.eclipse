@@ -41,6 +41,7 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard.Side;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -91,9 +92,8 @@ implements CombiTransferWizard
 	/**
 	 * @param transferMode One of {@link #TRANSFER_MODE_PAYMENT},
 	 *		{@link #TRANSFER_MODE_DELIVERY} or {@link #TRANSFER_MODE_BOTH}.
-	 * @param side Specifying whether we (the local organisation) is the vendor or the customer.
 	 */
-	public AbstractCombiTransferWizard(byte transferMode, Side side)
+	public AbstractCombiTransferWizard(byte transferMode)
 	{
 		if (transferMode != TRANSFER_MODE_PAYMENT &&
 				transferMode != TRANSFER_MODE_DELIVERY &&
@@ -107,10 +107,20 @@ implements CombiTransferWizard
 
 	private Side side;
 
-	public Side getSide()
-	{
+	@Override
+	public Side getSide() {
+		if (side == null)
+			throw new IllegalStateException("Side was not determined yet");
 		return side;
 	}
+	
+	protected void setSide(Side side) {
+		this.side = side;
+	}
+	
+//	{
+//		return side;
+//	}
 
 	private List<PaymentEntryPage> paymentEntryPages = null;
 

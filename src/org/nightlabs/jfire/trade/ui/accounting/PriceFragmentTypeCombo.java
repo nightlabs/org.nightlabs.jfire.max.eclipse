@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -42,6 +41,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -69,7 +69,7 @@ public class PriceFragmentTypeCombo extends XComposite {
 		priceFragmentTypes.addAll(pftCollection);
 		for (Iterator<PriceFragmentType> iter = priceFragmentTypes.iterator(); iter.hasNext();) {
 			PriceFragmentType pft = iter.next();
-			combo.add(pft.getName().getText(Locale.getDefault().getLanguage()));
+			combo.add(pft.getName().getText(NLLocale.getDefault().getLanguage()));
 		}
 	}
 	

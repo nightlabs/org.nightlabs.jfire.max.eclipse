@@ -33,7 +33,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,6 +90,7 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryRegistry;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
 
 /**
@@ -160,7 +160,7 @@ implements IDeliveryEntryPage
 		productTypeGUIList.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		for (Iterator<? extends ProductType> it = productTypes.iterator(); it.hasNext(); ) {
 			ProductType productType = it.next();
-			productTypeGUIList.add(productType.getName().getText(Locale.getDefault().getLanguage()));
+			productTypeGUIList.add(productType.getName().getText(NLLocale.getDefault().getLanguage()));
 		}
 
 		XComposite spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -401,15 +401,15 @@ implements IDeliveryEntryPage
 			Collections.sort(serverDeliveryProcessorList, new Comparator<ServerDeliveryProcessor>(){
 				public int compare(ServerDeliveryProcessor spp0, ServerDeliveryProcessor spp1)
 				{
-					String name0 = spp0.getName().getText(Locale.getDefault().getLanguage());
-					String name1 = spp1.getName().getText(Locale.getDefault().getLanguage());
+					String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
+					String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
 					return name0.compareTo(name1);
 				}
 			});
 
 			for (Iterator<ServerDeliveryProcessor> it = serverDeliveryProcessorList.iterator(); it.hasNext(); ) {
 				ServerDeliveryProcessor serverDeliveryProcessor = it.next();
-				serverDeliveryProcessorCombo.add(serverDeliveryProcessor.getName().getText(Locale.getDefault().getLanguage()));
+				serverDeliveryProcessorCombo.add(serverDeliveryProcessor.getName().getText(NLLocale.getDefault().getLanguage()));
 			}
 
 			if (serverDeliveryProcessorCombo.getItemCount() > 0)
@@ -554,8 +554,8 @@ implements IDeliveryEntryPage
 				Collections.sort(modeOfDeliveryFlavours, new Comparator<ModeOfDeliveryFlavour>() {
 					public int compare(ModeOfDeliveryFlavour mopf0, ModeOfDeliveryFlavour mopf1)
 					{
-						String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
-						String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
+						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
+						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
 						return name0.compareTo(name1);
 					}
 				});

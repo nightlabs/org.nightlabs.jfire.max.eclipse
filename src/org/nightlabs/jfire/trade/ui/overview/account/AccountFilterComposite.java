@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.overview.account;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -48,6 +47,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -351,7 +351,7 @@ public class AccountFilterComposite
 		accountTypeList.setEnabled(false);
 
 		AccountType dummyAccountType = new AccountType("dummy.b.c", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
-		dummyAccountType.getName().setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
+		dummyAccountType.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.loadingAccountTypes")); //$NON-NLS-1$
 		accountTypeList.setInput(Collections.singletonList(dummyAccountType));
 		accountTypeList.addSelectionListener(new SelectionAdapter()
 		{

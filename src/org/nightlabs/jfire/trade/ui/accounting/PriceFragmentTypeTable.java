@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.accounting;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -47,6 +46,7 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -78,7 +78,7 @@ extends AbstractTableComposite<PriceFragmentType>
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof PriceFragmentType) {
-				return ((PriceFragmentType)element).getName().getText(Locale.getDefault().getLanguage());
+				return ((PriceFragmentType)element).getName().getText(NLLocale.getDefault().getLanguage());
 			}
 			return ""; //$NON-NLS-1$
 		}

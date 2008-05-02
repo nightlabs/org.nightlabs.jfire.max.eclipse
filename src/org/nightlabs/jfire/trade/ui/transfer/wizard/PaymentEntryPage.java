@@ -34,7 +34,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -94,6 +93,7 @@ import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRegistry;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
 
 /**
@@ -390,8 +390,8 @@ implements IPaymentEntryPage
 				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
 					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
 					{
-						String name0 = mopf0.getName().getText(Locale.getDefault().getLanguage());
-						String name1 = mopf1.getName().getText(Locale.getDefault().getLanguage());
+						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
+						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
 						return name0.compareTo(name1);
 					}
 				});
@@ -432,7 +432,7 @@ implements IPaymentEntryPage
 //					if (sessionLastSelectedMOPFPK != null && sessionLastSelectedMOPFPK.equals(modeOfPaymentFlavour.getPrimaryKey()))
 //						selIdx = modeOfPaymentFlavourGUIList.getItemCount();
 		//
-//					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(Locale.getDefault().getLanguage()));
+//					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(NLLocale.getDefault().getLanguage()));
 //				}
 //				if (selIdx  < 0) selIdx = 0;
 				
@@ -864,14 +864,14 @@ implements IPaymentEntryPage
 			Collections.sort(serverPaymentProcessorList, new Comparator<ServerPaymentProcessor>(){
 				public int compare(ServerPaymentProcessor spp0, ServerPaymentProcessor spp1)
 				{
-					String name0 = spp0.getName().getText(Locale.getDefault().getLanguage());
-					String name1 = spp1.getName().getText(Locale.getDefault().getLanguage());
+					String name0 = spp0.getName().getText(NLLocale.getDefault().getLanguage());
+					String name1 = spp1.getName().getText(NLLocale.getDefault().getLanguage());
 					return name0.compareTo(name1);
 				}
 			});
 
 			for (ServerPaymentProcessor serverPaymentProcessor : serverPaymentProcessorList) {
-				serverPaymentProcessorCombo.add(serverPaymentProcessor.getName().getText(Locale.getDefault().getLanguage()));
+				serverPaymentProcessorCombo.add(serverPaymentProcessor.getName().getText(NLLocale.getDefault().getLanguage()));
 			}
 
 			if (serverPaymentProcessorCombo.getItemCount() > 0)

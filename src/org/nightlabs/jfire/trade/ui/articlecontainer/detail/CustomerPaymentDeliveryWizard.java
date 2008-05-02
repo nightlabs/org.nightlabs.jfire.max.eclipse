@@ -23,7 +23,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 	private OrderID orderID;
 
 	public CustomerPaymentDeliveryWizard(String personSearchText, OrderID orderID, byte transferMode, Side side) {
-		super(orderID, transferMode, side);
+		super(orderID, transferMode);
 		this.personSearchText = personSearchText;
 		this.orderID = orderID;
 	}

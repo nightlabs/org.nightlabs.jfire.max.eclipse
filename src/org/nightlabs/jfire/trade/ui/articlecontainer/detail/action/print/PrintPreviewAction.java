@@ -74,7 +74,7 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 //		params.put("invoiceOrganisationID", invoiceID.organisationID);
 //		params.put("invoiceIDPrefix", invoiceID.invoiceIDPrefix);
 //		params.put("invoiceInvoiceID", new BigDecimal(invoiceID.invoiceID));
-//		params.put("languageID", Locale.getDefault().getLanguage());
+//		params.put("languageID", NLLocale.getDefault().getLanguage());
 		params.put("articleContainerID", articleContainerID); //$NON-NLS-1$
 //		EditorReportViewer viewer = new EditorReportViewer();
 		

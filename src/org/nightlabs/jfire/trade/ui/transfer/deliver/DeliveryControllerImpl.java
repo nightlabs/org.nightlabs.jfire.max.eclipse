@@ -13,6 +13,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
 import org.nightlabs.jfire.store.deliver.id.DeliveryID;
+import org.nightlabs.jfire.transfer.TransferController;
 
 /**
  * A controller for the different stages of the delivery process as described in the

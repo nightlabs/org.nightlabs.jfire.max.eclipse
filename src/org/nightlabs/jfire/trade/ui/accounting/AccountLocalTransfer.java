@@ -32,7 +32,6 @@ import java.util.Iterator;
 import org.eclipse.swt.dnd.Transfer;
 import org.nightlabs.base.ui.dnd.LocalObjectTransfer;
 import org.nightlabs.jfire.accounting.Account;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>

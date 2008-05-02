@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.accounting;
 
-import java.util.Locale;
-
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -41,6 +39,7 @@ import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -97,7 +96,7 @@ extends DialogCellEditor
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor()
 				);
-			getDefaultLabel().setText(account.getName().getText(Locale.getDefault().getLanguage()));
+			getDefaultLabel().setText(account.getName().getText(NLLocale.getDefault().getLanguage()));
 		}
 		else {
 			getDefaultLabel().setText(""); //$NON-NLS-1$

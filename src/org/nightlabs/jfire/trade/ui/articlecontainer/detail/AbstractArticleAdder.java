@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 
 
 

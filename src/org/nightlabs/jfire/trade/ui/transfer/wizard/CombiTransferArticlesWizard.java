@@ -46,6 +46,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
@@ -53,6 +54,7 @@ import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
@@ -70,11 +72,10 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	 *		that shall be paid/delivered.
 	 * @param transferMode One of {@link AbstractCombiTransferWizard#TRANSFER_MODE_DELIVERY},
 	 *		{@link AbstractCombiTransferWizard#TRANSFER_MODE_PAYMENT} or {@link AbstractCombiTransferWizard#TRANSFER_MODE_BOTH}.
-	 * @param side Specifying whether we (the local organisation) is the vendor or the customer.
 	 */
-	public CombiTransferArticlesWizard(Collection<ArticleID> articleIDs, byte transferMode, Side side)
+	public CombiTransferArticlesWizard(Collection<ArticleID> articleIDs, byte transferMode)
 	{
-		super(transferMode, side);
+		super(transferMode);
 
 		if (articleIDs instanceof Set)
 			this.articleIDs = (Set<ArticleID>)articleIDs;
@@ -134,8 +135,17 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 				amountToPay += article.getPrice().getAmount();
 			}
 
+			// The LegalEntityID of the local organisation
+			AnchorID mandatorID = AnchorID.create(
+					SecurityReflector.getUserDescriptor().getOrganisationID(), 
+					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());						
 			setCurrency(currency);
 			setCustomerID(customerID);
+			if (mandatorID.equals(customerID))
+				setSide(Side.Customer);
+			else
+				setSide(Side.Vendor);
+			
 			setTotalAmount(amountToPay);
 
 		} catch (RuntimeException x) {

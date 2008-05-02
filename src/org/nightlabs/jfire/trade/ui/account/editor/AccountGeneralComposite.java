@@ -52,8 +52,8 @@ extends XComposite
 	
 	public void createControl()
 	{
-		setLayout(new GridLayout(2, false));
-		int textStyle = SWT.READ_ONLY | SWT.BORDER;
+		setLayout(new GridLayout(2, false));		
+		int textStyle = SWT.READ_ONLY | getBorderStyle();
 		
 		accountNameLbl = new Label(this, SWT.NONE);
 		accountNameLbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.editor.account.ManualMoneyTransferPage.label.accountName")); //$NON-NLS-1$

@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountSearchFilter;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite;
@@ -41,7 +42,11 @@ import org.nightlabs.progress.ProgressMonitor;
 
 public class AccountChooserComposite extends XComposite{
 
-	private String[] FETCH_GROUPS_ACCOUNT = {FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT , LegalEntity.FETCH_GROUP_PERSON};
+	private String[] FETCH_GROUPS_ACCOUNT = {
+			FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT, 
+			LegalEntity.FETCH_GROUP_PERSON, 
+			Account.FETCH_GROUP_ACCOUNT_TYPE, AccountType.FETCH_GROUP_NAME 
+		};
 	private AccountListComposite accountListComposite;
 	private Label accountFilterLabel;
 	private Text accountFilterName;

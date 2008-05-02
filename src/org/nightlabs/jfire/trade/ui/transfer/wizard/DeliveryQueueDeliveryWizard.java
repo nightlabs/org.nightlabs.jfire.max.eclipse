@@ -44,7 +44,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 	}
 
 	public DeliveryQueueDeliveryWizard(Collection<Delivery> deliveries) {
-		super(getArticleIDs(deliveries), AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY, TransferWizard.Side.Vendor);
+		super(getArticleIDs(deliveries), AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY);
 		this.oldDeliveries = deliveries;
 	}
 

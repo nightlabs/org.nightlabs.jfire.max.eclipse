@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jdo.JDODetachedFieldAccessException;
@@ -50,6 +49,7 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * Generic ProductType-Tree displaying all nested product-types of a certain
@@ -101,7 +101,7 @@ extends AbstractTreeComposite<ProductTypePackageTree.Node>
 					new NullProgressMonitor());
 			contentProvider.nodesByProductTypeID.put(nodeProductType, this);
 			try {
-				text = productType.getName().getText(Locale.getDefault().getCountry());
+				text = productType.getName().getText(NLLocale.getDefault().getCountry());
 			} catch (JDODetachedFieldAccessException e) {
 				text = nodeProductType.toString();
 			}

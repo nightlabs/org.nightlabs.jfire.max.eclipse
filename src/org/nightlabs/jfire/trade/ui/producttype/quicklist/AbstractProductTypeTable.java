@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
@@ -32,6 +30,7 @@ import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * Abstract implementation of an {@link AbstractTableComposite} which display {@link ProductType}s
@@ -85,7 +84,7 @@ implements ISelectionHandler
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			return ((ProductType)element).getName().getText(Locale.getDefault().getLanguage());
+			return ((ProductType)element).getName().getText(NLLocale.getDefault().getLanguage());
 		}
 	}	
 

@@ -57,7 +57,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
-import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -131,8 +130,7 @@ extends HeaderComposite
 			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(invoice);
 			CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 					articleContainerID,
-					AbstractCombiTransferWizard.TRANSFER_MODE_PAYMENT,
-					TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
+					AbstractCombiTransferWizard.TRANSFER_MODE_PAYMENT);
 
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 			dialog.open();

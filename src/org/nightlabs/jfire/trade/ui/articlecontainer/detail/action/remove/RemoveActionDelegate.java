@@ -28,6 +28,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove;
 
 import java.util.Set;
 
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditActionDelegate;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;

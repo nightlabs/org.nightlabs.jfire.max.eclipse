@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.trade.ui.modeofpayment;
 
-import java.util.Locale;
-
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -15,6 +13,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.jfire.accounting.pay.ModeOfPayment;
+import org.nightlabs.util.NLLocale;
 
 public class ModeOfPaymentTable
 		extends AbstractTableComposite<ModeOfPayment>
@@ -35,7 +34,7 @@ public class ModeOfPaymentTable
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			return ((ModeOfPayment)element).getName().getText(Locale.getDefault().getLanguage());
+			return ((ModeOfPayment)element).getName().getText(NLLocale.getDefault().getLanguage());
 		}
 	}
 

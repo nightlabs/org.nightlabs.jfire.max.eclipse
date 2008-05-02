@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 

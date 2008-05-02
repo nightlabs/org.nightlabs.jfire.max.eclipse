@@ -36,7 +36,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContai
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
-import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 
 public class DeliverAllAction extends ArticleContainerAction
 {
@@ -93,8 +92,7 @@ public class DeliverAllAction extends ArticleContainerAction
 
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				articleContainerID,
-				AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY,
-				TransferWizard.Side.Vendor); // TODO the side must be calculated correctly! It's not always "vendor"!
+				AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY);
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();

@@ -226,8 +226,7 @@ extends XComposite
 	{
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				getGeneralEditorComposite().getArticleContainerID(),
-				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
-				TransferWizard.Side.Vendor); // TODO it's not always vendor!
+				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		int returnCode = dialog.open();
 		if (returnCode == Window.CANCEL)
