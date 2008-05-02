@@ -79,7 +79,7 @@ extends XComposite
 		scriptTree.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 //		final ScriptRegistryItem loadingDataSRI = new org.nightlabs.jfire.scripting.ScriptCategory(getOrganisationID(), "dummy", "dummy");
-//		loadingDataSRI.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+//		loadingDataSRI.getName().setText(NLLocale.getDefault().getLanguage(), "Loading data...");
 //		ScriptRegistryItemNode loadingDataNode = new ScriptRegistryItemNode(null, new ScriptRegistryItemCarrier(null, loadingDataSRI, false)) {
 //			@Override
 //			public ScriptRegistryItem getRegistryItem()
