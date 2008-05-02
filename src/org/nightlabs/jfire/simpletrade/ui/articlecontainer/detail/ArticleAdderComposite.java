@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -71,6 +70,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -95,7 +95,7 @@ public class ArticleAdderComposite extends FadeableComposite
 		gd.horizontalSpan = 2;
 		productTypeNameLabel.setLayoutData(gd);
 		productTypeNameLabel.setText(
-				articleAdder.getProductType().getName().getText(Locale.getDefault().getLanguage()));
+				articleAdder.getProductType().getName().getText(NLLocale.getDefault().getLanguage()));
 
 		tariffCombo = new XComboComposite<TariffPricePair>(this, SWT.NONE, new LabelProvider() {
 			@Override

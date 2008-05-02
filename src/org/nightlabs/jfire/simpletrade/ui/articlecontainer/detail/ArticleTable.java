@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -55,6 +53,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -154,7 +153,7 @@ implements ISelectionProvider
 
 			int ci = 0;
 			if (ci == columnIndex)
-				return simpleProductType.getName().getText(Locale.getDefault().getLanguage());
+				return simpleProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex) {
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
