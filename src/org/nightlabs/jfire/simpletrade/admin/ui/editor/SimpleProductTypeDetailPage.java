@@ -9,7 +9,8 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
-import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.*;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
