@@ -17,7 +17,6 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueResolution;
-import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.security.SecurityReflector;
 
 public class IssueTypeResolutionComposite 

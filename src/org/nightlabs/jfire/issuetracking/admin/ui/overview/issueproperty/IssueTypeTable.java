@@ -1,13 +1,8 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -17,13 +12,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.issue.IssueType;
-import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.issue.id.IssueTypeID;
-import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This composite lists all {@link IssueType}s of an issue type in a table.

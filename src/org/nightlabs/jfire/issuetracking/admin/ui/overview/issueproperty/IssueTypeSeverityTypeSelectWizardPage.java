@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.annotations.FetchGroup;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
