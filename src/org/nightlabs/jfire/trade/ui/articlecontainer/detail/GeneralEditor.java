@@ -224,10 +224,10 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 				throw new IllegalStateException(
 						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: "
 						+ generalEditor.getEditorInput());
-
+			
 			--numEditorsOpen;
 
-			if (numEditorsOpen == 0) {
+			if (numEditorsOpen == 0  && RCPUtil.getActiveWorkbenchPage() != null) {
 				fireEvent(null);
 
 				if (RCPUtil.getActiveWorkbenchPage() != null)
