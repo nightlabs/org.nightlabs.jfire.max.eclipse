@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Locale;
 
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
@@ -52,6 +51,7 @@ import org.nightlabs.jfire.accounting.priceconfig.IPriceConfig;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -192,7 +192,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		productTypeGUIList.removeAll();
 
 		if (packageProductType != null) {
-			String languageID = Locale.getDefault().getLanguage();
+			String languageID = NLLocale.getDefault().getLanguage();
 
 			if (packageProductType.getInnerPriceConfig() != null) {
 				productTypeItemList.add(new Item(false, true, packageProductType));

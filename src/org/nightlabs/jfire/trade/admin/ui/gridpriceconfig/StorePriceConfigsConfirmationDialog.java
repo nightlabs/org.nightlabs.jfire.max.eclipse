@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,6 +34,7 @@ import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 public class StorePriceConfigsConfirmationDialog
 extends Dialog
@@ -81,7 +81,7 @@ extends Dialog
 			{
 				if (name == null) {
 					name = new I18nTextBuffer();
-					name.setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.pseudoEntry_loading")); //$NON-NLS-1$
+					name.setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.pseudoEntry_loading")); //$NON-NLS-1$
 				}
 				return name;
 			}

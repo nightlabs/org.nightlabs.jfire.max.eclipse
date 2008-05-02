@@ -26,13 +26,12 @@
 
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig;
 
-import java.util.Locale;
-
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IPriceCoordinate;
 import org.nightlabs.jfire.trade.CustomerGroup;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -110,7 +109,7 @@ public abstract class DimensionValue
 		}
 		@Override
 		public String getName() {
-			return priceFragmentType.getName().getText(Locale.getDefault().getLanguage());
+			return priceFragmentType.getName().getText(NLLocale.getDefault().getLanguage());
 		}
 		@Override
 		public void adjustPriceCoordinate(IPriceCoordinate priceCoordinate)

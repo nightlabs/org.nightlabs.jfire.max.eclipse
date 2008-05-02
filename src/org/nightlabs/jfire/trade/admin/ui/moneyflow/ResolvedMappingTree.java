@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
@@ -54,8 +53,8 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate.ResolvedMapEntry;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate.ResolvedMapKey;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate.ResolvedMapEntry;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate.ResolvedMapKey;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -65,6 +64,7 @@ import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
 import org.nightlabs.jfire.trade.ui.store.ProductTypePackageTree;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -284,7 +284,7 @@ extends AbstractTreeComposite
 				Node node = (Node)element;
 				if (node.getProductType() != null) {
 					switch (columnIndex) {
-						case 0: return node.getProductType().getName().getText(Locale.getDefault().getLanguage());
+						case 0: return node.getProductType().getName().getText(NLLocale.getDefault().getLanguage());
 					}
 				}
 				else {
@@ -299,7 +299,7 @@ extends AbstractTreeComposite
 //									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //									new NullProgressMonitor()
 //								);
-//							return account.getName().getText(Locale.getDefault().getLanguage());
+//							return account.getName().getText(NLLocale.getDefault().getLanguage());
 							return getAccountName(node.getMapping().getRevenueAccount());
 						case 2:
 							return getAccountName(node.getMapping().getExpenseAccount());

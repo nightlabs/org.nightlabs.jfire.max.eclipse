@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.admin.ui.producttype;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -46,6 +44,7 @@ import org.nightlabs.base.ui.table.TableSortSelectionListener;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 public class NestedProductTypeTable
 		extends AbstractTableComposite<NestedProductTypeLocal>
@@ -99,7 +98,7 @@ public class NestedProductTypeTable
 
 			int ci = 0;
 			if (ci == columnIndex)
-				return productType.getName().getText(Locale.getDefault().getLanguage());
+				return productType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
 				return String.valueOf(nestedProductTypeLocal.getQuantity());
@@ -128,8 +127,8 @@ public class NestedProductTypeTable
 		protected int _compare(Viewer viewer, NestedProductTypeLocal npt1, NestedProductTypeLocal npt2)
 		{
 			return getCollator().compare(
-					npt1.getInnerProductTypeLocal().getProductType().getName().getText(Locale.getDefault().getLanguage()),
-					npt2.getInnerProductTypeLocal().getProductType().getName().getText(Locale.getDefault().getLanguage()));
+					npt1.getInnerProductTypeLocal().getProductType().getName().getText(NLLocale.getDefault().getLanguage()),
+					npt2.getInnerProductTypeLocal().getProductType().getName().getText(NLLocale.getDefault().getLanguage()));
 		}
 	}
 

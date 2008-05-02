@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -68,6 +67,7 @@ import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -208,7 +208,7 @@ extends WizardHopPage
 					Collections.sort(pcs, new Comparator<IInnerPriceConfig>() {
 						public int compare(IInnerPriceConfig fpc0, IInnerPriceConfig fpc1)
 						{
-							String languageID = Locale.getDefault().getLanguage();
+							String languageID = NLLocale.getDefault().getLanguage();
 							return fpc0.getName().getText(languageID).compareTo(fpc1.getName().getText(languageID));
 						}
 					});
@@ -234,7 +234,7 @@ extends WizardHopPage
 							else
 								setInheritPriceConfigRadio_InnerPriceConfigName(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.pseudoInheritedPriceConfig_none")); //$NON-NLS-1$
 
-							String languageID = Locale.getDefault().getLanguage();
+							String languageID = NLLocale.getDefault().getLanguage();
 							priceConfigs = pcs;
 							priceConfigList.removeAll();
 							for (Iterator it = priceConfigs.iterator(); it.hasNext(); ) {

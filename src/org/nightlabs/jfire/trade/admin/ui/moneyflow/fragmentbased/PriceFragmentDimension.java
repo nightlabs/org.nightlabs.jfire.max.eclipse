@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased;
 
-import java.util.Locale;
-
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -44,6 +42,7 @@ import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimensionWizardPage;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -90,7 +89,7 @@ public class PriceFragmentDimension implements MappingDimension {
 				new String[] {FetchPlan.DEFAULT, PriceFragmentType.FETCH_GROUP_NAME}, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
-			).getName().getText(Locale.getDefault().getLanguage());
+			).getName().getText(NLLocale.getDefault().getLanguage());
 	}
 	
 	@Implement

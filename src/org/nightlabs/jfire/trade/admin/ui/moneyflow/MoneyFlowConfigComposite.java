@@ -29,8 +29,8 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -320,9 +320,9 @@ extends XComposite
 		LocalAccountantDelegate _delegate = getSelectedLocalAccountantDelegate();
 		if (_delegate == null)
 			return;
-		if (!(_delegate instanceof PFMappingAccountantDelegate))
+		if (!(_delegate instanceof MappingBasedAccountantDelegate))
 			return;
-		PFMappingAccountantDelegate delegate = (PFMappingAccountantDelegate) _delegate;
+		MappingBasedAccountantDelegate delegate = (MappingBasedAccountantDelegate) _delegate;
 		// TODO: Popup confirmation dialog
 		delegate.removeMoneyFlowMapping(mapping);
 		refresh(true);
@@ -344,7 +344,7 @@ extends XComposite
 		return currProductTypeID;
 	}
 	
-	public PFMappingAccountantDelegate getCurrDelegate() {
+	public MappingBasedAccountantDelegate getCurrDelegate() {
 		return productTypeMappingTree.getCurrentDelegate();
 	}
 	

@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
@@ -38,8 +37,8 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.PFMoneyFlowMapping;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.accounting.id.PriceFragmentTypeID;
@@ -52,6 +51,7 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -71,7 +71,7 @@ implements LocalAccountantDelegateType
 	 * @see org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateType#getDelegateClass()
 	 */
 	public Class getDelegateClass() {
-		return PFMappingAccountantDelegate.class;
+		return MappingBasedAccountantDelegate.class;
 	}
 
 	/**
@@ -97,9 +97,9 @@ implements LocalAccountantDelegateType
 			String localAccountantDelegateID
 		)
 	{
-		if ((extendedDelegate != null) && !(extendedDelegate instanceof PFMappingAccountantDelegate))
-			throw new IllegalArgumentException("Can not extend a new PFMappingAccountantDelegate from the given delegate: "+extendedDelegate.getClass().getName()); //$NON-NLS-1$
-		return new PFMappingAccountantDelegate(extendedDelegate, organisationID, localAccountantDelegateID);
+		if ((extendedDelegate != null) && !(extendedDelegate instanceof MappingBasedAccountantDelegate))
+			throw new IllegalArgumentException("Can not extend a new MappingBasedAccountantDelegate from the given delegate: "+extendedDelegate.getClass().getName()); //$NON-NLS-1$
+		return new MappingBasedAccountantDelegate(extendedDelegate, organisationID, localAccountantDelegateID);
 	}
 
 	public MoneyFlowMapping createNewMapping(
@@ -150,7 +150,7 @@ implements LocalAccountantDelegateType
 	}
 
 	public List getMoneyFlowDimensionIDs() {
-		return PFMappingAccountantDelegate.DIMENSION_IDS;
+		return MappingBasedAccountantDelegate.DIMENSION_IDS;
 	}
 
 	public String getMappingDescription(MoneyFlowMapping mapping) {
@@ -171,8 +171,8 @@ implements LocalAccountantDelegateType
 //		LegalEntityProvider.sharedInstance().getLegalEntity(anchorID,
 //				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 //			);
-//		return pfMapping.getSourceOrganisationID()+" "+priceFragmentType.getName().getText(Locale.getDefault().getLanguage());
-		return priceFragmentType.getName().getText(Locale.getDefault().getLanguage());
+//		return pfMapping.getSourceOrganisationID()+" "+priceFragmentType.getName().getText(NLLocale.getDefault().getLanguage());
+		return priceFragmentType.getName().getText(NLLocale.getDefault().getLanguage());
 //		return pfMapping.getPriceFragmentTypePK();
 	}
 

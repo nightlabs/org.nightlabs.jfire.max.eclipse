@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.trade.admin.ui.deliveryqueue;
 
-import java.util.Locale;
-
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -13,6 +11,7 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 public class DeliveryQueueTableComposite extends AbstractTableComposite<DeliveryQueue> {
 	public DeliveryQueueTableComposite(Composite parent) {
@@ -33,7 +32,7 @@ public class DeliveryQueueTableComposite extends AbstractTableComposite<Delivery
 			public String getColumnText(Object element, int columnIndex) {
 				if (element instanceof DeliveryQueue) {
 					DeliveryQueue pq = (DeliveryQueue) element;
-					return pq.getName().getText(Locale.getDefault().getLanguage());
+					return pq.getName().getText(NLLocale.getDefault().getLanguage());
 				}
 				if (element instanceof String) {
 					return (String) element;

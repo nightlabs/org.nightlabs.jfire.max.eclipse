@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.admin.ui.moneyflow;
 
-import java.util.Locale;
-
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -43,6 +41,7 @@ import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.dao.LocalAccountantDelegateDAO;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -119,7 +118,7 @@ public class LocalAccountantDelegateTree extends AbstractTreeComposite {
 		@Override
 		public String getText(Object element) {
 			if (element instanceof LocalAccountantDelegate)
-				return ((LocalAccountantDelegate)element).getName().getText(Locale.getDefault().getLanguage());
+				return ((LocalAccountantDelegate)element).getName().getText(NLLocale.getDefault().getLanguage());
 			return ""; //$NON-NLS-1$
 		}
 	}

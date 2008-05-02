@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -85,6 +84,7 @@ import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.currency.CurrencyLabelProvider;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -223,7 +223,7 @@ extends DynamicPathWizardPage
 //		accountTypeTable.setInput(new String[] {AccountType.ACCOUNT_TYPE_ID_LOCAL_REVENUE, AccountType.ANCHOR_TYPE_ID_LOCAL_EXPENSE});
 
 		AccountType dummy = new AccountType("dummy.a.b", "dummy", false);
-		dummy.getName().setText(Locale.getDefault().getLanguage(), "Loading data...");
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), "Loading data...");
 		accountTypeTable.setInput(Collections.singletonList(dummy));
 
 		Job job = new Job("Loading account types") {

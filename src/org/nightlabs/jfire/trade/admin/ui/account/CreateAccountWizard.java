@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;

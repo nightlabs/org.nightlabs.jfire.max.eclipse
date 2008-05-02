@@ -17,6 +17,7 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
+import org.nightlabs.jfire.editlock.EditLock;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.trade.JFireTradeEAR;

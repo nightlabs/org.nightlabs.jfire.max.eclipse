@@ -49,6 +49,7 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
+import org.nightlabs.jfire.trade.admin.ui.moneyflow.MappingDimension;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**

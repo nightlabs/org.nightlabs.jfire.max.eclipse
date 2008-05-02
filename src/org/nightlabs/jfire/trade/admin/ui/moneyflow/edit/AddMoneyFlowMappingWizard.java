@@ -36,8 +36,8 @@ import java.util.Map;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateRegistry;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.LocalAccountantDelegateType;
@@ -53,7 +53,7 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 public class AddMoneyFlowMappingWizard extends DynamicPathWizard {
 
 	private ProductTypeID productTypeID;
-	private PFMappingAccountantDelegate delegate;
+	private MappingBasedAccountantDelegate delegate;
 //	private MoneyFlowMappingConfigurator configurator;
 	private SelectProductTypeAndPackagePage selectProductTypeAndPackagePage;
 	private SelectCurrencyAndAccountPage selectCurrencyAndRevenueAccountPage;
@@ -64,7 +64,7 @@ public class AddMoneyFlowMappingWizard extends DynamicPathWizard {
 	
 	private MoneyFlowMapping createdMapping;
 	
-	public AddMoneyFlowMappingWizard(PFMappingAccountantDelegate delegate, ProductTypeID productTypeID) {
+	public AddMoneyFlowMappingWizard(MappingBasedAccountantDelegate delegate, ProductTypeID productTypeID) {
 		super();
 		this.productTypeID = productTypeID;
 		this.delegate = delegate;

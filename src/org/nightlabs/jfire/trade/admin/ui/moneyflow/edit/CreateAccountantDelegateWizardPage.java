@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.edit;
 
-import java.util.Locale;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -41,6 +39,7 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -89,7 +88,7 @@ public class CreateAccountantDelegateWizardPage extends DynamicPathWizardPage {
 	}
 	
 	public String getDelegateID() {
-		return ObjectIDUtil.makeValidIDString(getDelegateName().getText(Locale.getDefault().getLanguage()), true);
+		return ObjectIDUtil.makeValidIDString(getDelegateName().getText(NLLocale.getDefault().getLanguage()), true);
 	}
 }
  

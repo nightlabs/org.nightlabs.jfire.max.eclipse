@@ -3,7 +3,6 @@
  */
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
-import org.nightlabs.jfire.store.ProductType;
 
 /**
  * Extension for page controllers for ProductTypes that manage

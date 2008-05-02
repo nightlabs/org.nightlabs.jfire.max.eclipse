@@ -62,8 +62,8 @@ import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
+import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
-import org.nightlabs.jfire.accounting.book.mappingbased.PFMappingAccountantDelegate;
 import org.nightlabs.jfire.accounting.dao.LocalAccountantDelegateDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
@@ -185,8 +185,8 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				if (delegateNodes == null)
 					delegateNodes = new LinkedList<Node>();
 				delegateNodes.add(delegateNode);
-				if (delegateRun instanceof PFMappingAccountantDelegate) {
-					for (Iterator<MoneyFlowMapping> iter = ((PFMappingAccountantDelegate) delegateRun).getMoneyFlowMappings().iterator(); iter.hasNext();) {
+				if (delegateRun instanceof MappingBasedAccountantDelegate) {
+					for (Iterator<MoneyFlowMapping> iter = ((MappingBasedAccountantDelegate) delegateRun).getMoneyFlowMappings().iterator(); iter.hasNext();) {
 						MoneyFlowMapping mapping = iter.next();
 						Node mappingNode = Node.mappingNode(delegateNode, mapping);
 						nodesByMappings.put(mapping, mappingNode);
@@ -296,7 +296,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 //								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //								new NullProgressMonitor()
 //							);
-//						return account.getName().getText(Locale.getDefault().getLanguage());
+//						return account.getName().getText(NLLocale.getDefault().getLanguage());
 						return getAccountName(mapping.getRevenueAccount());
 					}
 					else if (columnIndex == currDimensionIDs.size() + 3)
@@ -456,13 +456,13 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		LocalAccountantDelegate.FETCH_GROUP_EXTENDED_ACCOUNTANT_DELEGATE,
 		LocalAccountantDelegate.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_NAME,
-		PFMappingAccountantDelegate.FETCH_GROUP_MONEY_FLOW_MAPPINGS,
+		MappingBasedAccountantDelegate.FETCH_GROUP_MONEY_FLOW_MAPPINGS,
 		MoneyFlowMapping.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 		MoneyFlowMapping.FETCH_GROUP_ALL_DIMENSIONS
 		, Account.FETCH_GROUP_NAME
 	};
 	
-	private PFMappingAccountantDelegate delegate;
+	private MappingBasedAccountantDelegate delegate;
 	private Class currDelegateClass;
 	private List<String> currDimensionIDs;
 	private CellModifier cellModifier;
@@ -470,7 +470,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	/**
 	 * @param parent
 	 */
-	public MoneyFlowMappingTree(Composite parent, PFMappingAccountantDelegate delegate) {
+	public MoneyFlowMappingTree(Composite parent, MappingBasedAccountantDelegate delegate) {
 		super(parent, DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION, true, true, true);
 		this.delegate = delegate;
 	}
@@ -489,11 +489,11 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
     treeViewer.addDropSupport(DND.DROP_MOVE, MoneyFlowMappingTransfer.MONEY_FLOW_MAPPING_TRANSFERS, new DropAdapter(treeViewer));
 	}
 	
-	public PFMappingAccountantDelegate getDelegate() {
+	public MappingBasedAccountantDelegate getDelegate() {
 		return delegate;
 	}
 	
-	private void setDelegate(PFMappingAccountantDelegate delegate) {
+	private void setDelegate(MappingBasedAccountantDelegate delegate) {
 		this.delegate = delegate;
 		getContentProvider().setDelegate(delegate);
 		Display.getDefault().syncExec(new Runnable(){
@@ -505,7 +505,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	}
 	
 	public void setDelegateID(LocalAccountantDelegateID delegateID) {
-		setDelegate((PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().
+		setDelegate((MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().
 				getDelegate(delegateID, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 	}
 
@@ -517,7 +517,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	 */
 	@Deprecated
 	public void setProductTypeID(ProductTypeID productTypeID, ProgressMonitor monitor) {
-		PFMappingAccountantDelegate dDelegate = null;
+		MappingBasedAccountantDelegate dDelegate = null;
 		if (productTypeID == null) {
 			getContentProvider().flushContent();
 		}
@@ -526,7 +526,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 					productTypeID, DEFAULT_PTYPE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 			if (productType != null && productType.getProductTypeLocal().getLocalAccountantDelegate() != null)
-				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+				dDelegate = (MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
 						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
@@ -540,13 +540,13 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	 */
 	public void setProductType(ProductType productType)
 	{
-		PFMappingAccountantDelegate dDelegate = null;
+		MappingBasedAccountantDelegate dDelegate = null;
 		if (productType == null) {
 			getContentProvider().flushContent();
 		}
 		else {
 			if (productType.getProductTypeLocal().getLocalAccountantDelegate() != null) {
-				dDelegate = (PFMappingAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+				dDelegate = (MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
 						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 					);
@@ -705,7 +705,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		// nothing done here columns created dynamically
 	}
 	
-	public PFMappingAccountantDelegate getCurrentDelegate() {
+	public MappingBasedAccountantDelegate getCurrentDelegate() {
 		return delegate;
 	}
 

@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 import javax.security.auth.login.LoginException;
@@ -60,6 +59,7 @@ import org.nightlabs.jfire.base.ui.JFireBasePlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
@@ -178,7 +178,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 		refresh();
 	}
 
-	private String languageID = Locale.getDefault().getLanguage();
+	private String languageID = NLLocale.getDefault().getLanguage();
 
 	/**
 	 * @return Returns the languageID.

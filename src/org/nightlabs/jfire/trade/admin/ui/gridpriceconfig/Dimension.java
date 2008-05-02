@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Currency;
@@ -45,6 +44,7 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup.AddCu
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype.AddPriceFragmentTypeWizard;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff.AddTariffWizard;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -161,7 +161,7 @@ public abstract class Dimension<DV extends DimensionValue>
 						l.add(new DimensionValue.PriceFragmentTypeDimensionValue(this, pft));
 					}
 					Collections.sort(l, new Comparator<DimensionValue.PriceFragmentTypeDimensionValue>() {
-						private String languageID = Locale.getDefault().getLanguage();
+						private String languageID = NLLocale.getDefault().getLanguage();
 						public int compare(DimensionValue.PriceFragmentTypeDimensionValue dv0, DimensionValue.PriceFragmentTypeDimensionValue dv1)
 						{
 							PriceFragmentType pft0 = (PriceFragmentType) dv0.getObject();

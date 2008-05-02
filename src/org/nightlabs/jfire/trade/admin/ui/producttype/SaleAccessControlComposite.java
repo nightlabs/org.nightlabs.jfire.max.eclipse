@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.trade.admin.ui.producttype;
 
-import java.util.Locale;
-
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,6 +46,7 @@ import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * With this composite the user can control the sale status of every
@@ -458,7 +457,7 @@ public class SaleAccessControlComposite extends XComposite
 		}
 		else {
 			if (showProductTypeLabel)
-				productTypeLabel.setText(productType.getName().getText(Locale.getDefault().getLanguage()));
+				productTypeLabel.setText(productType.getName().getText(NLLocale.getDefault().getLanguage()));
 
 			publishedCheckBox.setSelection(productType.isPublished());
 			confirmedCheckBox.setSelection(productType.isConfirmed());
