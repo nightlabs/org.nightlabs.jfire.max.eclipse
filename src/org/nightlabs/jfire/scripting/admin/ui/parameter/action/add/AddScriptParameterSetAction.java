@@ -4,7 +4,6 @@
 package org.nightlabs.jfire.scripting.admin.ui.parameter.action.add;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.i18n.I18nTextBuffer;
@@ -13,6 +12,7 @@ import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.admin.ui.parameter.action.ScriptParameterSetAction;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
@@ -57,7 +57,7 @@ public class AddScriptParameterSetAction extends ScriptParameterSetAction {
 	public void run(Collection<ScriptParameterSet> scriptParameterSets) {
 		ScriptManager scriptManager = ScriptingPlugin.getScriptManager();
 		I18nTextBuffer buffer = new I18nTextBuffer();
-		buffer.setText(Locale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.i18nBuffer.defaultLanguageText"));		 //$NON-NLS-1$
+		buffer.setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.i18nBuffer.defaultLanguageText"));		 //$NON-NLS-1$
 		try {
 			scriptManager.createParameterSet(buffer, null, -1);
 		} catch (Exception e) {

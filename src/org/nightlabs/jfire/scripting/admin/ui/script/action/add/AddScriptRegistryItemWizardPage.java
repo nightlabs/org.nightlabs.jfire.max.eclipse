@@ -26,8 +26,6 @@
 
 package org.nightlabs.jfire.scripting.admin.ui.script.action.add;
 
-import java.util.Locale;
-
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +33,7 @@ import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -49,7 +48,7 @@ public class AddScriptRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	private ModifyListener modifyListener = new ModifyListener() {
 		public void modifyText(ModifyEvent arg0) {
 			String editLang = getTextEditor().getLanguageChooser().getLanguage().getLanguageID();
-			if (editLang.equals(Locale.getDefault().getLanguage()))
+			if (editLang.equals(NLLocale.getDefault().getLanguage()))
 				registryItemID.getTextControl().setText(ObjectIDUtil.makeValidIDString(getTextEditor().getEditText()));
 			getWizard().getContainer().updateButtons();
 		}
