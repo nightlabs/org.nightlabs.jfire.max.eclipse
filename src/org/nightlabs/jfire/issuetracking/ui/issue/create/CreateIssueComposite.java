@@ -170,7 +170,8 @@ extends XComposite
 		gridData  = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		reporterText.setLayoutData(gridData);
-		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_THIS_USER}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		selectedReporter = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		issue.setReporter(selectedReporter);
 		reporterText.setText(selectedReporter.getName());
 
 		reporterButton = new Button(reporterComposite, SWT.PUSH);
