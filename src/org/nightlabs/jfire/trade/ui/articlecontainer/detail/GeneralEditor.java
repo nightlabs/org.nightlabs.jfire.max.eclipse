@@ -189,7 +189,8 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 
 			ArticleContainerID articleContainerID = null;
 
-			if (generalEditor != null)
+			if (generalEditor != null && 
+					generalEditor.getGeneralEditorComposite().getArticleContainer() != null) 
 			{
 				GeneralEditorInput input = (GeneralEditorInput) generalEditor.getEditorInput();
 				articleContainerID = input.getArticleContainerID();

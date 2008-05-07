@@ -188,12 +188,12 @@ implements ISelectionProvider
 
 				//PurchaseRootTreeNode
 				//SaleRootTreeNode
-				
-				
+
+
 				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
 
-						
-				
+
+
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(
 							HeaderTreeComposite.this, getSelection());
@@ -233,7 +233,7 @@ implements ISelectionProvider
 					}
 					return;
 				}
-					// throw new IllegalStateException("selection \"" + (selection == null ? "null" : selection.getClass().getName()) + "\" type unknown!");
+				// throw new IllegalStateException("selection \"" + (selection == null ? "null" : selection.getClass().getName()) + "\" type unknown!");
 
 				openEditor(editorInput);
 			}
@@ -280,8 +280,8 @@ implements ISelectionProvider
 	public static void openEditor(GeneralEditorInput editorInput)
 	{
 		IWorkbench wb = PlatformUI.getWorkbench();
-	  IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-	  IWorkbenchPage page = win.getActivePage();
+		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+		IWorkbenchPage page = win.getActivePage();
 		try {
 			page.openEditor(editorInput, GeneralEditor.ID_EDITOR);
 		} catch (PartInitException x) {
@@ -350,31 +350,33 @@ implements ISelectionProvider
 
 		if (! closeEditorsOfOtherPartners)
 			return;
-		
+
 		IWorkbench wb = PlatformUI.getWorkbench();
-	  IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
-	  IWorkbenchPage page = win.getActivePage();
-	  IEditorReference[] references = page.getEditorReferences();
-	  
-	  for (IEditorReference reference : references) {
+		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+		IWorkbenchPage page = win.getActivePage();
+		IEditorReference[] references = page.getEditorReferences();
+
+		for (IEditorReference reference : references) {
 			IEditorPart editor = reference.getEditor(false);
 			if (editor instanceof GeneralEditor) {
 				GeneralEditor ge = (GeneralEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
 //				TODO This was a workaround to NOT close the editor in the QuickSaleView, but now
-//							with the Editor<->Perspective Patch we only get editors for Trading Perspective.
+//				with the Editor<->Perspective Patch we only get editors for Trading Perspective.
 //				if (ge.getGeneralEditorComposite().getArticleContainer() instanceof Order) {
-//					Order order = (Order) ge.getGeneralEditorComposite().getArticleContainer();
-//					if (order.isQuickSaleWorkOrder())
-//						continue;
+//				Order order = (Order) ge.getGeneralEditorComposite().getArticleContainer();
+//				if (order.isQuickSaleWorkOrder())
+//				continue;
 //				}
 //				if (!partnerAnchorID.equals(ac.getVendorID()) && !partnerAnchorID.equals(ac.getCustomerID()))
 				// partnerAnchorID may be null, hence use util class to cover null cases
-				if (!Util.equals(partnerAnchorID, ac.getVendorID()) && !Util.equals(partnerAnchorID, ac.getCustomerID()))
+
+				if(ac != null)
+					if (!Util.equals(partnerAnchorID, ac.getVendorID()) && !Util.equals(partnerAnchorID, ac.getCustomerID()))
 						page.closeEditor(editor, true);
 			}
 //			else
-//				page.closeEditor(editor, true);
+//			page.closeEditor(editor, true);
 		}
 	}
 
@@ -385,13 +387,13 @@ implements ISelectionProvider
 		manager.add(createOrderAction);
 		manager.add(createOfferAction);
 
-//			manager.add(new TestAction());
+//		manager.add(new TestAction());
 
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute their actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
-	
+
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
@@ -422,7 +424,7 @@ implements ISelectionProvider
 	public OrganisationLegalEntity getMyOrganisationLegalEntity()
 	{
 		return myOrganisationLegalEntity;
-	}
+	}  
 	public AnchorID getMyOrganisationLegalEntityID()
 	{
 		return (AnchorID)JDOHelper.getObjectId(myOrganisationLegalEntity);
@@ -515,28 +517,28 @@ implements ISelectionProvider
 
 //	public void addInvoice(InvoiceID invoiceID)
 //	{
-//		try {
-//			InvoiceRootTreeNode invoiceRootTreeNode = getHeaderTreeContentProvider().getVendorInvoiceRootTreeNode();
-//			AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Invoice invoice = accountingManager.getInvoice(invoiceID, InvoiceRootTreeNode.FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			InvoiceTreeNode invoiceTreeNode = new InvoiceTreeNode(invoiceRootTreeNode, InvoiceTreeNode.POSITION_FIRST_CHILD, invoice);
-//			invoiceTreeNode.select();
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
+//	try {
+//	InvoiceRootTreeNode invoiceRootTreeNode = getHeaderTreeContentProvider().getVendorInvoiceRootTreeNode();
+//	AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//	Invoice invoice = accountingManager.getInvoice(invoiceID, InvoiceRootTreeNode.FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//	InvoiceTreeNode invoiceTreeNode = new InvoiceTreeNode(invoiceRootTreeNode, InvoiceTreeNode.POSITION_FIRST_CHILD, invoice);
+//	invoiceTreeNode.select();
+//	} catch (Exception x) {
+//	throw new RuntimeException(x);
+//	}
 //	}
 
 //	public void addDeliveryNote(DeliveryNoteID deliveryNoteID)
 //	{
-//		try {
-//			DeliveryNoteRootTreeNode deliveryNoteRootTreeNode = getHeaderTreeContentProvider().getVendorDeliveryNoteRootTreeNode();
-//			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			DeliveryNote deliveryNote = storeManager.getDeliveryNote(deliveryNoteID, DeliveryNoteRootTreeNode.FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			DeliveryNoteTreeNode deliveryNoteTreeNode = new DeliveryNoteTreeNode(deliveryNoteRootTreeNode, DeliveryNoteTreeNode.POSITION_FIRST_CHILD, deliveryNote);
-//			deliveryNoteTreeNode.select();
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
+//	try {
+//	DeliveryNoteRootTreeNode deliveryNoteRootTreeNode = getHeaderTreeContentProvider().getVendorDeliveryNoteRootTreeNode();
+//	StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//	DeliveryNote deliveryNote = storeManager.getDeliveryNote(deliveryNoteID, DeliveryNoteRootTreeNode.FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//	DeliveryNoteTreeNode deliveryNoteTreeNode = new DeliveryNoteTreeNode(deliveryNoteRootTreeNode, DeliveryNoteTreeNode.POSITION_FIRST_CHILD, deliveryNote);
+//	deliveryNoteTreeNode.select();
+//	} catch (Exception x) {
+//	throw new RuntimeException(x);
+//	}
 //	}
 
 	public CreateOrderAction getCreateOrderAction()
