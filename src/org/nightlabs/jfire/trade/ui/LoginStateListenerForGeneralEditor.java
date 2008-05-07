@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
