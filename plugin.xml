@@ -1003,6 +1003,9 @@ gibt's nimmer - oder?! Marco.
     <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective"/>
     </extension>
+    <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
+        <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForGeneralEditor"/>
+    </extension>
     <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
         <QueryFilter
               orderHint="10"
