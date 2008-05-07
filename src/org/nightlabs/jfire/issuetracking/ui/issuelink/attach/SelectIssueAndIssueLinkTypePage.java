@@ -52,29 +52,39 @@ extends DynamicPathWizardPage
 
 	private ListComposite<IssueLinkType> issueLinkTypeList;
 
+	//------------------------------------------------
+	private Button createNewIssueRadio;
+	private Button selectExistingIssueRadio;
+	
+	private Composite issueEntryListViewerComposite;
 	private IssueEntryListViewer issueEntryListViewer;
 
 	private IssueLinkType selectedIssueLinkType;
 	private Issue selectedIssue;
 	private Object attachedObject;
 
-	public static enum Action {
+	public static enum ActionForIssueLinkType {
 		createNewIssueLinkType,
 		selectExistingIssueLinkType
 	}
-
-	private Action action;
-
-	public Action getAction() {
-		return action;
+	
+	public static enum ActionForIssue {
+		createNewIssue,
+		selectExistingIssue
 	}
 
-	public void setAction(Action action) {
-		this.action = action;
+	private ActionForIssueLinkType actionForIssueLinkType;
+
+	public ActionForIssueLinkType getIssueLinkTypeAction() {
+		return actionForIssueLinkType;
+	}
+
+	public void setIssueLinkTypeAction(ActionForIssueLinkType actionForIssueLinkType) {
+		this.actionForIssueLinkType = actionForIssueLinkType;
 		createNewIssueLinkTypeRadio.setSelection(false);
 		selectExistingIssueLinkTypeRadio.setSelection(false);
 
-		switch (action) {
+		switch (actionForIssueLinkType) {
 			case createNewIssueLinkType:
 				createNewIssueLinkTypeRadio.setSelection(true);
 				break;
@@ -82,7 +92,34 @@ extends DynamicPathWizardPage
 				selectExistingIssueLinkTypeRadio.setSelection(true);
 				break;
 			default:
-				throw new IllegalStateException("Unknown action: " + action);
+				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
+		}
+
+		getContainer().updateButtons();
+	}
+	
+	private ActionForIssue actionForIssue;
+
+	public ActionForIssue getIssueAction() {
+		return actionForIssue;
+	}
+
+	public void setIssueAction(ActionForIssue actionForIssue) {
+		this.actionForIssue = actionForIssue;
+		createNewIssueRadio.setSelection(false);
+		selectExistingIssueRadio.setSelection(false);
+
+		switch (actionForIssue) {
+			case createNewIssue:
+				createNewIssueRadio.setSelection(true);
+				issueEntryListViewerComposite.setEnabled(false);
+				break;
+			case selectExistingIssue:
+				selectExistingIssueRadio.setSelection(true);
+				issueEntryListViewerComposite.setEnabled(true);
+				break;
+			default:
+				throw new IllegalStateException("Unknown actionForIssue: " + actionForIssue);
 		}
 
 		getContainer().updateButtons();
@@ -100,11 +137,11 @@ extends DynamicPathWizardPage
 		mainComposite.getGridLayout().numColumns = 1;
 
 		createNewIssueLinkTypeRadio = new Button(mainComposite, SWT.RADIO);		
-		createNewIssueLinkTypeRadio.setText("Create a new relation");
+		createNewIssueLinkTypeRadio.setText("Create new issue link type");
 		createNewIssueLinkTypeRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewIssueLinkTypeRadio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				setAction(Action.createNewIssueLinkType);
+				setIssueLinkTypeAction(ActionForIssueLinkType.createNewIssueLinkType);
 			}
 		});
 
@@ -114,16 +151,16 @@ extends DynamicPathWizardPage
 		newIssueLinkTypeNameEditor.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent event) {
-				setAction(Action.createNewIssueLinkType);
+				setIssueLinkTypeAction(ActionForIssueLinkType.createNewIssueLinkType);
 			}
 		});
 
 		selectExistingIssueLinkTypeRadio = new Button(mainComposite, SWT.RADIO);
-		selectExistingIssueLinkTypeRadio.setText("Select a relation from the list");
+		selectExistingIssueLinkTypeRadio.setText("Select issue link type from the list");
 		selectExistingIssueLinkTypeRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectExistingIssueLinkTypeRadio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				setAction(Action.selectExistingIssueLinkType);
+				setIssueLinkTypeAction(ActionForIssueLinkType.selectExistingIssueLinkType);
 			}
 		});
 
@@ -149,7 +186,7 @@ extends DynamicPathWizardPage
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
-				setAction(Action.selectExistingIssueLinkType);
+				setIssueLinkTypeAction(ActionForIssueLinkType.selectExistingIssueLinkType);
 			}
 		});
 
@@ -174,6 +211,25 @@ extends DynamicPathWizardPage
 		};
 		job.schedule();
 
+		//*********************************************************************************
+		createNewIssueRadio = new Button(mainComposite, SWT.RADIO);		
+		createNewIssueRadio.setText("Create new issue");
+		createNewIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createNewIssueRadio.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				setIssueAction(ActionForIssue.createNewIssue);
+			}
+		});
+		
+		selectExistingIssueRadio = new Button(mainComposite, SWT.RADIO);
+		selectExistingIssueRadio.setText("Select issue");
+		selectExistingIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		selectExistingIssueRadio.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				setIssueAction(ActionForIssue.selectExistingIssue);
+			}
+		});
+		
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
@@ -193,13 +249,13 @@ extends DynamicPathWizardPage
 			}
 		};	
 
-		issueEntryListViewer.createComposite(mainComposite);
+		issueEntryListViewerComposite = issueEntryListViewer.createComposite(mainComposite);
 		issueEntryListViewer.search();
 		issueEntryListViewer.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				setAction(Action.selectExistingIssueLinkType);
+				setIssueLinkTypeAction(ActionForIssueLinkType.selectExistingIssueLinkType);
 			}
 		});
 
@@ -211,15 +267,16 @@ extends DynamicPathWizardPage
 		if (createNewIssueLinkTypeRadio == null) // check if UI is already created
 			return false;
 
-		if (action != null)
-			switch (action) {
+		if (actionForIssueLinkType != null)
+			switch (actionForIssueLinkType) {
 				case createNewIssueLinkType:
 					return !newIssueLinkTypeName.isEmpty() && selectedIssue != null;
 				case selectExistingIssueLinkType:
 					return selectedIssueLinkType != null && selectedIssue != null;
 				default:
-					throw new IllegalStateException("Unknown action: " + action);
+					throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
 			}
+		
 		else 
 			return false;
 	}
@@ -239,7 +296,7 @@ extends DynamicPathWizardPage
 	private IssueLinkType newIssueLinkType;
 	
 	public IssueLinkType getIssueLinkType() {
-		switch (action) {
+		switch (actionForIssueLinkType) {
 			case createNewIssueLinkType:
 				if (newIssueLinkType == null) {
 					newIssueLinkType = new IssueLinkType(
@@ -257,7 +314,7 @@ extends DynamicPathWizardPage
 				return selectedIssueLinkType;
 
 			default:
-				throw new IllegalStateException("Unknown action: " + action);
+				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
 		}
 	}
 }
