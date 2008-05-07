@@ -1,7 +1,12 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
@@ -15,9 +20,13 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issue.dao.IssueFileAttachmentDAO;
+import org.nightlabs.jfire.issue.id.IssueFileAttachmentID;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class IssueFileAttachmentComposite 
 extends XComposite 
@@ -44,7 +53,7 @@ extends XComposite
 		});
 
 		fileListComposite.setInput(issue.getIssueFileAttachments());
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		mainComposite.setLayoutData(gridData);
 
@@ -89,10 +98,50 @@ extends XComposite
 				fileListComposite.removeSelected();
 			}
 		});
+
+		Button downloadButton = new Button(buttonComposite, SWT.PUSH);
+		downloadButton.setText("Download");
+		downloadButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		downloadButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				final IssueFileAttachment issueFileAttachment = fileListComposite.getSelectedElement();
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						IssueFileAttachment ia = IssueFileAttachmentDAO.sharedInstance().getIssueFileAttachment((IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment), new String[]{FetchPlan.DEFAULT, IssueFileAttachment.FETCH_GROUP_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						InputStream is = ia.createFileAttachmentInputStream();
+						if (is != null) {
+							try {
+								FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell(), SWT.SAVE);
+								String selectedFile = fileDialog.open();
+								if (selectedFile != null) {
+									saveFile(is, selectedFile);
+								}
+							} catch (Exception ex) {
+								throw new RuntimeException(ex);
+							}
+						}		
+					}
+				});
+				
+			}
+		});
+
 		buttonComposite.setLayoutData(new GridData());
 
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		mainComposite.setLayoutData(gridData);
+	}
+
+	public void saveFile(InputStream io, String fileName) throws IOException {
+		FileOutputStream fos = new FileOutputStream(fileName);
+		byte[] buf = new byte[256];
+		int read = 0;
+		while ((read = io.read(buf)) > 0) {
+			fos.write(buf, 0, read);
+		}
 	}
 }

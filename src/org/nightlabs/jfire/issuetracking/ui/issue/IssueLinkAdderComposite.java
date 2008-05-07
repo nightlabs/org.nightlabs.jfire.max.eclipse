@@ -81,7 +81,7 @@ extends XComposite
 			removeLinkButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					issueLinkTable.removeElement(issueLinkTable.getFirstSelectedElement());
+					issueLinkTable.removeIssueLinkTableItems(issueLinkTable.getSelectedElements());
 				}
 			});
 		}
