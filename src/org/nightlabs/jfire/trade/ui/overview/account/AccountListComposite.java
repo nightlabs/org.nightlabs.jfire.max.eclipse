@@ -355,10 +355,7 @@ extends AbstractTableComposite<Account>
 	};
 	
 	private Job loadAccountJob = null;
-	private synchronized void loadAccount()
-	{
-		
-	}
+	
 	
 	@Override
 	public void dispose()

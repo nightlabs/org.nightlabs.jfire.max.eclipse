@@ -86,11 +86,18 @@ extends RestorableSectionPart
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				controller.setFromInclude(moneyTransferSearchComposite.getTransferAmountEntry().getSpinnerComposite().getValue().longValue());
-//				controller.getMoneyTransferQuery().setToExclude(Long.MAX_VALUE);
-				controller.getMoneyTransferQuery().setTimestampFromIncl(moneyTransferSearchComposite.getCreateDTMin().getDate());
-				controller.getMoneyTransferQuery().setTimestampToIncl(moneyTransferSearchComposite.getCreateDTMax().getDate());
-				controller.getMoneyTransferQuery().setToAnchorID(moneyTransferSearchComposite.getAccountChooserComposite().getSelectedAccount());
+				// Was wrong, as it should have define the minimum transfer amount and not limit the results 
+//				controller.getMoneyTransferQuery().set(moneyTransferSearchComposite.getTransferAmountEntry().getSpinnerComposite().getValue().longValue());
+				if (moneyTransferSearchComposite.getCreateDTMin().isActive())
+					controller.getMoneyTransferQuery().setTimestampFromIncl(moneyTransferSearchComposite.getCreateDTMin().getDate());
+				else 
+					controller.getMoneyTransferQuery().setTimestampFromIncl(null);
+				if (moneyTransferSearchComposite.getCreateDTMax().isActive())
+					controller.getMoneyTransferQuery().setTimestampToIncl(moneyTransferSearchComposite.getCreateDTMax().getDate());
+				else
+					controller.getMoneyTransferQuery().setTimestampToIncl(null);
+				// For this page only transfers with the current account as one of the anchors 
+//				controller.getMoneyTransferQuery().setToAnchorID(moneyTransferSearchComposite.getAccountChooserComposite().getSelectedAccount());
 
 				fireMoneyTransferQueryChanged();
 			}

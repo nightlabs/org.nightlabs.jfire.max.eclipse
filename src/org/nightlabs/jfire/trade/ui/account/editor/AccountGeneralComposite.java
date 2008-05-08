@@ -93,8 +93,8 @@ extends XComposite
 		if (account != null)
 		{
 			accountNameEditor.setI18nText(account.getName(), EditMode.DIRECT);
-			ownerText.setText(account.getOwner() == null ? "" : account.getOwner().getAnchorID()); //$NON-NLS-1$
-			anchorTypeIDText.setText(account.getAnchorID());
+			ownerText.setText(account.getOwner() == null ? "" : account.getOwner().getPerson().getDisplayName()); //$NON-NLS-1$
+			anchorTypeIDText.setText(account.getAccountType().getName().getText());
 //			revenueInAccText.setText(account.getRevenueInAccount() == null ? "" : account.getRevenueInAccount().getName().getText()); //$NON-NLS-1$
 //			revenueOutAccText.setText(account.getRevenueOutAccount() == null ? "" : account.getRevenueOutAccount().getName().getText()); //$NON-NLS-1$
 			balanceText.setText(Long.toString(account.getBalance()));

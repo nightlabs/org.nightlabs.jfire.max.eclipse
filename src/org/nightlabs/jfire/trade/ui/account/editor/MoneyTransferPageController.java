@@ -64,7 +64,11 @@ public class MoneyTransferPageController extends EntityEditorPageController
 	public MoneyTransferPageController(EntityEditor editor)
 	{
 		super(editor);
-		queryWrapper.setToExclude(100);
+		if (editor.getEditorInput() instanceof AccountEditorInput) {
+			AnchorID accountID = ((AccountEditorInput ) editor.getEditorInput()).getJDOObjectID();
+			moneyTransferQuery.setCurrentAnchorID(accountID);
+		}
+//		queryWrapper.setToExclude(100);
 	}
 
 	@Override

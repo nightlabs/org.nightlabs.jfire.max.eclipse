@@ -14,9 +14,12 @@ import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -35,7 +38,10 @@ extends EntityEditorPageController
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		Account.FETCH_GROUP_THIS_ACCOUNT,
-		SummaryAccount.FETCH_GROUP_THIS_SUMMARY_ACCOUNT
+		SummaryAccount.FETCH_GROUP_THIS_SUMMARY_ACCOUNT,
+		AccountType.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON,
+		PropertySet.FETCH_GROUP_FULL_DATA
 	};
 	
 	private static final long serialVersionUID = -1651161683093714801L;

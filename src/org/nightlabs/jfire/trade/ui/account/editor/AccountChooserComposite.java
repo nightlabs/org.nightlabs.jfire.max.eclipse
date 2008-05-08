@@ -43,7 +43,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AccountChooserComposite extends XComposite{
 
 	private String[] FETCH_GROUPS_ACCOUNT = {
-			FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT, 
+			FetchPlan.DEFAULT, Account.FETCH_GROUP_THIS_ACCOUNT,
 			LegalEntity.FETCH_GROUP_PERSON, 
 			Account.FETCH_GROUP_ACCOUNT_TYPE, AccountType.FETCH_GROUP_NAME 
 		};

@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.ui.account.transfer;
 import java.util.Collection;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -14,12 +15,18 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.accounting.Account;
+import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.transfer.id.TransferID;
+import org.nightlabs.l10n.DateFormatProvider;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
 
 /**
@@ -38,7 +45,11 @@ extends AbstractTableComposite<MoneyTransfer>
 		FetchPlan.DEFAULT,
 		Transfer.FETCH_GROUP_THIS_TRANSFER,
 		MoneyTransfer.FETCH_GROUP_CURRENCY,
-		ManualMoneyTransfer.FETCH_GROUP_DESCRIPTION};
+		ManualMoneyTransfer.FETCH_GROUP_DESCRIPTION,
+		Account.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_ACCOUNT_TYPE,
+		AccountType.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON};
 
 	public MoneyTransferTable(Composite parent, int style)
 	{
@@ -52,20 +63,28 @@ extends AbstractTableComposite<MoneyTransfer>
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.fromAccountTableColumn.text")); //$NON-NLS-1$
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.timestampTableColumn.text")); //$NON-NLS-1$
+		layout.addColumnData(new ColumnWeightData(20));
+		
+		tc = new TableColumn(table, SWT.LEFT);
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.directionTableColumn.text")); //$NON-NLS-1$
+		layout.addColumnData(new ColumnWeightData(10));
+		
+		tc = new TableColumn(table, SWT.LEFT);
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTableColumn.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.toAccountableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(30));
-
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTypeTableColumn.text")); //$NON-NLS-1$
+		layout.addColumnData(new ColumnWeightData(20));
+		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.amountTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.reasonTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(40));
 
 		table.setLayout(layout);
 	}
@@ -82,17 +101,24 @@ extends AbstractTableComposite<MoneyTransfer>
 		return transferID;
 	}
 
-	private AnchorID currentTransferID;
+	private AnchorID currentAnchorID;
 
-	public void setMoneyTransfers(AnchorID currentTransferID, Collection<MoneyTransfer> moneyTransfers)
+	public void setMoneyTransfers(AnchorID currentAnchorID, Collection<MoneyTransfer> moneyTransfers)
 	{
-		if (currentTransferID == null)
-			throw new IllegalArgumentException("currentTransferID == null"); //$NON-NLS-1$
+		if (currentAnchorID == null)
+			throw new IllegalArgumentException("currentAnchorID == null"); //$NON-NLS-1$
 
-		this.currentTransferID = currentTransferID;
+		this.currentAnchorID = currentAnchorID;
 		super.setInput(moneyTransfers);
 	}
 
+	private Anchor getOtherAnchor(MoneyTransfer transfer) {
+		if (JDOHelper.getObjectId(transfer.getFrom()).equals(currentAnchorID)) {
+			return transfer.getTo();
+		} else
+			return transfer.getFrom();
+	}
+	
 	class MoneyTransferListLabelProvider
 	extends TableLabelProvider
 	{
@@ -100,23 +126,37 @@ extends AbstractTableComposite<MoneyTransfer>
 		{
 			if (element instanceof MoneyTransfer) {
 				MoneyTransfer moneyTransfer = (MoneyTransfer) element;
-				switch (columnIndex)
-				{
-				case(0):
-					if (moneyTransfer.getFrom().getAnchorID() != null)
-						return moneyTransfer.getFrom().getAnchorID();
-				break;
-				case(1):
-					if (moneyTransfer.getTo().getAnchorID() != null)
-						return moneyTransfer.getTo().getAnchorID();
-				break;
-				case(2):
-					return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);
-				case(3):
-					return moneyTransfer.getDescription();	
-				default:
-					return ""; //$NON-NLS-1$
+				int idx = 0;
+				if (columnIndex == idx++) {
+					return DateFormatter.formatDateShortTimeHM(moneyTransfer.getTimestamp(), false);
 				}
+				if (columnIndex == idx++) {
+					if (JDOHelper.getObjectId(moneyTransfer.getFrom()).equals(currentAnchorID)) {
+						return "->";
+					}
+					return "<-";
+				}
+				if (columnIndex == idx++) {
+					Anchor other = getOtherAnchor(moneyTransfer);
+					if (other instanceof Account)
+						return ((Account)other).getName().getText();
+					else
+						return ((LegalEntity)other).getPerson().getDisplayName();
+				}
+				if (columnIndex == idx++) {
+					Anchor other = getOtherAnchor(moneyTransfer);
+					if (other instanceof Account)
+						return ((Account)other).getAccountType().getName().getText();
+					else
+						return "LegalEntity";
+				}
+				if (columnIndex == idx++) {
+					return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);
+				}
+				if (columnIndex == idx++) {
+					return moneyTransfer.getDescription();
+				}
+				return ""; //$NON-NLS-1$
 			}
 			return null;
 		}
@@ -124,7 +164,7 @@ extends AbstractTableComposite<MoneyTransfer>
 
 	public void setLoadingStatus()
 	{
-		this.currentTransferID = null;
+		this.currentAnchorID = null;
 		super.setInput(Messages.getString("org.nightlabs.jfire.trade.ui.repository.transfer.ProductTransferTable.loadingDataPlaceholder")); //$NON-NLS-1$
 	}
 
