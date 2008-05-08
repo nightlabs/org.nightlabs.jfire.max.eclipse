@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -15,6 +16,8 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
@@ -51,12 +54,12 @@ extends AbstractProductTypeDetailPage
 
 	@Override
 	protected IProductTypeSectionPart createOwnerSection(Composite parent) {
-		return null;
+		return new OwnerConfigSection(this, parent, SWT.NONE);
 	}
 
 	@Override
 	protected IProductTypeSectionPart createVendorSection(Composite parent) {
-		return null;
+		return new VendorConfigSection(this, parent, SWT.NONE);
 	}
 
 	@Override
@@ -91,7 +94,7 @@ extends AbstractProductTypeDetailPage
 		final VoucherType voucherType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-
+				setProductTypePageController((AbstractProductTypePageController) getPageController());
 				if (voucherLayoutSection != null
 						&& !voucherLayoutSection.getSection().isDisposed()) {
 
