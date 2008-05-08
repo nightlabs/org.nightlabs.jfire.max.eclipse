@@ -38,6 +38,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -216,6 +217,18 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
+
+
+			if(Login.sharedInstance().getLoginState() == Login.LOGINSTATE_OFFLINE)
+			{
+
+				if (RCPUtil.getActiveWorkbenchPage() != null)
+					RCPUtil.getActiveWorkbenchPage().removePartListener(
+							partListener);
+
+				return;
+			}
+
 			if (!(part instanceof GeneralEditor))
 				return;
 
@@ -225,7 +238,7 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 				throw new IllegalStateException(
 						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: "
 						+ generalEditor.getEditorInput());
-			
+
 			--numEditorsOpen;
 
 			if (numEditorsOpen == 0  && RCPUtil.getActiveWorkbenchPage() != null) {
