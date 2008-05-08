@@ -221,11 +221,12 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 
 			if(Login.sharedInstance().getLoginState() == Login.LOGINSTATE_OFFLINE)
 			{
-
 				if (RCPUtil.getActiveWorkbenchPage() != null)
 					RCPUtil.getActiveWorkbenchPage().removePartListener(
 							partListener);
-
+				
+				partInitialized = false;
+				
 				return;
 			}
 
