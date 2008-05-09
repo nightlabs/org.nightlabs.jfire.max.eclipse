@@ -3,7 +3,7 @@ package org.nightlabs.jfire.jbpm.ui.transition.next;
 import java.util.EventObject;
 
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
-import org.nightlabs.jfire.trade.state.id.StateID;
+import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 
 public class SignalEvent
 extends EventObject
