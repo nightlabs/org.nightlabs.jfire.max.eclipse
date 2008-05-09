@@ -35,12 +35,12 @@ import org.nightlabs.jfire.jbpm.dao.TransitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
+import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.trade.state.id.StateID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
