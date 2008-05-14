@@ -45,4 +45,10 @@ implements LoginStateListener
 			}
 		});
 	}
+
+	@Override
+	public void loginStateBeforeChange(int loginState, IAction action) {
+		// TODO Auto-generated method stub
+		
+	}
 }
