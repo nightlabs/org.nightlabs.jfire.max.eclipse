@@ -218,18 +218,18 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-
-
-			if(Login.sharedInstance().getLoginState() == LoginState.OFFLINE)
-			{
-				if (RCPUtil.getActiveWorkbenchPage() != null)
-					RCPUtil.getActiveWorkbenchPage().removePartListener(
-							partListener);
-				
-				partInitialized = false;
-				
-				return;
-			}
+//
+//
+//			if(Login.sharedInstance().getLoginState() == LoginState.OFFLINE)
+//			{
+//				if (RCPUtil.getActiveWorkbenchPage() != null)
+//					RCPUtil.getActiveWorkbenchPage().removePartListener(
+//							partListener);
+//				
+//				partInitialized = false;
+//				
+//				return;
+//			}
 
 			if (!(part instanceof GeneralEditor))
 				return;
