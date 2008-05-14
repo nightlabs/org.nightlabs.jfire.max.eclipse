@@ -20,12 +20,12 @@ implements LoginStateListener
 
 
 	@Override
-	public void loginStateBeforeChange(int loginState, IAction action)
+	public void beforeLoginStateChange(int oldLoginState, int newLoginState, IAction action)
 	{		
 		// TODO: is also called at application shutdown (e.g. classloading configuration has changed)
 		// and leads to the fact that the AbstractApplication$ExitThread kills the app after 60s
 		// and therefore the application do NOT restarts.
-		if (loginState == Login.LOGINSTATE_LOGGED_OUT)
+		if (newLoginState == Login.LOGINSTATE_LOGGED_OUT)
 			closeAllEditors();	
 
 	
@@ -34,7 +34,7 @@ implements LoginStateListener
 	
 	
 	@Override
-	public void loginStateChanged(int loginState, IAction action)
+	public void afterLoginStateChange(int oldLoginState, int newLoginState, IAction action)
 	{		
 
 		
