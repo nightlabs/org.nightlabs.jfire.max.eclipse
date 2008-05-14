@@ -122,10 +122,11 @@ implements
 	
 	public void setSelectedLegalEntityID(final AnchorID legalEntityID) 
 	{
-		if (selectionComposite != null)
-			selectionComposite.setSelectedLegalEntityID(legalEntityID);
-		if (editLegalEntityAction != null)
-			editLegalEntityAction.setEnabled(legalEntityID != null);
+		if (selectionComposite == null || selectionComposite.isDisposed())
+			return;
+
+		selectionComposite.setSelectedLegalEntityID(legalEntityID);
+		editLegalEntityAction.setEnabled(legalEntityID != null);
 		if (legalEntityID != null) {
 			Job job = new Job("Check LegalEntity") {
 				@Override
