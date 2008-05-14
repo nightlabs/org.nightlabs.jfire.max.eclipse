@@ -13,6 +13,7 @@ Export-Package: org.nightlabs.jfire.trade.admin.ui,
  org.nightlabs.jfire.trade.admin.ui.customergroupmapping,
  org.nightlabs.jfire.trade.admin.ui.deliveryqueue,
  org.nightlabs.jfire.trade.admin.ui.editor,
+ org.nightlabs.jfire.trade.admin.ui.editor.authority,
  org.nightlabs.jfire.trade.admin.ui.editor.ownervendor,
  org.nightlabs.jfire.trade.admin.ui.gridpriceconfig,
  org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency,
@@ -36,5 +37,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.ui.workbench.texteditor,
- org.nightlabs.jseditor.ui;visibility:=reexport
+ org.nightlabs.jseditor.ui;visibility:=reexport,
+ org.nightlabs.jfire.base.admin.ui;visibility:=reexport
 Eclipse-LazyStart: true
