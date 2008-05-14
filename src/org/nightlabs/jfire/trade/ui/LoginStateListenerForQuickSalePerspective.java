@@ -3,20 +3,22 @@ package org.nightlabs.jfire.trade.ui;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
 import org.nightlabs.jfire.base.ui.login.LoginStateListener;
 
 public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener
 {
 	@Override
-	public void afterLoginStateChange(int oldLoginState, int newLoginState, IAction action)
+	public void afterLoginStateChange(LoginStateChangeEvent event)
 	{		
 		// TODO: is also called at application shutdown (e.g. classloading configuration has changed)
 		// and leads to the fact that the AbstractApplication$ExitThread kills the app after 60s
 		// and therefore the application do NOT restarts.
-		if (newLoginState == Login.LOGINSTATE_LOGGED_IN)
+		if (event.getNewLoginState() == LoginState.LOGGED_IN)
 			checkOrderOpenAsynchronously();
 	}
 
@@ -46,8 +48,9 @@ implements LoginStateListener
 		});
 	}
 
+
 	@Override
-	public void beforeLoginStateChange(int oldLoginState, int newLoginState, IAction action) {
+	public void beforeLoginStateChange(LoginStateChangeEvent event) {
 		// TODO Auto-generated method stub
 		
 	}

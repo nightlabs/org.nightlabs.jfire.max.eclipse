@@ -36,6 +36,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -219,7 +220,7 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 		public void partClosed(final IWorkbenchPart part) {
 
 
-			if(Login.sharedInstance().getLoginState() == Login.LOGINSTATE_OFFLINE)
+			if(Login.sharedInstance().getLoginState() == LoginState.OFFLINE)
 			{
 				if (RCPUtil.getActiveWorkbenchPage() != null)
 					RCPUtil.getActiveWorkbenchPage().removePartListener(
