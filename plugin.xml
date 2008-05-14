@@ -25,22 +25,27 @@
       <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            indexHint="1">
+            indexHint="10">
       </pageFactory>
       <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            indexHint="2">
+            indexHint="30">
       </pageFactory>
       <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            indexHint="3">
+            indexHint="40">
       </pageFactory>
       <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            indexHint="4">
+            indexHint="50">
+      </pageFactory>
+      <pageFactory
+            class="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
+            indexHint="20">
       </pageFactory>
    </extension>
    <extension
