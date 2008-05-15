@@ -52,8 +52,10 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilterFactory;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 
@@ -86,9 +88,6 @@ extends AbstractProductTypeQuickListFilter
 	public SimpleProductTypeQuickListFilter() {
 		super();
 
-		SelectionManager.sharedInstance().addNotificationListener(
-				TradePlugin.ZONE_SALE,
-				ArticleContainer.class, notificationListenerArticleContainerSelected);
 	}
 
 	// TODO temporary workaround - this should come from the query store. 
@@ -100,28 +99,30 @@ extends AbstractProductTypeQuickListFilter
 		return simpleProductTypeSearchFilter;
 	}
 
-	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor") {
-		public void notify(NotificationEvent event) {
-			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
-
-			ArticleContainer articleContainer = null;
-
-			if (event.getSubjects().isEmpty())
-				getProgressMonitorWrapper().worked(30);
-			else
-				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
-						(ArticleContainerID)event.getFirstSubject(),
-						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
-
+		public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
+		{
+//			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
+//
+//			ArticleContainer articleContainer = null;
+//
+//			if (event.getSubjects().isEmpty())
+//				getProgressMonitorWrapper().worked(30);
+//			else
+//				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
+//						(ArticleContainerID)event.getFirstSubject(),
+//						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
+//					articleContainer == null ? null : articleContainer.getVendorID());
+			
 			final SimpleProductTypeSearchFilter searchFilter = getSimpleProductTypeSearchFilter();
-			searchFilter.setVendorID(articleContainer == null ? null : articleContainer.getVendorID());
+			searchFilter.setVendorID(vendorID);
+				
 			try {
 				QueryCollection<SimpleProductTypeSearchFilter> productTypeQueries = new QueryCollection<SimpleProductTypeSearchFilter>(ProductType.class);
 				productTypeQueries.add(searchFilter);
 				final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new SubProgressMonitor(getProgressMonitorWrapper(), 70));
+						progressMonitor);
 				
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
@@ -131,8 +132,8 @@ extends AbstractProductTypeQuickListFilter
 			} catch (Exception x) {
 				throw new RuntimeException(x);
 			}
-		}
-	};
+		
+	}
 
 	@Override
 	protected Control doCreateResultViewerControl(Composite parent) {
