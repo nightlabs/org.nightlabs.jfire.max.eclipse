@@ -95,44 +95,14 @@ extends AbstractProductTypeQuickListFilter
 	private SimpleProductTypeSearchFilter getSimpleProductTypeSearchFilter() {
 		if (simpleProductTypeSearchFilter == null)
 			simpleProductTypeSearchFilter = new SimpleProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-		
+
 		return simpleProductTypeSearchFilter;
 	}
 
-		public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
-		{
-//			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
-//
-//			ArticleContainer articleContainer = null;
-//
-//			if (event.getSubjects().isEmpty())
-//				getProgressMonitorWrapper().worked(30);
-//			else
-//				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
-//						(ArticleContainerID)event.getFirstSubject(),
-//						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
-//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
-//					articleContainer == null ? null : articleContainer.getVendorID());
-			
-			final SimpleProductTypeSearchFilter searchFilter = getSimpleProductTypeSearchFilter();
-			searchFilter.setVendorID(vendorID);
-				
-			try {
-				QueryCollection<SimpleProductTypeSearchFilter> productTypeQueries = new QueryCollection<SimpleProductTypeSearchFilter>(ProductType.class);
-				productTypeQueries.add(searchFilter);
-				final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						progressMonitor);
-				
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						resultTable.setInput(productTypes);
-					}
-				});
-			} catch (Exception x) {
-				throw new RuntimeException(x);
-			}
-		
+	public void setVendorID(AnchorID vendorID) 
+	{
+		getSimpleProductTypeSearchFilter().setVendorID(vendorID);
+
 	}
 
 	@Override
@@ -159,7 +129,7 @@ extends AbstractProductTypeQuickListFilter
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					monitor);
-			
+
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					resultTable.setInput(productTypes);
