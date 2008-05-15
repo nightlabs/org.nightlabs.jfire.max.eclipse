@@ -32,8 +32,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.jfire.store.VendorDependentSearchFilter;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -107,13 +107,10 @@ extends ISelectionHandler
 	 */
 	Set<Class<? extends Object>> getClasses();
 
-
-
-	/* selects the ProductTypes of the specified Vendor
-	 * 
-	 * */
-	public void setVendorID(AnchorID vendorID); 
-
-
-//	IFilterSettingProvider getFilterSettingProvider();
+	/**
+	 * Get the ProductTypeSearchFilter used by this <code>IProductTypeQuickListFilter</code>.
+	 *
+	 * @return the <code>ProductTypeSearchFilter</code>
+	 */
+	VendorDependentSearchFilter getProductTypeSearchFilter();
 }

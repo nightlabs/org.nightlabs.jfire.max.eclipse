@@ -48,7 +48,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -60,11 +59,9 @@ import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
@@ -77,6 +74,7 @@ import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
  * A View for a configurable quick-list of sellable products.
@@ -95,9 +93,7 @@ implements ISelectionProvider
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
 	private TabFolder tabFolder;
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
-	private AnchorID vendorID=null;
-	
-	
+	private AnchorID vendorID;
 	
 	public ProductTypeQuickListView() {
 		super();
@@ -153,13 +149,12 @@ implements ISelectionProvider
 
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						ProductType.class, notificationListenerArticleContainerSelected);
-
-
 			}
 		});
 		refresh();
 //		getSite().setSelectionProvider(this);
 	}
+
 	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor") {
 		public void notify(NotificationEvent event) {
 			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
@@ -175,22 +170,16 @@ implements ISelectionProvider
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(getProgressMonitorWrapper(), 100));
 
-			vendorID = articleContainer == null ? null : articleContainer.getVendorID();
+			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
+			if (!Util.equals(vendorID, newVendorID)) {
+				// vendor changed => all search results are outdated
+				for (int i = 0; i < filterSearched.size(); ++i)
+					filterSearched.set(i, Boolean.FALSE);
+			}
 
 			refresh();
-
 		}
 	};
-
-
-
-
-
-
-
-
-
-
 
 	private ISelectionChangedListener filterSelectionListener = new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent selEvent)
@@ -304,7 +293,7 @@ implements ISelectionProvider
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
-						filter.setVendorID(vendorID);
+						filter.getProductTypeSearchFilter().setVendorID(vendorID);
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}
