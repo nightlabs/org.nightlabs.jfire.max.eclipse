@@ -48,6 +48,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -55,18 +56,27 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * A View for a configurable quick-list of sellable products.
@@ -128,15 +138,68 @@ implements ISelectionProvider
 		}
 		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE,
 				ProductType.class, selectionListener);
+
+		SelectionManager.sharedInstance().addNotificationListener(
+				TradePlugin.ZONE_SALE,
+				ArticleContainer.class, notificationListenerArticleContainerSelected);
+
 		wrapper.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						ProductType.class, selectionListener);
+
+				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
+						ProductType.class, notificationListenerArticleContainerSelected);
+
+
 			}
 		});
 		refresh();
 //		getSite().setSelectionProvider(this);
 	}
+	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor") {
+		public void notify(NotificationEvent event) {
+			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
+
+			ArticleContainer articleContainer = null;
+
+			if (event.getSubjects().isEmpty())
+				getProgressMonitorWrapper().worked(30);
+			else
+				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
+						(ArticleContainerID)event.getFirstSubject(),
+						AbstractProductTypeQuickListFilter.FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
+
+			AnchorID vendorID = articleContainer == null ? null : articleContainer.getVendorID();
+
+
+			if ( filters.size() == 1 ) {
+				IProductTypeQuickListFilter filter = (filters.get(0));
+				filter.showProductsofVendor(vendorID,new SubProgressMonitor(getProgressMonitorWrapper(), 70));
+
+			} else {
+				for (IProductTypeQuickListFilter filter : filters) {
+					filter.showProductsofVendor(vendorID,new SubProgressMonitor(getProgressMonitorWrapper(), 70));
+
+				} 
+
+
+			}
+
+		}
+	};
+
+
+
+
+
+
+
+
+
+
 
 	private ISelectionChangedListener filterSelectionListener = new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent selEvent)
@@ -166,7 +229,7 @@ implements ISelectionProvider
 					ProductTypeQuickListView.this, TradePlugin.ZONE_SALE, selectedProductTypeID,
 					selectedProductTypeID == null ? ProductTypeID.class : null);
 			SelectionManager.sharedInstance().notify(event);
-			
+
 			if (selEvent.getSource() instanceof IProductTypeQuickListFilter) {
 				IProductTypeQuickListFilter filter = (IProductTypeQuickListFilter) selEvent.getSource();
 				// selected filter is not active filter
@@ -189,7 +252,7 @@ implements ISelectionProvider
 	};
 
 	private boolean tabSelectProgrammtically = false;
-	
+
 	// To listen for changes from outside
 	private NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 		public void notify(NotificationEvent notificationEvent) {
@@ -238,7 +301,7 @@ implements ISelectionProvider
 		if (tabIndex >= 0 && tabIndex < filters.size())
 			filterSearched.set(tabIndex, new Boolean(searched));
 	}
-	
+
 	public void refresh() {
 		refresh(true);
 	}
@@ -300,9 +363,9 @@ implements ISelectionProvider
 	{
 //		// Iterate over all filters and set the selection if they can handle it
 //		for (IProductTypeQuickListFilter filter : filters) {
-//			if (filter.canHandleSelection(selection)) {
-//				filter.setSelection(selection);
-//			}
+//		if (filter.canHandleSelection(selection)) {
+//		filter.setSelection(selection);
+//		}
 //		}
 		Set<ObjectID> objectIDs = SelectionUtil.getObjectIDs(selection);
 		if (!objectIDs.isEmpty()) {
