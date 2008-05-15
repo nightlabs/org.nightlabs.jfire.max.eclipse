@@ -9,26 +9,17 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
-import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
-import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.VoucherTypeSearchFilter;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
-import org.nightlabs.notification.NotificationEvent;
-import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
 
 public class VoucherTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
@@ -45,7 +36,8 @@ extends AbstractProductTypeQuickListFilter
 
 	// TODO temporary workaround - this should come from the query store. 
 	private VoucherTypeSearchFilter voucherProductTypeSearchFilter;
-	private VoucherTypeSearchFilter getVoucherTypeSearchFilter() {
+	@Override
+	public VoucherTypeSearchFilter getProductTypeSearchFilter() {
 		if (voucherProductTypeSearchFilter == null)
 			voucherProductTypeSearchFilter = new VoucherTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
 
@@ -54,7 +46,7 @@ extends AbstractProductTypeQuickListFilter
 
 	public void setVendorID(AnchorID vendorID) 
 	{
-		getVoucherTypeSearchFilter().setVendorID(vendorID);
+		getProductTypeSearchFilter().setVendorID(vendorID);
 
 	}
 
@@ -80,7 +72,7 @@ extends AbstractProductTypeQuickListFilter
 	@Override
 	protected void search(ProgressMonitor monitor) {
 
-		final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
+		final VoucherTypeSearchFilter searchFilter = getProductTypeSearchFilter();
 		try {
 			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
 			productTypeQueries.add(searchFilter);
