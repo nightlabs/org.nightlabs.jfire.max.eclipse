@@ -112,7 +112,7 @@ extends ISelectionHandler
 	/* selects the ProductTypes of the specified Vendor
 	 * 
 	 * */
-	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor); 
+	public void setVendorID(AnchorID vendorID); 
 
 
 //	IFilterSettingProvider getFilterSettingProvider();

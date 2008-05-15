@@ -95,7 +95,10 @@ implements ISelectionProvider
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
 	private TabFolder tabFolder;
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
-
+	private AnchorID vendorID=null;
+	
+	
+	
 	public ProductTypeQuickListView() {
 		super();
 	}
@@ -164,29 +167,17 @@ implements ISelectionProvider
 			ArticleContainer articleContainer = null;
 
 			if (event.getSubjects().isEmpty())
-				getProgressMonitorWrapper().worked(30);
+				getProgressMonitorWrapper().worked(100);
 			else
 				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
 						(ArticleContainerID)event.getFirstSubject(),
 						AbstractProductTypeQuickListFilter.FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
+						new SubProgressMonitor(getProgressMonitorWrapper(), 100));
 
-			AnchorID vendorID = articleContainer == null ? null : articleContainer.getVendorID();
+			vendorID = articleContainer == null ? null : articleContainer.getVendorID();
 
-
-			if ( filters.size() == 1 ) {
-				IProductTypeQuickListFilter filter = (filters.get(0));
-				filter.showProductsofVendor(vendorID,new SubProgressMonitor(getProgressMonitorWrapper(), 70));
-
-			} else {
-				for (IProductTypeQuickListFilter filter : filters) {
-					filter.showProductsofVendor(vendorID,new SubProgressMonitor(getProgressMonitorWrapper(), 70));
-
-				} 
-
-
-			}
+			refresh();
 
 		}
 	};
@@ -313,6 +304,7 @@ implements ISelectionProvider
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
+						filter.setVendorID(vendorID);
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}
