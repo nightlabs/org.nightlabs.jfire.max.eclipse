@@ -1,32 +1,36 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.authority;
 
-import org.eclipse.swt.layout.GridData;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.language.I18nTextEditor;
-import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.jfire.base.ui.security.UserTable;
+import org.nightlabs.jfire.security.Authority;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 
-public class AuthoritySection
+public class UserSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
-	private I18nTextEditor name;
-	private I18nTextEditor description;
+	private UserTable userTable;
 
-	public AuthoritySection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR, "Authority");
-		((GridData)getSection().getLayoutData()).grabExcessVerticalSpace = false;
+	public UserSection(IFormPage page, Composite parent) {
+		super(page, parent, ExpandableComposite.TITLE_BAR, "Users && user groups in authority");
 
-		name = new I18nTextEditor(parent);
-		description = new I18nTextEditorMultiLine(parent);
+		userTable = new UserTable(parent, SWT.NONE);
+		userTable.setInput(users);
 	}
 
 	private ProductType productType;
+	private Authority authority;
+	private Set<User> users = new HashSet<User>();
 	private AuthorityPageController authorityPageController;
 
 	@Override
@@ -43,18 +47,18 @@ implements IProductTypeSectionPart
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> productTypeDetailPageController) {
 		authorityPageController = (AuthorityPageController) productTypeDetailPageController;
 		productType = authorityPageController.getControllerObject();
-		if (productType == null || productType.getProductTypeLocal().getAuthority() == null) {
-			setMessage("There is no authority assigned to this product type.");
-			setEnabled(false);
-		}
-		else {
-			setMessage(null);
-			setEnabled(true);
-		}
+		setAuthority(productType == null ? null : productType.getProductTypeLocal().getAuthority());
 	}
 
-	private void setEnabled(boolean enabled) {
-		name.setEnabled(enabled);
-		description.setEnabled(enabled);
+
+	private void setAuthority(Authority authority)
+	{
+		this.authority = authority;
+		if (authority == null) {
+			users.clear();
+		}
+		else {
+		}
+		userTable.refresh();
 	}
 }
