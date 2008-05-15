@@ -21,6 +21,7 @@ import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.VoucherTypeSearchFilter;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
@@ -39,9 +40,6 @@ extends AbstractProductTypeQuickListFilter
 
 
 	public VoucherTypeQuickListFilter() {
-		SelectionManager.sharedInstance().addNotificationListener(
-				TradePlugin.ZONE_SALE,
-				ArticleContainer.class, notificationListenerArticleContainerSelected);
 	}
 
 
@@ -56,46 +54,46 @@ extends AbstractProductTypeQuickListFilter
 
 
 
-	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor")  {
-		public void notify(NotificationEvent event) {
+	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
+	{
 
-			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
+//		getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
 
-			ArticleContainer articleContainer = null;
+//		ArticleContainer articleContainer = null;
 
-			if (event.getSubjects().isEmpty())
-				getProgressMonitorWrapper().worked(30);
-			else
-				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
-						(ArticleContainerID)event.getFirstSubject(),
-						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
+//		if (event.getSubjects().isEmpty())
+//		getProgressMonitorWrapper().worked(30);
+//		else
+//		articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
+//		(ArticleContainerID)event.getFirstSubject(),
+//		FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
+//		NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//		new SubProgressMonitor(getProgressMonitorWrapper(), 30));
 
-			final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
-			searchFilter.setVendorID(articleContainer == null ? null : articleContainer.getVendorID());
+		final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
+		searchFilter.setVendorID(vendorID);
 
-			try {
+		try {
 
-				QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
-				productTypeQueries.add(searchFilter);
+			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
+			productTypeQueries.add(searchFilter);
 
-				final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_VOUCHER_TYPE_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new SubProgressMonitor(getProgressMonitorWrapper(), 70));
+			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_VOUCHER_TYPE_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					progressMonitor);
 
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						voucherTypeTable.setInput(voucherTypes);
-					}
-				});
-			} catch (Exception x) {
-				throw new RuntimeException(x);
-			}
-
-
-
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					voucherTypeTable.setInput(voucherTypes);
+				}
+			});
+		} catch (Exception x) {
+			throw new RuntimeException(x);
 		}
-	};
+
+
+
+	}
+
 
 
 	private VoucherTypeTable voucherTypeTable;
@@ -119,7 +117,7 @@ extends AbstractProductTypeQuickListFilter
 
 	@Override
 	protected void search(ProgressMonitor monitor) {
-		
+
 		final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
 		try {
 			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
@@ -128,7 +126,7 @@ extends AbstractProductTypeQuickListFilter
 					DEFAULT_FETCH_VOUCHER_TYPE_GROUP, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					monitor);
-			
+
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					voucherTypeTable.setInput(voucherTypes);
