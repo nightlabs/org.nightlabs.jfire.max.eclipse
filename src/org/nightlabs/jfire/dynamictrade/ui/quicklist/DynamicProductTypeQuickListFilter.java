@@ -63,34 +63,10 @@ extends AbstractProductTypeQuickListFilter
 		return dynamicProductTypeSearchFilter;
 	}
 
-
-
-	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
+	public void setVendorID(AnchorID vendorID) 
 	{
-
-		final DynamicProductTypeSearchFilter searchFilter = getDynamicProductTypeSearchFilter();
-		searchFilter.setVendorID(vendorID);
-		try {
-
-			QueryCollection<DynamicProductTypeSearchFilter> productTypeQueries = new QueryCollection<DynamicProductTypeSearchFilter>(ProductType.class);
-			productTypeQueries.add(searchFilter);
-
-			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					progressMonitor);
-
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					dynamicProductTypeTable.setInput(productTypes);
-				}
-			});
-		} catch (Exception x) {
-			throw new RuntimeException(x);
-		}
-
-
-
+		getDynamicProductTypeSearchFilter().setVendorID(vendorID);
 	}
-
 
 	public String getDisplayName()
 	{
