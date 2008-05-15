@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -62,7 +63,7 @@ extends ISelectionHandler
 	 * @return The created Control
 	 */	
 	Control getResultViewerControl();
-	
+
 	/**
 	 * Returns the display name of this filter
 	 * @return The display name of this filter
@@ -99,12 +100,20 @@ extends ISelectionHandler
 	 * @return true if the filter can display the selection or not
 	 */
 	public boolean canHandleSelection(ISelection selection);
-	
+
 	/**
 	 * Returns the classes the filter is responsible for.
 	 * @return the classes the filter is responsible for
 	 */
 	Set<Class<? extends Object>> getClasses();
-		
+
+
+
+	/* selects the ProductTypes of the specified Vendor
+	 * 
+	 * */
+	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor); 
+
+
 //	IFilterSettingProvider getFilterSettingProvider();
 }
