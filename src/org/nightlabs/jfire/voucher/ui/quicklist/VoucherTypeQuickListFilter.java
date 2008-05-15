@@ -52,49 +52,11 @@ extends AbstractProductTypeQuickListFilter
 		return voucherProductTypeSearchFilter;
 	}
 
-
-
-	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
+	public void setVendorID(AnchorID vendorID) 
 	{
-
-//		getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
-
-//		ArticleContainer articleContainer = null;
-
-//		if (event.getSubjects().isEmpty())
-//		getProgressMonitorWrapper().worked(30);
-//		else
-//		articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
-//		(ArticleContainerID)event.getFirstSubject(),
-//		FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
-//		NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//		new SubProgressMonitor(getProgressMonitorWrapper(), 30));
-
-		final VoucherTypeSearchFilter searchFilter = getVoucherTypeSearchFilter();
-		searchFilter.setVendorID(vendorID);
-
-		try {
-
-			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
-			productTypeQueries.add(searchFilter);
-
-			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,DEFAULT_FETCH_VOUCHER_TYPE_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					progressMonitor);
-
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					voucherTypeTable.setInput(voucherTypes);
-				}
-			});
-		} catch (Exception x) {
-			throw new RuntimeException(x);
-		}
-
-
+		getVoucherTypeSearchFilter().setVendorID(vendorID);
 
 	}
-
-
 
 	private VoucherTypeTable voucherTypeTable;
 
