@@ -24,6 +24,7 @@ import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -42,9 +43,6 @@ extends AbstractProductTypeQuickListFilter
 	public DynamicProductTypeQuickListFilter() {
 		super();
 
-		SelectionManager.sharedInstance().addNotificationListener(
-				TradePlugin.ZONE_SALE,
-				ArticleContainer.class, notificationListenerArticleContainerSelected);
 	}
 
 	@Override
@@ -55,56 +53,43 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 
-	
+
 	// TODO temporary workaround - this should come from the query store. 
 	private DynamicProductTypeSearchFilter dynamicProductTypeSearchFilter;
 	private DynamicProductTypeSearchFilter getDynamicProductTypeSearchFilter() {
 		if (dynamicProductTypeSearchFilter == null)
 			dynamicProductTypeSearchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-		
+
 		return dynamicProductTypeSearchFilter;
 	}
 
 
-	
-	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor") {
-		public void notify(NotificationEvent event) {
 
-			ArticleContainer articleContainer = null;
+	public void showProductsofVendor(AnchorID vendorID,ProgressMonitor progressMonitor) 
+	{
 
-			
-			if (event.getSubjects().isEmpty())
-				getProgressMonitorWrapper().worked(30);
-			else
-				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
-						(ArticleContainerID)event.getFirstSubject(),
-						FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(getProgressMonitorWrapper(), 30));
-			
-			final DynamicProductTypeSearchFilter searchFilter = getDynamicProductTypeSearchFilter();
-			searchFilter.setVendorID(articleContainer == null ? null : articleContainer.getVendorID());
-			try {
-		
-				QueryCollection<DynamicProductTypeSearchFilter> productTypeQueries = new QueryCollection<DynamicProductTypeSearchFilter>(ProductType.class);
-				productTypeQueries.add(searchFilter);
-				
-				final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new SubProgressMonitor(getProgressMonitorWrapper(), 70));
-				
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						dynamicProductTypeTable.setInput(productTypes);
-					}
-				});
-			} catch (Exception x) {
-				throw new RuntimeException(x);
-			}
+		final DynamicProductTypeSearchFilter searchFilter = getDynamicProductTypeSearchFilter();
+		searchFilter.setVendorID(vendorID);
+		try {
 
+			QueryCollection<DynamicProductTypeSearchFilter> productTypeQueries = new QueryCollection<DynamicProductTypeSearchFilter>(ProductType.class);
+			productTypeQueries.add(searchFilter);
 
+			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					progressMonitor);
 
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					dynamicProductTypeTable.setInput(productTypes);
+				}
+			});
+		} catch (Exception x) {
+			throw new RuntimeException(x);
 		}
-	};
+
+
+
+	}
 
 
 	public String getDisplayName()
@@ -126,7 +111,7 @@ extends AbstractProductTypeQuickListFilter
 
 	@Override
 	protected void search(ProgressMonitor monitor) {
-		
+
 		final DynamicProductTypeSearchFilter searchFilter = getDynamicProductTypeSearchFilter();
 		try {
 			QueryCollection<DynamicProductTypeSearchFilter> productTypeQueries = new QueryCollection<DynamicProductTypeSearchFilter>(ProductType.class);
@@ -135,7 +120,7 @@ extends AbstractProductTypeQuickListFilter
 					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-			
+
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					dynamicProductTypeTable.setInput(productTypes);
