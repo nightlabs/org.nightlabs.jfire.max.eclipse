@@ -49,7 +49,7 @@ extends AbstractProductTypePageController<ProductType>
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID,
-		ProductTypeLocal.FETCH_GROUP_AUTHORITY,
+		ProductTypeLocal.FETCH_GROUP_SECURING_AUTHORITY,
 		AuthorityType.FETCH_GROUP_ROLE_GROUPS,
 		RoleGroup.FETCH_GROUP_NAME,
 		RoleGroup.FETCH_GROUP_DESCRIPTION,
