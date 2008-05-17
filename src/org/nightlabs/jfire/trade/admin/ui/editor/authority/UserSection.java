@@ -47,7 +47,7 @@ implements IProductTypeSectionPart
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> productTypeDetailPageController) {
 		authorityPageController = (AuthorityPageController) productTypeDetailPageController;
 		productType = authorityPageController.getControllerObject();
-		setAuthority(productType == null ? null : productType.getProductTypeLocal().getAuthority());
+		setAuthority(productType == null ? null : productType.getProductTypeLocal().getSecuringAuthority());
 	}
 
 

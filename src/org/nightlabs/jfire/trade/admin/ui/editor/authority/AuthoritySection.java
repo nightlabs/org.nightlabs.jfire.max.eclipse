@@ -43,7 +43,7 @@ implements IProductTypeSectionPart
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> productTypeDetailPageController) {
 		authorityPageController = (AuthorityPageController) productTypeDetailPageController;
 		productType = authorityPageController.getControllerObject();
-		if (productType == null || productType.getProductTypeLocal().getAuthority() == null) {
+		if (productType == null || productType.getProductTypeLocal().getSecuringAuthority() == null) {
 			setMessage("There is no authority assigned to this product type.");
 			setEnabled(false);
 		}

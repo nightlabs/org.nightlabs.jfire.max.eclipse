@@ -71,12 +71,12 @@ extends AbstractProductTypePageController<ProductType>
 
 	public AuthorityType getAuthorityType()
 	{
-		return getControllerObject() == null ? null : getControllerObject().getProductTypeLocal().getAuthorityType();
+		return getControllerObject() == null ? null : getControllerObject().getProductTypeLocal().getSecuringAuthorityType();
 	}
 
 	public Authority getAuthority()
 	{
-		return getControllerObject() == null ? null : getControllerObject().getProductTypeLocal().getAuthority();
+		return getControllerObject() == null ? null : getControllerObject().getProductTypeLocal().getSecuringAuthority();
 	}
 
 	private Set<RoleGroup> roleGroupsInAuthorityType = new HashSet<RoleGroup>();
