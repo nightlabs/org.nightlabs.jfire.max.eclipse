@@ -30,6 +30,7 @@ import org.nightlabs.jfire.accounting.priceconfig.AffectedProductType;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeName;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -74,13 +75,13 @@ extends Dialog
 				(String) null, new ProductTypeListLabelProvider());
 		ProductType dummy = new ProductType("dummy", "dummy", null, ProductType.INHERITANCE_NATURE_LEAF, ProductType.PACKAGE_NATURE_OUTER) { //$NON-NLS-1$ //$NON-NLS-2$
 			private static final long serialVersionUID = 1L; // get rid of the warning
-			private I18nTextBuffer name;
+			private ProductTypeName name;
 			@Override
 			@Implement
-			public I18nText getName()
+			public ProductTypeName getName()
 			{
 				if (name == null) {
-					name = new I18nTextBuffer();
+					name = new ProductTypeName(this);
 					name.setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.StorePriceConfigsConfirmationDialog.pseudoEntry_loading")); //$NON-NLS-1$
 				}
 				return name;
