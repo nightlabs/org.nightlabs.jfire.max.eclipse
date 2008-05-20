@@ -14,7 +14,6 @@ Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.editor2d.ui,
  org.nightlabs.jfire.voucher.editor2d.ui.action,
  org.nightlabs.jfire.voucher.editor2d.ui.dialog,
- org.nightlabs.jfire.voucher.editor2d.ui.iofilter,
  org.nightlabs.jfire.voucher.editor2d.ui.resource,
  org.nightlabs.jfire.voucher.editor2d.ui.scripting,
  org.nightlabs.jfire.voucher.editor2d.ui.tool
