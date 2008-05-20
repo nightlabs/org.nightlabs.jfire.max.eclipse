@@ -12,7 +12,7 @@ import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorOSPrint;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractScriptDataProviderThread;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
-import org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter;
+import org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
