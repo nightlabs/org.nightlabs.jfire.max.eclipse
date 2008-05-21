@@ -63,7 +63,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 				voucherLayout.loadFile(selectedFile);
 				voucherLayout.saveFile(selectedFile);
 				getVoucherType().setVoucherLayout(voucherLayout);
-				getVoucherType().getFieldMetaData("voucherLayout").setValueInherited(false);  //$NON-NLS-1$
+				getVoucherType().getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
 				// TODO: inheritance should be controllable by UI. Marco.
 			}
 		} catch (Exception e) {
@@ -86,27 +86,15 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 				monitor);
 	}
 
-
 	@Override
 	public VoucherType getExtendedProductType(ProgressMonitor monitor, ProductTypeID extendedProductTypeID)
 	{
-
 		return VoucherTypeDAO.sharedInstance().getVoucherType(
 				extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
-
-
 	}
-
-
-
-
-
-
-
-
 
 	@Override
 	protected VoucherType storeProductType(VoucherType voucherType, ProgressMonitor monitor)

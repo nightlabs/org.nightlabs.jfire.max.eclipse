@@ -79,7 +79,7 @@ extends DynamicPathWizard
 				voucherTypeNamePage.getInheritanceNature(),
 				voucherTypeNamePage.getPackageNature());
 		voucherType.getName().copyFrom(voucherTypeNamePage.getVoucherTypeNameBuffer());
-		voucherType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
+		voucherType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
 		switch (selectVoucherPriceConfigPage.getMode()) {
 			case INHERIT:
@@ -87,31 +87,15 @@ extends DynamicPathWizard
 				break;
 			case CREATE:
 				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.createPriceConfig());
-				voucherType.getFieldMetaData("packagePriceConfig").setValueInherited(false); //$NON-NLS-1$
+				voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
 				break;
 			case SELECT:
 				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getSelectedPriceConfig());
-				voucherType.getFieldMetaData("packagePriceConfig").setValueInherited(false); //$NON-NLS-1$
+				voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
 				break;
 			default:
 				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
-
-//		switch (selectLocalAccountantDelegatePage.getMode()) {
-//			case INHERIT:
-//				voucherType.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getInheritedLocalAccountantDelegate());
-//				break;
-//			case CREATE:
-//				voucherType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(false); //$NON-NLS-1$
-//				voucherType.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.createVoucherLocalAccountantDelegate());
-//				break;
-//			case SELECT:
-//				voucherType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(false); //$NON-NLS-1$
-//				voucherType.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getSelectedLocalAccountantDelegate());
-//				break;
-//			default:
-//				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
-//		}
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
 			@Override
@@ -137,11 +121,11 @@ extends DynamicPathWizard
 							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getInheritedLocalAccountantDelegate());
 							break;
 						case CREATE:
-							vt.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(false); //$NON-NLS-1$
+							vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
 							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.createVoucherLocalAccountantDelegate());
 							break;
 						case SELECT:
-							vt.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(false); //$NON-NLS-1$
+							vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
 							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getSelectedLocalAccountantDelegate());
 							break;
 						default:
