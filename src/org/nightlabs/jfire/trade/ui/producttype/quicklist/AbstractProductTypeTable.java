@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
@@ -112,10 +113,10 @@ implements ISelectionHandler
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
-		TableLayout l = new TableLayout();
-		l.addColumnData(new ColumnWeightData(1, true));
-		table.setLayout(l);
-//		table.setLayout(new WeightedTableLayout(new int[1]));
+//		TableLayout l = new TableLayout();
+//		l.addColumnData(new ColumnWeightData(1, true));
+//		table.setLayout(l);
+		table.setLayout(new WeightedTableLayout(new int[] {1}));
 	}
 
 	@Override
