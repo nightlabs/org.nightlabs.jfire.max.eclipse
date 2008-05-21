@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.action.SelectionAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -187,13 +188,15 @@ extends ToolBarSectionPart
 		}
 		
 		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").isValueInherited()); //$NON-NLS-1$
+			setChecked(productType.getProductTypeLocal().getFieldMetaData(
+					ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
 		}
 	}
 
 	@Override
 	public void commit(boolean save) {
-		productType.getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
+		productType.getProductTypeLocal().getFieldMetaData(
+				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(inheritAction.isChecked());
 		// delegate itself was already set
 		productType.getProductTypeLocal().setLocalAccountantDelegate(moneyFlowConfigComposite.getProductTypeMappingTree().getDelegate());
 		super.commit(save);

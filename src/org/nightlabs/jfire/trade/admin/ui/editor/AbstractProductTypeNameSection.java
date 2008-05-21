@@ -57,8 +57,8 @@ implements IProductTypeSectionPart
 			public void modifyText(ModifyEvent e) {
 				if (!ignoreProductTypeNameModify) {
 					setInheritanceSelection(false);
-					if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
-						productType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
+					if (productType.getFieldMetaData(ProductType.FieldName.name) != null)
+						productType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 				}
 				// TODO: fix NullPointerException
 				markDirty();
@@ -118,11 +118,8 @@ implements IProductTypeSectionPart
 
 	private AbstractProductTypePageController<ProductType> productTypePageController;
 
-
-
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
-		
 		if (pageController == null || getSection() == null || getSection().isDisposed())
 			return;
 
@@ -136,25 +133,17 @@ implements IProductTypeSectionPart
 		}
 		else {
 			productTypeName.setI18nText(productType.getName(), I18nTextEditor.EditMode.DIRECT);
-			if (productType.getFieldMetaData("name") != null) //$NON-NLS-1$
-				setInheritanceSelection(productType.getFieldMetaData("name").isValueInherited()); //$NON-NLS-1$
+			if (productType.getFieldMetaData(ProductType.FieldName.name) != null)
+				setInheritanceSelection(productType.getFieldMetaData(ProductType.FieldName.name).isValueInherited());
 		}
-		
-
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
-
 		return productTypePageController;
-
 	}
 
-
-
-
 	private II18nTextEditor productTypeName = null;
-
 	protected abstract ProductType retrieveExtendedProductType(ProductType type, ProgressMonitor monitor);
 
 	protected void inheritNamePressed()

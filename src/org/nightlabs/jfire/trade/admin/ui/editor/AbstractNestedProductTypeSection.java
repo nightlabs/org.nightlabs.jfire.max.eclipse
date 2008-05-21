@@ -115,8 +115,6 @@ implements IProductTypeSectionPart
 
 	private AbstractProductTypePageController<ProductType> productTypePageController;
 
-
-
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
 		if (pageController == null || getSection() == null || getSection().isDisposed()|| nestedProductTypeTable.isDisposed())
@@ -129,27 +127,20 @@ implements IProductTypeSectionPart
 			setInheritanceSelection(false);
 		}
 		else {
-			if (productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) //$NON-NLS-1$
-				setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").isValueInherited()); //$NON-NLS-1$
+			if (productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null)
+				setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData(
+						ProductTypeLocal.FieldName.nestedProductTypeLocals).isValueInherited());
 //			 TODO sort nestedProductTypes alphabetically
 		}
 		
 		nestedProductTypeTable.setInput(productType);
-		
-		
-
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
-
 		return productTypePageController;
-
 	}
 
-	
-	
-	
 	private InheritanceAction inheritNestedProductTypesAction = null;
 	private NestedProductTypeTable nestedProductTypeTable = null;
 
@@ -205,7 +196,7 @@ implements IProductTypeSectionPart
 			return;
 
 		boolean inherited = getInheritanceSelection();
-		productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").setValueInherited(inherited); //$NON-NLS-1$
+		productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals).setValueInherited(inherited);
 		if (inherited) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.loadInheritanceDataJob.name")) { //$NON-NLS-1$
 				@Override
@@ -219,9 +210,9 @@ implements IProductTypeSectionPart
 						new NestedProductTypeLocalMapInheriter().copyFieldValue(
 								mother.getProductTypeLocal(), productType.getProductTypeLocal(),
 								mother.getProductTypeLocal().getClass(), productType.getProductTypeLocal().getClass(),
-								ProductTypeLocal.class.getDeclaredField("nestedProductTypeLocals"), //$NON-NLS-1$
-								mother.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals"), //$NON-NLS-1$
-								productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals")); //$NON-NLS-1$
+								ProductTypeLocal.class.getDeclaredField(ProductTypeLocal.FieldName.nestedProductTypeLocals),
+								mother.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals),
+								productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals));
 						monitor.worked(1);
 						monitor.done();
 					} catch (Exception x) {
@@ -250,8 +241,8 @@ implements IProductTypeSectionPart
 	public void refreshNestedProductTypes()
 	{
 		nestedProductTypeTable.refresh();
-		if (productType != null && productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) //$NON-NLS-1$
-			setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").isValueInherited()); //$NON-NLS-1$
+		if (productType != null && productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null)
+			setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals).isValueInherited());
 	}
 			
 	public void removeSelectedNestedProductTypes()
@@ -259,8 +250,8 @@ implements IProductTypeSectionPart
 		if (productType == null)
 			return;
 
-		if (productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) //$NON-NLS-1$
-			productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").setValueInherited(false); //$NON-NLS-1$
+		if (productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null)
+			productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals).setValueInherited(false);
 		for (NestedProductTypeLocal nestedProductTypeLocal : nestedProductTypeTable.getSelectedElements()) {
 			productType.getProductTypeLocal().removeNestedProductTypeLocal(
 					nestedProductTypeLocal.getInnerProductTypeOrganisationID(),

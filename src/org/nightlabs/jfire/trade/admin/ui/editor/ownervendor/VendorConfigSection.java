@@ -26,8 +26,6 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Fitas [at] NightLabs [dot] de
  *
  */
-
-
 public class VendorConfigSection  
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
@@ -36,17 +34,13 @@ implements IProductTypeSectionPart
 	private FadeableComposite fadeableComposite;
 	private LegalEntityEditComposite vendorEditComposite = null;
 	private ProductType productType = null;
-
 	private LegalEntity originalEntity;
-
 
 	public VendorConfigSection(IFormPage page,
 			Composite parent, int style) 
 	{
 		super(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.title")); //$NON-NLS-1$
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
-
 		this.vendorEditComposite = new LegalEntityEditComposite(fadeableComposite, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorEditComposite.addLegalEntityValueChangedListener( 
@@ -66,7 +60,6 @@ implements IProductTypeSectionPart
 
 		inheritAction = new InheritAction();
 		registerAction(inheritAction);
-		
 		updateToolBarManager();
 	}
 
@@ -78,15 +71,11 @@ implements IProductTypeSectionPart
 		return productType;
 	}
 
-
 	public ProductTypeID getExtendedProductTypeID() {
 		return productType.getExtendedProductTypeID();
 	}
 
-
 	private AbstractProductTypePageController<ProductType> productTypePageController;
-
-
 
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
@@ -94,20 +83,15 @@ implements IProductTypeSectionPart
 			return;
 
 		productTypePageController = pageController; 
-
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getVendor();
 		getVendorEditComposite().setLegalEntity(originalEntity);
-		setInheritanceSelection(productType.getFieldMetaData("vendor").isValueInherited()); //$NON-NLS-1$
-
-
+		setInheritanceSelection(productType.getFieldMetaData(ProductType.FieldName.vendor).isValueInherited());
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
-
 		return productTypePageController;
-
 	}
 
 	/**
@@ -125,24 +109,17 @@ implements IProductTypeSectionPart
 
 	@Override
 	public void commit(boolean save) {
-
-		productType.getFieldMetaData("vendor").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
-
-		//getProductTypeLocal()
-
+		productType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(inheritAction.isChecked());
 		if (vendorEditComposite != null && isDirty())
 		{
 			productType.setVendor(vendorEditComposite.getLegalEntity());
 		}
-
 		super.commit(save);
-
 	}
 
 	protected void inheritPressed() {
 		if( inheritAction.isChecked() )
 		{
-
 			FadeableCompositeJob job = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.loadExtendedProductTypeJob.name"), fadeableComposite, null) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source)
@@ -164,17 +141,10 @@ implements IProductTypeSectionPart
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
-
-
 		}
 		else		
 			getVendorEditComposite().setLegalEntity(originalEntity);
-
-
-
-
 	}
-
 
 	protected boolean getInheritanceSelection() {
 		return inheritAction.isChecked();
@@ -183,8 +153,6 @@ implements IProductTypeSectionPart
 	protected void setInheritanceSelection(boolean selection) {
 		inheritAction.setChecked(selection);
 	}
-
-
 
 	private class InheritAction 
 	extends InheritanceAction
@@ -195,14 +163,12 @@ implements IProductTypeSectionPart
 				return;
 
 			inheritPressed();
-
-
 			updateToolBarManager();
 			markDirty();
 		}
 
 		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("vendor").isValueInherited()); //$NON-NLS-1$
+			setChecked(productType.getProductTypeLocal().getFieldMetaData(ProductType.FieldName.vendor).isValueInherited());
 		}
 	}
 

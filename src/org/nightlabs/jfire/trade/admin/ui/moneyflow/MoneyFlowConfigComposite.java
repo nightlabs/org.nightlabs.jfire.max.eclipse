@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
 import org.nightlabs.jfire.accounting.book.mappingbased.MappingBasedAccountantDelegate;
 import org.nightlabs.jfire.accounting.book.mappingbased.MoneyFlowMapping;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard;
@@ -416,7 +417,7 @@ extends XComposite
 				try {
 					// selected delegate is assigned
 					// TODO what about the inheritance? The meta-data is not set - I'll set it here, but I'm not sure whether it's set already somewhere else. IMHO here, it makes sense - otherwise our setting would be overwritten...
-					getProductType().getProductTypeLocal().getFieldMetaData("localAccountantDelegate").setValueInherited(wiz.isLocalAccountantDelegateInherited());
+					getProductType().getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(wiz.isLocalAccountantDelegateInherited());
 					getProductType().getProductTypeLocal().setLocalAccountantDelegate(wiz.getSelectedDelegate());
 					if (dirtyStateManager != null)
 						dirtyStateManager.markDirty();

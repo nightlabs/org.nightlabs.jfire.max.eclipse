@@ -36,30 +36,26 @@ implements IProductTypeSectionPart
 	private FadeableComposite fadeableComposite;
 	private LegalEntity originalEntity;
 
-
 	public OwnerConfigSection(IFormPage page,
 			Composite parent, int style) 
 	{
 		super(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection.title")); //$NON-NLS-1$
-
 		this.fadeableComposite = new FadeableComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
 		this.ownerEditComposite = new LegalEntityEditComposite(fadeableComposite, 
 				SWT.NONE);
 		this.ownerEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		ownerEditComposite.addLegalEntityValueChangedListener( 
-				new ILegalEntityValueChangedListener()
-				{
-					public void legalEntityValueChanged()
-					{	
-						// if value has changed 		
-						setInheritanceSelection(false);
-						markDirty();
-					}
-				});
+			new ILegalEntityValueChangedListener()
+			{
+				public void legalEntityValueChanged()
+				{	
+					// if value has changed 		
+					setInheritanceSelection(false);
+					markDirty();
+				}
+			}
+		);
 
-
-		
 		inheritAction = new InheritAction();
 		registerAction(inheritAction);
 		
@@ -74,10 +70,7 @@ implements IProductTypeSectionPart
 		return productType;
 	}
 
-
 	private AbstractProductTypePageController<ProductType> productTypePageController;
-
-
 
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
@@ -85,25 +78,16 @@ implements IProductTypeSectionPart
 			return;
 
 		productTypePageController = pageController; 
-
-
-
 		this.productType = pageController.getProductType();
 		originalEntity = pageController.getProductType().getOwner();
 		getOwnerEditComposite().setLegalEntity(originalEntity);	
-		setInheritanceSelection(productType.getFieldMetaData("owner").isValueInherited()); //$NON-NLS-1$
-
-
+		setInheritanceSelection(productType.getFieldMetaData(ProductType.FieldName.owner).isValueInherited());
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
-
 		return productTypePageController;
-
 	}
-
-
 
 	/**
 	 * sets the {@link ProductType}
@@ -116,38 +100,21 @@ implements IProductTypeSectionPart
 
 		//	this.productType = productType;
 		//getOwnerEditComposite().setLegalEntity(productType.getOwner());
-
-
-
 	}
-
 
 	public ProductTypeID getExtendedProductTypeID() {
 		return productType.getExtendedProductTypeID();
 	}
 
-
-
 	@Override
 	public void commit(boolean save) {
-
-
-		productType.getFieldMetaData("owner").setValueInherited(inheritAction.isChecked()); //$NON-NLS-1$
-
-
+		productType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(inheritAction.isChecked());
 		if (ownerEditComposite != null && isDirty())
 		{
 			productType.setOwner(ownerEditComposite.getLegalEntity());
 		}
-
 		super.commit(save);
-
-		
-
 	}
-
-
-
 
 	protected boolean getInheritanceSelection() {
 		return inheritAction.isChecked();
@@ -160,18 +127,13 @@ implements IProductTypeSectionPart
 	protected void inheritPressed() {
 		if( inheritAction.isChecked() )
 		{
-
-
 			//final ProductType extendedProductType = productTypePageController.getExtendedProductType(new NullProgressMonitor(), getExtendedProductTypeID()); // since this monitor is not yet started, we can directly pass it
-
-
 			FadeableCompositeJob job = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection.loadExtendedProductTypeJob.name"), fadeableComposite, null) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source)
 				throws Exception
 				{
 					final ProductType extendedProductType = productTypePageController.getExtendedProductType(monitor, getExtendedProductTypeID() ); // since this monitor is not yet started, we can directly pass it
-
 					Display.getDefault().syncExec(new Runnable()
 					{
 						public void run()
@@ -186,12 +148,9 @@ implements IProductTypeSectionPart
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
-
 		}
 		else		
 			getOwnerEditComposite().setLegalEntity(originalEntity);
-
-
 	}
 
 	class InheritAction 
@@ -207,7 +166,7 @@ implements IProductTypeSectionPart
 		}
 
 		public void updateState(ProductType productType) {
-			setChecked(productType.getProductTypeLocal().getFieldMetaData("owner").isValueInherited()); //$NON-NLS-1$
+			setChecked(productType.getProductTypeLocal().getFieldMetaData(ProductType.FieldName.owner).isValueInherited());
 		}
 	}
 

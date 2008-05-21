@@ -619,7 +619,7 @@ public abstract class PriceConfigComposite extends XComposite
 				new AssignInnerPriceConfigCommand(
 						productTypeID,
 						innerPriceConfigID,
-						packageProductType.getFieldMetaData("innerPriceConfig").isValueInherited()));
+						packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).isValueInherited()));
 
 		// and replace the local price configs by the new ones (freshly detached from the server)
 		if (priceConfig2ProductTypeSelectorItemList != null) {
@@ -643,20 +643,20 @@ public abstract class PriceConfigComposite extends XComposite
 
 		switch (wizard.getAbstractChooseGridPriceConfigPage().getAction()) {
 			case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
-				packageProductType.getFieldMetaData("innerPriceConfig").setValueInherited(true); //$NON-NLS-1$
+				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
 				break;
 			case AbstractChooseGridPriceConfigPage.ACTION_LATER:
-				packageProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				// nothing
 				break;
 			case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
-				packageProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				IInnerPriceConfig fpc = createInnerPriceConfig();
 				fpc.getName().copyFrom(wizard.getAbstractChooseGridPriceConfigPage().getNewPriceConfigNameBuffer());
 				packageProductType.setInnerPriceConfig(fpc);
 				break;
 			case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
-				packageProductType.getFieldMetaData("innerPriceConfig").setValueInherited(false); //$NON-NLS-1$
+				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				break;
 			default:
 				throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + wizard.getAbstractChooseGridPriceConfigPage().getAction()); //$NON-NLS-1$
