@@ -45,8 +45,8 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+		XComposite client = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		client.getGridLayout().numColumns = 1; 
 
 		issueResolutionTable = new IssueResolutionTable(client, SWT.NONE);
 		issueResolutionTable.addDoubleClickListener(new IDoubleClickListener() {
@@ -67,7 +67,7 @@ public class IssueTypeResolutionSection extends ToolBarSectionPart {
 			}
 		});
 		
-		getSection().setClient(client);
+//		getSection().setClient(client);
 		
 		createAction = new CreateResolutionAction();
 		deleteAction = new DeleteResolutionAction();

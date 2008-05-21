@@ -13,8 +13,6 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -40,14 +38,14 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 	private EditPriorityAction editAction;
 	
 	public IssueTypePrioritySection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Section Title");
 		this.controller = controller;
-		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-		getSection().setLayout(new GridLayout());
-		getSection().setText("Priorities");
+//		getSection().setLayoutData(new GridData(GridData.FILL_BOTH)); // all this is already done by the superclass
+//		getSection().setLayout(new GridLayout());
+//		getSection().setText("Priorities");
 		
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+		XComposite client = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		client.getGridLayout().numColumns = 1; 
 
 		issuePriorityTable = new IssuePriorityTable(client, SWT.NONE);
 		issuePriorityTable.addDoubleClickListener(new IDoubleClickListener() {
@@ -68,7 +66,7 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 			}
 		});
 		
-		getSection().setClient(client);
+//		getSection().setClient(client);
 		
 		increaseAction = new IncreasePriorityAction();
 		decreaseAction = new DecreasePriorityAction();

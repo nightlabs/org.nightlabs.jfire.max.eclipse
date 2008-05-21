@@ -39,13 +39,13 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 	private DecreaseSeverityAction decreaseSeverityAction;
 	
 	public IssueTypeSeverityTypeSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Severity Types");
 		this.controller = controller;
-		getSection().setText("Severity Types");
-		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-		getSection().setLayout(new GridLayout());
+//		getSection().setText("Severity Types");
+//		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+//		getSection().setLayout(new GridLayout());
 		
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite client = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 
 		issueSeverityTypeTable = new IssueSeverityTypeTable(client, SWT.NONE);
@@ -67,7 +67,7 @@ public class IssueTypeSeverityTypeSection extends ToolBarSectionPart {
 			}
 		});
 		
-		getSection().setClient(client);
+//		getSection().setClient(client);
 		
 		createAction = new CreateSeverityTypeAction();
 		deleteAction = new DeleteSeverityTypeAction();

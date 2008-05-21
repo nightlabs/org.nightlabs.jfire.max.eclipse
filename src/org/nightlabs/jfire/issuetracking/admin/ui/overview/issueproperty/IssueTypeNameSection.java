@@ -23,7 +23,7 @@ public class IssueTypeNameSection extends RestorableSectionPart {
 	private I18nTextEditor issueTypeName;
 	
 	public IssueTypeNameSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = controller;
 		getSection().setText("Issue Type");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
