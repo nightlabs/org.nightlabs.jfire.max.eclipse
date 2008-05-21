@@ -3,6 +3,7 @@ package org.nightlabs.jfire.simpletrade.admin.ui.producttype.nestedproducttype;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.ProductTypeLocalMapFieldMetaData;
 
 public class CreateNestedProductTypeWizard
@@ -30,8 +31,8 @@ public class CreateNestedProductTypeWizard
 	@Override
 	public boolean performFinish()
 	{
-		if (packageProductType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals") != null) { //$NON-NLS-1$
-			ProductTypeLocalMapFieldMetaData fieldMetaData = (ProductTypeLocalMapFieldMetaData) packageProductType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals"); //$NON-NLS-1$
+		if (packageProductType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null) {
+			ProductTypeLocalMapFieldMetaData fieldMetaData = (ProductTypeLocalMapFieldMetaData) packageProductType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals);
 			fieldMetaData.setValueInherited(false);
 		}
 		NestedProductTypeLocal npt = packageProductType.getProductTypeLocal().createNestedProductTypeLocal(selectProductTypePage.getSelectedProductType().getProductTypeLocal());
