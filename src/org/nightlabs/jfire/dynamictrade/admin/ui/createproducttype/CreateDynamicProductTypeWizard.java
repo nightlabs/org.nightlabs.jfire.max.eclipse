@@ -69,7 +69,7 @@ extends DynamicPathWizard
 				dynamicProductTypeNamePage.getInheritanceNature(),
 				dynamicProductTypeNamePage.getPackageNature());
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
-		dynamicProductType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
+		dynamicProductType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
