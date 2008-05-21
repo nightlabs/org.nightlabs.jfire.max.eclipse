@@ -1,15 +1,17 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.authority;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.jfire.base.ui.security.UserTable;
-import org.nightlabs.jfire.security.Authority;
+import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControllerHelper;
+import org.nightlabs.jfire.base.admin.ui.editor.authority.UserTableViewer;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
@@ -19,19 +21,19 @@ public class UserSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
-	private UserTable userTable;
+	private UserTableViewer userTable;
 
 	public UserSection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.TITLE_BAR, "Users && user groups in authority");
+		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED, "Users && user groups in authority");
 
-		userTable = new UserTable(parent, SWT.NONE);
+		userTable = new UserTableViewer(getContainer(), this);
 		userTable.setInput(users);
 	}
 
 	private ProductType productType;
-	private Authority authority;
-	private Set<User> users = new HashSet<User>();
+	private List<Map.Entry<User, Boolean>> users = new ArrayList<Map.Entry<User,Boolean>>();
 	private AuthorityPageController authorityPageController;
+	private AuthorityPageControllerHelper authorityPageControllerHelper;
 
 	@Override
 	public ProductType getProductType() {
@@ -43,22 +45,42 @@ implements IProductTypeSectionPart
 		return authorityPageController;
 	}
 
+	public AuthorityPageControllerHelper getAuthorityPageControllerHelper() {
+		return authorityPageControllerHelper;
+	}
+
 	@Override
 	public void setProductTypePageController(AbstractProductTypePageController<ProductType> productTypeDetailPageController) {
 		authorityPageController = (AuthorityPageController) productTypeDetailPageController;
-		productType = authorityPageController.getControllerObject();
-		setAuthority(productType == null ? null : productType.getProductTypeLocal().getSecuringAuthority());
+		authorityPageControllerHelper = authorityPageController.getAuthorityPageControllerHelper();
+
+		getSection().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				authorityChanged();
+			}
+		});
+
+		authorityPageControllerHelper.addPropertyChangeListener(
+				AuthorityPageControllerHelper.PROPERTY_NAME_AUTHORITY_LOADED, 
+				new PropertyChangeListener() {
+					@Override
+					public void propertyChange(PropertyChangeEvent evt) {
+						getSection().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								authorityChanged();
+							}
+						});						
+					}
+				}
+		);
 	}
 
-
-	private void setAuthority(Authority authority)
+	private void authorityChanged()
 	{
-		this.authority = authority;
-		if (authority == null) {
-			users.clear();
-		}
-		else {
-		}
+		users.clear();
+		if (authorityPageControllerHelper.getAuthority() != null)
+			users.addAll(authorityPageControllerHelper.createModifiableUserList());
+		
 		userTable.refresh();
 	}
 }
