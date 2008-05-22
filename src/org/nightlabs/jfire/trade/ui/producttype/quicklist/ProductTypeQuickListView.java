@@ -173,11 +173,17 @@ implements ISelectionProvider
 			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
 			if (!Util.equals(vendorID, newVendorID)) {
 				// vendor changed => all search results are outdated
-				for (int i = 0; i < filterSearched.size(); ++i)
-					filterSearched.set(i, Boolean.FALSE);
+				wrapper.getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						for (int i = 0; i < filterSearched.size(); ++i)
+							filterSearched.set(i, Boolean.FALSE);
+
+						refresh();
+					}
+				});
 			}
 
-			refresh();
 		}
 	};
 
