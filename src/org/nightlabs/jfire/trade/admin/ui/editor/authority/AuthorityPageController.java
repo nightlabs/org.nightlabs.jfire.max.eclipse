@@ -71,8 +71,9 @@ extends AbstractProductTypePageController<ProductType>
 
 	@Override
 	protected ProductType storeEntity(ProductType controllerObject, ProgressMonitor monitor) {
-		// TODO implement storing
-		return null;
+		// TODO implement assignment of Authority to ProductType
+		authorityPageControllerHelper.save(monitor);
+		return getControllerObject();
 	}
 
 }
