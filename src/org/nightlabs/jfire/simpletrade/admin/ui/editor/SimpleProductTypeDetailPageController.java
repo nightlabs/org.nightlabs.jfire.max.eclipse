@@ -30,7 +30,6 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 			fetchGroups.add(fetchGroup);
 		
 		fetchGroups.add(ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION);
-		
 		FETCH_GROUPS = fetchGroups.toArray(new String[fetchGroups.size()]);
 	}
 	
@@ -85,13 +84,10 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 	@Override
 	public SimpleProductType getExtendedProductType(ProgressMonitor monitor , ProductTypeID extendedProductTypeID)
 	{
-		
-		
 		return SimpleProductTypeDAO.sharedInstance().getSimpleProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
-	
 	}
 
 }
