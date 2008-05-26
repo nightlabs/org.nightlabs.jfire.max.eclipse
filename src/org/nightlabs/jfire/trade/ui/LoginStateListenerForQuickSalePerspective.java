@@ -11,7 +11,7 @@ public class LoginStateListenerForQuickSalePerspective
 implements LoginStateListener
 {	
 	@Override
-	public void afterLoginStateChange(LoginStateChangeEvent event)
+	public void loginStateChanged(LoginStateChangeEvent event)
 	{		
 		if (event.getNewLoginState() == LoginState.LOGGED_IN)
 			checkOrderOpenAsynchronously();
@@ -52,10 +52,5 @@ implements LoginStateListener
 				QuickSalePerspective.checkOrderOpen(activePerspectiveID);
 			}
 		});
-	}
-
-	@Override
-	public void beforeLoginStateChange(LoginStateChangeEvent event) {
-		// nothing to do here
 	}
 }
