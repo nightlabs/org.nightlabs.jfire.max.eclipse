@@ -9,7 +9,9 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
 
 /**
@@ -83,7 +85,9 @@ implements IGeneralEditor
 		public void partClosed(IWorkbenchPart part)
 		{
 			if (part.equals(GeneralQuickSaleEditor.this)) {
-				if (RCPUtil.getActiveWorkbenchPage() != null) {
+				if (RCPUtil.getActiveWorkbenchPage() != null &&
+						Login.sharedInstance().getLoginState() == LoginState.LOGGED_IN) 
+				{
 					QuickSalePerspective.checkOrderOpen(RCPUtil.getActivePerspectiveID());
 				}
 			}

@@ -35,11 +35,11 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.base.ui.login.part.LSDEditorPart;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -56,7 +56,11 @@ import org.nightlabs.notification.NotificationEvent;
  * 
  */
 
-public class GeneralEditor extends EditorPart implements IGeneralEditor {
+public class GeneralEditor 
+//extends EditorPart 
+extends LSDEditorPart
+implements IGeneralEditor 
+{
 	public static final String ID_EDITOR = GeneralEditor.class.getName();
 
 	private static final Logger logger = Logger.getLogger(GeneralEditor.class);
@@ -90,8 +94,8 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
-	throws PartInitException {
-
+	throws PartInitException 
+	{
 		if (!(input instanceof GeneralEditorInput))
 			throw new PartInitException(
 					"Invalid Input: Must be an instance of GeneralEditorInput but is " + input); //$NON-NLS-1$
@@ -105,35 +109,6 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 		ImageDescriptor img = input.getImageDescriptor();
 		if (img != null)
 			setTitleImage(img.createImage());
-
-		// getSite().setSelectionProvider(new ISelectionProvider() {
-		// private LinkedList listeners = new LinkedList();
-
-		// public void addSelectionChangedListener(ISelectionChangedListener
-		// listener)
-		// {
-		// listeners.add(listener);
-		// }
-
-		// public ISelection getSelection()
-		// {
-		// // TODO Auto-generated method stub
-		// return null;
-		// }
-
-		// public void removeSelectionChangedListener(ISelectionChangedListener
-		// listener)
-		// {
-		// listeners.remove(listener);
-		// }
-
-		// public void setSelection(ISelection selection)
-		// {
-		// // TODO Auto-generated method stub
-		// System.out.println("");
-		// }
-
-		// });
 	}
 
 	/**
@@ -152,14 +127,10 @@ public class GeneralEditor extends EditorPart implements IGeneralEditor {
 		return false;
 	}
 
-	/**
-	 * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
-	public void createPartControl(Composite parent) {
-		// ImageDescriptor imageDescriptor = ImageDescriptor.createFromFile(
-		// TradePlugin.class, "../../../../../icons/submit16.gif");
-		// setTitleImage(imageDescriptor.createImage());
+//	public void createPartControl(Composite parent) {
+	public void createPartContents(Composite parent) 
+	{
 		generalEditorComposite = new GeneralEditorComposite(getSite(), parent,
 				input);
 	}
