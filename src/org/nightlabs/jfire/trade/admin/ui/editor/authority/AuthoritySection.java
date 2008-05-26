@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.InheritedAuthorityResolver;
-import org.nightlabs.jfire.security.Authority;
+import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
@@ -42,7 +42,7 @@ implements IProductTypeSectionPart
 	protected InheritedAuthorityResolver createInheritedAuthorityResolver() {
 		return new InheritedAuthorityResolver() {
 			@Override
-			public Authority getInheritedAuthority(ProgressMonitor monitor) {
+			public AuthorityID getInheritedAuthorityID(ProgressMonitor monitor) {
 				if (productType.getExtendedProductTypeID() == null)
 					return null;
 
@@ -50,7 +50,7 @@ implements IProductTypeSectionPart
 						monitor,
 						productType.getExtendedProductTypeID());
 
-				return extendedProductType.getProductTypeLocal().getSecuringAuthority();
+				return extendedProductType.getProductTypeLocal().getSecuringAuthorityID();
 			}
 		};
 	}

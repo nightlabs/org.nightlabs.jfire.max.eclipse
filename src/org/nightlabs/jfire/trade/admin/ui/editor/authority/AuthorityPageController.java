@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.admin.ui.editor.authority;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -9,7 +8,6 @@ import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControlle
 import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.jfire.security.id.AuthorityTypeID;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
@@ -40,8 +38,7 @@ extends AbstractProductTypePageController<ProductType>
 	private static final String[] FETCH_GROUPS_PRODUCT_TYPE_WITH_AUTHORITY = {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
-		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID,
-		ProductTypeLocal.FETCH_GROUP_SECURING_AUTHORITY,
+		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 
 	@Override
@@ -54,8 +51,8 @@ extends AbstractProductTypePageController<ProductType>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new SubProgressMonitor(monitor, 30));
 
-		AuthorityTypeID authorityTypeID = (AuthorityTypeID) JDOHelper.getObjectId(productType.getProductTypeLocal().getSecuringAuthorityType());
-		AuthorityID authorityID = (AuthorityID) JDOHelper.getObjectId(productType.getProductTypeLocal().getSecuringAuthority());
+		AuthorityTypeID authorityTypeID = productType.getProductTypeLocal().getSecuringAuthorityTypeID();
+		AuthorityID authorityID = productType.getProductTypeLocal().getSecuringAuthorityID();
 		authorityPageControllerHelper.load(authorityTypeID, authorityID, new SubProgressMonitor(monitor, 70));
 
 		monitor.done();
