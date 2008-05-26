@@ -163,6 +163,7 @@ implements IGeneralEditor
 			ArticleContainerID articleContainerID = null;
 
 			if (generalEditor != null && 
+					generalEditor.getGeneralEditorComposite() != null &&
 					generalEditor.getGeneralEditorComposite().getArticleContainer() != null) 
 			{
 				GeneralEditorInput input = (GeneralEditorInput) generalEditor.getEditorInput();

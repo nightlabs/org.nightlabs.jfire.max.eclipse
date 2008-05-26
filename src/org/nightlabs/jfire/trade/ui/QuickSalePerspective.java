@@ -12,9 +12,11 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
+import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor;
@@ -189,11 +191,17 @@ implements IPerspectiveFactory
 	private static void checkSelectionListenerAdded() {
 		if (!selectionListenerAdded) {
 			try {
-				// sometimes causes a ClassNotFoundException for ProductType
-				// when trying to switch open the perspective
-				SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, ProductType.class, selectionListener);
-				selectionListenerAdded = true;
-				logger.info("selectionListener added"); //$NON-NLS-1$
+				if (Login.sharedInstance().getLoginState() == LoginState.LOGGED_IN) {
+					// sometimes causes a ClassNotFoundException for ProductType
+					// when trying to switch open the perspective					
+					SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, ProductType.class, selectionListener);
+					selectionListenerAdded = true;
+					logger.info("selectionListener added"); //$NON-NLS-1$					
+				}
+				else {
+					selectionListenerAdded = false;
+					logger.info("adding selectionListener failed, because not logined in"); //$NON-NLS-1$					
+				}
 			} catch (Exception e) {
 				selectionListenerAdded = false;
 				logger.info("adding selectionListener failed"); //$NON-NLS-1$
