@@ -93,7 +93,7 @@ implements ISelectionProvider
 	private List<IProductTypeQuickListFilter> filters = new ArrayList<IProductTypeQuickListFilter>();
 	private TabFolder tabFolder;
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
-	private AnchorID vendorID;
+	private AnchorID vendorID = null;
 	
 	public ProductTypeQuickListView() {
 		super();
@@ -172,6 +172,7 @@ implements ISelectionProvider
 
 			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
 			if (!Util.equals(vendorID, newVendorID)) {
+				vendorID =newVendorID; 
 				// vendor changed => all search results are outdated
 				wrapper.getDisplay().asyncExec(new Runnable() {
 					@Override
