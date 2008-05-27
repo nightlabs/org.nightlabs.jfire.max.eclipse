@@ -191,7 +191,7 @@ implements IGeneralEditor
 		public void partClosed(final IWorkbenchPart part) {
 
 			
-			if(Login.sharedInstance().getLoginState() == LoginState.LOGGED_OUT)
+			if(Login.sharedInstance().getLoginState() == LoginState.ABOUT_TO_LOG_OUT)
 			{
 				if (RCPUtil.getActiveWorkbenchPage() != null)
 					RCPUtil.getActiveWorkbenchPage().removePartListener(
