@@ -10,9 +10,13 @@ public class NotAvailableExceptionHandler
 {
 
 	@Override
-	public void handleException(Thread thread, Throwable thrownException, Throwable triggerException)
+	public boolean handleException(Thread thread, Throwable thrownException, Throwable triggerException)
 	{
-		MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.exceptionhandler.NotAvailableExceptionHandler.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.exceptionhandler.NotAvailableExceptionHandler.dialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
+		MessageDialog.openError(
+				RCPUtil.getActiveShell(),
+				Messages.getString("org.nightlabs.jfire.trade.ui.exceptionhandler.NotAvailableExceptionHandler.dialog.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.ui.exceptionhandler.NotAvailableExceptionHandler.dialog.message")); //$NON-NLS-1$
+		return true;
 	}
 
 }
