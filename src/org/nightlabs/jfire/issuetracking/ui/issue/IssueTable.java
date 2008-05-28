@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
@@ -43,6 +44,7 @@ extends AbstractTableComposite<Issue>
 		IssueType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
+		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,

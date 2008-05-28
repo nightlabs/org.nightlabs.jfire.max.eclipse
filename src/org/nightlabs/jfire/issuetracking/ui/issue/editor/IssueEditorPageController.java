@@ -24,6 +24,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
 
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -60,6 +62,8 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
 		IssueComment.FETCH_GROUP_THIS_COMMENT,
 		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT,
+		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
 		Statable.FETCH_GROUP_STATE,
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
@@ -132,6 +136,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 
 	@Override
 	protected Issue storeEntity(Issue controllerObject, ProgressMonitor monitor) {
-		return IssueDAO.sharedInstance().storeIssue(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
+		Issue issue = IssueDAO.sharedInstance().storeIssue(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor); 
+		return issue;
 	}
 }

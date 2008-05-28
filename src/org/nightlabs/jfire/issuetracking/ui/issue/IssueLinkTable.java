@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
@@ -163,7 +164,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 				// and we must not load it again. In this case, $issue will be initialised - otherwise, it's null.
 				if ($issue != null) {
 					_issue = $issue;
-					monitor.worked(20);
+					monitor.worked(40);
 				}
 				else {
 					_issue = IssueDAO.sharedInstance().getIssue(
@@ -175,9 +176,9 @@ extends AbstractTableComposite<IssueLinkTableItem>
 								IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS
 						}, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(monitor, 20));
+						new SubProgressMonitor(monitor, 40));
 				}
-				monitorTicksLeft -= 20;
+				monitorTicksLeft -= 40;
 
 				// (2) resolve IssueLinkHandlers and group IssueLinks by IssueLinkHandler
 				//     => Map<IssueLinkHandler, Set<IssueLink>>
@@ -336,7 +337,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		// create IssueLink instances - since the Issue is not thread-safe, we call this method on the UI thread before spawning a job.
 		final Map<IssueLinkTableItem, IssueLink> issueLinkTableItem2issueLinkMap = new HashMap<IssueLinkTableItem, IssueLink>();
 		for (IssueLinkTableItem issueLinkTableItem : items) {
-			IssueLink issueLink = issue.createIssueLink(issueLinkTableItem.getIssueLinkType(), issueLinkTableItem.getLinkedObjectID());
+			IssueLink issueLink = issue.createIssueLink(issueLinkTableItem.getIssueLinkType(), (ObjectID)issueLinkTableItem.getLinkedObjectID(), JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(issueLinkTableItem.getLinkedObjectID()));
 			issueLinkTableItem2issueLinkMap.put(issueLinkTableItem, issueLink);
 		}
 
