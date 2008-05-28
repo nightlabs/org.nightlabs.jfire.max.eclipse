@@ -80,7 +80,7 @@ extends AbstractIssueLinkAdder
 		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
 		for (Offer linkedOffer : oViewer.getListComposite().getSelectedElements()) {
 			issueLinks.add(
-					issue.createIssueLink(issueLinkType, linkedOffer));
+					issue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(linkedOffer), Offer.class));
 		}
 		return issueLinks;
 	}

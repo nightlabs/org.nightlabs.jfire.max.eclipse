@@ -20,6 +20,7 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.store.ReceptionNote;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;
@@ -80,7 +81,7 @@ extends AbstractIssueLinkAdder
 	{
 		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
 		for (ReceptionNote linkedReceptionNote : rViewer.getListComposite().getSelectedElements()) {
-			issueLinks.add(issue.createIssueLink(issueLinkType, linkedReceptionNote));
+			issueLinks.add(issue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(linkedReceptionNote), ReceptionNote.class));
 		}
 		return issueLinks;
 	}
