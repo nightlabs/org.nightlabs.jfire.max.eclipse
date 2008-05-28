@@ -89,11 +89,12 @@ public class DefaultReportViewerComposite extends XComposite {
 	
 	private static class ThreadDeathWorkaround implements IExceptionHandler {
 		private Set<DefaultReportViewerComposite> registeredComposites = new HashSet<DefaultReportViewerComposite>();
-		
-		public void handleException(Thread thread, Throwable thrownException, Throwable triggerException) {
+
+		public boolean handleException(Thread thread, Throwable thrownException, Throwable triggerException) {
 			logger.warn("WORKAROUND for Adobe PDF bean ThreadDeath = log.", triggerException); //$NON-NLS-1$
+			return true;
 		}
-		
+
 		public void registerComposite(final DefaultReportViewerComposite composite) {
 			boolean haveToAddHandler = registeredComposites.size() < 1;
 			if (!registeredComposites.contains(composite)) {
