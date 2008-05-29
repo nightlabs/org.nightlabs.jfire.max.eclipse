@@ -50,6 +50,8 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		issueLinkAdderComposite.getIssueLinkTable().addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener() {
 			public void issueLinkItemChanged(final IssueLinkItemChangeEvent itemChangedEvent)
 			{
+				boolean expanded = controller.getIssue().getIssueLinks().size() > 0;
+				getSection().setExpanded(expanded);
 				markDirty();
 			}
 		});
