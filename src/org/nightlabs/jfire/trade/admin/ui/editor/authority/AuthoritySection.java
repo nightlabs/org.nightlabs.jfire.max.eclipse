@@ -2,17 +2,15 @@ package org.nightlabs.jfire.trade.admin.ui.editor.authority;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.InheritedAuthorityResolver;
 import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
-import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class AuthoritySection
 extends AbstractAuthoritySection
-implements IProductTypeSectionPart
 {
 	public AuthoritySection(IFormPage page, Composite parent) {
 		super(page, parent);
@@ -22,19 +20,9 @@ implements IProductTypeSectionPart
 	private AuthorityPageController authorityPageController;
 
 	@Override
-	public ProductType getProductType() {
-		return productType;
-	}
-
-	@Override
-	public AuthorityPageController getProductTypePageController() {
-		return authorityPageController;
-	}
-
-	@Override
-	public void setProductTypePageController(AbstractProductTypePageController<ProductType> productTypeDetailPageController) {
-		authorityPageController = (AuthorityPageController) productTypeDetailPageController;
-		productType = productTypeDetailPageController.getControllerObject();
+	public void setPageController(IEntityEditorPageController pageController) {
+		authorityPageController = (AuthorityPageController) pageController;
+		productType = authorityPageController.getControllerObject();
 		setAuthorityPageControllerHelper(authorityPageController.getAuthorityPageControllerHelper());
 	}
 
@@ -46,7 +34,7 @@ implements IProductTypeSectionPart
 				if (productType.getExtendedProductTypeID() == null)
 					return null;
 
-				ProductType extendedProductType = getProductTypePageController().getExtendedProductType(
+				ProductType extendedProductType = authorityPageController.getExtendedProductType(
 						monitor,
 						productType.getExtendedProductTypeID());
 

@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -10,6 +9,7 @@ import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -39,17 +39,17 @@ extends EntityEditorPageController
 		productTypeID = ((ProductTypeEditorInput)editor.getEditorInput()).getJDOObjectID();
 	}
 
-	public void doLoad(IProgressMonitor monitor) {
+	public void doLoad(ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypePriceConfigPageController.loadPriceConfigMonitor.task.name"), 2); //$NON-NLS-1$
 		monitor.worked(1);
 		ProductType productType = Util.cloneSerializable(
 				PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(
-						getProductTypeID(), new ProgressMonitorWrapper(monitor)));
+						getProductTypeID(), monitor));
 		setProductType(productType);
 		monitor.worked(1);
 	}
 
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(ProgressMonitor monitor) {
 		for (IFormPage page : getPages()) {
 			if (page instanceof AbstractGridPriceConfigPage) {
 				final AbstractGridPriceConfigPage priceConfigPage = (AbstractGridPriceConfigPage) page;

@@ -5,8 +5,6 @@ import javax.jdo.FetchPlan;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControllerHelper;
-import org.nightlabs.jfire.security.id.AuthorityID;
-import org.nightlabs.jfire.security.id.AuthorityTypeID;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -45,19 +43,18 @@ extends AbstractProductTypePageController<ProductType>
 	protected ProductType retrieveEntity(ProgressMonitor monitor)
 	{
 		monitor.beginTask("Loading product type and authority", 100);
+		try {
+			ProductType productType = ProductTypeDAO.sharedInstance().getProductType(getProductTypeID(),
+					FETCH_GROUPS_PRODUCT_TYPE_WITH_AUTHORITY,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new SubProgressMonitor(monitor, 30));
+	
+			authorityPageControllerHelper.load(productType.getProductTypeLocal(), new SubProgressMonitor(monitor, 70));
 
-		ProductType productType = ProductTypeDAO.sharedInstance().getProductType(getProductTypeID(),
-				FETCH_GROUPS_PRODUCT_TYPE_WITH_AUTHORITY,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new SubProgressMonitor(monitor, 30));
-
-		AuthorityTypeID authorityTypeID = productType.getProductTypeLocal().getSecuringAuthorityTypeID();
-		AuthorityID authorityID = productType.getProductTypeLocal().getSecuringAuthorityID();
-		authorityPageControllerHelper.load(authorityTypeID, authorityID, new SubProgressMonitor(monitor, 70));
-
-		monitor.done();
-
-		return productType;
+			return productType;
+		} finally {
+			monitor.done();
+		}
 	}
 
 	private AuthorityPageControllerHelper authorityPageControllerHelper = new AuthorityPageControllerHelper();
@@ -68,8 +65,7 @@ extends AbstractProductTypePageController<ProductType>
 
 	@Override
 	protected ProductType storeEntity(ProductType controllerObject, ProgressMonitor monitor) {
-		// TODO implement assignment of Authority to ProductType
-		authorityPageControllerHelper.save(monitor);
+		authorityPageControllerHelper.store(monitor);
 		return getControllerObject();
 	}
 
