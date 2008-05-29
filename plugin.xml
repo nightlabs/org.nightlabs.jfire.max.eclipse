@@ -314,11 +314,6 @@ gibt's nimmer - oder?! Marco.
                 name="Deliver to Delivery Queue" organisationID="dev.jfire.org"/>
         </clientDeliveryProcessorFactory>
     </extension>
-    <extension point="org.eclipse.ui.perspectiveExtensions">
-        <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
-            <actionSet id="org.nightlabs.jfire.trade.ui.actionSet1"/>
-        </perspectiveExtension>
-    </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
         <articleContainerAction
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAllAction"
@@ -634,8 +629,18 @@ gibt's nimmer - oder?! Marco.
         <contributionItem
             class="org.nightlabs.base.ui.search.SearchContributionItem"
             id="org.nightlabs.base.ui.search.SearchContributionItem"
-            menubarPath="Search"
-            name="%org.nightlabs.base.ui.search.SearchContributionItem.name" toolbarPath="additionss"/>
+            menubarPath="org.nightlabs.jfire.trade.ui.searchMenu/org.nightlabs.jfire.trade.ui.searchGroupMarker"
+            name="%org.nightlabs.base.ui.search.SearchContributionItem.name" toolbarPath="org.nightlabs.jfire.trade.ui.searchGroupMarker"/>            
+        <menu
+              id="org.nightlabs.jfire.trade.ui.searchMenu"
+              label="Search">
+           <groupMarker
+                 name="org.nightlabs.jfire.trade.ui.searchGroupMarker">
+           </groupMarker>
+        </menu>
+        <groupMarker
+              name="org.nightlabs.jfire.trade.ui.searchGroupMarker">
+        </groupMarker> 
     </extension>
     <extension point="org.nightlabs.base.ui.perspectiveExtension">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
@@ -1003,9 +1008,6 @@ gibt's nimmer - oder?! Marco.
     <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective"/>
     </extension>
-    <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
-        <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForGeneralEditor"/>
-    </extension>
     <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
         <QueryFilter
               orderHint="10"
@@ -1172,18 +1174,21 @@ gibt's nimmer - oder?! Marco.
              name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryFactory.name">
        </entryFactory>
     </extension>
-    <!--   
-   <extension
-         point="org.eclipse.ui.activities">
-      <activity
-            description="hides overview editors from other perspectives than the the overview perspective"
-            id="org.nightlabs.jfire.trade.ui.overviewEditorHidding"
-            name="OverviewEditorHidding">
-      </activity>
-      <activityPatternBinding
-            activityId="org.nightlabs.jfire.trade.ui.overviewEditorHidding"
-            pattern="org\.nightlabs\.jfire\.trade\..*/.*">
-      </activityPatternBinding>
-   </extension>
+<!--    
+    <extension
+          point="org.eclipse.ui.perspectiveExtensions">
+       <perspectiveExtension
+             targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
+          <actionSet
+                id="org.nightlabs.jfire.trade.ui.search">
+          </actionSet>
+       </perspectiveExtension>
+       <perspectiveExtension
+             targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
+          <actionSet
+                id="org.nightlabs.jfire.trade.ui.search">
+          </actionSet>
+       </perspectiveExtension>
+    </extension>
 -->
 </plugin>

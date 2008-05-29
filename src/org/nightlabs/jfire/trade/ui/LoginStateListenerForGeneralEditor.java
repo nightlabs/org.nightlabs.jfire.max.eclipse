@@ -8,11 +8,13 @@ import org.eclipse.ui.PlatformUI;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
 import org.nightlabs.jfire.base.ui.login.LoginStateListener;
+import org.nightlabs.jfire.base.ui.login.part.LoginStateListenerForCloseOnLogoutEditorParts;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
  * @author marco schulze - marco at nightlabs dot de
+ * @deprecated replaced by {@link LoginStateListenerForCloseOnLogoutEditorParts}
  */
 public class LoginStateListenerForGeneralEditor
 implements LoginStateListener

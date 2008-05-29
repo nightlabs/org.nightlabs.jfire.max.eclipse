@@ -90,6 +90,8 @@ extends EditorActionBarContributor
 
 	public GeneralEditorActionBarContributor()
 	{
+		// TODO: WORKAROUND This is an workaround as setActiveEditor is not called when 
+		// the perspective is switched and therefore the contributions are not removed
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
 		RCPUtil.getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);
 	}
@@ -319,49 +321,6 @@ extends EditorActionBarContributor
 		contributeActions();
 	}
 
-//	/**
-//	 * Because our dynamic tool management doesn't work with the normal toolbar, we are forced to work
-//	 * with the {@link ICoolBarManager} (which is in reality a {@link SubCoolBarManager}) and handle
-//	 * our toolBar ourselves.
-//	 *
-//	 * @see #contributeToCoolBar(ICoolBarManager)
-//	 */
-//	private IToolBarManager toolBarManager;
-
-//	/**
-//	 * This implementation searches for our self-managed toolbar in the
-//	 * parent of the passed <code>coolBarManager</code> (i.e. the main CoolBarManager).
-//	 * If it was found (because Eclipse RCP dumps and restores its workbench layout),
-//	 * it is simply assigned to {@link #toolBarManager}; otherwise a new one is
-//	 * created. The real contribution does not happen here, but in {@link #contributeActions()}.
-//	 *
-//	 * @param coolBarManager This is in reality a {@link SubCoolBarManager} which allows
-//	 *		to access the real CoolBarManager via {@link SubContributionManager#getParent()}.
-//	 *
-//	 * @see org.eclipse.ui.part.EditorActionBarContributor#contributeToCoolBar(org.eclipse.jface.action.ICoolBarManager)
-//	 */
-//	public void contributeToCoolBar(ICoolBarManager coolBarManager)
-//	{
-//		ToolBarContributionItem toolBarContributionItem = null;
-//
-//		((SubCoolBarManager)coolBarManager).setVisible(true);
-//		IXContributionItem[] items = ((SubCoolBarManager)coolBarManager).getParent().getItems();
-//		String toolBarID = GeneralEditorActionBarContributor.class.getName();
-//		for (int i = 0; i < items.length; ++i) {
-//			if (toolBarID.equals(items[i].getId())) {
-//				toolBarContributionItem = (ToolBarContributionItem) items[i];
-//				toolBarManager = toolBarContributionItem.getToolBarManager();
-//				break;
-//			}
-//		}
-//
-//		if (toolBarContributionItem == null) {
-//			toolBarManager = new ToolBarManager();
-//			toolBarContributionItem = new ToolBarContributionItem(toolBarManager, toolBarID);
-//			coolBarManager.add(toolBarContributionItem);
-//		}
-//	}
-
 	/**
 	 * This method is called by {@link #activeSegmentEditSelected()} and {@link #createArticleEditListener} TODO it must be called, too, when an ArticleEdit is removed.
 	 * It flushes all Actions (in the toolbar, the pulldown menu, the articleContainerContextMenu and
@@ -484,7 +443,6 @@ extends EditorActionBarContributor
 		getActionBars().updateActionBars();
 	}
 	
-	
 
 	/**
 	 * This method is called by {@link ArticleEditAction#run()}. It iterates all
@@ -521,25 +479,6 @@ extends EditorActionBarContributor
 	 * This is the manager for the local (article container/edit actions) pulldown menu.
 	 */
 	private IMenuManager localPulldownMenuManager = null;
-
-//	/**
-//	 * We must use a separate MenuManager for each Control
-//	 * because the context menu doesn't work otherwise anymore after one Editor has been closed.
-//	 * After taking a short look at the source, it seems to me, a MenuManager is not meant
-//	 * to be used for multiple menus...
-//	 * <p>
-//	 * The entries are deleted from the Map when an Editor is closed via
-//	 * the {@link #generalEditorCompositeDisposeListener}.
-//	 * </p>
-//	 * <p>
-//	 * key: GeneralEditorComposite generalEditorComposite<br/>
-//	 * value: Map {<br/>
-//	 *		key: Control parent<br/>
-//	 *		value: MenuManager articleEditContextMenuManager
-//	 * }
-//	 * </p>
-//	 */
-//	private Map articleEditContextMenuManagers = new HashMap();
 
 	public Menu createArticleContainerContextMenu(Control parent)
 	{
@@ -598,36 +537,6 @@ extends EditorActionBarContributor
 		parent.setMenu(menu);
 		return menu;
 	}
-
-//	protected MenuManager getArticleEditContextMenuManager(SegmentEdit segmentEdit, Control parent)
-//	{
-//		GeneralEditorComposite gec = segmentEdit.getGeneralEditorComposite();
-//		Map m = (Map) articleEditContextMenuManagers.get(gec);
-//		if (m == null) {
-//			m = new HashMap();
-//			gec.addDisposeListener(generalEditorCompositeDisposeListener);
-//			articleEditContextMenuManagers.put(gec, m);
-//		}
-//		MenuManager res = (MenuManager) m.get(parent);
-//		if (res == null) {
-//			res = new MenuManager();
-//			res.setRemoveAllWhenShown(true);
-//			res.addMenuListener(new IMenuListener() {
-//				public void menuAboutToShow(IMenuManager manager)
-//				{
-//					if (activeSegmentEdit != null) {
-//						try {
-//							ArticleEditActionRegistry.sharedInstance().contributeToContextMenu(manager);
-//						} catch (EPProcessorException e) {
-//							throw new RuntimeException(e);
-//						}
-//					}
-//				}
-//			});
-//			m.put(parent, res);
-//		}
-//		return res;
-//	}
 	
 	private IPartListener2 partListener = new IPartListener2 () {
 		public void partActivated(IWorkbenchPartReference partRef) {
@@ -636,14 +545,7 @@ extends EditorActionBarContributor
 				(!activeGeneralEditor.equals(partRef.getPart(false))))
 			{
 				logger.debug("Part activated"); //$NON-NLS-1$
-				IActionBars2 actionBars = (IActionBars2) getActionBars();
-				ICoolBarManager coolBarManager = actionBars.getCoolBarManager();
-				try {
-					ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
-					ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
-				} catch (EPProcessorException e) {
-					throw new RuntimeException(e);
-				}
+				removeContributions();
 				activeGeneralEditor = null;
 			}
 		}
@@ -670,17 +572,24 @@ extends EditorActionBarContributor
 				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
 			{
 				logger.debug("Perspective activated");					 //$NON-NLS-1$
-				IActionBars2 actionBars = (IActionBars2) getActionBars();
-				ICoolBarManager coolBarManager = actionBars.getCoolBarManager();				
-				try {
-					ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
-					ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
-				} catch (EPProcessorException e) {
-					throw new RuntimeException(e);
-				}				
-				
+				removeContributions();				
 				activeGeneralEditor = null;
 			}
 		}
 	};
+	
+	private void removeContributions() {
+		IActionBars2 actionBars = (IActionBars2) getActionBars();
+		IMenuManager menuManager = actionBars.getMenuManager();
+		ICoolBarManager coolBarManager = actionBars.getCoolBarManager();				
+		try {
+			ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
+			ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
+			
+			ArticleContainerActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
+			ArticleEditActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
+		} catch (EPProcessorException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
