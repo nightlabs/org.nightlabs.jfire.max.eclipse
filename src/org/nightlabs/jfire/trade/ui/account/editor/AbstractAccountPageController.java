@@ -6,7 +6,6 @@ package org.nightlabs.jfire.trade.ui.account.editor;
 import javax.jdo.FetchPlan;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
@@ -24,6 +23,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -88,7 +88,7 @@ extends EntityEditorPageController
 	private NotificationListener accountChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingChangedAccountJob.name")) //$NON-NLS-1$
 	{
 		public void notify(NotificationEvent notificationEvent) {
-			doLoad(getProgressMonitor());
+			doLoad(new ProgressMonitorWrapper(getProgressMonitor()));
 		}
 	};
 	
@@ -119,7 +119,7 @@ extends EntityEditorPageController
 	 * Load the user data and user groups.
 	 * @param monitor The progress monitor to use.
 	 */
-	public void doLoad(IProgressMonitor monitor)
+	public void doLoad(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingAccountJob.name"), 4); //$NON-NLS-1$
 		try {
@@ -128,7 +128,7 @@ extends EntityEditorPageController
 				Account account = AccountDAO.sharedInstance().getAccount(
 						anchorID, getFetchGroups(),
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 3)
+						new SubProgressMonitor(monitor, 3)
 				);
 				monitor.worked(1);
 				// make a working copy to avoid changing the original

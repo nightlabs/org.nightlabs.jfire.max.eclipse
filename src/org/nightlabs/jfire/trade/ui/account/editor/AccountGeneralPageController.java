@@ -24,14 +24,13 @@
 package org.nightlabs.jfire.trade.ui.account.editor;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel Mazurek <!-- daniel [AT] nightlabs [DOT] de -->
@@ -53,7 +52,8 @@ extends AbstractAccountPageController
 	 * Save the user data.
 	 * @param monitor The progress monitor to use.
 	 */
-	public void doSave(IProgressMonitor monitor)
+	@Override
+	public void doSave(ProgressMonitor monitor)
 	{
 		for (IFormPage page : getPages()) {
 			if (page instanceof AccountGeneralPage) {
@@ -61,8 +61,8 @@ extends AbstractAccountPageController
 				Account account = gp.getAccountGeneralSection().getAccountEditorComposite().getAccount();
 				this.account = AccountDAO.sharedInstance().storeAccount(account,
 						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new ProgressMonitorWrapper(monitor));
-				doLoad(new NullProgressMonitor());
+						monitor);
+				doLoad(new org.nightlabs.progress.NullProgressMonitor());
 			}
 		}
 	}

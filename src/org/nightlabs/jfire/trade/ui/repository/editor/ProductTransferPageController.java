@@ -4,13 +4,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.store.ProductTransfer;
@@ -20,6 +18,7 @@ import org.nightlabs.jfire.trade.ui.repository.transfer.ProductTransferTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.transfer.id.TransferID;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 class ProductTransferPageController
@@ -47,7 +46,7 @@ extends EntityEditorPageController
 		super.dispose();
 	}
 
-	public void doLoad(IProgressMonitor monitor)
+	public void doLoad(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJobMonitor.task.name"), 100); //$NON-NLS-1$
 
@@ -55,14 +54,15 @@ extends EntityEditorPageController
 				queryWrapper,
 				ProductTransferTable.FETCH_GROUPS_PRODUCT_TRANSFER,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new SubProgressMonitor(new ProgressMonitorWrapper(monitor), 100));
+				new SubProgressMonitor(monitor, 100));
 
 		this.productTransferList = productTransfers;
 		monitor.done();
+		setLoaded(true); // must be done before fireModifyEvent!
 		fireModifyEvent(null, productTransfers);
 	}
 
-	public void doSave(IProgressMonitor monitor)
+	public void doSave(ProgressMonitor monitor)
 	{
 		// nothing to do
 	}
@@ -76,7 +76,7 @@ extends EntityEditorPageController
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor)
+			protected IStatus run(ProgressMonitor monitor)
 			{
 				doLoad(monitor);
 				return Status.OK_STATUS;
