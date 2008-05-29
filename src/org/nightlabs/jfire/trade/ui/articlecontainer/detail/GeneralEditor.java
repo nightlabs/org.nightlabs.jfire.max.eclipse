@@ -35,11 +35,11 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDEditorPart;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -57,8 +57,8 @@ import org.nightlabs.notification.NotificationEvent;
  */
 
 public class GeneralEditor 
-//extends EditorPart 
-extends LSDEditorPart
+extends EditorPart 
+//extends LSDEditorPart
 implements IGeneralEditor 
 {
 	public static final String ID_EDITOR = GeneralEditor.class.getName();
@@ -128,9 +128,9 @@ implements IGeneralEditor
 	}
 
 	@Override
-//	public void createPartControl(Composite parent) {
-	public void createPartContents(Composite parent) 
-	{
+	public void createPartControl(Composite parent) {
+//	public void createPartContents(Composite parent) 
+//	{
 		generalEditorComposite = new GeneralEditorComposite(getSite(), parent,
 				input);
 	}
