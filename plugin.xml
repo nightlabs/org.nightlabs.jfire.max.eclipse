@@ -627,20 +627,22 @@ gibt's nimmer - oder?! Marco.
     </extension>
     <extension point="org.nightlabs.base.ui.contributionItemSet">
         <contributionItem
-            class="org.nightlabs.base.ui.search.SearchContributionItem"
-            id="org.nightlabs.base.ui.search.SearchContributionItem"
-            menubarPath="org.nightlabs.jfire.trade.ui.searchMenu/org.nightlabs.jfire.trade.ui.searchGroupMarker"
-            name="%org.nightlabs.base.ui.search.SearchContributionItem.name" toolbarPath="org.nightlabs.jfire.trade.ui.searchGroupMarker"/>            
-        <menu
-              id="org.nightlabs.jfire.trade.ui.searchMenu"
-              label="Search">
-           <groupMarker
-                 name="org.nightlabs.jfire.trade.ui.searchGroupMarker">
-           </groupMarker>
-        </menu>
+              class="org.nightlabs.base.ui.search.SearchContributionItem"
+              id="org.nightlabs.base.ui.search.SearchContributionItem"
+              menubarPath="additions"
+              name="%org.nightlabs.base.ui.search.SearchContributionItem.name"
+              toolbarPath="org.nightlabs.jfire.trade.ui.searchGroupMarkerToolbar"/>                
         <groupMarker
-              name="org.nightlabs.jfire.trade.ui.searchGroupMarker">
-        </groupMarker> 
+              name="org.nightlabs.jfire.trade.ui.searchGroupMarkerToolbar">
+        </groupMarker>
+<!--        
+        <contributionItem
+              class="org.nightlabs.base.ui.search.MenuSearchContributionItem"
+              id="org.nightlabs.base.ui.search.MenuSearchContributionItem"
+              menubarPath="additions"
+              name="SearchMenu">
+        </contributionItem>
+-->        
     </extension>
     <extension point="org.nightlabs.base.ui.perspectiveExtension">
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">

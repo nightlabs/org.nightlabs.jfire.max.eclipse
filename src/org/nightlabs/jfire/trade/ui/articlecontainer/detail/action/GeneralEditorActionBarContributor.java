@@ -586,9 +586,8 @@ extends EditorActionBarContributor
 			ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
 			ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
 
-// FIXME reactivate these as soon as you checked-in, Daniel ;-)
-//			ArticleContainerActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
-//			ArticleEditActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
+			ArticleContainerActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
+			ArticleEditActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
