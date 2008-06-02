@@ -63,8 +63,7 @@ extends CenteredDialog
 		abstractProductTypeSearchComposite.getProductTypeTableComposite().addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (!event.getSelection().isEmpty())
-					getButton(Window.OK).setEnabled(true);
+				getButton(Window.OK).setEnabled(!event.getSelection().isEmpty());
 			}
 		});
 		if (earlySearchText != null) {
