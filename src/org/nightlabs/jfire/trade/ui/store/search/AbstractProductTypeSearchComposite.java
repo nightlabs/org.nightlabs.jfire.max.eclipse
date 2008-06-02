@@ -8,6 +8,7 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -203,7 +204,7 @@ extends XComposite
 						public void run() {
 							productTypeTableComposite.setInput(productTypes);
 							if (productTypeTableComposite.getItemCount() == 1) {
-								productTypeTableComposite.select(0);
+								productTypeTableComposite.setSelectedElements(productTypes);
 								productTypeTableComposite.setFocus();
 							}
 						}
@@ -247,5 +248,5 @@ extends XComposite
 			throw new RuntimeException(e);
 		}
 	}
- 
+ 	
 }

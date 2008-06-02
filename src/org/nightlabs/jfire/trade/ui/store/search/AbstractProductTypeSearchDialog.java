@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -52,6 +54,19 @@ extends CenteredDialog
 	protected Control createDialogArea(Composite parent)
 	{
 		abstractProductTypeSearchComposite = createProductTypeSearchComposite(parent);
+		abstractProductTypeSearchComposite.getProductTypeTableComposite().addDoubleClickListener(new IDoubleClickListener(){
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				okPressed();
+			}
+		});
+		abstractProductTypeSearchComposite.getProductTypeTableComposite().addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (!event.getSelection().isEmpty())
+					getButton(Window.OK).setEnabled(true);
+			}
+		});
 		if (earlySearchText != null) {
 			abstractProductTypeSearchComposite.setSearchText(earlySearchText);
 			if (!"".equals(earlySearchText.trim())) { //$NON-NLS-1$
