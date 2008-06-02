@@ -33,7 +33,6 @@ extends AbstractProductTypeQuickListFilter
 
 	public DynamicProductTypeQuickListFilter() {
 		super();
-
 	}
 
 	@Override
@@ -42,8 +41,6 @@ extends AbstractProductTypeQuickListFilter
 		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
 		return dynamicProductTypeTable;
 	}
-
-
 
 	// TODO temporary workaround - this should come from the query store. 
 	private DynamicProductTypeSearchFilter dynamicProductTypeSearchFilter;
