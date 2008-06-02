@@ -28,11 +28,8 @@ extends AbstractProductTypeQuickListFilter
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
 
-
-
 	public VoucherTypeQuickListFilter() {
 	}
-
 
 	// TODO temporary workaround - this should come from the query store. 
 	private VoucherTypeSearchFilter voucherProductTypeSearchFilter;
@@ -47,7 +44,6 @@ extends AbstractProductTypeQuickListFilter
 	public void setVendorID(AnchorID vendorID) 
 	{
 		getProductTypeSearchFilter().setVendorID(vendorID);
-
 	}
 
 	private VoucherTypeTable voucherTypeTable;
@@ -70,8 +66,8 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(ProgressMonitor monitor) {
-
+	protected void search(ProgressMonitor monitor) 
+	{
 		final VoucherTypeSearchFilter searchFilter = getProductTypeSearchFilter();
 		try {
 			QueryCollection<VoucherTypeSearchFilter> productTypeQueries = new QueryCollection<VoucherTypeSearchFilter>(ProductType.class);
