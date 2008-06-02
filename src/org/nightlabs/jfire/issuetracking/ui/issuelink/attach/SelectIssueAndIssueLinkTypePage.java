@@ -44,6 +44,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class SelectIssueAndIssueLinkTypePage 
 extends DynamicPathWizardPage
 {
+	//Issue Link Types
 	private Button createNewIssueLinkTypeRadio;
 	private Button selectExistingIssueLinkTypeRadio;
 
@@ -52,13 +53,14 @@ extends DynamicPathWizardPage
 
 	private ListComposite<IssueLinkType> issueLinkTypeList;
 
-	//------------------------------------------------
+	//Issue
 	private Button createNewIssueRadio;
 	private Button selectExistingIssueRadio;
 	
 	private Composite issueEntryListViewerComposite;
 	private IssueEntryListViewer issueEntryListViewer;
 
+	//Used Objects
 	private IssueLinkType selectedIssueLinkType;
 	private Issue selectedIssue;
 	private Object attachedObject;
@@ -128,7 +130,10 @@ extends DynamicPathWizardPage
 	public SelectIssueAndIssueLinkTypePage(Object attachedObject) {
 		super(SelectIssueAndIssueLinkTypePage.class.getName());
 		this.attachedObject = attachedObject;
-		setDescription("");
+		setTitle("Create/Attach issue");
+		
+		String objectNameString = attachedObject.getClass().getSimpleName();
+		setDescription("Create/Attach issue to " + objectNameString);
 	}
 
 	@Override
@@ -136,6 +141,7 @@ extends DynamicPathWizardPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
+		//Issue Link Types
 		createNewIssueLinkTypeRadio = new Button(mainComposite, SWT.RADIO);		
 		createNewIssueLinkTypeRadio.setText("Create new issue link type");
 		createNewIssueLinkTypeRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -181,6 +187,7 @@ extends DynamicPathWizardPage
 			}
 		});
 		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.minimumHeight = 60;
 		issueLinkTypeList.setLayoutData(gridData);
 		issueLinkTypeList.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -203,7 +210,8 @@ extends DynamicPathWizardPage
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 								new SubProgressMonitor(monitor, 10));
 						issueLinkTypeList.setInput(issueLinkTypes);
-						
+						issueLinkTypeList.setSelection(0);
+						issueLinkTypeList.setFocus();
 					}
 				});
 				return Status.OK_STATUS;
@@ -211,7 +219,7 @@ extends DynamicPathWizardPage
 		};
 		job.schedule();
 
-		//*********************************************************************************
+		//Issue
 		createNewIssueRadio = new Button(mainComposite, SWT.RADIO);		
 		createNewIssueRadio.setText("Create new issue");
 		createNewIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -25,8 +25,8 @@ extends DynamicPathWizard
 	private Object attachedObject;
 	private SelectIssueAndIssueLinkTypePage selectIssueAndIssueLinkTypePage;
 	
-	public AttachIssueToObjectWizard(Object attacedObject) {
-		this.attachedObject = attacedObject;
+	public AttachIssueToObjectWizard(Object attachedObject) {
+		this.attachedObject = attachedObject;
 		setWindowTitle("Attach Issue(s) to Objects");
 	}
 
