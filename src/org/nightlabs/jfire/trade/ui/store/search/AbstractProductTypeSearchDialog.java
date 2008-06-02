@@ -7,7 +7,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -15,7 +14,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -24,32 +23,38 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  *
  */
 public abstract class AbstractProductTypeSearchDialog
-extends CenteredDialog
+extends ResizableTitleAreaDialog
 {
+	public static final int SEARCH_ID = IDialogConstants.CLIENT_ID + 1;
+	private boolean earlySearchResult = false;
+	private AbstractProductTypeSearchComposite abstractProductTypeSearchComposite;
+	private String earlySearchText;
+	private ProductType selectedProductType;
+	
 	/**
 	 * @param parentShell
 	 */
 	public AbstractProductTypeSearchDialog(Shell parentShell) {
-		super(parentShell);
-		setShellStyle(getShellStyle() | SWT.RESIZE);
+		super(parentShell, null);
 	}
 
 	@Override
 	public void create() {
 		super.create();
-		getShell().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.title")); //$NON-NLS-1$
-//		getShell().setSize(800, 600);
-//		setToCenteredLocation();
+		getShell().setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.text.search"), getProductTypeName())); //$NON-NLS-1$
+		setTitle(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.title.search"), getProductTypeName())); //$NON-NLS-1$
+		setMessage(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.message.search"), getProductTypeName())); //$NON-NLS-1$
 	}
 
+	protected String getProductTypeName() {
+		return Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.productType"); //$NON-NLS-1$
+	}
+	
 	@Override
-	protected Point getInitialSize()
-	{
+	protected Point getInitialSize() {
 		return new Point(800, 600);
 	}
 
-	private boolean earlySearchResult = false;
-	private AbstractProductTypeSearchComposite abstractProductTypeSearchComposite;
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
@@ -79,8 +84,6 @@ extends CenteredDialog
 		}
 		return abstractProductTypeSearchComposite;
 	}
-	
-	public static final int SEARCH_ID = IDialogConstants.CLIENT_ID + 1;
 	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
@@ -115,12 +118,10 @@ extends CenteredDialog
 		}
 	};
 	
-	private ProductType selectedProductType;
 	public ProductType getProductType() {
 		return selectedProductType;
 	}
 	
-	private String earlySearchText;
 	public void setSearchText(String searchText) {
 		if (abstractProductTypeSearchComposite != null && !abstractProductTypeSearchComposite.isDisposed()) {
 			abstractProductTypeSearchComposite.setSearchText(searchText);
@@ -129,5 +130,10 @@ extends CenteredDialog
 		}
 	}
 	
+	/**
+	 * Returns the Implementation of {@link AbstractProductTypeSearchComposite} which performs the search.
+	 * @param parent the parent Composite
+	 * @return the Implementation of {@link AbstractProductTypeSearchComposite} which performs the search 
+	 */
 	protected abstract AbstractProductTypeSearchComposite createProductTypeSearchComposite(Composite parent);
 }

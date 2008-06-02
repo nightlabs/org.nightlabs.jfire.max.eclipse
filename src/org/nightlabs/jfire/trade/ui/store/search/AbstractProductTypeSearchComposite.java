@@ -8,7 +8,6 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -28,6 +27,7 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
@@ -60,11 +60,11 @@ extends XComposite
 		createComposite(this);
 	}
 
-	private ProductTypeTableComposite productTypeTableComposite;
+	private AbstractTableComposite<? extends ProductType> productTypeTableComposite;
 	private Text searchText;
 	private ProductTypeSearchCriteriaComposite searchCriteriaComposite = null;
 	
-	public ProductTypeTableComposite getProductTypeTableComposite() {
+	public AbstractTableComposite<? extends ProductType> getProductTypeTableComposite() {
 		return productTypeTableComposite;
 	}
 	
@@ -74,23 +74,43 @@ extends XComposite
 	
 	protected void createComposite(Composite parent)
 	{
-		final Composite criteriaComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		criteriaComp.setLayout(new GridLayout(2, false));
-		criteriaComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite criteriaComp = createCriteriaComposite(parent);		
+		ExpandableComposite expandableComposite = createExpandableComposite(parent);
+		initProductTypeTable(parent);
+	}
 		
+	protected void initProductTypeTable(Composite parent) {
+		productTypeTableComposite = createProductTypeTable(parent);
+		productTypeTableComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		productTypeTableComposite.addSelectionChangedListener(productTypeSelectionListener);		
+	}
+	
+	protected Composite createCriteriaComposite(Composite parent) {
+		Composite criteriaComp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		criteriaComp.setLayout(new GridLayout(2, false));
+		criteriaComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 		Label searchLabel = new Label(criteriaComp, SWT.NONE);
 		searchLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.searchLabel.text")); //$NON-NLS-1$
-		
-		searchText = new Text(criteriaComp, SWT.BORDER);
+		createSearchText(criteriaComp);
+		return criteriaComp;
+	}
+	 	
+	protected Text createSearchText(Composite parent) {
+		searchText = new Text(parent, SWT.BORDER);
 		searchText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		ExpandableComposite expandableComposite = new ExpandableComposite(criteriaComp, ExpandableComposite.TWISTIE);
+		searchText.addSelectionListener(searchTextListener);
+		return searchText;
+	}
+	
+	protected ExpandableComposite createExpandableComposite(Composite parent) {
+		ExpandableComposite expandableComposite = new ExpandableComposite(parent, ExpandableComposite.TWISTIE);
 		expandableComposite.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.expandableComposite.text")); //$NON-NLS-1$
 		expandableComposite.setLayout(new GridLayout());
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+//		GridData gridData = new GridData(GridData.FILL_BOTH);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		expandableComposite.setLayoutData(gridData);
-		searchCriteriaComposite = new ProductTypeSearchCriteriaComposite(expandableComposite, SWT.NONE);
+		searchCriteriaComposite = createSearchCriteriaComposite(expandableComposite);
 		searchCriteriaComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		expandableComposite.setClient(searchCriteriaComposite);
 		expandableComposite.addExpansionListener(new IExpansionListener(){
@@ -101,13 +121,9 @@ extends XComposite
 				layout(true, true);
 			}
 		});
-		
-		productTypeTableComposite = new ProductTypeTableComposite(parent, SWT.NONE);
-		productTypeTableComposite.addSelectionChangedListener(productTypeSelectionListener);
-		
-		searchText.addSelectionListener(searchTextListener);
+		return expandableComposite;
 	}
-		
+	
 	private SelectionListener searchTextListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			searchPressed();
@@ -158,36 +174,7 @@ extends XComposite
 				
 				AbstractProductTypeQuery query = createNewQuery();
 
-//				if (!searchStr.trim().equals(""))
-					query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
-
-				switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
-					case PUBLISHED: query.setPublished(true);
-					break;
-					case CONFIRMED: query.setConfirmed(true);
-					break;
-					case SALEABLE: query.setSaleable(true);
-					break;
-					case CLOSED: query.setClosed(true);
-					break;
-					default:
-						throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
-				}
-
-				if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
-					query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
-
-				if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
-					query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
-
-				if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
-					query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
-
-				if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
-					query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
-
-				if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
-					query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
+				configureQuery(query, searchStr);
 				
 				productTypeQueries.add(query);
 				
@@ -204,7 +191,8 @@ extends XComposite
 						public void run() {
 							productTypeTableComposite.setInput(productTypes);
 							if (productTypeTableComposite.getItemCount() == 1) {
-								productTypeTableComposite.setSelectedElements(productTypes);
+//								productTypeTableComposite.setSelectedElements(productTypes);
+								productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
 								productTypeTableComposite.setFocus();
 							}
 						}
@@ -249,4 +237,47 @@ extends XComposite
 		}
 	}
  	
+	protected ProductTypeSearchCriteriaComposite createSearchCriteriaComposite(Composite parent) {
+		return new ProductTypeSearchCriteriaComposite(parent, SWT.NONE); 
+	}
+	
+	protected AbstractTableComposite<? extends ProductType> createProductTypeTable(Composite parent) {
+		return new ProductTypeTableComposite(parent, SWT.NONE);
+	}
+	
+	protected AbstractProductTypeQuery configureQuery(AbstractProductTypeQuery query, String searchStr) 
+	{
+		query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
+
+		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
+			case PUBLISHED: query.setPublished(true);
+			break;
+			case CONFIRMED: query.setConfirmed(true);
+			break;
+			case SALEABLE: query.setSaleable(true);
+			break;
+			case CLOSED: query.setClosed(true);
+			break;
+			default:
+				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
+		}
+
+		if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
+			query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
+
+		if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
+			query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
+
+		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
+			query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
+
+		if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
+			query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
+
+		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
+			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
+
+		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
+		return query;
+	}	
 }
