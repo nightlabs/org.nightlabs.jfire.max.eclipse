@@ -77,7 +77,6 @@ extends AbstractProductTypeQuickListFilter
 
 	public SimpleProductTypeQuickListFilter() {
 		super();
-
 	}
 
 	// TODO temporary workaround - this should come from the query store. 
@@ -93,7 +92,6 @@ extends AbstractProductTypeQuickListFilter
 	public void setVendorID(AnchorID vendorID) 
 	{
 		getProductTypeSearchFilter().setVendorID(vendorID);
-
 	}
 
 	@Override
