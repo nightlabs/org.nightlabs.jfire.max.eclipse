@@ -7,7 +7,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredTitleDialog;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
+import org.nightlabs.jdo.query.DefaultQueryProvider;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.search.BaseProductTypeQuery;
 import org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite;
 
 /**
@@ -15,21 +18,20 @@ import org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaCompos
  *
  */
 public class BaseProductTypeQuickListFilterDialog 
-extends CenteredTitleDialog 
+extends ResizableTitleAreaDialog
 {
 	/**
 	 * @param parentShell
 	 */
 	public BaseProductTypeQuickListFilterDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell, null);
 	}
 
-	private ProductTypeSearchCriteriaComposite productTypeSearchCriteriaComposite;
-	
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		productTypeSearchCriteriaComposite = new ProductTypeSearchCriteriaComposite(parent, SWT.NONE);
-		return productTypeSearchCriteriaComposite;
+		return new ProductTypeSearchCriteriaComposite<BaseProductTypeQuery>(
+			parent, SWT.NONE, new DefaultQueryProvider(ProductType.class),
+			BaseProductTypeQuery.class);
 	}
 
 }

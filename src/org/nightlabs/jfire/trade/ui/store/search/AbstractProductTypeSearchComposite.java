@@ -29,6 +29,9 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.query.AbstractJDOQuery;
+import org.nightlabs.jdo.query.AbstractSearchQuery;
+import org.nightlabs.jdo.query.DefaultQueryProvider;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
@@ -237,8 +240,12 @@ extends XComposite
 		}
 	}
  	
-	protected ProductTypeSearchCriteriaComposite createSearchCriteriaComposite(Composite parent) {
-		return new ProductTypeSearchCriteriaComposite(parent, SWT.NONE); 
+	protected ProductTypeSearchCriteriaComposite createSearchCriteriaComposite(Composite parent) 
+	{
+		AbstractJDOQuery query = createNewQuery();
+		return new ProductTypeSearchCriteriaComposite(parent, SWT.NONE, 
+				new DefaultQueryProvider<AbstractSearchQuery>(query.getResultClass()), 
+				query.getClass()); 
 	}
 	
 	protected AbstractTableComposite<? extends ProductType> createProductTypeTable(Composite parent) {

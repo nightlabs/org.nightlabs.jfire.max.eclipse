@@ -26,22 +26,26 @@
 
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import java.util.SortedSet;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.nightlabs.jfire.base.ui.overview.search.QueryFilterDialog;
+import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactory;
+import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactoryRegistry;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-public class FilterProductTypeQuickListViewAction implements IViewActionDelegate {
-
-	public FilterProductTypeQuickListViewAction() {
-		super();
-	}
-
+public class FilterProductTypeQuickListViewAction 
+implements IViewActionDelegate 
+{
 	private ProductTypeQuickListView view;
+	
 	/**
 	 * @see org.eclipse.ui.IViewActionDelegate#init(org.eclipse.ui.IViewPart)
 	 */
@@ -53,13 +57,33 @@ public class FilterProductTypeQuickListViewAction implements IViewActionDelegate
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	public void run(IAction action) {
+		IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
+		if (selectedFilter != null) {
+			QueryFilterDialog dialog = new QueryFilterDialog(view.getSite().getShell(),
+					getScope(), selectedFilter.getQueryResultClass());
+			int returnCode = dialog.open();
+			if (returnCode == Window.OK) {
+				
+			}			
+		}
 	}
-	
 
 	/**
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
 	 */
-	public void selectionChanged(IAction action, ISelection selection) {
+	public void selectionChanged(IAction action, ISelection selection) 
+	{
+		IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
+		if (selectedFilter != null) {		
+			SortedSet<QueryFilterFactory> factories = QueryFilterFactoryRegistry.sharedInstance().getQueryFilterCompositesFor(
+					getScope(), selectedFilter.getQueryResultClass());
+			action.setEnabled(factories != null);
+			return;
+		}
+		action.setEnabled(false);
 	}
-
+	
+	protected String getScope() {
+		return "global";
+	}
 }

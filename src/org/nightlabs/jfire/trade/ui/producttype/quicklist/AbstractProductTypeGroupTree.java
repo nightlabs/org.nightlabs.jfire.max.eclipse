@@ -44,8 +44,6 @@ import org.nightlabs.util.NLLocale;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
-//public abstract class AbstractProductTypeGroupTree<P extends ProductType>
-//extends AbstractTreeComposite<P>
 public abstract class AbstractProductTypeGroupTree
 extends AbstractTreeComposite<AbstractProductTypeGroupTree.ProductTypeGroupNode>
 implements ISelectionHandler

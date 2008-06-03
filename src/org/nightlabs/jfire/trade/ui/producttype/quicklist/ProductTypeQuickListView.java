@@ -300,7 +300,7 @@ implements ISelectionProvider
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) {
-						filter.getProductTypeSearchFilter().setVendorID(vendorID);
+						filter.getQuery(monitor).setVendorID(vendorID);
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}

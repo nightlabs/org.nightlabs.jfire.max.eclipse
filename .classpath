@@ -17,5 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsQueryJDO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsQuery"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireQueryStore"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

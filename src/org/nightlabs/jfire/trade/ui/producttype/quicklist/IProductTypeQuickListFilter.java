@@ -32,8 +32,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.jfire.store.VendorDependentSearchFilter;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -43,7 +43,6 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
 public interface IProductTypeQuickListFilter
-//extends ISelectionProvider
 extends ISelectionHandler
 {
 	/**
@@ -108,9 +107,22 @@ extends ISelectionHandler
 	Set<Class<? extends Object>> getClasses();
 
 	/**
-	 * Get the ProductTypeSearchFilter used by this <code>IProductTypeQuickListFilter</code>.
+	 * Get the VendorDependentQuery used by this <code>IProductTypeQuickListFilter</code>.
 	 *
-	 * @return the <code>ProductTypeSearchFilter</code>
+	 * @return the <code>AbstractProductTypeQuery</code>
 	 */
-	VendorDependentSearchFilter getProductTypeSearchFilter();
+	VendorDependentQuery getQuery(ProgressMonitor monitor);
+	
+	/**
+	 * Returns the Class of the resultType for the Query returned by {@link #getQuery()} 
+	 * @return the Class of the resultType for the Query returned by {@link #getQuery()}
+	 */
+	Class<?> getQueryResultClass();
+	
+//	/**
+//	 * 
+//	 * @return the subclass of VendorDependentQuery this quicklist filter uses for
+//	 * searching, the here created instance is also returned by {@link #getQuery()} 
+//	 */
+//	VendorDependentQuery createQuery();
 }
