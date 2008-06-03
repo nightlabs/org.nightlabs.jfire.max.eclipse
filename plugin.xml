@@ -70,5 +70,15 @@
             searchResultProviderFactoryID="org.nightlabs.jfire.dynamictrade.ui.store.search.DynamicProductTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.queryFilterComposite">
+      <QueryFilter
+            orderHint="400"
+            queryFilterFactoryClass="org.nightlabs.jfire.dynamictrade.ui.store.search.DynamicProductTypeQueryFilterFactory"
+            scope="global"
+            targetClass="org.nightlabs.jfire.dynamictrade.store.DynamicProductType"
+            title="DynamicProductType">
+      </QueryFilter>
+   </extension>
 
 </plugin>

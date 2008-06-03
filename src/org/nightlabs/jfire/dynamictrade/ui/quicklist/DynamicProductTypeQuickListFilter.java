@@ -11,15 +11,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
-import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
-import org.nightlabs.jfire.dynamictrade.store.DynamicProductTypeSearchFilter;
+import org.nightlabs.jfire.dynamictrade.store.search.DynamicProductTypeQuery;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
-import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class DynamicProductTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
@@ -29,32 +29,13 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_NO_LIMIT,
 		ProductType.FETCH_GROUP_NAME};
 
-	private DynamicProductTypeTable dynamicProductTypeTable =null;
-
-	public DynamicProductTypeQuickListFilter() {
-		super();
-	}
+	private DynamicProductTypeTable dynamicProductTypeTable =null; 
 
 	@Override
 	public Control doCreateResultViewerControl(Composite parent)
 	{
 		dynamicProductTypeTable = new DynamicProductTypeTable(parent);
 		return dynamicProductTypeTable;
-	}
-
-	// TODO temporary workaround - this should come from the query store. 
-	private DynamicProductTypeSearchFilter dynamicProductTypeSearchFilter;
-	@Override
-	public DynamicProductTypeSearchFilter getProductTypeSearchFilter() {
-		if (dynamicProductTypeSearchFilter == null)
-			dynamicProductTypeSearchFilter = new DynamicProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-
-		return dynamicProductTypeSearchFilter;
-	}
-
-	public void setVendorID(AnchorID vendorID) 
-	{
-		getProductTypeSearchFilter().setVendorID(vendorID);
 	}
 
 	public String getDisplayName()
@@ -75,25 +56,35 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(ProgressMonitor monitor) {
-
-		final DynamicProductTypeSearchFilter searchFilter = getProductTypeSearchFilter();
+	protected void search(ProgressMonitor monitor) 
+	{		
+		monitor.beginTask("Searching Dynamic ProductTypes", 100);
+		final VendorDependentQuery searchQuery = getQuery(new SubProgressMonitor(monitor, 50));
 		try {
-			QueryCollection<DynamicProductTypeSearchFilter> productTypeQueries = new QueryCollection<DynamicProductTypeSearchFilter>(ProductType.class);
-			productTypeQueries.add(searchFilter);
+			QueryCollection<VendorDependentQuery> productTypeQueries = new QueryCollection<VendorDependentQuery>(DynamicProductType.class);
+			productTypeQueries.add(searchQuery);
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
 					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					monitor);
-
+					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					dynamicProductTypeTable.setInput(productTypes);
 				}
 			});
+			monitor.done();
 		} catch (Exception e) {
+			monitor.setCanceled(true);
 			throw new RuntimeException(e);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter#getQueryClass()
+	 */
+	@Override
+	protected Class<? extends VendorDependentQuery> getQueryClass() {
+		return DynamicProductTypeQuery.class;
+	}
+	
 }
