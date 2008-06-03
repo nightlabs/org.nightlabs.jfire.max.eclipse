@@ -23,7 +23,8 @@ public class AttachIssueToObjectWizard
 extends DynamicPathWizard
 {
 	private Object attachedObject;
-	private SelectIssueAndIssueLinkTypePage selectIssueAndIssueLinkTypePage;
+	private SelectIssueLinkTypePage selectIssueLinkTypePage;
+	private SelectIssuePage selectIssuePage;
 	
 	public AttachIssueToObjectWizard(Object attachedObject) {
 		this.attachedObject = attachedObject;
@@ -32,8 +33,11 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		selectIssueAndIssueLinkTypePage = new SelectIssueAndIssueLinkTypePage(attachedObject);
-		addPage(selectIssueAndIssueLinkTypePage);
+		selectIssueLinkTypePage = new SelectIssueLinkTypePage(attachedObject);
+		addPage(selectIssueLinkTypePage);
+		
+		selectIssuePage = new SelectIssuePage(attachedObject);
+		addPage(selectIssuePage);
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
@@ -54,10 +58,9 @@ extends DynamicPathWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-					IssueLinkType selectedIssueLinkType = selectIssueAndIssueLinkTypePage.getIssueLinkType();
-					Issue selectedIssue = selectIssueAndIssueLinkTypePage.getSelectedIssue();
+					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getIssueLinkType();
+					Issue selectedIssue = selectIssuePage.getSelectedIssue();
 					Issue completedIssue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(selectedIssue), FETCH_GROUP,  NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					Object attachedObject = selectIssueAndIssueLinkTypePage.getAttachedObject();
 					
 					completedIssue.createIssueLink(selectedIssueLinkType, attachedObject);
 					Issue issue = IssueDAO.sharedInstance().storeIssue(completedIssue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
