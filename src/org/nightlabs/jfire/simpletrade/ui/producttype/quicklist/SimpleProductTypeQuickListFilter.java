@@ -37,25 +37,23 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
-import org.nightlabs.jdo.search.SearchFilter;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
-import org.nightlabs.jfire.simpletrade.store.SimpleProductTypeSearchFilter;
+import org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeQuery;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilterFactory;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter;
-import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.SubProgressMonitor;
 
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
- *
  * @author Fitas Amine <fitas[AT]nightlabs[DOT]de>
+ * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-
-
 public class SimpleProductTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
 {
@@ -63,8 +61,6 @@ extends AbstractProductTypeQuickListFilter
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME
 	};
-
-	private SimpleProductTypeTable resultTable;
 
 	/**
 	 * Factory for extending org.nightlabs.jfire.trade.ui.producttype.quicklist.productTypeQuickListFilterFactory
@@ -75,25 +71,8 @@ extends AbstractProductTypeQuickListFilter
 		}
 	}
 
-	public SimpleProductTypeQuickListFilter() {
-		super();
-	}
-
-	// TODO temporary workaround - this should come from the query store. 
-	private SimpleProductTypeSearchFilter simpleProductTypeSearchFilter;
-	@Override
-	public SimpleProductTypeSearchFilter getProductTypeSearchFilter() {
-		if (simpleProductTypeSearchFilter == null)
-			simpleProductTypeSearchFilter = new SimpleProductTypeSearchFilter(SearchFilter.CONJUNCTION_DEFAULT);
-
-		return simpleProductTypeSearchFilter;
-	}
-
-	public void setVendorID(AnchorID vendorID) 
-	{
-		getProductTypeSearchFilter().setVendorID(vendorID);
-	}
-
+	private SimpleProductTypeTable resultTable;
+	
 	@Override
 	protected Control doCreateResultViewerControl(Composite parent) {
 		resultTable = new SimpleProductTypeTable(parent);
@@ -109,22 +88,25 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(org.nightlabs.progress.ProgressMonitor monitor) {
-		final SimpleProductTypeSearchFilter searchFilter = getProductTypeSearchFilter();
+	protected void search(org.nightlabs.progress.ProgressMonitor monitor) 
+	{
+		monitor.beginTask("Searching Simple ProductTypes", 100);
+		final VendorDependentQuery query = getQuery(new SubProgressMonitor(monitor, 50));
 		try {
-			QueryCollection<SimpleProductTypeSearchFilter> productTypeQueries = new QueryCollection<SimpleProductTypeSearchFilter>(ProductType.class);
-			productTypeQueries.add(searchFilter);
+			QueryCollection<VendorDependentQuery> productTypeQueries = new QueryCollection<VendorDependentQuery>(SimpleProductType.class);
+			productTypeQueries.add(query);
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					monitor);
-
+					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					resultTable.setInput(productTypes);
 				}
 			});
+			monitor.done();
 		} catch (Exception x) {
+			monitor.setCanceled(true);
 			throw new RuntimeException(x);
 		}
 	}
@@ -135,4 +117,13 @@ extends AbstractProductTypeQuickListFilter
 		classes.add(SimpleProductType.class);
 		return classes;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter#getQueryClass()
+	 */
+	@Override
+	protected Class<? extends VendorDependentQuery> getQueryClass() {
+		return SimpleProductTypeQuery.class;
+	}
+	
 }

@@ -136,4 +136,14 @@
             searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.queryFilterComposite">
+      <QueryFilter
+            orderHint="250"
+            queryFilterFactoryClass="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeQueryFilterFactory"
+            scope="global"
+            targetClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            title="SimpleProductType">
+      </QueryFilter>
+   </extension>
 </plugin>
