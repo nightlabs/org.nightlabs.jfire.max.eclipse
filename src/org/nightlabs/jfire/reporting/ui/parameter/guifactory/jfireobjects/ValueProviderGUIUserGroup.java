@@ -6,7 +6,6 @@ package org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.nightlabs.jfire.base.ui.security.UserSearchComposite;
-import org.nightlabs.jfire.reporting.ReportingConstants;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
@@ -26,7 +25,8 @@ public class ValueProviderGUIUserGroup extends AbstractValueProviderGUIUser {
 		}
 
 		public ValueProviderID getValueProviderID() {
-			return ReportingConstants.VALUE_PROVIDER_ID_USER_GROUP;
+			throw new UnsupportedOperationException("UserSecurityGroups should not be used in reporting! Marco.");
+//			return ReportingConstants.VALUE_PROVIDER_ID_USER_GROUP;
 		}
 
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
