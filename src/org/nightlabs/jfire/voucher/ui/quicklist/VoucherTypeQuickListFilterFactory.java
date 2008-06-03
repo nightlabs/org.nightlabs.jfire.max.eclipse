@@ -6,7 +6,6 @@ import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListF
 public class VoucherTypeQuickListFilterFactory
 extends AbstractProductTypeQuickListFilterFactory
 {
-
 	public IProductTypeQuickListFilter createProductTypeQuickListFilter() {
 		return new VoucherTypeQuickListFilter();
 	}

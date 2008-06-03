@@ -83,5 +83,15 @@
             searchResultProviderFactoryID="org.nightlabs.jfire.voucher.ui.store.search.VoucherTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.queryFilterComposite">
+      <QueryFilter
+            orderHint="500"
+            queryFilterFactoryClass="org.nightlabs.jfire.voucher.ui.store.search.VoucherTypeQueryFilterFactory"
+            scope="global"
+            targetClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            title="VoucherType">
+      </QueryFilter>
+   </extension>
 
 </plugin>
