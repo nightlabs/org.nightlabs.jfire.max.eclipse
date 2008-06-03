@@ -74,7 +74,7 @@ public class IssueEditor extends EntityEditor{
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
-		User.FETCH_GROUP_THIS_USER,
+		User.FETCH_GROUP_NAME,
 		IssueLinkType.FETCH_GROUP_NAME,
 	};
 	

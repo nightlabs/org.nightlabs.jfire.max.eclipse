@@ -24,8 +24,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
 
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -68,7 +66,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
-		User.FETCH_GROUP_THIS_USER,
+		User.FETCH_GROUP_NAME,
 		IssueLinkType.FETCH_GROUP_NAME,
 //		Issue.FETCH_GROUP_SUBJECT,
 //		Issue.FETCH_GROUP_ISSUE_TYPE,
