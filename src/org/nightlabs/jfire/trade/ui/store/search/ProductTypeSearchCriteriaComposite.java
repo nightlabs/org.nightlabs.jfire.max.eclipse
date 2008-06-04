@@ -42,10 +42,6 @@ import org.nightlabs.util.CollectionUtil;
 public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQuery>
 extends AbstractQueryFilterComposite<Q>
 {	
-	public enum SaleAccessState {
-		PUBLISHED, CONFIRMED, SALEABLE, CLOSED
-	}
-
 	class ActiveTextComposite extends XComposite 
 	{
 		private Group group;
