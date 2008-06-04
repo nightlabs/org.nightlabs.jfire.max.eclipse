@@ -91,11 +91,10 @@ extends AbstractProductTypeQuickListFilter
 	protected void search(org.nightlabs.progress.ProgressMonitor monitor) 
 	{
 		monitor.beginTask("Searching Simple ProductTypes", 100);
-		final VendorDependentQuery query = getQuery(new SubProgressMonitor(monitor, 50));
+		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
-			QueryCollection<VendorDependentQuery> productTypeQueries = new QueryCollection<VendorDependentQuery>(SimpleProductType.class);
-			productTypeQueries.add(query);
-			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
+			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
+					productTypeQueries,
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new SubProgressMonitor(monitor, 50));
