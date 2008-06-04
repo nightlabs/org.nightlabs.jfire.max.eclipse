@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,17 +12,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.base.ui.wizard.WizardHop;
+import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
 public class SelectIssuePage 
-extends DynamicPathWizardPage
+extends WizardHopPage
 {
 	//Issue
 	private Button createNewIssueRadio;
@@ -71,6 +76,8 @@ extends DynamicPathWizardPage
 		
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
+		
+		new WizardHop(this);
 	}
 
 	@Override
@@ -117,10 +124,16 @@ extends DynamicPathWizardPage
 		};	
 
 		issueEntryListViewerComposite = issueEntryListViewer.createComposite(mainComposite);
-		issueEntryListViewer.search();
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		issueEntryListViewerComposite.setLayoutData(gridData);
 
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				issueEntryListViewer.search();
+				setIssueAction(ActionForIssue.selectExistingIssue);
+			}
+		});
+		
 		return mainComposite;
 	}
 
@@ -132,7 +145,7 @@ extends DynamicPathWizardPage
 		if (actionForIssue != null)
 			switch (actionForIssue) {
 				case createNewIssue:
-					return selectedIssue != null;
+					return false;
 				case selectExistingIssue:
 					return selectedIssue != null;
 				default:
@@ -143,6 +156,28 @@ extends DynamicPathWizardPage
 			return false;
 	}
 
+//	@Override
+//	public IWizardPage getNextPage() {
+//		Issue newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+//		return new CreateIssueWizardPage(newIssue);
+//	}
+	
+	private Issue newIssue;
+//	@Override
+//	public boolean canFlipToNextPage() {
+//		if (actionForIssue == ActionForIssue.createNewIssue) {
+//			if (newIssue == null)
+//				newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+////			return new CreateIssueWizardPage(newIssue);
+////			getWizardHop().addHopPage(createPage);
+//		} else {
+////			getWizardHop().removeAllHopPages();
+//		}
+////		if (updateButtons)
+////			getContainer().updateButtons();
+////		return 
+//	}
+	
 	public Issue getSelectedIssue() {
 		return selectedIssue;
 	}
