@@ -51,11 +51,10 @@ extends AbstractProductTypeQuickListFilter
 	protected void search(ProgressMonitor monitor) 
 	{
 		monitor.beginTask("Searching VoucherTypes", 100);
-		final VendorDependentQuery searchQuery = getQuery(new SubProgressMonitor(monitor, 50));
+		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
-			QueryCollection<VendorDependentQuery> productTypeQueries = new QueryCollection<VendorDependentQuery>(VoucherType.class);
-			productTypeQueries.add(searchQuery);
-			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
+			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(
+					queryCollection,
 					DEFAULT_FETCH_VOUCHER_TYPE_GROUP, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new SubProgressMonitor(monitor, 50));
