@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -34,6 +35,10 @@ extends WizardHopPage
 		gridData.grabExcessVerticalSpace = true;
 		issueCreateComposite.setLayoutData(gridData);
 
+		if (issueLinkTableItem != null) {
+			issueCreateComposite.getIssueLinkAdderComposite().getIssueLinkTable().addIssueLinkTableItem(issueLinkTableItem);
+		}
+		
 		return mainComposite;
 	}
 
@@ -67,5 +72,10 @@ extends WizardHopPage
 	
 	public CreateIssueComposite getIssueCreateComposite(){
 		return issueCreateComposite;
+	}
+	
+	private IssueLinkTableItem issueLinkTableItem;
+	public void setIssueLinkTableItem(IssueLinkTableItem issueLinkTableItem) {
+		this.issueLinkTableItem = issueLinkTableItem;
 	}
 }

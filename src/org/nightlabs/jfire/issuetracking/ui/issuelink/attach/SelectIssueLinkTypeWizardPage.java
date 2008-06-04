@@ -27,7 +27,8 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.base.ui.wizard.WizardHop;
+import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
@@ -38,8 +39,10 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 public class SelectIssueLinkTypeWizardPage 
-extends DynamicPathWizardPage
+extends WizardHopPage
 {
+	private SelectIssueWizardPage selectIssuePage;
+
 	//Issue Link Types
 	private Button createNewIssueLinkTypeRadio;
 	private Button selectExistingIssueLinkTypeRadio;
@@ -57,7 +60,7 @@ extends DynamicPathWizardPage
 		createNewIssueLinkType,
 		selectExistingIssueLinkType
 	}
-	
+
 	private ActionForIssueLinkType actionForIssueLinkType;
 
 	public ActionForIssueLinkType getIssueLinkTypeAction() {
@@ -70,27 +73,32 @@ extends DynamicPathWizardPage
 		selectExistingIssueLinkTypeRadio.setSelection(false);
 
 		switch (actionForIssueLinkType) {
-			case createNewIssueLinkType:
-				createNewIssueLinkTypeRadio.setSelection(true);
-				break;
-			case selectExistingIssueLinkType:
-				selectExistingIssueLinkTypeRadio.setSelection(true);
-				break;
-			default:
-				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
+		case createNewIssueLinkType:
+			createNewIssueLinkTypeRadio.setSelection(true);
+			break;
+		case selectExistingIssueLinkType:
+			selectExistingIssueLinkTypeRadio.setSelection(true);
+			break;
+		default:
+			throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
 		}
 
 		getContainer().updateButtons();
 	}
-	
+
 	public SelectIssueLinkTypeWizardPage(Object attachedObject) {
 		super(SelectIssueLinkTypeWizardPage.class.getName());
 		this.attachedObject = attachedObject;
-		
+
 		setTitle("Create/Attach issue");
-		
+
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
+
+		new WizardHop(this);
+		
+		selectIssuePage = new SelectIssueWizardPage(attachedObject);
+		getWizardHop().addHopPage(selectIssuePage);
 	}
 
 	@Override
@@ -165,10 +173,9 @@ extends DynamicPathWizardPage
 								new String[] {FetchPlan.DEFAULT, IssueLinkType.FETCH_GROUP_NAME}, 
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 								new SubProgressMonitor(monitor, 10));
-						
+
 						if (issueLinkTypes.size() > 0) {
 							issueLinkTypeList.setInput(issueLinkTypes);
-//							issueLinkTypeList.setSelection(0);
 							selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
 							issueLinkTypeList.setFocus();
 						}
@@ -189,20 +196,35 @@ extends DynamicPathWizardPage
 	}
 
 	@Override
+	public void onNext() {
+		if (actionForIssueLinkType != null)
+			switch (actionForIssueLinkType) {
+			case createNewIssueLinkType:
+				selectIssuePage.setAttachedObjectLinkType(newIssueLinkType);
+				break;
+			case selectExistingIssueLinkType:
+				selectIssuePage.setAttachedObjectLinkType(selectedIssueLinkType);
+				break;
+			default:
+				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
+			}
+	}
+
+	@Override
 	public boolean isPageComplete() {
 		if (createNewIssueLinkTypeRadio == null) // check if UI is already created
 			return false;
 
 		if (actionForIssueLinkType != null)
 			switch (actionForIssueLinkType) {
-				case createNewIssueLinkType:
-					return !newIssueLinkTypeName.isEmpty();
-				case selectExistingIssueLinkType:
-					return selectedIssueLinkType != null;
-				default:
-					throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
+			case createNewIssueLinkType:
+				return !newIssueLinkTypeName.isEmpty();
+			case selectExistingIssueLinkType:
+				return selectedIssueLinkType != null;
+			default:
+				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
 			}
-		
+
 		else 
 			return false;
 	}
@@ -212,27 +234,27 @@ extends DynamicPathWizardPage
 	}
 
 	private IssueLinkType newIssueLinkType;
-	
+
 	public IssueLinkType getIssueLinkType() {
 		switch (actionForIssueLinkType) {
-			case createNewIssueLinkType:
-				if (newIssueLinkType == null) {
-					newIssueLinkType = new IssueLinkType(
-							IDGenerator.getOrganisationID(),
-							ObjectIDUtil.longObjectIDFieldToString(IDGenerator.nextID(IssueLinkType.class))
-					);
-				}
+		case createNewIssueLinkType:
+			if (newIssueLinkType == null) {
+				newIssueLinkType = new IssueLinkType(
+						IDGenerator.getOrganisationID(),
+						ObjectIDUtil.longObjectIDFieldToString(IDGenerator.nextID(IssueLinkType.class))
+				);
+			}
 
-				newIssueLinkType.getName().copyFrom(newIssueLinkTypeName);
-				newIssueLinkType.clearLinkedObjectClasses();
-				newIssueLinkType.addLinkedObjectClass(attachedObject.getClass());
-				return newIssueLinkType;
+			newIssueLinkType.getName().copyFrom(newIssueLinkTypeName);
+			newIssueLinkType.clearLinkedObjectClasses();
+			newIssueLinkType.addLinkedObjectClass(attachedObject.getClass());
+			return newIssueLinkType;
 
-			case selectExistingIssueLinkType:
-				return selectedIssueLinkType;
+		case selectExistingIssueLinkType:
+			return selectedIssueLinkType;
 
-			default:
-				throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
+		default:
+			throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssueLinkType);
 		}
 	}
 }

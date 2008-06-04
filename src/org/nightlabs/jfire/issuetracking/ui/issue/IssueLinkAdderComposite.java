@@ -22,7 +22,7 @@ extends XComposite
 {
 	private IssueLinkTable issueLinkTable;
 
-	private boolean haveButton;
+	private boolean haveButtons;
 
 	private Issue issue;
 
@@ -34,7 +34,7 @@ extends XComposite
 	public IssueLinkAdderComposite(Composite parent, int style, boolean haveButton, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
-		this.haveButton = haveButton;
+		this.haveButtons = haveButton;
 		this.issue = issue;
 
 		createComposite();
@@ -50,7 +50,7 @@ extends XComposite
 		gridData.heightHint = 100;
 		issueLinkTable.setLayoutData(gridData);
 
-		if (haveButton) {
+		if (haveButtons) {
 			XComposite linkedButtonComposite = new XComposite(this, SWT.NONE,
 					LayoutMode.TIGHT_WRAPPER);
 			linkedButtonComposite.getGridLayout().makeColumnsEqualWidth = true;

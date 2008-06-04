@@ -307,6 +307,12 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		}
 	}
 
+	public void addIssueLinkTableItem(IssueLinkTableItem item) {
+		Set<IssueLinkTableItem> items = new HashSet<IssueLinkTableItem>();
+		items.add(item);
+		addIssueLinkTableItems(items);
+	}
+	
 	/**
 	 * Add new instances of {@link IssueLinkTableItem} representing new {@link IssueLink}s that must be created.
 	 * Therefore, the {@link IssueLinkTableItem#getIssueLink()} property is not yet assigned (i.e. still returning <code>null</code>).

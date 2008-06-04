@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -18,8 +20,11 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
@@ -36,6 +41,7 @@ extends WizardHopPage
 
 	//Used Objects
 	private Issue selectedIssue;
+	private Object attachedObject;
 
 	public static enum ActionForIssue {
 		createNewIssue,
@@ -72,6 +78,8 @@ extends WizardHopPage
 	public SelectIssueWizardPage(Object attachedObject) {
 		super(SelectIssueLinkTypeWizardPage.class.getName());
 		setTitle("Create/Attach issue");
+
+		this.attachedObject = attachedObject;
 		
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
@@ -147,6 +155,7 @@ extends WizardHopPage
 					if (newIssue == null) {
 						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 						createIssueWizardPage = new CreateIssueWizardPage(newIssue);
+						createIssueWizardPage.setIssueLinkTableItem(new IssueLinkTableItem((ObjectID)JDOHelper.getObjectId(attachedObject), attachedObjectLinkType));
 						getWizardHop().addHopPage(createIssueWizardPage);
 					}
 					return false;
@@ -161,7 +170,7 @@ extends WizardHopPage
 	}
 
 	private Issue newIssue;
-	private WizardHopPage createIssueWizardPage;
+	private CreateIssueWizardPage createIssueWizardPage;
 	@Override
 	public boolean canFlipToNextPage() {
 		return actionForIssue == ActionForIssue.createNewIssue;
@@ -169,5 +178,10 @@ extends WizardHopPage
 	
 	public Issue getSelectedIssue() {
 		return selectedIssue;
+	}
+	
+	private IssueLinkType attachedObjectLinkType;
+	public void setAttachedObjectLinkType(IssueLinkType attachedObjectLinkType) {
+		this.attachedObjectLinkType = attachedObjectLinkType;
 	}
 }
