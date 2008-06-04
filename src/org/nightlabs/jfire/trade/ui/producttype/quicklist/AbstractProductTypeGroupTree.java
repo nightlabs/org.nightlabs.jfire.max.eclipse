@@ -24,18 +24,15 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeGroup;
+import org.nightlabs.jfire.store.ProductTypeGroupIDSearchResult;
 import org.nightlabs.jfire.store.ProductTypeGroupSearchResult;
 import org.nightlabs.jfire.store.ProductTypeGroupSearchResult.Entry;
-import org.nightlabs.jfire.store.dao.ProductTypeDAO;
-import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.SelectionUtil.SelectionContainment;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -48,18 +45,18 @@ public abstract class AbstractProductTypeGroupTree
 extends AbstractTreeComposite<AbstractProductTypeGroupTree.ProductTypeGroupNode>
 implements ISelectionHandler
 {
-	public static String[] PRODUCT_TYPE_GROUP_FETCH_GROUPS = new String[] {
+	public static String[] FETCH_GROUPS_PRODUCT_TYPE_GROUP = new String[] {
 		FetchPlan.DEFAULT,
 		ProductTypeGroup.FETCH_GROUP_NAME
 	};
 
-	public static String[] PRODUCT_TYPE_FETCH_GROUPS = new String[] {
+	public static String[] FETCH_GROUPS_PRODUCT_TYPE = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME
 	};
 	
 	/**
-	 * ContentProvider which holds the ProductTypeGroupSearchResult
+	 * ContentProvider which holds the ProductTypeGroupIDSearchResult
 	 * which was set as input for the viewer.
 	 *  
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
@@ -91,7 +88,6 @@ implements ISelectionHandler
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-//			if (parentElement instanceof AbstractProductTypeGroupTree<?>.ProductTypeGroupNode)
 			if (parentElement instanceof ProductTypeGroupNode)
 				return ((ProductTypeGroupNode)parentElement).getChildren();
 			return super.getChildren(parentElement);
@@ -146,24 +142,26 @@ implements ISelectionHandler
 			
 			ProductTypeGroupNode node = (ProductTypeGroupNode)element;
 			if (node.getType() == ProductTypeGroupNode.NODE_TYPE_GROUP) {
-				if (columnIndex == 0) { 
-					ProductTypeGroup group = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
-							(ProductTypeGroupID)node.getNodeObject(),
-							PRODUCT_TYPE_GROUP_FETCH_GROUPS, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor()
-					);
+				if (columnIndex == 0) {
+					ProductTypeGroup group = ((ProductTypeGroup) node.getNodeObject());
+//					ProductTypeGroup group = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
+//							(ProductTypeGroupID)node.getNodeObject(),
+//							FETCH_GROUPS_PRODUCT_TYPE_GROUP, 
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//							new NullProgressMonitor()
+//					);
 					return group.getName().getText(NLLocale.getDefault().getLanguage());
 				}
 				return ""; //$NON-NLS-1$
 			}
 			else {
-				ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
-						(ProductTypeID)node.getNodeObject(),
-						PRODUCT_TYPE_FETCH_GROUPS, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor()
-					);
+				ProductType productType = (ProductType) node.getNodeObject();
+//				ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
+//						(ProductTypeID)node.getNodeObject(),
+//						FETCH_GROUPS_PRODUCT_TYPE, 
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//						new NullProgressMonitor()
+//					);
 				switch (columnIndex) {
 					case 0: return productType.getName().getText(); 
 				}
@@ -182,19 +180,19 @@ implements ISelectionHandler
 		public static final int NODE_TYPE_GROUP = 1;
 		public static final int NODE_TYPE_SINGLE = 2;
 		private int type;
-		private ProductTypeGroupID productTypeGroupID;		
-		private ProductTypeID productTypeID;
+		private ProductTypeGroup productTypeGroup;		
+		private ProductType productType;
 		private ProductTypeGroupNode parent;
 		private Object[] children;
 		
 		public ProductTypeGroupNode(ProductTypeGroupSearchResult.Entry entry) {
-			if (entry.getProductTypeIDs().size() > 1) {
-				this.productTypeID = null;
-				this.productTypeGroupID = entry.getProductTypeGroupID();			
+			if (entry.getProductTypes().size() > 1) {
+				this.productType = null;
+				this.productTypeGroup = entry.getProductTypeGroup();			
 				this.type = NODE_TYPE_GROUP;
 				List<ProductTypeGroupNode> c = new LinkedList<ProductTypeGroupNode>();
-				for (Iterator<ProductTypeID> iter = entry.getProductTypeIDs().iterator(); iter.hasNext();) {
-					ProductTypeID pType = iter.next();
+				for (Iterator<ProductType> iter = entry.getProductTypes().iterator(); iter.hasNext();) {
+					ProductType pType = iter.next();
 					ProductTypeGroupNode node = new ProductTypeGroupNode(pType);
 					node.setParent(this);
 					c.add(node);
@@ -202,26 +200,26 @@ implements ISelectionHandler
 				children = c.toArray();
 			}
 			else {
-				if (entry.getProductTypeIDs().size() <= 0) {
-					this.productTypeID = null;
-					this.productTypeGroupID = entry.getProductTypeGroupID();			
+				if (entry.getProductTypes().size() <= 0) {
+					this.productType = null;
+					this.productTypeGroup = entry.getProductTypeGroup();			
 					this.type = NODE_TYPE_GROUP;
 					return;
 				}
-				this.productTypeID = (ProductTypeID)entry.getProductTypeIDs().toArray()[0];
-				this.productTypeGroupID = null;
+				this.productType = (ProductType)entry.getProductTypes().toArray()[0];
+				this.productTypeGroup = null;
 				this.type = NODE_TYPE_SINGLE; 
 			}
 		}
 		
-		public ProductTypeGroupNode(ProductTypeID productTypeID) {
-			this.productTypeID = productTypeID;
-			this.productTypeGroupID = null;
+		public ProductTypeGroupNode(ProductType productType) {
+			this.productType = productType;
+			this.productTypeGroup = null;
 			this.type = NODE_TYPE_SINGLE; 
 		}
 		
-		public ProductTypeID getProductTypeID() {
-			return productTypeID;
+		public ProductType getProductType() {
+			return productType;
 		}
 		
 		public boolean hasChildren() {
@@ -244,9 +242,9 @@ implements ISelectionHandler
 		
 		public Object getNodeObject() {
 			if (type == NODE_TYPE_GROUP)
-				return productTypeGroupID;
+				return productTypeGroup;
 			else
-				return productTypeID;
+				return productType;
 		}
 		
 		public int getType() {
@@ -258,9 +256,9 @@ implements ISelectionHandler
 			final int prime = 31;
 			int result = 1;
 			result = prime * result
-					+ ((productTypeGroupID == null) ? 0 : productTypeGroupID.hashCode());
+					+ ((productTypeGroup == null) ? 0 : productTypeGroup.hashCode());
 			result = prime * result
-					+ ((productTypeID == null) ? 0 : productTypeID.hashCode());
+					+ ((productType == null) ? 0 : productType.hashCode());
 			return result;
 		}
 
@@ -273,15 +271,15 @@ implements ISelectionHandler
 			if (getClass() != obj.getClass())
 				return false;
 			final ProductTypeGroupNode other = (ProductTypeGroupNode) obj;
-			if (productTypeGroupID == null) {
-				if (other.productTypeGroupID != null)
+			if (productTypeGroup == null) {
+				if (other.productTypeGroup != null)
 					return false;
-			} else if (!productTypeGroupID.equals(other.productTypeGroupID))
+			} else if (!productTypeGroup.equals(other.productTypeGroup))
 				return false;
-			if (productTypeID == null) {
-				if (other.productTypeID != null)
+			if (productType == null) {
+				if (other.productType != null)
 					return false;
-			} else if (!productTypeID.equals(other.productTypeID))
+			} else if (!productType.equals(other.productType))
 				return false;
 			return true;
 		}
@@ -328,7 +326,7 @@ implements ISelectionHandler
 		treeViewer.setLabelProvider(new LabelProvider());
 	}
 
-	public void setInput(ProductTypeGroupSearchResult result) {
+	public void setInput(ProductTypeGroupIDSearchResult result) {
 		getTreeViewer().setInput(result);
 	}
 
@@ -339,16 +337,16 @@ implements ISelectionHandler
 		Set<ProductTypeGroupID> productTypeGroupsIDs = selectionContainment.getProductTypeGroupIDs();
 		Set<ProductTypeID> productTypeIDs = selectionContainment.getProductTypeIDs();		 
 		if (!selectionContainment.isEmpty()) {
-			if (contentProvider != null && contentProvider.getSearchResult() != null) {
+			if (contentProvider != null && getSearchResult() != null) {
 				// first check for contained productTypeGroupIDs
 				for (ProductTypeGroupID productTypeGroupID : productTypeGroupsIDs) {
-					Entry entry = contentProvider.getSearchResult().getEntry(productTypeGroupID);
+					Entry entry = getSearchResult().getEntry(productTypeGroupID);
 					if (entry != null) {
 						return true;
 					}
-				}				
+				}
 				// if nothing found yet, check for contained productTypeIDs in the productTypeGroups
-				Set<ProductTypeID> searchResultProductTypeIDs = contentProvider.getSearchResult().getAllProductTypeIDs();
+				Collection<ProductTypeID> searchResultProductTypeIDs = getSearchResult().getAllProductTypeIDs();
 				for (ProductTypeID pTypeID : productTypeIDs) {
 					if (searchResultProductTypeIDs.contains(pTypeID)) {
 						return true;
@@ -368,12 +366,14 @@ implements ISelectionHandler
 			List<ProductTypeGroupNode> selectedNodes = new ArrayList<ProductTypeGroupNode>();
 			// first create nodes for productTypeGroupIDs
 			for (ProductTypeGroupID productTypeGroupID : productTypeGroupsIDs) {
-				ProductTypeGroupSearchResult.Entry entry = new ProductTypeGroupSearchResult.Entry(productTypeGroupID);
+				Entry entry = getSearchResult().getEntry(productTypeGroupID);
 				selectedNodes.add(new ProductTypeGroupNode(entry));
 			}
 			// then create nodes for productTypeIDs
-			for (ProductTypeID productTypeID : productTypeIDs) {			
-				selectedNodes.add(new ProductTypeGroupNode(productTypeID));
+			for (ProductTypeID productTypeID : productTypeIDs) 
+			{
+				ProductType productType = getSearchResult().getProductType(productTypeID);
+				selectedNodes.add(new ProductTypeGroupNode(productType));
 			}
 			// TODO: ARRGH, reveal does not work for trees
 			super.setSelection(selectedNodes, true);
@@ -383,4 +383,8 @@ implements ISelectionHandler
 		}
 	}
 
+	// TODO: maybe this should not come from the contentProvider
+	protected ProductTypeGroupSearchResult getSearchResult() {
+		return contentProvider.getSearchResult();
+	}
 }

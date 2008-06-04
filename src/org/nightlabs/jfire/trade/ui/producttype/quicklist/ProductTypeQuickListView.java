@@ -59,10 +59,12 @@ import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -299,8 +301,12 @@ implements ISelectionProvider
 			if ((!didSelectedFilterSearch()) || force) {
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
-					protected IStatus run(ProgressMonitor monitor) {
-						filter.getQuery(monitor).setVendorID(vendorID);
+					protected IStatus run(ProgressMonitor monitor) 
+					{
+						QueryCollection<VendorDependentQuery> queryCollection = filter.getQueryCollection(monitor);
+						for (VendorDependentQuery query : queryCollection) {
+							query.setVendorID(vendorID);							
+						}
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}

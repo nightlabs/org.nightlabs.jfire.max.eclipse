@@ -28,14 +28,18 @@ package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
 import java.util.SortedSet;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterDialog;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactory;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactoryRegistry;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -44,6 +48,8 @@ import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactoryRegistry;
 public class FilterProductTypeQuickListViewAction 
 implements IViewActionDelegate 
 {
+	private static final Logger logger = Logger.getLogger(FilterProductTypeQuickListViewAction.class);
+	
 	private ProductTypeQuickListView view;
 	
 	/**
@@ -58,13 +64,16 @@ implements IViewActionDelegate
 	 */
 	public void run(IAction action) {
 		IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
-		if (selectedFilter != null) {
+		if (isFactoriesRegistered(selectedFilter)) 
+		{
+			QueryCollection<VendorDependentQuery> queryCollection = selectedFilter.getQueryCollection(
+					new NullProgressMonitor());
 			QueryFilterDialog dialog = new QueryFilterDialog(view.getSite().getShell(),
-					getScope(), selectedFilter.getQueryResultClass());
+					getScope(), queryCollection);
 			int returnCode = dialog.open();
 			if (returnCode == Window.OK) {
 				
-			}			
+			}						
 		}
 	}
 
@@ -73,17 +82,19 @@ implements IViewActionDelegate
 	 */
 	public void selectionChanged(IAction action, ISelection selection) 
 	{
-		IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
-		if (selectedFilter != null) {		
-			SortedSet<QueryFilterFactory> factories = QueryFilterFactoryRegistry.sharedInstance().getQueryFilterCompositesFor(
-					getScope(), selectedFilter.getQueryResultClass());
-			action.setEnabled(factories != null);
-			return;
-		}
-		action.setEnabled(false);
 	}
 	
 	protected String getScope() {
 		return "global";
+	}
+	
+	protected boolean isFactoriesRegistered(IProductTypeQuickListFilter selectedFilter) 
+	{
+		if (selectedFilter != null) {		
+			SortedSet<QueryFilterFactory> factories = QueryFilterFactoryRegistry.sharedInstance().getQueryFilterCompositesFor(
+					getScope(), selectedFilter.getQueryResultClass());
+			return factories != null;
+		}
+		return false;
 	}
 }

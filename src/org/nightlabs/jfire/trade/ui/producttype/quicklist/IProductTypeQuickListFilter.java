@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.progress.ProgressMonitor;
@@ -106,13 +107,19 @@ extends ISelectionHandler
 	 */
 	Set<Class<? extends Object>> getClasses();
 
+//	/**
+//	 * Get the VendorDependentQuery used by this <code>IProductTypeQuickListFilter</code>.
+//	 *
+//	 * @return the <code>AbstractProductTypeQuery</code>
+//	 */
+//	VendorDependentQuery getQuery(ProgressMonitor monitor);
 	/**
-	 * Get the VendorDependentQuery used by this <code>IProductTypeQuickListFilter</code>.
+	 * Get the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
 	 *
-	 * @return the <code>AbstractProductTypeQuery</code>
+	 * @return the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
 	 */
-	VendorDependentQuery getQuery(ProgressMonitor monitor);
-	
+	QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor);
+
 	/**
 	 * Returns the Class of the resultType for the Query returned by {@link #getQuery()} 
 	 * @return the Class of the resultType for the Query returned by {@link #getQuery()}
