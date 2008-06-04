@@ -24,7 +24,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
-public class SelectIssuePage 
+public class SelectIssueWizardPage 
 extends WizardHopPage
 {
 	//Issue
@@ -69,8 +69,8 @@ extends WizardHopPage
 		getContainer().updateButtons();
 	}
 
-	public SelectIssuePage(Object attachedObject) {
-		super(SelectIssueLinkTypePage.class.getName());
+	public SelectIssueWizardPage(Object attachedObject) {
+		super(SelectIssueLinkTypeWizardPage.class.getName());
 		setTitle("Create/Attach issue");
 		
 		String objectNameString = attachedObject.getClass().getSimpleName();

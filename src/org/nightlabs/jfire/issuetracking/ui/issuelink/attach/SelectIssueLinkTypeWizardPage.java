@@ -37,7 +37,7 @@ import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
-public class SelectIssueLinkTypePage 
+public class SelectIssueLinkTypeWizardPage 
 extends DynamicPathWizardPage
 {
 	//Issue Link Types
@@ -83,8 +83,8 @@ extends DynamicPathWizardPage
 		getContainer().updateButtons();
 	}
 	
-	public SelectIssueLinkTypePage(Object attachedObject) {
-		super(SelectIssueLinkTypePage.class.getName());
+	public SelectIssueLinkTypeWizardPage(Object attachedObject) {
+		super(SelectIssueLinkTypeWizardPage.class.getName());
 		this.attachedObject = attachedObject;
 		
 		setTitle("Create/Attach issue");
