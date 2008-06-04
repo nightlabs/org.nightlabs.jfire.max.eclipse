@@ -4,7 +4,6 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -145,6 +144,11 @@ extends WizardHopPage
 		if (actionForIssue != null)
 			switch (actionForIssue) {
 				case createNewIssue:
+					if (newIssue == null) {
+						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+						createIssueWizardPage = new CreateIssueWizardPage(newIssue);
+						getWizardHop().addHopPage(createIssueWizardPage);
+					}
 					return false;
 				case selectExistingIssue:
 					return selectedIssue != null;
@@ -156,27 +160,12 @@ extends WizardHopPage
 			return false;
 	}
 
-//	@Override
-//	public IWizardPage getNextPage() {
-//		Issue newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-//		return new CreateIssueWizardPage(newIssue);
-//	}
-	
 	private Issue newIssue;
-//	@Override
-//	public boolean canFlipToNextPage() {
-//		if (actionForIssue == ActionForIssue.createNewIssue) {
-//			if (newIssue == null)
-//				newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-////			return new CreateIssueWizardPage(newIssue);
-////			getWizardHop().addHopPage(createPage);
-//		} else {
-////			getWizardHop().removeAllHopPages();
-//		}
-////		if (updateButtons)
-////			getContainer().updateButtons();
-////		return 
-//	}
+	private WizardHopPage createIssueWizardPage;
+	@Override
+	public boolean canFlipToNextPage() {
+		return actionForIssue == ActionForIssue.createNewIssue;
+	}
 	
 	public Issue getSelectedIssue() {
 		return selectedIssue;
