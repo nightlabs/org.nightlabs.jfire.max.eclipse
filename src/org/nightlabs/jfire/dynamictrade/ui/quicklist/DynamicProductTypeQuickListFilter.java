@@ -59,11 +59,10 @@ extends AbstractProductTypeQuickListFilter
 	protected void search(ProgressMonitor monitor) 
 	{		
 		monitor.beginTask("Searching Dynamic ProductTypes", 100);
-		final VendorDependentQuery searchQuery = getQuery(new SubProgressMonitor(monitor, 50));
+		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
-			QueryCollection<VendorDependentQuery> productTypeQueries = new QueryCollection<VendorDependentQuery>(DynamicProductType.class);
-			productTypeQueries.add(searchQuery);
-			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(productTypeQueries,
+			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
+					productTypeQueries,
 					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 50));
