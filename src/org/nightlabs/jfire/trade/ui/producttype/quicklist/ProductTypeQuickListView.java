@@ -186,7 +186,7 @@ implements ISelectionProvider
 					}
 				});
 			}
-
+			getProgressMonitorWrapper().done();
 		}
 	};
 

@@ -41,14 +41,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -326,24 +321,24 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 		}
 	}
 
-	public boolean isInOrder()
-	{
-		return Order.class.getName().equals(getSegmentEdit().getArticleContainerClass());
-	}
-	public boolean isInOffer()
-	{
-		return Offer.class.equals(getSegmentEdit().getArticleContainerClass());
-	}
-	public boolean isInInvoice()
-	{
-		return Invoice.class.equals(getSegmentEdit().getArticleContainerClass());
-	}
-	public boolean isInDeliveryNote()
-	{
-		return DeliveryNote.class.equals(getSegmentEdit().getArticleContainerClass());
-	}
-	public boolean isInReceptionNote()
-	{
-		return ReceptionNote.class.equals(getSegmentEdit().getArticleContainerClass());
-	}
+//	public boolean isInOrder()
+//	{
+//		return Order.class.getName().equals(getSegmentEdit().getArticleContainerClass());
+//	}
+//	public boolean isInOffer()
+//	{
+//		return Offer.class.equals(getSegmentEdit().getArticleContainerClass());
+//	}
+//	public boolean isInInvoice()
+//	{
+//		return Invoice.class.equals(getSegmentEdit().getArticleContainerClass());
+//	}
+//	public boolean isInDeliveryNote()
+//	{
+//		return DeliveryNote.class.equals(getSegmentEdit().getArticleContainerClass());
+//	}
+//	public boolean isInReceptionNote()
+//	{
+//		return ReceptionNote.class.equals(getSegmentEdit().getArticleContainerClass());
+//	}
 }
