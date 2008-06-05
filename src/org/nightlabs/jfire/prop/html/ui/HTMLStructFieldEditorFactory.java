@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.prop.html.ui;
 
 import org.nightlabs.jfire.base.ui.prop.structedit.AbstractStructFieldEditorFactory;
+import org.nightlabs.jfire.base.ui.prop.structedit.StructFieldEditor;
 
 /**
  * @author Marc Klinger - marc[at]nightlabs[dot]de
@@ -8,11 +9,11 @@ import org.nightlabs.jfire.base.ui.prop.structedit.AbstractStructFieldEditorFact
 public class HTMLStructFieldEditorFactory extends AbstractStructFieldEditorFactory
 {
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.structedit.StructFieldEditorFactory#getStructFieldEditorClass()
+	 * @see org.nightlabs.jfire.base.ui.prop.structedit.StructFieldEditorFactory#createStructFieldEditor()
 	 */
 	@Override
-	public String getStructFieldEditorClass()
+	public StructFieldEditor createStructFieldEditor()
 	{
-		return HTMLStructFieldEditor.class.getName();
+		return new HTMLStructFieldEditor();
 	}
 }

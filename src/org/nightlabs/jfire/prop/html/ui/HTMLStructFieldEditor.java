@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.prop.html.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.base.ui.prop.structedit.AbstractStructFieldEditor;
@@ -18,7 +19,9 @@ public class HTMLStructFieldEditor extends AbstractStructFieldEditor<HTMLStructF
 	protected Composite createSpecialComposite(Composite parent, int style)
 	{
 		Composite c = new Composite(parent, style);
-		new Label(c, SWT.NONE).setText("Hallo! Mein special composite");
+		c.setLayout(new FillLayout());
+		Label l = new Label(c, SWT.NONE);
+		l.setText("Hallo! Mein special composite");
 		return c;
 	}
 
