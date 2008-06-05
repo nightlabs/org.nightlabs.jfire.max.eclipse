@@ -43,10 +43,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
+import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticlePrice;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AllocationStatusImageUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
@@ -117,22 +122,22 @@ implements ISelectionProvider
 //					return SharedImages.getSharedImage(SimpletradePlugin.getDefault(), ArticleTable.class, "notAllocated");
 			}
 
-			if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
+			if (!isInOrder() && !isInOffer()) {
 				if (++ci == columnIndex)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_ORDER_16x16);
 			}
 
-			if (!articleEdit.isInOffer()) {
+			if (!isInOffer()) {
 				if (++ci == columnIndex)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_OFFER_16x16);
 			}
 
-			if (!articleEdit.isInInvoice()) {
+			if (!isInInvoice()) {
 				if (++ci == columnIndex && article.getInvoiceID() != null)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_INVOICE_16x16);
 			}
 
-			if (!articleEdit.isInDeliveryNote()) {
+			if (!isInDeliveryNote()) {
 				if (++ci == columnIndex && article.getDeliveryNoteID() != null)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_DELIVERY_NOTE_16x16);
 			}
@@ -159,22 +164,22 @@ implements ISelectionProvider
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
 			}
 
-			if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
+			if (!isInOrder() && !isInOffer()) {
 				if (++ci == columnIndex)
 					return ""; // Long.toString(article.getOrderID().orderID); //$NON-NLS-1$
 			}
 
-			if (!articleEdit.isInOffer()) {
+			if (!isInOffer()) {
 				if (++ci == columnIndex)
 					return ""; // Long.toString(article.getOfferID().offerID); //$NON-NLS-1$
 			}
 
-			if (!articleEdit.isInInvoice()) {
+			if (!isInInvoice()) {
 				if (++ci == columnIndex && article.getInvoiceID() != null)
 					return ""; // Long.toString(article.getInvoiceID().invoiceID); //$NON-NLS-1$
 			}
 
-			if (!articleEdit.isInDeliveryNote()) {
+			if (!isInDeliveryNote()) {
 				if (++ci == columnIndex && article.getDeliveryNoteID() != null)
 					return ""; // Long.toString(article.getDeliveryNoteID().deliveryNoteID); //$NON-NLS-1$
 			}
@@ -222,52 +227,72 @@ implements ISelectionProvider
 		}
 	};
 
+	private boolean isInOrder()
+	{
+		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Order;
+	}
+
+	private boolean isInOffer()
+	{
+		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Offer;
+	}
+	
+	private boolean isInInvoice()
+	{
+		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Invoice;
+	}
+	
+	private boolean isInDeliveryNote()
+	{
+		return articleEdit.getSegmentEdit().getArticleContainer() instanceof DeliveryNote;
+	}
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
-//		col.setToolTipText("Name");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
-//		col.setToolTipText("Allocation Status");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$		
 
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
-		if (!articleEdit.isInOrder() && !articleEdit.isInOffer()) {
+		if (!isInOrder() && !isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Order");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
 		}
 
-		if (!articleEdit.isInOffer()) {
+		if (!isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Offer");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
 		}
 
-		if (!articleEdit.isInInvoice()) {
+		if (!isInInvoice()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Invoice");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 		}
 
-		if (!articleEdit.isInDeliveryNote()) {
+		if (!isInDeliveryNote()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
-//			col.setToolTipText("DeliveryNote");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
 		}
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		TableColumn columnPrice = new TableColumn(table, SWT.RIGHT);
 		columnPrice.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.priceTableColumn.text"));		 //$NON-NLS-1$
 
-		if (articleEdit.isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
+		if (isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
 							new int[]{160, -1, -1, -1, -1, 30},
 							new int[]{-1, 22, 22, 22, 22, -1}));
-		else if (articleEdit.isInOffer())  // name, allocationStatus, invoice, deliveryNote, price
+		else if (isInOffer())  // name, allocationStatus, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
 							new int[]{160, -1, -1, -1, 20},
