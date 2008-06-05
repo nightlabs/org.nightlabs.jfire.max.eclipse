@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.html.HTMLDataField;
 
 /**
@@ -12,6 +13,10 @@ import org.nightlabs.jfire.prop.html.HTMLDataField;
  */
 public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 {
+	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data) {
+		super(struct, data);
+	}
+
 	private Control control;  
 	
 	/* (non-Javadoc)

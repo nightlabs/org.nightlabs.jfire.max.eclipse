@@ -4,6 +4,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.ExpandableBlocksEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.fieldbased.FieldBasedEditor;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.html.HTMLDataField;
 
 /**
@@ -11,15 +12,6 @@ import org.nightlabs.jfire.prop.html.HTMLDataField;
  */
 public class HTMLDataFieldEditorFactory extends AbstractDataFieldEditorFactory<HTMLDataField>
 {
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory#getDataFieldEditorClass()
-	 */
-	@Override
-	public Class<? extends DataFieldEditor<HTMLDataField>> getDataFieldEditorClass()
-	{
-		return HTMLDataFieldEditor.class;
-	}
-
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory#getEditorTypes()
 	 */
@@ -36,6 +28,11 @@ public class HTMLDataFieldEditorFactory extends AbstractDataFieldEditorFactory<H
 	public Class<HTMLDataField> getPropDataFieldType()
 	{
 		return HTMLDataField.class;
+	}
+
+	@Override
+	public DataFieldEditor<HTMLDataField> createPropDataFieldEditor(IStruct struct, HTMLDataField data) {
+		return new HTMLDataFieldEditor(struct, data);
 	}
 
 }
