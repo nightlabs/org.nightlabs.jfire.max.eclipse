@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.nightlabs.jfire.base.ui.propStructField">
+      <propStructField
+            class="org.nightlabs.jfire.prop.html.HTMLStructField"
+            description="HTML rich content property"
+            editorFactoryClass="org.nightlabs.jfire.prop.html.ui.HTMLStructFieldEditorFactory"
+            factoryClass="org.nightlabs.jfire.prop.html.ui.HTMLStructFieldFactory"
+            name="HTML struct field">
+      </propStructField>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
+      <propDataFieldEditorFactory
+            class="org.nightlabs.jfire.prop.html.ui.HTMLDataFieldEditorFactory">
+      </propDataFieldEditorFactory>
+   </extension>
+
+</plugin>

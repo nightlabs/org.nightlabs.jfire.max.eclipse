@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui Plug-in
+Bundle-SymbolicName: org.nightlabs.jfire.prop.html.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.nightlabs.jfire.prop.html.ui.Activator
+Bundle-Vendor: nightlabs.org
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.nightlabs.jfire.base.ui,
+ org.nightlabs.eclipse.ui.fckeditor
+Eclipse-LazyStart: true
+Export-Package: org.nightlabs.jfire.prop.html.ui
+Eclipse-BuddyPolicy: registered
+Eclipse-RegisterBuddy: org.nightlabs.jfire.base.ui
