@@ -307,7 +307,9 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		}
 	}
 
-	public void addIssueLinkTableItem(IssueLinkTableItem item) {
+	public void addIssueLinkTableItem(Issue issue, IssueLinkTableItem item) {
+		this.issue = issue; 
+		
 		Set<IssueLinkTableItem> items = new HashSet<IssueLinkTableItem>();
 		items.add(item);
 		addIssueLinkTableItems(items);

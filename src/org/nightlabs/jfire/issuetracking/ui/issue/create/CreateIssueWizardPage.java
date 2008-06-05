@@ -36,7 +36,8 @@ extends WizardHopPage
 		issueCreateComposite.setLayoutData(gridData);
 
 		if (issueLinkTableItem != null) {
-			issueCreateComposite.getIssueLinkAdderComposite().getIssueLinkTable().addIssueLinkTableItem(issueLinkTableItem);
+			
+			issueCreateComposite.getIssueLinkAdderComposite().getIssueLinkTable().addIssueLinkTableItem(issue, issueLinkTableItem);
 		}
 		
 		return mainComposite;
