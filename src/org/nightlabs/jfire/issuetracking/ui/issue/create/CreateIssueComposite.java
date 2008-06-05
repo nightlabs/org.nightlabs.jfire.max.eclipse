@@ -10,7 +10,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -90,11 +93,13 @@ extends XComposite
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	
 	private Issue issue;
+	private CreateIssueWizardPage createIssueWizardPage;
 	
-	public CreateIssueComposite(Composite parent, int style, Issue issue) {
+	public CreateIssueComposite(CreateIssueWizardPage createIssueWizardPage, Composite parent, int style, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
 		this.issue = issue;
+		this.createIssueWizardPage = createIssueWizardPage;
 		createComposite(this);
 	}
 
@@ -227,13 +232,24 @@ extends XComposite
 
 		subjectText = new I18nTextEditor(this);
 		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
+		subjectText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				createIssueWizardPage.updatePageComplete();
+			}
+		});
 
 		descriptionLabel = new Label(this, SWT.NONE);
 		descriptionLabel.setText("Description: ");
 
 		descriptionText = new I18nTextEditorMultiLine(this);
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
-
+		descriptionText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				createIssueWizardPage.updatePageComplete();
+			}
+		});
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.minimumHeight = 100;
 		descriptionText.setLayoutData(gridData);
@@ -243,7 +259,6 @@ extends XComposite
 
 		fileComposite = new IssueFileAttachmentComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, issue);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		gridData.heightHint = 100;
 		gridData.minimumHeight = 80;
 		fileComposite.setLayoutData(gridData);
 

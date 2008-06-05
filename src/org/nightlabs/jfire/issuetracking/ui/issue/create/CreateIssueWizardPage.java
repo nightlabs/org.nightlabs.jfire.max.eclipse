@@ -29,14 +29,13 @@ extends WizardHopPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		mainComposite.getGridLayout().numColumns = 1;
 
-		issueCreateComposite = new CreateIssueComposite(mainComposite, SWT.NONE, issue);
+		issueCreateComposite = new CreateIssueComposite(this, mainComposite, SWT.NONE, issue);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		issueCreateComposite.setLayoutData(gridData);
 
 		if (issueLinkTableItem != null) {
-			
 			issueCreateComposite.getIssueLinkAdderComposite().getIssueLinkTable().addIssueLinkTableItem(issue, issueLinkTableItem);
 		}
 		
@@ -51,24 +50,27 @@ extends WizardHopPage
 		super.setVisible(visible);
 	}
 
-	private void updatePageComplete() {
-		setPageComplete(false);
-		
-		if(issueCreateComposite.getSubjectText().getEditText() == null && issueCreateComposite.getSubjectText().getEditText().equals("")){
-			setMessage("The subject should not be empty.");
+	public void updatePageComplete() {
+		if(issueCreateComposite.getSubjectText().getEditText().equals("")){
+			setErrorMessage("The subject should not be empty.");
+			getContainer().updateButtons();
+			return;
 		}//if
 		
 		if(issueCreateComposite.getSelectedReporter() == null){
-			setMessage("The reporter should not be null");
+			setErrorMessage("The reporter should not be null");
+			getContainer().updateButtons();
+			return;
 		}
 		else{
-			setMessage(null);
+			setErrorMessage(null);
+			getContainer().updateButtons();
 		}
+	}
 
-		//.................
-		setPageComplete(true);
-		setErrorMessage(null);
-		
+	@Override
+	public boolean isPageComplete() {
+		return getErrorMessage() == null;
 	}
 	
 	public CreateIssueComposite getIssueCreateComposite(){

@@ -84,4 +84,9 @@ extends DynamicPathWizard
 		}
 		return true;
 	}
+	
+	@Override
+	public boolean canFinish() {
+		return issueCreateWizardPage.isPageComplete();
+	}
 }
