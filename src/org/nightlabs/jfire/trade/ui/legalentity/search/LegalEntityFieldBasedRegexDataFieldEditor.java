@@ -12,22 +12,20 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.RegexDataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldComposite;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.RegexDataField;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class LegalEntityFieldBasedRegexDataFieldEditor extends
-		RegexDataFieldEditor {
+public class LegalEntityFieldBasedRegexDataFieldEditor extends RegexDataFieldEditor {
+
+	public LegalEntityFieldBasedRegexDataFieldEditor(IStruct struct, RegexDataField data) {
+		super(struct, data);
+	}
 
 	private TextDataFieldComposite<RegexDataField> textDataFieldComposite;
-
-	/**
-	 *
-	 */
-	public LegalEntityFieldBasedRegexDataFieldEditor() {
-	}
 
 	/**
 	 * {@inheritDoc}

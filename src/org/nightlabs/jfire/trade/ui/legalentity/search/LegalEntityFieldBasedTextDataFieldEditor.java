@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldComposite;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.TextDataFieldEditor;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
 
 /**
@@ -21,13 +22,11 @@ import org.nightlabs.jfire.prop.datafield.TextDataField;
 public class LegalEntityFieldBasedTextDataFieldEditor extends
 		TextDataFieldEditor {
 
-	private TextDataFieldComposite<TextDataField> textDataFieldComposite;
-
-	/**
-	 *
-	 */
-	public LegalEntityFieldBasedTextDataFieldEditor() {
+	public LegalEntityFieldBasedTextDataFieldEditor(IStruct struct, TextDataField data) {
+		super(struct, data);
 	}
+
+	private TextDataFieldComposite<TextDataField> textDataFieldComposite;
 
 	/**
 	 * {@inheritDoc}

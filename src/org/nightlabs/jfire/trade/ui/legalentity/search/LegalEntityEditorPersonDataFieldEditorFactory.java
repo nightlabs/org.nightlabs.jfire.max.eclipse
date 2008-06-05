@@ -28,6 +28,7 @@ package org.nightlabs.jfire.trade.ui.legalentity.search;
 
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditorFactory;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityPersonEditor;
 
@@ -46,14 +47,18 @@ extends AbstractDataFieldEditorFactory<TextDataField> {
 		return new String[] {LegalEntityPersonEditor.EDITORTYPE_FIELD_BASED_DISGUISED_LEGALENTITY};
 	}
 
-	@Override
-	public Class<? extends DataFieldEditor<TextDataField>> getDataFieldEditorClass() {
-		return LegalEntityFieldBasedTextDataFieldEditor.class;
-	}
+//	@Override
+//	public Class<? extends DataFieldEditor<TextDataField>> getDataFieldEditorClass() {
+//		return LegalEntityFieldBasedTextDataFieldEditor.class;
+//	}
 
 	@Override
 	public Class<TextDataField> getPropDataFieldType() {
 		return TextDataField.class;
 	}
 
+	@Override
+	public DataFieldEditor<TextDataField> createPropDataFieldEditor(IStruct struct, TextDataField data) {
+		return new LegalEntityFieldBasedTextDataFieldEditor(struct, data);
+	}
 }
