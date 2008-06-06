@@ -27,6 +27,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nTextBuffer;
@@ -35,6 +36,8 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -87,7 +90,7 @@ extends WizardHopPage
 	}
 
 	public SelectIssueLinkTypeWizardPage(Object attachedObject) {
-		super(SelectIssueLinkTypeWizardPage.class.getName());
+		super(SelectIssueLinkTypeWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueLinkTypeWizardPage.class));
 		this.attachedObject = attachedObject;
 
 		setTitle("Create/Attach issue");

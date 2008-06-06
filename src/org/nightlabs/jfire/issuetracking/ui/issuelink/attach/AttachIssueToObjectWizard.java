@@ -78,4 +78,9 @@ extends DynamicPathWizard
 	public Issue getSelectedIssue() {
 		return selectedIssue;
 	}
+	
+	@Override
+	public boolean canFinish() {
+		return getContainer().getCurrentPage().isPageComplete(); 
+	}
 }

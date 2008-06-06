@@ -5,8 +5,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 
 /**
@@ -18,8 +20,8 @@ extends WizardHopPage
 	private Issue issue;
 	private CreateIssueComposite issueCreateComposite;
 	
-	public CreateIssueWizardPage(Issue issue){
-		super(CreateIssueWizardPage.class.getName(), "New Issue");
+	public CreateIssueWizardPage(Issue issue) {
+		super(CreateIssueWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizardPage.class));
 		setDescription("Create a new issue.");
 		this.issue = issue;
 	}

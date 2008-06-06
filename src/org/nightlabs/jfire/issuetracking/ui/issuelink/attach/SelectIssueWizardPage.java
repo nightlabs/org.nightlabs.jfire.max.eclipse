@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
@@ -24,6 +25,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
@@ -76,7 +78,7 @@ extends WizardHopPage
 	}
 
 	public SelectIssueWizardPage(Object attachedObject) {
-		super(SelectIssueLinkTypeWizardPage.class.getName());
+		super(SelectIssueWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class));
 		setTitle("Create/Attach issue");
 
 		this.attachedObject = attachedObject;
