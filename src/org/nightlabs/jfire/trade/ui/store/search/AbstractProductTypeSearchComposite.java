@@ -176,9 +176,7 @@ extends XComposite
 					new QueryCollection<AbstractProductTypeQuery>(ProductType.class);
 				
 				AbstractProductTypeQuery query = createNewQuery();
-
 				configureQuery(query, searchStr);
-				
 				productTypeQueries.add(query);
 				
 				Set<ProductTypeID> productTypeIDs;
@@ -194,7 +192,6 @@ extends XComposite
 						public void run() {
 							productTypeTableComposite.setInput(productTypes);
 							if (productTypeTableComposite.getItemCount() == 1) {
-//								productTypeTableComposite.setSelectedElements(productTypes);
 								productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
 								productTypeTableComposite.setFocus();
 							}
@@ -269,21 +266,24 @@ extends XComposite
 				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
 		}
 
-		if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
-			query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
-
-		if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
-			query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
-
+//		if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
+//			query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
+//
+//		if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
+//			query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
+//
+//		if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
+//			query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
+		
 		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
 			query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
 
-		if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
-			query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
+//		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
+//			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
 
-		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
-			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
-
+		if (getSearchCriteriaComposite().getSelectedVendorID() != null)
+			query.setVendorID(getSearchCriteriaComposite().getSelectedVendorID());
+		
 		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
 		return query;
 	}	

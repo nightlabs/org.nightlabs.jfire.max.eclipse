@@ -19,14 +19,9 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
-import org.nightlabs.jfire.accounting.book.id.LocalAccountantDelegateID;
-import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.store.ProductTypeGroup;
-import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
-import org.nightlabs.jfire.store.deliver.id.DeliveryConfigurationID;
-import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
+import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
@@ -50,7 +45,7 @@ extends AbstractQueryFilterComposite<Q>
 		private Button browseButton;
 		
 		public ActiveTextComposite(Composite parent, String groupTitle,
-				SelectionListener selectionListener) 
+				SelectionListener selectionListener)
 		{
 			super(parent, SWT.NONE);
 			createComposite(this, groupTitle, selectionListener);
@@ -98,6 +93,7 @@ extends AbstractQueryFilterComposite<Q>
 			text.setEnabled(active);
 			browseButton.setEnabled(active);
 			activeButton.setSelection(active);
+			// TODO: when not active set field to null
 		}
 		
 		public void clear() {
@@ -113,12 +109,12 @@ extends AbstractQueryFilterComposite<Q>
 		}
 	}
 	
-	private ActiveTextComposite deliveryConfigurationComp;
-	private ActiveTextComposite localAccountDelegateComp;
+//	private ActiveTextComposite priceConfigComp;
+//	private ActiveTextComposite deliveryConfigurationComp;
+//	private ActiveTextComposite localAccountDelegateComp;
 	private ActiveTextComposite ownerComp;
-	private ActiveTextComposite priceConfigComp;
-	private ActiveTextComposite productTypeGroupComp;
-	
+//	private ActiveTextComposite productTypeGroupComp;
+	private ActiveTextComposite vendorComp;
 	private Class<Q> queryClass;
 	
 	/**
@@ -155,39 +151,40 @@ extends AbstractQueryFilterComposite<Q>
 		parent.setLayout(new GridLayout(3, true));
 		
 		createSaleAccessComp(parent);
-		deliveryConfigurationComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.deliveryConfigurationGroup.text"), deliveryConfigurationListener); //$NON-NLS-1$
-		priceConfigComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.priceConfigurationGroup.text"), innerPriceConfigListener); //$NON-NLS-1$
-		localAccountDelegateComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.accountConfigurationGroup.text"), localAccountDelegateListener); //$NON-NLS-1$
+//		deliveryConfigurationComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.deliveryConfigurationGroup.text"), deliveryConfigurationListener); //$NON-NLS-1$
+//		priceConfigComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.priceConfigurationGroup.text"), innerPriceConfigListener); //$NON-NLS-1$
+//		localAccountDelegateComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.accountConfigurationGroup.text"), localAccountDelegateListener); //$NON-NLS-1$
 		ownerComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), ownerListener); //$NON-NLS-1$
-		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), productTypeGroupListener);		 //$NON-NLS-1$
+//		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), productTypeGroupListener);		 //$NON-NLS-1$
+		vendorComp = new ActiveTextComposite(parent, "Vendor", vendorListener);
 	}
 
-	private SelectionListener deliveryConfigurationListener = new SelectionListener() {
-		public void widgetSelected(SelectionEvent e) {
-			// TODO: select delivery configuration and set selectedDeliveryConfigurationID
-		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	};
-
-	private SelectionListener innerPriceConfigListener = new SelectionListener() {
-		public void widgetSelected(SelectionEvent e) {
-			// TODO: select price configuration and set selectedPriceConfigID
-		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	};
-	
-	private SelectionListener localAccountDelegateListener = new SelectionListener() {
-		public void widgetSelected(SelectionEvent e) {
-			// TODO: select account configuration and set selectedLocalAccountDelegateID
-		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	};
+//	private SelectionListener deliveryConfigurationListener = new SelectionListener() {
+//		public void widgetSelected(SelectionEvent e) {
+//			// TODO: select delivery configuration and set selectedDeliveryConfigurationID
+//		}
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}
+//	};
+//
+//	private SelectionListener innerPriceConfigListener = new SelectionListener() {
+//		public void widgetSelected(SelectionEvent e) {
+//			// TODO: select price configuration and set selectedPriceConfigID
+//		}
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}
+//	};
+//	
+//	private SelectionListener localAccountDelegateListener = new SelectionListener() {
+//		public void widgetSelected(SelectionEvent e) {
+//			// TODO: select account configuration and set selectedLocalAccountDelegateID
+//		}
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}
+//	};
 
 	private SelectionListener ownerListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
@@ -202,9 +199,22 @@ extends AbstractQueryFilterComposite<Q>
 		}
 	};
 
-	private SelectionListener productTypeGroupListener = new SelectionListener() {
+//	private SelectionListener productTypeGroupListener = new SelectionListener() {
+//		public void widgetSelected(SelectionEvent e) {
+//			// TODO: select productType and set selectedLocalAccountDelegateID
+//		}
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}
+//	};
+
+	private SelectionListener vendorListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
-			// TODO: select productType and set selectedLocalAccountDelegateID
+			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", false);
+			if (legalEntity != null) {
+					selectedVendorID = (AnchorID) JDOHelper.getObjectId(legalEntity);
+					vendorComp.setText(legalEntity.getPerson().getDisplayName());
+			}
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -255,31 +265,36 @@ extends AbstractQueryFilterComposite<Q>
 		});
 	}
 
-	private DeliveryConfigurationID selectedDeliveryConfigurationID = null;
-	public DeliveryConfigurationID getSelectedDeliveryConfigurationID() {
-		return selectedDeliveryConfigurationID;
-	}
-	
-	private PriceConfigID selectedPriceConfigID = null;
-	public PriceConfigID getSelectedPriceConfigID() {
-		return selectedPriceConfigID;
-	}
+//	private DeliveryConfigurationID selectedDeliveryConfigurationID = null;
+//	public DeliveryConfigurationID getSelectedDeliveryConfigurationID() {
+//		return selectedDeliveryConfigurationID;
+//	}
+//	
+//	private PriceConfigID selectedPriceConfigID = null;
+//	public PriceConfigID getSelectedPriceConfigID() {
+//		return selectedPriceConfigID;
+//	}
+//	
+//	private LocalAccountantDelegateID selectedLocalAccountantDelegateID = null;
+//	public LocalAccountantDelegateID getSelectedLocalAccountantDelegateID() {
+//		return selectedLocalAccountantDelegateID;
+//	}
 	
 	private AnchorID selectedOwnerID = null;
 	public AnchorID getSelectedOwnerID() {
 		return selectedOwnerID;
 	}
 
-	private ProductTypeGroupID selectedProductTypeGroupID = null;
-	public ProductTypeGroupID getSelectedProductTypeGroupID() {
-		return selectedProductTypeGroupID;
+	private AnchorID selectedVendorID = null;
+	public AnchorID getSelectedVendorID() {
+		return selectedVendorID;
 	}
 	
-	private LocalAccountantDelegateID selectedLocalAccountantDelegateID = null;
-	public LocalAccountantDelegateID getSelectedLocalAccountantDelegateID() {
-		return selectedLocalAccountantDelegateID;
-	}
-
+//	private ProductTypeGroupID selectedProductTypeGroupID = null;
+//	public ProductTypeGroupID getSelectedProductTypeGroupID() {
+//		return selectedProductTypeGroupID;
+//	}
+	
 	private SaleAccessState selectedSaleAccessState = SaleAccessState.SALEABLE;
 	public SaleAccessState getSelectedSaleAccessState() {
 		return selectedSaleAccessState;
@@ -290,11 +305,12 @@ extends AbstractQueryFilterComposite<Q>
 	 */
 	@Override
 	protected void resetSearchQueryValues(Q query) {
-		query.setDeliveryConfigurationID(selectedDeliveryConfigurationID);
-		query.setInnerPriceConfigID(selectedPriceConfigID);
-		query.setLocalAccountantDelegateID(selectedLocalAccountantDelegateID);
+//		query.setDeliveryConfigurationID(selectedDeliveryConfigurationID);
+//		query.setInnerPriceConfigID(selectedPriceConfigID);
+//		query.setLocalAccountantDelegateID(selectedLocalAccountantDelegateID);
 		query.setOwnerID(selectedOwnerID);
-		query.setProductTypeGroupID(selectedProductTypeGroupID);
+//		query.setProductTypeGroupID(selectedProductTypeGroupID);
+		query.setVendorID(selectedVendorID);
 		applySaleAccessState(selectedSaleAccessState, query);
 	}
 
@@ -304,28 +320,31 @@ extends AbstractQueryFilterComposite<Q>
 	@Override
 	protected void unsetSearchQueryValues(Q query) 
 	{
-		if (!deliveryConfigurationComp.isActive()) {
-			selectedDeliveryConfigurationID = null;
-		}
-		if (!localAccountDelegateComp.isActive()) {
-			selectedLocalAccountantDelegateID = null;
-		}
-		if (!priceConfigComp.isActive()) {
-			selectedPriceConfigID = null;			
-		}
-		if (!productTypeGroupComp.isActive()) {
-			selectedProductTypeGroupID = null;			
-		}
+//		if (!deliveryConfigurationComp.isActive()) {
+//			selectedDeliveryConfigurationID = null;
+//		}
+//		if (!localAccountDelegateComp.isActive()) {
+//			selectedLocalAccountantDelegateID = null;
+//		}
+//		if (!priceConfigComp.isActive()) {
+//			selectedPriceConfigID = null;			
+//		}
+//		if (!productTypeGroupComp.isActive()) {
+//			selectedProductTypeGroupID = null;			
+//		}
 		if (!ownerComp.isActive()) {
 			selectedOwnerID = null;
 		}
+		if (!vendorComp.isActive()) {
+			selectedVendorID = null;
+		}		
 		if (!saleAccessStateButton.getSelection()) {
 			selectedSaleAccessState = SaleAccessState.SALEABLE;
 		}		
 		
-		query.setDeliveryConfigurationID(null);
-		query.setInnerPriceConfigID(null);
-		query.setLocalAccountantDelegateID(null);
+//		query.setDeliveryConfigurationID(null);
+//		query.setInnerPriceConfigID(null);
+//		query.setLocalAccountantDelegateID(null);
 		query.setOwnerID(null);
 		query.setProductTypeGroupID(null);
 		applySaleAccessState(SaleAccessState.SALEABLE, query);
@@ -339,26 +358,30 @@ extends AbstractQueryFilterComposite<Q>
 	{
 		if (event.getChangedQuery() == null)
 		{
-			selectedDeliveryConfigurationID = null;
-			deliveryConfigurationComp.clear();
-			setSearchSectionActive(deliveryConfigurationComp.getActiveButton(), false);
+//			selectedDeliveryConfigurationID = null;
+//			deliveryConfigurationComp.clear();
+//			setSearchSectionActive(deliveryConfigurationComp.getActiveButton(), false);
+//			
+//			selectedLocalAccountantDelegateID = null;
+//			localAccountDelegateComp.clear();
+//			setSearchSectionActive(localAccountDelegateComp.getActiveButton(), false);
+//
+//			selectedPriceConfigID = null;
+//			priceConfigComp.clear();
+//			setSearchSectionActive(priceConfigComp.getActiveButton(), false);
 			
-			selectedLocalAccountantDelegateID = null;
-			localAccountDelegateComp.clear();
-			setSearchSectionActive(localAccountDelegateComp.getActiveButton(), false);
-
 			selectedOwnerID = null;
 			ownerComp.clear();
 			setSearchSectionActive(ownerComp.getActiveButton(), false);
 			
-			selectedPriceConfigID = null;
-			priceConfigComp.clear();
-			setSearchSectionActive(priceConfigComp.getActiveButton(), false);
+//			selectedProductTypeGroupID = null;
+//			productTypeGroupComp.clear();
+//			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
 
-			selectedProductTypeGroupID = null;
-			productTypeGroupComp.clear();
-			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
-
+			selectedVendorID = null;
+			vendorComp.clear();
+			setSearchSectionActive(vendorComp.getActiveButton(), false);
+			
 			selectedSaleAccessState = SaleAccessState.SALEABLE;
 			stateCombo.selectElement(selectedSaleAccessState);
 			setSearchSectionActive(saleAccessStateButton, false);
@@ -368,37 +391,6 @@ extends AbstractQueryFilterComposite<Q>
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
 				boolean active = isValueIntentionallySet();
-				if (AbstractProductTypeQuery.PROPERTY_DELIVERY_CONFIGURATION_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					DeliveryConfigurationID deliveryConfigurationID = (DeliveryConfigurationID) changedField.getNewValue();
-					if (deliveryConfigurationID == null) {
-						deliveryConfigurationComp.clear();
-					}
-					else {
-						// TODO get name from DAO and set it as text
-						deliveryConfigurationComp.setText(deliveryConfigurationID.toString());
-					}
-					active |= deliveryConfigurationID != null;
-					deliveryConfigurationComp.setActive(active);
-					setSearchSectionActive(deliveryConfigurationComp.getActiveButton(), active);					
-				}
-				
-				if (AbstractProductTypeQuery.PROPERTY_INNER_PRICE_CONFIG_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					PriceConfigID innerPriceConfigID = (PriceConfigID) changedField.getNewValue();
-					if (innerPriceConfigID == null) {
-						priceConfigComp.clear();
-					}
-					else {
-						// TODO get name from DAO and set it as text						
-						priceConfigComp.setText(innerPriceConfigID.toString());
-					}
-					active |= innerPriceConfigID != null;
-					priceConfigComp.setActive(active);
-					setSearchSectionActive(priceConfigComp.getActiveButton(), active);					
-				}
 
 				if (AbstractProductTypeQuery.PROPERTY_OWNER_ID.equals(
 						changedField.getPropertyName())) 
@@ -419,40 +411,44 @@ extends AbstractQueryFilterComposite<Q>
 					ownerComp.setActive(active);
 					setSearchSectionActive(ownerComp.getActiveButton(), active);					
 				}
-				
-				if (AbstractProductTypeQuery.PROPERTY_LOCAL_ACCOUNTANT_DELEGATE_ID.equals(
+
+				if (VendorDependentQuery.PROPERTY_VENDOR_ID.equals(
 						changedField.getPropertyName())) 
 				{
-					LocalAccountantDelegateID localAccountantDelegateID = (LocalAccountantDelegateID) changedField.getNewValue();
-					if (localAccountantDelegateID == null) {
-						localAccountDelegateComp.clear();
+					AnchorID vendorID = (AnchorID) changedField.getNewValue();
+					if (vendorID == null) {
+						vendorComp.clear();
 					}
 					else {
-						// TODO get name from DAO and set it as text						
-						localAccountDelegateComp.setText(localAccountantDelegateID.toString());
+						final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
+								vendorID,
+								new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							);					
+						vendorComp.setText(legalEntity.getPerson().getDisplayName());
 					}
-					active |= localAccountantDelegateID != null;
-					localAccountDelegateComp.setActive(active);
-					setSearchSectionActive(localAccountDelegateComp.getActiveButton(), active);					
+					active |= vendorID != null;
+					vendorComp.setActive(active);
+					setSearchSectionActive(vendorComp.getActiveButton(), active);					
 				}
 				
-				if (AbstractProductTypeQuery.PROPERTY_PRODUCTTYPE_GROUP_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
-					if (productTypeGroupID == null) {
-						productTypeGroupComp.clear();
-					}
-					else {
-						ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
-								productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-						productTypeGroupComp.setText(productTypeGroup.getName().getText());
-					}
-					active |= productTypeGroupID != null;
-					productTypeGroupComp.setActive(active);
-					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
-				}
+//				if (AbstractProductTypeQuery.PROPERTY_PRODUCTTYPE_GROUP_ID.equals(
+//						changedField.getPropertyName())) 
+//				{
+//					ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
+//					if (productTypeGroupID == null) {
+//						productTypeGroupComp.clear();
+//					}
+//					else {
+//						ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
+//								productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME}, 
+//								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//						productTypeGroupComp.setText(productTypeGroup.getName().getText());
+//					}
+//					active |= productTypeGroupID != null;
+//					productTypeGroupComp.setActive(active);
+//					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
+//				}
 				
 				if (AbstractProductTypeQuery.PROPERTY_CLOSED.equals(
 						changedField.getPropertyName())) 
@@ -489,6 +485,54 @@ extends AbstractQueryFilterComposite<Q>
 						stateCombo.selectElement(SaleAccessState.SALEABLE);
 					}
 				}				
+
+//				if (AbstractProductTypeQuery.PROPERTY_LOCAL_ACCOUNTANT_DELEGATE_ID.equals(
+//						changedField.getPropertyName())) 
+//				{
+//					LocalAccountantDelegateID localAccountantDelegateID = (LocalAccountantDelegateID) changedField.getNewValue();
+//					if (localAccountantDelegateID == null) {
+//						localAccountDelegateComp.clear();
+//					}
+//					else {
+//						// TODO get name from DAO and set it as text						
+//						localAccountDelegateComp.setText(localAccountantDelegateID.toString());
+//					}
+//					active |= localAccountantDelegateID != null;
+//					localAccountDelegateComp.setActive(active);
+//					setSearchSectionActive(localAccountDelegateComp.getActiveButton(), active);					
+//				}
+//				
+//				if (AbstractProductTypeQuery.PROPERTY_DELIVERY_CONFIGURATION_ID.equals(
+//						changedField.getPropertyName())) 
+//				{
+//					DeliveryConfigurationID deliveryConfigurationID = (DeliveryConfigurationID) changedField.getNewValue();
+//					if (deliveryConfigurationID == null) {
+//						deliveryConfigurationComp.clear();
+//					}
+//					else {
+//						// TODO get name from DAO and set it as text
+//						deliveryConfigurationComp.setText(deliveryConfigurationID.toString());
+//					}
+//					active |= deliveryConfigurationID != null;
+//					deliveryConfigurationComp.setActive(active);
+//					setSearchSectionActive(deliveryConfigurationComp.getActiveButton(), active);					
+//				}
+//				
+//				if (AbstractProductTypeQuery.PROPERTY_INNER_PRICE_CONFIG_ID.equals(
+//						changedField.getPropertyName())) 
+//				{
+//					PriceConfigID innerPriceConfigID = (PriceConfigID) changedField.getNewValue();
+//					if (innerPriceConfigID == null) {
+//						priceConfigComp.clear();
+//					}
+//					else {
+//						// TODO get name from DAO and set it as text						
+//						priceConfigComp.setText(innerPriceConfigID.toString());
+//					}
+//					active |= innerPriceConfigID != null;
+//					priceConfigComp.setActive(active);
+//					setSearchSectionActive(priceConfigComp.getActiveButton(), active);					
+//				}
 				
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null

@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
@@ -67,6 +68,8 @@ import org.nightlabs.progress.SubProgressMonitor;
 public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
+	private static Logger logger = Logger.getLogger(AbstractProductTypeQuickListFilter.class);
+	
 	public static String[] FETCH_GROUPS_QUERY_STORE = new String[] {
 		FetchPlan.DEFAULT,
 		BaseQueryStore.FETCH_GROUP_NAME,
@@ -81,7 +84,6 @@ implements IProductTypeQuickListFilter
 	
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
-//	private VendorDependentQuery query;
 	private QueryCollection<VendorDependentQuery> queryCollection;
 	
 	/**
@@ -211,6 +213,7 @@ implements IProductTypeQuickListFilter
 			return false; 
 	}
 	
+	@Override
 	public void search(ProgressMonitor monitor, boolean inJob) {
 		if (inJob) {
 			new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.search")) {  //$NON-NLS-1$
@@ -287,7 +290,7 @@ implements IProductTypeQuickListFilter
 	@Override
 	public QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor) 
 	{
-		monitor.beginTask("fetch query", 100);
+		monitor.beginTask("Load query", 100);
 		if (queryCollection == null) 
 		{
 			BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
@@ -309,8 +312,14 @@ implements IProductTypeQuickListFilter
 			}
 			if (queryCollection == null && defaultQueryStore != null) {
 				QueryCollection qc = defaultQueryStore.getQueryCollection();
-				if (qc != null && !qc.isEmpty()) {
+				if (qc != null) {
 					queryCollection = qc;
+					if (queryCollection.isEmpty()) {
+
+						VendorDependentQuery query = createQuery();
+						configureQuery(query);
+						queryCollection.add(query);
+					}
 				}
 			}
 			if (queryCollection == null) {
@@ -319,6 +328,18 @@ implements IProductTypeQuickListFilter
 		}
 		monitor.done();
 		return queryCollection;
+	}
+
+	@Override
+	public void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection) {
+		if (queryCollection == null)
+			throw new IllegalArgumentException("QueryCollection must not be null!");
+
+		if (!queryCollection.getResultClass().equals(getQueryResultClass())) {
+			throw new IllegalArgumentException("The resultClass of the given queryCollection is "+queryCollection.getResultClass()+" but it should be "+getQueryResultClass());
+		}
+		
+		this.queryCollection = queryCollection;
 	}	
 	
 }

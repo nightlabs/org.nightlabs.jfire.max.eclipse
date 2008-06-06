@@ -107,29 +107,18 @@ extends ISelectionHandler
 	 */
 	Set<Class<? extends Object>> getClasses();
 
-//	/**
-//	 * Get the VendorDependentQuery used by this <code>IProductTypeQuickListFilter</code>.
-//	 *
-//	 * @return the <code>AbstractProductTypeQuery</code>
-//	 */
-//	VendorDependentQuery getQuery(ProgressMonitor monitor);
-	/**
-	 * Get the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
-	 *
-	 * @return the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
-	 */
-	QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor);
-
 	/**
 	 * Returns the Class of the resultType for the Query returned by {@link #getQuery()} 
 	 * @return the Class of the resultType for the Query returned by {@link #getQuery()}
 	 */
 	Class<?> getQueryResultClass();
 	
-//	/**
-//	 * 
-//	 * @return the subclass of VendorDependentQuery this quicklist filter uses for
-//	 * searching, the here created instance is also returned by {@link #getQuery()} 
-//	 */
-//	VendorDependentQuery createQuery();
+	/**
+	 * Get the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
+	 * @return the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
+	 */
+	QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor);
+	
+	void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection);
+	
 }
