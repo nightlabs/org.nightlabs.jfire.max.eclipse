@@ -170,6 +170,11 @@ extends WizardHopPage
 			return false;
 	}
 
+//	@Override
+//	public void onFinish() {
+//		selectedIssue.createIssueLink(issueLinkType, linkedObject)
+//	}
+	
 	private Issue newIssue;
 	private CreateIssueWizardPage createIssueWizardPage;
 	@Override
@@ -183,8 +188,15 @@ extends WizardHopPage
 		return super.canBeLastPage();
 	}
 	
-	public Issue getSelectedIssue() {
-		return selectedIssue;
+	public Issue getIssue() {
+		switch (actionForIssue) {
+		case createNewIssue:
+			return newIssue;
+		case selectExistingIssue:
+			return selectedIssue;
+		}
+		
+		return null;
 	}
 	
 	private IssueLinkType attachedObjectLinkType;
