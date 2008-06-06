@@ -64,11 +64,9 @@ extends WizardHopPage
 		switch (actionForIssue) {
 			case createNewIssue:
 				createNewIssueRadio.setSelection(true);
-				issueEntryListViewerComposite.setEnabled(false);
 				break;
 			case selectExistingIssue:
 				selectExistingIssueRadio.setSelection(true);
-				issueEntryListViewerComposite.setEnabled(true);
 				break;
 			default:
 				throw new IllegalStateException("Unknown actionForIssue: " + actionForIssue);
@@ -126,6 +124,7 @@ extends WizardHopPage
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						selectedIssue = issueEntryListViewer.getIssueTable().getFirstSelectedElement();
+						setIssueAction(ActionForIssue.selectExistingIssue);
 						getContainer().updateButtons();
 					}
 				});
@@ -176,6 +175,12 @@ extends WizardHopPage
 	@Override
 	public boolean canFlipToNextPage() {
 		return actionForIssue == ActionForIssue.createNewIssue;
+	}
+	
+	@Override
+	public boolean canBeLastPage() {
+		// TODO Auto-generated method stub
+		return super.canBeLastPage();
 	}
 	
 	public Issue getSelectedIssue() {

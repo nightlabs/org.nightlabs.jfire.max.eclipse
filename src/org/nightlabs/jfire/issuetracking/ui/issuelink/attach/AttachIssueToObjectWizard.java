@@ -48,8 +48,7 @@ extends DynamicPathWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-					
-//					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getIssueLinkType();
+					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getIssueLinkType();
 //					Issue selectedIssue = selectIssuePage.getSelectedIssue();
 //					Issue completedIssue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(selectedIssue), FETCH_GROUP,  NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					
