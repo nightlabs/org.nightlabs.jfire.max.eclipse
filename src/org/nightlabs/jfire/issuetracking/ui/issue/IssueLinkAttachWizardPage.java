@@ -34,7 +34,7 @@ import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
+import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueGeneralWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -181,8 +181,8 @@ extends WizardHopPage
 		issueEntryViewer.getIssueTable().setEnabled(!isCreateNew);
 		
 		if (isCreateNew) {
-			createNewPage = new CreateIssueWizardPage(null);
-			getWizardHop().addHopPage(new CreateIssueWizardPage(null));
+			createNewPage = new CreateIssueGeneralWizardPage(null);
+			getWizardHop().addHopPage(new CreateIssueGeneralWizardPage(null));
 		} else {
 			getWizardHop().removeAllHopPages();
 		}

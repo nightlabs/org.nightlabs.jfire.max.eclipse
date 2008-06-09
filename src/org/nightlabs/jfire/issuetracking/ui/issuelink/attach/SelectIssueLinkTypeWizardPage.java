@@ -37,7 +37,6 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 

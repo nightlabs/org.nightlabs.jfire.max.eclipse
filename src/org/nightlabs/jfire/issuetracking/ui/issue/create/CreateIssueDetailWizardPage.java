@@ -53,7 +53,7 @@ extends WizardHopPage
 	private Issue issue;
 
 	public CreateIssueDetailWizardPage(Issue issue) {
-		super(CreateIssueDetailWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizardPage.class));
+		super(CreateIssueDetailWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueDetailWizardPage.class));
 		setDescription("Create a new issue.");
 		this.issue = issue;
 	}

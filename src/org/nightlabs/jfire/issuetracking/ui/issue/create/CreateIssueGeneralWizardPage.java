@@ -81,7 +81,7 @@ extends WizardHopPage
 
 
 	public CreateIssueGeneralWizardPage(Issue issue) {
-		super(CreateIssueGeneralWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizardPage.class));
+		super(CreateIssueGeneralWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueGeneralWizardPage.class));
 		setDescription("Create a new issue.");
 		this.issue = issue;
 	}

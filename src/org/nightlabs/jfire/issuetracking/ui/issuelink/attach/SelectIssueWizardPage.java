@@ -27,7 +27,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizardPage;
+import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueGeneralWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
@@ -155,9 +155,9 @@ extends WizardHopPage
 				case createNewIssue:
 					if (newIssue == null) {
 						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-						createIssueWizardPage = new CreateIssueWizardPage(newIssue);
-						createIssueWizardPage.setIssueLinkTableItem(new IssueLinkTableItem((ObjectID)JDOHelper.getObjectId(attachedObject), attachedObjectLinkType));
-						getWizardHop().addHopPage(createIssueWizardPage);
+						createIssueGeneralWizardPage = new CreateIssueGeneralWizardPage(newIssue);
+//						createIssueGeneralWizardPage.setIssueLinkTableItem(new IssueLinkTableItem((ObjectID)JDOHelper.getObjectId(attachedObject), attachedObjectLinkType));
+						getWizardHop().addHopPage(createIssueGeneralWizardPage);
 					}
 					return false;
 				case selectExistingIssue:
@@ -176,7 +176,7 @@ extends WizardHopPage
 //	}
 	
 	private Issue newIssue;
-	private CreateIssueWizardPage createIssueWizardPage;
+	private CreateIssueGeneralWizardPage createIssueGeneralWizardPage;
 	@Override
 	public boolean canFlipToNextPage() {
 		return actionForIssue == ActionForIssue.createNewIssue;
