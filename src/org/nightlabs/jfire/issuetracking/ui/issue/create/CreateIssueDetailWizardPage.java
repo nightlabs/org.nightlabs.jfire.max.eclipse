@@ -216,13 +216,19 @@ extends WizardHopPage
 	
 	@Override
 	public boolean isPageComplete() {
+		boolean result = true;
+		setErrorMessage(null);
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
 			setErrorMessage("Subject should not be null.");
-			return false;
+			result = false;
 		}
 		
-		setErrorMessage(null);
-		return true;
+		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) {
+			setErrorMessage("Description should not be null.");
+			result = false;
+		}
+		
+		return result;
 	}
 	
 	public I18nTextEditorMultiLine getDescriptionText() {
