@@ -89,14 +89,11 @@ extends WizardHopPage
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
-		mainComposite.getGridLayout().numColumns = 1;
+		mainComposite.getGridLayout().numColumns = 6;
 		
-		XComposite propertyComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
-		propertyComposite.getGridLayout().numColumns = 6;
-		
-		issueTypeLbl = new Label(propertyComposite, SWT.NONE);
+		issueTypeLbl = new Label(mainComposite, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
-		issueTypeCombo = new XComboComposite<IssueType>(propertyComposite, SWT.NONE, issueLabelProvider);
+		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE, issueLabelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
@@ -118,9 +115,9 @@ extends WizardHopPage
 			}
 		});
 
-		issueSeverityLbl = new Label(propertyComposite, SWT.NONE);
+		issueSeverityLbl = new Label(mainComposite, SWT.NONE);
 		issueSeverityLbl.setText("Severity: ");
-		issueSeverityCombo = new XComboComposite<IssueSeverityType>(propertyComposite, SWT.NONE, issueLabelProvider);
+		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE, issueLabelProvider);
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
@@ -128,9 +125,9 @@ extends WizardHopPage
 			}
 		});
 
-		issuePriorityLbl = new Label(propertyComposite, SWT.NONE);
+		issuePriorityLbl = new Label(mainComposite, SWT.NONE);
 		issuePriorityLbl.setText("Priority: ");
-		issuePriorityCombo = new XComboComposite<IssuePriority>(propertyComposite, SWT.NONE, issueLabelProvider);
+		issuePriorityCombo = new XComboComposite<IssuePriority>(mainComposite, SWT.NONE, issueLabelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
@@ -149,6 +146,10 @@ extends WizardHopPage
 				getContainer().updateButtons();
 			}
 		});
+		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 5;
+		subjectText.setLayoutData(gridData);
 
 		descriptionLabel = new Label(mainComposite, SWT.NONE);
 		descriptionLabel.setText("Description: ");
@@ -162,8 +163,9 @@ extends WizardHopPage
 			}
 		});
 
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.minimumHeight = 100;
+		gridData.horizontalSpan = 6;
 		descriptionText.setLayoutData(gridData);
 
 		Job loadJob = new Job("Loading Issue Properties....") {
