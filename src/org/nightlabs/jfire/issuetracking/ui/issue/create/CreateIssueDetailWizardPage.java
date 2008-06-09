@@ -81,17 +81,17 @@ extends WizardHopPage
 
 
 	public CreateIssueDetailWizardPage(Issue issue) {
-		super(CreateIssueDetailWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueDetailWizardPage.class));
+		super(CreateIssueDetailWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class));
 		setDescription("Enter subject & description for the issue.");
 		this.issue = issue;
 	}
 
 	@Override
 	public Control createPageContents(Composite parent) {
-		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 1;
-
-		XComposite propertyComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
+		
+		XComposite propertyComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		propertyComposite.getGridLayout().numColumns = 6;
 		
 		issueTypeLbl = new Label(propertyComposite, SWT.NONE);
@@ -153,7 +153,7 @@ extends WizardHopPage
 		descriptionLabel = new Label(mainComposite, SWT.NONE);
 		descriptionLabel.setText("Description: ");
 
-		descriptionText = new I18nTextEditorMultiLine(mainComposite);
+		descriptionText = new I18nTextEditorMultiLine(mainComposite, subjectText.getLanguageChooser());
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
 		descriptionText.addModifyListener(new ModifyListener() {
 			@Override

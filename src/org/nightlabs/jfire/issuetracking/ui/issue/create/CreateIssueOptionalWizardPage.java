@@ -43,7 +43,7 @@ extends WizardHopPage
 	private Issue issue;
 
 	public CreateIssueOptionalWizardPage(Issue issue) {
-		super(CreateIssueOptionalWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueOptionalWizardPage.class));
+		super(CreateIssueOptionalWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class));
 		setDescription("Add Issue Link & File Attachment");
 		this.issue = issue;
 	}
