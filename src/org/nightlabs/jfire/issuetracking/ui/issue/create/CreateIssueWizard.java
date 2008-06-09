@@ -11,14 +11,15 @@ import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -31,8 +32,8 @@ extends DynamicPathWizard
 	private ObjectID linkedObjectID;
 
 	private CreateIssueGeneralWizardPage issueCreateGeneralWizardPage;
-	private CreateIssueDetailWizardPage issueCreateDetailWizardPage;
-	
+	private CreateIssueOptionalWizardPage issueCreateDetailWizardPage;
+
 	/**
 	 * Launch the wizard with a linkedObject for which to immediately create a new {@link IssueLink}.
 	 *
@@ -42,6 +43,7 @@ extends DynamicPathWizard
 	{
 		setWindowTitle("Create new issue");	
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
 	}
 
 	/**
@@ -50,27 +52,17 @@ extends DynamicPathWizard
 	public void addPages() {
 		issueCreateGeneralWizardPage = new CreateIssueGeneralWizardPage(newIssue);
 		addPage(issueCreateGeneralWizardPage);
-		
-		issueCreateDetailWizardPage = new CreateIssueDetailWizardPage(newIssue);
+
+		issueCreateDetailWizardPage = new CreateIssueOptionalWizardPage(newIssue);
 		addPage(issueCreateDetailWizardPage);
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
-		FetchPlan.DEFAULT,
-		Issue.FETCH_GROUP_ISSUE_LINKS,
-		IssueLinkType.FETCH_GROUP_NAME,
-		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
-		Issue.FETCH_GROUP_ISSUE_REPORTER,
-		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
-		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT};
-	
+		FetchPlan.DEFAULT
+	};
+
 	@Override
 	public boolean performFinish() {
-		// this should be done on a worker thread! Use the Wizard.getContainer().run(...) method!
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
@@ -88,7 +80,7 @@ extends DynamicPathWizard
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean canFinish() {
 		return issueCreateGeneralWizardPage.isPageComplete();

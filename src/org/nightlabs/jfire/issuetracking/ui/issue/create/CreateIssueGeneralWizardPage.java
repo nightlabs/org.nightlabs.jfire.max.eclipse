@@ -81,8 +81,8 @@ extends WizardHopPage
 
 
 	public CreateIssueGeneralWizardPage(Issue issue) {
-		super(CreateIssueGeneralWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueGeneralWizardPage.class));
-		setDescription("Create a new issue.");
+		super(CreateIssueGeneralWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueGeneralWizardPage.class));
+		setDescription("Enter subject & description for the issue.");
 		this.issue = issue;
 	}
 
@@ -220,6 +220,8 @@ extends WizardHopPage
 			setErrorMessage("Subject should not be null.");
 			return false;
 		}
+		
+		setErrorMessage(null);
 		return true;
 	}
 	
