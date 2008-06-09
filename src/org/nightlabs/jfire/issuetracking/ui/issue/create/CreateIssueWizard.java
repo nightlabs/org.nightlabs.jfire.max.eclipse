@@ -31,7 +31,7 @@ extends DynamicPathWizard
 	private Issue newIssue;
 	private ObjectID linkedObjectID;
 
-	private CreateIssueGeneralWizardPage issueCreateGeneralWizardPage;
+	private CreateIssueDetailWizardPage issueCreateGeneralWizardPage;
 	private CreateIssueOptionalWizardPage issueCreateDetailWizardPage;
 
 	/**
@@ -50,7 +50,7 @@ extends DynamicPathWizard
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		issueCreateGeneralWizardPage = new CreateIssueGeneralWizardPage(newIssue);
+		issueCreateGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
 		addPage(issueCreateGeneralWizardPage);
 
 		issueCreateDetailWizardPage = new CreateIssueOptionalWizardPage(newIssue);
