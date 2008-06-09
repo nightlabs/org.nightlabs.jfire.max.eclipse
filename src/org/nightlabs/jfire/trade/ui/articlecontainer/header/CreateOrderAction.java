@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.header;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
@@ -40,11 +41,12 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.id.CurrencyID;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -52,6 +54,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorI
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -75,11 +78,18 @@ public class CreateOrderAction extends Action
 		Job createOrderJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction.job.creatingOrder")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				monitor.beginTask("Creating order", 100);
 				try {
-					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//					TODO where do we get the currency from? User prefs?
+					TradeConfigModule tradeConfigModule = ConfigUtil.getUserCfMod(
+							TradeConfigModule.class,
+							new String[] {
+								FetchPlan.DEFAULT,
+								TradeConfigModule.FETCH_GROUP_CURRENCY,
+							},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new SubProgressMonitor(monitor, 30));
+
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(headerTreeComposite.getPartner());
-//					FIXME IDPREFIX (next line) should be asked from user if necessary!
 
 					HeaderTreeNode selectedNode  = (HeaderTreeNode)headerTreeComposite.getSelectedNode();
 					// define a sale order 
@@ -92,18 +102,23 @@ public class CreateOrderAction extends Action
 						selectedNode = (HeaderTreeNode) selectedNode.getParent();
 					}
 
+					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+
 					final Order order;
 
+//					FIXME IDPREFIX should be asked from user if necessary!
 					if(SaleOrder)
 						order= tm.createSaleOrder(
-								customerID, null, CurrencyID.create("EUR"), //$NON-NLS-1$
+								customerID, null, tradeConfigModule.getCurrencyID(),
 								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
 								OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					else
 						order= tm.createPurchaseOrder(
-								customerID, null, CurrencyID.create("EUR"), //$NON-NLS-1$
+								customerID, null, tradeConfigModule.getCurrencyID(),
 								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
 								OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
+					monitor.worked(70);
 
 //					OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
 //					tm.createSegment(orderID, null, null);
@@ -119,6 +134,8 @@ public class CreateOrderAction extends Action
 					});
 				} catch (Exception x) {
 					throw new RuntimeException(x);
+				} finally {
+					monitor.done();
 				}
 
 				return Status.OK_STATUS;

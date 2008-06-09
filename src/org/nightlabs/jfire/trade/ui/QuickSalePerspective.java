@@ -43,9 +43,16 @@ implements IPerspectiveFactory
 	private static IPerspectiveListener4 quickSalePerspectiveListener = new PerspectiveAdapter()
 	{
 		@Override
-		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+		public void perspectiveActivated(IWorkbenchPage page, final IPerspectiveDescriptor perspective) {
 			logger.info("perspectiveActivated "+perspective.getId()); //$NON-NLS-1$
-			checkOrderOpen(perspective.getId());
+			// perform "checkOrderOpen" in the next event loop cycle, in order to ensure that the perspective switch
+			// is completely finished. Otherwise, the page.getActiveEditor() will still return the last active editor
+			// (from the last page). Marco.
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					checkOrderOpen(perspective.getId());
+				}
+			});
 		}
 		@Override
 		public void perspectiveOpened(IWorkbenchPage page, IPerspectiveDescriptor perspective) {

@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
@@ -24,11 +25,13 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
@@ -169,13 +172,21 @@ extends XComposite
 
 	public static GeneralEditorInputOrder createEditorInput()
 	{
-		// FIXME: add method in server which holds an order
 		TradeManager tm;
 		try {
 			try {
 				Login.getLogin();
+
+				TradeConfigModule tradeConfigModule = ConfigUtil.getUserCfMod(
+						TradeConfigModule.class,
+						new String[] {
+							FetchPlan.DEFAULT,
+							TradeConfigModule.FETCH_GROUP_CURRENCY,
+						},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()); // TODO async!
+
 				tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			 TODO where do we get the currency from? User prefs?
 					// by default get the customerID of the anonymous customer
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(
 						LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(
@@ -186,7 +197,7 @@ extends XComposite
 					OrderID orderID = tm.createQuickSaleWorkOrder(
 							customerID,
 							null,
-							"EUR", //$NON-NLS-1$
+							tradeConfigModule.getCurrencyID(),
 							new SegmentTypeID[] {null}); // null here is a shortcut for default segment type
 					return new GeneralEditorInputOrder(orderID);
 			} catch (LoginException le) {
@@ -196,7 +207,7 @@ extends XComposite
 			throw new RuntimeException(t);
 		}
 	}
-	
+
 	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
 		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
 			if (buttonComp != null && !buttonComp.isDisposed())
