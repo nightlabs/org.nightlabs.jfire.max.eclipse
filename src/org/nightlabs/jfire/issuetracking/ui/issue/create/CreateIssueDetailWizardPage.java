@@ -40,7 +40,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class CreateIssueGeneralWizardPage 
+public class CreateIssueDetailWizardPage 
 extends WizardHopPage
 {
 	//GUI
@@ -80,8 +80,8 @@ extends WizardHopPage
 	};
 
 
-	public CreateIssueGeneralWizardPage(Issue issue) {
-		super(CreateIssueGeneralWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueGeneralWizardPage.class));
+	public CreateIssueDetailWizardPage(Issue issue) {
+		super(CreateIssueDetailWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueDetailWizardPage.class));
 		setDescription("Enter subject & description for the issue.");
 		this.issue = issue;
 	}
