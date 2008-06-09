@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
-import org.nightlabs.jfire.base.admin.ui.editor.authority.InheritedAuthorityResolver;
+import org.nightlabs.jfire.base.admin.ui.editor.authority.InheritedSecuringAuthorityResolver;
 import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.progress.ProgressMonitor;
@@ -27,10 +27,10 @@ extends AbstractAuthoritySection
 	}
 
 	@Override
-	protected InheritedAuthorityResolver createInheritedAuthorityResolver() {
-		return new InheritedAuthorityResolver() {
+	protected InheritedSecuringAuthorityResolver createInheritedSecuringAuthorityResolver() {
+		return new InheritedSecuringAuthorityResolver() {
 			@Override
-			public AuthorityID getInheritedAuthorityID(ProgressMonitor monitor) {
+			public AuthorityID getInheritedSecuringAuthorityID(ProgressMonitor monitor) {
 				if (productType.getExtendedProductTypeID() == null)
 					return null;
 
