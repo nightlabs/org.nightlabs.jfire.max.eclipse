@@ -118,6 +118,7 @@ extends WizardHopPage
 		issueSeverityLbl = new Label(mainComposite, SWT.NONE);
 		issueSeverityLbl.setText("Severity: ");
 		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE, issueLabelProvider);
+		
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
