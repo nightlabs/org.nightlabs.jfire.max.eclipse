@@ -30,7 +30,8 @@ extends DynamicPathWizard
 	private Issue newIssue;
 	private ObjectID linkedObjectID;
 
-	private CreateIssueWizardPage issueCreateWizardPage;
+	private CreateIssueGeneralWizardPage issueCreateGeneralWizardPage;
+	private CreateIssueDetailWizardPage issueCreateDetailWizardPage;
 	
 	/**
 	 * Launch the wizard with a linkedObject for which to immediately create a new {@link IssueLink}.
@@ -47,8 +48,11 @@ extends DynamicPathWizard
 	 * Adding the page to the wizard.
 	 */
 	public void addPages() {
-		issueCreateWizardPage = new CreateIssueWizardPage(newIssue);
-		addPage(issueCreateWizardPage);
+		issueCreateGeneralWizardPage = new CreateIssueGeneralWizardPage(newIssue);
+		addPage(issueCreateGeneralWizardPage);
+		
+		issueCreateDetailWizardPage = new CreateIssueDetailWizardPage(newIssue);
+		addPage(issueCreateDetailWizardPage);
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
@@ -85,8 +89,8 @@ extends DynamicPathWizard
 		return true;
 	}
 	
-	@Override
-	public boolean canFinish() {
-		return issueCreateWizardPage.isPageComplete();
-	}
+//	@Override
+//	public boolean canFinish() {
+//		return issueCreateGeneralWizardPage.isPageComplete();
+//	}
 }
