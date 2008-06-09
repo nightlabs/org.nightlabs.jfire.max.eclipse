@@ -146,7 +146,7 @@ extends WizardHopPage
 		subjectText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent arg0) {
-//				createIssueWizardPage.updatePageComplete();
+				getContainer().updateButtons();
 			}
 		});
 
@@ -158,7 +158,7 @@ extends WizardHopPage
 		descriptionText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent arg0) {
-//				createIssueWizardPage.updatePageComplete();
+				getContainer().updateButtons();
 			}
 		});
 
@@ -209,17 +209,19 @@ extends WizardHopPage
 		return mainComposite;
 	}
 
-//	@Override
-//	public void setVisible(boolean visible) {
-//		if (visible) {
-//		}
-//		super.setVisible(visible);
-//	}
-
-//	@Override
-//	public boolean isPageComplete() {
-//		return true;
-//	}
+	@Override
+	public boolean canFlipToNextPage() {
+		return isPageComplete();
+	}
+	
+	@Override
+	public boolean isPageComplete() {
+		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
+			setErrorMessage("Subject should not be null.");
+			return false;
+		}
+		return true;
+	}
 	
 	public I18nTextEditorMultiLine getDescriptionText() {
 		return descriptionText;
@@ -257,5 +259,4 @@ extends WizardHopPage
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
 	}
-
 }
