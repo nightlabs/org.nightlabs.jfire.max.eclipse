@@ -294,7 +294,7 @@ implements IProductTypeQuickListFilter
 		if (queryCollection == null) 
 		{
 			BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
-					getQueryResultClass(), Login.sharedInstance().getCompleteUserID(),
+					getQueryResultClass(), Login.sharedInstance().getUserObjectID(),
 					FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new SubProgressMonitor(monitor, 50));
 			if (defaultQueryStore == null) {

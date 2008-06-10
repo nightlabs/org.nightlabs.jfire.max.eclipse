@@ -118,7 +118,7 @@ implements IViewActionDelegate
 									protected IStatus run(ProgressMonitor monitor) throws Exception 
 									{										
 										monitor.beginTask("Save Last Changes", 100);
-										UserID userID = Login.sharedInstance().getCompleteUserID();
+										UserID userID = Login.sharedInstance().getUserObjectID();
 										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
 												queryCollection.getResultClass(), userID, 
 												FETCH_GROUPS_QUERY_STORE_LOAD, 
