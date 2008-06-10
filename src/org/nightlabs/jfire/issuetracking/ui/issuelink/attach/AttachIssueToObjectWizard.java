@@ -48,8 +48,8 @@ extends DynamicPathWizard
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
 		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT};
+		Issue.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_STATES};
 	
 	@Override
 	public boolean performFinish() {
