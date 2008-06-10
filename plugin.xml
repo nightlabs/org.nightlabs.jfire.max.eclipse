@@ -18,4 +18,15 @@
       </propDataFieldEditorFactory>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.nightlabs.jfire.prop.html.ui.PropFCKEditor"
+            contributorClass="org.nightlabs.eclipse.ui.fckeditor.FCKEditorActionBarContributer"
+            id="org.nightlabs.jfire.prop.html.ui.PropFCKEditor"
+            icon="icons/document.png"
+            name="FCKeditor">
+      </editor>
+   </extension>
+
 </plugin>
