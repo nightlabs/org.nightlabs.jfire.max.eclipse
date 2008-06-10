@@ -60,6 +60,8 @@ extends AbstractProductTypeQuickListFilter
 					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
+					if (voucherTypeTable.isDisposed())
+						return;
 					voucherTypeTable.setInput(voucherTypes);
 				}
 			});
