@@ -68,6 +68,9 @@ extends AbstractProductTypeQuickListFilter
 					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
+					if (dynamicProductTypeTable.isDisposed())
+						return;
+					
 					dynamicProductTypeTable.setInput(productTypes);
 				}
 			});
