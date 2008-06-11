@@ -77,7 +77,6 @@ implements ITreeContentProvider
 			jdoLifecycleListener = null;
 		}
 
-
 		if (!registerAfterUnregister)
 			return;
 

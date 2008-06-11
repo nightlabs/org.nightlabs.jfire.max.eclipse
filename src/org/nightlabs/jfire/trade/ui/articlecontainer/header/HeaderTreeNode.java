@@ -326,6 +326,7 @@ public abstract class HeaderTreeNode
 			if (dirtyObjectIDs == null || dirtyObjectIDs.isEmpty())
 				return dirtyObjectIDs;
 		}
+		monitor.done();
 		return dirtyObjectIDs;
 	}
 }
