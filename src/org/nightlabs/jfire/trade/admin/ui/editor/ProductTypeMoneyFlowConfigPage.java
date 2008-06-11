@@ -54,6 +54,8 @@ extends EntityEditorPageWithProgress
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 //				moneyFlowSection.setProductTypeID(controller.getProductTypeID());
+				if (isDisposed())
+					return; // Do nothing if UI is already disposed
 				moneyFlowSection.setProductType(controller.getProductType());
 				if (controller.getProductType() != null && controller.getProductType().isClosed()) {
 					moneyFlowSection.setMessage(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigPage.moneyFlowSectionMessage_productTypeClosed")); //$NON-NLS-1$
