@@ -78,9 +78,11 @@ extends EntityEditorPageWithProgress
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						SimpleProductType.class, simpleProductType.getStructLocalScope(), monitor);
+						SimpleProductType.class, simpleProductType.getStructScope(), simpleProductType.getStructLocalScope(), monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
+						if (isDisposed())
+							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
 						blockBaseEditorSection.setProperty(controller.getPropertySet(), structLocal);
 						switchToContent();
