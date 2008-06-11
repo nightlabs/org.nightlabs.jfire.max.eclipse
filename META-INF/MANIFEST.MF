@@ -8,8 +8,7 @@ Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.nightlabs.jfire.scripting.print.ui,
- org.nightlabs.jfire.voucher.editor2d.ui
+ org.nightlabs.jfire.scripting.print.ui
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.print.ui,
  org.nightlabs.jfire.voucher.print.ui.transfer.deliver

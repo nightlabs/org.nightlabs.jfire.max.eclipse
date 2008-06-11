@@ -14,5 +14,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucher"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucherEditor2D"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsEditor2D"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
