@@ -243,6 +243,7 @@ public class DefaultReportViewerComposite extends XComposite {
 							viewer.activate();
 						}
 						viewer.setDocumentURL(preparedLayout.getEntryFileAsURL().toString());
+						
 //						awtFrame.repaint();
 //						awtFrame.doLayout();
 						awtFrame.pack();
