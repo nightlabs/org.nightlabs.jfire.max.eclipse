@@ -46,6 +46,7 @@ import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.prop.Struct;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
@@ -211,7 +212,8 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 						// TODO: Add Wizardhop for PropertySet inherit/createnew
 						SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, 1);
-						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, StructLocal.DEFAULT_SCOPE, subMonitor);
+						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
+								SimpleProductType.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE, subMonitor);
 						newProductType.getPropertySet().setStructLocalAttributes(struct);
 
 						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);

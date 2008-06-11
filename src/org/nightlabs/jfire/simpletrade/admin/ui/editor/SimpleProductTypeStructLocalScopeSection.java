@@ -25,6 +25,7 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 
 //	private SimpleProductType productType;
 //	private boolean doInheritStructLocalScope;
+	private String structScope;
 	private String structLocalScope;
 	private Text structLocalScopeText;
 	
@@ -51,8 +52,10 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 	}
 	
 	public void setSimpleProductType(SimpleProductType productType) {
+		structScope = productType.getStructScope();
 		structLocalScope = productType.getStructLocalScope();
-		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(SimpleProductType.class, structLocalScope, new NullProgressMonitor());
+		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(
+				SimpleProductType.class, structScope, structLocalScope, new NullProgressMonitor());
 		if (sl != null && sl.getName() != null) {
 			structLocalScopeText.setText(sl.getName().getText());
 		} else {
