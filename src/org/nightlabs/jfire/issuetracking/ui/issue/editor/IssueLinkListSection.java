@@ -80,7 +80,6 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
 		issueLinkAdderComposite.getIssueLinkTable().setIssue(issue);
-		issueLinkAdderComposite.getIssueLinkTable().refresh();
 	}
 	
 	@Override

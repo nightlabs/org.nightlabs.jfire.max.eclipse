@@ -146,7 +146,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		Job job = new Job("Loading issue links") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						issue = null;
 						issueLink2LinkedObjectMap = null;
@@ -223,6 +223,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 							linkItem.initIssueLink(issueLink);
 							issueLinkTableItems.add(linkItem);
 						}
+						
 						setInput(issueLinkTableItems);
 					}
 				});
