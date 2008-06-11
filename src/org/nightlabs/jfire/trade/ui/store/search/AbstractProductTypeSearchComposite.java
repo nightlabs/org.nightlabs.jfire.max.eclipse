@@ -278,11 +278,11 @@ extends XComposite
 		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
 			query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
 
-//		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
-//			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
+		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
+			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
 
-		if (getSearchCriteriaComposite().getSelectedVendorID() != null)
-			query.setVendorID(getSearchCriteriaComposite().getSelectedVendorID());
+//		if (getSearchCriteriaComposite().getSelectedVendorID() != null)
+//			query.setVendorID(getSearchCriteriaComposite().getSelectedVendorID());
 		
 		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
 		return query;

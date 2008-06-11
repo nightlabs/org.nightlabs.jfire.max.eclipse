@@ -20,8 +20,10 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.store.ProductTypeGroup;
+import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
+import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
-import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
@@ -113,8 +115,8 @@ extends AbstractQueryFilterComposite<Q>
 //	private ActiveTextComposite deliveryConfigurationComp;
 //	private ActiveTextComposite localAccountDelegateComp;
 	private ActiveTextComposite ownerComp;
-//	private ActiveTextComposite productTypeGroupComp;
-	private ActiveTextComposite vendorComp;
+	private ActiveTextComposite productTypeGroupComp;
+//	private ActiveTextComposite vendorComp;
 	private Class<Q> queryClass;
 	
 	/**
@@ -155,8 +157,8 @@ extends AbstractQueryFilterComposite<Q>
 //		priceConfigComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.priceConfigurationGroup.text"), innerPriceConfigListener); //$NON-NLS-1$
 //		localAccountDelegateComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.accountConfigurationGroup.text"), localAccountDelegateListener); //$NON-NLS-1$
 		ownerComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), ownerListener); //$NON-NLS-1$
-//		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), productTypeGroupListener);		 //$NON-NLS-1$
-		vendorComp = new ActiveTextComposite(parent, "Vendor", vendorListener);
+		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), productTypeGroupListener);		 //$NON-NLS-1$
+//		vendorComp = new ActiveTextComposite(parent, "Vendor", vendorListener);
 	}
 
 //	private SelectionListener deliveryConfigurationListener = new SelectionListener() {
@@ -199,27 +201,27 @@ extends AbstractQueryFilterComposite<Q>
 		}
 	};
 
-//	private SelectionListener productTypeGroupListener = new SelectionListener() {
-//		public void widgetSelected(SelectionEvent e) {
-//			// TODO: select productType and set selectedLocalAccountDelegateID
-//		}
-//		public void widgetDefaultSelected(SelectionEvent e) {
-//			widgetSelected(e);
-//		}
-//	};
-
-	private SelectionListener vendorListener = new SelectionListener() {
+	private SelectionListener productTypeGroupListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
-			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", false);
-			if (legalEntity != null) {
-					selectedVendorID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-					vendorComp.setText(legalEntity.getPerson().getDisplayName());
-			}
+			// TODO: select productType and set selectedLocalAccountDelegateID
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
 		}
 	};
+
+//	private SelectionListener vendorListener = new SelectionListener() {
+//		public void widgetSelected(SelectionEvent e) {
+//			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", false);
+//			if (legalEntity != null) {
+//					selectedVendorID = (AnchorID) JDOHelper.getObjectId(legalEntity);
+//					vendorComp.setText(legalEntity.getPerson().getDisplayName());
+//			}
+//		}
+//		public void widgetDefaultSelected(SelectionEvent e) {
+//			widgetSelected(e);
+//		}
+//	};
 	
 	private Button saleAccessStateButton = null;
 	private XComboComposite<SaleAccessState> stateCombo = null;
@@ -285,15 +287,15 @@ extends AbstractQueryFilterComposite<Q>
 		return selectedOwnerID;
 	}
 
-	private AnchorID selectedVendorID = null;
-	public AnchorID getSelectedVendorID() {
-		return selectedVendorID;
-	}
-	
-//	private ProductTypeGroupID selectedProductTypeGroupID = null;
-//	public ProductTypeGroupID getSelectedProductTypeGroupID() {
-//		return selectedProductTypeGroupID;
+//	private AnchorID selectedVendorID = null;
+//	public AnchorID getSelectedVendorID() {
+//		return selectedVendorID;
 //	}
+	
+	private ProductTypeGroupID selectedProductTypeGroupID = null;
+	public ProductTypeGroupID getSelectedProductTypeGroupID() {
+		return selectedProductTypeGroupID;
+	}
 	
 	private SaleAccessState selectedSaleAccessState = SaleAccessState.SALEABLE;
 	public SaleAccessState getSelectedSaleAccessState() {
@@ -309,8 +311,8 @@ extends AbstractQueryFilterComposite<Q>
 //		query.setInnerPriceConfigID(selectedPriceConfigID);
 //		query.setLocalAccountantDelegateID(selectedLocalAccountantDelegateID);
 		query.setOwnerID(selectedOwnerID);
-//		query.setProductTypeGroupID(selectedProductTypeGroupID);
-		query.setVendorID(selectedVendorID);
+		query.setProductTypeGroupID(selectedProductTypeGroupID);
+//		query.setVendorID(selectedVendorID);
 		applySaleAccessState(selectedSaleAccessState, query);
 	}
 
@@ -329,15 +331,15 @@ extends AbstractQueryFilterComposite<Q>
 //		if (!priceConfigComp.isActive()) {
 //			selectedPriceConfigID = null;			
 //		}
-//		if (!productTypeGroupComp.isActive()) {
-//			selectedProductTypeGroupID = null;			
-//		}
+		if (!productTypeGroupComp.isActive()) {
+			selectedProductTypeGroupID = null;			
+		}
 		if (!ownerComp.isActive()) {
 			selectedOwnerID = null;
 		}
-		if (!vendorComp.isActive()) {
-			selectedVendorID = null;
-		}		
+//		if (!vendorComp.isActive()) {
+//			selectedVendorID = null;
+//		}		
 		if (!saleAccessStateButton.getSelection()) {
 			selectedSaleAccessState = SaleAccessState.SALEABLE;
 		}		
@@ -374,13 +376,13 @@ extends AbstractQueryFilterComposite<Q>
 			ownerComp.clear();
 			setSearchSectionActive(ownerComp.getActiveButton(), false);
 			
-//			selectedProductTypeGroupID = null;
-//			productTypeGroupComp.clear();
-//			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
+			selectedProductTypeGroupID = null;
+			productTypeGroupComp.clear();
+			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
 
-			selectedVendorID = null;
-			vendorComp.clear();
-			setSearchSectionActive(vendorComp.getActiveButton(), false);
+//			selectedVendorID = null;
+//			vendorComp.clear();
+//			setSearchSectionActive(vendorComp.getActiveButton(), false);
 			
 			selectedSaleAccessState = SaleAccessState.SALEABLE;
 			stateCombo.selectElement(selectedSaleAccessState);
@@ -412,43 +414,43 @@ extends AbstractQueryFilterComposite<Q>
 					setSearchSectionActive(ownerComp.getActiveButton(), active);					
 				}
 
-				if (VendorDependentQuery.PROPERTY_VENDOR_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					AnchorID vendorID = (AnchorID) changedField.getNewValue();
-					if (vendorID == null) {
-						vendorComp.clear();
-					}
-					else {
-						final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
-								vendorID,
-								new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);					
-						vendorComp.setText(legalEntity.getPerson().getDisplayName());
-					}
-					active |= vendorID != null;
-					vendorComp.setActive(active);
-					setSearchSectionActive(vendorComp.getActiveButton(), active);					
-				}
-				
-//				if (AbstractProductTypeQuery.PROPERTY_PRODUCTTYPE_GROUP_ID.equals(
+//				if (VendorDependentQuery.PROPERTY_VENDOR_ID.equals(
 //						changedField.getPropertyName())) 
 //				{
-//					ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
-//					if (productTypeGroupID == null) {
-//						productTypeGroupComp.clear();
+//					AnchorID vendorID = (AnchorID) changedField.getNewValue();
+//					if (vendorID == null) {
+//						vendorComp.clear();
 //					}
 //					else {
-//						ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
-//								productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME}, 
-//								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//						productTypeGroupComp.setText(productTypeGroup.getName().getText());
+//						final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
+//								vendorID,
+//								new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+//								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+//							);					
+//						vendorComp.setText(legalEntity.getPerson().getDisplayName());
 //					}
-//					active |= productTypeGroupID != null;
-//					productTypeGroupComp.setActive(active);
-//					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
+//					active |= vendorID != null;
+//					vendorComp.setActive(active);
+//					setSearchSectionActive(vendorComp.getActiveButton(), active);					
 //				}
+				
+				if (AbstractProductTypeQuery.PROPERTY_PRODUCTTYPE_GROUP_ID.equals(
+						changedField.getPropertyName())) 
+				{
+					ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
+					if (productTypeGroupID == null) {
+						productTypeGroupComp.clear();
+					}
+					else {
+						ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
+								productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME}, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						productTypeGroupComp.setText(productTypeGroup.getName().getText());
+					}
+					active |= productTypeGroupID != null;
+					productTypeGroupComp.setActive(active);
+					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
+				}
 				
 				if (AbstractProductTypeQuery.PROPERTY_CLOSED.equals(
 						changedField.getPropertyName())) 
