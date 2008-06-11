@@ -104,6 +104,10 @@ extends AbstractClientDeliveryProcessorPrint
 		return (AWTPrinter) printer;
 	}
 	
+	/**
+	 * Returns the Printer Use Case.
+	 * @return the Printer Use Case
+	 */
 	protected abstract String getPrinterUseCase();
 	
 	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
@@ -137,6 +141,12 @@ extends AbstractClientDeliveryProcessorPrint
 		if (logger.isDebugEnabled())
 			logger.info("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-		
+
+	/**
+	 * Prints the given {@link ScriptRootDrawComponent}s to the given {@link PrinterJob}.
+	 *   
+	 * @param tickets the List of {@link ScriptRootDrawComponent}s to print
+	 * @param printJob the {@link PrinterJob} to print the tickets
+	 */
 	protected abstract void printTickets(List<ScriptRootDrawComponent> tickets, PrinterJob printJob);
 }

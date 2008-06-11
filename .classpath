@@ -6,10 +6,11 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScriptingEditor2D"/>
-	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2">
+	<classpathentry kind="var" path="JDO2" sourcepath="JPOX_SRC">
 		<attributes>
-			<attribute value="file:/home/tobias/java/jdo_javadoc/apidocs/" name="javadoc_location"/>
+			<attribute name="javadoc_location" value="file:/home/tobias/java/jdo_javadoc/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsEditor2D"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
