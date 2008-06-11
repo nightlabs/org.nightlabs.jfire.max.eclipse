@@ -78,7 +78,8 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		else
 			this.lePerson = legalEntity.getPerson();
 		
-		StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(Person.class, LegalEntity.PROPERTY_SET_SCOPE, new NullProgressMonitor());
+		StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
+				Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 		if (lePerson != null)
 			lePerson.inflate(struct);
 		
@@ -96,7 +97,8 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		legalEntity = null;
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(Person.class, LegalEntity.PROPERTY_SET_SCOPE, new NullProgressMonitor());
+			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
+					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 			lePerson.deflate();
 			legalEntity = tradeManager.storePersonAsLegalEntity(lePerson, true, LegalEntityPersonEditor.FETCH_GROUPS_FULL_LE_DATA, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			legalEntity.getPerson().inflate(struct);

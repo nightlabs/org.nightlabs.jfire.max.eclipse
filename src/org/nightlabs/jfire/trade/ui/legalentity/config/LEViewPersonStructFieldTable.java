@@ -43,7 +43,6 @@ import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructFieldID;
-import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.NLLocale;
@@ -124,7 +123,8 @@ extends AbstractTableComposite
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(Person.class, LegalEntity.PROPERTY_SET_SCOPE, new NullProgressMonitor());
+			IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
+					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 			
 			StructField field = null;
 			try {

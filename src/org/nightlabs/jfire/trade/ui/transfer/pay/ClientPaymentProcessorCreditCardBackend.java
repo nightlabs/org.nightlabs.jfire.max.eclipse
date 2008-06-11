@@ -47,7 +47,7 @@ import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.prop.dao.StructDAO;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.datafield.NumberDataField;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -131,7 +131,8 @@ extends AbstractClientPaymentProcessor
 				if (!entity.isAnonymous()) {
 					Person person = entity.getPerson();
 					if (person != null) {
-						IStruct struct = StructDAO.sharedInstance().getStruct(Person.class, new NullProgressMonitor());
+						IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
+								Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 						person.inflate(struct);
 
 						String nameOnCard = ((TextDataField)person.getDataField(PersonStruct.CREDITCARD_CREDITCARDHOLDER)).getText();
