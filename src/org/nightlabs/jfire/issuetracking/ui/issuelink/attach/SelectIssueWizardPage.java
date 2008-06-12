@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -19,14 +17,10 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
@@ -83,8 +77,6 @@ extends WizardHopPage
 		
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
-		
-		new WizardHop(this);
 	}
 
 	@Override
@@ -197,10 +189,5 @@ extends WizardHopPage
 		}
 		
 		return null;
-	}
-	
-	private IssueLinkType attachedObjectLinkType;
-	public void setAttachedObjectLinkType(IssueLinkType attachedObjectLinkType) {
-		this.attachedObjectLinkType = attachedObjectLinkType;
 	}
 }

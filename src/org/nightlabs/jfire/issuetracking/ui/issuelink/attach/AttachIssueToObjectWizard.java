@@ -10,8 +10,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -24,6 +24,7 @@ extends DynamicPathWizard
 {
 	private Object attachedObject;
 	private SelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
+	private SelectIssueWizardPage selectIssueWizardPage;
 	
 	private Issue selectedIssue;
 	
@@ -36,6 +37,9 @@ extends DynamicPathWizard
 	public void addPages() {
 		selectIssueLinkTypePage = new SelectIssueLinkTypeWizardPage(attachedObject);
 		addPage(selectIssueLinkTypePage);
+		
+		selectIssueWizardPage = new SelectIssueWizardPage(attachedObject);
+		addPage(selectIssueWizardPage);
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
@@ -56,10 +60,10 @@ extends DynamicPathWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getIssueLinkType();
+					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 					
-					SelectIssueWizardPage selectIssueWizardPage = (SelectIssueWizardPage)getPage(SelectIssueWizardPage.class.getName());
 					Issue issue = selectIssueWizardPage.getIssue();
+					issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					issue.createIssueLink(selectedIssueLinkType, attachedObject);
 					
 					Issue createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());

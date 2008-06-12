@@ -22,7 +22,6 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLinkType;
@@ -50,11 +49,6 @@ extends WizardHopPage
 
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
-
-		new WizardHop(this);
-		
-		selectIssuePage = new SelectIssueWizardPage(attachedObject);
-		getWizardHop().addHopPage(selectIssuePage);
 	}
 
 	@Override
@@ -118,22 +112,11 @@ extends WizardHopPage
 	}
 
 	@Override
-	public void onNext() {
-		selectIssuePage.setAttachedObjectLinkType(selectedIssueLinkType);
-	}
-
-	@Override
 	public boolean isPageComplete() {
 		return selectedIssueLinkType != null;
 	}
 
 	public IssueLinkType getSelectedIssueLinkType() {
-		return selectedIssueLinkType;
-	}
-
-	private IssueLinkType newIssueLinkType;
-
-	public IssueLinkType getIssueLinkType() {
 		return selectedIssueLinkType;
 	}
 }
