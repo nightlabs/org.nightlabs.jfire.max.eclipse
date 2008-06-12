@@ -149,7 +149,7 @@ implements ISelectionProvider
 					Login.getLogin().getOrganisationID(), true,
 					new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
-			partner = tm.getAnonymousCustomer(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // new String[] {FetchPlan.ALL});
+			partner = tm.getAnonymousLegalEntity(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (ModuleException x) {
 			throw x;
 		} catch (Exception x) {
