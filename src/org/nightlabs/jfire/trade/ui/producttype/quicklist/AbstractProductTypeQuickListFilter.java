@@ -30,11 +30,9 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -44,7 +42,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -218,8 +216,8 @@ implements IProductTypeQuickListFilter
 		if (inJob) {
 			new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.search")) {  //$NON-NLS-1$
 				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					search(new ProgressMonitorWrapper(monitor));
+				protected IStatus run(ProgressMonitor monitor) {
+					search(monitor);
 					return Status.OK_STATUS;
 				}
 			}.schedule();			
