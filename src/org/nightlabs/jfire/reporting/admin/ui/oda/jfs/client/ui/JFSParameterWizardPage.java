@@ -71,7 +71,7 @@ import org.nightlabs.jfire.reporting.oda.ParameterMetaData.ParameterDescriptor;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
-import org.nightlabs.jfire.scripting.dao.ScriptParameterSetDAO;
+import org.nightlabs.jfire.scripting.dao.ScriptParameterSetForScriptRegistryItemIDDAO;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -253,8 +253,8 @@ public class JFSParameterWizardPage extends DataSetWizardPage implements ICellMo
 			return parameterMetaData;
 		JFSQueryPropertySet queryPropertySet = JFSQueryUtil.createPropertySetFromQueryString(design.getQuery().getQueryText());
 		ScriptRegistryItemID scriptID = queryPropertySet.getScriptRegistryItemID();
-		ScriptParameterSet parameterSet = ScriptParameterSetDAO.sharedInstance().getScriptParameterSet(
-				scriptID, ScriptParameterSetDAO.DEFAULT_FETCH_GROUPS, new NullProgressMonitor()
+		ScriptParameterSet parameterSet = ScriptParameterSetForScriptRegistryItemIDDAO.sharedInstance().getScriptParameterSet(
+				scriptID, ScriptParameterSetForScriptRegistryItemIDDAO.DEFAULT_FETCH_GROUPS, new NullProgressMonitor()
 			);
 		parameterMetaData = null;
 		try {
