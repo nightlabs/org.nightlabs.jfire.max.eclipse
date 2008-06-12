@@ -59,8 +59,14 @@ extends FooterComposite
 		String totalPrice = NumberFormatter.formatCurrency(invoice.getPrice().getAmount(), invoice.getCurrency());
 
 		if (invoice.getInvoiceLocal().getAmountPaid() == 0)
-			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextNothingPaid"), amountPaid, amountToPay, totalPrice)); //$NON-NLS-1$
+			setFooterText(
+					String.format(
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextNothingPaid"), //$NON-NLS-1$ 
+							getArticleContainer().getArticleCount(), amountPaid, amountToPay, totalPrice)); 
 		else
-			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextWithPayment"), amountPaid, amountToPay, totalPrice)); //$NON-NLS-1$
+			setFooterText(
+					String.format(
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite.footerTextWithPayment"), //$NON-NLS-1$ 
+							getArticleContainer().getArticleCount(), amountPaid, amountToPay, totalPrice)); 
 	}
 }

@@ -134,9 +134,13 @@ public class FooterComposite extends XComposite
 //				return;
 //			}
 		}
+		
 		if (currency != null) {
 			String price = NumberFormatter.formatCurrency(priceAmount , currency);
-			setFooterText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), price));							 //$NON-NLS-1$
+			setFooterText(
+					String.format(
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), //$NON-NLS-1$ 
+							getArticleContainer().getArticleCount(), price));
 		}
 		else {
 			logger.info("currency == null!"); //$NON-NLS-1$
