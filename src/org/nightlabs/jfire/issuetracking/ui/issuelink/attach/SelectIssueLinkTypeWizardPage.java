@@ -102,8 +102,10 @@ extends WizardHopPage
 
 						if (issueLinkTypes.size() > 0) {
 							issueLinkTypeList.setInput(issueLinkTypes);
+							issueLinkTypeList.setSelection(0);
 							selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
 							issueLinkTypeList.setFocus();
+							getContainer().updateButtons();
 						}
 					}
 				});
