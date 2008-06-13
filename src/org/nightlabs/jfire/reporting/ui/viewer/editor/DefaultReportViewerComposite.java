@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerParam;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.exceptionhandler.IExceptionHandler;
 import org.nightlabs.jfire.reporting.Birt;
@@ -90,8 +91,8 @@ public class DefaultReportViewerComposite extends XComposite {
 	private static class ThreadDeathWorkaround implements IExceptionHandler {
 		private Set<DefaultReportViewerComposite> registeredComposites = new HashSet<DefaultReportViewerComposite>();
 
-		public boolean handleException(Thread thread, Throwable thrownException, Throwable triggerException) {
-			logger.warn("WORKAROUND for Adobe PDF bean ThreadDeath = log.", triggerException); //$NON-NLS-1$
+		public boolean handleException(ExceptionHandlerParam handlerParam) {
+			logger.warn("WORKAROUND for Adobe PDF bean ThreadDeath = log.", handlerParam.getTriggerException()); //$NON-NLS-1$
 			return true;
 		}
 
