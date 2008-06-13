@@ -18,7 +18,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
@@ -41,35 +40,18 @@ extends AbstractTableComposite<Issue>
 	public static final String[] FETCH_GROUPS_ISSUE = new String[] {
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_ISSUE_TYPE,
-		IssueType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
-		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-		IssueSeverityType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		IssuePriority.FETCH_GROUP_NAME,
 		Statable.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_ISSUE_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME,
-
-//		Issue.FETCH_GROUP_THIS_ISSUE,
-//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-//		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
-//		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-//		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
-//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-//		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-//		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
-//		Statable.FETCH_GROUP_STATE,
-//		Statable.FETCH_GROUP_STATES,
-//		StatableLocal.FETCH_GROUP_STATE,
-//		StatableLocal.FETCH_GROUP_STATES,
-//		State.FETCH_GROUP_STATE_DEFINITION,
-//		State.FETCH_GROUP_STATABLE,
-//		StateDefinition.FETCH_GROUP_NAME
+		IssueType.FETCH_GROUP_NAME,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssuePriority.FETCH_GROUP_NAME,
+		StateDefinition.FETCH_GROUP_NAME
 	};
 
 	public IssueTable(Composite parent, int style)

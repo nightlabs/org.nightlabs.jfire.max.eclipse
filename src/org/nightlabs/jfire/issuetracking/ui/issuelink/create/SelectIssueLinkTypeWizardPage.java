@@ -92,6 +92,7 @@ extends DynamicPathWizardPage
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
+				getContainer().updateButtons();
 			}
 		});
 
