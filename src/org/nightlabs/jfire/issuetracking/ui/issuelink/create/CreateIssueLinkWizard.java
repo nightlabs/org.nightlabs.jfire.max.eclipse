@@ -21,9 +21,9 @@ extends DynamicPathWizard
 	private IssueLinkTable issueLinkTable;
 
 	private IssueLinkAdder issueLinkAdder;
-	private SelectIssueLinkHandlerFactoryPage selectIssueLinkHandlerFactoryPage;
-	private SelectLinkedObjectPage selectLinkedObjectPage;
-	private SelectIssueLinkTypePage selectIssueLinkTypePage;
+	private SelectIssueLinkHandlerFactoryWizardPage selectIssueLinkHandlerFactoryPage;
+	private SelectLinkedObjectWizardPage selectLinkedObjectPage;
+	private SelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
 
 	public CreateIssueLinkWizard(IssueLinkTable issueLinkTable, Issue issue) {
 		this.issueLinkTable = issueLinkTable;
@@ -33,13 +33,13 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		selectIssueLinkHandlerFactoryPage = new SelectIssueLinkHandlerFactoryPage();
+		selectIssueLinkHandlerFactoryPage = new SelectIssueLinkHandlerFactoryWizardPage();
 		addPage(selectIssueLinkHandlerFactoryPage);
 
-		selectLinkedObjectPage = new SelectLinkedObjectPage();
+		selectLinkedObjectPage = new SelectLinkedObjectWizardPage();
 		addPage(selectLinkedObjectPage);
 
-		selectIssueLinkTypePage = new SelectIssueLinkTypePage();
+		selectIssueLinkTypePage = new SelectIssueLinkTypeWizardPage();
 		addPage(selectIssueLinkTypePage);
 
 		selectIssueLinkHandlerFactoryPage.addSelectionChangedListener(new ISelectionChangedListener() {

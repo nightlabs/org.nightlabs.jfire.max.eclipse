@@ -26,14 +26,14 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkDoubleClickedEven
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class SelectLinkedObjectPage extends DynamicPathWizardPage
+public class SelectLinkedObjectWizardPage extends DynamicPathWizardPage
 {
 	private Composite carrier;
 	private IssueLinkAdder issueLinkAdder;
 	private Set<ObjectID> linkedObjectIDs = new HashSet<ObjectID>();
 
-	public SelectLinkedObjectPage() {
-		super(SelectLinkedObjectPage.class.getName(), "Select the linked object");
+	public SelectLinkedObjectWizardPage() {
+		super(SelectLinkedObjectWizardPage.class.getName(), "Select the linked object");
 		setDescription("Please select the object(s)");
 	}
 

@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 import java.util.Collection;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,19 +31,17 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
-public class SelectIssueLinkTypeWizardPage 
+public class AttachIssueSelectIssueLinkTypeWizardPage 
 extends WizardHopPage
 {
-	private SelectIssueWizardPage selectIssuePage;
-
 	private ListComposite<IssueLinkType> issueLinkTypeList;
 
 	//Used Objects
 	private IssueLinkType selectedIssueLinkType;
 	private Object attachedObject;
 
-	public SelectIssueLinkTypeWizardPage(Object attachedObject) {
-		super(SelectIssueLinkTypeWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueLinkTypeWizardPage.class));
+	public AttachIssueSelectIssueLinkTypeWizardPage(Object attachedObject) {
+		super(AttachIssueSelectIssueLinkTypeWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), AttachIssueSelectIssueLinkTypeWizardPage.class));
 		this.attachedObject = attachedObject;
 
 		setTitle("Create/Attach issue");
@@ -100,6 +99,10 @@ extends WizardHopPage
 							selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
 							issueLinkTypeList.setFocus();
 							getContainer().updateButtons();
+
+							if(issueLinkTypes.size() == 1 && JDOHelper.getObjectId(selectedIssueLinkType).equals(IssueLinkType.ISSUE_LINK_TYPE_ID_RELATED)) {
+								getContainer().showPage(getNextPage());
+							}
 						}
 					}
 				});
@@ -112,11 +115,41 @@ extends WizardHopPage
 	}
 
 	@Override
-	public boolean isPageComplete() {
+	public boolean canFlipToNextPage() {
 		return selectedIssueLinkType != null;
 	}
 
 	public IssueLinkType getSelectedIssueLinkType() {
 		return selectedIssueLinkType;
 	}
+
+//	private IssueLinkAdder issueLinkAdder;
+//	public void setIssueLinkAdder(final IssueLinkAdder issueLinkAdder) {
+//	this.issueLinkAdder = issueLinkAdder;
+
+//	if (issueLinkAdder != null) {
+//	Job job = new Job("Loading issue link types") {
+//	@Override
+//	protected IStatus run(ProgressMonitor monitor) throws Exception {
+//	final Collection<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(
+//	issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass(), 
+//	new String[] {IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT}, 
+//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//	monitor);
+
+//	Display.getDefault().asyncExec(new Runnable() {
+//	@Override
+//	public void run() {
+//	issueLinkTypeList.removeAll();
+//	issueLinkTypeList.addElements(issueLinkTypes);
+//	}
+//	});
+
+//	return Status.OK_STATUS;
+//	}
+//	};
+//	job.setPriority(Job.SHORT);
+//	job.schedule();
+//	}
+//	}
 }

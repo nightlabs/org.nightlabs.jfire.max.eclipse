@@ -28,7 +28,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
 
-public class SelectIssueLinkHandlerFactoryPage 
+public class SelectIssueLinkHandlerFactoryWizardPage 
 extends DynamicPathWizardPage
 implements ISelectionProvider
 {
@@ -54,7 +54,7 @@ implements ISelectionProvider
 		return issueLinkHandlerFactory;
 	}
 
-	public SelectIssueLinkHandlerFactoryPage() {
+	public SelectIssueLinkHandlerFactoryWizardPage() {
 		super("Select an Object", "Select an object to link this issue with.");
 		setDescription("Link an object to the issue.");
 	}
@@ -103,7 +103,7 @@ implements ISelectionProvider
 
 				getContainer().updateButtons();
 
-				SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(SelectIssueLinkHandlerFactoryPage.this, getSelection());
+				SelectionChangedEvent selectionChangedEvent = new SelectionChangedEvent(SelectIssueLinkHandlerFactoryWizardPage.this, getSelection());
 				for (Object listener : selectionChangedListeners.getListeners())
 					((ISelectionChangedListener)listener).selectionChanged(selectionChangedEvent);
 			}

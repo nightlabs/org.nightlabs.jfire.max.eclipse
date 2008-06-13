@@ -10,7 +10,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
@@ -23,7 +22,7 @@ public class AttachIssueToObjectWizard
 extends DynamicPathWizard
 {
 	private Object attachedObject;
-	private SelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
+	private AttachIssueSelectIssueLinkTypeWizardPage selectIssueLinkTypePage;
 	private SelectIssueWizardPage selectIssueWizardPage;
 	
 	private Issue selectedIssue;
@@ -35,7 +34,7 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		selectIssueLinkTypePage = new SelectIssueLinkTypeWizardPage(attachedObject);
+		selectIssueLinkTypePage = new AttachIssueSelectIssueLinkTypeWizardPage(attachedObject);
 		addPage(selectIssueLinkTypePage);
 		
 		selectIssueWizardPage = new SelectIssueWizardPage(attachedObject);

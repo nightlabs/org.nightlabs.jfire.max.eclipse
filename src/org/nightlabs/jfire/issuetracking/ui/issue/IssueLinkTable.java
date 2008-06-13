@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;

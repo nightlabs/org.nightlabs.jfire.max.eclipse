@@ -35,7 +35,7 @@ import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class SelectIssueLinkTypePage 
+public class SelectIssueLinkTypeWizardPage 
 extends DynamicPathWizardPage
 {
 	private IssueLinkAdder issueLinkAdder;
@@ -79,8 +79,8 @@ extends DynamicPathWizardPage
 	
 	private IssueLinkType selectedIssueLinkType;
 	
-	public SelectIssueLinkTypePage() {
-		super(SelectIssueLinkTypePage.class.getName(), "Select/Create the relation for links.");
+	public SelectIssueLinkTypeWizardPage() {
+		super(SelectIssueLinkTypeWizardPage.class.getName(), "Select/Create the relation for links.");
 		setDescription("The relation for links");
 	}
 
