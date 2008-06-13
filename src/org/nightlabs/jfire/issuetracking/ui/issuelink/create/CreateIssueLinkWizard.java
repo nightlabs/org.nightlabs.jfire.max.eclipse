@@ -62,7 +62,7 @@ extends DynamicPathWizard
 	 */
 	@Override
 	public boolean performFinish() {
-		IssueLinkType issueLinkType = selectIssueLinkTypePage.getIssueLinkType();
+		IssueLinkType issueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 		
 		Set<ObjectID> linkedObjectIDs = selectLinkedObjectPage.getLinkedObjectIDs();
 		Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
