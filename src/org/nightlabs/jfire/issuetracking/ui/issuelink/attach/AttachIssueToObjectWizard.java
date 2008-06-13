@@ -66,9 +66,9 @@ extends DynamicPathWizard
 					issue.createIssueLink(selectedIssueLinkType, attachedObject);
 					
 					Issue createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
+					IssueEditorInput issueEditorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
 					try {
-						Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
+						Editor2PerspectiveRegistry.sharedInstance().openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
