@@ -23,7 +23,7 @@ public class IssueTypeEditorPageController extends EntityEditorPageController {
 		FetchPlan.DEFAULT,
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+		IssueResolution.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME};
 	
 	
