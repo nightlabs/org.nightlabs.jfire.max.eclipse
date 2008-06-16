@@ -253,27 +253,18 @@ extends XComposite
 	{
 		query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
 
-		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
-			case PUBLISHED: query.setPublished(true);
-			break;
-			case CONFIRMED: query.setConfirmed(true);
-			break;
-			case SALEABLE: query.setSaleable(true);
-			break;
-			case CLOSED: query.setClosed(true);
-			break;
-			default:
-				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
-		}
-
-//		if (getSearchCriteriaComposite().getSelectedDeliveryConfigurationID() != null)
-//			query.setDeliveryConfigurationID(getSearchCriteriaComposite().getSelectedDeliveryConfigurationID());
-//
-//		if (getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID() != null)
-//			query.setLocalAccountantDelegateID(getSearchCriteriaComposite().getSelectedLocalAccountantDelegateID());
-//
-//		if (getSearchCriteriaComposite().getSelectedPriceConfigID() != null)
-//			query.setInnerPriceConfigID(getSearchCriteriaComposite().getSelectedPriceConfigID());
+//		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
+//			case PUBLISHED: query.setPublished(true);
+//			break;
+//			case CONFIRMED: query.setConfirmed(true);
+//			break;
+//			case SALEABLE: query.setSaleable(true);
+//			break;
+//			case CLOSED: query.setClosed(true);
+//			break;
+//			default:
+//				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
+//		}
 		
 		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
 			query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
@@ -281,9 +272,6 @@ extends XComposite
 		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
 			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
 
-//		if (getSearchCriteriaComposite().getSelectedVendorID() != null)
-//			query.setVendorID(getSearchCriteriaComposite().getSelectedVendorID());
-		
 		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
 		return query;
 	}	

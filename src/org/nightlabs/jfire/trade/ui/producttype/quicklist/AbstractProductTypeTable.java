@@ -10,11 +10,9 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -95,7 +93,6 @@ implements ISelectionHandler
 	 * @param parent
 	 */
 	public AbstractProductTypeTable(Composite parent) {
-//		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
 		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 	}
 
@@ -113,6 +110,7 @@ implements ISelectionHandler
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
+		// makes problems under windows, led to the fact that the column was only 20 px wide
 //		TableLayout l = new TableLayout();
 //		l.addColumnData(new ColumnWeightData(1, true));
 //		table.setLayout(l);
@@ -124,6 +122,8 @@ implements ISelectionHandler
 		contentProvider = new ContentProvider();
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(new LabelProvider());
+		
+//		tableViewer.setSorter(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 	
 	@Override
@@ -186,4 +186,5 @@ implements ISelectionHandler
 //	 * @return the Class of the {@link ProductType} this Table is displaying
 //	 */
 //	public abstract Class<P> getProductTypeClass();
+	
 }

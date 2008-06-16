@@ -43,9 +43,9 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.AbstractSearchQuery;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.overview.search.QueryFilterDialog;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactory;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactoryRegistry;
+import org.nightlabs.jfire.base.ui.search.QueryFilterDialog;
 import org.nightlabs.jfire.query.store.BaseQueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
 import org.nightlabs.jfire.security.id.UserID;
@@ -96,9 +96,8 @@ implements IViewActionDelegate
 					view.getViewSite().getShell().getDisplay().asyncExec(new Runnable(){
 						@Override
 						public void run() {
-							QueryFilterDialog dialog = new QueryFilterDialog(view.getSite().getShell(),
+							final QueryFilterDialog dialog = new QueryFilterDialog(view.getSite().getShell(),
 									getScope(), queryCollection);
-							final QueryCollection<? extends AbstractSearchQuery> queryCollection = dialog.getQueryCollection();
 							int returnCode = dialog.open();
 							if (returnCode == Window.OK) 
 							{
@@ -106,6 +105,7 @@ implements IViewActionDelegate
 									@Override
 									protected IStatus run(ProgressMonitor monitor) throws Exception 
 									{
+										QueryCollection<? extends AbstractSearchQuery> queryCollection = dialog.getQueryCollection();										
 										selectedFilter.setQueryCollection((QueryCollection<VendorDependentQuery>) queryCollection);
 										selectedFilter.search(monitor, true);
 										return Status.OK_STATUS;
@@ -113,29 +113,29 @@ implements IViewActionDelegate
 								};
 								searchJob.schedule();
 								
-								Job saveJob = new Job("Save Last Changes") {				
-									@Override
-									protected IStatus run(ProgressMonitor monitor) throws Exception 
-									{										
-										monitor.beginTask("Save Last Changes", 100);
-										UserID userID = Login.sharedInstance().getUserObjectID();
-										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
-												queryCollection.getResultClass(), userID, 
-												FETCH_GROUPS_QUERY_STORE_LOAD, 
-												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-												new SubProgressMonitor(monitor, 50));
-										defaultQueryStore.setQueryCollection(queryCollection);
-										QueryStoreDAO.sharedInstance().storeQueryStore(
-												defaultQueryStore,
-												FETCH_GROUPS_QUERY_STORE_SAVE, 
-												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-												false, 
-												new SubProgressMonitor(monitor, 50));
-										monitor.done();
-										return Status.OK_STATUS;
-									}				
-								};
-								saveJob.schedule();
+//								Job saveJob = new Job("Save Last Changes") {				
+//									@Override
+//									protected IStatus run(ProgressMonitor monitor) throws Exception 
+//									{										
+//										monitor.beginTask("Save Last Changes", 100);
+//										UserID userID = Login.sharedInstance().getUserObjectID();
+//										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+//												queryCollection.getResultClass(), userID, 
+//												FETCH_GROUPS_QUERY_STORE_LOAD, 
+//												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//												new SubProgressMonitor(monitor, 50));
+//										defaultQueryStore.setQueryCollection(queryCollection);
+//										QueryStoreDAO.sharedInstance().storeQueryStore(
+//												defaultQueryStore,
+//												FETCH_GROUPS_QUERY_STORE_SAVE, 
+//												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//												false, 
+//												new SubProgressMonitor(monitor, 50));
+//										monitor.done();
+//										return Status.OK_STATUS;
+//									}				
+//								};
+//								saveJob.schedule();
 							}							
 						}
 					});

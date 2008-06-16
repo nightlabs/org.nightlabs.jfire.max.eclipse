@@ -37,7 +37,7 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.jbpm.JbpmManager;
 import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
 import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
@@ -491,7 +491,7 @@ public class StatableFilterSearchComposite
 							}
 
 							throw new RuntimeException(e);
-						}						
+						}
 						stateDefinitions.setSelection(selection);
 					}
 					
