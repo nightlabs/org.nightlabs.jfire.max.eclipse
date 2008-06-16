@@ -57,7 +57,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 //		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,
 		IssuePriority.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
-		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION,
+		IssueResolution.FETCH_GROUP_NAME,
 		IssueComment.FETCH_GROUP_THIS_COMMENT,
 		IssueLink.FETCH_GROUP_THIS_ISSUE_LINK,
 		IssueLink.FETCH_GROUP_LINKED_OBJECT,

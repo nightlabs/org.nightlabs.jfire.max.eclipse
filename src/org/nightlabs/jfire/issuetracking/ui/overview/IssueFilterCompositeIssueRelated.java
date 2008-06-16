@@ -273,7 +273,7 @@ public class IssueFilterCompositeIssueRelated
 						{
 							selectedIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(
 									tmpResolutionID, 
-									new String[] { IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION }, 
+									new String[] { IssueResolution.FETCH_GROUP_NAME}, 
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
 								);
 							issueResolutionCombo.setSelection(selectedIssueResolution);
@@ -342,7 +342,7 @@ public class IssueFilterCompositeIssueRelated
 	private static final String[] FETCH_GROUPS_ISSUE_TYPE = { IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE, 
 		IssuePriority.FETCH_GROUP_NAME, 
-		IssueResolution.FETCH_GROUP_THIS_ISSUE_RESOLUTION, FetchPlan.DEFAULT };
+		IssueResolution.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 	// TODO: Why does this flag exist? It is never read, but only set. If it isn't used anymore then remove this please.
 	private boolean loadJobRunning = false;
