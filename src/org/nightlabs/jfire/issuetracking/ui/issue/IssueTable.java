@@ -275,10 +275,11 @@ extends AbstractTableComposite<Issue>
 						return issue.getSubject().getText();
 				break;
 				case(4):
+					//TODO: We should find another ways for displaying the description text if it's longer than the column width!!!!
 					if (issue.getDescription() != null) {
 						String descriptionText = issue.getDescription().getText();
 						if (descriptionText.indexOf('\n') != -1)
-							return descriptionText.substring(0, descriptionText.indexOf('\n')).concat("...");
+							return descriptionText.substring(0, descriptionText.indexOf('\n')).concat("(...)");
 						else
 							return descriptionText;
 					}
