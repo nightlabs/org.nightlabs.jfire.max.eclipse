@@ -14,6 +14,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.IssueFileAttachmentCompositeStyle;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -127,7 +128,7 @@ extends WizardHopPage
 		fileLabel = new Label(mainComposite, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new IssueFileAttachmentComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, issue, null);
+		fileComposite = new IssueFileAttachmentComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, issue, IssueFileAttachmentCompositeStyle.withAddRemoveButton);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumHeight = 80;
 		fileComposite.setLayoutData(gridData);
