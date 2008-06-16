@@ -19,7 +19,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
-import org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.security.User;
