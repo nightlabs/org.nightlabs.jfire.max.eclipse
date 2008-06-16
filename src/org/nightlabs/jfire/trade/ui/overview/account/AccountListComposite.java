@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.account;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,16 +10,16 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
@@ -25,10 +27,10 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
-import org.nightlabs.jfire.accounting.AccountName;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
@@ -53,7 +55,6 @@ extends AbstractTableComposite<Account>
 	private TableViewerColumn tableViewerColumn;
 	public static String[] FETCH_GROUPS_ACCOUNT = new String[] {
 		FetchPlan.DEFAULT,
-//		Account.FETCH_GROUP_THIS_ACCOUNT,
 		Account.FETCH_GROUP_OWNER,
 		Account.FETCH_GROUP_CURRENCY,
 		Account.FETCH_GROUP_NAME,
@@ -90,108 +91,117 @@ extends AbstractTableComposite<Account>
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);				
 			}
 		});
+		
+		getTableViewer().setComparator(new ViewerComparator() {
+			@Override
+			public void sort(Viewer viewer, Object[] elements) {
+				if (! (elements instanceof Account[]))
+					return;
+				
+				Arrays.sort((Account[])elements, new Comparator<Account>() {
+					public int compare(Account account1, Account account2) {
+						return -account1.getName().getText().compareTo(account2.getName().getText());
+					}
+				});
+			}
+		});
 	}
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
 		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.id"));  //$NON-NLS-1$
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof String)
-					return (String) element;
-				
-				final String anchorID = ((Account) element).getAnchorID();
-				if (anchorID == null)
-					return ""; //$NON-NLS-1$
-				return anchorID;
-			}
-		});
-		
-		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
-		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountName"));	//$NON-NLS-1$
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (!(element instanceof Account))
-					return null;
-
-				final AccountName accountName = ((Account) element).getName();
-				if (accountName == null)
-					return ""; //$NON-NLS-1$
-				
-				return accountName.getText();
-			}
-		});
-		
-		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
-		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.owner"));	//$NON-NLS-1$
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (!(element instanceof Account))
-					return null;
-				
-				final LegalEntity owner = ((Account) element).getOwner();
-				if (owner == null)
-					return ""; //$NON-NLS-1$
-				if (owner.getPerson().getDisplayName() == null || "".equals(owner.getPerson().getDisplayName())) //$NON-NLS-1$
-					return owner.getAnchorID();
-				return owner.getPerson().getDisplayName();
-			}
-		});
-		
-		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
-		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountTypeName"));	//$NON-NLS-1$
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (!(element instanceof Account))
-					return null;
-
-				return ((Account) element).getAccountType().getName().getText();
-			}
-		});
-		
-		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		
-		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.balance"));	//$NON-NLS-1$
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (!(element instanceof Account))
-					return null;
-				return NumberFormatter.formatCurrency(((Account) element).getBalance(), ((Account) element).getCurrency(), true);
-			}
-			
-			@Override
-			public Color getForeground(Object element) {
-				if (element instanceof Account) {
-					Account account = (Account) element;
-					if(account.getBalance() < 0){
-						return new Color(getDisplay(), 255, 0, 0);
-					}
-				}
-				return null;
-			}
-			
+//		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
 //			@Override
-//			public Color getBackground(Object element) {
+//			public String getText(Object element) {
+//				if (element instanceof String)
+//					return (String) element;
+//				
+//				final String anchorID = ((Account) element).getAnchorID();
+//				if (anchorID == null)
+//					return ""; //$NON-NLS-1$
+//				return anchorID;
+//			}
+//		});
+		
+		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountName"));	//$NON-NLS-1$
+//		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				if (!(element instanceof Account))
+//					return null;
+//
+//				final AccountName accountName = ((Account) element).getName();
+//				if (accountName == null)
+//					return ""; //$NON-NLS-1$
+//				
+//				return accountName.getText();
+//			}
+//		});
+		
+		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.owner"));	//$NON-NLS-1$
+//		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				if (!(element instanceof Account))
+//					return null;
+//				
+//				final LegalEntity owner = ((Account) element).getOwner();
+//				if (owner == null)
+//					return ""; //$NON-NLS-1$
+//				if (owner.getPerson().getDisplayName() == null || "".equals(owner.getPerson().getDisplayName())) //$NON-NLS-1$
+//					return owner.getAnchorID();
+//				return owner.getPerson().getDisplayName();
+//			}
+//		});
+		
+		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.accountTypeName"));	//$NON-NLS-1$
+//		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				if (!(element instanceof Account))
+//					return null;
+//
+//				return ((Account) element).getAccountType().getName().getText();
+//			}
+//		});
+		
+		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.balance"));	//$NON-NLS-1$
+//		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+//			@Override
+//			public String getText(Object element) {
+//				if (!(element instanceof Account))
+//					return null;
+//				return NumberFormatter.formatCurrency(((Account) element).getBalance(), ((Account) element).getCurrency(), true);
+//			}
+//			
+//			@Override
+//			public Color getForeground(Object element) {
 //				if (element instanceof Account) {
 //					Account account = (Account) element;
 //					if(account.getBalance() < 0){
-//						return new Color(getDisplay(), 0, 0, 255);
+//						return new Color(getDisplay(), 255, 0, 0);
 //					}
 //				}
 //				return null;
 //			}
-		});
+//			
+////			@Override
+////			public Color getBackground(Object element) {
+////				if (element instanceof Account) {
+////					Account account = (Account) element;
+////					if(account.getBalance() < 0){
+////						return new Color(getDisplay(), 0, 0, 255);
+////					}
+////				}
+////				return null;
+////			}
+//		});
 
 		table.setLayout(new WeightedTableLayout(new int[] {30, 30, 20, 10, 10}));
 	}
@@ -200,74 +210,74 @@ extends AbstractTableComposite<Account>
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new TableContentProvider());
 //		tableViewer.setLabelProvider(new AccountTableLabelProvider());
-//		tableViewer.setLabelProvider(new AcountListLabelProvider());
+		tableViewer.setLabelProvider(new AcountListLabelProvider());
 	}
 
-//	class AcountListLabelProvider
-//	extends TableLabelProvider
-//	{
-//		public String getColumnText(Object element, int columnIndex)
-//		{
+	class AcountListLabelProvider
+	extends TableLabelProvider
+	{
+		public String getColumnText(Object element, int columnIndex)
+		{
+			if (element instanceof Account) {
+				Account account = (Account) element;
+				switch (columnIndex)
+				{
+					case(0):
+						return account.getAnchorID();
+					case(1):
+						if (account.getName() != null)
+							return account.getName().getText();
+					case(2):
+						if (account.getOwner() != null && account.getOwner().getPerson() != null)
+							return account.getOwner().getPerson().getDisplayName();
+						break;
+					case(3):
+						return account.getAccountType().getName().getText();
+					case(4):
+						if (account.getCurrency() != null)
+							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
+						break;
+					default:
+						return ""; //$NON-NLS-1$
+				}
+			}
+			return null;
+		}
+
+//		public Color getBackground(Object element, int columnIndex) {
 //			if (element instanceof Account) {
 //				Account account = (Account) element;
 //				switch (columnIndex)
 //				{
-//					case(0):
-//						return account.getAnchorID();
-//					case(1):
-//						if (account.getName() != null)
-//							return account.getName().getText();
-//					case(2):
-//						if (account.getOwner() != null && account.getOwner().getPerson() != null)
-//							return account.getOwner().getPerson().getDisplayName();
-//						break;
-//					case(3):
-//						return account.getAccountType().getName().getText();
 //					case(4):
-//						if (account.getCurrency() != null)
-//							return NumberFormatter.formatCurrency(account.getBalance(), account.getCurrency());
-//						break;
+//						if(account.getBalance() < 0){
+//							return new Color(getDisplay(), 255, 0, 0);
+//						}
+//					break;
 //					default:
-//						return ""; //$NON-NLS-1$
+//						return new Color(getDisplay(), 0, 255, 0);
 //				}
 //			}
-//			return null;
+//			return new Color(getDisplay(), 0, 255, 0);
 //		}
 //
-////		public Color getBackground(Object element, int columnIndex) {
-////			if (element instanceof Account) {
-////				Account account = (Account) element;
-////				switch (columnIndex)
-////				{
-////					case(4):
-////						if(account.getBalance() < 0){
-////							return new Color(getDisplay(), 255, 0, 0);
-////						}
-////					break;
-////					default:
-////						return new Color(getDisplay(), 0, 255, 0);
-////				}
-////			}
-////			return new Color(getDisplay(), 0, 255, 0);
-////		}
-////
-////		public Color getForeground(Object element, int columnIndex) {
-////			if (element instanceof Account) {
-////				Account account = (Account) element;
-////				switch (columnIndex)
-////				{
-////					case(4):
-////						if(account.getBalance() < 0){
-////							return new Color(getDisplay(), 255, 0, 0);
-////						}
-////					break;
-////					default:
-////						return new Color(getDisplay(), 0, 255, 0);
-////				}
-////			}
-////			return new Color(getDisplay(), 0, 255, 0);
-////		}
-//	}
+//		public Color getForeground(Object element, int columnIndex) {
+//			if (element instanceof Account) {
+//				Account account = (Account) element;
+//				switch (columnIndex)
+//				{
+//					case(4):
+//						if(account.getBalance() < 0){
+//							return new Color(getDisplay(), 255, 0, 0);
+//						}
+//					break;
+//					default:
+//						return new Color(getDisplay(), 0, 255, 0);
+//				}
+//			}
+//			return new Color(getDisplay(), 0, 255, 0);
+//		}
+	}
 	
 //	public static String getAnchorTypeIDName(String anchorTypeID )
 //	{
