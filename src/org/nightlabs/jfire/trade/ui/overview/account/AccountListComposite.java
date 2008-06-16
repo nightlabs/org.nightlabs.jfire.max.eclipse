@@ -92,20 +92,6 @@ extends AbstractTableComposite<Account>
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);				
 			}
 		});
-		
-		getTableViewer().setComparator(new ViewerComparator() {
-			@Override
-			public void sort(Viewer viewer, Object[] elements) {
-				if (! (elements instanceof Account[]))
-					return;
-				
-				Arrays.sort((Account[])elements, new Comparator<Account>() {
-					public int compare(Account account1, Account account2) {
-						return -account1.getName().getText().compareTo(account2.getName().getText());
-					}
-				});
-			}
-		});
 	}
 
 	@Override
