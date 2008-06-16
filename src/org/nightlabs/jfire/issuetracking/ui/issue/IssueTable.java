@@ -248,10 +248,10 @@ extends AbstractTableComposite<Issue>
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setContentProvider(new TableContentProvider());
-		tableViewer.setLabelProvider(new IssueListLabelProvider());
+		tableViewer.setLabelProvider(new IssueTableLabelProvider());
 	}
 
-	class IssueListLabelProvider
+	class IssueTableLabelProvider
 	extends TableLabelProvider
 	{
 		public String getColumnText(Object element, int columnIndex) 
@@ -275,8 +275,13 @@ extends AbstractTableComposite<Issue>
 						return issue.getSubject().getText();
 				break;
 				case(4):
-					if (issue.getDescription() != null)
-						return issue.getDescription().getText();
+					if (issue.getDescription() != null) {
+						String descriptionText = issue.getDescription().getText();
+						if (descriptionText.indexOf('\n') != -1)
+							return descriptionText.substring(0, descriptionText.indexOf('\n')).concat("...");
+						else
+							return descriptionText;
+					}
 				break;
 				case(5):
 					if(issue.getIssueSeverityType() != null)
