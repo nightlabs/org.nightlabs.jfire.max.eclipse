@@ -55,8 +55,7 @@ extends EntityEditorPageController
 				final AbstractGridPriceConfigPage priceConfigPage = (AbstractGridPriceConfigPage) page;
 				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
-						if (!priceConfigPage.isDisposed())
-							priceConfigPage.getPriceConfigSection().getPriceConfigComposite().submit();
+						priceConfigPage.getPriceConfigSection().getPriceConfigComposite().submit();
 					}
 				});
 			}

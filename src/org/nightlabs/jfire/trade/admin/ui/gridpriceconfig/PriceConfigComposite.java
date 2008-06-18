@@ -43,6 +43,7 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,7 +51,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
@@ -605,8 +608,15 @@ public abstract class PriceConfigComposite extends XComposite
 
 		if (!priceConfigIDs.isEmpty()) {
 			// show the consequences and ask the user whether he really wants to save
+			Shell shell = null;
+			try {
+				shell = getShell();
+			} catch (SWTException e) {
+				// the composite might be disposed already, try to get another shell
+				shell = Display.getDefault().getActiveShell();
+			}
 			StorePriceConfigsConfirmationDialog dialog = new StorePriceConfigsConfirmationDialog(
-					getShell(),
+					shell,
 					priceConfigIDs,
 					productTypeID, innerPriceConfigID);
 			if (dialog.open() != Window.OK)
