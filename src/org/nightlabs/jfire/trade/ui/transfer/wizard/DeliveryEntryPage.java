@@ -77,7 +77,6 @@ import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavourName;
 import org.nightlabs.jfire.store.deliver.ServerDeliveryProcessor;
-import org.nightlabs.jfire.store.deliver.ServerDeliveryProcessorName;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroup;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroupCarrier;
 import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
@@ -367,8 +366,7 @@ implements IDeliveryEntryPage
 						checkRequirementsEnvironment,
 						new String[] {
 								FetchPlan.DEFAULT,
-								ServerDeliveryProcessor.FETCH_GROUP_NAME,
-								ServerDeliveryProcessorName.FETCH_GROUP_NAMES
+								ServerDeliveryProcessor.FETCH_GROUP_NAME
 						}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			} catch (Exception e) {
 				throw new RuntimeException(e);

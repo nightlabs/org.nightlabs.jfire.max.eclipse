@@ -81,7 +81,6 @@ import org.nightlabs.jfire.accounting.pay.ModeOfPaymentName;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.ServerPaymentProcessor;
-import org.nightlabs.jfire.accounting.pay.ServerPaymentProcessorName;
 import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -833,8 +832,7 @@ implements IPaymentEntryPage
 					checkRequirementsEnvironment,
 					new String[] {
 							FetchPlan.DEFAULT,
-							ServerPaymentProcessor.FETCH_GROUP_NAME,
-							ServerPaymentProcessorName.FETCH_GROUP_NAMES
+							ServerPaymentProcessor.FETCH_GROUP_NAME
 					}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 			String clientPaymentProcessorFactoryID = selectedClientPaymentProcessorFactory.getID();
