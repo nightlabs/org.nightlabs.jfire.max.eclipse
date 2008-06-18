@@ -73,6 +73,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.pay.CheckRequirementsEnvironment;
+import org.nightlabs.jfire.accounting.pay.CheckRequirementsResult;
 import org.nightlabs.jfire.accounting.pay.ModeOfPayment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavourName;
@@ -908,9 +909,9 @@ implements IPaymentEntryPage
 		int idx = serverPaymentProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedServerPaymentProcessor = serverPaymentProcessorList.get(idx);
-			String reqMsg = selectedServerPaymentProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {
-				this.setErrorMessage(reqMsg.trim());
+			CheckRequirementsResult result = selectedServerPaymentProcessor.getRequirementCheckResult();
+			if (result != null) {
+				this.setErrorMessage(result.getMessage());
 				wizard.updateDialog();
 				return;
 			}
@@ -966,7 +967,7 @@ implements IPaymentEntryPage
 				clientPaymentProcessor.getRequirementCheckKey() == null &&
 				selectedClientPaymentProcessorFactory != null &&
 				selectedServerPaymentProcessor != null &&
-				selectedServerPaymentProcessor.getRequirementCheckKey() == null;
+				selectedServerPaymentProcessor.getRequirementCheckResult() == null;
 	}
 
 //	/**

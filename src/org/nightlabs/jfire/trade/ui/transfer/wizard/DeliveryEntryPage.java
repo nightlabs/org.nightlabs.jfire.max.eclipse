@@ -71,6 +71,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
+import org.nightlabs.jfire.store.deliver.CheckRequirementsResult;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
@@ -446,9 +447,9 @@ implements IDeliveryEntryPage
 			getDeliveryWizardHop().getDelivery().setServerDeliveryProcessorID(
 					(ServerDeliveryProcessorID) JDOHelper.getObjectId(selectedServerDeliveryProcessor));
 
-			String reqMsg = selectedServerDeliveryProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {
-				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
+			CheckRequirementsResult result = selectedServerDeliveryProcessor.getRequirementCheckResult();
+			if (result != null) {
+				this.setErrorMessage(result.getMessage());
 //				wizard.updateDialog(); // this is already done be setErrorMessage(...)
 				return;
 			}
@@ -503,7 +504,7 @@ implements IDeliveryEntryPage
 				clientDeliveryProcessor.getRequirementCheckKey() == null &&
 				selectedClientDeliveryProcessorFactory != null &&
 				selectedServerDeliveryProcessor != null &&
-				selectedServerDeliveryProcessor.getRequirementCheckKey() == null;
+				selectedServerDeliveryProcessor.getRequirementCheckResult() == null;
 	}
 	
 	private Job loadModeOfDeliveriesJob = null;

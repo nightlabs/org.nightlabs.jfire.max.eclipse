@@ -70,7 +70,7 @@ implements IViewActionDelegate
 	private static String[] FETCH_GROUPS_QUERY_STORE_SAVE = new String[] {
 		FetchPlan.DEFAULT,
 		BaseQueryStore.FETCH_GROUP_NAME,
-		BaseQueryStore.FETCH_GROUP_DESCRIPTION	
+		BaseQueryStore.FETCH_GROUP_DESCRIPTION
 	};
 	private ProductTypeQuickListView view;
 	
@@ -113,29 +113,29 @@ implements IViewActionDelegate
 								};
 								searchJob.schedule();
 								
-//								Job saveJob = new Job("Save Last Changes") {				
-//									@Override
-//									protected IStatus run(ProgressMonitor monitor) throws Exception 
-//									{										
-//										monitor.beginTask("Save Last Changes", 100);
-//										UserID userID = Login.sharedInstance().getUserObjectID();
-//										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
-//												queryCollection.getResultClass(), userID, 
-//												FETCH_GROUPS_QUERY_STORE_LOAD, 
-//												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//												new SubProgressMonitor(monitor, 50));
-//										defaultQueryStore.setQueryCollection(queryCollection);
-//										QueryStoreDAO.sharedInstance().storeQueryStore(
-//												defaultQueryStore,
-//												FETCH_GROUPS_QUERY_STORE_SAVE, 
-//												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//												false, 
-//												new SubProgressMonitor(monitor, 50));
-//										monitor.done();
-//										return Status.OK_STATUS;
-//									}				
-//								};
-//								saveJob.schedule();
+								Job saveJob = new Job("Save Last Changes") {				
+									@Override
+									protected IStatus run(ProgressMonitor monitor) throws Exception 
+									{										
+										monitor.beginTask("Save Last Changes", 100);
+										UserID userID = Login.sharedInstance().getUserObjectID();
+										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+												queryCollection.getResultClass(), userID, 
+												FETCH_GROUPS_QUERY_STORE_LOAD, 
+												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+												new SubProgressMonitor(monitor, 50));
+										defaultQueryStore.setQueryCollection(queryCollection);
+										QueryStoreDAO.sharedInstance().storeQueryStore(
+												defaultQueryStore,
+												FETCH_GROUPS_QUERY_STORE_SAVE, 
+												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+												false, 
+												new SubProgressMonitor(monitor, 50));
+										monitor.done();
+										return Status.OK_STATUS;
+									}				
+								};
+								saveJob.schedule();
 							}							
 						}
 					});
