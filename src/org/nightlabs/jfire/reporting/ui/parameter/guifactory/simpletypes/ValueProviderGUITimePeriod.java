@@ -3,6 +3,8 @@
  */
 package org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes;
 
+import java.util.Calendar;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
@@ -25,6 +27,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
 import org.nightlabs.jfire.reporting.ui.parameter.ValueProviderConfigUtil;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.util.CalendarUtil;
 import org.nightlabs.util.TimePeriod;
 
 /**
@@ -71,6 +74,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 			group.setLayout(new GridLayout(2, true));
 			group.setLayoutData(new GridData(GridData.FILL_BOTH));
 			group.setText(ValueProviderConfigUtil.getValueProviderMessage(getValueProviderConfig()));
+			Calendar cal = Calendar.getInstance();
 			fromEdit = new DateTimeEdit(
 					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.fromDateTimeEdit.caption")); //$NON-NLS-1$
@@ -79,7 +83,9 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 				public void modifyText(ModifyEvent e) {
 					notifyOutputChanged();
 				}
-			});
+			});			
+			CalendarUtil.setToMinTimeOfDay(cal);
+			fromEdit.setDate(cal.getTime());
 			toEdit = new DateTimeEdit(
 					group, DateFormatter.FLAGS_DATE_LONG_TIME_HM | DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.guifactory.simpletypes.ValueProviderGUITimePeriod.toDateTimeEdit.caption")); //$NON-NLS-1$
@@ -89,6 +95,8 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 					notifyOutputChanged();
 				}
 			});
+			CalendarUtil.setToMaxTimeOfDay(cal);
+			toEdit.setDate(cal.getTime());
 		}
 		return wrapper;
 	}
