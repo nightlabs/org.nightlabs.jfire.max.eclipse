@@ -23,6 +23,8 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -87,28 +89,45 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
-		issueLinkListSection = new IssueLinkListSection(this, parent, controller);
-		getManagedForm().addPart(issueLinkListSection);
+		GridLayout layout = (GridLayout)parent.getLayout();
+		layout.numColumns = 2;
+		layout.makeColumnsEqualWidth = true;
 		
 		issueDetailSection = new IssueDetailSection(this, parent, controller);
+		GridData gd = new GridData(GridData.FILL_VERTICAL);
+		gd.grabExcessHorizontalSpace = false;
+		gd.grabExcessVerticalSpace = false;
+		issueDetailSection.getSection().setLayoutData(gd);
 		getManagedForm().addPart(issueDetailSection);
 		
 		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
+		issueTypeAndStateSection.getSection().setLayoutData(gd);
 		getManagedForm().addPart(issueTypeAndStateSection);
 		
 		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, parent, controller);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		issueSubjectAndDescriptionSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueSubjectAndDescriptionSection);
 		
 		issuePropertySection = new IssuePropertySection(this, parent, controller);
+		issuePropertySection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issuePropertySection);
 		
+		issueLinkListSection = new IssueLinkListSection(this, parent, controller);
+		issueLinkListSection.getSection().setLayoutData(gridData);
+		getManagedForm().addPart(issueLinkListSection);
+		
 		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
+		issueFileAttachmentSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueFileAttachmentSection);
 		
 		issueCommentListSection = new IssueCommentListSection(this, parent, controller);
+		issueCommentListSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueCommentListSection);
 		
 		issueCommentCreateSection = new IssueCommentCreateSection(this, parent, controller);
+		issueCommentCreateSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueCommentCreateSection);
 		
 		if (controller.isLoaded()) {

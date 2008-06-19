@@ -30,9 +30,9 @@ extends AbstractIssueEditorGeneralSection
 	
 	public IssueCommentListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getSection().setText("Comment(s)");
+		getSection().setText("Comment");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		getSection().setLayout(new GridLayout());
+//		getSection().setLayout(new GridLayout());
 
 		// Sets up the toolkit.
 		toolkit = new FormToolkit(getSection().getShell().getDisplay());
