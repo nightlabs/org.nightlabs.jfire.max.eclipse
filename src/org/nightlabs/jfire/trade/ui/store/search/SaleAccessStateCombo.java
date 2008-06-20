@@ -26,7 +26,7 @@ implements ActiveStateManager
 {
 	private Button activeButton = null;
 	private XComboComposite<SaleAccessState> stateCombo = null;
-	private SaleAccessState selectedSaleAccessState;
+	private SaleAccessState selectedSaleAccessState = SaleAccessState.SALEABLE;
  
 	/**
 	 * @param parent
