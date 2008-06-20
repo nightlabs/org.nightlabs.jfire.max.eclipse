@@ -52,30 +52,37 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 
 	private Label issueTypeLabel;
 	private Label statusLabel;
-	
+
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
-	
+
 	/**
 	 * @param section
 	 * @param managedForm
 	 */
 	public IssueTypeAndStateSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
+
+		getSection().setText("Type and Status");
+
 		getClient().getGridLayout().numColumns = 3;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
-		getSection().setText("Type and Status");
-		
+
 		issueTypeLabel = new Label(getClient(), SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		issueTypeLabel.setLayoutData(gd);
-		
+
 		statusLabel = new Label(getClient(), SWT.WRAP);
 		statusLabel.setText("Status: ");
-		statusLabel.setLayoutData(new GridData());
-		
+		gd = new GridData();
+		statusLabel.setLayoutData(gd);
+
 		currentStateComposite = new CurrentStateComposite(getClient(), SWT.NONE);
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		currentStateComposite.setLayoutData(gd);
+		
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
@@ -98,8 +105,12 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 				signalIssue(event);
 			}
 		});
+		
+		gd = new GridData();
+		gd.horizontalSpan = 3;
+		nextTransitionComposite.setLayoutData(gd);
 	}
-	
+
 	/**
 	 * The fetch groups of issue data.
 	 */
@@ -115,7 +126,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
-	
+
 	protected void signalIssue(final SignalEvent event) {
 		Job job = new Job("Performing transition") {
 			@Override
@@ -126,7 +137,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
 							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-					
+
 					currentStateComposite.setStatable(issue);
 					nextTransitionComposite.setStatable(issue);
 				} catch (Exception x) {
@@ -139,7 +150,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		job.setUser(true);
 		job.schedule();		
 	}
-	
+
 	protected void signalAssign() {
 		Job job = new Job("Performing transition") {
 			@Override
@@ -151,7 +162,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 					Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
 							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-					
+
 					currentStateComposite.setStatable(issue);
 					nextTransitionComposite.setStatable(issue);
 
@@ -166,12 +177,12 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		job.setUser(true);
 		job.schedule();
 	}
-	
+
 	protected void doSetIssue(Issue issue) {
 		issueTypeLabel.setText(
-			String.format(
-				"Issue type: %s", 
-				issue.getIssueType().getName().getText())
+				String.format(
+						"Issue type: %s", 
+						issue.getIssueType().getName().getText())
 		);
 		currentStateComposite.setStatable(issue);
 		nextTransitionComposite.setStatable(issue);		
@@ -181,7 +192,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 		FetchPlan.DEFAULT,
 		Transition.FETCH_GROUP_NAME
 	};
-	
+
 	public static boolean assignInPossibleTransition(Issue issue, ProgressMonitor monitor) {
 		State state = issue.getStatableLocal().getState();
 		StateID stateID = (StateID) JDOHelper.getObjectId(state);
