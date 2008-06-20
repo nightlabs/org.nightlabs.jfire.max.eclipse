@@ -76,6 +76,7 @@ Export-Package: org.nightlabs.jfire.trade.ui,
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.forms,
+ org.nightlabs.base.ui;visibility:=reexport,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.reporting.ui;visibility:=reexport,
  org.nightlabs.jfire.jbpm.ui;visibility:=reexport
