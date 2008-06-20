@@ -253,25 +253,25 @@ extends XComposite
 	{
 		query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
 
-//		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
-//			case PUBLISHED: query.setPublished(true);
-//			break;
-//			case CONFIRMED: query.setConfirmed(true);
-//			break;
-//			case SALEABLE: query.setSaleable(true);
-//			break;
-//			case CLOSED: query.setClosed(true);
-//			break;
-//			default:
-//				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
-//		}
+		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
+			case PUBLISHED: query.setPublished(true);
+			break;
+			case CONFIRMED: query.setConfirmed(true);
+			break;
+			case SALEABLE: query.setSaleable(true);
+			break;
+			case CLOSED: query.setClosed(true);
+			break;
+			default:
+				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
+		}
 		
 		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)
 			query.setOwnerID(getSearchCriteriaComposite().getSelectedOwnerID());
 
 		if (getSearchCriteriaComposite().getSelectedProductTypeGroupID() != null)
 			query.setProductTypeGroupID(getSearchCriteriaComposite().getSelectedProductTypeGroupID());
-
+		
 		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
 		return query;
 	}	

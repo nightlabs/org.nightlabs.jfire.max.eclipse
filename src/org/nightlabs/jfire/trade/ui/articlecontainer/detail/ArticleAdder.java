@@ -37,14 +37,22 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public interface ArticleAdder
 {
+	/**
+	 * Initializes the ArticleAdder with the given {@link SegmentEdit}.
+	 * @param segmentEdit 
+	 */
 	void init(SegmentEdit segmentEdit);
 
 	/**
 	 * @param productTypeID The currently selected productType for which to expose the add-it-feature
-	 * @param monitor TODO
+	 * @param monitor The ProgressMonitor to display the progress
 	 */
 	void setProductTypeID(ProductTypeID productTypeID, ProgressMonitor monitor);
 
+	/**
+	 * Returns the {@link ProductType} for the ArticleAdder
+	 * @return the {@link ProductType} for the ArticleAdder
+	 */
 	ProductType getProductType();
 
 	/**
@@ -71,6 +79,7 @@ public interface ArticleAdder
 	Composite createComposite(Composite parent);
 
 	/**
+	 * Returns the <tt>Composite</tt> which has been created by {@link #createComposite(Composite)}.
 	 * @return the <tt>Composite</tt> which has been created by {@link #createComposite(Composite)}.
 	 */
 	Composite getComposite();

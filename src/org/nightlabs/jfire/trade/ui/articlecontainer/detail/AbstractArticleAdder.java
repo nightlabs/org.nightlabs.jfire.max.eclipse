@@ -26,12 +26,14 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.MessageComposite;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
-
-
+import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -72,7 +74,13 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
-		composite = _createComposite(parent);
+		boolean requirementsFulFilled = checkRequirements();
+		if (!requirementsFulFilled) {
+			composite = createRequirementsNotFulFilledComposite(parent);
+		}
+		if (composite == null) {
+			composite = _createComposite(parent);
+		}
 
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
@@ -110,4 +118,31 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 			composite.dispose();
 	}
 
+	/**
+	 * If the method {@link #checkRequirements()} returns false 
+	 * this method should return a corresponding Composite should which shows a appropriate
+	 * message 
+	 * 
+	 * @return a Composite which shows a appropriate message which requirements are not fulfilled.
+	 */
+	protected Composite createRequirementsNotFulFilledComposite(Composite parent) 
+	{
+		if (!getProductType().isSaleable()) {
+			String message = String.format("The ProductType %s is not saleable!", getProductType().getName().getText(NLLocale.getDefault())); 
+			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
+		}
+		return null;
+	}
+
+	/**
+	 * Subclasses can override this method to check if all prerequisites are fulfilled 
+	 * for selling the current productType.
+	 * By default this method checks if the ProductType is saleable.  
+	 * 
+	 * @return true if all requirements are fulfilled or false if not
+	 */	
+	protected boolean checkRequirements() {
+		return getProductType().isSaleable();
+	}
+	
 }

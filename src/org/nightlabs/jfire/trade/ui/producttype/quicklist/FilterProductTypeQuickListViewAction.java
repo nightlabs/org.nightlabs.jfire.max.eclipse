@@ -113,7 +113,7 @@ implements IViewActionDelegate
 								};
 								searchJob.schedule();
 								
-								Job saveJob = new Job("Save Last Changes") {				
+								Job saveJob = new Job("Save Last Changes") {
 									@Override
 									protected IStatus run(ProgressMonitor monitor) throws Exception 
 									{										

@@ -3,10 +3,12 @@ package org.nightlabs.jfire.trade.ui.store.search;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -35,7 +37,7 @@ extends AbstractQueryFilterComposite<Q>
 	private ActiveTextComposite ownerComp;
 	private ActiveTextComposite productTypeGroupComp;
 	private Class<Q> queryClass;
-//	private SaleAccessStateCombo saleAccessStateCombo;
+	private SaleAccessStateCombo saleAccessStateCombo;
 	
 	/**
 	 * @param parent
@@ -68,7 +70,10 @@ extends AbstractQueryFilterComposite<Q>
 	
 	protected void createComposite(Composite parent)
 	{
-		parent.setLayout(new GridLayout(2, true));
+		parent.setLayout(new GridLayout(3, true));
+		saleAccessStateCombo = new SaleAccessStateCombo(parent, SWT.NONE);
+		saleAccessStateCombo.getStateCombo().addSelectionListener(stateComboListener);
+		saleAccessStateCombo.getActiveButton().addSelectionListener(activeSaleAccessButtonListener);
 		ownerComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), //$NON-NLS-1$ 
 				ownerActiveListener, ownerBrowseListener);
 		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), //$NON-NLS-1$ 
@@ -112,6 +117,30 @@ extends AbstractQueryFilterComposite<Q>
 		}
 	};
 		
+	private SelectionListener stateComboListener = new SelectionListener() {
+		public void widgetSelected(SelectionEvent e) {
+			selectedSaleAccessState = saleAccessStateCombo.getStateCombo().getSelectedElement();
+			applySaleAccessState(selectedSaleAccessState, getQuery());
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+	};
+	
+	private SelectionListener activeSaleAccessButtonListener = new SelectionListener(){
+		public void widgetSelected(SelectionEvent e) {
+			saleAccessStateCombo.getStateCombo().setEnabled(((Button)e.getSource()).getSelection());
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+	};
+	
+	private SaleAccessState selectedSaleAccessState = SaleAccessState.SALEABLE;
+	public SaleAccessState getSelectedSaleAccessState() {
+		return selectedSaleAccessState;
+	}
+	
 	private AnchorID selectedOwnerID = null;
 	public AnchorID getSelectedOwnerID() {
 		return selectedOwnerID;
@@ -127,6 +156,7 @@ extends AbstractQueryFilterComposite<Q>
 	 */
 	@Override
 	protected void resetSearchQueryValues(Q query) {
+		applySaleAccessState(selectedSaleAccessState, query);
 		query.setOwnerID(selectedOwnerID);
 		query.setProductTypeGroupID(selectedProductTypeGroupID);
 	}
@@ -143,9 +173,13 @@ extends AbstractQueryFilterComposite<Q>
 		if (!ownerComp.isActive()) {
 			selectedOwnerID = null;
 		}
+		if (!saleAccessStateCombo.getActiveButton().getSelection()) {
+			selectedSaleAccessState = SaleAccessState.SALEABLE;
+		}
 		
 		query.setOwnerID(null);
 		query.setProductTypeGroupID(null);
+		applySaleAccessState(SaleAccessState.SALEABLE, query);
 	}
 
 	/* (non-Javadoc)
@@ -162,7 +196,11 @@ extends AbstractQueryFilterComposite<Q>
 			
 			selectedProductTypeGroupID = null;
 			productTypeGroupComp.clear();
-			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);			
+			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
+			
+			selectedSaleAccessState = SaleAccessState.SALEABLE;
+			saleAccessStateCombo.getStateCombo().selectElement(selectedSaleAccessState);
+			setSearchSectionActive(saleAccessStateCombo.getActiveButton(), false);
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
@@ -208,47 +246,82 @@ extends AbstractQueryFilterComposite<Q>
 					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
 				}
 
+				if (AbstractProductTypeQuery.PROPERTY_CLOSED.equals(
+						changedField.getPropertyName())) 
+				{
+					Boolean closed = (Boolean) changedField.getNewValue();
+					if (closed != null && closed) {
+						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CLOSED);
+					}
+				}
+				
+				if (AbstractProductTypeQuery.PROPERTY_CONFIRMED.equals(
+						changedField.getPropertyName())) 
+				{
+					Boolean confirmed = (Boolean) changedField.getNewValue();
+					if (confirmed != null && confirmed) {
+						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CONFIRMED);
+					}
+				}				
+
+				if (AbstractProductTypeQuery.PROPERTY_PUBLISHED.equals(
+						changedField.getPropertyName())) 
+				{
+					Boolean published = (Boolean) changedField.getNewValue();
+					if (published != null && published) {
+						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.PUBLISHED);
+					}
+				}				
+
+				if (AbstractProductTypeQuery.PROPERTY_SALEABLE.equals(
+						changedField.getPropertyName())) 
+				{
+					Boolean saleable = (Boolean) changedField.getNewValue();
+					if (saleable != null && saleable) {
+						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.SALEABLE);
+					}
+				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null
 	}
 
-//	protected void applySaleAccessState(SaleAccessState state, AbstractProductTypeQuery query) 
-//	{
-//		Boolean falseValue = null;
-//		if (state == null) {
-//			query.setPublished(null);
-//			query.setConfirmed(null);
-//			query.setSaleable(null);
-//			query.setClosed(null);
-//			return;
-//		}
-//		switch (state) {	
-//			case PUBLISHED:
-//				query.setPublished(true);
-//				query.setConfirmed(falseValue);
-//				query.setSaleable(falseValue);
-//				query.setClosed(falseValue);
-//				break;
-//			case CONFIRMED:
-//				query.setConfirmed(true);
-//				query.setPublished(falseValue);
-//				query.setSaleable(falseValue);
-//				query.setClosed(falseValue);
-//				break;
-//			case SALEABLE:
-//				query.setSaleable(true);				
-//				query.setPublished(falseValue);
-//				query.setConfirmed(falseValue);
-//				query.setClosed(falseValue);
-//				break;
-//			case CLOSED:
-//				query.setClosed(true);
-//				query.setPublished(falseValue);
-//				query.setConfirmed(falseValue);
-//				query.setSaleable(falseValue);				
-//				break;
-//		}
-//	}
+	protected void applySaleAccessState(SaleAccessState state, AbstractProductTypeQuery query) 
+	{
+		Boolean falseValue = null;
+		if (state == null) {
+			query.setPublished(null);
+			query.setConfirmed(null);
+			query.setSaleable(null);
+			query.setClosed(null);
+			return;
+		}
+		switch (state) {	
+			case PUBLISHED:
+				query.setPublished(true);
+				query.setConfirmed(falseValue);
+				query.setSaleable(falseValue);
+				query.setClosed(falseValue);
+				break;
+			case CONFIRMED:
+				query.setConfirmed(true);
+				query.setPublished(falseValue);
+				query.setSaleable(falseValue);
+				query.setClosed(falseValue);
+				break;
+			case SALEABLE:
+				query.setSaleable(true);				
+				query.setPublished(falseValue);
+				query.setConfirmed(falseValue);
+				query.setClosed(falseValue);
+				break;
+			case CLOSED:
+				query.setClosed(true);
+				query.setPublished(falseValue);
+				query.setConfirmed(falseValue);
+				query.setSaleable(falseValue);				
+				break;
+		}
+	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#getQueryClass()
