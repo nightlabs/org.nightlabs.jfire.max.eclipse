@@ -118,18 +118,6 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issuePropertySection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issuePropertySection);
 		
-		issueLinkListSection = new IssueLinkListSection(this, parent, controller);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		issueLinkListSection.getSection().setLayoutData(gridData);
-		getManagedForm().addPart(issueLinkListSection);
-		
-		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		issueFileAttachmentSection.getSection().setLayoutData(gridData);
-		getManagedForm().addPart(issueFileAttachmentSection);
-		
 		issueCommentListSection = new IssueCommentListSection(this, parent, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
@@ -141,6 +129,18 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		gridData.horizontalSpan = 2;
 		issueCommentCreateSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueCommentCreateSection);
+		
+		issueLinkListSection = new IssueLinkListSection(this, parent, controller);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		issueLinkListSection.getSection().setLayoutData(gridData);
+		getManagedForm().addPart(issueLinkListSection);
+		
+		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		issueFileAttachmentSection.getSection().setLayoutData(gridData);
+		getManagedForm().addPart(issueFileAttachmentSection);
 		
 		if (controller.isLoaded()) {
 			issueLinkListSection.setIssue(controller.getIssue());
