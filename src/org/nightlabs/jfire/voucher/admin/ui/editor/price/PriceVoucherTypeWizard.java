@@ -31,9 +31,6 @@ extends DynamicPathWizard
 	{
 		this.voucherType =  vouchertype;
 		this.parentVoucherTypeID = parentVoucherTypeID;
-		
-		if (parentVoucherTypeID == null)
-			throw new IllegalArgumentException("parentVoucherTypeID must not be null!"); //$NON-NLS-1$
 	}
 
 	private SelectVoucherPriceConfigPage selectVoucherPriceConfigPage;

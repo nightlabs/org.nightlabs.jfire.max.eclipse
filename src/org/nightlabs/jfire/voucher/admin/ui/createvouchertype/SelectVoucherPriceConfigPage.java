@@ -91,9 +91,6 @@ extends WizardHopPage
 
 	private void updateUI()
 	{
-
-
-
 		if (inheritPriceConfig.getSelection())
 			mode = Mode.INHERIT;
 		else if (createPriceConfig.getSelection())
@@ -214,7 +211,7 @@ extends WizardHopPage
 			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				final VoucherType parentVoucherType = VoucherTypeDAO.sharedInstance().getVoucherType(
+				final VoucherType parentVoucherType = parentVoucherTypeID == null ? null : VoucherTypeDAO.sharedInstance().getVoucherType(
 						parentVoucherTypeID,
 						new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG, PriceConfig.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
@@ -226,7 +223,7 @@ extends WizardHopPage
 				{
 					public void run()
 					{
-						inheritedPriceConfig = parentVoucherType.getPackagePriceConfig();
+						inheritedPriceConfig = parentVoucherType == null ? null : parentVoucherType.getPackagePriceConfig();
 						if (inheritedPriceConfig == null)
 							setInheritedPriceConfigName(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.inheritedPriceConfigName_noneAssigned")); //$NON-NLS-1$
 						else

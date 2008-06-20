@@ -80,6 +80,7 @@ extends ToolBarSectionPart
 				inheritPressed();
 			}
 		};
+		inheritanceAction.setEnabled(false);
 
 		getToolBarManager().add(inheritanceAction);
 
@@ -184,14 +185,25 @@ extends ToolBarSectionPart
 			throw new IllegalStateException("PriceConfig is not an instance of VoucherPriceConfig"); //$NON-NLS-1$
 	}
 
-	public void setVoucherType(VoucherType voucher)
+	public void setVoucherType(VoucherType voucherType)
 	{
-		voucherType = voucher;
-		originalVoucherConfig = (VoucherPriceConfig) voucher.getPackagePriceConfig();
-		orgPriceMap = originalVoucherConfig.getPrices();
+		this.voucherType = voucherType;
+		originalVoucherConfig = (VoucherPriceConfig) voucherType.getPackagePriceConfig();
+
+		if (originalVoucherConfig == null)
+			orgPriceMap = new HashMap<Currency, Long>();
+		else
+			orgPriceMap = originalVoucherConfig.getPrices();
+
+		switchtoEditPriceConfigPage();
 		updatePricesTable();
-		inheritanceAction.setChecked(voucherType.getFieldMetaData(
-				ProductType.FieldName.packagePriceConfig).isValueInherited());
+
+		inheritanceAction.setChecked(
+				voucherType.getFieldMetaData(
+						ProductType.FieldName.packagePriceConfig
+				).isValueInherited()
+		);
+		inheritanceAction.setEnabled(voucherType.getExtendedProductTypeID() != null);
 	}
 
 	protected void updatePricesTable()
@@ -227,8 +239,7 @@ extends ToolBarSectionPart
 		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
 		if( wizardDialog.open() == Window.OK)
 		{
-			inheritanceAction.setChecked(voucherType.getFieldMetaData(
-					ProductType.FieldName.packagePriceConfig).isValueInherited());
+			inheritanceAction.setChecked(voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).isValueInherited());
 			updatePricesTable();
 			markDirty();
 		}
