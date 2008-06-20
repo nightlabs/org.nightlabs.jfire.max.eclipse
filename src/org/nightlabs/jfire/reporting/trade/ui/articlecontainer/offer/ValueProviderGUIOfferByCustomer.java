@@ -5,7 +5,6 @@ package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer;
 
 import java.util.Collection;
 
-import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.CoreException;
@@ -21,17 +20,13 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
-import org.nightlabs.jfire.jbpm.graph.def.State;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
-import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
@@ -47,15 +42,15 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ValueProviderGUIOfferByCustomer
 extends AbstractValueProviderGUI<OfferID>
 {
-	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
-		FetchPlan.DEFAULT,
-		Offer.FETCH_GROUP_THIS_OFFER,
-		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON,
-		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL
-	};
-	
+//	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
+//		FetchPlan.DEFAULT,
+//		Offer.FETCH_GROUP_THIS_OFFER,
+//		State.FETCH_GROUP_STATE_DEFINITION,
+//		StateDefinition.FETCH_GROUP_NAME,
+//		LegalEntity.FETCH_GROUP_PERSON,
+//		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL
+//	};
+
 	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<OfferID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
@@ -114,7 +109,7 @@ extends AbstractValueProviderGUI<OfferID>
 				
 				final Collection<Offer> offers = OfferDAO.sharedInstance().getOffersByQuery(
 					qs, 
-					FETCH_GROUPS_OFFERS, 
+					OfferListComposite.FETCH_GROUPS_OFFER, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					monitor);
 				Display.getDefault().asyncExec(new Runnable() {
