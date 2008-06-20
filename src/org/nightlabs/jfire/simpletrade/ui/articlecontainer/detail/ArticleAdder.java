@@ -156,9 +156,7 @@ public class ArticleAdder extends AbstractArticleAdder
 		monitor.done();
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleAdder#getProductType()
-	 */
+	@Override
 	public ProductType getProductType()
 	{
 		return productType;
