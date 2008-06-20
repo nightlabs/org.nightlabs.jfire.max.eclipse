@@ -58,7 +58,6 @@ extends WizardHopPage
 		linkedObjectLbl.setText("Linked object");
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(mainComposite, SWT.NONE, true, issue);
-		
 //		/**********Reporter**********/
 //		reporterLbl = new Label(mainComposite, SWT.NONE);
 //		reporterLbl.setText("Reporter: ");

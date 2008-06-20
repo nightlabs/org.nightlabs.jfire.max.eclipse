@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
@@ -37,7 +38,7 @@ extends WizardHopPage
 
 	//Used Objects
 	private Issue selectedIssue;
-	private Object attachedObject;
+//	private Object attachedObject;
 
 	public static enum ActionForIssue {
 		createNewIssue,
@@ -73,7 +74,7 @@ extends WizardHopPage
 		super(SelectIssueWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class));
 		setTitle("Create/Attach issue");
 
-		this.attachedObject = attachedObject;
+//		this.attachedObject = attachedObject;
 		
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
@@ -149,6 +150,7 @@ extends WizardHopPage
 						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 						createIssueGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
 //						createIssueGeneralWizardPage.setIssueLinkTableItem(new IssueLinkTableItem((ObjectID)JDOHelper.getObjectId(attachedObject), attachedObjectLinkType));
+						new WizardHop(this);
 						getWizardHop().addHopPage(createIssueGeneralWizardPage);
 					}
 					return false;
@@ -176,7 +178,6 @@ extends WizardHopPage
 	
 	@Override
 	public boolean canBeLastPage() {
-		// TODO Auto-generated method stub
 		return super.canBeLastPage();
 	}
 	
