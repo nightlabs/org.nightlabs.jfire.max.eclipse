@@ -32,19 +32,19 @@ public class OfferEntryViewer
 	extends ArticleContainerEntryViewer<Offer, OfferQuery>
 {
 	public static final String ID = OfferEntryViewer.class.getName();
-	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
-		FetchPlan.DEFAULT,
-//		Offer.FETCH_GROUP_ARTICLES,
-//		Offer.FETCH_GROUP_CREATE_USER,
-//		Offer.FETCH_GROUP_PRICE,
-//		Offer.FETCH_GROUP_STATES
-		Offer.FETCH_GROUP_THIS_OFFER,
-		Offer.FETCH_GROUP_OFFER_LOCAL,
-		StatableLocal.FETCH_GROUP_STATE,
-		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON
-	};
+//	public static final String[] FETCH_GROUPS_OFFERS = new String[] {
+//		FetchPlan.DEFAULT,
+////		Offer.FETCH_GROUP_ARTICLES,
+////		Offer.FETCH_GROUP_CREATE_USER,
+////		Offer.FETCH_GROUP_PRICE,
+////		Offer.FETCH_GROUP_STATES
+//		Offer.FETCH_GROUP_THIS_OFFER,
+//		Offer.FETCH_GROUP_OFFER_LOCAL,
+//		StatableLocal.FETCH_GROUP_STATE,
+//		State.FETCH_GROUP_STATE_DEFINITION,
+//		StateDefinition.FETCH_GROUP_NAME,
+//		LegalEntity.FETCH_GROUP_PERSON
+//	};
 	
 	public OfferEntryViewer(Entry entry) {
 		super(entry);
@@ -80,7 +80,7 @@ public class OfferEntryViewer
 	{
 		return OfferDAO.sharedInstance().getOffersByQuery(
 			queryMap,
-			FETCH_GROUPS_OFFERS,
+			OfferListComposite.FETCH_GROUPS_OFFER,
 			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 			monitor);
 	}

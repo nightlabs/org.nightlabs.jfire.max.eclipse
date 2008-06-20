@@ -1,13 +1,19 @@
 package org.nightlabs.jfire.trade.ui.overview.offer;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
@@ -15,11 +21,25 @@ import org.nightlabs.l10n.NumberFormatter;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class OfferListComposite
 extends AbstractArticleContainerListComposite<Offer>
 {
+	public static final String[] FETCH_GROUPS_OFFER = {
+		FetchPlan.DEFAULT,
+		Offer.FETCH_GROUP_CREATE_USER,
+		Offer.FETCH_GROUP_CUSTOMER,
+		Offer.FETCH_GROUP_VENDOR,
+		Offer.FETCH_GROUP_CURRENCY,
+		Offer.FETCH_GROUP_PRICE,
+		Offer.FETCH_GROUP_FINALIZE_USER,
+		Offer.FETCH_GROUP_OFFER_LOCAL,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		StateDefinition.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON,
+		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL
+	};
+
 	public OfferListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
