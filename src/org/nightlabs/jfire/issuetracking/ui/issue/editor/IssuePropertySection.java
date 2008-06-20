@@ -40,8 +40,15 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 	 */
 	public IssuePropertySection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
+		
 		getClient().getGridLayout().numColumns = 6;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
+		
+		getClient().getGridData().grabExcessHorizontalSpace = false;
+		getClient().getGridData().grabExcessVerticalSpace = false;
+		getClient().getGridData().horizontalAlignment = SWT.BEGINNING;
+		getClient().getGridData().verticalAlignment = SWT.BEGINNING;
+		
 		getSection().setText("Properties");
 
 		priorityLabel = new Label(getClient(), SWT.WRAP);
