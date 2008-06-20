@@ -72,6 +72,7 @@ implements IProductTypeSectionPart
 //				setSelection(!isSelection());
 			}
 		};
+		inheritanceAction.setEnabled(false);
 		getToolBarManager().add(inheritanceAction);
 		updateToolBarManager();
 
@@ -130,11 +131,14 @@ implements IProductTypeSectionPart
 		if (productType == null) {
 			setInheritanceSelection(false);
 			productTypeName.setI18nText(null);
+			inheritanceAction.setEnabled(false);
 		}
 		else {
 			productTypeName.setI18nText(productType.getName(), I18nTextEditor.EditMode.DIRECT);
 			if (productType.getFieldMetaData(ProductType.FieldName.name) != null)
 				setInheritanceSelection(productType.getFieldMetaData(ProductType.FieldName.name).isValueInherited());
+
+			inheritanceAction.setEnabled(productType.getExtendedProductTypeID() != null);
 		}
 	}
 

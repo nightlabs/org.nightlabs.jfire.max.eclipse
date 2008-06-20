@@ -79,6 +79,7 @@ implements IProductTypeSectionPart
 			}
 		};
 		getToolBarManager().add(inheritNestedProductTypesAction);
+		inheritNestedProductTypesAction.setEnabled(false);
 		
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addNestedProductTypeAction);
@@ -125,14 +126,20 @@ implements IProductTypeSectionPart
 		this.productType = pageController.getProductType();
 		if (productType == null) {
 			setInheritanceSelection(false);
+			inheritNestedProductTypesAction.setEnabled(false);
 		}
 		else {
-			if (productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null)
-				setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData(
-						ProductTypeLocal.FieldName.nestedProductTypeLocals).isValueInherited());
-//			 TODO sort nestedProductTypes alphabetically
+			if (productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null) {
+				setInheritanceSelection(
+						productType.getProductTypeLocal().getFieldMetaData(
+								ProductTypeLocal.FieldName.nestedProductTypeLocals
+						).isValueInherited()
+				);
+			}
+			inheritNestedProductTypesAction.setEnabled(productType.getExtendedProductTypeID() != null);			
 		}
-		
+
+		// TODO sort nestedProductTypes alphabetically
 		nestedProductTypeTable.setInput(productType);
 	}
 

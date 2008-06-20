@@ -58,6 +58,7 @@ implements IProductTypeSectionPart
 
 		inheritAction = new InheritAction();
 		registerAction(inheritAction);
+		inheritAction.setEnabled(false);
 		
 		updateToolBarManager();
 	}
@@ -82,24 +83,12 @@ implements IProductTypeSectionPart
 		originalEntity = pageController.getProductType().getOwner();
 		getOwnerEditComposite().setLegalEntity(originalEntity);	
 		setInheritanceSelection(productType.getFieldMetaData(ProductType.FieldName.owner).isValueInherited());
+		inheritAction.setEnabled(productType.getExtendedProductTypeID() != null);
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
 		return productTypePageController;
-	}
-
-	/**
-	 * sets the {@link ProductType}
-	 * @param productType the {@link ProductType} to set
-	 */
-	public void setProductType(ProductType productType) 
-	{
-		if (productType == null || getSection() == null || getSection().isDisposed())
-			return;
-
-		//	this.productType = productType;
-		//getOwnerEditComposite().setLegalEntity(productType.getOwner());
 	}
 
 	public ProductTypeID getExtendedProductTypeID() {

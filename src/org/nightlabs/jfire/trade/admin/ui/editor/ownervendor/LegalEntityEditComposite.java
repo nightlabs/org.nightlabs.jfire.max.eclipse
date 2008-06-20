@@ -58,7 +58,7 @@ extends XComposite
 	}
 
 	protected void updateUI() {
-		legalText.setText(legalEntity.getPerson().getDisplayName());
+		legalText.setText(legalEntity == null ? "" : legalEntity.getPerson().getDisplayName());
 	}
 
 	public LegalEntity getLegalEntity() {
