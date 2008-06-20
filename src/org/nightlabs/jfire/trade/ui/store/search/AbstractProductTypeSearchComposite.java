@@ -253,17 +253,9 @@ extends XComposite
 	{
 		query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
 
-		switch(getSearchCriteriaComposite().getSelectedSaleAccessState()) {
-			case PUBLISHED: query.setPublished(true);
-			break;
-			case CONFIRMED: query.setConfirmed(true);
-			break;
-			case SALEABLE: query.setSaleable(true);
-			break;
-			case CLOSED: query.setClosed(true);
-			break;
-			default:
-				throw new IllegalStateException("Unknown SaleAccessState: " + getSearchCriteriaComposite().getSelectedSaleAccessState()); //$NON-NLS-1$
+		if (getSearchCriteriaComposite().getSelectedSaleAccessState() != null) {
+			getSearchCriteriaComposite().applySaleAccessState(
+					getSearchCriteriaComposite().getSelectedSaleAccessState(), query);
 		}
 		
 		if (getSearchCriteriaComposite().getSelectedOwnerID() != null)

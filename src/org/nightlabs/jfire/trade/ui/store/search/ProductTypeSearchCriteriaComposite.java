@@ -74,6 +74,10 @@ extends AbstractQueryFilterComposite<Q>
 		saleAccessStateCombo = new SaleAccessStateCombo(parent, SWT.NONE);
 		saleAccessStateCombo.getStateCombo().addSelectionListener(stateComboListener);
 		saleAccessStateCombo.getActiveButton().addSelectionListener(activeSaleAccessButtonListener);
+		if (selectedSaleAccessState != null) {
+			saleAccessStateCombo.getStateCombo().selectElement(selectedSaleAccessState);
+			saleAccessStateCombo.setActive(true);
+		}
 		ownerComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), //$NON-NLS-1$ 
 				ownerActiveListener, ownerBrowseListener);
 		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), //$NON-NLS-1$ 
@@ -315,8 +319,8 @@ extends AbstractQueryFilterComposite<Q>
 			}
 		} // changedQuery != null
 	}
-
-	protected void applySaleAccessState(SaleAccessState state, AbstractProductTypeQuery query) 
+		
+	public void applySaleAccessState(SaleAccessState state, AbstractProductTypeQuery query) 
 	{
 		Boolean falseValue = null;
 		if (state == null) {
