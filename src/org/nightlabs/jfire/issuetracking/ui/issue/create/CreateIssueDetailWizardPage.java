@@ -101,6 +101,9 @@ extends WizardHopPage
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				getContainer().updateButtons();
+				if (subjectText.getEditText().equals("")) {
+					setErrorMessage("Subject should not be empty!");
+				}
 			}
 		});
 		
@@ -117,6 +120,9 @@ extends WizardHopPage
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				getContainer().updateButtons();
+				if (descriptionText.getEditText().equals("")) {
+					setErrorMessage("Description should not be empty!");
+				}
 			}
 		});
 
@@ -230,12 +236,10 @@ extends WizardHopPage
 		boolean result = true;
 		setErrorMessage(null);
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
-			setErrorMessage("Subject should not be null.");
 			result = false;
 		}
 		
 		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) {
-			setErrorMessage("Description should not be null.");
 			result = false;
 		}
 		
