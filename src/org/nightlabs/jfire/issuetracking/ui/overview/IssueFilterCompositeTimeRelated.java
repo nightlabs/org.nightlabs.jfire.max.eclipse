@@ -86,7 +86,7 @@ public class IssueFilterCompositeTimeRelated
 		createdTimeEdit = new DateTimeEdit(
 				timeGroup,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
-				Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.createDateMin.caption")); //$NON-NLS-1$
+				"From"); //$NON-NLS-1$
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
@@ -134,7 +134,7 @@ public class IssueFilterCompositeTimeRelated
 		updatedTimeEdit = new DateTimeEdit(
 				timeGroup,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
-				Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.createDateMin.caption")); //$NON-NLS-1$
+				"To"); //$NON-NLS-1$
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
