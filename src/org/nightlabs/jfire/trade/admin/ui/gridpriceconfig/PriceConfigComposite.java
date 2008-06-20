@@ -639,6 +639,11 @@ public abstract class PriceConfigComposite extends XComposite
 					item.setPriceConfig(priceConfig);
 			}
 		}
+
+		// In case the new price configs have not all data that's necessary now
+		// (e.g. that's the case with DynamicTradePriceConfig, which does not store packagingResultPriceConfigs),
+		// we ensure this now:
+		priceCalculator.preparePriceCalculation();
 	}
 	
 	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard)
