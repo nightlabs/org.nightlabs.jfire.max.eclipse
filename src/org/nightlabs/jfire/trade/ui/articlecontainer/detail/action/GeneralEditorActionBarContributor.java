@@ -90,7 +90,7 @@ extends EditorActionBarContributor
 
 	public GeneralEditorActionBarContributor()
 	{
-		// TODO: WORKAROUND This is an workaround as setActiveEditor is not called when 
+		// TODO: WORKAROUND This is a workaround as setActiveEditor is not called when 
 		// the perspective is switched and therefore the contributions are not removed
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
 		RCPUtil.getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);

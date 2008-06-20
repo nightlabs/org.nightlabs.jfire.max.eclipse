@@ -247,6 +247,7 @@ implements IPaymentEntryPage
 			amountValueLabel = new Label(amountComposite, SWT.NONE);
 
 			amountSpinner = new Spinner(amountComposite, SWT.BORDER);
+			amountSpinner.setDigits(payment.getCurrency().getDecimalDigitCount());
 			amountSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			amountSpinner.setMinimum(0);
 			amountSpinner.setMaximum(Integer.MAX_VALUE);

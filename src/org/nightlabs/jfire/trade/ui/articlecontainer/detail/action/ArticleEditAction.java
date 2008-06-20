@@ -71,8 +71,10 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 	public boolean calculateVisible()
 	{
 		// Find out whether there is any delegate for this action in the active SegmentEdit
-
 		SegmentEdit activeSegmentEdit = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveSegmentEdit();
+		if (activeSegmentEdit == null)
+			return false;
+
 		boolean visible = false;
 		for (Iterator<ArticleEdit> itAE = activeSegmentEdit.getArticleEdits().iterator(); itAE.hasNext(); ) {
 			ArticleEdit articleEdit = itAE.next();
