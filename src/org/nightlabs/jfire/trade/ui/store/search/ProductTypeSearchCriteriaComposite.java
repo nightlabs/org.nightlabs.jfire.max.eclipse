@@ -129,7 +129,14 @@ extends AbstractQueryFilterComposite<Q>
 	
 	private SelectionListener activeSaleAccessButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
-			saleAccessStateCombo.getStateCombo().setEnabled(((Button)e.getSource()).getSelection());
+			boolean selection = ((Button)e.getSource()).getSelection();
+			saleAccessStateCombo.getStateCombo().setEnabled(selection);
+			if (selection) {
+				selectedSaleAccessState = saleAccessStateCombo.getStateCombo().getSelectedElement();
+			} else {
+				selectedSaleAccessState = null;
+			}
+			applySaleAccessState(selectedSaleAccessState, getQuery());
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -174,12 +181,12 @@ extends AbstractQueryFilterComposite<Q>
 			selectedOwnerID = null;
 		}
 		if (!saleAccessStateCombo.getActiveButton().getSelection()) {
-			selectedSaleAccessState = SaleAccessState.SALEABLE;
+			selectedSaleAccessState = null;
 		}
 		
 		query.setOwnerID(null);
 		query.setProductTypeGroupID(null);
-		applySaleAccessState(SaleAccessState.SALEABLE, query);
+		applySaleAccessState(null, query);
 	}
 
 	/* (non-Javadoc)
@@ -203,10 +210,12 @@ extends AbstractQueryFilterComposite<Q>
 			setSearchSectionActive(saleAccessStateCombo.getActiveButton(), false);
 		}
 		else
-		{ // there is a new Query -> the changedFieldList is not null!
+		{ 
+			boolean saleAccessStateComboSetToActive = false;
+			// there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
-			{
-				boolean active = isValueIntentionallySet();
+			{				
+//				boolean active = isValueIntentionallySet();
 
 				if (AbstractProductTypeQuery.PROPERTY_OWNER_ID.equals(
 						changedField.getPropertyName())) 
@@ -223,7 +232,9 @@ extends AbstractQueryFilterComposite<Q>
 							);					
 						ownerComp.setText(legalEntity.getPerson().getDisplayName());
 					}
-					active |= ownerID != null;
+//					active |= ownerID != null;
+					selectedOwnerID = ownerID;
+					boolean active = (ownerID != null);
 					ownerComp.setActive(active);
 					setSearchSectionActive(ownerComp.getActiveButton(), active);					
 				}
@@ -241,17 +252,22 @@ extends AbstractQueryFilterComposite<Q>
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						productTypeGroupComp.setText(productTypeGroup.getName().getText());
 					}
-					active |= productTypeGroupID != null;
+//					active |= productTypeGroupID != null;
+					selectedProductTypeGroupID = productTypeGroupID;
+					boolean active = (productTypeGroupID != null);
 					productTypeGroupComp.setActive(active);
 					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
 				}
-
+				
 				if (AbstractProductTypeQuery.PROPERTY_CLOSED.equals(
 						changedField.getPropertyName())) 
 				{
 					Boolean closed = (Boolean) changedField.getNewValue();
-					if (closed != null && closed) {
+					boolean active = (closed != null && closed);
+					if (active) {
 						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CLOSED);
+						saleAccessStateComboSetToActive = true;
+						selectedSaleAccessState = SaleAccessState.CLOSED;
 					}
 				}
 				
@@ -259,8 +275,11 @@ extends AbstractQueryFilterComposite<Q>
 						changedField.getPropertyName())) 
 				{
 					Boolean confirmed = (Boolean) changedField.getNewValue();
-					if (confirmed != null && confirmed) {
+					boolean active = (confirmed != null && confirmed);
+					if (active) {
 						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CONFIRMED);
+						saleAccessStateComboSetToActive = true;
+						selectedSaleAccessState = SaleAccessState.CONFIRMED;
 					}
 				}				
 
@@ -268,8 +287,11 @@ extends AbstractQueryFilterComposite<Q>
 						changedField.getPropertyName())) 
 				{
 					Boolean published = (Boolean) changedField.getNewValue();
-					if (published != null && published) {
+					boolean active = (published != null && published);
+					if (active) {
 						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.PUBLISHED);
+						saleAccessStateComboSetToActive = true;
+						selectedSaleAccessState = SaleAccessState.PUBLISHED;
 					}
 				}				
 
@@ -277,11 +299,20 @@ extends AbstractQueryFilterComposite<Q>
 						changedField.getPropertyName())) 
 				{
 					Boolean saleable = (Boolean) changedField.getNewValue();
-					if (saleable != null && saleable) {
+					boolean active = (saleable != null && saleable);
+					if (active) {
 						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.SALEABLE);
+						saleAccessStateComboSetToActive = true;
+						selectedSaleAccessState = SaleAccessState.SALEABLE;
 					}
 				}
+				
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
+			if (saleAccessStateComboSetToActive) {
+				boolean active = (selectedSaleAccessState != null);
+				saleAccessStateCombo.setActive(active);
+				setSearchSectionActive(saleAccessStateCombo.getActiveButton(), active);					
+			}
 		} // changedQuery != null
 	}
 
