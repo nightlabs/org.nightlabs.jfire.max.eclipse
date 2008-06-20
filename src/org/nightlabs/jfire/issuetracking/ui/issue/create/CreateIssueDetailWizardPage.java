@@ -90,7 +90,42 @@ extends WizardHopPage
 	public Control createPageContents(Composite parent) {
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 6;
+
+		//Subject & Description
+		subjectLabel = new Label(mainComposite, SWT.NONE);
+		subjectLabel.setText("Subject: ");
+
+		subjectText = new I18nTextEditor(mainComposite);
+		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
+		subjectText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				getContainer().updateButtons();
+			}
+		});
 		
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 5;
+		subjectText.setLayoutData(gridData);
+
+		descriptionLabel = new Label(mainComposite, SWT.NONE);
+		descriptionLabel.setText("Description: ");
+
+		descriptionText = new I18nTextEditorMultiLine(mainComposite, subjectText.getLanguageChooser());
+		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
+		descriptionText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				getContainer().updateButtons();
+			}
+		});
+
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.minimumHeight = 100;
+		gridData.horizontalSpan = 6;
+		descriptionText.setLayoutData(gridData);
+
+		//Properties
 		issueTypeLbl = new Label(mainComposite, SWT.NONE);
 		issueTypeLbl.setText("Issue Type: ");
 		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE, issueLabelProvider);
@@ -136,39 +171,7 @@ extends WizardHopPage
 			}
 		});
 
-		subjectLabel = new Label(mainComposite, SWT.NONE);
-		subjectLabel.setText("Subject: ");
-
-		subjectText = new I18nTextEditor(mainComposite);
-		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
-		subjectText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent arg0) {
-				getContainer().updateButtons();
-			}
-		});
-		
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 5;
-		subjectText.setLayoutData(gridData);
-
-		descriptionLabel = new Label(mainComposite, SWT.NONE);
-		descriptionLabel.setText("Description: ");
-
-		descriptionText = new I18nTextEditorMultiLine(mainComposite, subjectText.getLanguageChooser());
-		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
-		descriptionText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent arg0) {
-				getContainer().updateButtons();
-			}
-		});
-
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.minimumHeight = 100;
-		gridData.horizontalSpan = 6;
-		descriptionText.setLayoutData(gridData);
-
+		//Loading Data
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) throws Exception
@@ -212,6 +215,11 @@ extends WizardHopPage
 		return mainComposite;
 	}
 
+	@Override
+	public void onShow() {
+		subjectText.forceFocus();
+	}
+	
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
