@@ -127,7 +127,8 @@ extends WizardHopPage
 		fileLabel = new Label(mainComposite, SWT.NONE);
 		fileLabel.setText("Files: ");
 
-		fileComposite = new IssueFileAttachmentComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, issue, IssueFileAttachmentCompositeStyle.withAddRemoveButton);
+		fileComposite = new IssueFileAttachmentComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withAddRemoveButton);
+		fileComposite.setIssue(issue);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumHeight = 80;
 		fileComposite.setLayoutData(gridData);

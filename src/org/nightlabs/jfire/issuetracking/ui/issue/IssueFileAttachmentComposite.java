@@ -32,9 +32,8 @@ extends XComposite
 
 	private IssueFileAttachmentCompositeStyle style;
 
-	public IssueFileAttachmentComposite(Composite parent, int compositeStyle, LayoutMode layoutMode, Issue issue, IssueFileAttachmentCompositeStyle style) {
+	public IssueFileAttachmentComposite(Composite parent, int compositeStyle, LayoutMode layoutMode, IssueFileAttachmentCompositeStyle style) {
 		super(parent, compositeStyle, layoutMode);
-		this.issue = issue;
 		this.style = style;
 
 		createContents();
@@ -51,8 +50,6 @@ extends XComposite
 				return ((IssueFileAttachment)element).getFileName();
 			}
 		});
-
-		issueFileAttachmentListComposite.setInput(issue.getIssueFileAttachments());
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		mainComposite.setLayoutData(gridData);
@@ -106,6 +103,11 @@ extends XComposite
 		mainComposite.setLayoutData(gridData);
 	}
 
+	public void setIssue(Issue issue) {
+		this.issue = issue;
+		issueFileAttachmentListComposite.setInput(issue.getIssueFileAttachments());
+	}
+	
 	public IssueFileAttachment getSelectedIssueFileAttachment() {
 		return issueFileAttachmentListComposite.getSelectedElement();
 	}

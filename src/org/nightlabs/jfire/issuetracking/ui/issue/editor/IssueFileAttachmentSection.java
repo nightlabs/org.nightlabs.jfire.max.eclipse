@@ -65,7 +65,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		fileLabel.setText("Files: ");
 		
 		issueFileAttachmentComposite = 
-			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, controller.getIssue(), IssueFileAttachmentCompositeStyle.withoutAddRemoveButton);
+			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withoutAddRemoveButton);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.heightHint = 100;
 		issueFileAttachmentComposite.setLayoutData(gridData);
@@ -104,18 +104,14 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	
 	@Override
 	protected void doSetIssue(Issue newIssue) {
+		issueFileAttachmentComposite.setIssue(newIssue);
+		
 		if (issue != null && newIssue.getIssueFileAttachments().size() == nFile) {
 			return;
 		}
 		
 		issue = newIssue;
 		nFile = issue.getIssueFileAttachments().size();
-		
-//		List<IssueFileAttachment> fileAttachments = newIssue.getIssueFileAttachments();
-//		List<File> fileList = new ArrayList<File>();
-//		for(IssueFileAttachment isa : fileAttachments) {
-//			fileComposite.addFile(isa.getFileName(), isa.createFileAttachmentInputStream());
-//		}
 	}
 	
 	public class DownloadFileToolbarAction extends Action {		
