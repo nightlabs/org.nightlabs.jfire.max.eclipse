@@ -12,10 +12,8 @@ import java.util.Set;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -35,6 +33,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerParam;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.exceptionhandler.IExceptionHandler;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -43,6 +42,7 @@ import org.nightlabs.jfire.reporting.ui.config.DefaultReportViewerCfMod;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.RenderedReportLayoutProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 import com.adobe.acrobat.Viewer;
 import com.adobe.acrobat.ViewerCommand;
@@ -171,7 +171,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		switchToStatus();
 		Job fetchJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.fetchJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				final PreparedRenderedReportLayout preparedLayout = RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(
 						renderRequest, monitor
 					);
@@ -192,7 +192,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		switchToStatus();
 		Job fetchJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.fetchJob.name")){			 //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				final PreparedRenderedReportLayout preparedLayout = getPreparedRenderedReportLayout(reportLayout, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
@@ -210,10 +210,10 @@ public class DefaultReportViewerComposite extends XComposite {
 	 * {@link RenderedReportLayout} and returns the URL to its entry file.
 	 * 
 	 * @param reportLayout The rendered layout to prepare.
-	 * @param monitor An {@link IProgressMonitor} to provide feedback.
+	 * @param monitor An {@link ProgressMonitor} to provide feedback.
 	 * @return The {@link PreparedRenderedReportLayout} for the the given .
 	 */
-	protected PreparedRenderedReportLayout getPreparedRenderedReportLayout(RenderedReportLayout reportLayout, IProgressMonitor monitor) {
+	protected PreparedRenderedReportLayout getPreparedRenderedReportLayout(RenderedReportLayout reportLayout, ProgressMonitor monitor) {
 		return RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(reportLayout, monitor);
 	}
 	

@@ -27,13 +27,21 @@
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
 
+import javax.jdo.FetchPlan;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.reporting.Birt;
+import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -78,6 +86,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 				format
 		);
 		defaultReportViewerComposite.showReport(request);
+		updateEditorTitle();
 	}
 
 	/**
@@ -86,6 +95,25 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	 */
 	public void showReport(final RenderedReportLayout reportLayout) {
 		defaultReportViewerComposite.showReport(reportLayout);
+		updateEditorTitle();
+	}
+	
+	private void updateEditorTitle() {
+		Job nameJob = new Job("Fetch report name") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final ReportRegistryItem report = ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(
+						getReportRegistryItemID(), new String[] {FetchPlan.DEFAULT, ReportRegistryItem.FETCH_GROUP_NAME}, monitor);
+				defaultReportViewerComposite.getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						setPartName(report.getName().getText());
+					}
+				});
+				return Status.OK_STATUS;
+			}
+			
+		};
+		nameJob.schedule();
 	}
 	
 	/**

@@ -39,6 +39,7 @@ import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandler;
 import org.nightlabs.jfire.reporting.ui.viewer.RenderedReportHandlerRegistry;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -151,7 +152,7 @@ public class RenderedReportLayoutProvider {
 //			ReportRegistryItemID reportRegistryItemID,
 //			Map<String,Object> params,
 //			Birt.OutputFormat format,
-			IProgressMonitor monitor
+			ProgressMonitor monitor
 		)
 	{
 		RenderedReportKey key = new RenderedReportKey(renderRequest.getReportRegistryItemID(), renderRequest.getParameters());
@@ -183,7 +184,7 @@ public class RenderedReportLayoutProvider {
 	 */
 	public PreparedRenderedReportLayout getPreparedRenderedReportLayout(
 			RenderedReportLayout renderedReportLayout,
-			IProgressMonitor monitor
+			ProgressMonitor monitor
 		)
 	{
 		RenderedReportHandler handler = RenderedReportHandlerRegistry.sharedInstance().getHandler(renderedReportLayout.getHeader().getOutputFormat());
@@ -208,7 +209,7 @@ public class RenderedReportLayoutProvider {
 //			ReportRegistryItemID reportRegistryItemID,
 //			Map<String,Object> params,
 //			Birt.OutputFormat format,
-			IProgressMonitor monitor
+			ProgressMonitor monitor
 		)
 	{
 		ReportManager rm = ReportingPlugin.getReportManager();

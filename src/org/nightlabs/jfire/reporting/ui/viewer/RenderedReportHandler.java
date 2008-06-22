@@ -4,9 +4,9 @@
 package org.nightlabs.jfire.reporting.ui.viewer;
 
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * Handles {@link RenderedReportLayout}s that come from the server
@@ -28,6 +28,6 @@ public interface RenderedReportHandler {
 	 * @param layout The layout to be prepared
 	 * @return A {@link PreparedRenderedReportLayout} for the given layout referencing the entry file of the prepared layout.
 	 */
-	public PreparedRenderedReportLayout prepareRenderedReportLayout(IProgressMonitor monitor, RenderedReportLayout layout);
+	public PreparedRenderedReportLayout prepareRenderedReportLayout(ProgressMonitor monitor, RenderedReportLayout layout);
 	
 }

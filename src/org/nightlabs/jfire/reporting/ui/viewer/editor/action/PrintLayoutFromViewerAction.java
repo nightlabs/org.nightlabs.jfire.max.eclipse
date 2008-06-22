@@ -5,17 +5,17 @@ package org.nightlabs.jfire.reporting.ui.viewer.editor.action;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.viewer.editor.ReportViewerEditor;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -42,7 +42,7 @@ public class PrintLayoutFromViewerAction extends Action {
 	public void run() {
 		Job printJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.action.PrintLayoutFromViewerAction.printJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				try {
 //					PrintReportLayoutUtil.printReportLayout(
 //							reportViewerEditor.getReportRegistryItemID(),

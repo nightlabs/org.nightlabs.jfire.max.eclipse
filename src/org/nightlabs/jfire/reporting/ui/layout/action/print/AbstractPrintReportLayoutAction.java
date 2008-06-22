@@ -36,9 +36,8 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -49,6 +48,7 @@ import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.Result;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -104,8 +104,8 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 	public void runWithRegistryItemIDs(final Collection<ReportRegistryItemID> reportRegistryItems) {
 		Job printJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction.printJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				RCPUtil.getSaveProgressMonitor(monitor).beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction.printJob.beginPrintingTask.name"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
+			protected IStatus run(ProgressMonitor monitor) {
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction.printJob.beginPrintingTask.name"), IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 				Map<String, Object> params = null;
 				boolean paramsSet = false;
 				if (nextRunParams != null) {
@@ -140,7 +140,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 		printJob.schedule();
 	}
 	
-	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, IProgressMonitor monitor)
+	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, ProgressMonitor monitor)
 	throws PrinterException
 	{
 		String useCaseID = getReportUseCaseID();
