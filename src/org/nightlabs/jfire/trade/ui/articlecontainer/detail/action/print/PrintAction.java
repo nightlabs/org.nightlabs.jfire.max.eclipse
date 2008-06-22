@@ -31,10 +31,9 @@ import java.util.Map;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -43,6 +42,7 @@ import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUti
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class PrintAction extends ArticleContainerReportAction
 {
@@ -63,7 +63,7 @@ public class PrintAction extends ArticleContainerReportAction
 	{
 		Job printJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintAction.printJob.name")) { //$NON-NLS-1$
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
 					.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
