@@ -29,8 +29,6 @@ public class ValueProviderGUIOrganisations extends AbstractValueProviderGUIUsers
 
 		public ValueProviderID getValueProviderID() {
 			return ReportingConstants.VALUE_PROVIDER_ID_ORGANISATION;
-// TODO @Bieber: Wasn't the following ID wrong?! Is my new ID above correct? Marco.
-//			return ReportingConstants.VALUE_PROVIDER_ID_USER_GROUPS;
 		}
 
 		public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {

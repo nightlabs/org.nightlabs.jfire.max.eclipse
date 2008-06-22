@@ -273,7 +273,7 @@ implements ICellModifier
 			else
 				entry.setDefaultReportLayoutKey(null);
 		}
-		getTreeViewer().refresh(); // TODO Marco: imho this should be instead (more efficient): getTreeViewer().refresh(entry, true);
+		getTreeViewer().refresh(entry, true);
 		if (preferencePage != null)
 			preferencePage.setChanged(true);
 	}

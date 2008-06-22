@@ -15,15 +15,15 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class ValueProviderDialog extends CenteredDialog {
+public class ValueProviderDialog extends ResizableTrayDialog {
 
 	private ValueProviderTree valueProviderTree;
 	
@@ -33,7 +33,7 @@ public class ValueProviderDialog extends CenteredDialog {
 	 * @param parentShell
 	 */
 	public ValueProviderDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
@@ -41,7 +41,7 @@ public class ValueProviderDialog extends CenteredDialog {
 	 * @param parentShell
 	 */
 	public ValueProviderDialog(IShellProvider parentShell) {
-		super(parentShell);
+		super(parentShell, null);
 	}
 
 	@Override

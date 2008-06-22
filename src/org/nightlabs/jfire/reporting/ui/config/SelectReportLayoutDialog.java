@@ -47,8 +47,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -63,7 +63,7 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class SelectReportLayoutDialog extends CenteredDialog {
+public class SelectReportLayoutDialog extends ResizableTrayDialog {
 
 	private XComposite wrapper;
 	private SashForm sashForm;
@@ -85,7 +85,7 @@ public class SelectReportLayoutDialog extends CenteredDialog {
 			Collection<ReportRegistryItemID> availableItemIDs,
 			ReportRegistryItemID defaultItemID
 	) {
-		super(parentShell);
+		super(parentShell, null);
 		this.availableItemIDs = availableItemIDs;
 		this.defaultItemID = defaultItemID;
 		setShellStyle(getShellStyle() | SWT.RESIZE);

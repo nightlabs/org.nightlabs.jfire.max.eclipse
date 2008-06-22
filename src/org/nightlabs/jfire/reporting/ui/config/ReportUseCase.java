@@ -46,7 +46,6 @@ public class ReportUseCase {
 	 *
 	 */
 	public ReportUseCase() {
-		// TODO Auto-generated constructor stub
 	}
 
 

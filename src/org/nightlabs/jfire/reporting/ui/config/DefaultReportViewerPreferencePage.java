@@ -107,8 +107,7 @@ implements IWorkbenchPreferencePage
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench arg0) {
-		// TODO Auto-generated method stub
-
+		// nothing to do here
 	}
 
 }

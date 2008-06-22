@@ -44,7 +44,6 @@ public class ReportingPreferencePage extends PreferencePage implements
 	 * 
 	 */
 	public ReportingPreferencePage() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -52,7 +51,6 @@ public class ReportingPreferencePage extends PreferencePage implements
 	 */
 	public ReportingPreferencePage(String arg0) {
 		super(arg0);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -61,7 +59,6 @@ public class ReportingPreferencePage extends PreferencePage implements
 	 */
 	public ReportingPreferencePage(String arg0, ImageDescriptor arg1) {
 		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +66,6 @@ public class ReportingPreferencePage extends PreferencePage implements
 	 */
 	@Override
 	protected Control createContents(Composite arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -77,7 +73,6 @@ public class ReportingPreferencePage extends PreferencePage implements
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench arg0) {
-		// TODO Auto-generated method stub
 	}
 
 }
