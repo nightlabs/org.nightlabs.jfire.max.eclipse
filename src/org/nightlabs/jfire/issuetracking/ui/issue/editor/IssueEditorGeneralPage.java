@@ -93,7 +93,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
 		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
-				  SWT.V_SCROLL | SWT.BORDER);
+				  SWT.V_SCROLL);
 		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		XComposite c = new XComposite(sc, SWT.NONE);
