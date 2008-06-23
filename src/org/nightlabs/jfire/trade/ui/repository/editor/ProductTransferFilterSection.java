@@ -51,7 +51,7 @@ extends RestorableSectionPart
 		client.getGridLayout().numColumns = 3; // TODO when adding more UI, we might want to switch to 1 and use wrapper-composites
 
 		new Label(client, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferFilterSection.resultLimitLabel.text")); //$NON-NLS-1$
-		limit = new Spinner(client, getManagedForm().getToolkit().getBorderStyle());
+		limit = new Spinner(client, page.getEditor().getToolkit().getBorderStyle());
 		limit.setMinimum(0);
 		limit.setMaximum(Integer.MAX_VALUE);
 		limit.setSelection(1000000000);

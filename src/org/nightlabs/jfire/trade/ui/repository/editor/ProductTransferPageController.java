@@ -50,7 +50,7 @@ extends EntityEditorPageController
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJobMonitor.task.name"), 100); //$NON-NLS-1$
 
-		List<ProductTransfer> productTransfers = ProductTransferDAO.sharedInstance().getProductTransfersByIDQueries(
+		List<ProductTransfer> productTransfers = ProductTransferDAO.sharedInstance().getProductTransfers(
 				queryWrapper,
 				ProductTransferTable.FETCH_GROUPS_PRODUCT_TRANSFER,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
