@@ -254,7 +254,7 @@ extends XComposite
 		query.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
 
 		if (getSearchCriteriaComposite().getSelectedSaleAccessState() != null) {
-			getSearchCriteriaComposite().applySaleAccessState(
+			SaleAccessStateUtil.applySaleAccessState(
 					getSearchCriteriaComposite().getSelectedSaleAccessState(), query);
 		}
 		

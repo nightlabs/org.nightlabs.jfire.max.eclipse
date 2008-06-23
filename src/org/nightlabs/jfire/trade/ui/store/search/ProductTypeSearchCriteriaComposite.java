@@ -20,6 +20,7 @@ import org.nightlabs.jfire.store.ProductTypeGroup;
 import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
+import org.nightlabs.jfire.store.search.ISaleAccessQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
@@ -124,7 +125,7 @@ extends AbstractQueryFilterComposite<Q>
 	private SelectionListener stateComboListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
 			selectedSaleAccessState = saleAccessStateCombo.getStateCombo().getSelectedElement();
-			applySaleAccessState(selectedSaleAccessState, getQuery());
+			SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, getQuery());
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -140,7 +141,7 @@ extends AbstractQueryFilterComposite<Q>
 			} else {
 				selectedSaleAccessState = null;
 			}
-			applySaleAccessState(selectedSaleAccessState, getQuery());
+			SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, getQuery());
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
@@ -167,7 +168,7 @@ extends AbstractQueryFilterComposite<Q>
 	 */
 	@Override
 	protected void resetSearchQueryValues(Q query) {
-		applySaleAccessState(selectedSaleAccessState, query);
+		SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, query);
 		query.setOwnerID(selectedOwnerID);
 		query.setProductTypeGroupID(selectedProductTypeGroupID);
 	}
@@ -190,7 +191,7 @@ extends AbstractQueryFilterComposite<Q>
 		
 		query.setOwnerID(null);
 		query.setProductTypeGroupID(null);
-		applySaleAccessState(null, query);
+		SaleAccessStateUtil.applySaleAccessState(null, query);
 	}
 
 	/* (non-Javadoc)
@@ -320,44 +321,6 @@ extends AbstractQueryFilterComposite<Q>
 		} // changedQuery != null
 	}
 		
-	public void applySaleAccessState(SaleAccessState state, AbstractProductTypeQuery query) 
-	{
-		Boolean falseValue = null;
-		if (state == null) {
-			query.setPublished(null);
-			query.setConfirmed(null);
-			query.setSaleable(null);
-			query.setClosed(null);
-			return;
-		}
-		switch (state) {	
-			case PUBLISHED:
-				query.setPublished(true);
-				query.setConfirmed(falseValue);
-				query.setSaleable(falseValue);
-				query.setClosed(falseValue);
-				break;
-			case CONFIRMED:
-				query.setConfirmed(true);
-				query.setPublished(falseValue);
-				query.setSaleable(falseValue);
-				query.setClosed(falseValue);
-				break;
-			case SALEABLE:
-				query.setSaleable(true);				
-				query.setPublished(falseValue);
-				query.setConfirmed(falseValue);
-				query.setClosed(falseValue);
-				break;
-			case CLOSED:
-				query.setClosed(true);
-				query.setPublished(falseValue);
-				query.setConfirmed(falseValue);
-				query.setSaleable(falseValue);				
-				break;
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#getQueryClass()
 	 */

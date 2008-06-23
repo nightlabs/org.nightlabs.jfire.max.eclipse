@@ -72,6 +72,7 @@ implements IViewActionDelegate
 		BaseQueryStore.FETCH_GROUP_NAME,
 		BaseQueryStore.FETCH_GROUP_DESCRIPTION
 	};
+	
 	private ProductTypeQuickListView view;
 	
 	/**
