@@ -10,6 +10,7 @@ import org.nightlabs.jfire.base.ui.overview.EntryViewer;
 import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
 
 /**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
 public class IssueEntryListFactory 

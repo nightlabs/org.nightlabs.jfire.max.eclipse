@@ -13,6 +13,10 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueFilterCompositeDocumentRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	

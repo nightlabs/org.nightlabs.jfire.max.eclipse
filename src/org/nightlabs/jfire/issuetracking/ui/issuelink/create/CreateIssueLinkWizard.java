@@ -13,6 +13,10 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class CreateIssueLinkWizard 
 extends DynamicPathWizard
 {

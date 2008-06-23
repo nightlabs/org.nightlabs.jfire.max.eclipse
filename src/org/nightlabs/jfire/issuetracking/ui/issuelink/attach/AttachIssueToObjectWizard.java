@@ -18,6 +18,10 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.progress.NullProgressMonitor;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class AttachIssueToObjectWizard 
 extends DynamicPathWizard
 {

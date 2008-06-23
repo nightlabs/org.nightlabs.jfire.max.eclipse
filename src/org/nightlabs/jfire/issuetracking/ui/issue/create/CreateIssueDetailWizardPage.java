@@ -25,6 +25,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
@@ -231,6 +232,7 @@ extends WizardHopPage
 		return isPageComplete();
 	}
 	
+	private WizardHopPage optionalPage; 
 	@Override
 	public boolean isPageComplete() {
 		boolean result = true;
@@ -241,6 +243,12 @@ extends WizardHopPage
 		
 		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) {
 			result = false;
+		}
+		
+		if (result == true && optionalPage == null) {
+			new WizardHop(this);
+			optionalPage = new CreateIssueOptionalWizardPage(issue);
+			getWizardHop().addHopPage(optionalPage);
 		}
 		
 		return result;

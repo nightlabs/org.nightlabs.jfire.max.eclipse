@@ -31,6 +31,10 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class AttachIssueSelectIssueLinkTypeWizardPage 
 extends WizardHopPage
 {

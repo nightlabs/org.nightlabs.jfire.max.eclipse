@@ -27,6 +27,10 @@ import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueFilterCompositePeopleRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	

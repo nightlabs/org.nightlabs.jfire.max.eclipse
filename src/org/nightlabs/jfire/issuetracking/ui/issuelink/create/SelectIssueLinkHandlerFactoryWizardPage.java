@@ -28,6 +28,10 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class SelectIssueLinkHandlerFactoryWizardPage 
 extends DynamicPathWizardPage
 implements ISelectionProvider

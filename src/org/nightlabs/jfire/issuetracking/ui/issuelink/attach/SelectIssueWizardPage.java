@@ -26,6 +26,10 @@ import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizard
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class SelectIssueWizardPage 
 extends WizardHopPage
 {

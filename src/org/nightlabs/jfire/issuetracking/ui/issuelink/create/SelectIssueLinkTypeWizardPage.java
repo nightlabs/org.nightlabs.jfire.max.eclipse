@@ -26,6 +26,10 @@ import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 import org.nightlabs.progress.ProgressMonitor;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class SelectIssueLinkTypeWizardPage 
 extends DynamicPathWizardPage
 {

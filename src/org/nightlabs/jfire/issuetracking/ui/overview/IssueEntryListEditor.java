@@ -3,7 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditor;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
 public class IssueEntryListEditor extends OverviewEntryEditor {

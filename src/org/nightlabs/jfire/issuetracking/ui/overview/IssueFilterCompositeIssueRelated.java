@@ -41,6 +41,10 @@ import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueFilterCompositeIssueRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	

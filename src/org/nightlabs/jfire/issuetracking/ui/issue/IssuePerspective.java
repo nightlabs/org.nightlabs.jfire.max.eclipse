@@ -6,6 +6,10 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssuePerspective implements IPerspectiveFactory{
 	
 	public static final String ID_PERSPECTIVE = IssuePerspective.class.getName();

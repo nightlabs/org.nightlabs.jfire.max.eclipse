@@ -22,7 +22,7 @@ import org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * @author chairatk
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
 public class IssueLinkHandlerIssue 

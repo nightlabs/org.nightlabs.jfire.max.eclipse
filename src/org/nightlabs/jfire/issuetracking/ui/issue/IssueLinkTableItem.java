@@ -5,6 +5,10 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.util.Util;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueLinkTableItem {
 	private ObjectID linkedObjectID;
 	private IssueLinkType issueLinkType;

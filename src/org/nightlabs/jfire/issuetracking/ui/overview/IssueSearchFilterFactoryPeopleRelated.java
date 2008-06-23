@@ -8,6 +8,10 @@ import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterFactory;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueSearchFilterFactoryPeopleRelated
 extends AbstractQueryFilterFactory<IssueQuery>
 {

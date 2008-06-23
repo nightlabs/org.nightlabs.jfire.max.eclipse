@@ -9,9 +9,10 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 
-/* 
-* @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
-*/
+/**
+ * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
+ *
+ */
 public class IssueHistoryListSection extends RestorableSectionPart{
 
 	private IssueHistoryTable issueHistoryTable;

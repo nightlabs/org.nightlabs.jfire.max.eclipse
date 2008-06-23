@@ -104,7 +104,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		sc.setContent(c);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
-		sc.setMinSize(c.computeSize(1000, 1000));
+		sc.setMinSize(c.computeSize(SWT.DEFAULT, 1000));
 		
 		issueDetailSection = new IssueDetailSection(this, c, controller);
 		GridData gd = (GridData)issueDetailSection.getSection().getLayoutData();
