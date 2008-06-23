@@ -23,13 +23,15 @@
  ******************************************************************************/
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import org.eclipse.jface.viewers.CellEditor.LayoutData;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
@@ -90,53 +92,63 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
-		GridLayout layout = (GridLayout)parent.getLayout();
+		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
+				  SWT.V_SCROLL | SWT.BORDER);
+		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		XComposite c = new XComposite(sc, SWT.NONE);
+		GridLayout layout = (GridLayout)c.getLayout();
 		layout.numColumns = 2;
 		layout.makeColumnsEqualWidth = true;
 		
-		issueDetailSection = new IssueDetailSection(this, parent, controller);
+		sc.setContent(c);
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setMinSize(c.computeSize(1000, 1000));
+		
+		issueDetailSection = new IssueDetailSection(this, c, controller);
 		GridData gd = (GridData)issueDetailSection.getSection().getLayoutData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		issueDetailSection.getSection().setLayoutData(gd);
 		getManagedForm().addPart(issueDetailSection);
 		
-		issueTypeAndStateSection = new IssueTypeAndStateSection(this, parent, controller);
+		issueTypeAndStateSection = new IssueTypeAndStateSection(this, c, controller);
 		gd = (GridData)issueTypeAndStateSection.getSection().getLayoutData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		issueTypeAndStateSection.getSection().setLayoutData(gd);
 		getManagedForm().addPart(issueTypeAndStateSection);
 		
-		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, parent, controller);
+		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, c, controller);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueSubjectAndDescriptionSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueSubjectAndDescriptionSection);
 		
-		issuePropertySection = new IssuePropertySection(this, parent, controller);
+		issuePropertySection = new IssuePropertySection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issuePropertySection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issuePropertySection);
 		
-		issueCommentListSection = new IssueCommentListSection(this, parent, controller);
+		issueCommentListSection = new IssueCommentListSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueCommentListSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueCommentListSection);
 		
-		issueCommentCreateSection = new IssueCommentCreateSection(this, parent, controller);
+		issueCommentCreateSection = new IssueCommentCreateSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueCommentCreateSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueCommentCreateSection);
 		
-		issueLinkListSection = new IssueLinkListSection(this, parent, controller);
+		issueLinkListSection = new IssueLinkListSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueLinkListSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueLinkListSection);
 		
-		issueFileAttachmentSection = new IssueFileAttachmentSection(this, parent, controller);
+		issueFileAttachmentSection = new IssueFileAttachmentSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueFileAttachmentSection.getSection().setLayoutData(gridData);
