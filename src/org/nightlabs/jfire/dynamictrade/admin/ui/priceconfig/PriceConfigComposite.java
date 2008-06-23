@@ -95,10 +95,10 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	}
 
 	@Override
-	public void setPackageProductType(ProductType packageProductType)
+	public void _setPackageProductType(ProductType packageProductType)
 	{
 		packageProductType.setPackagePriceConfig(null); // this will not be stored to the server - during price-calculation, we need an IResultPriceConfig (which is done by the PriceCalculator, if this field is null)
-		super.setPackageProductType(packageProductType);
+		super._setPackageProductType(packageProductType);
 	}
 
 	@Override
