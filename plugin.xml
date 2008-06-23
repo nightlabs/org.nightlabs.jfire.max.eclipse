@@ -80,5 +80,11 @@
             title="DynamicProductType">
       </QueryFilter>
    </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.productTypeDetailView">
+      <productTypeDetailView
+            productTypeDetailViewFactory="org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewFactory">
+      </productTypeDetailView>
+   </extension>
 
 </plugin>
