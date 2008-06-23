@@ -50,6 +50,7 @@ import org.nightlabs.jfire.query.store.BaseQueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -89,7 +90,7 @@ implements IViewActionDelegate
 		final IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
 		if (isFactoriesRegistered(selectedFilter)) 
 		{
-			Job loadQuery = new Job("Open Query Dialog") {			
+			Job loadQuery = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.openQueryDialog")) {			 //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					final QueryCollection<VendorDependentQuery> queryCollection = selectedFilter.getQueryCollection(
@@ -102,7 +103,7 @@ implements IViewActionDelegate
 							int returnCode = dialog.open();
 							if (returnCode == Window.OK) 
 							{
-								Job searchJob = new Job("Search") {				
+								Job searchJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.search")) {				 //$NON-NLS-1$
 									@Override
 									protected IStatus run(ProgressMonitor monitor) throws Exception 
 									{
@@ -114,11 +115,11 @@ implements IViewActionDelegate
 								};
 								searchJob.schedule();
 								
-								Job saveJob = new Job("Save Last Changes") {
+								Job saveJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.saveLastChanges")) { //$NON-NLS-1$
 									@Override
 									protected IStatus run(ProgressMonitor monitor) throws Exception 
 									{										
-										monitor.beginTask("Save Last Changes", 100);
+										monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.saveLastChanges"), 100); //$NON-NLS-1$
 										UserID userID = Login.sharedInstance().getUserObjectID();
 										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
 												queryCollection.getResultClass(), userID, 
@@ -156,7 +157,7 @@ implements IViewActionDelegate
 	}
 	
 	protected String getScope() {
-		return "global";
+		return "global"; //$NON-NLS-1$
 	}
 	
 	protected boolean isFactoriesRegistered(IProductTypeQuickListFilter selectedFilter) 

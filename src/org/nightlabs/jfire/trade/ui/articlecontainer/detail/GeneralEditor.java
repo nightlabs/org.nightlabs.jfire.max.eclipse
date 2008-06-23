@@ -43,6 +43,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 
 /**
@@ -169,7 +170,7 @@ implements IGeneralEditor
 				articleContainerID = input.getArticleContainerID();
 			}
 			if (logger.isDebugEnabled())
-				logger.debug("ActivateListener.fireEvent: entered for " + articleContainerID);
+				logger.debug("ActivateListener.fireEvent: entered for " + articleContainerID); //$NON-NLS-1$
 
 			NotificationEvent event = new NotificationEvent(this,
 					TradePlugin.ZONE_SALE, articleContainerID,
@@ -209,7 +210,7 @@ implements IGeneralEditor
 
 			if (numEditorsOpen <= 0)
 				throw new IllegalStateException(
-						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: "
+						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: " //$NON-NLS-1$
 						+ generalEditor.getEditorInput());
 
 			--numEditorsOpen;
@@ -235,7 +236,7 @@ implements IGeneralEditor
 				return;
 
 			//if (logger.isDebugEnabled())
-			logger.debug("Part Opened !!!!");
+			logger.debug("Part Opened !!!!"); //$NON-NLS-1$
 
 
 			numEditorsOpen++;

@@ -132,9 +132,9 @@ extends AbstractTableComposite<MoneyTransfer>
 				}
 				if (columnIndex == idx++) {
 					if (JDOHelper.getObjectId(moneyTransfer.getFrom()).equals(currentAnchorID)) {
-						return "->";
+						return "->"; //$NON-NLS-1$
 					}
-					return "<-";
+					return "<-"; //$NON-NLS-1$
 				}
 				if (columnIndex == idx++) {
 					Anchor other = getOtherAnchor(moneyTransfer);
@@ -148,7 +148,7 @@ extends AbstractTableComposite<MoneyTransfer>
 					if (other instanceof Account)
 						return ((Account)other).getAccountType().getName().getText();
 					else
-						return "LegalEntity";
+						return Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.column.legalEntity"); //$NON-NLS-1$
 				}
 				if (columnIndex == idx++) {
 					return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);

@@ -288,7 +288,7 @@ implements IProductTypeQuickListFilter
 	@Override
 	public QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor) 
 	{
-		monitor.beginTask("Load query", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.loadQuery"), 100); //$NON-NLS-1$
 		if (queryCollection == null) 
 		{
 			BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
@@ -321,7 +321,7 @@ implements IProductTypeQuickListFilter
 				}
 			}
 			if (queryCollection == null) {
-				throw new IllegalStateException("QueryCollection is still null how can that happen!");
+				throw new IllegalStateException("QueryCollection is still null how can that happen!"); //$NON-NLS-1$
 			}
 		}
 		monitor.done();
@@ -331,10 +331,10 @@ implements IProductTypeQuickListFilter
 	@Override
 	public void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection) {
 		if (queryCollection == null)
-			throw new IllegalArgumentException("QueryCollection must not be null!");
+			throw new IllegalArgumentException("QueryCollection must not be null!"); //$NON-NLS-1$
 
 		if (!queryCollection.getResultClass().equals(getQueryResultClass())) {
-			throw new IllegalArgumentException("The resultClass of the given queryCollection is "+queryCollection.getResultClass()+" but it should be "+getQueryResultClass());
+			throw new IllegalArgumentException("The resultClass of the given queryCollection is "+queryCollection.getResultClass()+" but it should be "+getQueryResultClass()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		this.queryCollection = queryCollection;

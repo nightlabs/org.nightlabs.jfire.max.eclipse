@@ -157,9 +157,9 @@ implements ISelectionProvider
 //		getSite().setSelectionProvider(this);
 	}
 
-	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob("Selecting vendor") {
+	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.job.selectingVendor")) { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
-			getProgressMonitorWrapper().beginTask("Selecting vendor", 100);
+			getProgressMonitorWrapper().beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.job.selectingVendor"), 100); //$NON-NLS-1$
 
 			ArticleContainer articleContainer = null;
 

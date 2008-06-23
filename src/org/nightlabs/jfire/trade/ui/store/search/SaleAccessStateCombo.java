@@ -36,12 +36,12 @@ implements ActiveStateManager
 		super(parent, comboStyle);
 		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Group group = new Group(this, SWT.NONE);
-		group.setText("Sale Access Mode");
+		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.SaleAccessStateCombo.group.saleAccessMode")); //$NON-NLS-1$
 		group.setLayout(new GridLayout());
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		activeButton = new Button(group, SWT.CHECK);
-		activeButton.setText("Active");
+		activeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.SaleAccessStateCombo.button.active")); //$NON-NLS-1$
 
 		stateCombo = new XComboComposite<SaleAccessState>(group, SWT.READ_ONLY, new LabelProvider() {
 			@Override

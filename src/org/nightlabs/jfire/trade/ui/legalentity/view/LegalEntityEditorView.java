@@ -45,6 +45,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -128,7 +129,7 @@ implements
 		selectionComposite.setSelectedLegalEntityID(legalEntityID);
 		editLegalEntityAction.setEnabled(legalEntityID != null);
 		if (legalEntityID != null) {
-			Job job = new Job("Check LegalEntity") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView.job.checkLegalEntity")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					LegalEntity le = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);

@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -128,7 +129,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	protected Composite createRequirementsNotFulFilledComposite(Composite parent) 
 	{
 		if (!getProductType().isSaleable()) {
-			String message = String.format("The ProductType %s is not saleable!", getProductType().getName().getText(NLLocale.getDefault())); 
+			String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.notSaleable"), getProductType().getName().getText(NLLocale.getDefault()));  //$NON-NLS-1$
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
 		return null;

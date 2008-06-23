@@ -41,6 +41,7 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard.Side;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -110,7 +111,7 @@ implements CombiTransferWizard
 	@Override
 	public Side getSide() {
 		if (side == null)
-			throw new IllegalStateException("Side was not determined yet");
+			throw new IllegalStateException("Side was not determined yet"); //$NON-NLS-1$
 		return side;
 	}
 	

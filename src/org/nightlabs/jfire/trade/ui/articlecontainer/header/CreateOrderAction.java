@@ -78,7 +78,7 @@ public class CreateOrderAction extends Action
 		Job createOrderJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction.job.creatingOrder")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Creating order", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction.task.creatingOrder"), 100); //$NON-NLS-1$
 				try {
 					TradeConfigModule tradeConfigModule = ConfigUtil.getUserCfMod(
 							TradeConfigModule.class,

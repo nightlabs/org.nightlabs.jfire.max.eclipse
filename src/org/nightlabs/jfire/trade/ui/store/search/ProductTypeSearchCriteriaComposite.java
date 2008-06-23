@@ -97,7 +97,7 @@ extends AbstractQueryFilterComposite<Q>
 	private SelectionListener ownerBrowseListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", false);
+			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", false); //$NON-NLS-1$
 			if (legalEntity != null) {
 				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
 				ownerComp.setText(legalEntity.getPerson().getDisplayName());

@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
 import org.nightlabs.jfire.base.ui.overview.OverviewView;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -10,7 +11,7 @@ public class TradeOverviewView
 	extends OverviewView
 {
 	public static final String VIEW_ID = TradeOverviewView.class.getName();
-	public static final String SHELF_SCOPE = "TradeShelf";
+	public static final String SHELF_SCOPE = "TradeShelf"; //$NON-NLS-1$
 	
 	public TradeOverviewView()
 	{
