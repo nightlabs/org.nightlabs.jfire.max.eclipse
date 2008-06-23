@@ -82,11 +82,18 @@ extends WizardHopPage
 	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_INNER_PRICE_CONFIG, PriceConfig.FETCH_GROUP_NAME
 	};
-	
-	public static final int ACTION_INHERIT = 1;
-	public static final int ACTION_LATER = 2;
-	public static final int ACTION_CREATE = 3;
-	public static final int ACTION_SELECT = 4;
+
+	public static enum Action {
+		inherit,
+		later,
+		create,
+		select
+	}
+
+//	public static final int ACTION_INHERIT = 1;
+//	public static final int ACTION_LATER = 2;
+//	public static final int ACTION_CREATE = 3;
+//	public static final int ACTION_SELECT = 4;
 
 	private FadeableComposite page;
 	private Button inheritPriceConfigRadio;
@@ -133,7 +140,7 @@ extends WizardHopPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				setAction(ACTION_INHERIT);
+				setAction(Action.inherit);
 			}
 		});
 
@@ -143,7 +150,7 @@ extends WizardHopPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				setAction(ACTION_LATER);
+				setAction(Action.later);
 			}
 		});
 
@@ -153,7 +160,7 @@ extends WizardHopPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				setAction(ACTION_CREATE);
+				setAction(Action.create);
 			}
 		});
 		newPriceConfigNameEditor = new I18nTextEditor(page, Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.newPriceConfigNameEditor.caption")); //$NON-NLS-1$
@@ -162,7 +169,7 @@ extends WizardHopPage
 		newPriceConfigNameEditor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
 			{
-				setAction(ACTION_CREATE);
+				setAction(Action.create);
 			}
 		});
 
@@ -172,7 +179,7 @@ extends WizardHopPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				setAction(ACTION_SELECT);
+				setAction(Action.select);
 			}
 		});
 
@@ -183,7 +190,7 @@ extends WizardHopPage
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				setAction(ACTION_SELECT);
+				setAction(Action.select);
 			}
 		});
 
@@ -225,9 +232,9 @@ extends WizardHopPage
 
 							inheritPriceConfigRadio.setEnabled(parentProductType != null);
 							if (parentProductType == null)
-								setAction(ACTION_LATER);
+								setAction(Action.later);
 							else
-								setAction(ACTION_INHERIT);
+								setAction(Action.inherit);
 
 							if (parentProductType != null && parentProductType.getInnerPriceConfig() != null)
 								setInheritPriceConfigRadio_InnerPriceConfigName(parentProductType.getInnerPriceConfig().getName().getText());
@@ -256,7 +263,7 @@ extends WizardHopPage
 		return page;
 	}
 
-	protected void setAction(int action)
+	protected void setAction(Action action)
 	{
 		this.action = action;
 
@@ -266,20 +273,20 @@ extends WizardHopPage
 		selectPriceConfigRadio.setSelection(false);
 
 		switch (action) {
-			case ACTION_CREATE:
+			case create:
 				createPriceConfigRadio.setSelection(true);
 				selectedPriceConfig = null;
 			break;
-			case ACTION_INHERIT:
+			case inherit:
 				inheritPriceConfigRadio.setSelection(true);
 				// parentProductType can be null, because it's possible to use the wizard for the root-product-type
 				selectedPriceConfig = parentProductType == null ? null : parentProductType.getInnerPriceConfig();
 			break;
-			case ACTION_LATER:
+			case later:
 				assignPriceConfigLaterRadio.setSelection(true);
 				selectedPriceConfig = null;
 			break;
-			case ACTION_SELECT:
+			case select:
 				selectPriceConfigRadio.setSelection(true);
 				int idx = priceConfigList.getSelectionIndex();
 				if (idx < 0)
@@ -345,9 +352,9 @@ extends WizardHopPage
 //		return mode;
 //	}
 
-	private int action;
+	private Action action;
 
-	public int getAction()
+	public Action getAction()
 	{
 		return action;
 	}

@@ -41,6 +41,7 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.internal.filebuffers.Progress;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -80,6 +81,9 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseG
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.dao.CustomerGroupMappingDAO;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+
+import sun.net.ProgressMeteringPolicy;
 
 /**
  * This composite can be used to display and edit the whole grid-price-configuration
@@ -463,7 +467,7 @@ public abstract class PriceConfigComposite extends XComposite
 		return packageProductType;
 	}
 	
-	public void setPackageProductType(ProductType packageProductType)
+	public void _setPackageProductType(ProductType packageProductType)
 //	throws ModuleException
 	{
 		if (productTypeSelector != null)
@@ -579,22 +583,27 @@ public abstract class PriceConfigComposite extends XComposite
 			priceConfigs.add((GridPriceConfig) packageProductType.getInnerPriceConfig());
 		}
 		else {
-			priceConfig2ProductTypeSelectorItemList = new HashMap<GridPriceConfig, List<ProductTypeSelector.Item>>(productTypeSelector.getProductTypeItems().size());
-			for (ProductTypeSelector.Item item : productTypeSelector.getProductTypeItems()) {
-				if (!localOrganisationID.equals(item.getProductType().getOrganisationID())) // ignore partner-ProductTypes as we must not modify their prices
-					continue;
-
-				GridPriceConfig priceConfig = item.getPriceConfig();
-				if (priceConfig != null) {
-					List<ProductTypeSelector.Item> items = priceConfig2ProductTypeSelectorItemList.get(priceConfig);
-					if (items == null) {
-						items = new ArrayList<ProductTypeSelector.Item>();
-						priceConfig2ProductTypeSelectorItemList.put(priceConfig, items);
-					}
-					items.add(item);
-				}
+			if (packageProductType.getInnerPriceConfig() == null) {
+				priceConfigs = new HashSet<GridPriceConfig>(0);
 			}
-			priceConfigs = new HashSet<GridPriceConfig>(priceConfig2ProductTypeSelectorItemList.keySet()); // we copy the set, because the keySet is not serializable and cannot be sent to the server
+			else {
+				priceConfig2ProductTypeSelectorItemList = new HashMap<GridPriceConfig, List<ProductTypeSelector.Item>>(productTypeSelector.getProductTypeItems().size());
+				for (ProductTypeSelector.Item item : productTypeSelector.getProductTypeItems()) {
+					if (!localOrganisationID.equals(item.getProductType().getOrganisationID())) // ignore partner-ProductTypes as we must not modify their prices
+						continue;
+
+					GridPriceConfig priceConfig = item.getPriceConfig();
+					if (priceConfig != null) {
+						List<ProductTypeSelector.Item> items = priceConfig2ProductTypeSelectorItemList.get(priceConfig);
+						if (items == null) {
+							items = new ArrayList<ProductTypeSelector.Item>();
+							priceConfig2ProductTypeSelectorItemList.put(priceConfig, items);
+						}
+						items.add(item);
+					}
+				}
+				priceConfigs = new HashSet<GridPriceConfig>(priceConfig2ProductTypeSelectorItemList.keySet()); // we copy the set, because the keySet is not serializable and cannot be sent to the server
+			}
 		}
 
 		// remove null values - maybe not every product type has a price config assigned
@@ -643,10 +652,47 @@ public abstract class PriceConfigComposite extends XComposite
 		// In case the new price configs have not all data that's necessary now
 		// (e.g. that's the case with DynamicTradePriceConfig, which does not store packagingResultPriceConfigs),
 		// we ensure this now:
-		priceCalculator.preparePriceCalculation();
+		if (packageProductType.getInnerPriceConfig() != null)
+			priceCalculator.preparePriceCalculation();
 	}
-	
-	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard)
+
+	public void assignNewPriceConfig(IInnerPriceConfig innerPC, final boolean inherited, final ProgressMonitor monitor)
+	{
+		monitor.beginTask("Assigning price config", 100);
+		try {
+			if (innerPC != null) {
+				PriceConfigID innerPCID = (PriceConfigID) JDOHelper.getObjectId(innerPC);
+				if (innerPCID != null)
+					innerPC = retrieveInnerPriceConfigForEditing(innerPCID);
+			}
+			monitor.worked(80);
+
+			final IInnerPriceConfig finalInnerPC = innerPC;
+
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					if (isDisposed())
+						return;
+
+					packageProductType.setInnerPriceConfig(finalInnerPC);
+					packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(inherited);
+					if (packageProductType.getInnerPriceConfig() != null) {
+						GridPriceConfig packagePriceConfig = (GridPriceConfig)packageProductType.getPackagePriceConfig();
+						if (packagePriceConfig != null)
+							packagePriceConfig.adoptParameters(packageProductType.getInnerPriceConfig(), false);
+					}
+
+					_setPackageProductType(packageProductType);
+					dirtyStateManager.markDirty();
+					monitor.worked(20);
+				}
+			});
+		} finally {
+			monitor.done();
+		}
+	}
+
+	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard) // TODO ProgressMonitor
 	{
 		IInnerPriceConfig innerPC = wizard.getAbstractChooseGridPriceConfigPage().getSelectedPriceConfig();
 		if (innerPC != null) {
@@ -657,20 +703,20 @@ public abstract class PriceConfigComposite extends XComposite
 		packageProductType.setInnerPriceConfig(innerPC);
 
 		switch (wizard.getAbstractChooseGridPriceConfigPage().getAction()) {
-			case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
+			case inherit:
 				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
 				break;
-			case AbstractChooseGridPriceConfigPage.ACTION_LATER:
+			case later:
 				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				// nothing
 				break;
-			case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
+			case create:
 				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				IInnerPriceConfig fpc = createInnerPriceConfig();
 				fpc.getName().copyFrom(wizard.getAbstractChooseGridPriceConfigPage().getNewPriceConfigNameBuffer());
 				packageProductType.setInnerPriceConfig(fpc);
 				break;
-			case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
+			case select:
 				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 				break;
 			default:
@@ -683,7 +729,7 @@ public abstract class PriceConfigComposite extends XComposite
 				packagePriceConfig.adoptParameters(packageProductType.getInnerPriceConfig(), false);
 		}
 
-		setPackageProductType(packageProductType);
+		_setPackageProductType(packageProductType);
 		dirtyStateManager.markDirty();
 	}
 }

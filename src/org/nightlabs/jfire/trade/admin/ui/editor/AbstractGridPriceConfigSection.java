@@ -2,21 +2,31 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
+import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -30,6 +40,8 @@ extends ToolBarSectionPart
 	public AbstractGridPriceConfigSection(IFormPage page, Composite parent, int style) {
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.title")); //$NON-NLS-1$
 	}
+
+	private InheritanceAction inheritanceAction;
 
 	/**
 	 * @param page
@@ -47,16 +59,18 @@ extends ToolBarSectionPart
 		AssignNewPriceConfigAction assignNewPriceConfigAction = new AssignNewPriceConfigAction();
 		getToolBarManager().add(assignNewPriceConfigAction);
 		
-		InheritanceAction inheritanceAction = new InheritanceAction(){
+		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
 				inheritPressed();
 //				setSelection(!isSelection());
 			}
 		};
+		inheritanceAction.setEnabled(false);
 		getToolBarManager().add(inheritanceAction);
 
 		updateToolBarManager();
+
 //		Composite buttonWrapper = new XComposite(getSection(), SWT.NONE,
 //				LayoutMode.TOTAL_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
 //		inheritButton = new InheritanceToggleButton(buttonWrapper);
@@ -93,10 +107,72 @@ extends ToolBarSectionPart
 	public PriceConfigComposite getPriceConfigComposite() {
 		return priceConfigComposite;
 	}
+
+	private volatile Job inheritPressedLoadJob = null;
 		
 	protected void inheritPressed() {
-		// TODO: implement this
-		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
+		if (inheritanceAction.isChecked()) {
+			Job job = new Job("Loading extended product type's price config") {
+				@Override
+				protected IStatus run(ProgressMonitor monitor) throws Exception {
+					monitor.beginTask("Loading extended product type's price config", 100);
+					try {
+						ProductType pt = packageProductType;
+						if (pt == null)
+							return Status.OK_STATUS;
+
+						ProductType parentPT = ProductTypeDAO.sharedInstance().getProductType(
+								pt.getExtendedProductTypeID(),
+								new String[] {
+									javax.jdo.FetchPlan.DEFAULT,
+									ProductType.FETCH_GROUP_INNER_PRICE_CONFIG
+								},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+								new SubProgressMonitor(monitor, 40)
+						);
+
+						if (this != inheritPressedLoadJob)
+							return Status.OK_STATUS;
+
+						priceConfigComposite.assignNewPriceConfig(
+								parentPT.getInnerPriceConfig(),
+								true,
+								new SubProgressMonitor(monitor, 60)
+						);
+
+						return Status.OK_STATUS;
+					} finally {
+						monitor.done();
+					}
+				}
+			};
+			inheritPressedLoadJob = job;
+			job.setPriority(Job.SHORT);
+			job.schedule();
+		}
+		else {
+			packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
+			priceConfigComposite.getDirtyStateManager().markDirty();
+		}
+	}
+
+	private ProductType packageProductType;
+
+	public void setPackageProductType(ProductType productType)
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("This method must be called on the UI thread!");
+
+		if (productType == null) {
+			inheritanceAction.setEnabled(false);
+		}
+		else {
+			inheritanceAction.setChecked(productType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).isValueInherited());
+			inheritanceAction.setEnabled(productType.getExtendedProductTypeID() != null);
+		}
+
+		priceConfigComposite._setPackageProductType(productType);
+		this.packageProductType = productType;
 	}
 
 	protected void assignNewPressed()
@@ -108,6 +184,7 @@ extends ToolBarSectionPart
 		int returnType = dialog.open();
 		if (returnType == Window.OK) {
 			getPriceConfigComposite().assignNewPriceConfig(wizard);
+			inheritanceAction.setChecked(wizard.getAbstractChooseGridPriceConfigPage().getAction() == AbstractChooseGridPriceConfigPage.Action.inherit);
 			IInnerPriceConfig ipc = getPriceConfigComposite().getPackageProductType().getInnerPriceConfig();
 			if (ipc == null)
 				getSection().setText(orgTitle);

@@ -154,7 +154,7 @@ implements IProductTypeSectionPart
 	{
 //		if (!getInheritanceSelection())
 		if (getInheritanceSelection())
-			productType.getFieldMetaData("name").setValueInherited(false); //$NON-NLS-1$
+			productType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false); //$NON-NLS-1$
 		else {
 			if (productType != null) {
 				final ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);

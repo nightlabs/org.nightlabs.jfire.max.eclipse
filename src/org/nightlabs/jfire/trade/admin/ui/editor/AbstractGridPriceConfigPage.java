@@ -52,9 +52,7 @@ extends EntityEditorPageWithProgress
 					
 //					priceConfigSection.getPriceConfigComposite().setInitaliseState(true);
 //					try {
-					if (productType != null) {
-						priceConfigSection.getPriceConfigComposite().setPackageProductType(productType);
-					}
+					priceConfigSection.setPackageProductType(productType);
 //					} finally {
 //						priceConfigSection.getPriceConfigComposite().setInitaliseState(false);
 //					}
