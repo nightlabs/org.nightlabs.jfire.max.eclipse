@@ -178,15 +178,15 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 						}
 
 						switch (selectPriceConfigPage.getAction()) {
-						case AbstractChooseGridPriceConfigPage.ACTION_INHERIT:
+						case inherit:
 							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
 							newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
 							break;
-						case AbstractChooseGridPriceConfigPage.ACTION_LATER:
+						case later:
 							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 							// nothing
 							break;
-						case AbstractChooseGridPriceConfigPage.ACTION_CREATE:
+						case create:
 							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 							IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
 							priceConfig = new FormulaPriceConfig(
@@ -195,7 +195,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 							priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
 							newProductType.setInnerPriceConfig(priceConfig);
 							break;
-						case AbstractChooseGridPriceConfigPage.ACTION_SELECT:
+						case select:
 							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
 							newProductType.setInnerPriceConfig(selectPriceConfigPage.getSelectedPriceConfig());
 							break;
