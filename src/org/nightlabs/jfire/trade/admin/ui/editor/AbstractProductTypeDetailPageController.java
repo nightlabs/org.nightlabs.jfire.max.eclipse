@@ -89,8 +89,14 @@ implements IProductTypeDetailPageController<ProductTypeType>
 	protected ProductTypeType storeEntity(ProductTypeType productType, ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.storeProductTypeDetailMonitor.task.name"), 5); //$NON-NLS-1$
 		monitor.worked(1);
-		ProductTypeType newProductType = storeProductType(productType, new SubProgressMonitor(monitor, 2));
+
+		// It is important that the two following lines are executed in this order.
+		// This way, the sale access is first modified, then the ProductType is stored *and* *retrieved*.
+		// This way the second call returns the correct newProductType and not one
+		// which is already outdated when storeSaleAccessControl(...) has been called. Marco.
 		storeSaleAccessControl(new SubProgressMonitor(monitor, 2));
+		ProductTypeType newProductType = storeProductType(productType, new SubProgressMonitor(monitor, 2));
+
 		monitor.done();
 		return newProductType;
 	}
