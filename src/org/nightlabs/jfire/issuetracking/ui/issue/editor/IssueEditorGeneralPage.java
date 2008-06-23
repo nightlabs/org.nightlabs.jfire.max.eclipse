@@ -25,12 +25,19 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ExpandAdapter;
+import org.eclipse.swt.events.ExpandListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
@@ -64,8 +71,6 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		}
 	}
 
-	// TODO: Somehow have a LanguageChooser for the whole page, not for every I18nEditor.
-	
 	private IssueLinkListSection issueLinkListSection;
 	private IssueDetailSection issueDetailSection;
 	private IssueTypeAndStateSection issueTypeAndStateSection;
@@ -88,23 +93,34 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		super(editor, ID_PAGE, "General");
 	}
 
+	private ScrolledComposite sc;
 	@Override
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
 		
-		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
+		sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
 				  SWT.V_SCROLL);
 		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		XComposite c = new XComposite(sc, SWT.NONE);
+		final XComposite c = new XComposite(sc, SWT.NONE);
 		GridLayout layout = (GridLayout)c.getLayout();
 		layout.numColumns = 2;
 		layout.makeColumnsEqualWidth = true;
 		
+		sc.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent arg0) {
+				int preferredHeight = 0;
+				for (Control c : sc.getChildren()) {
+					preferredHeight += c.getBounds().height;
+				}
+				sc.setMinSize(c.computeSize(SWT.DEFAULT, preferredHeight));
+			}
+		});
+		
 		sc.setContent(c);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
-		sc.setMinSize(c.computeSize(SWT.DEFAULT, 1000));
 		
 		issueDetailSection = new IssueDetailSection(this, c, controller);
 		GridData gd = (GridData)issueDetailSection.getSection().getLayoutData();
