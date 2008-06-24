@@ -16,6 +16,7 @@
             default="false"
             icon="icons/editor/DynamicProductTypeEditor.16x16.png"
             id="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
+            matchingStrategy="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorMatchingStrategy"
             name="%org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor.name"/>
    </extension>
    <extension
