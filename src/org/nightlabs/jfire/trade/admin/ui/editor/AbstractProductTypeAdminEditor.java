@@ -114,4 +114,10 @@ public abstract class AbstractProductTypeAdminEditor
 		if (editLockHandle != null)
 			editLockHandle.release();
 	}
+	
+//	/**
+//	 * Returns the Class of the ProductType this editor is used for.
+//	 * @return the Class of the ProductType this editor is used for
+//	 */
+//	public abstract Class<? extends ProductType> getProductTypeClass();
 }

@@ -160,4 +160,12 @@
          </editorActionBarContribution>
       </editorActionBarContributionRegistry>
     </extension>
+    <extension
+          point="org.nightlabs.base.ui.searchResultProvider">
+       <searchResultActionHandler
+             class="org.nightlabs.jfire.trade.admin.ui.search.GenericProductTypeSearchAdminActionHandler"
+             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
+             searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory">
+       </searchResultActionHandler>
+    </extension>
 </plugin>
