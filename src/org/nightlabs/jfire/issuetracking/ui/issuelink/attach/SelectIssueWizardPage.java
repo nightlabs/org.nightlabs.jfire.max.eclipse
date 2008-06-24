@@ -21,6 +21,7 @@ import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
@@ -42,7 +43,7 @@ extends WizardHopPage
 
 	//Used Objects
 	private Issue selectedIssue;
-//	private Object attachedObject;
+	private Object attachedObject;
 
 	public static enum ActionForIssue {
 		createNewIssue,
@@ -76,10 +77,10 @@ extends WizardHopPage
 
 	public SelectIssueWizardPage(Object attachedObject) {
 		super(SelectIssueWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class));
+		this.attachedObject = attachedObject;
+		
 		setTitle("Create/Attach issue");
 
-//		this.attachedObject = attachedObject;
-		
 		String objectNameString = attachedObject.getClass().getSimpleName();
 		setDescription("Create/Attach issue to " + objectNameString);
 	}
@@ -152,8 +153,8 @@ extends WizardHopPage
 				case createNewIssue:
 					if (newIssue == null) {
 						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+						newIssue.createIssueLink(issueLinkType, attachedObject);
 						createIssueGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
-//						createIssueGeneralWizardPage.setIssueLinkTableItem(new IssueLinkTableItem((ObjectID)JDOHelper.getObjectId(attachedObject), attachedObjectLinkType));
 						new WizardHop(this);
 						getWizardHop().addHopPage(createIssueGeneralWizardPage);
 					}
@@ -194,5 +195,10 @@ extends WizardHopPage
 		}
 		
 		return null;
+	}
+	
+	private IssueLinkType issueLinkType;
+	public void setIssueLinkType(IssueLinkType issueLinkType) {
+		this.issueLinkType = issueLinkType;
 	}
 }

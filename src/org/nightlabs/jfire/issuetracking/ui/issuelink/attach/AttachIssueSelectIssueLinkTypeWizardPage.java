@@ -105,6 +105,10 @@ extends WizardHopPage
 							getContainer().updateButtons();
 
 							if(issueLinkTypes.size() == 1 && JDOHelper.getObjectId(selectedIssueLinkType).equals(IssueLinkType.ISSUE_LINK_TYPE_ID_RELATED)) {
+								if (getNextPage() instanceof SelectIssueWizardPage) {
+									SelectIssueWizardPage selectPage = (SelectIssueWizardPage)getNextPage();
+									selectPage.setIssueLinkType(selectedIssueLinkType);
+								}
 								getContainer().showPage(getNextPage());
 							}
 						}
