@@ -153,13 +153,19 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectProductTypeAndPackagePage.description"); //$NON-NLS-1$
 	}
 	
-	public ProductType getSelectedProduct() {
+	public ProductType getSelectedProductType() {
 		ProductTypeID pTypeID = productTypePackageTree.getSelectedProductTypeID();
 		if (pTypeID == null)
 			return null;
+
 		ProductType pType = ProductTypeDAO.sharedInstance().getProductType(
-				pTypeID, new String[] {FetchPlan.DEFAULT},
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+				pTypeID,
+				new String[] {
+						FetchPlan.DEFAULT,
+						ProductType.FETCH_GROUP_NAME
+				},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor()
 		);
 		return pType;
 	}

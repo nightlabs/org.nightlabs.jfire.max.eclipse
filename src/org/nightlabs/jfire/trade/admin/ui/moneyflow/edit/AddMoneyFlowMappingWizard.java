@@ -148,7 +148,7 @@ public class AddMoneyFlowMappingWizard extends DynamicPathWizard {
 			dimensionValues.put(dimensionPage.getMoneyFlowMappingDimensionID(), dimensionPage.getDimensionValue());
 		}
 		createdMapping = delegateType.createNewMapping(
-				selectProductTypeAndPackagePage.getSelectedProduct(),
+				selectProductTypeAndPackagePage.getSelectedProductType(),
 				selectProductTypeAndPackagePage.getPackageType(),
 				dimensionValues,
 				selectCurrencyAndRevenueAccountPage.getCurrency(),

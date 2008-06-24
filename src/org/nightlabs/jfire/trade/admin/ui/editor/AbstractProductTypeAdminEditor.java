@@ -17,6 +17,7 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.editlock.EditLock;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -36,7 +37,8 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 public abstract class AbstractProductTypeAdminEditor
-	extends EntityEditor
+extends EntityEditor
+implements ICloseOnLogoutEditorPart
 {
 	private EditLockHandle editLockHandle;
 	

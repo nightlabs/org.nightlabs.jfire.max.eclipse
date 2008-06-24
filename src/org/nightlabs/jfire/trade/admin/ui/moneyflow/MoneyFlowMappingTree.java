@@ -74,6 +74,7 @@ import org.nightlabs.jfire.trade.ui.accounting.AccountCellEditor;
 import org.nightlabs.jfire.trade.ui.accounting.AccountingUtil;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -195,10 +196,10 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				// TODO IMPROVE: when fetch-depth works change this
 				delegateRun = delegateRun.getExtendedAccountantDelegate();
 				if (delegateRun != null)
-					delegateRun = LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+					delegateRun = Util.cloneSerializable(LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 							(LocalAccountantDelegateID)JDOHelper.getObjectId(delegateRun), 
 							DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor());
+							new NullProgressMonitor()));
 			}
 		}
 		
@@ -505,8 +506,9 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 	}
 	
 	public void setDelegateID(LocalAccountantDelegateID delegateID) {
-		setDelegate((MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().
-				getDelegate(delegateID, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+		setDelegate(Util.cloneSerializable(
+				(MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().
+				getDelegate(delegateID, DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor())));
 	}
 
 	/**
@@ -525,11 +527,12 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
 					productTypeID, DEFAULT_PTYPE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
+			productType = Util.cloneSerializable(productType);
 			if (productType != null && productType.getProductTypeLocal().getLocalAccountantDelegate() != null)
-				dDelegate = (MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+				dDelegate = Util.cloneSerializable((MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
 						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-					);
+					));
 		}
 		setDelegate(dDelegate);
 	}
@@ -546,10 +549,10 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 		}
 		else {
 			if (productType.getProductTypeLocal().getLocalAccountantDelegate() != null) {
-				dDelegate = (MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
+				dDelegate = Util.cloneSerializable((MappingBasedAccountantDelegate) LocalAccountantDelegateDAO.sharedInstance().getDelegate(
 						(LocalAccountantDelegateID)JDOHelper.getObjectId(productType.getProductTypeLocal().getLocalAccountantDelegate()),
 						DEFAULT_DELEGATE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-					);
+					));
 			}
 		}
 		setDelegate(dDelegate);

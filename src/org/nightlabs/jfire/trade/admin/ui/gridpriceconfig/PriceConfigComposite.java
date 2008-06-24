@@ -41,7 +41,6 @@ import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.internal.filebuffers.Progress;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -76,14 +75,11 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.CustomerGroupMapper;
-import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.dao.CustomerGroupMappingDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-
-import sun.net.ProgressMeteringPolicy;
 
 /**
  * This composite can be used to display and edit the whole grid-price-configuration

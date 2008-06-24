@@ -117,7 +117,9 @@ implements LocalAccountantDelegateType
 			PriceFragmentTypeID pTypeID = PriceFragmentType.primaryKeyToPriceFragmentTypeID(pTypeStr);
 			pType = PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(
 					pTypeID, 
-					new String[] {FetchPlan.DEFAULT}, 
+					new String[] {
+							FetchPlan.DEFAULT
+					}, 
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor());
 		}
@@ -135,7 +137,9 @@ implements LocalAccountantDelegateType
 			AnchorID leID = Anchor.primaryKeyToAnchorID((String) dimensionValues.get(org.nightlabs.jfire.accounting.book.mappingbased.OwnerDimension.MONEY_FLOW_DIMENSION_ID));
 			owner = LegalEntityDAO.sharedInstance().getLegalEntity(
 					leID,
-					new String[] {FetchPlan.DEFAULT},
+					new String[] {
+							FetchPlan.DEFAULT
+					},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new NullProgressMonitor()
 			);

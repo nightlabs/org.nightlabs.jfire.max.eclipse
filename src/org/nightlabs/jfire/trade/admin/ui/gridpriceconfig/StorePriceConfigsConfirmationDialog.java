@@ -21,8 +21,6 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.i18n.I18nText;
-import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
