@@ -1,16 +1,11 @@
 package org.nightlabs.jfire.prop.html.ui;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.fckeditor.FCKEditorComposite;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
@@ -23,8 +18,6 @@ import org.nightlabs.jfire.prop.html.HTMLDataField;
 public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 {
 	private Composite control;
-	private Label contentLabel;
-	private Label fileLabel;
 
 	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data)
 	{
@@ -38,36 +31,47 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 	public Control createControl(Composite parent)
 	{
 		control = new Composite(parent, SWT.NONE);
-		control.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.horizontalSpan = 2;
+		control.setLayoutData(gd);
+
 		GridLayout gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
 		control.setLayout(gl);
 
-		contentLabel = new Label(control, SWT.WRAP);
+		// TODO: add language switcher here...
 
-		fileLabel = new Label(control, SWT.WRAP);
+		IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
+		FCKEditorComposite editorComposite = new FCKEditorComposite(control, SWT.BORDER, editorInput);
+		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Button b = new Button(control, SWT.PUSH);
-		b.setText("Edit...");
-		b.addSelectionListener(new SelectionAdapter() {
-			/* (non-Javadoc)
-			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-			 */
-			@Override
-			public void widgetSelected(SelectionEvent event)
-			{
-				try {
-					IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
-					RCPUtil.getActiveWorkbenchPage().openEditor(editorInput, "org.nightlabs.jfire.prop.html.ui.PropFCKEditor");
-					// TEST:
-					modifyData();
-				} catch (Throwable e) {
-					MessageDialog.openError(b.getShell(), "Error", String.format("Editor could not be opened: %s", e.getLocalizedMessage()));
-					e.printStackTrace();
-				}
-			}
-		});
+//
+//		contentLabel = new Label(control, SWT.WRAP);
+//
+//		fileLabel = new Label(control, SWT.WRAP);
+//
+//		final Button b = new Button(control, SWT.PUSH);
+//		b.setText("Edit...");
+//		b.addSelectionListener(new SelectionAdapter() {
+//			/* (non-Javadoc)
+//			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+//			 */
+//			@Override
+//			public void widgetSelected(SelectionEvent event)
+//			{
+//				try {
+//					IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
+//					RCPUtil.getActiveWorkbenchPage().openEditor(editorInput, "org.nightlabs.jfire.prop.html.ui.PropFCKEditor");
+//					// TEST:
+//					modifyData();
+//				} catch (Throwable e) {
+//					MessageDialog.openError(b.getShell(), "Error", String.format("Editor could not be opened: %s", e.getLocalizedMessage()));
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 
 		doRefresh();
 
@@ -80,15 +84,17 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 	@Override
 	public void doRefresh()
 	{
-		if(!getDataField().isEmpty())
-			contentLabel.setText(getDataField().getHtml());
-		else
-			contentLabel.setText("No content.");
+		// TODO: handle input change
 
-		int count = getDataField().getFiles() == null ? 0 : getDataField().getFiles().size();
-		fileLabel.setText(String.format("%d files", count));
-
-		contentLabel.getParent().layout(true, true);
+//		if(!getDataField().isEmpty())
+//			contentLabel.setText(getDataField().getHtml());
+//		else
+//			contentLabel.setText("No content.");
+//
+//		int count = getDataField().getFiles() == null ? 0 : getDataField().getFiles().size();
+//		fileLabel.setText(String.format("%d files", count));
+//
+//		contentLabel.getParent().layout(true, true);
 	}
 
 	/* (non-Javadoc)

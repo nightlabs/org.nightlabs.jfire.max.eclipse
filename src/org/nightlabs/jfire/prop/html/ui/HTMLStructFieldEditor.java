@@ -18,6 +18,7 @@ public class HTMLStructFieldEditor extends AbstractStructFieldEditor<HTMLStructF
 	@Override
 	protected Composite createSpecialComposite(Composite parent, int style)
 	{
+		// FIXME: remove this.
 		Composite c = new Composite(parent, style);
 		c.setLayout(new FillLayout());
 		Label l = new Label(c, SWT.NONE);
