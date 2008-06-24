@@ -25,8 +25,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ExpandAdapter;
-import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.GridData;
@@ -36,8 +34,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
@@ -107,20 +104,12 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		layout.numColumns = 2;
 		layout.makeColumnsEqualWidth = true;
 		
-		sc.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent arg0) {
-				int preferredHeight = 0;
-				for (Control c : sc.getChildren()) {
-					preferredHeight += c.getBounds().height;
-				}
-				sc.setMinSize(c.computeSize(SWT.DEFAULT, preferredHeight));
-			}
-		});
-		
 		sc.setContent(c);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
+		
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 		
 		issueDetailSection = new IssueDetailSection(this, c, controller);
 		GridData gd = (GridData)issueDetailSection.getSection().getLayoutData();
@@ -133,6 +122,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		gd.verticalAlignment = GridData.BEGINNING;
 		issueTypeAndStateSection.getSection().setLayoutData(gd);
 		getManagedForm().addPart(issueTypeAndStateSection);
+		
+		issueTypeAndStateSection.getSection().descriptionVerticalSpacing = issueDetailSection.getSection().getTextClientHeightDifference();
 		
 		issueSubjectAndDescriptionSection = new IssueSubjectAndDescriptionSection(this, c, controller);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -263,5 +254,10 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 
 	public IssueCommentCreateSection getIssueCommentCreateSection() {
 		return issueCommentCreateSection;
+	}
+	
+	@Override
+	protected boolean includeFixForVerticalScrolling() {
+		return false;
 	}
 }
