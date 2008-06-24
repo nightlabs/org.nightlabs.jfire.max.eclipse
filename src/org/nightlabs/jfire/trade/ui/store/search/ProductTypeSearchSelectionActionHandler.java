@@ -11,9 +11,6 @@ public class ProductTypeSearchSelectionActionHandler
 //extends AbstractSelectionZoneActionHandler
 extends AbstractJDOSelectionZoneActionHandler
 {
-	public ProductTypeSearchSelectionActionHandler() {
-	}
-
 	@Override
 	public String getSelectionZone() {
 		return TradePlugin.ZONE_SALE;
