@@ -14,6 +14,8 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
+import org.nightlabs.jfire.prop.IStruct;
+import org.nightlabs.jfire.prop.html.HTMLDataField;
 
 /**
  * @author Marc Klinger - marc[at]nightlabs[dot]de
