@@ -18,13 +18,16 @@ import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
 import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
 import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
 import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 
-public class IssueEditor extends EntityEditor{
+public class IssueEditor extends EntityEditor
+implements ICloseOnLogoutEditorPart
+{
 
 	public static final String EDITOR_ID = IssueEditor.class.getName();
 
