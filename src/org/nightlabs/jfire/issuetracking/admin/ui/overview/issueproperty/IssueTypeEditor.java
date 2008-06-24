@@ -11,11 +11,14 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class IssueTypeEditor extends EntityEditor{
+public class IssueTypeEditor extends EntityEditor
+implements ICloseOnLogoutEditorPart
+{
 	public static final String EDITOR_ID = IssueTypeEditor.class.getName();
 	private IssueTypeEditorInput issueTypeEditorInput;
 	@Override
