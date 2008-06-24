@@ -17,6 +17,7 @@
             contributorClass="org.nightlabs.base.ui.entity.editor.action.EntityEditorActionBarContributor"
             icon="icons/editor/SimpleProductTypeEditor.16x16.png"
             id="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
+            matchingStrategy="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditorMatchingStrategy"
             name="%SimpleProductTypeEditor.name">
       </editor>
    </extension>
