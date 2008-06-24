@@ -14,18 +14,17 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
-import org.nightlabs.jfire.prop.IStruct;
-import org.nightlabs.jfire.prop.html.HTMLDataField;
 
 /**
  * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 {
-	private Composite control;  
+	private Composite control;
 	private Label contentLabel;
-	
-	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data) 
+	private Label fileLabel;
+
+	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data)
 	{
 		super(struct, data);
 	}
@@ -41,13 +40,12 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		GridLayout gl = new GridLayout();
 		gl.marginWidth = 0;
 		gl.marginHeight = 0;
-		
+		control.setLayout(gl);
+
 		contentLabel = new Label(control, SWT.WRAP);
 
-		Label l2 = new Label(control, SWT.WRAP);
-		int count = getDataField().getFiles() == null ? 0 : getDataField().getFiles().size();
-		l2.setText(String.format("%d files", count));
-		
+		fileLabel = new Label(control, SWT.WRAP);
+
 		final Button b = new Button(control, SWT.PUSH);
 		b.setText("Edit...");
 		b.addSelectionListener(new SelectionAdapter() {
@@ -68,9 +66,9 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 				}
 			}
 		});
-		
+
 		doRefresh();
-		
+
 		return control;
 	}
 
@@ -84,6 +82,11 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 			contentLabel.setText(getDataField().getHtml());
 		else
 			contentLabel.setText("No content.");
+
+		int count = getDataField().getFiles() == null ? 0 : getDataField().getFiles().size();
+		fileLabel.setText(String.format("%d files", count));
+
+		contentLabel.getParent().layout(true, true);
 	}
 
 	/* (non-Javadoc)
