@@ -26,7 +26,6 @@ package org.nightlabs.jfire.trade.ui.account.editor;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;

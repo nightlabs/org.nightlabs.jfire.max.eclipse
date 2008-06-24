@@ -2,8 +2,6 @@ package org.nightlabs.jfire.trade.ui.overview.offer;
 
 import java.util.Collection;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
@@ -13,10 +11,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
-import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
-import org.nightlabs.jfire.jbpm.graph.def.State;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;

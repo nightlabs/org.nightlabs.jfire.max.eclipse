@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
 import org.nightlabs.jfire.base.ui.overview.OverviewView;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->

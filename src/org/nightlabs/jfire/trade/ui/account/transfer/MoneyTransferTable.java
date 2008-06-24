@@ -25,7 +25,6 @@ import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.transfer.id.TransferID;
-import org.nightlabs.l10n.DateFormatProvider;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
 

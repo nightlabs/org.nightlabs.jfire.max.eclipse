@@ -20,7 +20,6 @@ import org.nightlabs.jfire.store.ProductTypeGroup;
 import org.nightlabs.jfire.store.dao.ProductTypeGroupDAO;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
-import org.nightlabs.jfire.store.search.ISaleAccessQuery;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;

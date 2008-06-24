@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.dao.RepositoryDAO;
@@ -27,6 +28,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 public class RepositoryEditor
 extends EntityEditor
+implements ICloseOnLogoutEditorPart
 {
 	public static final String EDITOR_ID = RepositoryEditor.class.getName();
 

@@ -13,11 +13,13 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.Anchor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class AccountEditor extends EntityEditor
+implements ICloseOnLogoutEditorPart
 {
 	/**
 	 * The editor id.

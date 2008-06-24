@@ -43,7 +43,6 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 
 /**

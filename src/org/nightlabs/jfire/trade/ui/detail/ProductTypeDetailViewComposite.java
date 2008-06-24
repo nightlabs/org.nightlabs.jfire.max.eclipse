@@ -14,7 +14,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
