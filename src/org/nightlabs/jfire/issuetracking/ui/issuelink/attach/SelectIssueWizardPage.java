@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issuelink.attach;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -19,6 +21,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
@@ -153,7 +156,7 @@ extends WizardHopPage
 				case createNewIssue:
 					if (newIssue == null) {
 						newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-						newIssue.createIssueLink(issueLinkType, attachedObject);
+						newIssue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(attachedObject), attachedObject.getClass());
 						createIssueGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
 						new WizardHop(this);
 						getWizardHop().addHopPage(createIssueGeneralWizardPage);
