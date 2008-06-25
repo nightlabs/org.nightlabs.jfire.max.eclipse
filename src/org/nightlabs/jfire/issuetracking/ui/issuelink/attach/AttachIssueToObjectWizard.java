@@ -66,7 +66,12 @@ extends DynamicPathWizard
 					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 					
 					Issue issue = selectIssueWizardPage.getIssue();
-					issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					if (JDOHelper.getObjectId(issue) == null) {
+						issue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					}
+					else {
+						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					}
 					issue.createIssueLink(selectedIssueLinkType, attachedObject);
 					
 					Issue createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
