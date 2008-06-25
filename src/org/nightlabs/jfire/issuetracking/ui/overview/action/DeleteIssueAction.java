@@ -4,6 +4,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPart;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class DeleteIssueAction 
@@ -47,14 +48,16 @@ extends AbstractIssueAction
 
 	@Override
 	public boolean calculateEnabled() {
-		return getSelectedIssueIDs().size() == 1;
+		return getSelectedIssueIDs().size() > 0;
 	}
 
 	@Override
 	public void run() {
-		boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete this issue?");
-		if (result == true) {
-			IssueDAO.sharedInstance().deleteIssue(getSelectedIssueIDs().iterator().next(), new NullProgressMonitor());
+		for (IssueID issueID : getSelectedIssueIDs()) {
+			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete this issue?");
+			if (result == true) {
+				IssueDAO.sharedInstance().deleteIssue(issueID, new NullProgressMonitor());
+			}
 		}
 	}
 }

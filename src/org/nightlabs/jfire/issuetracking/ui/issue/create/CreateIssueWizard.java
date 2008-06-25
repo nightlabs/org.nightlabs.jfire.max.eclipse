@@ -52,9 +52,6 @@ extends DynamicPathWizard
 	public void addPages() {
 		issueCreateGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
 		addPage(issueCreateGeneralWizardPage);
-
-		issueCreateDetailWizardPage = new CreateIssueOptionalWizardPage(newIssue);
-		addPage(issueCreateDetailWizardPage);
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
