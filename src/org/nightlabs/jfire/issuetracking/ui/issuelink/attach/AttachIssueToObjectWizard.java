@@ -4,18 +4,21 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -67,6 +70,11 @@ extends DynamicPathWizard
 					
 					Issue issue = selectIssueWizardPage.getIssue();
 					if (JDOHelper.getObjectId(issue) == null) {
+						try {
+							issue.setReporter((Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
+						} catch (LoginException e) {
+							throw new RuntimeException(e);
+						}
 						issue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					}
 					else {
