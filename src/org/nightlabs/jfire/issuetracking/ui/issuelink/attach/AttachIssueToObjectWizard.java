@@ -71,7 +71,8 @@ extends DynamicPathWizard
 					Issue issue = selectIssueWizardPage.getIssue();
 					if (JDOHelper.getObjectId(issue) == null) {
 						try {
-							issue.setReporter((Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
+							User reporter = Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+							issue.setReporter(reporter);
 						} catch (LoginException e) {
 							throw new RuntimeException(e);
 						}
