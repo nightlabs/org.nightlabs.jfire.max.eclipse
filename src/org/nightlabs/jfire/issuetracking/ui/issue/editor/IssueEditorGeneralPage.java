@@ -65,14 +65,15 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		}
 	}
 
-	private IssueLinkListSection issueLinkListSection;
+	//Sections (in order)
 	private IssueDetailSection issueDetailSection;
 	private IssueTypeAndStateSection issueTypeAndStateSection;
 	private IssueSubjectAndDescriptionSection issueSubjectAndDescriptionSection;
 	private IssuePropertySection issuePropertySection;
-	private IssueFileAttachmentSection issueFileAttachmentSection;
 	private IssueCommentListSection issueCommentListSection;
 	private IssueCommentCreateSection issueCommentCreateSection;
+	private IssueLinkListSection issueLinkListSection;
+	private IssueFileAttachmentSection issueFileAttachmentSection;
 	
 	/**
 	 * <p>
