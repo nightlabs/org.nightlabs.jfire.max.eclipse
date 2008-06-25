@@ -130,6 +130,7 @@ public class NextTransitionComposite
 				nextTransitionCombo.addElements(transitions);
 				setEnabled(true);
 				updateUI();
+				layout(true);
 			}
 		};
 
