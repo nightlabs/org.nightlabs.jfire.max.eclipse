@@ -23,11 +23,8 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
-import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssueManager;
 import org.nightlabs.jfire.issue.IssueManagerUtil;
-import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
@@ -116,14 +113,7 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_THIS_ISSUE,
-		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-//		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
-//		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
-		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-//		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-		IssueLocal.FETCH_GROUP_THIS_ISSUE_LOCAL,
+		IssueType.FETCH_GROUP_NAME,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
 
