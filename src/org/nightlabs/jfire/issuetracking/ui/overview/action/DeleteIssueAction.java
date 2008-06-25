@@ -54,7 +54,7 @@ extends AbstractIssueAction
 	@Override
 	public void run() {
 		for (IssueID issueID : getSelectedIssueIDs()) {
-			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete this issue?");
+			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete issue "+ issueID.issueID + "?");
 			if (result == true) {
 				IssueDAO.sharedInstance().deleteIssue(issueID, new NullProgressMonitor());
 			}
