@@ -203,26 +203,21 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 							throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + selectPriceConfigPage.getAction()); //$NON-NLS-1$
 						} // switch (selectPriceConfigPage.getAction()) {
 
-
-
-						newProductType.setOwner(ownerVendorPage.getOwnerEntity());
-
-						newProductType.setVendor(ownerVendorPage.getVendorEntity());
-
-
 						// TODO: Add Wizardhop for PropertySet inherit/createnew
 						SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, 1);
 						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
 								SimpleProductType.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE, subMonitor);
 						newProductType.getPropertySet().setStructLocalAttributes(struct);
 
+						newProductType.setOwner(ownerVendorPage.getOwnerEntity());
+						newProductType.setVendor(ownerVendorPage.getVendorEntity());						
+						newProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
+						newProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
 						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);
 //						newProductType = getSimpleTradeManager().storeProductType(
 //						newProductType, true,
 //						ProductTypeTreeNode.FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
 						monitor.worked(1);
-
 //						if (selectedNode.isChildrenLoaded()) {
 //						new ProductTypeTreeNode(selectedNode, newProductType);
 //						selectedNode.refreshLocal();
