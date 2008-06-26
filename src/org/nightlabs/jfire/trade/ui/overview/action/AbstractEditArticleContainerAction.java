@@ -22,11 +22,11 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -57,32 +57,32 @@ implements IOverviewEditAction
 	{
 		try {
 			IEditorInput input = getEditorInput();
-			if (! (input instanceof GeneralEditorInput) )
-				throw new IllegalArgumentException("This subclass: "+this+" does not return an input type, which is not a subclass of GeneralEditorInput. This must not be allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (! (input instanceof ArticleContainerEditorInput) )
+				throw new IllegalArgumentException("This subclass: "+this+" does not return an input type, which is not a subclass of ArticleContainerEditorInput. This must not be allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			Editor2PerspectiveRegistry.sharedInstance().openEditor(getEditorInput(), getEditorID());
 			
-			GeneralEditorInput generalEditorInput = (GeneralEditorInput) input;
+			ArticleContainerEditorInput articleContainerEditorInput = (ArticleContainerEditorInput) input;
 			AnchorID anchorID;
 			
 			// TODO: try to create a generic solution with getArticleContainerID and some new ArticleContainerDAO
-			if (generalEditorInput instanceof GeneralEditorInputDeliveryNote) {
-				DeliveryNoteID noteID = ((GeneralEditorInputDeliveryNote) generalEditorInput).getDeliveryNoteID();
+			if (articleContainerEditorInput instanceof ArticleContainerEditorInputDeliveryNote) {
+				DeliveryNoteID noteID = ((ArticleContainerEditorInputDeliveryNote) articleContainerEditorInput).getDeliveryNoteID();
 				DeliveryNote note = DeliveryNoteDAO.sharedInstance().getDeliveryNote(noteID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = note.getCustomerID();
-			} else if (generalEditorInput instanceof GeneralEditorInputInvoice) {
-				InvoiceID invoiceID = ((GeneralEditorInputInvoice) generalEditorInput).getInvoiceID();
+			} else if (articleContainerEditorInput instanceof ArticleContainerInputInvoice) {
+				InvoiceID invoiceID = ((ArticleContainerInputInvoice) articleContainerEditorInput).getInvoiceID();
 				Invoice invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = invoice.getCustomerID();
-			} else if (generalEditorInput instanceof GeneralEditorInputOffer) {
-				OfferID offerID = ((GeneralEditorInputOffer) generalEditorInput).getOfferID();
+			} else if (articleContainerEditorInput instanceof ArticleContainerEditorInputOffer) {
+				OfferID offerID = ((ArticleContainerEditorInputOffer) articleContainerEditorInput).getOfferID();
 				Offer offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = offer.getCustomerID();
-			} else if (generalEditorInput instanceof GeneralEditorInputOrder) {
-				OrderID orderID = ((GeneralEditorInputOrder) generalEditorInput).getOrderID();
+			} else if (articleContainerEditorInput instanceof ArticleContainerEditorInputOrder) {
+				OrderID orderID = ((ArticleContainerEditorInputOrder) articleContainerEditorInput).getOrderID();
 				Order order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = order.getCustomerID();

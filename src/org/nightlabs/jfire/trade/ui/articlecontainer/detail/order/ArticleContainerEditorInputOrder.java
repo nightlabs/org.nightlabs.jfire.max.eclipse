@@ -24,49 +24,49 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote;
+package org.nightlabs.jfire.trade.ui.articlecontainer.detail.order;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class GeneralEditorInputDeliveryNote
-extends GeneralEditorInput
+public class ArticleContainerEditorInputOrder
+extends ArticleContainerEditorInput
 implements IEditorInput
 {
-	private DeliveryNoteID deliveryNoteID;
+	private OrderID orderID;
 
-	public GeneralEditorInputDeliveryNote()
+	public ArticleContainerEditorInputOrder()
 	{
 	}
 
-	public GeneralEditorInputDeliveryNote(DeliveryNoteID deliveryNoteID)
+	public ArticleContainerEditorInputOrder(OrderID orderID)
 	{
-		this.deliveryNoteID = deliveryNoteID;
+		this.orderID = orderID;
 	}
 
 	/**
-	 * @return Returns the deliveryNoteID.
+	 * @return Returns the orderID.
 	 */
-	public DeliveryNoteID getDeliveryNoteID()
+	public OrderID getOrderID()
 	{
-		return deliveryNoteID;
+		return orderID;
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return deliveryNoteID == null ? 0 : deliveryNoteID.hashCode();
+		return orderID == null ? 0 : orderID.hashCode();
 	}
 
 	@Override
@@ -74,22 +74,22 @@ implements IEditorInput
 	{
 		if (obj == this) return true;
 
-		if (!(obj instanceof GeneralEditorInputDeliveryNote))
+		if (!(obj instanceof ArticleContainerEditorInputOrder))
 			return false;
 
-		GeneralEditorInputDeliveryNote other = (GeneralEditorInputDeliveryNote)obj;
+		ArticleContainerEditorInputOrder other = (ArticleContainerEditorInputOrder)obj;
 
-		return Util.equals(this.deliveryNoteID, other.deliveryNoteID);
+		return Util.equals(this.orderID, other.orderID);
 	}
 
 	public String getName()
 	{
 		return String.format(
-				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote.name"), //$NON-NLS-1$
-				(deliveryNoteID == null ? "" : deliveryNoteID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID))); //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder.name"), //$NON-NLS-1$
+				(orderID == null ? "" : orderID.orderIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(orderID.orderID))); //$NON-NLS-1$
 	}
 
-	private static final String IMAGE = "icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"; //$NON-NLS-1$
+	private static final String IMAGE = "icons/articlecontainer/detail/order/ArticleContainerEditorInputOrder.16x16.png"; //$NON-NLS-1$
 
 	@Override
 	public ImageDescriptor getImageDescriptor()
@@ -99,6 +99,7 @@ implements IEditorInput
 
 	@Override
 	public ArticleContainerID getArticleContainerID() {
-		return getDeliveryNoteID();
+		// TODO Auto-generated method stub
+		return getOrderID();
 	}
 }

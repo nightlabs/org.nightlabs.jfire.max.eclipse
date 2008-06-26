@@ -3,7 +3,7 @@ package org.nightlabs.jfire.trade.ui.overview.deliverynote.action;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 
 /**
@@ -19,7 +19,7 @@ extends AbstractEditArticleContainerAction
 
 	public IEditorInput getEditorInput() {
 		DeliveryNoteID deliveryNoteID = (DeliveryNoteID) getArticleContainerID();
-		return new GeneralEditorInputDeliveryNote(deliveryNoteID);
+		return new ArticleContainerEditorInputDeliveryNote(deliveryNoteID);
 	}
 
 }

@@ -36,7 +36,7 @@ import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -61,7 +61,7 @@ extends XComposite
 	 * @param input
 	 */
 	public ArticleContainerQuickSaleEditorComposite(IWorkbenchPartSite site,
-			Composite parent, GeneralEditorInput input)
+			Composite parent, ArticleContainerEditorInput input)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.site = site;
@@ -69,7 +69,7 @@ extends XComposite
 	}
 	
 	private Composite buttonComp;
-	protected void createComposite(Composite parent, GeneralEditorInput input)
+	protected void createComposite(Composite parent, ArticleContainerEditorInput input)
 	{
 		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, parent, input);
 		
@@ -170,7 +170,7 @@ extends XComposite
 		}
 	};
 
-	public static GeneralEditorInputOrder createEditorInput()
+	public static ArticleContainerEditorInputOrder createEditorInput()
 	{
 		TradeManager tm;
 		try {
@@ -199,7 +199,7 @@ extends XComposite
 							null,
 							tradeConfigModule.getCurrencyID(),
 							new SegmentTypeID[] {null}); // null here is a shortcut for default segment type
-					return new GeneralEditorInputOrder(orderID);
+					return new ArticleContainerEditorInputOrder(orderID);
 			} catch (LoginException le) {
 				return null;
 			}
@@ -262,7 +262,7 @@ extends XComposite
 		}
 	}
 	
-	protected void createGeneralEditorComposite(GeneralEditorInput input)
+	protected void createGeneralEditorComposite(ArticleContainerEditorInput input)
 	{
 		articleContainerEditorComposite.dispose();
 		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, this, input);

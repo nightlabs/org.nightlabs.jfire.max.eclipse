@@ -11,7 +11,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
@@ -32,7 +32,7 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return orderID != null && !(getActiveGeneralEditorInput() instanceof GeneralEditorInputOrder);
+		return orderID != null && !(getActiveGeneralEditorInput() instanceof ArticleContainerEditorInputOrder);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 		if (orderID == null)
 			return;
 		try {
-			RCPUtil.openEditor(new GeneralEditorInputOrder(orderID), ArticleContainerEditor.ID_EDITOR);
+			RCPUtil.openEditor(new ArticleContainerEditorInputOrder(orderID), ArticleContainerEditor.ID_EDITOR);
 		} catch (PartInitException e) {
 			throw new RuntimeException(e);
 		}

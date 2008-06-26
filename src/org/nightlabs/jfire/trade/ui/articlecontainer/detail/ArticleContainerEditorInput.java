@@ -35,35 +35,35 @@ import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputReceptionNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputReceptionNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public abstract class GeneralEditorInput
+public abstract class ArticleContainerEditorInput
 implements IEditorInput
 {
 	private String articleContainerClass;
 
-	public GeneralEditorInput()
+	public ArticleContainerEditorInput()
 	{
-		if (this instanceof GeneralEditorInputOrder)
+		if (this instanceof ArticleContainerEditorInputOrder)
 			articleContainerClass = Order.class.getName();
-		else if (this instanceof GeneralEditorInputOffer)
+		else if (this instanceof ArticleContainerEditorInputOffer)
 			articleContainerClass = Offer.class.getName();
-		else if (this instanceof GeneralEditorInputInvoice)
+		else if (this instanceof ArticleContainerInputInvoice)
 			articleContainerClass = Invoice.class.getName();
-		else if (this instanceof GeneralEditorInputDeliveryNote)
+		else if (this instanceof ArticleContainerEditorInputDeliveryNote)
 			articleContainerClass = DeliveryNote.class.getName();
-		else if (this instanceof GeneralEditorInputReceptionNote)
+		else if (this instanceof ArticleContainerEditorInputReceptionNote)
 			articleContainerClass = ReceptionNote.class.getName();
 		else
-			throw new UnsupportedOperationException("This class is not a supported child of " + GeneralEditorInput.class.getName()); //$NON-NLS-1$
+			throw new UnsupportedOperationException("This class is not a supported child of " + ArticleContainerEditorInput.class.getName()); //$NON-NLS-1$
 	}
 
 	/**

@@ -64,7 +64,7 @@ implements IArticleContainerEditor
 	private static final Logger logger = Logger.getLogger(ArticleContainerEditor.class);
 
 	private ArticleContainerEditorComposite articleContainerEditorComposite;
-	private GeneralEditorInput input;
+	private ArticleContainerEditorInput input;
 	private static int numEditorsOpen = 0;
 	private static boolean partInitialized = false;
 
@@ -94,11 +94,11 @@ implements IArticleContainerEditor
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException 
 	{
-		if (!(input instanceof GeneralEditorInput))
+		if (!(input instanceof ArticleContainerEditorInput))
 			throw new PartInitException(
-					"Invalid Input: Must be an instance of GeneralEditorInput but is " + input); //$NON-NLS-1$
+					"Invalid Input: Must be an instance of ArticleContainerEditorInput but is " + input); //$NON-NLS-1$
 
-		this.input = (GeneralEditorInput) input;
+		this.input = (ArticleContainerEditorInput) input;
 
 		setSite(site);
 		setInput(input);
@@ -163,7 +163,7 @@ implements IArticleContainerEditor
 			if (articleContainerEditor != null && 
 					articleContainerEditor.getEditorInput() != null) 
 			{
-				GeneralEditorInput input = (GeneralEditorInput) articleContainerEditor.getEditorInput();
+				ArticleContainerEditorInput input = (ArticleContainerEditorInput) articleContainerEditor.getEditorInput();
 				articleContainerID = input.getArticleContainerID();
 			}
 			if (logger.isDebugEnabled())

@@ -41,7 +41,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
 
 public class ReverseWizard extends DynamicPathWizard
@@ -105,7 +105,7 @@ public class ReverseWizard extends DynamicPathWizard
 				default:
 					throw new IllegalStateException("selectOfferPage.getAction() returned unknown action!"); //$NON-NLS-1$
 			}
-			HeaderTreeComposite.openEditor(new GeneralEditorInputOffer(offerID));
+			HeaderTreeComposite.openEditor(new ArticleContainerEditorInputOffer(offerID));
 			return true;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

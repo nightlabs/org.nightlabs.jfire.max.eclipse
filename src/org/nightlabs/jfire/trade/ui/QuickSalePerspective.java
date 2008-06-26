@@ -18,7 +18,7 @@ import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
@@ -97,7 +97,7 @@ implements IPerspectiveFactory
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
 
-	private static void openEditor(final GeneralEditorInput editorInput, final boolean editor2Perspective)
+	private static void openEditor(final ArticleContainerEditorInput editorInput, final boolean editor2Perspective)
 	{
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("Wrong thread!!! This method must be called on the UI thread!"); //$NON-NLS-1$
@@ -157,7 +157,7 @@ implements IPerspectiveFactory
 			// open editor if necessary
 			if (page != null && page.getActiveEditor() == null && page.getEditorReferences().length == 0)
 			{
-				GeneralEditorInput input = ArticleContainerQuickSaleEditorComposite.createEditorInput();
+				ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorComposite.createEditorInput();
 				if (input != null) {
 					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
 					openEditor(input, false);

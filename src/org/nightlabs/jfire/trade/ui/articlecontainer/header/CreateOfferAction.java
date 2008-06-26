@@ -47,7 +47,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -85,7 +85,7 @@ public class CreateOfferAction extends Action
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							HeaderTreeComposite.openEditor(new GeneralEditorInputOffer((OfferID)JDOHelper.getObjectId(offer)));
+							HeaderTreeComposite.openEditor(new ArticleContainerEditorInputOffer((OfferID)JDOHelper.getObjectId(offer)));
 						}
 					});
 				} catch (Exception e) {

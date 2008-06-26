@@ -103,14 +103,14 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -141,7 +141,7 @@ extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(ArticleContainerEditorComposite.class);
 
-	private GeneralEditorInput input = null;
+	private ArticleContainerEditorInput input = null;
 
 	/**
 	 * This is initialized by
@@ -203,7 +203,7 @@ extends XComposite
 	 * @param parent
 	 * @param style
 	 */
-	public ArticleContainerEditorComposite(IWorkbenchPartSite site, Composite parent, GeneralEditorInput generalEditorInput) {
+	public ArticleContainerEditorComposite(IWorkbenchPartSite site, Composite parent, ArticleContainerEditorInput articleContainerEditorInput) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		if (site == null)
@@ -214,7 +214,7 @@ extends XComposite
 		loadingDataLabel = new Label(this, SWT.NONE);
 		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.label.loadingData")); //$NON-NLS-1$
 
-		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(generalEditorInput);
+		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(articleContainerEditorInput);
 		loadInitialArticleContainerJob.schedule();
 	}
 
@@ -222,13 +222,13 @@ extends XComposite
 
 	private class LoadInitialArticleContainerJob extends Job
 	{
-		private GeneralEditorInput generalEditorInput;
+		private ArticleContainerEditorInput articleContainerEditorInput;
 
-		public LoadInitialArticleContainerJob(GeneralEditorInput generalEditorInput)
+		public LoadInitialArticleContainerJob(ArticleContainerEditorInput articleContainerEditorInput)
 		{
 			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.job.loadingArticleContainer")); //$NON-NLS-1$
-			this.generalEditorInput = generalEditorInput;
-			assert generalEditorInput != null : "generalEditorInput != null"; //$NON-NLS-1$
+			this.articleContainerEditorInput = articleContainerEditorInput;
+			assert articleContainerEditorInput != null : "articleContainerEditorInput != null"; //$NON-NLS-1$
 		}
 		
 		@Override
@@ -236,7 +236,7 @@ extends XComposite
 		{
 			loadInitialArticleContainerJob = null; // release memory
 
-			initGeneralEditorInput(generalEditorInput, monitor);
+			initGeneralEditorInput(articleContainerEditorInput, monitor);
 
 			Display.getDefault().asyncExec(new Runnable()
 			{
@@ -404,7 +404,7 @@ extends XComposite
 		}
 	};
 
-	public GeneralEditorInput getInput() {
+	public ArticleContainerEditorInput getInput() {
 		return input;
 	}
 	
@@ -872,51 +872,51 @@ extends XComposite
 
 	/**
 	 * Initialise this instance of <code>ArticleContainerEditorComposite</code> or reload the {@link ArticleContainer} referenced
-	 * by the <code>generalEditorInput</code> parameter. In case of reloading, the articles are not fetched again
+	 * by the <code>articleContainerEditorInput</code> parameter. In case of reloading, the articles are not fetched again
 	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroups})
 	 *
-	 * @param generalEditorInput the input to be set.
+	 * @param articleContainerEditorInput the input to be set.
 	 * @param monitor the monitor to provide feedback.
 	 */
-	protected synchronized void initGeneralEditorInput(GeneralEditorInput generalEditorInput, ProgressMonitor monitor) {
+	protected synchronized void initGeneralEditorInput(ArticleContainerEditorInput articleContainerEditorInput, ProgressMonitor monitor) {
 		boolean reloadArticleContainerWithoutArticles = this.input != null;
 
-		if (input == null && generalEditorInput == null)
+		if (input == null && articleContainerEditorInput == null)
 				throw new IllegalStateException("input not yet initialized and no input parameter given!"); //$NON-NLS-1$
 
-		if (generalEditorInput == null)
-			generalEditorInput = input;
-		else if (input != null && !generalEditorInput.equals(input))
-			throw new IllegalStateException("this.input != GeneralEditorInput generalEditorInput !!!"); //$NON-NLS-1$
+		if (articleContainerEditorInput == null)
+			articleContainerEditorInput = input;
+		else if (input != null && !articleContainerEditorInput.equals(input))
+			throw new IllegalStateException("this.input != ArticleContainerEditorInput articleContainerEditorInput !!!"); //$NON-NLS-1$
 
 //		monitor.beginTask("Loading article container", 100); // the monitor is directly passed to the DAOs - no need to use a sub-monitor
 		try {
-			this.input = generalEditorInput;
+			this.input = articleContainerEditorInput;
 			this.order = null;
 			this.offer = null;
 			this.invoice = null;
 			this.deliveryNote = null;
 
-			if (input instanceof GeneralEditorInputOrder) {
-				OrderID orderID = ((GeneralEditorInputOrder) input).getOrderID();
+			if (input instanceof ArticleContainerEditorInputOrder) {
+				OrderID orderID = ((ArticleContainerEditorInputOrder) input).getOrderID();
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
 					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof GeneralEditorInputOffer) {
-				OfferID offerID = ((GeneralEditorInputOffer) input).getOfferID();
+			} else if (input instanceof ArticleContainerEditorInputOffer) {
+				OfferID offerID = ((ArticleContainerEditorInputOffer) input).getOfferID();
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
 					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof GeneralEditorInputInvoice) {
-				InvoiceID invoiceID = ((GeneralEditorInputInvoice) input).getInvoiceID();
+			} else if (input instanceof ArticleContainerInputInvoice) {
+				InvoiceID invoiceID = ((ArticleContainerInputInvoice) input).getInvoiceID();
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
 					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof GeneralEditorInputDeliveryNote) {
-				DeliveryNoteID deliveryNoteID = ((GeneralEditorInputDeliveryNote) input).getDeliveryNoteID();
+			} else if (input instanceof ArticleContainerEditorInputDeliveryNote) {
+				DeliveryNoteID deliveryNoteID = ((ArticleContainerEditorInputDeliveryNote) input).getDeliveryNoteID();
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else

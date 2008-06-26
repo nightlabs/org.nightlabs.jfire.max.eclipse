@@ -86,11 +86,11 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationAdapterWorkerThreadAsync;
 import org.nightlabs.notification.NotificationEvent;
@@ -214,15 +214,15 @@ implements ISelectionProvider
 				if (!structuredSelection.isEmpty())
 					selection = structuredSelection.getFirstElement();
 
-				GeneralEditorInput editorInput;
+				ArticleContainerEditorInput editorInput;
 				if (selection instanceof OrderID)
-					editorInput = new GeneralEditorInputOrder((OrderID)selection);
+					editorInput = new ArticleContainerEditorInputOrder((OrderID)selection);
 				else if (selection instanceof OfferID)
-					editorInput = new GeneralEditorInputOffer((OfferID)selection);
+					editorInput = new ArticleContainerEditorInputOffer((OfferID)selection);
 				else if (selection instanceof InvoiceID)
-					editorInput = new GeneralEditorInputInvoice((InvoiceID)selection);
+					editorInput = new ArticleContainerInputInvoice((InvoiceID)selection);
 				else if (selection instanceof DeliveryNoteID)
-					editorInput = new GeneralEditorInputDeliveryNote((DeliveryNoteID)selection);
+					editorInput = new ArticleContainerEditorInputDeliveryNote((DeliveryNoteID)selection);
 				else {
 					// expand/collapse currently selected node... and that's all.
 					if (selectedNode != null && selectedNode.hasChildren()) {
@@ -277,7 +277,7 @@ implements ISelectionProvider
 	protected Image imageCustomerRootTreeNode = null;
 	protected Image imageVendorRootTreeNode = null;
 
-	public static void openEditor(GeneralEditorInput editorInput)
+	public static void openEditor(ArticleContainerEditorInput editorInput)
 	{
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();

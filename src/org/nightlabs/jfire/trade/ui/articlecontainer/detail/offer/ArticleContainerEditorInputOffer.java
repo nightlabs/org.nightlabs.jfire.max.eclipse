@@ -24,49 +24,49 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice;
+package org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class GeneralEditorInputInvoice
-extends GeneralEditorInput
+public class ArticleContainerEditorInputOffer
+extends ArticleContainerEditorInput
 implements IEditorInput
 {
-	private InvoiceID invoiceID;
+	private OfferID offerID;
 
-	public GeneralEditorInputInvoice()
+	public ArticleContainerEditorInputOffer()
 	{
 	}
 
-	public GeneralEditorInputInvoice(InvoiceID invoiceID)
+	public ArticleContainerEditorInputOffer(OfferID offerID)
 	{
-		this.invoiceID = invoiceID;
+		this.offerID = offerID;
 	}
 
 	/**
-	 * @return Returns the invoiceID.
+	 * @return Returns the offerID.
 	 */
-	public InvoiceID getInvoiceID()
+	public OfferID getOfferID()
 	{
-		return invoiceID;
+		return offerID;
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return invoiceID == null ? 0 : invoiceID.hashCode();
+		return offerID == null ? 0 : offerID.hashCode();
 	}
 
 	@Override
@@ -74,22 +74,22 @@ implements IEditorInput
 	{
 		if (obj == this) return true;
 
-		if (!(obj instanceof GeneralEditorInputInvoice))
+		if (!(obj instanceof ArticleContainerEditorInputOffer))
 			return false;
 
-		GeneralEditorInputInvoice other = (GeneralEditorInputInvoice)obj;
+		ArticleContainerEditorInputOffer other = (ArticleContainerEditorInputOffer)obj;
 
-		return Util.equals(this.invoiceID, other.invoiceID);
+		return Util.equals(this.offerID, other.offerID);
 	}
 
 	public String getName()
 	{
 		return String.format(
-				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice.name"), //$NON-NLS-1$
-				(invoiceID == null ? "" : invoiceID.invoiceIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(invoiceID.invoiceID))); //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer.name"), //$NON-NLS-1$
+				(offerID == null ? "" : offerID.offerIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(offerID.offerID))); //$NON-NLS-1$
 	}
 
-	private static final String IMAGE = "icons/articlecontainer/detail/invoice/GeneralEditorInputInvoice.16x16.png"; //$NON-NLS-1$
+	private static final String IMAGE = "icons/articlecontainer/detail/offer/ArticleContainerEditorInputOffer.16x16.png"; //$NON-NLS-1$
 
 	@Override
 	public ImageDescriptor getImageDescriptor()
@@ -99,6 +99,8 @@ implements IEditorInput
 
 	@Override
 	public ArticleContainerID getArticleContainerID() {
-		return getInvoiceID();
+		// TODO Auto-generated method stub
+		return getOfferID();
 	}
+
 }

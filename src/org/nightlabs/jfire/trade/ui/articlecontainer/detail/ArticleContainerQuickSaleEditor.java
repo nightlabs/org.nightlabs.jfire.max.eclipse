@@ -29,7 +29,7 @@ implements IArticleContainerEditor
 		return articleContainerQuickSaleEditorComposite.getGeneralEditorComposite();
 	}
 	
-	private GeneralEditorInput input;
+	private ArticleContainerEditorInput input;
 	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -45,10 +45,10 @@ implements IArticleContainerEditor
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException
 	{
-		if (!(input instanceof GeneralEditorInput))
-			throw new PartInitException("Invalid Input: Must be an instance of GeneralEditorInput! But is: " + (input == null ? null : input.getClass().getName())); //$NON-NLS-1$
+		if (!(input instanceof ArticleContainerEditorInput))
+			throw new PartInitException("Invalid Input: Must be an instance of ArticleContainerEditorInput! But is: " + (input == null ? null : input.getClass().getName())); //$NON-NLS-1$
 		
-		this.input = (GeneralEditorInput) input;
+		this.input = (ArticleContainerEditorInput) input;
 
 		setSite(site);
 		setInput(input);

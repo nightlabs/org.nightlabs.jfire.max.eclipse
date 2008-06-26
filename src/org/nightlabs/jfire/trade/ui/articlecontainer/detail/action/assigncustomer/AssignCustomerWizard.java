@@ -10,8 +10,8 @@ import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -44,7 +44,7 @@ public class AssignCustomerWizard
 			tm.assignCustomer(orderID, customerID, true, null, 1);
 
 			LegalEntityEditorView view = (LegalEntityEditorView) RCPUtil.showView(LegalEntityEditorView.ID_VIEW);
-			GeneralEditorInput input = new GeneralEditorInputOrder(orderID);
+			ArticleContainerEditorInput input = new ArticleContainerEditorInputOrder(orderID);
 			RCPUtil.closeEditor(input, true);
 			RCPUtil.openEditor(input, ArticleContainerEditor.ID_EDITOR);
 			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity));
