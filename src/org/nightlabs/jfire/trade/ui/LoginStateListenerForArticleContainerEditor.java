@@ -16,7 +16,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEdi
  * @author marco schulze - marco at nightlabs dot de
  * @deprecated replaced by {@link LoginStateListenerForCloseOnLogoutEditorParts}
  */
-public class LoginStateListenerForGeneralEditor
+public class LoginStateListenerForArticleContainerEditor
 implements LoginStateListener
 {
 	@Override

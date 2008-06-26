@@ -114,7 +114,7 @@ extends XComposite
 	}
 	
 	private ArticleContainerEditorComposite articleContainerEditorComposite;
-	public ArticleContainerEditorComposite getGeneralEditorComposite() {
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
 		return articleContainerEditorComposite;
 	}
 	
@@ -135,7 +135,7 @@ extends XComposite
 //			}
 			CustomerPaymentDeliveryWizard wiz = new CustomerPaymentDeliveryWizard(
 					text,
-					(OrderID) getGeneralEditorComposite().getArticleContainerID(),
+					(OrderID) getArticleContainerEditorComposite().getArticleContainerID(),
 					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 					TransferWizard.Side.Vendor);
 			if (new DynamicPathWizardDialog(wiz).open() == Dialog.OK)
@@ -225,7 +225,7 @@ extends XComposite
 	{
 		TradeManager tm = TradePlugin.getDefault().getTradeManager();
 		AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-		OrderID orderID = (OrderID) getGeneralEditorComposite().getArticleContainerID();
+		OrderID orderID = (OrderID) getArticleContainerEditorComposite().getArticleContainerID();
 		try {
 			tm.assignCustomer(orderID, customerID, true, null, 1);
 		} catch (Exception e) {
@@ -236,7 +236,7 @@ extends XComposite
 	protected boolean payAndDeliverAll()
 	{
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
-				getGeneralEditorComposite().getArticleContainerID(),
+				getArticleContainerEditorComposite().getArticleContainerID(),
 				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		int returnCode = dialog.open();
@@ -250,9 +250,9 @@ extends XComposite
 		try {
 			TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
 			Collection<Article> articles = tradeManager.releaseArticles(NLJDOHelper.getObjectIDSet(
-					getGeneralEditorComposite().getArticles()), true, false, null,
+					getArticleContainerEditorComposite().getArticles()), true, false, null,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getGeneralEditorComposite().getArticles());
+			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getArticleContainerEditorComposite().getArticles());
 			tradeManager.deleteArticles(articleIDs, true);
 			
 			createNewOrder();
@@ -262,7 +262,7 @@ extends XComposite
 		}
 	}
 	
-	protected void createGeneralEditorComposite(ArticleContainerEditorInput input)
+	protected void createArticleContainerEditorComposite(ArticleContainerEditorInput input)
 	{
 		articleContainerEditorComposite.dispose();
 		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, this, input);
@@ -272,6 +272,6 @@ extends XComposite
 	protected void createNewOrder()
 	{
 		// only close open will occur automaticly because of partListener in ArticleContainerQuickSaleEditor
-		RCPUtil.closeEditor(getGeneralEditorComposite().getInput(), false);
+		RCPUtil.closeEditor(getArticleContainerEditorComposite().getInput(), false);
 	}
 }

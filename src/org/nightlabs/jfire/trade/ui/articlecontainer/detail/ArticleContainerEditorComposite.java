@@ -236,7 +236,7 @@ extends XComposite
 		{
 			loadInitialArticleContainerJob = null; // release memory
 
-			initGeneralEditorInput(articleContainerEditorInput, monitor);
+			initArticleContainerEditorInput(articleContainerEditorInput, monitor);
 
 			Display.getDefault().asyncExec(new Runnable()
 			{
@@ -364,7 +364,7 @@ extends XComposite
 
 					// it is likely that the action-bar-contributor has been set too early for creating the UI, hence, we call it now.
 					if (articleContainerEditorActionBarContributor != null)
-						setGeneralEditorActionBarContributor(articleContainerEditorActionBarContributor);
+						setArticleContainerEditorActionBarContributor(articleContainerEditorActionBarContributor);
 				} // void run()
 			});
 
@@ -388,7 +388,7 @@ extends XComposite
 			}
 
 			// reload the new ArticleContainer from the server
-			initGeneralEditorInput(input, new ProgressMonitorWrapper(getProgressMonitor()));
+			initArticleContainerEditorInput(input, new ProgressMonitorWrapper(getProgressMonitor()));
 
 			// update header+footer on the UI thread
 			Display.getDefault().asyncExec(new Runnable()
@@ -425,7 +425,7 @@ extends XComposite
 	 *         first time. Afterwards, it returns the contributor responsible for
 	 *         the editor.
 	 */
-	public ArticleContainerEditorActionBarContributor getGeneralEditorActionBarContributor() {
+	public ArticleContainerEditorActionBarContributor getArticleContainerEditorActionBarContributor() {
 		return articleContainerEditorActionBarContributor;
 	}
 
@@ -433,7 +433,7 @@ extends XComposite
 	 * This method is called by
 	 * {@link ArticleContainerEditorActionBarContributor#setActiveEditor(IEditorPart)}.
 	 */
-	public void setGeneralEditorActionBarContributor(
+	public void setArticleContainerEditorActionBarContributor(
 			ArticleContainerEditorActionBarContributor articleContainerEditorActionBarContributor) {
 		this.articleContainerEditorActionBarContributor = articleContainerEditorActionBarContributor;
 
@@ -878,7 +878,7 @@ extends XComposite
 	 * @param articleContainerEditorInput the input to be set.
 	 * @param monitor the monitor to provide feedback.
 	 */
-	protected synchronized void initGeneralEditorInput(ArticleContainerEditorInput articleContainerEditorInput, ProgressMonitor monitor) {
+	protected synchronized void initArticleContainerEditorInput(ArticleContainerEditorInput articleContainerEditorInput, ProgressMonitor monitor) {
 		boolean reloadArticleContainerWithoutArticles = this.input != null;
 
 		if (input == null && articleContainerEditorInput == null)
@@ -925,7 +925,7 @@ extends XComposite
 				throw new IllegalArgumentException("input type \"" + input.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (logger.isDebugEnabled())
-				logger.debug("initGeneralEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer)); //$NON-NLS-1$ //$NON-NLS-2$
+				logger.debug("initArticleContainerEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer)); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (!reloadArticleContainerWithoutArticles)
 				createArticleSegmentGroups();

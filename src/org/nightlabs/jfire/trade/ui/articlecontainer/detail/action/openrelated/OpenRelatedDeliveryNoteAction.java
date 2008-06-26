@@ -32,7 +32,7 @@ public class OpenRelatedDeliveryNoteAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return deliveryNoteID != null && !(getActiveGeneralEditorInput() instanceof ArticleContainerEditorInputDeliveryNote);
+		return deliveryNoteID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputDeliveryNote);
 	}
 	
 	/**

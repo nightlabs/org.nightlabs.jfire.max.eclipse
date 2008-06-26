@@ -108,7 +108,7 @@ extends Action implements IArticleContainerAction
 		if (editor == null)
 			return false;
 
-		Collection<Article> articles = editor.getGeneralEditorComposite().getArticles();
+		Collection<Article> articles = editor.getArticleContainerEditorComposite().getArticles();
 
 		List<Article> filteredArticles = new ArrayList<Article>(articles.size());
 		for (Article article : articles) {
@@ -132,7 +132,7 @@ extends Action implements IArticleContainerAction
 		if (articleContainerEditor == null)
 			return null;
 
-		return articleContainerEditor.getGeneralEditorComposite().getArticleContainer();
+		return articleContainerEditor.getArticleContainerEditorComposite().getArticleContainer();
 	}
 	
 	public ArticleContainerID getArticleContainerID() {
@@ -140,6 +140,6 @@ extends Action implements IArticleContainerAction
 		if (articleContainerEditor == null)
 			return null;
 		
-		return articleContainerEditor.getGeneralEditorComposite().getArticleContainerID();
+		return articleContainerEditor.getArticleContainerEditorComposite().getArticleContainerID();
 	}
 }

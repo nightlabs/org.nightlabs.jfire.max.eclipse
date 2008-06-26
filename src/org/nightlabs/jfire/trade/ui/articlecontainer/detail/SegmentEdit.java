@@ -73,11 +73,11 @@ public interface SegmentEdit
 	 */
 	SegmentEditFactory getSegmentEditFactory();
 
-	ArticleContainerEditorComposite getGeneralEditorComposite();
+	ArticleContainerEditorComposite getArticleContainerEditorComposite();
 
 	/**
 	 * This method is a convenience method and shortcuts
-	 * <code>getGeneralEditorComposite().getArticleContainer()</code>.
+	 * <code>getArticleContainerEditorComposite().getArticleContainer()</code>.
 	 *
 	 * @return Returns the ArticleContainer
 	 *		(either {@link org.nightlabs.jfire.trade.ui.Order}, {@link org.nightlabs.jfire.trade.ui.Offer},

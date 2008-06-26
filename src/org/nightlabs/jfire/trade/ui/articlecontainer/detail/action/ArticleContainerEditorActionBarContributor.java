@@ -111,17 +111,17 @@ extends EditorActionBarContributor
 		}
 
 		activeArticleContainerEditor = (IArticleContainerEditor)targetEditor;
-		activeArticleContainerEditorComposite = activeArticleContainerEditor == null ? null : activeArticleContainerEditor.getGeneralEditorComposite();
+		activeArticleContainerEditorComposite = activeArticleContainerEditor == null ? null : activeArticleContainerEditor.getArticleContainerEditorComposite();
 
 		if (activeArticleContainerEditorComposite != null && !activeArticleContainerEditorComposite.isDisposed()) {
-			activeArticleContainerEditorComposite.setGeneralEditorActionBarContributor(this);
+			activeArticleContainerEditorComposite.setArticleContainerEditorActionBarContributor(this);
 			activeArticleContainerEditorComposite.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
 			activeArticleContainerEditorComposite.addDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
 		try {
 			ArticleContainerActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
-			ArticleEditActionRegistry.sharedInstance().setActiveGeneralEditorActionBarContributor(this);
+			ArticleEditActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}

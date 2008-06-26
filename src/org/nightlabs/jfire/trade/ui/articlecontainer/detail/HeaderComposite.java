@@ -85,7 +85,7 @@ public class HeaderComposite extends XComposite
 	/**
 	 * @return Returns the articleContainerEditorComposite.
 	 */
-	public ArticleContainerEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
 	{
 		return articleContainerEditorComposite;
 	}
@@ -98,7 +98,7 @@ public class HeaderComposite extends XComposite
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run()
 			{
-				ArticleContainerEditorComposite gec = getGeneralEditorComposite();
+				ArticleContainerEditorComposite gec = getArticleContainerEditorComposite();
 				if (gec != null && !gec.isDisposed())
 					createArticleContainerContextMenu(gec, HeaderComposite.this);
 			}

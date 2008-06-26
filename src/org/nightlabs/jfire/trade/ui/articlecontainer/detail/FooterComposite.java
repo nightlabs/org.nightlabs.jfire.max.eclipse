@@ -104,7 +104,7 @@ public class FooterComposite extends XComposite
 	/**
 	 * @return Returns the articleContainerEditorComposite.
 	 */
-	public ArticleContainerEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
 	{
 		return articleContainerEditorComposite;
 	}

@@ -25,8 +25,8 @@ implements IArticleContainerEditor
 	public static final String ID_EDITOR = ArticleContainerQuickSaleEditor.class.getName();
 	
 	private ArticleContainerQuickSaleEditorComposite articleContainerQuickSaleEditorComposite;
-	public ArticleContainerEditorComposite getGeneralEditorComposite() {
-		return articleContainerQuickSaleEditorComposite.getGeneralEditorComposite();
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
+		return articleContainerQuickSaleEditorComposite.getArticleContainerEditorComposite();
 	}
 	
 	private ArticleContainerEditorInput input;

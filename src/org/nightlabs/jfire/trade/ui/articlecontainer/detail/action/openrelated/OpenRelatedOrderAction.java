@@ -32,7 +32,7 @@ public class OpenRelatedOrderAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return orderID != null && !(getActiveGeneralEditorInput() instanceof ArticleContainerEditorInputOrder);
+		return orderID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputOrder);
 	}
 	
 	/**

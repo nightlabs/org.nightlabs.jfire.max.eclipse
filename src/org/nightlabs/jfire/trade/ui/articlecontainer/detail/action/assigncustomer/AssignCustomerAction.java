@@ -19,7 +19,7 @@ public class AssignCustomerAction
 		if (editor == null)
 			return false;
 
-		ArticleContainerID articleContainerID = editor.getGeneralEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = editor.getArticleContainerEditorComposite().getArticleContainerID();
 
 //		if (!(articleContainerID instanceof OrderID || articleContainerID instanceof OfferID))
 		if (!(articleContainerID instanceof OrderID))
@@ -53,7 +53,7 @@ public class AssignCustomerAction
 	public void runWithEvent(Event event)
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-		.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticleContainerID();
+		.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
 
 		OrderID orderID = (OrderID) articleContainerID;
 

@@ -73,7 +73,7 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 		// Find out whether there is any delegate for this action in the active SegmentEdit
 
 		// First, check if there is an active SegmentEdit at all.
-		SegmentEdit activeSegmentEdit = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveSegmentEdit();
+		SegmentEdit activeSegmentEdit = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveSegmentEdit();
 		if (activeSegmentEdit == null)
 			return false;
 
@@ -121,9 +121,9 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 	@Override
 	public void run()
 	{
-		ArticleContainerEditorActionBarContributor contributor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor();
+		ArticleContainerEditorActionBarContributor contributor = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor();
 		if (contributor == null)
-			throw new IllegalStateException("No activeGeneralEditorActionBarContributor set in ArticleEditActionRegistry!"); //$NON-NLS-1$
+			throw new IllegalStateException("No activeArticleContainerEditorActionBarContributor set in ArticleEditActionRegistry!"); //$NON-NLS-1$
 
 		contributor.articleEditActionDelegatesRun(this);
 	}

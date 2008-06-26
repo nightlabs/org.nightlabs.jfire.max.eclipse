@@ -136,7 +136,7 @@ implements SegmentEdit
 		}
 	}
 
-	public ArticleContainerEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
 	{
 		return articleContainerEditorComposite;
 	}

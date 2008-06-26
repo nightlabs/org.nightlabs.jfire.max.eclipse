@@ -103,8 +103,8 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 		return activeArticleContainerEditorActionBarContributor;
 	}
 	protected void setActiveArticleContainerEditorActionBarContributor(
-			ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor)
+			ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor)
 	{
-		this.activeArticleContainerEditorActionBarContributor = activeGeneralEditorActionBarContributor;
+		this.activeArticleContainerEditorActionBarContributor = activeArticleContainerEditorActionBarContributor;
 	}
 }

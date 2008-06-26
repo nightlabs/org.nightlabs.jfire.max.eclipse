@@ -72,16 +72,16 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 		return "articleEditAction"; //$NON-NLS-1$
 	}
 
-	private ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor = null;
+	private ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor = null;
 
-	public ArticleContainerEditorActionBarContributor getActiveGeneralEditorActionBarContributor()
+	public ArticleContainerEditorActionBarContributor getActiveArticleContainerEditorActionBarContributor()
 	{
-		return activeGeneralEditorActionBarContributor;
+		return activeArticleContainerEditorActionBarContributor;
 	}
-	protected void setActiveGeneralEditorActionBarContributor(
-			ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor)
+	protected void setActiveArticleContainerEditorActionBarContributor(
+			ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor)
 	{
-		this.activeGeneralEditorActionBarContributor = activeGeneralEditorActionBarContributor;
+		this.activeArticleContainerEditorActionBarContributor = activeArticleContainerEditorActionBarContributor;
 	}
 
 	private static final String ATTRIBUTE_NAME_ACTION_CLASS = "class"; //$NON-NLS-1$

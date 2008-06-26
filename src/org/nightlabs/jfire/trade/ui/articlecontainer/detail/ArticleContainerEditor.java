@@ -133,7 +133,7 @@ implements IArticleContainerEditor
 				input);
 	}
 
-	public ArticleContainerEditorComposite getGeneralEditorComposite() {
+	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
 		return articleContainerEditorComposite;
 	}
 
@@ -207,7 +207,7 @@ implements IArticleContainerEditor
 
 			if (numEditorsOpen <= 0)
 				throw new IllegalStateException(
-						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: " //$NON-NLS-1$
+						"Closing more editors as have been opened!!! How can this happen! ArticleContainerEditor.editorInput: " //$NON-NLS-1$
 						+ articleContainerEditor.getEditorInput());
 
 			--numEditorsOpen;

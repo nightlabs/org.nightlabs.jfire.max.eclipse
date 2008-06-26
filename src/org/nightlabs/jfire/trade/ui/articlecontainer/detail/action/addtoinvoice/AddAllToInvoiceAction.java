@@ -41,7 +41,7 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 		if (editor == null)
 			return false;
 
-		return !(editor.getGeneralEditorComposite().getArticleContainerID() instanceof Invoice);
+		return !(editor.getArticleContainerEditorComposite().getArticleContainerID() instanceof Invoice);
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 	{
 		AddToInvoiceWizard addToInvoiceWizard = new AddToInvoiceWizard(
 				getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-				.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticles());
+				.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticles());
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(addToInvoiceWizard);
 		dialog.open();

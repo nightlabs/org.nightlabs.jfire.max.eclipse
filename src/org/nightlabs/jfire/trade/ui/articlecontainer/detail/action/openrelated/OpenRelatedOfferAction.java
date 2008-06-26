@@ -32,7 +32,7 @@ public class OpenRelatedOfferAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return offerID != null && !(getActiveGeneralEditorInput() instanceof ArticleContainerEditorInputOffer);
+		return offerID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputOffer);
 	}
 	
 	/**

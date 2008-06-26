@@ -41,7 +41,7 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 		if (editor == null)
 			return false;
 
-		return !(editor.getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNote);
+		return !(editor.getArticleContainerEditorComposite().getArticleContainerID() instanceof DeliveryNote);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 	{
 		AddToDeliveryNoteWizard addToDeliveryNoteWizard = new AddToDeliveryNoteWizard(
 				getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-				.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticles());
+				.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticles());
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(addToDeliveryNoteWizard);
 		dialog.open();

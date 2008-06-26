@@ -9,5 +9,5 @@ import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 public interface IArticleContainerEditor
 extends ICloseOnLogoutEditorPart
 {
-	ArticleContainerEditorComposite getGeneralEditorComposite();
+	ArticleContainerEditorComposite getArticleContainerEditorComposite();
 }

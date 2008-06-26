@@ -32,7 +32,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return invoiceID != null && !(getActiveGeneralEditorInput() instanceof ArticleContainerInputInvoice);
+		return invoiceID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerInputInvoice);
 	}
 	
 	/**

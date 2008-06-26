@@ -55,8 +55,8 @@ public abstract class OpenRelatedAction extends Action implements IArticleEditAc
 		this.articleEditActionRegistry = articleEditActionRegistry;
 	}
 
-	public IEditorInput getActiveGeneralEditorInput() {
-		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveArticleContainerEditor();
+	public IEditorInput getActiveArticleContainerEditorInput() {
+		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
 		if (editor == null)
 			return null;
 		return editor.getEditorInput();

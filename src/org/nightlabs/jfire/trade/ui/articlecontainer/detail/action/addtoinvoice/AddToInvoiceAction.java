@@ -44,9 +44,9 @@ extends GenericArticleEditAction
 	@Override
 	public boolean calculateVisible()
 	{
-		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveArticleContainerEditor();
+		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
 		return editor != null &&
-				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof InvoiceID);
+				!(editor.getArticleContainerEditorComposite().getArticleContainerID() instanceof InvoiceID);
 	}
 
 	@Override
