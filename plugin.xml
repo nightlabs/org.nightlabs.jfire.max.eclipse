@@ -165,19 +165,19 @@ gibt's nimmer - oder?! Marco.
             class="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
-            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            icon="icons/articlecontainer/detail/deliverynote/ArticleContainerEditorInputDeliveryNote.16x16.png"
             id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor" name="%org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor.name"/>
         <editor
             class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
-            icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
+            icon="icons/articlecontainer/detail/order/ArticleContainerEditorInputOrder.16x16.png"
             id="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor" name="%org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor.name"/>
         <editor
             class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="true"
-            icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
+            icon="icons/articlecontainer/detail/offer/ArticleContainerEditorInputOffer.16x16.png"
             id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor" name="%org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor.name"/>
         <editor
             class="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor"

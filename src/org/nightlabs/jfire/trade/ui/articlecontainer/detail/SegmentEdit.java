@@ -87,7 +87,7 @@ public interface SegmentEdit
 
 	/**
 	 * This method is a convenience method and shortcuts
-	 * <code>getGeneralEditorComposite().getArticleContainerID()</code>.
+	 * <code>getArticleContainerEditorComposite().getArticleContainerID()</code>.
 	 *
 	 * @return Returns the ArticleContainerID
 	 *		(either {@link org.nightlabs.jfire.trade.ui.id.OrderID}, {@link org.nightlabs.jfire.trade.ui.id.OfferID},
