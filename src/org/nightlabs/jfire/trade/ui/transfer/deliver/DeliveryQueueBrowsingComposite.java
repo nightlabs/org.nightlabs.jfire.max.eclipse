@@ -17,8 +17,8 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.base.ui.composite.ComboComposite;
 import org.nightlabs.base.ui.composite.FadeableComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -33,15 +33,17 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard;
 import org.nightlabs.progress.NullProgressMonitor;
 
-class DeliveryQueueBrowsingComposite extends FadeableComposite {
-	private ComboComposite<DeliveryQueue> printQueueCombo;
+class DeliveryQueueBrowsingComposite 
+extends FadeableComposite 
+{
+	private XComboComposite<DeliveryQueue> printQueueCombo;
 	private DeliveryTable deliveryTable;
 	private DeliveryQueueConfigModule deliveryQueueConfigModule;
 	private boolean refreshing = false;
 	
 	public DeliveryQueueBrowsingComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		printQueueCombo = new ComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, new LabelProvider() {
+		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof DeliveryQueue) {

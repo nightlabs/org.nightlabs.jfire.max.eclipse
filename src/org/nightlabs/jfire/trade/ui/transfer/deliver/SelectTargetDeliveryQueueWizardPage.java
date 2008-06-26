@@ -20,8 +20,9 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-class SelectTargetDeliveryQueueWizardPage extends WizardHopPage {
-
+class SelectTargetDeliveryQueueWizardPage 
+extends WizardHopPage 
+{
 	private XComboComposite<DeliveryQueue> queueCombo;
 	private List<DeliveryQueue> visibleDeliveryQueues;
 
@@ -45,7 +46,9 @@ class SelectTargetDeliveryQueueWizardPage extends WizardHopPage {
 			}
 		};
 		queueCombo = new XComboComposite<DeliveryQueue>(comp,
-				AbstractListComposite.getDefaultWidgetStyle(comp), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.SelectTargetDeliveryQueueWizardPage.queueCombo.caption"), labelProvider); //$NON-NLS-1$
+				AbstractListComposite.getDefaultWidgetStyle(comp), 
+				Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.SelectTargetDeliveryQueueWizardPage.queueCombo.caption"), //$NON-NLS-1$ 
+				labelProvider);
 		queueCombo.setInput(visibleDeliveryQueues);
 		queueCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -59,7 +62,7 @@ class SelectTargetDeliveryQueueWizardPage extends WizardHopPage {
 		return comp;
 	}
 
-	DeliveryQueue getSelectedDeliveryQueue() {
+	protected DeliveryQueue getSelectedDeliveryQueue() {
 		return queueCombo.getSelectedElement();
 	}
 

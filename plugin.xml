@@ -81,7 +81,7 @@ gibt's nimmer - oder?! Marco.
             class="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView"
             icon="icons/detail/ProductTypeDetailView.16x16.png"
             id="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView" name="%org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView.name"/>
-        <view allowMultiple="false" category="Trade"
+        <view allowMultiple="false" category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView"
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView" name="%org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView.name"/>
     </extension>

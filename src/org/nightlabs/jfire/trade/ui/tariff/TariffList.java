@@ -90,6 +90,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		this.filterOrganisationIDInverse = filterOrganisationIDInverse;
 		
 		getTable().setHeaderVisible(false);
+		getTable().setLinesVisible(false);
 		
 		initTable();
 	}

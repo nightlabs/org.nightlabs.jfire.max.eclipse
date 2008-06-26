@@ -45,7 +45,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 	}
 	
 	public DeliveryTable(Composite parent, int style) {
-		super(parent, style, true, SWT.CHECK);
+		super(parent, style, true, SWT.CHECK | SWT.FULL_SELECTION | SWT.BORDER);
 		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {

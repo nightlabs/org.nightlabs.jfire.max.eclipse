@@ -26,12 +26,14 @@
 
 package org.nightlabs.jfire.trade.ui;
 
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
+import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -59,17 +61,21 @@ public class TradePerspective implements IPerspectiveFactory
 				// IPageLayout.RATIO_MAX,
 				HeaderTreeView.ID_VIEW
 			);
-		layout.addView(
-				ProductTypeQuickListView.ID_VIEW,
-				IPageLayout.TOP,
-				0.3f, // IPageLayout.DEFAULT_VIEW_RATIO,
-				IPageLayout.ID_EDITOR_AREA
-			);
+//		layout.addView(
+//				ProductTypeQuickListView.ID_VIEW,
+//				IPageLayout.TOP,
+//				0.3f, // IPageLayout.DEFAULT_VIEW_RATIO,
+//				IPageLayout.ID_EDITOR_AREA
+//			);		
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.3f, IPageLayout.ID_EDITOR_AREA);
+		topRight.addView(ProductTypeQuickListView.ID_VIEW);
+		topRight.addView(DeliveryQueueBrowsingView.ID_VIEW);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
 		layout.addShowViewShortcut(HeaderTreeView.ID_VIEW);
 		layout.addShowViewShortcut(LegalEntityEditorView.ID_VIEW);
 		layout.addShowViewShortcut(ProductTypeQuickListView.ID_VIEW);
+		layout.addShowViewShortcut(DeliveryQueueBrowsingView.ID_VIEW);
 		
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}

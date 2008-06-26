@@ -5,10 +5,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 
-public class DeliveryQueueBrowsingView extends LSDViewPart {
-
-	DeliveryQueueBrowsingComposite comp;
-	Label loginLabel;
+public class DeliveryQueueBrowsingView 
+extends LSDViewPart 
+{
+	public static final String ID_VIEW = DeliveryQueueBrowsingView.class.getName();
+	
+	private DeliveryQueueBrowsingComposite comp;
+	private Label loginLabel;
 	
 	public void createPartContents(Composite parent) {
 		comp = new DeliveryQueueBrowsingComposite(parent, SWT.NONE);
