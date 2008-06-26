@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.simpletrade.ui.prop.edit.blockbased.special;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -9,8 +10,11 @@ import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorFactoryRegistry;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorNotFoundException;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.AbstractDataBlockEditor;
-import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.AbstractDataBlockEditorComposite;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.AbstractDataBlockEditorFactory;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.ExpandableBlocksEditor;
+import org.nightlabs.jfire.base.ui.prop.edit.blockbased.IDataBlockEditorComposite;
 import org.nightlabs.jfire.prop.DataBlock;
 import org.nightlabs.jfire.prop.DataField;
 import org.nightlabs.jfire.prop.IStruct;
@@ -21,11 +25,12 @@ import org.nightlabs.jfire.simpletrade.store.prop.SimpleProductTypeStruct;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class DescriptionDataBlockEditor
 extends AbstractDataBlockEditor
 {
-	public static class Factory implements DataBlockEditorFactory {
+	public static class Factory extends AbstractDataBlockEditorFactory {
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory#getProviderStructBlockID()
 		 */
@@ -34,72 +39,80 @@ extends AbstractDataBlockEditor
 			return SimpleProductTypeStruct.DESCRIPTION;
 		}
 
-		/* (non-Javadoc)
-		 * @see org.nightlabs.jfire.base.ui.prop.edit.blockbased.DataBlockEditorFactory#createPropDataBlockEditor(org.nightlabs.jfire.prop.IStruct, org.nightlabs.jfire.prop.DataBlock, org.eclipse.swt.widgets.Composite, int)
-		 */
 		@Override
-		public AbstractDataBlockEditor createPropDataBlockEditor(IStruct struct, DataBlock dataBlock, Composite parent, int style) {
-			return new DescriptionDataBlockEditor(struct, dataBlock, parent, style);
+		public DataBlockEditor createDataBlockEditor(IStruct struct, DataBlock dataBlock) {
+			return new DescriptionDataBlockEditor(struct, dataBlock);
 		}
 	}
 
-	private static final Logger logger = Logger.getLogger(DescriptionDataBlockEditor.class);
+	private static class DescriptionDataBlockEditorComposite extends AbstractDataBlockEditorComposite {
+		private static final Logger logger = Logger.getLogger(AbstractDataBlockEditorComposite.class);
 
-	public DescriptionDataBlockEditor(IStruct struct, DataBlock dataBlock,
-			Composite parent, int style) {
-		super(struct, dataBlock, parent, style);
+		public DescriptionDataBlockEditorComposite(DataBlockEditor blockEditor,
+				Composite parent, int style) {
+			super(blockEditor, parent, style);
 
-		setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridLayout thisLayout = new GridLayout(2, true);
-		thisLayout.marginWidth = 0;
-		thisLayout.marginHeight = 0;
-		this.setLayout(thisLayout);
+			setLayoutData(new GridData(GridData.FILL_BOTH));
+			GridLayout thisLayout = new GridLayout(2, true);
+			thisLayout.marginWidth = 0;
+			thisLayout.marginHeight = 0;
+			this.setLayout(thisLayout);
 
-		createFieldEditors();
-	}
-
-	@Override
-	public void refresh(IStruct struct, DataBlock block) {
-		this.dataBlock = block;
-		createFieldEditors();
-	}
-
-	private void createFieldEditors() {
-		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_SHORT, 2);
-		addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_LONG, 2);
-	}
-
-	private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan)
-	{
-		DataField field = null;
-		try {
-			field = dataBlock.getDataField(fieldID);
-		} catch (DataFieldNotFoundException e) {
-			logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+fieldID.toString(),e); //$NON-NLS-1$
+			createFieldEditors();
 		}
-		DataFieldEditor<DataField> editor = null;
-		if (!hasFieldEditorFor(field)) {
+
+		@Override
+		public void doRefresh() {
+			createFieldEditors();
+		}
+
+		private void createFieldEditors() {
+			addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_SHORT, 2);
+			addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_LONG, 2);
+		}
+
+		private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan)
+		{
+			DataField field = null;
 			try {
-				editor = DataFieldEditorFactoryRegistry.sharedInstance().getNewEditorInstance(
-						getStruct(), ExpandableBlocksEditor.EDITORTYPE_BLOCK_BASED_EXPANDABLE,
-						"", // TODO: Context ?!? //$NON-NLS-1$
-						field
-				);
-			} catch (DataFieldEditorNotFoundException e1) {
-				logger.error("addDataFieldEditor(StructFieldID fieldID) DataFieldEditor not found for fieldID continuing: "+fieldID.toString(),e1); //$NON-NLS-1$
+				field = getDataBlock().getDataField(fieldID);
+			} catch (DataFieldNotFoundException e) {
+				logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+fieldID.toString(),e); //$NON-NLS-1$
 			}
-			Control editorControl = editor.createControl(this);
-			GridData editorLData = new GridData(GridData.FILL_BOTH);
-			editorLData.horizontalSpan = horizontalSpan;
-//			editorLData.grabExcessHorizontalSpace = true;
-//			editorLData.horizontalAlignment = GridData.FILL;
-			editorControl.setLayoutData(editorLData);
-			addFieldEditor(field, editor);
+			DataFieldEditor<DataField> editor = null;
+			if (!hasFieldEditorFor(field)) {
+				try {
+					editor = DataFieldEditorFactoryRegistry.sharedInstance().getNewEditorInstance(
+							getStruct(), ExpandableBlocksEditor.EDITORTYPE_BLOCK_BASED_EXPANDABLE,
+							"", // TODO: Context ?!? //$NON-NLS-1$
+							field
+					);
+				} catch (DataFieldEditorNotFoundException e1) {
+					logger.error("addDataFieldEditor(StructFieldID fieldID) DataFieldEditor not found for fieldID continuing: "+fieldID.toString(),e1); //$NON-NLS-1$
+				}
+				Control editorControl = editor.createControl(this);
+				GridData editorLData = new GridData(GridData.FILL_BOTH);
+				editorLData.horizontalSpan = horizontalSpan;
+//				editorLData.grabExcessHorizontalSpace = true;
+//				editorLData.horizontalAlignment = GridData.FILL;
+				editorControl.setLayoutData(editorLData);
+				addFieldEditor(field, editor);
+			}
+			else {
+				editor = getFieldEditor(field);
+			}
+			editor.setData(getStruct(), field);
+			editor.refresh();
 		}
-		else {
-			editor = getFieldEditor(field);
-		}
-		editor.setData(getStruct(), field);
-		editor.refresh();
 	}
+	
+	protected DescriptionDataBlockEditor(IStruct struct, DataBlock dataBlock) {
+		super();
+	}
+	
+	@Override
+	protected IDataBlockEditorComposite createEditorComposite(Composite parent) {
+		return new DescriptionDataBlockEditorComposite(this, parent, SWT.NONE);
+	}
+	
 }
