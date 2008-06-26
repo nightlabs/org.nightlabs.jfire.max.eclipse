@@ -149,7 +149,6 @@ extends DynamicPathWizardPage
 		});
 
 		new Label(page, SWT.NONE);
-		new Label(page, SWT.NONE);
 
 		XComposite comp1 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
