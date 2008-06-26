@@ -46,7 +46,7 @@ extends GenericArticleEditAction
 	public boolean calculateVisible()
 	{
 		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
-			.getActiveGeneralEditorActionBarContributor()
+			.getActiveArticleContainerEditorActionBarContributor()
 			.getActiveArticleContainerEditorComposite().getArticleContainerID();
 		
 		// a deliveryNote can only be delivered as a whole with deliverAll - this is a restriction of the GUI

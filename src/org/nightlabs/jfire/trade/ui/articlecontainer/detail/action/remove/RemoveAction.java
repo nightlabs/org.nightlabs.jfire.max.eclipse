@@ -127,7 +127,7 @@ public class RemoveAction extends ArticleEditAction
 	public void run()
 	{
 		// We remove the lines from the server - therefore find out first, what lines shall be handled here.
-		SegmentEdit segmentEdit = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveSegmentEdit();
+		SegmentEdit segmentEdit = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveSegmentEdit();
 		Set<? extends ArticleSelection> articleSelections = segmentEdit.getArticleSelections();
 		Set<ArticleID> articleIDs = new HashSet<ArticleID>();
 		for (ArticleSelection articleSelection : articleSelections) {

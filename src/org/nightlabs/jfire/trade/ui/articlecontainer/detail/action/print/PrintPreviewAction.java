@@ -45,8 +45,8 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 
 	public boolean calculateVisible()
 	{
-//		return (getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-//				.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID() instanceof InvoiceID);
+//		return (getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
+//				.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID() instanceof InvoiceID);
 		return true;
 	}
 
@@ -68,7 +68,7 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 	public void run()
 	{
 		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-		.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticleContainerID();
+		.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
 		
 		Map <String, Object> params = new HashMap<String,Object>();
 //		params.put("invoiceOrganisationID", invoiceID.organisationID);

@@ -46,7 +46,7 @@ extends GenericArticleEditAction
 	public boolean calculateVisible()
 	{
 		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
-			.getActiveGeneralEditorActionBarContributor()
+			.getActiveArticleContainerEditorActionBarContributor()
 			.getActiveArticleContainerEditorComposite().getArticleContainerID();
 
 		// An invoice can only be paid as a whole with payAll - this is a restriction of the GUI

@@ -66,7 +66,7 @@ public class PrintAction extends ArticleContainerReportAction
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-					.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticleContainerID();
+					.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
 					
 //					InvoiceID invoiceID = (InvoiceID)articleContainerID;
 					
