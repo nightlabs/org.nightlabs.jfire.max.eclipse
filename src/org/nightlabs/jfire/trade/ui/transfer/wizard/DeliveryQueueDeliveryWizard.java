@@ -16,15 +16,19 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.id.DeliveryID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard.Side;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -52,7 +56,8 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 	protected void loadData() {
 		try {
 			getArticlesToTransfer().clear();
-
+			AnchorID customerID = null;
+			
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			int alreadyDeliveredArticles = 0;
 			for (Iterator<?> it = tradeManager.getArticles(getArticleIDs(), FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).iterator(); it.hasNext();) {
@@ -63,15 +68,30 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 					continue;
 				}
 				
+				if (customerID == null)
+					customerID = (AnchorID) JDOHelper.getObjectId(article.getOrder().getCustomer());
+				else if (!customerID.equals(JDOHelper.getObjectId(article.getOrder().getCustomer())))
+					throw new IllegalArgumentException("The passed Articles have differing customers!"); //$NON-NLS-1$
+				
 				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(article.getOrder().getCustomerGroup()));
 				getArticlesToTransfer().add(article);
-				
-				setCustomerID((AnchorID) JDOHelper.getObjectId(article.getOrder().getCustomer()));
+				setCustomerID((AnchorID) JDOHelper.getObjectId(article.getOrder().getCustomer()));				
 			}
 			if (alreadyDeliveredArticles > 0) {
 				String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogMessage"), alreadyDeliveredArticles); //$NON-NLS-1$
 				MessageDialog.openWarning(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogTitle"), message); //$NON-NLS-1$
 			}
+			
+			// The LegalEntityID of the local organisation
+			AnchorID mandatorID = AnchorID.create(
+					SecurityReflector.getUserDescriptor().getOrganisationID(), 
+					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());						
+			setCustomerID(customerID);
+			if (mandatorID.equals(customerID))
+				setSide(Side.Customer);
+			else
+				setSide(Side.Vendor);
+
 		} catch (RuntimeException x) {
 			throw x;
 		} catch (Exception x) {
