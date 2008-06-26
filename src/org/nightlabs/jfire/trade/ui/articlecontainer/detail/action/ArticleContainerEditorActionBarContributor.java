@@ -71,24 +71,24 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegment
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionListener;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-public class GeneralEditorActionBarContributor
+public class ArticleContainerEditorActionBarContributor
 extends EditorActionBarContributor
 {
-	private static final Logger logger = Logger.getLogger(GeneralEditorActionBarContributor.class);
+	private static final Logger logger = Logger.getLogger(ArticleContainerEditorActionBarContributor.class);
 
-	private IGeneralEditor activeGeneralEditor = null;
-	private ArticleContainerEditorComposite activeGeneralEditorComposite = null;
+	private IArticleContainerEditor activeArticleContainerEditor = null;
+	private ArticleContainerEditorComposite activeArticleContainerEditorComposite = null;
 	private SegmentEdit activeSegmentEdit = null;
 
 	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
 
-	public GeneralEditorActionBarContributor()
+	public ArticleContainerEditorActionBarContributor()
 	{
 		// TODO: WORKAROUND This is a workaround as setActiveEditor is not called when 
 		// the perspective is switched and therefore the contributions are not removed
@@ -102,25 +102,25 @@ extends EditorActionBarContributor
 	@Override
 	public void setActiveEditor(IEditorPart targetEditor)
 	{
-		if (activeGeneralEditor == targetEditor)
+		if (activeArticleContainerEditor == targetEditor)
 			return;
 
-		if (activeGeneralEditorComposite != null && !activeGeneralEditorComposite.isDisposed()) {
-			activeGeneralEditorComposite.removeActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
-			activeGeneralEditorComposite.removeDisposeListener(generalEditorCompositeDisposeListener);
+		if (activeArticleContainerEditorComposite != null && !activeArticleContainerEditorComposite.isDisposed()) {
+			activeArticleContainerEditorComposite.removeActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
+			activeArticleContainerEditorComposite.removeDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
-		activeGeneralEditor = (IGeneralEditor)targetEditor;
-		activeGeneralEditorComposite = activeGeneralEditor == null ? null : activeGeneralEditor.getGeneralEditorComposite();
+		activeArticleContainerEditor = (IArticleContainerEditor)targetEditor;
+		activeArticleContainerEditorComposite = activeArticleContainerEditor == null ? null : activeArticleContainerEditor.getGeneralEditorComposite();
 
-		if (activeGeneralEditorComposite != null && !activeGeneralEditorComposite.isDisposed()) {
-			activeGeneralEditorComposite.setGeneralEditorActionBarContributor(this);
-			activeGeneralEditorComposite.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
-			activeGeneralEditorComposite.addDisposeListener(generalEditorCompositeDisposeListener);
+		if (activeArticleContainerEditorComposite != null && !activeArticleContainerEditorComposite.isDisposed()) {
+			activeArticleContainerEditorComposite.setGeneralEditorActionBarContributor(this);
+			activeArticleContainerEditorComposite.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
+			activeArticleContainerEditorComposite.addDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
 		try {
-			ArticleContainerActionRegistry.sharedInstance().setActiveGeneralEditorActionBarContributor(this);
+			ArticleContainerActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
 			ArticleEditActionRegistry.sharedInstance().setActiveGeneralEditorActionBarContributor(this);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
@@ -129,23 +129,23 @@ extends EditorActionBarContributor
 		activeSegmentEditSelected();
 	}
 
-	private DisposeListener generalEditorCompositeDisposeListener = new DisposeListener() {
+	private DisposeListener articleContainerEditorCompositeDisposeListener = new DisposeListener() {
 		public void widgetDisposed(DisposeEvent e)
 		{
 			ArticleContainerEditorComposite gec = (ArticleContainerEditorComposite) e.widget;
-			if (gec == activeGeneralEditorComposite) // should be, because we remove the listeners when switching active, but secure is better
+			if (gec == activeArticleContainerEditorComposite) // should be, because we remove the listeners when switching active, but secure is better
 				setActiveEditor(null);
 		}
 	};
 
-	public IGeneralEditor getActiveGeneralEditor()
+	public IArticleContainerEditor getActiveArticleContainerEditor()
 	{
-		return activeGeneralEditor;
+		return activeArticleContainerEditor;
 	}
 	
-	public ArticleContainerEditorComposite getActiveGeneralEditorComposite()
+	public ArticleContainerEditorComposite getActiveArticleContainerEditorComposite()
 	{
-		return activeGeneralEditorComposite;
+		return activeArticleContainerEditorComposite;
 	}
 	
 	public SegmentEdit getActiveSegmentEdit()
@@ -291,7 +291,7 @@ extends EditorActionBarContributor
 	private void activeSegmentEditSelected()
 	{
 		SegmentEdit oldActiveSegmentEdit = activeSegmentEdit;
-		activeSegmentEdit = activeGeneralEditorComposite == null ? null : activeGeneralEditorComposite.getActiveSegmentEdit();
+		activeSegmentEdit = activeArticleContainerEditorComposite == null ? null : activeArticleContainerEditorComposite.getActiveSegmentEdit();
 		if (oldActiveSegmentEdit != activeSegmentEdit) {
 			if (oldActiveSegmentEdit != null) {
 				oldActiveSegmentEdit.removeSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);
@@ -363,7 +363,7 @@ extends EditorActionBarContributor
 			if (action != null) {
 				action.setEnabled(false);
 	
-				if (activeGeneralEditorComposite == null)
+				if (activeArticleContainerEditorComposite == null)
 					actionDescriptor.setVisible(false);
 				else
 					actionDescriptor.setVisible(action.calculateVisible());
@@ -371,7 +371,7 @@ extends EditorActionBarContributor
 			else if (contributionItem != null) {
 				contributionItem.setEnabled(false);
 
-				if (activeGeneralEditorComposite == null)
+				if (activeArticleContainerEditorComposite == null)
 					contributionItem.setVisible(false);
 				else {
 					if (contributionItem instanceof IArticleContainerContributionItem)
@@ -400,7 +400,7 @@ extends EditorActionBarContributor
 			else if (contributionItem != null) {
 				contributionItem.setEnabled(false);
 
-				if (activeGeneralEditorComposite == null)
+				if (activeArticleContainerEditorComposite == null)
 					contributionItem.setVisible(false);
 				else {
 					if (contributionItem instanceof IArticleEditContributionItem)
@@ -416,10 +416,10 @@ extends EditorActionBarContributor
 		// contribute to the main pulldown menu
 		if (localPulldownMenuManager == null) {
 			// do we have the menu already from a previous session (=> workbench.xml)?
-			localPulldownMenuManager = (IMenuManager) realPulldownMenuManager.find(GeneralEditorActionBarContributor.class.getPackage().getName());
+			localPulldownMenuManager = (IMenuManager) realPulldownMenuManager.find(ArticleContainerEditorActionBarContributor.class.getPackage().getName());
 
 			if (localPulldownMenuManager == null) {
-				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor.pulldownMenu.text"), GeneralEditorActionBarContributor.class.getPackage().getName()); //$NON-NLS-1$
+				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.pulldownMenu.text"), ArticleContainerEditorActionBarContributor.class.getPackage().getName()); //$NON-NLS-1$
 				realPulldownMenuManager.insertAfter(
 						// IWorkbenchActionConstants.MB_ADDITIONS,
 						IWorkbenchActionConstants.M_FILE,
@@ -540,13 +540,13 @@ extends EditorActionBarContributor
 	
 	private IPartListener2 partListener = new IPartListener2 () {
 		public void partActivated(IWorkbenchPartReference partRef) {
-			if (activeGeneralEditor != null &&
+			if (activeArticleContainerEditor != null &&
 				(partRef.getPart(false) instanceof IEditorPart) &&
-				(!activeGeneralEditor.equals(partRef.getPart(false))))
+				(!activeArticleContainerEditor.equals(partRef.getPart(false))))
 			{
 				logger.debug("Part activated"); //$NON-NLS-1$
 				removeContributions();
-				activeGeneralEditor = null;
+				activeArticleContainerEditor = null;
 			}
 		}
 		public void partBroughtToTop(IWorkbenchPartReference arg0) {
@@ -573,7 +573,7 @@ extends EditorActionBarContributor
 			{
 				logger.debug("Perspective activated");					 //$NON-NLS-1$
 				removeContributions();				
-				activeGeneralEditor = null;
+				activeArticleContainerEditor = null;
 			}
 		}
 	};

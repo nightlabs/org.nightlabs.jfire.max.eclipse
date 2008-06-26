@@ -182,7 +182,7 @@ public class RemoveAction extends ArticleEditAction
 //			removeActionDelegate.removeArticlesFromArticleProductTypeClassGroup(articleEdit, articleSelection.getSelectedArticles());
 //		}
 
-		// super.run() delegates to the GeneralEditorActionBarContributor which calls the run method in
+		// super.run() delegates to the ArticleContainerEditorActionBarContributor which calls the run method in
 		// the ArticleEditActionDelegates. They'll remove the lines in the GUI.
 		super.run();
 	}

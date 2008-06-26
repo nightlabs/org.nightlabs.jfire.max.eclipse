@@ -33,7 +33,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -44,7 +44,7 @@ extends GenericArticleEditAction
 	@Override
 	public boolean calculateVisible()
 	{
-		IGeneralEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveArticleContainerEditor();
 		return editor != null &&
 				!(editor.getGeneralEditorComposite().getArticleContainerID() instanceof DeliveryNoteID);
 	}

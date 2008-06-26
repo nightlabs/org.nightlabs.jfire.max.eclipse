@@ -114,14 +114,14 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 
 	/**
 	 * This implementation calls
-	 * {@link GeneralEditorActionBarContributor#articleEditActionDelegatesRun(IArticleEditAction)}.
+	 * {@link ArticleContainerEditorActionBarContributor#articleEditActionDelegatesRun(IArticleEditAction)}.
 	 *
 	 * @see org.eclipse.jface.action.IAction#run()
 	 */
 	@Override
 	public void run()
 	{
-		GeneralEditorActionBarContributor contributor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor();
+		ArticleContainerEditorActionBarContributor contributor = getArticleEditActionRegistry().getActiveGeneralEditorActionBarContributor();
 		if (contributor == null)
 			throw new IllegalStateException("No activeGeneralEditorActionBarContributor set in ArticleEditActionRegistry!"); //$NON-NLS-1$
 

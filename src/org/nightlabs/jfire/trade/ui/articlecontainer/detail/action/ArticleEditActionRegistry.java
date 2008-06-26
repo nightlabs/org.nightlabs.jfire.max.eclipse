@@ -72,14 +72,14 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 		return "articleEditAction"; //$NON-NLS-1$
 	}
 
-	private GeneralEditorActionBarContributor activeGeneralEditorActionBarContributor = null;
+	private ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor = null;
 
-	public GeneralEditorActionBarContributor getActiveGeneralEditorActionBarContributor()
+	public ArticleContainerEditorActionBarContributor getActiveGeneralEditorActionBarContributor()
 	{
 		return activeGeneralEditorActionBarContributor;
 	}
 	protected void setActiveGeneralEditorActionBarContributor(
-			GeneralEditorActionBarContributor activeGeneralEditorActionBarContributor)
+			ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor)
 	{
 		this.activeGeneralEditorActionBarContributor = activeGeneralEditorActionBarContributor;
 	}

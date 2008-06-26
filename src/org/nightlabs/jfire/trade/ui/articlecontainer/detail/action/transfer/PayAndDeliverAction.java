@@ -48,7 +48,7 @@ extends GenericArticleEditAction
 	{
 		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
 			.getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditorComposite().getArticleContainerID();
+			.getActiveArticleContainerEditorComposite().getArticleContainerID();
 
 		// A deliveryNote can only be delivered as a whole with deliverAll or payAndDeliverAll -
 		// this is a restriction of the GUI

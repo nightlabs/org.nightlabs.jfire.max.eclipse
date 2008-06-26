@@ -96,15 +96,15 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 		return "articleContainerAction"; //$NON-NLS-1$
 	}
 
-	private GeneralEditorActionBarContributor activeGeneralEditorActionBarContributor = null;
+	private ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor = null;
 
-	public GeneralEditorActionBarContributor getActiveGeneralEditorActionBarContributor()
+	public ArticleContainerEditorActionBarContributor getActiveArticleContainerEditorActionBarContributor()
 	{
-		return activeGeneralEditorActionBarContributor;
+		return activeArticleContainerEditorActionBarContributor;
 	}
-	protected void setActiveGeneralEditorActionBarContributor(
-			GeneralEditorActionBarContributor activeGeneralEditorActionBarContributor)
+	protected void setActiveArticleContainerEditorActionBarContributor(
+			ArticleContainerEditorActionBarContributor activeGeneralEditorActionBarContributor)
 	{
-		this.activeGeneralEditorActionBarContributor = activeGeneralEditorActionBarContributor;
+		this.activeArticleContainerEditorActionBarContributor = activeGeneralEditorActionBarContributor;
 	}
 }

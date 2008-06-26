@@ -19,8 +19,8 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
 import org.nightlabs.notification.NotificationEvent;
@@ -104,11 +104,11 @@ implements IPerspectiveFactory
 
 		try {
 			if (editor2Perspective) {
-				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, GeneralQuickSaleEditor.ID_EDITOR);
+				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, ArticleContainerQuickSaleEditor.ID_EDITOR);
 			}
 			else {
 				if (RCPUtil.getActiveWorkbenchPage() != null)
-					RCPUtil.openEditor(editorInput, GeneralQuickSaleEditor.ID_EDITOR);
+					RCPUtil.openEditor(editorInput, ArticleContainerQuickSaleEditor.ID_EDITOR);
 			}
 		} catch (Exception x) {
 			throw new RuntimeException(x);
@@ -157,7 +157,7 @@ implements IPerspectiveFactory
 			// open editor if necessary
 			if (page != null && page.getActiveEditor() == null && page.getEditorReferences().length == 0)
 			{
-				GeneralEditorInput input = GeneralQuickSaleEditorComposite.createEditorInput();
+				GeneralEditorInput input = ArticleContainerQuickSaleEditorComposite.createEditorInput();
 				if (input != null) {
 					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
 					openEditor(input, false);
@@ -176,8 +176,8 @@ implements IPerspectiveFactory
 					for (int i=0; i<references.length; i++) {
 						IEditorReference reference = references[i];
 						String editorID = reference.getId();
-						if (!editorID.equals(GeneralQuickSaleEditor.ID_EDITOR)) {
-							logger.info("Closing editor (because it is no GeneralQuickSaleEditor): editorID=" + editorID); //$NON-NLS-1$
+						if (!editorID.equals(ArticleContainerQuickSaleEditor.ID_EDITOR)) {
+							logger.info("Closing editor (because it is no ArticleContainerQuickSaleEditor): editorID=" + editorID); //$NON-NLS-1$
 							page.closeEditor(reference.getEditor(false), true);
 						}
 						try {

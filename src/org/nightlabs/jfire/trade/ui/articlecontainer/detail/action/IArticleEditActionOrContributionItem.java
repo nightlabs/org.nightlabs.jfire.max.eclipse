@@ -47,7 +47,7 @@ public interface IArticleEditActionOrContributionItem
 	ArticleEditActionRegistry getArticleEditActionRegistry();
 
 	/**
-	 * This method is called by {@link GeneralEditorActionBarContributor#contributeActions()} and the result
+	 * This method is called by {@link ArticleContainerEditorActionBarContributor#contributeActions()} and the result
 	 * then stored via {@link org.nightlabs.base.ui.action.registry.ActionDescriptor#setVisible(boolean)}.
 	 * <p>
 	 * An <code>IArticleEditAction</code> can operate in multiple ways: Either

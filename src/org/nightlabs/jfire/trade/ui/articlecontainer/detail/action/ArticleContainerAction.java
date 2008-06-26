@@ -35,7 +35,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 
 public abstract class ArticleContainerAction
 extends Action implements IArticleContainerAction
@@ -104,7 +104,7 @@ extends Action implements IArticleContainerAction
 	{
 		this.articles = null;
 
-		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
 		if (editor == null)
 			return false;
 
@@ -128,18 +128,18 @@ extends Action implements IArticleContainerAction
 	 */
 	public ArticleContainer getArticleContainer() {
 		// TODO: Shouldn't there be a more convenient and straight forward way to access this?!? Alex
-		IGeneralEditor generalEditor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
-		if (generalEditor == null)
+		IArticleContainerEditor articleContainerEditor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
+		if (articleContainerEditor == null)
 			return null;
 
-		return generalEditor.getGeneralEditorComposite().getArticleContainer();
+		return articleContainerEditor.getGeneralEditorComposite().getArticleContainer();
 	}
 	
 	public ArticleContainerID getArticleContainerID() {
-		IGeneralEditor generalEditor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
-		if (generalEditor == null)
+		IArticleContainerEditor articleContainerEditor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
+		if (articleContainerEditor == null)
 			return null;
 		
-		return generalEditor.getGeneralEditorComposite().getArticleContainerID();
+		return articleContainerEditor.getGeneralEditorComposite().getArticleContainerID();
 	}
 }

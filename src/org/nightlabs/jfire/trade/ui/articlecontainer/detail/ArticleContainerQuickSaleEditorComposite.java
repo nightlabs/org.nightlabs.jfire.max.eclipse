@@ -50,7 +50,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GeneralQuickSaleEditorComposite
+public class ArticleContainerQuickSaleEditorComposite
 extends XComposite
 {
 	private IWorkbenchPartSite site;
@@ -60,7 +60,7 @@ extends XComposite
 	 * @param parent
 	 * @param input
 	 */
-	public GeneralQuickSaleEditorComposite(IWorkbenchPartSite site,
+	public ArticleContainerQuickSaleEditorComposite(IWorkbenchPartSite site,
 			Composite parent, GeneralEditorInput input)
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -78,7 +78,7 @@ extends XComposite
 		buttonComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		deleteButton = new Button(buttonComp, SWT.NONE);
-		deleteButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.deleteButton.text")); //$NON-NLS-1$
+		deleteButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.deleteButton.text")); //$NON-NLS-1$
 		deleteButton.setImage(SharedImages.DELETE_16x16.createImage());
 		deleteButton.addSelectionListener(deleteListener);
 		
@@ -86,7 +86,7 @@ extends XComposite
 		spacerLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label customerSearchLabel = new Label(buttonComp, SWT.NONE);
-		customerSearchLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.customerSearchLabel.text")); //$NON-NLS-1$
+		customerSearchLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.customerSearchLabel.text")); //$NON-NLS-1$
 		customerSearchText = new Text(buttonComp, SWT.BORDER);
 		GridData textData = new GridData();
 		textData.widthHint = 100;
@@ -96,14 +96,14 @@ extends XComposite
 		customerSearchText.addSelectionListener(okListenerCustomer);
 		
 		okButtonCustomer = new Button(buttonComp, SWT.NONE);
-		okButtonCustomer.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonCustomer.text")); //$NON-NLS-1$
+		okButtonCustomer.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.okButtonCustomer.text")); //$NON-NLS-1$
 		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), LegalEntityEditorView.class));
 		okButtonCustomer.addSelectionListener(okListenerCustomer);
 		
 //		Label separator = new Label(buttonComp, SWT.SEPARATOR);
 		
 		okButtonAnonymous = new Button(buttonComp, SWT.NONE);
-		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditorComposite.okButtonAnonymous.text")); //$NON-NLS-1$
+		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.okButtonAnonymous.text")); //$NON-NLS-1$
 		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
 				
@@ -271,7 +271,7 @@ extends XComposite
 	
 	protected void createNewOrder()
 	{
-		// only close open will occur automaticly because of partListener in GeneralQuickSaleEditor
+		// only close open will occur automaticly because of partListener in ArticleContainerQuickSaleEditor
 		RCPUtil.closeEditor(getGeneralEditorComposite().getInput(), false);
 	}
 }

@@ -57,7 +57,7 @@ import org.nightlabs.notification.NotificationEvent;
  */
 public class ArticleContainerEditor 
 extends EditorPart 
-implements IGeneralEditor 
+implements IArticleContainerEditor 
 {
 	public static final String ID_EDITOR = ArticleContainerEditor.class.getName();
 

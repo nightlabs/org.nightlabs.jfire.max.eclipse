@@ -9,7 +9,7 @@ import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
 import org.nightlabs.jfire.base.ui.login.LoginStateListener;
 import org.nightlabs.jfire.base.ui.login.part.LoginStateListenerForCloseOnLogoutEditorParts;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
@@ -35,7 +35,7 @@ implements LoginStateListener
 
 		for (IEditorReference reference : references) {
 			IEditorPart editor = reference.getEditor(false);
-			if (editor instanceof IGeneralEditor)
+			if (editor instanceof IArticleContainerEditor)
 				page.closeEditor(editor, true);
 		}
 	}

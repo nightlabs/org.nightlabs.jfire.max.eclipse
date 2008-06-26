@@ -100,7 +100,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
@@ -145,10 +145,10 @@ extends XComposite
 
 	/**
 	 * This is initialized by
-	 * {@link GeneralEditorActionBarContributor#setActiveEditor(IEditorPart)} as
+	 * {@link ArticleContainerEditorActionBarContributor#setActiveEditor(IEditorPart)} as
 	 * soon as the Editor became active the first time.
 	 */
-	private GeneralEditorActionBarContributor generalEditorActionBarContributor = null;
+	private ArticleContainerEditorActionBarContributor articleContainerEditorActionBarContributor = null;
 
 	private Order order = null;
 
@@ -363,8 +363,8 @@ extends XComposite
 					});
 
 					// it is likely that the action-bar-contributor has been set too early for creating the UI, hence, we call it now.
-					if (generalEditorActionBarContributor != null)
-						setGeneralEditorActionBarContributor(generalEditorActionBarContributor);
+					if (articleContainerEditorActionBarContributor != null)
+						setGeneralEditorActionBarContributor(articleContainerEditorActionBarContributor);
 				} // void run()
 			});
 
@@ -425,17 +425,17 @@ extends XComposite
 	 *         first time. Afterwards, it returns the contributor responsible for
 	 *         the editor.
 	 */
-	public GeneralEditorActionBarContributor getGeneralEditorActionBarContributor() {
-		return generalEditorActionBarContributor;
+	public ArticleContainerEditorActionBarContributor getGeneralEditorActionBarContributor() {
+		return articleContainerEditorActionBarContributor;
 	}
 
 	/**
 	 * This method is called by
-	 * {@link GeneralEditorActionBarContributor#setActiveEditor(IEditorPart)}.
+	 * {@link ArticleContainerEditorActionBarContributor#setActiveEditor(IEditorPart)}.
 	 */
 	public void setGeneralEditorActionBarContributor(
-			GeneralEditorActionBarContributor generalEditorActionBarContributor) {
-		this.generalEditorActionBarContributor = generalEditorActionBarContributor;
+			ArticleContainerEditorActionBarContributor articleContainerEditorActionBarContributor) {
+		this.articleContainerEditorActionBarContributor = articleContainerEditorActionBarContributor;
 
 		assert Display.getCurrent() != null : "*NOT* called on UI thread! This method must be called on the UI thread!"; //$NON-NLS-1$
 
@@ -937,15 +937,15 @@ extends XComposite
 	}
 
 	public Menu createArticleContainerContextMenu(Control parent) {
-		if (generalEditorActionBarContributor != null)
-			return generalEditorActionBarContributor
+		if (articleContainerEditorActionBarContributor != null)
+			return articleContainerEditorActionBarContributor
 					.createArticleContainerContextMenu(parent);
 
 		return null;
 	}
 
 	public Menu createArticleEditContextMenu(Control parent) {
-		return generalEditorActionBarContributor
+		return articleContainerEditorActionBarContributor
 				.createArticleEditContextMenu(parent);
 	}
 

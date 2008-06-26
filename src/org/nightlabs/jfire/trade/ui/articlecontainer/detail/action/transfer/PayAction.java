@@ -47,7 +47,7 @@ extends GenericArticleEditAction
 	{
 		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
 			.getActiveGeneralEditorActionBarContributor()
-			.getActiveGeneralEditorComposite().getArticleContainerID();
+			.getActiveArticleContainerEditorComposite().getArticleContainerID();
 
 		// An invoice can only be paid as a whole with payAll - this is a restriction of the GUI
 		// (the backend is more flexible), but IMHO this restriction makes understanding easier,

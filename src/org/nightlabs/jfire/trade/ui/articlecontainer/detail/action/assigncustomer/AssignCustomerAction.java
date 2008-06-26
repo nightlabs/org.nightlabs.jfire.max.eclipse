@@ -7,7 +7,7 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 
 public class AssignCustomerAction
@@ -15,7 +15,7 @@ public class AssignCustomerAction
 {
 	public boolean calculateVisible()
 	{
-		IGeneralEditor editor = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor().getActiveGeneralEditor();
+		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
 		if (editor == null)
 			return false;
 
@@ -52,8 +52,8 @@ public class AssignCustomerAction
 	@Override
 	public void runWithEvent(Event event)
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-		.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
+		.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticleContainerID();
 
 		OrderID orderID = (OrderID) articleContainerID;
 

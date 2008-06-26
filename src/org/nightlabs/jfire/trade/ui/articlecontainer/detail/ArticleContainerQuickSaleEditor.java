@@ -18,15 +18,15 @@ import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
-public class GeneralQuickSaleEditor
+public class ArticleContainerQuickSaleEditor
 extends EditorPart
-implements IGeneralEditor
+implements IArticleContainerEditor
 {
-	public static final String ID_EDITOR = GeneralQuickSaleEditor.class.getName();
+	public static final String ID_EDITOR = ArticleContainerQuickSaleEditor.class.getName();
 	
-	private GeneralQuickSaleEditorComposite generalQuickSaleEditorComposite;
+	private ArticleContainerQuickSaleEditorComposite articleContainerQuickSaleEditorComposite;
 	public ArticleContainerEditorComposite getGeneralEditorComposite() {
-		return generalQuickSaleEditorComposite.getGeneralEditorComposite();
+		return articleContainerQuickSaleEditorComposite.getGeneralEditorComposite();
 	}
 	
 	private GeneralEditorInput input;
@@ -71,7 +71,7 @@ implements IGeneralEditor
 
 	@Override
 	public void createPartControl(Composite parent) {
-		generalQuickSaleEditorComposite = new GeneralQuickSaleEditorComposite(getSite(), parent, input);
+		articleContainerQuickSaleEditorComposite = new ArticleContainerQuickSaleEditorComposite(getSite(), parent, input);
 		RCPUtil.getActiveWorkbenchPage().addPartListener(quickSaleEditorListener);
 	}
 
@@ -84,7 +84,7 @@ implements IGeneralEditor
 	{
 		public void partClosed(IWorkbenchPart part)
 		{
-			if (part.equals(GeneralQuickSaleEditor.this)) {
+			if (part.equals(ArticleContainerQuickSaleEditor.this)) {
 				if (RCPUtil.getActiveWorkbenchPage() != null &&
 						Login.sharedInstance().getLoginState() == LoginState.LOGGED_IN) 
 				{

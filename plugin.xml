@@ -147,14 +147,14 @@ gibt's nimmer - oder?! Marco.
     <extension point="org.eclipse.ui.editors">
         <editor
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
-            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
+            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor"
             icon="icons/generalOrderOfferInvoiceDeliveryEditor16.gif"
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor.name"/>
         <editor
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor"
-            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor"
+            contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor"
             default="false" icon="icons/QuickSalePerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor.name"/>
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor.name"/>
         <editor
             class="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
@@ -901,7 +901,7 @@ gibt's nimmer - oder?! Marco.
         <registry
             editorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor" perspectiveID="org.nightlabs.jfire.base.ui.overview.OverviewPerspective"/>
         <registry
-            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor" perspectiveID="org.nightlabs.jfire.trade.ui.QuickSalePerspective"/>
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor" perspectiveID="org.nightlabs.jfire.trade.ui.QuickSalePerspective"/>
     </extension>
     <extension point="org.nightlabs.base.ui.workbenchListener">
         <workbenchListener class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener"/>

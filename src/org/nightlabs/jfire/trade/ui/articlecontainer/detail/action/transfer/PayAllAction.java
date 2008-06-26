@@ -68,8 +68,8 @@ public class PayAllAction extends ArticleContainerAction
 	@Override
 	public void run()
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveGeneralEditorActionBarContributor()
-		.getActiveGeneralEditor().getGeneralEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
+		.getActiveArticleContainerEditor().getGeneralEditorComposite().getArticleContainerID();
 
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				articleContainerID,
