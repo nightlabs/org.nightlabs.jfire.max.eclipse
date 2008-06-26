@@ -99,7 +99,6 @@ implements IEditorInput
 
 	@Override
 	public ArticleContainerID getArticleContainerID() {
-		// TODO Auto-generated method stub
 		return getReceptionNoteID();
 	}
 }

@@ -13,6 +13,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.legalentity.search.ExtendedPersonSearchWizardPage;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -26,6 +27,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		super(orderID, transferMode);
 		this.personSearchText = personSearchText;
 		this.orderID = orderID;
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.CustomerPaymentDeliveryWizard.window.title")); //$NON-NLS-1$
 	}
 
 	@Override

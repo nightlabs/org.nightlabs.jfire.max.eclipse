@@ -26,24 +26,11 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
-import org.nightlabs.base.ui.login.LoginState;
-import org.nightlabs.base.ui.notification.SelectionManager;
-import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.notification.NotificationEvent;
 
 /**
  * This editor is the frame for editing <tt>Order</tt>s, <tt>Offer</tt>s,
@@ -56,35 +43,14 @@ import org.nightlabs.notification.NotificationEvent;
  * 
  */
 public class ArticleContainerEditor 
-extends EditorPart 
-implements IArticleContainerEditor 
+extends AbstractArticleContainerEditor  
 {
 	public static final String ID_EDITOR = ArticleContainerEditor.class.getName();
 
-	private static final Logger logger = Logger.getLogger(ArticleContainerEditor.class);
-
 	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	private ArticleContainerEditorInput input;
-	private static int numEditorsOpen = 0;
-	private static boolean partInitialized = false;
-
-	public ArticleContainerEditor() {
-		registerActivatePartListener();
-	}
-
-	/**
-	 * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
-	 */
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-	}
-
-	/**
-	 * @see org.eclipse.ui.ISaveablePart#doSaveAs()
-	 */
-	@Override
-	public void doSaveAs() {
-	}
+	
+	public ArticleContainerEditor() {}
 
 	/**
 	 * @see org.eclipse.ui.IEditorPart#init(org.eclipse.ui.IEditorSite,
@@ -109,22 +75,6 @@ implements IArticleContainerEditor
 			setTitleImage(img.createImage());
 	}
 
-	/**
-	 * @see org.eclipse.ui.ISaveablePart#isDirty()
-	 */
-	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	/**
-	 * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
-	 */
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
 //	public void createPartContents(Composite parent) 
@@ -137,126 +87,4 @@ implements IArticleContainerEditor
 		return articleContainerEditorComposite;
 	}
 
-	/**
-	 * @see org.eclipse.ui.IWorkbenchPart#setFocus()
-	 */
-	@Override
-	public void setFocus() {
-	}
-
-	protected synchronized static void registerActivatePartListener() {
-		if (partInitialized)
-			return;
-
-		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
-		partInitialized = true;
-	}
-
-	private static ActivateListener partListener = new ActivateListener();
-
-	protected static class ActivateListener implements IPartListener {
-
-		private void fireEvent(ArticleContainerEditor articleContainerEditor) {
-
-			ArticleContainerID articleContainerID = null;
-
-			if (articleContainerEditor != null && 
-					articleContainerEditor.getEditorInput() != null) 
-			{
-				ArticleContainerEditorInput input = (ArticleContainerEditorInput) articleContainerEditor.getEditorInput();
-				articleContainerID = input.getArticleContainerID();
-			}
-			if (logger.isDebugEnabled())
-				logger.debug("ActivateListener.fireEvent: entered for " + articleContainerID); //$NON-NLS-1$
-
-			NotificationEvent event = new NotificationEvent(this,
-					TradePlugin.ZONE_SALE, articleContainerID,
-					ArticleContainer.class);
-
-			SelectionManager.sharedInstance().notify(event);
-		}
-
-		public void partActivated(final IWorkbenchPart part) {
-			if (part instanceof ArticleContainerEditor)
-				fireEvent((ArticleContainerEditor) part);
-		}
-
-		@Override
-		public void partBroughtToTop(final IWorkbenchPart part) {
-		}
-
-		@Override
-		public void partClosed(final IWorkbenchPart part) {
-
-			
-			if(Login.sharedInstance().getLoginState() == LoginState.ABOUT_TO_LOG_OUT)
-			{
-				if (RCPUtil.getActiveWorkbenchPage() != null)
-					RCPUtil.getActiveWorkbenchPage().removePartListener(
-							partListener);
-				
-				partInitialized = false;
-				
-				return;
-			}
-
-			if (!(part instanceof ArticleContainerEditor))
-				return;
-
-			ArticleContainerEditor articleContainerEditor = (ArticleContainerEditor) part;
-
-			if (numEditorsOpen <= 0)
-				throw new IllegalStateException(
-						"Closing more editors as have been opened!!! How can this happen! ArticleContainerEditor.editorInput: " //$NON-NLS-1$
-						+ articleContainerEditor.getEditorInput());
-
-			--numEditorsOpen;
-
-			if (numEditorsOpen == 0  && RCPUtil.getActiveWorkbenchPage() != null) {
-				fireEvent(null);
-
-				if (RCPUtil.getActiveWorkbenchPage() != null)
-					RCPUtil.getActiveWorkbenchPage().removePartListener(
-							partListener);
-
-				partInitialized = false;
-			}
-		}
-
-		@Override
-		public void partDeactivated(final IWorkbenchPart part) {
-		}
-
-		@Override
-		public void partOpened(final IWorkbenchPart part) {
-			if (!(part instanceof ArticleContainerEditor))
-				return;
-
-			//if (logger.isDebugEnabled())
-			logger.debug("Part Opened !!!!"); //$NON-NLS-1$
-
-
-			numEditorsOpen++;
-			registerActivatePartListener();
-			//	fireEvent((ArticleContainerEditor) part);
-		}
-	}
-
-	// /**
-	// * @see org.eclipse.ui.part.WorkbenchPart#dispose()
-	// */
-	// public void dispose()
-	// {
-	// LOGGER.debug("dispose() entered. articleContainerEditorComposite.isDisposed()=" +
-	// articleContainerEditorComposite.isDisposed());
-
-	// // TODO the following line should NOT be necessary, but the dispose
-	// method of
-	// // our composite is never called.
-	// LOGGER.debug("manually calling articleContainerEditorComposite.dispose()");
-	// articleContainerEditorComposite.dispose();
-
-	// LOGGER.debug("dispose() calling super.dispose()");
-	// super.dispose();
-	// }
 }

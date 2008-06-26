@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -8,7 +7,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -19,8 +17,7 @@ import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
  *
  */
 public class ArticleContainerQuickSaleEditor
-extends EditorPart
-implements IArticleContainerEditor
+extends AbstractArticleContainerEditor
 {
 	public static final String ID_EDITOR = ArticleContainerQuickSaleEditor.class.getName();
 	
@@ -31,16 +28,6 @@ implements IArticleContainerEditor
 	
 	private ArticleContainerEditorInput input;
 	
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-
-	}
-
-	@Override
-	public void doSaveAs() {
-
-	}
-
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException
@@ -60,24 +47,9 @@ implements IArticleContainerEditor
 	}
 
 	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
 	public void createPartControl(Composite parent) {
 		articleContainerQuickSaleEditorComposite = new ArticleContainerQuickSaleEditorComposite(getSite(), parent, input);
 		RCPUtil.getActiveWorkbenchPage().addPartListener(quickSaleEditorListener);
-	}
-
-	@Override
-	public void setFocus() {
-
 	}
 
 	private IPartListener quickSaleEditorListener = new IPartListener()
@@ -101,4 +73,5 @@ implements IArticleContainerEditor
 		public void partActivated(IWorkbenchPart part) {
 		}
 	};
+	
 }
