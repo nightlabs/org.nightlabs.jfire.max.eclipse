@@ -1,7 +1,10 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer;
 
+import javax.security.auth.login.LoginException;
+
 import org.eclipse.swt.widgets.Event;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
@@ -11,18 +14,25 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEdi
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 
 public class AssignCustomerAction
-		extends ArticleContainerAction
+extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
+		String owner =null;		
 		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (editor == null)
+
+		if (editor == null || editor.getArticleContainerEditorComposite().getArticleContainer() == null)
 			return false;
-
 		ArticleContainerID articleContainerID = editor.getArticleContainerEditorComposite().getArticleContainerID();
+		try {
+			owner = Login.getLogin().getOrganisationID();
+		} catch (LoginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard		 
 
-//		if (!(articleContainerID instanceof OrderID || articleContainerID instanceof OfferID))
-		if (!(articleContainerID instanceof OrderID))
+		String vendor = editor.getArticleContainerEditorComposite().getArticleContainer().getVendor().getAnchorID();
+		if (!(articleContainerID instanceof OrderID) ||!vendor.equals(owner))
 			return false;
 
 		return true;
@@ -38,14 +48,14 @@ public class AssignCustomerAction
 		ArticleContainer articleContainer = getArticleContainer();
 		if (articleContainer instanceof Order) {
 			Order order = (Order) articleContainer;
-			
+
 			for (Offer offer : order.getOffers())
 				if (offer.isFinalized())
 					return false;
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
