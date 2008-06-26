@@ -13,6 +13,7 @@ import org.nightlabs.eclipse.ui.fckeditor.IFCKEditor;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
 import org.nightlabs.htmlcontent.IFCKEditorContent;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
+import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorLayoutData;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.html.HTMLDataField;
 
@@ -90,6 +91,13 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		return control;
 	}
 
+	@Override
+	public DataFieldEditorLayoutData getLayoutData() {
+		DataFieldEditorLayoutData ld = new DataFieldEditorLayoutData(DataFieldEditorLayoutData.FILL_BOTH);
+		ld.minimumHeight = 200;
+		return ld;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#doRefresh()
 	 */
