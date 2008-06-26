@@ -88,7 +88,7 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -220,7 +220,7 @@ implements ISelectionProvider
 				else if (selection instanceof OfferID)
 					editorInput = new ArticleContainerEditorInputOffer((OfferID)selection);
 				else if (selection instanceof InvoiceID)
-					editorInput = new ArticleContainerInputInvoice((InvoiceID)selection);
+					editorInput = new ArticleContainerEditorInputInvoice((InvoiceID)selection);
 				else if (selection instanceof DeliveryNoteID)
 					editorInput = new ArticleContainerEditorInputDeliveryNote((DeliveryNoteID)selection);
 				else {

@@ -3,7 +3,7 @@ package org.nightlabs.jfire.trade.ui.overview.invoice.action;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 
 /**
@@ -24,7 +24,7 @@ extends AbstractEditArticleContainerAction
 
 	public IEditorInput getEditorInput() {
 		InvoiceID invoiceID = (InvoiceID) getArticleContainerID();
-		return new ArticleContainerInputInvoice(invoiceID);
+		return new ArticleContainerEditorInputInvoice(invoiceID);
 	}
 	
 }

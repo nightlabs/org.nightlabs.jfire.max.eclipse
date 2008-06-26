@@ -40,17 +40,17 @@ import org.nightlabs.util.Util;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class ArticleContainerInputInvoice
+public class ArticleContainerEditorInputInvoice
 extends ArticleContainerEditorInput
 implements IEditorInput
 {
 	private InvoiceID invoiceID;
 
-	public ArticleContainerInputInvoice()
+	public ArticleContainerEditorInputInvoice()
 	{
 	}
 
-	public ArticleContainerInputInvoice(InvoiceID invoiceID)
+	public ArticleContainerEditorInputInvoice(InvoiceID invoiceID)
 	{
 		this.invoiceID = invoiceID;
 	}
@@ -74,10 +74,10 @@ implements IEditorInput
 	{
 		if (obj == this) return true;
 
-		if (!(obj instanceof ArticleContainerInputInvoice))
+		if (!(obj instanceof ArticleContainerEditorInputInvoice))
 			return false;
 
-		ArticleContainerInputInvoice other = (ArticleContainerInputInvoice)obj;
+		ArticleContainerEditorInputInvoice other = (ArticleContainerEditorInputInvoice)obj;
 
 		return Util.equals(this.invoiceID, other.invoiceID);
 	}
@@ -85,11 +85,11 @@ implements IEditorInput
 	public String getName()
 	{
 		return String.format(
-				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice.name"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice.name"), //$NON-NLS-1$
 				(invoiceID == null ? "" : invoiceID.invoiceIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(invoiceID.invoiceID))); //$NON-NLS-1$
 	}
 
-	private static final String IMAGE = "icons/articlecontainer/detail/invoice/ArticleContainerInputInvoice.16x16.png"; //$NON-NLS-1$
+	private static final String IMAGE = "icons/articlecontainer/detail/invoice/ArticleContainerEditorInputInvoice.16x16.png"; //$NON-NLS-1$
 
 	@Override
 	public ImageDescriptor getImageDescriptor()

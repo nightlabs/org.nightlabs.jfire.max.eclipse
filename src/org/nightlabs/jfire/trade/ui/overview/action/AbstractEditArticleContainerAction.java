@@ -24,7 +24,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -71,8 +71,8 @@ implements IOverviewEditAction
 				DeliveryNote note = DeliveryNoteDAO.sharedInstance().getDeliveryNote(noteID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = note.getCustomerID();
-			} else if (articleContainerEditorInput instanceof ArticleContainerInputInvoice) {
-				InvoiceID invoiceID = ((ArticleContainerInputInvoice) articleContainerEditorInput).getInvoiceID();
+			} else if (articleContainerEditorInput instanceof ArticleContainerEditorInputInvoice) {
+				InvoiceID invoiceID = ((ArticleContainerEditorInputInvoice) articleContainerEditorInput).getInvoiceID();
 				Invoice invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				anchorID = invoice.getCustomerID();

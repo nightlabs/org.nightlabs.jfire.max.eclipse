@@ -1127,7 +1127,7 @@ gibt's nimmer - oder?! Marco.
              categoryEntryID="org.nightlabs.jfire.trade.ui.overview.offer"
              categoryID="org.nightlabs.jfire.trade.ui.overview"
              class="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryFactory"
-             icon="icons/articlecontainer/detail/offer/GeneralEditorInputOffer.16x16.png"
+             icon="icons/articlecontainer/detail/offer/ArticleContainerEditorInputOffer.16x16.png"
              index="2"
              name="%org.nightlabs.jfire.trade.ui.overview.offer.name">
        </entryFactory>
@@ -1135,7 +1135,7 @@ gibt's nimmer - oder?! Marco.
              categoryEntryID="org.nightlabs.jfire.trade.ui.overview.order"
              categoryID="org.nightlabs.jfire.trade.ui.overview"
              class="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryFactory"
-             icon="icons/articlecontainer/detail/order/GeneralEditorInputOrder.16x16.png"
+             icon="icons/articlecontainer/detail/order/ArticleContainerEditorInputOrder.16x16.png"
              index="3"
              name="%org.nightlabs.jfire.trade.ui.overview.order.name">
        </entryFactory>

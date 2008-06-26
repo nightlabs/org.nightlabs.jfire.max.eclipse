@@ -11,7 +11,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
@@ -32,7 +32,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return invoiceID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerInputInvoice);
+		return invoiceID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputInvoice);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 		if (invoiceID == null)
 			return;
 		try {
-			RCPUtil.openEditor(new ArticleContainerInputInvoice(invoiceID), ArticleContainerEditor.ID_EDITOR);
+			RCPUtil.openEditor(new ArticleContainerEditorInputInvoice(invoiceID), ArticleContainerEditor.ID_EDITOR);
 		} catch (PartInitException e) {
 			throw new RuntimeException(e);
 		}

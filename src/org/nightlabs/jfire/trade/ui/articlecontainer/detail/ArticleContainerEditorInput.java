@@ -37,7 +37,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputReceptionNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerInputInvoice;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 
@@ -56,7 +56,7 @@ implements IEditorInput
 			articleContainerClass = Order.class.getName();
 		else if (this instanceof ArticleContainerEditorInputOffer)
 			articleContainerClass = Offer.class.getName();
-		else if (this instanceof ArticleContainerInputInvoice)
+		else if (this instanceof ArticleContainerEditorInputInvoice)
 			articleContainerClass = Invoice.class.getName();
 		else if (this instanceof ArticleContainerEditorInputDeliveryNote)
 			articleContainerClass = DeliveryNote.class.getName();
