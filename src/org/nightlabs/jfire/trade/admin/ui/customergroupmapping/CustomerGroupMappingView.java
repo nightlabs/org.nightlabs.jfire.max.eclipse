@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.CustomerGroupMapping;
@@ -113,11 +114,28 @@ extends LSDViewPart
 			}
 		});
 
-		sfTopHoriz.setWeights(new int[] {60, 40});
+		sfTopHoriz.setWeights(new int[] {50, 50});
 
 		XComposite bottom = new XComposite(sfMainVert, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		bottom.getGridLayout().numColumns = 2;
 
+		customerGroupMappingTable = new CustomerGroupMappingTable(bottom, SWT.NONE);
+		customerGroupMappingTable.loadCustomerGroupMappings();
+		customerGroupMappingTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event)
+			{
+				boolean enabled = !customerGroupMappingTable.getSelectedElements().isEmpty();
+
+				for (Iterator it = customerGroupMappingTable.getSelectedElements().iterator(); it.hasNext(); ) {
+					CustomerGroupMapping tm = (CustomerGroupMapping) it.next();
+					if (JDOHelper.getObjectId(tm) != null)
+						enabled = false;
+				}
+
+				removeCustomerGroupMappingButton.setEnabled(enabled);
+			}
+		});		
+		
 		XComposite btnComp = new XComposite(bottom, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		btnComp.getGridData().grabExcessHorizontalSpace = false;
 		btnComp.getGridData().horizontalAlignment = GridData.BEGINNING;
@@ -145,24 +163,6 @@ extends LSDViewPart
 			{
 				removeCustomerGroupMappingButton.setEnabled(false);
 				removeCustomerGroupMappings();
-			}
-		});
-
-
-		customerGroupMappingTable = new CustomerGroupMappingTable(bottom, SWT.NONE);
-		customerGroupMappingTable.loadCustomerGroupMappings();
-		customerGroupMappingTable.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event)
-			{
-				boolean enabled = !customerGroupMappingTable.getSelectedElements().isEmpty();
-
-				for (Iterator it = customerGroupMappingTable.getSelectedElements().iterator(); it.hasNext(); ) {
-					CustomerGroupMapping tm = (CustomerGroupMapping) it.next();
-					if (JDOHelper.getObjectId(tm) != null)
-						enabled = false;
-				}
-
-				removeCustomerGroupMappingButton.setEnabled(enabled);
 			}
 		});
 
@@ -211,7 +211,7 @@ extends LSDViewPart
 	@Override
 	public void setFocus()
 	{
-		if (customerGroupMappingTable != null)
+		if (customerGroupMappingTable != null && !customerGroupMappingTable.isDisposed())
 			customerGroupMappingTable.setFocus();
 	}
 }

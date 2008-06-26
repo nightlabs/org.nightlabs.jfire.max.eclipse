@@ -56,7 +56,7 @@ extends LSDViewPart
 		
 		SashForm sf = new SashForm(composite, SWT.BORDER);
 		sf.setLayoutData(new GridData(GridData.FILL_BOTH));
-		languageChooser = new LanguageChooserList(sf, false);
+		languageChooser = new LanguageChooserList(sf, false, true);
 		tariffListComposite = new TariffListComposite(sf, SWT.NONE);
 
 		sf.setWeights(new int[] {1, 2});

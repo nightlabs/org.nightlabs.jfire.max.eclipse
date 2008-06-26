@@ -210,7 +210,7 @@ extends LSDViewPart
 	@Override
 	public void setFocus()
 	{
-		if (tariffMappingTable != null)
+		if (tariffMappingTable != null && !tariffMappingTable.isDisposed())
 			tariffMappingTable.setFocus();
 	}
 }

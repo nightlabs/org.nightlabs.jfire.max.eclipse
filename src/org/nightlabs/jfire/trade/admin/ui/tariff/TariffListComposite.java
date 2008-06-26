@@ -230,7 +230,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		// Add the columns to the table
 		TableViewerColumn col = new TableViewerColumn(tableViewer, SWT.LEFT);
-		col.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariff.TariffListComposite.categorySetNameTableColumn.text")); //$NON-NLS-1$
+		col.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariff.TariffListComposite.tariffNameTableColumn.text")); //$NON-NLS-1$
 		col.setEditingSupport(new TariffNameEditingSupport());
 	}
 
@@ -243,7 +243,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 					TariffCarrier tariffCarrier = (TariffCarrier) element;
 					return tariffCarrier.getTariff().getName().getText();
 				}
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 		});
 	}

@@ -35,7 +35,7 @@
                 toolbarPath="additions" tooltip="%ResetTariffsViewAction.tooltip"/>
             <action
                 class="org.nightlabs.jfire.trade.admin.ui.tariff.SubmitTariffsViewAction"
-                icon="icons/submit16.gif"
+                icon="icons/tariff/SubmitTariffsViewAction.16x16.png"
                 id="org.nightlabs.jfire.trade.admin.ui.tariff.SubmitTariffsViewAction"
                 label="%SubmitTariffsViewAction.label" style="push"
                 toolbarPath="additions" tooltip="%SubmitTariffsViewAction.tooltip"/>
@@ -89,18 +89,22 @@
         <viewContribution
             id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingView" targetID="org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingView">
             <action
-                class="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
-                id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
-                label="%org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction.label"
-                style="push" toolbarPath="additions"/>
+                  class="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
+                  icon="icons/tariffmapping/StoreClientOnlyTariffMappingsToServerAction.16x16.png"
+                  id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
+                  label="%org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction.label"
+                  style="push"
+                  toolbarPath="additions"/>
         </viewContribution>
         <viewContribution
             id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingView" targetID="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingView">
             <action
-                class="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
-                id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
-                label="%org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction.label"
-                style="push" toolbarPath="additions"/>
+                  class="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
+                  icon="icons/customergroupmapping/StoreClientOnlyCustomerGroupMappingsToServerAction.16x16.png"
+                  id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
+                  label="%org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction.label"
+                  style="push"
+                  toolbarPath="additions"/>
         </viewContribution>
     </extension>
     <extension point="org.nightlabs.base.ui.entitymanagerview">
@@ -120,10 +124,6 @@
         <localAccountantDelegateType class="org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased.PFLocalAccountantDelegateType"/>
     </extension>
     <extension point="org.eclipse.ui.perspectives">
-        <perspective
-            class="org.nightlabs.jfire.trade.admin.ui.tariff.TariffPerspective"
-            icon="icons/tariff/TariffPerspective.16x16.png"
-            id="org.nightlabs.jfire.trade.admin.ui.tariff.TariffPerspective" name="%TariffPerspective.name"/>
         <!--            
       <perspective
             class="org.nightlabs.jfire.trade.admin.ui.AccountingPerspective"
