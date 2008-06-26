@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
@@ -60,7 +60,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 		if (invoiceID == null)
 			return;
 		try {
-			RCPUtil.openEditor(new GeneralEditorInputInvoice(invoiceID), GeneralEditor.ID_EDITOR);
+			RCPUtil.openEditor(new GeneralEditorInputInvoice(invoiceID), ArticleContainerEditor.ID_EDITOR);
 		} catch (PartInitException e) {
 			throw new RuntimeException(e);
 		}

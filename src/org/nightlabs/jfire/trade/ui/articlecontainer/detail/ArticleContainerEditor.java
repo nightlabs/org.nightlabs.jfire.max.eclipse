@@ -55,20 +55,20 @@ import org.nightlabs.notification.NotificationEvent;
  * @author Fitas Amine - fitas at nightlabs dot de
  * 
  */
-public class GeneralEditor 
+public class ArticleContainerEditor 
 extends EditorPart 
 implements IGeneralEditor 
 {
-	public static final String ID_EDITOR = GeneralEditor.class.getName();
+	public static final String ID_EDITOR = ArticleContainerEditor.class.getName();
 
-	private static final Logger logger = Logger.getLogger(GeneralEditor.class);
+	private static final Logger logger = Logger.getLogger(ArticleContainerEditor.class);
 
 	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	private GeneralEditorInput input;
 	private static int numEditorsOpen = 0;
 	private static boolean partInitialized = false;
 
-	public GeneralEditor() {
+	public ArticleContainerEditor() {
 		registerActivatePartListener();
 	}
 
@@ -156,14 +156,14 @@ implements IGeneralEditor
 
 	protected static class ActivateListener implements IPartListener {
 
-		private void fireEvent(GeneralEditor generalEditor) {
+		private void fireEvent(ArticleContainerEditor articleContainerEditor) {
 
 			ArticleContainerID articleContainerID = null;
 
-			if (generalEditor != null && 
-					generalEditor.getEditorInput() != null) 
+			if (articleContainerEditor != null && 
+					articleContainerEditor.getEditorInput() != null) 
 			{
-				GeneralEditorInput input = (GeneralEditorInput) generalEditor.getEditorInput();
+				GeneralEditorInput input = (GeneralEditorInput) articleContainerEditor.getEditorInput();
 				articleContainerID = input.getArticleContainerID();
 			}
 			if (logger.isDebugEnabled())
@@ -177,8 +177,8 @@ implements IGeneralEditor
 		}
 
 		public void partActivated(final IWorkbenchPart part) {
-			if (part instanceof GeneralEditor)
-				fireEvent((GeneralEditor) part);
+			if (part instanceof ArticleContainerEditor)
+				fireEvent((ArticleContainerEditor) part);
 		}
 
 		@Override
@@ -200,15 +200,15 @@ implements IGeneralEditor
 				return;
 			}
 
-			if (!(part instanceof GeneralEditor))
+			if (!(part instanceof ArticleContainerEditor))
 				return;
 
-			GeneralEditor generalEditor = (GeneralEditor) part;
+			ArticleContainerEditor articleContainerEditor = (ArticleContainerEditor) part;
 
 			if (numEditorsOpen <= 0)
 				throw new IllegalStateException(
 						"Closing more editors as have been opened!!! How can this happen! generalEditor.editorInput: " //$NON-NLS-1$
-						+ generalEditor.getEditorInput());
+						+ articleContainerEditor.getEditorInput());
 
 			--numEditorsOpen;
 
@@ -229,7 +229,7 @@ implements IGeneralEditor
 
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
-			if (!(part instanceof GeneralEditor))
+			if (!(part instanceof ArticleContainerEditor))
 				return;
 
 			//if (logger.isDebugEnabled())
@@ -238,7 +238,7 @@ implements IGeneralEditor
 
 			numEditorsOpen++;
 			registerActivatePartListener();
-			//	fireEvent((GeneralEditor) part);
+			//	fireEvent((ArticleContainerEditor) part);
 		}
 	}
 

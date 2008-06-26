@@ -130,7 +130,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * and displays the edits which are delivered from the factory.
  * <p>
  * This <tt>Composite</tt> contains the main logic while
- * {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor} is
+ * {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor} is
  * just a tiny wrapper. This architecture allows to display and edit an
  * order/offer/invoice/deliveryNote within another carrier (e.g. a view).
  * 

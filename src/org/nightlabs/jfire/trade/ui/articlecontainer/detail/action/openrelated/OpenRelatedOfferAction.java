@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.GeneralEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.Util;
@@ -60,7 +60,7 @@ public class OpenRelatedOfferAction extends OpenRelatedAction {
 		if (offerID == null)
 			return;
 		try {
-			RCPUtil.openEditor(new GeneralEditorInputOffer(offerID), GeneralEditor.ID_EDITOR);
+			RCPUtil.openEditor(new GeneralEditorInputOffer(offerID), ArticleContainerEditor.ID_EDITOR);
 		} catch (PartInitException e) {
 			throw new RuntimeException(e);
 		}

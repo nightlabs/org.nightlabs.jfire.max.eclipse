@@ -146,10 +146,10 @@ gibt's nimmer - oder?! Marco.
     </extension>
     <extension point="org.eclipse.ui.editors">
         <editor
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor"
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
             contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
             icon="icons/generalOrderOfferInvoiceDeliveryEditor16.gif"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor.name"/>
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor" name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor.name"/>
         <editor
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralQuickSaleEditor"
             contributorClass="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GeneralEditorActionBarContributor"
@@ -897,7 +897,7 @@ gibt's nimmer - oder?! Marco.
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
         <registry
-            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor" perspectiveID="org.nightlabs.jfire.trade.ui.TradePerspective"/>
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor" perspectiveID="org.nightlabs.jfire.trade.ui.TradePerspective"/>
         <registry
             editorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor" perspectiveID="org.nightlabs.jfire.base.ui.overview.OverviewPerspective"/>
         <registry

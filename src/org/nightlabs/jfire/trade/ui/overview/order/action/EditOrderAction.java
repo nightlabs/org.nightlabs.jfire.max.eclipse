@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.order.action;
 
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.GeneralEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 
@@ -18,7 +18,7 @@ extends AbstractEditArticleContainerAction
 	}
 
 	public String getEditorID() {
-		return GeneralEditor.ID_EDITOR;
+		return ArticleContainerEditor.ID_EDITOR;
 	}
 
 	public IEditorInput getEditorInput() {

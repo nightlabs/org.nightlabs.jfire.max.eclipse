@@ -85,7 +85,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.GeneralEditorInputInvoice;
@@ -283,7 +283,7 @@ implements ISelectionProvider
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 		IWorkbenchPage page = win.getActivePage();
 		try {
-			page.openEditor(editorInput, GeneralEditor.ID_EDITOR);
+			page.openEditor(editorInput, ArticleContainerEditor.ID_EDITOR);
 		} catch (PartInitException x) {
 			throw new RuntimeException(x);
 		}
@@ -358,8 +358,8 @@ implements ISelectionProvider
 
 		for (IEditorReference reference : references) {
 			IEditorPart editor = reference.getEditor(false);
-			if (editor instanceof GeneralEditor) {
-				GeneralEditor ge = (GeneralEditor) editor;
+			if (editor instanceof ArticleContainerEditor) {
+				ArticleContainerEditor ge = (ArticleContainerEditor) editor;
 				ArticleContainer ac = ge.getGeneralEditorComposite().getArticleContainer();
 //				TODO This was a workaround to NOT close the editor in the QuickSaleView, but now
 //				with the Editor<->Perspective Patch we only get editors for Trading Perspective.

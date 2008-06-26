@@ -2,7 +2,7 @@ package org.nightlabs.jfire.trade.ui.overview.deliverynote.action;
 
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.GeneralEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction;
 
@@ -14,7 +14,7 @@ public class EditDeliveryNoteAction
 extends AbstractEditArticleContainerAction
 {
 	public String getEditorID() {
-		return GeneralEditor.ID_EDITOR;
+		return ArticleContainerEditor.ID_EDITOR;
 	}
 
 	public IEditorInput getEditorInput() {
