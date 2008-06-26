@@ -124,7 +124,6 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		@Override
 		public void propertyChanged(Object source, int propertyId) {
 			if(propertyId == IFCKEditor.PROP_DIRTY && source instanceof IFCKEditor && !((IFCKEditor)source).isDirty()) {
-				System.out.println("CHANGE! "+source+" - "+propertyId);
 				committed = true;
 			}
 		}
