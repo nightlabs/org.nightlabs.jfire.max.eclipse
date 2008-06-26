@@ -5,9 +5,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPropertyListener;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorComposite;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
+import org.nightlabs.eclipse.ui.fckeditor.IFCKEditor;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditorInput;
+import org.nightlabs.htmlcontent.IFCKEditorContent;
 import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.html.HTMLDataField;
@@ -18,6 +22,7 @@ import org.nightlabs.jfire.prop.html.HTMLDataField;
 public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 {
 	private Composite control;
+	private FCKEditorComposite editorComposite;
 
 	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data)
 	{
@@ -44,8 +49,15 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		// TODO: add language switcher here...
 
 		IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
-		FCKEditorComposite editorComposite = new FCKEditorComposite(control, SWT.BORDER, editorInput);
+		editorComposite = new FCKEditorComposite(control, SWT.BORDER, editorInput);
 		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		editorComposite.getEditor().addPropertyListener(new IPropertyListener() {
+			@Override
+			public void propertyChanged(Object src, int propertyId) {
+				if(propertyId == IFCKEditor.PROP_DIRTY)
+					modifyData();
+			}
+		});
 
 //
 //		contentLabel = new Label(control, SWT.WRAP);
@@ -106,12 +118,50 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		return control;
 	}
 
+	private class MyWaitListener implements IPropertyListener
+	{
+		boolean committed = false;
+		@Override
+		public void propertyChanged(Object source, int propertyId) {
+			if(propertyId == IFCKEditor.PROP_DIRTY && source instanceof IFCKEditor && !((IFCKEditor)source).isDirty()) {
+				System.out.println("CHANGE! "+source+" - "+propertyId);
+				committed = true;
+			}
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor#updatePropertySet()
 	 */
 	@Override
 	public void updatePropertySet()
 	{
-		System.out.println("Update property set!");
+		long timeoutMillis = 5000;
+		IFCKEditor editor = editorComposite.getEditor();
+		MyWaitListener propertyListener = new MyWaitListener();
+		if(editor.isDirty()) {
+			editor.addPropertyListener(propertyListener);
+			try {
+				editor.commit();
+				// wait on the ui thread until the server commit round-trip 
+				// is back and the editor is not dirty anymore:
+				long startTimeMillis = System.currentTimeMillis();
+				Display display = control.getDisplay();
+				while(!display.isDisposed() && !propertyListener.committed) {
+					if(System.currentTimeMillis() - startTimeMillis > timeoutMillis)
+						throw new RuntimeException("Editor commit timeout");
+					if(!display.readAndDispatch())
+						display.sleep();
+				}
+			} finally {
+				editor.removePropertyListener(propertyListener);
+			}
+			// waiting done. Commit into the property set:
+			IFCKEditorContent editorContent = editor.getEditorInput().getEditorContent();
+			HTMLDataField dataField = getDataField();
+			dataField.setHtml(editorContent.getHtml());
+			dataField.setFiles(editorContent.getFiles());
+			// commit done.
+		}
 	}
 }
