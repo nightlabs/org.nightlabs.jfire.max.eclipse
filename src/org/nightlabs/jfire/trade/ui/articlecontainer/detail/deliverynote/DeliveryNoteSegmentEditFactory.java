@@ -29,7 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote;
 
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEditFactory;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 
 public class DeliveryNoteSegmentEditFactory extends AbstractSegmentEditFactory
@@ -39,11 +39,11 @@ public class DeliveryNoteSegmentEditFactory extends AbstractSegmentEditFactory
 	{
 	}
 
-	public SegmentEdit createSegmentEdit(GeneralEditorComposite generalEditorComposite,
+	public SegmentEdit createSegmentEdit(ArticleContainerEditorComposite articleContainerEditorComposite,
 			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
 	{
 		SegmentEdit segmentEdit = new DeliveryNoteSegmentEdit();
-		segmentEdit.init(this, generalEditorComposite, articleContainerClass, articleSegmentGroup);
+		segmentEdit.init(this, articleContainerEditorComposite, articleContainerClass, articleSegmentGroup);
 		return segmentEdit;
 	}
 

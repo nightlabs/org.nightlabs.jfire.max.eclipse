@@ -76,7 +76,7 @@ public interface SegmentEditFactory
 	 * In your implementation of this method, you must create a new instance of
 	 * <tt>SegmentEdit</tt> and pass the parameters to it
 	 * via {@link SegmentEdit#init(IWorkbenchPartSite, String, ArticleContainer, ArticleSegmentGroup)}.
-	 * @param generalEditorComposite TODO
+	 * @param articleContainerEditorComposite TODO
 	 * @param articleContainerClass The articleContainerClass - one of
 	 *		{@link #SEGMENTCONTEXT_ORDER},
 	 *		{@link #SEGMENTCONTEXT_OFFER},
@@ -85,6 +85,6 @@ public interface SegmentEditFactory
 	 * @return a new <tt>SegmentEdit</tt> which will be used to render a <tt>Segment</tt>.
 	 */
 	SegmentEdit createSegmentEdit(
-			GeneralEditorComposite generalEditorComposite, String articleContainerClass,
+			ArticleContainerEditorComposite articleContainerEditorComposite, String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 }

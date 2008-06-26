@@ -29,7 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice;
 
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractSegmentEditFactory;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 
 public class InvoiceSegmentEditFactory extends AbstractSegmentEditFactory
@@ -40,13 +40,13 @@ public class InvoiceSegmentEditFactory extends AbstractSegmentEditFactory
 	}
 
 	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, java.lang.String, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(ArticleContainerEditorComposite, java.lang.String, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
 	 */
-	public SegmentEdit createSegmentEdit(GeneralEditorComposite generalEditorComposite,
+	public SegmentEdit createSegmentEdit(ArticleContainerEditorComposite articleContainerEditorComposite,
 			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
 	{
 		SegmentEdit segmentEdit = new InvoiceSegmentEdit();
-		segmentEdit.init(this, generalEditorComposite, articleContainerClass, articleSegmentGroup);
+		segmentEdit.init(this, articleContainerEditorComposite, articleContainerClass, articleSegmentGroup);
 		return segmentEdit;
 	}
 

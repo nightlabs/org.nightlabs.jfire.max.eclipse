@@ -70,7 +70,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditListener;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IGeneralEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionEvent;
@@ -83,7 +83,7 @@ extends EditorActionBarContributor
 	private static final Logger logger = Logger.getLogger(GeneralEditorActionBarContributor.class);
 
 	private IGeneralEditor activeGeneralEditor = null;
-	private GeneralEditorComposite activeGeneralEditorComposite = null;
+	private ArticleContainerEditorComposite activeGeneralEditorComposite = null;
 	private SegmentEdit activeSegmentEdit = null;
 
 	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
@@ -132,7 +132,7 @@ extends EditorActionBarContributor
 	private DisposeListener generalEditorCompositeDisposeListener = new DisposeListener() {
 		public void widgetDisposed(DisposeEvent e)
 		{
-			GeneralEditorComposite gec = (GeneralEditorComposite) e.widget;
+			ArticleContainerEditorComposite gec = (ArticleContainerEditorComposite) e.widget;
 			if (gec == activeGeneralEditorComposite) // should be, because we remove the listeners when switching active, but secure is better
 				setActiveEditor(null);
 		}
@@ -143,7 +143,7 @@ extends EditorActionBarContributor
 		return activeGeneralEditor;
 	}
 	
-	public GeneralEditorComposite getActiveGeneralEditorComposite()
+	public ArticleContainerEditorComposite getActiveGeneralEditorComposite()
 	{
 		return activeGeneralEditorComposite;
 	}

@@ -48,24 +48,22 @@ import org.nightlabs.notification.NotificationEvent;
 /**
  * This editor is the frame for editing <tt>Order</tt>s, <tt>Offer</tt>s,
  * <tt>Invoice</tt>s and <tt>Delivery</tt>s. It delegates all work to the
- * {@link GeneralEditorComposite}.
+ * {@link ArticleContainerEditorComposite}.
  * 
  * @author Marco Schulze - marco at nightlabs dot de
  * 
  * @author Fitas Amine - fitas at nightlabs dot de
  * 
  */
-
 public class GeneralEditor 
 extends EditorPart 
-//extends LSDEditorPart
 implements IGeneralEditor 
 {
 	public static final String ID_EDITOR = GeneralEditor.class.getName();
 
 	private static final Logger logger = Logger.getLogger(GeneralEditor.class);
 
-	private GeneralEditorComposite generalEditorComposite;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	private GeneralEditorInput input;
 	private static int numEditorsOpen = 0;
 	private static boolean partInitialized = false;
@@ -131,12 +129,12 @@ implements IGeneralEditor
 	public void createPartControl(Composite parent) {
 //	public void createPartContents(Composite parent) 
 //	{
-		generalEditorComposite = new GeneralEditorComposite(getSite(), parent,
+		articleContainerEditorComposite = new ArticleContainerEditorComposite(getSite(), parent,
 				input);
 	}
 
-	public GeneralEditorComposite getGeneralEditorComposite() {
-		return generalEditorComposite;
+	public ArticleContainerEditorComposite getGeneralEditorComposite() {
+		return articleContainerEditorComposite;
 	}
 
 	/**
@@ -249,14 +247,14 @@ implements IGeneralEditor
 	// */
 	// public void dispose()
 	// {
-	// LOGGER.debug("dispose() entered. generalEditorComposite.isDisposed()=" +
-	// generalEditorComposite.isDisposed());
+	// LOGGER.debug("dispose() entered. articleContainerEditorComposite.isDisposed()=" +
+	// articleContainerEditorComposite.isDisposed());
 
 	// // TODO the following line should NOT be necessary, but the dispose
 	// method of
 	// // our composite is never called.
-	// LOGGER.debug("manually calling generalEditorComposite.dispose()");
-	// generalEditorComposite.dispose();
+	// LOGGER.debug("manually calling articleContainerEditorComposite.dispose()");
+	// articleContainerEditorComposite.dispose();
 
 	// LOGGER.debug("dispose() calling super.dispose()");
 	// super.dispose();

@@ -48,9 +48,9 @@ public interface SegmentEdit
 {
 	/**
 	 * This method is called by
-	 * {@link SegmentEditFactory#createSegmentEdit(GeneralEditorComposite, String, ArticleSegmentGroup)}.
+	 * {@link SegmentEditFactory#createSegmentEdit(ArticleContainerEditorComposite, String, ArticleSegmentGroup)}.
 	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>.
-	 * @param generalEditorComposite TODO
+	 * @param articleContainerEditorComposite TODO
 	 * @param articleContainerClass The articleContainerClass - one of
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_ORDER},
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_OFFER},
@@ -61,7 +61,7 @@ public interface SegmentEdit
 	 */
 	void init(
 			SegmentEditFactory segmentEditFactory,
-			GeneralEditorComposite generalEditorComposite,
+			ArticleContainerEditorComposite articleContainerEditorComposite,
 			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 
@@ -69,11 +69,11 @@ public interface SegmentEdit
 	/**
 	 * @return Returns the factory which has created this <code>SegmentEdit</code> and
 	 *		was passed to
-	 *		{@link #init(SegmentEditFactory, GeneralEditorComposite, String, ArticleSegmentGroup)}.
+	 *		{@link #init(SegmentEditFactory, ArticleContainerEditorComposite, String, ArticleSegmentGroup)}.
 	 */
 	SegmentEditFactory getSegmentEditFactory();
 
-	GeneralEditorComposite getGeneralEditorComposite();
+	ArticleContainerEditorComposite getGeneralEditorComposite();
 
 	/**
 	 * This method is a convenience method and shortcuts
@@ -185,7 +185,7 @@ public interface SegmentEdit
 	 * a {@link JDOLifecycleListener} which is registered by the {@link ClientArticleSegmentGroupSet}.
 	 * </p>
 	 * <p>
-	 * Hence, this method is now called by the {@link GeneralEditorComposite} (which is notified
+	 * Hence, this method is now called by the {@link ArticleContainerEditorComposite} (which is notified
 	 * by the {@link ClientArticleSegmentGroupSet}) and it needs to update its UI (i.e. its {@link Composite}).
 	 * </p>
 	 * <p>
@@ -208,7 +208,7 @@ public interface SegmentEdit
 
 	/**
 	 * <p>
-	 * This method is called by the {@link GeneralEditorComposite} (which is notified
+	 * This method is called by the {@link ArticleContainerEditorComposite} (which is notified
 	 * by the {@link ClientArticleSegmentGroupSet}), whenever articles are removed from an {@link ArticleContainer}.
 	 * Note, that the {@link ArticleCarrier}s passed to this method have already been removed from
 	 * the {@link ClientArticleSegmentGroupSet} when this method is called.

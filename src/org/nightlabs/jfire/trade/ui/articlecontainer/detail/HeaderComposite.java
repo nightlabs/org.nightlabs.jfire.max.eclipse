@@ -40,13 +40,13 @@ import org.nightlabs.jfire.trade.ArticleContainer;
  */
 public class HeaderComposite extends XComposite
 {
-	private GeneralEditorComposite generalEditorComposite;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	private ArticleContainer articleContainer;
 
-	public HeaderComposite(Composite parent, GeneralEditorComposite generalEditorComposite, ArticleContainer articleContainer)
+	public HeaderComposite(Composite parent, ArticleContainerEditorComposite articleContainerEditorComposite, ArticleContainer articleContainer)
 	{
 		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
-		this.generalEditorComposite = generalEditorComposite;
+		this.articleContainerEditorComposite = articleContainerEditorComposite;
 		this.articleContainer = articleContainer;
 		
 //		setBackground(DEFAULT_BG_COLOR);
@@ -83,11 +83,11 @@ public class HeaderComposite extends XComposite
 		return articleContainer;
 	}
 	/**
-	 * @return Returns the generalEditorComposite.
+	 * @return Returns the articleContainerEditorComposite.
 	 */
-	public GeneralEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getGeneralEditorComposite()
 	{
-		return generalEditorComposite;
+		return articleContainerEditorComposite;
 	}
 
 	/**
@@ -98,14 +98,14 @@ public class HeaderComposite extends XComposite
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run()
 			{
-				GeneralEditorComposite gec = getGeneralEditorComposite();
+				ArticleContainerEditorComposite gec = getGeneralEditorComposite();
 				if (gec != null && !gec.isDisposed())
 					createArticleContainerContextMenu(gec, HeaderComposite.this);
 			}
 		});
 	}
 
-	private static void createArticleContainerContextMenu(GeneralEditorComposite gec, Composite c)
+	private static void createArticleContainerContextMenu(ArticleContainerEditorComposite gec, Composite c)
 	{
 		gec.createArticleContainerContextMenu(c);
 

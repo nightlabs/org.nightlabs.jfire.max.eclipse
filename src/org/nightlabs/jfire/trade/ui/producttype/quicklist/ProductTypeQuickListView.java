@@ -174,7 +174,7 @@ implements ISelectionProvider
 
 			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
 			if (!Util.equals(vendorID, newVendorID)) {
-				vendorID =newVendorID; 
+				vendorID = newVendorID; 
 				// vendor changed => all search results are outdated
 				wrapper.getDisplay().asyncExec(new Runnable() {
 					@Override

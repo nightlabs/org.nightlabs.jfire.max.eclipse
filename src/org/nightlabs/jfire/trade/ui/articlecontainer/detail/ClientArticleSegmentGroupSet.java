@@ -123,7 +123,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 	}
 
 	/**
-	 * This method is called by {@link GeneralEditorComposite} in the {@link org.eclipse.swt.events.DisposeListener}.
+	 * This method is called by {@link ArticleContainerEditorComposite} in the {@link org.eclipse.swt.events.DisposeListener}.
 	 */
 	public void onDispose()
 	{

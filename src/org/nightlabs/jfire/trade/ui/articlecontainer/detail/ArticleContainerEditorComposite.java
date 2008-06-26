@@ -136,10 +136,10 @@ import org.nightlabs.progress.ProgressMonitor;
  * 
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class GeneralEditorComposite
+public class ArticleContainerEditorComposite
 extends XComposite
 {
-	private static final Logger logger = Logger.getLogger(GeneralEditorComposite.class);
+	private static final Logger logger = Logger.getLogger(ArticleContainerEditorComposite.class);
 
 	private GeneralEditorInput input = null;
 
@@ -203,7 +203,7 @@ extends XComposite
 	 * @param parent
 	 * @param style
 	 */
-	public GeneralEditorComposite(IWorkbenchPartSite site, Composite parent, GeneralEditorInput generalEditorInput) {
+	public ArticleContainerEditorComposite(IWorkbenchPartSite site, Composite parent, GeneralEditorInput generalEditorInput) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		if (site == null)
@@ -212,7 +212,7 @@ extends XComposite
 		this.site = site;
 
 		loadingDataLabel = new Label(this, SWT.NONE);
-		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite.label.loadingData")); //$NON-NLS-1$
+		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.label.loadingData")); //$NON-NLS-1$
 
 		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(generalEditorInput);
 		loadInitialArticleContainerJob.schedule();
@@ -226,7 +226,7 @@ extends XComposite
 
 		public LoadInitialArticleContainerJob(GeneralEditorInput generalEditorInput)
 		{
-			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite.job.loadingArticleContainer")); //$NON-NLS-1$
+			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.job.loadingArticleContainer")); //$NON-NLS-1$
 			this.generalEditorInput = generalEditorInput;
 			assert generalEditorInput != null : "generalEditorInput != null"; //$NON-NLS-1$
 		}
@@ -242,29 +242,29 @@ extends XComposite
 			{
 				public void run()
 				{
-					if (GeneralEditorComposite.this.isDisposed())
+					if (ArticleContainerEditorComposite.this.isDisposed())
 						return;
 
 					loadingDataLabel.dispose();
 					loadingDataLabel = null;
 
 					if (order != null)
-						headerComposite = new OrderHeaderComposite(GeneralEditorComposite.this, order);
+						headerComposite = new OrderHeaderComposite(ArticleContainerEditorComposite.this, order);
 
 					if (offer != null)
-						headerComposite = new OfferHeaderComposite(GeneralEditorComposite.this, offer);
+						headerComposite = new OfferHeaderComposite(ArticleContainerEditorComposite.this, offer);
 
 					if (invoice != null)
-						headerComposite = new InvoiceHeaderComposite(GeneralEditorComposite.this, invoice);
+						headerComposite = new InvoiceHeaderComposite(ArticleContainerEditorComposite.this, invoice);
 
 					if (deliveryNote != null)
-						headerComposite = new DeliveryNoteHeaderComposite(GeneralEditorComposite.this, deliveryNote);
+						headerComposite = new DeliveryNoteHeaderComposite(ArticleContainerEditorComposite.this, deliveryNote);
 
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-					// TODO: segments can be potentially added on the fly, therefore GeneralEditorComposite.this behaviour must be supported
+					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditorComposite.this behaviour must be supported
 					if (hasDifferentSegments()) {
-						segmentCompositeFolder = new TabFolder(GeneralEditorComposite.this, SWT.NONE);
+						segmentCompositeFolder = new TabFolder(ArticleContainerEditorComposite.this, SWT.NONE);
 						segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 						((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
 							@Override
@@ -274,10 +274,10 @@ extends XComposite
 						});
 					}
 					else {
-						segmentCompositeFolder = new XComposite(GeneralEditorComposite.this, SWT.NONE);
+						segmentCompositeFolder = new XComposite(ArticleContainerEditorComposite.this, SWT.NONE);
 					}
 
-					// segmentCompositeScrollContainer = new ScrolledComposite(GeneralEditorComposite.this,
+					// segmentCompositeScrollContainer = new ScrolledComposite(ArticleContainerEditorComposite.this,
 					// SWT.V_SCROLL); // TODO do we really not want horizontal scrolling?
 					// segmentCompositeScrollContainer.setExpandHorizontal(true);
 					// segmentCompositeScrollContainer.setExpandVertical(true);
@@ -295,19 +295,19 @@ extends XComposite
 
 					EditLockTypeID editLockTypeID;
 					if (order != null) {
-						footerComposite = new OrderFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
+						footerComposite = new OrderFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
 						editLockTypeID = EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
 					}
 					else if (offer != null) {
-						footerComposite = new OfferFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
+						footerComposite = new OfferFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
 						editLockTypeID = EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
 					}
 					else if (invoice != null) {
-						footerComposite = new InvoiceFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
+						footerComposite = new InvoiceFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
 						editLockTypeID = EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
 					}
 					else if (deliveryNote != null) {
-						footerComposite = new DeliveryNoteFooterComposite(GeneralEditorComposite.this, GeneralEditorComposite.this);
+						footerComposite = new DeliveryNoteFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
 						editLockTypeID = EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
 					}
 					else
@@ -489,7 +489,7 @@ extends XComposite
 	{
 		Segment segment = segmentEdit.getArticleSegmentGroup().getSegment();
 
-		// TODO Segments can be added while this GeneralEditorComposite is visible. Unfortunately,
+		// TODO Segments can be added while this ArticleContainerEditorComposite is visible. Unfortunately,
 		// this was not taken into account when Daniel refactored this class (he removed the TabFolder
 		// when there's only one Segment). After his refactoring, it means that we would need to
 		// rebuild the UI if a Segment is added! Marco.
@@ -499,7 +499,7 @@ extends XComposite
 			tabItem = new TabItem((TabFolder)segmentCompositeFolder, SWT.NONE);
 			tabItem.setText(
 					String.format(
-							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite.segmentTabItem.text"), //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.segmentTabItem.text"), //$NON-NLS-1$
 							segment.getSegmentType().getName().getText(),
 							segment.getSegmentIDAsString()));
 		}
@@ -530,7 +530,7 @@ extends XComposite
 		segmentCompositeScrollContainer.setContent(composite);
 		// segmentEditComposites.add(composite);
 
-		// TODO Segments can be added while this GeneralEditorComposite is visible. See comment at the beginning of this method! Marco.
+		// TODO Segments can be added while this ArticleContainerEditorComposite is visible. See comment at the beginning of this method! Marco.
 		if (hasDifferentSegments())
 			segmentEditsByTabItem.put(tabItem, segmentEdit);
 		else {
@@ -871,7 +871,7 @@ extends XComposite
 			FetchPlan.DEFAULT };
 
 	/**
-	 * Initialise this instance of <code>GeneralEditorComposite</code> or reload the {@link ArticleContainer} referenced
+	 * Initialise this instance of <code>ArticleContainerEditorComposite</code> or reload the {@link ArticleContainer} referenced
 	 * by the <code>generalEditorInput</code> parameter. In case of reloading, the articles are not fetched again
 	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroups})
 	 *

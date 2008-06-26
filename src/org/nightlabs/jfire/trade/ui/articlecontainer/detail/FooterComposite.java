@@ -50,13 +50,13 @@ public class FooterComposite extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(FooterComposite.class);
 	
-	private GeneralEditorComposite generalEditorComposite;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
 //	private ArticleContainer articleContainer;
 
-	public FooterComposite(Composite parent, GeneralEditorComposite generalEditorComposite)
+	public FooterComposite(Composite parent, ArticleContainerEditorComposite articleContainerEditorComposite)
 	{
 		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
-		this.generalEditorComposite = generalEditorComposite;
+		this.articleContainerEditorComposite = articleContainerEditorComposite;
 //		this.articleContainer = articleContainer;
 		
 		setBackground(DEFAULT_BG_COLOR);
@@ -99,14 +99,14 @@ public class FooterComposite extends XComposite
 	 */
 	public ArticleContainer getArticleContainer()
 	{
-		return generalEditorComposite.getArticleContainer();
+		return articleContainerEditorComposite.getArticleContainer();
 	}
 	/**
-	 * @return Returns the generalEditorComposite.
+	 * @return Returns the articleContainerEditorComposite.
 	 */
-	public GeneralEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getGeneralEditorComposite()
 	{
-		return generalEditorComposite;
+		return articleContainerEditorComposite;
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class FooterComposite extends XComposite
 		long priceAmount = 0;
 		Currency currency = null;
 
-		for (Article article : generalEditorComposite.getArticles()) {
+		for (Article article : articleContainerEditorComposite.getArticles()) {
 			ArticlePrice articlePrice = article.getPrice();
 			priceAmount += articlePrice.getAmount();
 			if (currency == null)

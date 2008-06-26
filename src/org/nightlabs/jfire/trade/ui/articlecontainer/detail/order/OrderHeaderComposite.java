@@ -30,7 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
@@ -46,9 +46,9 @@ extends HeaderComposite
 	private Label timestamp;
 	private Label userName;
 	
-	public OrderHeaderComposite(GeneralEditorComposite generalEditorComposite, Order _order)
+	public OrderHeaderComposite(ArticleContainerEditorComposite articleContainerEditorComposite, Order _order)
 	{
-		super(generalEditorComposite, generalEditorComposite, _order);
+		super(articleContainerEditorComposite, articleContainerEditorComposite, _order);
 		this.order = _order;
 		
 		setLayout(new GridLayout(4, false));

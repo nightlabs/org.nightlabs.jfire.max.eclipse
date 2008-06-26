@@ -25,7 +25,7 @@ implements IGeneralEditor
 	public static final String ID_EDITOR = GeneralQuickSaleEditor.class.getName();
 	
 	private GeneralQuickSaleEditorComposite generalQuickSaleEditorComposite;
-	public GeneralEditorComposite getGeneralEditorComposite() {
+	public ArticleContainerEditorComposite getGeneralEditorComposite() {
 		return generalQuickSaleEditorComposite.getGeneralEditorComposite();
 	}
 	

@@ -75,7 +75,7 @@ public abstract class AbstractSegmentEdit
 implements SegmentEdit
 {
 	private SegmentEditFactory segmentEditFactory;
-	private GeneralEditorComposite generalEditorComposite;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	private String articleContainerClass;
 	private ArticleSegmentGroup articleSegmentGroup;
 
@@ -87,12 +87,12 @@ implements SegmentEdit
 	@Implement
 	public void init(
 			SegmentEditFactory segmentEditFactory,
-			GeneralEditorComposite generalEditorComposite,
+			ArticleContainerEditorComposite articleContainerEditorComposite,
 			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup)
 	{
 		this.segmentEditFactory = segmentEditFactory;
-		this.generalEditorComposite = generalEditorComposite;
+		this.articleContainerEditorComposite = articleContainerEditorComposite;
 		this.articleContainerClass = articleContainerClass;
 		this.articleSegmentGroup = articleSegmentGroup;
 
@@ -136,19 +136,19 @@ implements SegmentEdit
 		}
 	}
 
-	public GeneralEditorComposite getGeneralEditorComposite()
+	public ArticleContainerEditorComposite getGeneralEditorComposite()
 	{
-		return generalEditorComposite;
+		return articleContainerEditorComposite;
 	}
 
 	public ArticleContainer getArticleContainer()
 	{
-		return generalEditorComposite.getArticleContainer();
+		return articleContainerEditorComposite.getArticleContainer();
 	}
 
 	public ArticleContainerID getArticleContainerID()
 	{
-		return generalEditorComposite.getArticleContainerID();
+		return articleContainerEditorComposite.getArticleContainerID();
 	}
 
 	public List<ArticleEdit> getArticleEdits()
@@ -173,7 +173,7 @@ implements SegmentEdit
 
 	public Menu createArticleEditContextMenu(Control parent)
 	{
-		return generalEditorComposite.createArticleEditContextMenu(parent);
+		return articleContainerEditorComposite.createArticleEditContextMenu(parent);
 	}
 
 //	/**

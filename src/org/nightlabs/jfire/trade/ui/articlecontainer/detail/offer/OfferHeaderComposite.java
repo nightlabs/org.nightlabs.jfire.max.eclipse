@@ -49,7 +49,7 @@ import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.GeneralEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
@@ -77,9 +77,9 @@ extends HeaderComposite
 		return (OfferID) JDOHelper.getObjectId(offer);
 	}
 
-	public OfferHeaderComposite(GeneralEditorComposite generalEditorComposite, Offer offer)
+	public OfferHeaderComposite(ArticleContainerEditorComposite articleContainerEditorComposite, Offer offer)
 	{
-		super(generalEditorComposite, generalEditorComposite, offer);
+		super(articleContainerEditorComposite, articleContainerEditorComposite, offer);
 		this.offer = offer;
 
 		this.getGridLayout().numColumns = 2;
@@ -158,7 +158,7 @@ extends HeaderComposite
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), 3); //$NON-NLS-1$
 			offer = OfferDAO.sharedInstance().getOffer(
 					(OfferID) JDOHelper.getObjectId(offer),
-					GeneralEditorComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					ArticleContainerEditorComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			currentStateComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));

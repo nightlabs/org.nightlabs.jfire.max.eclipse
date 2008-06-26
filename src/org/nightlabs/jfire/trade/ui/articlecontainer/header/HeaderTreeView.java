@@ -54,9 +54,6 @@ extends LSDViewPart
 	public void createPartContents(Composite parent)
 	{
 		try {
-//			Login.getLogin();
-			// give the parent a GridLayout
-//			parent.setLayout(new GridLayout(1, true));
 			headerTreeComposite = new HeaderTreeComposite(parent, SWT.NONE, getSite());
 			headerTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			selectionProviderProxy.addRealSelectionProvider(headerTreeComposite);

@@ -71,7 +71,7 @@ extends XComposite
 	private Composite buttonComp;
 	protected void createComposite(Composite parent, GeneralEditorInput input)
 	{
-		generalEditorComposite = new GeneralEditorComposite(site, parent, input);
+		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, parent, input);
 		
 		buttonComp = new XComposite(parent, SWT.NONE);
 		buttonComp.setLayout(new GridLayout(6, false));
@@ -107,15 +107,15 @@ extends XComposite
 		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
 				
-		generalEditorComposite.addArticleChangeListener(articleChangeListener);
-		generalEditorComposite.addArticleCreateListener(articleCreateListener);
+		articleContainerEditorComposite.addArticleChangeListener(articleChangeListener);
+		articleContainerEditorComposite.addArticleCreateListener(articleCreateListener);
 		
 		buttonComp.setEnabled(false);
 	}
 	
-	private GeneralEditorComposite generalEditorComposite;
-	public GeneralEditorComposite getGeneralEditorComposite() {
-		return generalEditorComposite;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
+	public ArticleContainerEditorComposite getGeneralEditorComposite() {
+		return articleContainerEditorComposite;
 	}
 	
 	private Button okButtonCustomer;
@@ -264,8 +264,8 @@ extends XComposite
 	
 	protected void createGeneralEditorComposite(GeneralEditorInput input)
 	{
-		generalEditorComposite.dispose();
-		generalEditorComposite = new GeneralEditorComposite(site, this, input);
+		articleContainerEditorComposite.dispose();
+		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, this, input);
 		layout(true, true);
 	}
 	
