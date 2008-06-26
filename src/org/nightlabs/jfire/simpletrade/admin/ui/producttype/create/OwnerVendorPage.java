@@ -62,8 +62,6 @@ import org.nightlabs.progress.ProgressMonitor;
 public class OwnerVendorPage
 extends DynamicPathWizardPage
 {
-
-
 	private ProductTypeID parentProductTypeID;
 	private ProductType parentProductType;
 	private LegalEntityEditComposite ownerEditComposite = null;
@@ -94,9 +92,6 @@ extends DynamicPathWizardPage
 		this.parentProductTypeID = parentProductTypeID;
 	}
 
-
-
-
 	public LegalEntityEditComposite getOwnerEditComposite() {
 		return ownerEditComposite;
 	}
@@ -104,8 +99,6 @@ extends DynamicPathWizardPage
 	public LegalEntityEditComposite getVendorEditComposite() {
 		return vendorEditComposite;
 	}
-
-
 
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
@@ -135,8 +128,6 @@ extends DynamicPathWizardPage
 					}
 				});
 
-
-
 		inheritButtonOwner = new InheritanceToggleButton(comp0,null);
 //		inheritButtonOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		inheritButtonOwner.setSelection(true);
@@ -157,22 +148,16 @@ extends DynamicPathWizardPage
 			}
 		});
 
-
-
 		new Label(page, SWT.NONE);
-
 		new Label(page, SWT.NONE);
-
 
 		XComposite comp1 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comp1.getGridLayout().numColumns = 3;
 
-
 		Label labelVendor = new Label(comp1, SWT.NONE);
 		labelVendor.setText(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.OwnerVendorPage.labelVendor.text")); //$NON-NLS-1$
 //		labelVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 
 		this.vendorEditComposite = new LegalEntityEditComposite(comp1, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -201,15 +186,11 @@ extends DynamicPathWizardPage
 					if(originEntityVendor != null)
 						getVendorEditComposite().setLegalEntity(originEntityVendor);
 				}
-
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
 		});
-
-
-
 
 		page.setFaded(true);
 
@@ -227,17 +208,11 @@ extends DynamicPathWizardPage
 					public void run()
 					{
 						page.setFaded(false);
-
 						if (parentProductType != null)
 						{
-
 							getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
-
 							getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
-
 						}
-
-
 					}
 				});
 
@@ -247,22 +222,17 @@ extends DynamicPathWizardPage
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
 
-
-
 		return page;
 	}
 
-	LegalEntity getOwnerEntity()
+	protected LegalEntity getOwnerEntity()
 	{
 		return getOwnerEditComposite().getLegalEntity();
 	}
 
-
-	LegalEntity getVendorEntity()
+	protected LegalEntity getVendorEntity()
 	{
 		return getVendorEditComposite().getLegalEntity();
 	}
-
-
 
 }
