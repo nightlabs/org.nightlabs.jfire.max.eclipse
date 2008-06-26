@@ -92,6 +92,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 		@Override
 		protected void setValue(Object element, Object value) {
 			((TariffCarrier) element).getTariff().getName().setText(getLanguageID(), (String) value);
+			((TariffCarrier) element).setDirty(true);
 			getTableViewer().refresh(true);
 		}
 	};
@@ -241,7 +242,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 			public String getColumnText(Object element, int columnIndex) {
 				if (element instanceof TariffCarrier) {
 					TariffCarrier tariffCarrier = (TariffCarrier) element;
-					return tariffCarrier.getTariff().getName().getText();
+					return tariffCarrier.getTariff().getName().getText(getLanguageID());
 				}
 				return ""; //$NON-NLS-1$
 			}
