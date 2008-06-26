@@ -8,11 +8,13 @@ import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.MessageBox;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -66,8 +68,10 @@ extends DynamicPathWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
+					//Issue Link Type
 					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 					
+					//Checking if the issue is new.
 					Issue issue = selectIssueWizardPage.getIssue();
 					if (JDOHelper.getObjectId(issue) == null) {
 						try {
@@ -81,9 +85,21 @@ extends DynamicPathWizard
 					else {
 						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					}
-					issue.createIssueLink(selectedIssueLinkType, attachedObject);
 					
+					//Issue Link
+					IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
+					if (issueLink == null) {
+						MessageBox msg = new MessageBox(getShell());
+						msg.setText("The issue has already had this link!!.");
+						if (msg.open() == 1) {
+							return;
+						}
+					}
+					
+					//Store Issue
 					Issue createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					
+					//Open the editor
 					IssueEditorInput issueEditorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
 					try {
 						Editor2PerspectiveRegistry.sharedInstance().openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
