@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import java.text.Collator;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -123,7 +125,8 @@ implements ISelectionHandler
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(new LabelProvider());
 		
-//		tableViewer.setSorter(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
+		// TODO FIXME Why does this has no effect???
+		tableViewer.setSorter(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 	
 	@Override
