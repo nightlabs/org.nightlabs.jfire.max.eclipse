@@ -117,6 +117,9 @@ extends XComposite
 					public void run() {
 						if (thisJob != setProductTypeIDJob)
 							return;
+						
+						if (isDisposed())
+							return;
 
 						productTypeName.setText(productType.getName().getText());
 						currImageData = null;
