@@ -33,16 +33,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.part.ViewPart;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.part.ControllablePart;
-import org.nightlabs.base.ui.part.PartVisibilityListener;
-import org.nightlabs.base.ui.part.PartVisibilityTracker;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.login.part.LSDPartController;
+import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -54,41 +48,17 @@ import org.nightlabs.progress.ProgressMonitor;
  *
  */
 public class LegalEntityEditorView
-extends ViewPart
-implements
-	PartVisibilityListener,
-	ControllablePart
+extends LSDViewPart
 {
 	public static String ID_VIEW = LegalEntityEditorView.class.getName();
+	
 	private LegalEntitySelectionComposite selectionComposite;
-//	/**
-//	 * List of direct listeners of the selection of the legal entity in this view
-//	 * not over the Notification framework
-//	 */
-//	private ListenerList legalEntitySelectionListeners = new ListenerList();
-	
-	public LegalEntityEditorView() {
-		LSDPartController.sharedInstance().registerPart(this);
-	}
-	
-	@Override
-	public void createPartControl(Composite parent) {
-        LSDPartController.sharedInstance().createPartControl(this, parent);
-        PartVisibilityTracker.sharedInstance().addVisibilityListener(this, this);
-	}
+	private SelectAnonymousViewAction selectAnonymousAction = new SelectAnonymousViewAction();
+	private EditLegalEntityViewAction editLegalEntityAction = new EditLegalEntityViewAction();
+	private SearchLegalEntityViewAction searchLegalEntityAction = new SearchLegalEntityViewAction();
 
 	@Override
 	public void setFocus() {
-	}
-
-	public void partHidden(IWorkbenchPartReference partRef) {
-	}
-
-	public void partVisible(IWorkbenchPartReference partRef) {
-	}
-
-	public boolean canDisplayPart() {
-		return Login.isLoggedIn();
 	}
 
 	public void createPartContents(Composite parent) {
@@ -105,21 +75,6 @@ implements
 	public LegalEntity getSelectedLegalEntity() {
 		return selectionComposite.getSelectedLegalEntity();
 	}
-
-//	public void addLegalEntitySelectionListener(ILegalEntitySelectionListener listener) {
-//		legalEntitySelectionListeners.add(listener);
-//	}
-//	public void removeLegalEntitySelectionListener(ILegalEntitySelectionListener listener) {
-//		legalEntitySelectionListeners.remove(listener);
-//	}
-//	private void notifyLegalEntitySelectionListeners(AnchorID legalEntityID) {
-//		Object[] listeners = legalEntitySelectionListeners.getListeners();
-//		for (Object listener : listeners) {
-//			if (listener instanceof ILegalEntitySelectionListener) {
-//				((ILegalEntitySelectionListener) listener).legalEntitySelected(legalEntityID);
-//			}
-//		}
-//	}
 	
 	public void setSelectedLegalEntityID(final AnchorID legalEntityID) 
 	{
@@ -139,12 +94,7 @@ implements
 			};
 			job.schedule();
 		}
-//		notifyLegalEntitySelectionListeners(legalEntityID);
 	}
-
-	private SelectAnonymousViewAction selectAnonymousAction = new SelectAnonymousViewAction();
-	private EditLegalEntityViewAction editLegalEntityAction = new EditLegalEntityViewAction();
-	private SearchLegalEntityViewAction searchLegalEntityAction = new SearchLegalEntityViewAction();
 	
 	private void contributeToActionBars() {
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
@@ -156,7 +106,4 @@ implements
 		toolBarManager.add(searchLegalEntityAction);		
 	}
 	
-//	public void setSelectedLegalEntity(LegalEntity legalEntity) {
-//		selectionComposite.setSelectedLegalEntity(legalEntity);
-//	}
 }
