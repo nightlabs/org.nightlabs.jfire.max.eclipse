@@ -35,12 +35,9 @@ extends ArticleContainerAction
 				OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, 
 				OrganisationLegalEntity.class.getName());
 		
-		if (!localOrgID.equals(
-				JDOHelper.getObjectId(
-						editor.getArticleContainerEditorComposite().getArticleContainer().getVendor()))) 
-		{
+		if (!localOrgID.equals(editor.getArticleContainerEditorComposite().getArticleContainer().getVendorID())) 
 			return false;
-		}
+		
 		
 		return true;
 	}
