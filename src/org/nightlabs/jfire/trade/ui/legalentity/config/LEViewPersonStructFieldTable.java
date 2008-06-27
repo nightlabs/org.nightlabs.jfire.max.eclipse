@@ -201,4 +201,8 @@ extends AbstractTableComposite<String>
 	public List<String> getStructFields() {
 		return ((ContentProvider)getTableViewer().getContentProvider()).getCfModFields();
 	}
+	
+	public void addStructField(String structFieldOID) {
+		((ContentProvider) getTableViewer().getContentProvider()).add(structFieldOID);
+	}
 }

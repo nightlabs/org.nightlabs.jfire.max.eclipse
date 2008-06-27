@@ -26,21 +26,33 @@
 
 package org.nightlabs.jfire.trade.ui.legalentity.config;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
+import org.nightlabs.jfire.base.ui.prop.structedit.StructFieldNode;
+import org.nightlabs.jfire.base.ui.prop.structedit.StructTreeComposite;
+import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.StructField;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -96,6 +108,17 @@ extends AbstractUserConfigModulePreferencePage
 		addButton = new Button(buttonWrapper, SWT.PUSH);
 		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.addButton.text")); //$NON-NLS-1$
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				StructDialog dialog = new StructDialog(addButton.getShell());				
+				if (dialog.open() == Dialog.OK) {
+					structFieldTable.addStructField(dialog.getSelectedStructField().getStructFieldIDObj().toString());
+					structFieldTable.refresh();
+					setConfigChanged(true);
+				}
+			}
+		});
 		
 		removeButton = new Button(buttonWrapper, SWT.PUSH);
 		removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.removeButton.text")); //$NON-NLS-1$
@@ -144,13 +167,18 @@ extends AbstractUserConfigModulePreferencePage
 		structFieldTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent arg0) {
-				removeButton.setEnabled(structFieldTable.getFirstSelectedElement() != null);
-				upButton.setEnabled(!structFieldTable.isSelectedFirst());
-				downButton.setEnabled(!structFieldTable.isSelectedLast());
+				updateButtonsEnabled();
 			}
 		});
+		updateButtonsEnabled();
 	}
 
+	protected void updateButtonsEnabled() {
+		removeButton.setEnabled(structFieldTable.getFirstSelectedElement() != null);
+		upButton.setEnabled((!structFieldTable.isSelectedFirst()) && structFieldTable.getFirstSelectedElement() != null);
+		downButton.setEnabled((!structFieldTable.isSelectedLast()) && structFieldTable.getFirstSelectedElement() != null);
+	}
+	
 //	@Override
 //	protected void updatePreferencePage(ConfigModule configModule) {
 //		structFieldTable.setInput(configModule);
@@ -182,5 +210,56 @@ extends AbstractUserConfigModulePreferencePage
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
 		return new LegalEntityViewConfigController(this);
+	}
+	
+	class StructDialog extends ResizableTitleAreaDialog {
+
+		private StructField<?> selectedStructField;
+		private StructTreeComposite treeComposite;
+		
+		
+		public StructDialog(Shell shell) {
+			super(shell, null);
+		}
+		
+		@Override
+		protected void configureShell(Shell newShell) {
+			super.configureShell(newShell);
+			newShell.setText("Select a struct field");
+		}
+		
+		@Override
+		protected Control createDialogArea(Composite parent) {
+			setTitle("Select a struct field");			
+			treeComposite = new StructTreeComposite(parent, true, null);
+			treeComposite.setInput(StructLocalDAO.sharedInstance().getStructLocal(
+					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor()));
+			treeComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+				@Override
+				public void selectionChanged(SelectionChangedEvent arg0) {
+					StructFieldNode node = treeComposite.getStructFieldNode();
+					selectedStructField = node != null ? node.getField() : null;
+					setOKButtonEnabled(
+							selectedStructField != null &&
+							!(structFieldTable.getStructFields().contains(selectedStructField.getStructFieldIDObj().toString()))
+						);
+				}
+			});
+			return super.createDialogArea(parent);
+		}
+
+		@Override
+		protected void createButtonsForButtonBar(Composite parent) {
+			super.createButtonsForButtonBar(parent);
+			setOKButtonEnabled(false);
+		}
+		
+		protected void setOKButtonEnabled(boolean value) {
+			getButton(IDialogConstants.OK_ID).setEnabled(value);	
+		}
+		
+		public StructField<?> getSelectedStructField() {
+			return selectedStructField;
+		}
 	}
 }
