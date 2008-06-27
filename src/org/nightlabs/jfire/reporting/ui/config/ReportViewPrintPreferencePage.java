@@ -98,7 +98,7 @@ extends LSDPreferencePage
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 			public void widgetSelected(SelectionEvent arg0) {
-				updateEditUseCaseConfigComposite();
+				updateEditUseCaseConfigComposite(true);
 			}
 		});
 		sameForAll = new Button(wrapper, SWT.CHECK);
@@ -111,12 +111,13 @@ extends LSDPreferencePage
 		for (Entry<String, UseCaseConfig> entry : configs.entrySet()) {
 			useCaseConfigs.put(entry.getKey(), (UseCaseConfig)entry.getValue().clone());
 		}
-		updateEditUseCaseConfigComposite();
+		updateEditUseCaseConfigComposite(false);
 //		return wrapper;
 	}
 
-	protected void updateEditUseCaseConfigComposite() {
-		readCurrentlyEdited();
+	protected void updateEditUseCaseConfigComposite(boolean updateFromUI) {
+		if (updateFromUI)
+			readCurrentlyEdited();
 		ReportUseCase useCase = null;
 		if (sameForAll.getSelection()) {
 			 useCase = useCaseCombo.getElements().get(0);
