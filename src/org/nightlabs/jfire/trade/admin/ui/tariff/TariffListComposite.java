@@ -86,7 +86,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((TariffCarrier) element).getTariff().getName().getText();
+			return ((TariffCarrier) element).getTariff().getName().getText(getLanguageID());
 		}
 
 		@Override
