@@ -91,10 +91,14 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		return control;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#getLayoutData()
+	 */
 	@Override
-	public DataFieldEditorLayoutData getLayoutData() {
+	public DataFieldEditorLayoutData getLayoutData() 
+	{
 		DataFieldEditorLayoutData ld = new DataFieldEditorLayoutData(DataFieldEditorLayoutData.FILL_BOTH);
-		ld.minimumHeight = 200;
+		ld.minimumHeight = 450;
 		return ld;
 	}
 	
