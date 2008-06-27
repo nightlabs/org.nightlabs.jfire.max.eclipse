@@ -101,9 +101,9 @@ extends AbstractIssueEditorGeneralSection
 		
 		/********Using FormText********/
 //		FormText text = toolkit.createFormText(commentEntry, false);
-//		text.setText(comment.getText().replaceAll("\\n", "<br/>"),
+//		text.setText(comment.getText(),
 //				false,
-//				true);
+//				false);
 //		text.setWhitespaceNormalized(false);
 		
 		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
