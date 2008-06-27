@@ -179,6 +179,9 @@ implements ISelectionProvider
 				wrapper.getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {
+						if (wrapper.isDisposed())
+							return;
+
 						for (int i = 0; i < filterSearched.size(); ++i)
 							filterSearched.set(i, Boolean.FALSE);
 
