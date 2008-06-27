@@ -90,7 +90,11 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 		spaceWrapper.getGridData().verticalSpan = 5;
 		XComposite.configureLayout(LayoutMode.ORDINARY_WRAPPER, pqTableComposite.getGridLayout());
 		
-		addQueueButton = new Button(wrapper, SWT.NONE);
+		Composite buttonComp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		buttonComp.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		
+		addQueueButton = new Button(buttonComp, SWT.NONE);
+		addQueueButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addQueueButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.addQueueButton.text")); //$NON-NLS-1$
 		addQueueButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -99,7 +103,8 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			}
 		});
 
-		editQueueButton = new Button(wrapper, SWT.NONE);
+		editQueueButton = new Button(buttonComp, SWT.NONE);
+		editQueueButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editQueueButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.editQueueButton.text")); //$NON-NLS-1$
 		editQueueButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {}
@@ -108,7 +113,8 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			}
 		});
 		
-		delQueueButton = new Button(wrapper, SWT.NONE);
+		delQueueButton = new Button(buttonComp, SWT.NONE);
+		delQueueButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		delQueueButton.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueConfigurationComposite.removeQueueButton.text")); //$NON-NLS-1$
 		delQueueButton.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {}
