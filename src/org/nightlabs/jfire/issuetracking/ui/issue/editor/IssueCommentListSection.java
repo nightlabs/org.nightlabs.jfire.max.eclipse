@@ -7,11 +7,11 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -96,13 +96,17 @@ extends AbstractIssueEditorGeneralSection
 //		commentEntry.setClient(commentLabel);
 		
 		/********Using Text********/
-		FormText text = toolkit.createFormText(commentEntry, false);
+		Text text = toolkit.createText(commentEntry, comment.getText(), SWT.MULTI | SWT.WRAP);
+		text.setEditable(false);
+		
+		/********Using FormText********/
+//		FormText text = toolkit.createFormText(commentEntry, false);
+//		text.setText(comment.getText().replaceAll("\\n", "<br/>"),
+//				false,
+//				true);
+//		text.setWhitespaceNormalized(false);
+		
 		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
-		
-		text.setText(comment.getText(),
-				false,
-				true);
-		
 		commentEntry.setClient(text);
 
 		commentEntry.addExpansionListener(new ExpansionAdapter() {
