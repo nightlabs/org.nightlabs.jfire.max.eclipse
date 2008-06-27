@@ -6,6 +6,7 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorMatchingStrategy;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.PartInitException;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -29,6 +30,14 @@ implements IEditorMatchingStrategy
 			if (clazz != null && clazz.equals(getProductTypeClass())) {
 				if (editorRef == null)
 					return true;
+				else
+					try {
+						if (editorRef.getEditorInput().equals(input)) {
+							return true;
+						}
+					} catch (PartInitException e) {
+						return false;
+					}
 			}
 		}
 		return false;
