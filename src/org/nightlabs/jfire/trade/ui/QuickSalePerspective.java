@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveFactory;
@@ -23,6 +24,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuic
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
+import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -88,12 +90,18 @@ implements IPerspectiveFactory
 		layout.setEditorAreaVisible(true);
 		layout.addView(ProductTypeDetailView.ID_VIEW, IPageLayout.TOP,
 				0.2f, IPageLayout.ID_EDITOR_AREA);
-		layout.addView(ProductTypeQuickListView.ID_VIEW, IPageLayout.RIGHT, 0.7f,
-				IPageLayout.ID_EDITOR_AREA);
+//		layout.addView(ProductTypeQuickListView.ID_VIEW, IPageLayout.RIGHT, 0.7f,
+//				IPageLayout.ID_EDITOR_AREA);
+
+		IFolderLayout folder = layout.createFolder("right_bottom", IPageLayout.RIGHT, 0.7f, IPageLayout.ID_EDITOR_AREA);
+		folder.addView(ProductTypeQuickListView.ID_VIEW);
+		folder.addView(DeliveryQueueBrowsingView.ID_VIEW);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
 		layout.addShowViewShortcut(ProductTypeDetailView.ID_VIEW);
 		layout.addShowViewShortcut(ProductTypeQuickListView.ID_VIEW);
+		layout.addShowViewShortcut(DeliveryQueueBrowsingView.ID_VIEW);
+		
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
 
