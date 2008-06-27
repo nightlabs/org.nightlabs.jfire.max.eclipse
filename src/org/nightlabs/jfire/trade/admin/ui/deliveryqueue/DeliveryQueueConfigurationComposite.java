@@ -252,7 +252,6 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			storeManager.storeDeliveryQueues(changedDeliveryQueues);
 			
 			configModule.setVisibleDeliveryQueues(visibleDeliveryQueues);
-			dirtyStateManager.markUndirty();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
