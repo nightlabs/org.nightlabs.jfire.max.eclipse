@@ -20,6 +20,6 @@ extends AbstractQueryFilterFactory<IssueQuery>
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
-		return new IssueFilterCompositeDocumentRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
+		return new IssueFilterCompositeIssueLinkRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 }

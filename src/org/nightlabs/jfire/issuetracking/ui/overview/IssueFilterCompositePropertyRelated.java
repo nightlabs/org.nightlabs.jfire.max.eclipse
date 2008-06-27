@@ -45,10 +45,10 @@ import org.nightlabs.util.Util;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositeIssueRelated 
+public class IssueFilterCompositePropertyRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
-	private static final Logger logger = Logger.getLogger(IssueFilterCompositeIssueRelated.class);
+	private static final Logger logger = Logger.getLogger(IssueFilterCompositePropertyRelated.class);
 	private Object mutex = new Object();
 
 	private XComboComposite<IssueType> issueTypeCombo;
@@ -74,7 +74,7 @@ public class IssueFilterCompositeIssueRelated
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public IssueFilterCompositeIssueRelated(Composite parent, int style,
+	public IssueFilterCompositePropertyRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
@@ -92,7 +92,7 @@ public class IssueFilterCompositeIssueRelated
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public IssueFilterCompositeIssueRelated(Composite parent, int style,
+	public IssueFilterCompositePropertyRelated(Composite parent, int style,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);

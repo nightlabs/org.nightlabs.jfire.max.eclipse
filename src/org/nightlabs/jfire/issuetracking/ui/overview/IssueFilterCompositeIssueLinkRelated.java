@@ -3,7 +3,11 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -17,7 +21,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositeDocumentRelated 
+public class IssueFilterCompositeIssueLinkRelated 
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private IssueLinkAdderComposite issueLinkAdderComposite;
@@ -36,7 +40,7 @@ public class IssueFilterCompositeDocumentRelated
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
+	public IssueFilterCompositeIssueLinkRelated(Composite parent, int style,
 			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
@@ -53,7 +57,7 @@ public class IssueFilterCompositeDocumentRelated
 	 *          The queryProvider to use. It may be <code>null</code>, but the caller has to
 	 *          ensure, that it is set before {@link #getQuery()} is called!
 	 */
-	public IssueFilterCompositeDocumentRelated(Composite parent, int style,
+	public IssueFilterCompositeIssueLinkRelated(Composite parent, int style,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
@@ -68,16 +72,27 @@ public class IssueFilterCompositeDocumentRelated
 	@Override
 	protected void createComposite(Composite parent)
 	{
-		issueLinkAdderComposite = new IssueLinkAdderComposite(parent, SWT.NONE, true, null);
-//		issueLinkAdderComposite.addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener()
-//		{
-//			@Override
-//			public void issueLinkItemChanged(IssueLinkItemChangeEvent itemChangedEvent)
-//			{
-//				issueLinks = issueLinkAdderComposite.getItems();
-//				getQuery().setIssueLinks( issueLinks );
-//			}
-//		});
+		Group issueLinkGroup = new Group(parent, SWT.NONE);
+		issueLinkGroup.setText("Issue Link");
+		
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.verticalSpacing = 10;
+		issueLinkGroup.setLayout(gridLayout);
+		issueLinkGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		new Label(issueLinkGroup, SWT.NONE).setText("Type: ");
+		
+		
+//		issueLinkAdderComposite = new IssueLinkAdderComposite(parent, SWT.NONE, true, null);
+////		issueLinkAdderComposite.addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener()
+////		{
+////			@Override
+////			public void issueLinkItemChanged(IssueLinkItemChangeEvent itemChangedEvent)
+////			{
+////				issueLinks = issueLinkAdderComposite.getItems();
+////				getQuery().setIssueLinks( issueLinks );
+////			}
+////		});
 	}
 	
 	@Override
