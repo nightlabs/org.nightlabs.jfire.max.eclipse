@@ -166,7 +166,6 @@ extends AbstractUserConfigModulePreferencePage
 		LegalEntityViewConfigModule configModule = (LegalEntityViewConfigModule) getConfigModuleController().getConfigModule();
 		configModule.getStructFields().clear();
 		configModule.getStructFields().addAll(structFieldTable.getStructFields());
-		setConfigChanged(false);
 	}
 
 	@Override
