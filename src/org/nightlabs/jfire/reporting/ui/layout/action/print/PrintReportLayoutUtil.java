@@ -31,6 +31,8 @@ import java.io.File;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.print.PrinterInterfaceManager;
 import org.nightlabs.base.ui.print.PrinterUseCase;
 import org.nightlabs.jfire.reporting.Birt;
@@ -86,6 +88,45 @@ public class PrintReportLayoutUtil {
 			format = Birt.OutputFormat.valueOf(useCaseConfig.getPrintFormat());
 		if (format == null)
 			throw new IllegalStateException("Could not lookup (valid) printFormat for the reportUseCaseID: "+reportUseCase.getId()+". The found value was: "+useCaseConfig.getPrintFormat()); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		// TODO: Temporary disabled printing. See https://www.jfire.org/modules/bugs/view.php?id=676
+		
+		if (format == Birt.OutputFormat.html) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					MessageDialog.openInformation(
+							Display.getCurrent().getActiveShell(), 
+							"Printing disabled/Drucken deaktiviert",
+							"We're sorry, for the 0.9.4 release of JFire the html printing feature had to be disabled.\n" +
+							"Possibly you can print the document from the viewer by using the context menu.\n\n" +
+							"Das Drucken von HTML Dokumenten musste für die JFire Version 0.9.4 leider deaktiviert werden.\n" +
+							"Sie können das Dokument vielleicht aus der Dokumentansicht mittels des Kontextmenüs drucken."
+						);					
+					
+				}
+			});
+			return;
+		} else {
+			// format is pdf, works only on linux
+			if (!System.getProperty("os.name").toLowerCase().equals("linux")) {
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						MessageDialog.openInformation(
+								Display.getCurrent().getActiveShell(), 
+								"Printing disabled/Drucken deaktiviert",
+								"We're sorry, for the 0.9.4 release of JFire the pdf printing feature had to be disabled for your platform.\n" +
+								"Possibly you can print the document from the viewer by using its print action.\n\n" +
+								"Das Drucken von PDF Dokumenten musste für die JFire Version 0.9.4 und Ihr Betriebssystem leider deaktiviert werden.\n" +
+								"Sie können das Dokument vielleicht aus der Dokumentansicht drucken."
+							);					
+						
+					}
+				});
+				return;
+			}
+		}
+		// END Temporary
+		
 		RenderReportRequest renderRequest = new RenderReportRequest();
 		renderRequest.setReportRegistryItemID(reportRegistryItemID);
 		renderRequest.setParameters(params);
