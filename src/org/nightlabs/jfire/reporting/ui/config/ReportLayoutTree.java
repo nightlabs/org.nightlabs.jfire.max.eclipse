@@ -222,7 +222,7 @@ implements ICellModifier
 	}
 	
 	public boolean canModify(Object element, String property) {
-		logger.info("getValue() called with "+property+" = "+element); //$NON-NLS-1$ //$NON-NLS-2$
+		logger.debug("getValue() called with "+property+" = "+element); //$NON-NLS-1$ //$NON-NLS-2$
 		ReportRegistryItem item = getReportRegistryItem(element);
 		if (item instanceof ReportLayout)
 			return true;
@@ -230,7 +230,7 @@ implements ICellModifier
 	}
 
 	public Object getValue(Object element, String property) {
-		logger.info("getValue() called with "+property+" = "+element); //$NON-NLS-1$ //$NON-NLS-2$
+		logger.debug("getValue() called with "+property+" = "+element); //$NON-NLS-1$ //$NON-NLS-2$
 		ReportRegistryItem item = getReportRegistryItem(element);
 		if (item == null || configModule == null)
 			return new Boolean(false);
@@ -252,8 +252,8 @@ implements ICellModifier
 		return new Boolean(false);
 	}
 
-	public void modify(Object element, String property, Object value) {
-		logger.info("modify() called with "+property+" = "+value); //$NON-NLS-1$ //$NON-NLS-2$
+	public void modify(Object element, String property, Object value) {		
+		logger.debug("modify() called with "+property+" = "+value); //$NON-NLS-1$ //$NON-NLS-2$
 		ReportRegistryItem item = getReportRegistryItem(((TreeItem)element).getData());
 		if (item == null || configModule == null)
 			return;
