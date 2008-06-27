@@ -116,10 +116,12 @@ extends FadeableComposite
 						// restore selection
 						if (selectedDeliveryQueue != null) {
 							printQueueCombo.setSelection(selectedDeliveryQueue);
-							deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
+							if (printQueueCombo.getSelectedElement() != null)
+								deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
 						} else if (!printQueueCombo.getElements().isEmpty()){
 							printQueueCombo.setSelection(0);
-							deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
+							if (printQueueCombo.getSelectedElement() != null)
+								deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
 						}
 						
 						setFaded(false);
