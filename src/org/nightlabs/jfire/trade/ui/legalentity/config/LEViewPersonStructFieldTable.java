@@ -52,7 +52,7 @@ import org.nightlabs.util.NLLocale;
  *
  */
 public class LEViewPersonStructFieldTable 
-extends AbstractTableComposite 
+extends AbstractTableComposite<String> 
 {
 	private static class ContentProvider implements IStructuredContentProvider {
 		
@@ -106,6 +106,14 @@ extends AbstractTableComposite
 		
 		public List<String> getCfModFields() {
 			return cfModFields;
+		}
+		
+		public boolean isFirst(String structFieldOID) {			
+			return cfModFields.indexOf(structFieldOID) == 0;
+		}
+		
+		public boolean isLast(String structFieldOID) {
+			return cfModFields.indexOf(structFieldOID) == cfModFields.size() - 1;
 		}
 	}
 	
@@ -174,6 +182,20 @@ extends AbstractTableComposite
 		if ( selection.size() != 1)
 			return;
 		((ContentProvider)getTableViewer().getContentProvider()).remove((String)selection.getFirstElement());
+	}
+	
+	public boolean isSelectedFirst() {
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
+		if ( selection.size() != 1)
+			return false;
+		return ((ContentProvider)getTableViewer().getContentProvider()).isFirst(((String)selection.getFirstElement()));
+	}
+	
+	public boolean isSelectedLast() {
+		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
+		if ( selection.size() != 1)
+			return false;
+		return ((ContentProvider)getTableViewer().getContentProvider()).isLast(((String)selection.getFirstElement()));
 	}
 	
 	public List<String> getStructFields() {

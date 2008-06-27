@@ -27,6 +27,8 @@
 package org.nightlabs.jfire.trade.ui.legalentity.config;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -137,6 +139,15 @@ extends AbstractUserConfigModulePreferencePage
 				widgetSelected(e);
 			}
 			
+		});
+		
+		structFieldTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent arg0) {
+				removeButton.setEnabled(structFieldTable.getFirstSelectedElement() != null);
+				upButton.setEnabled(!structFieldTable.isSelectedFirst());
+				downButton.setEnabled(!structFieldTable.isSelectedLast());
+			}
 		});
 	}
 
