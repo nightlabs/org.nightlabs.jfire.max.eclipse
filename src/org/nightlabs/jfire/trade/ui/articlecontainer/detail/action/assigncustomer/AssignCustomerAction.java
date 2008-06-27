@@ -1,40 +1,47 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer;
 
-import javax.security.auth.login.LoginException;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.widgets.Event;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 
 public class AssignCustomerAction
 extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
-		String owner =null;		
 		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
 
 		if (editor == null || editor.getArticleContainerEditorComposite().getArticleContainer() == null)
 			return false;
+		
+		
 		ArticleContainerID articleContainerID = editor.getArticleContainerEditorComposite().getArticleContainerID();
-		try {
-			owner = Login.getLogin().getOrganisationID();
-		} catch (LoginException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard		 
-
-		String vendor = editor.getArticleContainerEditorComposite().getArticleContainer().getVendor().getAnchorID();
-		if (!(articleContainerID instanceof OrderID) ||!vendor.equals(owner))
+		if (!(articleContainerID instanceof OrderID))
 			return false;
-
+		
+		AnchorID localOrgID = AnchorID.create(
+				SecurityReflector.getUserDescriptor().getOrganisationID(), 
+				OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, 
+				OrganisationLegalEntity.class.getName());
+		
+		if (!localOrgID.equals(
+				JDOHelper.getObjectId(
+						editor.getArticleContainerEditorComposite().getArticleContainer().getVendor()))) 
+		{
+			return false;
+		}
+		
 		return true;
 	}
 
