@@ -30,6 +30,7 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -44,14 +45,17 @@ import org.nightlabs.base.ui.composite.InheritanceToggleButton;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.ILegalEntityValueChangedListener;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.LegalEntityEditComposite;
 import org.nightlabs.progress.ProgressMonitor;
@@ -166,9 +170,20 @@ extends DynamicPathWizardPage
 					public void legalEntityValueChanged()
 					{
 
-						inheritButtonVendor.setSelection(false);
-						// if value has changed
-						originEntityVendor = getVendorEntity();
+						String VendorOrgId = vendorEditComposite.getLegalEntity().getOrganisationID();
+						if (!VendorOrgId.equals(SecurityReflector.getUserDescriptor().getOrganisationID()) && (vendorEditComposite.getLegalEntity() instanceof OrganisationLegalEntity))
+						{
+							MessageDialog.openError(RCPUtil.getActiveShell(),"can't assign a Foreign OrganisationLegalEntity", "you Cannot assign a foreign OrganisationLegalEntity as vendor of a ProductType!");
+							//	revert to original value						
+							vendorEditComposite.setLegalEntity(originEntityVendor);
+						}
+						else
+						{			
+							inheritButtonVendor.setSelection(false);
+							// if value has changed
+							originEntityVendor = getVendorEntity();
+						}
+
 					}
 				});
 
