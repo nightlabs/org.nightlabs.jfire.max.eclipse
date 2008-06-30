@@ -143,6 +143,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	public ProductTypeNamePage getProductTypeNamePage()
 	{
 		return productTypeNamePage;
+
 	}
 
 
@@ -211,15 +212,9 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 						StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
 								SimpleProductType.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE, subMonitor);
 						newProductType.getPropertySet().setStructLocalAttributes(struct);
+						if(ownerVendorPage.isPageComplete())
+							ownerVendorPage.configureProductType(newProductType);
 
-
-						if(ownerVendorPage.getWasDisplayed())
-						{
-							newProductType.setOwner(ownerVendorPage.getOwnerEntity());
-							newProductType.setVendor(ownerVendorPage.getVendorEntity());						
-							newProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
-							newProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
-						}
 						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);
 						//						newProductType = getSimpleTradeManager().storeProductType(
 //						newProductType, true,
