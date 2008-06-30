@@ -102,6 +102,8 @@ extends DynamicPathWizard
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
 
+		if(ownerVendorPage.isPageComplete())
+			ownerVendorPage.configureProductType(voucherType);		
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			@Implement
@@ -137,14 +139,6 @@ extends DynamicPathWizard
 						throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 					}
 
-					if(ownerVendorPage.getWasDisplayed())
-					{
-						vt.setOwner(ownerVendorPage.getOwnerEntity());
-						vt.setVendor(ownerVendorPage.getVendorEntity());						
-						vt.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
-						vt.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
-						// and store it again with the correct LocalAccountantDelegate
-					}
 					vm.storeVoucherType(vt, false, null, 1);
 
 //					// remove this DEBUG stuff - this can now be done by the editor afterwards - still I keep it commented here ;-) Marco.
