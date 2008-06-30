@@ -23,6 +23,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssueManager;
 import org.nightlabs.jfire.issue.IssueManagerUtil;
 import org.nightlabs.jfire.issue.IssueType;
@@ -45,8 +46,9 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection {
-
+public class IssueTypeAndStateSection 
+extends AbstractIssueEditorGeneralSection 
+{
 	private Label issueTypeLabel;
 	private Label statusLabel;
 
@@ -113,7 +115,10 @@ public class IssueTypeAndStateSection extends AbstractIssueEditorGeneralSection 
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, 
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
 		IssueType.FETCH_GROUP_NAME,
+		IssueLocal.FETCH_GROUP_STATE,
+		IssueLocal.FETCH_GROUP_STATES,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME};
 
