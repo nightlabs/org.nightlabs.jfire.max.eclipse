@@ -129,7 +129,8 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		@Override
 		public void run() {
 			final IssueFileAttachment issueFileAttachment = issueFileAttachmentComposite.getSelectedIssueFileAttachment();
-
+			if (issueFileAttachment == null)
+				return; // Do nothing if nothing selected.
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
