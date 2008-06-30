@@ -129,11 +129,13 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 					issue.setAssignee(assigneeUser);
 					assigneeTextLabel.setText(issue.getAssignee().getName());
 					
-					if (!issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
-						if (IssueTypeAndStateSection.assignInPossibleTransition(issue, new NullProgressMonitor()))
-							page.getIssueTypeAndStateSection().signalAssign();
-					}
+					//disabled for the 0.9.4 release.
+//					if (!issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
+//						if (IssueTypeAndStateSection.assignInPossibleTransition(issue, new NullProgressMonitor()))
+//							page.getIssueTypeAndStateSection().signalAssign();
+//					}
 				}
+				markDirty();
 			}//if
 		}		
 	}

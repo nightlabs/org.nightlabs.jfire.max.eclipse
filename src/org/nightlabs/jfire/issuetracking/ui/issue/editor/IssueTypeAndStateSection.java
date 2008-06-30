@@ -85,20 +85,20 @@ extends AbstractIssueEditorGeneralSection
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
-				if (assignInPossibleTransition(getIssue(), new NullProgressMonitor())) {
-					if (getIssue().getAssignee() == null) {
-						if (!isDirty()) {
-							UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
-							int returnCode = userSearchDialog.open();
-							if (returnCode == Dialog.OK) {
-								User assigneeUser = userSearchDialog.getSelectedUser();
-								if (assigneeUser != null) {
-									getIssue().setAssignee(assigneeUser);
-								}
-							}//if							
-						}
-					}
-				}
+//				if (assignInPossibleTransition(getIssue(), new NullProgressMonitor())) {
+//					if (getIssue().getAssignee() == null) {
+//						if (!isDirty()) {
+//							UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+//							int returnCode = userSearchDialog.open();
+//							if (returnCode == Dialog.OK) {
+//								User assigneeUser = userSearchDialog.getSelectedUser();
+//								if (assigneeUser != null) {
+//									getIssue().setAssignee(assigneeUser);
+//								}
+//							}//if							
+//						}
+//					}
+//				}
 
 				commit(true);
 				signalIssue(event);
@@ -188,7 +188,8 @@ extends AbstractIssueEditorGeneralSection
 		Transition.FETCH_GROUP_NAME
 	};
 
-	public static boolean assignInPossibleTransition(Issue issue, ProgressMonitor monitor) {
+	//disabled for the 0.9.4 release
+	/*public static boolean assignInPossibleTransition(Issue issue, ProgressMonitor monitor) {
 		State state = issue.getStatableLocal().getState();
 		StateID stateID = (StateID) JDOHelper.getObjectId(state);
 
@@ -202,5 +203,5 @@ extends AbstractIssueEditorGeneralSection
 			}
 		}
 		return false;
-	}
+	}*/
 }
