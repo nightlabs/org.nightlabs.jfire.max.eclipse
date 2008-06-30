@@ -18,6 +18,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor;
@@ -31,6 +32,7 @@ public class CreateVoucherTypeWizard
 extends DynamicPathWizard
 {
 	private ProductTypeID parentVoucherTypeID;
+	private OwnerVendorPage ownerVendorPage;
 
 	public CreateVoucherTypeWizard(ProductTypeID parentVoucherTypeID)
 	{
@@ -54,6 +56,9 @@ extends DynamicPathWizard
 
 		selectLocalAccountantDelegatePage = new SelectLocalAccountantDelegatePage(parentVoucherTypeID);
 		addPage(selectLocalAccountantDelegatePage);
+
+		ownerVendorPage = new OwnerVendorPage(parentVoucherTypeID);
+		addPage(ownerVendorPage);	
 	}
 
 	private static String[] FETCH_GROUPS_PARENT_VOUCHER_TYPE = {
@@ -82,19 +87,19 @@ extends DynamicPathWizard
 		voucherType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
 		switch (selectVoucherPriceConfigPage.getMode()) {
-			case INHERIT:
-				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getInheritedPriceConfig());
-				break;
-			case CREATE:
-				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.createPriceConfig());
-				voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
-				break;
-			case SELECT:
-				voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getSelectedPriceConfig());
-				voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
-				break;
-			default:
-				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
+		case INHERIT:
+			voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getInheritedPriceConfig());
+			break;
+		case CREATE:
+			voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.createPriceConfig());
+			voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
+			break;
+		case SELECT:
+			voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getSelectedPriceConfig());
+			voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
+			break;
+		default:
+			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
@@ -111,36 +116,43 @@ extends DynamicPathWizard
 									ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 									ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
 									ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE },
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					final ProductTypeID voucherTypeID = (ProductTypeID) JDOHelper.getObjectId(vt);
 
 					// We cannot access the ProductTypeLocal before it has been stored. Hence, we unfortunately, need to set it after we already stored it.
 					// Alternatively, we could later pass the localAccountantDelegate to the store-method...
 					switch (selectLocalAccountantDelegatePage.getMode()) {
-						case INHERIT:
-							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getInheritedLocalAccountantDelegate());
-							break;
-						case CREATE:
-							vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
-							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.createVoucherLocalAccountantDelegate());
-							break;
-						case SELECT:
-							vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
-							vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getSelectedLocalAccountantDelegate());
-							break;
-						default:
-							throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
+					case INHERIT:
+						vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getInheritedLocalAccountantDelegate());
+						break;
+					case CREATE:
+						vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
+						vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.createVoucherLocalAccountantDelegate());
+						break;
+					case SELECT:
+						vt.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
+						vt.getProductTypeLocal().setLocalAccountantDelegate(selectLocalAccountantDelegatePage.getSelectedLocalAccountantDelegate());
+						break;
+					default:
+						throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 					}
 
-					// and store it again with the correct LocalAccountantDelegate
+					if(ownerVendorPage.getWasDisplayed())
+					{
+						vt.setOwner(ownerVendorPage.getOwnerEntity());
+						vt.setVendor(ownerVendorPage.getVendorEntity());						
+						vt.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
+						vt.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
+						// and store it again with the correct LocalAccountantDelegate
+					}
 					vm.storeVoucherType(vt, false, null, 1);
 
 //					// remove this DEBUG stuff - this can now be done by the editor afterwards - still I keep it commented here ;-) Marco.
 //					StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //					sm.setProductTypeStatus_published(voucherTypeID, false, null, 1);
 //					if (ProductType.INHERITANCE_NATURE_LEAF == voucherType.getInheritanceNature()) {
-//						sm.setProductTypeStatus_confirmed(voucherTypeID, false, null, 1);
-//						sm.setProductTypeStatus_saleable(voucherTypeID, true, false, null, 1);
+//					sm.setProductTypeStatus_confirmed(voucherTypeID, false, null, 1);
+//					sm.setProductTypeStatus_saleable(voucherTypeID, true, false, null, 1);
 //					}
 //					// end DEBUG stuff
 
