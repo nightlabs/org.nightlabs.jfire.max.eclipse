@@ -23,6 +23,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -30,7 +31,7 @@ public class CreateDynamicProductTypeWizard
 extends DynamicPathWizard
 {
 	private ProductTypeID parentProductTypeID;
-	
+	private OwnerVendorPage ownerVendorPage;
 	private static String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME,
@@ -43,7 +44,7 @@ extends DynamicPathWizard
 	{
 		if (parentProductTypeID == null)
 			throw new IllegalArgumentException("parentProductTypeID must not be null.");
-		
+
 		this.parentProductTypeID = parentProductTypeID;
 	}
 
@@ -54,6 +55,10 @@ extends DynamicPathWizard
 	{
 		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentProductTypeID);
 		addPage(dynamicProductTypeNamePage);
+
+		ownerVendorPage = new OwnerVendorPage(parentProductTypeID);
+		addPage(ownerVendorPage);
+
 	}
 
 	@Override
@@ -61,7 +66,7 @@ extends DynamicPathWizard
 	{
 		ProductType parentProductType = ProductTypeDAO.sharedInstance().getProductType(
 				parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // TODO async!
-		
+
 		final DynamicProductType dynamicProductType = new DynamicProductType(
 				IDGenerator.getOrganisationID(),
 				ObjectIDUtil.makeValidIDString(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer().getText()) + '_' + ProductType.createProductTypeID(),
@@ -71,6 +76,13 @@ extends DynamicPathWizard
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
 		dynamicProductType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
+		if(ownerVendorPage.getWasDisplayed())
+		{
+			dynamicProductType.setOwner(ownerVendorPage.getOwnerEntity());
+			dynamicProductType.setVendor(ownerVendorPage.getVendorEntity());						
+			dynamicProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
+			dynamicProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);		
+		}
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			@Implement
@@ -84,8 +96,8 @@ extends DynamicPathWizard
 //				StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 //				sm.setProductTypeStatus_published(dynamicProductTypeID, false, null, 1);
 //				if (ProductType.INHERITANCE_NATURE_LEAF == dynamicProductType.getInheritanceNature()) {
-//					sm.setProductTypeStatus_confirmed(dynamicProductTypeID, false, null, 1);
-//					sm.setProductTypeStatus_saleable(dynamicProductTypeID, true, false, null, 1);
+//				sm.setProductTypeStatus_confirmed(dynamicProductTypeID, false, null, 1);
+//				sm.setProductTypeStatus_saleable(dynamicProductTypeID, true, false, null, 1);
 //				}
 				// end DEBUG stuff
 
