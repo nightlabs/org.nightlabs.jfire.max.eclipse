@@ -38,7 +38,7 @@
    <extension
          point="org.nightlabs.base.ui.iofilter">
       <ioFilter
-            class="org.nightlabs.jfire.voucher.editor2d.ui.iofilter.VoucherXStreamFilter"
+            class="org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter"
             description="%voucherIOFilter.description"
             name="%voucherIOFilter.name">
          <fileExtension
