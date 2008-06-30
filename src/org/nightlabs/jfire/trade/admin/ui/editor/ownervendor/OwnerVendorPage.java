@@ -70,11 +70,10 @@ extends DynamicPathWizardPage
 	private LegalEntityEditComposite vendorEditComposite = null;
 	private InheritanceToggleButton inheritButtonOwner = null;
 	private InheritanceToggleButton inheritButtonVendor = null;
-	private Boolean wasDisplayed  = false;
-	
+	private boolean ownerInherited = false;
+	private boolean vendorInherited = false;
 	private LegalEntity originEntityOwner = null;
 	private LegalEntity originEntityVendor = null;
-
 
 	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
@@ -91,8 +90,41 @@ extends DynamicPathWizardPage
 	{
 		super(OwnerVendorPage.class.getName(), "Owner && Vendor"); //$NON-NLS-1$
 		this.setDescription("Please Define the Owner and Vendor"); //$NON-NLS-1$
-//		this.parentProductType = parentProductType;
 		this.parentProductTypeID = parentProductTypeID;
+		inilialize();
+	}
+
+	protected void inilialize() {
+
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.loadingProduct")) {  //$NON-NLS-1$
+			@Override
+			@Implement
+			protected IStatus run(ProgressMonitor monitor)
+			throws Exception
+			{
+				if (parentProductTypeID != null)
+					parentProductType = ProductTypeDAO.sharedInstance().getProductType(parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+
+				Display.getDefault().asyncExec(new Runnable()
+				{
+					public void run()
+					{
+						if (parentProductType != null)
+						{
+							originEntityOwner = parentProductType.getOwner();
+							originEntityVendor = parentProductType.getVendor();
+							ownerInherited = true;
+							vendorInherited = true;
+
+						}
+					}
+				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
+		job.schedule();	
 	}
 
 	public LegalEntityEditComposite getOwnerEditComposite() {
@@ -102,6 +134,32 @@ extends DynamicPathWizardPage
 	public LegalEntityEditComposite getVendorEditComposite() {
 		return vendorEditComposite;
 	}
+
+	@Override
+	public boolean isPageComplete() {	
+		if(!vendorInherited) 
+			if (originEntityVendor == null)
+				return false;
+
+		if(!ownerInherited) 
+			if (originEntityOwner == null)
+				return false;				
+
+		return true;
+	}
+
+	public void configureProductType(ProductType productType) 
+	{
+		if (originEntityVendor != null)
+			productType.setVendor(originEntityOwner);      
+
+		if (originEntityVendor != null)
+			productType.setOwner(originEntityOwner);
+
+		productType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(vendorInherited);
+		productType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(ownerInherited);
+	}
+
 
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
@@ -126,6 +184,7 @@ extends DynamicPathWizardPage
 					public void legalEntityValueChanged()
 					{
 						inheritButtonOwner.setSelection(false);
+						ownerInherited = inheritButtonOwner.getSelection();
 						// if value has changed
 						originEntityOwner = getOwnerEntity();
 					}
@@ -145,6 +204,7 @@ extends DynamicPathWizardPage
 						getOwnerEditComposite().setLegalEntity(originEntityOwner);
 				}
 
+				ownerInherited = inheritButtonOwner.getSelection();
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -179,6 +239,7 @@ extends DynamicPathWizardPage
 						else
 						{			
 							inheritButtonVendor.setSelection(false);
+							vendorInherited = inheritButtonVendor.getSelection();
 							// if value has changed
 							originEntityVendor = getVendorEntity();
 						}
@@ -199,44 +260,19 @@ extends DynamicPathWizardPage
 					if(originEntityVendor != null)
 						getVendorEditComposite().setLegalEntity(originEntityVendor);
 				}
+				vendorInherited = inheritButtonVendor.getSelection();
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
 		});
 
-		page.setFaded(true);
+		if (parentProductType != null)
+		{
+			getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
+			getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
+		}
 
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.loadingProduct")) {  //$NON-NLS-1$
-			@Override
-			@Implement
-			protected IStatus run(ProgressMonitor monitor)
-			throws Exception
-			{
-				if (parentProductTypeID != null)
-					parentProductType = ProductTypeDAO.sharedInstance().getProductType(parentProductTypeID, FETCH_GROUPS_PARENT_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-
-				Display.getDefault().asyncExec(new Runnable()
-				{
-					public void run()
-					{
-						page.setFaded(false);
-						if (parentProductType != null)
-						{
-							getOwnerEditComposite().setLegalEntity(parentProductType.getOwner());
-							getVendorEditComposite().setLegalEntity(parentProductType.getVendor());
-						}
-					}
-				});
-
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
-		job.schedule();
-
-		wasDisplayed  = true;
-		
 		return page;
 	}
 
@@ -250,7 +286,5 @@ extends DynamicPathWizardPage
 		return getVendorEditComposite().getLegalEntity();
 	}
 
-	public Boolean getWasDisplayed() {
-		return wasDisplayed;
-	}
+
 }
