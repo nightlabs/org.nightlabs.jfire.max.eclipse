@@ -618,13 +618,6 @@ gibt's nimmer - oder?! Marco.
             id="org.nightlabs.jfire.trade.ui.reportUseCase.deliveryNote"
             name="%reportUseCase.deliveryNote.name" reportLayoutType="JFireReportingTrade-Reporting-Delivery"/>
     </extension>
-    <extension point="org.nightlabs.jfire.reporting.ui.valueProviderGUIFactory">
-        <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.report.ValueProviderGUIFactoryLegalEntitySearch"/>
-        <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.invoice.report.ValueProviderGUIFactoryInvoiceByCustomer"/>
-        <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.offer.report.ValueProviderGUIFactoryOfferByCustomer"/>
-        <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.order.report.ValueProviderGUIFactoryOrderByCustomer"/>
-        <valueProviderGUIFactory class="org.nightlabs.jfire.trade.ui.overview.deliverynote.report.ValueProviderGUIFactoryDeliveryNoteByCustomer"/>
-    </extension>
     <extension point="org.nightlabs.base.ui.contributionItemSet">
         <contributionItem
               class="org.nightlabs.base.ui.search.SearchContributionItem"
