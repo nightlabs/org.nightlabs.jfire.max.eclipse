@@ -61,6 +61,7 @@ import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeEditorInput;
+import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -79,6 +80,15 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	private AbstractChooseGridPriceConfigPage selectPriceConfigPage;
 
 	private StoreManager _storeManager = null;
+
+	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
+		FetchPlan.DEFAULT,
+		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
+		ProductType.FETCH_GROUP_OWNER,
+		ProductType.FETCH_GROUP_VENDOR,
+		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
+	};
+
 	protected StoreManager getStoreManager()
 	throws ModuleException
 	{
@@ -135,13 +145,6 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		return productTypeNamePage;
 	}
 
-	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
-		FetchPlan.DEFAULT,
-		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
-		ProductType.FETCH_GROUP_OWNER,
-		ProductType.FETCH_GROUP_VENDOR,
-		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
-	};
 
 	@Override
 	@Implement
@@ -209,12 +212,16 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 								SimpleProductType.class, Struct.DEFAULT_SCOPE, StructLocal.DEFAULT_SCOPE, subMonitor);
 						newProductType.getPropertySet().setStructLocalAttributes(struct);
 
-						newProductType.setOwner(ownerVendorPage.getOwnerEntity());
-						newProductType.setVendor(ownerVendorPage.getVendorEntity());						
-						newProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
-						newProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
+
+						if(ownerVendorPage.getWasDisplayed())
+						{
+							newProductType.setOwner(ownerVendorPage.getOwnerEntity());
+							newProductType.setVendor(ownerVendorPage.getVendorEntity());						
+							newProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
+							newProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);
+						}
 						newProductType = getSimpleTradeManager().storeProductType(newProductType, true, null, 1);
-//						newProductType = getSimpleTradeManager().storeProductType(
+						//						newProductType = getSimpleTradeManager().storeProductType(
 //						newProductType, true,
 //						ProductTypeTreeNode.FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 						monitor.worked(1);
