@@ -76,13 +76,9 @@ extends DynamicPathWizard
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
 		dynamicProductType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
-		if(ownerVendorPage.getWasDisplayed())
-		{
-			dynamicProductType.setOwner(ownerVendorPage.getOwnerEntity());
-			dynamicProductType.setVendor(ownerVendorPage.getVendorEntity());						
-			dynamicProductType.getFieldMetaData(ProductType.FieldName.vendor).setValueInherited(false);
-			dynamicProductType.getFieldMetaData(ProductType.FieldName.owner).setValueInherited(false);		
-		}
+		if(ownerVendorPage.isPageComplete())
+			ownerVendorPage.configureProductType(dynamicProductType);
+
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			@Implement
