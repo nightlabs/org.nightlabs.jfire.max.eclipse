@@ -162,6 +162,13 @@ implements IReportEditorPage
 		outputCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
+				Map<String, Object> params = getReportParameters();
+				if (params == null) {
+					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
+					if (params == null)
+						return;
+				}
+				setReportParameters(params);
 				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			}
 		});
@@ -173,6 +180,13 @@ implements IReportEditorPage
 		localeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
+				Map<String, Object> params = getReportParameters();
+				if (params == null) {
+					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
+					if (params == null)
+						return;
+				}
+				setReportParameters(params);
 				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			}
 		});
@@ -244,10 +258,11 @@ implements IReportEditorPage
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
 			if (getReportParameters() == null) {
 				Map<String, Object> params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
-				if (params != null)
+				if (params != null) {
 					setReportParameters(params);
+					showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
+				}
 			}
-			showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			return true;
 		}
 		else
