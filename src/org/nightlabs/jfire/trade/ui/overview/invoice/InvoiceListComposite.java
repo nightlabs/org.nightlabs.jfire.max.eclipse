@@ -1,12 +1,18 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
@@ -15,6 +21,20 @@ import org.nightlabs.l10n.NumberFormatter;
 public class InvoiceListComposite
 extends AbstractArticleContainerListComposite<Invoice>
 {
+
+	/**
+	 * The fetch-groups this list composite needs to display invoices.
+	 */
+	public static final String[] FETCH_GROUPS_INVOICES = new String[] {
+		FetchPlan.DEFAULT,
+		Invoice.FETCH_GROUP_THIS_INVOICE,
+		Invoice.FETCH_GROUP_INVOICE_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		StateDefinition.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON
+	};
+	
 	public InvoiceListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
