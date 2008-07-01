@@ -50,9 +50,12 @@ public class PrintLayoutFromViewerAction extends Action {
 //							monitor
 //						);
 					
+					if (!PrintReportLayoutUtil.canPrint(reportViewerEditor.getPreparedRenderedReportLayout().getRenderedReportLayout().getHeader().getOutputFormat()))
+						return Status.OK_STATUS;
+					
 					PrintReportLayoutUtil.printReportLayout(
 							reportViewerEditor.getReportRegistryItemID(),
-							new File(Util.urlToUri(reportViewerEditor.getPreparedRenderedReportLayout().getEntryFileAsURL())),
+							reportViewerEditor.getPreparedRenderedReportLayout().getEntryFile(),
 							monitor
 						);
 				} catch (Exception e) {
