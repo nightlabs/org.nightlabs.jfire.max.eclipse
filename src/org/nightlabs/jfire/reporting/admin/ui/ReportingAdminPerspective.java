@@ -63,6 +63,7 @@ public class ReportingAdminPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(PaletteView.ID);
 		layout.addShowViewShortcut(ID_ATTRIBUTE_VIEW);
+		layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
 		layout.addShowViewShortcut(ID_DATA_VIEW);
 //		layout.addShowViewShortcut( LibraryExplorerView.ID );
 		layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
@@ -91,7 +92,8 @@ public class ReportingAdminPerspective implements IPerspectiveFactory {
 		bottomLeft.addView(IPageLayout.ID_OUTLINE);
 
 		// Bottom right.
-		IFolderLayout bootomRight = layout.createFolder("bootomRight", IPageLayout.BOTTOM, (float) 0.66, editorArea); //$NON-NLS-1$
-		bootomRight.addView(ID_ATTRIBUTE_VIEW);
+		IFolderLayout bottomRight = layout.createFolder("bootomRight", IPageLayout.BOTTOM, (float) 0.66, editorArea); //$NON-NLS-1$
+		bottomRight.addView(ID_ATTRIBUTE_VIEW);
+		bottomRight.addView(IPageLayout.ID_PROP_SHEET);
 	}
 }
