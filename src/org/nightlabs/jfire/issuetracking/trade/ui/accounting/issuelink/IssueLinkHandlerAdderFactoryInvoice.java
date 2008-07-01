@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.accounting.issuelink;
 
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
@@ -12,7 +13,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 public class IssueLinkHandlerAdderFactoryInvoice 
 extends AbstractIssueLinkHandlerFactory
 {
-	public IssueLinkAdder createIssueLinkAdder() {
+	public IssueLinkAdder createIssueLinkAdder(Issue issue) {
 		IssueLinkAdder adder = new IssueLinkAdderInvoice();
 		adder.init(this);
 		

@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
@@ -12,7 +13,7 @@ import org.nightlabs.jfire.trade.Order;
 public class IssueLinkHandlerAdderFactoryOrder 
 extends AbstractIssueLinkHandlerFactory
 {
-	public IssueLinkAdder createIssueLinkAdder() {
+	public IssueLinkAdder createIssueLinkAdder(Issue issue) {
 		IssueLinkAdder adder = new IssueLinkAdderOrder();
 		adder.init(this);
 		
