@@ -25,6 +25,9 @@ import org.nightlabs.l10n.NumberFormatter;
 public class OfferListComposite
 extends AbstractArticleContainerListComposite<Offer>
 {
+	/**
+	 * The fetch-groups this list composite needs to display offers.
+	 */
 	public static final String[] FETCH_GROUPS_OFFER = {
 		FetchPlan.DEFAULT,
 		Offer.FETCH_GROUP_CREATE_USER,
@@ -34,6 +37,7 @@ extends AbstractArticleContainerListComposite<Offer>
 		Offer.FETCH_GROUP_PRICE,
 		Offer.FETCH_GROUP_FINALIZE_USER,
 		Offer.FETCH_GROUP_OFFER_LOCAL,
+		Offer.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON,
