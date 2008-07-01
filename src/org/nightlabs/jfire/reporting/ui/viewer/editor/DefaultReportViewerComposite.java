@@ -124,7 +124,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	private static ThreadDeathWorkaround threadDeathWorkaround = new ThreadDeathWorkaround();
 	
 	public DefaultReportViewerComposite(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		stack = new Composite(this, SWT.NONE);
 		stack.setLayoutData(new GridData(GridData.FILL_BOTH));
 		stackLayout = new StackLayout();
@@ -230,48 +230,35 @@ public class DefaultReportViewerComposite extends XComposite {
 		if (format == OutputFormat.pdf && cfMod.isUseAcrobatJavaBeanForPDFs()) {
 			stackLayout.topControl = awtWrapper;
 			threadDeathWorkaround.registerComposite(this);
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						if (viewer == null) {
-							viewer = new Viewer(new String[]{
-								ViewerCommand.OpenURL_K,
-								ViewerCommand.Open_K,
-								ViewerCommand.Print_K,
-								ViewerCommand.PrintSetup_K
-							});
-							awtFrame.add(viewer, BorderLayout.CENTER);
-							viewer.activate();
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						try {
+							if (viewer == null) {
+								viewer = new Viewer(new String[]{
+									ViewerCommand.OpenURL_K,
+									ViewerCommand.Open_K,
+									ViewerCommand.Print_K,
+									ViewerCommand.PrintSetup_K
+								});
+								awtFrame.add(viewer, BorderLayout.CENTER);
+								viewer.activate();
+							}
+							viewer.setDocumentURL(preparedLayout.getEntryFileAsURL().toString());
+						} catch (Exception e) {
+							throw new RuntimeException(e);
 						}
-						viewer.setDocumentURL(preparedLayout.getEntryFileAsURL().toString());
-						
-//						awtFrame.repaint();
-//						awtFrame.doLayout();
-						awtFrame.pack();
-//						viewer.repaint();
-//						viewer.doLayout();
-					} catch (Exception e) {
-						throw new RuntimeException(e);
 					}
-				}
-			});
-//			awtWrapper.redraw();
-//			awtWrapper.update();
+				});
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 		else {
 			// Use the browser widget as default for all other
 			stackLayout.topControl = browser;
 			browser.setUrl(preparedLayout.getEntryFileAsURL().toString());
 		}
-//		Composite parent = awtWrapper;
-//		parent.setSize(parent.computeSize(0, 0));
-//		do {
-//			parent.layout(true, true);
-//			parent.redraw();
-//			parent.update();
-//			parent = parent.getParent();
-//		} while (parent != null);
-//		stack.layout(true, true);
 		if (errorLink != null && !errorLink.isDisposed()) {
 			errorLink.dispose();
 		}
@@ -294,7 +281,9 @@ public class DefaultReportViewerComposite extends XComposite {
 				).getImage()
 			);
 		}
-		this.layout(true, true);
+		// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
+		stackLayout.marginHeight = 1;
+		stack.layout(true, true);
 	}
 	
 	public PreparedRenderedReportLayout getPreparedLayout() {

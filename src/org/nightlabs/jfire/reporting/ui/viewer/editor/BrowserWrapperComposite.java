@@ -25,7 +25,7 @@ public class BrowserWrapperComposite extends XComposite {
 	 * @param style
 	 */
 	public BrowserWrapperComposite(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 	}
 	
 	public void setUrl(String url) {
