@@ -100,7 +100,6 @@ implements CombiTransferWizard
 			throw new IllegalArgumentException("Invalid transferMode! Must be one of: TRANSFER_MODE_PAYMENT, TRANSFER_MODE_DELIVERY, TRANSFER_MODE_BOTH"); //$NON-NLS-1$
 
 		this.transferMode = transferMode;
-		this.side = side;
 		setNeedsProgressMonitor(true);
 	}
 

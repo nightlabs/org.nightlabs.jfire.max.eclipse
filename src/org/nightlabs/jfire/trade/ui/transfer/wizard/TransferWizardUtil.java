@@ -343,6 +343,10 @@ public class TransferWizardUtil
 			if (article.isReversing() != reversing)
 				continue;
 
+			// https://www.jfire.org/modules/bugs/view.php?id=751 : only allocated articles should be paid / delivered
+			if (!article.isAllocated())
+				continue;
+
 			ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(
 					article.getProductType());
 
