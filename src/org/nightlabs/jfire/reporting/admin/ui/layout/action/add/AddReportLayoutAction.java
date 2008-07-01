@@ -28,10 +28,16 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.action.add;
 
 import java.util.Collection;
 
+import javax.jdo.FetchPlan;
+import javax.jdo.JDODetachedFieldAccessException;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
+import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -69,23 +75,32 @@ public class AddReportLayoutAction extends ReportRegistryItemAction {
 		super(text, style);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.ReportRegistryItemAction#run(org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItem)
-	 */
-	public @Override void run(Collection<ReportRegistryItem> reportRegistryItems) {
-		if (reportRegistryItems.size() == 1)
-			AddReportLayoutWizard.show(reportRegistryItems.iterator().next());
+	@Override
+	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
+		if (registryItems.size() != 1)
+			return false;
+		ReportRegistryItem item = registryItems.iterator().next();
+		if (item instanceof ReportLayout) {
+			try {
+				item.getParentCategoryID();
+			} catch (JDODetachedFieldAccessException e) {
+				// can't access parent category
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
-	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
-		if (registryItems.isEmpty() || (registryItems.size() != 1))
-			return false;
-		ReportRegistryItem registryItem = registryItems.iterator().next();
-		
-		if (registryItem instanceof ReportCategory)
-			return true;
-		return false;
+	public void run(Collection<ReportRegistryItem> reportRegistryItems) {		
+		if (reportRegistryItems.size() != 1)
+			return;
+		ReportRegistryItem item = reportRegistryItems.iterator().next();
+		if (!(item instanceof ReportCategory)) {
+			item = ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(
+					item.getParentCategoryID(), new String[] {FetchPlan.DEFAULT}, new NullProgressMonitor());
+		}
+		AddReportLayoutWizard.show(item);
 	}
-
+	
 }
