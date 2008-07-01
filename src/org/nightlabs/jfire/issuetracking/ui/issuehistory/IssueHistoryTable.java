@@ -11,6 +11,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -75,16 +76,14 @@ extends AbstractTableComposite<IssueHistory>
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
-		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Date");
-		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Action");
-		layout.addColumnData(new ColumnWeightData(30));
 
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30});
 		table.setLayout(layout);
 	}
 

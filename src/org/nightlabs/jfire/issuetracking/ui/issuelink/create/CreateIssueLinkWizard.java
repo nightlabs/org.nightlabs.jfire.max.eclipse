@@ -52,7 +52,7 @@ extends DynamicPathWizard
 				if (selectIssueLinkHandlerFactoryPage.getIssueLinkHandlerFactory() == null)
 					issueLinkAdder = null;
 				else
-					issueLinkAdder = selectIssueLinkHandlerFactoryPage.getIssueLinkHandlerFactory().createIssueLinkAdder();
+					issueLinkAdder = selectIssueLinkHandlerFactoryPage.getIssueLinkHandlerFactory().createIssueLinkAdder(issue);
 				
 				selectLinkedObjectPage.setIssueLinkAdder(issueLinkAdder);
 				selectIssueLinkTypePage.setIssueLinkAdder(issueLinkAdder);

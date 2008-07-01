@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -20,7 +21,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class DefaultIssueLinkHandlerFactory 
 implements IssueLinkHandlerFactory 
 {
-	public IssueLinkAdder createIssueLinkAdder() {
+	public IssueLinkAdder createIssueLinkAdder(Issue issue) {
 		return null;
 	}
 

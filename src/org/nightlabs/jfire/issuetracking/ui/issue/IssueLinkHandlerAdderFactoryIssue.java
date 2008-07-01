@@ -12,8 +12,8 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 public class IssueLinkHandlerAdderFactoryIssue 
 extends AbstractIssueLinkHandlerFactory
 {
-	public IssueLinkAdder createIssueLinkAdder() {
-		IssueLinkAdder adder = new IssueLinkAdderIssue();
+	public IssueLinkAdder createIssueLinkAdder(Issue issue) {
+		IssueLinkAdder adder = new IssueLinkAdderIssue(issue);
 		adder.init(this);
 		
 		return adder;

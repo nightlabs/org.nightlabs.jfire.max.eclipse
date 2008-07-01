@@ -74,7 +74,11 @@ implements ISelectionProvider
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
-				getContainer().showPage(getNextPage());
+				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
+				if (firstElement instanceof IssueLinkHandlerFactory)
+					getContainer().showPage(getNextPage());
+				else 
+					treeViewer.expandToLevel(firstElement, 1);
 			}
 		});
 		

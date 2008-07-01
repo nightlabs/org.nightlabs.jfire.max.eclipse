@@ -31,7 +31,12 @@ public class IssueLinkAdderIssue
 extends AbstractIssueLinkAdder 
 {
 	private IssueEntryListViewer iViewer;
-
+	private Issue issue;
+	
+	public IssueLinkAdderIssue(Issue issue) {
+		this.issue = issue;
+	}
+	
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		iViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
