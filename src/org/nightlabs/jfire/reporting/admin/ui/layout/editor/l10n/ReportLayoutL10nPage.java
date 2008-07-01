@@ -375,6 +375,6 @@ implements IReportEditorPage, IReportLayoutL10nManager
 
 	@SuppressWarnings("unchecked")
 	public Collection<Locale> getBundleLocales() {
-		return getResourceManager() != null ? getResourceManager().getLocales() : null;
+		return getResourceManager() != null ? new ArrayList<Locale>(getResourceManager().getLocales()) : null;
 	}
 }
