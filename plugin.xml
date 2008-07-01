@@ -113,8 +113,10 @@
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUser$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUICurrentUser$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUsers$Factory"/>
+      <!--
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUserGroup$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIUserGroups$Factory"/>
+      -->
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIOrganisation$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIOrganisations$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.ui.parameter.guifactory.jfireobjects.ValueProviderGUIWorkstation$Factory"/>
