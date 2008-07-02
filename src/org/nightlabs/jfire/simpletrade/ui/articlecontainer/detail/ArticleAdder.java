@@ -141,7 +141,7 @@ public class ArticleAdder extends AbstractArticleAdder
 
 		tariffPricePairs = null;
 		try {
-			if (productType.getPackagePriceConfig() != null && customerGroup != null && currency != null) {
+			if (productType != null && productType.getPackagePriceConfig() != null && customerGroup != null && currency != null) {
 				tariffPricePairs = TariffPricePairDAO.sharedInstance().getTariffPricePairs(
 						(PriceConfigID) JDOHelper.getObjectId(productType.getPackagePriceConfig()),
 						(CustomerGroupID)JDOHelper.getObjectId(customerGroup),
