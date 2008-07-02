@@ -1002,6 +1002,9 @@ gibt's nimmer - oder?! Marco.
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.loginstatelistener">
         <loginStateListener class="org.nightlabs.jfire.trade.ui.LoginStateListenerForQuickSalePerspective"/>
+        <loginStateListener
+              class="org.nightlabs.jfire.trade.ui.LoginStateListenerForProductTypeSelection">
+        </loginStateListener>
     </extension>
     <extension point="org.nightlabs.jfire.base.ui.queryFilterComposite">
         <QueryFilter

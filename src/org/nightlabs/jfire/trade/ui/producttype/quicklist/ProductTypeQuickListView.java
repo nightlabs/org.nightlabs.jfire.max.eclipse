@@ -150,7 +150,7 @@ implements ISelectionProvider
 						ProductType.class, selectionListener);
 
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
-						ProductType.class, notificationListenerArticleContainerSelected);
+						ArticleContainer.class, notificationListenerArticleContainerSelected);
 			}
 		});
 		refresh();
