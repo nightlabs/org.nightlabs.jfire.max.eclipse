@@ -58,6 +58,11 @@ extends AbstractIssueLinkAdder
 		return dViewer.getComposite();
 	}
 
+	@Override
+	protected void doSearch() {
+		dViewer.search();
+	}
+	
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
 		for(Object o : dViewer.getListComposite().getSelectedElements()) {

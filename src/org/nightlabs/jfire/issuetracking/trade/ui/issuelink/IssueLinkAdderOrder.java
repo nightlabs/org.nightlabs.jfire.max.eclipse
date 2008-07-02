@@ -55,6 +55,11 @@ extends AbstractIssueLinkAdder
 		return oViewer.getComposite();
 	}
 
+	@Override
+	protected void doSearch() {
+		oViewer.search();
+	}
+	
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Set<ObjectID> result = new HashSet<ObjectID>();
 		Collection<Order> elements = oViewer.getListComposite().getSelectedElements();

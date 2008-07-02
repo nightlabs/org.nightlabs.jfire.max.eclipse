@@ -45,7 +45,7 @@ extends AbstractIssueLinkAdder
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
-				
+
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						fireSelectionChangedEvent();
@@ -53,9 +53,14 @@ extends AbstractIssueLinkAdder
 				});
 			}
 		};
-		
+
 		rViewer.createComposite(parent);
 		return rViewer.getComposite();
+	}
+
+	@Override
+	protected void doSearch() {
+		rViewer.search();
 	}
 
 	public Set<ObjectID> getLinkedObjectIDs() {
@@ -72,17 +77,17 @@ extends AbstractIssueLinkAdder
 
 		return !rViewer.getListComposite().getSelectedElements().isEmpty();
 	}
-	
+
 	@Override
 	public Set<IssueLink> createIssueLinks(
 			Issue issue,
 			IssueLinkType issueLinkType,
 			ProgressMonitor monitor)
-	{
+			{
 		Set<IssueLink> issueLinks = new HashSet<IssueLink>();
 		for (ReceptionNote linkedReceptionNote : rViewer.getListComposite().getSelectedElements()) {
 			issueLinks.add(issue.createIssueLink(issueLinkType, (ObjectID)JDOHelper.getObjectId(linkedReceptionNote), ReceptionNote.class));
 		}
 		return issueLinks;
-	}
+			}
 }
