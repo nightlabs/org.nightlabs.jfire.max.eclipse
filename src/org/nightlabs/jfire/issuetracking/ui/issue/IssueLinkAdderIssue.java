@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -56,9 +58,15 @@ extends AbstractIssueLinkAdder
 				});
 			}
 		};
-		
+
 		iViewer.createComposite(parent);
-		iViewer.search();
+		
+		iViewer.getIssueTable().getTableViewer().addFilter(new ViewerFilter() {
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return !element.equals(issue);
+			}
+		});
+		
 		return iViewer.getComposite();
 	}
 
@@ -66,6 +74,7 @@ extends AbstractIssueLinkAdder
 	protected void doSearch() {
 		iViewer.search();
 	}
+	
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
 		return NLJDOHelper.getObjectIDSet(elements);
