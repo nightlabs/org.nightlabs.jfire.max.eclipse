@@ -39,6 +39,7 @@ implements IssueLinkAdder
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
 		composite = doCreateComposite(parent);
+		doSearch();
 		
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
@@ -61,6 +62,8 @@ implements IssueLinkAdder
 	 */
 	protected abstract Composite doCreateComposite(Composite parent);
 	
+	protected abstract void doSearch();
+
 	public void dispose()
 	{
 		if (composite != null)

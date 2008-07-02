@@ -58,9 +58,14 @@ extends AbstractIssueLinkAdder
 		};
 		
 		iViewer.createComposite(parent);
+		iViewer.search();
 		return iViewer.getComposite();
 	}
 
+	@Override
+	protected void doSearch() {
+		iViewer.search();
+	}
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
 		return NLJDOHelper.getObjectIDSet(elements);
