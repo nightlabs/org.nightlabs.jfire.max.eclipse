@@ -35,6 +35,9 @@ public class TransferUtil
 			if (reversedArticle.getDeliveryNoteID() == null)
 				return false;
 		}
+
+		if (article.getDeliveryNoteID() != null)
+			return false;
 		
 		return true;
 	}
@@ -60,6 +63,9 @@ public class TransferUtil
 			if (reversedArticle.getInvoiceID() == null)
 				return false;
 		}
+
+		if (article.getInvoiceID() != null)
+			return false;
 		
 		return true;
 	}
