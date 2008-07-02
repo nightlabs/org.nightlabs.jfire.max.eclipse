@@ -666,25 +666,24 @@ extends XComposite
 			Runnable runnable = new Runnable() {
 				public void run()
 				{
-					if (articleChangeEvent.getDeletedArticles().isEmpty())
-						return;
-
-					Map<SegmentEdit, Collection<ArticleCarrier>> segmentEdit2DeletedArticleCarriers = new HashMap<SegmentEdit, Collection<ArticleCarrier>>();
-					for (ArticleCarrier articleCarrier : articleChangeEvent.getDeletedArticleCarriers()) {
-						String segmentPK = articleCarrier.getArticle().getSegment().getPrimaryKey();
-						SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(segmentPK);
-						Collection<ArticleCarrier> deletedArticleCarriers = segmentEdit2DeletedArticleCarriers.get(segmentEdit);
-						if (deletedArticleCarriers == null) {
-							deletedArticleCarriers = new ArrayList<ArticleCarrier>();
-							segmentEdit2DeletedArticleCarriers.put(segmentEdit, deletedArticleCarriers);
+					if (!articleChangeEvent.getDeletedArticles().isEmpty()) {
+						Map<SegmentEdit, Collection<ArticleCarrier>> segmentEdit2DeletedArticleCarriers = new HashMap<SegmentEdit, Collection<ArticleCarrier>>();
+						for (ArticleCarrier articleCarrier : articleChangeEvent.getDeletedArticleCarriers()) {
+							String segmentPK = articleCarrier.getArticle().getSegment().getPrimaryKey();
+							SegmentEdit segmentEdit = segmentPK2segmentEditMap.get(segmentPK);
+							Collection<ArticleCarrier> deletedArticleCarriers = segmentEdit2DeletedArticleCarriers.get(segmentEdit);
+							if (deletedArticleCarriers == null) {
+								deletedArticleCarriers = new ArrayList<ArticleCarrier>();
+								segmentEdit2DeletedArticleCarriers.put(segmentEdit, deletedArticleCarriers);
+							}
+							deletedArticleCarriers.add(articleCarrier);
 						}
-						deletedArticleCarriers.add(articleCarrier);
+
+						for (Map.Entry<SegmentEdit, Collection<ArticleCarrier>> me : segmentEdit2DeletedArticleCarriers.entrySet())
+							me.getKey().removeArticles(me.getValue());
 					}
 
-					for (Map.Entry<SegmentEdit, Collection<ArticleCarrier>> me : segmentEdit2DeletedArticleCarriers.entrySet())
-						me.getKey().removeArticles(me.getValue());
-
-					updateHeaderAndFooter();
+					updateHeaderAndFooter(); // the header + footer might iterate articles instead of using summary information => need to update whenever an article changes.
 				}
 			};
 
