@@ -291,22 +291,29 @@ implements IProductTypeQuickListFilter
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.loadQuery"), 100); //$NON-NLS-1$
 		if (queryCollection == null) 
 		{
-			BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
-					getQueryResultClass(), Login.sharedInstance().getUserObjectID(),
-					FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					new SubProgressMonitor(monitor, 50));
-			if (defaultQueryStore == null) {
-				VendorDependentQuery query = createQuery();
-				configureQuery(query);
-				queryCollection = new QueryCollection<VendorDependentQuery>(getQueryResultClass());
-				queryCollection.add(query);
-				User owner = Login.sharedInstance().getUser(new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new org.eclipse.core.runtime.NullProgressMonitor());				
-				defaultQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
-				defaultQueryStore.setDefaultQuery(true);
-				QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore, 
+			BaseQueryStore defaultQueryStore;
+			// TODO this should be done in the server in order to make it [nearly] impossible that 2 defaults are created!
+			synchronized (AbstractProductTypeQuickListFilter.class) { // prevent having 2 defaultQueryStores due to multiple threads
+				defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+						getQueryResultClass(), Login.sharedInstance().getUserObjectID(),
 						FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						false, new SubProgressMonitor(monitor, 50));
+						new SubProgressMonitor(monitor, 50));
+				if (defaultQueryStore == null) {
+					VendorDependentQuery query = createQuery();
+					configureQuery(query);
+					queryCollection = new QueryCollection<VendorDependentQuery>(getQueryResultClass());
+					queryCollection.add(query);
+					User owner = Login.sharedInstance().getUser(new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new org.eclipse.core.runtime.NullProgressMonitor());				
+					defaultQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
+					defaultQueryStore.setDefaultQuery(true);
+					if (logger.isDebugEnabled()) {
+						logger.debug("No default query store available, create one for resultClass = "+getQueryResultClass()+" and user "+Login.sharedInstance().getUserObjectID());
+					}
+					defaultQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore, 
+							FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							true, new SubProgressMonitor(monitor, 50));
+				}
 			}
 			if (queryCollection == null && defaultQueryStore != null) {
 				QueryCollection qc = defaultQueryStore.getQueryCollection();
