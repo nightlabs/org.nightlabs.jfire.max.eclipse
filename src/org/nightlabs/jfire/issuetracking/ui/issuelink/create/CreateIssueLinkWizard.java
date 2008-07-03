@@ -3,15 +3,20 @@ package org.nightlabs.jfire.issuetracking.ui.issuelink.create;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.JDOHelper;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.xml.NLDOMUtil;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -73,7 +78,14 @@ extends DynamicPathWizard
 		for(ObjectID linkedObjectID : linkedObjectIDs) {
 			IssueLinkTableItem linkedTableItem = new IssueLinkTableItem(linkedObjectID, issueLinkType);
 			issueLinkTableItems.add(linkedTableItem);
+			
+			boolean isExist = issueLinkTable.getIssueLinkTableItems().contains(linkedTableItem);
+			if (isExist) {
+				MessageDialog.openError(getShell(), "This link is already existed!!", "This " + issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass().getSimpleName() + " : " + linkedObjectID.toString() +  " with IssueLinkType = " + linkedTableItem.getIssueLinkType().getName().getText() + " is already existed."))
+				return false;
+			}
 		}
+		
 		issueLinkTable.addIssueLinkTableItems(issueLinkTableItems);
 		
 		return true;
