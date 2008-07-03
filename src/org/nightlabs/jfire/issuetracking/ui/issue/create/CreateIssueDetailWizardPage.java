@@ -12,10 +12,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
@@ -36,6 +38,7 @@ import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -58,6 +61,14 @@ extends WizardHopPage
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
+	private Button setFromDateTimeButton;
+	private Label fromDateTimeLabel;
+	private DateTimeControl fromDateTimeControl;
+	
+	private Button setToDateTimeButton;
+	private Label toDateTimeLabel;
+	private DateTimeControl toDateTimeControl;
+	
 	private IssueLabelProvider issueLabelProvider = new IssueLabelProvider();
 
 	//Used objects
@@ -177,7 +188,19 @@ extends WizardHopPage
 				issue.setIssuePriority(selectedIssuePriority);
 			}
 		});
+		
+		setFromDateTimeButton = new Button(mainComposite, SWT.CHECK);
+		fromDateTimeLabel = new Label(mainComposite, SWT.NONE);
+		fromDateTimeLabel.setText("From Date");
+		fromDateTimeControl = new DateTimeControl(mainComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+		fromDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		setToDateTimeButton = new Button(mainComposite, SWT.CHECK);
+		toDateTimeLabel = new Label(mainComposite, SWT.NONE);
+		toDateTimeLabel.setText("To Date");
+		toDateTimeControl = new DateTimeControl(mainComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		//Loading Data
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
