@@ -75,15 +75,28 @@ extends DynamicPathWizard
 		
 		Set<ObjectID> linkedObjectIDs = selectLinkedObjectPage.getLinkedObjectIDs();
 		Set<IssueLinkTableItem> issueLinkTableItems = new HashSet<IssueLinkTableItem>();
-		for(ObjectID linkedObjectID : linkedObjectIDs) {
+		
+		Set<IssueLinkTableItem> duplicatedItems = new HashSet<IssueLinkTableItem>();
+		
+		
+		for (ObjectID linkedObjectID : linkedObjectIDs) {
 			IssueLinkTableItem linkedTableItem = new IssueLinkTableItem(linkedObjectID, issueLinkType);
 			issueLinkTableItems.add(linkedTableItem);
 			
 			boolean isExist = issueLinkTable.getIssueLinkTableItems().contains(linkedTableItem);
 			if (isExist) {
-				MessageDialog.openError(getShell(), "This link is already existed!!", "This " + issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass().getSimpleName() + " : " + linkedObjectID.toString() +  " with IssueLinkType = " + linkedTableItem.getIssueLinkType().getName().getText() + " is already existed.");
-				return false;
+				duplicatedItems.add(linkedTableItem);
 			}
+		}
+		
+		if (duplicatedItems.size() != 0) {
+			StringBuffer errorMsg = new StringBuffer();
+			for (IssueLinkTableItem dItem : duplicatedItems) {
+				errorMsg.append(dItem.getLinkedObjectID().toString() + " with IssueLinkType=" + dItem.getIssueLinkType().getName().getText() + "\n\n");
+			}
+			
+			MessageDialog.openError(getShell(), "The following IssueLinks are already existed!!", errorMsg.toString());
+			return false;
 		}
 		
 		issueLinkTable.addIssueLinkTableItems(issueLinkTableItems);
