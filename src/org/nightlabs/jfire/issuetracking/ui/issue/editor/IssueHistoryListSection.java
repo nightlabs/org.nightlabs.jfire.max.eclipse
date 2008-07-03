@@ -22,7 +22,7 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = controller;
 		getSection().setText("Issue History");
-		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		
 //		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
