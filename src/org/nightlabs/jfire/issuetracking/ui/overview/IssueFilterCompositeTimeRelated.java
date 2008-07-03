@@ -85,11 +85,18 @@ public class IssueFilterCompositeTimeRelated
 		timeGroup.setLayout(gridLayout);
 		timeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(timeGroup, SWT.NONE).setText("Created Time: ");
+		Label createTimeLabel = new Label(timeGroup, SWT.NONE);
+		createTimeLabel.setText("Created Time: ");
+		createTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		
 		createdTimeEdit = new DateTimeEdit(
 				timeGroup,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
-				"From"); //$NON-NLS-1$
+				new Date(),
+				"From",
+				true);
+		createdTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
@@ -133,11 +140,18 @@ public class IssueFilterCompositeTimeRelated
 			}
 		});
 		
-		new Label(timeGroup, SWT.NONE).setText("Updated Time: ");
+		Label updatedTimeLabel = new Label(timeGroup, SWT.NONE);
+		updatedTimeLabel.setText("Updated Time: ");
+		updatedTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		
 		updatedTimeEdit = new DateTimeEdit(
 				timeGroup,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
-				"To"); //$NON-NLS-1$
+				new Date(),
+				"To",
+				true);
+		updatedTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));

@@ -76,25 +76,26 @@ public class IssueFilterCompositePeopleRelated
 	{
 		Group userGroup = new Group(parent, SWT.NONE);
 		userGroup.setText("People Related");
-		GridLayout gridLayout = new GridLayout(2, false);
-		gridLayout.verticalSpacing = 10;
+		GridLayout gridLayout = new GridLayout(4, false);
+//		gridLayout.verticalSpacing = 10;
 		userGroup.setLayout(gridLayout);
 		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label rLabel = new Label(userGroup, SWT.NONE);
 		rLabel.setText("Reporter: ");
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.CENTER;
-		rLabel.setLayoutData(gridData);
+//		GridData gridData = new GridData();
+//		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
+//		rLabel.setLayoutData(gridData);
 
-		XComposite rComposite = new XComposite(userGroup, SWT.NONE);
-		rComposite.setLayout(new GridLayout(2, false));
+//		XComposite rComposite = new XComposite(userGroup, SWT.NONE);
+//		rComposite.setLayout(new GridLayout(2, false));
+//		rComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		allReporterButton = new Button(rComposite, SWT.CHECK);
+		allReporterButton = new Button(userGroup, SWT.CHECK);
 		allReporterButton.setText("All");
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		allReporterButton.setLayoutData(gridData);
+//		gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.horizontalSpan = 2;
+//		allReporterButton.setLayoutData(gridData);
 		allReporterButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
@@ -105,11 +106,11 @@ public class IssueFilterCompositePeopleRelated
 			}
 		});
 
-		reporterText = new Text(rComposite, getBorderStyle());
+		reporterText = new Text(userGroup, getBorderStyle());
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		reporterButton = new Button(rComposite, SWT.PUSH);
+		reporterButton = new Button(userGroup, SWT.PUSH);
 		reporterButton.setText("...");
 
 		reporterButton.addSelectionListener(new SelectionAdapter(){
@@ -131,18 +132,19 @@ public class IssueFilterCompositePeopleRelated
 
 		Label aLabel = new Label(userGroup, SWT.NONE);
 		aLabel.setText("Assignee: ");
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.verticalAlignment = GridData.CENTER;
-		aLabel.setLayoutData(gridData);
+//		gridData = new GridData();
+//		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
+//		aLabel.setLayoutData(gridData);
 
-		XComposite aComposite = new XComposite(userGroup, SWT.NONE);
-		aComposite.setLayout(new GridLayout(2, false));
-
-		allAssigneeButton = new Button(aComposite, SWT.CHECK);
+//		XComposite aComposite = new XComposite(userGroup, SWT.NONE);
+//		aComposite.setLayout(new GridLayout(2, false));
+//		aComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		allAssigneeButton = new Button(userGroup, SWT.CHECK);
 		allAssigneeButton.setText("All");
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		allAssigneeButton.setLayoutData(gridData);
+//		gridData = new GridData(GridData.FILL_HORIZONTAL);
+//		gridData.horizontalSpan = 2;
+//		allAssigneeButton.setLayoutData(gridData);
 		allAssigneeButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
@@ -155,11 +157,11 @@ public class IssueFilterCompositePeopleRelated
 		});
 		allAssigneeButton.setSelection(true);
 
-		assigneeText = new Text(aComposite, getBorderStyle());
+		assigneeText = new Text(userGroup, getBorderStyle());
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		assigneeButton = new Button(aComposite, SWT.PUSH);
+		assigneeButton = new Button(userGroup, SWT.PUSH);
 		assigneeButton.setText("...");
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
