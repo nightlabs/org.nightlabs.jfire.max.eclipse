@@ -103,6 +103,7 @@
          point="org.nightlabs.jfire.base.ui.quickSearchEntry">
       <quickSearchEntryFactory
             class="org.nightlabs.jfire.issuetracking.ui.overview.search.IssueSubjectQuickSearchEntryFactory"
+            default="true"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer"
             name="Subject">
       </quickSearchEntryFactory>
