@@ -143,6 +143,8 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite {
 
 
 		public void modify(Object tableElement, String property, Object value) {
+			if (tableElement == null)
+				return;
 			Object element = ((TableItem)tableElement).getData();
 			if (element instanceof Map.Entry) {
 				String newVal = (String)value;

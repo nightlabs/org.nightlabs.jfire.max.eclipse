@@ -288,6 +288,8 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
             DesignSessionUtil.toDataSetParametersDesign( paramMd,
                     DesignSessionUtil.toParameterModeDesign( IParameterMetaData.parameterModeIn ) );
         
+        if (paramDesign == null)
+        	return;
         // no exception in conversion; go ahead and assign to specified dataSetDesign
         paramDesign.setDerivedMetaData( true );
         // TODO WORKAROUND
