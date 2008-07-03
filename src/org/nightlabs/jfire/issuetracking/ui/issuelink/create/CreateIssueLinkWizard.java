@@ -81,7 +81,7 @@ extends DynamicPathWizard
 			
 			boolean isExist = issueLinkTable.getIssueLinkTableItems().contains(linkedTableItem);
 			if (isExist) {
-				MessageDialog.openError(getShell(), "This link is already existed!!", "This " + issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass().getSimpleName() + " : " + linkedObjectID.toString() +  " with IssueLinkType = " + linkedTableItem.getIssueLinkType().getName().getText() + " is already existed."))
+				MessageDialog.openError(getShell(), "This link is already existed!!", "This " + issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass().getSimpleName() + " : " + linkedObjectID.toString() +  " with IssueLinkType = " + linkedTableItem.getIssueLinkType().getName().getText() + " is already existed.");
 				return false;
 			}
 		}
