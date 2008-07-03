@@ -27,7 +27,7 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 	private LegalEntity legalEntity;
 	private CustomerGroup defaultCustomerGroup;
 
-	private boolean additionalDataLoaded = true;
+//	private boolean additionalDataLoaded = true;
 
 	public ExtendedPersonSearchWizardPage(String quickSearchText) {
 		super(quickSearchText);
@@ -60,23 +60,42 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 		loadAdditionalDataJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.search.ExtendedPersonSearchWizardPage.job.loadingCustomerData")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				additionalDataLoaded = false;
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						legalEntity = null;
+						defaultCustomerGroup = null;
+						getContainer().updateButtons();
+					}
+				});
+//				additionalDataLoaded = false;
 
 				// do expensive work
-				LegalEntity legalEntity = null;
+				LegalEntity __legalEntity = null;
+				CustomerGroup __defaultCustomerGroup = null;
 				try {
 					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					if (selectedPerson != null) {
-						legalEntity = tradeManager.getLegalEntityForPerson(selectedPerson,
+						__legalEntity = tradeManager.getLegalEntityForPerson(selectedPerson,
 							new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP },
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 						);
 					}
+
+					CustomerGroupID defaultCustomerGroupID = CustomerGroupID.create(IDGenerator.getOrganisationID(), CustomerGroup.CUSTOMER_GROUP_ID_DEFAULT);
+					Collection<CustomerGroup> customerGroups = tradeManager.getCustomerGroups(Collections.singleton(defaultCustomerGroupID),
+							new String[] { CustomerGroup.FETCH_GROUP_THIS_CUSTOMER_GROUP },	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
+					if (customerGroups.isEmpty())
+						throw new IllegalStateException("DefaultCustomerGroup does not exist."); //$NON-NLS-1$
+
+					__defaultCustomerGroup = customerGroups.iterator().next();
+
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
 
-				final LegalEntity _legalEntity = legalEntity;
+				final LegalEntity _legalEntity = __legalEntity;
+				final CustomerGroup _defaultCustomerGroup = __defaultCustomerGroup;
 
 				final Job thisJob = this;
 				Display.getDefault().asyncExec(new Runnable() {
@@ -84,8 +103,9 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 						if (thisJob != loadAdditionalDataJob)
 							return;
 
-						additionalDataLoaded = true;
-						setLegalEntity(_legalEntity);
+//						additionalDataLoaded = true;
+						legalEntity = _legalEntity;
+						defaultCustomerGroup = _defaultCustomerGroup;
 						getContainer().updateButtons();
 
 						// give the gc the chance to collect already before we close the wizard (not important but nicer)
@@ -105,26 +125,26 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 		return loadAdditionalDataJob;
 	}
 
-	private void setLegalEntity(LegalEntity legalEntity) {
-		this.legalEntity = legalEntity;
-		if (legalEntity != null)
-			defaultCustomerGroup = legalEntity.getDefaultCustomerGroup();
-		else {
-			try {
-				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-				CustomerGroupID defaultCustomerGroupID = CustomerGroupID.create(IDGenerator.getOrganisationID(), CustomerGroup.CUSTOMER_GROUP_ID_DEFAULT);
-				Collection<CustomerGroup> customerGroups = tradeManager.getCustomerGroups(Collections.singleton(defaultCustomerGroupID),
-						new String[] { CustomerGroup.FETCH_GROUP_THIS_CUSTOMER_GROUP },	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
-				if (customerGroups.isEmpty())
-					throw new IllegalStateException("DefaultCustomerGroup does not exist."); //$NON-NLS-1$
-
-				defaultCustomerGroup = customerGroups.iterator().next();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
+//	private void setLegalEntity(LegalEntity legalEntity) {
+//		this.legalEntity = legalEntity;
+//		if (legalEntity != null)
+//			defaultCustomerGroup = legalEntity.getDefaultCustomerGroup();
+//		else {
+//			try {
+//				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//				CustomerGroupID defaultCustomerGroupID = CustomerGroupID.create(IDGenerator.getOrganisationID(), CustomerGroup.CUSTOMER_GROUP_ID_DEFAULT);
+//				Collection<CustomerGroup> customerGroups = tradeManager.getCustomerGroups(Collections.singleton(defaultCustomerGroupID),
+//						new String[] { CustomerGroup.FETCH_GROUP_THIS_CUSTOMER_GROUP },	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//
+//				if (customerGroups.isEmpty())
+//					throw new IllegalStateException("DefaultCustomerGroup does not exist."); //$NON-NLS-1$
+//
+//				defaultCustomerGroup = customerGroups.iterator().next();
+//			} catch (Exception e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
+//	}
 
 	public LegalEntity getSelectedLegalEntity() {
 		return legalEntity;
@@ -136,10 +156,9 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 
 	@Override
 	public boolean canFlipToNextPage() {
-		return additionalDataLoaded;
+		return legalEntity != null;
 	}
 
 	public void onAdditionalDataLoaded() {
-
 	}
 }
