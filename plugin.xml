@@ -2,6 +2,9 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="expressionProviderEntry" name="Expression Provider Entry" schema="schema/expressionProviderEntry.exsd"/>
+<!-- TODO: Removed for the 0.9.4 release: 
+  https://www.jfire.org/modules/bugs/view.php?id=729
+  https://www.jfire.org/modules/bugs/view.php?id=731          
    <extension
          point="org.eclipse.birt.report.designer.ui.odadatasource">
       <odaDataSourceUI id="org.nightlabs.jfire.reporting.oda.jdoql.JDOQLDriver">
@@ -23,6 +26,7 @@
                path="/"/>
       </odaDataSetUI>
    </extension>
+-->   
    <extension
          point="org.eclipse.ui.views">
       <view
