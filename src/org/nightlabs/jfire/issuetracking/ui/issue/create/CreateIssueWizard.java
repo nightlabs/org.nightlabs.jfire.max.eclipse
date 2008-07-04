@@ -10,11 +10,9 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
@@ -29,16 +27,11 @@ public class CreateIssueWizard
 extends DynamicPathWizard
 {
 	private Issue newIssue;
-	private ObjectID linkedObjectID;
+//	private ObjectID linkedObjectID;
 
 	private CreateIssueDetailWizardPage issueCreateGeneralWizardPage;
-	private CreateIssueOptionalWizardPage issueCreateDetailWizardPage;
+//	private CreateIssueOptionalWizardPage issueCreateDetailWizardPage;
 
-	/**
-	 * Launch the wizard with a linkedObject for which to immediately create a new {@link IssueLink}.
-	 *
-	 * @param linkedObjectID
-	 */
 	public CreateIssueWizard()
 	{
 		setWindowTitle("Create new issue");	
@@ -49,6 +42,7 @@ extends DynamicPathWizard
 	/**
 	 * Adding the page to the wizard.
 	 */
+	@Override
 	public void addPages() {
 		issueCreateGeneralWizardPage = new CreateIssueDetailWizardPage(newIssue);
 		addPage(issueCreateGeneralWizardPage);

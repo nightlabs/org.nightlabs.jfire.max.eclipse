@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -12,15 +11,11 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
@@ -41,7 +36,6 @@ import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -64,13 +58,13 @@ extends WizardHopPage
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
-	private Button setFromDateTimeButton;
-	private Label fromDateTimeLabel;
-	private DateTimeControl fromDateTimeControl;
-	
-	private Button setToDateTimeButton;
-	private Label toDateTimeLabel;
-	private DateTimeControl toDateTimeControl;
+//	private Button setFromDateTimeButton;
+//	private Label fromDateTimeLabel;
+//	private DateTimeControl fromDateTimeControl;
+//	
+//	private Button setToDateTimeButton;
+//	private Label toDateTimeLabel;
+//	private DateTimeControl toDateTimeControl;
 	
 	private IssueLabelProvider issueLabelProvider = new IssueLabelProvider();
 
@@ -197,32 +191,32 @@ extends WizardHopPage
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 6;
 		dateTimeComposite.setLayoutData(gridData);
-		
-		setFromDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
-		setFromDateTimeButton.setSelection(true);
-		setFromDateTimeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				fromDateTimeControl.setEnabled(setFromDateTimeButton.getSelection());
-			}
-		});
-		fromDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
-		fromDateTimeLabel.setText("From Date");
-		fromDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
-		fromDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		setToDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
-		setToDateTimeButton.setSelection(true);
-		setToDateTimeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				toDateTimeControl.setEnabled(setToDateTimeButton.getSelection());
-			}
-		});
-		toDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
-		toDateTimeLabel.setText("To Date");
-		toDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
-		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		setFromDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
+//		setFromDateTimeButton.setSelection(true);
+//		setFromDateTimeButton.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				fromDateTimeControl.setEnabled(setFromDateTimeButton.getSelection());
+//			}
+//		});
+//		fromDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
+//		fromDateTimeLabel.setText("From Date");
+//		fromDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+//		fromDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//
+//		setToDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
+//		setToDateTimeButton.setSelection(true);
+//		setToDateTimeButton.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				toDateTimeControl.setEnabled(setToDateTimeButton.getSelection());
+//			}
+//		});
+//		toDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
+//		toDateTimeLabel.setText("To Date");
+//		toDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+//		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Loading Data
 		Job loadJob = new Job("Loading Issue Properties....") {
@@ -338,11 +332,11 @@ extends WizardHopPage
 		return selectedIssueType;
 	}
 	
-	public Date getFromDateTime() {
-		return fromDateTimeControl.getDate();
-	}
-	
-	public Date getToDateTime() {
-		return toDateTimeControl.getDate();
-	}
+//	public Date getFromDateTime() {
+//		return fromDateTimeControl.getDate();
+//	}
+//	
+//	public Date getToDateTime() {
+//		return toDateTimeControl.getDate();
+//	}
 }
