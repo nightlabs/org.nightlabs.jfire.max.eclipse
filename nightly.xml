@@ -8,7 +8,6 @@
     <ant path="org.nightlabs.jfire.scripting.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.scripting.ui/dist/org.nightlabs.jfire.scripting.ui_0.9.3.jar"/>
     <javadoc path="org.nightlabs.jfire.scripting.ui/src"/>
   </project>
 
