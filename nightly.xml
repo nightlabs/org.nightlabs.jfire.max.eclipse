@@ -8,7 +8,6 @@
     <ant path="org.nightlabs.jfire.reporting.trade.ui" file="build-nightlabs.xml" target="deploy"/>
     <requires/>
     <provides/>
-    <publishes description="..." location="org.nightlabs.jfire.reporting.trade.ui/dist/org.nightlabs.jfire.reporting.trade.ui_0.9.3.jar"/>
     <javadoc path="org.nightlabs.jfire.reporting.trade.ui/src"/>
   </project>
 
