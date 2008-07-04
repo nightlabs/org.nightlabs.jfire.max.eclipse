@@ -24,7 +24,7 @@ public class AccountNameQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(AccountQuery query, String value)
 	{
-		query.setAccountName(value);
+		query.setAccountName(".*" + value + ".*");
 	}
 
 	@Override
