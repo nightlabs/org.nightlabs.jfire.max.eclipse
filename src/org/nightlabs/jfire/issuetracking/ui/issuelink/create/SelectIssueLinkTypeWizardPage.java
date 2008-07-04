@@ -58,6 +58,11 @@ extends DynamicPathWizardPage
 						public void run() {
 							issueLinkTypeList.removeAll();
 							issueLinkTypeList.addElements(issueLinkTypes);
+							if (!issueLinkTypes.isEmpty()) {
+								issueLinkTypeList.selectElementByIndex(0);
+								selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
+								getContainer().updateButtons();
+							}
 						}
 					});
 
