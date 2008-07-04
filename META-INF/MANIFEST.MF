@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Report Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.reporting.ui;singleton:=true
-Bundle-Version: 0.9.3
+Bundle-Version: 0.9.4.qualifier
 Bundle-ClassPath: org.nightlabs.jfire.reporting.ui.jar,
  lib/acrobat.jar,
  lib/MRJToolkitStubs.jar
