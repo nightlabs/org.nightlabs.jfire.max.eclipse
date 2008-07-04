@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -11,6 +12,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -189,16 +192,36 @@ extends WizardHopPage
 			}
 		});
 		
-		setFromDateTimeButton = new Button(mainComposite, SWT.CHECK);
-		fromDateTimeLabel = new Label(mainComposite, SWT.NONE);
+		XComposite dateTimeComposite = new XComposite(mainComposite, SWT.NONE);
+		dateTimeComposite.getGridLayout().numColumns = 3;
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 6;
+		dateTimeComposite.setLayoutData(gridData);
+		
+		setFromDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
+		setFromDateTimeButton.setSelection(true);
+		setFromDateTimeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fromDateTimeControl.setEnabled(setFromDateTimeButton.getSelection());
+			}
+		});
+		fromDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
 		fromDateTimeLabel.setText("From Date");
-		fromDateTimeControl = new DateTimeControl(mainComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+		fromDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
 		fromDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		setToDateTimeButton = new Button(mainComposite, SWT.CHECK);
-		toDateTimeLabel = new Label(mainComposite, SWT.NONE);
+		setToDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
+		setToDateTimeButton.setSelection(true);
+		setToDateTimeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				toDateTimeControl.setEnabled(setToDateTimeButton.getSelection());
+			}
+		});
+		toDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
 		toDateTimeLabel.setText("To Date");
-		toDateTimeControl = new DateTimeControl(mainComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
+		toDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
 		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Loading Data
@@ -256,6 +279,7 @@ extends WizardHopPage
 	}
 	
 	private WizardHopPage optionalPage; 
+	
 	@Override
 	public boolean isPageComplete() {
 		boolean result = true;
@@ -312,5 +336,13 @@ extends WizardHopPage
 
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
+	}
+	
+	public Date getFromDateTime() {
+		return fromDateTimeControl.getDate();
+	}
+	
+	public Date getToDateTime() {
+		return toDateTimeControl.getDate();
 	}
 }
