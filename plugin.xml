@@ -44,6 +44,7 @@
             name="%org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction.name"
             toolbarPath="additions" tooltip="%org.nightlabs.jfire.scripting.admin.ui.script.action.edit.EditScriptAction.tooltip"/>
     </extension>
+    <!--
     <extension point="org.eclipse.ui.editors">
         <editor
             class="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor"
@@ -51,6 +52,7 @@
             default="false"            
             id="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor" name="%org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor.name"/>
     </extension>
+    -->
     <extension point="org.nightlabs.jfire.scripting.admin.ui.scriptEditor">
         <scriptEditor
             editorID="org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJSEditor" scriptLanguage="JavaScript"/>

@@ -28,17 +28,11 @@ package org.nightlabs.jfire.scripting.admin.ui.script.action.edit;
 
 import java.util.Collection;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.PartInitException;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.admin.ui.script.ScriptEditorRegistry;
 import org.nightlabs.jfire.scripting.admin.ui.script.action.ScriptRegistryItemAction;
-import org.nightlabs.jfire.scripting.admin.ui.script.jscript.ScriptingJScriptEditorInput;
-import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -84,15 +78,15 @@ public class EditScriptAction extends ScriptRegistryItemAction {
 	public void run(Collection<ScriptRegistryItem> reportRegistryItems) {
 		Script script = (Script)reportRegistryItems.iterator().next();
 		String editorID = ScriptEditorRegistry.sharedInstance().getEditorID(script.getLanguage());
-		try {
-			RCPUtil.openEditor(
-//					new ExternalFileEditorInput(new File("/home/alex/test.js")),
-					new ScriptingJScriptEditorInput((ScriptRegistryItemID)JDOHelper.getObjectId(script)),
-					editorID
-				);
-		} catch (PartInitException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			RCPUtil.openEditor(
+////					new ExternalFileEditorInput(new File("/home/alex/test.js")),
+//					new ScriptingJScriptEditorInput((ScriptRegistryItemID)JDOHelper.getObjectId(script)),
+//					editorID
+//				);
+//		} catch (PartInitException e) {
+//			throw new RuntimeException(e);
+//		}
 	}
 	
 	@Override
