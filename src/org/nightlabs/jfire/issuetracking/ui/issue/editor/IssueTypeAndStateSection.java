@@ -3,44 +3,21 @@
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.util.List;
-
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.nightlabs.annotation.Implement;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueLocal;
-import org.nightlabs.jfire.issue.IssueManager;
-import org.nightlabs.jfire.issue.IssueManagerUtil;
-import org.nightlabs.jfire.issue.IssueType;
-import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
-import org.nightlabs.jfire.jbpm.dao.TransitionDAO;
-import org.nightlabs.jfire.jbpm.graph.def.State;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
-import org.nightlabs.jfire.jbpm.graph.def.id.StateID;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
-import org.nightlabs.jfire.security.User;
-import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -85,6 +62,15 @@ extends AbstractIssueEditorGeneralSection
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
+				if (getController().getEntityEditor().isDirty()) {
+					if (!MessageDialog.openQuestion(nextTransitionComposite.getShell(), "Save?", "In order to perform a transition, you need to save all modifications. Do you want to save the editor and perform the transition now?")) {
+						nextTransitionComposite.setEnabled(true);
+						return;
+					}
+				}
+
+				
+
 //				if (assignInPossibleTransition(getIssue(), new NullProgressMonitor())) {
 //					if (getIssue().getAssignee() == null) {
 //						if (!isDirty()) {
@@ -100,8 +86,14 @@ extends AbstractIssueEditorGeneralSection
 //					}
 //				}
 
-				commit(true);
-				signalIssue(event);
+// is this commit necessary? I commented it out.
+//				commit(true);
+
+// instead of signalling it here, we save the whole editor
+//				signalIssue(event);
+				getController().setJbpmTransitionName(event.getTransition().getJbpmTransitionName());
+				markDirty();
+				getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 			}
 		});
 		
@@ -110,68 +102,76 @@ extends AbstractIssueEditorGeneralSection
 		nextTransitionComposite.setLayoutData(gd);
 	}
 
-	/**
-	 * The fetch groups of issue data.
-	 */
-	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT, 
-		Issue.FETCH_GROUP_ISSUE_LOCAL,
-		IssueType.FETCH_GROUP_NAME,
-		IssueLocal.FETCH_GROUP_STATE,
-		IssueLocal.FETCH_GROUP_STATES,
-		State.FETCH_GROUP_STATE_DEFINITION,
-		StateDefinition.FETCH_GROUP_NAME};
+//	/**
+//	 * The fetch groups of issue data.
+//	 */
+//	public static final String[] FETCH_GROUPS = new String[] {
+//		FetchPlan.DEFAULT, 
+//		Issue.FETCH_GROUP_ISSUE_LOCAL,
+//		IssueType.FETCH_GROUP_NAME,
+//		IssueLocal.FETCH_GROUP_STATE,
+//		IssueLocal.FETCH_GROUP_STATES,
+//		State.FETCH_GROUP_STATE_DEFINITION,
+//		StateDefinition.FETCH_GROUP_NAME};
 
-	protected void signalIssue(final SignalEvent event) {
-		Job job = new Job("Performing transition") {
-			@Override
-			@Implement
-			protected IStatus run(IProgressMonitor monitor)
-			{
-				try {
-					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
-							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//	protected void signalIssue(final SignalEvent event) {
+//		Job job = new Job("Performing transition") {
+//			@Override
+//			protected IStatus run(ProgressMonitor monitor)
+//			{
+//				monitor.beginTask("Performing transition of issue", 100);
+//				try {
+//					IssueID issueID = (IssueID)JDOHelper.getObjectId(getIssue());
+//					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+////					Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
+////							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//					im.signalIssue(issueID, event.getTransition().getJbpmTransitionName(), false, null, 1);
+//					// make sure the object cannot be loaded from the cache anymore (we would load an out-dated version, since the notification from the server is surely not yet here)
+//					Cache.sharedInstance().removeByObjectID(issueID, false);
+//					monitor.worked(30);
+//					getController().load(new SubProgressMonitor(monitor, 70));
+//
+////					currentStateComposite.setStatable(issue);
+////					nextTransitionComposite.setStatable(issue);
+//				} catch (Exception x) {
+//					throw new RuntimeException(x);
+//				} finally {
+//					monitor.done();
+//				}
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.setPriority(Job.SHORT);
+//		job.setUser(true);
+//		job.schedule();		
+//	}
 
-					currentStateComposite.setStatable(issue);
-					nextTransitionComposite.setStatable(issue);
-				} catch (Exception x) {
-					throw new RuntimeException(x);
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(Job.SHORT);
-		job.setUser(true);
-		job.schedule();		
-	}
-
-	protected void signalAssign() {
-		Job job = new Job("Performing transition") {
-			@Override
-			@Implement
-			protected IStatus run(IProgressMonitor monitor)
-			{
-				try {
-					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-					issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
-							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
-					currentStateComposite.setStatable(issue);
-					nextTransitionComposite.setStatable(issue);
-
-					getController().setIssue(issue);
-				} catch (Exception x) {
-					throw new RuntimeException(x);
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(Job.SHORT);
-		job.setUser(true);
-		job.schedule();
-	}
+//	protected void signalAssign() {
+//		Job job = new Job("Performing transition") {
+//			@Override
+//			@Implement
+//			protected IStatus run(IProgressMonitor monitor)
+//			{
+//				try {
+//					IssueManager im = IssueManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//					issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
+//							true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//
+//					currentStateComposite.setStatable(issue);
+//					nextTransitionComposite.setStatable(issue);
+//
+//					getController().setIssue(issue);
+//				} catch (Exception x) {
+//					throw new RuntimeException(x);
+//				}
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.setPriority(Job.SHORT);
+//		job.setUser(true);
+//		job.schedule();
+//	}
 
 	protected void doSetIssue(Issue issue) {
 		issueTypeLabel.setText(

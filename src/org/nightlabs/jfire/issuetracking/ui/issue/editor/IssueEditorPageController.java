@@ -24,6 +24,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -44,6 +45,7 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -133,8 +135,45 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	}
 
 	@Override
-	protected Issue storeEntity(Issue controllerObject, ProgressMonitor monitor) {
-		Issue issue = IssueDAO.sharedInstance().storeIssue(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor); 
-		return issue;
+	protected Issue storeEntity(Issue controllerObject, ProgressMonitor monitor)
+	{
+		monitor.beginTask("Saving issue", 100);
+		try {
+			IssueID issueID = (IssueID) JDOHelper.getObjectId(controllerObject);
+			if (issueID == null)
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+
+			Issue issue;
+			issue = IssueDAO.sharedInstance().storeIssue(
+					controllerObject, jbpmTransitionName == null, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+					new SubProgressMonitor(monitor, 50)
+			);
+
+			if (jbpmTransitionName == null)
+				monitor.worked(50);
+			else {
+				issue = IssueDAO.sharedInstance().signalIssue(
+						issueID, jbpmTransitionName, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+						new SubProgressMonitor(monitor, 50)
+				);
+				jbpmTransitionName = null;
+			}
+
+			return issue;
+		} finally {
+			monitor.done();
+		}
+	}
+
+	private String jbpmTransitionName;
+
+	/**
+	 * @return <code>null</code> or the name of the jBPM transition that will be performed when saving.
+	 */
+	public String getJbpmTransitionName() {
+		return jbpmTransitionName;
+	}
+	public void setJbpmTransitionName(String transitionName) {
+		this.jbpmTransitionName = transitionName;
 	}
 }
