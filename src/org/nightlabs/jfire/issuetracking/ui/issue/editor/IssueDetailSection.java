@@ -79,15 +79,26 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 
 //		PrintIssueAction printAction = new PrintIssueAction();
 //		PrintPreviewIssueAction printPreviewAction = new PrintPreviewIssueAction();
-		ReassignAction reassignAction = new ReassignAction();
-		UnassignAction unassignAction = new UnassignAction();
+		assignAction = new AssignAction();
+		unassignAction = new UnassignAction();
 
 		getToolBarManager().add(unassignAction);
-		getToolBarManager().add(reassignAction);
+		getToolBarManager().add(assignAction);
 //		getToolBarManager().add(printAction);
 //		getToolBarManager().add(printPreviewAction);
 
 		updateToolBarManager();
+	}
+
+	private AssignAction assignAction;
+	private UnassignAction unassignAction;
+
+	protected AssignAction getAssignAction() {
+		return assignAction;
+	}
+
+	protected UnassignAction getUnassignAction() {
+		return unassignAction;
 	}
 
 	protected void doSetIssue(Issue issue) {
@@ -107,16 +118,16 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? "-" : issue.getUpdateTimestamp().toString());
 	}
 
-	public class ReassignAction extends Action {		
-		public ReassignAction() {
+	public class AssignAction extends Action {		
+		public AssignAction() {
 			super();
-			setId(ReassignAction.class.getName());
+			setId(AssignAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-			"Reassign"));
-			setToolTipText("Reassign");
-			setText("ReassignAction");
+					"Assign"));
+			setToolTipText("Assign");
+			setText("Assign");
 		}
 
 		@Override
@@ -129,7 +140,7 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 					issue.setAssignee(assigneeUser);
 					assigneeTextLabel.setText(issue.getAssignee().getName());
 					
-					//disabled for the 0.9.4 release.
+					//disabled for the 0.9.4 release. This is bad to do here anyway. I just implemented this in the back-end! Marco.
 //					if (!issue.getState().getStateDefinition().getJbpmNodeName().equals(JbpmConstants.TRANSITION_NAME_ASSIGN)) {
 //						if (IssueTypeAndStateSection.assignInPossibleTransition(issue, new NullProgressMonitor()))
 //							page.getIssueTypeAndStateSection().signalAssign();
@@ -149,13 +160,13 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 					IssueDetailSection.class, 
 			"Unassign"));
 			setToolTipText("Unassign");
-			setText("UnassignAction");
+			setText("Unassign");
 		}
 
 		@Override
 		public void run() {
 			issue.setAssignee(null);
-			assigneeTextLabel.setText("-");
+			assigneeTextLabel.setText("");
 			markDirty();
 		}		
 	}

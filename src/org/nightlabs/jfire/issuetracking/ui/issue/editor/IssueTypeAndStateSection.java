@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
@@ -36,7 +37,7 @@ extends AbstractIssueEditorGeneralSection
 	 * @param section
 	 * @param managedForm
 	 */
-	public IssueTypeAndStateSection(FormPage page, Composite parent, IssueEditorPageController controller) {
+	public IssueTypeAndStateSection(final FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
 
 		getSection().setText("Type and Status");
@@ -62,14 +63,26 @@ extends AbstractIssueEditorGeneralSection
 		nextTransitionComposite = new NextTransitionComposite(getClient(), SWT.NONE);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			public void signal(SignalEvent event) {
+				if (JbpmConstants.TRANSITION_NAME_ASSIGN.equals(event.getTransition().getJbpmTransitionName()) &&
+						getIssue().getAssignee() == null) 
+				{
+					((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
+					nextTransitionComposite.setEnabled(true);
+					return;
+				}
+
+				if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(event.getTransition().getJbpmTransitionName())) {
+					((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
+					nextTransitionComposite.setEnabled(true);
+					return;
+				}
+
 				if (getController().getEntityEditor().isDirty()) {
 					if (!MessageDialog.openQuestion(nextTransitionComposite.getShell(), "Save?", "In order to perform a transition, you need to save all modifications. Do you want to save the editor and perform the transition now?")) {
 						nextTransitionComposite.setEnabled(true);
 						return;
 					}
 				}
-
-				
 
 //				if (assignInPossibleTransition(getIssue(), new NullProgressMonitor())) {
 //					if (getIssue().getAssignee() == null) {
