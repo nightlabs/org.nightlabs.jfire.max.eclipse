@@ -143,6 +143,9 @@ public class IssueFilterCompositePropertyRelated
 				}
 				selectedIssuePriority = ISSUE_PRIORITY_ALL;
 				getQuery().setIssuePriorityID(null); // null <=> ISSUE_PRIORITY_ALL
+				
+				issueSeverityCombo.selectElement(selectedIssueSeverityType);
+				issuePriorityCombo.selectElement(selectedIssuePriority);
 			}
 		});
 

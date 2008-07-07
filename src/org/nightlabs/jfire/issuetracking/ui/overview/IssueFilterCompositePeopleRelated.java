@@ -74,14 +74,11 @@ public class IssueFilterCompositePeopleRelated
 	@Override
 	protected void createComposite(Composite parent)
 	{
-		Group userGroup = new Group(parent, SWT.NONE);
-		userGroup.setText("People Related");
 		GridLayout gridLayout = new GridLayout(4, false);
-//		gridLayout.verticalSpacing = 10;
-		userGroup.setLayout(gridLayout);
-		userGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		parent.setLayout(gridLayout);
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label rLabel = new Label(userGroup, SWT.NONE);
+		Label rLabel = new Label(parent, SWT.NONE);
 		rLabel.setText("Reporter: ");
 //		GridData gridData = new GridData();
 //		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
@@ -91,7 +88,7 @@ public class IssueFilterCompositePeopleRelated
 //		rComposite.setLayout(new GridLayout(2, false));
 //		rComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		allReporterButton = new Button(userGroup, SWT.CHECK);
+		allReporterButton = new Button(parent, SWT.CHECK);
 		allReporterButton.setText("All");
 //		gridData = new GridData(GridData.FILL_HORIZONTAL);
 //		gridData.horizontalSpan = 2;
@@ -106,11 +103,11 @@ public class IssueFilterCompositePeopleRelated
 			}
 		});
 
-		reporterText = new Text(userGroup, getBorderStyle());
+		reporterText = new Text(parent, getBorderStyle());
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		reporterButton = new Button(userGroup, SWT.PUSH);
+		reporterButton = new Button(parent, SWT.PUSH);
 		reporterButton.setText("...");
 
 		reporterButton.addSelectionListener(new SelectionAdapter(){
@@ -130,7 +127,7 @@ public class IssueFilterCompositePeopleRelated
 		reporterButton.setEnabled(false);
 		reporterText.setEnabled(false);
 
-		Label aLabel = new Label(userGroup, SWT.NONE);
+		Label aLabel = new Label(parent, SWT.NONE);
 		aLabel.setText("Assignee: ");
 //		gridData = new GridData();
 //		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
@@ -140,7 +137,7 @@ public class IssueFilterCompositePeopleRelated
 //		aComposite.setLayout(new GridLayout(2, false));
 //		aComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		allAssigneeButton = new Button(userGroup, SWT.CHECK);
+		allAssigneeButton = new Button(parent, SWT.CHECK);
 		allAssigneeButton.setText("All");
 //		gridData = new GridData(GridData.FILL_HORIZONTAL);
 //		gridData.horizontalSpan = 2;
@@ -157,11 +154,11 @@ public class IssueFilterCompositePeopleRelated
 		});
 		allAssigneeButton.setSelection(true);
 
-		assigneeText = new Text(userGroup, getBorderStyle());
+		assigneeText = new Text(parent, getBorderStyle());
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		assigneeButton = new Button(userGroup, SWT.PUSH);
+		assigneeButton = new Button(parent, SWT.PUSH);
 		assigneeButton.setText("...");
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){

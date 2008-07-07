@@ -100,16 +100,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	@Override
 	protected void createComposite(Composite parent)
 	{
-		Group issueLinkGroup = new Group(parent, SWT.NONE);
-		issueLinkGroup.setText("Issue Link");
-
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
-		issueLinkGroup.setLayout(gridLayout);
-		issueLinkGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		parent.setLayout(gridLayout);
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(issueLinkGroup, SWT.NONE).setText("Type: ");
-		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(issueLinkGroup, getBorderStyle());
+		new Label(parent, SWT.NONE).setText("Type: ");
+		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(parent, getBorderStyle());
 		issueLinkTypeCombo.setLabelProvider(labelProvider);
 		issueLinkTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{

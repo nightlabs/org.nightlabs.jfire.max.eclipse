@@ -77,20 +77,17 @@ public class IssueFilterCompositeTimeRelated
 	@Override
 	protected void createComposite(Composite parent)
 	{
-		Group timeGroup = new Group(parent, SWT.NONE);
-		timeGroup.setText("Time Related");
-		
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
-		timeGroup.setLayout(gridLayout);
-		timeGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		parent.setLayout(gridLayout);
+		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label createTimeLabel = new Label(timeGroup, SWT.NONE);
+		Label createTimeLabel = new Label(parent, SWT.NONE);
 		createTimeLabel.setText("Created Time: ");
 		createTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
 		createdTimeEdit = new DateTimeEdit(
-				timeGroup,
+				parent,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
 				"From",
@@ -140,12 +137,12 @@ public class IssueFilterCompositeTimeRelated
 			}
 		});
 		
-		Label updatedTimeLabel = new Label(timeGroup, SWT.NONE);
+		Label updatedTimeLabel = new Label(parent, SWT.NONE);
 		updatedTimeLabel.setText("Updated Time: ");
 		updatedTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
 		updatedTimeEdit = new DateTimeEdit(
-				timeGroup,
+				parent,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
 				"To",
