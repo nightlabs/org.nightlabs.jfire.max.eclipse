@@ -71,8 +71,11 @@ extends DynamicPathWizard
 					//Issue Link Type
 					IssueLinkType selectedIssueLinkType = selectIssueLinkTypePage.getSelectedIssueLinkType();
 					
+					Issue createdIssue = null;
+					
 					//Checking if the issue is new.
 					Issue issue = selectIssueWizardPage.getIssue();
+				
 					if (JDOHelper.getObjectId(issue) == null) {
 						try {
 							User reporter = Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
@@ -80,24 +83,25 @@ extends DynamicPathWizard
 						} catch (LoginException e) {
 							throw new RuntimeException(e);
 						}
-						issue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						
+						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					}
 					else {
-						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					}
-					
-					//Issue Link
-					IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
-					if (issueLink == null) {
-						MessageBox msg = new MessageBox(getShell());
-						msg.setText("The issue has already had this link!!.");
-						if (msg.open() == 1) {
-							return;
+						//Issue Link
+						IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
+						if (issueLink == null) {
+							MessageBox msg = new MessageBox(getShell());
+							msg.setText("The issue has already had this link!!.");
+							if (msg.open() == 1) {
+								return;
+							}
 						}
+						
+						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						
+						//Store Issue
+						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					}
-					
-					//Store Issue
-					Issue createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					
 					//Open the editor
 					IssueEditorInput issueEditorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(createdIssue));
