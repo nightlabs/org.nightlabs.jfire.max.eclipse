@@ -34,13 +34,11 @@ extends XComposite
 	public void setPreviewParameterValuesResult(PreviewParameterValuesResult ppvr)
 	{
 		this.ppvr = ppvr;
-		if (ppvr != null) {
-			populateCurrencies(ppvr);
-		}
+		populateCurrencies(this.ppvr);
 	}
 
 	public Currency getSelectedCurrency() {
-		return selectedCurrency;
+		return selectedCurrency;	
 	}
 
 	private Combo currencyCombo = null;
@@ -56,7 +54,10 @@ extends XComposite
 	};
 	
 	private void currencySelected() {
-		selectedCurrency = currencies.get(currencyCombo.getSelectionIndex());
+		if (currencyCombo.getSelectionIndex() < 0)
+			selectedCurrency = null;
+		else
+			selectedCurrency = currencies.get(currencyCombo.getSelectionIndex());
 	}
 	
 //	private NightlabsFormsToolkit toolkit = null;
@@ -83,6 +84,11 @@ extends XComposite
 	protected void populateCurrencies(PreviewParameterValuesResult ppvr)
 	{
 		currencyCombo.removeAll();
+		if (ppvr == null) {
+			currencySelected();
+			return;
+		}
+
 		currencies = new ArrayList<Currency>(ppvr.getCurrencies());
 		for (Iterator<Currency> it = currencies.iterator(); it.hasNext(); ) {
 			Currency c = it.next();

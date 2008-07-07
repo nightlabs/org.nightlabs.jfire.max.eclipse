@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.voucher.editor2d.ui.dialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -17,6 +19,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTreeNode;
 import org.nightlabs.jfire.voucher.editor2d.ui.VoucherDetailComposite;
@@ -69,6 +72,27 @@ extends CenteredDialog
 		voucherTypeTree = new VoucherTypeTree(voucherGroup,
 				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.BORDER);
 		voucherTypeTree.addSelectionChangedListener(voucherSelectionListener);
+		voucherTypeTree.getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				Object firstElement = ((StructuredSelection) event.getSelection()).getFirstElement();
+				if (firstElement instanceof VoucherTypeTreeNode) {
+					VoucherTypeTreeNode voucherTypeTreeNode = (VoucherTypeTreeNode) firstElement;
+					VoucherType selectedVoucherType = voucherTypeTreeNode.getJdoObject();
+					if (selectedVoucherType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH) {
+						if (voucherTypeTree.getTreeViewer().getExpandedState(voucherTypeTreeNode))
+							voucherTypeTree.getTreeViewer().collapseToLevel(voucherTypeTreeNode, 1);
+						else
+							voucherTypeTree.getTreeViewer().expandToLevel(voucherTypeTreeNode, 1);
+					}
+
+					if (selectedVoucherType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_LEAF) {
+						if (getButton(IDialogConstants.OK_ID).isEnabled())
+							okPressed();
+					}
+				}
+			}
+		});
 //		voucherTypeTree.getTreeViewer().expandToLevel(2);
 		
 		// Voucher Details
@@ -93,11 +117,18 @@ extends CenteredDialog
 				if (firstElement instanceof VoucherTypeTreeNode) {
 					VoucherTypeTreeNode voucherTypeTreeNode = (VoucherTypeTreeNode) firstElement;
 					VoucherType selectedVoucherType = voucherTypeTreeNode.getJdoObject();
-					PreviewParameterValuesResult ppvr = VoucherScriptResultProvider.sharedInstance().
+					if (selectedVoucherType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_LEAF) {
+						PreviewParameterValuesResult ppvr = VoucherScriptResultProvider.sharedInstance().
 						getPreviewParameterValuesResult(selectedVoucherType);
-					detailComp.setPreviewParameterValuesResult(ppvr);
-					RCPUtil.setControlEnabledRecursive(detailGroup, true);
-					getButton(IDialogConstants.OK_ID).setEnabled(true);
+						detailComp.setPreviewParameterValuesResult(ppvr);
+						RCPUtil.setControlEnabledRecursive(detailGroup, true);
+						getButton(IDialogConstants.OK_ID).setEnabled(true);
+					}
+					else {
+						detailComp.setPreviewParameterValuesResult(null);
+						RCPUtil.setControlEnabledRecursive(detailGroup, false);
+						getButton(IDialogConstants.OK_ID).setEnabled(false);
+					}
 				}
 			}
 		}
