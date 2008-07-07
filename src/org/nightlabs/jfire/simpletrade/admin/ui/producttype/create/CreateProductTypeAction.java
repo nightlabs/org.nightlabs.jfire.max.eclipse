@@ -45,7 +45,7 @@ public class CreateProductTypeAction extends Action
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(CreateProductTypeAction.class);
-	
+
 	protected ProductTypeTree tree;
 	protected ProductTypeTreeNode selectedNode = null;
 
@@ -55,19 +55,22 @@ public class CreateProductTypeAction extends Action
 		setEnabled(false);
 		this.tree = tree;
 		tree.addSelectionChangedListener(
-			new ISelectionChangedListener() {
-				public void selectionChanged(SelectionChangedEvent event)
-				{
-					logger.debug("selection changed! selection: "+event.getSelection().getClass().getName()+", "+event.getSelection()); //$NON-NLS-1$ //$NON-NLS-2$
-					StructuredSelection selection = (StructuredSelection) event.getSelection();
-					if (selection.isEmpty())
-						selectedNode = null;
-					else
-						selectedNode = (ProductTypeTreeNode) selection.getFirstElement();
+				new ISelectionChangedListener() {
+					public void selectionChanged(SelectionChangedEvent event)
+					{
+						logger.debug("selection changed! selection: "+event.getSelection().getClass().getName()+", "+event.getSelection()); //$NON-NLS-1$ //$NON-NLS-2$
+						StructuredSelection selection = (StructuredSelection) event.getSelection();
+						if (selection.isEmpty())
+							selectedNode = null;
+						else
+							if ( selection.getFirstElement() instanceof ProductTypeTreeNode)
+								selectedNode = (ProductTypeTreeNode) selection.getFirstElement();
+							else
+								selectedNode = null;
 
-					setEnabled(selectedNode != null && selectedNode.getJdoObject().isInheritanceBranch());
-				}
-			});
+						setEnabled(selectedNode != null && selectedNode.getJdoObject().isInheritanceBranch());
+					}
+				});
 	}
 
 	@Override
