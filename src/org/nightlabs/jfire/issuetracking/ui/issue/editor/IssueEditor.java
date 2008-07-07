@@ -60,7 +60,7 @@ implements ICloseOnLogoutEditorPart
 				{
 					public void run()
 					{
-						setPartName("ID: " + issue.getIssueID());
+						setPartName("ID: " + issue.getIssueIDAsString());
 						setTitleToolTip(issue.getSubject().getText());
 					}
 				});

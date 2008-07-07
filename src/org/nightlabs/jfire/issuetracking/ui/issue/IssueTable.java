@@ -261,7 +261,7 @@ extends AbstractTableComposite<Issue>
 				switch (columnIndex) 
 				{
 				case(0):
-					return Long.toString(issue.getIssueID());
+					return issue.getIssueIDAsString();
 				case(1):
 					if(issue.getCreateTimestamp() != null)
 						return issue.getCreateTimestamp().toString();
