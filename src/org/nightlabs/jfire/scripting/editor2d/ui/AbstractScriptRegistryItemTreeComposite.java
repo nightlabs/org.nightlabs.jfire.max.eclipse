@@ -117,6 +117,7 @@ extends XComposite
 							return;
 
 						scriptTree.setInput(scriptNodes);
+						scriptTree.getTreeViewer().expandToLevel(2);
 					}
 				});
 
