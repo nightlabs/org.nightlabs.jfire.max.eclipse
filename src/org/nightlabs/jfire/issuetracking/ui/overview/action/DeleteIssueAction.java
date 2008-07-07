@@ -3,6 +3,8 @@ package org.nightlabs.jfire.issuetracking.ui.overview.action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPart;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -54,7 +56,7 @@ extends AbstractIssueAction
 	@Override
 	public void run() {
 		for (IssueID issueID : getSelectedIssueIDs()) {
-			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete issue "+ issueID.issueID + "?");
+			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete issue "+ ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + "?");
 			if (result == true) {
 				IssueDAO.sharedInstance().deleteIssue(issueID, new NullProgressMonitor());
 			}
