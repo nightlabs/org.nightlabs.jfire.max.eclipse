@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jbpm Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.jbpm.ui
-Bundle-Version: 0.9.4.qualifier
+Bundle-Version: 0.9.5.qualifier
 Bundle-ClassPath: org.nightlabs.jfire.jbpm.ui.jar
 Bundle-Activator: org.nightlabs.jfire.jbpm.ui.JFireJbpmPlugin
 Bundle-Vendor: NightLabs.org
