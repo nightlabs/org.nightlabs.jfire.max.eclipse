@@ -89,8 +89,10 @@ public class IssueFilterCompositePeopleRelated
 				reporterButton.setEnabled(!selectAll);
 				
 				if (selectAll) {
+					setValueIntentionally(true);
 					selectedReporter = null;
 					getQuery().setReporterID(null);
+					setValueIntentionally(false);
 				}
 			}
 		});
@@ -133,8 +135,10 @@ public class IssueFilterCompositePeopleRelated
 				assigneeButton.setEnabled(!selectAll);
 				
 				if (selectAll) {
+					setValueIntentionally(true);
 					selectedAssignee = null;
 					getQuery().setAssigneeID(null);
+					setValueIntentionally(false);
 				}
 			}
 		});
