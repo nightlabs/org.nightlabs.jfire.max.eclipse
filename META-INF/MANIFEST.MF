@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.prop.html.ui;singleton:=true
-Bundle-Version: 0.9.4.qualifier
+Bundle-Version: 0.9.5.qualifier
 Bundle-Activator: org.nightlabs.jfire.prop.html.ui.Activator
 Bundle-Vendor: nightlabs.org
 Require-Bundle: org.eclipse.ui,
