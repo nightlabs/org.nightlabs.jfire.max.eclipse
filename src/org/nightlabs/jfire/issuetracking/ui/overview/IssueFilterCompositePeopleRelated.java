@@ -11,10 +11,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -80,19 +78,8 @@ public class IssueFilterCompositePeopleRelated
 
 		Label rLabel = new Label(parent, SWT.NONE);
 		rLabel.setText("Reporter: ");
-//		GridData gridData = new GridData();
-//		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
-//		rLabel.setLayoutData(gridData);
-
-//		XComposite rComposite = new XComposite(userGroup, SWT.NONE);
-//		rComposite.setLayout(new GridLayout(2, false));
-//		rComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		allReporterButton = new Button(parent, SWT.CHECK);
 		allReporterButton.setText("All");
-//		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		gridData.horizontalSpan = 2;
-//		allReporterButton.setLayoutData(gridData);
 		allReporterButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
@@ -100,6 +87,11 @@ public class IssueFilterCompositePeopleRelated
 				final boolean selectAll = ((Button) e.getSource()).getSelection();
 				reporterText.setEnabled(!selectAll);
 				reporterButton.setEnabled(!selectAll);
+				
+				if (selectAll) {
+					selectedReporter = null;
+					getQuery().setReporterID(null);
+				}
 			}
 		});
 
@@ -113,7 +105,7 @@ public class IssueFilterCompositePeopleRelated
 		reporterButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedReporter == null ? "" : selectedReporter.getUserID());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
@@ -121,25 +113,16 @@ public class IssueFilterCompositePeopleRelated
 				}//if
 			}
 		});
+		
 		allReporterButton.setSelection(true);
 		reporterButton.setEnabled(false);
 		reporterText.setEnabled(false);
 
 		Label aLabel = new Label(parent, SWT.NONE);
 		aLabel.setText("Assignee: ");
-//		gridData = new GridData();
-//		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_BEGINNING;
-//		aLabel.setLayoutData(gridData);
-
-//		XComposite aComposite = new XComposite(userGroup, SWT.NONE);
-//		aComposite.setLayout(new GridLayout(2, false));
-//		aComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		allAssigneeButton = new Button(parent, SWT.CHECK);
 		allAssigneeButton.setText("All");
-//		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		gridData.horizontalSpan = 2;
-//		allAssigneeButton.setLayoutData(gridData);
 		allAssigneeButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
@@ -148,6 +131,11 @@ public class IssueFilterCompositePeopleRelated
 				final boolean selectAll = ((Button) e.getSource()).getSelection();
 				assigneeText.setEnabled(!selectAll);
 				assigneeButton.setEnabled(!selectAll);
+				
+				if (selectAll) {
+					selectedAssignee = null;
+					getQuery().setAssigneeID(null);
+				}
 			}
 		});
 		allAssigneeButton.setSelection(true);
@@ -162,7 +150,7 @@ public class IssueFilterCompositePeopleRelated
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), selectedAssignee == null ? "" : selectedAssignee.getUserID());
+				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
