@@ -33,7 +33,9 @@ public class IssueFilterCompositePeopleRelated
 	extends AbstractQueryFilterComposite<IssueQuery> 
 {	
 	private User selectedReporter;
+	private UserID selectedReportID;
 	private User selectedAssignee;
+	private UserID selectedAssigneeID;
 
 	private Text reporterText;
 	private Text assigneeText;
@@ -90,9 +92,13 @@ public class IssueFilterCompositePeopleRelated
 				
 				if (selectAll) {
 					setValueIntentionally(true);
+					reporterText.setText("");
 					selectedReporter = null;
 					getQuery().setReporterID(null);
 					setValueIntentionally(false);
+				}
+				else {
+					getQuery().setReporterID(selectedReportID);
 				}
 			}
 		});
@@ -111,7 +117,10 @@ public class IssueFilterCompositePeopleRelated
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
-					getQuery().setReporterID((UserID) JDOHelper.getObjectId(selectedReporter));
+					selectedReportID = (UserID) JDOHelper.getObjectId(selectedReporter);
+					reporterText.setText(selectedReporter.getName());
+
+					getQuery().setReporterID(selectedReportID);
 				}//if
 			}
 		});
@@ -136,9 +145,13 @@ public class IssueFilterCompositePeopleRelated
 				
 				if (selectAll) {
 					setValueIntentionally(true);
+					assigneeText.setText("");
 					selectedAssignee = null;
 					getQuery().setAssigneeID(null);
 					setValueIntentionally(false);
+				}
+				else {
+					getQuery().setAssigneeID(selectedAssigneeID);
 				}
 			}
 		});
@@ -158,7 +171,10 @@ public class IssueFilterCompositePeopleRelated
 				int returnCode = userSearchDialog.open();
 				if (returnCode == Window.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
-					getQuery().setAssigneeID((UserID) JDOHelper.getObjectId(selectedAssignee));
+					selectedAssigneeID = (UserID) JDOHelper.getObjectId(selectedAssignee);
+					assigneeText.setText(selectedAssignee.getName());
+					
+					getQuery().setAssigneeID(selectedAssigneeID);
 				}//if
 			}
 		});
@@ -201,7 +217,9 @@ public class IssueFilterCompositePeopleRelated
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
-				boolean all = isValueIntentionallySet();
+				boolean active = isValueIntentionallySet();
+				boolean sectionActive = selectedAssignee != null || selectedReporter != null;
+				setSearchSectionActive(sectionActive);
 				if (IssueQuery.PROPERTY_ASSIGNEE_ID.equals(changedField.getPropertyName()))
 				{
 					UserID tmpAssigneeID = (UserID) changedField.getNewValue();
@@ -214,12 +232,9 @@ public class IssueFilterCompositePeopleRelated
 						selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
 							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 							new NullProgressMonitor());
-						assigneeText.setText(selectedAssignee.getName());
 					}
-					all |= tmpAssigneeID == null;
-					setSearchSectionActive(allAssigneeButton, all);
-					assigneeButton.setEnabled(!all);
-					assigneeText.setEnabled(!all);
+					assigneeButton.setEnabled(!active);
+					assigneeText.setEnabled(!active);
 				}
 				
 				if (IssueQuery.PROPERTY_REPORTER_ID.equals(changedField.getPropertyName()))
@@ -234,12 +249,9 @@ public class IssueFilterCompositePeopleRelated
 						selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
 							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 							new NullProgressMonitor());
-						reporterText.setText(selectedReporter.getName());
 					}
-					all |= tmpReporterID == null;
-					allReporterButton.setSelection(all);
-					reporterText.setEnabled(! all);
-					reporterButton.setEnabled(! all);
+					reporterText.setEnabled(! active);
+					reporterButton.setEnabled(! active);
 				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null		
