@@ -62,137 +62,134 @@ extends AbstractTableComposite<Issue>
 
 //		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
 //		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, changedIssueListener);
-//
+
 //		addDisposeListener(new DisposeListener() {
-//			public void widgetDisposed(DisposeEvent event)
-//			{
-//				JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
-//				JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, changedIssueListener);
-//			}
+//		public void widgetDisposed(DisposeEvent event)
+//		{
+//		JDOLifecycleManager.sharedInstance().removeLifecycleListener(newIssueListener);
+//		JDOLifecycleManager.sharedInstance().removeNotificationListener(Issue.class, changedIssueListener);
+//		}
 //		});
 
 		getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
-				if (! (elements instanceof Issue[]))
-					return;
-				
-				Arrays.sort((Issue[])elements, new Comparator<Issue>() {
-					public int compare(Issue issue1, Issue issue2) {
-						return -issue1.getCreateTimestamp().compareTo(issue2.getCreateTimestamp());
+				Arrays.sort(elements, new Comparator<Object>() {
+					public int compare(Object object1, Object object2) {
+						return ((Issue)object1).getCreateTimestamp().compareTo(((Issue)object2).getCreateTimestamp());
 					}
 				});
 			}
 		});
 	}
-	
+
 //	private JDOLifecycleListener newIssueListener = new JDOLifecycleAdapterJob("Loading Issue") {
-//		private SimpleLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(Issue.class,
-//			true, JDOLifecycleState.NEW);
-//
-//		public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
-//		{
-//			return filter;
-//		}
-//
-//		public void notify(JDOLifecycleEvent event)
-//		{
-//			Set<IssueID> issueIDs = new HashSet<IssueID>();
-//			for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs())
-//				issueIDs.add((IssueID) dirtyObjectID.getObjectID());
-//
-//			// we should filter the new issueIDs against the conditions defined by the UI (i.e. the QueryMap that is managed by IssueEntryListViewer).
-//			// TODO or even better we embed the JDOQueryMap in our IJDOLifecycleListenerFilter (which needs to be updated whenever we press the search button),
-//			// since this would be more efficient than first sending all new issueIDs to the client and then again run the queries on the server (the filter
-//			// is already on the server and could run the queries with 1 less round-trip to the client).
-//			// We'll do this filtering thing for JFire 1.2 ;-) or later. It's fine for the beginning, if all new issues pop up.
-//
-//			final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(issueIDs, IssueTable.FETCH_GROUPS_ISSUE,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					getProgressMontitorWrapper());
-//
-//			Display.getDefault().asyncExec(new Runnable() {
-//				public void run() {
-//					for (Issue issue : issues) {
-//						issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-//					}
-//					refresh();
-//				}
-//			});
-//		}
+//	private SimpleLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(Issue.class,
+//	true, JDOLifecycleState.NEW);
+
+//	public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
+//	{
+//	return filter;
+//	}
+
+//	public void notify(JDOLifecycleEvent event)
+//	{
+//	Set<IssueID> issueIDs = new HashSet<IssueID>();
+//	for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs())
+//	issueIDs.add((IssueID) dirtyObjectID.getObjectID());
+
+//	// we should filter the new issueIDs against the conditions defined by the UI (i.e. the QueryMap that is managed by IssueEntryListViewer).
+//	// TODO or even better we embed the JDOQueryMap in our IJDOLifecycleListenerFilter (which needs to be updated whenever we press the search button),
+//	// since this would be more efficient than first sending all new issueIDs to the client and then again run the queries on the server (the filter
+//	// is already on the server and could run the queries with 1 less round-trip to the client).
+//	// We'll do this filtering thing for JFire 1.2 ;-) or later. It's fine for the beginning, if all new issues pop up.
+
+//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(issueIDs, IssueTable.FETCH_GROUPS_ISSUE,
+//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//	getProgressMontitorWrapper());
+
+//	Display.getDefault().asyncExec(new Runnable() {
+//	public void run() {
+//	for (Issue issue : issues) {
+//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+//	}
+//	refresh();
+//	}
+//	});
+//	}
 //	};
 
 //	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
-//		public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-//			ProgressMonitor monitor = getProgressMonitorWrapper();
-//			Set<IssueID> dirtyIssueIDs = new HashSet<IssueID>();
-//			for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
-//				DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
-//				switch (dirtyObjectID.getLifecycleState()) {
-//					case DIRTY:
-//						dirtyIssueIDs.add((IssueID) dirtyObjectID.getObjectID());
-//						break;
-//					case DELETED:
-//						// TODO remove the object from the UI
-//						break;
-//					default:
-//						break;
-//				}
-//			}
-//
-//			if (!dirtyIssueIDs.isEmpty()) {
-//				final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(
-//						dirtyIssueIDs,
-//						IssueTable.FETCH_GROUPS_ISSUE,
-//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//						monitor);
-//
-//				Display.getDefault().asyncExec(new Runnable() {
-//					public void run() {
-//						for (Issue issue : issues)
-//							issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-//
-//						refresh();
-//					}
-//				});
-//			}
-//		}
+//	public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+//	ProgressMonitor monitor = getProgressMonitorWrapper();
+//	Set<IssueID> dirtyIssueIDs = new HashSet<IssueID>();
+//	for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+//	DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
+//	switch (dirtyObjectID.getLifecycleState()) {
+//	case DIRTY:
+//	dirtyIssueIDs.add((IssueID) dirtyObjectID.getObjectID());
+//	break;
+//	case DELETED:
+//	// TODO remove the object from the UI
+//	break;
+//	default:
+//	break;
+//	}
+//	}
+
+//	if (!dirtyIssueIDs.isEmpty()) {
+//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(
+//	dirtyIssueIDs,
+//	IssueTable.FETCH_GROUPS_ISSUE,
+//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//	monitor);
+
+//	Display.getDefault().asyncExec(new Runnable() {
+//	public void run() {
+//	for (Issue issue : issues)
+//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+
+//	refresh();
+//	}
+//	});
+//	}
+//	}
 //	};
 
 //	private void loadIssues()
 //	{
-//		Job job = new Job("Loading issues") {
-//			@Override
-//			protected IStatus run(ProgressMonitor monitor) throws Exception {
-//				loadIssues(monitor);
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		job.schedule();
+//	Job job = new Job("Loading issues") {
+//	@Override
+//	protected IStatus run(ProgressMonitor monitor) throws Exception {
+//	loadIssues(monitor);
+//	return Status.OK_STATUS;
 //	}
-//
+//	};
+//	job.schedule();
+//	}
+
 //	private void loadIssues(ProgressMonitor monitor)
 //	{
-//		Display.getDefault().syncExec(new Runnable() {
-//			public void run() {					
-//				setInput("Loading data...");
-//			}
-//		});
-//
-//		final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS_ISSUE,
-//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//				monitor);
-//
-//		Display.getDefault().asyncExec(new Runnable() {
-//			public void run() {
-//				issueID2issue.clear();
-//				for (Issue issue : issues) {
-//					issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-//				}
-//
-//				setInput(issueID2issue.values());
-//			}
-//		});
+//	Display.getDefault().syncExec(new Runnable() {
+//	public void run() {					
+//	setInput("Loading data...");
+//	}
+//	});
+
+//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS_ISSUE,
+//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//	monitor);
+
+//	Display.getDefault().asyncExec(new Runnable() {
+//	public void run() {
+//	issueID2issue.clear();
+//	for (Issue issue : issues) {
+//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+//	}
+
+//	setInput(issueID2issue.values());
+//	}
+//	});
 //	}
 
 	@Override
@@ -258,22 +255,11 @@ extends AbstractTableComposite<Issue>
 		{
 			if (element instanceof Issue) {
 				Issue issue = (Issue) element;
-				switch (columnIndex) 
-				{
-				case(0):
-					return issue.getIssueIDAsString();
-				case(1):
-					if(issue.getCreateTimestamp() != null)
-						return issue.getCreateTimestamp().toString();
-				break;
-				case(2):
-					if(issue.getIssueType() != null)
-						return issue.getIssueType().getName().getText();
-				break;
-				case(3):
-					if (issue.getSubject() != null)
-						return issue.getSubject().getText();
-				break;
+				switch (columnIndex) {
+				case(0): return issue.getIssueIDAsString();
+				case(1): return issue.getCreateTimestamp().toString();
+				case(2): return issue.getIssueType().getName().getText();
+				case(3): return issue.getSubject().getText();
 				case(4):
 					//TODO: We should find another ways for displaying the description text if it's longer than the column width!!!!
 					if (issue.getDescription() != null) {
@@ -284,18 +270,10 @@ extends AbstractTableComposite<Issue>
 							return descriptionText;
 					}
 				break;
-				case(5):
-					if(issue.getIssueSeverityType() != null)
-						return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
-				break;
-				case(6):
-					if(issue.getIssuePriority() != null)
-						return issue.getIssuePriority().getIssuePriorityText().getText();
-				break;
-				case(7):
-					return getStateName(issue);					
-				default:
-					return ""; //$NON-NLS-1$
+				case(5): return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
+				case(6): return issue.getIssuePriority().getIssuePriorityText().getText();
+				case(7): return getStateName(issue);					
+				default: return ""; //$NON-NLS-1$
 				}
 			}
 			return null;
