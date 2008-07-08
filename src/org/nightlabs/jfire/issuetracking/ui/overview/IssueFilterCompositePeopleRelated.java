@@ -118,8 +118,6 @@ public class IssueFilterCompositePeopleRelated
 				if (returnCode == Window.OK) {
 					selectedReporter = userSearchDialog.getSelectedUser();
 					getQuery().setReporterID((UserID) JDOHelper.getObjectId(selectedReporter));
-					if (selectedReporter != null)
-						reporterText.setText(selectedReporter.getName());
 				}//if
 			}
 		});
@@ -169,8 +167,6 @@ public class IssueFilterCompositePeopleRelated
 				if (returnCode == Window.OK) {
 					selectedAssignee = userSearchDialog.getSelectedUser();
 					getQuery().setAssigneeID((UserID) JDOHelper.getObjectId(selectedAssignee));
-					if (selectedAssignee != null)
-						assigneeText.setText(selectedAssignee.getName());
 				}//if
 			}
 		});
