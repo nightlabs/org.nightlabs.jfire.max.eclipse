@@ -543,6 +543,7 @@ gibt's nimmer - oder?! Marco.
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
             name="%articleEditAction.pay.label" tooltip="%articleEditAction.pay.tooltip"/>
+<!--            
         <articleEditAction
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveAction"
             icon="icons/articlecontainer/detail/action/remove/RemoveAction.24x24.png"
@@ -602,6 +603,7 @@ gibt's nimmer - oder?! Marco.
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
             name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.name"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.tooltip"/>
+-->            
     </extension>
     <extension point="org.nightlabs.jfire.reporting.ui.reportUseCase">
         <reportUseCase description="%reportUseCase.invoice.description"
