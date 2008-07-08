@@ -9,7 +9,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -78,7 +77,6 @@ public class IssueFilterCompositeTimeRelated
 	protected void createComposite(Composite parent)
 	{
 		GridLayout gridLayout = new GridLayout(2, false);
-		gridLayout.verticalSpacing = 10;
 		parent.setLayout(gridLayout);
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -145,7 +143,7 @@ public class IssueFilterCompositeTimeRelated
 				parent,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
-				"To",
+				"From",
 				true);
 		updatedTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
