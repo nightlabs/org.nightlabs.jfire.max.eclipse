@@ -266,4 +266,6 @@ public interface ArticleEdit
 //	 * @param manager
 //	 */
 //	void populateArticleEditContextMenu(IMenuManager manager);
+	
+	void changeTariffForSelectedArticles();
 }

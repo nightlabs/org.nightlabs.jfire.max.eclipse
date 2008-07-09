@@ -32,6 +32,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.jdo.JDOHelper;
+
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -41,9 +43,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
+import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffWizard;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -318,6 +323,25 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 				event = new ArticleEditArticleSelectionEvent(this);
 
 			listener.selected(event);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit#changeTariffForSelectedArticles()
+	 */
+	@Override
+	public void changeTariffForSelectedArticles() {
+		Set<ArticleID> selectedArticleIDs = new HashSet<ArticleID>();
+		// check if articles are allocated because only for those can the tariff be changes
+		for (Article article : getSelectedArticles()) {
+			if (article.isAllocated()) {
+				selectedArticleIDs.add((ArticleID)JDOHelper.getObjectId(article));
+			}
+		}
+		if (!selectedArticleIDs.isEmpty()) {
+			ChangeTariffWizard changeTariffWizard = new ChangeTariffWizard(selectedArticleIDs);
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(changeTariffWizard);
+			dialog.open();
 		}
 	}
 
