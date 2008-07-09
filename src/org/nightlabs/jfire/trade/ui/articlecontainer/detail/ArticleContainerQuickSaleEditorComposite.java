@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -10,6 +11,7 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -33,6 +35,7 @@ import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -54,6 +57,13 @@ public class ArticleContainerQuickSaleEditorComposite
 extends XComposite
 {
 	private IWorkbenchPartSite site;
+	private Composite buttonComp;
+	private Button okButtonCustomer;
+	private Button okButtonAnonymous;
+	private Button deleteAllButton;
+	private Button deleteSelectionButton;
+	private Text customerSearchText;
+	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	
 	/**
 	 * @param site
@@ -68,19 +78,31 @@ extends XComposite
 		createComposite(this, input);
 	}
 	
-	private Composite buttonComp;
 	protected void createComposite(Composite parent, ArticleContainerEditorInput input)
 	{
 		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, parent, input);
 		
 		buttonComp = new XComposite(parent, SWT.NONE);
-		buttonComp.setLayout(new GridLayout(6, false));
+		buttonComp.setLayout(new GridLayout(7, false));
 		buttonComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		deleteButton = new Button(buttonComp, SWT.NONE);
-		deleteButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.deleteButton.text")); //$NON-NLS-1$
-		deleteButton.setImage(SharedImages.DELETE_16x16.createImage());
-		deleteButton.addSelectionListener(deleteListener);
+		deleteAllButton = new Button(buttonComp, SWT.NONE);
+		deleteAllButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.deleteAllButton.text")); //$NON-NLS-1$
+		deleteAllButton.setImage(SharedImages.DELETE_16x16.createImage());
+		deleteAllButton.addSelectionListener(deleteAllListener);
+
+		deleteSelectionButton = new Button(buttonComp, SWT.NONE);
+		deleteSelectionButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.button.deleteSelection.text")); //$NON-NLS-1$
+		deleteSelectionButton.setImage(SharedImages.DELETE_16x16.createImage());
+		deleteSelectionButton.addSelectionListener(deleteSelectionListener);
+		deleteSelectionButton.setEnabled(false);
+		
+		articleContainerEditorComposite.addActiveSegmentEditSelectionListener(new ActiveSegmentEditSelectionListener(){
+			@Override
+			public void selected(ActiveSegmentEditSelectionEvent event) {				
+				event.getActiveSegmentEdit().addSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);				
+			}
+		});
 		
 		Label spacerLabel = new Label(buttonComp, SWT.NONE);
 		spacerLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -113,15 +135,15 @@ extends XComposite
 		buttonComp.setEnabled(false);
 	}
 	
-	private ArticleContainerEditorComposite articleContainerEditorComposite;
 	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
 		return articleContainerEditorComposite;
 	}
-	
-	private Button okButtonCustomer;
-	private Button okButtonAnonymous;
-	private Button deleteButton;
-	private Text customerSearchText;
+		
+	private SegmentEditArticleSelectionListener segmentEditArticleSelectionListener = new SegmentEditArticleSelectionListener() {
+		public void selected(SegmentEditArticleSelectionEvent event) {
+			deleteSelectionButton.setEnabled(!event.getArticleSelections().isEmpty());
+		}
+	};	
 	
 	private SelectionListener okListenerCustomer = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
@@ -161,15 +183,18 @@ extends XComposite
 		}
 	};
 	
-	private SelectionListener deleteListener = new SelectionListener(){
+	private SelectionListener deleteAllListener = new SelectionAdapter(){
 		public void widgetSelected(SelectionEvent e) {
 			deleteAll();
 		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
 	};
 
+	private SelectionListener deleteSelectionListener = new SelectionAdapter(){
+		public void widgetSelected(SelectionEvent e) {
+			deleteSelection();
+		}
+	};
+		
 	public static ArticleContainerEditorInputOrder createEditorInput()
 	{
 		TradeManager tm;
@@ -261,7 +286,51 @@ extends XComposite
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+	protected void deleteSelection()
+	{
+		// We remove the lines from the server - therefore find out first, what lines shall be handled here.
+		SegmentEdit segmentEdit = articleContainerEditorComposite.getActiveSegmentEdit();
+		Set<? extends ArticleSelection> articleSelections = segmentEdit.getArticleSelections();
+
+		if (!articleSelections.isEmpty())
+		{
+			Set<ArticleID> articleIDs = new HashSet<ArticleID>();
+			for (ArticleSelection articleSelection : articleSelections) {
+				for (Article article : articleSelection.getSelectedArticles()) {
+					articleIDs.add((ArticleID) JDOHelper.getObjectId(article));
+				}
+			}
+
+			try {
+				if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
+					articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(false);
+				}
+				ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
+					@Override
+					public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
+						if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
+							articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(true);
+						}
+						articleContainerEditorComposite.removeArticleChangeListener(this);
+					}
+				};
+				articleContainerEditorComposite.addArticleChangeListener(articleChangeListener);
+
+				TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
+				Collection<Article> articles = tradeManager.releaseArticles(articleIDs, 
+						true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				tradeManager.deleteArticles(articleIDs, true);				
+			}
+			catch (Exception e) {
+				if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
+					articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(true);
+				}
+				throw new RuntimeException(e);
+			}
+		}
+	}
+		
 	protected void createArticleContainerEditorComposite(ArticleContainerEditorInput input)
 	{
 		articleContainerEditorComposite.dispose();
@@ -271,7 +340,7 @@ extends XComposite
 	
 	protected void createNewOrder()
 	{
-		// only close open will occur automaticly because of partListener in ArticleContainerQuickSaleEditor
+		// only close, open will occur automatically because of partListener in ArticleContainerQuickSaleEditor
 		RCPUtil.closeEditor(getArticleContainerEditorComposite().getInput(), false);
 	}
 }
