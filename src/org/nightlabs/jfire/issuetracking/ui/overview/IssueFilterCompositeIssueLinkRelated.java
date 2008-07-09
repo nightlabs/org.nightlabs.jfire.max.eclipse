@@ -176,7 +176,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	private static final String[] FETCH_GROUPS_ISSUE_LINK_TYPE = { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
 
 	private void loadProperties(){
-		Job loadJob = new Job("Loading Issue Properties....") {
+		Job loadJob = new Job("Loading Issue Link Properties....") {
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {				
 				try {
