@@ -356,8 +356,8 @@ extends XComposite
 //							// TODO WORKAROUND JPOX bug end
 
 							editLockHandle.release();
-							if (articleSegmentGroups != null)
-								articleSegmentGroups.onDispose();
+							if (articleSegmentGroupSet != null)
+								articleSegmentGroupSet.onDispose();
 							// removeDisposeListener(this); // nötig? Marco.
 						}
 					});
@@ -410,7 +410,7 @@ extends XComposite
 	
 	protected boolean hasDifferentSegments()
 	{
-		return articleSegmentGroups.getArticleSegmentGroups().size() > 1;
+		return articleSegmentGroupSet.getArticleSegmentGroups().size() > 1;
 	}
 	
 	protected void updateHeaderAndFooter() {
@@ -543,7 +543,7 @@ extends XComposite
 		layout(true, true);
 	}
 
-	private ClientArticleSegmentGroupSet articleSegmentGroups = null;
+	private ClientArticleSegmentGroupSet articleSegmentGroupSet = null;
 
 	protected void createArticleSegmentGroups()
 	throws EPProcessorException
@@ -577,7 +577,7 @@ extends XComposite
 			articleChangeListenerArray = new ArticleChangeListener[] { articleChangeListener };
 		}
 
-		articleSegmentGroups = new ClientArticleSegmentGroupSet(articleContainer,
+		articleSegmentGroupSet = new ClientArticleSegmentGroupSet(articleContainer,
 				articleCreateListenerArray,
 				articleChangeListenerArray);
 	}
@@ -588,7 +588,7 @@ extends XComposite
 		segmentEditCompositesCreated = true;
 
 		// ArticleSegmentGroupSet asgs = new ArticleSegmentGroupSet(articleContainer);
-		for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroups.getArticleSegmentGroups())
+		for (ArticleSegmentGroup articleSegmentGroup : articleSegmentGroupSet.getArticleSegmentGroups())
 			createSegmentEditAndComposite(articleSegmentGroup);
 
 		updateActiveSegmentEdit();
@@ -872,7 +872,7 @@ extends XComposite
 	/**
 	 * Initialise this instance of <code>ArticleContainerEditorComposite</code> or reload the {@link ArticleContainer} referenced
 	 * by the <code>articleContainerEditorInput</code> parameter. In case of reloading, the articles are not fetched again
-	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroups})
+	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroupSet})
 	 *
 	 * @param articleContainerEditorInput the input to be set.
 	 * @param monitor the monitor to provide feedback.
@@ -968,9 +968,9 @@ extends XComposite
 	}
 
 	public Collection<Article> getArticles() {
-		if (articleSegmentGroups == null)
+		if (articleSegmentGroupSet == null)
 			return Collections.emptyList();
-		return articleSegmentGroups.getArticles();
+		return articleSegmentGroupSet.getArticles();
 	}
 
 	public IWorkbenchPartSite getSite() {
@@ -980,8 +980,8 @@ extends XComposite
 //	private List<ArticleChangeListener> earlyArticleChangeListeners = new ArrayList<ArticleChangeListener>();
 	private ListenerList earlyArticleChangeListeners = new ListenerList();
 	public void addArticleChangeListener(ArticleChangeListener articleChangeListener) {
-		if (articleSegmentGroups != null) {
-			articleSegmentGroups.addArticleChangeListener(articleChangeListener);
+		if (articleSegmentGroupSet != null) {
+			articleSegmentGroupSet.addArticleChangeListener(articleChangeListener);
 		}
 		else {
 			earlyArticleChangeListeners.add(articleChangeListener);;
@@ -989,33 +989,33 @@ extends XComposite
 	}
 	
 	public void removeArticleChangeListener(ArticleChangeListener articleChangeListener) {
-		if (articleSegmentGroups != null) {
-			articleSegmentGroups.removeArticleChangeListener(articleChangeListener);
+		if (articleSegmentGroupSet != null) {
+			articleSegmentGroupSet.removeArticleChangeListener(articleChangeListener);
 		} else {
-			logger.warn("ArticleChangeListener not removed because articleSegmentGroups == null!"); //$NON-NLS-1$
+			logger.warn("ArticleChangeListener not removed because articleSegmentGroupSet == null!"); //$NON-NLS-1$
 		}
 	}
 	
 //	private List<ArticleCreateListener> earlyArticleCreateListeners = new ArrayList<ArticleCreateListener>();
 	private ListenerList earlyArticleCreateListeners = new ListenerList();
 	public void addArticleCreateListener(ArticleCreateListener articleCreateListener) {
-		if (articleSegmentGroups != null) {
-			articleSegmentGroups.addArticleCreateListener(articleCreateListener);
+		if (articleSegmentGroupSet != null) {
+			articleSegmentGroupSet.addArticleCreateListener(articleCreateListener);
 		} else {
 			earlyArticleCreateListeners.add(articleCreateListener);
 		}
 	}
 	
 	public void removeArticleCreateListener(ArticleCreateListener articleCreateListener) {
-		if (articleSegmentGroups != null) {
-			articleSegmentGroups.removeArticleCreateListener(articleCreateListener);
+		if (articleSegmentGroupSet != null) {
+			articleSegmentGroupSet.removeArticleCreateListener(articleCreateListener);
 		} else {
-			logger.warn("ArticleCreateListener not removed because articleSegmentGroups == null!"); //$NON-NLS-1$
+			logger.warn("ArticleCreateListener not removed because articleSegmentGroupSet == null!"); //$NON-NLS-1$
 		}
 	}
 
-	public ClientArticleSegmentGroupSet getArticleSegmentGroups()
+	public ClientArticleSegmentGroupSet getArticleSegmentGroupSet()
 	{
-		return articleSegmentGroups;
+		return articleSegmentGroupSet;
 	}
 }

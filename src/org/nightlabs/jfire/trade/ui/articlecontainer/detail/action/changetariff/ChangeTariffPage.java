@@ -10,12 +10,15 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.composite.OKCancelComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -61,8 +64,24 @@ public class ChangeTariffPage
 			@Override
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				selectedTariff = tariffList.getFirstSelectedElement();
-				getContainer().updateButtons();
+				if (tariffList.getFirstSelectedElement() instanceof Tariff) {
+					selectedTariff = tariffList.getFirstSelectedElement();
+					getContainer().updateButtons();					
+				}
+			}
+		});
+		tariffList.addDoubleClickListener(new IDoubleClickListener(){
+			@Override
+			public void doubleClick(DoubleClickEvent arg0) {
+				if (selectedTariff != null) {
+					if (getNextPage() == null) {
+						if (getWizard().canFinish()) {
+							getWizard().performFinish();
+							// close shell afterwards because getWizard().performFinish() does not close 
+							getContainer().getShell().close();
+						}
+					}
+				}
 			}
 		});
 

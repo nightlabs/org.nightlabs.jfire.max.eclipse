@@ -26,12 +26,22 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.nightlabs.jfire.trade.Article;
 
 public class ArticleSelection
 {
+	public static Set<Article> getSelectedArticles(Set<ArticleSelection> articleSelections) 
+	{
+		Set<Article> selectedArticles = new HashSet<Article>();
+		for (ArticleSelection articleSelection : articleSelections) {
+			selectedArticles.addAll(articleSelection.getSelectedArticles());
+		}
+		return selectedArticles;
+	}
+	
 	private ArticleEdit articleEdit;
 	private Set<? extends Article> selectedArticles;
 

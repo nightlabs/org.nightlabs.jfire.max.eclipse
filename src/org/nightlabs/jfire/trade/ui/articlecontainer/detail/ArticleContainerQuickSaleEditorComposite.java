@@ -55,7 +55,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class ArticleContainerQuickSaleEditorComposite
 extends XComposite
-{
+{	
 	private IWorkbenchPartSite site;
 	private Composite buttonComp;
 	private Button okButtonCustomer;
@@ -97,9 +97,11 @@ extends XComposite
 		deleteSelectionButton.addSelectionListener(deleteSelectionListener);
 		deleteSelectionButton.setEnabled(false);
 		
+		// need to add listeners for activeSegmentEdit by this listener, because at this time activeSegementEdit is null
 		articleContainerEditorComposite.addActiveSegmentEditSelectionListener(new ActiveSegmentEditSelectionListener(){
 			@Override
-			public void selected(ActiveSegmentEditSelectionEvent event) {				
+			public void selected(ActiveSegmentEditSelectionEvent event) {
+				// add listener to check for articleSelection to set enable state for deleteSelectionButton
 				event.getActiveSegmentEdit().addSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);				
 			}
 		});
@@ -128,20 +130,38 @@ extends XComposite
 		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite.okButtonAnonymous.text")); //$NON-NLS-1$
 		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
-				
+
 		articleContainerEditorComposite.addArticleChangeListener(articleChangeListener);
 		articleContainerEditorComposite.addArticleCreateListener(articleCreateListener);
-		
+
 		buttonComp.setEnabled(false);
 	}
 	
 	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
 		return articleContainerEditorComposite;
 	}
-		
+
+	/**
+	 * Returns a Set of all {@link ArticleID} of those {@link Article}s which do not have the allocated or reversed status
+	 * form the given Set of {@link ArticleSelection}s.
+	 * 
+	 * @param selections a Set of {@link ArticleSelection} which should be checked
+	 * @return a Set of all {@link ArticleID} of those {@link Article}s which do not have the allocated or reversed status
+	 */
+	protected ArticleStatusCheckResult getArticleStatusCheckResult(Set<ArticleSelection> selections) {
+		return new ArticleStatusCheckResult(ArticleSelection.getSelectedArticles(selections));
+	}
+	
 	private SegmentEditArticleSelectionListener segmentEditArticleSelectionListener = new SegmentEditArticleSelectionListener() {
 		public void selected(SegmentEditArticleSelectionEvent event) {
-			deleteSelectionButton.setEnabled(!event.getArticleSelections().isEmpty());
+			if (!event.getArticleSelections().isEmpty()) {
+				// we check if all articles are allocated or reversed, only then they can be removed
+				ArticleStatusCheckResult articleStatusCheckResult = getArticleStatusCheckResult(event.getArticleSelections());
+				deleteSelectionButton.setEnabled(articleStatusCheckResult.isAllArticlesAllocatedOrReversed());
+			}
+			else {
+				deleteSelectionButton.setEnabled(false);
+			}			
 		}
 	};	
 	
@@ -233,16 +253,38 @@ extends XComposite
 		}
 	}
 
+//	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
+//		public void articlesCreated(ArticleCreateEvent articleCreateEvent) { 
+//			if (buttonComp != null && !buttonComp.isDisposed())
+//				buttonComp.setEnabled(true);
+//		}
+//	};
+
+	private Set<Article> articlesWithWrongState = new HashSet<Article>();
+	
+	private void checkAllArticlesAreAllocatedOrReversed() 
+	{
+		ArticleStatusCheckResult articleStatusCheckResult = new ArticleStatusCheckResult(articleContainerEditorComposite.getArticles());			
+		
+		if (!articleStatusCheckResult.getNotAllocatedNorReversedArticles().isEmpty())
+			articlesWithWrongState.addAll(articleStatusCheckResult.getNotAllocatedNorReversedArticles());
+		
+		if (!articleStatusCheckResult.getAllocatedOrReversedArticles().isEmpty())
+			articlesWithWrongState.removeAll(articleStatusCheckResult.getAllocatedOrReversedArticles());
+		
+		if (buttonComp != null && !buttonComp.isDisposed())
+			buttonComp.setEnabled(articlesWithWrongState.isEmpty());		
+	}
+	
 	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
 		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
-			if (buttonComp != null && !buttonComp.isDisposed())
-				buttonComp.setEnabled(true);
+			checkAllArticlesAreAllocatedOrReversed();
 		}
 	};
 	
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-			// TODO: check if order is empty
+			checkAllArticlesAreAllocatedOrReversed();
 		}
 	};
 	
