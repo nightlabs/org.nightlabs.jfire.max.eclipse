@@ -48,7 +48,6 @@ import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticlePrice;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
@@ -106,6 +105,9 @@ implements ISelectionProvider
 			if (ci == columnIndex)
 				return null; // name
 
+			if (++ci == columnIndex)
+				return null; // tariff
+			
 			if (++ci == columnIndex) {
 				return AllocationStatusImageUtil.getAllocationStatusImage(article);
 //				if (article.isAllocationAbandoned())
@@ -160,6 +162,9 @@ implements ISelectionProvider
 			if (ci == columnIndex)
 				return simpleProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
+			if (++ci == columnIndex)
+				return article.getTariff().getName().getText(NLLocale.getDefault().getLanguage());
+			
 			if (++ci == columnIndex) {
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
 			}
@@ -255,9 +260,13 @@ implements ISelectionProvider
 		col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
+		col.setText("Tariff");
+		col.setToolTipText("Shows the tariff of the product type");		
+
+		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
 		col.setToolTipText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$		
-
+		
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!isInOrder() && !isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
@@ -287,21 +296,21 @@ implements ISelectionProvider
 		TableColumn columnPrice = new TableColumn(table, SWT.RIGHT);
 		columnPrice.setText(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleTable.priceTableColumn.text"));		 //$NON-NLS-1$
 
-		if (isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
+		if (isInOrder()) // name, tariff, allocationStatus, offer, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{160, -1, -1, -1, -1, 30},
-							new int[]{-1, 22, 22, 22, 22, -1}));
-		else if (isInOffer())  // name, allocationStatus, invoice, deliveryNote, price
+							new int[]{80, 80, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, 22, 22, 22, 22, -1}));
+		else if (isInOffer())  // name, tariff, allocationStatus, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{160, -1, -1, -1, 20},
-							new int[]{-1, 22, 22, 22, -1}));
-		else // Invoice || DeliveryNote: name, allocationStatus, order, offer, (invoice|deliveryNote), price
+							new int[]{80, 80, -1, -1, -1, 20},
+							new int[]{-1, -1, 22, 22, 22, -1}));
+		else // Invoice || DeliveryNote: name, tariff, allocationStatus, order, offer, (invoice|deliveryNote), price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{160, -1, -1, -1, -1, 30},
-							new int[]{-1, 22, 22, 22, 22, -1}));
+							new int[]{80, 80, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, 22, 22, 22, 22, -1}));
 	}
 
 	/**

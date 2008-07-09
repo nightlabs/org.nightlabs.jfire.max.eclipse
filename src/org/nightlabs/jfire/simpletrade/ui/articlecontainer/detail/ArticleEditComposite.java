@@ -32,6 +32,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -77,6 +79,13 @@ public class ArticleEditComposite extends XComposite
 				} // if (!RCPUtil.isKeyDown(RCPUtil.KEY_CTRL)) {
 
 				articleEdit.fireArticleEditArticleSelectionEvent();
+			}
+		});
+		
+		articleTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener(){
+			@Override
+			public void doubleClick(DoubleClickEvent arg0) {
+				articleEdit.changeTariffForSelectedArticles();
 			}
 		});
 	}
