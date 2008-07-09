@@ -344,15 +344,19 @@ extends XComposite
 				}
 			}
 
+			final Composite composite = articleContainerEditorComposite.getActiveSegmentEdit().getComposite();
+//			Composite composite = articleContainerEditorComposite;
 			try {
-				if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
-					articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(false);
+				if (!composite.isDisposed()) {
+					composite.setEnabled(false);
+					buttonComp.setEnabled(false);
 				}
 				ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
 					@Override
 					public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-						if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
-							articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(true);
+						if (!composite.isDisposed()) {
+							composite.setEnabled(true);
+							buttonComp.setEnabled(true);
 						}
 						articleContainerEditorComposite.removeArticleChangeListener(this);
 					}
@@ -365,8 +369,9 @@ extends XComposite
 				tradeManager.deleteArticles(articleIDs, true);				
 			}
 			catch (Exception e) {
-				if (!articleContainerEditorComposite.getActiveSegmentEdit().getComposite().isDisposed()) {
-					articleContainerEditorComposite.getActiveSegmentEdit().getComposite().setEnabled(true);
+				if (!composite.isDisposed()) {
+					composite.setEnabled(true);
+					buttonComp.setEnabled(true);
 				}
 				throw new RuntimeException(e);
 			}
