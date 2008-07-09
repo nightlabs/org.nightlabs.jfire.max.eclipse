@@ -242,48 +242,49 @@ implements ISelectionProvider
 	{
 		TableColumn col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
-//		col.setToolTipText("Name of the voucher");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.nameTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.keyTableColumn.text")); //$NON-NLS-1$
-//		col.setToolTipText("Key (after delivery)");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.keyTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.validityTableColumn.text")); //$NON-NLS-1$
-//		col.setToolTipText("Validity");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.validityTableColumn.text")); //$NON-NLS-1$
 
 		col = new TableColumn(table, SWT.LEFT);
 		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
-//		col.setToolTipText("Status of the allocation");
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.allocationStatusTableColumn.text"));		 //$NON-NLS-1$
 
 		//////////// BEGIN Order, Offer, Invoice, DeliveryNote //////////
 		if (!isInOrder() && !isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Order");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.orderTableColumn.text"));			 //$NON-NLS-1$
 		}
 
 		if (!isInOffer()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Offer");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.offerTableColumn.text"));			 //$NON-NLS-1$
 		}
 
 		if (!isInInvoice()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
-//			col.setToolTipText("Invoice");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 		}
 
 		if (!isInDeliveryNote()) {
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
-//			col.setToolTipText("Delivery Note");
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
 		}
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		TableColumn columnPrice = new TableColumn(table, SWT.RIGHT);
 		columnPrice.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.priceTableColumn.text"));		 //$NON-NLS-1$
+		columnPrice.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.priceTableColumn.text"));		 //$NON-NLS-1$
 
 		if (isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
 			table.setLayout(
