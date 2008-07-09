@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
@@ -18,7 +19,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -31,11 +31,8 @@ import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
-import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueResolution;
-import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
+import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.progress.ProgressMonitor;
@@ -113,7 +110,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
-//				getQuery().setIssuePriorityID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
+				getQuery().setIssueLinkTypeID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
 			}
 		});
 
