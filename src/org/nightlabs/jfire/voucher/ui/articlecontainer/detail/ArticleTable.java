@@ -26,12 +26,15 @@
 
 package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
+import java.text.Collator;
+
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -43,6 +46,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
@@ -101,8 +105,7 @@ implements ISelectionProvider
 	}
 
 	protected class ArticleLabelProvider
-	extends LabelProvider
-	implements ITableLabelProvider
+	extends TableLabelProvider
 	{
 		public Image getColumnImage(Object element, int columnIndex)
 		{
@@ -308,6 +311,8 @@ implements ISelectionProvider
 	{
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
+		
+		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 
 	@Override
