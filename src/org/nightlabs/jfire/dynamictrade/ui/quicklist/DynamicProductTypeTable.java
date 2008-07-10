@@ -26,10 +26,10 @@
 
 package org.nightlabs.jfire.dynamictrade.ui.quicklist;
 
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable;
@@ -42,9 +42,8 @@ import org.nightlabs.util.NLLocale;
 public class DynamicProductTypeTable 
 extends AbstractProductTypeTable<DynamicProductType>
 {
-	private static class LabelProvider 
-	extends org.eclipse.jface.viewers.LabelProvider 
-	implements ITableLabelProvider 
+	private static class LabelProvider
+	extends TableLabelProvider
 	{
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
@@ -59,7 +58,6 @@ extends AbstractProductTypeTable<DynamicProductType>
 				if (pt.getExtendedProductType() != null)
 					sb.insert(0, " / "); //$NON-NLS-1$
 			}
-
 			return sb.toString();
 		}
 	}
@@ -77,11 +75,5 @@ extends AbstractProductTypeTable<DynamicProductType>
 		super.setTableProvider(tableViewer);
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
-
-//	@Override
-//	public Class<DynamicProductType> getProductTypeClass() {
-//		return DynamicProductType.class;
-//	}
-	
 }
 
