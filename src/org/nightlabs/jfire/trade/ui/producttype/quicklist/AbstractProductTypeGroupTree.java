@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -324,6 +326,8 @@ implements ISelectionHandler
 		contentProvider = new ContentProvider();
 		treeViewer.setContentProvider(contentProvider);
 		treeViewer.setLabelProvider(new LabelProvider());
+		
+		treeViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 
 	public void setInput(ProductTypeGroupIDSearchResult result) {
