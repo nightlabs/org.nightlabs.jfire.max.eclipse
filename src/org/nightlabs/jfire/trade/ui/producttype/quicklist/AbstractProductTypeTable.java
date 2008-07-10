@@ -13,7 +13,6 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -76,9 +76,8 @@ implements ISelectionHandler
 		}		
 	}
 	
-	public class LabelProvider 
-	extends org.eclipse.jface.viewers.LabelProvider 
-	implements ITableLabelProvider 
+	public class LabelProvider
+	extends TableLabelProvider
 	{
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
@@ -95,7 +94,7 @@ implements ISelectionHandler
 	 * @param parent
 	 */
 	public AbstractProductTypeTable(Composite parent) {
-		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
+		super(parent, SWT.NONE, true, AbstractTableComposite.DEFAULT_STYLE_SINGLE);
 	}
 
 	/**
@@ -111,7 +110,8 @@ implements ISelectionHandler
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
+		TableColumn tc = new TableColumn(table, SWT.LEFT);
+		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeTable.column.name"));  //$NON-NLS-1$
 		// makes problems under windows, led to the fact that the column was only 20 px wide
 //		TableLayout l = new TableLayout();
 //		l.addColumnData(new ColumnWeightData(1, true));
@@ -124,9 +124,8 @@ implements ISelectionHandler
 		contentProvider = new ContentProvider();
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(new LabelProvider());
-		
-		// TODO FIXME Why does this has no effect???
-		tableViewer.setSorter(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
+
+		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 	
 	@Override
@@ -168,26 +167,5 @@ implements ISelectionHandler
 		}
 		return false;
 	}
-
-//	public boolean canHandleSelection(ISelection selection) 
-//	{
-//		Set<ProductTypeID> typeIDs = SelectionUtil.getProductTypesIDs(selection);
-//		if (!typeIDs.isEmpty()) {
-//			for (ProductTypeID productTypeID : typeIDs) {
-//				Class productTypeClass = JDOObjectID2PCClassMap.sharedInstance().
-//					getPersistenceCapableClass(productTypeID);
-//				if (getProductTypeClass().equals(productTypeClass)) {
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-//	
-//	/**
-//	 * Returns the Class of the {@link ProductType} this Table is displaying.
-//	 * @return the Class of the {@link ProductType} this Table is displaying
-//	 */
-//	public abstract Class<P> getProductTypeClass();
 	
 }
