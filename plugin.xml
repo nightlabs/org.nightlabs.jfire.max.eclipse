@@ -160,7 +160,7 @@
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
             orderHint="30"
-            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueRelated"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssuePropertyRelated"
             scope="global"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterSectionTitle"
             targetClass="org.nightlabs.jfire.issue.Issue"
@@ -169,7 +169,7 @@
       <QueryFilter
             baseElementClass="org.nightlabs.jfire.issue.Issue"
             orderHint="40"
-            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryDocumentRelated"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryIssueLinkRelated"
             scope="global"
             sectionTitle="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle"
             targetClass="org.nightlabs.jfire.issue.Issue"

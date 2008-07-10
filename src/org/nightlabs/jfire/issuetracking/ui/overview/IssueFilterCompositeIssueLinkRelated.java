@@ -32,11 +32,8 @@ import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
-import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
-import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
-import org.nightlabs.jfire.issue.id.IssuePriorityID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -108,7 +105,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		parent.setLayout(gridLayout);
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(parent, SWT.NONE).setText("Type: ");
+		new Label(parent, SWT.NONE).setText("Link Type: ");
 		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(parent, getBorderStyle());
 		issueLinkTypeCombo.setLabelProvider(labelProvider);
 		issueLinkTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -116,15 +113,23 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
-				getQuery().setIssueLinkTypeID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
+				
+				if (selectedIssueLinkType.equals(ISSUE_LINK_TYPE_ALL)) {
+					setValueIntentionally(true);
+					getQuery().setIssueLinkTypeID(null);	
+					setValueIntentionally(false);
+				}
+				else {
+					getQuery().setIssueLinkTypeID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
+				}
 			}
 		});
 
 		loadProperties();
 	}
 
-	private LabelProvider labelProvider = new LabelProvider() {
-
+	private LabelProvider labelProvider = new LabelProvider() 
+	{
 		public String getText(Object element) {
 			if (element instanceof IssueLinkType) {
 				IssueLinkType issueLinkType = (IssueLinkType) element;
@@ -138,12 +143,14 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	protected void resetSearchQueryValues(IssueQuery query)
 	{
 		query.setIssueLinks(issueLinks);
+		query.setIssueLinkTypeID((IssueLinkTypeID)JDOHelper.getObjectId(selectedIssueLinkType));
 	}
 
 	@Override
 	protected void unsetSearchQueryValues(IssueQuery query)
 	{
 		query.setIssueLinks(null);
+		query.setIssueLinkTypeID(null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -154,11 +161,14 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			issueLinks = null;
 			selectedIssueLinkType = null;
+			setSearchSectionActive(false);
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
+				boolean active = isValueIntentionallySet();
+				setSearchSectionActive(active);
 				if (IssueQuery.PROPERTY_ISSUE_LINK_TYPE_ID.equals(changedField.getPropertyName()))
 				{
 					IssueLinkTypeID tmpIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();

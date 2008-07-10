@@ -12,7 +12,7 @@ import org.nightlabs.jfire.issue.query.IssueQuery;
  * 
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class IssueSearchFilterFactoryIssueRelated
+public class IssueSearchFilterFactoryIssueLinkRelated
 extends AbstractQueryFilterFactory<IssueQuery>
 {
 	@Override
@@ -20,6 +20,6 @@ extends AbstractQueryFilterFactory<IssueQuery>
 			int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
-		return new IssueFilterCompositePropertyRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
+		return new IssueFilterCompositeIssueLinkRelated(parent, style, layoutMode, layoutDataMode, queryProvider);
 	}
 }
