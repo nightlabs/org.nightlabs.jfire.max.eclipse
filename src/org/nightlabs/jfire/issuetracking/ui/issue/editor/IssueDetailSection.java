@@ -118,6 +118,41 @@ public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
 		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? "-" : issue.getUpdateTimestamp().toString());
 	}
 
+	public class AssignToMyselfAction extends Action {		
+		public AssignToMyselfAction() {
+			super();
+			setId(AssignToMyselfAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueDetailSection.class, 
+					"Assign to myself"));
+			setToolTipText("Assign to myself");
+			setText("Assign to myself");
+		}
+
+		@Override
+		public void run() {
+		}		
+	}
+	
+	public class AssignToReporterAction extends Action {		
+		public AssignToReporterAction() {
+			super();
+			setId(AssignToReporterAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueDetailSection.class, 
+					"Assign to reporter"));
+			setToolTipText("Assign to reporter");
+			setText("Assign to reporter");
+		}
+
+		@Override
+		public void run() {
+
+		}		
+	}
+	
 	public class AssignAction extends Action {		
 		public AssignAction() {
 			super();

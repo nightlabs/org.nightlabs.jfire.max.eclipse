@@ -84,8 +84,8 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
 		prepareIssueProperties();
+		createComposite(this);
 	}
 
 	/**
@@ -101,8 +101,8 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
 		prepareIssueProperties();
+		createComposite(this);
 	}
 
 	@Override

@@ -76,7 +76,7 @@ extends AbstractTableComposite<Issue>
 			public void sort(Viewer viewer, Object[] elements) {
 				Arrays.sort(elements, new Comparator<Object>() {
 					public int compare(Object object1, Object object2) {
-						return ((Issue)object1).getCreateTimestamp().compareTo(((Issue)object2).getCreateTimestamp());
+						return -((Issue)object1).getCreateTimestamp().compareTo(((Issue)object2).getCreateTimestamp());
 					}
 				});
 			}

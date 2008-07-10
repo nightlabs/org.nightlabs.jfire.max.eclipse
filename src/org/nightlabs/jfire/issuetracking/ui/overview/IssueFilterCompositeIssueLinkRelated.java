@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -31,11 +32,16 @@ import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
+import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
+import org.nightlabs.jfire.issue.id.IssuePriorityID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
+import org.nightlabs.jfire.organisation.Organisation;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -46,11 +52,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {	
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeIssueLinkRelated.class);
 
-	private IssueLinkAdderComposite issueLinkAdderComposite;
-
 	private XComboComposite<IssueLinkType> issueLinkTypeCombo;
+	
 	private Set<IssueLink> issueLinks;
-
+	private IssueLinkType selectedIssueLinkType;
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -69,6 +74,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
+		prepareProperties();
 		createComposite(this);
 	}
 
@@ -85,6 +91,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
+		prepareProperties();
 		createComposite(this);
 	}
 
@@ -93,7 +100,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		return IssueQuery.class;
 	}
 
-	private IssueLinkType selectedIssueLinkType;
 	@Override
 	protected void createComposite(Composite parent)
 	{
@@ -114,17 +120,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 		});
 
-//		issueLinkAdderComposite = new IssueLinkAdderComposite(parent, SWT.NONE, true, null);
-////		issueLinkAdderComposite.addIssueLinkTableItemChangeListener(new IssueLinkTableItemChangeListener()
-////		{
-////		@Override
-////		public void issueLinkItemChanged(IssueLinkItemChangeEvent itemChangedEvent)
-////		{
-////		issueLinks = issueLinkAdderComposite.getItems();
-////		getQuery().setIssueLinks( issueLinks );
-////		}
-////		});
-		
 		loadProperties();
 	}
 
@@ -158,23 +153,45 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		if (event.getChangedQuery() == null)
 		{
 			issueLinks = null;
-//			issueLinkAdderComposite.setIssueLinks(null);
+			selectedIssueLinkType = null;
 		}
 		else
 		{ // there is a new Query -> the changedFieldList is not null!
 			for (FieldChangeCarrier changedField : event.getChangedFields())
 			{
+				if (IssueQuery.PROPERTY_ISSUE_LINK_TYPE_ID.equals(changedField.getPropertyName()))
+				{
+					IssueLinkTypeID tmpIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
+					if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), tmpIssueLinkTypeID) )
+					{
+						if (tmpIssueLinkTypeID == null)
+						{
+							issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+						}
+						else
+						{
+							selectedIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
+									tmpIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME }, 
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+							);
+							issueLinkTypeCombo.setSelection(selectedIssueLinkType);
+						}
+					}
+				}
 				if (IssueQuery.PROPERTY_ISSUE_LINKS.equals(changedField.getPropertyName()))
 				{
 					issueLinks = (Set<IssueLink>) changedField.getNewValue();
-//					issueLinkAdderComposite.setIssueLinks(issueLinks);
 				}
 			} // for (FieldChangeCarrier changedField : event.getChangedFields())
 		} // changedQuery != null		
 	}
 
 	private static final String[] FETCH_GROUPS_ISSUE_LINK_TYPE = { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
-
+	private static IssueLinkType ISSUE_LINK_TYPE_ALL = new IssueLinkType(Organisation.DEV_ORGANISATION_ID, "Issue_Link_Type_All");
+	
+	private void prepareProperties(){
+		ISSUE_LINK_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+	}
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Link Properties....") {
 			@Override
@@ -187,10 +204,12 @@ extends AbstractQueryFilterComposite<IssueQuery>
 						Display.getDefault().syncExec(new Runnable() {
 							public void run() {
 								issueLinkTypeCombo.removeAll();
+								issueLinkTypeCombo.addElement(ISSUE_LINK_TYPE_ALL);
 								for (Iterator<IssueLinkType> it = issueLinkTypeList.iterator(); it.hasNext(); ) {
 									IssueLinkType issueLinkType = it.next();
 									issueLinkTypeCombo.addElement(issueLinkType);
 								}
+								issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
 							}
 						});
 					}catch (Exception e1) {
