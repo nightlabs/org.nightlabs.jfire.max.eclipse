@@ -39,6 +39,8 @@ import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductWizard;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
@@ -64,6 +66,7 @@ extends XComposite
 	private Button deleteSelectionButton;
 	private Text customerSearchText;
 	private ArticleContainerEditorComposite articleContainerEditorComposite;
+	private Button reverseButton;
 	
 	/**
 	 * @param site
@@ -80,10 +83,28 @@ extends XComposite
 	
 	protected void createComposite(Composite parent, ArticleContainerEditorInput input)
 	{
-		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, parent, input);
+		Composite wrapper = new XComposite(parent, SWT.NONE);
+		wrapper.setLayout(new GridLayout(2, false));
 		
-		buttonComp = new XComposite(parent, SWT.NONE);
-		buttonComp.setLayout(new GridLayout(7, false));
+		articleContainerEditorComposite = new ArticleContainerEditorComposite(site, wrapper, input);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.horizontalSpan = 2;
+		articleContainerEditorComposite.setLayoutData(gd);
+		
+		reverseButton = new Button(wrapper, SWT.NONE);
+		reverseButton.setText("Reverse");
+		reverseButton.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), 
+				ReverseProductAction.class));
+		reverseButton.addSelectionListener(new SelectionAdapter(){		
+			@Override
+			public void widgetSelected(SelectionEvent e) 
+			{
+				new ReverseProductAction().run();
+			}		
+		});
+		
+		buttonComp = new XComposite(wrapper, SWT.NONE);
+		buttonComp.setLayout(new GridLayout(8, false));
 		buttonComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		deleteAllButton = new Button(buttonComp, SWT.NONE);
@@ -96,7 +117,7 @@ extends XComposite
 		deleteSelectionButton.setImage(SharedImages.DELETE_16x16.createImage());
 		deleteSelectionButton.addSelectionListener(deleteSelectionListener);
 		deleteSelectionButton.setEnabled(false);
-		
+				
 		// need to add listeners for activeSegmentEdit by this listener, because at this time activeSegementEdit is null
 		articleContainerEditorComposite.addActiveSegmentEditSelectionListener(new ActiveSegmentEditSelectionListener(){
 			@Override

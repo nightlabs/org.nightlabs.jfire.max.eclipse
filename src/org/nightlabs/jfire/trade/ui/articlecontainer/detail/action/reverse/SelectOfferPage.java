@@ -64,6 +64,7 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
@@ -78,11 +79,13 @@ public class SelectOfferPage extends DynamicPathWizardPage
 	private AbstractTableComposite<Offer> offerTable;
 	private List<Object> offers = new ArrayList<Object>(0); // holds either a String or instances of Offer
 	private Offer selectedOffer = null;
+	private OrderID orderID;
 
-	public SelectOfferPage()
+	public SelectOfferPage(OrderID orderID)
 	{
 		super(SelectOfferPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.title")); //$NON-NLS-1$
 		setDescription(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.SelectOfferPage.description")); //$NON-NLS-1$
+		this.orderID = orderID;
 	}
 
 	@Override
@@ -174,17 +177,18 @@ public class SelectOfferPage extends DynamicPathWizardPage
 		return page;
 	}
 
-	protected ReverseWizard getReverseWizard()
-	{
-		return (ReverseWizard) getWizard();
-	}
+//	protected ReverseWizard getReverseWizard()
+//	{
+//		return (ReverseWizard) getWizard();
+//	}
 
 	private void loadDataInJob()
 	{
 		try {
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			final List<Offer> l = tradeManager.getNonFinalizedNonEndedOffers(
-					getReverseWizard().getOrderID(),
+//					getReverseWizard().getOrderID(),
+					orderID,
 					FETCH_GROUPS_OFFERS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 			Display.getDefault().asyncExec(new Runnable() {

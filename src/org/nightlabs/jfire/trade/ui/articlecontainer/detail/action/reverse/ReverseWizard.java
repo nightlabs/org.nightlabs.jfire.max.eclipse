@@ -69,7 +69,7 @@ public class ReverseWizard extends DynamicPathWizard
 	@Override
 	public void addPages()
 	{
-		selectOfferPage = new SelectOfferPage();
+		selectOfferPage = new SelectOfferPage(orderID);
 		addPage(selectOfferPage);
 	}
 
