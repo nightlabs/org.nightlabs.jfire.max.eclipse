@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.order;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -8,6 +10,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -20,6 +23,12 @@ import org.nightlabs.l10n.DateFormatter;
 public class OrderListComposite
 extends AbstractArticleContainerListComposite<Order>
 {
+	public static final String[] FETCH_GROUPS_ORDER = 
+		new String[] {FetchPlan.DEFAULT, Order.FETCH_GROUP_ARTICLES, 
+		Order.FETCH_GROUP_CHANGE_USER, Order.FETCH_GROUP_CREATE_USER,
+		Order.FETCH_GROUP_CURRENCY, Order.FETCH_GROUP_CUSTOMER, 
+		Order.FETCH_GROUP_VENDOR, LegalEntity.FETCH_GROUP_PERSON};
+	
 	public OrderListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
