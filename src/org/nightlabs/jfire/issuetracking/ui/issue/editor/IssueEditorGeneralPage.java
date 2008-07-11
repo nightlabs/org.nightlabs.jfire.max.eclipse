@@ -183,9 +183,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 			public void run() {
 				if (issueLinkListSection != null && !issueLinkListSection.getSection().isDisposed()) {
 					issueLinkListSection.setIssue(getController().getIssue());
-					if (getController().getIssue().getIssueLinks().size() == 0) {
-						issueLinkListSection.getSection().setExpanded(false);
-					}
+					issueLinkListSection.getSection().setExpanded(getController().getIssue().getIssueLinks().size() != 0);
 				}
 				if (issueDetailSection != null && !issueDetailSection.getSection().isDisposed())
 					issueDetailSection.setIssue(getController().getIssue());
@@ -197,15 +195,11 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 					issuePropertySection.setIssue(getController().getIssue());
 				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed()) {
 					issueFileAttachmentSection.setIssue(getController().getIssue());
-					if (getController().getIssue().getIssueFileAttachments().size() == 0) {
-						issueFileAttachmentSection.getSection().setExpanded(false);
-					}
+					issueFileAttachmentSection.getSection().setExpanded(getController().getIssue().getIssueFileAttachments().size() != 0);
 				}
 				if (issueCommentListSection != null && !issueCommentListSection.getSection().isDisposed()) {
 					issueCommentListSection.setIssue(getController().getIssue());
-					if (getController().getIssue().getComments().size() == 0) {
-						issueCommentListSection.getSection().setExpanded(false);
-					}
+					issueCommentListSection.getSection().setExpanded(getController().getIssue().getComments().size() != 0);
 				}
 				if (issueCommentCreateSection != null && !issueCommentCreateSection.getSection().isDisposed())
 					issueCommentCreateSection.setIssue(getController().getIssue());
