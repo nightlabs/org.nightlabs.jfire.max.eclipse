@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
@@ -104,7 +105,7 @@ extends AbstractTableComposite<IssueHistory>
 				switch (columnIndex) 
 				{
 				case(0):
-				break;
+					return ObjectIDUtil.longObjectIDFieldToString(issueHistory.getIssueHistoryID());
 				case(1):
 				break;
 				case(2):

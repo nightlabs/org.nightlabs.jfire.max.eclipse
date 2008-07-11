@@ -24,6 +24,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -83,6 +84,10 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 		
 		issueHistorySection = new IssueHistoryListSection(this, parent, controller);
 		getManagedForm().addPart(issueHistorySection);
+		
+		if (controller.isLoaded()) {
+			issueHistorySection.setIssue(controller.getIssue());
+		}
 	}
 
 	@Override
@@ -93,6 +98,12 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent(); // multiple calls don't hurt
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (issueHistorySection != null && !issueHistorySection.getSection().isDisposed())
+					issueHistorySection.setIssue(getController().getIssue());
+			}
+		});
 	}
 
 	@Override

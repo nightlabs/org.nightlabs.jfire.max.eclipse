@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.history.IssueHistoryDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 
 /**
@@ -25,12 +27,13 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		
-//		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		client.getGridLayout().numColumns = 1; 
-		
 		issueHistoryTable = new IssueHistoryTable(getSection(), SWT.NONE);
 		issueHistoryTable.getGridData().grabExcessHorizontalSpace = true;
 		
 		getSection().setClient(issueHistoryTable);
+	}
+	
+	public void setIssue(Issue issue) {
+		issueHistoryTable.setInput(IssueHistoryDAO.sharedInstance().getIssueHistoryByIssue(issue));
 	}
 }
