@@ -1,9 +1,30 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 
+import javax.jdo.JDOHelper;
+
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.store.id.ProductID;
+import org.nightlabs.jfire.store.reverse.ReverseProductException;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
@@ -12,24 +33,96 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 public class ReverseProductAction 
 extends Action 
 {
+	private static final Logger logger = Logger.getLogger(ReverseProductAction.class);
+
+	private Shell shell = null;
+
 	public ReverseProductAction() {
-		super("Reverse Product", 
-				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), ReverseProductAction.class));
+		this(null);
 	}
 
-	/**
-	 * @param text
-	 * @param style
-	 */
-	public ReverseProductAction(String text, int style) {
-		super(text, style);
+	public ReverseProductAction(Shell shell) {
+		super("Reverse Product", 
+				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), ReverseProductAction.class));
+		this.shell = shell;
 	}
 
 	@Override
-	public void run() {
-		ReverseProductWizard wizard = new ReverseProductWizard();
-		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
-		dialog.open();
+	public void run() 
+	{
+		ReverseProductDialog dialog = new ReverseProductDialog(getShell(), null);
+		int returnCode = dialog.open();
+		if (returnCode == Window.OK) {
+			ProductID productID = dialog.getProductID();
+			createReversingOffer(productID);
+		}
 	}
 
+	private void createReversingOffer(final ProductID productID) 
+	{
+		Job searchJob = new Job("Reversing Product"){
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				try {
+					final Offer reversingOffer = tm.createReverseOfferForProduct(productID);
+					if (reversingOffer == null) {
+						showNothingFound();
+					}
+					else {
+						getDisplay().syncExec(new Runnable(){
+							@Override
+							public void run() {
+								try {
+									OfferID offerID = (OfferID) JDOHelper.getObjectId(reversingOffer);
+									RCPUtil.openEditor(
+											new ArticleContainerEditorInputOffer(offerID), 
+											ArticleContainerEditor.ID_EDITOR);
+								} catch (PartInitException e) {
+									throw new RuntimeException(e);
+								}											
+							}
+						});
+					}
+				} catch (Exception e) {
+					if (e instanceof ReverseProductException) {
+						final ReverseProductException exception = (ReverseProductException) e;
+						getDisplay().syncExec(new Runnable(){
+							@Override
+							public void run() {
+								MessageDialog.openError(getShell(), 
+										"Reverse Error", 
+										exception.getDescription());								
+							}
+						});
+					}
+					else {
+						showNothingFound();
+					}
+					logger.warn("Problem occured when trying to create a reversing offer for productID "+productID, e);
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		searchJob.schedule();
+	}
+
+	private Shell getShell() {
+		return shell != null ? shell : RCPUtil.getActiveShell();
+	}
+	
+	private Display getDisplay() {
+		return shell != null ? shell.getDisplay() : Display.getDefault(); 
+	}
+	
+	private void showNothingFound() {
+		getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				MessageDialog.openError(getShell(), 
+						"No Product found", 
+						"There was not Product found with the given product ID");
+			}
+		});		
+	}
 }

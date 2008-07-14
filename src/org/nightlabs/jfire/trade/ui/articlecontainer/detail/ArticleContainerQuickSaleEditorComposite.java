@@ -40,7 +40,6 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductWizard;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
