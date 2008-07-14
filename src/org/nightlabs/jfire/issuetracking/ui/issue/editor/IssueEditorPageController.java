@@ -33,6 +33,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -43,6 +44,7 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -63,10 +65,16 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		Issue.FETCH_GROUP_ISSUE_PRIORITY,
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
+		Issue.FETCH_GROUP_ISSUE_COMMENT,
+		Issue.FETCH_GROUP_ISSUE_FILELIST,
+		Issue.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_STATES,
 		IssueType.FETCH_GROUP_NAME,
 		IssueType.FETCH_GROUP_ISSUE_PRIORITIES,
 		IssueType.FETCH_GROUP_ISSUE_SEVERITY_TYPES,
 		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,
+		IssueType.FETCH_GROUP_PROCESS_DEFINITION,
 		IssuePriority.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssueResolution.FETCH_GROUP_NAME,
@@ -74,15 +82,15 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssueLink.FETCH_GROUP_LINKED_OBJECT,
 		IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS,
 		Statable.FETCH_GROUP_STATE,
+		Statable.FETCH_GROUP_STATES,
 		StatableLocal.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATES,
 		State.FETCH_GROUP_STATE_DEFINITION,
+		State.FETCH_GROUP_STATABLE,
 		StateDefinition.FETCH_GROUP_NAME,
 		User.FETCH_GROUP_NAME,
-		Issue.FETCH_GROUP_ISSUE_LOCAL,
-		Issue.FETCH_GROUP_ISSUE_COMMENT,
 		IssueComment.FETCH_GROUP_USER,
-		IssueLinkType.FETCH_GROUP_NAME,
-		Issue.FETCH_GROUP_ISSUE_FILELIST
+		IssueLinkType.FETCH_GROUP_NAME		
 	};
 
 	public IssueEditorPageController(EntityEditor editor)

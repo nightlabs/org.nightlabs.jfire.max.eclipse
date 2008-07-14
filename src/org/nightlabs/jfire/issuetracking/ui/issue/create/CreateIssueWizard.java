@@ -13,10 +13,22 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueComment;
+import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.IssueLocal;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -49,7 +61,16 @@ extends DynamicPathWizard
 	}
 
 	private static String[] FETCH_GROUP = new String[]{
-		FetchPlan.DEFAULT
+		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_STATES,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		IssueLocal.FETCH_GROUP_STATE,
+		IssueLocal.FETCH_GROUP_STATES,
+		Statable.FETCH_GROUP_STATE,
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
 	};
 
 	@Override

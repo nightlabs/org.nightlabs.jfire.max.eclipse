@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.history.IssueHistoryDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -34,6 +35,6 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 	}
 	
 	public void setIssue(Issue issue) {
-		issueHistoryTable.setInput(IssueHistoryDAO.sharedInstance().getIssueHistoryByIssue(issue));
+		issueHistoryTable.setInput(IssueHistoryDAO.sharedInstance().getIssueHistoryByIssue(issue, new NullProgressMonitor()));
 	}
 }
