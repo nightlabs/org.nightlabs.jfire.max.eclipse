@@ -308,7 +308,7 @@ implements IProductTypeQuickListFilter
 					defaultQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
 					defaultQueryStore.setDefaultQuery(true);
 					if (logger.isDebugEnabled()) {
-						logger.debug("No default query store available, create one for resultClass = "+getQueryResultClass()+" and user "+Login.sharedInstance().getUserObjectID());
+						logger.debug("No default query store available, create one for resultClass = "+getQueryResultClass()+" and user "+Login.sharedInstance().getUserObjectID()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					defaultQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore, 
 							FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 

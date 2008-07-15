@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.message.IErrorMessageDisplayer;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.store.id.ProductID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
@@ -40,9 +41,9 @@ implements IErrorMessageDisplayer
 	@Override
 	protected Control createDialogArea(Composite parent) 
 	{
-		getShell().setText("Reverse Product");
-		setTitle("Enter Product ID");
-		setMessage("Enter the Product ID you want to reverse");
+		getShell().setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductDialog.windows.title")); //$NON-NLS-1$
+		setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductDialog.title")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductDialog.message")); //$NON-NLS-1$
 		reverseProductComposite = new ReverseProductComposite(parent, SWT.NONE);
 		reverseProductComposite.getProductIDText().addModifyListener(new ModifyListener() {
 			@Override
@@ -52,7 +53,7 @@ implements IErrorMessageDisplayer
 					String errorMessage = null;
 					ProductID productID = reverseProductComposite.getProductID();
 					if (productID == null) {
-						errorMessage = "The entered Product ID is not right formatted";
+						errorMessage = Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductDialog.errorMessage"); //$NON-NLS-1$
 					}
 					setErrorMessage(errorMessage);
 					okButton.setEnabled(productID != null);

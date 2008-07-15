@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.ui.overview.account.search;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.search.AbstractQuickSearchEntry;
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
@@ -24,7 +25,7 @@ public class AccountNameQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(AccountQuery query, String value)
 	{
-		query.setAccountName(".*" + value + ".*");
+		query.setAccountName(".*" + value + ".*"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

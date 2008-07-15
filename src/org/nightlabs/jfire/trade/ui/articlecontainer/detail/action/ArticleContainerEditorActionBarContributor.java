@@ -31,6 +31,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -50,6 +54,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PerspectiveAdapter;
+import org.eclipse.ui.internal.ActionSetContributionItem;
 import org.eclipse.ui.part.EditorActionBarContributor;
 import org.nightlabs.base.ui.action.IXContributionItem;
 import org.nightlabs.base.ui.action.registry.ActionDescriptor;
@@ -82,11 +87,12 @@ extends EditorActionBarContributor
 {
 	private static final Logger logger = Logger.getLogger(ArticleContainerEditorActionBarContributor.class);
 
+	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
+	public static final String EDIT_MENU_ID = ArticleContainerEditorActionBarContributor.class.getPackage().getName();
+	
 	private IArticleContainerEditor activeArticleContainerEditor = null;
 	private ArticleContainerEditorComposite activeArticleContainerEditorComposite = null;
 	private SegmentEdit activeSegmentEdit = null;
-
-	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
 
 	public ArticleContainerEditorActionBarContributor()
 	{
@@ -416,17 +422,32 @@ extends EditorActionBarContributor
 		// contribute to the main pulldown menu
 		if (localPulldownMenuManager == null) {
 			// do we have the menu already from a previous session (=> workbench.xml)?
-			localPulldownMenuManager = (IMenuManager) realPulldownMenuManager.find(ArticleContainerEditorActionBarContributor.class.getPackage().getName());
+			IContributionItem contributionItem = (IContributionItem) realPulldownMenuManager.find(EDIT_MENU_ID);
+			if (contributionItem instanceof IMenuManager) {
+				localPulldownMenuManager = (IMenuManager) contributionItem;				
+			}
+			// added to avoid ClasscastException when same menu already comes from actionSet extension-point
+			else if (contributionItem instanceof ActionSetContributionItem) {
+				ActionSetContributionItem actionItem = (ActionSetContributionItem) contributionItem;
+				IContributionItem innerItem = actionItem.getInnerItem();
+				if (innerItem != null && innerItem instanceof IMenuManager) {
+					localPulldownMenuManager = (IMenuManager) innerItem;					
+				}
+			}
 
 			if (localPulldownMenuManager == null) {
-				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.pulldownMenu.text"), ArticleContainerEditorActionBarContributor.class.getPackage().getName()); //$NON-NLS-1$
+				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.pulldownMenu.text"), //$NON-NLS-1$ 
+						EDIT_MENU_ID); 
 				realPulldownMenuManager.insertAfter(
 						// IWorkbenchActionConstants.MB_ADDITIONS,
 						IWorkbenchActionConstants.M_FILE,
 						localPulldownMenuManager);
 			}
 		}
-		localPulldownMenuManager.removeAll();
+//		localPulldownMenuManager.removeAll();
+		articleContainerActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);		
+		articleEditActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);
+		
 		articleContainerActionRegistry.contributeToMenuBar(localPulldownMenuManager);
 		localPulldownMenuManager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
 		articleEditActionRegistry.contributeToMenuBar(localPulldownMenuManager);

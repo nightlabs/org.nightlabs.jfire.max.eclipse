@@ -225,12 +225,12 @@ extends AbstractUserConfigModulePreferencePage
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
-			newShell.setText("Select a struct field");
+			newShell.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.windows.title")); //$NON-NLS-1$
 		}
 		
 		@Override
 		protected Control createDialogArea(Composite parent) {
-			setTitle("Select a struct field");			
+			setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.title"));			 //$NON-NLS-1$
 			treeComposite = new StructTreeComposite(parent, true, null);
 			treeComposite.setInput(StructLocalDAO.sharedInstance().getStructLocal(
 					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor()));

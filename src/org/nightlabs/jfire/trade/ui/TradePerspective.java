@@ -33,6 +33,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
 
 /**
@@ -67,7 +68,7 @@ public class TradePerspective implements IPerspectiveFactory
 //				0.3f, // IPageLayout.DEFAULT_VIEW_RATIO,
 //				IPageLayout.ID_EDITOR_AREA
 //			);		
-		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.3f, IPageLayout.ID_EDITOR_AREA);
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.TOP, 0.3f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		topRight.addView(ProductTypeQuickListView.ID_VIEW);
 		topRight.addView(DeliveryQueueBrowsingView.ID_VIEW);
 

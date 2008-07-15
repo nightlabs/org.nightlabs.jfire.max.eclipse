@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.store.id.ProductID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -16,7 +17,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class DefaultProductIDParser 
 implements IProductIDParser 
 {
-	private static final String SEPARATOR = "/";
+	private static final String SEPARATOR = "/"; //$NON-NLS-1$
 	
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.IProductIDParser#isValid(java.lang.String, org.nightlabs.progress.ProgressMonitor)

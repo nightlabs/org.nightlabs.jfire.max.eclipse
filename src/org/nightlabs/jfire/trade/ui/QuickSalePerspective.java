@@ -2,15 +2,12 @@ package org.nightlabs.jfire.trade.ui;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IPerspectiveListener4;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.login.LoginState;
@@ -93,7 +90,7 @@ implements IPerspectiveFactory
 //		layout.addView(ProductTypeQuickListView.ID_VIEW, IPageLayout.RIGHT, 0.7f,
 //				IPageLayout.ID_EDITOR_AREA);
 
-		IFolderLayout folder = layout.createFolder("right_bottom", IPageLayout.RIGHT, 0.7f, IPageLayout.ID_EDITOR_AREA);
+		IFolderLayout folder = layout.createFolder("right_bottom", IPageLayout.RIGHT, 0.7f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		folder.addView(ProductTypeQuickListView.ID_VIEW);
 		folder.addView(DeliveryQueueBrowsingView.ID_VIEW);
 
@@ -173,33 +170,34 @@ implements IPerspectiveFactory
 				else
 					logger.warn("Opening QuickSaleEditor not possible, because input is null!"); //$NON-NLS-1$
 			}
-			if (page != null) {
-				// close additional editors if more than one is open
-				IEditorReference[] references = page.getEditorReferences();
-				if (references.length > 1) {
-					IEditorInput activeInput = null;
-					if (page.getActiveEditor() != null) {
-						activeInput = page.getActiveEditor().getEditorInput();
-					}
-					for (int i=0; i<references.length; i++) {
-						IEditorReference reference = references[i];
-						String editorID = reference.getId();
-						if (!editorID.equals(ArticleContainerQuickSaleEditor.ID_EDITOR)) {
-							logger.info("Closing editor (because it is no ArticleContainerQuickSaleEditor): editorID=" + editorID); //$NON-NLS-1$
-							page.closeEditor(reference.getEditor(false), true);
-						}
-						try {
-							IEditorInput input = reference.getEditorInput();
-							if (activeInput != null && !activeInput.equals(input)) {
-								logger.info("Closing editor (because it is not showing the active one): input=" + input); //$NON-NLS-1$
-								page.closeEditor(reference.getEditor(false), true);
-							}
-						} catch (PartInitException e) {
-							logger.error("PartInitException: " + e.getLocalizedMessage(), e); //$NON-NLS-1$
-						}
-					}
-				}
-			}
+			// commented because now with reverse product action additional editor can be opened in QuickSalePerspective 
+//			if (page != null) {
+//				// close additional editors if more than one is open
+//				IEditorReference[] references = page.getEditorReferences();
+//				if (references.length > 1) {
+//					IEditorInput activeInput = null;
+//					if (page.getActiveEditor() != null) {
+//						activeInput = page.getActiveEditor().getEditorInput();
+//					}
+//					for (int i=0; i<references.length; i++) {
+//						IEditorReference reference = references[i];
+//						String editorID = reference.getId();
+//						if (!editorID.equals(ArticleContainerQuickSaleEditor.ID_EDITOR)) {
+//							logger.info("Closing editor (because it is no ArticleContainerQuickSaleEditor): editorID=" + editorID); //$NON-NLS-1$
+//							page.closeEditor(reference.getEditor(false), true);
+//						}
+//						try {
+//							IEditorInput input = reference.getEditorInput();
+//							if (activeInput != null && !activeInput.equals(input)) {
+//								logger.info("Closing editor (because it is not showing the active one): input=" + input); //$NON-NLS-1$
+//								page.closeEditor(reference.getEditor(false), true);
+//							}
+//						} catch (PartInitException e) {
+//							logger.error("PartInitException: " + e.getLocalizedMessage(), e); //$NON-NLS-1$
+//						}
+//					}
+//				}
+//			}
 		}
 	}
 

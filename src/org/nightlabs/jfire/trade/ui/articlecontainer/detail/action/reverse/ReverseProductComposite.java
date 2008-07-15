@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.store.id.ProductID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -37,7 +38,7 @@ extends XComposite
 		searchWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label label = new Label(searchWrapper, SWT.NONE);
-		label.setText("Product ID (Organisation ID / Product ID)");
+		label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.label")); //$NON-NLS-1$
 		productIDText = new Text(searchWrapper, SWT.BORDER);
 		productIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productIDText.setFocus();
@@ -50,16 +51,21 @@ extends XComposite
 	
 		Composite chooseComposite = new XComposite(wrapper, SWT.NONE);				
 		reverseAllButton = new Button(chooseComposite, SWT.RADIO);
-		reverseAllButton.setText("Reverse Complete Offer");
+		reverseAllButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.button.reverseAll.text")); //$NON-NLS-1$
 		reverseAllButton.setSelection(true);
 		reverseArticleButton = new Button(chooseComposite, SWT.RADIO);
-		reverseArticleButton.setText("Reverse only Article");		
+		reverseArticleButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.button.reverseOnlyArticle.text"));		 //$NON-NLS-1$
 	}
 
+	private IProductIDParser productIDParser;
 	public IProductIDParser getProductIDParser() 
 	{
-		// TODO: should come from extension-point
-		return new DefaultProductIDParser();
+		if (productIDParser == null) {
+			// TODO: should come from extension-point
+//		productIDParser = new DefaultProductIDParser();		
+			productIDParser = ProductIDParserRegistry.sharedInstance().getProductIDParser().iterator().next();			
+		}
+		return productIDParser;
 	}
 	
 	public boolean isReverseAll() {
