@@ -1,12 +1,20 @@
 package org.nightlabs.jfire.prop.html.ui;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPropertyListener;
+import org.nightlabs.base.ui.language.LanguageChangeEvent;
+import org.nightlabs.base.ui.language.LanguageChangeListener;
+import org.nightlabs.base.ui.language.LanguageChooserCombo;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorComposite;
 import org.nightlabs.eclipse.ui.fckeditor.FCKEditorInput;
 import org.nightlabs.eclipse.ui.fckeditor.IFCKEditor;
@@ -16,6 +24,7 @@ import org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor;
 import org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditorLayoutData;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.html.HTMLDataField;
+import org.nightlabs.language.LanguageCf;
 
 /**
  * @author Marc Klinger - marc[at]nightlabs[dot]de
@@ -23,7 +32,10 @@ import org.nightlabs.jfire.prop.html.HTMLDataField;
 public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 {
 	private Composite control;
-	private FCKEditorComposite editorComposite;
+	private LanguageChooserCombo languageChooser;
+	private Map<String, FCKEditorComposite> editorComposites;
+	private Composite editorWrapper;
+	private StackLayout editorWrapperLayout;
 
 	public HTMLDataFieldEditor(IStruct struct, HTMLDataField data)
 	{
@@ -47,61 +59,66 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 		gl.marginHeight = 0;
 		control.setLayout(gl);
 
-		// TODO: add language switcher here...
-
-		IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
-		editorComposite = new FCKEditorComposite(control, SWT.BORDER, editorInput);
-		editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		editorComposite.getEditor().addPropertyListener(new IPropertyListener() {
+		languageChooser = new LanguageChooserCombo(control);
+		languageChooser.addLanguageChangeListener(new LanguageChangeListener() {
 			@Override
-			public void propertyChanged(Object src, int propertyId) {
-				if(propertyId == IFCKEditor.PROP_DIRTY)
-					modifyData();
+			public void languageChanged(LanguageChangeEvent event)
+			{
+				switchLanguage(event.getNewLanguage().getLanguageID());
 			}
 		});
 
-//
-//		contentLabel = new Label(control, SWT.WRAP);
-//
-//		fileLabel = new Label(control, SWT.WRAP);
-//
-//		final Button b = new Button(control, SWT.PUSH);
-//		b.setText("Edit...");
-//		b.addSelectionListener(new SelectionAdapter() {
-//			/* (non-Javadoc)
-//			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-//			 */
-//			@Override
-//			public void widgetSelected(SelectionEvent event)
-//			{
-//				try {
-//					IFCKEditorInput editorInput = new FCKEditorInput(getDataField(), getDataField().getStructFieldID());
-//					RCPUtil.getActiveWorkbenchPage().openEditor(editorInput, "org.nightlabs.jfire.prop.html.ui.PropFCKEditor");
-//					// TEST:
-//					modifyData();
-//				} catch (Throwable e) {
-//					MessageDialog.openError(b.getShell(), "Error", String.format("Editor could not be opened: %s", e.getLocalizedMessage()));
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		editorWrapper = new Composite(control, SWT.NONE);
+		gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		editorWrapper.setLayoutData(gd);
+
+		editorWrapperLayout = new StackLayout();
+		editorWrapper.setLayout(editorWrapperLayout);
+
+		List<LanguageCf> languages = languageChooser.getLanguages();
+		editorComposites = new HashMap<String, FCKEditorComposite>(languages.size());
+		for(LanguageCf language : languages) {
+			IFCKEditorContent contentWrapper = getDataField().getContent(language.getLanguageID());
+			System.out.println("CONTENT: "+contentWrapper.getHtml());
+			IFCKEditorInput editorInput = new FCKEditorInput(contentWrapper, getDataField().getStructFieldID());
+			FCKEditorComposite editorComposite = new FCKEditorComposite(editorWrapper, SWT.BORDER, editorInput);
+			editorComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			editorComposite.getEditor().addPropertyListener(new IPropertyListener() {
+				@Override
+				public void propertyChanged(Object src, int propertyId) {
+					if(propertyId == IFCKEditor.PROP_DIRTY)
+						modifyData();
+				}
+			});
+			editorComposites.put(language.getLanguageID(), editorComposite);
+		}
+		switchLanguage(languageChooser.getLanguage().getLanguageID());
 
 		doRefresh();
 
 		return control;
 	}
 
+	private void switchLanguage(String languageId)
+	{
+		FCKEditorComposite editorComposite = editorComposites.get(languageId);
+		if(editorComposite == null)
+			throw new IllegalStateException("Editor for language "+languageId+" is unknown");
+		editorWrapperLayout.topControl = editorComposite;
+		editorWrapper.layout();
+	}
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#getLayoutData()
 	 */
 	@Override
-	public DataFieldEditorLayoutData getLayoutData() 
+	public DataFieldEditorLayoutData getLayoutData()
 	{
 		DataFieldEditorLayoutData ld = new DataFieldEditorLayoutData(DataFieldEditorLayoutData.FILL_BOTH);
 		ld.minimumHeight = 450;
 		return ld;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.AbstractDataFieldEditor#doRefresh()
 	 */
@@ -140,7 +157,7 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 			}
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.prop.edit.DataFieldEditor#updatePropertySet()
 	 */
@@ -148,31 +165,35 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 	public void updatePropertySet()
 	{
 		long timeoutMillis = 5000;
-		IFCKEditor editor = editorComposite.getEditor();
-		MyWaitListener propertyListener = new MyWaitListener();
-		if(editor.isDirty()) {
-			editor.addPropertyListener(propertyListener);
-			try {
-				editor.commit();
-				// wait on the ui thread until the server commit round-trip 
-				// is back and the editor is not dirty anymore:
-				long startTimeMillis = System.currentTimeMillis();
-				Display display = control.getDisplay();
-				while(!display.isDisposed() && !propertyListener.committed) {
-					if(System.currentTimeMillis() - startTimeMillis > timeoutMillis)
-						throw new RuntimeException("Editor commit timeout");
-					if(!display.readAndDispatch())
-						display.sleep();
+		for(Map.Entry<String, FCKEditorComposite> entry : editorComposites.entrySet()) {
+			String languageId = entry.getKey();
+			FCKEditorComposite editorComposite = entry.getValue();
+			IFCKEditor editor = editorComposite.getEditor();
+			MyWaitListener propertyListener = new MyWaitListener();
+			if(editor.isDirty()) {
+				editor.addPropertyListener(propertyListener);
+				try {
+					editor.commit();
+					// wait on the ui thread until the server commit round-trip
+					// is back and the editor is not dirty anymore:
+					long startTimeMillis = System.currentTimeMillis();
+					Display display = control.getDisplay();
+					while(!display.isDisposed() && !propertyListener.committed) {
+						if(System.currentTimeMillis() - startTimeMillis > timeoutMillis)
+							throw new RuntimeException("Editor commit timeout");
+						if(!display.readAndDispatch())
+							display.sleep();
+					}
+				} finally {
+					editor.removePropertyListener(propertyListener);
 				}
-			} finally {
-				editor.removePropertyListener(propertyListener);
+				// waiting done. Commit into the property set:
+				IFCKEditorContent editorContent = editor.getEditorInput().getEditorContent();
+				HTMLDataField dataField = getDataField();
+				dataField.setText(languageId, editorContent.getHtml());
+				dataField.setFiles(editorContent.getFiles());
+				// commit done.
 			}
-			// waiting done. Commit into the property set:
-			IFCKEditorContent editorContent = editor.getEditorInput().getEditorContent();
-			HTMLDataField dataField = getDataField();
-			dataField.setHtml(editorContent.getHtml());
-			dataField.setFiles(editorContent.getFiles());
-			// commit done.
 		}
 	}
 }
