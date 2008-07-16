@@ -3,6 +3,8 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -24,6 +26,9 @@ extends XComposite
 	private Button reverseArticleButton;
 	private Text productIDText;
 	private String text;
+	private boolean reverseAll;
+	private boolean reverseArticle;
+	private IProductIDParser productIDParser;
 	
 	/**
 	 * @param parent
@@ -52,34 +57,48 @@ extends XComposite
 		Composite chooseComposite = new XComposite(wrapper, SWT.NONE);				
 		reverseAllButton = new Button(chooseComposite, SWT.RADIO);
 		reverseAllButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.button.reverseAll.text")); //$NON-NLS-1$
-		reverseAllButton.setSelection(true);
+		reverseAllButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				reverseAll = true;
+				reverseArticle = false;
+			}
+		});
 		reverseArticleButton = new Button(chooseComposite, SWT.RADIO);
 		reverseArticleButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.button.reverseOnlyArticle.text"));		 //$NON-NLS-1$
+		reverseArticleButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				reverseAll = false;
+				reverseArticle = true;
+			}
+		});
+		
+		reverseAllButton.setSelection(true);
+		reverseAll = true;
+		reverseArticle = false;
 	}
 
-	private IProductIDParser productIDParser;
 	public IProductIDParser getProductIDParser() 
 	{
 		if (productIDParser == null) {
-			// TODO: should come from extension-point
-//		productIDParser = new DefaultProductIDParser();		
 			productIDParser = ProductIDParserRegistry.sharedInstance().getProductIDParser().iterator().next();			
 		}
 		return productIDParser;
 	}
-	
+
 	public boolean isReverseAll() {
-		return reverseAllButton.getSelection();
+		return reverseAll;
 	}
 
 	public boolean isReverseArticle() {
-		return reverseArticleButton.getSelection();
+		return reverseArticle;
 	}
 
 	public ProductID getProductID() {
 		return getProductIDParser().getProductID(text, new NullProgressMonitor());
 	}
-		
+
 	public Text getProductIDText() {
 		return productIDText;
 	}

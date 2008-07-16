@@ -75,5 +75,14 @@ implements IErrorMessageDisplayer
 	public ProductID getProductID() {
 		return productID;
 	}
+	
+	public boolean isReverseAll() {
+		return reverseProductComposite.isReverseAll();
+	}
+	
+	public boolean isReverseArticle() {
+		return reverseProductComposite.isReverseArticle();
+	}
+	
 }
 ;

@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 
+import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.store.reverse.AlreadyReversedArticleReverseProductError;
@@ -41,9 +43,9 @@ extends Action
 
 	private Shell shell = null;
 
-	public ReverseProductAction() {
-		this(null);
-	}
+//	public ReverseProductAction() {
+//		this(null);
+//	}
 
 	public ReverseProductAction(Shell shell) {
 		super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.text"),  //$NON-NLS-1$
@@ -58,18 +60,19 @@ extends Action
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
 			ProductID productID = dialog.getProductID();
-			createReversingOffer(productID);
+			createReversingOffer(productID, dialog.isReverseAll());
 		}
 	}
 
-	private void createReversingOffer(final ProductID productID) 
+	private void createReversingOffer(final ProductID productID, final boolean completeOffer) 
 	{
 		Job searchJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.job.name")){ //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				try {
-					final Offer reversingOffer = tm.createReverseOfferForProduct(productID);
+					final Offer reversingOffer = tm.createReverseOfferForProduct(productID, completeOffer, true, 
+							new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					if (reversingOffer == null) {
 						showNothingFound();
 					}
@@ -125,12 +128,20 @@ extends Action
 		searchJob.schedule();
 	}
 
+//	private Shell getShell() {
+//		return shell != null ? shell : RCPUtil.getActiveShell();
+//	}
+//	
+//	private Display getDisplay() {
+//		return shell != null ? shell.getDisplay() : Display.getDefault(); 
+//	}
+
 	private Shell getShell() {
-		return shell != null ? shell : RCPUtil.getActiveShell();
+		return shell;
 	}
 	
 	private Display getDisplay() {
-		return shell != null ? shell.getDisplay() : Display.getDefault(); 
+		return shell.getDisplay(); 
 	}
 	
 	private void showNothingFound() {
