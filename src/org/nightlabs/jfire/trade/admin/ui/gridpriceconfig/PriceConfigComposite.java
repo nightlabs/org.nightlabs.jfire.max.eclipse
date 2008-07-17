@@ -251,7 +251,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 			Label title = new Label(this, SWT.NONE);
 			title.setText("Assigned:");
-			priceConfigName = new Text(this, SWT.BORDER | SWT.READ_ONLY);
+			priceConfigName = new Text(this, getBorderStyle() | SWT.READ_ONLY);
 			priceConfigName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			Label info = new Label(this, SWT.NONE | SWT.WRAP);

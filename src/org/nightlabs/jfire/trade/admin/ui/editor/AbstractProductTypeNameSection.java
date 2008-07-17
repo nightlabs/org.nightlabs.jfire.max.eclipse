@@ -27,7 +27,6 @@ import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public abstract class AbstractProductTypeNameSection
 extends ToolBarSectionPart
@@ -44,12 +43,6 @@ implements IProductTypeSectionPart
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeNameSection.text")); //$NON-NLS-1$
 	}
 
-	/**
-	 * @param page
-	 * @param parent
-	 * @param style
-	 * @param title
-	 */
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent, int style, String title) {
 		super(page, parent, style, title);
 		productTypeName = new I18nTextEditorTable(getContainer());
