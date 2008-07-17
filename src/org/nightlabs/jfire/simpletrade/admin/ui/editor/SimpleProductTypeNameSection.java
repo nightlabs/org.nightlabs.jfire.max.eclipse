@@ -14,17 +14,10 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class SimpleProductTypeNameSection
 extends AbstractProductTypeNameSection
 {
-	/**
-	 * @param page
-	 * @param parent
-	 * @param style
-	 * @param title
-	 */
 	public SimpleProductTypeNameSection(IFormPage page, Composite parent, int style) {
 		super(
 				page, parent, style,
