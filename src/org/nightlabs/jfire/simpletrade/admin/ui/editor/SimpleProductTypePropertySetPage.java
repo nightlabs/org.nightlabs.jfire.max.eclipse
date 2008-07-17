@@ -41,7 +41,7 @@ extends EntityEditorPageWithProgress
 	}
 	
 	private SimpleProductTypeStructLocalScopeSection structLocalScopeSection = null;
-	private BlockBasedEditorSection blockBaseEditorSection = null;
+	private BlockBasedEditorSection blockBasedEditorSection = null;
 	
 	
 	/**
@@ -53,8 +53,8 @@ extends EntityEditorPageWithProgress
 		super(editor, SimpleProductTypePropertySetPage.class.getName(), Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.title"));  //$NON-NLS-1$
 	}
 
-	public BlockBasedEditorSection getBlockBaseEditorSection() {
-		return blockBaseEditorSection;
+	public BlockBasedEditorSection getBlockBasedEditorSection() {
+		return blockBasedEditorSection;
 	}
 	
 	private int sectionStyle = ExpandableComposite.TITLE_BAR;
@@ -65,8 +65,8 @@ extends EntityEditorPageWithProgress
 		structLocalScopeSection = new SimpleProductTypeStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
 		
-		blockBaseEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBaseEditorSection.title"));  //$NON-NLS-1$
-		getManagedForm().addPart(blockBaseEditorSection);
+		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBasedEditorSection.title"));  //$NON-NLS-1$
+		getManagedForm().addPart(blockBasedEditorSection);
 	}
 
 	@Override
@@ -78,13 +78,17 @@ extends EntityEditorPageWithProgress
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						SimpleProductType.class, simpleProductType.getStructScope(), simpleProductType.getStructLocalScope(), monitor);
+						SimpleProductType.class,
+						simpleProductType.getPropertySet().getStructScope(),
+						simpleProductType.getPropertySet().getStructLocalScope(),
+						monitor
+				);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						if (isDisposed())
 							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
-						blockBaseEditorSection.setProperty(controller.getPropertySet(), structLocal);
+						blockBasedEditorSection.setPropertySet(controller.getPropertySet(), structLocal);
 						switchToContent();
 					}
 				});
