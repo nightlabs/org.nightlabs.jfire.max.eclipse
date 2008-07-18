@@ -16,6 +16,7 @@ import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
+import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.history.ProductHistoryItem;
@@ -32,6 +33,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 	public static final String[] FETCH_GROUPS_PRODUCT_HISTORY = new String[] {
 		FetchPlan.DEFAULT,
 		User.FETCH_GROUP_PERSON,
+//		Person.FETCH_GROUP_FULL_DATA,
 		Offer.FETCH_GROUP_CREATE_USER,
 		Order.FETCH_GROUP_CREATE_USER,
 		Invoice.FETCH_GROUP_CREATE_USER,
@@ -41,7 +43,8 @@ extends AbstractTableComposite<ProductHistoryItem>
 		Invoice.FETCH_GROUP_CUSTOMER,
 		DeliveryNote.FETCH_GROUP_CUSTOMER,
 		ModeOfDeliveryFlavour.FETCH_GROUP_NAME,
-		ModeOfPaymentFlavour.FETCH_GROUP_NAME
+		ModeOfPaymentFlavour.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON,
 	};
 	
 	class ProductHistoryTableLabelProvider
@@ -71,14 +74,16 @@ extends AbstractTableComposite<ProductHistoryItem>
 								return "Allocation";
 							case DELIVERY:
 								return "Delivery";
-							case DELIVERY_NOTE_FINALIZED:
+							case DELIVERY_NOTE:
 								return "Delivery Note";
-							case INVOICE_FINALIZED:
-								return "Invoice";
-							case OFFER_ACCEPTED:
+							case INVOICE:
+								return "Invoice";								
+							case OFFER:
 								return "Offer";
 							case PAYMENT:
-								return "Payment";								
+								return "Payment";
+							default:
+								return "";
 						}
 					// name
 					case 3:
@@ -146,7 +151,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 		TableColumn createDTColumn = new TableColumn(table, SWT.LEFT);
 		createDTColumn.setText("Create Date");
 		createDTColumn.setToolTipText("Create Date");
-		
+
 		TableColumn userColumn = new TableColumn(table, SWT.LEFT);
 		userColumn.setText("User");
 		userColumn.setToolTipText("User");
@@ -154,11 +159,11 @@ extends AbstractTableComposite<ProductHistoryItem>
 		TableColumn historyTypeColumn = new TableColumn(table, SWT.LEFT);
 		historyTypeColumn.setText("Type");
 		historyTypeColumn.setToolTipText("Type");
-		
+
 		TableColumn nameColumn = new TableColumn(table, SWT.LEFT);
 		nameColumn.setText("Name");
 		nameColumn.setToolTipText("Name");
-		
+
 		TableColumn articleContainerIDColumn = new TableColumn(table, SWT.LEFT);
 		articleContainerIDColumn.setText("ID");
 		articleContainerIDColumn.setToolTipText("ID");		
@@ -174,8 +179,8 @@ extends AbstractTableComposite<ProductHistoryItem>
 		TableColumn customerColumn = new TableColumn(table, SWT.LEFT);
 		customerColumn.setText("Customer");
 		customerColumn.setToolTipText("Customer");
-		
-		WeightedTableLayout layout = new WeightedTableLayout(new int [] {1, 1, 1, 1, 1, 1, 1, 1});
+
+		WeightedTableLayout layout = new WeightedTableLayout(new int [] {20, 15, 15, 15, 10, 20, 20, 40});
 		table.setLayout(layout);
 	}
 

@@ -331,7 +331,8 @@ public class StatableFilterSearchComposite
 				try {
 					TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
 					JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					
+
+					// TODO: add workflow selection so that only the processdefiniton for the given workflow
 					Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(statableClassName);
 					String[] PROCESS_DEFINITION_FETCH_GROUPS = new String[] {
 							FetchPlan.DEFAULT,
@@ -342,7 +343,7 @@ public class StatableFilterSearchComposite
 							PROCESS_DEFINITION_FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
-					
+
 					final Set<StateDefinition> allStateDefinitions = new HashSet<StateDefinition>();
 					for (ProcessDefinition processDefinition : processDefinitions)
 					{
@@ -354,7 +355,7 @@ public class StatableFilterSearchComposite
 								monitor);
 						allStateDefinitions.addAll(stateDefinitions);
 					}
-					
+
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							if (stateDefinitions == null || stateDefinitions.isDisposed())
