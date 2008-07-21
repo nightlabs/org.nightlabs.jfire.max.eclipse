@@ -87,7 +87,7 @@ public class HTMLDataFieldEditor extends AbstractDataFieldEditor<HTMLDataField>
 				@Override
 				public void propertyChanged(Object src, int propertyId) {
 					if(propertyId == IFCKEditor.PROP_DIRTY)
-						modifyData();
+						notifyChangeListeners();
 				}
 			});
 			editorComposites.put(language.getLanguageID(), editorComposite);
