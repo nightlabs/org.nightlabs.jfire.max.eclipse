@@ -1,5 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.util.Collection;
+
+import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -7,8 +12,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.history.IssueHistoryDAO;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -35,6 +43,11 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 	}
 	
 	public void setIssue(Issue issue) {
-		issueHistoryTable.setInput(IssueHistoryDAO.sharedInstance().getIssueHistoryByIssue(issue, new NullProgressMonitor()));
+		IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
+		Collection<IssueHistory> issueHistories = IssueHistoryDAO.sharedInstance().getIssueHistories(
+				issueID, 
+				new String[]{FetchPlan.DEFAULT, IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		
+		issueHistoryTable.setIssueHistories(issueID, issueHistories);
 	}
 }

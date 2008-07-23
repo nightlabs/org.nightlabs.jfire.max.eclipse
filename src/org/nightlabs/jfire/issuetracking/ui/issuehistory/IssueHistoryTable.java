@@ -1,9 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
+import java.text.DateFormat;
+import java.util.Collection;
+
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -15,13 +16,13 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.history.IssueHistory;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
@@ -95,6 +96,8 @@ extends AbstractTableComposite<IssueHistory>
 		tableViewer.setLabelProvider(new IssueHistoryListLabelProvider());
 	}
 
+	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	
 	class IssueHistoryListLabelProvider
 	extends TableLabelProvider
 	{
@@ -105,7 +108,7 @@ extends AbstractTableComposite<IssueHistory>
 				switch (columnIndex) 
 				{
 				case(0):
-					return ObjectIDUtil.longObjectIDFieldToString(issueHistory.getIssueHistoryID());
+					return dateTimeFormat.format(issueHistory.getCreateTimeStamp());
 				case(1):
 				break;
 				case(2):
@@ -127,6 +130,16 @@ extends AbstractTableComposite<IssueHistory>
 		super.setInput("Loading message");
 	}
 
+	private IssueID issueID;
+	public void setIssueHistories(IssueID issueID, Collection<IssueHistory> issueHistories)
+	{
+		if (issueID == null)
+			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
+
+		this.issueID = issueID;
+		super.setInput(issueHistories);
+	}
+	
 	@Override
 	public void setInput(Object input)
 	{
