@@ -110,7 +110,7 @@ extends AbstractTableComposite<IssueHistory>
 				case(0):
 					return dateTimeFormat.format(issueHistory.getCreateTimeStamp());
 				case(1):
-				break;
+					return issueHistory.getChange();
 				case(2):
 				case(3):
 				break;
