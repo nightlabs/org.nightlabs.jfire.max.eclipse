@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -248,6 +249,8 @@ extends AbstractTableComposite<Issue>
 		tableViewer.setLabelProvider(new IssueTableLabelProvider());
 	}
 
+	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	
 	class IssueTableLabelProvider
 	extends TableLabelProvider
 	{
@@ -257,7 +260,7 @@ extends AbstractTableComposite<Issue>
 				Issue issue = (Issue) element;
 				switch (columnIndex) {
 				case(0): return issue.getIssueIDAsString();
-				case(1): return issue.getCreateTimestamp().toString();
+				case(1): return dateTimeFormat.format(issue.getCreateTimestamp());
 				case(2): return issue.getIssueType().getName().getText();
 				case(3): return issue.getSubject().getText();
 				case(4):
