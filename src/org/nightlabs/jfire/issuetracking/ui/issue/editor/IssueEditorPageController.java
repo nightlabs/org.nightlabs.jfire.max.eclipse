@@ -38,6 +38,7 @@ import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -88,7 +89,8 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		StateDefinition.FETCH_GROUP_NAME,
 		User.FETCH_GROUP_NAME,
 		IssueComment.FETCH_GROUP_USER,
-		IssueLinkType.FETCH_GROUP_NAME		
+		IssueLinkType.FETCH_GROUP_NAME,
+		IssueHistory.FETCH_GROUP_USER
 /*		Issue.FETCH_GROUP_THIS_ISSUE,
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 //		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,

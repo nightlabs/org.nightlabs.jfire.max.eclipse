@@ -83,9 +83,12 @@ extends AbstractTableComposite<IssueHistory>
 		tc.setText("Date");
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setText("Username");
+		
+		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Action");
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30, 30});
 		table.setLayout(layout);
 	}
 
@@ -110,8 +113,9 @@ extends AbstractTableComposite<IssueHistory>
 				case(0):
 					return dateTimeFormat.format(issueHistory.getCreateTimeStamp());
 				case(1):
-					return issueHistory.getChange();
+					return issueHistory.getUser().getName();
 				case(2):
+					return issueHistory.getChange();
 				case(3):
 				break;
 				case(4):

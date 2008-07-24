@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.history.IssueHistoryDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -46,7 +47,7 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 		IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
 		Collection<IssueHistory> issueHistories = IssueHistoryDAO.sharedInstance().getIssueHistories(
 				issueID, 
-				new String[]{FetchPlan.DEFAULT, IssueHistory.FETCH_GROUP_THIS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				new String[]{FetchPlan.DEFAULT, IssueHistory.FETCH_GROUP_USER, User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		
 		issueHistoryTable.setIssueHistories(issueID, issueHistories);
 	}

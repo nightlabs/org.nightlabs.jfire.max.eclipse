@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -35,7 +36,6 @@ extends AbstractIssueEditorGeneralSection
 		super(page, parent, controller);
 		getSection().setText("Comment");
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		getSection().setLayout(new GridLayout());
 
 		// Sets up the toolkit.
 		toolkit = new FormToolkit(getSection().getShell().getDisplay());
@@ -78,33 +78,21 @@ extends AbstractIssueEditorGeneralSection
 		getManagedForm().getForm().reflow(true);
 	}
 	
+	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	
 	public void addComment(IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
 		commentEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD)));
 		commentEntry.setText(String.format("%s - %s", 
 				comment.getUser().getName(), 
-				comment.getCreateTimestamp().toString()));
+				dateTimeFormat.format(comment.getCreateTimestamp())));
 
 		toolkit.adapt(commentEntry);
-		
-		/*******Using Label********/
-//		Label commentLabel = new Label(commentEntry, SWT.BORDER);
-//		toolkit.adapt(commentLabel, false, false);		
-//		commentLabel.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
-//		commentLabel.setText(comment.getText());
-//		commentEntry.setClient(commentLabel);
 		
 		/********Using Text********/
 		Text text = toolkit.createText(commentEntry, comment.getText(), SWT.MULTI | SWT.WRAP);
 		text.setEditable(false);
-		
-		/********Using FormText********/
-//		FormText text = toolkit.createFormText(commentEntry, false);
-//		text.setText(comment.getText(),
-//				false,
-//				false);
-//		text.setWhitespaceNormalized(false);
 		
 		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
 		commentEntry.setClient(text);
