@@ -1,11 +1,15 @@
 package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -56,6 +60,17 @@ extends AbstractTableComposite<IssueHistory>
 	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
 	      }
 	    });
+	    
+	    getTableViewer().setComparator(new ViewerComparator() {
+			@Override
+			public void sort(Viewer viewer, Object[] elements) {
+				Arrays.sort(elements, new Comparator<Object>() {
+					public int compare(Object object1, Object object2) {
+						return -((IssueHistory)object1).getCreateTimestamp().compareTo(((IssueHistory)object2).getCreateTimestamp());
+					}
+				});
+			}
+		});
 	}		
 
 	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Xyz") {
@@ -111,7 +126,7 @@ extends AbstractTableComposite<IssueHistory>
 				switch (columnIndex) 
 				{
 				case(0):
-					return dateTimeFormat.format(issueHistory.getCreateTimeStamp());
+					return dateTimeFormat.format(issueHistory.getCreateTimestamp());
 				case(1):
 					return issueHistory.getUser().getName();
 				case(2):
