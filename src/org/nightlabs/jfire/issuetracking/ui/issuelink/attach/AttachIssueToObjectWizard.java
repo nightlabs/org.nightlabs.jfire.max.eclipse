@@ -20,6 +20,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -60,6 +61,11 @@ extends DynamicPathWizard
 		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
 		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_COMMENT,
+		Issue.FETCH_GROUP_ISSUE_FILELIST,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		State.FETCH_GROUP_STATE_DEFINITION,
 		Issue.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_STATES};
 	
@@ -88,6 +94,7 @@ extends DynamicPathWizard
 					}
 					else {
 						//Issue Link
+						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
 						if (issueLink == null) {
 							MessageBox msg = new MessageBox(getShell());
@@ -96,8 +103,6 @@ extends DynamicPathWizard
 								return;
 							}
 						}
-						
-						issue = IssueDAO.sharedInstance().getIssue((IssueID)JDOHelper.getObjectId(issue), FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						
 						//Store Issue
 						createdIssue = IssueDAO.sharedInstance().storeIssue(issue, true, FETCH_GROUP, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
