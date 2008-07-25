@@ -57,6 +57,9 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 			return new IssueEditorHistoryPage(formEditor);
 		}
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
+			IssueEditorPageController controller = editor.getController().getSinglePageController(IssueEditorPageController.class);
+			if (controller != null)
+				return controller;
 			return new IssueEditorPageController(editor);
 		}
 	}
