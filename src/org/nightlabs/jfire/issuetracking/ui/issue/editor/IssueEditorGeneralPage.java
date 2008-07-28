@@ -44,7 +44,8 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
  * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
+public class IssueEditorGeneralPage 
+extends EntityEditorPageWithProgress
 {
 	/**
 	 * The id of this page.
@@ -74,6 +75,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 	private IssueCommentCreateSection issueCommentCreateSection;
 	private IssueLinkListSection issueLinkListSection;
 	private IssueFileAttachmentSection issueFileAttachmentSection;
+	private IssueWorkTimeSection issueWorkTimeSection;
 	
 	/**
 	 * <p>
@@ -159,6 +161,12 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 		issueFileAttachmentSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueFileAttachmentSection);
 		
+		issueWorkTimeSection = new IssueWorkTimeSection(this, c, controller);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		issueWorkTimeSection.getSection().setLayoutData(gridData);
+		getManagedForm().addPart(issueWorkTimeSection);
+		
 		if (controller.isLoaded()) {
 			issueLinkListSection.setIssue(controller.getIssue());
 			issueDetailSection.setIssue(controller.getIssue());
@@ -168,6 +176,7 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 			issueFileAttachmentSection.setIssue(controller.getIssue());
 			issueCommentListSection.setIssue(controller.getIssue());
 			issueCommentCreateSection.setIssue(controller.getIssue());
+			issueWorkTimeSection.setIssue(controller.getIssue());
 		}
 	}
 
@@ -203,6 +212,8 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 				}
 				if (issueCommentCreateSection != null && !issueCommentCreateSection.getSection().isDisposed())
 					issueCommentCreateSection.setIssue(getController().getIssue());
+				if (issueWorkTimeSection != null && !issueWorkTimeSection.getSection().isDisposed())
+					issueWorkTimeSection.setIssue(getController().getIssue());
 			}
 		});
 	}
@@ -246,6 +257,10 @@ public class IssueEditorGeneralPage extends EntityEditorPageWithProgress
 
 	public IssueCommentCreateSection getIssueCommentCreateSection() {
 		return issueCommentCreateSection;
+	}
+	
+	public IssueWorkTimeSection getIssueWorkTimeSection() {
+		return issueWorkTimeSection;
 	}
 	
 	@Override
