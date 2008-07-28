@@ -17,8 +17,6 @@ import org.nightlabs.jfire.issue.Issue;
 public class IssueWorkTimeSection 
 extends AbstractIssueEditorGeneralSection 
 {
-//	private IssueFileAttachmentComposite issueFileAttachmentComposite;
-	
 //	private DownloadFileToolbarAction downloadFileToolbarAction;
 	
 	private Issue issue;
@@ -37,22 +35,21 @@ extends AbstractIssueEditorGeneralSection
 		
 		new Label(getClient(), SWT.NONE).setText("State Time: ");
 				
-		Label fileLabel2 = new Label(getClient(), SWT.NONE);
-		fileLabel2.setText(dateTimeFormat.format(new Date()));
+		Label startTimeLabel = new Label(getClient(), SWT.NONE);
+		startTimeLabel.setText(dateTimeFormat.format(new Date()));
 		
-		Button fileLabel3 = new Button(getClient(), SWT.NONE);
-		fileLabel3.setText("Start");
+		Button startButton = new Button(getClient(), SWT.NONE);
+		startButton.setText("Start");
 		
 		new Label(getClient(), SWT.NONE).setText("Finish Time: ");
 		
-		Label fileLabel5 = new Label(getClient(), SWT.NONE);
-		fileLabel5.setText(dateTimeFormat.format(new Date()));
+		Label finishTimeLabel = new Label(getClient(), SWT.NONE);
+		finishTimeLabel.setText(dateTimeFormat.format(new Date()));
 		
-		Button fileLabel6 = new Button(getClient(), SWT.NONE);
-		fileLabel6.setText("Finish");
-//		issueFileAttachmentComposite = 
-//			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withoutAddRemoveButton);
-//		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		Button finishTimeButton = new Button(getClient(), SWT.NONE);
+		finishTimeButton.setText("Finish");
+
+		//		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 //		gridData.heightHint = 100;
 //		issueFileAttachmentComposite.setLayoutData(gridData);
 //		
