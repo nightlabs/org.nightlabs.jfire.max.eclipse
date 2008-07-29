@@ -15,8 +15,8 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.jfire.trade.ui.overview.order.action.EditOrderAction;
 import org.nightlabs.progress.ProgressMonitor;
 

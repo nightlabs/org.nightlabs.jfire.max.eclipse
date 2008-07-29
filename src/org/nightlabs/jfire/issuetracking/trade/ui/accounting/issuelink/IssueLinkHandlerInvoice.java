@@ -17,7 +17,7 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerDeliveryNote;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
-import org.nightlabs.jfire.trade.ui.articlecontainer.InvoiceDAO;
+import org.nightlabs.jfire.trade.dao.InvoiceDAO;
 import org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction;
 import org.nightlabs.progress.ProgressMonitor;
 
