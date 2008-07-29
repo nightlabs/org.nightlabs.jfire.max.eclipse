@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -52,10 +53,10 @@ extends XComposite
 
 	private volatile Job setProductTypeIDJob = null;
 	public void setProductTypeID(final ProductTypeID productTypeID) {
-		Job loadJob = new Job("Loading dynamic product type") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Loading dynamic product type", 100);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.loadDynamicProductTypeJob.name"), 100); //$NON-NLS-1$
 				try {
 					final DynamicProductType productType = (DynamicProductType) ProductTypeDAO.sharedInstance().getProductType(
 							productTypeID,
@@ -83,7 +84,7 @@ extends XComposite
 							ProductType cat = category;
 							while (cat != null) {
 								if (categoryText.length() != 0)
-									categoryText.insert(0, " / ");
+									categoryText.insert(0, Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.categoryText.separator")); //$NON-NLS-1$
 
 								categoryText.insert(0, cat.getName().getText());
 								cat = cat.getExtendedProductType();
@@ -105,10 +106,10 @@ extends XComposite
 	protected void createComposite(XComposite parent)
 	{
 		textWrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		productTypeCategory = new ReadOnlyLabeledText(textWrapper, "Category", SWT.BORDER);
+		productTypeCategory = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.categoryLabel.text"), SWT.BORDER); //$NON-NLS-1$
 		productTypeCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeCategory.getTextControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		productTypeName = new ReadOnlyLabeledText(textWrapper, "Name", SWT.BORDER);
+		productTypeName = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.productTypeLabel.text"), SWT.BORDER); //$NON-NLS-1$
 
 		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER);
 		gd.grabExcessHorizontalSpace = true;

@@ -173,7 +173,7 @@ extends AbstractTableComposite<Article>
 				return dynamicProduct.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return NumberFormatter.formatFloat(dynamicProduct.getQuantityAsDouble(), 2);
+				return NumberFormatter.formatFloat(dynamicProduct.getQuantityAsDouble(), dynamicProduct.getUnit().getDecimalDigitCount());
 
 			if (++ci == columnIndex)
 				return dynamicProduct.getUnit().getSymbol().getText();

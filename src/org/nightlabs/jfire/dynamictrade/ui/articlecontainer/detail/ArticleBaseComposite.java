@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +11,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDODetachedFieldAccessException;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -86,13 +88,15 @@ import org.nightlabs.util.Util;
 public abstract class ArticleBaseComposite
 extends FadeableComposite
 {
+	private static Logger logger = Logger.getLogger(ArticleBaseComposite.class);
+
 	protected ArticleContainer articleContainer;
 	protected ProductTypeID productTypeID;
 
 	protected Label productTypeNameLabel;
 	protected XComboComposite<Tariff> tariffCombo;
-	protected Text quantity;
 	protected XComboComposite<Unit> unitCombo;
+	protected Text quantity;
 	protected Text productNameText;
 	protected Button productNameDialogButton;
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
@@ -230,19 +234,6 @@ extends FadeableComposite
 
 		comp2.setWeights(new int[] { 1, 1 });
 
-		quantity = new Text(comp1, SWT.BORDER);
-		quantity.setText(NumberFormatter.formatFloat(1, 2));
-		GridData gd = new GridData();
-		gd.widthHint = 200;
-		quantity.setLayoutData(gd);
-
-//		unitCombo = new ComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
-//			@Override
-//			public String getText(Object element)
-//			{
-//				return ((Unit)element).getName().getText();
-//			}
-//		});
 		unitCombo = new XComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element)
@@ -250,11 +241,49 @@ extends FadeableComposite
 				return ((Unit)element).getName().getText();
 			}
 		});
+		unitCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				unitSelected();
+			}
+		});
+
+		quantity = new Text(comp1, SWT.BORDER);
+		quantity.setText(NumberFormatter.formatFloat(1, 2));
+		GridData gd = new GridData();
+		gd.widthHint = 200;
+		quantity.setLayoutData(gd);
+		quantity.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent event) {
+				Unit unit = unitCombo.getSelectedElement();
+				if (unit == null)
+					return;
+
+				String quantityStr = quantity.getText();
+				if (!"".equals(quantityStr)) { //$NON-NLS-1$
+					try {
+						lastValidQuantity = NumberFormatter.parseFloat(quantityStr);
+					} catch (ParseException e) {
+						MessageDialog.openError(
+								getShell(),
+								Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.quantityInvalidDialog.title"), //$NON-NLS-1$
+								String.format(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.quantityInvalidDialog.message"), quantityStr) //$NON-NLS-1$
+						);
+						quantity.setText(NumberFormatter.formatFloat(lastValidQuantity, unit.getDecimalDigitCount()));
+					}
+				}
+			}
+		});
 
 		createUI_additionalElements_comp1(comp1);
-		
+
+		setEditable(false);
+
 		loadDynamicProductType();
 	}
+
+	private double lastValidQuantity = 1;
 
 	protected boolean inputPriceFragmentTypeModified = false;
 	protected boolean productNameModified = false;
@@ -296,8 +325,9 @@ extends FadeableComposite
 	
 	private void applyEditableState() {
 		tariffCombo.setEnabled(editable);
-		quantity.setEditable(editable);
 		unitCombo.setEnabled(editable);
+		quantity.setEditable(editable && unitCombo.getSelectedElement() != null);
+		quantity.setEnabled(unitCombo.getSelectedElement() != null);
 		productNameText.setEditable(editable);
 		inputPriceFragmentTypeTable.setEditable(editable);
 	}
@@ -353,7 +383,7 @@ extends FadeableComposite
 	};
 
 //	private static long temporaryResultPriceConfigID = IDGenerator.nextID(PriceConfig.class);
-	private static String temporaryResultPriceConfigID = "temporary.resultPriceConfigID";
+	private static String temporaryResultPriceConfigID = "temporary.resultPriceConfigID"; //$NON-NLS-1$
 
 	/**
 	 * Though it was volatile I had strange timing issues and changed to synchronizing.
@@ -454,7 +484,6 @@ extends FadeableComposite
 					{
 						public void run()
 						{
-							setEditable(shouldBeEditable);
 							Article deferredArticle = null;
 							try {
 								if (tariffCombo.isDisposed())
@@ -477,12 +506,13 @@ extends FadeableComposite
 
 								unitCombo.removeAll();
 								unitCombo.addElements(units);
-								if (!units.isEmpty())
-									unitCombo.setSelection(0);
+								unitCombo.setSelection(0);
+								unitSelected();
 
 								updateInputPriceFragmentTypes();
-								setFaded(false);
+								setEditable(shouldBeEditable);
 
+								setFaded(false);
 							} finally {
 								synchronized (loadDynamicProductType_inProcess) {
 									deferredArticle = deferredArticleAssignment;
@@ -511,6 +541,25 @@ extends FadeableComposite
 		};
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
+	}
+
+	private void unitSelected()
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Wrong thread! This method must be called on the UI thread!"); //$NON-NLS-1$
+
+		Unit unit = unitCombo.getSelectedElement();
+		if (unit != null) {
+			double d;
+			try {
+				d = NumberFormatter.parseFloat(quantity.getText());
+			} catch (ParseException e) {
+				logger.warn("Failed to parse the quantity \"" + quantity.getText() + "\" as float value! Using 1 as fallback!", e); //$NON-NLS-1$ //$NON-NLS-2$
+				d = 1;
+			}
+			quantity.setText(NumberFormatter.formatFloat(d, unit.getDecimalDigitCount()));
+		}
+		applyEditableState();
 	}
 
 	private boolean checkEditable(ProgressMonitor monitor) {
@@ -653,7 +702,7 @@ extends FadeableComposite
 	protected void _setArticle(Article _article)
 	{
 		if (!_article.getProductType().equals(dynamicProductType))
-			throw new IllegalArgumentException("article.productType != this.productType : " + _article.getProductType() + " != " + dynamicProductType); //$NON-NLS-1$
+			throw new IllegalArgumentException("article.productType != this.productType : " + _article.getProductType() + " != " + dynamicProductType); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.article = _article;
 
@@ -665,9 +714,10 @@ extends FadeableComposite
 		updateProductNameUI();
 		productNameModified = false;
 
-		quantity.setText(NumberFormatter.formatFloat(product.getQuantityAsDouble(), 2));
 		if (!unitCombo.selectElement(product.getUnit()))
 			throw new IllegalStateException("Unit not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
+
+		quantity.setText(NumberFormatter.formatFloat(product.getQuantityAsDouble(), product.getUnit().getDecimalDigitCount()));
 
 		// product.singlePrice.fragments is probably not detached in the ArticleEdit's Articles
 		try {
