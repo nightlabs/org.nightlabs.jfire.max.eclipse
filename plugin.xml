@@ -283,6 +283,16 @@
             <modeOfDelivery modeOfDeliveryID="deliverToDeliveryQueue"
                 name="Deliver to Delivery Queue" organisationID="dev.jfire.org"/>
         </clientDeliveryProcessorFactory>
+        <clientDeliveryProcessorFactory
+              class="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault"
+              id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault"
+              name="%org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault.name">
+           <modeOfDeliveryFlavour
+                 modeOfDeliveryFlavourID="mailing.physical.default"
+                 name="dev.jfire.org/mailing.physical.default"
+                 organisationID="dev.jfire.org">
+           </modeOfDeliveryFlavour>
+        </clientDeliveryProcessorFactory>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
         <articleContainerAction

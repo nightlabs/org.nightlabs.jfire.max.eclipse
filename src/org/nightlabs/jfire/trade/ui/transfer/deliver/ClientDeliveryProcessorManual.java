@@ -37,49 +37,37 @@ import org.nightlabs.jfire.store.deliver.DeliveryResult;
 public class ClientDeliveryProcessorManual
 extends AbstractClientDeliveryProcessor
 {
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#init()
-	 */
 	@Override
 	public void init()
 	{
+		super.init();
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getDeliveryData()
-	 */
+	@Override
 	public DeliveryData getDeliveryData()
 	{
 		return null;
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#createDeliveryWizardPage()
-	 */
+	@Override
 	public IWizardHopPage createDeliveryWizardPage()
 	{
 		return null;
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#deliverBegin()
-	 */
+	@Override
 	public DeliveryResult deliverBegin() throws DeliveryException
 	{
 		return null;
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#deliverDoWork()
-	 */
+	@Override
 	public DeliveryResult deliverDoWork() throws DeliveryException
 	{
 		return null;
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#deliverEnd()
-	 */
+	@Override
 	public DeliveryResult deliverEnd() throws DeliveryException
 	{
 		return null;

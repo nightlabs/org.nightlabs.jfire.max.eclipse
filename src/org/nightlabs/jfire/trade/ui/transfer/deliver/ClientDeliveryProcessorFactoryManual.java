@@ -38,16 +38,12 @@ public class ClientDeliveryProcessorFactoryManual extends
 		AbstractClientDeliveryProcessorFactory
 {
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#init()
-	 */
+	@Override
 	public void init()
 	{
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory#createClientDeliveryProcessor()
-	 */
+	@Override
 	public ClientDeliveryProcessor createClientDeliveryProcessor()
 	{
 		return new ClientDeliveryProcessorManual();
