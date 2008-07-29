@@ -48,10 +48,10 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.dao.OfferDAO;
+import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.OfferDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.OrderDAO;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 

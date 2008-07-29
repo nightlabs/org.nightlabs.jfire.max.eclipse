@@ -12,8 +12,8 @@ import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.store.ReceptionNote;
+import org.nightlabs.jfire.trade.dao.ReceptionNoteDAO;
 import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
-import org.nightlabs.jfire.trade.ui.articlecontainer.ReceptionNoteDAO;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;
 
