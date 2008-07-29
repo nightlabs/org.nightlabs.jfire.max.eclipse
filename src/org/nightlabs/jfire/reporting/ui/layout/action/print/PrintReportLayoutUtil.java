@@ -226,24 +226,25 @@ public class PrintReportLayoutUtil {
 			return false;
 		} else {
 			// format is pdf, works only on linux
-			if (!System.getProperty("os.name").toLowerCase().equals("linux")) {
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						MessageDialog.openInformation(
-								Display.getCurrent().getActiveShell(), 
-								"Printing disabled/Drucken deaktiviert",
-								"We're sorry, for the 0.9.4 release of JFire the pdf printing feature had to be disabled for your platform.\n" +
-								"Possibly you can print the document from the viewer by using its print action.\n\n" +
-								"Das Drucken von PDF Dokumenten musste für die JFire Version 0.9.4 und Ihr Betriebssystem leider deaktiviert werden.\n" +
-								"Sie können das Dokument vielleicht aus der Dokumentansicht drucken."
-							);					
-						
-					}
-				});
-				return false;
-			}
+//			if (!System.getProperty("os.name").toLowerCase().equals("linux")) {
+//				Display.getDefault().asyncExec(new Runnable() {
+//					public void run() {
+//						MessageDialog.openInformation(
+//								Display.getCurrent().getActiveShell(), 
+//								"Printing disabled/Drucken deaktiviert",
+//								"We're sorry, for the 0.9.4 release of JFire the pdf printing feature had to be disabled for your platform.\n" +
+//								"Possibly you can print the document from the viewer by using its print action.\n\n" +
+//								"Das Drucken von PDF Dokumenten musste für die JFire Version 0.9.4 und Ihr Betriebssystem leider deaktiviert werden.\n" +
+//								"Sie können das Dokument vielleicht aus der Dokumentansicht drucken."
+//							);					
+//						
+//					}
+//				});
+//				return false;
+//			}
+			return true;
 		}
 		// END Temporary
-		return true;
+//		return true;
 	}
 }
