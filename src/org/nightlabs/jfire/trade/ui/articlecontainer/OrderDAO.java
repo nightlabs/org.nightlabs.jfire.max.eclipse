@@ -84,7 +84,7 @@ public class OrderDAO
 	{
 		try {
 			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			List<OrderID> orderIDList = tm.getOrderIDs(vendorID, customerID, rangeBeginIdx, rangeEndIdx);
+			List<OrderID> orderIDList = tm.getOrderIDs(Order.class ,false, vendorID, customerID, rangeBeginIdx, rangeEndIdx);
 			Set<OrderID> orderIDs = new HashSet<OrderID>(orderIDList);
 
 			Map<OrderID, Order> orderMap = new HashMap<OrderID, Order>(orderIDs.size());
