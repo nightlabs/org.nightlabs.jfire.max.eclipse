@@ -29,6 +29,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
@@ -52,14 +53,14 @@ public class SelectedScriptComposite extends XComposite {
 	private ScriptRegistryItemID scriptRegistryItemID;
 	
 	
-	private static class SelectScriptDialog extends CenteredDialog {
+	private static class SelectScriptDialog extends ResizableTitleAreaDialog {
 
 		private Script selectedScript;
 		
 		private ScriptRegistryItemTree itemTree;
 		
 		public SelectScriptDialog(Shell parentShell) {
-			super(parentShell);
+			super(parentShell, null);
 			setShellStyle(getShellStyle() | SWT.RESIZE);
 		}
 		
@@ -74,12 +75,9 @@ public class SelectedScriptComposite extends XComposite {
 		}
 		
 		@Override
-		protected Point getInitialSize() {
-			return new Point(300, 400);
-		}
-		
-		@Override
 		protected Control createDialogArea(Composite parent) {
+			setTitle(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.title")); //$NON-NLS-1$
+			setMessage(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.message")); //$NON-NLS-1$
 			itemTree = new ScriptRegistryItemTree(parent, null);
 			itemTree.addSelectionChangedListener(new ISelectionChangedListener() {
 				public void selectionChanged(SelectionChangedEvent event) {

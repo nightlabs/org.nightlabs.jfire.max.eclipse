@@ -24,11 +24,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -36,14 +36,14 @@ import org.nightlabs.base.ui.util.RCPUtil;
  */
 public class JDOQLParameterTable extends AbstractTableComposite<JDOQLParameterEntry> {
 
-	protected class EditEntryDialog extends CenteredDialog {
+	protected class EditEntryDialog extends ResizableTitleAreaDialog {
 
 		private Text name;
 		private Text jScript;
 		private JDOQLParameterEntry entry;
 		
 		public EditEntryDialog(Shell parentShell, JDOQLParameterEntry entry) {
-			super(parentShell);
+			super(parentShell, null);
 			this.entry = entry;
 		}
 		

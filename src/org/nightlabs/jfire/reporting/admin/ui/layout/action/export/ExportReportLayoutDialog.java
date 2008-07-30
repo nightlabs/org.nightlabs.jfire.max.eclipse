@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.FileSelectionComposite;
 import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.ReportingInitialiser;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nUtil.PreparedLayoutL10nData;
@@ -31,7 +31,7 @@ import org.nightlabs.util.IOUtil;
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class ExportReportLayoutDialog extends CenteredDialog {
+public class ExportReportLayoutDialog extends ResizableTrayDialog {
 
 	private XComposite wrapper;
 	private FileSelectionComposite folderComposite;
@@ -42,7 +42,7 @@ public class ExportReportLayoutDialog extends CenteredDialog {
 	 * @param parentShell
 	 */
 	public ExportReportLayoutDialog(Shell parentShell, ReportRegistryItemID layoutID ) {
-		super(parentShell);
+		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		this.layoutID = layoutID;
 	}
@@ -54,7 +54,7 @@ public class ExportReportLayoutDialog extends CenteredDialog {
 	}
 
 	@Override
-	protected Point getInitialSize() {
+	protected Point getPreferredSize() {
 		return new Point(400, 400);
 	}
 	
