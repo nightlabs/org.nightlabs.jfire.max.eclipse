@@ -1,13 +1,14 @@
 package org.nightlabs.jfire.reporting.admin.parameter.ui.dialog;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
@@ -18,7 +19,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisition
  *
  */
 public class UseCaseDialog
-extends CenteredDialog
+extends ResizableTrayDialog
 {
 	public static final int EDIT_MODE = 1;
 	public static final int NEW_MODE = 2;
@@ -29,23 +30,25 @@ extends CenteredDialog
 	public UseCaseDialog(Shell parentShell, ReportParameterAcquisitionUseCase useCase,
 			ReportParameterAcquisitionSetup setup, int mode)
 	{
-		super(parentShell);
+		super(parentShell, null);
+		setShellStyle(getShellStyle() | SWT.Resize);
 		this.useCase = useCase;
 		this.mode = mode;
 		this.setup = setup;
 	}
 
 	@Override
-	public void create()
-	{
-		super.create();
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
 		if (mode == EDIT_MODE)
-			getShell().setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.editMode.shell.text")); //$NON-NLS-1$
+			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.editMode.shell.text")); //$NON-NLS-1$
 		if (mode == NEW_MODE)
-			getShell().setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.newMode.shell.text"));		 //$NON-NLS-1$
-		
-		setShellStyle(getShellStyle() | SWT.Resize);
-		getShell().setSize(300, 200);
+			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.newMode.shell.text"));		 //$NON-NLS-1$
+	}
+	
+	@Override
+	protected Point getPreferredSize() {
+		return new Point(300, 200);
 	}
 
 	private int mode = EDIT_MODE;

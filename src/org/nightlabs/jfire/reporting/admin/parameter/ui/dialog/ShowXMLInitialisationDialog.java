@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.reporting.parameter.config.AcquisitionParameterConfig;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
@@ -26,7 +26,7 @@ import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class ShowXMLInitialisationDialog extends CenteredDialog {
+public class ShowXMLInitialisationDialog extends ResizableTrayDialog {
 
 	private ReportParameterAcquisitionSetup acquisitionSetup;
 	private Text output;
@@ -35,12 +35,12 @@ public class ShowXMLInitialisationDialog extends CenteredDialog {
 	 * @param parentShell
 	 */
 	public ShowXMLInitialisationDialog(Shell parentShell, ReportParameterAcquisitionSetup acquisitionSetup) {
-		super(parentShell);
+		super(parentShell, null);
 		this.acquisitionSetup = acquisitionSetup;
 	}
 	
 	@Override
-	protected Point getInitialSize() {
+	protected Point getPreferredSize() {
 		return new Point(400, 500);
 	}
 	
