@@ -6,14 +6,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 
 public class ProductNameDialog
-extends CenteredDialog
+extends ResizableTrayDialog
 {
 	private I18nText productName;
 	private I18nTextEditorMultiLine productNameEditor;
@@ -21,14 +21,14 @@ extends CenteredDialog
 	
 	public ProductNameDialog(Shell parentShell, I18nText productName, boolean editable)
 	{
-		super(parentShell);
+		super(parentShell, null);
 		this.editable = editable;
 		this.productName = productName;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	@Override
-	protected Point getInitialSize()
+	protected Point getPreferredSize()
 	{
 		return new Point(400, 400);
 	}

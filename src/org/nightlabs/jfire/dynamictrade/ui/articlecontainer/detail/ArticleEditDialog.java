@@ -34,11 +34,11 @@ extends ResizableTrayDialog
 	}
 
 	@Override
-	protected Point getInitialSize()
+	protected Point getPreferredSize() 
 	{
 		return new Point(800, 400);
 	}
-
+	
 	@Override
 	protected void okPressed()
 	{
