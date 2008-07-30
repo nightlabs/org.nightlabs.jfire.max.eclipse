@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -16,9 +17,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTreeNode;
@@ -33,13 +34,13 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  *
  */
 public class VoucherChooseDialog
-extends CenteredDialog
+extends ResizableTrayDialog
 {
 	/**
 	 * @param parentShell
 	 */
 	public VoucherChooseDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell, null);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
@@ -48,7 +49,11 @@ extends CenteredDialog
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.title")); //$NON-NLS-1$
-		newShell.setSize(600, 400);
+	}
+	
+	@Override
+	protected Point getPreferredSize() {
+		return new Point(600, 400);
 	}
 
 	private VoucherTypeTree voucherTypeTree = null;
