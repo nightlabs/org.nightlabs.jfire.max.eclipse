@@ -97,7 +97,7 @@ public class ScriptRegistryItemTree extends AbstractTreeComposite<ScriptRegistry
 	 * @param zone The zone notifications of selection changes will be made
 	 */
 	public ScriptRegistryItemTree(Composite parent, String zone) {
-		this(parent, SWT.FULL_SELECTION, true, true, zone, true);
+		this(parent, SWT.FULL_SELECTION, true, false, zone, true);
 	}
 
 
