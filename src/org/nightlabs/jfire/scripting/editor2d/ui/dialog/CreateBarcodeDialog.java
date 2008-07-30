@@ -45,7 +45,7 @@ import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.editor2d.unit.DotUnit;
 import org.nightlabs.editor2d.util.UnitUtil;
 import org.nightlabs.i18n.unit.MMUnit;
@@ -63,14 +63,14 @@ import org.nightlabs.util.CollectionUtil;
  *
  */
 public abstract class CreateBarcodeDialog
-extends CenteredDialog
+extends ResizableTitleAreaDialog
 {
 	public static final Logger LOGGER = Logger.getLogger(CreateBarcodeDialog.class);
 	public static final double DEFAULT_BARCODE_HEIGHT = 15; // mm
 	
 	public CreateBarcodeDialog(Shell parentShell, BarcodeCreateRequest request)
 	{
-		super(parentShell);
+		super(parentShell, null);
 		this.request = request;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
@@ -82,8 +82,12 @@ extends CenteredDialog
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.title")); //$NON-NLS-1$
-		newShell.setSize(500, 200);
 		newShell.setMinimumSize(400, 200);
+	}
+	
+	@Override
+	protected org.eclipse.swt.graphics.Point getPreferredSize() {
+		return new org.eclipse.swt.graphics.Point(500, 200);
 	}
 
 	protected XComboComposite<ScriptRegistryItemID> scriptCombo = null;

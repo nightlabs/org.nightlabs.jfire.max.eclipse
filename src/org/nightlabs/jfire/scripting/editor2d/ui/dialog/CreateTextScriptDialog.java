@@ -56,8 +56,8 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.scripting.Script;
 import org.nightlabs.jfire.scripting.editor2d.ui.AbstractScriptRegistryItemTreeComposite;
 import org.nightlabs.jfire.scripting.editor2d.ui.ScriptRegistryTreeLabelProvider;
@@ -73,21 +73,21 @@ import org.nightlabs.util.FontUtil;
  *
  */
 public abstract class CreateTextScriptDialog
-extends CenteredDialog
+extends ResizableTrayDialog
 {
 	public static final Logger logger = Logger.getLogger(CreateTextScriptDialog.class);
 	
 	public CreateTextScriptDialog(Shell parentShell,
 			TextScriptCreateRequest request)
 	{
-		super(parentShell);
+		super(parentShell, null);
 		init(request);
 	}
 
 	public CreateTextScriptDialog(IShellProvider parentShell,
 			TextScriptCreateRequest request)
 	{
-		super(parentShell);
+		super(parentShell, null);
 		init(request);
 	}
 
@@ -105,7 +105,11 @@ extends CenteredDialog
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.title")); //$NON-NLS-1$
-		newShell.setSize(700, 500);
+	}
+	
+	@Override
+	protected org.eclipse.swt.graphics.Point getPreferredSize() {
+		return new org.eclipse.swt.graphics.Point(700, 500);
 	}
 
 	private TextScriptCreateRequest request;
