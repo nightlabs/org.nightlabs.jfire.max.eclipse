@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
@@ -63,7 +64,7 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class SelectReportLayoutDialog extends ResizableTrayDialog {
+public class SelectReportLayoutDialog extends ResizableTitleAreaDialog {
 
 	private XComposite wrapper;
 	private SashForm sashForm;
@@ -98,7 +99,7 @@ public class SelectReportLayoutDialog extends ResizableTrayDialog {
 	}
 
 	@Override
-	protected Point getInitialSize() {
+	protected Point getPreferredSize() {
 		return new Point(300, 400);
 	}
 	
@@ -109,6 +110,8 @@ public class SelectReportLayoutDialog extends ResizableTrayDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		setTitle(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.title")); //$NON-NLS-!$
+		setMessage(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.message")); //$NON-NLS-!$
 		wrapper = new XComposite(parent, SWT.NONE);
 		sashForm = new SashForm(wrapper, SWT.NONE | SWT.VERTICAL);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));

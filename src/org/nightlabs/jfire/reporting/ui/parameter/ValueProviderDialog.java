@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
@@ -23,7 +24,7 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class ValueProviderDialog extends ResizableTrayDialog {
+public class ValueProviderDialog extends ResizableTitleAreaDialog {
 
 	private ValueProviderTree valueProviderTree;
 	
@@ -37,13 +38,6 @@ public class ValueProviderDialog extends ResizableTrayDialog {
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
-	/**
-	 * @param parentShell
-	 */
-	public ValueProviderDialog(IShellProvider parentShell) {
-		super(parentShell, null);
-	}
-
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
@@ -51,12 +45,14 @@ public class ValueProviderDialog extends ResizableTrayDialog {
 	}
 	
 	@Override
-	protected Point getInitialSize() {
+	protected Point getPreferredSize() {
 		return new Point(400, 500);
 	}
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		setTitle(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderDialog.title")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderDialog.message")); //$NON-NLS-1$
 		valueProviderTree = new ValueProviderTree(parent);
 		valueProviderTree.getTreeViewer().expandToLevel(2);
 		valueProviderTree.addSelectionChangedListener(new ISelectionChangedListener() {
