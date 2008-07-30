@@ -6,29 +6,29 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.language.I18nTextEditorTable;
 import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
-public class DeliveryQueueNameEditDialog extends CenteredDialog {
+public class DeliveryQueueNameEditDialog extends ResizableTrayDialog {
 
 	private II18nTextEditor deliveryQueueNameEditor;
 	private DeliveryQueue deliveryQueue;
 
 	public DeliveryQueueNameEditDialog(Shell shell, DeliveryQueue deliveryQueue) {
-		super(shell);
+		super(shell, null);
 		this.deliveryQueue = deliveryQueue;
 	}
 
 	@Override
-	protected Point getInitialSize() {
-		Point s = super.getInitialSize();
-		return new Point(Math.max(400, s.x), Math.max(500, s.y));
+	protected Point getPreferredSize() {
+		return new Point(400, 500);
 	}
+	
 	@Override
 	protected int getShellStyle() {
 		return super.getShellStyle() | SWT.RESIZE;
