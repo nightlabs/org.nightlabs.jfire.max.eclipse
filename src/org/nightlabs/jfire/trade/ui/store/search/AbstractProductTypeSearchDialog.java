@@ -51,7 +51,7 @@ extends ResizableTitleAreaDialog
 	}
 	
 	@Override
-	protected Point getInitialSize() {
+	protected Point getPreferredSize() {
 		return new Point(800, 600);
 	}
 
