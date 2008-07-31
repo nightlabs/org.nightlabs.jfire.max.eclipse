@@ -281,7 +281,7 @@ extends AbstractTableComposite<Issue>
 				case(5): return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
 				case(6): return issue.getIssuePriority().getIssuePriorityText().getText();
 				case(7): return getStateName(issue);					
-				case(8): return issue.isStarted()? "Working" : "Stoped";
+				case(8): return issue.isStarted()? "Working" : "Stopped";
 				default: return ""; //$NON-NLS-1$
 				}
 			}
