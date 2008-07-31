@@ -2,7 +2,9 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -10,37 +12,63 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
+import org.nightlabs.jfire.store.deliver.id.DeliveryQueueID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard;
+import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
-class DeliveryQueueBrowsingComposite 
-extends FadeableComposite 
+class DeliveryQueueBrowsingComposite
+extends FadeableComposite
 {
 	private XComboComposite<DeliveryQueue> printQueueCombo;
 	private DeliveryTable deliveryTable;
-	private DeliveryQueueConfigModule deliveryQueueConfigModule;
+//	private DeliveryQueueConfigModule deliveryQueueConfigModule;
 	private boolean refreshing = false;
 	
+	private NotificationListener deliveryQueueLifecycleListener = new NotificationAdapterJob() {
+    public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
+      for (Iterator<DirtyObjectID> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
+        DirtyObjectID dirtyObjectID = it.next();
+        
+        Set<DeliveryQueueID> objectIds = NLJDOHelper.getObjectIDSet(printQueueCombo.getElements());
+				if (!objectIds.contains(dirtyObjectID.getObjectID())) {
+        	return;
+        }
+
+        switch (dirtyObjectID.getLifecycleState()) {
+          case DIRTY:
+          	refreshDeliveryQueues();
+            break;
+        }
+      }
+    }
+  };
+
 	public DeliveryQueueBrowsingComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, new LabelProvider() {
@@ -60,49 +88,69 @@ extends FadeableComposite
 		});
 		deliveryTable = new DeliveryTable(this, SWT.NONE);
 		
+		JDOLifecycleManager.sharedInstance().addNotificationListener(DeliveryQueue.class, deliveryQueueLifecycleListener);
+
+    addDisposeListener(new DisposeListener() {
+      public void widgetDisposed(DisposeEvent event)
+      {
+        JDOLifecycleManager.sharedInstance().removeNotificationListener(DeliveryQueue.class, deliveryQueueLifecycleListener);
+      }
+    });
+
  		refreshDeliveryQueues();
 	}
-	
+
 	private DeliveryQueueConfigModule getDeliveryQueueConfigModule () {
 		String[] fetchGroups = new String[] { DeliveryQueueConfigModule.FETCH_GROUP_VISIBLE_DELIVERY_QUEUES, DeliveryQueue.FETCH_GROUP_NAME,
 				DeliveryQueue.FETCH_GROUP_PENDING_DELIVERY_SET, Delivery.FETCH_GROUP_DELIVERY_TABLE_DATA, LegalEntity.FETCH_GROUP_PERSON,
 				User.FETCH_GROUP_PERSON, FetchPlan.DEFAULT };
 		DeliveryQueueConfigModule printQueueConfigModule =
-				(DeliveryQueueConfigModule) ConfigUtil.getUserCfMod(DeliveryQueueConfigModule.class, fetchGroups, -1, new NullProgressMonitor());
-		
+				ConfigUtil.getUserCfMod(DeliveryQueueConfigModule.class, fetchGroups, -1, new NullProgressMonitor());
+
 		return printQueueConfigModule;
 	}
-	
+
 	void deliverCheckedDeliveries() {
 		final List<Delivery> checkedDeliveries = deliveryTable.getCheckedElements();
 		if (checkedDeliveries.isEmpty())
 			return;
+		
+		AnchorID customerID = null;
+		for (Delivery delivery : checkedDeliveries) {
+			if (customerID != null && !delivery.getPartnerID().equals(customerID)) {
+				MessageDialog.openError(RCPUtil.getActiveShell(), "Checked deliveries have differing customers.", "The checked deliveries have differing customers. You can only deliver deliveries with the same customer at once.");
+				return;
+			}
+			customerID = delivery.getPartnerID();
+		}
 
-		//		CombiTransferArticlesWizard transferArticlesWizard = new CombiTransferArticlesWizard(articleIDs, AbstractCombiTransferWizard.TRANSFER_MODE_DELIVERY, DeliveryWizard.SIDE_VENDOR);
-		DeliveryQueueDeliveryWizard deliverWizard = new DeliveryQueueDeliveryWizard(checkedDeliveries);
-		WizardDialog wizardDialog = new WizardDialog(RCPUtil.getActiveShell(), deliverWizard);
-		
 		final DeliveryQueue selectedDeliveryQueue = printQueueCombo.getSelectedElement();
+		DeliveryQueueDeliveryWizard deliverWizard = new DeliveryQueueDeliveryWizard(checkedDeliveries, selectedDeliveryQueue);
+		WizardDialog wizardDialog = new WizardDialog(RCPUtil.getActiveShell(), deliverWizard);
+
 		wizardDialog.open();
-	}
-	
-	void refreshDeliveryQueues() {
 		
+		refreshDeliveryQueues();
+	}
+
+	void refreshDeliveryQueues() {
+
 		if (refreshing)
 			return;
-		
-		setFaded(true);
+
 		refreshing = true;
 		Job refreshJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.refreshDeliveryQueuesJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				final DeliveryQueueConfigModule pqCfMod = getDeliveryQueueConfigModule();
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
+						setFaded(true);
+						
 						// store selection
 						DeliveryQueue selectedDeliveryQueue = printQueueCombo.getSelectedElement();
-						
+
 						// reload delivery queues
 						List<DeliveryQueue> visibleDeliveryQueues = pqCfMod.getVisibleDeliveryQueues();
 						Collections.sort(visibleDeliveryQueues, new Comparator<DeliveryQueue>() {
@@ -110,9 +158,9 @@ extends FadeableComposite
 								return o1.getName().getText().compareTo(o2.getName().getText());
 							}
 						});
-						
+
 						printQueueCombo.setInput(visibleDeliveryQueues);
-						
+
 						// restore selection
 						if (selectedDeliveryQueue != null) {
 							printQueueCombo.setSelection(selectedDeliveryQueue);
@@ -123,7 +171,7 @@ extends FadeableComposite
 							if (printQueueCombo.getSelectedElement() != null)
 								deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
 						}
-						
+
 						setFaded(false);
 						refreshing = false;
 					}
@@ -131,22 +179,22 @@ extends FadeableComposite
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		refreshJob.setPriority(Job.SHORT);
 		refreshJob.schedule();
 	}
-	
-	private StoreManager storeManager;
-	
-	private StoreManager getStoreManager() {
-		if (storeManager != null)
-			return storeManager;
-		
-		try {
-			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			return storeManager;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+
+//	private StoreManager storeManager;
+//
+//	private StoreManager getStoreManager() {
+//		if (storeManager != null)
+//			return storeManager;
+//
+//		try {
+//			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			return storeManager;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 }

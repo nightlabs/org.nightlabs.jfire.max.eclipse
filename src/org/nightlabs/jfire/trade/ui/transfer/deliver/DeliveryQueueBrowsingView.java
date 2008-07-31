@@ -2,25 +2,24 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 
-public class DeliveryQueueBrowsingView 
-extends LSDViewPart 
+public class DeliveryQueueBrowsingView
+extends LSDViewPart
 {
 	public static final String ID_VIEW = DeliveryQueueBrowsingView.class.getName();
-	
+
 	private DeliveryQueueBrowsingComposite comp;
-	private Label loginLabel;
-	
+//	private Label loginLabel;
+
 	public void createPartContents(Composite parent) {
 		comp = new DeliveryQueueBrowsingComposite(parent, SWT.NONE);
 	}
-	
+
 	void refreshContent() {
 		comp.refreshDeliveryQueues();
 	}
-	
+
 	void deliverCheckedDeliveries() {
 		comp.deliverCheckedDeliveries();
 	}
