@@ -1,10 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 
+import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -16,22 +15,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -166,6 +160,30 @@ extends AbstractIssueEditorGeneralSection
 		@Override
 		public void run() 
 		{
+			Dialog dialog = new Dialog(getSection().getShell()) {
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Composite container = (Composite) super.createDialogArea(parent);
+					
+					IssueWorkTimeRangeTable t = new IssueWorkTimeRangeTable(container, SWT.NONE);
+					t.setIssueWorkTimeRanges((IssueID)JDOHelper.getObjectId(issue), issue.getIssueWorkTimeRanges());
+					
+					GridData gd = new GridData();
+					gd.heightHint = 400;
+					gd.widthHint = 400;
+					t.setLayoutData(gd);
+					
+					t.pack();
+					
+					return container;
+				}
+				
+				@Override
+				protected void createButtonsForButtonBar(Composite parent) {
+				}
+			};
+			
+			dialog.open();
 		}		
 	}
 }
