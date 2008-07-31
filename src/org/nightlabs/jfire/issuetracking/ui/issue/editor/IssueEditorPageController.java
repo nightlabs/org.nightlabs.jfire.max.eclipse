@@ -37,6 +37,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -91,7 +92,8 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		User.FETCH_GROUP_NAME,
 		IssueComment.FETCH_GROUP_USER,
 		IssueLinkType.FETCH_GROUP_NAME,
-		IssueHistory.FETCH_GROUP_USER
+		IssueHistory.FETCH_GROUP_USER,
+		IssueWorkTimeRange.FETCH_GROUP_USER
 /*		Issue.FETCH_GROUP_THIS_ISSUE,
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 //		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,

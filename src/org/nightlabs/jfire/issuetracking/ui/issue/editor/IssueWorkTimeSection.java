@@ -1,9 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
-import java.awt.GridLayout;
 import java.text.DateFormat;
-import java.util.Collection;
 import java.util.Date;
+
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
@@ -15,10 +15,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
-import org.nightlabs.util.CollectionUtil;
+import org.nightlabs.jfire.security.User;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -99,8 +101,16 @@ extends AbstractIssueEditorGeneralSection
 	protected void doSetIssue(Issue newIssue) {
 		this.issue = newIssue;
 
-		if (issue.isStarted()) 
+		if (issue.isStarted()) {
 			startStopButton.setText("Stop");
+			try {
+				boolean canStop = issue.getLastestIssueWorkTimeRange().getUser().equals(Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+				startStopButton.setEnabled(canStop);
+			} catch (LoginException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		else 
 			startStopButton.setText("Start");
 
