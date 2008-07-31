@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -59,6 +60,7 @@ extends AbstractIssueEditorGeneralSection
 				if (issue.isStarted()) { //End
 					issue.endWorking(new Date());
 					markDirty();
+					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 				}
 
 				else {	//Start
@@ -71,7 +73,9 @@ extends AbstractIssueEditorGeneralSection
 					}
 					
 					issue.startWorking(new Date());
+					
 					markDirty();
+					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 				}
 			}
 		});
@@ -103,9 +107,14 @@ extends AbstractIssueEditorGeneralSection
 		IssueWorkTimeRange workTime = issue.getLastestIssueWorkTimeRange();
 		if (workTime != null) {
 			statusLabel.setText(issue.isStarted() ? "Working" : "Finished");
-			startTimeLabel.setText(workTime.getFrom() == null? "" : dateTimeFormat.format(workTime.getFrom()));
-			endTimeLabel.setText(workTime.getTo() == null? "" : dateTimeFormat.format(workTime.getTo()));
-			getClient().pack(true);
+			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom()));
+			endTimeLabel.setText(workTime.getTo() == null ? "" : dateTimeFormat.format(workTime.getTo()));
+
+			statusLabel.pack(true);
+			startStopButton.pack(true);
+			startTimeLabel.pack(true);
+			endTimeLabel.pack(true);
+			getClient().pack();
 		}
 	}
 }
