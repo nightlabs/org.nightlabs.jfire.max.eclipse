@@ -48,6 +48,7 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		
 		subjectText = new I18nTextEditor(getClient());
 		subjectText.addModifyListener(modifyListener);
+		subjectText.setEditable(false);
 		
 		descriptionLabel = new Label(getClient(), SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
@@ -56,6 +57,7 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		descriptionText = new I18nTextEditorMultiLine(getClient(), subjectText.getLanguageChooser());		
 		((GridData) descriptionText.getLayoutData()).heightHint = 80;
 		descriptionText.addModifyListener(modifyListener);
+		descriptionText.setEditable(false);
 	}
 	
 	protected void doSetIssue(Issue issue) {

@@ -1,11 +1,14 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,13 +16,22 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueFileAttachment;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -37,6 +49,8 @@ extends AbstractIssueEditorGeneralSection
 	private Label startTimeLabel;
 	private Label endTimeLabel;
 
+	private WorkTimeListAction workTimeListAction;
+	
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 	/**
@@ -95,6 +109,12 @@ extends AbstractIssueEditorGeneralSection
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		endTimeLabel.setLayoutData(gd);
+		
+		workTimeListAction = new WorkTimeListAction();
+		
+		getToolBarManager().add(workTimeListAction);
+		
+		updateToolBarManager();
 	}
 
 	@Override
@@ -126,5 +146,26 @@ extends AbstractIssueEditorGeneralSection
 			endTimeLabel.pack(true);
 			getClient().pack();
 		}
+	}
+	
+	public class WorkTimeListAction 
+	extends Action 
+	{		
+		public WorkTimeListAction() 
+		{
+			super();
+			setId(WorkTimeListAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueWorkTimeSection.class, 
+			"List"));
+			setToolTipText("List all work times");
+			setText("List");
+		}
+
+		@Override
+		public void run() 
+		{
+		}		
 	}
 }

@@ -32,7 +32,7 @@ import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 
 /**
- * This composite lists all {@link Issue}s of an issue in a table.
+ * This composite lists all {@link IssueHistory}s of an issue in a table.
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueHistoryTable
