@@ -239,6 +239,11 @@ extends AbstractTableComposite<Issue>
 		tc.setText("State");
 		layout.addColumnData(new ColumnWeightData(15));
 
+		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
+		tc.setText("Status");
+		layout.addColumnData(new ColumnWeightData(15));
+		
 		table.setLayout(layout);
 	}
 
@@ -276,6 +281,7 @@ extends AbstractTableComposite<Issue>
 				case(5): return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
 				case(6): return issue.getIssuePriority().getIssuePriorityText().getText();
 				case(7): return getStateName(issue);					
+				case(8): return issue.isStarted()? "Working" : "Stoped";
 				default: return ""; //$NON-NLS-1$
 				}
 			}
