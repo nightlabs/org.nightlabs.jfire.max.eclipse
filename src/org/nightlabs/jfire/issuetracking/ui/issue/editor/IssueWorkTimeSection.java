@@ -87,7 +87,7 @@ extends AbstractIssueEditorGeneralSection
 		gd.horizontalSpan = 2;
 		startTimeLabel.setLayoutData(gd);
 
-		new Label(getClient(), SWT.NONE).setText("End Time: ");
+		new Label(getClient(), SWT.NONE).setText("Stop Time: ");
 		endTimeLabel = new Label(getClient(), SWT.NONE);
 		endTimeLabel.setText("");
 		gd = new GridData();
@@ -106,7 +106,7 @@ extends AbstractIssueEditorGeneralSection
 
 		IssueWorkTimeRange workTime = issue.getLastestIssueWorkTimeRange();
 		if (workTime != null) {
-			statusLabel.setText(issue.isStarted() ? "Working" : "Finished");
+			statusLabel.setText(issue.isStarted() ? "Working" : "Stopped");
 			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom()));
 			endTimeLabel.setText(workTime.getTo() == null ? "" : dateTimeFormat.format(workTime.getTo()));
 
