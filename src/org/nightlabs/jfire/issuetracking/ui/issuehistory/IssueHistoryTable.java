@@ -95,15 +95,18 @@ extends AbstractTableComposite<IssueHistory>
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Date");
 
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Username");
 		
 		tc = new TableColumn(table, SWT.LEFT);
+		tc.setMoveable(true);
 		tc.setText("Action");
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30, 30});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30, 70});
 		table.setLayout(layout);
 	}
 
