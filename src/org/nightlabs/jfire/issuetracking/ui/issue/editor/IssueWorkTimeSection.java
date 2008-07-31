@@ -180,6 +180,7 @@ extends AbstractIssueEditorGeneralSection
 				
 				@Override
 				protected void createButtonsForButtonBar(Composite parent) {
+					//don't need any buttons ;-)
 				}
 			};
 			
