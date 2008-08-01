@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -21,16 +20,10 @@ extends ResizableTrayDialog
 	
 	public ProductNameDialog(Shell parentShell, I18nText productName, boolean editable)
 	{
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		this.editable = editable;
 		this.productName = productName;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
-	}
-
-	@Override
-	protected Point getPreferredSize()
-	{
-		return new Point(400, 400);
 	}
 
 	@Override
