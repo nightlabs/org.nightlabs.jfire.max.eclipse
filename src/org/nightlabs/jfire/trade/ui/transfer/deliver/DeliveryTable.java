@@ -15,6 +15,8 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -35,7 +37,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 				case 0: return delivery.getPartner().getPerson().getDisplayName();
 				case 1: return dateTimeFormat.format(delivery.getEndDT());
 				case 2: return Integer.toString(delivery.getArticleIDs().size());
-				case 3: return Long.toString(delivery.getDeliveryID());
+				case 3: return ObjectIDUtil.longObjectIDFieldToString(delivery.getDeliveryID());
 				case 4: return delivery.getUser().getName();
 				default: return null;
 				}
