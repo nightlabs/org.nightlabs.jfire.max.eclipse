@@ -9,6 +9,9 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,6 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -44,7 +48,7 @@ extends AbstractIssueEditorGeneralSection
 	private Label endTimeLabel;
 
 	private WorkTimeListAction workTimeListAction;
-	
+
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 	/**
@@ -81,9 +85,9 @@ extends AbstractIssueEditorGeneralSection
 							issue.setAssignee(userSearchDialog.getSelectedUser());
 						}
 					}
-					
+
 					issue.startWorking(new Date());
-					
+
 					markDirty();
 					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
 				}
@@ -103,11 +107,11 @@ extends AbstractIssueEditorGeneralSection
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		endTimeLabel.setLayoutData(gd);
-		
+
 		workTimeListAction = new WorkTimeListAction();
-		
+
 		getToolBarManager().add(workTimeListAction);
-		
+
 		updateToolBarManager();
 	}
 
@@ -118,7 +122,7 @@ extends AbstractIssueEditorGeneralSection
 		if (issue.isStarted()) {
 			startStopButton.setText("Stop");
 			try {
-				boolean canStop = issue.getLastestIssueWorkTimeRange().getUser().equals(Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+				boolean canStop = issue.getAssignee().equals(Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 				startStopButton.setEnabled(canStop);
 			} catch (LoginException e) {
 				// TODO Auto-generated catch block
@@ -141,7 +145,7 @@ extends AbstractIssueEditorGeneralSection
 			getClient().pack();
 		}
 	}
-	
+
 	public class WorkTimeListAction 
 	extends Action 
 	{		
@@ -161,29 +165,41 @@ extends AbstractIssueEditorGeneralSection
 		public void run() 
 		{
 			Dialog dialog = new Dialog(getSection().getShell()) {
+				
 				@Override
-				protected Control createDialogArea(Composite parent) {
-					Composite container = (Composite) super.createDialogArea(parent);
-					
-					IssueWorkTimeRangeTable t = new IssueWorkTimeRangeTable(container, SWT.NONE);
-					t.setIssueWorkTimeRanges((IssueID)JDOHelper.getObjectId(issue), issue.getIssueWorkTimeRanges());
-					
-					GridData gd = new GridData();
-					gd.heightHint = 400;
-					gd.widthHint = 400;
-					t.setLayoutData(gd);
-					
-					t.pack();
-					
-					return container;
+				protected void setShellStyle(int newShellStyle) {
+					super.setShellStyle(getShellStyle() | SWT.RESIZE);
 				}
 				
 				@Override
+				protected Control createDialogArea(Composite parent) {
+					Composite container = (Composite) super.createDialogArea(parent);
+
+					IssueWorkTimeRangeTable t = new IssueWorkTimeRangeTable(container, SWT.NONE);
+					t.setIssueWorkTimeRanges((IssueID)JDOHelper.getObjectId(issue), issue.getIssueWorkTimeRanges());
+
+					t.pack();
+
+					getShell().setMinimumSize(700, 400);
+					return container;
+				}
+
+				@Override
 				protected void createButtonsForButtonBar(Composite parent) {
-					//don't need any buttons ;-)
+					createButton(parent, 
+							IDialogConstants.CLOSE_ID,
+							"Close", 
+							false);
+				}
+
+				@Override
+				protected void buttonPressed(int id) {
+					if (id == IDialogConstants.CLOSE_ID){
+						close();
+					}
 				}
 			};
-			
+
 			dialog.open();
 		}		
 	}
