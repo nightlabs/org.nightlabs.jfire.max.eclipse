@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 import java.text.DateFormat;
 import java.util.Collection;
 
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -83,7 +84,7 @@ extends AbstractTableComposite<IssueHistory>
 				case(2):
 					return dateTimeFormat.format(issueWorkTimeRange.getTo());
 				case(3):
-					return issueWorkTimeRange.getDuration().toString();
+					return DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true);
 				default:
 					return ""; //$NON-NLS-1$
 				}
