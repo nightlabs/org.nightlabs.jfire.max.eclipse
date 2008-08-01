@@ -8,16 +8,13 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
-import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
@@ -34,7 +31,7 @@ public class ValueProviderDialog extends ResizableTitleAreaDialog {
 	 * @param parentShell
 	 */
 	public ValueProviderDialog(Shell parentShell) {
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
@@ -42,11 +39,6 @@ public class ValueProviderDialog extends ResizableTitleAreaDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ValueProviderDialog.newShell.text")); //$NON-NLS-1$
-	}
-	
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(400, 500);
 	}
 	
 	@Override

@@ -38,7 +38,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -49,7 +48,6 @@ import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
-import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -86,7 +84,7 @@ public class SelectReportLayoutDialog extends ResizableTitleAreaDialog {
 			Collection<ReportRegistryItemID> availableItemIDs,
 			ReportRegistryItemID defaultItemID
 	) {
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		this.availableItemIDs = availableItemIDs;
 		this.defaultItemID = defaultItemID;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
@@ -98,11 +96,6 @@ public class SelectReportLayoutDialog extends ResizableTitleAreaDialog {
 		newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.SelectReportLayoutDialog.newShell.text")); //$NON-NLS-1$
 	}
 
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(300, 400);
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 * 
