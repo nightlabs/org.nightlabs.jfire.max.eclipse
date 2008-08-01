@@ -22,7 +22,7 @@ extends AbstractProductTypeSearchDialog
 	 * @param parentShell
 	 */
 	public VoucherTypeSearchDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 	}
 
 	@Override
