@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -9,7 +11,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -34,8 +35,8 @@ extends ResizableTitleAreaDialog
 	/**
 	 * @param parentShell
 	 */
-	public AbstractProductTypeSearchDialog(Shell parentShell) {
-		super(parentShell, null);
+	public AbstractProductTypeSearchDialog(Shell parentShell, ResourceBundle resourceBundle) {
+		super(parentShell, resourceBundle);
 	}
 
 	@Override
@@ -48,11 +49,6 @@ extends ResizableTitleAreaDialog
 
 	protected String getProductTypeName() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchDialog.productType"); //$NON-NLS-1$
-	}
-	
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(800, 600);
 	}
 
 	@Override
