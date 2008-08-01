@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.reporting.admin.parameter.ui.dialog;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -30,7 +29,7 @@ extends ResizableTrayDialog
 	public UseCaseDialog(Shell parentShell, ReportParameterAcquisitionUseCase useCase,
 			ReportParameterAcquisitionSetup setup, int mode)
 	{
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		setShellStyle(getShellStyle() | SWT.Resize);
 		this.useCase = useCase;
 		this.mode = mode;
@@ -44,11 +43,6 @@ extends ResizableTrayDialog
 			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.editMode.shell.text")); //$NON-NLS-1$
 		if (mode == NEW_MODE)
 			newShell.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.dialog.UseCaseDialog.newMode.shell.text"));		 //$NON-NLS-1$
-	}
-	
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(300, 200);
 	}
 
 	private int mode = EDIT_MODE;

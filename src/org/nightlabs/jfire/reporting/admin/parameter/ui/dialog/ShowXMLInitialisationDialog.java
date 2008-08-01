@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,10 +37,11 @@ public class ShowXMLInitialisationDialog extends ResizableTrayDialog {
 		super(parentShell, null);
 		this.acquisitionSetup = acquisitionSetup;
 	}
-	
+
 	@Override
-	protected Point getPreferredSize() {
-		return new Point(400, 500);
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setSize(400, 500);
 	}
 	
 	protected void addLine(StringBuffer buffer, int indent, String line) {
