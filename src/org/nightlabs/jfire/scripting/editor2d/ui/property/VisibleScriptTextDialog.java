@@ -13,7 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredTitleDialog;
+import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
+import org.nightlabs.editor2d.ui.resource.Messages;
 import org.nightlabs.jfire.scripting.condition.Script;
 import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
 
@@ -23,7 +24,7 @@ import org.nightlabs.jseditor.ui.editor.JSEditorComposite;
  */
 public class VisibleScriptTextDialog 
 //extends CenteredDialog 
-extends CenteredTitleDialog
+extends ResizableTitleAreaDialog
 {
 	private Script script;
 	private JSEditorComposite jsEditorComposite;
@@ -32,7 +33,7 @@ extends CenteredTitleDialog
 	 * @param parentShell
 	 */
 	public VisibleScriptTextDialog(Shell parentShell, Script script) {
-		super(parentShell);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		this.script = script;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
@@ -115,7 +116,6 @@ extends CenteredTitleDialog
 	public void create() {
 		super.create();
 		getShell().setText("Edit Visible Script");
-		getShell().setSize(500, 350);
 		getShell().setMinimumSize(400, 300);
 	}
 }

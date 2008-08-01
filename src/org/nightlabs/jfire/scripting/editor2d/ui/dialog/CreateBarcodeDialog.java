@@ -70,7 +70,7 @@ extends ResizableTitleAreaDialog
 	
 	public CreateBarcodeDialog(Shell parentShell, BarcodeCreateRequest request)
 	{
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		this.request = request;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
@@ -85,11 +85,6 @@ extends ResizableTitleAreaDialog
 		newShell.setMinimumSize(400, 200);
 	}
 	
-	@Override
-	protected org.eclipse.swt.graphics.Point getPreferredSize() {
-		return new org.eclipse.swt.graphics.Point(500, 200);
-	}
-
 	protected XComboComposite<ScriptRegistryItemID> scriptCombo = null;
 	private XComboComposite<Type> barcodeTypeCombo = null;
 	private XComboComposite<WidthScale> widthScaleCombo = null;

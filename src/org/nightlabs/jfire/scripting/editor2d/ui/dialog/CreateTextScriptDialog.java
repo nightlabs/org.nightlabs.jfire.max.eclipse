@@ -80,14 +80,14 @@ extends ResizableTrayDialog
 	public CreateTextScriptDialog(Shell parentShell,
 			TextScriptCreateRequest request)
 	{
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		init(request);
 	}
 
 	public CreateTextScriptDialog(IShellProvider parentShell,
 			TextScriptCreateRequest request)
 	{
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		init(request);
 	}
 
@@ -105,11 +105,6 @@ extends ResizableTrayDialog
 	{
 		super.configureShell(newShell);
 		newShell.setText(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateTextScriptDialog.title")); //$NON-NLS-1$
-	}
-	
-	@Override
-	protected org.eclipse.swt.graphics.Point getPreferredSize() {
-		return new org.eclipse.swt.graphics.Point(700, 500);
 	}
 
 	private TextScriptCreateRequest request;
