@@ -18,7 +18,7 @@ extends AbstractProductTypeSearchDialog
 	 * @param parentShell
 	 */
 	public SimpleProductTypeSearchDialog(Shell parentShell) {
-		super(parentShell);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 	}
 
 	@Override
