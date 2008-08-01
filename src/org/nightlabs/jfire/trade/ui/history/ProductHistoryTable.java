@@ -13,6 +13,8 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
+import org.nightlabs.jfire.accounting.pay.Payment;
+import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
@@ -33,7 +35,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 	public static final String[] FETCH_GROUPS_PRODUCT_HISTORY = new String[] {
 		FetchPlan.DEFAULT,
 		User.FETCH_GROUP_PERSON,
-//		Person.FETCH_GROUP_FULL_DATA,
+		Person.FETCH_GROUP_FULL_DATA,
 		Offer.FETCH_GROUP_CREATE_USER,
 		Order.FETCH_GROUP_CREATE_USER,
 		Invoice.FETCH_GROUP_CREATE_USER,
@@ -45,6 +47,10 @@ extends AbstractTableComposite<ProductHistoryItem>
 		ModeOfDeliveryFlavour.FETCH_GROUP_NAME,
 		ModeOfPaymentFlavour.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON,
+		Payment.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOUR,
+		Payment.FETCH_GROUP_USER,
+		ModeOfDeliveryFlavour.FETCH_GROUP_NAME,
+		ModeOfPaymentFlavour.FETCH_GROUP_NAME,
 	};
 	
 	class ProductHistoryTableLabelProvider
