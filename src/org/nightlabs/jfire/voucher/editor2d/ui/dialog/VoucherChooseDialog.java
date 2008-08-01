@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +39,7 @@ extends ResizableTrayDialog
 	 * @param parentShell
 	 */
 	public VoucherChooseDialog(Shell parentShell) {
-		super(parentShell, null);
+		super(parentShell, Messages.RESOURCE_BUNDLE);
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
@@ -51,11 +50,6 @@ extends ResizableTrayDialog
 		newShell.setText(Messages.getString("org.nightlabs.jfire.voucher.editor2d.ui.dialog.VoucherChooseDialog.title")); //$NON-NLS-1$
 	}
 	
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(600, 400);
-	}
-
 	private VoucherTypeTree voucherTypeTree = null;
 	private Group detailGroup = null;
 	private VoucherDetailComposite detailComp = null;
