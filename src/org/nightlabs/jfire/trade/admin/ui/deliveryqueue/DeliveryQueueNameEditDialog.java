@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.admin.ui.deliveryqueue;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -20,15 +19,10 @@ public class DeliveryQueueNameEditDialog extends ResizableTrayDialog {
 	private DeliveryQueue deliveryQueue;
 
 	public DeliveryQueueNameEditDialog(Shell shell, DeliveryQueue deliveryQueue) {
-		super(shell, null);
+		super(shell, Messages.RESOURCE_BUNDLE);
 		this.deliveryQueue = deliveryQueue;
 	}
 
-	@Override
-	protected Point getPreferredSize() {
-		return new Point(400, 500);
-	}
-	
 	@Override
 	protected int getShellStyle() {
 		return super.getShellStyle() | SWT.RESIZE;
