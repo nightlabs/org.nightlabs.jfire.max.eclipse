@@ -23,4 +23,12 @@ extends LSDViewPart
 	void deliverCheckedDeliveries() {
 		comp.deliverCheckedDeliveries();
 	}
+	
+	void checkAllDeliveries() {
+		comp.checkAllDeliveries();
+	}
+	
+	void uncheckAllDeliveries() {
+		comp.uncheckAllDeliveries();
+	}
 }

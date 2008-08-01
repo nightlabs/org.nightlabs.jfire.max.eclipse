@@ -134,6 +134,12 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 							monitor.worked(1);
 	
 							TransferWizardUtil.deliver(getShell(), DeliveryQueueDeliveryWizard.this);
+							
+							// now reload the deliveryQueue object because it may have been altered by the
+							// new delivery (if the target and the source delivery queue are the same)
+							deliveryQueue = DeliveryQueueDAO.sharedInstance().getDeliveryQueue(deliveryQueue.getObjectID(),
+									new String[] { DeliveryQueue.FETCH_GROUP_PENDING_DELIVERY_SET }, -1, new NullProgressMonitor());
+							
 							for (DeliveryEntryPage page : getDeliveryEntryPages()) {
 								for (Delivery delivery : page.getDeliveryWizardHop().getDeliveryList()) {
 									// If the delivery has not failed, we mark all original (old) deliveries that contributed to this one as processed
@@ -143,9 +149,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 									}
 								}
 							}
-							
 							monitor.worked(2);
-	
 							DeliveryQueueDAO.sharedInstance().storeDeliveryQueue(deliveryQueue, false, null, -1, new NullProgressMonitor());
 	
 							monitor.worked(1);

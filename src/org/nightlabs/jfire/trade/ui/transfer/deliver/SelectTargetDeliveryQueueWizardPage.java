@@ -6,14 +6,12 @@ import java.util.List;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.base.ui.composite.AbstractListComposite;
-import org.nightlabs.base.ui.composite.XComboComposite;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -26,7 +24,8 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 class SelectTargetDeliveryQueueWizardPage
 extends WizardHopPage
 {
-	private XComboComposite<DeliveryQueue> queueCombo;
+//	private XComboComposite<DeliveryQueue> queueCombo;
+	private DeliveryQueueSelectionTable queueTable;
 	private List<DeliveryQueue> visibleDeliveryQueues;
 
 	public SelectTargetDeliveryQueueWizardPage(List<DeliveryQueue> visibleDeliveryQueues) {
@@ -38,20 +37,13 @@ extends WizardHopPage
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
-		LabelProvider labelProvider = new LabelProvider() {
-			@Override
-			public String getText(Object element) {
-				if (element instanceof DeliveryQueue) {
-					DeliveryQueue deliveryQueue = (DeliveryQueue) element;
-					return deliveryQueue.getName().getText();
-				}
-				return ""; //$NON-NLS-1$
-			}
-		};
-		queueCombo = new XComboComposite<DeliveryQueue>(comp,
-				AbstractListComposite.getDefaultWidgetStyle(comp),
-				Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.SelectTargetDeliveryQueueWizardPage.queueCombo.caption"), //$NON-NLS-1$
-				labelProvider);
+		
+		Label lbl = new Label(comp, SWT.WRAP);
+		XComposite.setLayoutDataMode(LayoutDataMode.GRID_DATA_HORIZONTAL, lbl);
+		lbl.setText("Please select the delivery queue you want to deliver to.");
+		
+		queueTable = new DeliveryQueueSelectionTable(comp);
+		
 		Collections.sort(visibleDeliveryQueues, new Comparator<DeliveryQueue>() {
 			@Override
 			public int compare(DeliveryQueue o1, DeliveryQueue o2) {
@@ -59,15 +51,14 @@ extends WizardHopPage
 			}
 		});
 		
-		queueCombo.setInput(visibleDeliveryQueues);
+		queueTable.setInput(visibleDeliveryQueues);
+		
 		final DeliveryQueueConfigModule configModule = Config.sharedInstance().createConfigModule(DeliveryQueueConfigModule.class);
-		queueCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
-			public void widgetSelected(SelectionEvent e) {
+		queueTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent arg0) {
 				getContainer().updateButtons();
-				configModule.setLastUsedDeliveryQueueId((DeliveryQueueID) JDOHelper.getObjectId(queueCombo.getSelectedElement()));
+				configModule.setLastUsedDeliveryQueueId((DeliveryQueueID) JDOHelper.getObjectId(queueTable.getFirstSelectedElement()));
 			}
 		});
 		
@@ -76,19 +67,20 @@ extends WizardHopPage
 			if (dq.getObjectID().equals(configModule.getLastUsedDeliveryQueueId()))
 				lastSelectedDeliveryQueue = dq;
 		}
+		
 		if (lastSelectedDeliveryQueue != null)
-			queueCombo.setSelection(lastSelectedDeliveryQueue);
+			queueTable.setSelectedElements(Collections.singleton(lastSelectedDeliveryQueue));
 
 		return comp;
 	}
-
-	protected DeliveryQueue getSelectedDeliveryQueue() {
-		return queueCombo.getSelectedElement();
+	
+	DeliveryQueue getSelectedDeliveryQueue() {
+		return queueTable.getFirstSelectedElement();
 	}
 
 	@Override
 	public boolean isPageComplete() {
-		return !(queueCombo == null || queueCombo.getSelectedElement() == null);
+		return !(queueTable == null || queueTable.getFirstSelectedElement() == null);
 	}
 	
 	@Override

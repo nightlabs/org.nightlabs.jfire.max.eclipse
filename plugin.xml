@@ -101,17 +101,31 @@
         <viewContribution
             id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingViewContribution" targetID="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView">
             <action
-                class="org.nightlabs.jfire.trade.ui.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
-                icon="icons/transfer/deliver/PrintQueueBrowsingView-refresh.16x16.gif"
-                id="org.nightlabs.jfire.trade.ui.transfer.deliver.RefreshDeliveryQueuesActionDelegate"
-                label="%org.nightlabs.jfire.trade.ui.transfer.deliver.RefreshDeliveryQueuesActionDelegate.label"
-                menubarPath="additions" state="true" style="push" toolbarPath="additions"/>
-            <action
                 class="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
                 icon="icons/transfer/deliver/PrintQueueBrowsingView-printDeliveries.16x16.png"
                 id="org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate"
                 label="%org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate.label"
                 menubarPath="additions" state="true" style="push" toolbarPath="additions"/>
+            <action
+                  class="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
+                  id="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
+                  label="-"
+                  menubarPath="additions"
+                  state="true"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Uncheck all deliveries">
+            </action>
+            <action
+                  class="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
+                  id="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
+                  label="+"
+                  menubarPath="additions"
+                  state="true"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Check all deliveries">
+            </action>
         </viewContribution>
     </extension>
     <extension point="org.eclipse.ui.editors">

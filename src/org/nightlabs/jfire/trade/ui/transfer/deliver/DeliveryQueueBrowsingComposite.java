@@ -12,6 +12,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -22,8 +25,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite.CaptionOrientation;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -35,6 +40,7 @@ import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
 import org.nightlabs.jfire.store.deliver.id.DeliveryQueueID;
+import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard;
@@ -71,7 +77,7 @@ extends FadeableComposite
 
 	public DeliveryQueueBrowsingComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, new LabelProvider() {
+		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, "Delivery Queue: ", new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof DeliveryQueue) {
@@ -80,13 +86,35 @@ extends FadeableComposite
 				}
 				return super.getText(element);
 			}
-		});
+		}, CaptionOrientation.LEFT);
 		printQueueCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				deliveryTable.setInput(printQueueCombo.getSelectedElement().getPendingDeliveries());
 			}
 		});
 		deliveryTable = new DeliveryTable(this, SWT.NONE);
+		
+		MenuManager popupMenu = new MenuManager();
+    IAction checkAllAction = new Action() {
+    	@Override
+    	public void run() {
+    		checkAllDeliveries();
+    	}
+    };
+    checkAllAction.setText("Check all deliveries");
+    
+    IAction uncheckAllAction = new Action() {
+    	@Override
+    	public void run() {
+    		uncheckAllDeliveries();
+    	}
+    };
+    uncheckAllAction.setText("Uncheck all deliveries");
+    
+    popupMenu.add(checkAllAction);
+    popupMenu.add(uncheckAllAction);
+    Menu menu = popupMenu.createContextMenu(deliveryTable.getTableViewer().getTable());
+    deliveryTable.getTableViewer().getTable().setMenu(menu);
 		
 		JDOLifecycleManager.sharedInstance().addNotificationListener(DeliveryQueue.class, deliveryQueueLifecycleListener);
 
@@ -102,12 +130,12 @@ extends FadeableComposite
 
 	private DeliveryQueueConfigModule getDeliveryQueueConfigModule () {
 		String[] fetchGroups = new String[] { DeliveryQueueConfigModule.FETCH_GROUP_VISIBLE_DELIVERY_QUEUES, DeliveryQueue.FETCH_GROUP_NAME,
-				DeliveryQueue.FETCH_GROUP_PENDING_DELIVERY_SET, Delivery.FETCH_GROUP_DELIVERY_TABLE_DATA, LegalEntity.FETCH_GROUP_PERSON,
-				User.FETCH_GROUP_PERSON, FetchPlan.DEFAULT };
-		DeliveryQueueConfigModule printQueueConfigModule =
+				DeliveryQueue.FETCH_GROUP_PENDING_DELIVERY_SET, Delivery.FETCH_GROUP_DELIVERY_TABLE_DATA, Article.FETCH_GROUP_ORDER,
+				LegalEntity.FETCH_GROUP_PERSON,	User.FETCH_GROUP_PERSON, FetchPlan.DEFAULT };
+		DeliveryQueueConfigModule deliveryQueueConfigModule =
 				ConfigUtil.getUserCfMod(DeliveryQueueConfigModule.class, fetchGroups, -1, new NullProgressMonitor());
 
-		return printQueueConfigModule;
+		return deliveryQueueConfigModule;
 	}
 
 	void deliverCheckedDeliveries() {
@@ -129,8 +157,6 @@ extends FadeableComposite
 		WizardDialog wizardDialog = new WizardDialog(RCPUtil.getActiveShell(), deliverWizard);
 
 		wizardDialog.open();
-		
-		refreshDeliveryQueues();
 	}
 
 	void refreshDeliveryQueues() {
@@ -182,6 +208,14 @@ extends FadeableComposite
 
 		refreshJob.setPriority(Job.SHORT);
 		refreshJob.schedule();
+	}
+	
+	void checkAllDeliveries() {
+		deliveryTable.checkAll();
+	}
+	
+	void uncheckAllDeliveries() {
+		deliveryTable.uncheckAll();
 	}
 
 //	private StoreManager storeManager;

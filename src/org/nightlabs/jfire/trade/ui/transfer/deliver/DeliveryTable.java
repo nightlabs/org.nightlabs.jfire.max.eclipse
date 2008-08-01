@@ -3,6 +3,8 @@ package org.nightlabs.jfire.trade.ui.transfer.deliver;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -15,9 +17,11 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.store.deliver.Delivery;
+import org.nightlabs.jfire.store.id.DeliveryNoteID;
+import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
@@ -35,10 +39,29 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 				Delivery delivery = (Delivery) element;
 				switch (columnIndex) {
 				case 0: return delivery.getPartner().getPerson().getDisplayName();
-				case 1: return dateTimeFormat.format(delivery.getEndDT());
-				case 2: return Integer.toString(delivery.getArticleIDs().size());
-				case 3: return ObjectIDUtil.longObjectIDFieldToString(delivery.getDeliveryID());
-				case 4: return delivery.getUser().getName();
+				case 1: {
+					Set<DeliveryNoteID> deliveryNoteIDs = delivery.getDeliveryNoteIDs();
+					StringBuilder sb = new StringBuilder();
+					for (DeliveryNoteID deliveryNoteID : deliveryNoteIDs)
+						sb.append(ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)).append(", ");
+					return sb.substring(0, sb.length()-2);
+				}
+				case 2: {
+					Set<OrderID> orderIDs = new HashSet<OrderID>();
+					for (Article article : delivery.getArticles()) {
+						orderIDs.add(article.getOrderID());
+					}
+					
+					StringBuilder sb = new StringBuilder();
+					for (OrderID orderID : orderIDs) {
+						sb.append(ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)).append(", ");
+					}
+					return sb.substring(0, sb.length()-2);
+				}
+				case 3: return dateTimeFormat.format(delivery.getEndDT());
+				case 4: return Integer.toString(delivery.getArticleIDs().size());
+				case 5: return ObjectIDUtil.longObjectIDFieldToString(delivery.getDeliveryID());
+				case 6: return delivery.getUser().getName();
 				default: return null;
 				}
 			}
@@ -63,11 +86,13 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.customerNameTableColumn.text")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText("DeliveryNote IDs");
+		new TableColumn(table, SWT.LEFT).setText("Order IDs");
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.enqueueDateTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.articleCountTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.deliveryIDTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.userTableColumn.text")); //$NON-NLS-1$
-		table.setLayout(new WeightedTableLayout(new int[] { 3, -1, -1, -1, 1}, new int[] { -1, 120, 30, 60, -1}));
+		table.setLayout(new WeightedTableLayout(new int[] { 3, -1, -1, -1, -1, -1, 1}, new int[] { -1, 120, 120, 120, 30, 60, -1}));
 	}
 
 	@Override
