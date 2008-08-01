@@ -9,13 +9,14 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,12 +27,13 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.dialog.CenteredDialog;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
+import org.nightlabs.jfire.reporting.scripting.ScriptingConstants;
 import org.nightlabs.jfire.scripting.Script;
+import org.nightlabs.jfire.scripting.ScriptCategory;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.ui.ScriptRegistryItemNode;
@@ -80,22 +82,43 @@ public class SelectedScriptComposite extends XComposite {
 			setMessage(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.SelectedScriptComposite.selectSourceScriptShell.message")); //$NON-NLS-1$
 			itemTree = new ScriptRegistryItemTree(parent, null);
 			itemTree.addSelectionChangedListener(new ISelectionChangedListener() {
+				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
-					ScriptRegistryItemNode node = (ScriptRegistryItemNode) itemTree.getFirstSelectedElement();
-					if (node != null) {
-						if (node.getRegistryItem() != null && node.getRegistryItem() instanceof Script) {
-							selectedScript = (Script) node.getRegistryItem();
-						} else {
-							selectedScript = null;
-						}
-					} else {
-						selectedScript = null;
-					}
-					getButton(IDialogConstants.OK_ID).setEnabled(selectedScript != null);
+					setSelectedScript();
 				}
 			});
-			itemTree.setInput(ScriptRegistryItemProvider.sharedInstance().getTopLevelNodes());
+			itemTree.getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					setSelectedScript();
+					if (getButton(IDialogConstants.OK_ID).isEnabled()) {						
+						okPressed();
+						return;
+					}
+					ScriptRegistryItemNode node = itemTree.getFirstSelectedElement();
+					if (node != null && node.getRegistryItem() instanceof ScriptCategory) {
+						itemTree.getTreeViewer().expandToLevel(node, 1);
+					}
+				}
+			});
+			
+			itemTree.setInput(ScriptRegistryItemProvider.sharedInstance().getTopLevelNodeForType(ScriptingConstants.SCRIPT_REGISTRY_ITEM_TYPE_ROOT));
+			itemTree.getTreeViewer().expandToLevel(3);
 			return itemTree;
+		}
+		
+		protected void setSelectedScript() {
+			ScriptRegistryItemNode node = (ScriptRegistryItemNode) itemTree.getFirstSelectedElement();
+			if (node != null) {
+				if (node.getRegistryItem() != null && node.getRegistryItem() instanceof Script) {
+					selectedScript = (Script) node.getRegistryItem();
+				} else {
+					selectedScript = null;
+				}
+			} else {
+				selectedScript = null;
+			}
+			getButton(IDialogConstants.OK_ID).setEnabled(selectedScript != null);
 		}
 		
 		public static Script openDialog() {
