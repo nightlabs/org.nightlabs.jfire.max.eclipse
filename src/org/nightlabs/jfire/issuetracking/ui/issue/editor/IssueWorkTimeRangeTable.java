@@ -82,9 +82,9 @@ extends AbstractTableComposite<IssueHistory>
 				case(1):
 					return dateTimeFormat.format(issueWorkTimeRange.getFrom());
 				case(2):
-					return dateTimeFormat.format(issueWorkTimeRange.getTo());
+					return issueWorkTimeRange.getTo() == null ? "(Still working)" : dateTimeFormat.format(issueWorkTimeRange.getTo());
 				case(3):
-					return DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true);
+					return issueWorkTimeRange.getDuration() == null ? "(Still working)" : DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true);
 				default:
 					return ""; //$NON-NLS-1$
 				}

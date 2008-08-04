@@ -97,12 +97,13 @@ extends AbstractIssueEditorGeneralSection
 		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
 		commentEntry.setClient(text);
 
-		/********Using FormText********/
+//		/********Using FormText********/
 //		FormText text = toolkit.createFormText(commentEntry, false);
 //		text.setText(comment.getText(),
 //				false,
 //				false);
 //		text.setWhitespaceNormalized(false);
+//		commentEntry.setClient(text);
 		
 		commentEntry.addExpansionListener(new ExpansionAdapter() {
 			public void expansionStateChanged(ExpansionEvent e) {
