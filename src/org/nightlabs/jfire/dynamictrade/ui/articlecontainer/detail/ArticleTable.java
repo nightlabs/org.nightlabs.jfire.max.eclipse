@@ -94,6 +94,7 @@ extends AbstractTableComposite<Article>
 	protected class ArticleLabelProvider
 	extends TableLabelProvider
 	{
+		@Override
 		public Image getColumnImage(Object element, int columnIndex)
 		{
 			if (! (element instanceof Article))
@@ -143,12 +144,18 @@ extends AbstractTableComposite<Article>
 			if (!isInInvoice()) {
 				if (++ci == columnIndex && article.getInvoiceID() != null)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_INVOICE_16x16);
+
+				if (++ci == columnIndex && article.getArticleLocal().isInvoicePaid())
+					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_ARTICLE_PAID_16x16);
 			}
 
 			if (!isInDeliveryNote()) {
 				if (++ci == columnIndex && article.getDeliveryNoteID() != null)
 					return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_DELIVERY_NOTE_16x16);
 			}
+
+			if (++ci == columnIndex && article.getArticleLocal().isDelivered())
+				return TradePlugin.getDefault().getImageRegistry().get(TradePlugin.IMAGE_ARTICLE_DELIVERED_16x16);
 
 			return null;
 		}
@@ -193,14 +200,20 @@ extends AbstractTableComposite<Article>
 			}
 
 			if (!isInInvoice()) {
-				if (++ci == columnIndex && article.getInvoiceID() != null)
+				if (++ci == columnIndex)
 					return ""; // Long.toString(article.getInvoiceID().invoiceID); //$NON-NLS-1$
+
+				if (++ci == columnIndex)
+					return ""; // invoice's paid status
 			}
 
 			if (!isInDeliveryNote()) {
-				if (++ci == columnIndex && article.getDeliveryNoteID() != null)
+				if (++ci == columnIndex)
 					return ""; // Long.toString(article.getDeliveryNoteID().deliveryNoteID); //$NON-NLS-1$
 			}
+
+			if (++ci == columnIndex)
+				return ""; // Article's delivered status
 
 			if (++ci == columnIndex) {
 				ArticlePrice price = article.getPrice();
@@ -285,6 +298,10 @@ extends AbstractTableComposite<Article>
 			col = new TableColumn(table, SWT.LEFT);
 			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 			col.setToolTipText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
+
+			col = new TableColumn(table, SWT.LEFT);
+			col.setText("Paid");
+			col.setToolTipText("The invoice of this article has been paid completely.");
 		}
 
 		if (!isInDeliveryNote()) {
@@ -292,6 +309,10 @@ extends AbstractTableComposite<Article>
 			col.setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
 			col.setToolTipText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleTable.deliveryNoteTableColumn.text")); //$NON-NLS-1$
 		}
+
+		col = new TableColumn(table, SWT.LEFT);
+		col.setText("Delivered");
+		col.setToolTipText("The article has been delivered.");
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		col = new TableColumn(table, SWT.RIGHT);
@@ -301,18 +322,25 @@ extends AbstractTableComposite<Article>
 		if (isInOrder()) // name, allocationStatus, offer, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{80, 40, 20, 20, -1, -1, -1, -1, 30},
-							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, -1}));
+							new int[]{80, 40, 20, 20, -1, -1, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, 22, 22, -1}));
 		else if (isInOffer())  // name, allocationStatus, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{80, 40, 20, 20, -1, -1, -1, 30},
-							new int[]{-1, -1, -1, -1, 22, 22, 22, -1}));
-		else // Invoice || DeliveryNote: name, allocationStatus, order, offer, (invoice|deliveryNote), price
+							new int[]{80, 40, 20, 20, -1, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, 22, -1}));
+		else if (isInInvoice())
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{80, 40, 20, 20, -1, -1, -1, -1, 30},
-							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, -1}));
+							new int[]{80, 40, 20, 20, -1, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, 22, -1}));
+		else if (isInDeliveryNote())
+			table.setLayout(
+					new WeightedTableLayout(
+							new int[]{80, 40, 20, 20, -1, -1, -1, -1, -1, -1, 30},
+							new int[]{-1, -1, -1, -1, 22, 22, 22, 22, 22, 22, -1}));
+		else
+			throw new UnsupportedOperationException("Unknown ArticleContainer!");
 	}
 
 	/**
@@ -323,7 +351,7 @@ extends AbstractTableComposite<Article>
 	{
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
-		
+
 		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 
@@ -336,7 +364,7 @@ extends AbstractTableComposite<Article>
 			children[i].setMenu(menu);
 		}
 	}
-		
+
 	private boolean isInOrder()
 	{
 		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Order;
@@ -346,14 +374,14 @@ extends AbstractTableComposite<Article>
 	{
 		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Offer;
 	}
-	
+
 	private boolean isInInvoice()
 	{
 		return articleEdit.getSegmentEdit().getArticleContainer() instanceof Invoice;
 	}
-	
+
 	private boolean isInDeliveryNote()
 	{
 		return articleEdit.getSegmentEdit().getArticleContainer() instanceof DeliveryNote;
-	}		
+	}
 }
