@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui.transfer.wizard;
 
+import java.awt.print.PrinterException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,9 +44,12 @@ import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.ModuleException;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
@@ -85,6 +89,8 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class TransferWizardUtil
 {
+	private static final Logger logger = Logger.getLogger(TransferWizardUtil.class);
+	
 		protected TransferWizardUtil() { }
 //
 //	private static AccountingManager accountingManager = null;
@@ -284,39 +290,47 @@ public class TransferWizardUtil
 		
 		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
 		
-		// if a payment was done
-		if (paymentTuples != null) {
-			Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
-			
-			for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
-				PaymentData paymentData = paymentPair.getFirst();
+		try {
+			// if a payment was done
+			if (paymentTuples != null) {
+				Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
 				
-				if (paymentData.getPayment().isSuccessfulAndComplete()) {
-					invoiceIDsToBePrinted.addAll(paymentData.getPayment().getInvoiceIDs());
+				for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
+					PaymentData paymentData = paymentPair.getFirst();
+					
+					if (paymentData.getPayment().isSuccessfulAndComplete()) {
+						invoiceIDsToBePrinted.addAll(paymentData.getPayment().getInvoiceIDs());
+					}
+				}
+	
+				for (InvoiceID invoiceID : invoiceIDsToBePrinted) {
+					for (int i = 1; i <= invoicesToPrintCount; i++) {
+						printArticleContainer(invoiceID);
+					}
+				}
+
+			}
+			
+			// if a delivery was done
+			if (deliveryTuples != null) {
+				Set<DeliveryNoteID> deliveryNoteIDsToBePrinted = new HashSet<DeliveryNoteID>();
+				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
+					DeliveryData deliveryData = deliveryPair.getFirst();
+					
+					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
+						deliveryNoteIDsToBePrinted.addAll(deliveryData.getDelivery().getDeliveryNoteIDs());
+					}
+				}
+				
+				for (DeliveryNoteID deliveryNoteID : deliveryNoteIDsToBePrinted) {
+					for (int i = 1; i <= deliveryNotesToPrintCount; i++) {
+						printArticleContainer(deliveryNoteID);
+					}
 				}
 			}
-			
-			for (InvoiceID invoiceID : invoiceIDsToBePrinted) {
-				for (int i = 1; i <= invoicesToPrintCount; i++)
-					printArticleContainer(invoiceID);
-			}
-		}
-		
-		// if a delivery was done
-		if (deliveryTuples != null) {
-			Set<DeliveryNoteID> deliveryNoteIDsToBePrinted = new HashSet<DeliveryNoteID>();
-			for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
-				DeliveryData deliveryData = deliveryPair.getFirst();
-				
-				if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
-					deliveryNoteIDsToBePrinted.addAll(deliveryData.getDelivery().getDeliveryNoteIDs());
-				}
-			}
-			
-			for (DeliveryNoteID deliveryNoteID : deliveryNoteIDsToBePrinted) {
-				for (int i = 1; i <= deliveryNotesToPrintCount; i++)
-					printArticleContainer(deliveryNoteID);
-			}
+		} catch (Exception e) {
+			MessageDialog.openError(RCPUtil.getActiveShell(), "Printing error", "Printing failed: " + e.getMessage());
+			logger.error("Printing failed", e);
 		}
 		
 		return transferResult;
@@ -340,29 +354,25 @@ public class TransferWizardUtil
 		return toReturn;
 	}
 	
-	private static void printArticleContainer(ArticleContainerID articleContainerId) {
-		try {
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
-			String reportRegistryItemType = null;
-			
-			if (articleContainerId instanceof InvoiceID)
-				reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;
-			else if (articleContainerId instanceof DeliveryNoteID)
-				reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_DELIVERY_NOTE;
-			
-			ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
-			ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
-			if (defLayoutID == null)
-				throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
-			PrintReportLayoutUtil.printReportLayout(
-					defLayoutID,
-					params,
-					new NullProgressMonitor()
-				);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
+		String reportRegistryItemType = null;
+
+		if (articleContainerId instanceof InvoiceID)
+			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;
+		else if (articleContainerId instanceof DeliveryNoteID)
+			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_DELIVERY_NOTE;
+
+		ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+		ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
+		if (defLayoutID == null)
+			throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+		PrintReportLayoutUtil.printReportLayout(
+				defLayoutID,
+				params,
+				new NullProgressMonitor()
+		);
 	}
 
 //	/**

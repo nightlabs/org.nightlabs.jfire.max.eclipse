@@ -73,7 +73,7 @@ public class PrintAction extends ArticleContainerReportAction
 					Map<String, Object> params = new HashMap<String, Object>();
 					params.put("articleContainerID", articleContainerID); //$NON-NLS-1$
 					
-					ReportLayoutConfigModule cfMod = (ReportLayoutConfigModule)ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+					ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
 					ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
 					if (defLayoutID == null)
 						throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
