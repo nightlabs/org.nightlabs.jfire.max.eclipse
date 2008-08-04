@@ -68,6 +68,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
@@ -92,9 +93,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleConta
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.notification.NotificationAdapterWorkerThreadAsync;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -112,7 +113,7 @@ implements ISelectionProvider
 
 	protected DrillDownAdapter drillDownAdapter;
 
-	private OrganisationLegalEntity myOrganisationLegalEntity; // representing our own organisation
+	private volatile OrganisationLegalEntity myOrganisationLegalEntity; // representing our own organisation - lazily initialised
 	private LegalEntity partner;
 
 	private CreateOrderAction createOrderAction;
@@ -143,18 +144,18 @@ implements ISelectionProvider
 		imageCustomerRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/PurchaseRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 		imageVendorRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/SaleRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 
-		try {
-			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
-					Login.getLogin().getOrganisationID(), true,
-					new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
-			partner = tm.getAnonymousLegalEntity(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-		} catch (ModuleException x) {
-			throw x;
-		} catch (Exception x) {
-			throw new ModuleException(x);
-		}
+//		try {
+//			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
+//					Login.getLogin().getOrganisationID(), true,
+//					new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//
+////			partner = tm.getAnonymousLegalEntity(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+////		} catch (ModuleException x) {
+////			throw x;
+//		} catch (Exception x) {
+//			throw new ModuleException(x);
+//		}
 
 		// set up the table tree for our order-/invoice-/delivery-headers
 		headerTreeViewer = new TreeViewer(this, SWT.NONE);
@@ -289,29 +290,44 @@ implements ISelectionProvider
 		}
 	}
 
-	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterWorkerThreadAsync() {
+	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterJob("") {
 		public void notify(NotificationEvent event) {
-			try {
-				if (event.getSubjects().isEmpty())
-					setPartnerID(null, true);
-				else
-					setPartnerID((AnchorID)event.getFirstSubject(), true);
-			} catch (ModuleException x) {
-				throw new RuntimeException(x);
-			}
+			if (event.getSubjects().isEmpty())
+				setPartnerID(null, true, getProgressMonitorWrapper());
+			else
+				setPartnerID((AnchorID)event.getFirstSubject(), true, getProgressMonitorWrapper());
 		}
 	};
 
-	private AnchorID setPartnerIDInvocationID = null;
+	private volatile AnchorID setPartnerIDInvocationID = null;
 
-	public void setPartnerID(final AnchorID partnerID, final boolean closeEditorsOfOtherPartners) // TODO needs a ProgressMonitor parameter!
-	throws ModuleException
+	public void setPartnerID(final AnchorID partnerID, final boolean closeEditorsOfOtherPartners, ProgressMonitor monitor)
 	{
-		// TODO maybe we should prevent this method from being called on the UI thread (exception)?!
+		if (Display.getCurrent() != null)
+			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!");
+
+		monitor.beginTask("Loading business partner", 100);
 		setPartnerIDInvocationID = partnerID;
 		try {
 			TradeManager tm = partnerID == null ? null : TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			monitor.worked(10);
 			final LegalEntity partner = partnerID == null ? null : tm.getLegalEntity(partnerID, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			monitor.worked(40);
+
+			if (myOrganisationLegalEntity == null) {
+				if (tm == null)
+					tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+
+				monitor.worked(10);
+
+				myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
+						Login.getLogin().getOrganisationID(), true,
+						new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+				);
+				monitor.worked(40);
+			}
+			else
+				monitor.worked(50);
 
 			if (!Util.equals(partnerID, setPartnerIDInvocationID))
 				return;
@@ -329,17 +345,22 @@ implements ISelectionProvider
 				});
 			}
 		} catch (Exception x) {
-			throw new ModuleException(x);
+			throw new RuntimeException(x);
+		} finally {
+			monitor.done();
 		}
 	}
 
-	public void setPartner(LegalEntity partner, boolean closeEditorsOfOtherPartners)
+	private void setPartner(LegalEntity partner, boolean closeEditorsOfOtherPartners)
 	{
 		if (!Login.isLoggedIn())
 			return;
 
 		if (isDisposed())
 			return;
+
+		if (myOrganisationLegalEntity == null)
+			throw new IllegalStateException("myOrganisationLegalEntity is null!");
 
 		this.partner = partner;
 		AnchorID partnerAnchorID = (AnchorID) JDOHelper.getObjectId(partner);
@@ -423,10 +444,16 @@ implements ISelectionProvider
 	 */
 	public OrganisationLegalEntity getMyOrganisationLegalEntity()
 	{
+		if (myOrganisationLegalEntity == null)
+			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!");
+
 		return myOrganisationLegalEntity;
-	}  
+	}
 	public AnchorID getMyOrganisationLegalEntityID()
 	{
+		if (myOrganisationLegalEntity == null)
+			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!");
+
 		return (AnchorID)JDOHelper.getObjectId(myOrganisationLegalEntity);
 	}
 	/**
@@ -444,7 +471,7 @@ implements ISelectionProvider
 		return headerTreeViewer;
 	}
 
-	private java.util.List<ISelectionChangedListener> selectionChangedListeners = 
+	private java.util.List<ISelectionChangedListener> selectionChangedListeners =
 		new LinkedList<ISelectionChangedListener>();
 
 	/**
