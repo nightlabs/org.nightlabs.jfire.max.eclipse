@@ -30,6 +30,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
+import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
@@ -45,7 +46,7 @@ extends AbstractUIPlugin
 {
 	public static final String ZONE_SALE = TradePlugin.class.getName() + "#ZONE_SALE"; //$NON-NLS-1$
 	public static final String ZONE_ADMIN = TradePlugin.class.getName() + "#ZONE_ADMIN"; //$NON-NLS-1$
-	
+
 	//The shared instance.
 	private static TradePlugin plugin;
 //	//Resource bundle.
@@ -72,7 +73,7 @@ extends AbstractUIPlugin
 //		} catch (MissingResourceException x) {
 //			resourceBundle = null;
 //		}
-		
+
 		// TODO: find some way listen to creation of the WorkbenchWindow (WorkbenchWindowAdvisor can do this)
 //		PlatformUI.getWorkbench().addWindowListener(new IWindowListener() {
 //			public void windowActivated(IWorkbenchWindow window) {
@@ -91,7 +92,7 @@ extends AbstractUIPlugin
 //			}
 //		});
 	}
-	
+
 //	public static final String OVERVIEW_EDITORS_ACTIVITY_ID = "org.nightlabs.jfire.trade.ui.overviewEditorHidding";
 //	private IPerspectiveListener4 activityPerspectiveListener = new PerspectiveAdapter()
 //	{
@@ -161,7 +162,7 @@ extends AbstractUIPlugin
 //		}
 //
 //	};
-	
+
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
@@ -203,7 +204,14 @@ extends AbstractUIPlugin
 	public static final String IMAGE_ORDER_16x16 = "icons/TradePlugin-Order.16x16.png"; //$NON-NLS-1$
 	public static final String IMAGE_OFFER_16x16 = "icons/TradePlugin-Offer.16x16.png"; //$NON-NLS-1$
 	public static final String IMAGE_INVOICE_16x16 = "icons/TradePlugin-Invoice.16x16.png"; //$NON-NLS-1$
-	public static final String IMAGE_DELIVERY_NOTE_16x16 = "icons/TradePlugin-DeliveryNote.16x16.png";	 //$NON-NLS-1$
+
+	/**
+	 * Indicates that the {@link Invoice} of the article has been paid completely. Note, that an article
+	 * cannot be paid individually - only the corresponding invoice.
+	 */
+	public static final String IMAGE_ARTICLE_PAID_16x16 = "icons/TradePlugin-Article-paid.16x16.png"; //$NON-NLS-1$
+	public static final String IMAGE_DELIVERY_NOTE_16x16 = "icons/TradePlugin-DeliveryNote.16x16.png"; //$NON-NLS-1$
+	public static final String IMAGE_ARTICLE_DELIVERED_16x16 = "icons/TradePlugin-Article-delivered.16x16.png"; //$NON-NLS-1$
 
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg)
@@ -212,9 +220,11 @@ extends AbstractUIPlugin
 		reg.put(IMAGE_ORDER_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_ORDER_16x16));
 		reg.put(IMAGE_OFFER_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_OFFER_16x16));
 		reg.put(IMAGE_INVOICE_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_INVOICE_16x16));
+		reg.put(IMAGE_ARTICLE_PAID_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_ARTICLE_PAID_16x16));
 		reg.put(IMAGE_DELIVERY_NOTE_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_DELIVERY_NOTE_16x16));
+		reg.put(IMAGE_ARTICLE_DELIVERED_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_ARTICLE_DELIVERED_16x16));
 	}
-	
+
 	public TradeManager getTradeManager()
 	{
 		try {
@@ -224,7 +234,7 @@ extends AbstractUIPlugin
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public StoreManager getStoreManager()
 	{
 		try {
@@ -234,7 +244,7 @@ extends AbstractUIPlugin
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public AccountingManager getAccountingManager()
 	{
 		try {
