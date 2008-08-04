@@ -51,12 +51,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
@@ -66,6 +71,7 @@ import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
@@ -83,12 +89,14 @@ import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.config.TradePrintingConfigModule;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.modeofdelivery.ModeOfDeliveryFlavourTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryRegistry;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 import org.nightlabs.util.Util;
@@ -129,6 +137,12 @@ implements IDeliveryEntryPage
 	private ClientDeliveryProcessor clientDeliveryProcessor = null;
 	private ServerDeliveryProcessor selectedServerDeliveryProcessor = null;
 	
+	private Button printDeliveryNoteCheckbox = null;
+	private Spinner printDeliveryNoteCountSpinner = null;
+	private TradePrintingConfigModule tradePrintingCfMod = null;
+	private Label printingInfoLabel;
+	private int deliveryNotesToBePrintedCount;
+	
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
 		return (DeliveryWizardHop) getWizardHop();
@@ -152,7 +166,7 @@ implements IDeliveryEntryPage
 	 */
 	@Override
 	public Control createPageContents(Composite parent)
-	{		
+	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.productTypesLabel.text")); //$NON-NLS-1$
@@ -223,9 +237,57 @@ implements IDeliveryEntryPage
 			}
 		});
 		
+		Group printGroup = new Group(page, SWT.BORDER);
+		printGroup.setText("Delivery note printing options");
+		printGroup.setLayout(new GridLayout(3, false));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.verticalIndent = 10;
+		printGroup.setLayoutData(gridData);
+		XComposite wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+		new Label(wrapper, SWT.NONE).setText("Print delivery note: ");
+		
+		printDeliveryNoteCheckbox = new Button(wrapper, SWT.CHECK);
+		wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+		new Label(wrapper, SWT.NONE).setText("Copies: ");
+		printDeliveryNoteCountSpinner = new Spinner(wrapper, SWT.BORDER);
+		printDeliveryNoteCountSpinner.setMinimum(0);
+		printDeliveryNoteCountSpinner.setMaximum(-1);
+		printDeliveryNoteCountSpinner.setDigits(0);
+		printDeliveryNoteCountSpinner.setIncrement(1);
+		printingInfoLabel = new Label(printGroup, SWT.RIGHT);
+		printingInfoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		printDeliveryNoteCheckbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateDeliveryNotesToBePrinted();
+			}
+		});
+		printDeliveryNoteCountSpinner.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				printDeliveryNoteCheckbox.setSelection(printDeliveryNoteCountSpinner.getSelection() != 0);
+				updateDeliveryNotesToBePrinted();
+			}
+		});
+		
 		loadModeOfDeliveries();
 
 		return page;
+	}
+	
+	private void updateDeliveryNotesToBePrinted() {
+		if (!printDeliveryNoteCheckbox.getSelection())
+			deliveryNotesToBePrintedCount = 0;
+		else
+			deliveryNotesToBePrintedCount = printDeliveryNoteCountSpinner.getSelection();
+		
+		if (deliveryNotesToBePrintedCount == 0)
+			printingInfoLabel.setText("No DeliveryNote will be printed.");
+		else {
+			String copyText = deliveryNotesToBePrintedCount == 1 ? "copy" : "copies";
+			printingInfoLabel.setText(String.format("%d %s of the delivery note will be printed.", deliveryNotesToBePrintedCount, copyText));
+		}
 	}
 	
 	protected static String sessionLastSelectedMOPFPK = null;
@@ -317,7 +379,7 @@ implements IDeliveryEntryPage
 
 		int idx = clientDeliveryProcessorFactoryCombo.getSelectionIndex();
 		if (idx >= 0) {
-			selectedClientDeliveryProcessorFactory = (ClientDeliveryProcessorFactory) clientDeliveryProcessorFactoryList.get(idx);
+			selectedClientDeliveryProcessorFactory = clientDeliveryProcessorFactoryList.get(idx);
 
 			clientDeliveryProcessor = selectedClientDeliveryProcessorFactory.createClientDeliveryProcessor();
 			if (clientDeliveryProcessor == null)
@@ -441,7 +503,7 @@ implements IDeliveryEntryPage
 
 		int idx = serverDeliveryProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
-			selectedServerDeliveryProcessor = (ServerDeliveryProcessor) serverDeliveryProcessorList.get(idx);
+			selectedServerDeliveryProcessor = serverDeliveryProcessorList.get(idx);
 			getDeliveryWizardHop().getDelivery().setServerDeliveryProcessorID(
 					(ServerDeliveryProcessorID) JDOHelper.getObjectId(selectedServerDeliveryProcessor));
 
@@ -568,6 +630,9 @@ implements IDeliveryEntryPage
 					}
 				}
 				
+				tradePrintingCfMod = ConfigUtil.getWorkstationCfMod(TradePrintingConfigModule.class,
+						new String[] { FetchPlan.DEFAULT }, 1, new NullProgressMonitor());
+				
 				final Job thisJob = this;
 				
 				Display.getDefault().asyncExec(new Runnable() {
@@ -584,6 +649,12 @@ implements IDeliveryEntryPage
 							setMessage(null);
 							modeOfDeliveryFlavourGUIListSelectionChanged();
 						}
+						
+						if (printDeliveryNoteCheckbox != null) {
+							printDeliveryNoteCheckbox.setSelection(tradePrintingCfMod.isPrintDeliveryNoteByDefault());
+							printDeliveryNoteCountSpinner.setSelection(tradePrintingCfMod.getDeliveryNoteCopyCount());
+							updateDeliveryNotesToBePrinted();
+						}
 					}
 				});
 				
@@ -593,7 +664,9 @@ implements IDeliveryEntryPage
 		
 		loadModeOfDeliveriesJob = loadJob;
 		loadJob.schedule();
-		
 	}
-
+	
+	public int getDeliveryNotesToPrintCount() {
+		return deliveryNotesToBePrintedCount;
+	}
 }

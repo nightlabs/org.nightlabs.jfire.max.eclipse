@@ -248,6 +248,11 @@
         <page
             class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
             id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
+        <page
+              class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
+              name="Automatic printing settings">
+        </page>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory

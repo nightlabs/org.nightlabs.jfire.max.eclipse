@@ -50,10 +50,16 @@ import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
+import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
+import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
+import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
+import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
@@ -63,13 +69,16 @@ import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavourName;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroup;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroupCarrier;
+import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -244,6 +253,9 @@ public class TransferWizardUtil
 		List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
 		List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
 		
+		int invoicesToPrintCount = -1;
+		int deliveryNotesToPrintCount = -1;
+		
 		// prepare payment information
 		if (paymentWizard != null) {
 			paymentTuples = new ArrayList<Pair<PaymentData,ClientPaymentProcessor>>();
@@ -251,6 +263,7 @@ public class TransferWizardUtil
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				PaymentData paymentData = paymentEntryPage.getPaymentWizardHop().getPaymentData();
 				paymentTuples.add(new Pair<PaymentData, ClientPaymentProcessor>(paymentData, paymentEntryPage.getClientPaymentProcessor()));
+				invoicesToPrintCount = paymentEntryPage.getInvoicesToPrintCount();
 			}
 		}
 		
@@ -261,11 +274,52 @@ public class TransferWizardUtil
 			for (DeliveryEntryPage deliveryEntryPage : deliveryWizard.getDeliveryEntryPages()) {
 				DeliveryData deliveryData = deliveryEntryPage.getDeliveryWizardHop().getDeliveryData();
 				deliveryTuples.add(new Pair<DeliveryData, ClientDeliveryProcessor>(deliveryData, deliveryEntryPage.getClientDeliveryProcessor()));
+				deliveryNotesToPrintCount = deliveryEntryPage.getDeliveryNotesToPrintCount();
 			}
 		}
 		
 		// Now do the actual payment/delivery
-		return payAndDeliver(shell, paymentTuples, deliveryTuples);
+		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples);
+
+		
+		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
+		
+		// if a payment was done
+		if (paymentTuples != null) {
+			Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
+			
+			for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
+				PaymentData paymentData = paymentPair.getFirst();
+				
+				if (paymentData.getPayment().isSuccessfulAndComplete()) {
+					invoiceIDsToBePrinted.addAll(paymentData.getPayment().getInvoiceIDs());
+				}
+			}
+			
+			for (InvoiceID invoiceID : invoiceIDsToBePrinted) {
+				for (int i = 1; i <= invoicesToPrintCount; i++)
+					printArticleContainer(invoiceID);
+			}
+		}
+		
+		// if a delivery was done
+		if (deliveryTuples != null) {
+			Set<DeliveryNoteID> deliveryNoteIDsToBePrinted = new HashSet<DeliveryNoteID>();
+			for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
+				DeliveryData deliveryData = deliveryPair.getFirst();
+				
+				if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
+					deliveryNoteIDsToBePrinted.addAll(deliveryData.getDelivery().getDeliveryNoteIDs());
+				}
+			}
+			
+			for (DeliveryNoteID deliveryNoteID : deliveryNoteIDsToBePrinted) {
+				for (int i = 1; i <= deliveryNotesToPrintCount; i++)
+					printArticleContainer(deliveryNoteID);
+			}
+		}
+		
+		return transferResult;
 	}
 	
 	private static boolean payAndDeliver(
@@ -284,6 +338,31 @@ public class TransferWizardUtil
 		}
 		
 		return toReturn;
+	}
+	
+	private static void printArticleContainer(ArticleContainerID articleContainerId) {
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
+			String reportRegistryItemType = null;
+			
+			if (articleContainerId instanceof InvoiceID)
+				reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;
+			else if (articleContainerId instanceof DeliveryNoteID)
+				reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_DELIVERY_NOTE;
+			
+			ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+			ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
+			if (defLayoutID == null)
+				throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+			PrintReportLayoutUtil.printReportLayout(
+					defLayoutID,
+					params,
+					new NullProgressMonitor()
+				);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 //	/**
