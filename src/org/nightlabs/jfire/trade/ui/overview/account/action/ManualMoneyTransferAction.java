@@ -27,8 +27,6 @@ extends WorkbenchPartSelectionAction
 		if (accountID == null)
 			return;
 
-		// TODO pass the selected account to the wizard
-//		ManualMoneyTransferWizard wizard = new ManualMoneyTransferWizard(accountID);
 		ManualMoneyTransferWizard wizard = new ManualMoneyTransferWizard(AnchorID.create(account.getOrganisationID(), account.getAnchorTypeID(), account.getAnchorID()));
 		//Instantiates the wizard container with the wizard and opens it
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.account.transfer.manual;
 
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 
 import javax.jdo.FetchPlan;
 
@@ -19,7 +18,6 @@ import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.jfire.transfer.Transfer;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
 

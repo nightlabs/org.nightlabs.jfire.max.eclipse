@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,36 +14,43 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.editor.RestorableSectionPart;
+import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageControllerModifyListener;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.MoneyTransfer;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable;
+import org.nightlabs.jfire.trade.ui.account.transfer.manual.ManualMoneyTransferWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
  */
-public class MoneyTransferListSection extends RestorableSectionPart{
+public class MoneyTransferListSection extends ToolBarSectionPart{
 
 	private MoneyTransferTable moneyTransferTable;
 	private MoneyTransferPageController controller;
-	
+
+	private ManualMoneyTransferAction transferMoneyAction;
+
 	public MoneyTransferListSection(FormPage page, Composite parent, MoneyTransferPageController controller) {
-		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR);
+		super(page, parent,	ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Section Title");
 		this.controller = controller;
 		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.sectionTitle")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
-		
+
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
-		
+
 		moneyTransferTable = new MoneyTransferTable(
 				client, SWT.NONE);
 		moneyTransferTable.getGridData().grabExcessHorizontalSpace = true;
-		
+
 		this.controller.addPropertyChangeListener(MoneyTransferPageController.PROPERTY_MONEY_TRANSFER_QUERY, new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt)
 			{
@@ -67,16 +75,20 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 			}
 		});
 		moneyTransferQueryChanged(this.controller.getQueryWrapper());
-		
+
 		List<MoneyTransfer> moneyTransferList = this.controller.getMoneyTransferList();
 		if (moneyTransferList != null)
 			moneyTransferListChanged(moneyTransferList);
-		
+
 		getSection().setClient(client);
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		getSection().setLayoutData(gridData);
+
+		transferMoneyAction = new ManualMoneyTransferAction();
+		getToolBarManager().add(transferMoneyAction);
+		updateToolBarManager();
 	}
 
 	private boolean ignoreMoneyTransferQueryChanged = false;
@@ -92,7 +104,7 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 			ignoreMoneyTransferQueryChanged = false;
 		}
 	}
-	
+
 	/**
 	 * This method is called on the UI thread whenever the productTransferQuery has changed.
 	 * It is not called, if the change originated from here (i.e. {@link #fireProductTransferQueryChanged()} in
@@ -109,5 +121,34 @@ public class MoneyTransferListSection extends RestorableSectionPart{
 	private void moneyTransferListChanged(List<MoneyTransfer> moneyTransferList)
 	{
 		moneyTransferTable.setMoneyTransfers(controller.getCurrentAnchorID(), moneyTransferList);
+	}
+
+	public class ManualMoneyTransferAction 
+	extends Action 
+	{		
+		public ManualMoneyTransferAction() 
+		{
+			super();
+			setId(ManualMoneyTransferAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					TradePlugin.getDefault(), 
+					MoneyTransferListSection.class, 
+			"Transfer"));
+			setToolTipText("Transfer Money");
+			setText("Transfer Money");
+		}
+
+		@Override
+		public void run() 
+		{
+			AnchorID accountID = (AnchorID) controller.getCurrentAnchorID();
+
+			if (accountID == null)
+				return;
+
+			ManualMoneyTransferWizard wizard = new ManualMoneyTransferWizard(accountID);
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
+			dialog.open();
+		}		
 	}
 }

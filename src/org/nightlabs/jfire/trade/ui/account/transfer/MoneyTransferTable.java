@@ -12,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -42,7 +43,8 @@ extends AbstractTableComposite<MoneyTransfer>
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		Transfer.FETCH_GROUP_THIS_TRANSFER,
+		Transfer.FETCH_GROUP_FROM,
+		Transfer.FETCH_GROUP_TO,
 		MoneyTransfer.FETCH_GROUP_CURRENCY,
 		ManualMoneyTransfer.FETCH_GROUP_DESCRIPTION,
 		Account.FETCH_GROUP_NAME,
@@ -59,32 +61,28 @@ extends AbstractTableComposite<MoneyTransfer>
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
-		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.timestampTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.directionTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(10));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTypeTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.amountTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(30));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.reasonTableColumn.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(40));
 
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 10, 30, 30, 30, 50});
+		table.setLayout(layout);
+		
 		table.setLayout(layout);
 	}
 
