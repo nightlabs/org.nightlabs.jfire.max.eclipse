@@ -27,9 +27,9 @@ extends AbstractProductTypeQuickListFilter
 	public static String[] DEFAULT_FETCH_VOUCHER_TYPE_GROUP = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
- 	
-	private VoucherTypeTable voucherTypeTable;	
-	
+
+	private VoucherTypeTable voucherTypeTable;
+
 	@Override
 	protected Control doCreateResultViewerControl(Composite parent)
 	{
@@ -48,15 +48,15 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(ProgressMonitor monitor) 
+	protected void search(ProgressMonitor monitor)
 	{
 		monitor.beginTask("Searching VoucherTypes", 100);
 		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					queryCollection,
-					DEFAULT_FETCH_VOUCHER_TYPE_GROUP, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					DEFAULT_FETCH_VOUCHER_TYPE_GROUP,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
