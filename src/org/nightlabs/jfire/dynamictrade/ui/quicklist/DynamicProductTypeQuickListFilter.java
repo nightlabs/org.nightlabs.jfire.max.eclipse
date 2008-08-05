@@ -29,7 +29,7 @@ extends AbstractProductTypeQuickListFilter
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_NO_LIMIT,
 		ProductType.FETCH_GROUP_NAME};
 
-	private DynamicProductTypeTable dynamicProductTypeTable =null; 
+	private DynamicProductTypeTable dynamicProductTypeTable =null;
 
 	@Override
 	public Control doCreateResultViewerControl(Composite parent)
@@ -56,21 +56,21 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(ProgressMonitor monitor) 
-	{		
+	protected void search(ProgressMonitor monitor)
+	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name"), 100); //$NON-NLS-1$
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					productTypeQueries,
-					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, 
+					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (dynamicProductTypeTable.isDisposed())
 						return;
-					
+
 					dynamicProductTypeTable.setInput(productTypes);
 				}
 			});
@@ -88,5 +88,5 @@ extends AbstractProductTypeQuickListFilter
 	protected Class<? extends VendorDependentQuery> getQueryClass() {
 		return DynamicProductTypeQuery.class;
 	}
-	
+
 }

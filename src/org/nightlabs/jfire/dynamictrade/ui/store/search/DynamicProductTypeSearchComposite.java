@@ -1,7 +1,9 @@
 package org.nightlabs.jfire.dynamictrade.ui.store.search;
 
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.store.search.DynamicProductTypeQuery;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite;
 
@@ -24,6 +26,18 @@ extends AbstractProductTypeSearchComposite
 	protected AbstractProductTypeQuery createNewQuery()
 	{
 		return new DynamicProductTypeQuery();
+	}
+
+	@Override
+	protected Class<? extends AbstractProductTypeQuery> getQueryClass()
+	{
+		return DynamicProductTypeQuery.class;
+	}
+
+	@Override
+	protected Class<? extends ProductType> getResultClass()
+	{
+		return DynamicProductType.class;
 	}
 
 }
