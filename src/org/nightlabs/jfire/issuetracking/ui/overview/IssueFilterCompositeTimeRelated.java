@@ -2,14 +2,15 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.DateTimeEdit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -23,14 +24,12 @@ import org.nightlabs.l10n.DateFormatter;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositeTimeRelated 
-	extends AbstractQueryFilterComposite<IssueQuery> 
-{	
+public class IssueFilterCompositeTimeRelated
+	extends AbstractQueryFilterComposite<IssueQuery>
+{
 	private DateTimeEdit createdTimeEdit;
-	private Date createDate;
 	private DateTimeEdit updatedTimeEdit;
-	private Date updateDate;
-	
+
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -49,7 +48,7 @@ public class IssueFilterCompositeTimeRelated
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -65,7 +64,7 @@ public class IssueFilterCompositeTimeRelated
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -74,37 +73,32 @@ public class IssueFilterCompositeTimeRelated
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
-		GridLayout gridLayout = new GridLayout(2, false);
-		parent.setLayout(gridLayout);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridLayout gridLayout = new GridLayout(2, true);
+		this.setLayout(gridLayout);
+		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label createTimeLabel = new Label(parent, SWT.NONE);
-		createTimeLabel.setText("Created Time: ");
-		createTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		
 		createdTimeEdit = new DateTimeEdit(
-				parent,
+				this,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
-				"From",
+				"Created after",
 				true);
 		createdTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		createdTimeEdit.setDate(cal.getTime());
-		createdTimeEdit.addModifyListener(new ModifyListener() 
+		createdTimeEdit.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				createDate = createdTimeEdit.getDate();
-				getQuery().setCreateTimestamp(createDate);
+				getQuery().setCreateTimestamp(createdTimeEdit.getDate());
 			}
 		});
 		createdTimeEdit.addActiveChangeListener(new ButtonSelectionListener()
@@ -112,54 +106,30 @@ public class IssueFilterCompositeTimeRelated
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (createDate == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the date edit composites.
-						createDate = createdTimeEdit.getDate();
-						getQuery().setCreateTimestamp(createDate);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setCreateTimestamp(createDate);
-					}
-				}
-				else
-				{
-					getQuery().setCreateTimestamp(null);
-				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.createTimestamp, active);
 			}
 		});
-		
-		Label updatedTimeLabel = new Label(parent, SWT.NONE);
-		updatedTimeLabel.setText("Updated Time: ");
-		updatedTimeLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		
+
 		updatedTimeEdit = new DateTimeEdit(
-				parent,
+				this,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
-				"From",
+				"Updated after",
 				true);
 		updatedTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
 		cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
 		updatedTimeEdit.setDate(cal.getTime());
-		updatedTimeEdit.addModifyListener(new ModifyListener() 
+		updatedTimeEdit.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				updateDate = updatedTimeEdit.getDate();
-				getQuery().setUpdateTimestamp(updateDate);
+				getQuery().setUpdateTimestamp(updatedTimeEdit.getDate());
 			}
 		});
 		updatedTimeEdit.addActiveChangeListener(new ButtonSelectionListener()
@@ -167,105 +137,70 @@ public class IssueFilterCompositeTimeRelated
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (updateDate == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the date edit composites.
-						updateDate = updatedTimeEdit.getDate();
-						getQuery().setUpdateTimestamp(updateDate);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setUpdateTimestamp(updateDate);
-					}
-				}
-				else
-				{
-					getQuery().setUpdateTimestamp(null);
-				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.updateTimestamp, active);
 			}
 		});
 	}
-	
+
 	@Override
-	protected void resetSearchQueryValues(IssueQuery query)
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		query.setCreateTimestamp(createDate);
-		query.setUpdateTimestamp(updateDate);		
+		for (FieldChangeCarrier changedField : event.getChangedFields())
+		{
+			if (IssueQuery.FieldName.createTimestamp.equals(changedField.getPropertyName()))
+			{
+				final Date tmpCreateDate = (Date) changedField.getNewValue();
+				createdTimeEdit.setDate(tmpCreateDate);
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.createTimestamp).equals(changedField.getPropertyName()))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				if (createdTimeEdit.isActive() != active)
+				{
+					createdTimeEdit.setActive(active);
+					setSearchSectionActive(active);
+				}
+			}
+			else if (IssueQuery.FieldName.updateTimestamp.equals(changedField.getPropertyName()))
+			{
+				final Date tmpUpdateDate = (Date) changedField.getNewValue();
+				updatedTimeEdit.setDate(tmpUpdateDate);
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.updateTimestamp).equals(changedField.getPropertyName()))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				if (updatedTimeEdit.isActive() != active)
+				{
+					updatedTimeEdit.setActive(active);
+					setSearchSectionActive(active);
+				}
+			}
+		} // for (FieldChangeCarrier changedField : event.getChangedFields())
+	}
+
+	private static final Set<String> fieldNames;
+	static
+	{
+		fieldNames = new HashSet<String>(2);
+		fieldNames.add(IssueQuery.FieldName.createTimestamp);
+		fieldNames.add(IssueQuery.FieldName.updateTimestamp);
 	}
 
 	@Override
-	protected void unsetSearchQueryValues(IssueQuery query)
+	protected Set<String> getFieldNames()
 	{
-		if (! createdTimeEdit.isActive())
-		{
-			createDate = null;
-		}
-		if (! updatedTimeEdit.isActive())
-		{
-			updateDate = null;
-		}
-		
-		query.setCreateTimestamp(null);
-		query.setUpdateTimestamp(null);
+		return fieldNames;
 	}
 
-	@Override
-	protected void updateUI(QueryEvent event)
-	{
-		if (event.getChangedQuery() == null)
-		{
-			createDate = null;
-			createdTimeEdit.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			if (createdTimeEdit.isActive())
-			{
-				createdTimeEdit.setActive(false);
-				setSearchSectionActive(false);
-			}
+	/**
+	 * Group ID for storing active states in the query.
+	 */
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositeTimeRelated";
 
-			updateDate = null;
-			updatedTimeEdit.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			if (updatedTimeEdit.isActive())
-			{
-				updatedTimeEdit.setActive(false);
-				setSearchSectionActive(false);
-			}
-		}
-		else
-		{ // there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
-			{
-				boolean active = isValueIntentionallySet();
-				if (IssueQuery.PROPERTY_CREATE_TIMESTAMP.equals(changedField.getPropertyName()))
-				{
-					final Date tmpCreateDate = (Date) changedField.getNewValue();
-					createdTimeEdit.setDate(tmpCreateDate);
-					active |= tmpCreateDate != null;
-					if (createdTimeEdit.isActive() != active)
-					{
-						createdTimeEdit.setActive(active);
-						setSearchSectionActive(active);
-					}
-				}
-				
-				if (IssueQuery.PROPERTY_UPDATE_TIMESTAMP.equals(changedField.getPropertyName()))
-				{
-					final Date tmpUpdateDate = (Date) changedField.getNewValue();
-					updatedTimeEdit.setDate(tmpUpdateDate);
-					active |= tmpUpdateDate != null;
-					if (updatedTimeEdit.isActive() != active)
-					{
-						updatedTimeEdit.setActive(active);
-						setSearchSectionActive(active);
-					}
-				}
-				
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		} // changedQuery != null		
+	@Override
+	protected String getGroupID()
+	{
+		return FILTER_GROUP_ID;
 	}
 
 }

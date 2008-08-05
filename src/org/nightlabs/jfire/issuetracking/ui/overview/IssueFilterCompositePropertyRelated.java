@@ -1,9 +1,11 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -44,15 +46,14 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.util.Util;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositePropertyRelated 
-extends AbstractQueryFilterComposite<IssueQuery> 
-{	
+public class IssueFilterCompositePropertyRelated
+	extends AbstractQueryFilterComposite<IssueQuery>
+{
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositePropertyRelated.class);
 	private Object mutex = new Object();
 
@@ -61,10 +62,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 	private XComboComposite<IssueResolution> issueResolutionCombo;
 
-	private IssueType selectedIssueType;
-	private IssueSeverityType selectedIssueSeverityType;
-	private IssuePriority selectedIssuePriority;
-	private IssueResolution selectedIssueResolution;
+	private volatile IssueType selectedIssueType;
+	private volatile IssueSeverityType selectedIssueSeverityType;
+	private volatile IssuePriority selectedIssuePriority;
+	private volatile IssueResolution selectedIssueResolution;
 
 	/**
 	 * @param parent
@@ -85,12 +86,12 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		prepareIssueProperties();
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
 	 * @param parent
-	 *          The parent to instantiate this filter into.
+	 *          The this to instantiate this filter into.
 	 * @param style
 	 *          The style to apply.
 	 * @param queryProvider
@@ -102,7 +103,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		super(parent, style, queryProvider);
 		prepareIssueProperties();
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -111,11 +112,11 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
-		parent.setLayout(new GridLayout(3, false));
+		this.setLayout(new GridLayout(3, false));
 
-		XComposite issueTypeComposite = new XComposite(parent, SWT.NONE,
+		XComposite issueTypeComposite = new XComposite(this, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
 
@@ -126,30 +127,26 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedIssueType = issueTypeCombo.getSelectedElement();
+				final IssueType selectedIssueType = issueTypeCombo.getSelectedElement();
 
-				if (selectedIssueType.equals(ISSUE_TYPE_ALL)) {
-					setValueIntentionally(true);
+				if (selectedIssueType.equals(ISSUE_TYPE_ALL))
 					getQuery().setIssueTypeID(null);
-					setValueIntentionally(false);
-				}
-				else {
-					getQuery().setIssueTypeID((IssueTypeID)JDOHelper.getObjectId(selectedIssueType));	
-				}
+				else
+					getQuery().setIssueTypeID((IssueTypeID)JDOHelper.getObjectId(selectedIssueType));
 
-				issueSeverityCombo.removeAll();
-				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
-				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-					issueSeverityCombo.addElement(is);
-				}
-				issueSeverityCombo.selectElement(ISSUE_SEVERITY_TYPE_ALL);
-
-				issuePriorityCombo.removeAll();
-				issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
-				for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-					issuePriorityCombo.addElement(ip);
-				}
-				issuePriorityCombo.selectElement(ISSUE_PRIORITY_ALL);
+//				issueSeverityCombo.removeAll();
+//				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
+//				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+//					issueSeverityCombo.addElement(is);
+//				}
+//				issueSeverityCombo.selectElement(ISSUE_SEVERITY_TYPE_ALL);
+//
+//				issuePriorityCombo.removeAll();
+//				issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
+//				for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+//					issuePriorityCombo.addElement(ip);
+//				}
+//				issuePriorityCombo.selectElement(ISSUE_PRIORITY_ALL);
 			}
 		});
 
@@ -160,15 +157,14 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+				final IssueSeverityType selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
-				if (selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL)) {
-					setValueIntentionally(true);
+				if (selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL))
 					getQuery().setIssueSeverityTypeID(null);
-					setValueIntentionally(false);
-				}
-				else {
-					getQuery().setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
+				else
+				{
+					getQuery().setIssueSeverityTypeID(
+							(IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
 				}
 			}
 		});
@@ -180,15 +176,16 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+				final IssuePriority selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 
-				if (selectedIssuePriority.equals(ISSUE_PRIORITY_ALL)) {
-					setValueIntentionally(true);
-					getQuery().setIssuePriorityID(null);	
-					setValueIntentionally(false);
+				if (selectedIssuePriority.equals(ISSUE_PRIORITY_ALL))
+				{
+					getQuery().setIssuePriorityID(null);
 				}
-				else {
-					getQuery().setIssuePriorityID((IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
+				else
+				{
+					getQuery().setIssuePriorityID(
+							(IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
 				}
 			}
 		});
@@ -200,134 +197,113 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedIssueResolution = issueResolutionCombo.getSelectedElement();
-				getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
+				final IssueResolution selectedIssueResolution = issueResolutionCombo.getSelectedElement();
+				if (ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution))
+					getQuery().setIssuePriorityID(null);
+				else
+					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
 			}
 		});
 
 		loadProperties();
 	}
 
-	@Override
-	protected void resetSearchQueryValues(IssueQuery query)
-	{
-		query.setIssueTypeID((IssueTypeID) JDOHelper.getObjectId(selectedIssueType));
-		query.setIssueSeverityTypeID((IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-		query.setIssuePriorityID((IssuePriorityID)JDOHelper.getObjectId(selectedIssuePriority));
-		query.setIssueResolutionID((IssueResolutionID)JDOHelper.getObjectId(selectedIssueResolution));
-	}
-
-	@Override
-	protected void unsetSearchQueryValues(IssueQuery query)
-	{
-		query.setIssueTypeID(null);
-		query.setIssueSeverityTypeID(null);
-		query.setIssuePriorityID(null);
-		query.setIssueResolutionID(null);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void updateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		if (event.getChangedQuery() == null)
+		boolean sectionActive = false;
+		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			selectedIssueType = null;
-			selectedIssueSeverityType = null;
-			selectedIssuePriority = null;
-			selectedIssueResolution = null;
-			setSearchSectionActive(false);
-		}
-		else
-		{ // there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
+			if (IssueQuery.FieldName.issuePriorityID.equals(changedField.getPropertyName()))
 			{
-				boolean active = isValueIntentionallySet();
-				setSearchSectionActive(!active);
-				if (IssueQuery.PROPERTY_ISSUE_PRIORITY_ID.equals(changedField.getPropertyName()))
+				IssuePriorityID tmpPriorityID = (IssuePriorityID) changedField.getNewValue();
+				if (tmpPriorityID == null)
 				{
-					IssuePriorityID tmpPriorityID = (IssuePriorityID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedIssuePriority), tmpPriorityID) )
-					{
-						if (tmpPriorityID == null)
-						{
-							issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
-						}
-						else
-						{
-							selectedIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(
-									tmpPriorityID, new String[] { IssuePriority.FETCH_GROUP_NAME }, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);
-							issuePriorityCombo.setSelection(selectedIssuePriority);
-						}
-					}
+					issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
 				}
-
-				if (IssueQuery.PROPERTY_ISSUE_RESOLUTION_ID.equals(changedField.getPropertyName()))
+				else
 				{
-					IssueResolutionID tmpResolutionID = (IssueResolutionID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedIssueResolution), tmpResolutionID) )
-					{
-						if (tmpResolutionID == null)
-						{
-							issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
-						}
-						else
-						{
-							selectedIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(
-									tmpResolutionID, 
-									new String[] { IssueResolution.FETCH_GROUP_NAME}, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);
-							issueResolutionCombo.setSelection(selectedIssueResolution);
-						}
-					}
+					final IssuePriority newIssuePriority = IssuePriorityDAO.sharedInstance().getIssuePriority(
+							tmpPriorityID, new String[] { IssuePriority.FETCH_GROUP_NAME },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+					issuePriorityCombo.setSelection(newIssuePriority);
+					if (! newIssuePriority.equals(issuePriorityCombo.getSelectedElement()))
+						selectedIssuePriority = newIssuePriority;
+
+					sectionActive |= true;
 				}
-
-				if (IssueQuery.PROPERTY_ISSUE_SEVERITY_TYPE_ID.equals(changedField.getPropertyName()))
+			}
+			else if (IssueQuery.FieldName.issueResolutionID.equals(changedField.getPropertyName()))
+			{
+				final IssueResolutionID tmpResolutionID = (IssueResolutionID) changedField.getNewValue();
+				if (tmpResolutionID == null)
 				{
-					IssueSeverityTypeID tmpSeverityID = (IssueSeverityTypeID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedIssueSeverityType), tmpSeverityID) )
-					{
-						if (tmpSeverityID == null)
-						{
-							issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
-						}
-						else
-						{
-							selectedIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(
-									tmpSeverityID, 
-									new String[] { IssueSeverityType.FETCH_GROUP_NAME }, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);
-							issueSeverityCombo.setSelection(selectedIssueSeverityType);
-						}
-					}
+					issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
 				}
-
-				if (IssueQuery.PROPERTY_ISSUE_TYPE_ID.equals(changedField.getPropertyName()))
+				else
 				{
-					IssueTypeID tmpTypeID = (IssueTypeID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedIssueType), tmpTypeID) )
-					{
-						if (tmpTypeID == null)
-						{
-							issueTypeCombo.setSelection(ISSUE_TYPE_ALL);
-						}
-						else
-						{
-							selectedIssueType = IssueTypeDAO.sharedInstance().getIssueType(
-									tmpTypeID, 
-									new String[] { IssueType.FETCH_GROUP_NAME }, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);
-							issueTypeCombo.setSelection(selectedIssueType);
-						}
-					}
-				}				
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		} // changedQuery != null		
+					final IssueResolution newIssueResolution = IssueResolutionDAO.sharedInstance().getIssueResolution(
+							tmpResolutionID,
+							new String[] { IssueResolution.FETCH_GROUP_NAME},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+
+					issueResolutionCombo.setSelection(newIssueResolution);
+					if (! newIssueResolution.equals(issueResolutionCombo.getSelectedElement()))
+						selectedIssueResolution = newIssueResolution;
+
+					sectionActive |= true;
+				}
+			}
+			else if (IssueQuery.FieldName.issueSeverityTypeID.equals(changedField.getPropertyName()))
+			{
+				IssueSeverityTypeID tmpSeverityID = (IssueSeverityTypeID) changedField.getNewValue();
+				if (tmpSeverityID == null)
+				{
+					issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
+				}
+				else
+				{
+					final IssueSeverityType newIssueSeverityType = IssueSeverityTypeDAO.sharedInstance().getIssueSeverityType(
+							tmpSeverityID,
+							new String[] { IssueSeverityType.FETCH_GROUP_NAME },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+
+					issueSeverityCombo.setSelection(newIssueSeverityType);
+					if (! newIssueSeverityType.equals(issueSeverityCombo.getSelectedElement()))
+						selectedIssueSeverityType = newIssueSeverityType;
+
+					sectionActive |= true;
+				}
+			}
+			else if (IssueQuery.FieldName.issueTypeID.equals(changedField.getPropertyName()))
+			{
+				IssueTypeID tmpTypeID = (IssueTypeID) changedField.getNewValue();
+				if (tmpTypeID == null)
+				{
+					issueTypeCombo.setSelection(ISSUE_TYPE_ALL);
+				}
+				else
+				{
+					final IssueType newIssueType = IssueTypeDAO.sharedInstance().getIssueType(
+							tmpTypeID,
+							new String[] { IssueType.FETCH_GROUP_NAME },
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+
+					issueTypeCombo.setSelection(newIssueType);
+					if (! newIssueType.equals(issueTypeCombo.getSelectedElement()))
+						selectedIssueType = newIssueType;
+
+					sectionActive |= true;
+				}
+			}
+		} // for (FieldChangeCarrier changedField : event.getChangedFields())
+
+		setSearchSectionActive(sectionActive);
 	}
 
 	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
@@ -342,22 +318,21 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
 	}
 
-
-	private static final String[] FETCH_GROUPS_ISSUE_TYPE = { IssueType.FETCH_GROUP_NAME,
+	private static final String[] FETCH_GROUPS_ISSUE_TYPE = {
+		IssueType.FETCH_GROUP_NAME,
 		IssueType.FETCH_GROUP_ISSUE_PRIORITIES,
 		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,
 		IssueType.FETCH_GROUP_ISSUE_SEVERITY_TYPES,
-		IssueSeverityType.FETCH_GROUP_NAME, 
-		IssuePriority.FETCH_GROUP_NAME, 
-		IssueResolution.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssuePriority.FETCH_GROUP_NAME,
+		IssueResolution.FETCH_GROUP_NAME, FetchPlan.DEFAULT
+		};
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
-	// TODO: Why does this flag exist? It is never read, but only set. If it isn't used anymore then remove this please.
-//	private boolean loadJobRunning = false;
 
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Properties....") {
 			@Override
-			protected IStatus run(final ProgressMonitor monitor) {				
+			protected IStatus run(final ProgressMonitor monitor) {
 				synchronized (mutex) {
 //					loadJobRunning = true;
 					logger.debug("Load Job running....");
@@ -380,8 +355,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
 										issueSeverityTypeList.add(s);
 								}
-								selectedIssueType = ISSUE_TYPE_ALL;
-//								getQuery().setIssueTypeID(null); // null <=> ISSUE_TYPE_ALL
+								if (selectedIssueType == null)
+									selectedIssueType = ISSUE_TYPE_ALL;
+
+								issueTypeCombo.setSelection(selectedIssueType);
 
 								/**************************************************/
 								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
@@ -394,8 +371,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 									if (!issueSeverityCombo.contains(is))
 										issueSeverityCombo.addElement(is);
 								}
-								selectedIssueSeverityType = ISSUE_SEVERITY_TYPE_ALL;
-//								getQuery().setIssueSeverityTypeID(null); // null <=> ISSUE_SEVERITY_TYPE_ALL
+								if (selectedIssueSeverityType != null)
+								{
+									issueSeverityCombo.setSelection(selectedIssueSeverityType);
+									selectedIssueSeverityType = null;
+								}
+								else
+									issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
 
 								issuePriorityCombo.removeAll();
 								issuePriorityCombo.addElement(ISSUE_PRIORITY_ALL);
@@ -403,7 +385,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 									if (!issuePriorityCombo.contains(ip))
 										issuePriorityCombo.addElement(ip);
 								}
-								selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+								if (selectedIssuePriority != null)
+								{
+									issuePriorityCombo.setSelection(selectedIssuePriority);
+									selectedIssuePriority = null;
+								}
+								else
+									issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
 
 								issueResolutionCombo.removeAll();
 								issueResolutionCombo.addElement(ISSUE_RESOLUTION_ALL);
@@ -411,13 +399,19 @@ extends AbstractQueryFilterComposite<IssueQuery>
 									if (!issueResolutionCombo.contains(ir))
 										issueResolutionCombo.addElement(ir);
 								}
-								selectedIssueResolution = ISSUE_RESOLUTION_ALL;
-//								getQuery().setIssueResolutionID(null); // null <=> ISSUE_RESOLUTION_ALL
+								if (selectedIssueResolution != null)
+								{
+									issueResolutionCombo.setSelection(selectedIssueResolution);
+									selectedIssueResolution = null;
+								}
+								else
+									issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
 
-								issueTypeCombo.selectElement(ISSUE_TYPE_ALL);
-								issueSeverityCombo.selectElement(ISSUE_SEVERITY_TYPE_ALL);
-								issuePriorityCombo.selectElement(ISSUE_PRIORITY_ALL);
-								issueResolutionCombo.selectElement(ISSUE_RESOLUTION_ALL);
+								selectedIssueType = null;
+//								issueTypeCombo.selectElement(ISSUE_TYPE_ALL);
+//								issueSeverityCombo.selectElement(ISSUE_SEVERITY_TYPE_ALL);
+//								issuePriorityCombo.selectElement(ISSUE_PRIORITY_ALL);
+//								issueResolutionCombo.selectElement(ISSUE_RESOLUTION_ALL);
 							}
 						});
 					}catch (Exception e1) {
@@ -437,10 +431,38 @@ extends AbstractQueryFilterComposite<IssueQuery>
 						logger.debug("Load Job finished.");
 					}
 				}
-			} 
+			}
 		};
 
 		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
-	} 
+	}
+
+	private static final Set<String> fieldNames;
+	static
+	{
+		fieldNames = new HashSet<String>(4);
+		fieldNames.add(IssueQuery.FieldName.issueTypeID);
+		fieldNames.add(IssueQuery.FieldName.issueSeverityTypeID);
+		fieldNames.add(IssueQuery.FieldName.issuePriorityID);
+		fieldNames.add(IssueQuery.FieldName.issueResolutionID);
+	}
+
+	@Override
+	protected Set<String> getFieldNames()
+	{
+		return fieldNames;
+	}
+
+	/**
+	 * Group ID for storing active states in the query.
+	 */
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositePropertyRelated";
+
+	@Override
+	protected String getGroupID()
+	{
+		return FILTER_GROUP_ID;
+	}
+
 }

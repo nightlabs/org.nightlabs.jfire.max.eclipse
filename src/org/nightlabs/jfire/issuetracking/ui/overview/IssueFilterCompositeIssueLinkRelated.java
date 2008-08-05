@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +31,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
@@ -44,15 +44,19 @@ import org.nightlabs.util.Util;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositeIssueLinkRelated 
-extends AbstractQueryFilterComposite<IssueQuery> 
-{	
+public class IssueFilterCompositeIssueLinkRelated
+	extends AbstractQueryFilterComposite<IssueQuery>
+{
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeIssueLinkRelated.class);
 
 	private XComboComposite<IssueLinkType> issueLinkTypeCombo;
-	
-	private Set<IssueLink> issueLinks;
-	private IssueLinkType selectedIssueLinkType;
+
+//	private Set<IssueLink> issueLinks;
+	/**
+	 * Used to defer the selection of an element until the loading job is finished.
+	 */
+	private volatile IssueLinkType selectedIssueLinkType;
+
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -72,7 +76,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		prepareProperties();
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -89,7 +93,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		super(parent, style, queryProvider);
 		prepareProperties();
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -98,28 +102,30 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.verticalSpacing = 10;
-		parent.setLayout(gridLayout);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		this.setLayout(gridLayout);
+		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(parent, SWT.NONE).setText("Link Type: ");
-		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(parent, getBorderStyle());
+		new Label(this, SWT.NONE).setText("Link Type: ");
+		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(this, getBorderStyle());
 		issueLinkTypeCombo.setLabelProvider(labelProvider);
 		issueLinkTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
-				
+
 				if (selectedIssueLinkType.equals(ISSUE_LINK_TYPE_ALL)) {
-					setValueIntentionally(true);
-					getQuery().setIssueLinkTypeID(null);	
-					setValueIntentionally(false);
+					getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, false);
 				}
-				else {
+				else
+				{
+					if (! getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID))
+						getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, true);
+
 					getQuery().setIssueLinkTypeID((IssueLinkTypeID) JDOHelper.getObjectId(selectedIssueLinkType));
 				}
 			}
@@ -128,8 +134,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		loadProperties();
 	}
 
-	private LabelProvider labelProvider = new LabelProvider() 
+	private LabelProvider labelProvider = new LabelProvider()
 	{
+		@Override
 		public String getText(Object element) {
 			if (element instanceof IssueLinkType) {
 				IssueLinkType issueLinkType = (IssueLinkType) element;
@@ -139,73 +146,53 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		};
 	};
 
-	@Override
-	protected void resetSearchQueryValues(IssueQuery query)
-	{
-		query.setIssueLinks(issueLinks);
-		query.setIssueLinkTypeID((IssueLinkTypeID)JDOHelper.getObjectId(selectedIssueLinkType));
-	}
-
-	@Override
-	protected void unsetSearchQueryValues(IssueQuery query)
-	{
-		query.setIssueLinks(null);
-		query.setIssueLinkTypeID(null);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void updateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		if (event.getChangedQuery() == null)
+		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			issueLinks = null;
-			selectedIssueLinkType = null;
-			setSearchSectionActive(false);
-		}
-		else
-		{ // there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
+			if (IssueQuery.FieldName.issueLinkTypeID.equals(changedField.getPropertyName()))
 			{
-				boolean active = isValueIntentionallySet();
-				setSearchSectionActive(active);
-				if (IssueQuery.PROPERTY_ISSUE_LINK_TYPE_ID.equals(changedField.getPropertyName()))
+				IssueLinkTypeID tmpIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
+				if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), tmpIssueLinkTypeID) )
 				{
-					IssueLinkTypeID tmpIssueLinkTypeID = (IssueLinkTypeID) changedField.getNewValue();
-					if (! Util.equals(JDOHelper.getObjectId(selectedIssueLinkType), tmpIssueLinkTypeID) )
+					if (tmpIssueLinkTypeID == null)
 					{
-						if (tmpIssueLinkTypeID == null)
-						{
-							issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
-						}
-						else
-						{
-							selectedIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
-									tmpIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME }, 
-									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);
-							issueLinkTypeCombo.setSelection(selectedIssueLinkType);
-						}
+						issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+					}
+					else
+					{
+						final IssueLinkType newIssueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
+								tmpIssueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME },
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+
+						issueLinkTypeCombo.setSelection(newIssueLinkType);
+						if (! newIssueLinkType.equals(issueLinkTypeCombo.getSelectedElement()))
+							selectedIssueLinkType = newIssueLinkType;
 					}
 				}
-				if (IssueQuery.PROPERTY_ISSUE_LINKS.equals(changedField.getPropertyName()))
-				{
-					issueLinks = (Set<IssueLink>) changedField.getNewValue();
-				}
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		} // changedQuery != null		
+			}
+//			if (IssueQuery.FieldName.issueLinks.equals(changedField.getPropertyName()))
+//			{
+//				issueLinks = (Set<IssueLink>) changedField.getNewValue();
+//			}
+		} // for (FieldChangeCarrier changedField : event.getChangedFields())
+
+		setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueTypeID));
 	}
 
 	private static final String[] FETCH_GROUPS_ISSUE_LINK_TYPE = { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
 	private static IssueLinkType ISSUE_LINK_TYPE_ALL = new IssueLinkType(Organisation.DEV_ORGANISATION_ID, "Issue_Link_Type_All");
-	
+
 	private void prepareProperties(){
 		ISSUE_LINK_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
 	}
 	private void loadProperties(){
 		Job loadJob = new Job("Loading Issue Link Properties....") {
 			@Override
-			protected IStatus run(final ProgressMonitor monitor) {				
+			protected IStatus run(final ProgressMonitor monitor) {
 				try {
 					try {
 						final List<IssueLinkType> issueLinkTypeList = new ArrayList<IssueLinkType>(IssueLinkTypeDAO.sharedInstance().
@@ -219,7 +206,12 @@ extends AbstractQueryFilterComposite<IssueQuery>
 									IssueLinkType issueLinkType = it.next();
 									issueLinkTypeCombo.addElement(issueLinkType);
 								}
-								issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+								if (selectedIssueLinkType == null)
+									issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+								else {
+									issueLinkTypeCombo.setSelection(selectedIssueLinkType);
+									selectedIssueLinkType = null;
+								}
 							}
 						});
 					}catch (Exception e1) {
@@ -231,10 +223,30 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				} finally {
 					logger.debug("Load Job finished.");
 				}
-			} 
+			}
 		};
 
 		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
-	} 
+	}
+
+	private static final Set<String> fieldNames =
+		Collections.singleton(IssueQuery.FieldName.issueLinkTypeID);
+
+	@Override
+	protected Set<String> getFieldNames()
+	{
+		return fieldNames;
+	}
+
+	/**
+	 * Group ID for storing active states in the query.
+	 */
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositeIssueLinkRelated";
+
+	@Override
+	protected String getGroupID()
+	{
+		return FILTER_GROUP_ID;
+	}
 }

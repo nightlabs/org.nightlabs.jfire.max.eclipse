@@ -14,7 +14,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
@@ -25,11 +24,11 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * 
+ *
  * @author Chairat Kongarayawetchakun
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class IssueEntryListViewer 
+public class IssueEntryListViewer
 	extends JDOQuerySearchEntryViewer<Issue, IssueQuery>
 {
 	public IssueEntryListViewer(Entry entry) {
@@ -37,7 +36,7 @@ public class IssueEntryListViewer
 	}
 
 	private IssueTable issueTable;
-	
+
 //	@Override
 //	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
 //		return new IssueFilterCompositeIssueRelated(parent, SWT.NONE);
@@ -71,8 +70,8 @@ public class IssueEntryListViewer
 		});
 
 	}
-	
-//	private static final String[] FETCH_GROUPS_ISSUES = { 
+
+//	private static final String[] FETCH_GROUPS_ISSUES = {
 //		Issue.FETCH_GROUP_THIS_ISSUE,
 //		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 //		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
@@ -81,21 +80,21 @@ public class IssueEntryListViewer
 ////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
 //		FetchPlan.DEFAULT
 //		};
-	
+
 //	@Override
 //	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries,
 //			ProgressMonitor monitor) {
 //		try {
 //			return IssueDAO.sharedInstance().getIssuesForQueries(
 //					queries,
-//					FETCH_GROUPS_ISSUES, 
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//					FETCH_GROUPS_ISSUES,
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //					monitor);
 //		} catch (Exception e) {
 //			throw new RuntimeException(e);
 //		}
 //	}
-	
+
 	public IssueTable getIssueTable() {
 		return issueTable;
 	}
@@ -107,7 +106,7 @@ public class IssueEntryListViewer
 		return IssueDAO.sharedInstance().getIssuesForQueries(
 			queryMap,
 			IssueTable.FETCH_GROUPS_ISSUE,
-			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 			monitor);
 	}
 
@@ -117,9 +116,14 @@ public class IssueEntryListViewer
 		return Issue.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = IssueEntryListViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Issue, IssueQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return IssueEntryListViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 }

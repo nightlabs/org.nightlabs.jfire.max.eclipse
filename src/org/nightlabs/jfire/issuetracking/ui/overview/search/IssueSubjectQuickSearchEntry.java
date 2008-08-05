@@ -5,7 +5,7 @@ import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 
 /**
- * 
+ *
  * @author chairat
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
@@ -20,12 +20,12 @@ public class IssueSubjectQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(IssueQuery query, String value)
 	{
-		query.setIssueSubject(value);
+		query.setIssueSubject(".*" + value + ".*");
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(IssueQuery query)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setIssueSubject(null);
+		return IssueQuery.FieldName.issueSubject;
 	}
 }

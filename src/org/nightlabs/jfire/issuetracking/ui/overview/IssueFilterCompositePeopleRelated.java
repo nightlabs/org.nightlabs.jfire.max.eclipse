@@ -1,5 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.overview;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -29,13 +33,13 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFilterCompositePeopleRelated 
-	extends AbstractQueryFilterComposite<IssueQuery> 
-{	
-	private User selectedReporter;
-	private UserID selectedReportID;
-	private User selectedAssignee;
-	private UserID selectedAssigneeID;
+public class IssueFilterCompositePeopleRelated
+	extends AbstractQueryFilterComposite<IssueQuery>
+{
+//	private User selectedReporter;
+//	private UserID selectedReportID;
+//	private User selectedAssignee;
+//	private UserID selectedAssigneeID;
 
 	private Text reporterText;
 	private Text assigneeText;
@@ -56,14 +60,14 @@ public class IssueFilterCompositePeopleRelated
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	public IssueFilterCompositePeopleRelated(Composite parent, int style,
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -72,67 +76,68 @@ public class IssueFilterCompositePeopleRelated
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
 		GridLayout gridLayout = new GridLayout(4, false);
-		parent.setLayout(gridLayout);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		setLayout(gridLayout);
+		setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label rLabel = new Label(parent, SWT.NONE);
+		Label rLabel = new Label(this, SWT.NONE);
 		rLabel.setText("Reporter: ");
-		allReporterButton = new Button(parent, SWT.CHECK);
+		allReporterButton = new Button(this, SWT.CHECK);
 		allReporterButton.setText("All");
 		allReporterButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
 				final boolean selectAll = ((Button) e.getSource()).getSelection();
-				reporterText.setEnabled(!selectAll);
-				reporterButton.setEnabled(!selectAll);
-				
-				if (selectAll) {
-					setValueIntentionally(true);
-					reporterText.setText("");
-					selectedReporter = null;
-					getQuery().setReporterID(null);
-					setValueIntentionally(false);
-				}
-				else {
-					getQuery().setReporterID(selectedReportID);
-				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.reporterID, ! selectAll);
+//				reporterText.setEnabled(!selectAll);
+//				reporterButton.setEnabled(!selectAll);
+//
+//				if (selectAll) {
+//					setValueIntentionally(true);
+//					reporterText.setText("");
+//					selectedReporter = null;
+//					getQuery().setReporterID(null);
+//					setValueIntentionally(false);
+//				}
+//				else {
+//					getQuery().setReporterID(selectedReportID);
+//				}
 			}
 		});
 
-		reporterText = new Text(parent, getBorderStyle());
+		reporterText = new Text(this, getBorderStyle());
 		reporterText.setEditable(false);
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		reporterButton = new Button(parent, SWT.PUSH);
+		reporterButton = new Button(this, SWT.PUSH);
 		reporterButton.setText("...");
 
-		reporterButton.addSelectionListener(new SelectionAdapter(){
+		reporterButton.addSelectionListener(new SelectionAdapter()
+		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
-				int returnCode = userSearchDialog.open();
-				if (returnCode == Window.OK) {
-					selectedReporter = userSearchDialog.getSelectedUser();
-					selectedReportID = (UserID) JDOHelper.getObjectId(selectedReporter);
-					reporterText.setText(selectedReporter.getName());
-
-					getQuery().setReporterID(selectedReportID);
+				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
+				if (Window.OK == userSearchDialog.open())
+				{
+					final User selectedUser = userSearchDialog.getSelectedUser();
+					final UserID reporterID = (UserID) JDOHelper.getObjectId(selectedUser);
+					reporterText.setText(selectedUser.getName());
+					getQuery().setReporterID(reporterID);
 				}//if
 			}
 		});
-		
+
 		allReporterButton.setSelection(true);
 		reporterButton.setEnabled(false);
 		reporterText.setEnabled(false);
 
-		Label aLabel = new Label(parent, SWT.NONE);
+		Label aLabel = new Label(this, SWT.NONE);
 		aLabel.setText("Assignee: ");
-		
-		allAssigneeButton = new Button(parent, SWT.CHECK);
+
+		allAssigneeButton = new Button(this, SWT.CHECK);
 		allAssigneeButton.setText("All");
 		allAssigneeButton.addSelectionListener(new SelectionAdapter()
 		{
@@ -140,40 +145,40 @@ public class IssueFilterCompositePeopleRelated
 			public void widgetSelected(SelectionEvent e)
 			{
 				final boolean selectAll = ((Button) e.getSource()).getSelection();
-				assigneeText.setEnabled(!selectAll);
-				assigneeButton.setEnabled(!selectAll);
-				
-				if (selectAll) {
-					setValueIntentionally(true);
-					assigneeText.setText("");
-					selectedAssignee = null;
-					getQuery().setAssigneeID(null);
-					setValueIntentionally(false);
-				}
-				else {
-					getQuery().setAssigneeID(selectedAssigneeID);
-				}
+				getQuery().setFieldEnabled(IssueQuery.FieldName.assigneeID, ! selectAll);
+//				assigneeText.setEnabled(!selectAll);
+//				assigneeButton.setEnabled(!selectAll);
+//
+//				if (selectAll) {
+//					setValueIntentionally(true);
+//					assigneeText.setText("");
+//					selectedAssignee = null;
+//					getQuery().setAssigneeID(null);
+//					setValueIntentionally(false);
+//				}
+//				else {
+//					getQuery().setAssigneeID(selectedAssigneeID);
+//				}
 			}
 		});
 		allAssigneeButton.setSelection(true);
 
-		assigneeText = new Text(parent, getBorderStyle());
+		assigneeText = new Text(this, getBorderStyle());
 		assigneeText.setEditable(false);
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		assigneeButton = new Button(parent, SWT.PUSH);
+		assigneeButton = new Button(this, SWT.PUSH);
 		assigneeButton.setText("...");
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
-				int returnCode = userSearchDialog.open();
-				if (returnCode == Window.OK) {
-					selectedAssignee = userSearchDialog.getSelectedUser();
-					selectedAssigneeID = (UserID) JDOHelper.getObjectId(selectedAssignee);
+				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
+				if (Window.OK == userSearchDialog.open())
+				{
+					final User selectedAssignee = userSearchDialog.getSelectedUser();
+					final UserID selectedAssigneeID = (UserID) JDOHelper.getObjectId(selectedAssignee);
 					assigneeText.setText(selectedAssignee.getName());
-					
 					getQuery().setAssigneeID(selectedAssigneeID);
 				}//if
 			}
@@ -181,80 +186,89 @@ public class IssueFilterCompositePeopleRelated
 		assigneeButton.setEnabled(false);
 		assigneeText.setEnabled(false);
 	}
-	
-	@Override
-	protected void resetSearchQueryValues(IssueQuery query)
-	{
-		query.setReporterID((UserID)JDOHelper.getObjectId(selectedReporter));		
-		query.setAssigneeID((UserID)JDOHelper.getObjectId(selectedAssignee));
-	}
 
 	@Override
-	protected void unsetSearchQueryValues(IssueQuery query)
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		query.setAssigneeID(null);
-		query.setReporterID(null);
-	}
-
-	@Override
-	protected void updateUI(QueryEvent event)
-	{
-		if (event.getChangedQuery() == null)
+		for (FieldChangeCarrier changedField : changedFields)
 		{
-			selectedAssignee = null;
-			allAssigneeButton.setSelection(true);
-			assigneeButton.setEnabled(false);
-			assigneeText.setEnabled(false);
-			assigneeText.setText("");
-
-			selectedReporter = null;
-			allReporterButton.setSelection(true);
-			reporterButton.setEnabled(false);
-			reporterText.setEnabled(false);			
-			reporterText.setText("");
-		}
-		else
-		{ // there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
+			if (IssueQuery.FieldName.assigneeID.equals(changedField.getPropertyName()))
 			{
-				boolean active = isValueIntentionallySet();
-				boolean sectionActive = selectedAssignee != null || selectedReporter != null;
-				setSearchSectionActive(sectionActive);
-				if (IssueQuery.PROPERTY_ASSIGNEE_ID.equals(changedField.getPropertyName()))
+				UserID tmpAssigneeID = (UserID) changedField.getNewValue();
+				if (tmpAssigneeID == null)
 				{
-					UserID tmpAssigneeID = (UserID) changedField.getNewValue();
-					if (tmpAssigneeID == null)
-					{
-						assigneeText.setText("");
-					}
-					else
-					{
-						selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
-							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
-					}
-					assigneeButton.setEnabled(!active);
-					assigneeText.setEnabled(!active);
+					assigneeText.setText("");
 				}
-				
-				if (IssueQuery.PROPERTY_REPORTER_ID.equals(changedField.getPropertyName()))
+				else
 				{
-					UserID tmpReporterID = (UserID) changedField.getNewValue();
-					if (tmpReporterID == null)
-					{
-						reporterText.setText("");
-					}
-					else
-					{
-						selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
-							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					final User selectedAssignee = UserDAO.sharedInstance().getUser(tmpAssigneeID,
+							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new NullProgressMonitor());
-					}
-					reporterText.setEnabled(! active);
-					reporterButton.setEnabled(! active);
+
+					assigneeText.setText(selectedAssignee.getName());
 				}
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-		} // changedQuery != null		
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.assigneeID).equals(changedField.getPropertyName()))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				assigneeButton.setEnabled(active);
+				assigneeText.setEnabled(active);
+				setSearchSectionActive(allAssigneeButton, ! active);
+			}
+			else if (IssueQuery.FieldName.reporterID.equals(changedField.getPropertyName()))
+			{
+				UserID tmpReporterID = (UserID) changedField.getNewValue();
+				if (tmpReporterID == null)
+				{
+					reporterText.setText("");
+				}
+				else
+				{
+					final User selectedReporter = UserDAO.sharedInstance().getUser(tmpReporterID,
+							new String[] { FetchPlan.DEFAULT }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new NullProgressMonitor());
+
+					reporterText.setText(selectedReporter.getName());
+				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.reporterID).equals(changedField.getPropertyName()))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				reporterText.setEnabled(active);
+				reporterButton.setEnabled(active);
+				allReporterButton.setSelection(! active);
+			}
+		} // for (FieldChangeCarrier changedField : event.getChangedFields())
+//		boolean sectionActive = selectedAssignee != null || selectedReporter != null;
+		boolean sectionActive = getQuery().isFieldEnabled(IssueQuery.FieldName.assigneeID) ||
+														getQuery().isFieldEnabled(IssueQuery.FieldName.reporterID);
+
+		setSearchSectionActive(sectionActive);
 	}
-	
+
+	private static final Set<String> fieldNames;
+	static
+	{
+		fieldNames = new HashSet<String>(2);
+		fieldNames.add(IssueQuery.FieldName.assigneeID);
+		fieldNames.add(IssueQuery.FieldName.reporterID);
+	}
+
+	@Override
+	protected Set<String> getFieldNames()
+	{
+		return fieldNames;
+	}
+
+	/**
+	 * Group ID for storing active states in the query.
+	 */
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositePeopleRelated";
+
+	@Override
+	protected String getGroupID()
+	{
+		return FILTER_GROUP_ID;
+	}
+
 }

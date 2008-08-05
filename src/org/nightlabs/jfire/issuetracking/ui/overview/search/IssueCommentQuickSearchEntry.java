@@ -5,10 +5,10 @@ import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 
 /**
- * @author chairat 
+ * @author chairat
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
-public class IssueCommentQuickSearchEntry 
+public class IssueCommentQuickSearchEntry
 	extends AbstractQuickSearchEntry<IssueQuery>
 {
 	public IssueCommentQuickSearchEntry(QuickSearchEntryFactory<IssueQuery> factory)
@@ -19,12 +19,12 @@ public class IssueCommentQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(IssueQuery query, String value)
 	{
-		query.setIssueComment(value);
+		query.setIssueComment(".*" + value + ".*");
 	}
 
 	@Override
-	protected void doUnsetSearchConditionValue(IssueQuery query)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setIssueComment(null);
+		return IssueQuery.FieldName.issueComment;
 	}
 }
