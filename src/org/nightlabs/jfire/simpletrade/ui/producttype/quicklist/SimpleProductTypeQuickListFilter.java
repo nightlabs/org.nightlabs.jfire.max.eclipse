@@ -72,7 +72,7 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	private SimpleProductTypeTable resultTable;
-	
+
 	@Override
 	protected Control doCreateResultViewerControl(Composite parent) {
 		resultTable = new SimpleProductTypeTable(parent);
@@ -88,15 +88,15 @@ extends AbstractProductTypeQuickListFilter
 	}
 
 	@Override
-	protected void search(org.nightlabs.progress.ProgressMonitor monitor) 
+	protected void search(org.nightlabs.progress.ProgressMonitor monitor)
 	{
 		monitor.beginTask("Searching Simple ProductTypes", 100);
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					productTypeQueries,
-					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 50));
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
@@ -126,5 +126,5 @@ extends AbstractProductTypeQuickListFilter
 	protected Class<? extends VendorDependentQuery> getQueryClass() {
 		return SimpleProductTypeQuery.class;
 	}
-	
+
 }
