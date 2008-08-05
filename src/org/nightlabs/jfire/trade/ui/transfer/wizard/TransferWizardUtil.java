@@ -73,6 +73,7 @@ import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavourName;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroup;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroupCarrier;
+import org.nightlabs.jfire.store.deliver.id.DeliveryID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -246,16 +247,16 @@ public class TransferWizardUtil
 // Marco: Not necessary anymore, because the DeliveryNotes are read from the Articles.
 //		// prepare delivery
 //		StoreManager storeManager = null;
-//		if (deliveryWizard != null) {
-//			storeManager = getStoreManager();
+////		if (deliveryWizard != null) {
+////			storeManager = getStoreManager();
+////
+////			for (Iterator it = deliveryWizard.getDeliveryEntryPages().iterator(); it.hasNext(); ) {
+////				DeliveryEntryPage deliveryEntryPage = (DeliveryEntryPage) it.next();
+////				Delivery delivery = deliveryEntryPage.getDeliveryWizardHop().getDelivery();
+////				delivery.setDeliveryNoteIDs(deliveryWizard.getDeliveryNoteIDs());
+////			}
+////		}
 //
-//			for (Iterator it = deliveryWizard.getDeliveryEntryPages().iterator(); it.hasNext(); ) {
-//				DeliveryEntryPage deliveryEntryPage = (DeliveryEntryPage) it.next();
-//				Delivery delivery = deliveryEntryPage.getDeliveryWizardHop().getDelivery();
-//				delivery.setDeliveryNoteIDs(deliveryWizard.getDeliveryNoteIDs());
-//			}
-//		}
-		
 		List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
 		List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
 		
@@ -286,13 +287,12 @@ public class TransferWizardUtil
 		
 		// Now do the actual payment/delivery
 		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples);
-
 		
 		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
 		
 		try {
 			// if a payment was done
-			if (paymentTuples != null) {
+			if (invoicesToPrintCount > 0 && paymentTuples != null) {
 				Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
 				
 				for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
@@ -312,13 +312,18 @@ public class TransferWizardUtil
 			}
 			
 			// if a delivery was done
-			if (deliveryTuples != null) {
+			if (deliveryNotesToPrintCount > 0 && deliveryTuples != null) {
 				Set<DeliveryNoteID> deliveryNoteIDsToBePrinted = new HashSet<DeliveryNoteID>();
+				
 				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
 					DeliveryData deliveryData = deliveryPair.getFirst();
 					
+					StoreManager storeManager = StoreManagerUtil.getHome().create();
 					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
-						deliveryNoteIDsToBePrinted.addAll(deliveryData.getDelivery().getDeliveryNoteIDs());
+						DeliveryID deliveryID = (DeliveryID) JDOHelper.getObjectId(deliveryData);
+						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, -1);
+						
+						deliveryNoteIDsToBePrinted.addAll(delivery.getDeliveryNoteIDs());
 					}
 				}
 				
