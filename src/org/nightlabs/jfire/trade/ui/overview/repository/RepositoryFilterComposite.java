@@ -2,7 +2,9 @@ package org.nightlabs.jfire.trade.ui.overview.repository;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -57,7 +59,7 @@ public class RepositoryFilterComposite
 	private Button repositoryTypeActiveButton;
 	private XComboComposite<RepositoryType> repositoryTypeList;
 	protected RepositoryTypeID selectedRepositoryTypeID;
-	
+
 	/**
 	 * @param parent
 	 *          The parent to instantiate this filter into.
@@ -76,7 +78,7 @@ public class RepositoryFilterComposite
 			QueryProvider<? super RepositoryQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class RepositoryFilterComposite
 		QueryProvider<? super RepositoryQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -101,11 +103,11 @@ public class RepositoryFilterComposite
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
-		parent.setLayout(new GridLayout(2, false));
-		
-		final Group ownerGroup = new Group(parent, SWT.NONE);
+		setLayout(new GridLayout(2, false));
+
+		final Group ownerGroup = new Group(this, SWT.NONE);
 		ownerGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.ownerGroup.text")); //$NON-NLS-1$
 		ownerGroup.setLayout(new GridLayout(2, false));
 		ownerGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -127,27 +129,11 @@ public class RepositoryFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (selectedOwnerID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setOwnerID(selectedOwnerID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setOwnerID(selectedOwnerID);
-					}
-				}
-				else
-				{
-					getQuery().setOwnerID(null);
-				}
+				getQuery().setFieldEnabled(RepositoryQuery.FieldName.ownerID, active);
 			}
 		});
 
-		final Group repositoryTypeGroup = new Group(parent, SWT.NONE);
+		final Group repositoryTypeGroup = new Group(this, SWT.NONE);
 		repositoryTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchComposite.anchorTypeIdGroup.text")); //$NON-NLS-1$
 		repositoryTypeGroup.setLayout(new GridLayout());
 		repositoryTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -173,7 +159,7 @@ public class RepositoryFilterComposite
 			@Override
 			public void selectionChanged(SelectionChangedEvent event)
 			{
-				selectedRepositoryTypeID = (RepositoryTypeID) 
+				final RepositoryTypeID selectedRepositoryTypeID = (RepositoryTypeID)
 					JDOHelper.getObjectId(repositoryTypeList.getSelectedElement());
 				getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
 			}
@@ -219,27 +205,11 @@ public class RepositoryFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (selectedRepositoryTypeID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setRepositoryTypeID(selectedRepositoryTypeID);
-					}
-				}
-				else
-				{
-					getQuery().setRepositoryTypeID(null);
-				}
+				getQuery().setFieldEnabled(RepositoryQuery.FieldName.repositoryTypeID, active);
 			}
 		});
 	}
-	
+
 	protected AnchorID selectedOwnerID = null;
 	private SelectionListener ownerSelectionListener = new SelectionAdapter()
 	{
@@ -248,7 +218,7 @@ public class RepositoryFilterComposite
 		{
 			LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 			if (_legalEntity != null) {
-				selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+				final AnchorID selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
 				getQuery().setOwnerID(selectedOwnerID);
 
 				// TODO perform this expensive code in a job
@@ -261,93 +231,82 @@ public class RepositoryFilterComposite
 		}
 	};
 
-	@Override
-	protected void resetSearchQueryValues(RepositoryQuery query)
+	private static final String Repository_Group_ID = "RepositoryFilterComposite";
+	private static final Set<String> fieldNames;
+	static
 	{
-		query.setOwnerID(selectedOwnerID);
-		query.setRepositoryTypeID(selectedRepositoryTypeID);
+		fieldNames = new HashSet<String>(5);
+		fieldNames.add(RepositoryQuery.FieldName.repositoryTypeID);
+		fieldNames.add(RepositoryQuery.FieldName.ownerID);
 	}
 
 	@Override
-	protected void unsetSearchQueryValues(RepositoryQuery query)
+	protected Set<String> getFieldNames()
 	{
-		if (! ownerActiveButton.getSelection())
-		{
-			selectedOwnerID = null;			
-		}
-		if (! repositoryTypeActiveButton.getSelection())
-		{
-			selectedRepositoryTypeID = null;			
-		}
-		
-		query.setOwnerID(null);
-		query.setRepositoryTypeID(null);
+		return fieldNames;
 	}
 
 	@Override
-	protected void updateUI(QueryEvent event)
+	protected String getGroupID()
 	{
-		if (event.getChangedQuery() == null)
+		return Repository_Group_ID;
+	}
+
+	@Override
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
+	{
+		for (FieldChangeCarrier fieldChange :changedFields)
 		{
-			selectedOwnerID = null;
-			ownerText.setText(""); //$NON-NLS-1$
-			ownerBrowseButton.setEnabled(false);
-			setSearchSectionActive(ownerActiveButton, false);
-			
-			selectedRepositoryTypeID = null;
-			repositoryTypeList.setSelection((RepositoryType) null);
-			setSearchSectionActive(repositoryTypeActiveButton, false);
-		}
-		else
-		{
-			boolean active = isValueIntentionallySet();
-			for (FieldChangeCarrier fieldChange : event.getChangedFields())
+			if (RepositoryQuery.FieldName.ownerID.equals(fieldChange.getPropertyName()))
 			{
-				if (RepositoryQuery.PROPERTY_OWNER_ID.equals(fieldChange.getPropertyName()))
+				AnchorID tmpOwnerID = (AnchorID) fieldChange.getNewValue();
+				if (tmpOwnerID == null)
 				{
-					AnchorID tmpOwnerID = (AnchorID) fieldChange.getNewValue();
-					if (tmpOwnerID == null)
-					{
-						ownerText.setText(""); //$NON-NLS-1$
-					}
-					else
-					{
-						final LegalEntity owner = LegalEntityDAO.sharedInstance().getLegalEntity(
-							selectedOwnerID,
-							new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor()
-						);
-						ownerText.setText(owner.getPerson().getDisplayName());
-					}
-					active |= tmpOwnerID != null;
-					ownerText.setEnabled(active);
-					ownerBrowseButton.setEnabled(active);
-					setSearchSectionActive(ownerActiveButton, active);
+					ownerText.setText(""); //$NON-NLS-1$
 				}
-				
-				if (RepositoryQuery.PROPERTY_REPOSITORY_TYPE_ID.equals(fieldChange.getPropertyName()))
+				else
 				{
-					RepositoryTypeID repoTypeID = (RepositoryTypeID) fieldChange.getNewValue();
-					if (repoTypeID == null)
-					{
-						repositoryTypeList.setSelection((RepositoryType) null);
-					}
-					else
-					{
-						RepositoryType repoType = RepositoryTypeDAO.sharedInstance().getRepositoryType(
-							repoTypeID, new String[] { FetchPlan.DEFAULT, RepositoryType.FETCH_GROUP_NAME	},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-						);
-						repositoryTypeList.setSelection(repoType);
-					}
-					active |= repoTypeID != null;
-					repositoryTypeList.setEnabled(active);
-					setSearchSectionActive(repositoryTypeActiveButton, active);
+					final LegalEntity owner = LegalEntityDAO.sharedInstance().getLegalEntity(
+						selectedOwnerID,
+						new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()
+					);
+					ownerText.setText(owner.getPerson().getDisplayName());
 				}
-				
-			} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
-		} // else (changedQuery != null)
+			}
+			else if (getEnableFieldName(RepositoryQuery.FieldName.ownerID).equals(
+					fieldChange.getPropertyName()))
+			{
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				ownerText.setEnabled(active);
+				ownerBrowseButton.setEnabled(active);
+				setSearchSectionActive(ownerActiveButton, active);
+			}
+			else if (RepositoryQuery.FieldName.repositoryTypeID.equals(fieldChange.getPropertyName()))
+			{
+				RepositoryTypeID repoTypeID = (RepositoryTypeID) fieldChange.getNewValue();
+				if (repoTypeID == null)
+				{
+					repositoryTypeList.setSelection((RepositoryType) null);
+				}
+				else
+				{
+					RepositoryType repoType = RepositoryTypeDAO.sharedInstance().getRepositoryType(
+						repoTypeID, new String[] { FetchPlan.DEFAULT, RepositoryType.FETCH_GROUP_NAME	},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+					repositoryTypeList.setSelection(repoType);
+				}
+			}
+			else if (getEnableFieldName(RepositoryQuery.FieldName.repositoryTypeID).equals(
+					fieldChange.getPropertyName()))
+			{
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				repositoryTypeList.setEnabled(active);
+				setSearchSectionActive(repositoryTypeActiveButton, active);
+			}
+		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
-	
+
 }

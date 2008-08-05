@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
@@ -16,34 +17,9 @@ public class InvoiceIDQuickSearchEntry
 		super(factory, InvoiceQuery.class);
 	}
 
-//	@Override
-//	protected void doResetSearchCondition(InvoiceQuery query, String lastValue)
-//	{
-//		query.setArticleContainerID(lastValue);
-//	}
-
 	@Override
-	protected void doSetSearchConditionValue(InvoiceQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setArticleContainerID(value);
+		return AbstractArticleContainerQuery.FieldName.articleContainerID;
 	}
-
-	@Override
-	protected void doUnsetSearchConditionValue(InvoiceQuery query)
-	{
-		query.setArticleContainerID(null);
-	}
-
-//	@Override
-//	public String[] getFetchGroups() {
-//		return InvoiceEntryViewer.FETCH_GROUPS_INVOICES;
-//	}
-//
-//	@Override
-//	public AbstractArticleContainerQuery getQuery()
-//	{
-//		AbstractArticleContainerQuery query = new InvoiceQuery();
-//		query.setArticleContainerID(getSearchText());
-//		return query;
-//	}
 }

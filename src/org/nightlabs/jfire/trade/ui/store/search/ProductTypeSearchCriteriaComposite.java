@@ -1,5 +1,9 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -7,9 +11,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -29,27 +34,26 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQuery>
-extends AbstractQueryFilterComposite<Q>
-{		
+	extends AbstractQueryFilterComposite<Q>
+{
 	private ActiveTextComposite ownerComp;
 	private ActiveTextComposite productTypeGroupComp;
 	private Class<Q> queryClass;
-	private SaleAccessStateCombo saleAccessStateCombo;
-	
+	private ProductTypeRelatedQueryStateTable stateTable;
+
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public ProductTypeSearchCriteriaComposite(Composite parent, int style, 
-			QueryProvider<? super Q> queryProvider,
-			Class<Q> queryClass) 
+	public ProductTypeSearchCriteriaComposite(Composite parent, int style,
+			QueryProvider<? super Q> queryProvider, Class<Q> queryClass)
 	{
 		super(parent, style, queryProvider);
 		this.queryClass = queryClass;
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -59,40 +63,42 @@ extends AbstractQueryFilterComposite<Q>
 	 * @param layoutDataMode
 	 */
 	public ProductTypeSearchCriteriaComposite(Composite parent, int style,
-			LayoutMode layoutMode, LayoutDataMode layoutDataMode, 
-			QueryProvider<? super Q> queryProvider,
-			Class<Q> queryClass) 
+			LayoutMode layoutMode, LayoutDataMode layoutDataMode,
+			QueryProvider<? super Q> queryProvider, Class<Q> queryClass)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
 		this.queryClass = queryClass;
-		createComposite(this);
+		createComposite();
 	}
-	
-	protected void createComposite(Composite parent)
+
+	@Override
+	protected void createComposite()
 	{
-		parent.setLayout(new GridLayout(3, true));
-		saleAccessStateCombo = new SaleAccessStateCombo(parent, SWT.NONE);
-		saleAccessStateCombo.getStateCombo().addSelectionListener(stateComboListener);
-		saleAccessStateCombo.getActiveButton().addSelectionListener(activeSaleAccessButtonListener);
-		if (selectedSaleAccessState != null) {
-			saleAccessStateCombo.getStateCombo().selectElement(selectedSaleAccessState);
-			saleAccessStateCombo.setActive(true);
-		}
-		ownerComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), //$NON-NLS-1$ 
+		setLayout(new GridLayout(2, true));
+		ownerComp = new ActiveTextComposite(this, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.ownerGroup.text"), //$NON-NLS-1$
 				ownerActiveListener, ownerBrowseListener);
-		productTypeGroupComp = new ActiveTextComposite(parent, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), //$NON-NLS-1$ 
-				productTypeGroupActiveListener, productTypeGroupBrowseListener);		
+		productTypeGroupComp = new ActiveTextComposite(this, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), //$NON-NLS-1$
+				productTypeGroupActiveListener, productTypeGroupBrowseListener);
+		Group statesGroup = new Group(this, SWT.NONE);
+		statesGroup.setText("Product Type States");
+		statesGroup.setLayout(new GridLayout());
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.horizontalSpan = 2;
+		statesGroup.setLayoutData(gd);
+		stateTable = new ProductTypeRelatedQueryStateTable(statesGroup, SWT.NONE);
+		stateTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		stateTable.setInput(getQuery());
 	}
 
 	private ButtonSelectionListener ownerActiveListener = new ButtonSelectionListener() {
 		@Override
-		protected void handleSelection(boolean active) 
+		protected void handleSelection(boolean active)
 		{
 			getQuery().setOwnerID(active ? selectedOwnerID : null);
-			ownerComp.setActive(active);			
-		}	
+			ownerComp.setActive(active);
+		}
 	};
-	
+
 	private SelectionListener ownerBrowseListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -104,222 +110,112 @@ extends AbstractQueryFilterComposite<Q>
 			}
 		}
 	};
-	
+
 	private ButtonSelectionListener productTypeGroupActiveListener = new ButtonSelectionListener() {
 		@Override
-		protected void handleSelection(boolean active) 
+		protected void handleSelection(boolean active)
 		{
 			getQuery().setProductTypeGroupID(active ? selectedProductTypeGroupID : null);
-			productTypeGroupComp.setActive(active);						
-		}	
+			productTypeGroupComp.setActive(active);
+		}
 	};
-	
+
 	private SelectionListener productTypeGroupBrowseListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			// TODO: Implement ProductTypeGroupSearch
 		}
 	};
-		
-	private SelectionListener stateComboListener = new SelectionListener() {
-		public void widgetSelected(SelectionEvent e) {
-			selectedSaleAccessState = saleAccessStateCombo.getStateCombo().getSelectedElement();
-			SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, getQuery());
-		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	};
-	
-	private SelectionListener activeSaleAccessButtonListener = new SelectionListener(){
-		public void widgetSelected(SelectionEvent e) {
-			boolean selection = ((Button)e.getSource()).getSelection();
-			saleAccessStateCombo.getStateCombo().setEnabled(selection);
-			if (selection) {
-				selectedSaleAccessState = saleAccessStateCombo.getStateCombo().getSelectedElement();
-			} else {
-				selectedSaleAccessState = null;
-			}
-			SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, getQuery());
-		}
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	};
-	
-	private SaleAccessState selectedSaleAccessState = SaleAccessState.SALEABLE;
-	public SaleAccessState getSelectedSaleAccessState() {
-		return selectedSaleAccessState;
-	}
-	
+
 	private AnchorID selectedOwnerID = null;
 	public AnchorID getSelectedOwnerID() {
 		return selectedOwnerID;
 	}
-	
+
 	private ProductTypeGroupID selectedProductTypeGroupID = null;
 	public ProductTypeGroupID getSelectedProductTypeGroupID() {
 		return selectedProductTypeGroupID;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#resetSearchQueryValues(org.nightlabs.jdo.query.AbstractSearchQuery)
-	 */
-	@Override
-	protected void resetSearchQueryValues(Q query) {
-		SaleAccessStateUtil.applySaleAccessState(selectedSaleAccessState, query);
-		query.setOwnerID(selectedOwnerID);
-		query.setProductTypeGroupID(selectedProductTypeGroupID);
+
+	private static final String ProductType_Group_ID = "ProductTypeSearchCriteriaComposite";
+	private static final Set<String> fieldNames;
+	static
+	{
+		fieldNames = new HashSet<String>();
+		fieldNames.add(AbstractProductTypeQuery.FieldName.ownerID);
+		fieldNames.add(AbstractProductTypeQuery.FieldName.productTypeGroupID);
+		fieldNames.add(AbstractProductTypeQuery.FieldName.closed);
+		fieldNames.add(AbstractProductTypeQuery.FieldName.confirmed);
+		fieldNames.add(AbstractProductTypeQuery.FieldName.published);
+		fieldNames.add(AbstractProductTypeQuery.FieldName.saleable);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#unsetSearchQueryValues(org.nightlabs.jdo.query.AbstractSearchQuery)
-	 */
 	@Override
-	protected void unsetSearchQueryValues(Q query) 
+	protected Set<String> getFieldNames()
 	{
-		if (!productTypeGroupComp.isActive()) {
-			selectedProductTypeGroupID = null;			
-		}
-		if (!ownerComp.isActive()) {
-			selectedOwnerID = null;
-		}
-		if (!saleAccessStateCombo.getActiveButton().getSelection()) {
-			selectedSaleAccessState = null;
-		}
-		
-		query.setOwnerID(null);
-		query.setProductTypeGroupID(null);
-		SaleAccessStateUtil.applySaleAccessState(null, query);
+		return fieldNames;
+	}
+
+	@Override
+	protected String getGroupID()
+	{
+		return ProductType_Group_ID;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#updateUI(org.nightlabs.jdo.query.QueryEvent)
 	 */
 	@Override
-	protected void updateUI(QueryEvent event) 
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		if (event.getChangedQuery() == null)
+		// there is a new Query -> the changedFieldList is not null!
+		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			selectedOwnerID = null;
-			ownerComp.clear();
-			setSearchSectionActive(ownerComp.getActiveButton(), false);
-			
-			selectedProductTypeGroupID = null;
-			productTypeGroupComp.clear();
-			setSearchSectionActive(productTypeGroupComp.getActiveButton(), false);
-			
-			selectedSaleAccessState = SaleAccessState.SALEABLE;
-			saleAccessStateCombo.getStateCombo().selectElement(selectedSaleAccessState);
-			setSearchSectionActive(saleAccessStateCombo.getActiveButton(), false);
-		}
-		else
-		{ 
-			boolean saleAccessStateComboSetToActive = false;
-			// there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
-			{				
-//				boolean active = isValueIntentionallySet();
-
-				if (AbstractProductTypeQuery.PROPERTY_OWNER_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					AnchorID ownerID = (AnchorID) changedField.getNewValue();
-					if (ownerID == null) {
-						ownerComp.clear();
-					}
-					else {
-						final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
-								ownerID,
-								new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							);					
-						ownerComp.setText(legalEntity.getPerson().getDisplayName());
-					}
-//					active |= ownerID != null;
-					selectedOwnerID = ownerID;
-					boolean active = (ownerID != null);
-					ownerComp.setActive(active);
-					setSearchSectionActive(ownerComp.getActiveButton(), active);					
+			final String changedPropName = changedField.getPropertyName();
+			if (AbstractProductTypeQuery.FieldName.ownerID.equals(changedPropName))
+			{
+				AnchorID ownerID = (AnchorID) changedField.getNewValue();
+				if (ownerID == null) {
+					ownerComp.clear();
 				}
-				
-				if (AbstractProductTypeQuery.PROPERTY_PRODUCTTYPE_GROUP_ID.equals(
-						changedField.getPropertyName())) 
-				{
-					ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
-					if (productTypeGroupID == null) {
-						productTypeGroupComp.clear();
-					}
-					else {
-						ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
-								productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME}, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-						productTypeGroupComp.setText(productTypeGroup.getName().getText());
-					}
-//					active |= productTypeGroupID != null;
-					selectedProductTypeGroupID = productTypeGroupID;
-					boolean active = (productTypeGroupID != null);
-					productTypeGroupComp.setActive(active);
-					setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);					
+				else {
+					final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
+							ownerID,
+							new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						);
+					ownerComp.setText(legalEntity.getPerson().getDisplayName());
 				}
-				
-				if (AbstractProductTypeQuery.PROPERTY_CLOSED.equals(
-						changedField.getPropertyName())) 
-				{
-					Boolean closed = (Boolean) changedField.getNewValue();
-					boolean active = (closed != null && closed);
-					if (active) {
-						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CLOSED);
-						saleAccessStateComboSetToActive = true;
-						selectedSaleAccessState = SaleAccessState.CLOSED;
-					}
-				}
-				
-				if (AbstractProductTypeQuery.PROPERTY_CONFIRMED.equals(
-						changedField.getPropertyName())) 
-				{
-					Boolean confirmed = (Boolean) changedField.getNewValue();
-					boolean active = (confirmed != null && confirmed);
-					if (active) {
-						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.CONFIRMED);
-						saleAccessStateComboSetToActive = true;
-						selectedSaleAccessState = SaleAccessState.CONFIRMED;
-					}
-				}				
-
-				if (AbstractProductTypeQuery.PROPERTY_PUBLISHED.equals(
-						changedField.getPropertyName())) 
-				{
-					Boolean published = (Boolean) changedField.getNewValue();
-					boolean active = (published != null && published);
-					if (active) {
-						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.PUBLISHED);
-						saleAccessStateComboSetToActive = true;
-						selectedSaleAccessState = SaleAccessState.PUBLISHED;
-					}
-				}				
-
-				if (AbstractProductTypeQuery.PROPERTY_SALEABLE.equals(
-						changedField.getPropertyName())) 
-				{
-					Boolean saleable = (Boolean) changedField.getNewValue();
-					boolean active = (saleable != null && saleable);
-					if (active) {
-						saleAccessStateCombo.getStateCombo().selectElement(SaleAccessState.SALEABLE);
-						saleAccessStateComboSetToActive = true;
-						selectedSaleAccessState = SaleAccessState.SALEABLE;
-					}
-				}
-				
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())
-			if (saleAccessStateComboSetToActive) {
-				boolean active = (selectedSaleAccessState != null);
-				saleAccessStateCombo.setActive(active);
-				setSearchSectionActive(saleAccessStateCombo.getActiveButton(), active);					
 			}
-		} // changedQuery != null
+			else if (getEnableFieldName(AbstractProductTypeQuery.FieldName.ownerID).equals(
+					changedPropName))
+			{
+				final Boolean active = (Boolean) changedField.getNewValue();
+				ownerComp.setActive(active);
+				setSearchSectionActive(ownerComp.getActiveButton(), active);
+			}
+			else if (AbstractProductTypeQuery.FieldName.productTypeGroupID.equals(changedPropName))
+			{
+				ProductTypeGroupID productTypeGroupID = (ProductTypeGroupID) changedField.getNewValue();
+				if (productTypeGroupID == null) {
+					productTypeGroupComp.clear();
+				}
+				else {
+					ProductTypeGroup productTypeGroup = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
+							productTypeGroupID, new String[] {ProductTypeGroup.FETCH_GROUP_NAME},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					productTypeGroupComp.setText(productTypeGroup.getName().getText());
+				}
+			}
+			else if (getEnableFieldName(AbstractProductTypeQuery.FieldName.productTypeGroupID).equals(changedPropName))
+			{
+				final Boolean active = (Boolean) changedField.getNewValue();
+				productTypeGroupComp.setActive(active);
+				setSearchSectionActive(productTypeGroupComp.getActiveButton(), active);
+			}
+		}
 	}
-		
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.base.ui.overview.search.AbstractQueryFilterComposite#getQueryClass()
 	 */
@@ -327,5 +223,5 @@ extends AbstractQueryFilterComposite<Q>
 	public Class<Q> getQueryClass() {
 		return queryClass;
 	}
-	
+
 }

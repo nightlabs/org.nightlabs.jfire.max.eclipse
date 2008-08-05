@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.offer.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.query.OfferQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
@@ -16,33 +17,9 @@ extends AbstractArticleContainerQuickSearchEntry<OfferQuery>
 		super(factory, OfferQuery.class);
 	}
 
-//	@Override
-//	protected void doResetSearchCondition(OfferQuery query, String lastValue)
-//	{
-//		query.setVendorName(lastValue);
-//	}
-
 	@Override
-	protected void doSetSearchConditionValue(OfferQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setVendorName(value);
+		return AbstractArticleContainerQuery.FieldName.vendorName;
 	}
-
-	@Override
-	protected void doUnsetSearchConditionValue(OfferQuery query)
-	{
-		query.setVendorName(null);
-	}
-
-//	@Override
-//	public String[] getFetchGroups() {
-//		return OfferEntryViewer.FETCH_GROUPS_OFFERS;
-//	}
-//
-//	@Override
-//	public AbstractArticleContainerQuery getQuery() {
-//		AbstractArticleContainerQuery query = new OfferQuery();
-//		query.setVendorName(getSearchText());
-//		return query;
-//	}
 }

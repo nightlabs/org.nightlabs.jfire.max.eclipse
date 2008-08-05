@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.deliverynote.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.query.DeliveryNoteQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
@@ -16,33 +17,10 @@ public class DeliveryNoteVendorNameQuickSearchEntry
 		super(factory, DeliveryNoteQuery.class);
 	}
 
-//	@Override
-//	public AbstractArticleContainerQuery getQuery() {
-//		AbstractArticleContainerQuery query = new DeliveryNoteQuery();
-//		query.setVendorName(getSearchText());
-//		return query;
-//	}
-//
-//	@Override
-//	public String[] getFetchGroups() {
-//		return DeliveryNoteEntryViewer.FETCH_GROUPS_DELIVERY_NOTES;
-//	}
-
 	@Override
-	protected void doSetSearchConditionValue(DeliveryNoteQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setVendorName(value);
+		return AbstractArticleContainerQuery.FieldName.vendorName;
 	}
 
-	@Override
-	protected void doUnsetSearchConditionValue(DeliveryNoteQuery query)
-	{
-		query.setVendorName(null);
-	}
-
-//	@Override
-//	protected void doResetSearchCondition(DeliveryNoteQuery query, String lastValue)
-//	{
-//		query.setVendorName(lastValue);
-//	}
 }

@@ -39,7 +39,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * Interface for filtering products within the ProductTypeQuickListView.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
@@ -49,7 +49,7 @@ extends ISelectionHandler
 	/**
 	 * Creates the Control that displays the filtered results
 	 * to the user.
-	 * 
+	 *
 	 * @param parent The parent composite of the ResultViewer
 	 * @return The created Control
 	 */
@@ -58,10 +58,10 @@ extends ISelectionHandler
 	/**
 	 * Returns the Control that displays the filtered results
 	 * to the user.
-	 * 
+	 *
 	 * @param parent The parent composite of the ResultViewer
 	 * @return The created Control
-	 */	
+	 */
 	Control getResultViewerControl();
 
 	/**
@@ -70,7 +70,7 @@ extends ISelectionHandler
 	 */
 	String getDisplayName();
 
-	/** 
+	/**
 	 * Searches for <tt>ProductType</tt>s and refreshes the resultViewer.
 	 */
 	void search(ProgressMonitor monitor, boolean inJob);
@@ -80,7 +80,7 @@ extends ISelectionHandler
 	 * make sure to select {@link org.nightlabs.jfire.store.id.ProductTypeID} instances
 	 * and fire events with {@link org.eclipse.jface.viewers.IStructuredSelection} instances
 	 * which contain these <tt>ProductTypeID</tt>s.
-	 * 
+	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
 	void addSelectionChangedListener(ISelectionChangedListener listener);
@@ -108,17 +108,17 @@ extends ISelectionHandler
 	Set<Class<? extends Object>> getClasses();
 
 	/**
-	 * Returns the Class of the resultType for the Query returned by {@link #getQuery()} 
+	 * Returns the Class of the resultType for the Query returned by {@link #getQuery()}
 	 * @return the Class of the resultType for the Query returned by {@link #getQuery()}
 	 */
 	Class<?> getQueryResultClass();
-	
+
 	/**
 	 * Get the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
 	 * @return the <code>QueryCollection</code> of <code>VendorDependentQuery</code> used by this <code>IProductTypeQuickListFilter</code>.
 	 */
 	QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor);
-	
+
 	void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection);
-	
+
 }

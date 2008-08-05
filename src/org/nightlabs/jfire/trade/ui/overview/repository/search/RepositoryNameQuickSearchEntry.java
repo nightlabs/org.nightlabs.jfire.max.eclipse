@@ -17,14 +17,8 @@ public class RepositoryNameQuickSearchEntry
 	}
 
 	@Override
-	protected void doSetSearchConditionValue(RepositoryQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setName(value);
-	}
-
-	@Override
-	protected void doUnsetSearchConditionValue(RepositoryQuery query)
-	{
-		query.setName(null);
+		return RepositoryQuery.FieldName.name;
 	}
 }

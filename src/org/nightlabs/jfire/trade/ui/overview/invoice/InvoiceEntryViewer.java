@@ -11,7 +11,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.trade.dao.InvoiceDAO;
 import org.nightlabs.jfire.trade.query.InvoiceQuery;
 import org.nightlabs.jfire.trade.ui.overview.ArticleContainerEntryViewer;
@@ -26,7 +25,7 @@ public class InvoiceEntryViewer
 	extends ArticleContainerEntryViewer<Invoice, InvoiceQuery>
 {
 	public static final String ID = InvoiceEntryViewer.class.getName();
-	
+
 	public InvoiceEntryViewer(Entry entry) {
 		super(entry);
 	}
@@ -36,7 +35,7 @@ public class InvoiceEntryViewer
 		final InvoiceListComposite invoiceListComposite = new InvoiceListComposite(parent, SWT.NONE);
 		return invoiceListComposite;
 	}
-	
+
 	@Override
 	protected void addResultTableListeners(final AbstractTableComposite<Invoice> tableComposite) {
 		super.addResultTableListeners(tableComposite);
@@ -52,7 +51,7 @@ public class InvoiceEntryViewer
 	public String getID() {
 		return ID;
 	}
-		
+
 	@Override
 	protected Collection<Invoice> doSearch(
 		QueryCollection<? extends InvoiceQuery> queryMap, ProgressMonitor monitor)
@@ -70,9 +69,14 @@ public class InvoiceEntryViewer
 		return Invoice.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = InvoiceEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Invoice, InvoiceQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return InvoiceEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 }

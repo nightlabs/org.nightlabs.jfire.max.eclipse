@@ -10,7 +10,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.trade.dao.ReceptionNoteDAO;
 import org.nightlabs.jfire.trade.query.ReceptionNoteQuery;
@@ -24,7 +23,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ReceptionNoteEntryViewer
 	extends ArticleContainerEntryViewer<ReceptionNote, ReceptionNoteQuery>
 {
-	
+
 	public ReceptionNoteEntryViewer(Entry entry) {
 		super(entry);
 	}
@@ -39,12 +38,12 @@ public class ReceptionNoteEntryViewer
 	public AbstractTableComposite<ReceptionNote> createListComposite(Composite parent) {
 		return new ReceptionNoteListComposite(parent, SWT.NONE);
 	}
-	
+
 	public static final String[] FETCH_GROUPS_RECEPTION_NOTES = new String[] {
 		FetchPlan.DEFAULT,
 		ReceptionNote.FETCH_GROUP_THIS_RECEPTION_NOTE
 	};
-	
+
 	@Override
 	protected Collection<ReceptionNote> doSearch(
 		QueryCollection<? extends ReceptionNoteQuery> queryMap, ProgressMonitor monitor)
@@ -62,9 +61,14 @@ public class ReceptionNoteEntryViewer
 		return ReceptionNote.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = ReceptionNoteEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<ReceptionNote, ReceptionNoteQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return ReceptionNoteEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 }

@@ -57,15 +57,15 @@ import org.nightlabs.progress.SubProgressMonitor;
 /**
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
-public class FilterProductTypeQuickListViewAction 
-implements IViewActionDelegate 
+public class FilterProductTypeQuickListViewAction
+implements IViewActionDelegate
 {
 	private static final Logger logger = Logger.getLogger(FilterProductTypeQuickListViewAction.class);
-	
+
 	private static String[] FETCH_GROUPS_QUERY_STORE_LOAD = new String[] {
 		FetchPlan.DEFAULT,
 		BaseQueryStore.FETCH_GROUP_NAME,
-		BaseQueryStore.FETCH_GROUP_DESCRIPTION	
+		BaseQueryStore.FETCH_GROUP_DESCRIPTION
 	};
 
 	private static String[] FETCH_GROUPS_QUERY_STORE_SAVE = new String[] {
@@ -73,9 +73,9 @@ implements IViewActionDelegate
 		BaseQueryStore.FETCH_GROUP_NAME,
 		BaseQueryStore.FETCH_GROUP_DESCRIPTION
 	};
-	
+
 	private ProductTypeQuickListView view;
-	
+
 	/**
 	 * @see org.eclipse.ui.IViewActionDelegate#init(org.eclipse.ui.IViewPart)
 	 */
@@ -88,7 +88,7 @@ implements IViewActionDelegate
 	 */
 	public void run(IAction action) {
 		final IProductTypeQuickListFilter selectedFilter = view.getSelectedFilter();
-		if (isFactoriesRegistered(selectedFilter)) 
+		if (isFactoriesRegistered(selectedFilter))
 		{
 			Job loadQuery = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.openQueryDialog")) {			 //$NON-NLS-1$
 				@Override
@@ -101,49 +101,49 @@ implements IViewActionDelegate
 							final QueryFilterDialog dialog = new QueryFilterDialog(view.getSite().getShell(),
 									getScope(), queryCollection);
 							int returnCode = dialog.open();
-							if (returnCode == Window.OK) 
+							if (returnCode == Window.OK)
 							{
 								Job searchJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.search")) {				 //$NON-NLS-1$
 									@Override
-									protected IStatus run(ProgressMonitor monitor) throws Exception 
+									protected IStatus run(ProgressMonitor monitor) throws Exception
 									{
-										QueryCollection<? extends AbstractSearchQuery> queryCollection = dialog.getQueryCollection();										
+										QueryCollection<? extends AbstractSearchQuery> queryCollection = dialog.getQueryCollection();
 										selectedFilter.setQueryCollection((QueryCollection<VendorDependentQuery>) queryCollection);
 										selectedFilter.search(monitor, true);
 										return Status.OK_STATUS;
 									}
 								};
 								searchJob.schedule();
-								
+
 								Job saveJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.saveLastChanges")) { //$NON-NLS-1$
 									@Override
-									protected IStatus run(ProgressMonitor monitor) throws Exception 
-									{										
+									protected IStatus run(ProgressMonitor monitor) throws Exception
+									{
 										monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.saveLastChanges"), 100); //$NON-NLS-1$
 										UserID userID = Login.sharedInstance().getUserObjectID();
 										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
-												queryCollection.getResultClass(), userID, 
-												FETCH_GROUPS_QUERY_STORE_LOAD, 
-												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+												queryCollection.getResultClass(), userID,
+												FETCH_GROUPS_QUERY_STORE_LOAD,
+												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 												new SubProgressMonitor(monitor, 50));
 										defaultQueryStore.setQueryCollection(queryCollection);
 										QueryStoreDAO.sharedInstance().storeQueryStore(
 												defaultQueryStore,
-												FETCH_GROUPS_QUERY_STORE_SAVE, 
-												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-												false, 
+												FETCH_GROUPS_QUERY_STORE_SAVE,
+												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+												false,
 												new SubProgressMonitor(monitor, 50));
 										monitor.done();
 										return Status.OK_STATUS;
-									}				
+									}
 								};
 								saveJob.schedule();
-							}							
+							}
 						}
 					});
 					monitor.done();
 					return Status.OK_STATUS;
-				}			
+				}
 			};
 			loadQuery.schedule();
 		}
@@ -152,17 +152,17 @@ implements IViewActionDelegate
 	/**
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
 	 */
-	public void selectionChanged(IAction action, ISelection selection) 
+	public void selectionChanged(IAction action, ISelection selection)
 	{
 	}
-	
+
 	protected String getScope() {
 		return "global"; //$NON-NLS-1$
 	}
-	
-	protected boolean isFactoriesRegistered(IProductTypeQuickListFilter selectedFilter) 
+
+	protected boolean isFactoriesRegistered(IProductTypeQuickListFilter selectedFilter)
 	{
-		if (selectedFilter != null) {		
+		if (selectedFilter != null) {
 			SortedSet<QueryFilterFactory> factories = QueryFilterFactoryRegistry.sharedInstance().getQueryFilterCompositesFor(
 					getScope(), selectedFilter.getQueryResultClass());
 			return factories != null;

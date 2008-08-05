@@ -10,7 +10,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.query.OfferQuery;
@@ -39,13 +38,13 @@ public class OfferEntryViewer
 //		StateDefinition.FETCH_GROUP_NAME,
 //		LegalEntity.FETCH_GROUP_PERSON
 //	};
-	
+
 	public OfferEntryViewer(Entry entry) {
 		super(entry);
 	}
 
 	private OfferListComposite list;
-	
+
 	@Override
 	public AbstractTableComposite<Offer> createListComposite(Composite parent) {
 		list = new OfferListComposite(parent, SWT.NONE);
@@ -63,11 +62,11 @@ public class OfferEntryViewer
 			}
 		});
 	}
-	
+
 	public String getID() {
 		return ID;
 	}
-		
+
 	@Override
 	protected Collection<Offer> doSearch(
 		QueryCollection<? extends OfferQuery> queryMap, ProgressMonitor monitor)
@@ -85,10 +84,15 @@ public class OfferEntryViewer
 		return Offer.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = OfferEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Offer, OfferQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return OfferEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 
 }

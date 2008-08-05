@@ -11,37 +11,15 @@ import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
 public class AccountOwnerNameQuickSearchEntry
 extends AbstractQuickSearchEntry<AccountQuery>
 {
-	public AccountOwnerNameQuickSearchEntry(QuickSearchEntryFactory<AccountQuery> factory) {
+	public AccountOwnerNameQuickSearchEntry(QuickSearchEntryFactory<AccountQuery> factory)
+	{
 		super(factory, AccountQuery.class);
 	}
 
-//	@Override
-//	protected void doResetSearchCondition(AccountQuery query, String lastValue)
-//	{
-//		query.setOwnerName(lastValue);
-//	}
-
 	@Override
-	protected void doSetSearchConditionValue(AccountQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setOwnerName(value);
+		return AccountQuery.FieldName.ownerName;
 	}
 
-	@Override
-	protected void doUnsetSearchConditionValue(AccountQuery query)
-	{
-		query.setOwnerName(null);
-	}
-
-//	public Object search(ProgressMonitor monitor) {
-//		AccountQuery query = new AccountQuery();
-//		query.setOwnerName(getSearchText());
-//		query.setFromInclude(getMinIncludeRange());
-//		query.setToExclude(getMaxExcludeRange());
-//		Collection<AccountQuery> queries = Collections.singleton(query);
-//		return AccountDAO.sharedInstance().getAccountsForQueries(
-//				queries,
-//				AccountEntryViewer.FETCH_GROUPS_ACCOUNTS,
-//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//	}
 }

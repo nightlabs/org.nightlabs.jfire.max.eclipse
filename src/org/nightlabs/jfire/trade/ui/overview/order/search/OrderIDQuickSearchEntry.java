@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.order.search;
 
 import org.nightlabs.jfire.base.ui.overview.search.QuickSearchEntryFactory;
+import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.query.OrderQuery;
 import org.nightlabs.jfire.trade.ui.overview.search.AbstractArticleContainerQuickSearchEntry;
 
@@ -17,14 +18,8 @@ public class OrderIDQuickSearchEntry
 	}
 
 	@Override
-	protected void doSetSearchConditionValue(OrderQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setArticleContainerID(value);
-	}
-
-	@Override
-	protected void doUnsetSearchConditionValue(OrderQuery query)
-	{
-		query.setArticleContainerID(null);
+		return AbstractArticleContainerQuery.FieldName.articleContainerID;
 	}
 }

@@ -17,14 +17,8 @@ public class RepositoryOwnerNameQuickSearchEntry
 	}
 
 	@Override
-	protected void doSetSearchConditionValue(RepositoryQuery query, String value)
+	protected String getModifiedQueryFieldName()
 	{
-		query.setOwnerName(value);
-	}
-
-	@Override
-	protected void doUnsetSearchConditionValue(RepositoryQuery query)
-	{
-		query.setOwnerName(null);
+		return RepositoryQuery.FieldName.ownerName;
 	}
 }

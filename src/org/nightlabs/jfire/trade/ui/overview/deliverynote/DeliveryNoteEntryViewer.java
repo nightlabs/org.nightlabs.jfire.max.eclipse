@@ -12,7 +12,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -41,13 +40,13 @@ public class DeliveryNoteEntryViewer
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON
 	};
-	
+
 	public DeliveryNoteEntryViewer(Entry entry) {
 		super(entry);
 	}
 
 	private DeliveryNoteListComposite list;
-	
+
 	@Override
 	public AbstractTableComposite<DeliveryNote> createListComposite(Composite parent)
 	{
@@ -66,11 +65,11 @@ public class DeliveryNoteEntryViewer
 			}
 		});
 	}
-	
+
 	public String getID() {
 		return ID;
 	}
-		
+
 	@Override
 	protected Collection<DeliveryNote> doSearch(
 		QueryCollection<? extends DeliveryNoteQuery> queryMap, ProgressMonitor monitor)
@@ -78,8 +77,8 @@ public class DeliveryNoteEntryViewer
 		return (Collection<DeliveryNote>)
 			ArticleContainerDAO.sharedInstance().getArticleContainersForQueries(
 			queryMap,
-			FETCH_GROUPS_DELIVERY_NOTES, 
-			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+			FETCH_GROUPS_DELIVERY_NOTES,
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 			monitor
 			);
 	}
@@ -90,10 +89,15 @@ public class DeliveryNoteEntryViewer
 		return DeliveryNote.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = DeliveryNoteEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<DeliveryNote, DeliveryNoteQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return DeliveryNoteEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 
 }

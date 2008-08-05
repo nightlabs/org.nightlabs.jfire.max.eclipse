@@ -67,23 +67,23 @@ public abstract class AbstractProductTypeQuickListFilter
 implements IProductTypeQuickListFilter
 {
 	private static Logger logger = Logger.getLogger(AbstractProductTypeQuickListFilter.class);
-	
+
 	public static String[] FETCH_GROUPS_QUERY_STORE = new String[] {
 		FetchPlan.DEFAULT,
 		BaseQueryStore.FETCH_GROUP_NAME,
-		BaseQueryStore.FETCH_GROUP_DESCRIPTION,		
+		BaseQueryStore.FETCH_GROUP_DESCRIPTION,
 		BaseQueryStore.FETCH_GROUP_SERIALISED_QUERIES
 	};
-	
+
 	public static String[] FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR = new String[] {
 		FetchPlan.DEFAULT,
 		ArticleContainer.FETCH_GROUP_VENDOR_ID,
 	};
-	
+
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private QueryCollection<VendorDependentQuery> queryCollection;
-	
+
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
 	 */
@@ -119,7 +119,7 @@ implements IProductTypeQuickListFilter
 
 		SelectionChangedEvent event = new SelectionChangedEvent(this, selection);
 		for (int i=0; i<selectionChangedListeners.size(); i++) {
-			ISelectionChangedListener listener = (ISelectionChangedListener) selectionChangedListeners.getListeners()[i]; 
+			ISelectionChangedListener listener = (ISelectionChangedListener) selectionChangedListeners.getListeners()[i];
 			listener.selectionChanged(event);
 		}
 	}
@@ -151,8 +151,8 @@ implements IProductTypeQuickListFilter
 							selectionHandler.setSelection(selection);
 						}
 					});
-				}				
-			} 
+				}
+			}
 			else {
 				Display.getDefault().syncExec(new Runnable(){
 					@Override
@@ -163,7 +163,7 @@ implements IProductTypeQuickListFilter
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates the Control which is then returned in {@link #createResultViewerControl(Composite)}
 	 * @param parent the parent composite
@@ -180,13 +180,13 @@ implements IProductTypeQuickListFilter
 		}
 		return control;
 	}
-	
+
 	/**
 	 * Subclasses can override this method if they need a special ISelectionChangedListener
 	 * for their implementation
-	 * @return the SelectionListener for your implementation 
+	 * @return the SelectionListener for your implementation
 	 */
-	protected ISelectionChangedListener getSelectionChangedListener() 
+	protected ISelectionChangedListener getSelectionChangedListener()
 	{
 		return new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -195,8 +195,8 @@ implements IProductTypeQuickListFilter
 
 				IStructuredSelection sel = (IStructuredSelection) event.getSelection();
 				Object elem = sel.getFirstElement();
-				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);				
-				setSelectedProductTypeID(productTypeID);						
+				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(elem);
+				setSelectedProductTypeID(productTypeID);
 			}
 		};
 	}
@@ -208,34 +208,34 @@ implements IProductTypeQuickListFilter
 			return selectionHandler.canHandleSelection(selection);
 		}
 		else
-			return false; 
+			return false;
 	}
-	
+
 	@Override
 	public void search(ProgressMonitor monitor, boolean inJob) {
-		if (inJob) {
+		if (! inJob) {
 			new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.search")) {  //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) {
 					search(monitor);
 					return Status.OK_STATUS;
 				}
-			}.schedule();			
+			}.schedule();
 		} else {
 			search(monitor);
 		}
 	}
-		
+
 //	public void setVendorID(AnchorID vendorID) {
 //		getQuery().setVendorID(vendorID);
 //	}
-	
+
 	/**
 	 * performs the search with the Query returned by {@link #getQuery()}
 	 * @param monitor the progressMonitor to show the progress
 	 */
 	protected abstract void search(ProgressMonitor monitor);
-	
+
 //	public abstract Class<?> getQueryResultClass();
 	/**
 	 * Returns the class of the resultType of the Query which is used for searching.
@@ -244,7 +244,7 @@ implements IProductTypeQuickListFilter
 	public Class<?> getQueryResultClass() {
 		return createQuery().getResultClass();
 	}
-	
+
 	/**
 	 * Returns the subclass of the {@link VendorDependentQuery} which is used
 	 * for searching.
@@ -252,9 +252,9 @@ implements IProductTypeQuickListFilter
 	 * for searching.
 	 */
 	protected abstract Class<? extends VendorDependentQuery> getQueryClass();
-	
+
 //	protected abstract VendorDependentQuery createQuery();
-	
+
 	/**
 	 * Creates an instance of the subclass of VendorDependentQuery which is used for searching
 	 * By default this is done by calling <code>getQueryClass().newInstance()</code>, if your implementation
@@ -269,7 +269,7 @@ implements IProductTypeQuickListFilter
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Configures the Query return by {@link #createQuery()}.
 	 * @param query the query to configure
@@ -286,32 +286,32 @@ implements IProductTypeQuickListFilter
 	}
 
 	@Override
-	public QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor) 
+	public QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.loadQuery"), 100); //$NON-NLS-1$
-		if (queryCollection == null) 
+		if (queryCollection == null)
 		{
 			BaseQueryStore defaultQueryStore;
 			// TODO this should be done in the server in order to make it [nearly] impossible that 2 defaults are created!
 			synchronized (AbstractProductTypeQuickListFilter.class) { // prevent having 2 defaultQueryStores due to multiple threads
 				defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
 						getQueryResultClass(), Login.sharedInstance().getUserObjectID(),
-						FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
 				if (defaultQueryStore == null) {
 					VendorDependentQuery query = createQuery();
 					configureQuery(query);
 					queryCollection = new QueryCollection<VendorDependentQuery>(getQueryResultClass());
 					queryCollection.add(query);
-					User owner = Login.sharedInstance().getUser(new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new org.eclipse.core.runtime.NullProgressMonitor());				
+					User owner = Login.sharedInstance().getUser(new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+							new org.eclipse.core.runtime.NullProgressMonitor());
 					defaultQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
 					defaultQueryStore.setDefaultQuery(true);
 					if (logger.isDebugEnabled()) {
 						logger.debug("No default query store available, create one for resultClass = "+getQueryResultClass()+" and user "+Login.sharedInstance().getUserObjectID()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
-					defaultQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore, 
-							FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					defaultQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore,
+							FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							true, new SubProgressMonitor(monitor, 50));
 				}
 			}
@@ -343,8 +343,8 @@ implements IProductTypeQuickListFilter
 		if (!queryCollection.getResultClass().equals(getQueryResultClass())) {
 			throw new IllegalArgumentException("The resultClass of the given queryCollection is "+queryCollection.getResultClass()+" but it should be "+getQueryResultClass()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		
+
 		this.queryCollection = queryCollection;
-	}	
-	
+	}
+
 }

@@ -12,7 +12,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -38,19 +37,19 @@ public class OrderEntryViewer
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON
 	};
-	
+
 	public OrderEntryViewer(Entry entry) {
 		super(entry);
 	}
 
 	private OrderListComposite list;
-	
+
 	@Override
 	public AbstractTableComposite<Order> createListComposite(Composite parent) {
 		list = new OrderListComposite(parent, SWT.NONE);
 		return list;
 	}
-	
+
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<Order> tableComposite) {
 		super.addResultTableListeners(tableComposite);
@@ -62,11 +61,11 @@ public class OrderEntryViewer
 			}
 		});
 	}
-	
+
 	public String getID() {
 		return ID;
 	}
-		
+
 	@Override
 	protected Collection<Order> doSearch(
 		QueryCollection<? extends OrderQuery> queryMap, ProgressMonitor monitor)
@@ -84,10 +83,15 @@ public class OrderEntryViewer
 		return Order.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = OrderEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Order, OrderQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return OrderEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 
 }

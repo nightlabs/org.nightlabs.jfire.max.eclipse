@@ -48,6 +48,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -80,7 +81,7 @@ import org.nightlabs.util.Util;
 
 /**
  * A View for a configurable quick-list of sellable products.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  * @author Daniel Mazurek <daniel[AT]nightlabs[DOT]de>
  */
@@ -96,10 +97,6 @@ implements ISelectionProvider
 	private TabFolder tabFolder;
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private AnchorID vendorID = null;
-	
-	public ProductTypeQuickListView() {
-		super();
-	}
 
 	public void createPartContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -129,8 +126,9 @@ implements ISelectionProvider
 				filter.addSelectionChangedListener(filterSelectionListener);
 				TabItem filterTabItem = new TabItem(tabFolder, SWT.BORDER);
 				filterTabItem.setText(filter.getDisplayName());
-				if (filter.createResultViewerControl(tabFolder) != null) {
-					filterTabItem.setControl(filter.createResultViewerControl(tabFolder));
+				final Control resultViewer = filter.createResultViewerControl(tabFolder);
+				if (resultViewer != null) {
+					filterTabItem.setControl(resultViewer);
 					filterTabItem.setData(filter);
 				} else
 					throw new IllegalStateException("filter.createResultViewerControl(tabFolder) == null"); //$NON-NLS-1$
@@ -174,7 +172,7 @@ implements ISelectionProvider
 
 			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
 			if (!Util.equals(vendorID, newVendorID)) {
-				vendorID = newVendorID; 
+				vendorID = newVendorID;
 				// vendor changed => all search results are outdated
 				wrapper.getDisplay().asyncExec(new Runnable() {
 					@Override
@@ -234,11 +232,11 @@ implements ISelectionProvider
 								tabSelectProgrammtically = true;
 								tabFolder.setSelection(i);
 								refresh(false);
-								tabSelectProgrammtically = false;								
+								tabSelectProgrammtically = false;
 							}
 						}
 					}
-				}				
+				}
 			}
 		}
 	};
@@ -304,11 +302,11 @@ implements ISelectionProvider
 			if ((!didSelectedFilterSearch()) || force) {
 				new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
 					@Override
-					protected IStatus run(ProgressMonitor monitor) 
+					protected IStatus run(ProgressMonitor monitor)
 					{
 						QueryCollection<VendorDependentQuery> queryCollection = filter.getQueryCollection(monitor);
 						for (VendorDependentQuery query : queryCollection) {
-							query.setVendorID(vendorID);							
+							query.setVendorID(vendorID);
 						}
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
@@ -327,7 +325,7 @@ implements ISelectionProvider
 	public void setFocus() {
 	}
 
-	private ListenerList selectionChangedListeners = new ListenerList();	
+	private ListenerList selectionChangedListeners = new ListenerList();
 
 	/**
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
@@ -373,7 +371,7 @@ implements ISelectionProvider
 					Set<Class<? extends Object>> classes = filter.getClasses();
 					if (classes.contains(clazz)) {
 						// if not searched before, perform search first
-						if (!filterSearched.get(i)) 
+						if (!filterSearched.get(i))
 						{
 							final int index = i;
 							new Job(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.refresh.job.name")) { //$NON-NLS-1$
@@ -386,13 +384,13 @@ implements ISelectionProvider
 									}
 									return Status.OK_STATUS;
 								}
-							}.schedule();							
+							}.schedule();
 						}
 						// already searched before, just check if can handle selection
 						else {
 							if (filter.canHandleSelection(selection)) {
 								filter.setSelection(selection);
-							}							
+							}
 						}
 					}
 				}

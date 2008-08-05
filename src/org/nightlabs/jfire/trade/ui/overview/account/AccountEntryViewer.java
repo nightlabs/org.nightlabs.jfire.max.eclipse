@@ -15,14 +15,13 @@ import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.query.AccountQuery;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
  * displaying {@link Account}s
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
@@ -37,7 +36,7 @@ public class AccountEntryViewer
 	public AbstractTableComposite<Account> createListComposite(Composite parent) {
 		return new AccountListComposite(parent, SWT.NONE);
 	}
-	
+
 //	@Override
 //	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
 //		return new AccountFilterComposite(parent, SWT.NONE);
@@ -72,10 +71,15 @@ public class AccountEntryViewer
 			);
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = AccountEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Account, AccountQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return AccountEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 
 }

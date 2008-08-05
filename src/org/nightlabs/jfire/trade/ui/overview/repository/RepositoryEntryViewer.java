@@ -11,7 +11,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
-import org.nightlabs.jfire.base.ui.overview.search.SearchEntryViewer;
 import org.nightlabs.jfire.store.Repository;
 import org.nightlabs.jfire.store.RepositoryType;
 import org.nightlabs.jfire.store.dao.RepositoryDAO;
@@ -22,7 +21,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * implementation of a {@link JDOQuerySearchEntryViewer} for searching and
  * displaying {@link Repository}s
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
@@ -65,10 +64,15 @@ public class RepositoryEntryViewer
 		return Repository.class;
 	}
 
+	/**
+	 * The ID for the Quick search registry.
+	 */
+	public static final String QUICK_SEARCH_REGISTRY_ID = RepositoryEntryViewer.class.getName();
+
 	@Override
-	protected Class<? extends SearchEntryViewer<Repository, RepositoryQuery>> getViewerClass()
+	protected String getQuickSearchRegistryID()
 	{
-		return RepositoryEntryViewer.class;
+		return QUICK_SEARCH_REGISTRY_ID;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -54,9 +55,10 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
- * 
+ *
  * @author Marius Heinzmann - marius[at]nightlabs[dot]com
  */
 public class StatableFilterSearchComposite
@@ -66,21 +68,17 @@ public class StatableFilterSearchComposite
 	private DateTimeEdit createDTMax;
 	private Button stateDefinitionActiveButton;
 	private Button onlyInSelectedStateButton;
-	private StateDefinitionID stateDefinitionID;
-	private boolean onlyInSelectedState = false;
-	private Date createDTMinDate;
-	private Date createDTMaxDate;
-	
+
 	private static final String[] FETCH_GROUPS_STATE_DEFINITON = new String[] {
 		FetchPlan.DEFAULT,
 		StateDefinition.FETCH_GROUP_NAME
 	};
- 
+
 	/**
 	 * Creates a new {@link AbstractQueryFilterComposite}.
-	 * <p><b>Note</b>: The caller has to call {@link #createComposite(Composite)} to create the UI! <br />
+	 * <p><b>Note</b>: The caller has to call {@link #createComposite()} to create the UI! <br />
 	 * 	This is not done in this constructor to omit problems with fields that are not only declared,
-	 * 	but also initialised. If these fields are used inside {@link #createComposite(Composite)}
+	 * 	but also initialised. If these fields are used inside {@link #createComposite()}
 	 * 	or new values are assigned to them, one of the following two things may happen:
 	 *  <ul>
 	 *  	<li>The value assigned to that field is overridden by the initialisation value that is
@@ -105,7 +103,7 @@ public class StatableFilterSearchComposite
 		LayoutDataMode layoutDataMode, QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -115,7 +113,7 @@ public class StatableFilterSearchComposite
 		QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -125,13 +123,13 @@ public class StatableFilterSearchComposite
 	}
 
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
-		Group group = new Group(parent, SWT.NONE);
+		Group group = new Group(this, SWT.NONE);
 		group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.group.text"));		 //$NON-NLS-1$
 		group.setLayout(new GridLayout(4, false));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
 			LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
 		wrapper.getGridLayout().makeColumnsEqualWidth = true;
@@ -143,26 +141,7 @@ public class StatableFilterSearchComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (stateDefinitionID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setOnlyInSelectedState(onlyInSelectedState);
-						getQuery().setStateDefinitionID(stateDefinitionID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setOnlyInSelectedState(onlyInSelectedState);
-						getQuery().setStateDefinitionID(stateDefinitionID);
-					}
-				}
-				else
-				{
-					getQuery().setOnlyInSelectedState(false);
-					getQuery().setStateDefinitionID(null);
-				}
+				getQuery().setFieldEnabled(StatableQuery.FieldName.stateDefinitionID, active);
 			}
 		});
 		onlyInSelectedStateButton = new Button(wrapper, SWT.CHECK);
@@ -176,11 +155,11 @@ public class StatableFilterSearchComposite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				onlyInSelectedState = onlyInSelectedStateButton.getSelection();
+				final Boolean onlyInSelectedState = onlyInSelectedStateButton.getSelection();
 				getQuery().setOnlyInSelectedState(onlyInSelectedState);
 			}
 		});
-		
+
 		stateDefinitions = new XComboComposite<StateDefinition>(wrapper, getBorderStyle(), labelProvider);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
@@ -191,11 +170,13 @@ public class StatableFilterSearchComposite
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				stateDefinitionID = (StateDefinitionID) JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+				final StateDefinitionID stateDefinitionID = (StateDefinitionID)
+					JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+
 				getQuery().setStateDefinitionID(stateDefinitionID);
 			}
 		});
-		
+
 		createDTMin = new DateTimeEdit(
 				group,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
@@ -212,38 +193,19 @@ public class StatableFilterSearchComposite
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
-				createDTMinDate = createDTMin.getDate();
+				final Date createDTMinDate = createDTMin.getDate();
 				getQuery().setStateCreateDTMin(createDTMinDate);
 			}
 		});
-		createDTMin.addActiveChangeListener(new ButtonSelectionListener() 
+		createDTMin.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (createDTMinDate == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the date edit composites.
-						createDTMinDate = createDTMin.getDate();
-						getQuery().setStateCreateDTMin(createDTMinDate);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setStateCreateDTMin(createDTMinDate);
-					}
-				}
-				else
-				{
-					getQuery().setStateCreateDTMin(null);
-				}
+				getQuery().setFieldEnabled(StatableQuery.FieldName.stateCreateDTMin, active);
 			}
 		});
-		
+
 		createDTMax = new DateTimeEdit(
 				group,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
@@ -260,7 +222,7 @@ public class StatableFilterSearchComposite
 			@Override
 			public void modifyText(ModifyEvent me)
 			{
-				createDTMaxDate = createDTMax.getDate();
+				final Date createDTMaxDate = createDTMax.getDate();
 				getQuery().setStateCreateDTMax(createDTMaxDate);
 			}
 		});
@@ -269,26 +231,7 @@ public class StatableFilterSearchComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (createDTMaxDate == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the date edit composites.
-						createDTMaxDate = createDTMax.getDate();
-						getQuery().setStateCreateDTMax(createDTMaxDate);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setStateCreateDTMax(createDTMaxDate);
-					}
-				}
-				else
-				{
-					getQuery().setStateCreateDTMax(null);
-				}
+				getQuery().setFieldEnabled(StatableQuery.FieldName.stateCreateDTMax, active);
 			}
 		});
 	}
@@ -302,17 +245,19 @@ public class StatableFilterSearchComposite
 				StateDefinition stateDefinition = (StateDefinition) element;
 				return stateDefinition.getName().getText();
 			}
-			
+
 			return super.getText(element);
 		}
 	};
-	
+
 	private Class<? extends Statable> statableClass;
-	
+
+	private Job fillStateComboJob;
+
 	/**
 	 * Sets the class implementing {@link Statable} for which the states shall be retrieved and used
 	 * for filtering.
-	 *  
+	 *
 	 * @param statableClass a class implementing Statable
 	 */
 	public void setStatableClass(Class<? extends Statable> statableClass)
@@ -320,12 +265,12 @@ public class StatableFilterSearchComposite
 		assert statableClass != null;
 		if (statableClass == this.statableClass)
 			return;
-		
+
 		this.statableClass = statableClass;
 		getQuery().setStatableClass(statableClass);
 		final String statableClassName = statableClass.getName();
-		
-		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.loadProcessDefinitionsJob.name")) { //$NON-NLS-1$
+
+		fillStateComboJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterComposite.loadProcessDefinitionsJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
@@ -356,12 +301,16 @@ public class StatableFilterSearchComposite
 						allStateDefinitions.addAll(stateDefinitions);
 					}
 
-					Display.getDefault().syncExec(new Runnable() {
+					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							if (stateDefinitions == null || stateDefinitions.isDisposed())
 								return;
 
 							stateDefinitions.addElements(allStateDefinitions);
+							if (deferredSelectedStateDefinition != null) {
+								stateDefinitions.selectElement(deferredSelectedStateDefinition);
+								deferredSelectedStateDefinition = null;
+							}
 						}
 					});
 				} catch (Exception e) {
@@ -370,140 +319,111 @@ public class StatableFilterSearchComposite
 				return Status.OK_STATUS;
 			}
 		};
-		job.schedule();
-	}
-	
-	@Override
-	protected void resetSearchQueryValues(StatableQuery query)
-	{
-		query.setOnlyInSelectedState(onlyInSelectedState);
-		query.setStateCreateDTMin(createDTMinDate);
-		query.setStateCreateDTMax(createDTMaxDate);
-		query.setStateDefinitionID(stateDefinitionID);
+		fillStateComboJob.schedule();
 	}
 
-	@Override
-	protected void unsetSearchQueryValues(StatableQuery query)
+	private static final String STATABLE_GROUP_ID = "StatableFilterGroup";
+	private static final Set<String> fieldNames;
+	static
 	{
-		if (! stateDefinitionActiveButton.getSelection())
-		{
-			stateDefinitionID = null;
-			onlyInSelectedState = false;
-		}
-		if (! createDTMax.isActive())
-		{
-			createDTMaxDate = null;
-		}
-		if (! createDTMin.isActive())
-		{
-			createDTMinDate = null;
-		}
-		
-		query.setOnlyInSelectedState(false);
-		query.setStateCreateDTMin(null);
-		query.setStateCreateDTMax(null);
-		query.setStateDefinitionID(null);
+		fieldNames = new HashSet<String>();
+		fieldNames.add(StatableQuery.FieldName.onlyInSelectedState);
+		fieldNames.add(StatableQuery.FieldName.stateCreateDTMax);
+		fieldNames.add(StatableQuery.FieldName.stateCreateDTMin);
+		fieldNames.add(StatableQuery.FieldName.stateDefinitionID);
 	}
 
 	@Override
-	protected void updateUI(QueryEvent event)
+	protected Set<String> getFieldNames()
 	{
-		if (event.getChangedQuery() == null)
-		{
-			onlyInSelectedState = false;
-			onlyInSelectedStateButton.setSelection(false);
-			stateDefinitionID = null;
-			stateDefinitions.setSelection((StateDefinition) null);
-			setSearchSectionActive(stateDefinitionActiveButton, false);
+		return fieldNames;
+	}
 
-			createDTMinDate = null;
-			createDTMin.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			if (createDTMin.isActive())
+	@Override
+	protected String getGroupID()
+	{
+		return STATABLE_GROUP_ID;
+	}
+
+	private StateDefinition deferredSelectedStateDefinition = null;
+
+	@Override
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("This method must be invoked on the SWT UI thread!");
+
+		for (FieldChangeCarrier fieldChange : changedFields)
+		{
+			if (StatableQuery.FieldName.onlyInSelectedState.equals(fieldChange.getPropertyName()))
 			{
-				createDTMin.setActive(false);
-				setSearchSectionActive(false);
+				onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
 			}
-
-			createDTMaxDate = null;
-			createDTMax.setTimestamp(Calendar.getInstance().getTimeInMillis());
-			if (createDTMax.isActive())
+			else if (StatableQuery.FieldName.stateCreateDTMax.equals(fieldChange.getPropertyName()))
 			{
-				createDTMax.setActive(false);
-				setSearchSectionActive(false);
+				Date maxDate = (Date) fieldChange.getNewValue();
+				createDTMax.setDate(maxDate);
 			}
-		}
-		else
-		{
-			for (FieldChangeCarrier fieldChange : event.getChangedFields())
+			else if (getEnableFieldName(StatableQuery.FieldName.stateCreateDTMax).equals(
+					fieldChange.getPropertyName()))
 			{
-				boolean active = isValueIntentionallySet();
-				if (StatableQuery.PROPERTY_ONLY_IN_SELECTED_STATE.equals(fieldChange.getPropertyName()))
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				createDTMax.setActive(active);
+				setSearchSectionActive(active);
+			}
+			else if (StatableQuery.FieldName.stateCreateDTMin.equals(fieldChange.getPropertyName()))
+			{
+				Date minDate = (Date) fieldChange.getNewValue();
+				createDTMin.setDate(minDate);
+			}
+			else if (getEnableFieldName(StatableQuery.FieldName.stateCreateDTMin).equals(
+					fieldChange.getPropertyName()))
+			{
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				createDTMin.setActive(active);
+				setSearchSectionActive(active);
+			}
+			else if (StatableQuery.FieldName.stateDefinitionID.equals(fieldChange.getPropertyName()))
+			{
+				StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
+				if (tmpID == null)
 				{
-					onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
+					stateDefinitions.setSelection((StateDefinition) null);
 				}
-				
-				if (StatableQuery.PROPERTY_STATE_CREATE_DATE_MAX.equals(fieldChange.getPropertyName()))
+				else
 				{
-					Date maxDate = (Date) fieldChange.getNewValue();
-					createDTMax.setDate(maxDate);
-					
-					active |= maxDate != null;
-					if (createDTMax.isActive() != active)
+					StateDefinition selection;
+					try
 					{
-						createDTMax.setActive(active);
-						setSearchSectionActive(active);
+						selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
+							Collections.singleton(tmpID), FETCH_GROUPS_STATE_DEFINITON,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						).iterator().next();
 					}
-				}
-				
-				if (StatableQuery.PROPERTY_STATE_CREATE_DATE_MIN.equals(fieldChange.getPropertyName()))
-				{
-					Date minDate = (Date) fieldChange.getNewValue();
-					createDTMin.setDate(minDate);
-					active |= minDate != null;
-					if (createDTMin.isActive() != active)
+					catch (Exception e)
 					{
-						createDTMin.setActive(active);
-						setSearchSectionActive(active);
-					}
-				}
-				
-				if (StatableQuery.PROPERTY_STATE_DEFINITION_ID.equals(fieldChange.getPropertyName()))
-				{
-					StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
-					if (tmpID == null)
-					{
-						stateDefinitions.setSelection((StateDefinition) null);
-					}
-					else
-					{
-						StateDefinition selection;
-						try
+						if (e instanceof RuntimeException)
 						{
-							selection = StateDefinitionDAO.sharedInstance().getStateDefintions(
-								Collections.singleton(stateDefinitionID), FETCH_GROUPS_STATE_DEFINITON, 
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-							).iterator().next();
+							throw (RuntimeException) e;
 						}
-						catch (Exception e)
-						{
-							if (e instanceof RuntimeException)
-							{
-								throw (RuntimeException) e;
-							}
 
-							throw new RuntimeException(e);
-						}
-						stateDefinitions.setSelection(selection);
+						throw new RuntimeException(e);
 					}
-					
-					active |= tmpID != null;
-					stateDefinitions.setEnabled(active);
-					onlyInSelectedStateButton.setEnabled(active);
-					setSearchSectionActive(stateDefinitionActiveButton, active);
-//					initialValue = false;
+
+					stateDefinitions.setSelection(selection);
+					if (!Util.equals(selection, stateDefinitions.getSelectedElement()))
+						deferredSelectedStateDefinition = selection;
 				}
-			} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
-		} // else (changedQuery != null)
+			}
+			else if (getEnableFieldName(StatableQuery.FieldName.stateDefinitionID).equals(
+					fieldChange.getPropertyName()))
+			{
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				stateDefinitions.setEnabled(active);
+				onlyInSelectedStateButton.setEnabled(active);
+				setSearchSectionActive(stateDefinitionActiveButton, active);
+			}
+		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
-	
+
 }

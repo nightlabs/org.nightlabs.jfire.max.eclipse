@@ -1,7 +1,9 @@
 package org.nightlabs.jfire.trade.ui.overview.account;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -32,7 +34,6 @@ import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.accounting.AccountType;
-import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
 import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
@@ -74,7 +75,7 @@ public class AccountFilterComposite
 			QueryProvider<? super AccountQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class AccountFilterComposite
 		QueryProvider<? super AccountQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-		createComposite(this);
+		createComposite();
 	}
 
 	@Override
@@ -101,30 +102,27 @@ public class AccountFilterComposite
 
 	private SpinnerSearchEntry minBalanceEntry;
 	private SpinnerSearchEntry maxBalanceEntry;
-	private Long minBalance;
-	private Long maxBalance;
-	
+
 	private Button activeCurrencyButton;
 	private CurrencyCombo currencyCombo;
 	protected CurrencyID selectedCurrencyID;
-	
+
 	private Button ownerActiveButton;
 	private Text ownerText;
 	private Button ownerBrowseButton;
-	private AnchorID selectedOwnerID;
-	
+
 	private Button accountTypeActiveButton;
 	private XComboComposite<AccountType> accountTypeList;
-	private static final String[] ACCOUNT_TYPE_FETCH_GROUPS = 
+	private static final String[] ACCOUNT_TYPE_FETCH_GROUPS =
 		new String[] { FetchPlan.DEFAULT, AccountType.FETCH_GROUP_NAME };
 	protected AccountTypeID selectedAccountTypeID;
-	
+
 	@Override
-	protected void createComposite(Composite parent)
+	protected void createComposite()
 	{
 		setLayout(new GridLayout(3, false));
-		
-		minBalanceEntry = new SpinnerSearchEntry(this, SWT.NONE, 
+
+		minBalanceEntry = new SpinnerSearchEntry(this, SWT.NONE,
 			LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL,
 			Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.minBalanceEntry.caption")); //$NON-NLS-1$
 		minBalanceEntry.getSpinnerComposite().setMinimum(Integer.MIN_VALUE);
@@ -133,7 +131,7 @@ public class AccountFilterComposite
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				minBalance = computeValue(minBalanceEntry.getSpinnerComposite());
+				final Long minBalance = computeValue(minBalanceEntry.getSpinnerComposite());
 				getQuery().setMinBalance(minBalance);
 			}
 		});
@@ -142,29 +140,12 @@ public class AccountFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (minBalance == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the spinner.
-						minBalance = computeValue(minBalanceEntry.getSpinnerComposite());
-						getQuery().setMinBalance( minBalance );
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setMinBalance( minBalance );
-					}
-				}
-				else
-				{
-					getQuery().setMinBalance( null );
-				}
+				getQuery().setFieldEnabled(AccountQuery.FieldName.minBalance, active);
+				if (getQuery().getMinBalance() == null)
+					getQuery().setMinBalance( computeValue(minBalanceEntry.getSpinnerComposite()) );
 			}
 		});
-		
+
 		maxBalanceEntry = new SpinnerSearchEntry(this, SWT.NONE,
 			LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL,
 			Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.maxBalanceEntry.caption")); //$NON-NLS-1$
@@ -174,7 +155,7 @@ public class AccountFilterComposite
 			@Override
 			public void modifyText(ModifyEvent arg0)
 			{
-				maxBalance = computeValue(maxBalanceEntry.getSpinnerComposite());
+				final Long maxBalance = computeValue(maxBalanceEntry.getSpinnerComposite());
 				getQuery().setMaxBalance(maxBalance);
 			}
 		});
@@ -183,29 +164,12 @@ public class AccountFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (maxBalance == null)
-					{
-						setValueIntentionally(true);
-						// for consistency we need to update the field according to the initial value of
-						// the spinner.
-						maxBalance = computeValue(maxBalanceEntry.getSpinnerComposite());
-						getQuery().setMaxBalance( maxBalance );
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setMaxBalance( maxBalance );
-					}
-				}
-				else
-				{
-					getQuery().setMaxBalance( null );
-				}
+				getQuery().setFieldEnabled(AccountQuery.FieldName.maxBalance, active);
+				if (getQuery().getMaxBalance() == null)
+					getQuery().setMaxBalance( computeValue(maxBalanceEntry.getSpinnerComposite()) );
 			}
 		});
-		
+
 		Group currencyGroup = new Group(this, SWT.NONE);
 		currencyGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountSearchComposite.currencyGroup.text")); //$NON-NLS-1$
 		currencyGroup.setLayout(new GridLayout());
@@ -217,23 +181,7 @@ public class AccountFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (selectedCurrencyID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setCurrencyID(selectedCurrencyID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setCurrencyID(selectedCurrencyID);
-					}
-				}
-				else
-				{
-					getQuery().setCurrencyID(null);
-				}
+				getQuery().setFieldEnabled(AccountQuery.FieldName.currencyID, active);
 			}
 		});
 		activeCurrencyButton.setSelection(false);
@@ -244,11 +192,13 @@ public class AccountFilterComposite
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
-				selectedCurrencyID = (CurrencyID)JDOHelper.getObjectId(currencyCombo.getSelectedCurrency());
+				final CurrencyID selectedCurrencyID = (CurrencyID)
+					JDOHelper.getObjectId(currencyCombo.getSelectedCurrency());
+
 				getQuery().setCurrencyID(selectedCurrencyID);
 			}
 		});
-		
+
 		final Group ownerGroup = new Group(this, SWT.NONE);
 		ownerGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.ownerGroup.text")); //$NON-NLS-1$
 		ownerGroup.setLayout(new GridLayout(2, false));
@@ -263,23 +213,7 @@ public class AccountFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (selectedOwnerID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setOwnerID(selectedOwnerID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setOwnerID(selectedOwnerID);						
-					}
-				}
-				else
-				{
-					getQuery().setOwnerID(null);
-				}
+				getQuery().setFieldEnabled(AccountQuery.FieldName.ownerID, active);
 			}
 		});
 		ownerText = new Text(ownerGroup, XComposite.getBorderStyle(ownerGroup));
@@ -294,7 +228,7 @@ public class AccountFilterComposite
 			{
 				LegalEntity _legalEntity = LegalEntitySearchCreateWizard.open(ownerText.getText(), false);
 				if (_legalEntity != null) {
-					selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
+					final AnchorID selectedOwnerID = (AnchorID) JDOHelper.getObjectId(_legalEntity);
 					getQuery().setOwnerID(selectedOwnerID);
 					// TODO perform this expensive code asynchronously
 					LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(selectedOwnerID,
@@ -305,7 +239,7 @@ public class AccountFilterComposite
 			}
 		});
 		ownerBrowseButton.setEnabled(false);
-		
+
 		final Group accountTypeGroup = new Group(this, SWT.NONE);
 		accountTypeGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.account.AccountListComposite.AccountSearchComposite.accountTypeGroup.text")); //$NON-NLS-1$
 		accountTypeGroup.setLayout(new GridLayout());
@@ -318,23 +252,7 @@ public class AccountFilterComposite
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				if (active)
-				{
-					if (selectedAccountTypeID == null)
-					{
-						setValueIntentionally(true);
-						getQuery().setAccountTypeID(selectedAccountTypeID);
-						setValueIntentionally(false);
-					}
-					else
-					{
-						getQuery().setAccountTypeID(selectedAccountTypeID);
-					}
-				}
-				else
-				{
-					getQuery().setAccountTypeID(null);
-				}
+				getQuery().setFieldEnabled(AccountQuery.FieldName.accountTypeID, active);
 			}
 		});
 		accountTypeList = new XComboComposite<AccountType>(
@@ -358,7 +276,9 @@ public class AccountFilterComposite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				selectedAccountTypeID = (AccountTypeID) JDOHelper.getObjectId(accountTypeList.getSelectedElement());
+				final AccountTypeID selectedAccountTypeID = (AccountTypeID)
+					JDOHelper.getObjectId(accountTypeList.getSelectedElement());
+
 				getQuery().setAccountTypeID(selectedAccountTypeID);
 			}
 		});
@@ -388,47 +308,38 @@ public class AccountFilterComposite
 		job.schedule();
 	}
 
-	@Override
-	protected void resetSearchQueryValues(AccountQuery query)
+	private static final String ACCOUNT_GROUP_ID = "AccountFilterComposite";
+	private static Set<String> fieldNames;
+	static
 	{
-		query.setMinBalance(minBalance);
-		query.setMaxBalance(maxBalance);
-		query.setCurrencyID(selectedCurrencyID);
-		query.setOwnerID(selectedOwnerID);
-		query.setAccountTypeID(selectedAccountTypeID);
+		fieldNames = new HashSet<String>();
+		fieldNames.add(AccountQuery.FieldName.accountTypeID);
+		fieldNames.add(AccountQuery.FieldName.currencyID);
+		fieldNames.add(AccountQuery.FieldName.minBalance);
+		fieldNames.add(AccountQuery.FieldName.maxBalance);
+		fieldNames.add(AccountQuery.FieldName.ownerID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite#getFieldNames()
+	 */
 	@Override
-	protected void unsetSearchQueryValues(AccountQuery query)
+	protected Set<String> getFieldNames()
 	{
-		if (! minBalanceEntry.isActive())
-		{
-			minBalance = null;
-		}
-		if (! maxBalanceEntry.isActive())
-		{
-			maxBalance = null;
-		}
-		if (! activeCurrencyButton.getSelection())
-		{
-			selectedCurrencyID = null;
-		}
-		if (! ownerActiveButton.getSelection())
-		{
-			selectedOwnerID = null;
-		}
-		if (! accountTypeActiveButton.getSelection())
-		{
-			selectedAccountTypeID = null;
-		}
-		
-		query.setMinBalance(null);
-		query.setMaxBalance(null);
-		query.setCurrencyID(null);
-		query.setOwnerID(null);
-		query.setAccountTypeID(null);
+		return fieldNames;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite#getGroupID()
+	 */
+	@Override
+	protected String getGroupID()
+	{
+		return ACCOUNT_GROUP_ID;
+	}
+
 	private long computeValue(NumberSpinnerComposite spinner)
 	{
 		int numDigits = spinner.getNumDigits();
@@ -437,134 +348,109 @@ public class AccountFilterComposite
 		double val = number.doubleValue() * multiplier;
 		return new Double(val).longValue();
 	}
-	
+
 	private double computeDoubleFromQueryValue(long value, NumberSpinnerComposite spinner)
 	{
 		int numDigits = spinner.getNumDigits();
 		double divider = Math.pow(10, numDigits);
 		return value / divider;
 	}
-	
+
 	@Override
-	protected void updateUI(QueryEvent event)
+	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		if (event.getChangedQuery() == null)
+		// apply changes.
+		for (FieldChangeCarrier changedField : changedFields)
 		{
-			minBalance = null;
-			minBalanceEntry.getSpinnerComposite().setValue(null);
-			if (minBalanceEntry.isActive())
+			if (AccountQuery.FieldName.maxBalance.equals(changedField.getPropertyName()))
 			{
-				minBalanceEntry.setActive(false);
-				setSearchSectionActive(false);
-			}
-			
-			maxBalance = null;
-			maxBalanceEntry.getSpinnerComposite().setValue(null);
-			if (maxBalanceEntry.isActive())
-			{
-				maxBalanceEntry.setActive(false);
-				setSearchSectionActive(false);
-			}
-			
-			selectedCurrencyID = null;
-			currencyCombo.setSelectedCurrency((Currency) null);
-			setSearchSectionActive(activeCurrencyButton, false);
-			
-			selectedOwnerID = null;
-			ownerText.setText(""); //$NON-NLS-1$
-			setSearchSectionActive(ownerActiveButton, false);
-			
-			selectedAccountTypeID = null;
-			accountTypeList.setSelection((AccountType) null);
-			setSearchSectionActive(accountTypeActiveButton, false);
-		}
-		else
-		{ // there is a new Query -> the changedFieldList is not null!
-			for (FieldChangeCarrier changedField : event.getChangedFields())
-			{
-				boolean active = isValueIntentionallySet();
-				if (AccountQuery.PROPERTY_MAX_BALANCE.equals(changedField.getPropertyName()))
-				{
-					Long tmpMaxBalance = (Long) changedField.getNewValue();
-					double tmpSpinnerValue = computeDoubleFromQueryValue(
+				Long tmpMaxBalance = (Long) changedField.getNewValue();
+				double tmpSpinnerValue = computeDoubleFromQueryValue(
 						tmpMaxBalance == null ? 0 : tmpMaxBalance, maxBalanceEntry.getSpinnerComposite());
-					maxBalanceEntry.getSpinnerComposite().setValue(tmpSpinnerValue);
-					active |= tmpMaxBalance != null;
-					if (maxBalanceEntry.isActive() != active)
-					{
-						maxBalanceEntry.setActive(active);
-						setSearchSectionActive(active);
-					}
-				}
-				
-				if (AccountQuery.PROPERTY_MIN_BALANCE.equals(changedField.getPropertyName()))
-				{
-					Long tmpMinBalance = (Long) changedField.getNewValue();
-					double tmpSpinnerValue = computeDoubleFromQueryValue(
+				maxBalanceEntry.getSpinnerComposite().setValue(tmpSpinnerValue);
+			}
+			else if (getEnableFieldName(AccountQuery.FieldName.maxBalance).equals(
+					changedField.getPropertyName()))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				maxBalanceEntry.setActive(active);
+				setSearchSectionActive(active);
+			}
+			else if (AccountQuery.FieldName.minBalance.equals(changedField.getPropertyName()))
+			{
+				Long tmpMinBalance = (Long) changedField.getNewValue();
+				double tmpSpinnerValue = computeDoubleFromQueryValue(
 						tmpMinBalance == null ? 0 : tmpMinBalance, minBalanceEntry.getSpinnerComposite());
-					minBalanceEntry.getSpinnerComposite().setValue(tmpSpinnerValue);
-					active |= tmpMinBalance != null;
-					if (minBalanceEntry.isActive() != active)
-					{
-						minBalanceEntry.setActive(active);
-						setSearchSectionActive(active);
-					}
-				}
-				
-				if (AccountQuery.PROPERTY_CURRENCY_ID.equals(changedField.getPropertyName()))
+				minBalanceEntry.getSpinnerComposite().setValue(tmpSpinnerValue);
+			}
+			else if (getEnableFieldName(AccountQuery.FieldName.minBalance).equals(
+					changedField.getPropertyName()))
+			{
+				boolean active = (Boolean) changedField.getNewValue();
+				minBalanceEntry.setActive(active);
+				setSearchSectionActive(active);
+			}
+			else if (AccountQuery.FieldName.currencyID.equals(changedField.getPropertyName()))
+			{
+				CurrencyID currencyID = (CurrencyID) changedField.getNewValue();
+				currencyCombo.setSelectedCurrency(currencyID);
+			}
+			else if (getEnableFieldName(AccountQuery.FieldName.currencyID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				currencyCombo.setEnabled(active);
+				setSearchSectionActive(activeCurrencyButton, active);
+			}
+			else if (AccountQuery.FieldName.accountTypeID.equals(changedField.getPropertyName()))
+			{
+				AccountTypeID accountTypeID = (AccountTypeID) changedField.getNewValue();
+				if (accountTypeID == null)
 				{
-					CurrencyID currencyID = (CurrencyID) changedField.getNewValue();
-					currencyCombo.setSelectedCurrency(currencyID);
-					
-					active |= currencyID != null;
-					currencyCombo.setEnabled(active);
-					setSearchSectionActive(activeCurrencyButton, active);
+					accountTypeList.setSelection((AccountType) null);
 				}
-				
-				if (AccountQuery.PROPERTY_ACCOUNT_TYPE_ID.equals(changedField.getPropertyName()))
+				else
 				{
-					AccountTypeID accountTypeID = (AccountTypeID) changedField.getNewValue();
-					if (accountTypeID == null)
-					{
-						accountTypeList.setSelection((AccountType) null);
-					}
-					else
-					{
-						final AccountType newAccountType = AccountTypeDAO.sharedInstance().getAccountType(
+					final AccountType newAccountType = AccountTypeDAO.sharedInstance().getAccountType(
 							accountTypeID, ACCOUNT_TYPE_FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-						);
-						accountTypeList.setSelection(newAccountType);
-					}
-					
-					active |= accountTypeID != null;
-					accountTypeList.setEnabled(active);
-					setSearchSectionActive(accountTypeActiveButton, active);
+					);
+					accountTypeList.setSelection(newAccountType);
 				}
-				
-				if (AccountQuery.PROPERTY_OWNER_ID.equals(changedField.getPropertyName()))
+			}
+			else if (getEnableFieldName(AccountQuery.FieldName.accountTypeID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				accountTypeList.setEnabled(active);
+				setSearchSectionActive(accountTypeActiveButton, active);
+			}
+			else if (AccountQuery.FieldName.ownerID.equals(changedField.getPropertyName()))
+			{
+				AnchorID ownerID = (AnchorID) changedField.getNewValue();
+				if (ownerID == null)
 				{
-					AnchorID ownerID = (AnchorID) changedField.getNewValue();
-					if (ownerID == null)
-					{
-						ownerText.setText(""); //$NON-NLS-1$
-					}
-					else
-					{
-						final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
+					ownerText.setText(""); //$NON-NLS-1$
+				}
+				else
+				{
+					final LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(
 							ownerID,
 							new String[] {LegalEntity.FETCH_GROUP_PERSON, FetchPlan.DEFAULT},
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-						);
-						ownerText.setText(legalEntity.getPerson().getDisplayName());
-					}
-					active |= ownerID != null;
-					ownerText.setEnabled(active);
-					ownerBrowseButton.setEnabled(active);
-					setSearchSectionActive(ownerActiveButton, active);
+					);
+					ownerText.setText(legalEntity.getPerson().getDisplayName());
 				}
-			} // for (FieldChangeCarrier changedField : event.getChangedFields())			
-		} // changedQuery != null		
+			}
+			else if (getEnableFieldName(AccountQuery.FieldName.ownerID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				ownerText.setEnabled(active);
+				ownerBrowseButton.setEnabled(active);
+				setSearchSectionActive(ownerActiveButton, active);
+			}
+		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
-	
+
 }
