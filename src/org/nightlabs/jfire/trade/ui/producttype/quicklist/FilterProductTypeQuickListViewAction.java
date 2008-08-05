@@ -47,6 +47,7 @@ import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactory;
 import org.nightlabs.jfire.base.ui.overview.search.QueryFilterFactoryRegistry;
 import org.nightlabs.jfire.base.ui.search.QueryFilterDialog;
 import org.nightlabs.jfire.query.store.BaseQueryStore;
+import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
@@ -121,7 +122,7 @@ implements IViewActionDelegate
 									{
 										monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.FilterProductTypeQuickListViewAction.job.saveLastChanges"), 100); //$NON-NLS-1$
 										UserID userID = Login.sharedInstance().getUserObjectID();
-										BaseQueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+										QueryStore defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
 												queryCollection.getResultClass(), userID,
 												FETCH_GROUPS_QUERY_STORE_LOAD,
 												NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,

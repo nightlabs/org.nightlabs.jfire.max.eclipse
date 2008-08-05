@@ -48,6 +48,7 @@ import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.query.store.BaseQueryStore;
+import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -291,7 +292,7 @@ implements IProductTypeQuickListFilter
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.loadQuery"), 100); //$NON-NLS-1$
 		if (queryCollection == null)
 		{
-			BaseQueryStore defaultQueryStore;
+			QueryStore defaultQueryStore;
 			// TODO this should be done in the server in order to make it [nearly] impossible that 2 defaults are created!
 			synchronized (AbstractProductTypeQuickListFilter.class) { // prevent having 2 defaultQueryStores due to multiple threads
 				defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
