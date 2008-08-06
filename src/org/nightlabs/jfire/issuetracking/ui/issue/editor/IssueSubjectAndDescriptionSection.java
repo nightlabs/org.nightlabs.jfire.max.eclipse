@@ -55,7 +55,6 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		descriptionLabel.setText("Description:");
 		
 		descriptionText = new I18nTextEditorMultiLine(getClient(), subjectText.getLanguageChooser());		
-		((GridData) descriptionText.getLayoutData()).heightHint = 80;
 		descriptionText.addModifyListener(modifyListener);
 		descriptionText.setEditable(false);
 	}
@@ -63,7 +62,7 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 	protected void doSetIssue(Issue issue) {
 		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
-		
+		((GridData) descriptionText.getLayoutData()).heightHint = descriptionLabel.getBounds().height * 10;
 	}
 
 //	@Override
