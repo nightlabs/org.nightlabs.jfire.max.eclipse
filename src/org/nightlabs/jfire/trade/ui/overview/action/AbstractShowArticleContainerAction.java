@@ -28,12 +28,6 @@ extends AbstractArticleContainerAction
 		init();
 	}
 		
-//	public AbstractShowArticleContainerAction(OverviewEntryEditor editor)
-//	{
-//		super(editor);
-//		init();
-//	}
-	
 	protected void init() {
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainerAction.text")); //$NON-NLS-1$
@@ -77,14 +71,13 @@ extends AbstractArticleContainerAction
 	 */
 	protected void prepareParams(Map<String, Object> params) {
 		params.put("articleContainerID", getArticleContainerID()); //$NON-NLS-1$
-//		params.put("articleContainerID", JFireReportingHelper.createDataSetParam(getArticleContainerID())); //$NON-NLS-1$
 	}
 	
 	/**
-	 * Returns the Report registry type that should be used to
+	 * Returns the report registry type that should be used to
 	 * show the selected {@link ArticleContainer}.
 	 * 
-	 * @return The Report registry type that should be used to
+	 * @return The report registry type that should be used to
 	 * show the selected {@link ArticleContainer}.
 	 */
 	protected abstract String getReportRegistryItemType();

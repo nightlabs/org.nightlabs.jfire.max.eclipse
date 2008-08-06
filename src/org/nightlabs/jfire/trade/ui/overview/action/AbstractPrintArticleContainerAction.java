@@ -6,31 +6,39 @@ import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
+ * Abstract action that prints an '{@link ArticleContainer}-report' of a certain category, 
+ * i.e. an offer-layout, invoice-layout etc. 
+ * The category of the the report has to be provided by the implementation class (see {@link #getReportRegistryItemType()}). 
+ * <p>
+ * The only parameter of the rendered reports is assumed to have the name "articleContainerID" 
+ * and be of type {@link OrderID}, {@link OfferID}, {@link InvoiceID} etc.
+ * If you want to override this behaviour, override {@link #prepareParams(Map)}.
+ * </p>
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public abstract class AbstractPrintArticleContainerAction
 extends AbstractArticleContainerAction
 {
 	public static final String ID = AbstractPrintArticleContainerAction.class.getName();
+	public static final String PARAMETER_ID_ARTICLE_CONTAINER_ID = "articleContainerID";
 
 	public AbstractPrintArticleContainerAction() {
 		super();
 		init();
 	}
 	
-//	public AbstractPrintArticleContainerAction(OverviewEntryEditor editor) {
-//		super(editor);
-//		init();
-//	}
-
 	protected void init() {
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractPrintArticleContainerAction.text")); //$NON-NLS-1$
@@ -62,6 +70,25 @@ extends AbstractArticleContainerAction
 		printReportAction.runWithRegistryItemIDs(itemIDs);
 	}
 	
-	protected abstract void prepareParams(Map<String, Object> params);
+	/**
+	 * Prepare the parameter for the ReportLayout in order to print
+	 * the selected {@link ArticleContainer}.
+	 * The default implementation puts {@link #getArticleContainerID()}
+	 * with the key "articleContainerID" into the map.
+	 * Override to customize this behaviour;
+	 * 
+	 * @param params The params that will be passed to the {@link AbstractPrintReportLayoutAction}
+	 */
+	protected void prepareParams(Map<String, Object> params) {
+		params.put(PARAMETER_ID_ARTICLE_CONTAINER_ID, getArticleContainerID());
+	}
+	
+	/**
+	 * Returns the report registry type that should be used to
+	 * show the selected {@link ArticleContainer}.
+	 * 
+	 * @return The report registry type that should be used to
+	 * show the selected {@link ArticleContainer}.
+	 */ 
 	protected abstract String getReportRegistryItemType();
 }
