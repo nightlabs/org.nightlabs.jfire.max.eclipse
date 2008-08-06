@@ -54,17 +54,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -150,10 +146,7 @@ implements IPaymentEntryPage
 	private Payment payment;
 	
 	private TradePrintingConfigModule tradePrintingCfMod = null;
-	private Button printInvoiceCheckbox;
-	private Spinner printInvoiceCountSpinner;
-	private Label printingInfoLabel;
-	private int invoicesToBePrintedCount = 0;
+	private AutomaticPrintingOptionsGroup automaticPrintingGroup;
 
 	public PaymentEntryPage(Payment payment)
 	{
@@ -358,41 +351,48 @@ implements IPaymentEntryPage
 //				}
 //			});
 			
-			Group printGroup = new Group(page, SWT.BORDER);
-			printGroup.setText("Invoice printing options");
-			printGroup.setLayout(new GridLayout(3, false));
-			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-			gridData.verticalIndent = 10;
-			printGroup.setLayoutData(gridData);
-			XComposite wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-			new Label(wrapper, SWT.NONE).setText("Print invoice: ");
+			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, "Invoice printing options", "invoice", null);
 			
-			printInvoiceCheckbox = new Button(wrapper, SWT.CHECK);
-			wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-			new Label(wrapper, SWT.NONE).setText("Copies: ");
-			printInvoiceCountSpinner = new Spinner(wrapper, SWT.BORDER);
-			printInvoiceCountSpinner.setMinimum(0);
-			printInvoiceCountSpinner.setMaximum(-1);
-			printInvoiceCountSpinner.setDigits(0);
-			printInvoiceCountSpinner.setIncrement(1);
-			printingInfoLabel = new Label(printGroup, SWT.RIGHT);
-			printingInfoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//			GridData gridData = new GridData(SWT.LEFTData(GridData.FILL_HORIZONTAL), SWT.CENTER, true, false, 2, 1);
-//			printingInfoLabel.setLayoutData(gridData);
-			
-			printInvoiceCheckbox.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					updateInvoicesToBePrinted();
-				}
-			});
-			printInvoiceCountSpinner.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					printInvoiceCheckbox.setSelection(printInvoiceCountSpinner.getSelection() != 0);
-					updateInvoicesToBePrinted();
-				}
-			});
+//			Group printGroup = new Group(page, SWT.BORDER);
+//			printGroup.setText("Invoice printing options");
+//			printGroup.setLayout(new GridLayout(3, false));
+//			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+//			gridData.verticalIndent = 10;
+//			printGroup.setLayoutData(gridData);
+//			XComposite wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+//
+//			printInvoiceCheckbox = new Button(wrapper, SWT.CHECK);
+//			printInvoiceCheckbox.setText("Print invoice");
+//			wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
+//			Label label = new Label(wrapper, SWT.NONE);
+//			gridData = new GridData(GridData.FILL_HORIZONTAL);
+//			gridData.horizontalIndent = 20;
+//			label.setLayoutData(gridData);
+//			label.setText("Copies ");
+//
+//			printInvoiceCountSpinner = new Spinner(wrapper, SWT.BORDER);
+//			printInvoiceCountSpinner.setMinimum(0);
+//			printInvoiceCountSpinner.setMaximum(-1);
+//			printInvoiceCountSpinner.setDigits(0);
+//			printInvoiceCountSpinner.setIncrement(1);
+//			printingInfoLabel = new Label(printGroup, SWT.RIGHT);
+//			printingInfoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+////			GridData gridData = new GridData(SWT.LEFTData(GridData.FILL_HORIZONTAL), SWT.CENTER, true, false, 2, 1);
+////			printingInfoLabel.setLayoutData(gridData);
+//
+//			printInvoiceCheckbox.addSelectionListener(new SelectionAdapter() {
+//				@Override
+//				public void widgetSelected(SelectionEvent e) {
+//					updateInvoicesToBePrinted();
+//				}
+//			});
+//			printInvoiceCountSpinner.addSelectionListener(new SelectionAdapter() {
+//				@Override
+//				public void widgetSelected(SelectionEvent e) {
+//					printInvoiceCheckbox.setSelection(printInvoiceCountSpinner.getSelection() != 0);
+//					updateInvoicesToBePrinted();
+//				}
+//			});
 			
 			loadModeOfPayments();
 
@@ -404,20 +404,6 @@ implements IPaymentEntryPage
 		}
 	}
 	
-	private void updateInvoicesToBePrinted() {
-		if (!printInvoiceCheckbox.getSelection())
-			invoicesToBePrintedCount = 0;
-		else
-			invoicesToBePrintedCount = printInvoiceCountSpinner.getSelection();
-		
-		if (invoicesToBePrintedCount == 0)
-			printingInfoLabel.setText("No invoice will be printed.");
-		else {
-			String copyText = invoicesToBePrintedCount == 1 ? "copy" : "copies";
-			printingInfoLabel.setText(String.format("%d %s of the invoice will be printed.", invoicesToBePrintedCount, copyText));
-		}
-	}
-
 	protected PaymentWizardHop getPaymentWizardHop()
 	{
 		return (PaymentWizardHop) getWizardHop();
@@ -489,10 +475,9 @@ implements IPaymentEntryPage
 							modeOfPaymentFlavourGUIListSelectionChanged();
 						}
 						
-						if (printInvoiceCheckbox != null) {
-							printInvoiceCheckbox.setSelection(tradePrintingCfMod.isPrintInvoiceByDefault());
-							printInvoiceCountSpinner.setSelection(tradePrintingCfMod.getInvoiceCopyCount());
-							updateInvoicesToBePrinted();
+						if (automaticPrintingGroup != null) {
+							automaticPrintingGroup.setEnteredPrintCount(tradePrintingCfMod.getInvoiceCopyCount());
+							automaticPrintingGroup.setDoPrint(tradePrintingCfMod.isPrintInvoiceByDefault());
 						}
 					}
 				});
@@ -1042,7 +1027,7 @@ implements IPaymentEntryPage
 	}
 	
 	public int getInvoicesToPrintCount() {
-		return invoicesToBePrintedCount;
+		return automaticPrintingGroup.getActualPrintCount();
 	}
 
 //	/**

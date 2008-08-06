@@ -51,17 +51,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
@@ -137,11 +132,8 @@ implements IDeliveryEntryPage
 	private ClientDeliveryProcessor clientDeliveryProcessor = null;
 	private ServerDeliveryProcessor selectedServerDeliveryProcessor = null;
 	
-	private Button printDeliveryNoteCheckbox = null;
-	private Spinner printDeliveryNoteCountSpinner = null;
 	private TradePrintingConfigModule tradePrintingCfMod = null;
-	private Label printingInfoLabel;
-	private int deliveryNotesToBePrintedCount;
+	private AutomaticPrintingOptionsGroup automaticPrintingGroup = null;
 	
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
@@ -237,57 +229,11 @@ implements IDeliveryEntryPage
 			}
 		});
 		
-		Group printGroup = new Group(page, SWT.BORDER);
-		printGroup.setText("Delivery note printing options");
-		printGroup.setLayout(new GridLayout(3, false));
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.verticalIndent = 10;
-		printGroup.setLayoutData(gridData);
-		XComposite wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-		new Label(wrapper, SWT.NONE).setText("Print delivery note: ");
-		
-		printDeliveryNoteCheckbox = new Button(wrapper, SWT.CHECK);
-		wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-		new Label(wrapper, SWT.NONE).setText("Copies: ");
-		printDeliveryNoteCountSpinner = new Spinner(wrapper, SWT.BORDER);
-		printDeliveryNoteCountSpinner.setMinimum(0);
-		printDeliveryNoteCountSpinner.setMaximum(-1);
-		printDeliveryNoteCountSpinner.setDigits(0);
-		printDeliveryNoteCountSpinner.setIncrement(1);
-		printingInfoLabel = new Label(printGroup, SWT.RIGHT);
-		printingInfoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		printDeliveryNoteCheckbox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateDeliveryNotesToBePrinted();
-			}
-		});
-		printDeliveryNoteCountSpinner.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				printDeliveryNoteCheckbox.setSelection(printDeliveryNoteCountSpinner.getSelection() != 0);
-				updateDeliveryNotesToBePrinted();
-			}
-		});
+		automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, "Delivery note printing options", "delivery note", null);
 		
 		loadModeOfDeliveries();
 
 		return page;
-	}
-	
-	private void updateDeliveryNotesToBePrinted() {
-		if (!printDeliveryNoteCheckbox.getSelection())
-			deliveryNotesToBePrintedCount = 0;
-		else
-			deliveryNotesToBePrintedCount = printDeliveryNoteCountSpinner.getSelection();
-		
-		if (deliveryNotesToBePrintedCount == 0)
-			printingInfoLabel.setText("No DeliveryNote will be printed.");
-		else {
-			String copyText = deliveryNotesToBePrintedCount == 1 ? "copy" : "copies";
-			printingInfoLabel.setText(String.format("%d %s of the delivery note will be printed.", deliveryNotesToBePrintedCount, copyText));
-		}
 	}
 	
 	protected static String sessionLastSelectedMOPFPK = null;
@@ -650,10 +596,9 @@ implements IDeliveryEntryPage
 							modeOfDeliveryFlavourGUIListSelectionChanged();
 						}
 						
-						if (printDeliveryNoteCheckbox != null) {
-							printDeliveryNoteCheckbox.setSelection(tradePrintingCfMod.isPrintDeliveryNoteByDefault());
-							printDeliveryNoteCountSpinner.setSelection(tradePrintingCfMod.getDeliveryNoteCopyCount());
-							updateDeliveryNotesToBePrinted();
+						if (automaticPrintingGroup != null) {
+							automaticPrintingGroup.setEnteredPrintCount(tradePrintingCfMod.getDeliveryNoteCopyCount());
+							automaticPrintingGroup.setDoPrint(tradePrintingCfMod.isPrintDeliveryNoteByDefault());
 						}
 					}
 				});
@@ -667,6 +612,6 @@ implements IDeliveryEntryPage
 	}
 	
 	public int getDeliveryNotesToPrintCount() {
-		return deliveryNotesToBePrintedCount;
+		return automaticPrintingGroup.getActualPrintCount();
 	}
 }
