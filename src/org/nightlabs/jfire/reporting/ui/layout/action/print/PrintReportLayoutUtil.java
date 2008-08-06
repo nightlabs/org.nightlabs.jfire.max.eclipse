@@ -151,10 +151,11 @@ public class PrintReportLayoutUtil {
 		monitor.setTaskName(Messages.getString("org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil.saveProgressMonitor.lookupPrinterUseCaseTask.name")); //$NON-NLS-1$
 		ReportViewPrintConfigModule cfMod = ReportViewPrintConfigModule.sharedInstance();
 		UseCaseConfig useCaseConfig = cfMod.getReportUseCaseConfigs().get(reportUseCaseID);
-		if (useCaseConfig.getPrinterUseCase() != null)
+		if (useCaseConfig.getPrinterUseCase() != null && !"".equals(useCaseConfig.getPrinterUseCase()))
+			// a specific printer use-case was selected for the report use-case => use this configuration
 			printFile(preparedLayout.getEntryFile(), useCaseConfig.getPrinterUseCase(), monitor);
 		else {
-			logger.warn("No printerUseCase was configured for reportUseCase "+reportUseCaseID+", trying to print to defaultPrinterUseCase"); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.info("No printerUseCase was configured for reportUseCase "+reportUseCaseID+", trying to print to defaultPrinterUseCase"); //$NON-NLS-1$ //$NON-NLS-2$
 			printFile(preparedLayout.getEntryFile(), PrinterUseCase.DEFAULT_USE_CASE_ID, monitor);
 		}
 	}

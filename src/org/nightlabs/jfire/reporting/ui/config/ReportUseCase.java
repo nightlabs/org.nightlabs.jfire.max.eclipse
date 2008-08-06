@@ -28,9 +28,20 @@ package org.nightlabs.jfire.reporting.ui.config;
 
 import java.util.Set;
 
+import org.nightlabs.base.ui.print.PrinterUseCase;
+import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+
 /**
+ * {@link ReportUseCase}s are used to declare the different use-cases where 
+ * reports are shown/printed in JFire. {@link ReportUseCase}s are purely 
+ * declarative and are registered using the <code>org.nightlabs.jfire.reporting.ui.reportUseCase</code> 
+ * extension-point. 
+ * <p>
+ * {@link ReportUseCase}s are not intended to be use instantiated by client
+ * code, they are managed by the {@link ReportUseCaseRegistry}.
+ * </p>
+ * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
  */
 public class ReportUseCase {
 
@@ -43,14 +54,14 @@ public class ReportUseCase {
 
 
 	/**
-	 *
+	 * Create a new {@link ReportUseCase}.
 	 */
 	public ReportUseCase() {
 	}
 
 
 	/**
-	 * @return the description
+	 * @return A human readable description of this report use-case.
 	 */
 	public String getDescription() {
 		return description;
@@ -58,7 +69,7 @@ public class ReportUseCase {
 
 
 	/**
-	 * @param description the description to set
+	 * @param description The description to set.
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -66,7 +77,7 @@ public class ReportUseCase {
 
 
 	/**
-	 * @return the id
+	 * @return The unique id of this report use-case.
 	 */
 	public String getId() {
 		return id;
@@ -74,7 +85,7 @@ public class ReportUseCase {
 
 
 	/**
-	 * @param id the id to set
+	 * @param id The id to set.
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -82,7 +93,7 @@ public class ReportUseCase {
 
 
 	/**
-	 * @return the name
+	 * @return The rather short name of this use-case.
 	 */
 	public String getName() {
 		return name;
@@ -90,14 +101,14 @@ public class ReportUseCase {
 
 
 	/**
-	 * @param name the name to set
+	 * @param name The name to set.
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * @return the reportLayoutType
+	 * @return The reportLayoutType (part of {@link ReportRegistryItemID}) this use-case represents the usage of.
 	 */
 	public String getReportLayoutType() {
 		return reportLayoutType;
@@ -105,30 +116,37 @@ public class ReportUseCase {
 
 
 	/**
-	 * @param reportLayoutType the reportLayoutType to set
+	 * @param reportLayoutType The reportLayoutType to set.
 	 */
 	public void setReportLayoutType(String reportLayoutType) {
 		this.reportLayoutType = reportLayoutType;
 	}
 
 	/**
-	 * @return the defaultPrinterUseCase
+	 * @return The id of the default {@link PrinterUseCase} that should be used for this report use-case.
 	 */
 	public String getDefaultPrinterUseCase() {
 		return defaultPrinterUseCase;
 	}
 
 	/**
-	 * @param defaultPrinterUseCase the defaultPrinterUseCase to set
+	 * @param defaultPrinterUseCase The defaultPrinterUseCase to set.
 	 */
 	public void setDefaultPrinterUseCase(String defaultPrinterUseCase) {
 		this.defaultPrinterUseCase = defaultPrinterUseCase;
 	}
 
+	/**
+	 * @return The (minimum/all) classes this {@link ReportUseCase} consumers of this use-case
+	 * should be adaptable to. (e.g. Composite). 
+	 */
 	public Set<Class<?>> getMinAdapterClasses() {
 		return minAdapterClasses;
 	}
 
+	/**
+	 * @param minAdapterClasses The minAdapterClasses to set.
+	 */
 	public void setMinAdapterClasses(Set<Class<?>> minAdapterClasses) {
 		this.minAdapterClasses = minAdapterClasses;
 	}
