@@ -5,7 +5,11 @@ import java.util.Date;
 
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -118,19 +122,35 @@ extends AbstractIssueEditorGeneralSection
 
 		if (issue.isStarted()) {
 			startStopButton.setText("Stop");
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
+
+
+			Job job = new Job("Checking User...") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						boolean canStop = issue.getAssignee().equals(
+						final boolean canStop = issue.getAssignee().equals(
 								Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, 
 										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
-						startStopButton.setEnabled(canStop);
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								try {
+									startStopButton.setEnabled(canStop);
+								}
+								catch (Exception e) {
+									throw new RuntimeException(e);
+								}
+							}
+						});
 					}
 					catch (Exception e) {
 						throw new RuntimeException(e);
 					}
+					monitor.done();
+					return Status.OK_STATUS;
 				}
-			});
+			};
+			
+			job.schedule();
 		}
 		else 
 			startStopButton.setText("Start");
