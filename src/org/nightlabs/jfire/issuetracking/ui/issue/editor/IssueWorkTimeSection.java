@@ -4,14 +4,11 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import javax.jdo.JDOHelper;
-import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -19,8 +16,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -121,13 +118,19 @@ extends AbstractIssueEditorGeneralSection
 
 		if (issue.isStarted()) {
 			startStopButton.setText("Stop");
-			try {
-				boolean canStop = issue.getAssignee().equals(Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
-				startStopButton.setEnabled(canStop);
-			} catch (LoginException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					try {
+						boolean canStop = issue.getAssignee().equals(
+								Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, 
+										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+						startStopButton.setEnabled(canStop);
+					}
+					catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			});
 		}
 		else 
 			startStopButton.setText("Start");
@@ -165,12 +168,12 @@ extends AbstractIssueEditorGeneralSection
 		public void run() 
 		{
 			Dialog dialog = new Dialog(getSection().getShell()) {
-				
+
 				@Override
 				protected void setShellStyle(int newShellStyle) {
 					super.setShellStyle(getShellStyle() | SWT.RESIZE);
 				}
-				
+
 				@Override
 				protected Control createDialogArea(Composite parent) {
 					Composite container = (Composite) super.createDialogArea(parent);
