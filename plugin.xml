@@ -245,9 +245,18 @@
             name="Standard - DeliveryNote" segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
     </extension>
     <extension point="org.eclipse.ui.preferencePages">
+	    <page
+            class="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
+            id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
+            name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
+        <page
+            class="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
+            name="%org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage.name"/>
         <page
             class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
+            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
+            name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
         <page
               class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
               id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
@@ -966,11 +975,6 @@
         <quickSearchEntryFactory
             class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
             id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer" name="%org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer.name"/>
-    </extension>
-    <extension point="org.eclipse.ui.preferencePages">
-        <page
-            class="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
-            id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage" name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.exceptionhandler">
         <exceptionHandler
