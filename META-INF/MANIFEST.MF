@@ -19,7 +19,6 @@ Export-Package: org.nightlabs.jfire.reporting.admin.ui,
  org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n,
  org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview,
  org.nightlabs.jfire.reporting.admin.ui.oda,
- org.nightlabs.jfire.reporting.admin.ui.oda.jdojs.ui,
  org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui,
  org.nightlabs.jfire.reporting.admin.ui.platform
 Require-Bundle: org.eclipse.ui,
