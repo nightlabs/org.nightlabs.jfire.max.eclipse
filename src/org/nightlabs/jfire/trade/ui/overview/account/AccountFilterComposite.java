@@ -308,7 +308,7 @@ public class AccountFilterComposite
 		job.schedule();
 	}
 
-	private static final String ACCOUNT_GROUP_ID = "AccountFilterComposite";
+	private static final String ACCOUNT_GROUP_ID = "AccountFilterComposite"; //$NON-NLS-1$
 	private static Set<String> fieldNames;
 	static
 	{

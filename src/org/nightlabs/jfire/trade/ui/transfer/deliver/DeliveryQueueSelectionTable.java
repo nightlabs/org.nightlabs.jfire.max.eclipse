@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 class DeliveryQueueSelectionTable extends AbstractTableComposite<DeliveryQueue> {
 
@@ -22,7 +23,7 @@ class DeliveryQueueSelectionTable extends AbstractTableComposite<DeliveryQueue> 
 		table.setLayout(new WeightedTableLayout(new int[] { 1 }));
 		table.setHeaderVisible(true);
 		TableColumn column = new TableColumn(table, SWT.LEFT);
-		column.setText("Delivery Queue Name");
+		column.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueSelectionTable.column.deliveryQueueName.text")); //$NON-NLS-1$
 //
 //		column = new TableColumn(table, SWT.LEFT);
 //		column.setText("# Pending Deliveries");

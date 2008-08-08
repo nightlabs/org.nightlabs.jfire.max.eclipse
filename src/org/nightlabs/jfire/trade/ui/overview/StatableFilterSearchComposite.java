@@ -322,7 +322,7 @@ public class StatableFilterSearchComposite
 		fillStateComboJob.schedule();
 	}
 
-	private static final String STATABLE_GROUP_ID = "StatableFilterGroup";
+	private static final String STATABLE_GROUP_ID = "StatableFilterGroup"; //$NON-NLS-1$
 	private static final Set<String> fieldNames;
 	static
 	{
@@ -351,7 +351,7 @@ public class StatableFilterSearchComposite
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("This method must be invoked on the SWT UI thread!");
+			throw new IllegalStateException("This method must be invoked on the SWT UI thread!"); //$NON-NLS-1$
 
 		for (FieldChangeCarrier fieldChange : changedFields)
 		{

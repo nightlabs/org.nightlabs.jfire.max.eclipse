@@ -92,6 +92,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.Article
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -290,7 +291,7 @@ implements ISelectionProvider
 		}
 	}
 
-	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterJob("") {
+	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 			if (event.getSubjects().isEmpty())
 				setPartnerID(null, true, getProgressMonitorWrapper());
@@ -304,9 +305,9 @@ implements ISelectionProvider
 	public void setPartnerID(final AnchorID partnerID, final boolean closeEditorsOfOtherPartners, ProgressMonitor monitor)
 	{
 		if (Display.getCurrent() != null)
-			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!");
+			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
 
-		monitor.beginTask("Loading business partner", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite.monitor.taskName.loadingBusinessPartner"), 100); //$NON-NLS-1$
 		setPartnerIDInvocationID = partnerID;
 		try {
 			TradeManager tm = partnerID == null ? null : TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
@@ -360,7 +361,7 @@ implements ISelectionProvider
 			return;
 
 		if (myOrganisationLegalEntity == null)
-			throw new IllegalStateException("myOrganisationLegalEntity is null!");
+			throw new IllegalStateException("myOrganisationLegalEntity is null!"); //$NON-NLS-1$
 
 		this.partner = partner;
 		AnchorID partnerAnchorID = (AnchorID) JDOHelper.getObjectId(partner);
@@ -445,14 +446,14 @@ implements ISelectionProvider
 	public OrganisationLegalEntity getMyOrganisationLegalEntity()
 	{
 		if (myOrganisationLegalEntity == null)
-			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!");
+			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!"); //$NON-NLS-1$
 
 		return myOrganisationLegalEntity;
 	}
 	public AnchorID getMyOrganisationLegalEntityID()
 	{
 		if (myOrganisationLegalEntity == null)
-			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!");
+			throw new IllegalStateException("myOrganisationLegalEntity not yet initialised!"); //$NON-NLS-1$
 
 		return (AnchorID)JDOHelper.getObjectId(myOrganisationLegalEntity);
 	}

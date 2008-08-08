@@ -32,7 +32,7 @@ public abstract class AbstractPrintArticleContainerAction
 extends AbstractArticleContainerAction
 {
 	public static final String ID = AbstractPrintArticleContainerAction.class.getName();
-	public static final String PARAMETER_ID_ARTICLE_CONTAINER_ID = "articleContainerID";
+	public static final String PARAMETER_ID_ARTICLE_CONTAINER_ID = "articleContainerID"; //$NON-NLS-1$
 
 	public AbstractPrintArticleContainerAction() {
 		super();

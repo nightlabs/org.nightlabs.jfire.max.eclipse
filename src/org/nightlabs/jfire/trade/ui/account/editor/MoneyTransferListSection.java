@@ -38,7 +38,7 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 	private ManualMoneyTransferAction transferMoneyAction;
 
 	public MoneyTransferListSection(FormPage page, Composite parent, MoneyTransferPageController controller) {
-		super(page, parent,	ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Section Title");
+		super(page, parent,	ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.section.title")); //$NON-NLS-1$
 		this.controller = controller;
 		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.sectionTitle")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -133,9 +133,9 @@ public class MoneyTransferListSection extends ToolBarSectionPart{
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					TradePlugin.getDefault(), 
 					MoneyTransferListSection.class, 
-			"Transfer"));
-			setToolTipText("Transfer Money");
-			setText("Transfer Money");
+			"Transfer")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.action.toolitp")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.MoneyTransferListSection.action.text")); //$NON-NLS-1$
 		}
 
 		@Override

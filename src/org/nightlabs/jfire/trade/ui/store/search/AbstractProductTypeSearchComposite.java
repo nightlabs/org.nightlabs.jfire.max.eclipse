@@ -195,7 +195,7 @@ public abstract class AbstractProductTypeSearchComposite
 				});
 
 				if (queryProvider == null)
-					throw new RuntimeException("queryProvider must NOT be null at this point of time!");
+					throw new RuntimeException("queryProvider must NOT be null at this point of time!"); //$NON-NLS-1$
 
 				AbstractProductTypeQuery productTypeQuery = queryProvider.getQueryOfType(getQueryClass());
 				// ignore user input on the saleable flag, everything else doesn't make sense!

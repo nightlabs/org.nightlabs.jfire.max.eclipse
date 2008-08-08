@@ -80,7 +80,7 @@ public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQue
 		productTypeGroupComp = new ActiveTextComposite(this, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.productTypeGroupGroup.text"), //$NON-NLS-1$
 				productTypeGroupActiveListener, productTypeGroupBrowseListener);
 		Group statesGroup = new Group(this, SWT.NONE);
-		statesGroup.setText("Product Type States");
+		statesGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchCriteriaComposite.group.productTypeStates.text")); //$NON-NLS-1$
 		statesGroup.setLayout(new GridLayout());
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.horizontalSpan = 2;
@@ -137,7 +137,7 @@ public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQue
 		return selectedProductTypeGroupID;
 	}
 
-	private static final String ProductType_Group_ID = "ProductTypeSearchCriteriaComposite";
+	private static final String ProductType_Group_ID = "ProductTypeSearchCriteriaComposite"; //$NON-NLS-1$
 	private static final Set<String> fieldNames;
 	static
 	{

@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
 import org.nightlabs.jfire.trade.config.OfferConfigModule;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class OfferCfModPrefPageComposite extends XComposite
 {
@@ -28,13 +29,13 @@ public class OfferCfModPrefPageComposite extends XComposite
 
 		{
 			Group group = new Group(this, SWT.NONE);
-			group.setText("Expiry duration of unfinalized offer");
+			group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPageComposite.group.expiryDurationUnfinalizedOffer.text")); //$NON-NLS-1$
 			group.setLayout(new GridLayout());
 			group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			Label label = new Label(group, SWT.WRAP);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			label.setText("An offer which is not yet finalized will expire after this duration.\n\nThe time is calculated after the last modification, if the timestamp is set to be automatically managed in the individual offer. If the expiry timestamp is not managed, the time is manually entered or - if not changed by the user - calculated from the creation time of the offer.");
+			label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPageComposite.label.expiryDurationUnfinalizedOffer")); //$NON-NLS-1$
 
 			expiryDurationUnfinalized = new TimeLengthComposite(group);
 			expiryDurationUnfinalized.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -49,13 +50,13 @@ public class OfferCfModPrefPageComposite extends XComposite
 
 		{
 			Group group = new Group(this, SWT.NONE);
-			group.setText("Expiry duration of finalized offer");
+			group.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPageComposite.group.expiryDurationFinalizedOffer.text")); //$NON-NLS-1$
 			group.setLayout(new GridLayout());
 			group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 			Label label = new Label(group, SWT.WRAP);
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			label.setText("An offer which is already finalized will expire after this duration, if not accepted by the customer in the mean time.\n\nThe time is calculated after the finalization, if the timestamp is set to be automatically managed in the individual offer. If the expiry timestamp is not managed, the time is manually entered or - if not changed by the user - calculated from the creation time of the offer.");
+			label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPageComposite.label.expiryDurationFinalizedOffer")); //$NON-NLS-1$
 
 			expiryDurationFinalized = new TimeLengthComposite(group);
 			expiryDurationFinalized.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

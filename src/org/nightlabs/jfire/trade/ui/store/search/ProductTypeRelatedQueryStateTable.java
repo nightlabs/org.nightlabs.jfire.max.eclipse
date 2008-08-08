@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.util.JFaceUtil;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.store.search.ISaleAccessQuery;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Simple Table displaying a Collection of ProductTypeStateDescriptions of an
@@ -53,13 +54,13 @@ public class ProductTypeRelatedQueryStateTable
 	{
 		table.setLayout(new WeightedTableLayout(new int[] { 2, 8 }));
 		TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
-		column.getColumn().setText("filtered");
+		column.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.filtered.text")); //$NON-NLS-1$
 		column.setLabelProvider(new ColumnLabelProvider()
 		{
 			@Override
 			public String getText(Object element)
 			{
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 
 			@Override
@@ -128,7 +129,7 @@ public class ProductTypeRelatedQueryStateTable
 		});
 
 		column = new TableViewerColumn(tableViewer, SWT.NONE);
-		column.getColumn().setText("State");
+		column.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.state.text")); //$NON-NLS-1$
 		column.setLabelProvider(new ColumnLabelProvider()
 		{
 			@Override
@@ -173,13 +174,13 @@ public class ProductTypeRelatedQueryStateTable
 				final ISaleAccessQuery query = (ISaleAccessQuery) inputElement;
 				ProductTypeStateDescription[] stateDescriptions = new ProductTypeStateDescription[4];
 				stateDescriptions[0] = new ProductTypeStateDescription(
-						query, "Confirmed", AbstractProductTypeQuery.FieldName.confirmed);
+						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.confirmed.text"), AbstractProductTypeQuery.FieldName.confirmed); //$NON-NLS-1$
 				stateDescriptions[1] = new ProductTypeStateDescription(
-						query, "Published", AbstractProductTypeQuery.FieldName.published);
+						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.published.text"), AbstractProductTypeQuery.FieldName.published); //$NON-NLS-1$
 				stateDescriptions[2] = new ProductTypeStateDescription(
-						query, "Saleable", AbstractProductTypeQuery.FieldName.saleable);
+						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.saleable.text"), AbstractProductTypeQuery.FieldName.saleable); //$NON-NLS-1$
 				stateDescriptions[3] = new ProductTypeStateDescription(
-						query, "Closed", AbstractProductTypeQuery.FieldName.closed);
+						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.closed.text"), AbstractProductTypeQuery.FieldName.closed); //$NON-NLS-1$
 				return stateDescriptions;
 			}
 

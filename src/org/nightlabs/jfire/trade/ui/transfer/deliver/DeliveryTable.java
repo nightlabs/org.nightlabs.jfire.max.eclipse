@@ -43,7 +43,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 					Set<DeliveryNoteID> deliveryNoteIDs = delivery.getDeliveryNoteIDs();
 					StringBuilder sb = new StringBuilder();
 					for (DeliveryNoteID deliveryNoteID : deliveryNoteIDs)
-						sb.append(ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)).append(", ");
+						sb.append(ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)).append(", "); //$NON-NLS-1$
 					return sb.substring(0, sb.length()-2);
 				}
 				case 2: {
@@ -54,7 +54,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 					
 					StringBuilder sb = new StringBuilder();
 					for (OrderID orderID : orderIDs) {
-						sb.append(ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)).append(", ");
+						sb.append(ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)).append(", "); //$NON-NLS-1$
 					}
 					return sb.substring(0, sb.length()-2);
 				}
@@ -86,8 +86,8 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.customerNameTableColumn.text")); //$NON-NLS-1$
-		new TableColumn(table, SWT.LEFT).setText("DeliveryNote IDs");
-		new TableColumn(table, SWT.LEFT).setText("Order IDs");
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.column.deliveryNoteIDs")); //$NON-NLS-1$
+		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.column.orderIDs")); //$NON-NLS-1$
 		new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.enqueueDateTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.articleCountTableColumn.text")); //$NON-NLS-1$
 		new TableColumn(table, SWT.RIGHT).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryTable.deliveryIDTableColumn.text")); //$NON-NLS-1$

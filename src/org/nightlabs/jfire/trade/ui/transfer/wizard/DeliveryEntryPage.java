@@ -229,7 +229,7 @@ implements IDeliveryEntryPage
 			}
 		});
 		
-		automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, "Delivery note printing options", "delivery note", null);
+		automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.deliveryNote"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		loadModeOfDeliveries();
 

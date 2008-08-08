@@ -43,10 +43,6 @@ extends Action
 
 	private Shell shell = null;
 
-//	public ReverseProductAction() {
-//		this(null);
-//	}
-
 	public ReverseProductAction(Shell shell) {
 		super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.text"),  //$NON-NLS-1$
 				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), ReverseProductAction.class));
@@ -127,14 +123,6 @@ extends Action
 		};
 		searchJob.schedule();
 	}
-
-//	private Shell getShell() {
-//		return shell != null ? shell : RCPUtil.getActiveShell();
-//	}
-//	
-//	private Display getDisplay() {
-//		return shell != null ? shell.getDisplay() : Display.getDefault(); 
-//	}
 
 	private Shell getShell() {
 		return shell;

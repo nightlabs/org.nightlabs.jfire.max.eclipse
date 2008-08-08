@@ -79,6 +79,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog;
@@ -334,8 +335,8 @@ public class TransferWizardUtil
 				}
 			}
 		} catch (Exception e) {
-			MessageDialog.openError(RCPUtil.getActiveShell(), "Printing error", "Printing failed: " + e.getMessage());
-			logger.error("Printing failed", e);
+			MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizardUtil.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizardUtil.dialog.message") + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.error("Printing failed", e); //$NON-NLS-1$
 		}
 		
 		return transferResult;

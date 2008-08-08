@@ -49,7 +49,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public abstract class AbstractArticleContainerFilterComposite<Q extends AbstractArticleContainerQuery>
 	extends AbstractQueryFilterComposite<Q>
 {
-	private static final String ARTICLE_CONTAINER_GROUP_ID = "ArticleContainerFilterComposite";
+	private static final String ARTICLE_CONTAINER_GROUP_ID = "ArticleContainerFilterComposite"; //$NON-NLS-1$
 
 	private DateTimeEdit createDTMin;
 	private DateTimeEdit createDTMax;

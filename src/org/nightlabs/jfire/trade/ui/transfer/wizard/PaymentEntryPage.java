@@ -351,7 +351,7 @@ implements IPaymentEntryPage
 //				}
 //			});
 			
-			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, "Invoice printing options", "invoice", null);
+			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.group.invoicePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.invoice"), null); //$NON-NLS-1$ //$NON-NLS-2$
 			
 //			Group printGroup = new Group(page, SWT.BORDER);
 //			printGroup.setText("Invoice printing options");

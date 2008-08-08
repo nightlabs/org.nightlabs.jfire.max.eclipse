@@ -231,7 +231,7 @@ public class RepositoryFilterComposite
 		}
 	};
 
-	private static final String Repository_Group_ID = "RepositoryFilterComposite";
+	private static final String Repository_Group_ID = "RepositoryFilterComposite"; //$NON-NLS-1$
 	private static final Set<String> fieldNames;
 	static
 	{

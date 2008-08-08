@@ -40,7 +40,7 @@ extends WizardHopPage
 		
 		Label lbl = new Label(comp, SWT.WRAP);
 		XComposite.setLayoutDataMode(LayoutDataMode.GRID_DATA_HORIZONTAL, lbl);
-		lbl.setText("Please select the delivery queue you want to deliver to.");
+		lbl.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.SelectTargetDeliveryQueueWizardPage.label")); //$NON-NLS-1$
 		
 		queueTable = new DeliveryQueueSelectionTable(comp);
 		

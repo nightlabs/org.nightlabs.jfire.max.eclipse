@@ -77,7 +77,7 @@ extends FadeableComposite
 
 	public DeliveryQueueBrowsingComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, "Delivery Queue: ", new LabelProvider() {
+		printQueueCombo = new XComboComposite<DeliveryQueue>(this, SWT.READ_ONLY, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.combo.label"), new LabelProvider() { //$NON-NLS-1$
 			@Override
 			public String getText(Object element) {
 				if (element instanceof DeliveryQueue) {
@@ -101,7 +101,7 @@ extends FadeableComposite
     		checkAllDeliveries();
     	}
     };
-    checkAllAction.setText("Check all deliveries");
+    checkAllAction.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.button.checkAllDeliveries")); //$NON-NLS-1$
     
     IAction uncheckAllAction = new Action() {
     	@Override
@@ -109,7 +109,7 @@ extends FadeableComposite
     		uncheckAllDeliveries();
     	}
     };
-    uncheckAllAction.setText("Uncheck all deliveries");
+    uncheckAllAction.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.button.uncheckAllDeliveries")); //$NON-NLS-1$
     
     popupMenu.add(checkAllAction);
     popupMenu.add(uncheckAllAction);
@@ -146,7 +146,7 @@ extends FadeableComposite
 		AnchorID customerID = null;
 		for (Delivery delivery : checkedDeliveries) {
 			if (customerID != null && !delivery.getPartnerID().equals(customerID)) {
-				MessageDialog.openError(RCPUtil.getActiveShell(), "Checked deliveries have differing customers.", "The checked deliveries have differing customers. You can only deliver deliveries with the same customer at once.");
+				MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingComposite.dialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			}
 			customerID = delivery.getPartnerID();

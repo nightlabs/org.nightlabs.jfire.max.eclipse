@@ -107,25 +107,17 @@
                 label="%org.nightlabs.jfire.trade.ui.transfer.deliver.DeliverCheckedDeliveriesActionDelegate.label"
                 menubarPath="additions" state="true" style="push" toolbarPath="additions"/>
             <action
-                  class="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
-                  id="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
-                  label="-"
-                  menubarPath="additions"
-                  state="true"
-                  style="push"
-                  toolbarPath="additions"
-                  tooltip="Uncheck all deliveries">
-            </action>
+                class="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
+                id="org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate"
+                label="%org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate.label"
+                menubarPath="additions" state="true" style="push"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.ui.transfer.deliver.UncheckAllDeliveriesActionDelegate.tooltip"/>
             <action
-                  class="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
-                  id="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
-                  label="+"
-                  menubarPath="additions"
-                  state="true"
-                  style="push"
-                  toolbarPath="additions"
-                  tooltip="Check all deliveries">
-            </action>
+                class="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
+                id="org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate"
+                label="%org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate.label"
+                menubarPath="additions" state="true" style="push"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.ui.transfer.deliver.CheckAllDeliveriesActionDelegate.tooltip"/>
         </viewContribution>
     </extension>
     <extension point="org.eclipse.ui.editors">
@@ -245,23 +237,18 @@
             name="Standard - DeliveryNote" segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
     </extension>
     <extension point="org.eclipse.ui.preferencePages">
-	    <page
+        <page
             class="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
-            id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
-            name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
+            id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage" name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
         <page
             class="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
-            name="%org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage.name"/>
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage" name="%org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage.name"/>
         <page
             class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
-            name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
+            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
         <page
-              class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
-              id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
-              name="Automatic printing settings">
-        </page>
+            class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
+            id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.name"/>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory
@@ -312,14 +299,11 @@
                 name="Deliver to Delivery Queue" organisationID="dev.jfire.org"/>
         </clientDeliveryProcessorFactory>
         <clientDeliveryProcessorFactory
-              class="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault"
-              id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault"
-              name="%org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault.name">
-           <modeOfDeliveryFlavour
-                 modeOfDeliveryFlavourID="mailing.physical.default"
-                 name="dev.jfire.org/mailing.physical.default"
-                 organisationID="dev.jfire.org">
-           </modeOfDeliveryFlavour>
+            class="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault"
+            id="org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault" name="%org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryMailingPhysicalDefault.name">
+            <modeOfDeliveryFlavour
+                modeOfDeliveryFlavourID="mailing.physical.default"
+                name="dev.jfire.org/mailing.physical.default" organisationID="dev.jfire.org"/>
         </clientDeliveryProcessorFactory>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
@@ -990,53 +974,40 @@
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.account.AdvancedAccountSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.accounting.Account" title="%queryfilterComposite.AdvancedAccountFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.DeliveryNote" title="%queryfilterComposite.DeliveryStateFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="10"
+        <QueryFilter orderHint="10"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.DeliveryNote" title="%queryfilterComposite.AdvancedDeliveryFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.accounting.Invoice" title="%queryfilterComposite.InvoiceStateFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="10"
+        <QueryFilter orderHint="10"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.accounting.Invoice" title="%queryfilterComposite.AdvancedInvoiceFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
-            scope="global"
-            targetClass="org.nightlabs.jfire.trade.Offer" title="%queryfilterComposite.OfferStateFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="10"
+            scope="global" targetClass="org.nightlabs.jfire.trade.Offer" title="%queryfilterComposite.OfferStateFilterSectionTitle"/>
+        <QueryFilter orderHint="10"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.offer.OfferSearchFilterFactory"
-            scope="global"
-            targetClass="org.nightlabs.jfire.trade.Offer" title="%queryfilterComposite.AdvancedOfferFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+            scope="global" targetClass="org.nightlabs.jfire.trade.Offer" title="%queryfilterComposite.AdvancedOfferFilterSectionTitle"/>
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.order.OrderSearchFilterFactory"
-            scope="global"
-            targetClass="org.nightlabs.jfire.trade.Order" title="%queryfilterComposite.OrderStateFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+            scope="global" targetClass="org.nightlabs.jfire.trade.Order" title="%queryfilterComposite.OrderStateFilterSectionTitle"/>
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.StatableSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.ReceptionNote" title="%queryfilterComposite.ReceptionNoteStateFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="10"
+        <QueryFilter orderHint="10"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteSearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.ReceptionNote" title="%queryfilterComposite.AdvancedReceptionNoteFilterSectionTitle"/>
-        <QueryFilter
-            orderHint="0"
+        <QueryFilter orderHint="0"
             queryFilterFactoryClass="org.nightlabs.jfire.trade.ui.overview.repository.RepositorySearchFilterFactory"
             scope="global"
             targetClass="org.nightlabs.jfire.store.Repository" title="%queryfilterComposite.AdvancedRepositoryFilterSectionTitle"/>
@@ -1119,7 +1090,8 @@
     </extension>
 -->
     <extension point="org.eclipse.ui.actionSets">
-        <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"
+        <actionSet
+            id="org.nightlabs.jfire.trade.ui.action.reverseProduct"
             label="%org.nightlabs.jfire.trade.ui.action.reverse.label" visible="false">
             <menu id="ReverseProduct" label="%ReverseProduct.label">
                 <separator name="reverseGroup"/>
@@ -1139,7 +1111,7 @@
         </actionSet>
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
-<!--
+        <!--
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">
             <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
         </perspectiveExtension>

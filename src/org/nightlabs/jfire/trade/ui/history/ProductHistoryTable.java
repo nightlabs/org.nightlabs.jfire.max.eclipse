@@ -23,6 +23,7 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.history.ProductHistoryItem;
 import org.nightlabs.jfire.trade.history.ProductHistoryItem.ProductHistoryItemType;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -77,19 +78,19 @@ extends AbstractTableComposite<ProductHistoryItem>
 						ProductHistoryItemType type = item.getType();
 						switch (type) {
 							case ALLOCATION:
-								return "Allocation";
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.allocation"); //$NON-NLS-1$
 							case DELIVERY:
-								return "Delivery";
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.delivery"); //$NON-NLS-1$
 							case DELIVERY_NOTE:
-								return "Delivery Note";
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.deliveryNote"); //$NON-NLS-1$
 							case INVOICE:
-								return "Invoice";								
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.invoice");								 //$NON-NLS-1$
 							case OFFER:
-								return "Offer";
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.offer"); //$NON-NLS-1$
 							case PAYMENT:
-								return "Payment";
+								return Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.payment"); //$NON-NLS-1$
 							default:
-								return "";
+								return ""; //$NON-NLS-1$
 						}
 					// name
 					case 3:
@@ -103,14 +104,14 @@ extends AbstractTableComposite<ProductHistoryItem>
 						if (paymentFlavour != null) {
 							return paymentFlavour.getName().getText();
 						}
-						return "";
+						return ""; //$NON-NLS-1$
 					// delivery
 					case 6:
 						ModeOfDeliveryFlavour deliveryFlavour = item.getModeOfDeliveryFlavour();
 						if (deliveryFlavour != null) {
 							return deliveryFlavour.getName().getText();
 						}
-						return "";
+						return ""; //$NON-NLS-1$
 					// customer
 					case 7:
 						return item.getCustomer().getPerson().getDisplayName();
@@ -155,36 +156,36 @@ extends AbstractTableComposite<ProductHistoryItem>
 	protected void createTableColumns(TableViewer tableViewer, Table table) 
 	{
 		TableColumn createDTColumn = new TableColumn(table, SWT.LEFT);
-		createDTColumn.setText("Create Date");
-		createDTColumn.setToolTipText("Create Date");
+		createDTColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.createDate.text")); //$NON-NLS-1$
+		createDTColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.createDate.tooltip")); //$NON-NLS-1$
 
 		TableColumn userColumn = new TableColumn(table, SWT.LEFT);
-		userColumn.setText("User");
-		userColumn.setToolTipText("User");
+		userColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.user.text")); //$NON-NLS-1$
+		userColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.user.tooltip")); //$NON-NLS-1$
 
 		TableColumn historyTypeColumn = new TableColumn(table, SWT.LEFT);
-		historyTypeColumn.setText("Type");
-		historyTypeColumn.setToolTipText("Type");
+		historyTypeColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.type.text")); //$NON-NLS-1$
+		historyTypeColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.type.tooltip")); //$NON-NLS-1$
 
 		TableColumn nameColumn = new TableColumn(table, SWT.LEFT);
-		nameColumn.setText("Name");
-		nameColumn.setToolTipText("Name");
+		nameColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.name.text")); //$NON-NLS-1$
+		nameColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.name.tooltip")); //$NON-NLS-1$
 
 		TableColumn articleContainerIDColumn = new TableColumn(table, SWT.LEFT);
-		articleContainerIDColumn.setText("ID");
-		articleContainerIDColumn.setToolTipText("ID");		
+		articleContainerIDColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.id.text")); //$NON-NLS-1$
+		articleContainerIDColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.id.tooltip"));		 //$NON-NLS-1$
 
 		TableColumn paymentColumn = new TableColumn(table, SWT.LEFT);
-		paymentColumn.setText("Payment");
-		paymentColumn.setToolTipText("Payment");		
+		paymentColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.payment.text")); //$NON-NLS-1$
+		paymentColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.payment.tooltip"));		 //$NON-NLS-1$
 
 		TableColumn deliveryColumn = new TableColumn(table, SWT.LEFT);
-		deliveryColumn.setText("Delivery");
-		deliveryColumn.setToolTipText("Delivery");		
+		deliveryColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.delivery.text")); //$NON-NLS-1$
+		deliveryColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.delivery.tooltip"));		 //$NON-NLS-1$
 
 		TableColumn customerColumn = new TableColumn(table, SWT.LEFT);
-		customerColumn.setText("Customer");
-		customerColumn.setToolTipText("Customer");
+		customerColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.customer.text")); //$NON-NLS-1$
+		customerColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.customer.tooltip")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int [] {20, 15, 15, 15, 10, 20, 20, 40});
 		table.setLayout(layout);
