@@ -63,11 +63,13 @@ extends AbstractTableComposite<String>
 			if (! (inputElement instanceof LegalEntityViewConfigModule))
 				return null;
 			LegalEntityViewConfigModule cfMod = (LegalEntityViewConfigModule)inputElement;
-			if ((cfMod != null) && (cfMod != inputCfMod)) {
-				cfModFields.clear();
-				cfModFields.addAll(cfMod.getStructFields());
-				inputCfMod = cfMod;
-			}
+			if (inputCfMod == null) {
+				if ((cfMod != null)) {
+					cfModFields.clear();
+					cfModFields.addAll(cfMod.getStructFields());
+					inputCfMod = cfMod;
+				}
+			}  
 			return cfModFields.toArray();
 		}
 
@@ -75,6 +77,7 @@ extends AbstractTableComposite<String>
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			inputCfMod = null;
 		}
 		
 		public void add(String structFieldOID)
