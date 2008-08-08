@@ -49,6 +49,10 @@
 			class="org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="20" />
+		<pageFactory
+			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+			indexHint="30" />
    </extension>  
   
   <extension point="org.nightlabs.base.ui.editorActionBarContribution">

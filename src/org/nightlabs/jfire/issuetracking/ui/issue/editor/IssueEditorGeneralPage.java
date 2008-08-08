@@ -157,13 +157,15 @@ extends EntityEditorPageWithProgress
 		
 		issueFileAttachmentSection = new IssueFileAttachmentSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
+		gridData.verticalAlignment = GridData.BEGINNING;
+//		gridData.horizontalSpan = 2;
 		issueFileAttachmentSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueFileAttachmentSection);
 		
 		issueWorkTimeSection = new IssueWorkTimeSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
+		gridData.verticalAlignment = GridData.BEGINNING;
+//		gridData.horizontalSpan = 2;
 		issueWorkTimeSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueWorkTimeSection);
 		

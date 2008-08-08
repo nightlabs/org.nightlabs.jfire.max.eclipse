@@ -45,6 +45,7 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -71,6 +72,8 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		Issue.FETCH_GROUP_ISSUE_FILELIST,
 		Issue.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_STATES,
+		Issue.FETCH_GROUP_PROPERTY_SET,
+		PropertySet.FETCH_GROUP_DATA_FIELDS, PropertySet.FETCH_GROUP_FULL_DATA,
 		IssueType.FETCH_GROUP_NAME,
 		IssueType.FETCH_GROUP_ISSUE_PRIORITIES,
 		IssueType.FETCH_GROUP_ISSUE_SEVERITY_TYPES,
