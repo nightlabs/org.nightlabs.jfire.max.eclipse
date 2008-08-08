@@ -36,7 +36,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 	public static final String[] FETCH_GROUPS_PRODUCT_HISTORY = new String[] {
 		FetchPlan.DEFAULT,
 		User.FETCH_GROUP_PERSON,
-		Person.FETCH_GROUP_FULL_DATA,
+//		Person.FETCH_GROUP_FULL_DATA,
 		Offer.FETCH_GROUP_CREATE_USER,
 		Order.FETCH_GROUP_CREATE_USER,
 		Invoice.FETCH_GROUP_CREATE_USER,
