@@ -14,10 +14,10 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 import org.nightlabs.jfire.accounting.pay.Payment;
-import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
@@ -97,7 +97,9 @@ extends AbstractTableComposite<ProductHistoryItem>
 						return item.getName();
 					// id
 					case 4:
-						return item.getArticleContainer().getArticleContainerIDAsString();
+//						return item.getArticleContainer().getArticleContainerIDAsString();
+						String id = ArticleContainerUtil.getArticleContainerID(item.getArticleContainer());
+						return id != null ? id : "";
 					// payment
 					case 5:
 						ModeOfPaymentFlavour paymentFlavour = item.getModeOfPaymentFlavour();
@@ -187,7 +189,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 		customerColumn.setText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.customer.text")); //$NON-NLS-1$
 		customerColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.history.ProductHistoryTable.column.customer.tooltip")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int [] {20, 15, 15, 15, 10, 20, 20, 40});
+		WeightedTableLayout layout = new WeightedTableLayout(new int [] {20, 15, 15, 15, 20, 20, 20, 40});
 		table.setLayout(layout);
 	}
 
