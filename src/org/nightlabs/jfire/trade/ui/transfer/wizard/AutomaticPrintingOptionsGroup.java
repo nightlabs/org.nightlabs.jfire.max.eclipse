@@ -28,7 +28,7 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		this.entityName = entityName;
 		
-		group = new Group(this, SWT.BORDER);
+		group = new Group(this, SWT.NONE);
 		group.setText(groupTitle);
 		group.setLayout(new GridLayout(3, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
