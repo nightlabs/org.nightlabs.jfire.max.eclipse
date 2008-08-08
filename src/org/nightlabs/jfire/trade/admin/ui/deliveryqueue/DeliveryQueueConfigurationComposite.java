@@ -280,5 +280,9 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 	
 	void loadData(DeliveryQueueConfigModule configModule) {
 		this.cfMod = configModule;
+		if (cfMod != null) {
+			pqTableComposite.setCheckedElements(cfMod.getVisibleDeliveryQueues());
+		}
+		updateGUI();
 	}
 }
