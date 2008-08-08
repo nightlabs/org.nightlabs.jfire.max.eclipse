@@ -284,19 +284,19 @@ implements ICellModifier
 	
 	public void setConfigModule(ReportLayoutConfigModule configModule) {
 		this.configModule = configModule;
-		if (getTreeViewer().getInput() == null) {
-			getTreeViewer().setInput(itemTreeController);
-			getTreeViewer().addTreeListener(new ITreeViewerListener() {
-				public void treeCollapsed(TreeExpansionEvent event) {
-				}
+		boolean doExpand = getTreeViewer().getInput() == null;
+		getTreeViewer().setInput(itemTreeController);
+		getTreeViewer().addTreeListener(new ITreeViewerListener() {
+			public void treeCollapsed(TreeExpansionEvent event) {
+			}
 
-				public void treeExpanded(TreeExpansionEvent event) {
-					event.getElement();
-				}
+			public void treeExpanded(TreeExpansionEvent event) {
+				event.getElement();
+			}
 				
-			});
+		});
+		if (doExpand)
 			getTreeViewer().expandToLevel(3);
-		}
 	}
 
 	
