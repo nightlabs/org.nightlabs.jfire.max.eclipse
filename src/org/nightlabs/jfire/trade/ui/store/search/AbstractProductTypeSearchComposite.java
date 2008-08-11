@@ -204,7 +204,7 @@ public abstract class AbstractProductTypeSearchComposite
 				productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.saleable, true);
 				if (searchStr != null && searchStr.trim().length() > 0)
 				{
-					productTypeQuery.setFullTextSearch(".*"+searchStr+".*"); // Need to pass regex here //$NON-NLS-1$ //$NON-NLS-2$
+					productTypeQuery.setFullTextSearch(searchStr);
 					productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.fullTextSearch, true);
 				}
 				// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
