@@ -35,7 +35,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.DateTimeControl;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
@@ -52,6 +58,7 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
@@ -64,13 +71,18 @@ public class OfferHeaderComposite
 extends HeaderComposite
 {
 	private Offer offer;
-//	private Button finalizedCheckBox;
-//	private Button acceptedCheckBox;
-//	private Button rejectedCheckBox;
-//	private Button confirmedCheckBox;
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
+
+	private XComposite expiryTimestampContainerComp;
+	private XComposite expiryTimestampUnfinalizedComp;
+	private DateTimeControl expiryTimestampUnfinalized;
+	private Button expiryTimestampUnfinalizedAutoManaged;
+
+	private XComposite expiryTimestampFinalizedComp;
+	private DateTimeControl expiryTimestampFinalized;
+	private Button expiryTimestampFinalizedAutoManaged;
 
 	protected OfferID getOfferID()
 	{
@@ -82,13 +94,15 @@ extends HeaderComposite
 		super(articleContainerEditorComposite, articleContainerEditorComposite, offer);
 		this.offer = offer;
 
-		this.getGridLayout().numColumns = 2;
+		this.setLayout(new RowLayout());
 
 		currentStateComposite = new CurrentStateComposite(this, SWT.NONE);
 		currentStateComposite.setStatable(offer);
+		currentStateComposite.setLayoutData(null);
 
 		nextTransitionComposite = new NextTransitionComposite(this, SWT.NONE);
 		nextTransitionComposite.setStatable(offer);
+		nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			@Implement
 			public void signal(SignalEvent event)
@@ -97,49 +111,45 @@ extends HeaderComposite
 			}
 		});
 
-//		XComposite c1 = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		c1.getGridLayout().numColumns = 4;
-//		finalizedCheckBox = new Button(c1, SWT.CHECK);
-//		finalizedCheckBox.setText("finalized");
-//		finalizedCheckBox.setToolTipText("An offer must be finalized before further action. After it is finalized, it cannot be changed anymore.");
-//		finalizedCheckBox.setSelection(offer.isFinalized());
-//		finalizedCheckBox.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				finalizedCheckBoxSelectionChanged();
-//			}
-//		});
-//
-//		acceptedCheckBox = new Button(c1, SWT.CHECK);
-//		acceptedCheckBox.setText("accepted");
-//		acceptedCheckBox.setToolTipText("Did the customer accept the offer?");
-//		acceptedCheckBox.setSelection(offer.getOfferLocal().isAccepted());
-//		acceptedCheckBox.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				acceptedCheckBoxSelectionChanged();
-//			}
-//		});
-//
-//		rejectedCheckBox = new Button(c1, SWT.CHECK);
-//		rejectedCheckBox.setText("rejected");
-//		rejectedCheckBox.setToolTipText("Did the customer reject the offer?");
-//		rejectedCheckBox.setSelection(offer.getOfferLocal().isRejected());
-//		rejectedCheckBox.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				rejectedCheckBoxSelectionChanged();
-//			}
-//		});
-//
-//		confirmedCheckBox = new Button(c1, SWT.CHECK);
-//		confirmedCheckBox.setText("confirmed");
-//		confirmedCheckBox.setToolTipText("Have we already sent a confirmation to the customer?");
-//		confirmedCheckBox.setSelection(offer.getOfferLocal().isConfirmed());
-//		confirmedCheckBox.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				confirmedCheckBoxSelectionChanged();
-//			}
-//		});
+		if (!offer.isFinalized()) {
+			if (expiryTimestampContainerComp == null)
+				expiryTimestampContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 
-//		setStatusCheckBoxesEnabled();
+			expiryTimestampUnfinalizedComp = new XComposite(expiryTimestampContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+			expiryTimestampUnfinalizedComp.setLayoutData(null);
+			expiryTimestampUnfinalizedComp.getGridLayout().numColumns = 2;
+			new Label(expiryTimestampUnfinalizedComp, SWT.NONE).setText("Expiry (unfinalized):");
+			expiryTimestampUnfinalized = new DateTimeControl(expiryTimestampUnfinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+			new Label(expiryTimestampUnfinalizedComp, SWT.NONE);
+			expiryTimestampUnfinalizedAutoManaged = new Button(expiryTimestampUnfinalizedComp, SWT.CHECK);
+			expiryTimestampUnfinalizedAutoManaged.setText("Manage automatically");
+			expiryTimestampUnfinalizedAutoManaged.setToolTipText("Manage the date and time of expiry automatically according to the configuration.");
+
+			expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
+			expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
+		}
+
+		if (!offer.getOfferLocal().isAccepted()) {
+			if (expiryTimestampContainerComp == null)
+				expiryTimestampContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+
+			expiryTimestampFinalizedComp = new XComposite(expiryTimestampContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+			expiryTimestampFinalizedComp.setLayoutData(null);
+			expiryTimestampFinalizedComp.getGridLayout().numColumns = 2;
+			new Label(expiryTimestampFinalizedComp, SWT.NONE).setText("Expiry (finalized):");
+			expiryTimestampFinalized = new DateTimeControl(expiryTimestampFinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+			new Label(expiryTimestampFinalizedComp, SWT.NONE);
+			expiryTimestampFinalizedAutoManaged = new Button(expiryTimestampFinalizedComp, SWT.CHECK);
+			expiryTimestampFinalizedAutoManaged.setText("Manage automatically");
+			expiryTimestampFinalizedAutoManaged.setToolTipText("Manage the date and time of expiry automatically according to the configuration.");
+
+			expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
+			expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
+		}
+
+		if (expiryTimestampContainerComp != null)
+			expiryTimestampContainerComp.getGridLayout().numColumns = 2;
+
 		createArticleContainerContextMenu();
 
 		JDOLifecycleManager.sharedInstance().addNotificationListener(Offer.class, offerChangedListener);
@@ -149,6 +159,8 @@ extends HeaderComposite
 				JDOLifecycleManager.sharedInstance().removeNotificationListener(Offer.class, offerChangedListener);
 			}
 		});
+
+		layout(true, true);
 	}
 
 	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
@@ -162,6 +174,40 @@ extends HeaderComposite
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			currentStateComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));
+
+			getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					if (expiryTimestampUnfinalizedComp != null && offer.isFinalized()) {
+						expiryTimestampUnfinalizedComp.dispose();
+						expiryTimestampUnfinalizedComp = null;
+						expiryTimestampUnfinalized = null;
+						expiryTimestampUnfinalizedAutoManaged = null;
+					}
+
+					if (expiryTimestampFinalizedComp != null && offer.getOfferLocal().isAccepted()) {
+						expiryTimestampFinalizedComp.dispose();
+						expiryTimestampFinalizedComp = null;
+						expiryTimestampFinalized = null;
+						expiryTimestampFinalizedAutoManaged = null;
+					}
+
+					if (expiryTimestampUnfinalizedComp == null && expiryTimestampFinalizedComp == null && expiryTimestampContainerComp != null) {
+						expiryTimestampContainerComp.dispose();
+						expiryTimestampContainerComp = null;
+					}
+
+					if (expiryTimestampUnfinalized != null) {
+						expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
+						expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
+					}
+
+					if (expiryTimestampFinalized != null) {
+						expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
+						expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
+					}
+				}
+			});
+
 			monitor.done();
 		}
 	};
@@ -186,82 +232,5 @@ extends HeaderComposite
 		job.setUser(true);
 		job.schedule();
 	}
-
-//	private void setStatusCheckBoxesEnabled()
-//	{
-//		if (offer.getOfferLocal().isRejected())
-//			acceptedCheckBox.setEnabled(false);
-//
-//		if (offer.getOfferLocal().isAccepted())
-//			rejectedCheckBox.setEnabled(false);
-//	}
-//
-//	private void finalizedCheckBoxSelectionChanged() {
-//		try {
-//			if (offer.isFinalized()) {
-//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo finalization!", "This offer is finalized. A finalization cannot be taken back.");
-//				finalizedCheckBox.setSelection(true);
-//			}
-//			else {
-//				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//				tradeManager.finalizeOffer(getOfferID(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			}
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
-//
-//		setStatusCheckBoxesEnabled();
-//	}
-//
-//	private void acceptedCheckBoxSelectionChanged() {
-//		try {
-//			if (offer.getOfferLocal().isAccepted()) {
-//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo acceptance!", "This offer is accepted. An acceptance cannot be taken back.");
-//				acceptedCheckBox.setSelection(true);
-//			}
-//			else {
-//				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//				tradeManager.acceptOffer(getOfferID(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			}
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
-//
-//		setStatusCheckBoxesEnabled();
-//	}
-//
-//	private void rejectedCheckBoxSelectionChanged() {
-//		try {
-//			if (offer.getOfferLocal().isRejected()) {
-//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo rejection!", "This offer is rejected. A rejection cannot be taken back.");
-//				rejectedCheckBox.setSelection(true);
-//			}
-//			else {
-//				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//				tradeManager.rejectOffer(getOfferID(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			}
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
-//
-//		setStatusCheckBoxesEnabled();
-//	}
-//
-//	private void confirmedCheckBoxSelectionChanged() {
-//		try {
-//			if (offer.getOfferLocal().isConfirmed()) {
-//				MessageDialog.openError(RCPUtil.getActiveShell(), "Cannot undo confirmation!", "This offer is confirmed. A confirmation cannot be taken back.");
-//				confirmedCheckBox.setSelection(true);
-//			}
-//			else {
-//				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//				tradeManager.confirmOffer(getOfferID(), false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//			}
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
-//
-//		setStatusCheckBoxesEnabled();
-//	}
 
 }
