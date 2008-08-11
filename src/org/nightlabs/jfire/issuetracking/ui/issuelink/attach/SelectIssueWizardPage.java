@@ -138,6 +138,7 @@ extends WizardHopPage
 
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				getShell().layout(true, true);
 				issueEntryListViewer.search();
 				setIssueAction(ActionForIssue.selectExistingIssue);
 			}
