@@ -59,7 +59,7 @@ public class CurrentStateComposite
 		{
 			if (statable == null)
 				return;
-			
+
 			StateHistoryDialog stateHistoryDialog = new StateHistoryDialog(getShell(), (ObjectID) JDOHelper.getObjectId(statable));
 			stateHistoryDialog.open();
 		}
