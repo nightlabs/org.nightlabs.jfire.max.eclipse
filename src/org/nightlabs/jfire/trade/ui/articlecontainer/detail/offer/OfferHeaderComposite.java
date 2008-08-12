@@ -219,6 +219,9 @@ extends HeaderComposite
 					}
 				}
 			});
+
+			if (offer.isFinalized())
+				expiryTimestampFinalizedComp.setEnabled(false);
 		}
 
 		if (expiryTimestampContainerComp != null)
@@ -234,7 +237,17 @@ extends HeaderComposite
 			}
 		});
 
-		layout(true, true);
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				getShell().layout(true, true);
+
+				getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						getShell().layout(true, true);
+					}
+				});
+			}
+		});
 	}
 
 	private boolean expiryTimestampModifiedNeedsSaveOnFocusLost = false;
@@ -288,7 +301,7 @@ extends HeaderComposite
 						expiryTimestampUnfinalizedAutoManaged = null;
 					}
 
-					if (expiryTimestampFinalizedComp != null && offer.getOfferLocal().isAccepted()) {
+					if (expiryTimestampFinalizedComp != null && (offer.getOfferLocal().isAccepted() || offer.getOfferLocal().isRejected())) {
 						expiryTimestampFinalizedComp.dispose();
 						expiryTimestampFinalizedComp = null;
 						expiryTimestampFinalized = null;
@@ -308,9 +321,12 @@ extends HeaderComposite
 					if (expiryTimestampFinalized != null) {
 						expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
 						expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
+
+						if (offer.isFinalized())
+							expiryTimestampFinalizedComp.setEnabled(false);
 					}
 
-					layout(true, true);
+					getShell().layout(true, true);
 				}
 			});
 		} finally {
