@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer;
 
+import java.util.Date;
+
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,6 +37,12 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
@@ -70,7 +78,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class OfferHeaderComposite
 extends HeaderComposite
 {
-	private Offer offer;
+	private volatile Offer offer;
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
@@ -127,6 +135,39 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
 			expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
+
+			expiryTimestampUnfinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					saveExpiryTimestamp();
+				}
+			});
+
+			expiryTimestampUnfinalized.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					expiryTimestampUnfinalizedAutoManaged.setSelection(false);
+					saveExpiryTimestamp();
+				}
+			});
+
+			expiryTimestampUnfinalized.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent event) {
+					expiryTimestampModifiedNeedsSaveOnFocusLost = true;
+					expiryTimestampUnfinalizedAutoManaged.setSelection(false);
+				}
+			});
+
+			expiryTimestampUnfinalized.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (expiryTimestampModifiedNeedsSaveOnFocusLost) {
+						expiryTimestampModifiedNeedsSaveOnFocusLost = false;
+						saveExpiryTimestamp();
+					}
+				}
+			});
 		}
 
 		if (!offer.getOfferLocal().isAccepted()) {
@@ -145,6 +186,39 @@ extends HeaderComposite
 
 			expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
 			expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
+
+			expiryTimestampFinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					saveExpiryTimestamp();
+				}
+			});
+
+			expiryTimestampFinalized.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					expiryTimestampFinalizedAutoManaged.setSelection(false);
+					saveExpiryTimestamp();
+				}
+			});
+
+			expiryTimestampFinalized.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent event) {
+					expiryTimestampModifiedNeedsSaveOnFocusLost = true;
+					expiryTimestampFinalizedAutoManaged.setSelection(false);
+				}
+			});
+
+			expiryTimestampFinalized.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (expiryTimestampModifiedNeedsSaveOnFocusLost) {
+						expiryTimestampModifiedNeedsSaveOnFocusLost = false;
+						saveExpiryTimestamp();
+					}
+				}
+			});
 		}
 
 		if (expiryTimestampContainerComp != null)
@@ -163,15 +237,45 @@ extends HeaderComposite
 		layout(true, true);
 	}
 
-	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
-		public void notify(NotificationEvent notificationEvent)
-		{
-			ProgressMonitor monitor = getProgressMonitorWrapper();
-			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), 3); //$NON-NLS-1$
-			offer = OfferDAO.sharedInstance().getOffer(
-					(OfferID) JDOHelper.getObjectId(offer),
-					ArticleContainerEditorComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
+	private boolean expiryTimestampModifiedNeedsSaveOnFocusLost = false;
+
+	private void saveExpiryTimestamp()
+	{
+		final Date _expiryTimestampUnfinalized = expiryTimestampUnfinalized == null ? offer.getExpiryTimestampUnfinalized() : expiryTimestampUnfinalized.getDate();
+		final boolean _expiryTimestampUnfinalizedAutoManaged = expiryTimestampUnfinalizedAutoManaged == null ? offer.isExpiryTimestampUnfinalizedAutoManaged() : expiryTimestampUnfinalizedAutoManaged.getSelection();
+		final Date _expiryTimestampFinalized = expiryTimestampFinalized == null ? offer.getExpiryTimestampFinalized() : expiryTimestampFinalized.getDate();
+		final boolean _expiryTimestampFinalizedAutoManaged = expiryTimestampFinalizedAutoManaged == null ? offer.isExpiryTimestampFinalizedAutoManaged() : expiryTimestampFinalizedAutoManaged.getSelection();
+
+		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job("Saving expiry timestamp") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				monitor.beginTask("Saving expiry timestamp", 2);
+				try {
+					Offer _offer = OfferDAO.sharedInstance().setOfferExpiry(
+							getOfferID(),
+							_expiryTimestampUnfinalized, _expiryTimestampUnfinalizedAutoManaged,
+							_expiryTimestampFinalized, _expiryTimestampFinalizedAutoManaged,
+							true,
+							ArticleContainerEditorComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
+
+					onOfferModified(_offer, new SubProgressMonitor(monitor, 1));
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.INTERACTIVE);
+		job.setUser(true);
+		job.schedule();
+	}
+
+	private void onOfferModified(final Offer offer, ProgressMonitor monitor)
+	{
+		monitor.beginTask("Updating UI for offer", 100);
+		try {
+			this.offer = offer;
 			currentStateComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));
 
@@ -205,9 +309,32 @@ extends HeaderComposite
 						expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
 						expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
 					}
+
+					layout(true, true);
 				}
 			});
+		} finally {
+			monitor.done();
+		}
+	}
 
+	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
+		public void notify(NotificationEvent notificationEvent)
+		{
+			ProgressMonitor monitor = getProgressMonitorWrapper();
+			monitor.beginTask(
+					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), //$NON-NLS-1$
+					3
+			);
+			Offer _offer = OfferDAO.sharedInstance().getOffer(
+					(OfferID) JDOHelper.getObjectId(offer),
+//					ArticleContainerEditorComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					// After a change, it does NOT load the ArticleContainer *with* articles, but *WITHOUT*!
+					// Therefore, it's a bad idea to load them with articles! Marco.
+					ArticleContainerEditorComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
+
+			onOfferModified(_offer, new SubProgressMonitor(monitor, 2));
 			monitor.done();
 		}
 	};
