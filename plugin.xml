@@ -24,15 +24,20 @@
       <pageFactory
             class="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeDetailPage$Factory"
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
-            indexHint="0"/>
+            indexHint="100"/>
       <pageFactory
             class="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypePriceConfigPage$Factory"
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
-            indexHint="10"/>
+            indexHint="300"/>
       <pageFactory
             class="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeMoneyFlowConfigPageFactory"
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
-            indexHint="20"/>
+            indexHint="400"/>
+      <pageFactory
+            class="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"
+            editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
+            indexHint="200">
+      </pageFactory>
    </extension>
    <extension
          point="org.nightlabs.base.ui.searchResultProvider">
