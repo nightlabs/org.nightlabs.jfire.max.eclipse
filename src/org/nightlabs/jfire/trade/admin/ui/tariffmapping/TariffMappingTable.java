@@ -294,7 +294,7 @@ extends AbstractTableComposite<TariffMapping>
 					TariffID partnerTariffID = (TariffID) JDOHelper.getObjectId(tariffMapping.getPartnerTariff());
 					TariffID localTariffID = (TariffID) JDOHelper.getObjectId(tariffMapping.getLocalTariff());
 
-					TariffMappingDAO.sharedInstance().createTariffMapping_new(localTariffID, partnerTariffID, false, null, 1, monitor);
+					TariffMappingDAO.sharedInstance().createTariffMapping(localTariffID, partnerTariffID, false, null, 1, monitor);
 				}
 
 				Display.getDefault().asyncExec(new Runnable()
