@@ -25,7 +25,7 @@ extends AbstractAccountPageController
 	}
 
 	@Override
-	public void doSave(ProgressMonitor monitor)
+	public boolean doSave(ProgressMonitor monitor)
 	{
 		for (IFormPage page : getPages()) {
 			if (page instanceof AccountConfigurationPage) {
@@ -34,17 +34,10 @@ extends AbstractAccountPageController
 				this.account = AccountDAO.sharedInstance().storeAccount(account,
 						false, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor);
-//				Display.getDefault().syncExec(new Runnable(){
-//					public void run() {
-//						try {
-//							acp.getAccountConfigurationSection().getAccountConfigurationComposite().save();
-//						} catch (Exception e) {
-//							throw new RuntimeException(e);
-//						}
-//					}
-//				});
+				return true;
 			}
 		}
+		return false;
 	}
 	
 }

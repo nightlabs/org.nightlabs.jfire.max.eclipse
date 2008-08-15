@@ -52,7 +52,7 @@ extends AbstractAccountPageController
 	 * @param monitor The progress monitor to use.
 	 */
 	@Override
-	public void doSave(ProgressMonitor monitor)
+	public boolean doSave(ProgressMonitor monitor)
 	{
 		for (IFormPage page : getPages()) {
 			if (page instanceof AccountGeneralPage) {
@@ -62,7 +62,9 @@ extends AbstractAccountPageController
 						true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor);
 				doLoad(new org.nightlabs.progress.NullProgressMonitor());
+				return true;
 			}
 		}
+		return false;
 	}
 }

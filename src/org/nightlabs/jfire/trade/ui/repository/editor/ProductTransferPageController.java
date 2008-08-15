@@ -46,6 +46,7 @@ extends EntityEditorPageController
 		super.dispose();
 	}
 
+	@Override
 	public void doLoad(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.ProductTransferPageController.loadingProductTransfersJobMonitor.task.name"), 100); //$NON-NLS-1$
@@ -62,9 +63,10 @@ extends EntityEditorPageController
 		fireModifyEvent(null, productTransfers);
 	}
 
-	public void doSave(ProgressMonitor monitor)
+	@Override
+	public boolean doSave(ProgressMonitor monitor)
 	{
-		// nothing to do
+		return true;
 	}
 
 	/**

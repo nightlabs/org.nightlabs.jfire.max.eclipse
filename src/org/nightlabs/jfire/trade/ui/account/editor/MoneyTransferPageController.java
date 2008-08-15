@@ -67,7 +67,6 @@ public class MoneyTransferPageController extends EntityEditorPageController
 			AnchorID accountID = ((AccountEditorInput ) editor.getEditorInput()).getJDOObjectID();
 			moneyTransferQuery.setCurrentAnchorID(accountID);
 		}
-//		queryWrapper.setToExclude(100);
 	}
 
 	@Override
@@ -93,9 +92,9 @@ public class MoneyTransferPageController extends EntityEditorPageController
 		fireModifyEvent(null, moneyTransfers);
 	}
 
-	public void doSave(ProgressMonitor monitor)
+	public boolean doSave(ProgressMonitor monitor)
 	{
-		// nothing to do
+		return true;
 	}
 
 	/**

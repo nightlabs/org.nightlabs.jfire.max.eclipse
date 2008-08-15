@@ -47,6 +47,7 @@ extends EntityEditorPageController
 		return repository;
 	}
 
+	@Override
 	public void doLoad(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.RepositoryGeneralPageController.loadingRepositoryJobMonitor.task.name"), 100); //$NON-NLS-1$
@@ -59,11 +60,13 @@ extends EntityEditorPageController
 		fireModifyEvent(null, repository);
 	}
 
-	public void doSave(ProgressMonitor monitor)
+	@Override
+	public boolean doSave(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.RepositoryGeneralPageController.savingRepositoryJobMonitor.task.name"), 100); //$NON-NLS-1$
 		RepositoryDAO.sharedInstance().storeRepository(repository, false, null, 1,
 				new SubProgressMonitor(monitor, 100));
 		monitor.done();
+		return true;
 	}
 }
