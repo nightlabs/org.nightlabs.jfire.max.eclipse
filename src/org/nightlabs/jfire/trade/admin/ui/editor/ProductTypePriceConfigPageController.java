@@ -48,17 +48,20 @@ extends EntityEditorPageController
 		monitor.worked(1);
 	}
 
-	public void doSave(ProgressMonitor monitor) {
+	public boolean doSave(ProgressMonitor monitor) {
 		for (IFormPage page : getPages()) {
 			if (page instanceof AbstractGridPriceConfigPage) {
 				final AbstractGridPriceConfigPage priceConfigPage = (AbstractGridPriceConfigPage) page;
+				final boolean[] result = new boolean[1];
 				Display.getDefault().syncExec(new Runnable(){
 					public void run() {
-						priceConfigPage.getPriceConfigSection().getPriceConfigComposite().submit();
+						result[0] = priceConfigPage.getPriceConfigSection().getPriceConfigComposite().submit();
 					}
 				});
+				return result[0];
 			}
 		}
+		return false;
 	}
 	
 	

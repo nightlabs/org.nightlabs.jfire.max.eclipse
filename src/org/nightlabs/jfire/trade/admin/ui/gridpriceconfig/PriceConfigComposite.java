@@ -551,11 +551,19 @@ public abstract class PriceConfigComposite extends XComposite
 	 */
 	public abstract CellReferenceProductTypeSelector createCellReferenceProductTypeSelector();
 	
-	public void submit()
+	/**
+	 * Stores the current PriceConfig.
+	 * Prior to saving it will show the user which other ProductTypes
+	 * are affected by this change and give him the possibility to 
+	 * cancel this action.
+	 * 
+	 * @return Whether the PriceConfig was saved or not.
+	 */
+	public boolean submit()
 	{
 //		ProductType packageProductType = productTypeSelector.getPackageProductType();
 		if (packageProductType == null)
-			return;
+			return false;
 
 		ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(packageProductType);
 //		PriceConfigID innerPriceConfigID = (PriceConfigID) JDOHelper.getObjectId(packageProductType.getInnerPriceConfig()); // This doesn't work, if the PC is new!
@@ -625,7 +633,7 @@ public abstract class PriceConfigComposite extends XComposite
 					priceConfigIDs,
 					productTypeID, innerPriceConfigID);
 			if (dialog.open() != Window.OK)
-				return;
+				return false;
 		}
 
 		// store the price configs to the server (it will recalculate all affected product types)
@@ -650,6 +658,8 @@ public abstract class PriceConfigComposite extends XComposite
 		// we ensure this now:
 		if (packageProductType.getInnerPriceConfig() != null)
 			priceCalculator.preparePriceCalculation();
+		
+		return true;
 	}
 
 	public void assignNewPriceConfig(IInnerPriceConfig innerPC, final boolean inherited, final ProgressMonitor monitor)
