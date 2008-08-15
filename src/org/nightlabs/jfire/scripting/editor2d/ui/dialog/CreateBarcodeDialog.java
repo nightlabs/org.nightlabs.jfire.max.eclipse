@@ -97,6 +97,9 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
+		setTitle(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.title")); //$NON-NLS-1$
+		setMessage(Messages.getString("org.nightlabs.jfire.scripting.editor2d.ui.dialog.CreateBarcodeDialog.message")); //$NON-NLS-1$
+		
 		XComposite comp = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		GridLayout layout = new GridLayout(4, true);
 		comp.setLayout(layout);

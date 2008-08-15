@@ -67,19 +67,26 @@ extends DrawComponentEditPart
 			refreshVisuals();
 			return;
 		}
-		if (propertyName.equals(BarcodeDrawComponent.PROP_VALUE)) {
+		else if (propertyName.equals(BarcodeDrawComponent.PROP_VALUE)) {
 			refreshVisuals();
 			return;
 		}
-		if (propertyName.equals(BarcodeDrawComponent.PROP_HUMAN_READABLE)) {
+		else if (propertyName.equals(BarcodeDrawComponent.PROP_HUMAN_READABLE)) {
 			refreshVisuals();
 			return;
 		}
-		if (propertyName.equals(ScriptDrawComponent.PROP_SCRIPT_REGISTRY_ITEM_ID)) {
+		else if (propertyName.equals(ScriptDrawComponent.PROP_SCRIPT_REGISTRY_ITEM_ID)) {
 			refreshVisuals();
 			return;
 		}
-		
+		else if (propertyName.equals(BarcodeDrawComponent.PROP_ORIENTATION)) {
+			refreshVisuals();
+			return;
+		}
+		else if (propertyName.equals(BarcodeDrawComponent.PROP_WIDTH_SCALE)) {
+			refreshVisuals();
+			return;
+		}		
 		super.propertyChanged(evt);
 	}
 }
