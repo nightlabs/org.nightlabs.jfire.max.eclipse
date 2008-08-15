@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: TradeAdmin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.trade.admin.ui;singleton:=true
 Bundle-Version: 0.9.5.qualifier
-Bundle-ClassPath: org.nightlabs.jfire.trade.admin.ui.jar
+Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
