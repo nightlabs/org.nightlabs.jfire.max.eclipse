@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Simpletrade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.simpletrade.ui;singleton:=true
 Bundle-Version: 0.9.5.qualifier
-Bundle-ClassPath: org.nightlabs.jfire.simpletrade.ui.jar
+Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.simpletrade.ui.SimpletradePlugin
 Bundle-Vendor: NightLabs.com
 Bundle-Localization: plugin
