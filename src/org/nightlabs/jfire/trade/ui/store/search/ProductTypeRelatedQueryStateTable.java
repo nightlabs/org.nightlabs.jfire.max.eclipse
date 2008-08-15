@@ -52,7 +52,7 @@ public class ProductTypeRelatedQueryStateTable
 	@Override
 	protected void createTableColumns(final TableViewer tableViewer, Table table)
 	{
-		table.setLayout(new WeightedTableLayout(new int[] { 2, 8 }));
+		table.setLayout(new WeightedTableLayout(new int[] { 1, 20 }));
 		TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
 		column.getColumn().setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.filtered.text")); //$NON-NLS-1$
 		column.setLabelProvider(new ColumnLabelProvider()
@@ -79,7 +79,7 @@ public class ProductTypeRelatedQueryStateTable
 					return JFaceUtil.getCheckBoxImage(tableViewer, value, true);
 				}
 				else
-					return JFaceUtil.getCheckBoxImage(tableViewer, false, false);
+					return JFaceUtil.getCheckBoxImage(tableViewer, true, false);
 			}
 		});
 		column.setEditingSupport(new EditingSupport(tableViewer)
