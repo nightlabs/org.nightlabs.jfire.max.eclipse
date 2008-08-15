@@ -17,4 +17,4 @@ Export-Package: org.nightlabs.jfire.voucher.editor2d.ui,
  org.nightlabs.jfire.voucher.editor2d.ui.resource,
  org.nightlabs.jfire.voucher.editor2d.ui.scripting,
  org.nightlabs.jfire.voucher.editor2d.ui.tool
-Bundle-ClassPath: org.nightlabs.jfire.voucher.editor2d.ui.jar
+Bundle-ClassPath: .
