@@ -43,7 +43,7 @@ public class ClientResourceLocator extends DefaultResourceLocator implements
 				File file = RCPUtil.getResourceAsFile(resourceFile);
 				if (!file.exists())
 					return null;
-				return file.toURL();
+				return file.toURI().toURL();
 			} catch (MalformedURLException e) {
 				throw new RuntimeException(e);
 			}

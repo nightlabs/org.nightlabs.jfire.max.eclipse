@@ -56,6 +56,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.IJFSQueryPropertySetEditor;
+import org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.IJFSQueryPropertySetEditorFactory;
+import org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.JFSQueryPropertySetEditorRegistry;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.oda.client.jfs.ClientJFSDriver;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSParameterUtil;
@@ -64,7 +67,8 @@ import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryUtil;
 
 /**
  * DataSet WizardPage that lets the user pick a JFireScript that
- * should be executed for the DataSet.
+ * should be executed for the DataSet and also lets the user
+ * configure the {@link JFSQueryPropertySet} for the data-set script.
  * 
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
  */
@@ -74,14 +78,17 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	 * Logger used by this class.
 	 */
 	private static final Logger logger = Logger.getLogger(JFSQueryPropertySetWizardPage.class);
-	
+
 	private SashForm wrapper;
 	private SelectedScriptComposite selectedScriptComposite;
 	private Group propertyGroup;
-	private JFSQueryPropertySetTable propertySetTable;
-	
+	private IJFSQueryPropertySetEditorFactory propertySetEditorFactory;
+	private IJFSQueryPropertySetEditor propertySetEditor;
+
 	/**
-	 * @param name The page name
+	 * Create a new {@link JFSQueryPropertySetWizardPage}.
+	 * 
+	 * @param name The page name.
 	 */
 	public JFSQueryPropertySetWizardPage(String name) {
 		super(name);
@@ -89,10 +96,11 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 
 
 	/**
-	 * 
+	 * Create a new {@link JFSQueryPropertySetWizardPage}.
+	 *  
 	 * @param name The page name.
-	 * @param title The page title
-	 * @param icon The page icon
+	 * @param title The page title.
+	 * @param icon The page icon.
 	 */
 	public JFSQueryPropertySetWizardPage(String name, String title,
 			ImageDescriptor icon) {
@@ -100,7 +108,7 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	}
 
 	private JFSQueryPropertySet queryPropertySet = null;
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizardPage#createPageCustomControl(org.eclipse.swt.widgets.Composite)
 	 */
@@ -108,26 +116,22 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 	public void createPageCustomControl(Composite parent) {
 //		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		wrapper = new SashForm(parent, SWT.VERTICAL);
-		
+
 		selectedScriptComposite = new SelectedScriptComposite(wrapper, SWT.NONE);
-		
+
 		propertyGroup = new Group(wrapper, SWT.NONE);
 		GridLayout gl = new GridLayout();
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, gl);
 		propertyGroup.setLayout(gl);
-		propertyGroup.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSQueryPropertySetWizardPage.propertyGroup.text")); //$NON-NLS-1$
-		propertySetTable = new JFSQueryPropertySetTable(propertyGroup, SWT.NONE);
-		propertySetTable.getGridData().heightHint = 100;
+		propertyGroup.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSQueryPropertySetWizardPage.propertyGroup.text")); //$NON-NLS-1$		
 		wrapper.setWeights(new int[] {3, 2});
 		setControl(wrapper);
 		setMessage(Messages.getString("org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.JFSQueryPropertySetWizardPage.message")); //$NON-NLS-1$
 		refresh(null);
 	}
 
-	
-
-	/**
-	 * {@inheritDoc}
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizardPage#refresh(org.eclipse.datatools.connectivity.oda.design.DataSetDesign)
 	 */
 	@Override
@@ -151,17 +155,48 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 			if (selectedScriptComposite != null && !selectedScriptComposite.isDisposed()) {
 				selectedScriptComposite.setScriptRegistryItemID(queryPropertySet.getScriptRegistryItemID());
 			}
-		}
-		propertySetTable.setInput(queryPropertySet.getProperties());
+
+			IJFSQueryPropertySetEditorFactory newFactory = JFSQueryPropertySetEditorRegistry.sharedInstance()
+				.getJFSQueryPropertySetFactory(queryPropertySet.getScriptRegistryItemID());
+
+			if (newFactory == null) {
+				throw new IllegalStateException(JFSQueryPropertySetEditorRegistry.class.getName() + " returned null on getJFSQueryPropertySetFactory()");
+			}
+
+			if (newFactory != null && newFactory != propertySetEditorFactory) {
+				if (
+						propertySetEditor != null && 
+						propertySetEditor.getControl() != null &&
+						!propertySetEditor.getControl().isDisposed()
+				) {
+					propertySetEditor.getControl().dispose();
+				}
+				propertySetEditorFactory = newFactory;
+				propertySetEditor = propertySetEditorFactory.createJFSQueryPropertySetEditor();
+				if (propertySetEditor == null) {
+					throw new IllegalStateException(propertySetEditorFactory.getClass().getName() + " returned no editor on createJFSQueryPropertySetEditor()", new NullPointerException("propertySetEditor"));
+				}
+				propertySetEditor.createControl(propertyGroup);
+			}
+			if (propertySetEditor != null) {
+				propertySetEditor.setJFSQueryPropertySet(queryPropertySet);
+			}
+		} // if (queryPropertySet.getScriptRegistryItemID() != null)
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.datatools.connectivity.oda.design.ui.wizards.DataSetWizardPage#collectDataSetDesign(org.eclipse.datatools.connectivity.oda.design.DataSetDesign)
+	 */
 	@Override
 	protected DataSetDesign collectDataSetDesign(DataSetDesign design) {
 		if (queryPropertySet != null) {
 			if (selectedScriptComposite != null && !selectedScriptComposite.isDisposed()) {
 				queryPropertySet.setScriptRegistryItemID(selectedScriptComposite.getScriptRegistryItemID());
 			}
-			queryPropertySet.setProperties(propertySetTable.getProperties());
+			if (propertySetEditor != null) {
+				queryPropertySet.setProperties(propertySetEditor.getProperties());
+			}
 			String queryText = JFSQueryUtil.createQueryStringFromPropertySet(queryPropertySet);
 			design.setQueryText(queryText);
 
@@ -203,124 +238,112 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 		return design;
 	}
 
-    /**
-     * Updates the given dataSetDesign with the queryText and its derived metadata
-     * obtained from the ODA runtime connection.
-     */
-    private void updateDesign( DataSetDesign dataSetDesign,
-                               IConnection conn, String queryText )
-        throws OdaException
-    {
-        IQuery query = conn.newQuery( null );
-        query.prepare( queryText );
-        
-        // TODO a runtime driver might require a query to first execute before
-        // its metadata is available
-//      query.setMaxRows( 1 );
-//      query.executeQuery();
-        
-        try
-        {
-            IResultSetMetaData md = query.getMetaData();
-            updateResultSetDesign( md, dataSetDesign );
-        }
-        catch( OdaException e )
-        {
-            // no result set definition available, reset previous derived metadata
-            dataSetDesign.setResultSets( null );
-            e.printStackTrace();
-        }
-        
-        // proceed to get parameter design definition
-        try
-        {
-            IParameterMetaData paramMd = query.getParameterMetaData();
-            updateParameterDesign( paramMd, dataSetDesign );
-        }
-        catch( OdaException ex )
-        {
-            // no parameter definition available, reset previous derived metadata
-            dataSetDesign.setParameters( null );
-            ex.printStackTrace();
-        }
-        
-        /*
-         * See DesignSessionUtil for more convenience methods
-         * to define a data set design instance.
-         */
-    }
-
-    /**
-     * Updates the specified data set design's result set definition based on the
-     * specified runtime metadata.
-     * @param md    runtime result set metadata instance
-     * @param dataSetDesign     data set design instance to update
-     * @throws OdaException
-     */
-	private void updateResultSetDesign( IResultSetMetaData md,
-            DataSetDesign dataSetDesign )
-        throws OdaException
+	/**
+	 * Updates the given dataSetDesign with the queryText and its derived metadata
+	 * obtained from the ODA runtime connection.
+	 */
+	private void updateDesign(DataSetDesign dataSetDesign, IConnection conn, String queryText)
+	throws OdaException
 	{
-        ResultSetColumns columns = DesignSessionUtil.toResultSetColumnsDesign( md );
+		IQuery query = conn.newQuery( null );
+		query.prepare( queryText );
 
-        ResultSetDefinition resultSetDefn = DesignFactory.eINSTANCE
-                .createResultSetDefinition();
-        // resultSetDefn.setName( value );  // result set name
-        resultSetDefn.setResultSetColumns( columns );
+		// TODO a runtime driver might require a query to first execute before
+		// its metadata is available
+//		query.setMaxRows( 1 );
+//		query.executeQuery();
 
-        // no exception in conversion; go ahead and assign to specified dataSetDesign
-        dataSetDesign.setPrimaryResultSet( resultSetDefn );
-        dataSetDesign.getResultSets().setDerivedMetaData( true );
+		try {
+			IResultSetMetaData md = query.getMetaData();
+			updateResultSetDesign( md, dataSetDesign );
+		} catch( OdaException e ) {
+			// no result set definition available, reset previous derived metadata
+			dataSetDesign.setResultSets( null );
+			e.printStackTrace();
+		}
+
+		// proceed to get parameter design definition
+		try {
+			IParameterMetaData paramMd = query.getParameterMetaData();
+			updateParameterDesign( paramMd, dataSetDesign );
+		} catch( OdaException ex ) {
+			// no parameter definition available, reset previous derived metadata
+			dataSetDesign.setParameters( null );
+			ex.printStackTrace();
+		}
 	}
 
-    /**
-     * Updates the specified data set design's parameter definition based on the
-     * specified runtime metadata.
-     * @param paramMd   runtime parameter metadata instance
-     * @param dataSetDesign     data set design instance to update
-     * @throws OdaException
-     */
-    private void updateParameterDesign( IParameterMetaData paramMd,
-            DataSetDesign dataSetDesign )
-        throws OdaException
-    {
-        DataSetParameters paramDesign =
-            DesignSessionUtil.toDataSetParametersDesign( paramMd,
-                    DesignSessionUtil.toParameterModeDesign( IParameterMetaData.parameterModeIn ) );
-        
-        if (paramDesign == null)
-        	return;
-        // no exception in conversion; go ahead and assign to specified dataSetDesign
-        paramDesign.setDerivedMetaData( true );
-        // TODO WORKAROUND
-        // hard-coded parameter's default because bindings will be ignored if no default value set :-(
-        for (int i = 0; i < paramDesign.getParameterDefinitions().size(); i++) {
-            ParameterDefinition paramDef = (ParameterDefinition) paramDesign.getParameterDefinitions().get(i);
-            if( paramDef != null )
-                paramDef.setDefaultScalarValue(JFSParameterUtil.DUMMY_DEFAULT_PARAMETER_VALUE);
-        }
-        dataSetDesign.setParameters( paramDesign );
+	/**
+	 * Updates the specified data set design's result set definition based on the
+	 * specified runtime metadata.
+	 * @param md    runtime result set metadata instance
+	 * @param dataSetDesign     data set design instance to update
+	 * @throws OdaException
+	 */
+	private void updateResultSetDesign( IResultSetMetaData md,
+			DataSetDesign dataSetDesign )
+	throws OdaException
+	{
+		ResultSetColumns columns = DesignSessionUtil.toResultSetColumnsDesign( md );
 
-    }
-    
-    /**
-     * Attempts to close given ODA connection.
-     */
-    private void closeConnection( IConnection conn )
-    {
-        try
-        {
-            if( conn != null && conn.isOpen() )
-                conn.close();
-        }
-        catch ( OdaException e )
-        {
-            // ignore
-            e.printStackTrace();
-        }
-    }
-    
-    
+		ResultSetDefinition resultSetDefn = DesignFactory.eINSTANCE
+		.createResultSetDefinition();
+		// resultSetDefn.setName( value );  // result set name
+		resultSetDefn.setResultSetColumns( columns );
+
+		// no exception in conversion; go ahead and assign to specified dataSetDesign
+		dataSetDesign.setPrimaryResultSet( resultSetDefn );
+		dataSetDesign.getResultSets().setDerivedMetaData( true );
+	}
+
+	/**
+	 * Updates the specified data set design's parameter definition based on the
+	 * specified runtime metadata.
+	 * @param paramMd The runtime parameter metadata instance.
+	 * @param dataSetDesign The data set design instance to update.
+	 * @throws OdaException
+	 */
+	private void updateParameterDesign( IParameterMetaData paramMd,
+			DataSetDesign dataSetDesign )
+	throws OdaException
+	{
+		DataSetParameters paramDesign =
+			DesignSessionUtil.toDataSetParametersDesign( paramMd,
+					DesignSessionUtil.toParameterModeDesign( IParameterMetaData.parameterModeIn ) );
+
+		if (paramDesign == null)
+			return;
+		// no exception in conversion; go ahead and assign to specified dataSetDesign
+		paramDesign.setDerivedMetaData( true );
+		// TODO WORKAROUND
+		// hard-coded parameter's default because bindings will be ignored if no default value set :-(
+		for (int i = 0; i < paramDesign.getParameterDefinitions().size(); i++) {
+			ParameterDefinition paramDef = (ParameterDefinition) paramDesign.getParameterDefinitions().get(i);
+			if( paramDef != null )
+				paramDef.setDefaultScalarValue(JFSParameterUtil.DUMMY_DEFAULT_PARAMETER_VALUE);
+		}
+		dataSetDesign.setParameters( paramDesign );
+
+	}
+
+	/**
+	 * Attempts to close given ODA connection.
+	 */
+	private void closeConnection( IConnection conn )
+	{
+		try
+		{
+			if( conn != null && conn.isOpen() )
+				conn.close();
+		}
+		catch ( OdaException e )
+		{
+			// ignore
+			e.printStackTrace();
+		}
+	}
+
+
 	private void logDesignParameters(String prefix, DataSetDesign design) {
 		if (design.getParameters() == null)
 			return;
@@ -338,5 +361,5 @@ public class JFSQueryPropertySetWizardPage extends DataSetWizardPage {
 			logger.info(prefix + "Parameter defaultValue: " + elementAttributes.getDefaultScalarValue()); //$NON-NLS-1$
 		}
 	}
-    
+
 }

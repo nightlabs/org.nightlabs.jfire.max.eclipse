@@ -2,6 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="expressionProviderEntry" name="Expression Provider Entry" schema="schema/expressionProviderEntry.exsd"/>
+   <extension-point id="queryPropertySetEditor" name="JFSQueryPropertySetEditor Extension-Point" schema="schema/queryPropertySetEditor.exsd"/>
 <!-- TODO: Removed for the 0.9.4 release: 
   https://www.jfire.org/modules/bugs/view.php?id=729
   https://www.jfire.org/modules/bugs/view.php?id=731          
@@ -363,5 +364,11 @@
               name="Get localised report message"
               tooltip="Get localised report message">
         </expressionProviderEntry>
+     </extension>
+     <extension
+           point="org.nightlabs.jfire.reporting.admin.ui.queryPropertySetEditor">
+        <queryPropertySetEditor
+              class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.prop.PropertySetQueryPropertySetEditorFactory">
+        </queryPropertySetEditor>
      </extension>
 </plugin>
