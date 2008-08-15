@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DynamicTrade Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.dynamictrade.ui;singleton:=true
 Bundle-Version: 0.9.5.qualifier
-Bundle-ClassPath: org.nightlabs.jfire.dynamictrade.ui.jar
+Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.dynamictrade.ui.DynamicTradePlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
