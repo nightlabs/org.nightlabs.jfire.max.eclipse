@@ -12,4 +12,4 @@ Require-Bundle: org.eclipse.ui,
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.print.ui,
  org.nightlabs.jfire.voucher.print.ui.transfer.deliver
-Bundle-ClassPath: org.nightlabs.jfire.voucher.print.ui.jar
+Bundle-ClassPath: .
