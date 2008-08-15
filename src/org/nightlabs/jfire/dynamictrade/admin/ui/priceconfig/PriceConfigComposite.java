@@ -102,9 +102,9 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	}
 
 	@Override
-	public void submit()
+	public boolean submit()
 	{
-		super.submit();
+		return super.submit();
 	}
 
 	@Implement
