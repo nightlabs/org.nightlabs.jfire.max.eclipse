@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Scripting Admin Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.scripting.admin.ui;singleton:=true
 Bundle-Version: 0.9.5.qualifier
-Bundle-ClassPath: org.nightlabs.jfire.scripting.admin.ui.jar
+Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.scripting.admin.ui.ScriptingAdminPlugin
 Bundle-Vendor: NightLabs.org
 Bundle-Localization: plugin
