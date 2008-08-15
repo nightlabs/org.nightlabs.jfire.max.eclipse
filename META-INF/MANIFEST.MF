@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Issue Tracking Plug-in
 Bundle-SymbolicName: org.nightlabs.jfire.issuetracking.ui;singleton:=true
 Bundle-Version: 0.9.5.qualifier
-Bundle-ClassPath: org.nightlabs.jfire.issuetracking.ui.jar
+Bundle-ClassPath: .
 Bundle-Activator: org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
