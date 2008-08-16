@@ -61,34 +61,29 @@ extends AbstractDataBlockEditor
 			createFieldEditors();
 		}
 
-		@Override
-		public void doRefresh() {
-			createFieldEditors();
-		}
-
 		private void createFieldEditors() {
 			addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_SHORT, 2);
 			addDataFieldEditor(SimpleProductTypeStruct.DESCRIPTION_LONG, 2);
 		}
 
-		private void addDataFieldEditor(StructFieldID fieldID, int horizontalSpan)
+		private void addDataFieldEditor(StructFieldID structFieldID, int horizontalSpan)
 		{
-			DataField field = null;
+			DataField dataField = null;
 			try {
-				field = getDataBlock().getDataField(fieldID);
+				dataField = getDataBlock().getDataField(structFieldID);
 			} catch (DataFieldNotFoundException e) {
-				logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+fieldID.toString(),e); //$NON-NLS-1$
+				logger.error("addDataFieldEditor(StructFieldID fieldID) DataField not found for fieldID continuing: "+structFieldID.toString(),e); //$NON-NLS-1$
 			}
 			DataFieldEditor<DataField> editor = null;
-			if (!hasFieldEditorFor(field)) {
+			if (!hasFieldEditorFor(structFieldID)) {
 				try {
 					editor = DataFieldEditorFactoryRegistry.sharedInstance().getNewEditorInstance(
 							getStruct(), ExpandableBlocksEditor.EDITORTYPE_BLOCK_BASED_EXPANDABLE,
 							"", // TODO: Context ?!? //$NON-NLS-1$
-							field
+							dataField
 					);
 				} catch (DataFieldEditorNotFoundException e1) {
-					logger.error("addDataFieldEditor(StructFieldID fieldID) DataFieldEditor not found for fieldID continuing: "+fieldID.toString(),e1); //$NON-NLS-1$
+					logger.error("addDataFieldEditor(StructFieldID fieldID) DataFieldEditor not found for fieldID continuing: "+structFieldID.toString(),e1); //$NON-NLS-1$
 				}
 				Control editorControl = editor.createControl(this);
 				GridData editorLData = new GridData(GridData.FILL_BOTH);
@@ -96,12 +91,12 @@ extends AbstractDataBlockEditor
 //				editorLData.grabExcessHorizontalSpace = true;
 //				editorLData.horizontalAlignment = GridData.FILL;
 				editorControl.setLayoutData(editorLData);
-				addFieldEditor(field, editor);
+				addFieldEditor(structFieldID, editor);
 			}
 			else {
-				editor = getFieldEditor(field);
+				editor = getFieldEditor(dataField);
 			}
-			editor.setData(getStruct(), field);
+			editor.setData(getStruct(), dataField);
 			editor.refresh();
 		}
 	}
