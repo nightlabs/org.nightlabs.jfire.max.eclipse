@@ -280,22 +280,6 @@ implements IReportEditorPage, IActionUpdateDelegate
 		return provider;
 	}
 	
-//	private ActionRegistry registry;
-//
-//	public Object getAdapter( Class required )
-//	{
-//		System.out.println("Get Adapter called for "+required);
-//		if ( required.equals( ActionRegistry.class ) )
-//		{
-//			if ( registry == null )
-//			{
-//				registry = new ActionRegistry( );
-//			}
-//			return registry;
-//		}
-//		return super.getAdapter( required );
-//	}
-	
 	public Object getModel() {
 		if (model == null)
 			model = getProvider().getReportModuleHandle(getEditorInput());
