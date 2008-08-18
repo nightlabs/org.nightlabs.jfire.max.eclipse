@@ -52,11 +52,10 @@ public class IssueTypeEditorPageController extends EntityEditorPageController {
 		fireModifyEvent(null, issueType);
 	}
 
-	public boolean doSave(ProgressMonitor monitor) {
+	public void doSave(ProgressMonitor monitor) {
 		IssueTypeDAO.sharedInstance().storeIssueTypes(issueType, FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 					new NullProgressMonitor());
-		return true;
 	}
 	
 	public IssueTypeID getIssueTypeID() {
