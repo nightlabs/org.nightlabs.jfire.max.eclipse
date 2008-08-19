@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-	<extension-point id="issueOverview" name="Issue overview" schema="schema/overview.exsd"/>
-
-   
-   
    <extension
          point="org.nightlabs.jfire.trade.ui.articleContainerAction">
       <articleContainerAction
@@ -74,89 +70,5 @@
                name="org.nightlabs.jfire.issuetracking.ui.overview">
          </groupMarker>         
       </editorActionBarContributionRegistry>
-   </extension-->
-   
-   <!--extension
-         point="org.nightlabs.jfire.base.ui.quickSearchEntry">
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.account.search.AccountNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer"
-            name="Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.account.search.AccountOwnerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryViewer"
-            name="Owner Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
-            name="ID">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
-            name="Customer Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.deliverynote.search.DeliveryNoteVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryViewer"
-            name="Vendor Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
-            name="ID">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
-            name="Customer Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.invoice.search.InvoiceVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer"
-            name="Vendor Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
-            name="ID">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
-            name="Customer Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.offer.search.OfferVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryViewer"
-            name="Vendor Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderIDQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueOrderLinkAdder"
-            name="ID">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderCustomerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueOrderLinkAdder"
-            name="Customer Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.order.search.OrderVendorNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.IssueOrderLinkAdder"
-            name="Vendor Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer"
-            name="Name">
-      </quickSearchEntryFactory>
-      <quickSearchEntryFactory
-            class="org.nightlabs.jfire.trade.ui.overview.repository.search.RepositoryOwnerNameQuickSearchEntryFactory"
-            id="org.nightlabs.jfire.trade.ui.overview.repository.RepositoryEntryViewer"
-            name="Owner Name">
-      </quickSearchEntryFactory>
    </extension-->
 </plugin>
