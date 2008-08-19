@@ -76,7 +76,6 @@ extends EntityEditorPageWithProgress
 	private IssueLinkListSection issueLinkListSection;
 	private IssueFileAttachmentSection issueFileAttachmentSection;
 	private IssueWorkTimeSection issueWorkTimeSection;
-	private ProjectSection projectSection;
 	
 	/**
 	 * <p>
@@ -169,13 +168,6 @@ extends EntityEditorPageWithProgress
 //		gridData.horizontalSpan = 2;
 		issueWorkTimeSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueWorkTimeSection);
-		
-		projectSection = new ProjectSection(this, c, controller);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.verticalAlignment = GridData.BEGINNING;
-		gridData.horizontalSpan = 2;
-		projectSection.getSection().setLayoutData(gridData);
-		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
 			issueLinkListSection.setIssue(controller.getIssue());
