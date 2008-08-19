@@ -55,7 +55,7 @@ extends AbstractTreeComposite<Project>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-			return project.getSubProjects().size() > 0;
+			return project.getProjectItems().size() > 0;
 		}
 	}
 
@@ -206,7 +206,7 @@ extends AbstractTreeComposite<Project>
 				protected void okPressed() {
 					try {
 						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-						project.setParentProject(getFirstSelectedElement());
+//						project.setProject(getFirstSelectedElement());
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 						ProjectDAO.sharedInstance().storeProject(project, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						dialog.close();

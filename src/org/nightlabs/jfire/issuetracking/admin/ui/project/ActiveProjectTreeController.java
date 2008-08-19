@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -14,19 +13,20 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
+import org.nightlabs.jfire.issue.project.ProjectItem;
 import org.nightlabs.jfire.issue.project.ProjectParentResolver;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  *
  */
-public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode>
+public class ActiveProjectTreeController 
+extends ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode>
 {
 	public static final String[] FETCH_GROUPS_PROJECT = {
-		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
+		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_PROJECT_ITEMS
 	};
 
 	@Implement
@@ -43,11 +43,11 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 		if (parentID != null) {
 			Project project = ProjectDAO.sharedInstance().getProject(
 					parentID, FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
-			Collection<Project> res = project.getSubProjects();
+			Collection<Project> res = null;//project.getProjectItems();
 			return res;
 		}
 		
-		return ProjectDAO.sharedInstance().getProjects(FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return null;//ProjectDAO.sharedInstance().getProjects(FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 	}
 
 	@Implement
