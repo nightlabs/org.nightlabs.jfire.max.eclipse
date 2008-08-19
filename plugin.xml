@@ -40,4 +40,18 @@
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension-->
+   
+   
+   <extension
+         point="org.nightlabs.jfire.base.ui.overview">
+      	<categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.IssueTypeCategoryFactory"
+            index="10" name="Issue Types" scope="IssueShelf"/>
+        <entryFactory
+            categoryEntryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntry"
+            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
+            index="0" name="Issue Types"/>
+    </extension>
 </plugin>

@@ -12,7 +12,10 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * This composite lists all {@link IssueType}s of an issue type in a table.
@@ -32,7 +35,7 @@ extends AbstractTableComposite<IssueType>
 	public IssueTypeTable(Composite parent, int style)
 	{
 		super(parent, style);
-//		load();
+		setInput(IssueTypeDAO.sharedInstance().getAllIssueTypes(IssueTypeTable.FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
 	}
 	
 //	@Override

@@ -33,6 +33,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun 
@@ -91,7 +92,7 @@ extends WizardHopPage {
 		issuePriorityTable = new IssuePriorityTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
-				List<IssuePriority> issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(new String[] { IssuePriority.FETCH_GROUP_NAME }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, null);
+				List<IssuePriority> issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(new String[] { IssuePriority.FETCH_GROUP_NAME }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issuePriorities.removeAll(issueType.getIssuePriorities());
 				
 				issuePriorityTable.setInput(issuePriorities);
