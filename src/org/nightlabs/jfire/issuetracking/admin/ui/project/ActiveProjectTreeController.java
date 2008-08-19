@@ -26,7 +26,7 @@ public class ActiveProjectTreeController
 extends ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode>
 {
 	public static final String[] FETCH_GROUPS_PROJECT = {
-		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_PROJECT_ITEMS
+		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, // Project.FETCH_GROUP_PROJECT_ITEMS // TODO handle this fetch-group. I commented it out temporarily, because it does not exist and causes the nightly build to fail. Marco.
 	};
 
 	@Implement
