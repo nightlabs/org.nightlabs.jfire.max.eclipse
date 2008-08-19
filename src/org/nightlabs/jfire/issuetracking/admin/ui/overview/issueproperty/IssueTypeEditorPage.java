@@ -9,6 +9,8 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectSection;
 
 public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	/**
@@ -34,6 +36,7 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	private IssueTypePrioritySection issueTypePrioritySection;
 	private IssueTypeSeverityTypeSection issueTypeSeverityTypeSection;
 	private IssueTypeResolutionSection issueTypeResolutionSection;
+	private ProjectSection projectSection;
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -62,6 +65,9 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		
 		issueTypeResolutionSection = new IssueTypeResolutionSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeResolutionSection);
+		
+		projectSection = new ProjectSection(this, parent, controller);
+		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
 			issueTypeNameSection.setIssueType(controller.getIssueType());
