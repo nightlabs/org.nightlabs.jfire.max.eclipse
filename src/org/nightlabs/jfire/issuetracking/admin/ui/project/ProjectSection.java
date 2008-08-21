@@ -18,7 +18,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -27,7 +26,6 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 import org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPageController;
-import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -37,7 +35,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ProjectSection 
 extends ToolBarSectionPart
 {
-	private ProjectTreeComposite projectTreeComposite;
+//	private ProjectTreeComposite projectTreeComposite;
 
 	private CreateProjectAction createProjectAction;
 	private DeleteProjectAction deleteProjectAction;
@@ -51,10 +49,10 @@ extends ToolBarSectionPart
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1; 
 		
-		projectTreeComposite = new ProjectTreeComposite(
-				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
-		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
-		projectTreeComposite.getGridData().heightHint = 80;
+//		projectTreeComposite = new ProjectTreeComposite(
+//				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
+//		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
+//		projectTreeComposite.getGridData().heightHint = 80;
 		
 		getSection().setClient(client);
 		
