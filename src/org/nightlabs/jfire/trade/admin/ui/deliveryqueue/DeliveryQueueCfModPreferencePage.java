@@ -7,9 +7,9 @@ import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
 
 public class DeliveryQueueCfModPreferencePage
 extends AbstractUserConfigModulePreferencePage
-{	
+{
 	private DeliveryQueueConfigurationComposite pqConfigComposite;
-	
+
 	@Override
 	protected void createPreferencePage(Composite parent) {
 		pqConfigComposite = new DeliveryQueueConfigurationComposite(parent, getPageDirtyStateManager());
@@ -28,9 +28,15 @@ extends AbstractUserConfigModulePreferencePage
 		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) getConfigModuleController().getConfigModule();
 		pqConfigComposite.storeChanges(pqcm);
 	}
-	
+
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
 		return new DeliveryQueueConfigModuleController(this);
+	}
+
+	@Override
+	protected void setBodyContentEditable(boolean editable)
+	{
+		pqConfigComposite.setReadOnly(! editable);
 	}
 }
