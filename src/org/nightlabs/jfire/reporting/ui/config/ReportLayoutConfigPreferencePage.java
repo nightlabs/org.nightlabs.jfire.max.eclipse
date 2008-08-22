@@ -29,6 +29,7 @@ package org.nightlabs.jfire.reporting.ui.config;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage;
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
@@ -47,7 +48,7 @@ extends AbstractUserConfigModulePreferencePage
 	public ReportLayoutConfigPreferencePage() {
 		super();
 	}
-	
+
 	/**
 	 * @param title
 	 */
@@ -62,14 +63,16 @@ extends AbstractUserConfigModulePreferencePage
 	public ReportLayoutConfigPreferencePage(String title, ImageDescriptor image) {
 		super(title, image);
 	}
-	
-	
+
+
 	private ReportLayoutTree reportLayoutTree;
 
 	@Override
 	protected void createPreferencePage(Composite parent) {
 		reportLayoutTree = new ReportLayoutTree(parent, this,
-				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION | SWT.BORDER);
+				AbstractTreeComposite.DEFAULT_STYLE_SINGLE | SWT.FULL_SELECTION |
+				XComposite.getBorderStyle(parent)
+			);
 	}
 
 	@Override
@@ -83,12 +86,12 @@ extends AbstractUserConfigModulePreferencePage
 	public void updateConfigModule() {
 		// WORKAROUND This is a
 //		(ReportLayoutConfigModule)getConfigModuleManager().getConfigModule()).copyFrom(
-		
+
 //		((ReportLayoutConfigModule)getConfigModuleManager().getConfigModule()).copyFrom(
 //				(ReportLayoutConfigModule)getConfigModuleManager().getConfigModule());
 	}
-	
-	
+
+
 	public void setChanged(boolean changed) {
 		setConfigChanged(changed);
 	}
@@ -96,6 +99,12 @@ extends AbstractUserConfigModulePreferencePage
 	@Override
 	protected IConfigModuleController createConfigModuleController() {
 		return new ReportLayoutConfigController(this);
+	}
+
+	@Override
+	protected void setBodyContentEditable(boolean editable)
+	{
+		reportLayoutTree.setEditable(editable);
 	}
 
 }
