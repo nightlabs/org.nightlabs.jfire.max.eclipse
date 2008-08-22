@@ -204,10 +204,11 @@ extends AbstractTreeComposite<Project>
 				@Override
 				protected void okPressed() {
 					try {
+						Project projectToStore = getFirstSelectedElement();
 						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-//						project.setProject(getFirstSelectedElement());
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-						ProjectDAO.sharedInstance().storeProject(project, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						projectToStore.addSubProject(project);
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						dialog.close();
 					} catch (Exception e) {
 						throw new RuntimeException(e);
