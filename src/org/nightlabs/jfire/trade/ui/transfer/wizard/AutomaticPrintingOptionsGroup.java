@@ -14,7 +14,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 class AutomaticPrintingOptionsGroup extends XComposite {
-	
+
 	Group group;
 	Button doPrintCheckbox;
 	Spinner printCountSpinner;
@@ -28,14 +28,14 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		this.entityName = entityName;
-		
+
 		group = new Group(this, SWT.NONE);
 		group.setText(groupTitle);
 		group.setLayout(new GridLayout(3, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.verticalIndent = 10;
 		group.setLayoutData(gridData);
-		
+
 		if (description != null) {
 			Label label = new Label(group, SWT.WRAP);
 			label.setText(description);
@@ -43,9 +43,9 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 			gridData.horizontalSpan = 3;
 			label.setLayoutData(gridData);
 		}
-		
+
 		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-		
+
 		doPrintCheckbox = new Button(wrapper, SWT.CHECK);
 		doPrintCheckbox.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.button.print.text"), entityName)); //$NON-NLS-1$
 		wrapper = new XComposite(group, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
@@ -54,15 +54,15 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 		gridData.horizontalIndent = 10;
 		label.setLayoutData(gridData);
 		label.setText("#"); //$NON-NLS-1$
-		
-		printCountSpinner = new Spinner(wrapper, SWT.BORDER);
+
+		printCountSpinner = new Spinner(wrapper, getBorderStyle());
 		printCountSpinner.setMinimum(0);
 		printCountSpinner.setMaximum(-1);
 		printCountSpinner.setDigits(0);
 		printCountSpinner.setIncrement(1);
 		infoLabel = new Label(group, SWT.RIGHT);
 		infoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		doPrintCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -79,7 +79,7 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 			}
 		});
 	}
-	
+
 	protected void updateInfoLabel() {
 		if (getEnteredPrintCount() == 0)
 			infoLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.infoLabel.text")); //$NON-NLS-1$
@@ -88,31 +88,31 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 			infoLabel.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.willBePrinted"), printCount, copyText)); //$NON-NLS-1$
 		}
 	}
-	
+
 	public int getActualPrintCount() {
 		return (doPrint ? printCount : 0);
 	}
-	
+
 	public int getEnteredPrintCount() {
 		return printCount;
 	}
-	
+
 	public void setEnteredPrintCount(int printCount) {
 		this.printCount = printCount;
 		this.printCountSpinner.setSelection(printCount);
 		if (printCount > 0)
 			doPrintCheckbox.setSelection(true);
-		
+
 		updateInfoLabel();
 	}
-	
+
 	public void setDoPrint(boolean value) {
 		doPrint = value;
 		this.doPrintCheckbox.setSelection(doPrint);
-		
+
 		updateInfoLabel();
 	}
-	
+
 	public boolean getDoPrint() {
 		return doPrint;
 	}

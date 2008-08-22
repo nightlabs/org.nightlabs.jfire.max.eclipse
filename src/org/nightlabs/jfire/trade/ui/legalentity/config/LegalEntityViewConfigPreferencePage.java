@@ -63,14 +63,14 @@ extends AbstractUserConfigModulePreferencePage
 {
 	private XComposite wrapper;
 	private LEViewPersonStructFieldTable structFieldTable;
-	
+
 	private XComposite buttonWrapper;
 	private Button addButton;
 	private Button removeButton;
 	private Button upButton;
 	private Button downButton;
-	
-	
+
+
 	public LegalEntityViewConfigPreferencePage() {
 		super();
 	}
@@ -98,20 +98,20 @@ extends AbstractUserConfigModulePreferencePage
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		wrapper.getGridLayout().numColumns = 2;
 		wrapper.getGridLayout().makeColumnsEqualWidth = false;
-		
+
 		structFieldTable = new LEViewPersonStructFieldTable(wrapper, SWT.NONE	);
 		structFieldTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		buttonWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		buttonWrapper.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		
+
 		addButton = new Button(buttonWrapper, SWT.PUSH);
 		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.addButton.text")); //$NON-NLS-1$
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				StructDialog dialog = new StructDialog(addButton.getShell());				
+				StructDialog dialog = new StructDialog(addButton.getShell());
 				if (dialog.open() == Dialog.OK) {
 					structFieldTable.addStructField(dialog.getSelectedStructField().getStructFieldIDObj().toString());
 					structFieldTable.refresh();
@@ -119,7 +119,7 @@ extends AbstractUserConfigModulePreferencePage
 				}
 			}
 		});
-		
+
 		removeButton = new Button(buttonWrapper, SWT.PUSH);
 		removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.removeButton.text")); //$NON-NLS-1$
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -133,7 +133,7 @@ extends AbstractUserConfigModulePreferencePage
 				widgetSelected(e);
 			}
 		});
-		
+
 		upButton = new Button(buttonWrapper, SWT.PUSH);
 		upButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.upButton.text")); //$NON-NLS-1$
 		upButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -146,9 +146,9 @@ extends AbstractUserConfigModulePreferencePage
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
-			
+
 		});
-		
+
 		downButton = new Button(buttonWrapper, SWT.PUSH);
 		downButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.downButton.text")); //$NON-NLS-1$
 		downButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -161,9 +161,9 @@ extends AbstractUserConfigModulePreferencePage
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
-			
+
 		});
-		
+
 		structFieldTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent arg0) {
@@ -178,7 +178,7 @@ extends AbstractUserConfigModulePreferencePage
 		upButton.setEnabled((!structFieldTable.isSelectedFirst()) && structFieldTable.getFirstSelectedElement() != null);
 		downButton.setEnabled((!structFieldTable.isSelectedLast()) && structFieldTable.getFirstSelectedElement() != null);
 	}
-	
+
 //	@Override
 //	protected void updatePreferencePage(ConfigModule configModule) {
 //		structFieldTable.setInput(configModule);
@@ -191,12 +191,29 @@ extends AbstractUserConfigModulePreferencePage
 	protected void discardPreferencePageWidgets() {
 		wrapper = null;
 		structFieldTable = null;
-		
+
 		buttonWrapper = null;
 		addButton = null;
 		removeButton = null;
 		upButton = null;
 		downButton = null;
+	}
+
+	@Override
+	protected void setBodyContentEditable(boolean editable)
+	{
+		addButton.setEnabled(editable);
+		if (editable)
+		{
+			updateButtonsEnabled();
+		}
+		else
+		{
+			removeButton.setEnabled(false);
+			upButton.setEnabled(false);
+			downButton.setEnabled(false);
+		}
+		structFieldTable.setEditable(editable);
 	}
 
 	@Override
@@ -211,23 +228,23 @@ extends AbstractUserConfigModulePreferencePage
 	protected IConfigModuleController createConfigModuleController() {
 		return new LegalEntityViewConfigController(this);
 	}
-	
+
 	class StructDialog extends ResizableTitleAreaDialog {
 
 		private StructField<?> selectedStructField;
 		private StructTreeComposite treeComposite;
-		
-		
+
+
 		public StructDialog(Shell shell) {
 			super(shell, null);
 		}
-		
+
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.windows.title")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.title"));			 //$NON-NLS-1$
@@ -253,11 +270,11 @@ extends AbstractUserConfigModulePreferencePage
 			super.createButtonsForButtonBar(parent);
 			setOKButtonEnabled(false);
 		}
-		
+
 		protected void setOKButtonEnabled(boolean value) {
-			getButton(IDialogConstants.OK_ID).setEnabled(value);	
+			getButton(IDialogConstants.OK_ID).setEnabled(value);
 		}
-		
+
 		public StructField<?> getSelectedStructField() {
 			return selectedStructField;
 		}
