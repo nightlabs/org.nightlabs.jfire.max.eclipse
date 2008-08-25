@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -54,7 +55,9 @@ extends AbstractTreeComposite<Project>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-			return project.getSubProjects().size() > 0;
+//			return true;
+			Project p = ProjectDAO.sharedInstance().getProject((ProjectID)JDOHelper.getObjectId(project), new String[]{Project.FETCH_GROUP_SUBPROJECTS, FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			return p.getSubProjects().size() > 0;
 		}
 	}
 

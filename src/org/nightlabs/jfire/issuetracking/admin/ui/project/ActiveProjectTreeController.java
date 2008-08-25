@@ -47,7 +47,8 @@ extends ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode>
 			return res;
 		}
 		
-		return ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID());
+		Collection<Project> rootProjects = ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID());
+		return rootProjects;
 	}
 
 	@Implement
