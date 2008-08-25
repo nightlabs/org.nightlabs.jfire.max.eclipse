@@ -163,35 +163,17 @@ public class ArticleAdder extends AbstractArticleAdder
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder#checkRequirements()
-	 */
-	@Override
-	protected boolean checkRequirements() 
-	{ 
-		boolean requirementsFulFilled = super.checkRequirements();
-		if (!requirementsFulFilled) {
-			return requirementsFulFilled;
-		}
-
-		return tariffPricePairs != null;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder#createRequirementsNotFulFilledComposite(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	protected Composite createRequirementsNotFulFilledComposite(Composite parent) 
+	protected Composite createRequirementsNotFulfilledComposite(Composite parent) 
 	{
-		if (!super.checkRequirements()) {
-			return super.createRequirementsNotFulFilledComposite(parent);
-		}
-		
 		if (tariffPricePairs == null) {
 			String message = String.format("No TariffPricePairs are available for the ProductType %s", getProductType().getName().getText(NLLocale.getDefault()));
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
 
-		return null;
+		return super.createRequirementsNotFulfilledComposite(parent);
 	}
 
 }
