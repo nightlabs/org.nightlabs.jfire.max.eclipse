@@ -34,8 +34,10 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -225,6 +227,36 @@ extends AbstractUIPlugin
 		reg.put(IMAGE_ARTICLE_DELIVERED_16x16, imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, IMAGE_ARTICLE_DELIVERED_16x16));
 	}
 
+	/**
+	 * Returns a localized string that represents the type of {@link ArticleContainer} passed.
+	 * 
+	 * @param articleContainer The {@link ArticleContainer} to get the type string for.
+	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
+	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
+	 */
+	public static String getArticleContainerTypeString(ArticleContainer articleContainer, boolean capitalize) {
+		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainerTypeString.";
+		Class<?> acClass = articleContainer.getClass();
+		String acTypeString = getMessageKey(prefix + acClass.getSimpleName());
+		while (acTypeString == null && !(acClass == Object.class)) {
+			acClass = acClass.getSuperclass();
+			acTypeString = getMessageKey(prefix + acClass.getSimpleName());
+		}
+		if (acTypeString == null) {
+			acTypeString = articleContainer.getClass().getSimpleName();
+		}
+		if (capitalize && acTypeString.length() > 0) {
+			acTypeString = acTypeString.substring(0, 1).toUpperCase() + acTypeString.substring(1); 
+		}
+		return acTypeString;
+	}
+	
+	private static String getMessageKey(String key) {
+		if (Messages.RESOURCE_BUNDLE.containsKey(key))
+			return Messages.RESOURCE_BUNDLE.getString(key);
+		return null;
+	}
+	
 	public TradeManager getTradeManager()
 	{
 		try {

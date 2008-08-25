@@ -32,12 +32,21 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
+import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.util.NLLocale;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public abstract class AbstractArticleAdder implements ArticleAdder
 {
@@ -75,10 +84,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
-		boolean requirementsFulFilled = checkRequirements();
-		if (!requirementsFulFilled) {
-			composite = createRequirementsNotFulFilledComposite(parent);
-		}
+		composite = createRequirementsNotFulfilledComposite(parent);		
 		if (composite == null) {
 			composite = _createComposite(parent);
 		}
@@ -120,30 +126,53 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	}
 
 	/**
-	 * If the method {@link #checkRequirements()} returns false 
-	 * this method should return a corresponding Composite should which shows a appropriate
-	 * message 
-	 * 
-	 * @return a Composite which shows a appropriate message which requirements are not fulfilled.
+	 * This method is invoked to check if the requirements 
+	 * (concerning the current {@link ProductType} or the current {@link ArticleContainer})
+	 * are all fulfilled in order to show this {@link ArticleAdder}s Composite.
+	 * <p>
+	 * A return value of <code>null</code> indicates that all requirements are fulfilled.
+	 * When a Composite is returned, the creation of the Composite of this {@link ArticleAdder}
+	 * is aborted (i.e. {@link #_createComposite(Composite)} will not be called).
+	 * </p>
+	 * <p>
+	 * By default this method checks if the {@link ProductType} is saleable and if the {@link ArticleContainer}
+	 * is not finalized and returns a {@link MessageComposite} if it finds a requirement unfulfilled.
+	 * </p>
+	 * @return <code>null</code> if all requirements are fulfilled, a Composite which shows a appropriate message which requirements are not fulfilled otherwise.
 	 */
-	protected Composite createRequirementsNotFulFilledComposite(Composite parent) 
+	protected Composite createRequirementsNotFulfilledComposite(Composite parent) 
 	{
 		if (!getProductType().isSaleable()) {
 			String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.notSaleable"), getProductType().getName().getText(NLLocale.getDefault()));  //$NON-NLS-1$
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
+		if (isNonOrderArticleContainerFinilized()) {
+			ArticleContainer ac = getSegmentEdit().getArticleContainer();
+			String message = String.format(
+					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.articleContainerFinalized"), //$NON-NLS-1$
+					TradePlugin.getArticleContainerTypeString(ac, false), TradePlugin.getArticleContainerTypeString(ac, true),
+					ArticleContainerUtil.getArticleContainerID(ac)
+					);
+			return new MessageComposite(parent, SWT.NONE, message, MessageType.INFO);
+		}
 		return null;
 	}
 
 	/**
-	 * Subclasses can override this method to check if all prerequisites are fulfilled 
-	 * for selling the current productType.
-	 * By default this method checks if the ProductType is saleable.  
-	 * 
-	 * @return true if all requirements are fulfilled or false if not
-	 */	
-	protected boolean checkRequirements() {
-		return getProductType().isSaleable();
+	 * @return <code>true</code> if the current {@link ArticleContainer} is
+	 *         something else than an {@link Order} and is finalized and <code>false</code>
+	 *         otherwise.
+	 */
+	protected boolean isNonOrderArticleContainerFinilized() {
+		ArticleContainer ac = getSegmentEdit().getArticleContainer();
+		if (ac instanceof Offer) {
+			return ((Offer) ac).isFinalized();
+		} else if (ac instanceof Invoice) {
+			return ((Invoice) ac).isFinalized();
+		} else if (ac instanceof DeliveryNote) {
+			return ((DeliveryNote) ac).isFinalized();
+		} // TODO: Handle ReceptionNotes
+		return false;
 	}
 	
 }
