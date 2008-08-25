@@ -179,6 +179,15 @@
             targetClass="org.nightlabs.jfire.issue.Issue"
             title="%queryfilterComposite.AdvancedIssueFilterDocumentSectionTitle">
       </QueryFilter>
+      <QueryFilter
+            baseElementClass="org.nightlabs.jfire.issue.Issue"
+            orderHint="50"
+            queryFilterFactoryClass="org.nightlabs.jfire.issuetracking.ui.overview.IssueSearchFilterFactoryWorkTimeRelated"
+            scope="global"
+            sectionTitle="%queryfilterComposite.AdvancedIssueFilterWorkTimeSectionTitle"
+            targetClass="org.nightlabs.jfire.issue.Issue"
+            title="%queryfilterComposite.AdvancedIssueFilterWorkTimeSectionTitle">
+      </QueryFilter>
    </extension>
    <extension
          point="org.nightlabs.jfire.base.ui.overview">
