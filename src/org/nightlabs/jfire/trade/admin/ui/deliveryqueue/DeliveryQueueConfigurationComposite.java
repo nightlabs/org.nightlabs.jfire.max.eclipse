@@ -287,7 +287,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			}
 			// end cleanup
 
-			storeManager.storeDeliveryQueues(changedDeliveryQueues);
+			storeManager.storeDeliveryQueues(changedDeliveryQueues, false, null, 1);
 
 			configModule.setVisibleDeliveryQueues(visibleDeliveryQueues);
 		} catch (Exception e) {
