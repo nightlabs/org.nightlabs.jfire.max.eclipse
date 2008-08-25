@@ -41,7 +41,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
@@ -51,7 +50,6 @@ import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -61,6 +59,8 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.DeliveryNoteDAO;
+import org.nightlabs.jfire.trade.dao.InvoiceDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OfferID;
@@ -68,6 +68,7 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -213,7 +214,7 @@ extends AbstractCombiTransferWizard
 		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
-	
+
 	protected static final String[] FETCH_GROUPS_ORDER = new String[]{
 		Order.FETCH_GROUP_CURRENCY,
 		Order.FETCH_GROUP_CUSTOMER,
@@ -231,7 +232,7 @@ extends AbstractCombiTransferWizard
 		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
-	
+
 	protected static final String[] FETCH_GROUPS_INVOICE = new String[]{
 		Invoice.FETCH_GROUP_CUSTOMER,
 		Invoice.FETCH_GROUP_CURRENCY,
@@ -272,12 +273,12 @@ extends AbstractCombiTransferWizard
 		Price.FETCH_GROUP_CURRENCY, // for payment
 		FetchPlan.DEFAULT
 	};
-	
+
 	protected void loadData()
 	{
 		try {
 			articlesToTransfer.clear();
-			
+
 			if (offerID != null) {
 				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				offer = tradeManager.getOffer(offerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -288,11 +289,11 @@ extends AbstractCombiTransferWizard
 
 				this.addCustomerGroupID(
 						(CustomerGroupID) JDOHelper.getObjectId(offer.getOrder().getCustomerGroup()));
-				
+
 				this.setCurrency(offer.getCurrency());
-				
+
 				for (Article article : articleContainer.getArticles()) {
-					// If payment is enabled, we transfer only payable articles 
+					// If payment is enabled, we transfer only payable articles
 					// If delivery is enabled, we transfer only deliverable articles
 //					if ((!isPaymentEnabled() || article.getInvoiceID() == null) &&
 //							(!isDeliveryEnabled() || article.getDeliveryNoteID() == null))
@@ -325,8 +326,8 @@ extends AbstractCombiTransferWizard
 				}
 			}
 			else if (invoiceID != null) {
-				AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-				invoice = accountingManager.getInvoice(invoiceID, FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()); // TODO need real progress monitor!
 				articleContainer = invoice;
 
 				this.setCustomerID(
@@ -348,8 +349,9 @@ extends AbstractCombiTransferWizard
 				this.setTotalAmount(invoice.getInvoiceLocal().getAmountToPay());
 			}
 			else if (deliveryNoteID != null) {
-				StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-				deliveryNote = storeManager.getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(
+						deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()); // TODO need real progress monitor!
 				articleContainer = deliveryNote;
 
 				this.setCustomerID(
@@ -385,17 +387,17 @@ extends AbstractCombiTransferWizard
 				}
 				this.setTotalAmount(amountToPay);
 			}
-			
+
 			// The LegalEntityID of the local organisation
 			AnchorID mandatorID = AnchorID.create(
-					SecurityReflector.getUserDescriptor().getOrganisationID(), 
+					SecurityReflector.getUserDescriptor().getOrganisationID(),
 					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());
-			
+
 			if (mandatorID.equals(getCustomerID()))
 				setSide(Side.Customer);
 			else
 				setSide(Side.Vendor);
-			
+
 		} catch (RuntimeException x) {
 			throw x;
 		} catch (Exception x) {
@@ -436,7 +438,7 @@ extends AbstractCombiTransferWizard
 								if (article.getDeliveryNoteID() == null) {
 									if (articlesWithoutDeliveryNote == null)
 										articlesWithoutDeliveryNote = new LinkedList<Article>();
-				
+
 									articlesWithoutDeliveryNote.add(article);
 								}
 							}
