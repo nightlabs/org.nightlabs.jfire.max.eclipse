@@ -55,7 +55,6 @@ extends AbstractTreeComposite<Project>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-//			return true;
 			Project p = ProjectDAO.sharedInstance().getProject((ProjectID)JDOHelper.getObjectId(project), new String[]{Project.FETCH_GROUP_SUBPROJECTS, FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			return p.getSubProjects().size() > 0;
 		}
@@ -197,13 +196,13 @@ extends AbstractTreeComposite<Project>
 					IssueTrackingAdminPlugin.getDefault(), 
 					ProjectSection.class, 
 			"Create"));
-			setToolTipText("Create Project");
-			setText("Create");
+			setToolTipText("Create Sub Project");
+			setText("Create Sub Project");
 		}
 
 		@Override
 		public void run() {
-			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Project", "Enter project's name", "Name", null) {
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Sub Project", "Enter project's name", "Name", null) {
 				@Override
 				protected void okPressed() {
 					try {

@@ -74,13 +74,13 @@ extends ToolBarSectionPart
 					IssueTrackingAdminPlugin.getDefault(), 
 					ProjectSection.class, 
 			"Create"));
-			setToolTipText("Create Project");
-			setText("Create");
+			setToolTipText("Create Root Project");
+			setText("Create Root Project");
 		}
 
 		@Override
 		public void run() {
-			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Project", "Enter project's name", "Name", null) {
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Root Project", "Enter project's name", "Name", null) {
 				@Override
 				protected void okPressed() {
 					try {
