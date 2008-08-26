@@ -57,6 +57,11 @@ extends AbstractIssueEditorGeneralSection
 		issue = newIssue;
 		oldSize = issue.getComments().size();
 		
+		getSection().setText(String.format(
+				"Comment ( %s )", 
+				oldSize)
+		);
+		
 		if (firstLoaded) {
 			List<IssueComment> comments = newIssue.getComments();
 			for (int i = 0; i < comments.size(); i++) {
