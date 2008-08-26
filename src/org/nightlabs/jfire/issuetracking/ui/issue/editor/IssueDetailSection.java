@@ -22,8 +22,9 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueDetailSection extends AbstractIssueEditorGeneralSection {
-
+public class IssueDetailSection 
+extends AbstractIssueEditorGeneralSection 
+{
 	private Label reporterLabel;
 	private Label reporterTextLabel;
 
