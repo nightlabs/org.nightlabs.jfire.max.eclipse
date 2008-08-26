@@ -38,11 +38,8 @@ public class IssueTypePrioritySection extends ToolBarSectionPart {
 	private EditPriorityAction editAction;
 	
 	public IssueTypePrioritySection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Section Title");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Priorities");
 		this.controller = controller;
-//		getSection().setLayoutData(new GridData(GridData.FILL_BOTH)); // all this is already done by the superclass
-//		getSection().setLayout(new GridLayout());
-//		getSection().setText("Priorities");
 		
 		XComposite client = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 //		client.getGridLayout().numColumns = 1; 

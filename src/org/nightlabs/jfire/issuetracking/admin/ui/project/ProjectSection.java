@@ -42,18 +42,15 @@ extends ToolBarSectionPart
 	private DeleteProjectAction deleteProjectAction;
 	
 	public ProjectSection(FormPage page, Composite parent, final IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Severity Types");
-		getSection().setText("Project");
-		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		getSection().setLayout(new GridLayout());
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Projects");
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+//		client.getGridLayout().numColumns = 1; 
 		
 		projectTreeComposite = new ProjectTreeComposite(
 				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
 		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
-		projectTreeComposite.getGridData().heightHint = 80;
+		projectTreeComposite.getGridData().heightHint = 200;
 		
 		getSection().setClient(client);
 		
