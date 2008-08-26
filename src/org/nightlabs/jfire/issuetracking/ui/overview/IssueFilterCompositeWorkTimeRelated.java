@@ -98,7 +98,7 @@ public class IssueFilterCompositeWorkTimeRelated
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				getQuery().setCreateTimestamp(startTimeEdit.getDate());
+				getQuery().setIssueWorkTimeRangeFrom(startTimeEdit.getDate());
 			}
 		});
 		startTimeEdit.addActiveChangeListener(new ButtonSelectionListener()
@@ -106,7 +106,7 @@ public class IssueFilterCompositeWorkTimeRelated
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				getQuery().setFieldEnabled(IssueQuery.FieldName.createTimestamp, active);
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueWorkTimeRangeFrom, active);
 			}
 		});
 
@@ -129,7 +129,7 @@ public class IssueFilterCompositeWorkTimeRelated
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				getQuery().setUpdateTimestamp(endTimeEdit.getDate());
+				getQuery().setIssueWorkTimeRangeTo(endTimeEdit.getDate());
 			}
 		});
 		endTimeEdit.addActiveChangeListener(new ButtonSelectionListener()
@@ -137,7 +137,7 @@ public class IssueFilterCompositeWorkTimeRelated
 			@Override
 			protected void handleSelection(boolean active)
 			{
-				getQuery().setFieldEnabled(IssueQuery.FieldName.updateTimestamp, active);
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueWorkTimeRangeTo, active);
 			}
 		});
 	}
@@ -147,12 +147,12 @@ public class IssueFilterCompositeWorkTimeRelated
 	{
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			if (IssueQuery.FieldName.createTimestamp.equals(changedField.getPropertyName()))
+			if (IssueQuery.FieldName.issueWorkTimeRangeFrom.equals(changedField.getPropertyName()))
 			{
 				final Date tmpCreateDate = (Date) changedField.getNewValue();
 				startTimeEdit.setDate(tmpCreateDate);
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.createTimestamp).equals(changedField.getPropertyName()))
+			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeFrom).equals(changedField.getPropertyName()))
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				if (startTimeEdit.isActive() != active)
@@ -161,12 +161,12 @@ public class IssueFilterCompositeWorkTimeRelated
 					setSearchSectionActive(active);
 				}
 			}
-			else if (IssueQuery.FieldName.updateTimestamp.equals(changedField.getPropertyName()))
+			else if (IssueQuery.FieldName.issueWorkTimeRangeTo.equals(changedField.getPropertyName()))
 			{
 				final Date tmpUpdateDate = (Date) changedField.getNewValue();
 				endTimeEdit.setDate(tmpUpdateDate);
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.updateTimestamp).equals(changedField.getPropertyName()))
+			else if (getEnableFieldName(IssueQuery.FieldName.issueWorkTimeRangeTo).equals(changedField.getPropertyName()))
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
 				if (endTimeEdit.isActive() != active)

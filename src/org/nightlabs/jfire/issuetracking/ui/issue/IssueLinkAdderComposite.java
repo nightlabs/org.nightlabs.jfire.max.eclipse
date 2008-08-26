@@ -60,12 +60,12 @@ extends XComposite
 			linkedButtonComposite.setLayoutData(gridData);
 
 			Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-			addLinkButton.setText("Add Link");
+			addLinkButton.setText("Add");
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			addLinkButton.setLayoutData(gridData);
 
 			Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-			removeLinkButton.setText("Remove Link");
+			removeLinkButton.setText("Remove");
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			removeLinkButton.setLayoutData(gridData);
 
