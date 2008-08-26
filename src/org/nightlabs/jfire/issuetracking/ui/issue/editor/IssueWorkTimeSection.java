@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -51,6 +52,8 @@ extends AbstractIssueEditorGeneralSection
 	private WorkTimeListAction workTimeListAction;
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	
+	private boolean canStopWorking = false;
 
 	/**
 	 * @param section
@@ -73,9 +76,19 @@ extends AbstractIssueEditorGeneralSection
 			@Override
 			public void widgetSelected(SelectionEvent se) {
 				if (issue.isStarted()) { //End
+					if (!canStopWorking) {
+						boolean b = MessageDialog.openConfirm(
+								getSection().getShell(), 
+								"Stop Issue", 
+								"Are you sure to stop this issue by the user who is not the owner?");
+						if (!b)
+							return;
+					}
+					
 					issue.endWorking(new Date());
 					markDirty();
-					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
+					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.		
+					
 				}
 
 				else {	//Start
@@ -128,19 +141,19 @@ extends AbstractIssueEditorGeneralSection
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
-						final boolean canStop = issue.getAssignee().equals(
+						canStopWorking = issue.getAssignee().equals(
 								Login.getLogin().getUser(new String[]{User.FETCH_GROUP_NAME}, 
 										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
-						Display.getDefault().asyncExec(new Runnable() {
-							public void run() {
-								try {
-									startStopButton.setEnabled(canStop);
-								}
-								catch (Exception e) {
-									throw new RuntimeException(e);
-								}
-							}
-						});
+//						Display.getDefault().asyncExec(new Runnable() {
+//							public void run() {
+//								try {
+//									startStopButton.setEnabled(canStop);
+//								}
+//								catch (Exception e) {
+//									throw new RuntimeException(e);
+//								}
+//							}
+//						});
 					}
 					catch (Exception e) {
 						throw new RuntimeException(e);
