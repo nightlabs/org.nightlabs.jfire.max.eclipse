@@ -139,7 +139,7 @@ extends AbstractTableComposite
 		jdoLifecycleListener = new JDOLifecycleAdapterJob() {
 			// there exist neither subclasses of CustomerGroupMapping nor can a CustomerGroupMapping be changed - therefore this is sufficient. We might later add a Change-Listener (implicit) in case the name of a CustomerGroup is changed, but currently, this is not very important
 			private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(CustomerGroupMapping.class, false, new JDOLifecycleState[] { JDOLifecycleState.NEW });
-			
+
 			@Implement
 			public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 			{
@@ -215,7 +215,7 @@ extends AbstractTableComposite
 		try {
 			customerGroupMappings = null;
 			setInput(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.inputPseudoEntry_loading")); //$NON-NLS-1$
-	
+
 			org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.loadCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
 				@Override
 				@Implement
@@ -223,11 +223,11 @@ extends AbstractTableComposite
 				{
 					boolean error2 = true;
 					try {
-	
+
 						final List<CustomerGroupMapping> _customerGroupMappings = CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(
 								FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor);
-		
+
 						Display.getDefault().asyncExec(new Runnable()
 						{
 							public void run()
@@ -244,7 +244,7 @@ extends AbstractTableComposite
 								}
 							}
 						});
-		
+
 						error2 = false;
 						return Status.OK_STATUS;
 					} finally {
@@ -295,7 +295,7 @@ extends AbstractTableComposite
 					CustomerGroupID partnerCustomerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getPartnerCustomerGroup());
 					CustomerGroupID localCustomerGroupID = (CustomerGroupID) JDOHelper.getObjectId(customerGroupMapping.getLocalCustomerGroup());
 
-					CustomerGroupMappingDAO.sharedInstance().createCustomerGroupMapping_new(localCustomerGroupID, partnerCustomerGroupID, false, null, 1, monitor);
+					CustomerGroupMappingDAO.sharedInstance().createCustomerGroupMapping(localCustomerGroupID, partnerCustomerGroupID, false, null, 1, monitor);
 				}
 
 				Display.getDefault().asyncExec(new Runnable()
