@@ -51,8 +51,8 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 {
 	private static final String ARTICLE_CONTAINER_GROUP_ID = "ArticleContainerFilterComposite"; //$NON-NLS-1$
 
-	private DateTimeEdit createDTMin;
-	private DateTimeEdit createDTMax;
+	private DateTimeEdit createDateAfter;
+	private DateTimeEdit createDateBefore;
 
 	private Button userActiveButton;
 	private Text userText;
@@ -110,18 +110,18 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		createDTGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateGroup.text")); //$NON-NLS-1$
 		createDTGroup.setLayout(new GridLayout(2, true));
 		long dateTimeEditStyle = DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX;
-		createDTMin = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
-		createDTMin.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		createDTMin.setActive(false);
-		createDTMin.addModifyListener(new ModifyListener()
+		createDateAfter = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMin.caption")); //$NON-NLS-1$
+		createDateAfter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createDateAfter.setActive(false);
+		createDateAfter.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				getQuery().setCreateDTMin(createDTMin.getDate());
+				getQuery().setCreateDTMin(createDateAfter.getDate());
 			}
 		});
-		createDTMin.addActiveChangeListener(new ButtonSelectionListener()
+		createDateAfter.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
 			protected void handleSelection(boolean active)
@@ -129,18 +129,18 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.createDTMin, active);
 			}
 		});
-		createDTMax = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMax.caption")); //$NON-NLS-1$
-		createDTMax.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		createDTMax.setActive(false);
-		createDTMax.addModifyListener(new ModifyListener()
+		createDateBefore = new DateTimeEdit(createDTGroup, dateTimeEditStyle, Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateMax.caption")); //$NON-NLS-1$
+		createDateBefore.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createDateBefore.setActive(false);
+		createDateBefore.addModifyListener(new ModifyListener()
 		{
 			@Override
 			public void modifyText(ModifyEvent e)
 			{
-				getQuery().setCreateDTMax(createDTMax.getDate());
+				getQuery().setCreateDTMax(createDateBefore.getDate());
 			}
 		});
-		createDTMax.addActiveChangeListener(new ButtonSelectionListener()
+		createDateBefore.addActiveChangeListener(new ButtonSelectionListener()
 		{
 			@Override
 			protected void handleSelection(boolean active)
@@ -323,29 +323,29 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 			if (AbstractArticleContainerQuery.FieldName.createDTMax.equals(propertyName))
 			{
 				Date maxDate = (Date) changedField.getNewValue();
-				createDTMax.setDate(maxDate);
+				createDateBefore.setDate(maxDate);
 			}
 			else if (getEnableFieldName(AbstractArticleContainerQuery.FieldName.createDTMax).equals(propertyName))
 			{
 				final boolean newActiveState = (Boolean) changedField.getNewValue();
-				if (createDTMax.isActive() != newActiveState)
+				if (createDateBefore.isActive() != newActiveState)
 				{
-					createDTMax.setActive(newActiveState);
+					createDateBefore.setActive(newActiveState);
 					setSearchSectionActive(newActiveState);
 				}
 			}
 			else if (AbstractArticleContainerQuery.FieldName.createDTMin.equals(propertyName))
 			{
 				Date minDate = (Date) changedField.getNewValue();
-				createDTMin.setDate(minDate);
+				createDateAfter.setDate(minDate);
 			}
 			else if (AbstractSearchQuery.getEnabledFieldName(
 					AbstractArticleContainerQuery.FieldName.createDTMin).equals(propertyName))
 			{
 				final boolean active = (Boolean) changedField.getNewValue();
-				if (createDTMin.isActive() != active)
+				if (createDateAfter.isActive() != active)
 				{
-					createDTMin.setActive(active);
+					createDateAfter.setActive(active);
 					setSearchSectionActive(active);
 				}
 			}
