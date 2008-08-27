@@ -30,9 +30,9 @@ import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
