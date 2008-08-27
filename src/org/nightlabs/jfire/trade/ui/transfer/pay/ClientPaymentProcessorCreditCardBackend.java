@@ -41,7 +41,6 @@ import org.nightlabs.jfire.accounting.pay.PaymentException;
 import org.nightlabs.jfire.accounting.pay.PaymentResult;
 import org.nightlabs.jfire.accounting.pay.ServerPaymentProcessorCreditCardDummyForClientPayment;
 import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.person.PersonStruct;
@@ -51,8 +50,7 @@ import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.datafield.NumberDataField;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CreditCardPage;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -62,7 +60,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  *
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class ClientPaymentProcessorCreditCardBackend 
+public class ClientPaymentProcessorCreditCardBackend
 extends AbstractClientPaymentProcessor
 {
 	private PaymentDataCreditCard paymentData;
@@ -101,13 +99,13 @@ extends AbstractClientPaymentProcessor
 	{
 		return null;
 	}
-	
+
 	@Implement
 	public PaymentResult payDoWork() throws PaymentException
 	{
 		return null;
 	}
-	
+
 	@Implement
 	public PaymentResult payEnd() throws PaymentException
 	{
@@ -121,13 +119,17 @@ extends AbstractClientPaymentProcessor
 			try {
 				paymentData = new PaymentDataCreditCard(getPayment());
 
-				// TODO should use a cache for legal entity / persons
-				TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-				LegalEntity entity = tradeManager.getLegalEntity(getPartnerID(), new String[] {
-					FetchPlan.DEFAULT,
-					LegalEntity.FETCH_GROUP_PERSON,
-					PropertySet.FETCH_GROUP_FULL_DATA
-				}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				LegalEntity entity = LegalEntityDAO.sharedInstance().getLegalEntity(
+						getPartnerID(),
+						new String[] {
+							FetchPlan.DEFAULT,
+							LegalEntity.FETCH_GROUP_PERSON,
+							PropertySet.FETCH_GROUP_FULL_DATA
+						},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor()// TODO we should make a progress monitor available here.
+				);
+
 				if (!entity.isAnonymous()) {
 					Person person = entity.getPerson();
 					if (person != null) {
@@ -165,11 +167,11 @@ extends AbstractClientPaymentProcessor
 //							// ignore
 //						}
 
-						
+
 						// TODO the person should store a special year and month field for expiry - not simply text.
 						int expiryYear = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYYEAR)).getIntValue();
 						int expiryMonth = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH)).getIntValue();
-						
+
 						paymentData.setNameOnCard(nameOnCard);
 						paymentData.setCardNumber(cardNumber);
 						paymentData.setExpiryYear(expiryYear);

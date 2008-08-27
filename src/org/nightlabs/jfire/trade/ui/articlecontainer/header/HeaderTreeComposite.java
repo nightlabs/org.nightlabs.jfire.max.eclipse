@@ -81,8 +81,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -97,6 +96,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 import org.nightlabs.util.Util;
 
 /**
@@ -310,22 +310,18 @@ implements ISelectionProvider
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite.monitor.taskName.loadingBusinessPartner"), 100); //$NON-NLS-1$
 		setPartnerIDInvocationID = partnerID;
 		try {
-			TradeManager tm = partnerID == null ? null : TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			TradeManager tm = partnerID == null ? null : TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			monitor.worked(10);
-			final LegalEntity partner = partnerID == null ? null : tm.getLegalEntity(partnerID, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			monitor.worked(40);
+			final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(partnerID, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 40));
 
 			if (myOrganisationLegalEntity == null) {
-				if (tm == null)
-					tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-
 				monitor.worked(10);
 
-				myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
+				myOrganisationLegalEntity = LegalEntityDAO.sharedInstance().getOrganisationLegalEntity(
 						Login.getLogin().getOrganisationID(), true,
-						new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+						new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 40)
 				);
-				monitor.worked(40);
 			}
 			else
 				monitor.worked(50);

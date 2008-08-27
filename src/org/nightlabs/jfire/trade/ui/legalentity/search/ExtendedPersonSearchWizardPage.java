@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -15,6 +16,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchWizardPage;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.id.PropertySetID;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
@@ -75,9 +77,12 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 				try {
 					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 					if (selectedPerson != null) {
-						__legalEntity = tradeManager.getLegalEntityForPerson(selectedPerson,
-							new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP },
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+						__legalEntity = tradeManager.getLegalEntityForPerson(
+								(PropertySetID) JDOHelper.getObjectId(selectedPerson),
+								new String[] {
+										FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP
+								},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
 						);
 					}
 

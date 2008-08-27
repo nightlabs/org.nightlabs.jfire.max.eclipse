@@ -44,8 +44,10 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 {
@@ -130,7 +132,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 //					throw new IllegalArgumentException("articleContainer is an instance of " + articleContainer.getClass().getName() + ", but must be either Order, Offer or DeliveryNote!");
 //			}
 //			else {
-				Article article = (Article) articles.iterator().next();
+				Article article = articles.iterator().next();
 				vendorID = article.getVendorID();
 				customerID = article.getCustomerID();
 //			}
@@ -163,7 +165,8 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 //			}
 //			else {
 				Article article = articles.iterator().next();
-				article = getTradeManager().getArticle((ArticleID)JDOHelper.getObjectId(article), FETCH_GROUPS_ARTICLE_FOR_VENDOR_ID_AND_CUSTOMER_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+				// TODO should be asynchronous!
+				article = ArticleDAO.sharedInstance().getArticle((ArticleID)JDOHelper.getObjectId(article), FETCH_GROUPS_ARTICLE_FOR_VENDOR_ID_AND_CUSTOMER_ID, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				vendorID = article.getVendorID();
 				customerID = article.getCustomerID();
 //			}
@@ -248,7 +251,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 
 		return vendorID;
 	}
-	
+
 	public AnchorID getCustomerID()
 	{
 		if (customerID == null)
