@@ -85,6 +85,7 @@ extends AbstractTreeComposite<Project>
 
 		
 		addContextMenuContribution(new CreateProjectAction());
+		addContextMenuContribution(new RenameProjectAction());
 		
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
@@ -194,7 +195,7 @@ extends AbstractTreeComposite<Project>
 			setId(CreateProjectAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
-					ProjectSection.class, 
+					ProjectTreeComposite.class, 
 			"Create"));
 			setToolTipText("Create Sub Project");
 			setText("Create Sub Project");
@@ -210,6 +211,45 @@ extends AbstractTreeComposite<Project>
 						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 						projectToStore.addSubProject(project);
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+				
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Control dialogArea = super.createDialogArea(parent);
+					return dialogArea;
+				}
+			};
+			
+			if (dialog.open() != Window.OK)
+				return;
+		}		
+	}
+	
+	public class RenameProjectAction extends Action {
+		private InputDialog dialog;
+		public RenameProjectAction() {
+			setId(CreateProjectAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingAdminPlugin.getDefault(), 
+					ProjectTreeComposite.class, 
+			"Rename"));
+			setToolTipText("Rename Project");
+			setText("Rename Project");
+		}
+
+		@Override
+		public void run() {
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", getFirstSelectedElement().getName().getText(), null) {
+				@Override
+				protected void okPressed() {
+					try {
+						Project projectToStore = getFirstSelectedElement();
+						projectToStore.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						dialog.close();
 					} catch (Exception e) {

@@ -8,8 +8,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -45,7 +43,6 @@ extends ToolBarSectionPart
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Projects");
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		client.getGridLayout().numColumns = 1; 
 		
 		projectTreeComposite = new ProjectTreeComposite(
 				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
