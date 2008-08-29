@@ -468,14 +468,14 @@ implements IPaymentEntryPage
 						
 						PaymentEntryPage.this.modeOfPaymentFlavourList = modeOfPaymentFlavourList;
 						
-						if (modeOfPaymentFlavourTable != null) {
+						if (modeOfPaymentFlavourTable != null && !modeOfPaymentFlavourTable.isDisposed()) {
 							modeOfPaymentFlavourTable.setInput(modeOfPaymentFlavourList);
 							modeOfPaymentFlavourTable.setSelectedElements(selList);
 							setMessage(null);
 							modeOfPaymentFlavourGUIListSelectionChanged();
 						}
 						
-						if (automaticPrintingGroup != null) {
+						if (automaticPrintingGroup != null && !automaticPrintingGroup.isDisposed()) {
 							automaticPrintingGroup.setEnteredPrintCount(tradePrintingCfMod.getInvoiceCopyCount());
 							automaticPrintingGroup.setDoPrint(tradePrintingCfMod.isPrintInvoiceByDefault());
 						}
