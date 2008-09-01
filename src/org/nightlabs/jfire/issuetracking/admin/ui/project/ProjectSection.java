@@ -39,7 +39,7 @@ extends ToolBarSectionPart
 	private CreateProjectAction createProjectAction;
 	private DeleteProjectAction deleteProjectAction;
 	
-	public ProjectSection(FormPage page, Composite parent, final IssueTypeEditorPageController controller) {
+	public ProjectSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Projects");
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);

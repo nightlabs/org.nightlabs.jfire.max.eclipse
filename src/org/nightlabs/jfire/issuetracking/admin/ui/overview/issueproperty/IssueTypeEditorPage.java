@@ -36,7 +36,6 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	private IssueTypePrioritySection issueTypePrioritySection;
 	private IssueTypeSeverityTypeSection issueTypeSeverityTypeSection;
 	private IssueTypeResolutionSection issueTypeResolutionSection;
-	private ProjectSection projectSection;
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -65,9 +64,6 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 		
 		issueTypeResolutionSection = new IssueTypeResolutionSection(this, parent, controller);
 		getManagedForm().addPart(issueTypeResolutionSection);
-		
-		projectSection = new ProjectSection(this, parent, controller);
-		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
 			issueTypeNameSection.setIssueType(controller.getIssueType());
