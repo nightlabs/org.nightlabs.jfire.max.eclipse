@@ -116,6 +116,7 @@ implements IReportEditorPage
 	
 	private ReportViewer reportViewer;
 	
+	private boolean parameterAquisitionDone = false;
 	private Map<String, Object> reportParameters;
 	
 	
@@ -257,13 +258,16 @@ implements IReportEditorPage
 		IEditorInput input = getEditorInput();
 		if (input instanceof IJFireRemoteReportEditorInput) {
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
-			if (getReportParameters() == null) {
+			if (!isParameterAquisitionDone()) {
 				Result paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID());
 				Map<String, Object> params = paramResult.getParameters();
 				if (paramResult.isAcquisitionFinished()) {
+					setParameterAquisitionDone(true);
 					setReportParameters(params);
-					showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 				}
+			}
+			if (isParameterAquisitionDone()) {
+				showPreview(jfireInput.getReportRegistryItemID(), getReportParameters());
 			}
 			return true;
 		}
@@ -537,6 +541,17 @@ implements IReportEditorPage
 		return reportViewer;
 	}
 
+	/**
+	 * @return Whether parameters were already acquired for this report.
+	 */
+	protected boolean isParameterAquisitionDone() {
+		return parameterAquisitionDone;
+	}
+	
+	protected void setParameterAquisitionDone(boolean parameterAquisitionDone) {
+		this.parameterAquisitionDone = parameterAquisitionDone;
+	}
+	
 	/**
 	 * @return the reportParameters
 	 */
