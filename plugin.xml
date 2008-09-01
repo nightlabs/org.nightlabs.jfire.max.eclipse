@@ -309,6 +309,13 @@
               tooltip="Import the class JFireReportingHelper">
         </expressionProviderEntry>
         <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.imports"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.imports.ReportTextPartHelper"
+              insertText="importClass(Packages.org.nightlabs.jfire.reporting.textpart.ReportTextPartHelper);"
+              name="Import ReportTextPartHelper"
+              tooltip="Import the class ReportTextPartHelper">
+        </expressionProviderEntry>
+        <expressionProviderEntry
               categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods"
               id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.helperMethods.dataSetParameter"
               insertText="JFireReportingHelper.createDataSetParam()"
@@ -363,6 +370,13 @@
               insertText="reportContext.getMessage(&quot;&quot;, reportContext.getLocale())"
               name="Get localised report message"
               tooltip="Get localised report message">
+        </expressionProviderEntry>
+        <expressionProviderEntry
+              categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation"
+              id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation.getReportTextPart"
+              insertText="eval(&quot;&quot; + ReportTextPartHelper.getEvalString(JFireReportingHelper.getDataSetParamObject(), &quot;&quot;));"
+              name="Get report text part"
+              tooltip="Get report text part. Fill in the missing linked object and the part id">
         </expressionProviderEntry>
      </extension>
      <extension
