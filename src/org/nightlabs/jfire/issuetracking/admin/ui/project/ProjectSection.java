@@ -112,7 +112,7 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
-			ProjectDAO.sharedInstance().deleteProject(projectTreeComposite.getFirstSelectedElement().getObjectId(), new NullProgressMonitor());
+//			ProjectDAO.sharedInstance().deleteProject(projectTreeComposite.getFirstSelectedElement().getObjectId(), new NullProgressMonitor());
 		}		
 	}
 }
