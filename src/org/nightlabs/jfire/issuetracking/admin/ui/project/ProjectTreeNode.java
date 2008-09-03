@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.jdo.FetchPlan;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -58,7 +59,7 @@ public class ProjectTreeNode
 		return true;
 	}
 	
-	private static String[] FETCH_GROUPS = new String[]{ Project.FETCH_GROUP_SUBPROJECTS};
+	private static String[] FETCH_GROUPS = new String[]{ FetchPlan.DEFAULT, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_NAME};
 	
 	public void loadChildren() {
 		if(isChildrenLoaded())
@@ -87,7 +88,7 @@ public class ProjectTreeNode
 	}
 
 	public ImageDescriptor getImageDescriptor() {
-		return IssueTrackingAdminPlugin.getImageDescriptor("icons/city.png"); //$NON-NLS-1$
+		return IssueTrackingAdminPlugin.getImageDescriptor("icons/project.png"); //$NON-NLS-1$
 	}
 
 	public I18nText getName() {

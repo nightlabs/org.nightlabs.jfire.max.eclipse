@@ -3,6 +3,9 @@ package org.nightlabs.jfire.issuetracking.admin.ui.project;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+
+import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -15,6 +18,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -32,9 +36,13 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
-import org.nightlabs.util.CollectionUtil;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -153,12 +161,13 @@ extends XComposite
 				@Override
 				protected void okPressed() {
 					try {
-//						Project projectToStore = treeViewer..getFirstSelectedElement();
-//						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-//						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-//						projectToStore.addSubProject(project);
-//						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//						dialog.close();
+						TreeSelection selection = (TreeSelection)treeViewer.getSelection();
+						Project projectToStore = (Project)((ProjectTreeNode)selection.getFirstElement()).getObject();
+						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
+						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
+						projectToStore.addSubProject(project);
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
@@ -190,25 +199,26 @@ extends XComposite
 
 		@Override
 		public void run() {
-//			dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", getFirstSelectedElement().getName().getText(), null) {
-//				@Override
-//				protected void okPressed() {
-//					try {
-//						Project projectToStore = getFirstSelectedElement();
-//						projectToStore.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-//						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//						dialog.close();
-//					} catch (Exception e) {
-//						throw new RuntimeException(e);
-//					}
-//				};
-//				
-//				@Override
-//				protected Control createDialogArea(Composite parent) {
-//					Control dialogArea = super.createDialogArea(parent);
-//					return dialogArea;
-//				}
-//			};
+			TreeSelection selection = (TreeSelection)treeViewer.getSelection();
+			final Project projectToStore = (Project)selection.getFirstElement();
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", projectToStore.getName().getText(), null) {
+				@Override
+				protected void okPressed() {
+					try {
+						projectToStore.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+				
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Control dialogArea = super.createDialogArea(parent);
+					return dialogArea;
+				}
+			};
 			
 			if (dialog.open() != Window.OK)
 				return;
@@ -226,13 +236,21 @@ extends XComposite
 
 		public Object[] getChildren(final Object parentElement) 
 		{
-			Project project = (Project) parentElement;
-			return CollectionUtil.collection2TypedArray(project.getSubProjects(), Project.class);
+			final ProjectTreeNode node = (ProjectTreeNode)parentElement;
+			if (!node.isChildrenLoaded()) {
+				treeViewer.getTree().setEnabled(false);
+				node.loadChildren();
+				Object[] elements = node.getChildren();
+				treeViewer.getTree().setEnabled(true);
+				return elements;
+			} else {
+				return node.getChildren();
+			}
 		}
 
 		public Object getParent(Object childElement) {
-			Project project = (Project) childElement;
-			return project.getParentProject();
+			ProjectTreeNode projectTreeNode = (ProjectTreeNode) childElement;
+			return projectTreeNode.getParent().getObject();
 		}
 
 		public boolean hasChildren(Object element) {
