@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -13,6 +14,7 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
+import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -70,8 +72,9 @@ public class ProjectTreeNode
 		if(object != null){
 			object = ProjectDAO.sharedInstance().getProject(object.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
 			Collection<Project> p = object.getSubProjects();
-			for(Project po : p) {
-				childNodes.add(new ProjectTreeNode(treeViewer, po));
+			Collection<ProjectID> pid = JDOHelper.getObjectIds(p);
+			for(ProjectID id : pid) {
+				childNodes.add(new ProjectTreeNode(treeViewer, ProjectDAO.sharedInstance().getProject(id, FETCH_GROUPS, 1, new NullProgressMonitor())));
 			}//for
 			setChildrenLoaded(true);
 		}//if
