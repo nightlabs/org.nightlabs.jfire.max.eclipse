@@ -54,7 +54,6 @@ public class OrderSegmentComposite extends XComposite
 	public OrderSegmentComposite(Composite parent, OrderSegmentEdit _orderSegmentEdit)
 	{
 		super(parent, SWT.BORDER, LayoutMode.ORDINARY_WRAPPER);
-		setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		this.orderSegmentEdit = _orderSegmentEdit;
 
 		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
