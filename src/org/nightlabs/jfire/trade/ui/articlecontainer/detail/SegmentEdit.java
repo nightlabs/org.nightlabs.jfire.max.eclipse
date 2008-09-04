@@ -35,14 +35,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
+import org.nightlabs.jfire.trade.Segment;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 
 /**
+ * The {@link SegmentEdit} is responsible for creating and managing the UI to edit one {@link Segment} of an {@link ArticleContainer}.
+ * The factories that create {@link SegmentEdit}s are registered as extensions to the point 
+ * <code>org.nightlabs.jfire.trade.ui.segmentEditFactory</code>.
+ * <p>
+ * {@link SegmentEdit}s also manage {@link ArticleEdit}s for the different types/classes of {@link ProductType} articles
+ * exist for in their associated {@link Segment}. 
+ * </p>
+ * 
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public interface SegmentEdit
 {
@@ -112,7 +123,7 @@ public interface SegmentEdit
 	 * @return Returns the {@link ClientArticleSegmentGroupSet} instance which is the main container
 	 *		holding all {@link Article}s in a grouped tree.
 	 */
-	ClientArticleSegmentGroupSet getClientArticleSegmentGroups();
+	ClientArticleSegmentGroupSet getClientArticleSegmentGroupSet();
 
 	/**
 	 * @return Returns all {@link ArticleEdit}s of this <code>SegmentEdit</code>.

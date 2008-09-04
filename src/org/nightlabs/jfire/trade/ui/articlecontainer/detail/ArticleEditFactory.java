@@ -27,6 +27,8 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
+
+import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
@@ -37,8 +39,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditA
 public interface ArticleEditFactory extends SegmentTypeProductTypeDependentFactory
 {
 	/**
-	 * This method should create a <tt>Collection</tt> of {@link ArticleEdit}
-	 * for the given <tt>Collection</tt> of {@link org.nightlabs.jfire.trade.ui.Article}s.
+	 * This method should create a <tt>Collection</tt> of all necessary {@link ArticleEdit}s
+	 * so that all {@link Article}s of the given <tt>Collection</tt> of {@link org.nightlabs.jfire.trade.ui.Article}s
+	 * were accepted by/added to one. 
 	 * <p>
 	 * You must call {@link ArticleEdit#init(List, IWorkbenchPartSite, ArticleProductTypeClassGroup, Set)} in
 	 * your implementation of this method!

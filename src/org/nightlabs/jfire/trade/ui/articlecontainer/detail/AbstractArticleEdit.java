@@ -86,7 +86,7 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 					sb.append("\" articleSegmentGroup=\""); //$NON-NLS-1$
 					sb.append(ac.getArticleProductTypeClassGroup().getArticleSegmentGroup());
 					sb.append("\" articleSegmentGroups=\""); //$NON-NLS-1$
-					sb.append(ac.getArticleProductTypeClassGroup().getArticleSegmentGroup().getArticleSegmentGroups());
+					sb.append(ac.getArticleProductTypeClassGroup().getArticleSegmentGroup().getArticleSegmentGroupSet());
 					sb.append("\""); //$NON-NLS-1$
 				}
 				throw new IllegalArgumentException(sb.toString());

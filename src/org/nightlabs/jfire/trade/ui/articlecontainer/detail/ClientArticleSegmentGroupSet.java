@@ -72,10 +72,23 @@ import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
- * New (2007-06-07): Since this class is used in the client with Jobs, it is now Thread-safe.
+ * This is a {@link ArticleSegmentGroupSet} that manages listeners for the creation, change and deletion
+ * of the {@link Article}s of the associated {@link ArticleContainer} in order to keep the set up-to-date.
+ * <p>
+ * Users of {@link ClientArticleSegmentGroupSet} can add {@link ArticleCreateListener}s and {@link ArticleChangeListener}s
+ * to be notified of the changes made to the group.
+ * </p>
+ * <p>
+ * Note that this class knows of some implementations of {@link ArticleContainer} (Order, Offer, Invoive, DeliveryNote)
+ * and will handle those differently, but it does not know other implementations or the special needs
+ * of sub-classes.
+ * </p>
+ * <p>
+ * This class is thread-safe.
+ * </p>
  *
  * @author Marco Schulze - Marco at NightLabs dot de
- *
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 {

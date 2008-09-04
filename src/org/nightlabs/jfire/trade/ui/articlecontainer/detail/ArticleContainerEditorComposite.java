@@ -124,17 +124,22 @@ import org.nightlabs.progress.ProgressMonitor;
  * {@link org.nightlabs.jfire.trade.ui.Order}s,
  * {@link org.nightlabs.jfire.trade.ui.Offer}s,
  * {@link org.nightlabs.jfire.accounting.Invoice}s and
- * {@link org.nightlabs.jfire.store.Delivery}s. It asks the
- * {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
+ * {@link org.nightlabs.jfire.store.DeliveryNote}s. 
+ * <p>
+ * It loads the {@link ArticleContainer} from an 
+ * editor input it is instantiated with and creates a {@link ClientArticleSegmentGroupSet}
+ * to manage the articles within the container. It also 
+ * It asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
  * for the right factories for all the {@link org.nightlabs.jfire.trade.ui.Segment}s
  * and displays the edits which are delivered from the factory.
- * <p>
+ * </p>
  * This <tt>Composite</tt> contains the main logic while
  * {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor} is
  * just a tiny wrapper. This architecture allows to display and edit an
  * order/offer/invoice/deliveryNote within another carrier (e.g. a view).
  * 
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class ArticleContainerEditorComposite
 extends XComposite
