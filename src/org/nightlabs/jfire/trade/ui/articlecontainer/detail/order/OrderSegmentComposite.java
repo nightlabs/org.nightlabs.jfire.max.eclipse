@@ -53,7 +53,7 @@ public class OrderSegmentComposite extends XComposite
 	 */
 	public OrderSegmentComposite(Composite parent, OrderSegmentEdit _orderSegmentEdit)
 	{
-		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.orderSegmentEdit = _orderSegmentEdit;
 
 		articleAdderArea = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
