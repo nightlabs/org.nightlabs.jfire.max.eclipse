@@ -112,7 +112,7 @@ public class ArticleAdderComposite
 
 					Collection<Article> articles = createArticles(segmentID, offerID, productTypeID, qty, fetchGroupTrade_article);
 
-					segmentEdit.getClientArticleSegmentGroups().addArticles(articles);
+					segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 					return Status.OK_STATUS;
 				}
 			};
