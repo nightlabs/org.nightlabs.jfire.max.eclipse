@@ -31,10 +31,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -68,6 +65,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSel
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
@@ -75,7 +73,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CreateArticleEditListener;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditArticleSelectionEvent;
@@ -310,8 +307,8 @@ extends EditorActionBarContributor
 			}
 		}
 
-		ClientArticleSegmentGroupSet oldClientArticleSegmentGroups = oldActiveSegmentEdit == null ? null : oldActiveSegmentEdit.getClientArticleSegmentGroups();
-		ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = activeSegmentEdit == null ? null : activeSegmentEdit.getClientArticleSegmentGroups();
+		ClientArticleSegmentGroupSet oldClientArticleSegmentGroups = oldActiveSegmentEdit == null ? null : oldActiveSegmentEdit.getClientArticleSegmentGroupSet();
+		ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = activeSegmentEdit == null ? null : activeSegmentEdit.getClientArticleSegmentGroupSet();
 
 		if (oldClientArticleSegmentGroups != clientArticleSegmentGroupSet) {
 			if (oldClientArticleSegmentGroups != null) {
