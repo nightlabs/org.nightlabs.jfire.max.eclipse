@@ -105,7 +105,7 @@
    <element name="articleEditActionDelegate">
       <annotation>
          <documentation>
-            An articleEditActionDelegate references a org.nightlabs.jfire.trade.ui.articleEditAction. The action is only shown, if at least one ArticleEdit within the active SegmentEdit has a delegate. The delegates are responsible to apply to action onto the selected articles.
+            An articleEditActionDelegate references a org.nightlabs.jfire.trade.ui.articleEditAction. The action is only shown, if at least one ArticleEdit within the active SegmentEdit has a delegate. The delegates are responsible to apply the action onto the selected articles.
          </documentation>
       </annotation>
       <complexType>
