@@ -134,7 +134,7 @@ extends ArticleBaseComposite
 									FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 					List<Article> articles = new ArrayList<Article>(1); articles.add(article);
-					segmentEdit.getClientArticleSegmentGroups().addArticles(articles);
+					segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 					return Status.OK_STATUS;
 				}
 			};
