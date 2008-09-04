@@ -180,7 +180,7 @@ public class ArticleAdderComposite extends FadeableComposite
 								fetchGroupTrade_article,
 								FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
-				segmentEdit.getClientArticleSegmentGroups().addArticles(articles);
+				segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 				return Status.OK_STATUS;
 			}
 		};

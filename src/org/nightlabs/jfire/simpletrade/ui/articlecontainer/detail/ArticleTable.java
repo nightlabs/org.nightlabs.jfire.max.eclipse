@@ -230,7 +230,7 @@ implements ISelectionProvider
 		this.articleLabelProvider = new ArticleLabelProvider();
 		initTable();
 		getTable().setHeaderVisible(true);
-		clientArticleSegmentGroupSet = ((ClientArticleSegmentGroupSet)articleEdit.getSegmentEdit().getArticleSegmentGroup().getArticleSegmentGroups());
+		clientArticleSegmentGroupSet = ((ClientArticleSegmentGroupSet)articleEdit.getSegmentEdit().getArticleSegmentGroup().getArticleSegmentGroupSet());
 		clientArticleSegmentGroupSet.addArticleChangeListener(articleChangeListener);
 		addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
