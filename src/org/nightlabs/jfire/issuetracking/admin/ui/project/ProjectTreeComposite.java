@@ -254,7 +254,7 @@ extends XComposite
 		}
 
 		public boolean hasChildren(Object element) {
-			return true;
+			return ((ProjectTreeNode)element).hasChildren();
 		}
 
 		public Object[] getElements(final Object inputElement) {
