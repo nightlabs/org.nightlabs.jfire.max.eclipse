@@ -62,32 +62,7 @@ implements ICloseOnLogoutEditorPart
 			close(false);
 		}
 	};
-	
-	@Override
-	public String getTitle()
-	{
-		if(getEditorInput() == null)
-			return super.getTitle();
-
-		Job loadTitleJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.loadTitleJob.name")) { //$NON-NLS-1$
-			@Override
-			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				final String title = ProductTypeDAO.sharedInstance().getProductType(
-						((ProductTypeEditorInput)getEditorInput()).getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME },
-						1, monitor).getName().getText();
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						setPartName(title);
-					}
-				});
-				return Status.OK_STATUS;
-			}
-		};
-		loadTitleJob.schedule();
-		return super.getTitle();
-	}
-	
+		
 	private IPropertyListener dirtyStateListener = new IPropertyListener() {
 		public void propertyChanged(Object source, int propID) {
 			if (PROP_DIRTY == propID) {
@@ -105,6 +80,23 @@ implements ICloseOnLogoutEditorPart
 		);
 		
 		addPropertyListener(dirtyStateListener);
+		Job loadTitleJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.loadTitleJob.name")) { //$NON-NLS-1$
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final String title = ProductTypeDAO.sharedInstance().getProductType(
+						((ProductTypeEditorInput)getEditorInput()).getJDOObjectID(),
+						new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME },
+						1, monitor).getName().getText();
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						setPartName(title);
+						setTitle(title);
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+		loadTitleJob.schedule();		
 	}
 
 	@Override
