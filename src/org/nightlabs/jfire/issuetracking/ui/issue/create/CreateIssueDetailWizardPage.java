@@ -58,6 +58,7 @@ extends WizardHopPage
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
+	private ProjectComboComposite projectListComposite;
 //	private Button setFromDateTimeButton;
 //	private Label fromDateTimeLabel;
 //	private DateTimeControl fromDateTimeControl;
@@ -100,6 +101,13 @@ extends WizardHopPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 6;
 
+		new Label(mainComposite, SWT.NONE).setText("Project");
+		projectListComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 5;
+		projectListComposite.setLayoutData(gridData);
+		projectListComposite.loadProjects();
+		
 		//Subject & Description
 		subjectLabel = new Label(mainComposite, SWT.NONE);
 		subjectLabel.setText("Subject: ");
@@ -116,7 +124,7 @@ extends WizardHopPage
 			}
 		});
 		
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 5;
 		subjectText.setLayoutData(gridData);
 
