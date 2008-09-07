@@ -9,18 +9,25 @@ import org.nightlabs.progress.ProgressMonitor;
 public class RecurringPurchaseRootTreeNode extends HeaderTreeNode.RootNode{
 
 	private HeaderTreeNode[] _children;
+	private RecurringOrderRootTreeNode recurringOrderTreeNode;
 	
 	public 	RecurringPurchaseRootTreeNode(HeaderTreeNode parent)
 	{
 		super(parent, "Purchase",parent.getHeaderTreeComposite().getImageCustomerRootTreeNode());
-		
+
+		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, true);
+
+		_children = new HeaderTreeNode[] {
+				recurringOrderTreeNode
+		};
 	}
+	
 	@Override
 	public HeaderTreeNode[] getChildren()
 	{
 		return _children;
 	}
-	
+
 	@Override
 	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)

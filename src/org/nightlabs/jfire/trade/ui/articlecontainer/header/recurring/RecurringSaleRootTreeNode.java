@@ -9,11 +9,17 @@ import org.nightlabs.progress.ProgressMonitor;
 public class RecurringSaleRootTreeNode extends HeaderTreeNode.RootNode{
 
 	private HeaderTreeNode[] _children;
+	private RecurringOrderRootTreeNode recurringOrderTreeNode;
 	
 	public 	RecurringSaleRootTreeNode(HeaderTreeNode parent)
 	{
 		super(parent, "Sale",parent.getHeaderTreeComposite().getImageCustomerRootTreeNode());
 		
+		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, true);
+
+		_children = new HeaderTreeNode[] {
+				recurringOrderTreeNode
+		};
 	}
 
 	
