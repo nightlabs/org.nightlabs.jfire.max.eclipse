@@ -40,6 +40,7 @@ import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.trade.notification.ArticleContainerLifecycleListenerFilter;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
@@ -52,7 +53,7 @@ implements ITreeContentProvider
 
 	private SaleRootTreeNode saleRootTreeNode;
 	private PurchaseRootTreeNode purchaseRootTreeNode;
-
+	private RecurringRootTreeNode recurringRootTreeNode;
 	private HeaderTreeNode.RootNode[] rootNodes;
 	private HeaderTreeComposite headerTreeComposite;
 
@@ -61,10 +62,12 @@ implements ITreeContentProvider
 		this.headerTreeComposite = headerTreeComposite;
 		saleRootTreeNode = new SaleRootTreeNode(headerTreeComposite);
 		purchaseRootTreeNode = new PurchaseRootTreeNode(headerTreeComposite);
+		recurringRootTreeNode = new RecurringRootTreeNode(headerTreeComposite);
 
 		rootNodes = new HeaderTreeNode.RootNode[] {
 			saleRootTreeNode,
-			purchaseRootTreeNode
+			purchaseRootTreeNode,
+			recurringRootTreeNode
 		};
 
 		unregisterAndRegisterListeners(true);

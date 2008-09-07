@@ -119,7 +119,7 @@ implements ISelectionProvider
 
 	private CreateOrderAction createOrderAction;
 	private CreateOfferAction createOfferAction;
-
+	
 	private HeaderTreeNode selectedNode = null;
 
 	/**
@@ -174,7 +174,6 @@ implements ISelectionProvider
 
 		createOrderAction = new CreateOrderAction(this);
 		createOfferAction = new CreateOfferAction(this);
-
 		// Our content provider fetches the data itself, hence we need the following call
 		// only to trigger the tree initialization
 		headerTreeViewer.setInput(new Object());
@@ -404,7 +403,6 @@ implements ISelectionProvider
 		//	manager.add(new Separator());
 		manager.add(createOrderAction);
 		manager.add(createOfferAction);
-
 //		manager.add(new TestAction());
 
 		drillDownAdapter.addNavigationActions(manager);
@@ -578,5 +576,43 @@ implements ISelectionProvider
 	public HeaderTreeNode getSelectedNode()
 	{
 		return selectedNode;
+	}
+
+
+
+	public Image getImageOrderRootTreeNode() {
+		return imageOrderRootTreeNode;
+	}
+
+	public Image getImageOrderTreeNode() {
+		return imageOrderTreeNode;
+	}
+
+	public Image getImageOfferTreeNode() {
+		return imageOfferTreeNode;
+	}
+
+	public Image getImageInvoiceRootTreeNode() {
+		return imageInvoiceRootTreeNode;
+	}
+
+	public Image getImageInvoiceTreeNode() {
+		return imageInvoiceTreeNode;
+	}
+
+	public Image getImageDeliveryNoteRootTreeNode() {
+		return imageDeliveryNoteRootTreeNode;
+	}
+
+	public Image getImageDeliveryNoteTreeNode() {
+		return imageDeliveryNoteTreeNode;
+	}
+
+	public Image getImageCustomerRootTreeNode() {
+		return imageCustomerRootTreeNode;
+	}
+
+	public Image getImageVendorRootTreeNode() {
+		return imageVendorRootTreeNode;
 	}
 }
