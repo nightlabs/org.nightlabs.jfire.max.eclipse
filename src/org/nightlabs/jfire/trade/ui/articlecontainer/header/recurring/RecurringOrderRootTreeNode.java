@@ -36,7 +36,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 
 	public RecurringOrderRootTreeNode(HeaderTreeNode parent, boolean customerSide)
 	{
-		super(parent, "Order", parent.getHeaderTreeComposite().getImageOrderRootTreeNode(), customerSide); //$NON-NLS-1$
+		super(parent, "Orders", parent.getHeaderTreeComposite().getImageOrderRootTreeNode(), customerSide); //$NON-NLS-1$
 		init();
 	}
 

@@ -58,7 +58,16 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 
 	
 	
-	
+	/**
+	 * This method returns always <tt>false</tt>.
+	 *
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#hasChildren()
+	 */
+	@Override
+	public boolean hasChildren()
+	{
+		return false;
+	}
 	
 	
 	
