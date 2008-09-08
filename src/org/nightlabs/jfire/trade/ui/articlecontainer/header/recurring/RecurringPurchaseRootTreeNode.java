@@ -6,6 +6,9 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
 
+/**
+ * @author Fitas Amine - fitas at nightlabs dot de
+ */
 public class RecurringPurchaseRootTreeNode extends HeaderTreeNode.RootNode{
 
 	private HeaderTreeNode[] _children;

@@ -8,6 +8,11 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
+
+
+/**
+ * @author Fitas Amine - fitas at nightlabs dot de
+ */
 public class RecurringRootTreeNode
 extends HeaderTreeNode.RootNode
 {
