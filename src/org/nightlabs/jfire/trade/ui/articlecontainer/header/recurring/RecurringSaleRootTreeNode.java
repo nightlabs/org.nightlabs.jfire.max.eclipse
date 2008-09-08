@@ -18,7 +18,7 @@ public class RecurringSaleRootTreeNode extends HeaderTreeNode.RootNode{
 	{
 		super(parent, "Sale",parent.getHeaderTreeComposite().getImageCustomerRootTreeNode());
 		
-		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, true);
+		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, false);
 
 		_children = new HeaderTreeNode[] {
 				recurringOrderTreeNode

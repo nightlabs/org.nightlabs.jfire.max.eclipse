@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
@@ -21,6 +22,7 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 	public RecurringOrderTreeNode(HeaderTreeNode parent, byte position ,RecurringOrder recurringOrder) {
 		super(parent, position);
 		this.recurringOrder = recurringOrder;
+		init();
 
 	}
 	
@@ -57,6 +59,13 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 	}
 
 	
+	/**
+	 * @return Returns the order.
+	 */
+	public Order getOrder()
+	{
+		return recurringOrder;
+	}
 	
 	/**
 	 * This method returns always <tt>false</tt>.

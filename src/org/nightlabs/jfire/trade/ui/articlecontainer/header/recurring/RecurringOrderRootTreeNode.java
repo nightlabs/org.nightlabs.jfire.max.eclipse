@@ -8,6 +8,7 @@ import javax.jdo.FetchPlan;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
@@ -54,7 +55,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 			ProgressMonitor monitor) throws Exception {
 		
 		return CollectionUtil.castList(
-				RecurringOrderDAO.sharedInstance().getRecurringOrders(vendorID, customerID,
+				OrderDAO.sharedInstance().getOrders(RecurringOrder.class,false,vendorID, customerID,
 				rangeBeginIdx, rangeEndIdx,
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
@@ -68,7 +69,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 			Set<ArticleContainerID> articleContainerIDs, ProgressMonitor monitor) {
 		// TODO Auto-generated method stub
 		Set<OrderID> orderIDs = CollectionUtil.castSet(articleContainerIDs);
-		return CollectionUtil.castList(RecurringOrderDAO.sharedInstance().getRecurringOrders(
+		return CollectionUtil.castList(OrderDAO.sharedInstance().getOrders(
 				orderIDs,
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
@@ -79,7 +80,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 	@Override
 	protected Class<? extends ArticleContainerID> getArticleContainerIDClass() {
 		// TODO Auto-generated method stub
-		return null;
+		return OrderID.class;
 	}
 
 }

@@ -91,6 +91,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.Article
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.CreateRecurringOrderAction;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -119,7 +122,9 @@ implements ISelectionProvider
 
 	private CreateOrderAction createOrderAction;
 	private CreateOfferAction createOfferAction;
-	
+	private CreateRecurringOrderAction createRecurringOrderAction;
+
+
 	private HeaderTreeNode selectedNode = null;
 
 	/**
@@ -146,16 +151,16 @@ implements ISelectionProvider
 		imageVendorRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/SaleRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 
 //		try {
-//			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
-//					Login.getLogin().getOrganisationID(), true,
-//					new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//
-////			partner = tm.getAnonymousLegalEntity(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//		TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//		myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
+//		Login.getLogin().getOrganisationID(), true,
+//		new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+
+////		partner = tm.getAnonymousLegalEntity(null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 ////		} catch (ModuleException x) {
-////			throw x;
+////		throw x;
 //		} catch (Exception x) {
-//			throw new ModuleException(x);
+//		throw new ModuleException(x);
 //		}
 
 		// set up the table tree for our order-/invoice-/delivery-headers
@@ -174,6 +179,7 @@ implements ISelectionProvider
 
 		createOrderAction = new CreateOrderAction(this);
 		createOfferAction = new CreateOfferAction(this);
+		createRecurringOrderAction = new CreateRecurringOrderAction(this);
 		// Our content provider fetches the data itself, hence we need the following call
 		// only to trigger the tree initialization
 		headerTreeViewer.setInput(new Object());
@@ -190,10 +196,18 @@ implements ISelectionProvider
 				//PurchaseRootTreeNode
 				//SaleRootTreeNode
 
-
+				createRecurringOrderAction.setEnabled(false);
+				createOrderAction.setEnabled(true);
+				
+				
 				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
-
-
+			
+				if(selectedNode instanceof RecurringOrderRootTreeNode)
+				{
+					createRecurringOrderAction.setEnabled(true);
+					createOrderAction.setEnabled(false);
+				}
+				
 
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(
@@ -403,7 +417,8 @@ implements ISelectionProvider
 		//	manager.add(new Separator());
 		manager.add(createOrderAction);
 		manager.add(createOfferAction);
-//		manager.add(new TestAction());
+		manager.add(createRecurringOrderAction);
+		//		manager.add(new TestAction());
 
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute their actions here
