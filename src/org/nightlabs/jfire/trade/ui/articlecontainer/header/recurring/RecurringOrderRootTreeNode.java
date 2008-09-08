@@ -55,7 +55,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 			ProgressMonitor monitor) throws Exception {
 		
 		return CollectionUtil.castList(
-				OrderDAO.sharedInstance().getOrders(RecurringOrder.class,false,vendorID, customerID,
+				RecurringOrderDAO.sharedInstance().getRecurringOrders(vendorID, customerID,
 				rangeBeginIdx, rangeEndIdx,
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
@@ -69,7 +69,7 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 			Set<ArticleContainerID> articleContainerIDs, ProgressMonitor monitor) {
 		// TODO Auto-generated method stub
 		Set<OrderID> orderIDs = CollectionUtil.castSet(articleContainerIDs);
-		return CollectionUtil.castList(OrderDAO.sharedInstance().getOrders(
+		return CollectionUtil.castList(RecurringOrderDAO.sharedInstance().getRecurringOrders(
 				orderIDs,
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
