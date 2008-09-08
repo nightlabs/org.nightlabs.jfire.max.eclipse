@@ -2,7 +2,10 @@ package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -99,6 +102,7 @@ implements ISelectionProvider
 		return selection;
 	}
 
+	private Set<Project> projectSet = new HashSet<Project>();
 	public void loadProjects()
 	{
 		projects.clear();
@@ -110,9 +114,12 @@ implements ISelectionProvider
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					final Collection<Project> _projects = ProjectDAO.sharedInstance().getProjects(new String[] { FetchPlan.DEFAULT, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_DESCRIPTION}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-
+					final Collection<Project> _projects = ProjectDAO.sharedInstance().getRootProjects(getLocalOrganisationID());
+					for (Project project : _projects) {
+						projectSet.add(project);
+						generateSub(project);
+					}
+					
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run()
@@ -121,10 +128,11 @@ implements ISelectionProvider
 								return;
 
 							projectCombo.removeAll();
-							for (Project project : _projects) {
-								projects.add(project);
+							
+							for (Project project : projectSet) {
 								projectCombo.add(project.getName().getText(NLLocale.getDefault().getLanguage()));
 							}
+							
 							ProjectComboComposite.this.getParent().layout(true);
 							fireSelectionChangedEvent();
 						}
@@ -136,6 +144,22 @@ implements ISelectionProvider
 				return Status.OK_STATUS;
 			}
 		}.schedule();
+	}
+	
+	private void generateSub(Project project) {
+		boolean hasMoreChilds = false;
+		
+		Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getOrganisationID(), project.getProjectID());
+		if (sp != null && sp.size() > 0) {
+			hasMoreChilds = true;
+			projectSet.addAll(sp);
+		}
+		
+		if (hasMoreChilds) {
+			for (Project p : sp) {
+				generateSub(p);
+			}
+		}
 	}
 	
 	private List<Project> projects = new ArrayList<Project>(0);
