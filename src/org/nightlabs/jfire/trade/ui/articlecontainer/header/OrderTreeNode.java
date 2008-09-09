@@ -185,6 +185,7 @@ public class OrderTreeNode extends HeaderTreeNode
 			for (Iterator<DirtyObjectID> itD = dirtyObjectIDs.iterator(); itD.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = itD.next();
 				objectID2DirtyObjectIDMap.put(dirtyObjectID.getObjectID(), dirtyObjectID);
+				
 				if (dirtyObjectID.getObjectID() instanceof OfferID) {
 					OfferID offerID = (OfferID) dirtyObjectID.getObjectID();
 					itD.remove();
@@ -192,6 +193,8 @@ public class OrderTreeNode extends HeaderTreeNode
 						if (!offerIDsLoaded.contains(offerID))
 							offerIDsToLoad.add(offerID);
 					}
+				
+				
 				}
 			}
 	

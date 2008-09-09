@@ -94,6 +94,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContain
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.CreateRecurringOrderAction;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -195,7 +196,6 @@ implements ISelectionProvider
 
 				//PurchaseRootTreeNode
 				//SaleRootTreeNode
-
 				createRecurringOrderAction.setEnabled(false);
 				createOrderAction.setEnabled(true);
 				
