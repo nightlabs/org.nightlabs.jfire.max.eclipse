@@ -71,6 +71,7 @@ implements ISelectionProvider
 				fireSelectionChangedEvent();
 			}
 		});
+		loadProjects();
 	}
 	
 	private Collection<Project> projectSet = new HashSet<Project>();

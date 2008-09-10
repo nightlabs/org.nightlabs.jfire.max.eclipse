@@ -58,6 +58,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_ISSUE_PROJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
 		Issue.FETCH_GROUP_ISSUE_LINKS,
 		Issue.FETCH_GROUP_ISSUE_REPORTER,

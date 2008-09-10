@@ -27,6 +27,7 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 public class IssueTypeAndStateSection 
 extends AbstractIssueEditorGeneralSection 
 {
+	private Label projectLabel;
 	private Label issueTypeLabel;
 	private Label statusLabel;
 
@@ -49,6 +50,11 @@ extends AbstractIssueEditorGeneralSection
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		issueTypeLabel.setLayoutData(gd);
+		
+		projectLabel = new Label(getClient(), SWT.WRAP);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+		projectLabel.setLayoutData(gd);
 
 		statusLabel = new Label(getClient(), SWT.WRAP);
 		statusLabel.setText("Status: ");
@@ -192,6 +198,13 @@ extends AbstractIssueEditorGeneralSection
 						"Issue type: %s", 
 						issue.getIssueType().getName().getText())
 		);
+		
+		projectLabel.setText(
+				String.format(
+						"Project: %s", 
+						issue.getProject().getName().getText())
+		);
+		
 		currentStateComposite.setStatable(issue);
 		nextTransitionComposite.setStatable(issue);		
 	}

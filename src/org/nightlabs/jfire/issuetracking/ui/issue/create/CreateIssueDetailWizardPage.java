@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -33,6 +34,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -58,7 +60,7 @@ extends WizardHopPage
 	private Label issuePriorityLbl;
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
-	private ProjectComboComposite projectListComposite;
+	private ProjectComboComposite projectComboComposite;
 //	private Button setFromDateTimeButton;
 //	private Label fromDateTimeLabel;
 //	private DateTimeControl fromDateTimeControl;
@@ -76,7 +78,8 @@ extends WizardHopPage
 	private IssueSeverityType selectedIssueSeverityType;
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
-
+	private Project selectedProject;
+	
 	private Issue issue;
 
 	private static final String[] ISSUE_TYPE_FETCH_GROUPS = {
@@ -102,11 +105,17 @@ extends WizardHopPage
 		mainComposite.getGridLayout().numColumns = 6;
 
 		new Label(mainComposite, SWT.NONE).setText("Project");
-		projectListComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
+		projectComboComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 5;
-		projectListComposite.setLayoutData(gridData);
-		projectListComposite.loadProjects();
+		projectComboComposite.setLayoutData(gridData);
+		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent e) {
+				selectedProject = (Project)((StructuredSelection)e.getSelection()).getFirstElement();
+				issue.setProject(selectedProject);
+			}
+		});
 		
 		//Subject & Description
 		subjectLabel = new Label(mainComposite, SWT.NONE);
@@ -340,6 +349,13 @@ extends WizardHopPage
 		return selectedIssueType;
 	}
 	
+	public void setSelectedProject(Project selectedProject) {
+		this.selectedProject = selectedProject;
+	}
+	
+	public Project getSelectedProject() {
+		return selectedProject;
+	}
 //	public Date getFromDateTime() {
 //		return fromDateTimeControl.getDate();
 //	}
