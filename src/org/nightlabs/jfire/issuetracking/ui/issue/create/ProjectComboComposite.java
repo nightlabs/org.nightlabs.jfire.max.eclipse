@@ -70,7 +70,7 @@ implements ISelectionProvider
 				if (idx < 0 || idx > projectList.size() - 1)
 					selectedProject = null;
 				else
-					selectedProject = projectList.get(projectList.size() - 1 - idx);
+					selectedProject = projectList.get(idx);
 
 				fireSelectionChangedEvent();
 			}
