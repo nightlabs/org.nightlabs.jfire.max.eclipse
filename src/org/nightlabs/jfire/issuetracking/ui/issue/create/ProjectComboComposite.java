@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -21,6 +23,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.util.collection.CollectionsUtil;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -29,6 +32,8 @@ import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
+
+import com.ibm.icu.impl.CollectionUtilities;
 
 public class ProjectComboComposite 
 extends XComposite
@@ -50,7 +55,6 @@ implements ISelectionProvider
 	
 	private XCombo projectCombo;
 	private Project selectedProject;
-	private List<Project> projectList;
 	
 	public ProjectComboComposite(Composite parent, int style,String filterOrganisationID, boolean filterOrganisationIDInverse)
 	{
@@ -74,7 +78,7 @@ implements ISelectionProvider
 		loadProjects();
 	}
 	
-	private Collection<Project> projectSet = new HashSet<Project>();
+	private List<Project> projectList = new ArrayList<Project>();
 	public void loadProjects()
 	{
 		projectCombo.removeAll();
@@ -85,8 +89,12 @@ implements ISelectionProvider
 			{
 				try {
 					final Collection<Project> _projects = ProjectDAO.sharedInstance().getRootProjects(getLocalOrganisationID());
-					for (Project project : _projects) {
-						projectSet.add(project);
+					
+					List<Project> tempProjectList = new ArrayList<Project>();
+					CollectionUtil.addAllToCollection(_projects.toArray(new Project[0]), tempProjectList);
+					Collections.sort(tempProjectList);
+					for (Project project : tempProjectList) {
+//						projectList.add(project);
 						generateSub(project);
 					}
 					
@@ -98,15 +106,12 @@ implements ISelectionProvider
 								return;
 
 							projectCombo.removeAll();
-							Project[] projectArray = CollectionUtil.collection2TypedArray(projectSet, Project.class);
-							projectList = CollectionUtil.array2ArrayList(projectArray);
 							
-							for (int n = projectList.size() - 1; n >= 0; n--) {
+							for (Project pj : projectList) {
 								StringBuffer sb = new StringBuffer("");
-								
-								for (int i = 0; i < projectList.get(n).getLevel(); i++) 
-									sb.append("»»");
-								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  projectList.get(n).getName().getText(NLLocale.getDefault().getLanguage()));
+								for (int i = 0; i < pj.getLevel(); i++) 
+									sb.append("»");
+								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage()));
 							}
 							
 							ProjectComboComposite.this.getParent().layout(true);
@@ -123,22 +128,21 @@ implements ISelectionProvider
 	
 	private int level = 0;
 	private void generateSub(Project project) {
-		boolean hasMoreChilds = false;
+		projectList.add(project);
 		
 		Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getOrganisationID(), project.getProjectID());
-		if (sp != null && sp.size() > 0) {
-			hasMoreChilds = true;
-			level++;
-			for (Project p : sp) {
-				p.setLevel(level);
-			}
-			projectSet.addAll(sp);
-		}
 		
-		if (hasMoreChilds) {
-			for (Project p : sp) {
+		List<Project> tempProjectList = new ArrayList<Project>();
+		CollectionUtil.addAllToCollection(sp.toArray(new Project[0]), tempProjectList);
+		Collections.sort(tempProjectList);
+		
+		if (sp.size() > 0) {
+			level++;
+			for (Project p : tempProjectList) {
+				p.setLevel(level);
 				generateSub(p);
 			}
+			level--;
 		}
 	}
 	
