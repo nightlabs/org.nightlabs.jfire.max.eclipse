@@ -295,6 +295,10 @@ extends WizardHopPage
 	public boolean isPageComplete() {
 		boolean result = true;
 		setErrorMessage(null);
+		
+		if (selectedProject == null) {
+			result = false;
+		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
 			result = false;
 		}
