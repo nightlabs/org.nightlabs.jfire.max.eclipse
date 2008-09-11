@@ -225,4 +225,8 @@ implements ISelectionProvider
 			selectedProject = projectList.get(idx);
 		}
 	}
+	
+	public Project getSelectedProject() {
+		return selectedProject;
+	}
 }
