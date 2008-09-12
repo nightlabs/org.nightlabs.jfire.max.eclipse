@@ -114,6 +114,7 @@ extends WizardHopPage
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedProject = (Project)((StructuredSelection)e.getSelection()).getFirstElement();
 				issue.setProject(selectedProject);
+				getContainer().updateButtons();
 			}
 		});
 		
