@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issue.create;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,7 +22,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.util.collection.CollectionsUtil;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -32,8 +30,6 @@ import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
-
-import com.ibm.icu.impl.CollectionUtilities;
 
 public class ProjectComboComposite 
 extends XComposite
