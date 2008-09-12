@@ -229,4 +229,9 @@ implements ISelectionProvider
 	public Project getSelectedProject() {
 		return selectedProject;
 	}
+	
+	public void addProject(Project project, int index) {
+		projectList.add(index, project);
+		projectCombo.add(null, project.getName().getText(), index);
+	}
 }

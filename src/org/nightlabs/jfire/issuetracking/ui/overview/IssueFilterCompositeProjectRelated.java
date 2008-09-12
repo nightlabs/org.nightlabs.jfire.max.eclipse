@@ -94,7 +94,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		projectComposite.getGridLayout().numColumns = 2;
 
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
-		projectCombo = new ProjectComboComposite(projectComposite, getBorderStyle());
+		projectCombo = new ProjectComboComposite(projectComposite, SWT.NONE);
 		projectCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			public void selectionChanged(SelectionChangedEvent e)
@@ -107,6 +107,8 @@ extends AbstractQueryFilterComposite<IssueQuery>
 					getQuery().setProjectID(selectedProject.getObjectId());
 			}
 		});
+		
+		prepareIssueProperties();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -145,6 +147,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 	private void prepareIssueProperties(){
 		PROJECT_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+		projectCombo.addProject(PROJECT_ALL, 0);
+		
+		if (selectedProject == null)
+			selectedProject = PROJECT_ALL;
+
+		projectCombo.setSelectedProject(selectedProject);
+
 	}
 
 	private static final Set<String> fieldNames;
