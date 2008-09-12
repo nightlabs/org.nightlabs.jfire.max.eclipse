@@ -43,6 +43,7 @@ extends ToolBarSectionPart
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		
+		
 		projectTreeComposite = new ProjectTreeComposite(
 				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
 		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
