@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
@@ -24,10 +26,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
 
@@ -74,6 +78,12 @@ implements ISelectionProvider
 		loadProjects();
 	}
 	
+	private static String[] FETCH_GROUP_PROJECT = new String[] {FetchPlan.DEFAULT, 
+		Project.FETCH_GROUP_NAME, 
+		Project.FETCH_GROUP_PARENT_PROJECT, 
+		Project.FETCH_GROUP_SUBPROJECTS, 
+		Project.FETCH_GROUP_DESCRIPTION};
+	
 	private List<Project> projectList = new ArrayList<Project>();
 	public void loadProjects()
 	{
@@ -84,7 +94,7 @@ implements ISelectionProvider
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					final Collection<Project> _projects = ProjectDAO.sharedInstance().getRootProjects(getLocalOrganisationID());
+					final Collection<Project> _projects = ProjectDAO.sharedInstance().getRootProjects(getLocalOrganisationID(), FETCH_GROUP_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					
 					List<Project> tempProjectList = new ArrayList<Project>();
 					CollectionUtil.addAllToCollection(_projects.toArray(new Project[0]), tempProjectList);
@@ -126,7 +136,7 @@ implements ISelectionProvider
 	private void generateSub(Project project) {
 		projectList.add(project);
 		
-		Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getOrganisationID(), project.getProjectID());
+		Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getObjectId(), FETCH_GROUP_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 		
 		List<Project> tempProjectList = new ArrayList<Project>();
 		CollectionUtil.addAllToCollection(sp.toArray(new Project[0]), tempProjectList);
