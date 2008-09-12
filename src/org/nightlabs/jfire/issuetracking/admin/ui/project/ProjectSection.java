@@ -24,7 +24,6 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
-import org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**

@@ -11,6 +11,7 @@ import javax.security.auth.login.LoginException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.nightlabs.i18n.I18nText;
+import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
@@ -80,7 +81,7 @@ public class ProjectTreeNode
 		}//if
 		else {
 			try {
-				Collection<Project> projects = ProjectDAO.sharedInstance().getRootProjects(Login.getLogin().getOrganisationID());
+				Collection<Project> projects = ProjectDAO.sharedInstance().getRootProjects(Login.getLogin().getOrganisationID(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				for (Project p : projects) {
 					childNodes.add(new ProjectTreeNode(treeViewer, p));
 				}
