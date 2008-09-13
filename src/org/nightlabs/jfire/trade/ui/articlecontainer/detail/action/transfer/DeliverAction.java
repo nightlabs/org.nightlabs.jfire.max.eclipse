@@ -32,8 +32,8 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -45,14 +45,12 @@ extends GenericArticleEditAction
 	@Override
 	public boolean calculateVisible()
 	{
-		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
-			.getActiveArticleContainerEditorActionBarContributor()
-			.getActiveArticleContainerEditorComposite().getArticleContainerID();
+		ArticleContainerEdit edit = getArticleContainerEdit();
 		
 		// a deliveryNote can only be delivered as a whole with deliverAll - this is a restriction of the GUI
 		// (the backend is more flexible), but IMHO this restriction makes understanding easier and prevents that
 		// a customer receives a DeliveryNote with things he didn't receive (yet).
-		return !(articleContainerID instanceof DeliveryNoteID);
+		return edit != null && !(edit.getArticleContainerID() instanceof DeliveryNoteID);
 	}
 
 	@Override

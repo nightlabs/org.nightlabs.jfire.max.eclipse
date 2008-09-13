@@ -33,6 +33,7 @@ import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.IXContributionItem;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 
 public class ArticleContainerActionRegistry extends AbstractActionRegistry
 {
@@ -98,10 +99,10 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 
 	private ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor = null;
 
-	public ArticleContainerEditorActionBarContributor getActiveArticleContainerEditorActionBarContributor()
-	{
-		return activeArticleContainerEditorActionBarContributor;
+	public ArticleContainerEdit getActiveArticleContainerEdit() {
+		return activeArticleContainerEditorActionBarContributor != null ? activeArticleContainerEditorActionBarContributor.getActiveArticleContainerEdit() : null; 
 	}
+	
 	protected void setActiveArticleContainerEditorActionBarContributor(
 			ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor)
 	{

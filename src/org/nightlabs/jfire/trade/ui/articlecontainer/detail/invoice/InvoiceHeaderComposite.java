@@ -52,7 +52,7 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -73,9 +73,9 @@ extends HeaderComposite
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 
-	public InvoiceHeaderComposite(ArticleContainerEditorComposite articleContainerEditorComposite, Invoice _invoice)
+	public InvoiceHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Invoice _invoice)
 	{
-		super(articleContainerEditorComposite, articleContainerEditorComposite, _invoice);
+		super(articleContainerEditComposite, articleContainerEditComposite, _invoice);
 		this.invoice = _invoice;
 		getGridLayout().numColumns = 2;
 
@@ -113,7 +113,7 @@ extends HeaderComposite
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite.loadInvoicesMonitor.task.name"), 3); //$NON-NLS-1$
 			invoice = InvoiceDAO.sharedInstance().getInvoice(
 					(InvoiceID) JDOHelper.getObjectId(invoice),
-					ArticleContainerEditorComposite.FETCH_GROUPS_INVOICE_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					ArticleContainerEditComposite.FETCH_GROUPS_INVOICE_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			currentStateComposite.setStatable(invoice, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(invoice, new SubProgressMonitor(monitor, 1));

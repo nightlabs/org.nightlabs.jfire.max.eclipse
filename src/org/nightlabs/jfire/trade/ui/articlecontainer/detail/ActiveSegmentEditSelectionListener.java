@@ -32,7 +32,7 @@ public interface ActiveSegmentEditSelectionListener
 	 * This method is triggered whenever the active {@link SegmentEdit} has been changed by user
 	 * selection.
 	 *
-	 * @param event The event with the new active <code>SegmentEdit</code> and the {@link ArticleContainerEditorComposite}
+	 * @param event The event with the new active <code>SegmentEdit</code> and the {@link ArticleContainerEditComposite}
 	 *		which has fired the event.
 	 */
 	void selected(ActiveSegmentEditSelectionEvent event);

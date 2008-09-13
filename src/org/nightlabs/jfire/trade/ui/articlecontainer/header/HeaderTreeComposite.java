@@ -93,8 +93,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContain
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.CreateRecurringOrderAction;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -391,7 +389,7 @@ implements ISelectionProvider
 			IEditorPart editor = reference.getEditor(false);
 			if (editor instanceof ArticleContainerEditor) {
 				ArticleContainerEditor ge = (ArticleContainerEditor) editor;
-				ArticleContainer ac = ge.getArticleContainerEditorComposite().getArticleContainer();
+				ArticleContainer ac = ge.getArticleContainerEdit().getArticleContainer();
 //				TODO This was a workaround to NOT close the editor in the QuickSaleView, but now
 //				with the Editor<->Perspective Patch we only get editors for Trading Perspective.
 //				if (ge.getArticleContainerEditorComposite().getArticleContainer() instanceof Order) {

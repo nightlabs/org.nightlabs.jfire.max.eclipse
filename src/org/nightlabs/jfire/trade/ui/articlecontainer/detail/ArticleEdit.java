@@ -60,13 +60,13 @@ public interface ArticleEdit
 
 	/**
 	 * @return the instance of <tt>SegmentEdit</tt> that has previously been
-	 * passed to {@link #init(List, IWorkbenchPartSite, ArticleProductTypeClassGroup, Set)}.
+	 * passed to {@link #init(List, ArticleContainerEdit, ArticleProductTypeClassGroup, Set)}.
 	 */
 	SegmentEdit getSegmentEdit();
 
 	/**
 	 * @return the instance of <tt>ArticleProductTypeClassGroup</tt> that has previously been
-	 * passed to {@link #init(List, IWorkbenchPartSite, ArticleProductTypeClassGroup, Set)}.
+	 * passed to {@link #init(List, ArticleContainerEdit, ArticleProductTypeClassGroup, Set)}.
 	 */
 	ArticleProductTypeClassGroup getArticleProductTypeClassGroup();
 

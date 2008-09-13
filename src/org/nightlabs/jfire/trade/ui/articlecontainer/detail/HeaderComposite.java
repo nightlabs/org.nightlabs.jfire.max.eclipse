@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.jfire.trade.ArticleContainer;
 
 /**
@@ -40,13 +41,15 @@ import org.nightlabs.jfire.trade.ArticleContainer;
  */
 public class HeaderComposite extends XComposite
 {
-	private ArticleContainerEditorComposite articleContainerEditorComposite;
+	private ArticleContainerEditComposite articleContainerEditComposite;
 	private ArticleContainer articleContainer;
 
-	public HeaderComposite(Composite parent, ArticleContainerEditorComposite articleContainerEditorComposite, ArticleContainer articleContainer)
+	public HeaderComposite(Composite parent, ArticleContainerEditComposite articleContainerEditComposite, ArticleContainer articleContainer)
 	{
-		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
-		this.articleContainerEditorComposite = articleContainerEditorComposite;
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//	    setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
+	    
+		this.articleContainerEditComposite = articleContainerEditComposite;
 		this.articleContainer = articleContainer;
 		
 //		setBackground(DEFAULT_BG_COLOR);
@@ -83,11 +86,11 @@ public class HeaderComposite extends XComposite
 		return articleContainer;
 	}
 	/**
-	 * @return Returns the articleContainerEditorComposite.
+	 * @return Returns the articleContainerEditComposite.
 	 */
-	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
+	public ArticleContainerEditComposite getArticleContainerEditorComposite()
 	{
-		return articleContainerEditorComposite;
+		return articleContainerEditComposite;
 	}
 
 	/**
@@ -98,14 +101,14 @@ public class HeaderComposite extends XComposite
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run()
 			{
-				ArticleContainerEditorComposite gec = getArticleContainerEditorComposite();
+				ArticleContainerEditComposite gec = getArticleContainerEditorComposite();
 				if (gec != null && !gec.isDisposed())
 					createArticleContainerContextMenu(gec, HeaderComposite.this);
 			}
 		});
 	}
 
-	private static void createArticleContainerContextMenu(ArticleContainerEditorComposite gec, Composite c)
+	private static void createArticleContainerContextMenu(ArticleContainerEditComposite gec, Composite c)
 	{
 		gec.createArticleContainerContextMenu(c);
 

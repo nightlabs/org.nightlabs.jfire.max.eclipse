@@ -27,8 +27,7 @@ public abstract class ArticleContainerReportAction extends ArticleContainerActio
 	 * @return the correct ReportRegistryItemType for the type of ArticleContainer that's edited
 	 */
 	protected String getReportRegistryItemType() {
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-		.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerID();
 		
 		if (articleContainerID instanceof InvoiceID)
 			return ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;

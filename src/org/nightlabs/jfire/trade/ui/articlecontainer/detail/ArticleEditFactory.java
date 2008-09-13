@@ -43,7 +43,7 @@ public interface ArticleEditFactory extends SegmentTypeProductTypeDependentFacto
 	 * so that all {@link Article}s of the given <tt>Collection</tt> of {@link org.nightlabs.jfire.trade.ui.Article}s
 	 * were accepted by/added to one. 
 	 * <p>
-	 * You must call {@link ArticleEdit#init(List, IWorkbenchPartSite, ArticleProductTypeClassGroup, Set)} in
+	 * You must call {@link ArticleEdit#init(List, ArticleContainerEdit, ArticleProductTypeClassGroup, Set)} in
 	 * your implementation of this method!
 	 *
 	 * @param segmentEdit The <tt>SegmentEdit</tt> into which this ArticleEditFactory should create the <tt>ArticleEdit</tt>s.

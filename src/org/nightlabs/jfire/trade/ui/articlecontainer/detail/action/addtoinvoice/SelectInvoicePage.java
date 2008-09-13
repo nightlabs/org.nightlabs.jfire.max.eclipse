@@ -109,7 +109,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 			}
 		});
 
-		invoiceTable = new AbstractTableComposite<Invoice>(page, SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+		invoiceTable = new AbstractTableComposite<Invoice>(page, SWT.NONE, true, page.getBorderStyle() | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{

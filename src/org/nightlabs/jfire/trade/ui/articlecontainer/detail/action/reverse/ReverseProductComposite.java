@@ -37,14 +37,14 @@ extends XComposite
 	public ReverseProductComposite(Composite parent, int style) {
 		super(parent, style);
 		
-		Composite wrapper = new XComposite(parent, SWT.NONE);
+		XComposite wrapper = new XComposite(parent, SWT.NONE);
 		
 		Composite searchWrapper = new XComposite(wrapper, SWT.NONE);
 		searchWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		Label label = new Label(searchWrapper, SWT.NONE);
 		label.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.label")); //$NON-NLS-1$
-		productIDText = new Text(searchWrapper, SWT.BORDER);
+		productIDText = new Text(searchWrapper, wrapper.getBorderStyle());
 		productIDText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productIDText.setFocus();
 		productIDText.addModifyListener(new ModifyListener(){

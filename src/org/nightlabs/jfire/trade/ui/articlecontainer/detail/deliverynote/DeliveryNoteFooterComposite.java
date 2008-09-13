@@ -28,7 +28,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -36,9 +36,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 public class DeliveryNoteFooterComposite
 extends FooterComposite
 {
-	public DeliveryNoteFooterComposite(Composite parent, ArticleContainerEditorComposite articleContainerEditorComposite)
+	public DeliveryNoteFooterComposite(Composite parent, ArticleContainerEditComposite articleContainerEditComposite)
 	{
-		super(parent, articleContainerEditorComposite);
+		super(parent, articleContainerEditComposite);
 	}
 
 //	public void refresh()

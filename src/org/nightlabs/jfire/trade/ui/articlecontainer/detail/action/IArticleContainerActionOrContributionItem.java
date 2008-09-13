@@ -43,7 +43,7 @@ extends IUpdateActionOrContributionItem
 	 * @return Returns the registry that is managing this <code>IArticleContainerAction</code> and
 	 *		was passed to {@link #init(ArticleContainerActionRegistry)} before.
 	 */
-	ArticleContainerActionRegistry getArticleContainerActionRegistry();
+//	ArticleContainerActionRegistry getArticleContainerActionRegistry();
 
 //	boolean calculateVisible();
 //	boolean calculateEnabled();

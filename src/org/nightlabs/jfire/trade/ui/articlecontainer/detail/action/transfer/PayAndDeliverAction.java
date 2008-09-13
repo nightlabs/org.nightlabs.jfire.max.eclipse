@@ -35,6 +35,7 @@ import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticleEditAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -46,10 +47,11 @@ extends GenericArticleEditAction
 	@Override
 	public boolean calculateVisible()
 	{
-		ArticleContainerID articleContainerID = getArticleEditActionRegistry()
-			.getActiveArticleContainerEditorActionBarContributor()
-			.getActiveArticleContainerEditorComposite().getArticleContainerID();
-
+		ArticleContainerEdit edit = getArticleContainerEdit();
+		if (edit == null)
+			return false;
+		ArticleContainerID articleContainerID = edit.getArticleContainerID();
+		
 		// A deliveryNote can only be delivered as a whole with deliverAll or payAndDeliverAll -
 		// this is a restriction of the GUI
 		// (the backend is more flexible), but IMHO this restriction makes understanding easier and prevents that

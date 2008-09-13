@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.nightlabs.jfire.trade.ui">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="articleContainerEditFactory" name="ArticleContainerEditFactory extension-point"/>
+      </appInfo>
+      <documentation>
+         This extension-point is used to register implemetations of ArticleContainerEdit (to be precise: the factories that create them) mapped to the class of ArticleContainer edited.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="articleContainerEditFactory" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="articleContainerEditFactory">
+      <annotation>
+         <documentation>
+            Register an ArticleContainerEditFactory that creates an implementation of ArticleContainerEdit
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="articleContainerClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The class-name of the ArticleContainer the registered ArticleContainerEdit should apply to. 
+Note that when searching for edits for a particular ArticleContainer inheritance resovling (including interfaces) is applied.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ArticleContainer"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The class-name the of the factory that creates the implementation of ArticleContainerEdit registered here.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

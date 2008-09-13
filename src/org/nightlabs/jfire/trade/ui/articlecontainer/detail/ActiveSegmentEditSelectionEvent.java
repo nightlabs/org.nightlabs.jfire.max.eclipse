@@ -33,18 +33,18 @@ public class ActiveSegmentEditSelectionEvent extends EventObject
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @param source The source is the {@link ArticleContainerEditorComposite}, in which
+	 * @param source The source is the {@link ArticleContainerEditComposite}, in which
 	 *		an activeSegmentEdit has been selected.
 	 *
-	 * @see ArticleContainerEditorComposite#getActiveSegmentEdit()
+	 * @see ArticleContainerEditComposite#getActiveSegmentEdit()
 	 */
-	public ActiveSegmentEditSelectionEvent(ArticleContainerEditorComposite source)
+	public ActiveSegmentEditSelectionEvent(ArticleContainerEditComposite source)
 	{
 		super(source);
 	}
 
 	public SegmentEdit getActiveSegmentEdit()
 	{
-		return ((ArticleContainerEditorComposite)getSource()).getActiveSegmentEdit();
+		return ((ArticleContainerEditComposite)getSource()).getActiveSegmentEdit();
 	}
 }

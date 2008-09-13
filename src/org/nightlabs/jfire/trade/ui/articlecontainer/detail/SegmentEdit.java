@@ -59,9 +59,9 @@ public interface SegmentEdit
 {
 	/**
 	 * This method is called by
-	 * {@link SegmentEditFactory#createSegmentEdit(ArticleContainerEditorComposite, String, ArticleSegmentGroup)}.
+	 * {@link SegmentEditFactory#createSegmentEdit(ArticleContainerEdit, String, ArticleSegmentGroup)}.
 	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>.
-	 * @param articleContainerEditorComposite TODO
+	 * @param articleContainerEdit TODO
 	 * @param articleContainerClass The articleContainerClass - one of
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_ORDER},
 	 *		{@link SegmentEditFactory#SEGMENTCONTEXT_OFFER},
@@ -72,7 +72,7 @@ public interface SegmentEdit
 	 */
 	void init(
 			SegmentEditFactory segmentEditFactory,
-			ArticleContainerEditorComposite articleContainerEditorComposite,
+			ArticleContainerEdit articleContainerEdit,
 			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 
@@ -80,15 +80,15 @@ public interface SegmentEdit
 	/**
 	 * @return Returns the factory which has created this <code>SegmentEdit</code> and
 	 *		was passed to
-	 *		{@link #init(SegmentEditFactory, ArticleContainerEditorComposite, String, ArticleSegmentGroup)}.
+	 *		{@link #init(SegmentEditFactory, ArticleContainerEdit, String, ArticleSegmentGroup)}.
 	 */
 	SegmentEditFactory getSegmentEditFactory();
 
-	ArticleContainerEditorComposite getArticleContainerEditorComposite();
+	ArticleContainerEdit getArticleContainerEdit();
 
 	/**
 	 * This method is a convenience method and shortcuts
-	 * <code>getArticleContainerEditorComposite().getArticleContainer()</code>.
+	 * <code>getArticleContainerEdit().getArticleContainer()</code>.
 	 *
 	 * @return Returns the ArticleContainer
 	 *		(either {@link org.nightlabs.jfire.trade.ui.Order}, {@link org.nightlabs.jfire.trade.ui.Offer},
@@ -98,7 +98,7 @@ public interface SegmentEdit
 
 	/**
 	 * This method is a convenience method and shortcuts
-	 * <code>getArticleContainerEditorComposite().getArticleContainerID()</code>.
+	 * <code>getArticleContainerEdit().getArticleContainerID()</code>.
 	 *
 	 * @return Returns the ArticleContainerID
 	 *		(either {@link org.nightlabs.jfire.trade.ui.id.OrderID}, {@link org.nightlabs.jfire.trade.ui.id.OfferID},
@@ -196,7 +196,7 @@ public interface SegmentEdit
 	 * a {@link JDOLifecycleListener} which is registered by the {@link ClientArticleSegmentGroupSet}.
 	 * </p>
 	 * <p>
-	 * Hence, this method is now called by the {@link ArticleContainerEditorComposite} (which is notified
+	 * Hence, this method is now called by the {@link ArticleContainerEditComposite} (which is notified
 	 * by the {@link ClientArticleSegmentGroupSet}) and it needs to update its UI (i.e. its {@link Composite}).
 	 * </p>
 	 * <p>
@@ -219,7 +219,7 @@ public interface SegmentEdit
 
 	/**
 	 * <p>
-	 * This method is called by the {@link ArticleContainerEditorComposite} (which is notified
+	 * This method is called by the {@link ArticleContainerEditComposite} (which is notified
 	 * by the {@link ClientArticleSegmentGroupSet}), whenever articles are removed from an {@link ArticleContainer}.
 	 * Note, that the {@link ArticleCarrier}s passed to this method have already been removed from
 	 * the {@link ClientArticleSegmentGroupSet} when this method is called.

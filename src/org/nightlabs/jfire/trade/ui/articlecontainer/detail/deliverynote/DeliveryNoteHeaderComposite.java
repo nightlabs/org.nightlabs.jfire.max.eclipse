@@ -51,7 +51,7 @@ import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.jbpm.JbpmConstantsDeliveryNote;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
@@ -72,9 +72,9 @@ extends HeaderComposite
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 
-	public DeliveryNoteHeaderComposite(ArticleContainerEditorComposite articleContainerEditorComposite, DeliveryNote _deliveryNote)
+	public DeliveryNoteHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, DeliveryNote _deliveryNote)
 	{
-		super(articleContainerEditorComposite, articleContainerEditorComposite, _deliveryNote);
+		super(articleContainerEditComposite, articleContainerEditComposite, _deliveryNote);
 		this.deliveryNote = _deliveryNote;
 		getGridLayout().numColumns = 2;
 
@@ -107,7 +107,7 @@ extends HeaderComposite
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite.loadDeliveryNoteMonitor.task.name"), 3); //$NON-NLS-1$
 			deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(
 					(DeliveryNoteID) JDOHelper.getObjectId(deliveryNote),
-					ArticleContainerEditorComposite.FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+					ArticleContainerEditComposite.FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			currentStateComposite.setStatable(deliveryNote, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(deliveryNote, new SubProgressMonitor(monitor, 1));

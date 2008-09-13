@@ -65,7 +65,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSel
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeListener;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleCreateListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
@@ -81,6 +81,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ArticleContainerEditorActionBarContributor
 extends EditorActionBarContributor
+implements IArticleContainerEditActionContributor
 {
 	private static final Logger logger = Logger.getLogger(ArticleContainerEditorActionBarContributor.class);
 
@@ -88,7 +89,7 @@ extends EditorActionBarContributor
 	public static final String EDIT_MENU_ID = ArticleContainerEditorActionBarContributor.class.getPackage().getName();
 	
 	private IArticleContainerEditor activeArticleContainerEditor = null;
-	private ArticleContainerEditorComposite activeArticleContainerEditorComposite = null;
+	private ArticleContainerEdit activeArticleContainerEdit = null;
 	private SegmentEdit activeSegmentEdit = null;
 
 	public ArticleContainerEditorActionBarContributor()
@@ -108,18 +109,18 @@ extends EditorActionBarContributor
 		if (activeArticleContainerEditor == targetEditor)
 			return;
 
-		if (activeArticleContainerEditorComposite != null && !activeArticleContainerEditorComposite.isDisposed()) {
-			activeArticleContainerEditorComposite.removeActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
-			activeArticleContainerEditorComposite.removeDisposeListener(articleContainerEditorCompositeDisposeListener);
+		if (activeArticleContainerEdit != null && !activeArticleContainerEdit.getComposite().isDisposed()) {
+			activeArticleContainerEdit.removeActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
+			activeArticleContainerEdit.getComposite().removeDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
-		activeArticleContainerEditor = (IArticleContainerEditor)targetEditor;
-		activeArticleContainerEditorComposite = activeArticleContainerEditor == null ? null : activeArticleContainerEditor.getArticleContainerEditorComposite();
+		activeArticleContainerEditor = (IArticleContainerEditor) targetEditor;
+		activeArticleContainerEdit = activeArticleContainerEditor != null ? activeArticleContainerEditor.getArticleContainerEdit() : null;
 
-		if (activeArticleContainerEditorComposite != null && !activeArticleContainerEditorComposite.isDisposed()) {
-			activeArticleContainerEditorComposite.setArticleContainerEditorActionBarContributor(this);
-			activeArticleContainerEditorComposite.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
-			activeArticleContainerEditorComposite.addDisposeListener(articleContainerEditorCompositeDisposeListener);
+		if (activeArticleContainerEdit != null && !activeArticleContainerEdit.getComposite().isDisposed()) {
+			activeArticleContainerEdit.setArticleContainerEditActionContributor(this);
+			activeArticleContainerEdit.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
+			activeArticleContainerEdit.getComposite().addDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
 		try {
@@ -135,27 +136,17 @@ extends EditorActionBarContributor
 	private DisposeListener articleContainerEditorCompositeDisposeListener = new DisposeListener() {
 		public void widgetDisposed(DisposeEvent e)
 		{
-			ArticleContainerEditorComposite gec = (ArticleContainerEditorComposite) e.widget;
-			if (gec == activeArticleContainerEditorComposite) // should be, because we remove the listeners when switching active, but secure is better
+			Control gec = (Control) e.widget;
+			if (gec == activeArticleContainerEdit.getComposite()) // should be, because we remove the listeners when switching active, but secure is better
 				setActiveEditor(null);
 		}
 	};
 
-	public IArticleContainerEditor getActiveArticleContainerEditor()
+	public ArticleContainerEdit getActiveArticleContainerEdit()
 	{
-		return activeArticleContainerEditor;
+		return activeArticleContainerEdit;
 	}
 	
-	public ArticleContainerEditorComposite getActiveArticleContainerEditorComposite()
-	{
-		return activeArticleContainerEditorComposite;
-	}
-	
-	public SegmentEdit getActiveSegmentEdit()
-	{
-		return activeSegmentEdit;
-	}
-
 	private ActiveSegmentEditSelectionListener activeSegmentEditSelectionListener = new ActiveSegmentEditSelectionListener() {
 		public void selected(ActiveSegmentEditSelectionEvent event) {
 			activeSegmentEditSelected();
@@ -294,7 +285,7 @@ extends EditorActionBarContributor
 	private void activeSegmentEditSelected()
 	{
 		SegmentEdit oldActiveSegmentEdit = activeSegmentEdit;
-		activeSegmentEdit = activeArticleContainerEditorComposite == null ? null : activeArticleContainerEditorComposite.getActiveSegmentEdit();
+		activeSegmentEdit = activeArticleContainerEdit == null ? null : activeArticleContainerEdit.getActiveSegmentEdit();
 		if (oldActiveSegmentEdit != activeSegmentEdit) {
 			if (oldActiveSegmentEdit != null) {
 				oldActiveSegmentEdit.removeSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);
@@ -366,7 +357,7 @@ extends EditorActionBarContributor
 			if (action != null) {
 				action.setEnabled(false);
 	
-				if (activeArticleContainerEditorComposite == null)
+				if (activeArticleContainerEditor == null)
 					actionDescriptor.setVisible(false);
 				else
 					actionDescriptor.setVisible(action.calculateVisible());
@@ -374,7 +365,7 @@ extends EditorActionBarContributor
 			else if (contributionItem != null) {
 				contributionItem.setEnabled(false);
 
-				if (activeArticleContainerEditorComposite == null)
+				if (activeArticleContainerEditor == null)
 					contributionItem.setVisible(false);
 				else {
 					if (contributionItem instanceof IArticleContainerContributionItem)
@@ -403,7 +394,7 @@ extends EditorActionBarContributor
 			else if (contributionItem != null) {
 				contributionItem.setEnabled(false);
 
-				if (activeArticleContainerEditorComposite == null)
+				if (activeArticleContainerEditor == null)
 					contributionItem.setVisible(false);
 				else {
 					if (contributionItem instanceof IArticleEditContributionItem)
@@ -461,38 +452,6 @@ extends EditorActionBarContributor
 		getActionBars().updateActionBars();
 	}
 	
-
-	/**
-	 * This method is called by {@link ArticleEditAction#run()}. It iterates all
-	 * {@link ArticleSelection}s and calls the method
-	 * {@link IArticleEditActionDelegate#run(IArticleEditAction, ArticleSelection)} on all
-	 * associated delegates.
-	 */
-	protected void articleEditActionDelegatesRun(IArticleEditAction action)
-	{
-		if (activeSegmentEdit == null)
-			throw new IllegalStateException("No activeSegmentEdit set!"); //$NON-NLS-1$
-
-		for (Iterator<ArticleSelection> it = activeSegmentEdit.getArticleSelections().iterator(); it.hasNext(); ) {
-			ArticleSelection selection = it.next();
-			ArticleEdit articleEdit = selection.getArticleEdit();
-			IArticleEditActionDelegate delegate = articleEdit.getArticleEditFactory().getArticleEditActionDelegate(action.getId());
-			if (delegate == null) {
-				logger.info(
-						"No IArticleEditActionDelegate registered for articleEditFactory.productTypeClass=\"" + //$NON-NLS-1$
-						articleEdit.getArticleEditFactory().getProductTypeClass() +
-						"\" articleEditFactory.articleContainerClass=\"" + //$NON-NLS-1$
-						articleEdit.getArticleEditFactory().getArticleContainerClass() +
-						"\" articleEditFactory.segmentTypeClass=\"" + //$NON-NLS-1$
-						articleEdit.getArticleEditFactory().getSegmentTypeClass() +
-						"\" articleEditActionID=\"" + action.getId() +"\""); //$NON-NLS-1$ //$NON-NLS-2$
-//				throw new IllegalStateException("No IArticleEditActionDelegate registered for articleEditActionID=" + action.getId());
-			}
-			else
-				delegate.run(action, selection);
-		}
-	}
-
 	/**
 	 * This is the manager for the local (article container/edit actions) pulldown menu.
 	 */
@@ -589,7 +548,7 @@ extends EditorActionBarContributor
 			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || 
 				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
 			{
-				logger.debug("Perspective activated");					 //$NON-NLS-1$
+				logger.debug("Perspective activated: " + perspective.getId() + ", contributions will be removed.");					 //$NON-NLS-1$ //$NON-NLS-2$
 				removeContributions();				
 				activeArticleContainerEditor = null;
 			}

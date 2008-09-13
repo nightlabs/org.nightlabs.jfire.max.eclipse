@@ -18,7 +18,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage;
 import org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
@@ -162,7 +162,7 @@ implements IPerspectiveFactory
 			// open editor if necessary
 			if (page != null && page.getActiveEditor() == null && page.getEditorReferences().length == 0)
 			{
-				ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorComposite.createEditorInput();
+				ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorPage.createEditorInput();
 				if (input != null) {
 					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
 					openEditor(input, false);

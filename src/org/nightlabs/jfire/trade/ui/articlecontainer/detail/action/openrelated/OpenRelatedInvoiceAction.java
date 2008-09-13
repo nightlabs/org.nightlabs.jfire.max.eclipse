@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -23,6 +24,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 
 	@Override
 	protected boolean calculateEnabledWithArticles(Set<Article> articles) {
+		ArticleContainerEdit edit = getArticleEditActionRegistry().getActiveArticleContainerEdit();
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedInvoiceAction.action.text.disabled")); //$NON-NLS-1$
 		InvoiceID invoiceID = getCommonInvoiceID(articles);
 		if (invoiceID != null) {
@@ -32,7 +34,7 @@ public class OpenRelatedInvoiceAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return invoiceID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputInvoice);
+		return invoiceID != null && !(edit.getArticleContainerID() instanceof InvoiceID);
 	}
 	
 	/**

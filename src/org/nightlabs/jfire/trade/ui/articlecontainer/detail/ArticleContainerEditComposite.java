@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
@@ -69,6 +68,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.InvoiceLocal;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
 import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
@@ -101,16 +101,13 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerEditActionContributor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -120,53 +117,38 @@ import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * This <tt>Composite</tt> is used to edit
- * {@link org.nightlabs.jfire.trade.ui.Order}s,
- * {@link org.nightlabs.jfire.trade.ui.Offer}s,
- * {@link org.nightlabs.jfire.accounting.Invoice}s and
- * {@link org.nightlabs.jfire.store.DeliveryNote}s. 
+ * This composite might be used to implement registered {@link ArticleContainerEdit} or directly in ui-code.
+ * One of its known uses is the implementation of {@link DefaultArticleContainerEdit}.
+ * It might also be sub-classed in order to configure the header and footer composites.
  * <p>
- * It loads the {@link ArticleContainer} from an 
- * editor input it is instantiated with and creates a {@link ClientArticleSegmentGroupSet}
- * to manage the articles within the container. It also 
- * It asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
+ * For its main part it loads the {@link ArticleContainer} from the articleContainerID it is instantiated with 
+ * and creates a {@link ClientArticleSegmentGroupSet} to manage the articles within the container. 
+ * It also It asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
  * for the right factories for all the {@link org.nightlabs.jfire.trade.ui.Segment}s
  * and displays the edits which are delivered from the factory.
  * </p>
- * This <tt>Composite</tt> contains the main logic while
- * {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor} is
- * just a tiny wrapper. This architecture allows to display and edit an
- * order/offer/invoice/deliveryNote within another carrier (e.g. a view).
  * 
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public class ArticleContainerEditorComposite
+public class ArticleContainerEditComposite
 extends XComposite
+implements ArticleContainerEdit
 {
-	private static final Logger logger = Logger.getLogger(ArticleContainerEditorComposite.class);
+	private static final Logger logger = Logger.getLogger(ArticleContainerEditComposite.class);
 
-	private ArticleContainerEditorInput input = null;
+	private ArticleContainerID articleContainerID = null;
 
 	/**
 	 * This is initialized by
 	 * {@link ArticleContainerEditorActionBarContributor#setActiveEditor(IEditorPart)} as
 	 * soon as the Editor became active the first time.
 	 */
-	private ArticleContainerEditorActionBarContributor articleContainerEditorActionBarContributor = null;
-
-	private Order order = null;
-
-	private Offer offer = null;
-
-	private Invoice invoice = null;
-
-	private DeliveryNote deliveryNote = null;
+	private IArticleContainerEditActionContributor articleContainerEditActionContributor = null;
 
 	private ArticleContainer articleContainer = null;
 
 	private HeaderComposite headerComposite;
-
 	private FooterComposite footerComposite;
 
 	// private List segmentCompositeScrollContainers = new ArrayList();
@@ -200,26 +182,19 @@ extends XComposite
 	// */
 	// private XComposite segmentCompositeContainer;
 
-	private IWorkbenchPartSite site;
-
 	private Label loadingDataLabel;
 
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public ArticleContainerEditorComposite(IWorkbenchPartSite site, Composite parent, ArticleContainerEditorInput articleContainerEditorInput) {
-		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
-		if (site == null)
-			throw new IllegalArgumentException("site must not be null!"); //$NON-NLS-1$
-
-		this.site = site;
+	public ArticleContainerEditComposite(Composite parent, ArticleContainerID _articleContainerID) {
+		super(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
 
 		loadingDataLabel = new Label(this, SWT.NONE);
-		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.label.loadingData")); //$NON-NLS-1$
+		loadingDataLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite.label.loadingData")); //$NON-NLS-1$
 
-		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(articleContainerEditorInput);
+		loadInitialArticleContainerJob = new LoadInitialArticleContainerJob(_articleContainerID);
 		loadInitialArticleContainerJob.schedule();
 	}
 
@@ -227,13 +202,13 @@ extends XComposite
 
 	private class LoadInitialArticleContainerJob extends Job
 	{
-		private ArticleContainerEditorInput articleContainerEditorInput;
+		private ArticleContainerID loadArticleContainerID;
 
-		public LoadInitialArticleContainerJob(ArticleContainerEditorInput articleContainerEditorInput)
+		public LoadInitialArticleContainerJob(ArticleContainerID articleContainerID)
 		{
-			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.job.loadingArticleContainer")); //$NON-NLS-1$
-			this.articleContainerEditorInput = articleContainerEditorInput;
-			assert articleContainerEditorInput != null : "articleContainerEditorInput != null"; //$NON-NLS-1$
+			super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite.job.loadingArticleContainer")); //$NON-NLS-1$
+			this.loadArticleContainerID = articleContainerID;
+			assert articleContainerID != null : "loadArticleContainerID != null"; //$NON-NLS-1$
 		}
 		
 		@Override
@@ -241,35 +216,26 @@ extends XComposite
 		{
 			loadInitialArticleContainerJob = null; // release memory
 
-			initArticleContainerEditorInput(articleContainerEditorInput, monitor);
+			initArticleContainer(loadArticleContainerID, monitor);
 
 			Display.getDefault().asyncExec(new Runnable()
 			{
 				public void run()
 				{
-					if (ArticleContainerEditorComposite.this.isDisposed())
+					if (ArticleContainerEditComposite.this.isDisposed())
 						return;
 
 					loadingDataLabel.dispose();
 					loadingDataLabel = null;
 
-					if (order != null)
-						headerComposite = new OrderHeaderComposite(ArticleContainerEditorComposite.this, order);
-
-					if (offer != null)
-						headerComposite = new OfferHeaderComposite(ArticleContainerEditorComposite.this, offer);
-
-					if (invoice != null)
-						headerComposite = new InvoiceHeaderComposite(ArticleContainerEditorComposite.this, invoice);
-
-					if (deliveryNote != null)
-						headerComposite = new DeliveryNoteHeaderComposite(ArticleContainerEditorComposite.this, deliveryNote);
-
+					headerComposite = createHeaderComposite(ArticleContainerEditComposite.this);					
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditorComposite.this behaviour must be supported
+					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+					
+					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditComposite.this behaviour must be supported
 					if (hasDifferentSegments()) {
-						segmentCompositeFolder = new TabFolder(ArticleContainerEditorComposite.this, SWT.NONE);
+						segmentCompositeFolder = new TabFolder(ArticleContainerEditComposite.this, SWT.NONE);
 						segmentCompositeFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 						((TabFolder)segmentCompositeFolder).addSelectionListener(new SelectionAdapter() {
 							@Override
@@ -279,47 +245,17 @@ extends XComposite
 						});
 					}
 					else {
-						segmentCompositeFolder = new XComposite(ArticleContainerEditorComposite.this, SWT.NONE);
+						segmentCompositeFolder = new XComposite(ArticleContainerEditComposite.this, SWT.NONE, LayoutMode.TOTAL_WRAPPER);
 					}
 
-					// segmentCompositeScrollContainer = new ScrolledComposite(ArticleContainerEditorComposite.this,
-					// SWT.V_SCROLL); // TODO do we really not want horizontal scrolling?
-					// segmentCompositeScrollContainer.setExpandHorizontal(true);
-					// segmentCompositeScrollContainer.setExpandVertical(true);
-					// segmentCompositeScrollContainer.setLayoutData(new
-					// GridData(GridData.FILL_BOTH));
-					// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true); // TODO do
-					// we really want to ALWAYS display scroll bars?
-					//
-					// segmentCompositeContainer = new
-					// XComposite(segmentCompositeScrollContainer, SWT.NONE,
-					// XComposite.LAYOUT_MODE_TIGHT_WRAPPER);
-					// segmentCompositeScrollContainer.setContent(segmentCompositeContainer);
-
-					// segmentCompositeContainer.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-
-					EditLockTypeID editLockTypeID;
-					if (order != null) {
-						footerComposite = new OrderFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
-						editLockTypeID = EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
-					}
-					else if (offer != null) {
-						footerComposite = new OfferFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
-						editLockTypeID = EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
-					}
-					else if (invoice != null) {
-						footerComposite = new InvoiceFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
-						editLockTypeID = EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
-					}
-					else if (deliveryNote != null) {
-						footerComposite = new DeliveryNoteFooterComposite(ArticleContainerEditorComposite.this, ArticleContainerEditorComposite.this);
-						editLockTypeID = EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
-					}
-					else
-						throw new IllegalStateException("All null!"); //$NON-NLS-1$
+					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+					
+					footerComposite = createFooterComposite(ArticleContainerEditComposite.this);
 
 					footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 					footerComposite.refresh();
+					
+					EditLockTypeID editLockTypeID = getEditLockTypeID();
 
 					// try {
 					// createSegmentEditComposites();
@@ -368,15 +304,22 @@ extends XComposite
 					});
 
 					// it is likely that the action-bar-contributor has been set too early for creating the UI, hence, we call it now.
-					if (articleContainerEditorActionBarContributor != null)
-						setArticleContainerEditorActionBarContributor(articleContainerEditorActionBarContributor);
-				} // void run()
+					if (articleContainerEditActionContributor != null)
+						setArticleContainerEditActionContributor(articleContainerEditActionContributor);
+					try {
+						if (!segmentEditCompositesCreated)
+							createSegmentEditComposites();
+					} catch (EPProcessorException e) {
+						throw new RuntimeException(e);
+					}
+				} // void run()				
 			});
 
 			return Status.OK_STATUS;
 		}
 	};
 
+	
 	private NotificationListener articleContainerChangedListener = new NotificationAdapterJob() {
 		@Override
 		public void notify(NotificationEvent notificationEvent)
@@ -393,7 +336,7 @@ extends XComposite
 			}
 
 			// reload the new ArticleContainer from the server
-			initArticleContainerEditorInput(input, new ProgressMonitorWrapper(getProgressMonitor()));
+			initArticleContainer(articleContainerID, new ProgressMonitorWrapper(getProgressMonitor()));
 
 			// update header+footer on the UI thread
 			Display.getDefault().asyncExec(new Runnable()
@@ -409,8 +352,84 @@ extends XComposite
 		}
 	};
 
-	public ArticleContainerEditorInput getInput() {
-		return input;
+	public ArticleContainerID getArticleContainerID() {
+		return articleContainerID;
+	}
+
+	/**
+	 * This method is called to create the {@link HeaderComposite} of this composite.
+	 * It might be overridden to create custom headers.
+	 * <p>
+	 * This implementations will check if one of the supported implementations of 
+	 * {@link ArticleContainer} was loaded and then create one of the following:
+	 * {@link OrderHeaderComposite}, {@link OfferHeaderComposite}, {@link InvoiceHeaderComposite}
+	 * or {@link DeliveryNoteHeaderComposite}.
+	 * </p>
+	 * @param parent The parent to use for the new composite.
+	 * @return A newly created {@link HeaderComposite}.
+	 */
+	protected HeaderComposite createHeaderComposite(Composite parent) {
+		if (articleContainer instanceof Order)
+			return new OrderHeaderComposite(this, (Order) articleContainer);
+		if (articleContainer instanceof Offer)
+			return new OfferHeaderComposite(this, (Offer) articleContainer);
+		if (articleContainer instanceof Invoice)
+			return new InvoiceHeaderComposite(this, (Invoice) articleContainer);
+		if (articleContainer instanceof DeliveryNote)
+			return new DeliveryNoteHeaderComposite(this, (DeliveryNote) articleContainer);
+		
+		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+	}
+
+	
+	/**
+	 * This method is called to create the {@link FooterComposite} of this composite.
+	 * It might be overridden to create custom footers.
+	 * <p>
+	 * This implementations will check if one of the supported implementations of 
+	 * {@link ArticleContainer} was loaded and then create one of the following:
+	 * {@link OrderFooterComposite}, {@link OfferFooterComposite}, {@link InvoiceFooterComposite}
+	 * or {@link DeliveryNoteFooterComposite}.
+	 * </p>
+	 * @param parent The parent to use for the new composite.
+	 * @return A newly created {@link FooterComposite}.
+	 */
+	protected FooterComposite createFooterComposite(Composite parent) {
+		if (articleContainer instanceof Order)
+			return new OrderFooterComposite(parent, this);
+		if (articleContainer instanceof Offer)
+			return new OfferFooterComposite(parent, this);
+		if (articleContainer instanceof Invoice)
+			return new InvoiceFooterComposite(parent, this);
+		if (articleContainer instanceof DeliveryNote)
+			return new DeliveryNoteFooterComposite(parent, this);
+		
+		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+	}
+	
+	/**
+	 * This method is called to determine the {@link EditLockTypeID} 
+	 * that should be used to acquire an edit lock for the edited ArticleContainer.
+	 * This implementation supports Orders, Offers, Invoices and DeliveryNotes
+	 * for all other implementations of {@link ArticleContainer} this method
+	 * should be overridden.
+	 * 
+	 * @return The {@link EditLockTypeID} that should be used to acquire an edit lock.
+	 */
+	protected EditLockTypeID getEditLockTypeID() {
+		if (articleContainer instanceof Order)
+			return EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
+		if (articleContainer instanceof Offer)
+			return EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
+		if (articleContainer instanceof Invoice)
+			return EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
+		if (articleContainer instanceof DeliveryNote)
+			return EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
+		
+		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
 	}
 	
 	protected boolean hasDifferentSegments()
@@ -430,30 +449,17 @@ extends XComposite
 	 *         first time. Afterwards, it returns the contributor responsible for
 	 *         the editor.
 	 */
-	public ArticleContainerEditorActionBarContributor getArticleContainerEditorActionBarContributor() {
-		return articleContainerEditorActionBarContributor;
+	public IArticleContainerEditActionContributor getArticleContainerEditActionContributor() {
+		return articleContainerEditActionContributor;
 	}
 
 	/**
 	 * This method is called by
 	 * {@link ArticleContainerEditorActionBarContributor#setActiveEditor(IEditorPart)}.
 	 */
-	public void setArticleContainerEditorActionBarContributor(
-			ArticleContainerEditorActionBarContributor articleContainerEditorActionBarContributor) {
-		this.articleContainerEditorActionBarContributor = articleContainerEditorActionBarContributor;
-
-		assert Display.getCurrent() != null : "*NOT* called on UI thread! This method must be called on the UI thread!"; //$NON-NLS-1$
-
-		// not yet initialised - will initialise in the callback
-		if (loadingDataLabel != null)
-			return;
-
-		try {
-			if (!segmentEditCompositesCreated)
-				createSegmentEditComposites();
-		} catch (EPProcessorException e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public void setArticleContainerEditActionContributor(IArticleContainerEditActionContributor articleContainerEditActionContributor) {
+		this.articleContainerEditActionContributor = articleContainerEditActionContributor;
 	}
 
 	// protected void recreateSegmentEditComposites() throws EPProcessorException
@@ -494,7 +500,7 @@ extends XComposite
 	{
 		Segment segment = segmentEdit.getArticleSegmentGroup().getSegment();
 
-		// TODO Segments can be added while this ArticleContainerEditorComposite is visible. Unfortunately,
+		// TODO Segments can be added while this ArticleContainerEditComposite is visible. Unfortunately,
 		// this was not taken into account when Daniel refactored this class (he removed the TabFolder
 		// when there's only one Segment). After his refactoring, it means that we would need to
 		// rebuild the UI if a Segment is added! Marco.
@@ -504,7 +510,7 @@ extends XComposite
 			tabItem = new TabItem((TabFolder)segmentCompositeFolder, SWT.NONE);
 			tabItem.setText(
 					String.format(
-							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite.segmentTabItem.text"), //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite.segmentTabItem.text"), //$NON-NLS-1$
 							segment.getSegmentType().getName().getText(),
 							segment.getSegmentIDAsString()));
 		}
@@ -535,7 +541,7 @@ extends XComposite
 		segmentCompositeScrollContainer.setContent(composite);
 		// segmentEditComposites.add(composite);
 
-		// TODO Segments can be added while this ArticleContainerEditorComposite is visible. See comment at the beginning of this method! Marco.
+		// TODO Segments can be added while this ArticleContainerEditComposite is visible. See comment at the beginning of this method! Marco.
 		if (hasDifferentSegments())
 			segmentEditsByTabItem.put(tabItem, segmentEdit);
 		else {
@@ -605,10 +611,10 @@ extends XComposite
 	protected void createSegmentEditAndComposite(ArticleSegmentGroup asg) {
 		Segment segment = asg.getSegment();
 		SegmentType segmentType = segment.getSegmentType();
+		Class<?> articleContainerClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(articleContainerID);
+		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance().getSegmentEditFactory(articleContainerClass.getName(), segmentType.getClass(), true);
 
-		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance().getSegmentEditFactory(input.getArticleContainerClass(), segmentType.getClass(), true);
-
-		SegmentEdit segmentEdit = sef.createSegmentEdit(this, input.getArticleContainerClass(), asg);
+		SegmentEdit segmentEdit = sef.createSegmentEdit(this, articleContainerClass.getName(), asg);
 		segmentEdit.addCompositeContentChangeListener(segmentCompositeContentChangeListener);
 
 		createSegmentEditComposite(asg, segmentEdit);
@@ -729,11 +735,13 @@ extends XComposite
 
 	private ListenerList activeSegmentEditSelectionListeners = new ListenerList();
 
+	@Override
 	public void addActiveSegmentEditSelectionListener(
 			ActiveSegmentEditSelectionListener listener) {
 		activeSegmentEditSelectionListeners.add(listener);
 	}
 
+	@Override
 	public void removeActiveSegmentEditSelectionListener(
 			ActiveSegmentEditSelectionListener listener) {
 		activeSegmentEditSelectionListeners.remove(listener);
@@ -821,10 +829,12 @@ extends XComposite
 	 * @return Returns either <code>null</code> if there is no SegmentEdit
 	 *         active or the one that is.
 	 */
+	@Override
 	public SegmentEdit getActiveSegmentEdit() {
 		return activeSegmentEdit;
 	}
 
+	@Override
 	public Collection<SegmentEdit> getSegmentEdits() {
 		return segmentEditsByTabItem.values();
 	}
@@ -875,58 +885,54 @@ extends XComposite
 			FetchPlan.DEFAULT };
 
 	/**
-	 * Initialise this instance of <code>ArticleContainerEditorComposite</code> or reload the {@link ArticleContainer} referenced
-	 * by the <code>articleContainerEditorInput</code> parameter. In case of reloading, the articles are not fetched again
+	 * Initialise this instance of <code>ArticleContainerEditComposite</code> or reload the {@link ArticleContainer} referenced
+	 * by the <code>loadArticleContainerID</code> parameter. In case of reloading, the articles are not fetched again
 	 * (they're managed separately by the {@link ClientArticleSegmentGroupSet} in {@link #articleSegmentGroupSet})
 	 *
-	 * @param articleContainerEditorInput the input to be set.
+	 * @param _articleContainerID the articleContainerID to be set.
 	 * @param monitor the monitor to provide feedback.
 	 */
-	protected synchronized void initArticleContainerEditorInput(ArticleContainerEditorInput articleContainerEditorInput, ProgressMonitor monitor) {
-		boolean reloadArticleContainerWithoutArticles = this.input != null;
+	protected synchronized void initArticleContainer(ArticleContainerID _articleContainerID, ProgressMonitor monitor) {
+		boolean reloadArticleContainerWithoutArticles = this.articleContainerID != null;
 
-		if (input == null && articleContainerEditorInput == null)
-				throw new IllegalStateException("input not yet initialized and no input parameter given!"); //$NON-NLS-1$
+		if (this.articleContainerID == null && _articleContainerID == null)
+				throw new IllegalStateException("articleContainerID not yet initialized and no articleContainerID parameter given!"); //$NON-NLS-1$
 
-		if (articleContainerEditorInput == null)
-			articleContainerEditorInput = input;
-		else if (input != null && !articleContainerEditorInput.equals(input))
-			throw new IllegalStateException("this.input != ArticleContainerEditorInput articleContainerEditorInput !!!"); //$NON-NLS-1$
+		if (_articleContainerID == null)
+			_articleContainerID = articleContainerID;
+		else if (articleContainerID != null && !_articleContainerID.equals(articleContainerID))
+			throw new IllegalStateException("this.aritcleContainerID != ArticleContainerID articleContainerID !!!"); //$NON-NLS-1$
 
 //		monitor.beginTask("Loading article container", 100); // the monitor is directly passed to the DAOs - no need to use a sub-monitor
 		try {
-			this.input = articleContainerEditorInput;
-			this.order = null;
-			this.offer = null;
-			this.invoice = null;
-			this.deliveryNote = null;
+			this.articleContainerID = _articleContainerID;
 
-			if (input instanceof ArticleContainerEditorInputOrder) {
-				OrderID orderID = ((ArticleContainerEditorInputOrder) input).getOrderID();
+			if (articleContainerID instanceof OrderID) {
+				OrderID orderID = (OrderID) articleContainerID;
 				if (reloadArticleContainerWithoutArticles)
-					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-					articleContainer = order = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof ArticleContainerEditorInputOffer) {
-				OfferID offerID = ((ArticleContainerEditorInputOffer) input).getOfferID();
+					articleContainer = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else if (articleContainerID instanceof OfferID) {
+				OfferID offerID = (OfferID) articleContainerID;
 				if (reloadArticleContainerWithoutArticles)
-					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-					articleContainer = offer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof ArticleContainerEditorInputInvoice) {
-				InvoiceID invoiceID = ((ArticleContainerEditorInputInvoice) input).getInvoiceID();
+					articleContainer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else if (articleContainerID instanceof InvoiceID) {
+				InvoiceID invoiceID = (InvoiceID) articleContainerID;
 				if (reloadArticleContainerWithoutArticles)
-					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-					articleContainer = invoice = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (input instanceof ArticleContainerEditorInputDeliveryNote) {
-				DeliveryNoteID deliveryNoteID = ((ArticleContainerEditorInputDeliveryNote) input).getDeliveryNoteID();
+					articleContainer = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			} else if (articleContainerID instanceof DeliveryNoteID) {
+				DeliveryNoteID deliveryNoteID = (DeliveryNoteID) articleContainerID;
 				if (reloadArticleContainerWithoutArticles)
-					articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-				articleContainer = deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			} else
-				throw new IllegalArgumentException("input type \"" + input.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
+				throw new IllegalArgumentException("articleContainerID type \"" + articleContainerID.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (logger.isDebugEnabled())
 				logger.debug("initArticleContainerEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -941,16 +947,14 @@ extends XComposite
 	}
 
 	public Menu createArticleContainerContextMenu(Control parent) {
-		if (articleContainerEditorActionBarContributor != null)
-			return articleContainerEditorActionBarContributor
-					.createArticleContainerContextMenu(parent);
+		if (articleContainerEditActionContributor != null)
+			return articleContainerEditActionContributor.createArticleContainerContextMenu(parent);
 
 		return null;
 	}
 
 	public Menu createArticleEditContextMenu(Control parent) {
-		return articleContainerEditorActionBarContributor
-				.createArticleEditContextMenu(parent);
+		return articleContainerEditActionContributor.createArticleEditContextMenu(parent);
 	}
 
 	/**
@@ -964,26 +968,21 @@ extends XComposite
 	 *         {@link ArticleContainer#getArticles()}! Use {@link #getArticles()}
 	 *         instead!
 	 */
+	@Override
 	public ArticleContainer getArticleContainer() {
 		return articleContainer;
 	}
 
-	public ArticleContainerID getArticleContainerID() {
-		return (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
-	}
-
+	@Override
 	public Collection<Article> getArticles() {
 		if (articleSegmentGroupSet == null)
 			return Collections.emptyList();
 		return articleSegmentGroupSet.getArticles();
 	}
 
-	public IWorkbenchPartSite getSite() {
-		return site;
-	}
-
 //	private List<ArticleChangeListener> earlyArticleChangeListeners = new ArrayList<ArticleChangeListener>();
 	private ListenerList earlyArticleChangeListeners = new ListenerList();
+	@Override
 	public void addArticleChangeListener(ArticleChangeListener articleChangeListener) {
 		if (articleSegmentGroupSet != null) {
 			articleSegmentGroupSet.addArticleChangeListener(articleChangeListener);
@@ -993,6 +992,7 @@ extends XComposite
 		}
 	}
 	
+	@Override
 	public void removeArticleChangeListener(ArticleChangeListener articleChangeListener) {
 		if (articleSegmentGroupSet != null) {
 			articleSegmentGroupSet.removeArticleChangeListener(articleChangeListener);
@@ -1003,6 +1003,7 @@ extends XComposite
 	
 //	private List<ArticleCreateListener> earlyArticleCreateListeners = new ArrayList<ArticleCreateListener>();
 	private ListenerList earlyArticleCreateListeners = new ListenerList();
+	@Override
 	public void addArticleCreateListener(ArticleCreateListener articleCreateListener) {
 		if (articleSegmentGroupSet != null) {
 			articleSegmentGroupSet.addArticleCreateListener(articleCreateListener);
@@ -1011,6 +1012,7 @@ extends XComposite
 		}
 	}
 	
+	@Override
 	public void removeArticleCreateListener(ArticleCreateListener articleCreateListener) {
 		if (articleSegmentGroupSet != null) {
 			articleSegmentGroupSet.removeArticleCreateListener(articleCreateListener);
@@ -1019,8 +1021,24 @@ extends XComposite
 		}
 	}
 
+	@Override
 	public ClientArticleSegmentGroupSet getArticleSegmentGroupSet()
 	{
 		return articleSegmentGroupSet;
+	}
+
+	@Override
+	public Composite createComposite(Composite parent) {
+		return this;
+	}
+
+	@Override
+	public Composite getComposite() {
+		return this;
+	}
+
+	@Override
+	public void init(ArticleContainerID articleContainerID) {
+		// Noop, initialized in constructor.
 	}
 }

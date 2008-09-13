@@ -27,29 +27,24 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.nightlabs.jfire.trade.ArticleContainer;
 
 /**
- * This editor is the frame for editing <tt>Order</tt>s, <tt>Offer</tt>s,
- * <tt>Invoice</tt>s and <tt>Delivery</tt>s. It delegates all work to the
- * {@link ArticleContainerEditorComposite}.
+ * This editor is the frame for editing {@link ArticleContainer}s. 
+ * It delegates all work to the {@link ArticleContainerEdit}.
  * 
  * @author Marco Schulze - marco at nightlabs dot de
- * 
  * @author Fitas Amine - fitas at nightlabs dot de
- * 
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de --> 
  */
 public class ArticleContainerEditor 
 extends AbstractArticleContainerEditor  
 {
 	public static final String ID_EDITOR = ArticleContainerEditor.class.getName();
 
-	private ArticleContainerEditorComposite articleContainerEditorComposite;
-	private ArticleContainerEditorInput input;
-	
 	public ArticleContainerEditor() {}
 
 	/**
@@ -60,31 +55,15 @@ extends AbstractArticleContainerEditor
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException 
 	{
+		super.init(site, input);
+		
 		if (!(input instanceof ArticleContainerEditorInput))
 			throw new PartInitException(
 					"Invalid Input: Must be an instance of ArticleContainerEditorInput but is " + input); //$NON-NLS-1$
-
-		this.input = (ArticleContainerEditorInput) input;
-
-		setSite(site);
-		setInput(input);
 
 		setPartName(input.getName());
 		ImageDescriptor img = input.getImageDescriptor();
 		if (img != null)
 			setTitleImage(img.createImage());
 	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-//	public void createPartContents(Composite parent) 
-//	{
-		articleContainerEditorComposite = new ArticleContainerEditorComposite(getSite(), parent,
-				input);
-	}
-
-	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
-		return articleContainerEditorComposite;
-	}
-
 }

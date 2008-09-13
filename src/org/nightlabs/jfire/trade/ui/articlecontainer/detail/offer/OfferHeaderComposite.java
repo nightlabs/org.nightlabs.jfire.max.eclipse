@@ -63,7 +63,7 @@ import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
@@ -97,9 +97,9 @@ extends HeaderComposite
 		return (OfferID) JDOHelper.getObjectId(offer);
 	}
 
-	public OfferHeaderComposite(ArticleContainerEditorComposite articleContainerEditorComposite, Offer offer)
+	public OfferHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Offer offer)
 	{
-		super(articleContainerEditorComposite, articleContainerEditorComposite, offer);
+		super(articleContainerEditComposite, articleContainerEditComposite, offer);
 		this.offer = offer;
 
 		this.setLayout(new RowLayout());
@@ -239,10 +239,14 @@ extends HeaderComposite
 
 		getDisplay().asyncExec(new Runnable() {
 			public void run() {
+				if (isDisposed())
+					return;
 				getShell().layout(true, true);
 
 				getDisplay().asyncExec(new Runnable() {
 					public void run() {
+						if (isDisposed())
+							return;
 						getShell().layout(true, true);
 					}
 				});
@@ -269,7 +273,7 @@ extends HeaderComposite
 							_expiryTimestampUnfinalized, _expiryTimestampUnfinalizedAutoManaged,
 							_expiryTimestampFinalized, _expiryTimestampFinalizedAutoManaged,
 							true,
-							ArticleContainerEditorComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+							ArticleContainerEditComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 
 					onOfferModified(_offer, new SubProgressMonitor(monitor, 1));
@@ -344,10 +348,10 @@ extends HeaderComposite
 			);
 			Offer _offer = OfferDAO.sharedInstance().getOffer(
 					(OfferID) JDOHelper.getObjectId(offer),
-//					ArticleContainerEditorComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
+//					ArticleContainerEditComposite.FETCH_GROUPS_OFFER_WITH_ARTICLES, // it's fine to use these fetch groups here, because we'll get it out of the cache - hence it's even better to load it with more fetch groups than only with the ones we need in this composite
 					// After a change, it does NOT load the ArticleContainer *with* articles, but *WITHOUT*!
 					// Therefore, it's a bad idea to load them with articles! Marco.
-					ArticleContainerEditorComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					ArticleContainerEditComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 
 			onOfferModified(_offer, new SubProgressMonitor(monitor, 2));

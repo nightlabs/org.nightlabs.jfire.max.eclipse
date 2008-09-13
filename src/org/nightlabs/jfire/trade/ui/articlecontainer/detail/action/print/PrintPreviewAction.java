@@ -67,8 +67,7 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 	@Override
 	public void run()
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-		.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerID();
 		
 		Map <String, Object> params = new HashMap<String,Object>();
 //		params.put("invoiceOrganisationID", invoiceID.organisationID);

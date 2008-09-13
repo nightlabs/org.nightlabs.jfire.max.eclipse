@@ -32,6 +32,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.toolkit.IToolkit;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -59,7 +60,8 @@ public class InvoiceSegmentComposite extends XComposite
 //		articleAdderPlaceholderLabel = new Label(articleAdderArea, SWT.NONE);
 //		articleAdderPlaceholderLabel.setText("Please select a product type to add a new article.");
 
-		articleEditArea = new XComposite(this, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
+		articleEditArea = new XComposite(this, getBorderStyle(), LayoutMode.TIGHT_WRAPPER);
+		articleEditArea.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		articleEditArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		addDisposeListener(new DisposeListener(){
 			public void widgetDisposed(DisposeEvent e)

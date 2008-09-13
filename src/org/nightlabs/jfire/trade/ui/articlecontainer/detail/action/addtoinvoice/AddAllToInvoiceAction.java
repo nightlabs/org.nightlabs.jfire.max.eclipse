@@ -29,7 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 
@@ -37,11 +37,11 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
-		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (editor == null)
+		ArticleContainerEdit edit = getArticleContainerEdit();
+		if (edit == null)
 			return false;
 
-		return !(editor.getArticleContainerEditorComposite().getArticleContainerID() instanceof Invoice);
+		return !(edit.getArticleContainerID() instanceof Invoice);
 	}
 	
 	@Override
@@ -70,9 +70,7 @@ public class AddAllToInvoiceAction extends ArticleContainerAction
 	@Override
 	public void run()
 	{
-		AddToInvoiceWizard addToInvoiceWizard = new AddToInvoiceWizard(
-				getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-				.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticles());
+		AddToInvoiceWizard addToInvoiceWizard = new AddToInvoiceWizard(getArticleContainerEdit().getArticles());
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(addToInvoiceWizard);
 		dialog.open();

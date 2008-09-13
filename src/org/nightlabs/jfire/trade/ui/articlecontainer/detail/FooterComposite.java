@@ -50,29 +50,20 @@ public class FooterComposite extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(FooterComposite.class);
 	
-	private ArticleContainerEditorComposite articleContainerEditorComposite;
+	private ArticleContainerEditComposite articleContainerEditComposite;
 //	private ArticleContainer articleContainer;
 
-	public FooterComposite(Composite parent, ArticleContainerEditorComposite articleContainerEditorComposite)
+	public FooterComposite(Composite parent, ArticleContainerEditComposite articleContainerEditComposite)
 	{
-		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
-		this.articleContainerEditorComposite = articleContainerEditorComposite;
-//		this.articleContainer = articleContainer;
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		this.articleContainerEditComposite = articleContainerEditComposite;
 		
 		setBackground(DEFAULT_BG_COLOR);
 		
-//		setLayout(new GridLayout(2, false));
-//		spacerLabel = new Label(this, SWT.NONE);
-//		spacerLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		spacerLabel.setBackground(bgColor);
-
 		setLayout(new GridLayout(1, true));
 		label = new Label(this, SWT.RIGHT);
 		label.setBackground(bgColor);
-//		label.setText("                                                                    ");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER | GridData.FILL_HORIZONTAL));
-
-//		refresh();
 	}
 
 	public static final Color DEFAULT_BG_COLOR = new Color(null, 255, 255, 255);
@@ -99,14 +90,14 @@ public class FooterComposite extends XComposite
 	 */
 	public ArticleContainer getArticleContainer()
 	{
-		return articleContainerEditorComposite.getArticleContainer();
+		return articleContainerEditComposite.getArticleContainer();
 	}
 	/**
-	 * @return Returns the articleContainerEditorComposite.
+	 * @return Returns the articleContainerEditComposite.
 	 */
-	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
+	public ArticleContainerEditComposite getArticleContainerEditorComposite()
 	{
-		return articleContainerEditorComposite;
+		return articleContainerEditComposite;
 	}
 	
 	/**
@@ -119,7 +110,7 @@ public class FooterComposite extends XComposite
 		long priceAmount = 0;
 		Currency currency = null;
 
-		for (Article article : articleContainerEditorComposite.getArticles()) {
+		for (Article article : articleContainerEditComposite.getArticles()) {
 			ArticlePrice articlePrice = article.getPrice();
 			priceAmount += articlePrice.getAmount();
 			if (currency == null)

@@ -71,4 +71,5 @@ public class DeliveryNoteSegmentEdit extends AbstractSegmentEdit
 	protected void _populateArticleEditContextMenu(IMenuManager manager)
 	{
 	}
+
 }

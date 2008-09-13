@@ -70,7 +70,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This is the base implementation of {@link SegmentEdit} it should be sub-classed to create new ones.
- * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEditorComposite, String, ArticleSegmentGroup)}, 
+ * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEdit, String, ArticleSegmentGroup)}, 
  * the management/creation of {@link ArticleSelection}s it does two important things:
  * <p>
  * It listens to the selection of a {@link ProductTypeID} in the {@link TradePlugin#ZONE_SALE} and
@@ -96,7 +96,7 @@ public abstract class AbstractSegmentEdit
 implements SegmentEdit
 {
 	private SegmentEditFactory segmentEditFactory;
-	private ArticleContainerEditorComposite articleContainerEditorComposite;
+	private ArticleContainerEdit articleContainerEdit;
 	private String articleContainerClass;
 	private ArticleSegmentGroup articleSegmentGroup;
 
@@ -108,12 +108,12 @@ implements SegmentEdit
 	@Implement
 	public void init(
 			SegmentEditFactory segmentEditFactory,
-			ArticleContainerEditorComposite articleContainerEditorComposite,
+			ArticleContainerEdit articleContainerEdit,
 			String articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup)
 	{
 		this.segmentEditFactory = segmentEditFactory;
-		this.articleContainerEditorComposite = articleContainerEditorComposite;
+		this.articleContainerEdit = articleContainerEdit;
 		this.articleContainerClass = articleContainerClass;
 		this.articleSegmentGroup = articleSegmentGroup;
 
@@ -157,19 +157,19 @@ implements SegmentEdit
 		}
 	}
 
-	public ArticleContainerEditorComposite getArticleContainerEditorComposite()
+	public ArticleContainerEdit getArticleContainerEdit()
 	{
-		return articleContainerEditorComposite;
+		return articleContainerEdit;
 	}
 
 	public ArticleContainer getArticleContainer()
 	{
-		return articleContainerEditorComposite.getArticleContainer();
+		return articleContainerEdit.getArticleContainer();
 	}
 
 	public ArticleContainerID getArticleContainerID()
 	{
-		return articleContainerEditorComposite.getArticleContainerID();
+		return articleContainerEdit.getArticleContainerID();
 	}
 
 	public List<ArticleEdit> getArticleEdits()
@@ -182,49 +182,10 @@ implements SegmentEdit
 		return segmentEditFactory;
 	}
 
-//	private Action removeSelectedArticlesAction = new Action("Remove Selected Articles") {
-//		public void run() {
-//			Set articles = getSelectedArticles();
-//			if (articles.isEmpty())
-//				return;
-//
-//			removeArticles(articles);
-//		}
-//	};
-
 	public Menu createArticleEditContextMenu(Control parent)
 	{
-		return articleContainerEditorComposite.createArticleEditContextMenu(parent);
+		return articleContainerEdit.getArticleContainerEditActionContributor().createArticleEditContextMenu(parent);
 	}
-
-//	/**
-//	 * You should NOT override this method but {@link #_populateArticleEditContextMenu(IMenuManager)} instead.
-//	 * <p>
-//	 * This implementation adds
-//	 * the following default {@link org.eclipse.jface.action.Action}s:
-//	 * <ul>
-//	 *  <li>remove</li>
-//	 * </ul>
-//	 * Afterwards, it executes {@link #_populateArticleEditContextMenu(IMenuManager)} and then iterates
-//	 * all {@link ArticleEdit}s in order to call {@link ArticleEdit#populateArticleEditContextMenu(IMenuManager)}.
-//	 * </p>
-//	 *
-//	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit#populateArticleEditContextMenu(org.eclipse.jface.action.IMenuManager)
-//	 */
-//	public void populateArticleEditContextMenu(IMenuManager manager)
-//	{
-//		_populateArticleEditContextMenu(manager);
-//
-//		removeSelectedArticlesAction.setEnabled(canRemoveArticles(getSelectedArticles())); // TODO react on selections
-//		manager.add(removeSelectedArticlesAction);
-//
-//		for (Iterator it = articleEdits.iterator(); it.hasNext(); ) {
-//			ArticleEdit edit = (ArticleEdit) it.next();
-//			edit.populateArticleEditContextMenu(manager);
-//		}
-//	}
-//
-//	protected abstract void _populateArticleEditContextMenu(IMenuManager manager);
 
 	private Composite composite;
 
@@ -295,28 +256,6 @@ implements SegmentEdit
 	private volatile Class<? extends ProductType> selectedProductTypeClass = null;
 	private ArticleAdderFactory articleAdderFactoryForSelectedProductType = null;
 	private ArticleAdder articleAdderForSelectedProductType = null;
-
-//	/**
-//	 * This method is called (on a worker thread) by {@link #getProductType(ProductTypeID)}.
-//	 */
-//	protected String[] getProductTypeFetchGroups()
-//	{
-//		return new String[] {FetchPlan.ALL};
-//	}
-//
-//	/**
-//	 * This method is called (on a worker thread) by {@link #productTypeSelected(ProductTypeID)}.
-//	 * It uses a cache to speed up.
-//	 */
-//	protected ProductType getProductType(ProductTypeID productTypeID)
-//	{
-//		try {
-//			StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			return sm.getProductType(productTypeID, getProductTypeFetchGroups());
-//		} catch (Exception x) {
-//			throw new RuntimeException(x);
-//		}
-//	}
 
 	/**
 	 * This method is called (on a worker thread) by the {@link SelectionManager} by
@@ -652,24 +591,4 @@ implements SegmentEdit
 			listener.createdArticleEdits(event);
 		}
 	}
-
-//	public boolean canRemoveArticles(Collection articles)
-//	{
-//		for (Iterator it = articleEdits.iterator(); it.hasNext(); ) {
-//			ArticleEdit edit = (ArticleEdit) it.next();
-//			if (!edit.canRemoveArticles(articles))
-//				return false;
-//		}
-//		return true;
-//	}
-//
-//	public void removeArticles(Collection articles)
-//	{
-//		for (Iterator it = articleEdits.iterator(); it.hasNext(); ) {
-//			ArticleEdit edit = (ArticleEdit) it.next();
-//			articles = edit.removeArticles(articles);
-//			if (articles == null || articles.isEmpty())
-//				return;
-//		}
-//	}
 }

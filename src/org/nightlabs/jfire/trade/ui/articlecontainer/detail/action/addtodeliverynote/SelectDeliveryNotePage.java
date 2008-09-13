@@ -71,6 +71,8 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
+import sun.security.action.GetBooleanAction;
+
 public class SelectDeliveryNotePage extends DynamicPathWizardPage
 {
 	public static final int ACTION_CREATE = 1;
@@ -110,7 +112,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 		});
 
 		deliveryNoteTable = new AbstractTableComposite<DeliveryNote>(page, 
-				SWT.NONE, true, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE) {
+				SWT.NONE, true, page.getBorderStyle() | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
 			{

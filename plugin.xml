@@ -20,6 +20,7 @@
         name="productTypeDetailView" schema="schema/productTypeDetailView.exsd"/>
     <extension-point id="productIdParser"
         name="ProductIdParser Extension-Point" schema="schema/productIdParser.exsd"/>
+    <extension-point id="articleContainerEditFactory" name="ArticleContainerEditFactory extension-point" schema="schema/articleContainerEditFactory.exsd"/>
     <extension point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonDataFieldEditorFactory"/>
         <propDataFieldEditorFactory class="org.nightlabs.jfire.trade.ui.legalentity.search.LegalEntityEditorPersonRegexDataFieldEditorFactory"/>
@@ -1119,5 +1120,30 @@
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
             <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
         </perspectiveExtension>
+    </extension>
+    <extension
+          point="org.nightlabs.base.ui.entityEditor">
+       <pageFactory
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorPage$Factory"
+             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+             indexHint="0">
+       </pageFactory>
+       <pageFactory
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorDummyPage$Factory"
+             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+             indexHint="1">
+       </pageFactory>
+       <pageFactory
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage$Factory"
+             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor"
+             indexHint="0">
+       </pageFactory>
+    </extension>
+    <extension
+          point="org.nightlabs.jfire.trade.ui.articleContainerEditFactory">
+       <articleContainerEditFactory
+             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.DefaultArticleContainerEdit$Factory">
+       </articleContainerEditFactory>
     </extension>
 </plugin>

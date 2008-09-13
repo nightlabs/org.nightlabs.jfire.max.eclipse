@@ -1,13 +1,14 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.login.LoginState;
+import org.nightlabs.base.ui.part.PartAdapter;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
@@ -21,57 +22,47 @@ extends AbstractArticleContainerEditor
 {
 	public static final String ID_EDITOR = ArticleContainerQuickSaleEditor.class.getName();
 	
-	private ArticleContainerQuickSaleEditorComposite articleContainerQuickSaleEditorComposite;
-	public ArticleContainerEditorComposite getArticleContainerEditorComposite() {
-		return articleContainerQuickSaleEditorComposite.getArticleContainerEditorComposite();
+	private ArticleContainerEdit articleContainerEdit;
+	@Override
+	public ArticleContainerEdit getArticleContainerEdit() {
+		if (articleContainerEdit == null) {
+			IFormPage page = findPage(ArticleContainerEditorPage.PAGE_ID);
+			if (page instanceof ArticleContainerQuickSaleEditorPage)
+				articleContainerEdit = ((ArticleContainerQuickSaleEditorPage) page).getArticleContainerEdit();
+		}
+		return articleContainerEdit;
 	}
-	
-	private ArticleContainerEditorInput input;
 	
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
 	throws PartInitException
 	{
+		super.init(site, input);
+		
 		if (!(input instanceof ArticleContainerEditorInput))
 			throw new PartInitException("Invalid Input: Must be an instance of ArticleContainerEditorInput! But is: " + (input == null ? null : input.getClass().getName())); //$NON-NLS-1$
 		
-		this.input = (ArticleContainerEditorInput) input;
-
-		setSite(site);
-		setInput(input);
-
 		setPartName(input.getName());
 		ImageDescriptor img = input.getImageDescriptor();
 		if (img != null)
 			setTitleImage(img.createImage());
-	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-		articleContainerQuickSaleEditorComposite = new ArticleContainerQuickSaleEditorComposite(getSite(), parent, input);
 		RCPUtil.getActiveWorkbenchPage().addPartListener(quickSaleEditorListener);
 	}
 
-	private IPartListener quickSaleEditorListener = new IPartListener()
+	private IPartListener2 quickSaleEditorListener = new PartAdapter()
 	{
-		public void partClosed(IWorkbenchPart part)
+		public void partClosed(IWorkbenchPartReference ref)
 		{
-			if (part.equals(ArticleContainerQuickSaleEditor.this)) {
+			if (ref.getPart(true).equals(ArticleContainerQuickSaleEditor.this)) {
 				if (RCPUtil.getActiveWorkbenchPage() != null &&
 						Login.sharedInstance().getLoginState() == LoginState.LOGGED_IN) 
 				{
 					QuickSalePerspective.checkOrderOpen(RCPUtil.getActivePerspectiveID());
 				}
+				if (RCPUtil.getActiveWorkbenchPage() != null)
+					RCPUtil.getActiveWorkbenchPage().removePartListener(this);
 			}
 		}
-		public void partOpened(IWorkbenchPart part) {
-		}
-		public void partDeactivated(IWorkbenchPart part) {
-		}
-		public void partBroughtToTop(IWorkbenchPart part) {
-		}
-		public void partActivated(IWorkbenchPart part) {
-		}
 	};
-	
+
 }

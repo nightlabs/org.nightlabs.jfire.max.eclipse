@@ -29,17 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputReceptionNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 
 
 /**
@@ -48,22 +38,20 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContain
 public abstract class ArticleContainerEditorInput
 implements IEditorInput
 {
-	private String articleContainerClass;
-
 	public ArticleContainerEditorInput()
 	{
-		if (this instanceof ArticleContainerEditorInputOrder)
-			articleContainerClass = Order.class.getName();
-		else if (this instanceof ArticleContainerEditorInputOffer)
-			articleContainerClass = Offer.class.getName();
-		else if (this instanceof ArticleContainerEditorInputInvoice)
-			articleContainerClass = Invoice.class.getName();
-		else if (this instanceof ArticleContainerEditorInputDeliveryNote)
-			articleContainerClass = DeliveryNote.class.getName();
-		else if (this instanceof ArticleContainerEditorInputReceptionNote)
-			articleContainerClass = ReceptionNote.class.getName();
-		else
-			throw new UnsupportedOperationException("This class is not a supported child of " + ArticleContainerEditorInput.class.getName()); //$NON-NLS-1$
+//		if (this instanceof ArticleContainerEditorInputOrder)
+//			articleContainerClass = Order.class.getName();
+//		else if (this instanceof ArticleContainerEditorInputOffer)
+//			articleContainerClass = Offer.class.getName();
+//		else if (this instanceof ArticleContainerEditorInputInvoice)
+//			articleContainerClass = Invoice.class.getName();
+//		else if (this instanceof ArticleContainerEditorInputDeliveryNote)
+//			articleContainerClass = DeliveryNote.class.getName();
+//		else if (this instanceof ArticleContainerEditorInputReceptionNote)
+//			articleContainerClass = ReceptionNote.class.getName();
+//		else
+//			throw new UnsupportedOperationException("This class is not a supported child of " + ArticleContainerEditorInput.class.getName()); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,14 +102,6 @@ implements IEditorInput
 	public Object getAdapter(Class adapter)
 	{
 		return null;
-	}
-
-	/**
-	 * @return Returns the articleContainerClass.
-	 */
-	public String getArticleContainerClass()
-	{
-		return articleContainerClass;
 	}
 
 	public abstract ArticleContainerID getArticleContainerID();

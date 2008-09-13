@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -23,6 +24,7 @@ public class OpenRelatedOfferAction extends OpenRelatedAction {
 
 	@Override
 	protected boolean calculateEnabledWithArticles(Set<Article> articles) {
+		ArticleContainerEdit edit = getArticleEditActionRegistry().getActiveArticleContainerEdit();
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.openrelated.OpenRelatedOfferAction.action.text.disabled")); //$NON-NLS-1$
 		OfferID offerID = getCommonOfferID(articles);
 		if (offerID != null) {
@@ -32,7 +34,7 @@ public class OpenRelatedOfferAction extends OpenRelatedAction {
 				)
 			);
 		}
-		return offerID != null && !(getActiveArticleContainerEditorInput() instanceof ArticleContainerEditorInputOffer);
+		return offerID != null && !(edit.getArticleContainerID() instanceof OfferID);
 	}
 	
 	/**

@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.swt.widgets.Event;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.security.SecurityReflector;
@@ -11,7 +9,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OrderID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
@@ -20,13 +18,13 @@ extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
-		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
+		ArticleContainerEdit edit = getArticleContainerEdit();
 
-		if (editor == null || editor.getArticleContainerEditorComposite().getArticleContainer() == null)
+		if (edit == null || edit.getArticleContainer() == null)
 			return false;
 		
 		
-		ArticleContainerID articleContainerID = editor.getArticleContainerEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = edit.getArticleContainerID();
 		if (!(articleContainerID instanceof OrderID))
 			return false;
 		
@@ -35,7 +33,7 @@ extends ArticleContainerAction
 				OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, 
 				OrganisationLegalEntity.class.getName());
 		
-		if (!localOrgID.equals(editor.getArticleContainerEditorComposite().getArticleContainer().getVendorID())) 
+		if (!localOrgID.equals(edit.getArticleContainer().getVendorID())) 
 			return false;
 		
 		
@@ -66,8 +64,7 @@ extends ArticleContainerAction
 	@Override
 	public void runWithEvent(Event event)
 	{
-		ArticleContainerID articleContainerID = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-		.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticleContainerID();
+		ArticleContainerID articleContainerID = getArticleContainerID();
 
 		OrderID orderID = (OrderID) articleContainerID;
 

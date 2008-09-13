@@ -9,8 +9,8 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditActionRegistry;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;
 
@@ -55,10 +55,10 @@ public abstract class OpenRelatedAction extends Action implements IArticleEditAc
 		this.articleEditActionRegistry = articleEditActionRegistry;
 	}
 
-	public IEditorInput getActiveArticleContainerEditorInput() {
-		IArticleContainerEditor editor = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (editor == null)
-			return null;
-		return editor.getEditorInput();
-	}
+//	public IEditorInput getActiveArticleContainerEditorInput() {
+//		ArticleContainerEdit edit = getArticleEditActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEdit();
+//		if (edit == null)
+//			return null;
+//		return edit.getEditorInput();
+//	}
 }

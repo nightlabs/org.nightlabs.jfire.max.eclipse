@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
@@ -61,8 +62,9 @@ public class OrderSegmentComposite extends XComposite
 		articleAdderPlaceholderLabel = new Label(articleAdderArea, SWT.NONE);
 		articleAdderPlaceholderLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderSegmentComposite.articleAdderPlaceholderLabel.text")); //$NON-NLS-1$
 
-		articleEditArea = new XComposite(this, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
-		articleEditArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+		articleEditArea = new XComposite(this, getBorderStyle(), LayoutMode.TOTAL_WRAPPER);
+		articleEditArea.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
+//		articleEditArea.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 		addDisposeListener(new DisposeListener(){
 			public void widgetDisposed(DisposeEvent e)
 			{

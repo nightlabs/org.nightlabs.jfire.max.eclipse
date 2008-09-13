@@ -35,7 +35,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 
 public abstract class ArticleContainerAction
 extends Action implements IArticleContainerAction
@@ -104,11 +104,14 @@ extends Action implements IArticleContainerAction
 	{
 		this.articles = null;
 
-		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (editor == null)
+		ArticleContainerEdit edit = getArticleContainerEdit();
+		if (edit == null)
 			return false;
 
-		Collection<Article> articles = editor.getArticleContainerEditorComposite().getArticles();
+		Collection<Article> articles = edit.getArticles();
+		
+		if (articles == null)
+			return false;
 
 		List<Article> filteredArticles = new ArrayList<Article>(articles.size());
 		for (Article article : articles) {
@@ -122,24 +125,45 @@ extends Action implements IArticleContainerAction
 		return !this.articles.isEmpty();
 	}
 	
+	
 	/**
-	 * Returns the {@link ArticleContainer} the Editor this actions was contributed to is associated with.
-	 * @return The {@link ArticleContainer} the Editor this actions was contributed to is associated with or null, if there is currently no editor active.
+	 * This is a convenience method for: 
+	 * <pre>
+	 * getArticleContainerActionRegistry().getActiveArticleContainerEdit()
+	 * </pre>
+	 * However you should always use this method.
+	 * 
+	 * @return The active {@link ArticleContainerEdit}. Note that this might be <code>null</code>.
 	 */
-	public ArticleContainer getArticleContainer() {
-		// TODO: Shouldn't there be a more convenient and straight forward way to access this?!? Alex
-		IArticleContainerEditor articleContainerEditor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (articleContainerEditor == null)
-			return null;
-
-		return articleContainerEditor.getArticleContainerEditorComposite().getArticleContainer();
+	protected ArticleContainerEdit getArticleContainerEdit() {
+		return getArticleContainerActionRegistry().getActiveArticleContainerEdit();
 	}
 	
-	public ArticleContainerID getArticleContainerID() {
-		IArticleContainerEditor articleContainerEditor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (articleContainerEditor == null)
+	/**
+	 * This method attempts to get the {@link ArticleContainer} from the active {@link ArticleContainerEdit}.
+	 * The edit might be <code>null</code> and this method will also return <code>null</code> then.
+	 *   
+	 * @return The {@link ArticleContainer} of the {@link ArticleContainerEdit} this action associated with or null, if there is currently no edit active.
+	 */
+	protected ArticleContainer getArticleContainer() {
+		ArticleContainerEdit articleContainerEdit = getArticleContainerEdit();
+		if (articleContainerEdit == null)
+			return null;
+
+		return articleContainerEdit.getArticleContainer();
+	}
+	
+	/**
+	 * This method attempts to get the {@link ArticleContainerID} from the active {@link ArticleContainerEdit}.
+	 * The edit might be <code>null</code> and this method will also return <code>null</code> then.
+	 *   
+	 * @return The {@link ArticleContainerID} of the {@link ArticleContainerEdit} this action associated with or null, if there is currently no edit active.
+	 */
+	protected ArticleContainerID getArticleContainerID() {
+		ArticleContainerEdit articleContainerEdit = getArticleContainerEdit();
+		if (articleContainerEdit == null)
 			return null;
 		
-		return articleContainerEditor.getArticleContainerEditorComposite().getArticleContainerID();
+		return articleContainerEdit.getArticleContainerID();
 	}
 }

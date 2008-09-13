@@ -29,7 +29,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliver
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.IArticleContainerEditor;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.transfer.TransferUtil;
 
@@ -37,11 +37,9 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 {
 	public boolean calculateVisible()
 	{
-		IArticleContainerEditor editor = getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor().getActiveArticleContainerEditor();
-		if (editor == null)
-			return false;
-
-		return !(editor.getArticleContainerEditorComposite().getArticleContainerID() instanceof DeliveryNote);
+		ArticleContainerEdit edit = getArticleContainerEdit();
+		
+		return edit != null && !(edit.getArticleContainerID() instanceof DeliveryNote);
 	}
 
 	@Override
@@ -70,9 +68,7 @@ public class AddAllToDeliveryNoteAction extends ArticleContainerAction
 	@Override
 	public void run()
 	{
-		AddToDeliveryNoteWizard addToDeliveryNoteWizard = new AddToDeliveryNoteWizard(
-				getArticleContainerActionRegistry().getActiveArticleContainerEditorActionBarContributor()
-				.getActiveArticleContainerEditor().getArticleContainerEditorComposite().getArticles());
+		AddToDeliveryNoteWizard addToDeliveryNoteWizard = new AddToDeliveryNoteWizard(getArticleContainerEdit().getArticles());
 
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(addToDeliveryNoteWizard);
 		dialog.open();
