@@ -1129,11 +1129,6 @@
              indexHint="0">
        </pageFactory>
        <pageFactory
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorDummyPage$Factory"
-             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
-             indexHint="1">
-       </pageFactory>
-       <pageFactory
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage$Factory"
              editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor"
              indexHint="0">
