@@ -36,6 +36,7 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -158,7 +159,7 @@ extends FadeableComposite
 //				return ((Tariff)element).getName().getText();
 //			}
 //		});
-		tariffCombo = new XComboComposite<Tariff>(comp1, SWT.BORDER | SWT.READ_ONLY , new LabelProvider() {
+		tariffCombo = new XComboComposite<Tariff>(comp1, getBorderStyle() | SWT.READ_ONLY , new LabelProvider() {
 			@Override
 			public String getText(Object element)
 			{
@@ -182,7 +183,7 @@ extends FadeableComposite
 
 		XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp3.getGridLayout().numColumns = 2;
-		productNameText = new Text(comp3, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		productNameText = new Text(comp3, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		productNameText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productNameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
@@ -191,6 +192,7 @@ extends FadeableComposite
 				productNameModified = true;
 			}
 		});
+		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
 		productNameDialogButton = new Button(comp3, SWT.PUSH);
 		productNameDialogButton.setText("..."); //$NON-NLS-1$
@@ -231,7 +233,7 @@ extends FadeableComposite
 
 		comp2.setWeights(new int[] { 1, 1 });
 
-		unitCombo = new XComboComposite<Unit>(comp1, SWT.BORDER | SWT.READ_ONLY, new LabelProvider() {
+		unitCombo = new XComboComposite<Unit>(comp1, getBorderStyle() | SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element)
 			{
@@ -245,7 +247,7 @@ extends FadeableComposite
 			}
 		});
 
-		quantity = new Text(comp1, SWT.BORDER);
+		quantity = new Text(comp1, getBorderStyle());
 		quantity.setText(NumberFormatter.formatFloat(1, 2));
 		GridData gd = new GridData();
 		gd.widthHint = 200;
