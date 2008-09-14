@@ -283,7 +283,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		}
 		// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
 		stackLayout.marginHeight = 1;
-		stack.layout(true, true);
+		this.layout(true, true);
 	}
 	
 	public PreparedRenderedReportLayout getPreparedLayout() {
