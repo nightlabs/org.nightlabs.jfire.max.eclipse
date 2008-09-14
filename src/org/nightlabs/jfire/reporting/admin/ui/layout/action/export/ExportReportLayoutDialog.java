@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -61,11 +60,7 @@ public class ExportReportLayoutDialog extends ResizableTrayDialog {
 				wrapper, 
 				SWT.NONE, FileSelectionComposite.OPEN_DIR, 
 				"Select export folder",
-		"Select folder") {
-			@Override
-			protected void modifyText(ModifyEvent e) {
-			}
-		};
+		"Select folder");
 		return wrapper;
 	}
 

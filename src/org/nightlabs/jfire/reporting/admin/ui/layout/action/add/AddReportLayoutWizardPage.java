@@ -104,13 +104,7 @@ public class AddReportLayoutWizardPage extends I18nTextEditorWizardPage {
 		fileSelectComposite = new FileSelectionComposite(wrapper, SWT.NONE,
 				FileSelectionComposite.OPEN_FILE,
 				Messages.getString("org.nightlabs.jfire.reporting.admin.ui.layout.action.add.AddReportLayoutWizardPage.fileSelectComposite.caption"),  //$NON-NLS-1$
-				null)
-		{
-			@Override
-			protected void modifyText(ModifyEvent e) {
-				getContainer().updateButtons();
-			}
-		};
+				null);
 		getTextEditor().addModifyListener(modifyListener);
 	}
 	
