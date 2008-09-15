@@ -55,14 +55,15 @@ extends AbstractTreeComposite<Project>
 	private static String[] FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
 	};
-	
+
 	protected static class ProjectTreeContentProvider
 	extends JDOObjectTreeContentProvider<ProjectID, Project, ProjectTreeNode>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
-			return p.getSubProjects().size() > 0;
+			return true;
+//			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
+//			return p.getSubProjects().size() > 0;
 		}
 	}
 
@@ -91,16 +92,16 @@ extends AbstractTreeComposite<Project>
 
 		addContextMenuContribution(new CreateProjectAction());
 		addContextMenuContribution(new RenameProjectAction());
-		
+
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
 	}
-	
+
 	public ProjectTreeComposite(Composite parent)
 	{
 		this(parent, DEFAULT_STYLE_SINGLE);
 	}
-	
+
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
@@ -193,90 +194,90 @@ extends AbstractTreeComposite<Project>
 
 		return null;
 	}
-	
+
 	public class CreateProjectAction extends Action {
-	private InputDialog dialog;
-	public CreateProjectAction() {
-		setId(CreateProjectAction.class.getName());
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(
-				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
-		"Create"));
-		setToolTipText("Create Sub Project");
-		setText("Create Sub Project");
-	}
+		private InputDialog dialog;
+		public CreateProjectAction() {
+			setId(CreateProjectAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					ProjectTreeComposite.class, 
+			"Create"));
+			setToolTipText("Create Sub Project");
+			setText("Create Sub Project");
+		}
 
-	@Override
-	public void run() {
-		dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Sub Project", "Enter project's name", "Name", null) {
-			@Override
-			protected void okPressed() {
-				try {
-					TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
-					Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
-					Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-					project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-					
-					projectToStore = ProjectDAO.sharedInstance().getProject(
-							projectToStore.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
-					Collection<Project> res = project.getSubProjects();
-					projectToStore.addSubProject(project);
-					ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					dialog.close();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+		@Override
+		public void run() {
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Sub Project", "Enter project's name", "Name", null) {
+				@Override
+				protected void okPressed() {
+					try {
+						TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
+						Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
+						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
+						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
+
+						projectToStore = ProjectDAO.sharedInstance().getProject(
+								projectToStore.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
+						Collection<Project> res = project.getSubProjects();
+						projectToStore.addSubProject(project);
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Control dialogArea = super.createDialogArea(parent);
+					return dialogArea;
 				}
 			};
-			
-			@Override
-			protected Control createDialogArea(Composite parent) {
-				Control dialogArea = super.createDialogArea(parent);
-				return dialogArea;
-			}
-		};
-		
-		if (dialog.open() != Window.OK)
-			return;
-	}		
-}
 
-public class RenameProjectAction extends Action {
-	private InputDialog dialog;
-	public RenameProjectAction() {
-		setId(CreateProjectAction.class.getName());
-		setImageDescriptor(SharedImages.getSharedImageDescriptor(
-				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
-		"Rename"));
-		setToolTipText("Rename Project");
-		setText("Rename Project");
+			if (dialog.open() != Window.OK)
+				return;
+		}		
 	}
 
-	@Override
-	public void run() {
-		TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
-		final Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
-		dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", projectToStore.getName().getText(), null) {
-			@Override
-			protected void okPressed() {
-				try {
-					projectToStore.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-					ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					dialog.close();
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+	public class RenameProjectAction extends Action {
+		private InputDialog dialog;
+		public RenameProjectAction() {
+			setId(CreateProjectAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					ProjectTreeComposite.class, 
+			"Rename"));
+			setToolTipText("Rename Project");
+			setText("Rename Project");
+		}
+
+		@Override
+		public void run() {
+			TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
+			final Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", projectToStore.getName().getText(), null) {
+				@Override
+				protected void okPressed() {
+					try {
+						projectToStore.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
+						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Control dialogArea = super.createDialogArea(parent);
+					return dialogArea;
 				}
 			};
-			
-			@Override
-			protected Control createDialogArea(Composite parent) {
-				Control dialogArea = super.createDialogArea(parent);
-				return dialogArea;
-			}
-		};
-		
-		if (dialog.open() != Window.OK)
-			return;
-	}		
-}
+
+			if (dialog.open() != Window.OK)
+				return;
+		}		
+	}
 }
