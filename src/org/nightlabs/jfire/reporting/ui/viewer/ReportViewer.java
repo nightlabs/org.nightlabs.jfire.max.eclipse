@@ -35,49 +35,49 @@ import org.nightlabs.jfire.reporting.layout.render.RenderedReportLayout;
 /**
  * Interface to view Reports generated with BIRT within JFire.
  * {@link ReportViewer}s can be obtained by {@link ReportViewerFactory}s
- * that are regitered to the {@link ReportViewerRegistry} by the
+ * that are registered to the {@link ReportViewerRegistry} by the
  * extension point.
  * <p>
  * A report viewer can be used in two ways.
  * <ul>
  * <li>It can be passed a report layout id, parameters and a desired output format.
  * In this case the report viewer is responsible for triggering
- * the report generation (or taking it from cache). It will than display the report
+ * the report generation (or taking it from cache). It will then display the report
  * (See {@link #showReport(RenderReportRequest)})
  * </li>
  * <li>The second way can be used when an already generated and rendered report is
- * available an the viewer is only needed to present the report to the user. (See {@link #showReport(ReportRegistryItemID, RenderedReportLayout)})
+ * available and the viewer is only needed to present the report to the user. (See {@link #showReport(ReportRegistryItemID, RenderedReportLayout)})
  * </li>
  * </ul>
- * 
- * 
+ *
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
 public interface ReportViewer {
-	
+
 	/**
 	 * Returns all BIRT {@link OutputFormat}s supported by this ReportViewer.
 	 * @return All BIRT {@link OutputFormat}s supported by this ReportViewer.
 	 */
 	public Set<Birt.OutputFormat> getSupportedOutputFormats();
-	
+
 	/**
 	 * Return the adapter for the given adapterObject.
-	 * 
+	 *
 	 * @param adapterObject The adapterObject the adapter returned can be based on.
-	 * 
+	 *
 	 * @return An Object representing an adapter to the given object, or <code>null</code>.
 	 */
 	public Object getAdapter(Object adapterObject);
-	
+
 	/**
 	 * Use this if you want the viewer to generate the report (= trigger its
 	 * generation and rendering on the server) and then having it presented to the
 	 * user.
 	 *
-	 * @param renderRequest The request holdint the report layout id to display,
-	 * 	the params to generate the report with and
+	 * @param renderRequest The request holding the report layout id to display,
+	 * 	the parameters to generate the report with and
 	 * 	the format to render the report to and to display.
 	 */
 	public void showReport(
