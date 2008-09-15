@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -12,12 +11,12 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.ProjectParentResolver;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -47,7 +46,7 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 			return res;
 		}
 		
-		return ProjectDAO.sharedInstance().getProjects(FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID(), FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 	}
 
 	@Implement
