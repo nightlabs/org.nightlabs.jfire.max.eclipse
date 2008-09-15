@@ -123,7 +123,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * <p>
  * For its main part it loads the {@link ArticleContainer} from the articleContainerID it is instantiated with 
  * and creates a {@link ClientArticleSegmentGroupSet} to manage the articles within the container. 
- * It also It asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
+ * It also asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
  * for the right factories for all the {@link org.nightlabs.jfire.trade.ui.Segment}s
  * and displays the edits which are delivered from the factory.
  * </p>
