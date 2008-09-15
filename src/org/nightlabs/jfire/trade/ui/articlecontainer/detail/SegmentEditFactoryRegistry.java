@@ -27,10 +27,13 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageSettings;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.SegmentType;
@@ -109,9 +112,30 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 	 * @return
 	 */
 	public SegmentEditFactory getSegmentEditFactory(
-			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<?> articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
 			boolean throwExceptionIfNotFound)
 	{
+		Class<?> searchClass = articleContainerClass;
+		SegmentEditFactory factory = null;
+		while (searchClass != null) {
+			factory = getSegmentEditFactory(searchClass.getName(), segmentTypeClass);
+			if (factory != null)
+				return factory;
+			Class<?>[] interfaces = searchClass.getInterfaces();
+			for (int i = 0; i < interfaces.length; i++) {
+				factory = getSegmentEditFactory(interfaces[i].getName(), segmentTypeClass);
+				if (factory != null)
+					return factory;
+			}
+			searchClass = searchClass.getSuperclass();
+		}
+		if (throwExceptionIfNotFound && factory == null)
+			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return factory;
+		
+	}
+
+	private SegmentEditFactory getSegmentEditFactory(String articleContainerClass, Class<?> segmentTypeClass) {
 		Map<String, SegmentEditFactory> m = getSegmentEditFactories(articleContainerClass);
 		SegmentEditFactory factory = null;
 		Class<?> clazz = segmentTypeClass;
@@ -119,10 +143,6 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 			factory = m.get(clazz.getName());
 			clazz = clazz.getSuperclass();
 		} while (factory == null && clazz != Object.class);
-
-		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
 		return factory;
 	}
 

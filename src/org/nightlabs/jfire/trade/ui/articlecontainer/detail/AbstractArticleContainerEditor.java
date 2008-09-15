@@ -3,15 +3,19 @@
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageSettings;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.part.PartAdapter;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -22,9 +26,13 @@ import org.nightlabs.notification.NotificationEvent;
  * Abstract base class for editors for {@link ArticleContainer}s.
  * It extends {@link EntityEditor} and can therefore be enriched with
  * custom pages using the <code>org.nightlabs.base.ui.entityEditor</code> extension point.
+ * Additionally page-factories can be registered to as extensions to the
+ * extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory</code>
+ * where different pages can be defined for specific implementations of {@link ArticleContainer}. 
+ * <p>
  * Note, however, that this Editor relies on the fact that one 
  * Page of type {@link ArticleContainerEditorPage} is added using the page-id {@link ArticleContainerEditorPage#PAGE_ID}.
- *  
+ * </p>  
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
@@ -41,7 +49,23 @@ implements IArticleContainerEditor
 	public AbstractArticleContainerEditor() {
 		registerActivatePartListener();
 	}
-
+	
+	/**
+	 * Overrides and returns the result of the processing of extensions to the  
+	 * entityEditor and articleContainerEditorPageFactory extension-points.
+	 */
+	@Override
+	protected List<EntityEditorPageSettings> getPageSettingsOrdered() {
+		ArticleContainerID articleContainerID = getArticleContainerEditorInput().getArticleContainerID();
+		if (articleContainerID == null)
+			throw new IllegalStateException("No articleContainerID was set");
+		Class<?> articleContainerEditorClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(articleContainerID);
+		if (articleContainerEditorClass == null)
+			throw new IllegalStateException("The class of the ArticleContainer with id " + articleContainerID + " could not be determined");
+		return ArticleContainerEditorPageFactoryRegistry.sharedInstance().getPagesSettingsOrdered(
+				getEditorID(), articleContainerEditorClass);
+	}
+	
 	/**
 	 * Gets the {@link ArticleContainerEdit} from the {@link ArticleContainerEditorPage}
 	 * registered to this editor. The page should be added with the page-id {@link ArticleContainerEditorPage#PAGE_ID}.
@@ -55,6 +79,13 @@ implements IArticleContainerEditor
 			}
 		}
 		return articleContainerEdit;
+	}
+
+	/**
+	 * @return This editors input casted to an {@link ArticleContainerEditorInput}.
+	 */
+	protected ArticleContainerEditorInput getArticleContainerEditorInput() {
+		return (ArticleContainerEditorInput) getEditorInput();
 	}
 	
 	private static synchronized void registerActivatePartListener() {
@@ -76,8 +107,7 @@ implements IArticleContainerEditor
 			if (articleContainerEditor != null && 
 					articleContainerEditor.getEditorInput() != null) 
 			{
-				ArticleContainerEditorInput input = (ArticleContainerEditorInput) articleContainerEditor.getEditorInput();
-				articleContainerID = input.getArticleContainerID();
+				articleContainerID = articleContainerEditor.getArticleContainerEditorInput().getArticleContainerID();
 			}
 			if (logger.isDebugEnabled())
 				logger.debug("ActivateListener.fireEvent: entered for " + articleContainerID); //$NON-NLS-1$
