@@ -36,31 +36,31 @@ import org.nightlabs.config.ConfigModule;
  */
 public class DefaultReportViewerCfMod extends ConfigModule {
 
-	private static final long serialVersionUID = 1L;
-	
-	private boolean useAcrobatJavaBeanForPDFs = true;
-	
+	private static final long serialVersionUID = 20080915L;
+
+	private boolean useInternalBrowserForPDFs = false;
+
 	/**
-	 * 
+	 *
 	 */
 	public DefaultReportViewerCfMod() {
 	}
 
 	/**
-	 * @return the useAcrobatJavaBeanForPDFs
+	 * @return the useInternalBrowserForPDFs
 	 */
-	public boolean isUseAcrobatJavaBeanForPDFs() {
-		return useAcrobatJavaBeanForPDFs;
+	public boolean isUseInternalBrowserForPDFs() {
+		return useInternalBrowserForPDFs;
 	}
 
 	/**
-	 * @param useAcrobatJavaBeanForPDFs the useAcrobatJavaBeanForPDFs to set
+	 * @param useInternalBrowserForPDFs the useInternalBrowserForPDFs to set
 	 */
-	public void setUseAcrobatJavaBeanForPDFs(boolean useAcrobatJavaBeanForPDFs) {
-		this.useAcrobatJavaBeanForPDFs = useAcrobatJavaBeanForPDFs;
+	public void setUseInternalBrowserForPDFs(boolean useAcrobatJavaBeanForPDFs) {
+		this.useInternalBrowserForPDFs = useAcrobatJavaBeanForPDFs;
 		setChanged();
 	}
-	
+
 	/**
 	 * Returns and layzily creates an instance of {@link DefaultReportViewerCfMod}
 	 * for the shared instance of {@link Config}

@@ -1,22 +1,20 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
-import java.awt.BorderLayout;
-import java.awt.Frame;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -34,6 +32,9 @@ import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerParam;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.exceptionhandler.IExceptionHandler;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
+import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
+import org.nightlabs.eclipse.ui.pdfviewer.PdfViewer;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -44,8 +45,7 @@ import org.nightlabs.jfire.reporting.ui.layout.RenderedReportLayoutProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
-import com.adobe.acrobat.Viewer;
-import com.adobe.acrobat.ViewerCommand;
+import com.sun.pdfview.PDFFile;
 
 /**
  * This Composite incorporates two widgets to view
@@ -57,7 +57,7 @@ import com.adobe.acrobat.ViewerCommand;
  * is installed for the systems default browser. If
  * not this Composite can also display pdfs via the
  * Adobe Viewer Java bean.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -67,17 +67,18 @@ public class DefaultReportViewerComposite extends XComposite {
 	 * Log4J Logger for {@link DefaultReportViewerComposite}.
 	 */
 	private static final Logger logger = Logger.getLogger(DefaultReportViewerComposite.class);
-	
+
 	private Composite stack;
 	private StackLayout stackLayout;
 	private Composite fetchingLayoutComposite;
 	// TODO: Maybe add progressmonitor to status composite
 	private BrowserWrapperComposite browser;
-	
-	private Composite awtWrapper;
-	private Frame awtFrame;
-	private Viewer viewer;
-	
+
+//	private Composite awtWrapper;
+//	private Frame awtFrame;
+//	private Viewer viewer;
+	private PdfViewer pdfViewer;
+
 	/**
 	 * The {@link PreparedRenderedReportLayout} for the currently
 	 * displayed report.
@@ -87,7 +88,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	 * Hyperlink displayed when there where errors during report rendering.
 	 */
 	private ImageHyperlink errorLink;
-	
+
 	private static class ThreadDeathWorkaround implements IExceptionHandler {
 		private Set<DefaultReportViewerComposite> registeredComposites = new HashSet<DefaultReportViewerComposite>();
 
@@ -111,7 +112,7 @@ public class DefaultReportViewerComposite extends XComposite {
 				logger.info("Added WORKAROUND ExceptionHandler for Adobe PDF bean ThreadDeath"); //$NON-NLS-1$
 			}
 		}
-		
+
 		private void unregisterComposite(DefaultReportViewerComposite composite) {
 			registeredComposites.remove(composite);
 			if (registeredComposites.size() < 1) {
@@ -120,9 +121,9 @@ public class DefaultReportViewerComposite extends XComposite {
 			}
 		}
 	}
-	
+
 	private static ThreadDeathWorkaround threadDeathWorkaround = new ThreadDeathWorkaround();
-	
+
 	public DefaultReportViewerComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		stack = new Composite(this, SWT.NONE);
@@ -135,23 +136,13 @@ public class DefaultReportViewerComposite extends XComposite {
 		label.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.label.text")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		browser = new BrowserWrapperComposite(stack, SWT.NONE);
-		
-		awtWrapper = new Composite(stack, SWT.EMBEDDED);
-		awtWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
-		awtFrame = SWT_AWT.new_Frame(awtWrapper);
-		try {
-			awtFrame.setLayout(new BorderLayout());
-//			frame.add(viewer);
-//			viewer.activate();
-//			frame.pack();
-//			frame.setVisible(true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
+
+		pdfViewer = new PdfViewer();
+		pdfViewer.createControl(stack);
+
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
-	
+
 	public void switchToStatus() {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
@@ -160,11 +151,11 @@ public class DefaultReportViewerComposite extends XComposite {
 			}
 		});
 	}
-	
+
 	/**
 	 * Fetches the {@link RenderedReportLayout} for the given renderRequest
 	 * and displays it in the viewer.
-	 * 
+	 *
 	 * @param renderRequest The render request for the layout to show.
 	 */
 	public void showReport(final RenderReportRequest renderRequest) {
@@ -180,14 +171,14 @@ public class DefaultReportViewerComposite extends XComposite {
 						updateViewer(renderRequest.getOutputFormat(), preparedLayout);
 					}
 				});
-				
+
 				return Status.OK_STATUS;
 			}
-			
+
 		};
 		fetchJob.schedule();
 	}
-	
+
 	public void showReport(final RenderedReportLayout reportLayout) {
 		switchToStatus();
 		Job fetchJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.fetchJob.name")){			 //$NON-NLS-1$
@@ -204,11 +195,11 @@ public class DefaultReportViewerComposite extends XComposite {
 		};
 		fetchJob.schedule();
 	}
-	
+
 	/**
 	 * Uses the {@link RenderedReportLayoutProvider} to prepare (unpack) the given
 	 * {@link RenderedReportLayout} and returns the URL to its entry file.
-	 * 
+	 *
 	 * @param reportLayout The rendered layout to prepare.
 	 * @param monitor An {@link ProgressMonitor} to provide feedback.
 	 * @return The {@link PreparedRenderedReportLayout} for the the given .
@@ -216,41 +207,26 @@ public class DefaultReportViewerComposite extends XComposite {
 	protected PreparedRenderedReportLayout getPreparedRenderedReportLayout(RenderedReportLayout reportLayout, ProgressMonitor monitor) {
 		return RenderedReportLayoutProvider.sharedInstance().getPreparedRenderedReportLayout(reportLayout, monitor);
 	}
-	
+
 	/**
 	 * Updates the viewer (switches viewer from browser to adobe bean if necessary)
 	 * and displays the given preparedLayout.
-	 * 
+	 *
 	 * @param format The format the prepared layout is in.
 	 * @param preparedLayout The prepared layout.
 	 */
 	protected void updateViewer(Birt.OutputFormat format, final PreparedRenderedReportLayout preparedLayout) {
 		this.preparedLayout = preparedLayout;
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		if (format == OutputFormat.pdf && cfMod.isUseAcrobatJavaBeanForPDFs()) {
-			stackLayout.topControl = awtWrapper;
+		if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
+			stackLayout.topControl = pdfViewer.getControl();
 			threadDeathWorkaround.registerComposite(this);
 			try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						try {
-							if (viewer == null) {
-								viewer = new Viewer(new String[]{
-									ViewerCommand.OpenURL_K,
-									ViewerCommand.Open_K,
-									ViewerCommand.Print_K,
-									ViewerCommand.PrintSetup_K
-								});
-								awtFrame.add(viewer, BorderLayout.CENTER);
-								viewer.activate();
-							}
-							viewer.setDocumentURL(preparedLayout.getEntryFileAsURL().toString());
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
-					}
-				});
-			} catch (Exception e) {
+				IProgressMonitor monitor = new NullProgressMonitor();
+				// TODO: This is a expensive operation it should be done in a Job
+				PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), monitor);
+				pdfViewer.setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
+			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -285,7 +261,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		stackLayout.marginHeight = 1;
 		this.layout(true, true);
 	}
-	
+
 	public PreparedRenderedReportLayout getPreparedLayout() {
 		return preparedLayout;
 	}

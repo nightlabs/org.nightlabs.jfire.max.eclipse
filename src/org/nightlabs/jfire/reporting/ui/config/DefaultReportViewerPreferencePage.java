@@ -87,14 +87,14 @@ implements IWorkbenchPreferencePage
 		useAcrobatJavaBeanForPDFs = new Button(wrapper, SWT.CHECK);
 		useAcrobatJavaBeanForPDFs.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.DefaultReportViewerPreferencePage.useAcrobatJavaBeanForPDFsButton.text")); //$NON-NLS-1$
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		useAcrobatJavaBeanForPDFs.setSelection(cfMod.isUseAcrobatJavaBeanForPDFs());
+		useAcrobatJavaBeanForPDFs.setSelection(cfMod.isUseInternalBrowserForPDFs());
 		return wrapper;
 	}
 	
 	@Override
 	public boolean performOk() {
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		cfMod.setUseAcrobatJavaBeanForPDFs(useAcrobatJavaBeanForPDFs.getSelection());
+		cfMod.setUseInternalBrowserForPDFs(useAcrobatJavaBeanForPDFs.getSelection());
 		try {
 			Config.sharedInstance().save();
 		} catch (ConfigException e) {
