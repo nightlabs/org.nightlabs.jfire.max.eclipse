@@ -52,10 +52,6 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
-//			issueTypeNameSection.setProject(controller.getProject());
-//			issueTypePrioritySection.setProject(controller.getProject());
-//			issueTypeSeverityTypeSection.setProject(controller.getProject());
-//			issueTypeResolutionSection.setProject(controller.getProject());
 		}
 	}
 
@@ -72,15 +68,6 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				ProjectEditorPageController controller = (ProjectEditorPageController)getPageController();
-				
-//				if(issueTypeSeverityTypeSection != null)
-//					issueTypeSeverityTypeSection.setProject(controller.getProject());
-//				if(issueTypePrioritySection != null)
-//					issueTypePrioritySection.setProject(controller.getProject());
-//				if(issueTypeNameSection != null)
-//					issueTypeNameSection.setProject(controller.getProject());
-//				if(issueTypeResolutionSection != null)
-//					issueTypeResolutionSection.setProject(controller.getProject());
 			}
 		});
 		

@@ -24,6 +24,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.ProjectTreeComposite;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -33,7 +34,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ProjectSection 
 extends ToolBarSectionPart
 {
-	private ProjectTreeComposite projectTreeComposite;
+	private org.nightlabs.jfire.issuetracking.ui.issue.ProjectTreeComposite projectTreeComposite;
 
 	private CreateProjectAction createProjectAction;
 	private DeleteProjectAction deleteProjectAction;
@@ -43,9 +44,7 @@ extends ToolBarSectionPart
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		
-		
-		projectTreeComposite = new ProjectTreeComposite(
-				client, AbstractTreeComposite.DEFAULT_STYLE_SINGLE);
+		projectTreeComposite = new ProjectTreeComposite(client);
 		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
 		projectTreeComposite.getGridData().heightHint = 200;
 		
