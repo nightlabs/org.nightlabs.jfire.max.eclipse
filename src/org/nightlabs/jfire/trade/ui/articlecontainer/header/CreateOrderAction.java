@@ -49,8 +49,14 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
+import org.nightlabs.jfire.trade.recurring.RecurringOrder;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringPurchaseRootTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringSaleRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.ProgressMonitor;
@@ -94,20 +100,45 @@ public class CreateOrderAction extends Action
 					HeaderTreeNode selectedNode  = (HeaderTreeNode)headerTreeComposite.getSelectedNode();
 					// define a sale order 
 					boolean SaleOrder = true;
-
+					boolean recurring = false;
+					
 					while(selectedNode != null)
 					{
-						if(selectedNode instanceof PurchaseRootTreeNode)
-							SaleOrder = false; //purchase order
+						if(selectedNode instanceof PurchaseRootTreeNode ||selectedNode instanceof RecurringPurchaseRootTreeNode )
+							SaleOrder = false; // decide if it s purchase order
+						
+					
+						 recurring = (selectedNode instanceof RecurringSaleRootTreeNode  ||selectedNode instanceof RecurringPurchaseRootTreeNode ); 
+						
+						// decide if it s an conventional order or a recurring one
+				
+						
 						selectedNode = (HeaderTreeNode) selectedNode.getParent();
 					}
 
+					
+					
 					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 
 					final Order order;
-
+					final RecurringOrder recurringOrder;
+					
 //					FIXME IDPREFIX should be asked from user if necessary!
-					if(SaleOrder)
+					
+					
+					if(recurring)
+					{
+						
+						RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+
+						recurringOrder = rtm.createSaleRecurringOrder(customerID, null,
+								tradeConfigModule.getCurrencyID(), new SegmentTypeID[] { null }, 
+								new String[] { RecurringOrder.FETCH_GROUP_THIS_ORDER }, 
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);					
+					}
+					else
+					{
+						if(SaleOrder)
 						order= tm.createSaleOrder(
 								customerID, null, tradeConfigModule.getCurrencyID(),
 								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
@@ -117,7 +148,11 @@ public class CreateOrderAction extends Action
 								customerID, null, tradeConfigModule.getCurrencyID(),
 								new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
 								OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
+					
+					}
+					
+					
+					
 					monitor.worked(70);
 
 //					OrderID orderID = (OrderID) JDOHelper.getObjectId(order);
