@@ -119,7 +119,7 @@ public class IssueFilterCompositeIssueLinkRelated
 				selectedIssueLinkType = issueLinkTypeCombo.getSelectedElement();
 
 				if (selectedIssueLinkType.equals(ISSUE_LINK_TYPE_ALL)) {
-					getQuery().setFieldEnabled(IssueQuery.FieldName.issueLinkTypeID, false);
+					getQuery().setIssueLinkTypeID(null);
 				}
 				else
 				{
@@ -174,13 +174,14 @@ public class IssueFilterCompositeIssueLinkRelated
 					}
 				}
 			}
-//			if (IssueQuery.FieldName.issueLinks.equals(changedField.getPropertyName()))
-//			{
-//				issueLinks = (Set<IssueLink>) changedField.getNewValue();
-//			}
+			else if (getEnableFieldName(IssueQuery.FieldName.issueLinkTypeID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				issueLinkTypeCombo.setEnabled(active);
+				setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID));
+			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
-
-		setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueTypeID));
 	}
 
 	private static final String[] FETCH_GROUPS_ISSUE_LINK_TYPE = { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
