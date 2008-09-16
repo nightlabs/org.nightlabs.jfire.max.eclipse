@@ -58,7 +58,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
-//		prepareIssueProperties();
 		createComposite();
 	}
 
@@ -101,10 +100,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			{
 				final Project selectedProject = projectCombo.getSelectedProject();
 
-				if (selectedProject.equals(PROJECT_ALL))
+				boolean selectAll = selectedProject.equals(PROJECT_ALL);
+				if (selectAll)
 					getQuery().setProjectID(null);
 				else
 					getQuery().setProjectID(selectedProject.getObjectId());
+				
+				getQuery().setFieldEnabled(IssueQuery.FieldName.projectID, ! selectAll);
 			}
 		});
 		
@@ -137,6 +139,12 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 					sectionActive |= true;
 				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.projectID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				projectCombo.setEnabled(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 

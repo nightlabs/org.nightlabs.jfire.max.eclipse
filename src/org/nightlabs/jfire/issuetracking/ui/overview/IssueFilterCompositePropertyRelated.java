@@ -129,11 +129,14 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssueType selectedIssueType = issueTypeCombo.getSelectedElement();
 
-				if (selectedIssueType.equals(ISSUE_TYPE_ALL))
+				boolean selectAll = selectedIssueType.equals(ISSUE_TYPE_ALL);
+				
+				if (selectAll)
 					getQuery().setIssueTypeID(null);
 				else
 					getQuery().setIssueTypeID((IssueTypeID)JDOHelper.getObjectId(selectedIssueType));
 
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueTypeID, ! selectAll);
 //				issueSeverityCombo.removeAll();
 //				issueSeverityCombo.addElement(ISSUE_SEVERITY_TYPE_ALL);
 //				for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
@@ -159,13 +162,14 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssueSeverityType selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 
-				if (selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL))
+				boolean selectAll = selectedIssueSeverityType.equals(ISSUE_SEVERITY_TYPE_ALL);
+				if (selectAll)
 					getQuery().setIssueSeverityTypeID(null);
 				else
-				{
 					getQuery().setIssueSeverityTypeID(
 							(IssueSeverityTypeID) JDOHelper.getObjectId(selectedIssueSeverityType));
-				}
+				
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueSeverityTypeID, ! selectAll);
 			}
 		});
 
@@ -178,15 +182,14 @@ public class IssueFilterCompositePropertyRelated
 			{
 				final IssuePriority selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 
-				if (selectedIssuePriority.equals(ISSUE_PRIORITY_ALL))
-				{
+				boolean selectAll = selectedIssuePriority.equals(ISSUE_PRIORITY_ALL);
+				if (selectAll)
 					getQuery().setIssuePriorityID(null);
-				}
 				else
-				{
 					getQuery().setIssuePriorityID(
 							(IssuePriorityID) JDOHelper.getObjectId(selectedIssuePriority));
-				}
+				
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issuePriorityID, ! selectAll);
 			}
 		});
 
@@ -198,10 +201,14 @@ public class IssueFilterCompositePropertyRelated
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				final IssueResolution selectedIssueResolution = issueResolutionCombo.getSelectedElement();
-				if (ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution))
+				
+				boolean selectAll = ISSUE_RESOLUTION_ALL.equals(selectedIssueResolution);
+				if (selectAll)
 					getQuery().setIssuePriorityID(null);
 				else
 					getQuery().setIssueResolutionID((IssueResolutionID) JDOHelper.getObjectId(selectedIssueResolution));
+				
+				getQuery().setFieldEnabled(IssueQuery.FieldName.issueResolutionID, ! selectAll);
 			}
 		});
 
@@ -235,6 +242,12 @@ public class IssueFilterCompositePropertyRelated
 					sectionActive |= true;
 				}
 			}
+			else if (getEnableFieldName(IssueQuery.FieldName.issuePriorityID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				issuePriorityCombo.setEnabled(active);
+			}
 			else if (IssueQuery.FieldName.issueResolutionID.equals(changedField.getPropertyName()))
 			{
 				final IssueResolutionID tmpResolutionID = (IssueResolutionID) changedField.getNewValue();
@@ -256,6 +269,12 @@ public class IssueFilterCompositePropertyRelated
 
 					sectionActive |= true;
 				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.issueResolutionID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				issueResolutionCombo.setEnabled(active);
 			}
 			else if (IssueQuery.FieldName.issueSeverityTypeID.equals(changedField.getPropertyName()))
 			{
@@ -279,6 +298,12 @@ public class IssueFilterCompositePropertyRelated
 					sectionActive |= true;
 				}
 			}
+			else if (getEnableFieldName(IssueQuery.FieldName.issueSeverityTypeID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				issueSeverityCombo.setEnabled(active);
+			}
 			else if (IssueQuery.FieldName.issueTypeID.equals(changedField.getPropertyName()))
 			{
 				IssueTypeID tmpTypeID = (IssueTypeID) changedField.getNewValue();
@@ -300,6 +325,12 @@ public class IssueFilterCompositePropertyRelated
 
 					sectionActive |= true;
 				}
+			}
+			else if (getEnableFieldName(IssueQuery.FieldName.issueTypeID).equals(
+					changedField.getPropertyName()))
+			{
+				Boolean active = (Boolean) changedField.getNewValue();
+				issueTypeCombo.setEnabled(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 
