@@ -162,12 +162,12 @@ public class ArticleAdderComposite extends FadeableComposite
 				ProductType productType = articleAdder.getProductType();
 				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 
-				String articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
+				Class<?> articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
 				String fetchGroupTrade_article;
-				if (Order.class.getName().equals(articleContainerClass)) {
+				if (Order.class.isAssignableFrom(articleContainerClass)) {
 					fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
 				}
-				else if (Offer.class.getName().equals(articleContainerClass)) {
+				else if (Offer.class.isAssignableFrom(articleContainerClass)) {
 					fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
 				}
 				else
