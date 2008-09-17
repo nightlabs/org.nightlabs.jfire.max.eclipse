@@ -30,9 +30,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -65,7 +64,7 @@ public class OfferTreeNode extends HeaderTreeNode
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
-			case 0: return ((offer instanceof RecurringOffer) ? "Recc." : "") +  offer.getOfferIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(offer.getOfferID());
+			case 0: return ArticleContainerUtil.getArticleContainerID(offer);
 			default:
 				return ""; //$NON-NLS-1$
 		}

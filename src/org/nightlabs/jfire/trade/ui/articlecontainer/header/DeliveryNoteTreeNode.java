@@ -30,8 +30,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.store.DeliveryNote;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -68,7 +68,7 @@ public class DeliveryNoteTreeNode extends HeaderTreeNode
 	{
 		switch (columnIndex) {
 			case 0:
-				return deliveryNote.getDeliveryNoteIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(deliveryNote.getDeliveryNoteID());
+				return ArticleContainerUtil.getArticleContainerID(deliveryNote);
 			default:
 				return null;
 		}

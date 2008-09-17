@@ -2,12 +2,12 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.jdo.ObjectIDUtil;
-import org.eclipse.swt.graphics.Image;
 
 public class RecurringOfferTreeNode extends HeaderTreeNode{
 
@@ -47,7 +47,7 @@ public class RecurringOfferTreeNode extends HeaderTreeNode{
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
-			case 0: return recurringOffer.getOfferIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(recurringOffer.getOfferID());
+			case 0: return ArticleContainerUtil.getArticleContainerID(recurringOffer);
 			default:
 				return ""; //$NON-NLS-1$
 		}

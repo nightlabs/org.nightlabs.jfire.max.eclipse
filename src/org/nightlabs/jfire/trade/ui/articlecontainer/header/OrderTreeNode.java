@@ -44,8 +44,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
@@ -108,7 +108,7 @@ public class OrderTreeNode extends HeaderTreeNode
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
-			case 0: return order.getOrderIDPrefix() + '/' + ObjectIDUtil.longObjectIDFieldToString(order.getOrderID());
+			case 0: return ArticleContainerUtil.getArticleContainerID(order);
 			default:
 				return null;
 		}
