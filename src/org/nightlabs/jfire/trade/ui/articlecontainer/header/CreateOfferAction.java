@@ -41,13 +41,17 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.recurring.RecurringOrder;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -71,23 +75,26 @@ public class CreateOfferAction extends Action
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				try {
 					OrderTreeNode orderTreeNode = (OrderTreeNode) headerTreeComposite.getSelectedNode();
-					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//					FIXME IDPREFIX (next line) should be asked from user if necessary!
-//					Offer offer = tradeManager.createOffer(
-//					(OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder()), null,
-//					OrderTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//					OfferTreeNode offerTreeNode = new OfferTreeNode(orderTreeNode, OrderTreeNode.POSITION_FIRST_CHILD, offer);
-//					offerTreeNode.select();
-
-					final Offer offer = tradeManager.createOffer(
-							(OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder()), null,
-							null, 1);
-
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							HeaderTreeComposite.openEditor(new ArticleContainerEditorInputOffer((OfferID)JDOHelper.getObjectId(offer)));
-						}
-					});
+					OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder());
+					Offer offer = null;
+//					FIXME IDPREFIX (null-parameter for create*Offer() methods) should be asked from user if necessary!
+					final boolean recurring = orderTreeNode.getOrder() instanceof RecurringOrder; 
+					if (recurring) {
+						RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+						offer = rtm.createRecurringOffer(orderID, null, null, 1);
+					} else {
+						TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+						offer = tradeManager.createOffer(orderID, null, null, 1);
+					}
+					
+					if (offer != null) {
+						final OfferID offerID = (OfferID) JDOHelper.getObjectId(offer);
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								HeaderTreeComposite.openEditor(new ArticleContainerEditorInput(offerID));
+							}
+						});
+					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
