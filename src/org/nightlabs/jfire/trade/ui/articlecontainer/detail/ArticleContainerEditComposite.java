@@ -100,6 +100,8 @@ import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.recurring.RecurringOffer;
+import org.nightlabs.jfire.trade.recurring.RecurringOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerEditActionContributor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteFooterComposite;
@@ -110,6 +112,8 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferFooterCom
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -369,10 +373,15 @@ implements ArticleContainerEdit
 	 * @return A newly created {@link HeaderComposite}.
 	 */
 	protected HeaderComposite createHeaderComposite(Composite parent) {
+	
+		if (articleContainer instanceof RecurringOrder)
+			return new RecurringOrderHeaderComposite(this, (RecurringOrder) articleContainer);
 		if (articleContainer instanceof Order)
 			return new OrderHeaderComposite(this, (Order) articleContainer);
 		if (articleContainer instanceof Offer)
-			return new OfferHeaderComposite(this, (Offer) articleContainer);
+			return new OfferHeaderComposite(this, (RecurringOffer) articleContainer);
+		if (articleContainer instanceof RecurringOffer)
+			return new RecurringOfferHeaderComposite(this, (RecurringOffer) articleContainer);
 		if (articleContainer instanceof Invoice)
 			return new InvoiceHeaderComposite(this, (Invoice) articleContainer);
 		if (articleContainer instanceof DeliveryNote)
