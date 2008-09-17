@@ -326,7 +326,7 @@ implements ISelectionProvider
 		else if (isInOffer())  // name, tariff, allocationStatus, invoice, deliveryNote, price
 			table.setLayout(
 					new WeightedTableLayout(
-							new int[]{80, 80, -1, -1, -1, -1, -1, 20},
+							new int[]{80, 80, -1, -1, -1, -1, -1, 30},
 							new int[]{-1, -1, 22, 22, 22, 22, 22, -1}));
 		else if (isInInvoice())
 			table.setLayout(
