@@ -82,15 +82,12 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
+import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.CreateRecurringOrderAction;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -227,15 +224,9 @@ implements ISelectionProvider
 				if (!structuredSelection.isEmpty())
 					selection = structuredSelection.getFirstElement();
 
-				ArticleContainerEditorInput editorInput;
-				if (selection instanceof OrderID)
-					editorInput = new ArticleContainerEditorInputOrder((OrderID)selection);
-				else if (selection instanceof OfferID)
-					editorInput = new ArticleContainerEditorInputOffer((OfferID)selection);
-				else if (selection instanceof InvoiceID)
-					editorInput = new ArticleContainerEditorInputInvoice((InvoiceID)selection);
-				else if (selection instanceof DeliveryNoteID)
-					editorInput = new ArticleContainerEditorInputDeliveryNote((DeliveryNoteID)selection);
+				ArticleContainerEditorInput editorInput = null;
+				if (selection instanceof ArticleContainerID)
+					editorInput = new ArticleContainerEditorInput((ArticleContainerID) selection);
 				else {
 					// expand/collapse currently selected node... and that's all.
 					if (selectedNode != null && selectedNode.hasChildren()) {
@@ -244,11 +235,10 @@ implements ISelectionProvider
 						else
 							selectedNode.expandToLevel(1);
 					}
-					return;
 				}
 				// throw new IllegalStateException("selection \"" + (selection == null ? "null" : selection.getClass().getName()) + "\" type unknown!");
-
-				openEditor(editorInput);
+				if (editorInput != null)
+					openEditor(editorInput);
 			}
 		});
 

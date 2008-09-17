@@ -614,7 +614,7 @@ implements ArticleContainerEdit
 		Class<?> articleContainerClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(articleContainerID);
 		SegmentEditFactory sef = SegmentEditFactoryRegistry.sharedInstance().getSegmentEditFactory(articleContainerClass, segmentType.getClass(), true);
 
-		SegmentEdit segmentEdit = sef.createSegmentEdit(this, articleContainerClass.getName(), asg);
+		SegmentEdit segmentEdit = sef.createSegmentEdit(this, articleContainerClass, asg);
 		segmentEdit.addCompositeContentChangeListener(segmentCompositeContentChangeListener);
 
 		createSegmentEditComposite(asg, segmentEdit);

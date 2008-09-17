@@ -13,7 +13,7 @@ import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -53,7 +53,7 @@ extends MessageDialog
 			OfferID reversingOfferID = reversingArticle.getOfferID();
 			try {
 				RCPUtil.openEditor(
-						new ArticleContainerEditorInputOffer(reversingOfferID), 
+						new ArticleContainerEditorInput(reversingOfferID), 
 						ArticleContainerEditor.ID_EDITOR);
 			} catch (PartInitException e) {
 				throw new RuntimeException(e);

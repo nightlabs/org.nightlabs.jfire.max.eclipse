@@ -71,8 +71,6 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
-import sun.security.action.GetBooleanAction;
-
 public class SelectDeliveryNotePage extends DynamicPathWizardPage
 {
 	public static final int ACTION_CREATE = 1;

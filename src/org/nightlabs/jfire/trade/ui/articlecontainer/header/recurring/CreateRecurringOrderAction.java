@@ -3,32 +3,33 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
+import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
 import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
 import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.ArticleContainerEditorInputRecurringOffer;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
-import org.eclipse.jface.action.Action;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
-import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.id.SegmentTypeID;
-import org.nightlabs.jfire.trade.id.OrderID;
 
 public class CreateRecurringOrderAction extends Action {
 
@@ -89,7 +90,7 @@ public class CreateRecurringOrderAction extends Action {
 					monitor.worked(85);
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {			
-							HeaderTreeComposite.openEditor(new ArticleContainerEditorInputRecurringOffer((OfferID)JDOHelper.getObjectId(recurringOffer)));
+							HeaderTreeComposite.openEditor(new ArticleContainerEditorInput((OfferID)JDOHelper.getObjectId(recurringOffer)));
 						}
 					});
 				} catch (Exception x) {

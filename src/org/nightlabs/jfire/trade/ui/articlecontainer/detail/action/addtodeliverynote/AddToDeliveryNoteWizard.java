@@ -39,8 +39,8 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.AddToArticleContainerWizard;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.ArticleContainerEditorInputDeliveryNote;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -115,11 +115,10 @@ public class AddToDeliveryNoteWizard extends AddToArticleContainerWizard
 					throw new IllegalStateException("selectDeliveryNotePage.getAction() returned unknown action!"); //$NON-NLS-1$
 			}
 
-			HeaderTreeComposite.openEditor(new ArticleContainerEditorInputDeliveryNote(deliveryNoteID));
+			HeaderTreeComposite.openEditor(new ArticleContainerEditorInput(deliveryNoteID));
 			return true;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-
 }

@@ -66,8 +66,8 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	 * @return An instance of <tt>ArticleAdderFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	public ArticleAdderFactory getArticleAdderFactory(
-			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
-			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
+			Class<?> articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+ 			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
 		return (ArticleAdderFactory) super.getFactory(articleContainerClass, segmentTypeClass, productTypeClass, throwExceptionIfNotFound);
 	}

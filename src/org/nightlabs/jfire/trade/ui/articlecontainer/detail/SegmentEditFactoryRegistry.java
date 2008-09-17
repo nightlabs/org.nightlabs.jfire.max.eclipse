@@ -27,15 +27,13 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageSettings;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.SegmentType;
 
 /**
@@ -102,7 +100,7 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 	}
 
 	/**
-	 * @param articleContainerClass
+	 * @param articleContainerClass The type of {@link ArticleContainer} that should be searched for. 
 	 * @param segmentTypeClass This class will be resolved recursively. Means you can
 	 *		subclass a <tt>SegmentType</tt> and it will use the parent's factory, if you
 	 *		don't override it for your child.
@@ -132,7 +130,6 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 		if (throwExceptionIfNotFound && factory == null)
 			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return factory;
-		
 	}
 
 	private SegmentEditFactory getSegmentEditFactory(String articleContainerClass, Class<?> segmentTypeClass) {
@@ -148,8 +145,8 @@ public class SegmentEditFactoryRegistry extends AbstractEPProcessor
 
 	protected void addSegmentEditFactory(SegmentEditFactory sef)
 	{
-		Map<String, SegmentEditFactory> sefMap = getSegmentEditFactories(sef.getArticleContainerClass());
-		sefMap.put(sef.getSegmentTypeClass(), sef);
+		Map<String, SegmentEditFactory> sefMap = getSegmentEditFactories(sef.getArticleContainerClass().toString());
+		sefMap.put(sef.getSegmentTypeClass().toString(), sef);
 	}
 
 	/**

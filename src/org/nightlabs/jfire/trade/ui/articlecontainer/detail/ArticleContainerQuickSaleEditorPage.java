@@ -47,7 +47,6 @@ import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.ArticleContainerEditorInputOrder;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -240,7 +239,7 @@ extends ArticleContainerEditorPage
 		}
 	};
 		
-	public static ArticleContainerEditorInputOrder createEditorInput()
+	public static ArticleContainerEditorInput createEditorInput()
 	{
 		TradeManager tm;
 		try {
@@ -269,7 +268,7 @@ extends ArticleContainerEditorPage
 							null,
 							tradeConfigModule.getCurrencyID(),
 							new SegmentTypeID[] {null}); // null here is a shortcut for default segment type
-					return new ArticleContainerEditorInputOrder(orderID);
+					return new ArticleContainerEditorInput(orderID);
 			} catch (LoginException le) {
 				return null;
 			}

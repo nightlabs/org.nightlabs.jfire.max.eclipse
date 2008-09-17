@@ -44,10 +44,10 @@ extends AbstractSegmentEditFactory
 	}
 
 	/**
-	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(ArticleContainerEdit, java.lang.String, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
+	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactory#createSegmentEdit(ArticleContainerEdit, Class, org.nightlabs.jfire.trade.ui.ArticleSegmentGroup)
 	 */
 	public SegmentEdit createSegmentEdit(ArticleContainerEdit articleContainerEdit,
-			String articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
+			Class<?> articleContainerClass, ArticleSegmentGroup articleSegmentGroup)
 	{
 		SegmentEdit segmentEdit = new OrderSegmentEdit();
 		segmentEdit.init(this, articleContainerEdit, articleContainerClass, articleSegmentGroup);

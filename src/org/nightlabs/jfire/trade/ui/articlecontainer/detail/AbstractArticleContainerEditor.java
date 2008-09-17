@@ -6,11 +6,15 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageSettings;
+import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
+import org.nightlabs.base.ui.entity.editor.IEntityEditorPageControllerModifyListener;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.base.ui.part.PartAdapter;
@@ -50,6 +54,37 @@ implements IArticleContainerEditor
 		registerActivatePartListener();
 	}
 	
+	@Override
+	protected void addPages() {
+		super.addPages();
+		// add a listener to the controller that will set the part name and image
+		final IEntityEditorPageController controller = getController().getPageController(getArticleContainerEditorPage());
+		final IEntityEditorPageControllerModifyListener listener = new IEntityEditorPageControllerModifyListener() {
+			@Override
+			public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						setPartName("Lala");
+						setTitleImage(null);
+//						controller.removeModifyListener(listener);
+					}
+				});
+			}
+		};
+		controller.addModifyListener(listener);
+	}
+	
+	private ArticleContainerEditorPage articleContainerEditorPage;
+	
+	protected ArticleContainerEditorPage getArticleContainerEditorPage() {
+		if (articleContainerEditorPage == null) {
+			IFormPage page = findPage(ArticleContainerEditorPage.PAGE_ID);
+			if (page instanceof ArticleContainerEditorPage) {
+				articleContainerEditorPage = (ArticleContainerEditorPage) page;
+			}
+		}
+		return articleContainerEditorPage;
+	}
 	/**
 	 * Overrides and returns the result of the processing of extensions to the  
 	 * entityEditor and articleContainerEditorPageFactory extension-points.
@@ -73,10 +108,7 @@ implements IArticleContainerEditor
 	@Override
 	public ArticleContainerEdit getArticleContainerEdit() {
 		if (articleContainerEdit == null) {
-			IFormPage page = findPage(ArticleContainerEditorPage.PAGE_ID);
-			if (page instanceof ArticleContainerEditorPage) {
-				articleContainerEdit = ((ArticleContainerEditorPage) page).getArticleContainerEdit();
-			}
+			articleContainerEdit = getArticleContainerEditorPage().getArticleContainerEdit();
 		}
 		return articleContainerEdit;
 	}

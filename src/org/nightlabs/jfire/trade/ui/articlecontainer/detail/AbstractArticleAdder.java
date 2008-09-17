@@ -150,7 +150,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 			ArticleContainer ac = getSegmentEdit().getArticleContainer();
 			String message = String.format(
 					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.articleContainerFinalized"), //$NON-NLS-1$
-					TradePlugin.getArticleContainerTypeString(ac, false), TradePlugin.getArticleContainerTypeString(ac, true),
+					TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
 					ArticleContainerUtil.getArticleContainerID(ac)
 					);
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.INFO);

@@ -51,7 +51,7 @@ public abstract class AbstractSegmentEditFactory implements SegmentEditFactory
 	{
 		return name;
 	}
-
+ 
 	public String getArticleContainerClass()
 	{
 		return articleContainerClass;

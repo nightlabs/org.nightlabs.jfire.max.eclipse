@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 
 /**
@@ -75,7 +74,7 @@ public interface SegmentEditFactory
 	/**
 	 * In your implementation of this method, you must create a new instance of
 	 * <tt>SegmentEdit</tt> and pass the parameters to it
-	 * via {@link SegmentEdit#init(IWorkbenchPartSite, ArticleContainerEdit, ArticleContainer, ArticleSegmentGroup)}.
+	 * via {@link SegmentEdit#init(IWorkbenchPartSite, ArticleContainerEdit, Class, ArticleSegmentGroup)}.
 	 * @param articleContainerEdit TODO
 	 * @param articleContainerClass The articleContainerClass - one of
 	 *		{@link #SEGMENTCONTEXT_ORDER},
@@ -85,6 +84,6 @@ public interface SegmentEditFactory
 	 * @return a new <tt>SegmentEdit</tt> which will be used to render a <tt>Segment</tt>.
 	 */
 	SegmentEdit createSegmentEdit(
-			ArticleContainerEdit articleContainerEdit, String articleContainerClass,
+			ArticleContainerEdit articleContainerEdit, Class<?> articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 }

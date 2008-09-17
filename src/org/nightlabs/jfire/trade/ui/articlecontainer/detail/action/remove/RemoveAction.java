@@ -81,7 +81,7 @@ public class RemoveAction extends ArticleEditAction
 
 		for (ArticleSelection articleSelection : articleSelections) {
 			SegmentEdit segmentEdit = articleSelection.getArticleEdit().getSegmentEdit();
-			String articleContainerClass = segmentEdit.getArticleContainerClass();
+			Class<?> articleContainerClass = segmentEdit.getArticleContainerClass();
 
 			for (Article article : articleSelection.getSelectedArticles()) {
 
@@ -97,19 +97,19 @@ public class RemoveAction extends ArticleEditAction
 //					}
 //				}
 
-				if (Offer.class.getName().equals(articleContainerClass)) {
+				if (Offer.class.isAssignableFrom(articleContainerClass)) {
 					if (((Offer)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}
-				else if (Order.class.getName().equals(articleContainerClass)) {
+				else if (Order.class.isAssignableFrom(articleContainerClass)) {
 					if (ArticleUtil.isOfferFinalized(article, new NullProgressMonitor())) // TODO real progress monitor
 						return false;
 				}
-				else if (Invoice.class.getName().equals(articleContainerClass)) {
+				else if (Invoice.class.isAssignableFrom(articleContainerClass)) {
 					if (((Invoice)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}
-				else if (DeliveryNote.class.getName().equals(articleContainerClass)) {
+				else if (DeliveryNote.class.isAssignableFrom(articleContainerClass)) {
 					if (((DeliveryNote)segmentEdit.getArticleContainer()).isFinalized())
 						return false;
 				}

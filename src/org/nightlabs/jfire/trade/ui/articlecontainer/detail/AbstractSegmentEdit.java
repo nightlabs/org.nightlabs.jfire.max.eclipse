@@ -70,7 +70,7 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This is the base implementation of {@link SegmentEdit} it should be sub-classed to create new ones.
- * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEdit, String, ArticleSegmentGroup)}, 
+ * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEdit, Class, ArticleSegmentGroup)}, 
  * the management/creation of {@link ArticleSelection}s it does two important things:
  * <p>
  * It listens to the selection of a {@link ProductTypeID} in the {@link TradePlugin#ZONE_SALE} and
@@ -97,7 +97,7 @@ implements SegmentEdit
 {
 	private SegmentEditFactory segmentEditFactory;
 	private ArticleContainerEdit articleContainerEdit;
-	private String articleContainerClass;
+	private Class<?> articleContainerClass;
 	private ArticleSegmentGroup articleSegmentGroup;
 
 	protected Class<? extends SegmentType> segmentTypeClass;
@@ -109,7 +109,7 @@ implements SegmentEdit
 	public void init(
 			SegmentEditFactory segmentEditFactory,
 			ArticleContainerEdit articleContainerEdit,
-			String articleContainerClass,
+			Class<?> articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup)
 	{
 		this.segmentEditFactory = segmentEditFactory;
@@ -279,8 +279,8 @@ implements SegmentEdit
 				this.selectedProductTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 
 				// Only Order and Offer support ArticleAdders => manage ArticleAdders only for them
-				if (Order.class.getName().equals(articleContainerClass) ||
-						Offer.class.getName().equals(articleContainerClass))
+				if (Order.class.isAssignableFrom(articleContainerClass) ||
+						Offer.class.isAssignableFrom(articleContainerClass))
 				{
 					ArticleAdderFactory factory = ArticleAdderFactoryRegistry.sharedInstance().getArticleAdderFactory(
 							articleContainerClass, articleSegmentGroup.getSegment().getSegmentType().getClass(),
@@ -381,7 +381,7 @@ implements SegmentEdit
 		}
 	}
 
-	public String getArticleContainerClass()
+	public Class<?> getArticleContainerClass()
 	{
 		return articleContainerClass;
 	}

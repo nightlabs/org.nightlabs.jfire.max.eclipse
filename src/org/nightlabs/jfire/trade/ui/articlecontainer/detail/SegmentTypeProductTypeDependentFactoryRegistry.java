@@ -69,9 +69,34 @@ extends AbstractEPProcessor
 	 * @return An instance of <tt>SegmentTypeProductTypeDependentFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	protected SegmentTypeProductTypeDependentFactory getFactory(
+			Class<?> articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
+	{
+		Class<?> articleContainerC = articleContainerClass;
+		SegmentTypeProductTypeDependentFactory factory = null;
+		while (articleContainerC != null) {
+			factory = getFactory(articleContainerC.getName(), segmentTypeClass, productTypeClass, false);
+			if (factory != null)
+				return factory;
+			Class<?>[] interfaces = articleContainerC.getInterfaces();
+			for (int i = 0; i < interfaces.length; i++) {
+				factory = getFactory(interfaces[i].getName(), segmentTypeClass, productTypeClass, false);
+				if (factory != null)
+					return factory;
+			}
+			articleContainerC = articleContainerC.getSuperclass();
+		}
+		if (throwExceptionIfNotFound && factory == null)
+			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return factory;
+		
+	}
+	
+	private SegmentTypeProductTypeDependentFactory getFactory(
 			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
 			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
+
 		Map<String, Map<String, SegmentTypeProductTypeDependentFactory>> aefsBySegmentTypeClass = factories.get(articleContainerClass);
 		if (aefsBySegmentTypeClass == null) {
 			if (throwExceptionIfNotFound)

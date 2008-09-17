@@ -75,7 +75,7 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	 * @return An instance of <tt>ArticleEditFactory</tt> or <tt>null</tt> (if allowed).
 	 */
 	public ArticleEditFactory getArticleEditFactory(
-			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
+			Class<?> articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
 			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
 	{
 		return (ArticleEditFactory) super.getFactory(articleContainerClass, segmentTypeClass,

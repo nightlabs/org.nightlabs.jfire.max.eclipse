@@ -28,7 +28,7 @@ import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.ArticleContainerEditorInputOffer;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -79,7 +79,7 @@ extends Action
 								try {
 									OfferID offerID = (OfferID) JDOHelper.getObjectId(reversingOffer);
 									RCPUtil.openEditor(
-											new ArticleContainerEditorInputOffer(offerID), 
+											new ArticleContainerEditorInput(offerID), 
 											ArticleContainerEditor.ID_EDITOR);
 								} catch (PartInitException e) {
 									throw new RuntimeException(e);

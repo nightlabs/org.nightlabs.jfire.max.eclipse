@@ -29,29 +29,26 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.util.Util;
 
 
 /**
+ * 
  * @author Marco Schulze - marco at nightlabs dot de
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public abstract class ArticleContainerEditorInput
+public class ArticleContainerEditorInput
 implements IEditorInput
 {
-	public ArticleContainerEditorInput()
+	private ArticleContainerID articleContainerID;
+	
+	public ArticleContainerEditorInput(ArticleContainerID articleContainerID)
 	{
-//		if (this instanceof ArticleContainerEditorInputOrder)
-//			articleContainerClass = Order.class.getName();
-//		else if (this instanceof ArticleContainerEditorInputOffer)
-//			articleContainerClass = Offer.class.getName();
-//		else if (this instanceof ArticleContainerEditorInputInvoice)
-//			articleContainerClass = Invoice.class.getName();
-//		else if (this instanceof ArticleContainerEditorInputDeliveryNote)
-//			articleContainerClass = DeliveryNote.class.getName();
-//		else if (this instanceof ArticleContainerEditorInputReceptionNote)
-//			articleContainerClass = ReceptionNote.class.getName();
-//		else
-//			throw new UnsupportedOperationException("This class is not a supported child of " + ArticleContainerEditorInput.class.getName()); //$NON-NLS-1$
+		this.articleContainerID = articleContainerID;
 	}
 
 	/**
@@ -61,22 +58,6 @@ implements IEditorInput
 	{
 		return true;
 	}
-
-	/**
-	 * @see org.eclipse.ui.IEditorInput#getImageDescriptor()
-	 */
-	public ImageDescriptor getImageDescriptor()
-	{
-		return null;
-	}
-
-//	/**
-//	 * @see org.eclipse.ui.IEditorInput#getName()
-//	 */
-//	public String getName()
-//	{
-//		return articleContainerClass;
-//	}
 
 	/**
 	 * @see org.eclipse.ui.IEditorInput#getPersistable()
@@ -104,5 +85,54 @@ implements IEditorInput
 		return null;
 	}
 
-	public abstract ArticleContainerID getArticleContainerID();
+	public ArticleContainerID getArticleContainerID() {
+		return articleContainerID;
+	}
+
+	private Class<?> articleContainerClass = null;
+	
+	public Class<?> getArticleContainerClass() {
+		if (articleContainerClass == null) {
+			articleContainerClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(getArticleContainerID());
+		}
+		return articleContainerClass;
+	}
+	
+	@Override
+	public String getName()
+	{
+		return 
+			TradePlugin.getArticleContainerTypeString(getArticleContainerClass(), true) + " " + 
+			ArticleContainerUtil.getArticleContainerID(getArticleContainerID());
+	}
+
+	/**
+	 * @see org.eclipse.ui.IEditorInput#getImageDescriptor()
+	 */
+	@Override
+	public ImageDescriptor getImageDescriptor()
+	{
+		return TradePlugin.getArticleContainerImageDescriptor(getArticleContainerClass());
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return articleContainerID == null ? 0 : articleContainerID.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj == this) return true;
+
+		if (!(obj instanceof ArticleContainerEditor))
+			return false;
+
+		ArticleContainerEditorInput other = (ArticleContainerEditorInput)obj;
+
+		return Util.equals(this.articleContainerID, other.articleContainerID);
+	}
+	
+	
 }

@@ -39,8 +39,8 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.ArticleID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.AddToArticleContainerWizard;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.ArticleContainerEditorInputInvoice;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -128,7 +128,7 @@ public class AddToInvoiceWizard extends AddToArticleContainerWizard
 				default:
 					throw new IllegalStateException("selectInvoicePage.getAction() returned unknown action!"); //$NON-NLS-1$
 			}
-			HeaderTreeComposite.openEditor(new ArticleContainerEditorInputInvoice(invoiceID));
+			HeaderTreeComposite.openEditor(new ArticleContainerEditorInput(invoiceID));
 			return true;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

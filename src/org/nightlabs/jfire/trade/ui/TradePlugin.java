@@ -26,6 +26,7 @@
 
 package org.nightlabs.jfire.trade.ui;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.accounting.AccountingManager;
@@ -229,26 +230,55 @@ extends AbstractUIPlugin
 
 	/**
 	 * Returns a localized string that represents the type of {@link ArticleContainer} passed.
+	 * The type strings are taken from the resource-bundle in this plug-ins resource package,
+	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with 
+	 * $prefix$ = <code>jfire.trade.ui.TradePlugin.articleContainer.l10n</code> and
+	 * $suffix$ = <code>typeString</code>.  
 	 * 
-	 * @param articleContainer The {@link ArticleContainer} to get the type string for.
+	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
 	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
 	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
 	 */
-	public static String getArticleContainerTypeString(ArticleContainer articleContainer, boolean capitalize) {
-		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainerTypeString.";
-		Class<?> acClass = articleContainer.getClass();
-		String acTypeString = getMessageKey(prefix + acClass.getSimpleName());
+	public static String getArticleContainerTypeString(Class<?> articleContainerClass, boolean capitalize) {
+//		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainerTypeString.";
+		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n.";
+		String suffix = ".typeString";
+		Class<?> acClass = articleContainerClass;
+		String acTypeString = getMessageKey(prefix + acClass.getSimpleName() + suffix);
 		while (acTypeString == null && !(acClass == Object.class)) {
 			acClass = acClass.getSuperclass();
-			acTypeString = getMessageKey(prefix + acClass.getSimpleName());
+			acTypeString = getMessageKey(prefix + acClass.getSimpleName() + suffix);
 		}
 		if (acTypeString == null) {
-			acTypeString = articleContainer.getClass().getSimpleName();
+			acTypeString = articleContainerClass.getSimpleName();
 		}
 		if (capitalize && acTypeString.length() > 0) {
 			acTypeString = acTypeString.substring(0, 1).toUpperCase() + acTypeString.substring(1); 
 		}
 		return acTypeString;
+	}
+	
+	/**
+	 * Returns an image descriptor for the type of {@link ArticleContainer} passed.
+	 * The paths to the icons are taken from the resource-bundle in this plug-ins resource package,
+	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with 
+	 * $prefix$ = <code>jfire.trade.ui.TradePlugin.articleContainer.l10n</code> and
+	 * $suffix$ = <code>icon</code>.  
+	 * 
+	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
+	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
+	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
+	 */
+	public static ImageDescriptor getArticleContainerImageDescriptor(Class<?> articleContainerClass) {
+		String prefix = "org.nightlabs.jfire.trade.ui.TradePlugin.articleContainer.l10n.";
+		String suffix = ".icon";
+		Class<?> acClass = articleContainerClass;
+		String iconPath = getMessageKey(prefix + acClass.getSimpleName() + suffix);
+		while (iconPath == null && !(acClass == Object.class)) {
+			acClass = acClass.getSuperclass();
+			iconPath = getMessageKey(prefix + acClass.getSimpleName() + suffix);
+		}
+		return AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, iconPath);
 	}
 	
 	private static String getMessageKey(String key) {

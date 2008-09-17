@@ -59,7 +59,7 @@ public interface SegmentEdit
 {
 	/**
 	 * This method is called by
-	 * {@link SegmentEditFactory#createSegmentEdit(ArticleContainerEdit, String, ArticleSegmentGroup)}.
+	 * {@link SegmentEditFactory#createSegmentEdit(ArticleContainerEdit, Class, ArticleSegmentGroup)}.
 	 * @param segmentEditFactory The factory which has created this <code>SegmentEdit</code>.
 	 * @param articleContainerEdit TODO
 	 * @param articleContainerClass The articleContainerClass - one of
@@ -73,14 +73,14 @@ public interface SegmentEdit
 	void init(
 			SegmentEditFactory segmentEditFactory,
 			ArticleContainerEdit articleContainerEdit,
-			String articleContainerClass,
+			Class<?> articleContainerClass,
 			ArticleSegmentGroup articleSegmentGroup);
 
 
 	/**
 	 * @return Returns the factory which has created this <code>SegmentEdit</code> and
 	 *		was passed to
-	 *		{@link #init(SegmentEditFactory, ArticleContainerEdit, String, ArticleSegmentGroup)}.
+	 *		{@link #init(SegmentEditFactory, ArticleContainerEdit, Class, ArticleSegmentGroup)}.
 	 */
 	SegmentEditFactory getSegmentEditFactory();
 
@@ -164,7 +164,7 @@ public interface SegmentEdit
 	 */
 	void fireCompositeContentChangeEvent();
 
-	String getArticleContainerClass();
+	Class<?> getArticleContainerClass();
 
 	/**
 	 * This method iterates all {@link ArticleEdit}s, calls {@link ArticleEdit#getSelectedArticles()}
