@@ -74,11 +74,11 @@ public class CreateOfferAction extends Action
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				try {
-					OrderTreeNode orderTreeNode = (OrderTreeNode) headerTreeComposite.getSelectedNode();
-					OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getOrder());
+					HeaderTreeNode.ArticleContainerNode orderTreeNode = (HeaderTreeNode.ArticleContainerNode) headerTreeComposite.getSelectedNode();
+					OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getArticleContainer());
 					Offer offer = null;
 //					FIXME IDPREFIX (null-parameter for create*Offer() methods) should be asked from user if necessary!
-					final boolean recurring = orderTreeNode.getOrder() instanceof RecurringOrder; 
+					final boolean recurring = orderTreeNode.getArticleContainer() instanceof RecurringOrder; 
 					if (recurring) {
 						RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
 						offer = rtm.createRecurringOffer(orderID, null, null, 1);

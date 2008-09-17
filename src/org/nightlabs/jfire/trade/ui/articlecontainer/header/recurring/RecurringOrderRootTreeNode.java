@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -22,8 +23,6 @@ import org.nightlabs.util.CollectionUtil;
  * @author Fitas Amine - fitas at nightlabs dot de
  */
 public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
-
-	
 	
 	public static final String[] FETCH_GROUPS_ORDER = new String[] {
 		FetchPlan.DEFAULT,
@@ -32,20 +31,16 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 		Order.FETCH_GROUP_VENDOR_ID
 	};
 	
-	
-
 	public RecurringOrderRootTreeNode(HeaderTreeNode parent, boolean customerSide)
 	{
 		super(parent, "Orders", parent.getHeaderTreeComposite().getImageOrderRootTreeNode(), customerSide); //$NON-NLS-1$
 		init();
 	}
 
-
 	@Override
 	protected HeaderTreeNode createArticleContainerNode(byte position,
 			ArticleContainer articleContainer) {
 		return new RecurringOrderTreeNode(this, position, (RecurringOrder) articleContainer);
-
 	}
 
 	@Override
@@ -59,27 +54,22 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
 		);
-		
-		
 	}
 
 	@Override
 	protected List<ArticleContainer> doLoadNewArticleContainers(
 			Set<ArticleContainerID> articleContainerIDs, ProgressMonitor monitor) {
-		// TODO Auto-generated method stub
 		Set<OrderID> orderIDs = CollectionUtil.castSet(articleContainerIDs);
 		return CollectionUtil.castList(RecurringOrderDAO.sharedInstance().getRecurringOrders(
 				orderIDs,
 				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor)
 		);
-		
 	}
 
 	@Override
-	protected Class<? extends ArticleContainerID> getArticleContainerIDClass() {
-		// TODO Auto-generated method stub
-		return OrderID.class;
+	protected boolean acceptNewArticleContainer(Object newObjectID) {
+		Class<?> objectClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(newObjectID);
+		return RecurringOrder.class.isAssignableFrom(objectClass);
 	}
-
 }

@@ -33,6 +33,7 @@ import javax.jdo.FetchPlan;
 
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.dao.OrderDAO;
@@ -94,9 +95,8 @@ public class OrderRootTreeNode extends ArticleContainerRootTreeNode
 	}
 
 	@Override
-	@Implement
-	protected Class<? extends ArticleContainerID> getArticleContainerIDClass()
-	{
-		return OrderID.class;
+	protected boolean acceptNewArticleContainer(Object newObjectID) {
+		Class<?> objectClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(newObjectID);
+		return objectClass == Order.class;
 	}
 }

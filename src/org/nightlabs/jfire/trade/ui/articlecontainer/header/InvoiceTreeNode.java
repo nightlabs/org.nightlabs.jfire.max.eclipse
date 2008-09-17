@@ -37,7 +37,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class InvoiceTreeNode extends HeaderTreeNode
+public class InvoiceTreeNode extends HeaderTreeNode.ArticleContainerNode
 {
 	private Invoice invoice;
 
@@ -98,11 +98,8 @@ public class InvoiceTreeNode extends HeaderTreeNode
 		return null;
 	}
 
-	/**
-	 * @return Returns the invoice.
-	 */
-	public Invoice getInvoice()
-	{
+	@Override
+	public Invoice getArticleContainer() {
 		return invoice;
 	}
 }

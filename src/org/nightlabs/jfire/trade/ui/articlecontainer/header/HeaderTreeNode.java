@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
@@ -103,6 +104,15 @@ public abstract class HeaderTreeNode
 					return null;
 			}
 		}
+	}
+	
+	public static abstract class ArticleContainerNode extends HeaderTreeNode {
+
+		public ArticleContainerNode(HeaderTreeNode parent, byte position) {
+			super(parent, position);
+		}
+		
+		public abstract ArticleContainer getArticleContainer();
 	}
 
 	private HeaderTreeComposite headerTreeComposite;

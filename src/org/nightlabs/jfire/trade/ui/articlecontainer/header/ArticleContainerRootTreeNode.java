@@ -158,7 +158,9 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 		return purchase;
 	}
 
-	protected abstract Class<? extends ArticleContainerID> getArticleContainerIDClass();
+//	protected abstract Class<? extends ArticleContainerID> getArticleContainerIDClass();
+	
+	protected abstract boolean acceptNewArticleContainer(Object newObjectID);
 
 	private Set<ArticleContainerID> articleContainerIDsLoaded = new HashSet<ArticleContainerID>();
 
@@ -175,7 +177,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 			for (Iterator<DirtyObjectID> itDirtyObjectID = dirtyObjectIDs.iterator(); itDirtyObjectID.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = itDirtyObjectID.next();
 				objectID2DirtyObjectIDMap.put(dirtyObjectID.getObjectID(), dirtyObjectID);
-				if (getArticleContainerIDClass().isInstance(dirtyObjectID.getObjectID())) {
+				if (acceptNewArticleContainer(dirtyObjectID.getObjectID())) {
 					itDirtyObjectID.remove();
 					synchronized(articleContainerIDsLoaded) {
 						if (!articleContainerIDsLoaded.contains(dirtyObjectID.getObjectID()))

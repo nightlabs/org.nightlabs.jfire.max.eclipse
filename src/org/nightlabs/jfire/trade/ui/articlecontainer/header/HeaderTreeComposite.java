@@ -71,20 +71,12 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
-import org.nightlabs.jfire.trade.id.OfferID;
-import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
@@ -493,31 +485,11 @@ implements ISelectionProvider
 	{
 		ISelection selection = null;
 
-		if (selectedNode instanceof OrderTreeNode) {
-			OrderTreeNode node = (OrderTreeNode)selectedNode;
-			Order order = node.getOrder();
-			OrderID orderID = (OrderID)JDOHelper.getObjectId(order);
-			selection = new StructuredSelection(orderID);
+		if (selectedNode instanceof HeaderTreeNode.ArticleContainerNode) {
+			ArticleContainer articleContainer = ((HeaderTreeNode.ArticleContainerNode) selectedNode).getArticleContainer();
+			ArticleContainerID articleContainerID = (ArticleContainerID) JDOHelper.getObjectId(articleContainer);
+			selection = new StructuredSelection(articleContainerID);
 		}
-		else if (selectedNode instanceof OfferTreeNode) {
-			OfferTreeNode node = (OfferTreeNode)selectedNode;
-			Offer offer = node.getOffer();
-			OfferID offerID = (OfferID)JDOHelper.getObjectId(offer);
-			selection = new StructuredSelection(offerID);
-		}
-		else if (selectedNode instanceof InvoiceTreeNode) {
-			InvoiceTreeNode node = (InvoiceTreeNode)selectedNode;
-			Invoice invoice = node.getInvoice();
-			InvoiceID invoiceID = (InvoiceID)JDOHelper.getObjectId(invoice);
-			selection = new StructuredSelection(invoiceID);
-		}
-		else if (selectedNode instanceof DeliveryNoteTreeNode) {
-			DeliveryNoteTreeNode node = (DeliveryNoteTreeNode)selectedNode;
-			DeliveryNote deliveryNote = node.getDeliveryNote();
-			DeliveryNoteID deliveryNoteID = (DeliveryNoteID)JDOHelper.getObjectId(deliveryNote);
-			selection = new StructuredSelection(deliveryNoteID);
-		}
-
 		if (selection == null)
 			return StructuredSelection.EMPTY;
 

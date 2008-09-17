@@ -16,7 +16,6 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
@@ -35,11 +34,9 @@ import org.nightlabs.util.CollectionUtil;
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
  */
-public class RecurringOrderTreeNode extends HeaderTreeNode {
+public class RecurringOrderTreeNode extends HeaderTreeNode.ArticleContainerNode {
 
-	
 	private RecurringOrder recurringOrder;	
-	
 	
 	public static final String[] FETCH_GROUPS_ORDER = new String[] {
 		FetchPlan.DEFAULT,
@@ -60,7 +57,6 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 
 	}
 	
-	
 
 	@Override
 	protected List<HeaderTreeNode> createChildNodes(List<Object> childData) {
@@ -80,7 +76,6 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 	}
 
 	
-	
 	@Override
 	public Image getColumnImage(int columnIndex)
 	{
@@ -93,7 +88,6 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -102,15 +96,6 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 				return null;
 		}
 	}
-	
-	/**
-	 * @return Returns the order.
-	 */
-	public Order getOrder()
-	{
-		return recurringOrder;
-	}
-
 	
 	@Override
 	protected List<Object> loadChildData(ProgressMonitor monitor) {
@@ -171,7 +156,7 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 				final List<Offer> offers = new OfferDAO().getOffers(offerIDsToLoad, FETCH_GROUPS_OFFER,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	
-				OrderID orderID = (OrderID) JDOHelper.getObjectId(getOrder());
+				OrderID orderID = (OrderID) JDOHelper.getObjectId(getArticleContainer());
 	
 				for (Iterator<Offer> it = offers.iterator(); it.hasNext(); ) {
 					Offer offer = it.next();
@@ -204,6 +189,9 @@ public class RecurringOrderTreeNode extends HeaderTreeNode {
 		} // if (children != null) {
 		return super.onNewElementsCreated(dirtyObjectIDs, monitor);
 	}
-	
 
+	@Override
+	public RecurringOrder getArticleContainer() {
+		return recurringOrder;
+	}
 }

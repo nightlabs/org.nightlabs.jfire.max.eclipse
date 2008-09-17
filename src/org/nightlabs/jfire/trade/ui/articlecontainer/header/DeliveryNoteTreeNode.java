@@ -37,7 +37,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class DeliveryNoteTreeNode extends HeaderTreeNode
+public class DeliveryNoteTreeNode extends HeaderTreeNode.ArticleContainerNode
 {
 	private DeliveryNote deliveryNote;
 
@@ -94,11 +94,8 @@ public class DeliveryNoteTreeNode extends HeaderTreeNode
 		return null;
 	}
 
-	/**
-	 * @return Returns the deliveryNote.
-	 */
-	public DeliveryNote getDeliveryNote()
-	{
+	@Override
+	public DeliveryNote getArticleContainer() {
 		return deliveryNote;
 	}
 

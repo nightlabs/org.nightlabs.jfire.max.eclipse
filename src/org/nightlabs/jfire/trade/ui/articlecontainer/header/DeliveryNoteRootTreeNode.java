@@ -90,9 +90,7 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 	}
 
 	@Override
-	@Implement
-	protected Class<? extends ArticleContainerID> getArticleContainerIDClass()
-	{
-		return DeliveryNoteID.class;
+	protected boolean acceptNewArticleContainer(Object newObjectID) {
+		return newObjectID instanceof DeliveryNoteID;
 	}
 }

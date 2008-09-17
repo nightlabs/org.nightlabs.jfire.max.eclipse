@@ -58,7 +58,7 @@ import org.nightlabs.util.CollectionUtil;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class OrderTreeNode extends HeaderTreeNode
+public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 {
 	public static final String[] FETCH_GROUPS_ORDER = new String[] {
 		FetchPlan.DEFAULT,
@@ -167,14 +167,6 @@ public class OrderTreeNode extends HeaderTreeNode
 
 	private Set<OfferID> offerIDsLoaded = new HashSet<OfferID>();
 
-	/**
-	 * @return Returns the order.
-	 */
-	public Order getOrder()
-	{
-		return order;
-	}
-
 	@Override
 	public Collection<DirtyObjectID> onNewElementsCreated(Collection<DirtyObjectID> dirtyObjectIDs, ProgressMonitor monitor)
 	{
@@ -202,7 +194,7 @@ public class OrderTreeNode extends HeaderTreeNode
 				final List<Offer> offers = new OfferDAO().getOffers(offerIDsToLoad, FETCH_GROUPS_OFFER,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	
-				OrderID orderID = (OrderID) JDOHelper.getObjectId(getOrder());
+				OrderID orderID = (OrderID) JDOHelper.getObjectId(getArticleContainer());
 	
 				for (Iterator<Offer> it = offers.iterator(); it.hasNext(); ) {
 					Offer offer = it.next();
@@ -234,5 +226,10 @@ public class OrderTreeNode extends HeaderTreeNode
 			}
 		} // if (children != null) {
 		return super.onNewElementsCreated(dirtyObjectIDs, monitor);
+	}
+
+	@Override
+	public Order getArticleContainer() {
+		return order;
 	}
 }

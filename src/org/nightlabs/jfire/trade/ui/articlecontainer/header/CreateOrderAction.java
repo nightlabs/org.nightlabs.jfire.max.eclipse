@@ -97,19 +97,28 @@ public class CreateOrderAction extends Action
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(headerTreeComposite.getPartner());
 
 					HeaderTreeNode selectedNode  = (HeaderTreeNode)headerTreeComposite.getSelectedNode();
-					// define a sale order 
-					boolean saleOrder = true;
-					boolean recurring = false;
-					
-					while(selectedNode != null)
-					{
-						if(selectedNode instanceof PurchaseRootTreeNode ||selectedNode instanceof RecurringPurchaseRootTreeNode )
-							saleOrder = false; // decide if it s purchase order
-						
-						selectedNode = (HeaderTreeNode) selectedNode.getParent();
+					if (selectedNode == null)
+						return Status.OK_STATUS;
+					if (
+							selectedNode.getParent() == null &&                      // is root node 
+							(
+								!(selectedNode instanceof SaleRootTreeNode) &&       // but no normal sale
+								!(selectedNode instanceof PurchaseRootTreeNode)      // nor normal purchase node
+							)
+						) {
+						// can't determinde sale/purchase mode, do nothing
+						return Status.OK_STATUS;
 					}
-					// decide if it s an conventional order or a recurring one
-					recurring = (selectedNode instanceof RecurringSaleRootTreeNode  ||selectedNode instanceof RecurringPurchaseRootTreeNode ); 
+					
+					// define a sale order 
+					boolean saleOrder = false;
+					boolean recurring = false;
+					HeaderTreeNode checkNode = selectedNode;
+					while (checkNode != null) {
+						recurring = recurring || checkNode instanceof RecurringSaleRootTreeNode || checkNode instanceof RecurringPurchaseRootTreeNode;
+						saleOrder = saleOrder || checkNode instanceof RecurringSaleRootTreeNode || checkNode instanceof SaleRootTreeNode;
+						checkNode = checkNode.getParent();
+					}
 					
 					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 

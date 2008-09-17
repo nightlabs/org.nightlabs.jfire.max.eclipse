@@ -91,9 +91,7 @@ public class InvoiceRootTreeNode extends ArticleContainerRootTreeNode
 	}
 
 	@Override
-	@Implement
-	protected Class<? extends ArticleContainerID> getArticleContainerIDClass()
-	{
-		return InvoiceID.class;
+	protected boolean acceptNewArticleContainer(Object newObjectID) {
+		return newObjectID instanceof InvoiceID;
 	}
 }

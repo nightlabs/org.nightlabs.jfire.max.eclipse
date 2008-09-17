@@ -3,15 +3,12 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class RecurringOfferTreeNode extends HeaderTreeNode{
-
-
+public class RecurringOfferTreeNode extends HeaderTreeNode.ArticleContainerNode {
 
 	private RecurringOffer recurringOffer;
 
@@ -29,8 +26,7 @@ public class RecurringOfferTreeNode extends HeaderTreeNode{
 		return null;
 	}
 
-
-
+	
 	@Override
 	public Image getColumnImage(int columnIndex)
 	{
@@ -43,7 +39,6 @@ public class RecurringOfferTreeNode extends HeaderTreeNode{
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -59,12 +54,6 @@ public class RecurringOfferTreeNode extends HeaderTreeNode{
 		return null;
 	}
 
-
-	public RecurringOffer getRecurringOffer() {
-		return recurringOffer;
-	}
-
-
 	/**
 	 * This method returns always <tt>false</tt>.
 	 *
@@ -74,6 +63,12 @@ public class RecurringOfferTreeNode extends HeaderTreeNode{
 	public boolean hasChildren()
 	{
 		return false;
+	}
+
+
+	@Override
+	public RecurringOffer getArticleContainer() {
+		return recurringOffer;
 	}
 
 

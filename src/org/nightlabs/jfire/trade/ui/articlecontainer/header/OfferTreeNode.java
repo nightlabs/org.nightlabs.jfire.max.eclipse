@@ -37,7 +37,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Marco Schulze - marco at nightlabs dot de
  */
-public class OfferTreeNode extends HeaderTreeNode
+public class OfferTreeNode extends HeaderTreeNode.ArticleContainerNode
 {
 	private Offer offer;
 
@@ -95,11 +95,8 @@ public class OfferTreeNode extends HeaderTreeNode
 		return null;
 	}
 
-	/**
-	 * @return Returns the offer.
-	 */
-	public Offer getOffer()
-	{
+	@Override
+	public Offer getArticleContainer() {
 		return offer;
 	}
 }
