@@ -379,7 +379,7 @@ implements ArticleContainerEdit
 		if (articleContainer instanceof Order)
 			return new OrderHeaderComposite(this, (Order) articleContainer);
 		if (articleContainer instanceof Offer)
-			return new OfferHeaderComposite(this, (RecurringOffer) articleContainer);
+			return new OfferHeaderComposite(this, (Offer) articleContainer);
 		if (articleContainer instanceof RecurringOffer)
 			return new RecurringOfferHeaderComposite(this, (RecurringOffer) articleContainer);
 		if (articleContainer instanceof Invoice)
