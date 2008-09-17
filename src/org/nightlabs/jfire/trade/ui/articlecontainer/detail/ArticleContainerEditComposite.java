@@ -112,7 +112,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferFooterCom
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
@@ -405,10 +407,15 @@ implements ArticleContainerEdit
 	 * @return A newly created {@link FooterComposite}.
 	 */
 	protected FooterComposite createFooterComposite(Composite parent) {
+	
 		if (articleContainer instanceof Order)
 			return new OrderFooterComposite(parent, this);
+		if (articleContainer instanceof RecurringOrder)
+			return new RecurringOrderFooterComposite(parent, this);
 		if (articleContainer instanceof Offer)
 			return new OfferFooterComposite(parent, this);
+		if (articleContainer instanceof RecurringOffer)
+			return new RecurringOfferFooterComposite(parent, this);
 		if (articleContainer instanceof Invoice)
 			return new InvoiceFooterComposite(parent, this);
 		if (articleContainer instanceof DeliveryNote)
@@ -428,6 +435,11 @@ implements ArticleContainerEdit
 	 * @return The {@link EditLockTypeID} that should be used to acquire an edit lock.
 	 */
 	protected EditLockTypeID getEditLockTypeID() {
+		
+		if (articleContainer instanceof RecurringOrder)
+			return EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
+		if (articleContainer instanceof RecurringOffer)
+			return EditLockTypeOffer.EDIT_LOCK_TYPE_ID;
 		if (articleContainer instanceof Order)
 			return EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
 		if (articleContainer instanceof Offer)

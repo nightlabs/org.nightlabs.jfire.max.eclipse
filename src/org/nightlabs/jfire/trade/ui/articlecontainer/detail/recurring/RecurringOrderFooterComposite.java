@@ -7,8 +7,9 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite;
 public class RecurringOrderFooterComposite 
 extends FooterComposite{
 
-	public RecurringOrderFooterComposite(ArticleContainerEditComposite articleContainerEditComposite) {
-		super(articleContainerEditComposite, articleContainerEditComposite);
+	public RecurringOrderFooterComposite(Composite parent,
+			ArticleContainerEditComposite articleContainerEditComposite) {
+		super(parent, articleContainerEditComposite);
 		// TODO Auto-generated constructor stub
 	}
 
