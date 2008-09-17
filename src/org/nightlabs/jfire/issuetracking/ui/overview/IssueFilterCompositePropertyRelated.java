@@ -358,18 +358,20 @@ public class IssueFilterCompositePropertyRelated
 						final List<IssueType> issueTypeList = new ArrayList<IssueType>(IssueTypeDAO.sharedInstance().getAllIssueTypes(FETCH_GROUPS_ISSUE_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 						final List<IssuePriority> issuePriorityList = new ArrayList<IssuePriority>();
 						final List<IssueSeverityType> issueSeverityTypeList = new ArrayList<IssueSeverityType>();
+						final List<IssueResolution> issueResolutionList = new ArrayList<IssueResolution>();
 
 						Display.getDefault().syncExec(new Runnable() {
 							public void run() {
 								issueTypeCombo.removeAll();
 								issueTypeCombo.addElement(ISSUE_TYPE_ALL);
-								for (Iterator<IssueType> it = issueTypeList.iterator(); it.hasNext(); ) {
-									IssueType issueType = it.next();
+								for (IssueType issueType : issueTypeList) {
 									issueTypeCombo.addElement(issueType);
 									for (IssuePriority p : issueType.getIssuePriorities())
 										issuePriorityList.add(p);
 									for (IssueSeverityType s : issueType.getIssueSeverityTypes())
 										issueSeverityTypeList.add(s);
+									for (IssueResolution r : issueType.getIssueResolutions())
+										issueResolutionList.add(r);
 								}
 								if (selectedIssueType == null)
 									selectedIssueType = ISSUE_TYPE_ALL;
@@ -379,6 +381,7 @@ public class IssueFilterCompositePropertyRelated
 								/**************************************************/
 								ISSUE_TYPE_ALL.getIssuePriorities().addAll(issuePriorityList);
 								ISSUE_TYPE_ALL.getIssueSeverityTypes().addAll(issueSeverityTypeList);
+								ISSUE_TYPE_ALL.getIssueResolutions().addAll(issueResolutionList);
 								/**************************************************/
 
 								issueSeverityCombo.removeAll();
