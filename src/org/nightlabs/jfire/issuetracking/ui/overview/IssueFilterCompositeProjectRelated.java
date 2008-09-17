@@ -117,7 +117,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
 			if (IssueQuery.FieldName.projectID.equals(changedField.getPropertyName()))
@@ -137,18 +136,17 @@ extends AbstractQueryFilterComposite<IssueQuery>
 					if (! newProject.equals(projectCombo.getSelectedProject()))
 						selectedProject = newProject;
 
-					sectionActive |= true;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.projectID).equals(
 					changedField.getPropertyName()))
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
-				projectCombo.setEnabled(active);
+				setSearchSectionActive(active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 
-		setSearchSectionActive(sectionActive);
+		
 	}
 
 	private static Project PROJECT_ALL = new Project(Organisation.DEV_ORGANISATION_ID, -1);
