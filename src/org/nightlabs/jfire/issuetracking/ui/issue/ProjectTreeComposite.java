@@ -61,9 +61,9 @@ extends AbstractTreeComposite<Project>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-//			return true;
-			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 2, new NullProgressMonitor());
-			return p.getSubProjects().size() > 0;
+			return true;
+//			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 2, new NullProgressMonitor());
+//			return p.getSubProjects().size() > 0;
 		}
 	}
 
@@ -219,8 +219,7 @@ extends AbstractTreeComposite<Project>
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 
 						projectToStore = ProjectDAO.sharedInstance().getProject(
-								projectToStore.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
-						Collection<Project> res = project.getSubProjects();
+								projectToStore.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						projectToStore.addSubProject(project);
 						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						dialog.close();
