@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 
+
+/**
+ * @author Fitas Amine - fitas at nightlabs dot de
+ */
 public class RecurringOfferHeaderComposite
 extends HeaderComposite{
 
@@ -77,7 +81,7 @@ extends HeaderComposite{
 		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
 		if(date != null)
 			nextExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
-		
+
 
 		new Label(executionTaskComp, SWT.NONE).setText("RecurredOffers:");
 		new Label(executionTaskComp, SWT.NONE).setText(String.valueOf(recurringOffer.getRecurredOfferCount()));
@@ -119,8 +123,6 @@ extends HeaderComposite{
 
 
 }
-
-
 
 
 

@@ -17,10 +17,6 @@ extends FooterComposite{
 	}
 
 	
-	
-	
-	
-	
-	
+
 	
 }
