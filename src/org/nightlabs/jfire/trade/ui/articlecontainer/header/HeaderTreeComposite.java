@@ -110,7 +110,6 @@ implements ISelectionProvider
 
 	private CreateOrderAction createOrderAction;
 	private CreateOfferAction createOfferAction;
-	private CreateRecurringOrderAction createRecurringOrderAction;
 
 
 	private HeaderTreeNode selectedNode = null;
@@ -167,7 +166,6 @@ implements ISelectionProvider
 
 		createOrderAction = new CreateOrderAction(this);
 		createOfferAction = new CreateOfferAction(this);
-		createRecurringOrderAction = new CreateRecurringOrderAction(this);
 		// Our content provider fetches the data itself, hence we need the following call
 		// only to trigger the tree initialization
 		headerTreeViewer.setInput(new Object());
@@ -183,17 +181,10 @@ implements ISelectionProvider
 
 				//PurchaseRootTreeNode
 				//SaleRootTreeNode
-				createRecurringOrderAction.setEnabled(false);
 				createOrderAction.setEnabled(true);
 				
 				
 				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
-			
-				if(selectedNode instanceof RecurringOrderRootTreeNode)
-				{
-					createRecurringOrderAction.setEnabled(true);
-					createOrderAction.setEnabled(false);
-				}
 				
 
 				if (!selectionChangedListeners.isEmpty()) {
@@ -397,7 +388,6 @@ implements ISelectionProvider
 		//	manager.add(new Separator());
 		manager.add(createOrderAction);
 		manager.add(createOfferAction);
-		manager.add(createRecurringOrderAction);
 		//		manager.add(new TestAction());
 
 		drillDownAdapter.addNavigationActions(manager);

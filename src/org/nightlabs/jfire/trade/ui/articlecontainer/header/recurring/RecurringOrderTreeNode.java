@@ -44,9 +44,9 @@ public class RecurringOrderTreeNode extends HeaderTreeNode.ArticleContainerNode 
 	};
 	public static final String[] FETCH_GROUPS_OFFER = new String[] {
 		FetchPlan.DEFAULT,
-		Offer.FETCH_GROUP_ORDER
+		RecurringOffer.FETCH_GROUP_ORDER,
+		RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION
 	};
-
 	private Set<OfferID> offerIDsLoaded = new HashSet<OfferID>();
 	
 	

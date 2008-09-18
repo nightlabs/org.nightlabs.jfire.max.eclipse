@@ -135,7 +135,7 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
 			expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
-
+			
 			expiryTimestampUnfinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {

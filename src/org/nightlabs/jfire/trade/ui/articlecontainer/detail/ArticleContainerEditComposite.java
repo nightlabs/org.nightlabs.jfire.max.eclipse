@@ -159,7 +159,7 @@ implements ArticleContainerEdit
 
 	// private List segmentCompositeScrollContainers = new ArrayList();
 	// private List segmentEditComposites = new ArrayList();
-	
+
 	private Map<TabItem, SegmentEdit> segmentEditsByTabItem = new HashMap<TabItem, SegmentEdit>();
 //	// only used if no tabFolder, means only 1 or less segmentTypes are used
 //	private Map<Composite, SegmentEdit> segmentEditByComposite = new HashMap<Composite, SegmentEdit>();
@@ -216,7 +216,7 @@ implements ArticleContainerEdit
 			this.loadArticleContainerID = articleContainerID;
 			assert articleContainerID != null : "loadArticleContainerID != null"; //$NON-NLS-1$
 		}
-		
+
 		@Override
 		protected org.eclipse.core.runtime.IStatus run(ProgressMonitor monitor) throws Exception
 		{
@@ -238,7 +238,7 @@ implements ArticleContainerEdit
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					
+
 					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditComposite.this behaviour must be supported
 					if (hasDifferentSegments()) {
 						segmentCompositeFolder = new TabFolder(ArticleContainerEditComposite.this, SWT.NONE);
@@ -255,12 +255,12 @@ implements ArticleContainerEdit
 					}
 
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					
+
 					footerComposite = createFooterComposite(ArticleContainerEditComposite.this);
 
 					footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 					footerComposite.refresh();
-					
+
 					EditLockTypeID editLockTypeID = getEditLockTypeID();
 
 					// try {
@@ -290,15 +290,15 @@ implements ArticleContainerEdit
 //							ArticleContainerID articleContainerID = getArticleContainerID();
 //							// TODO WORKAROUND JPOX bug begin
 //							if (articleContainerID instanceof OrderID) {
-//								OrderID orderID = (OrderID) articleContainerID;
-//								if (orderID.organisationID == null) {
-//									logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
-//									orderID.organisationID = order.getOrganisationID();
-//								}
-//								if (orderID.orderIDPrefix == null) {
-//									logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
-//									orderID.orderIDPrefix = order.getOrderIDPrefix();
-//								}
+//							OrderID orderID = (OrderID) articleContainerID;
+//							if (orderID.organisationID == null) {
+//							logger.warn("orderID.organisationID == null", new NullPointerException("orderID.organisationID == null")); //$NON-NLS-1$ //$NON-NLS-2$
+//							orderID.organisationID = order.getOrganisationID();
+//							}
+//							if (orderID.orderIDPrefix == null) {
+//							logger.warn("orderID.orderIDPrefix == null", new NullPointerException("orderID.orderIDPrefix == null")); //$NON-NLS-1$ //$NON-NLS-2$
+//							orderID.orderIDPrefix = order.getOrderIDPrefix();
+//							}
 //							}
 //							// TODO WORKAROUND JPOX bug end
 
@@ -325,7 +325,7 @@ implements ArticleContainerEdit
 		}
 	};
 
-	
+
 	private NotificationListener articleContainerChangedListener = new NotificationAdapterJob() {
 		@Override
 		public void notify(NotificationEvent notificationEvent)
@@ -336,7 +336,7 @@ implements ArticleContainerEdit
 			DirtyObjectID notifiedDirtyObjectID = (DirtyObjectID) notificationEvent.getFirstSubject();
 			if (!getArticleContainerID().equals(notifiedDirtyObjectID.getObjectID())) {
 //				if (logger.isDebugEnabled()) {
-//					logger.debug("");
+//				logger.debug("");
 //				}
 				return;
 			}
@@ -375,25 +375,25 @@ implements ArticleContainerEdit
 	 * @return A newly created {@link HeaderComposite}.
 	 */
 	protected HeaderComposite createHeaderComposite(Composite parent) {
-	
-		if (articleContainer instanceof RecurringOrder)
+
+		if (articleContainer.getClass().equals(RecurringOrder.class))
 			return new RecurringOrderHeaderComposite(this, (RecurringOrder) articleContainer);
-		if (articleContainer instanceof Order)
+		if (articleContainer.getClass().equals(Order.class))
 			return new OrderHeaderComposite(this, (Order) articleContainer);
-		if (articleContainer instanceof Offer)
+		if(articleContainer.getClass().equals(Offer.class))
 			return new OfferHeaderComposite(this, (Offer) articleContainer);
-		if (articleContainer instanceof RecurringOffer)
+		if(articleContainer.getClass().equals(RecurringOffer.class))
 			return new RecurringOfferHeaderComposite(this, (RecurringOffer) articleContainer);
 		if (articleContainer instanceof Invoice)
 			return new InvoiceHeaderComposite(this, (Invoice) articleContainer);
 		if (articleContainer instanceof DeliveryNote)
 			return new DeliveryNoteHeaderComposite(this, (DeliveryNote) articleContainer);
-		
+
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
 				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
 	}
 
-	
+
 	/**
 	 * This method is called to create the {@link FooterComposite} of this composite.
 	 * It might be overridden to create custom footers.
@@ -407,7 +407,7 @@ implements ArticleContainerEdit
 	 * @return A newly created {@link FooterComposite}.
 	 */
 	protected FooterComposite createFooterComposite(Composite parent) {
-	
+
 		if (articleContainer instanceof Order)
 			return new OrderFooterComposite(parent, this);
 		if (articleContainer instanceof RecurringOrder)
@@ -420,11 +420,11 @@ implements ArticleContainerEdit
 			return new InvoiceFooterComposite(parent, this);
 		if (articleContainer instanceof DeliveryNote)
 			return new DeliveryNoteFooterComposite(parent, this);
-		
+
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
 				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * This method is called to determine the {@link EditLockTypeID} 
 	 * that should be used to acquire an edit lock for the edited ArticleContainer.
@@ -435,7 +435,7 @@ implements ArticleContainerEdit
 	 * @return The {@link EditLockTypeID} that should be used to acquire an edit lock.
 	 */
 	protected EditLockTypeID getEditLockTypeID() {
-		
+
 		if (articleContainer instanceof RecurringOrder)
 			return EditLockTypeOrder.EDIT_LOCK_TYPE_ID;
 		if (articleContainer instanceof RecurringOffer)
@@ -448,16 +448,16 @@ implements ArticleContainerEdit
 			return EditLockTypeInvoice.EDIT_LOCK_TYPE_ID;
 		if (articleContainer instanceof DeliveryNote)
 			return EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
-		
+
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
 				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
 	}
-	
+
 	protected boolean hasDifferentSegments()
 	{
 		return articleSegmentGroupSet.getArticleSegmentGroups().size() > 1;
 	}
-	
+
 	protected void updateHeaderAndFooter() {
 		headerComposite.refresh();
 		footerComposite.refresh();
@@ -494,7 +494,7 @@ implements ArticleContainerEdit
 	protected void removeSegmentEditComposites()
 	{
 		segmentEditCompositesCreated = false;
-		
+
 		if (hasDifferentSegments()) {
 			TabItem[] tabItems = ((TabFolder)segmentCompositeFolder).getItems();
 			for (int i = 0; i < tabItems.length; ++i) {
@@ -546,7 +546,7 @@ implements ArticleContainerEdit
 				GridData.FILL_BOTH));
 		// segmentCompositeScrollContainer.setAlwaysShowScrollBars(true);
 		// TODO do we really want to ALWAYS display scroll bars?
-		
+
 		if (tabItem != null)
 			tabItem.setControl(segmentCompositeScrollContainer);
 
@@ -558,7 +558,7 @@ implements ArticleContainerEdit
 		// segmentCompositeScrollContainer.setContent(segmentCompositeContainer);
 
 		Composite composite = segmentEdit
-				.createComposite(segmentCompositeScrollContainer); // segmentCompositeContainer);
+		.createComposite(segmentCompositeScrollContainer); // segmentCompositeContainer);
 		segmentCompositeScrollContainer.setContent(composite);
 		// segmentEditComposites.add(composite);
 
@@ -570,7 +570,7 @@ implements ArticleContainerEdit
 			singleSegmentSegmentEdit = segmentEdit;
 //			segmentEditByComposite.put(segmentCompositeFolder, segmentEdit);
 		}
-		
+
 		segmentPK2segmentEditMap.put(segment.getPrimaryKey(), segmentEdit);
 		layout(true, true);
 	}
@@ -588,7 +588,7 @@ implements ArticleContainerEdit
 			articleCreateListenerArray = new ArticleCreateListener[listeners.length + 1];
 			System.arraycopy(listeners, 0, articleCreateListenerArray, 0, listeners.length);
 //			for (int i=0; i<earlyArticleCreateListeners.size(); i++) {
-//				articleCreateListenerArray[i] = earlyArticleCreateListeners.get(i);
+//			articleCreateListenerArray[i] = earlyArticleCreateListeners.get(i);
 //			}
 			articleCreateListenerArray[articleCreateListenerArray.length-1] = articleCreateListener;
 		}
@@ -601,7 +601,7 @@ implements ArticleContainerEdit
 			articleChangeListenerArray = new ArticleChangeListener[listeners.length + 1];
 			System.arraycopy(listeners, 0, articleChangeListenerArray, 0, listeners.length);
 //			for (int i=0; i<earlyArticleChangeListeners.size(); i++) {
-//				articleChangeListenerArray[i] = earlyArticleChangeListeners.get(i);
+//			articleChangeListenerArray[i] = earlyArticleChangeListeners.get(i);
 //			}
 			articleChangeListenerArray[articleChangeListenerArray.length-1] = articleChangeListener;
 		}
@@ -613,7 +613,7 @@ implements ArticleContainerEdit
 				articleCreateListenerArray,
 				articleChangeListenerArray);
 	}
-	
+
 	protected void createSegmentEditComposites()
 	throws EPProcessorException
 	{
@@ -737,13 +737,13 @@ implements ArticleContainerEdit
 			activeSegmentEdit = segmentEditsByTabItem.get(item);
 			if (activeSegmentEdit == null && item != null && item.getControl() != null)
 				throw new IllegalStateException(
-						"TabItem is not registered in Map segmentEditsByTabItem!!!");			 //$NON-NLS-1$
+				"TabItem is not registered in Map segmentEditsByTabItem!!!");			 //$NON-NLS-1$
 		}
 		else {
 //			activeSegmentEdit = (SegmentEdit) segmentEditByComposite.get(segmentCompositeFolder);
 			activeSegmentEdit = singleSegmentSegmentEdit;
 		}
-		
+
 		ActiveSegmentEditSelectionEvent event = null;
 		Object[] listeners = activeSegmentEditSelectionListeners.getListeners();
 		for (int i = 0; i < listeners.length; ++i) {
@@ -780,8 +780,8 @@ implements ArticleContainerEdit
 			calculateScrollContentSize(segmentEdit);
 //			Composite segmentEditComposite = segmentEdit.getComposite();
 //			ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite) segmentEditComposite
-//					.getParent();
-//
+//			.getParent();
+
 //			// ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite)
 //			// it.next();
 //			// Control[] children = segmentCompositeScrollContainer.getChildren();
@@ -790,14 +790,14 @@ implements ArticleContainerEdit
 //			// + children.length + " child controls instead of 1!");
 //			//
 //			// Composite segmentEditComposite = (Composite) children[0];
-//
+
 //			Rectangle bounds = segmentEditComposite.getBounds();
 //			bounds.width = segmentCompositeScrollContainer.getClientArea().width
-//					- segmentCompositeScrollContainer.getVerticalBar().getSize().x;
+//			- segmentCompositeScrollContainer.getVerticalBar().getSize().x;
 //			// segmentCompositeContainer.setBounds(bounds);
-//
+
 //			segmentCompositeScrollContainer.setMinSize(segmentEditComposite
-//					.computeSize(bounds.width, SWT.DEFAULT));
+//			.computeSize(bounds.width, SWT.DEFAULT));
 //			segmentEditComposite.layout();
 		}
 
@@ -809,7 +809,7 @@ implements ArticleContainerEdit
 	{
 		Composite segmentEditComposite = segmentEdit.getComposite();
 		ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite) segmentEditComposite
-				.getParent();
+		.getParent();
 
 		// ScrolledComposite segmentCompositeScrollContainer = (ScrolledComposite)
 		// it.next();
@@ -822,7 +822,7 @@ implements ArticleContainerEdit
 
 		Rectangle bounds = segmentEditComposite.getBounds();
 		bounds.width = segmentCompositeScrollContainer.getClientArea().width
-				- segmentCompositeScrollContainer.getVerticalBar().getSize().x;
+		- segmentCompositeScrollContainer.getVerticalBar().getSize().x;
 		// segmentCompositeContainer.setBounds(bounds);
 
 		segmentCompositeScrollContainer.setMinSize(segmentEditComposite
@@ -874,36 +874,36 @@ implements ArticleContainerEdit
 	};
 
 	public static final String[] FETCH_GROUPS_ORDER_WITH_ARTICLES = {
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
-			Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
-			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
+		Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
+		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
 
 	public static final String[] FETCH_GROUPS_OFFER_WITH_ARTICLES = {
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
-			Offer.FETCH_GROUP_ARTICLES,
-			OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
-			StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
-			Segment.FETCH_GROUP_THIS_SEGMENT,
-			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
+		Offer.FETCH_GROUP_ARTICLES,
+		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
+		Segment.FETCH_GROUP_THIS_SEGMENT,
+		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
 
 	public static final String[] FETCH_GROUPS_INVOICE_WITH_ARTICLES = {
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
-			Invoice.FETCH_GROUP_THIS_INVOICE,
-			InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
-			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
-			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
+		Invoice.FETCH_GROUP_THIS_INVOICE,
+		InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
+		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
 
 	public static final String[] FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES = {
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
-			DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
-			DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL,
-			StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
-			SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-			FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
-			FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
+		DeliveryNote.FETCH_GROUP_THIS_DELIVERY_NOTE,
+		DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
+		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
+		FetchPlan.DEFAULT };
 
 	/**
 	 * Initialise this instance of <code>ArticleContainerEditComposite</code> or reload the {@link ArticleContainer} referenced
@@ -917,7 +917,7 @@ implements ArticleContainerEdit
 		boolean reloadArticleContainerWithoutArticles = this.articleContainerID != null;
 
 		if (this.articleContainerID == null && _articleContainerID == null)
-				throw new IllegalStateException("articleContainerID not yet initialized and no articleContainerID parameter given!"); //$NON-NLS-1$
+			throw new IllegalStateException("articleContainerID not yet initialized and no articleContainerID parameter given!"); //$NON-NLS-1$
 
 		if (_articleContainerID == null)
 			_articleContainerID = articleContainerID;
@@ -951,7 +951,7 @@ implements ArticleContainerEdit
 				if (reloadArticleContainerWithoutArticles)
 					articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 				else
-				articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+					articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			} else
 				throw new IllegalArgumentException("articleContainerID type \"" + articleContainerID.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -962,7 +962,7 @@ implements ArticleContainerEdit
 				createArticleSegmentGroups();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-//		} finally {
+//			} finally {
 //			monitor.done();
 		}
 	}
@@ -1012,7 +1012,7 @@ implements ArticleContainerEdit
 			earlyArticleChangeListeners.add(articleChangeListener);;
 		}
 	}
-	
+
 	@Override
 	public void removeArticleChangeListener(ArticleChangeListener articleChangeListener) {
 		if (articleSegmentGroupSet != null) {
@@ -1021,7 +1021,7 @@ implements ArticleContainerEdit
 			logger.warn("ArticleChangeListener not removed because articleSegmentGroupSet == null!"); //$NON-NLS-1$
 		}
 	}
-	
+
 //	private List<ArticleCreateListener> earlyArticleCreateListeners = new ArrayList<ArticleCreateListener>();
 	private ListenerList earlyArticleCreateListeners = new ListenerList();
 	@Override
@@ -1032,7 +1032,7 @@ implements ArticleContainerEdit
 			earlyArticleCreateListeners.add(articleCreateListener);
 		}
 	}
-	
+
 	@Override
 	public void removeArticleCreateListener(ArticleCreateListener articleCreateListener) {
 		if (articleSegmentGroupSet != null) {
