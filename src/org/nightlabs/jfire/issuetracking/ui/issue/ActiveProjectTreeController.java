@@ -54,7 +54,7 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 	protected Collection<Project> retrieveJDOObjects(Set<ProjectID> objectIDs, IProgressMonitor monitor)
 	{
 		Collection<Project> res = ProjectDAO.sharedInstance().getProjects(
-				objectIDs, FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+				objectIDs, new String[]{Project.FETCH_GROUP_PARENT_PROJECT, Project.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 		return res;
 	}
 

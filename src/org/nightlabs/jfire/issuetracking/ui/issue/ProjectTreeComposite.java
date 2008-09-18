@@ -219,7 +219,7 @@ extends AbstractTreeComposite<Project>
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 
 						projectToStore = ProjectDAO.sharedInstance().getProject(
-								projectToStore.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+								projectToStore.getObjectId(), new String[]{Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						projectToStore.addSubProject(project);
 						ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 						dialog.close();
