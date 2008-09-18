@@ -6,6 +6,7 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -19,8 +20,10 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
@@ -111,7 +114,11 @@ extends ToolBarSectionPart
 
 		@Override
 		public void run() {
-//			ProjectDAO.sharedInstance().deleteProject(projectTreeComposite.getFirstSelectedElement().getObjectId(), new NullProgressMonitor());
+			boolean result = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Are you sure to delete project "+ projectTreeComposite.getFirstSelectedElement().getName().getText() + "?");
+			if (result == true) {
+				ProjectDAO.sharedInstance().deleteProject(projectTreeComposite.getFirstSelectedElement().getObjectId(), new NullProgressMonitor());
+			}
+			
 		}		
 	}
 }
