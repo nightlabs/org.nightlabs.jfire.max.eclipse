@@ -41,7 +41,7 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 	{
 		if (parentID != null) {
 			Project project = ProjectDAO.sharedInstance().getProject(
-					parentID, FETCH_GROUPS_PROJECT, FetchPlan.DETACH_UNLOAD_FIELDS, new ProgressMonitorWrapper(monitor));
+					parentID, FETCH_GROUPS_PROJECT, 2, new ProgressMonitorWrapper(monitor));
 			Collection<Project> res = project.getSubProjects();
 			return res;
 		}

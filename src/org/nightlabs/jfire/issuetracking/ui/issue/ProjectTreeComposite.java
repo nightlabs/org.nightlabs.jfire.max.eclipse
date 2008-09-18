@@ -61,9 +61,9 @@ extends AbstractTreeComposite<Project>
 	{
 		@Override
 		public boolean hasJDOObjectChildren(Project project) {
-			return true;
-//			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 1, new NullProgressMonitor());
-//			return p.getSubProjects().size() > 0;
+//			return true;
+			Project p = ProjectDAO.sharedInstance().getProject(project.getObjectId(), FETCH_GROUPS, 2, new NullProgressMonitor());
+			return p.getSubProjects().size() > 0;
 		}
 	}
 
