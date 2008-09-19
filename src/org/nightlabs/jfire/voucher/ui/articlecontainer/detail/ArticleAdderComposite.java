@@ -46,7 +46,7 @@ public class ArticleAdderComposite
 	{
 		super(parent, SWT.NONE);
 		this.articleAdder = articleAdder;
-		
+
 		productTypeNameLabel = new Label(this, SWT.NONE);
 		productTypeNameLabel.setLayoutData(new GridData());
 		productTypeNameLabel.setText(
@@ -66,7 +66,7 @@ public class ArticleAdderComposite
 		};
 
 		this.getGridLayout().numColumns = this.getChildren().length;
-//		((GridData)productTypeNameLabel.getLayoutData()).horizontalSpan = this.getGridLayout().numColumns;
+		((GridData)productTypeNameLabel.getLayoutData()).horizontalSpan = this.getGridLayout().numColumns;
 	}
 
 	@SuppressWarnings("unchecked")
