@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue;
+package org.nightlabs.jfire.issuetracking.ui.project;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +41,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**

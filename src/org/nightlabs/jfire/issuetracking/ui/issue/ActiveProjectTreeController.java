@@ -16,6 +16,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.ProjectParentResolver;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 
 /**
