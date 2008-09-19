@@ -25,6 +25,7 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 		public IFormPage createPage(FormEditor formEditor) {
 			return new ProjectEditorPage(formEditor);
 		}
+		
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
 			return new ProjectEditorPageController(editor);
 		}
@@ -48,10 +49,11 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 	protected void addSections(Composite parent) {
 		ProjectEditorPageController controller = (ProjectEditorPageController)getPageController();
 		
-//		projectSection = new ProjectSection(this, parent, controller);
-//		getManagedForm().addPart(projectSection);
+		projectSection = new ProjectSection(this, parent, controller);
+		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
+			projectSection.setProject(controller.getProject());
 		}
 	}
 

@@ -35,8 +35,8 @@ import org.nightlabs.jfire.issue.project.id.ProjectID;
 public class ProjectEditorInput extends JDOObjectEditorInput<ProjectID>
 {
 	/**
-	 * Constructor for an existing issue type.
-	 * @param issueTypeID The issue type
+	 * Constructor for an existing project.
+	 * @param projectID The project
 	 */
 	public ProjectEditorInput(ProjectID projectID)
 	{

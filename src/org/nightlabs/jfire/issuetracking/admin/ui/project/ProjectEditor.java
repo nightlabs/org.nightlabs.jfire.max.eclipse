@@ -20,6 +20,7 @@ public class ProjectEditor extends EntityEditor
 implements ICloseOnLogoutEditorPart
 {
 	public static final String EDITOR_ID = ProjectEditor.class.getName();
+	
 	private ProjectEditorInput projectEditorInput;
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException
@@ -36,6 +37,7 @@ implements ICloseOnLogoutEditorPart
 						projectEditorInput.getJDOObjectID(),
 						new String[] { FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_DESCRIPTION},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+			
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()
@@ -44,10 +46,16 @@ implements ICloseOnLogoutEditorPart
 						setTitleToolTip(project.getDescription().getText());
 					}
 				});
+				
 				return Status.OK_STATUS;
 			}
 		};
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
 	}
 }

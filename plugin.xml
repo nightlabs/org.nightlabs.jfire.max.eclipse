@@ -8,7 +8,7 @@
         	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             default="false"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
-            icon=""
+            icon="icons/overview/issueproperty/IssueType-icon.16x16.png"
             id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             name="Issue Type">
       </editor>
@@ -16,7 +16,7 @@
         	class="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor"
             default="false"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
-            icon=""
+            icon="icons/project/ProjectTreeComposite-project.16x16.png"
             id="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor"
             name="Project">
       </editor>

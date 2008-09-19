@@ -1,29 +1,18 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
-import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class ProjectEditorPageController extends EntityEditorPageController {
-
-	/**
-	 * The fetch groups of issue data.
-	 */
-	public static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		Project.FETCH_GROUP_NAME,
-		Project.FETCH_GROUP_DESCRIPTION,
-		Project.FETCH_GROUP_PARENT_PROJECT,
-		Project.FETCH_GROUP_SUBPROJECTS};
-	
-	
+public class ProjectEditorPageController 
+extends ActiveEntityEditorPageController<Project>
+{
 	private ProjectID projectID;
 	private Project project;
 	
@@ -32,35 +21,44 @@ public class ProjectEditorPageController extends EntityEditorPageController {
 		super(editor);
 	}
 	
-	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("Loading Project....", 100);
-		
-		ProjectEditorInput input = (ProjectEditorInput)getEntityEditor().getEditorInput();
-		this.projectID = input.getJDOObjectID();
-
-		project = 
-			ProjectDAO.sharedInstance().getProject(projectID, 
-					FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					new NullProgressMonitor());
-		
-		monitor.done();
-		setLoaded(true); // must be done before fireModifyEvent!
-		fireModifyEvent(null, project);
-	}
-
-	public boolean doSave(ProgressMonitor monitor) {
-		ProjectDAO.sharedInstance().storeProject(project, false, FETCH_GROUPS,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					new NullProgressMonitor());
-		return true;
-	}
-	
-	public ProjectID getProjectID() {
-		return projectID;
+	protected ProjectID getProjectID() {
+		ProjectEditorInput input = (ProjectEditorInput) getEntityEditor().getEditorInput();
+		return input.getJDOObjectID();
 	}
 	
 	public Project getProject() {
+		return getControllerObject();
+	}
+
+	@Override
+	protected String[] getEntityFetchGroups() {
+		return new String[] {
+				FetchPlan.DEFAULT,
+				Project.FETCH_GROUP_NAME,
+				Project.FETCH_GROUP_DESCRIPTION};
+//				Project.FETCH_GROUP_PARENT_PROJECT,
+//				Project.FETCH_GROUP_SUBPROJECTS
+	}
+
+	@Override
+	protected Project retrieveEntity(ProgressMonitor monitor) {
+		Project project = ProjectDAO.sharedInstance().getProject(getProjectID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 		return project;
+		
+	}
+
+	@Override
+	protected Project storeEntity(Project controllerObject,
+			ProgressMonitor monitor) {
+		monitor.beginTask("Saving project", 100);
+		try {
+			ProjectID projectID = (ProjectID) JDOHelper.getObjectId(controllerObject);
+			if (projectID == null)
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+
+			return project;
+		} finally {
+			monitor.done();
+		}
 	}
 }

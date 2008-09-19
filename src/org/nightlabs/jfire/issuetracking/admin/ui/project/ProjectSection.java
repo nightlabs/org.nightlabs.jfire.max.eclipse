@@ -1,34 +1,19 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
-import java.util.Locale;
-
-import javax.jdo.FetchPlan;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.tree.AbstractTreeComposite;
-import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
-import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.base.ui.language.I18nTextEditor;
+import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issue.project.ProjectDAO;
-import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.ProjectTreeComposite;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -37,88 +22,42 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ProjectSection 
 extends ToolBarSectionPart
 {
-	private org.nightlabs.jfire.issuetracking.ui.issue.ProjectTreeComposite projectTreeComposite;
-
-	private CreateProjectAction createProjectAction;
-	private DeleteProjectAction deleteProjectAction;
+	private Label nameLabel;
+	private I18nTextEditor nameText;
+	private Label descriptionLabel;
+	private I18nTextEditor descriptionText;
 	
 	public ProjectSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Projects");
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		nameLabel = new Label(client, SWT.WRAP);
+		nameLabel.setLayoutData(new GridData());
+		nameLabel.setText("Name:");
 		
-		projectTreeComposite = new ProjectTreeComposite(client);
-		projectTreeComposite.getGridData().grabExcessHorizontalSpace = true;
-		projectTreeComposite.getGridData().heightHint = 200;
+		nameText = new I18nTextEditor(client);
+		
+		descriptionLabel = new Label(client, SWT.WRAP);
+		descriptionLabel.setLayoutData(new GridData());
+		descriptionLabel.setText("Description:");
+		
+		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
 		
 		getSection().setClient(client);
-		
-		createProjectAction = new CreateProjectAction();
-		deleteProjectAction = new DeleteProjectAction();
-		
-		getToolBarManager().add(createProjectAction);
-		getToolBarManager().add(deleteProjectAction);
-		
-		updateToolBarManager();
 	}
 	
-	public class CreateProjectAction extends Action {
-		private InputDialog dialog;
-		public CreateProjectAction() {
-			setId(CreateProjectAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingAdminPlugin.getDefault(), 
-					ProjectSection.class, 
-			"Create"));
-			setToolTipText("Create Root Project");
-			setText("Create Root Project");
-		}
-
-		@Override
-		public void run() {
-			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Root Project", "Enter project's name", "Name", null) {
-				@Override
-				protected void okPressed() {
-					try {
-						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
-						ProjectDAO.sharedInstance().storeProject(project, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-						dialog.close();
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				};
-				
-				@Override
-				protected Control createDialogArea(Composite parent) {
-					Control dialogArea = super.createDialogArea(parent);
-					return dialogArea;
-				}
-			};
-			
-			if (dialog.open() != Window.OK)
-				return;
-		}		
-	}
-	
-	public class DeleteProjectAction extends Action {		
-		public DeleteProjectAction() {
-			setId(DeleteProjectAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingAdminPlugin.getDefault(), 
-					ProjectSection.class, 
-			"Delete"));
-			setToolTipText("Delete Project(s)");
-			setText("Delete");
-		}
-
-		@Override
-		public void run() {
-			boolean result = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Are you sure to delete project "+ projectTreeComposite.getFirstSelectedElement().getName().getText() + "?");
-			if (result == true) {
-				ProjectDAO.sharedInstance().deleteProject(projectTreeComposite.getFirstSelectedElement().getObjectId(), new NullProgressMonitor());
+	private Project project;
+	public void setProject(final Project project) {
+		this.project = project;
+		
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				nameText.setI18nText(project.getName(), EditMode.DIRECT);
+				descriptionText.setI18nText(project.getDescription(), EditMode.DIRECT);
 			}
-			
-		}		
+		});
+		
 	}
 }
