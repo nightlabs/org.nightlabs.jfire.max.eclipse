@@ -57,5 +57,9 @@
             categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty"
             class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEntryFactory"
             index="0" name="Issue Types"/>
+        <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.admin.ui.overview.project"
+            class="org.nightlabs.jfire.issuetracking.admin.ui.overview.ProjectCategoryFactory"
+            index="20" name="Project" scope="IssueShelf"/>
     </extension>
 </plugin>
