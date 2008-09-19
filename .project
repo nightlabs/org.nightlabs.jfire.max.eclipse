@@ -3,6 +3,7 @@
 	<name>org.nightlabs.jfire.issuetracking.admin.ui</name>
 	<comment></comment>
 	<projects>
+		<project>org.nightlabs.jfire.issuetracking.ui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jfire.issue.IssuePriority;
 
 /**
  * @author Chairat Kongarayawetchakun 
