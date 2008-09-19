@@ -66,10 +66,13 @@ extends XComposite
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		parent.setBackground(toolkit.getColors().getBackground());
 		Form form = toolkit.createForm(parent);
+		form.setText("Details");
+		toolkit.decorateFormHeading(form);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		form.setLayout(new GridLayout());
 		Composite comp = form.getBody();
 		comp.setLayout(new GridLayout());
+
 		productTypeName = new ReadOnlyLabeledText(comp, Messages.getString("org.nightlabs.jfire.trade.ui.detail.GenericProductTypeDetailViewComposite.productTypeName.caption")); //$NON-NLS-1$
 		productTypeName.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
