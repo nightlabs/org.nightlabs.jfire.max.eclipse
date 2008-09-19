@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
@@ -13,19 +13,20 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.issue.IssuePriority;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun
  *
  */
-public class IssuePriorityTable 
+public class IssuePriorityTable
 extends AbstractTableComposite<IssuePriority>
 {
 	public IssuePriorityTable(Composite parent, int style)
 	{
 		super(parent, style);
 	}
-	
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tc;
@@ -34,9 +35,9 @@ extends AbstractTableComposite<IssuePriority>
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText("Name");
 		layout.addColumnData(new ColumnWeightData(30));
-		
+
 		table.setLayout(layout);
-		
+
 	}
 
 	@Override
@@ -44,15 +45,15 @@ extends AbstractTableComposite<IssuePriority>
 		tableViewer.setContentProvider(new TableContentProvider());
 		tableViewer.setLabelProvider(new IssueTypePriorityLabelProvider());
 	}
-	
+
 	class IssueTypePriorityLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof IssuePriority) {
 				IssuePriority issuePriority = (IssuePriority) element;
-				switch (columnIndex) 
+				switch (columnIndex)
 				{
 				case(0):
 					return issuePriority.getIssuePriorityText().getText();
@@ -61,7 +62,7 @@ extends AbstractTableComposite<IssuePriority>
 				}
 			}
 			return null;
-		}		
+		}
 	}
-	
+
 }
