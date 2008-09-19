@@ -17,7 +17,7 @@ import org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTy
 import org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorInput;
 import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor;
 import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditorInput;
-import org.nightlabs.jfire.issuetracking.ui.issue.ProjectTreeComposite;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeComposite;
 
 /**
  * @author Chairat Kongarayawetchakun chairat[at] NightLabs [dot] de
