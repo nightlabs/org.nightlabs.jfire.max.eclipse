@@ -48,8 +48,8 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 	protected void addSections(Composite parent) {
 		ProjectEditorPageController controller = (ProjectEditorPageController)getPageController();
 		
-		projectSection = new ProjectSection(this, parent, controller);
-		getManagedForm().addPart(projectSection);
+//		projectSection = new ProjectSection(this, parent, controller);
+//		getManagedForm().addPart(projectSection);
 		
 		if (controller.isLoaded()) {
 		}

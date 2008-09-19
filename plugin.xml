@@ -8,9 +8,17 @@
         	class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             default="false"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
-            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            icon=""
             id="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
             name="Issue Type">
+      </editor>
+      <editor
+        	class="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor"
+            default="false"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            icon=""
+            id="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor"
+            name="Project">
       </editor>
    </extension>
    
@@ -19,14 +27,10 @@
 			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
 			indexHint="10" />
-		<!--pageFactory
-			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
-			indexHint="10" /-->
-		<!--pageFactory 
+		<pageFactory 
 			class="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditorPage$Factory"
-			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
-			indexHint="20" /-->
+			editorID="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor"
+			indexHint="20" />
   	</extension>  
   
   <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">
