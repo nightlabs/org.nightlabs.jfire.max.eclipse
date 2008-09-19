@@ -24,8 +24,8 @@ import org.nightlabs.notification.NotificationListener;
  * This is done via the Extension-Point org.nightlabs.jfire.trade.ui.productTypeDetailView.
  * The View listenes of selections coming from the {@link SelectionManager} with the
  * zone {@link TradePlugin#ZONE_SALE} and the class {@link ProductType}
- * 
- * 
+ *
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
@@ -45,7 +45,7 @@ extends LSDViewPart
 		super.init(site, memento);
 		this.initMemento = memento;
 	}
-	
+
 	@Implement
 	public void createPartContents(Composite parent)
 	{
@@ -56,14 +56,12 @@ extends LSDViewPart
 
 		if (initMemento != null)
 			productTypeDetailComposite.init(initMemento);
-		
+
 		productTypeDetailComposite.addDisposeListener(new DisposeListener() {
-			
 			public void widgetDisposed(DisposeEvent e) {
 				SelectionManager.sharedInstance().removeNotificationListener(TradePlugin.ZONE_SALE,
 						ProductType.class, productTypeSelectionListener);
 			}
-			
 		});
 	}
 
@@ -84,13 +82,12 @@ extends LSDViewPart
 		}
 	};
 
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 		super.saveState(memento);
 		if (productTypeDetailComposite != null)
 			productTypeDetailComposite.saveState(memento);
 	}
-	
-	
+
 }

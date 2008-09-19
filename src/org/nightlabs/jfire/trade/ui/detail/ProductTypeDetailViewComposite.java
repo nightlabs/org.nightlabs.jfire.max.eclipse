@@ -30,12 +30,10 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	public ProductTypeDetailViewComposite(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new StackLayout());
-
 	}
 
 	protected void createComposite(XComposite parent) {
 		parent.setLayout(new StackLayout());
-
 	}
 
 	protected StackLayout getStackLayout() {

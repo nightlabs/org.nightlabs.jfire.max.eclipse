@@ -9,13 +9,15 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 /**
  * The Generic implementation of {@link IProductTypeDetailView}
  * which displays only those information which all {@link ProductType}s have
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
 public class GenericProductTypeDetailView
 implements IProductTypeDetailView
 {
+	private GenericProductTypeDetailViewComposite genericProductTypeDetailViewComposite = null;
+	private ProductTypeID productTypeID;
 
 	public Composite createComposite(Composite parent)
 	{
@@ -23,9 +25,6 @@ implements IProductTypeDetailView
 		return genericProductTypeDetailViewComposite;
 	}
 
-	private GenericProductTypeDetailViewComposite genericProductTypeDetailViewComposite = null;
-	
-	private ProductTypeID productTypeID;
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;
 		if (genericProductTypeDetailViewComposite != null)
@@ -34,7 +33,7 @@ implements IProductTypeDetailView
 	@Override
 	public void init(IMemento memento) {
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 	}
