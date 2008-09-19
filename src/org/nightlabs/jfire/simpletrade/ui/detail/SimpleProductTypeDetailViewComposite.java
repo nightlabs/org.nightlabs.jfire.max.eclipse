@@ -23,10 +23,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.ReadOnlyLabeledText;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -48,31 +51,29 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This is the Composite which is used by the {@link SimpleProductTypeDetailView}
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
 public class SimpleProductTypeDetailViewComposite
 extends XComposite
 {
-
 	private static final String ATTR_NAME_WEIGHT_2 = "weight_2";
 	private static final String ATTR_NAME_WEIGHT_1 = "weight_1";
 	private static final String ATTR_NAME_SASH_ORIENTATION = "sashOrientation";
-	
+
 	private static final int defaultImageHeight = 200;
 	private static final int defaultImageWidth = 200;
 
 	private Logger logger = Logger.getLogger(SimpleProductTypeDetailViewComposite.class);
-	
-	private XComposite textWrapper;
+
+	private Composite textWrapper;
 	private ReadOnlyLabeledText productTypeName;
 	private ReadOnlyLabeledText productTypeDescription;
 	private XComposite imageWrapper;
 	private Label imageLabel;
 	private ImageData currImageData;
-	
-	
+
 	public SimpleProductTypeDetailViewComposite(Composite parent, int style, LayoutMode layoutMode, LayoutDataMode layoutDataMode) {
 		super(parent, style, layoutMode, layoutDataMode);
 		createComposite(this);
@@ -82,7 +83,7 @@ extends XComposite
 		super(parent, style);
 		createComposite(this);
 	}
-	
+
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
 		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS};
@@ -117,7 +118,7 @@ extends XComposite
 					public void run() {
 						if (thisJob != setProductTypeIDJob)
 							return;
-						
+
 						if (isDisposed())
 							return;
 
@@ -171,11 +172,23 @@ extends XComposite
 	{
 		parent.getGridLayout().numColumns = 2;
 		parent.getGridLayout().makeColumnsEqualWidth = false;
-		
-		sashForm = new SashForm(parent, SWT.HORIZONTAL);
+
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		parent.setBackground(toolkit.getColors().getBackground());
+		Form form = toolkit.createForm(parent);
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setLayout(new GridLayout());
+		Composite comp = form.getBody();
+		comp.setLayout(new GridLayout());
+
+//		sashForm = new SashForm(parent, SWT.HORIZONTAL);
+		sashForm = new SashForm(comp, SWT.HORIZONTAL);
 		sashForm.setLayout(new FillLayout());
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
-		textWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		textWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		textWrapper = toolkit.createComposite(sashForm);
+		textWrapper.setLayout(new GridLayout());
+		textWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productTypeName = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.productTypeName.caption"), SWT.BORDER); // | SWT.READ_ONLY); //$NON-NLS-1$
 		productTypeDescription = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.productTypeDescription.caption"), SWT.BORDER); // | SWT.MULTI | SWT.READ_ONLY); //$NON-NLS-1$
 		productTypeDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -192,6 +205,7 @@ extends XComposite
 				}
 			}
 		};
+		imageWrapper.adaptToToolkit();
 		imageWrapper.getGridData().grabExcessHorizontalSpace = false;
 		imageWrapper.getGridData().heightHint = defaultImageHeight;
 		imageWrapper.getGridData().widthHint = defaultImageWidth;
@@ -229,7 +243,7 @@ extends XComposite
 
 	private Runnable sash_setWeights_runnable = new Runnable() {
 		public void run() {
-			
+
 			if (restoredOrientation != null && restoredWeights != null) {
 				sashForm.setOrientation(restoredOrientation);
 				sashForm.setWeights(restoredWeights);
@@ -237,12 +251,12 @@ extends XComposite
 				restoredWeights = null;
 				return;
 			}
-			
+
 			++sash_setWeights_counter;
 			int leftWeight = (100 * (getSize().x - defaultImageWidth) / getSize().x); // first multiply, then divide!!! otherwise the integer-divisions are most of the time 0
 			int rightWeight = (100 * defaultImageWidth / getSize().x);
-			
-			
+
+
 			if (leftWeight > 0 && rightWeight > 0) {
 				int[] weights = new int[] {leftWeight, rightWeight};
 				logger.info("Setting weights to " + weights[0] + ", " + weights[1]);
@@ -258,7 +272,7 @@ extends XComposite
 	};
 
 	private boolean layoutingImageWrapper = false;
-	
+
 	private void displayImage() {
 		if (imageLabel.getImage() != null) {
 			imageLabel.getImage().dispose();
@@ -269,22 +283,22 @@ extends XComposite
 				imageWrapper.layout(true, true);
 			return;
 		}
-		
+
 		int width = currImageData.width;
 		int height = currImageData.height;
 		double factor = 1.0;
 		int imgMaxWidth = defaultImageWidth - 5;
-		int maxThumbnailHeight = imageWrapper.getSize().y;		
+		int maxThumbnailHeight = imageWrapper.getSize().y;
 		int maxThumbnailWidth = Math.min(Math.max(imageWrapper.getSize().x / 2, imgMaxWidth), imgMaxWidth);
 		if (maxThumbnailWidth > imageWrapper.getSize().x)
 			maxThumbnailWidth = imageWrapper.getSize().x;
-		
+
 		if (width > maxThumbnailWidth || height > maxThumbnailHeight)
 			factor = Math.min(
 					height > maxThumbnailHeight ? 1.0*maxThumbnailHeight/height : 1.0,
 					width > maxThumbnailWidth ? 1.0*maxThumbnailWidth/width : 1.0
 				);
-			
+
 		ImageData scaledData = currImageData.scaledTo((int) (factor*width), (int) (factor*height));
 		Image image = new Image(Display.getDefault(), scaledData);
 		imageLabel.setImage(image);
@@ -293,12 +307,12 @@ extends XComposite
 			imageLabel.getParent().getParent().layout(true, true);
 		}
 	}
-	
+
 	public void setOrientation(int orientation) {
 		sashForm.setOrientation(orientation);
 		getDisplay().asyncExec(sash_setWeights_runnable);
 	}
-	
+
 	public void saveState(IMemento memento) {
 		int[] weights = sashForm.getWeights();
 		if (weights.length != 2)
@@ -309,10 +323,10 @@ extends XComposite
 		element.putInteger(ATTR_NAME_WEIGHT_1, weights[0]);
 		element.putInteger(ATTR_NAME_WEIGHT_2, weights[1]);
 	}
-	
+
 	private Integer restoredOrientation = null;
 	private int[] restoredWeights = null;
-	
+
 	public void restoreState(IMemento memento) {
 		IMemento element = memento.getChild(this.getClass().getSimpleName());
 		restoredOrientation = element.getInteger(ATTR_NAME_SASH_ORIENTATION);

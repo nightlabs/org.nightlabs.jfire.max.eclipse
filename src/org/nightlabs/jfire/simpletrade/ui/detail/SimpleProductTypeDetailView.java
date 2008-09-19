@@ -14,6 +14,9 @@ import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 public class SimpleProductTypeDetailView
 implements IProductTypeDetailView
 {
+	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;
+	private ProductTypeID productTypeID;
+	private IMemento initMemento;
 
 	public Composite createComposite(Composite parent)
 	{
@@ -23,22 +26,18 @@ implements IProductTypeDetailView
 		return simpleProductTypeDetailViewComposite;
 	}
 
-	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;
-
 	@SuppressWarnings("unused")
-	private ProductTypeID productTypeID;
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;
 		if (simpleProductTypeDetailViewComposite != null)
 			simpleProductTypeDetailViewComposite.setProductTypeID(productTypeID);
 	}
-	
-	private IMemento initMemento;
+
 	@Override
 	public void init(IMemento memento) {
 		this.initMemento = memento;
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 		if (simpleProductTypeDetailViewComposite != null)
