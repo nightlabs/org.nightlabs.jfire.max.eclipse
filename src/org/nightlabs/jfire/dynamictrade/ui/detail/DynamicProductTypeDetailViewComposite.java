@@ -4,8 +4,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.ReadOnlyLabeledText;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -20,7 +23,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * This is the Composite which is used by the {@link DynamicProductTypeDetailView}
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  * @author marco schulze - marco at nightlabs dot de
  */
@@ -40,14 +43,14 @@ extends XComposite
 		super(parent, style);
 		createComposite(this);
 	}
-	
+
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_DETAIL = new String[] {
 		ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_OWNER, ProductType.FETCH_GROUP_VENDOR,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_GROUPS, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 
 	public static final String[] FETCH_GROUP_PRODUCT_TYPE_CATEGORY = new String[] {
-		ProductType.FETCH_GROUP_NAME, 
+		ProductType.FETCH_GROUP_NAME,
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_NO_LIMIT
 	};
 
@@ -105,7 +108,15 @@ extends XComposite
 
 	protected void createComposite(XComposite parent)
 	{
-		textWrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
+		parent.setBackground(toolkit.getColors().getBackground());
+		Form form = toolkit.createForm(parent);
+		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setLayout(new GridLayout());
+		Composite textWrapper = form.getBody();
+		textWrapper.setLayout(new GridLayout());
+
+//		textWrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		productTypeCategory = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.categoryLabel.text"), SWT.BORDER); //$NON-NLS-1$
 		productTypeCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeCategory.getTextControl().setLayoutData(new GridData(GridData.FILL_BOTH));

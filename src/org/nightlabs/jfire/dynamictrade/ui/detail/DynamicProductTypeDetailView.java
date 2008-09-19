@@ -3,7 +3,6 @@ package org.nightlabs.jfire.dynamictrade.ui.detail;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
-import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 
@@ -14,6 +13,9 @@ import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 public class DynamicProductTypeDetailView
 implements IProductTypeDetailView
 {
+	private DynamicProductTypeDetailViewComposite dynamicProductTypeDetailViewComposite = null;
+	@SuppressWarnings("unused") //$NON-NLS-1$
+	private ProductTypeID productTypeID;
 
 	public Composite createComposite(Composite parent)
 	{
@@ -23,22 +25,18 @@ implements IProductTypeDetailView
 		return dynamicProductTypeDetailViewComposite;
 	}
 
-	private DynamicProductTypeDetailViewComposite dynamicProductTypeDetailViewComposite = null;
-
-	@SuppressWarnings("unused") //$NON-NLS-1$
-	private ProductTypeID productTypeID;
 	public void setProductTypeID(ProductTypeID productTypeID) {
 		this.productTypeID = productTypeID;
 		if (dynamicProductTypeDetailViewComposite != null)
 			dynamicProductTypeDetailViewComposite.setProductTypeID(productTypeID);
 	}
-	
+
 //	private IMemento initMemento;
 	@Override
 	public void init(IMemento memento) {
 //		this.initMemento = memento;
 	}
-	
+
 	@Override
 	public void saveState(IMemento memento) {
 //		if (dynamicProductTypeDetailViewComposite != null)
