@@ -23,10 +23,10 @@
 			class="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditorPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNewEditor"
 			indexHint="10" /-->
-		<pageFactory 
+		<!--pageFactory 
 			class="org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditorPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor"
-			indexHint="20" />
+			indexHint="20" /-->
   	</extension>  
   
   <!--extension point="org.nightlabs.base.ui.editorActionBarContribution">

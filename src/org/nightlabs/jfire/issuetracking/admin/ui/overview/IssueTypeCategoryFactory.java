@@ -20,6 +20,6 @@ public class IssueTypeCategoryFactory extends DefaultCategoryFactory {
 	
 	@Override
 	public Category createCategory() {
-		return new IssueOverviewCategory(this);
+		return new IssueTypeCategory(this);
 	}
 }
