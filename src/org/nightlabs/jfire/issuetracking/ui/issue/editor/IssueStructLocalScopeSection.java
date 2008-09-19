@@ -40,9 +40,9 @@ public class IssueStructLocalScopeSection extends ToolBarSectionPart {
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 	
-	public void setIssue(Issue productType) {
-		structScope = productType.getPropertySet().getStructScope();
-		structLocalScope = productType.getPropertySet().getStructLocalScope();
+	public void setIssue(Issue issue) {
+		structScope = issue.getPropertySet().getStructScope();
+		structLocalScope = issue.getPropertySet().getStructLocalScope();
 		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(
 				Issue.class, structScope, structLocalScope, new NullProgressMonitor());
 		if (sl != null && sl.getName() != null) {
