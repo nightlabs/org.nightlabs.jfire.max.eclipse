@@ -30,7 +30,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class DynamicProductTypeDetailViewComposite
 extends XComposite
 {
-	private XComposite textWrapper;
+	private Composite textWrapper;
 	private ReadOnlyLabeledText productTypeCategory;
 	private ReadOnlyLabeledText productTypeName;
 
@@ -111,11 +111,14 @@ extends XComposite
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		parent.setBackground(toolkit.getColors().getBackground());
 		Form form = toolkit.createForm(parent);
+		form.setText("Details");
+		toolkit.decorateFormHeading(form);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		form.setLayout(new GridLayout());
-		Composite textWrapper = form.getBody();
-		textWrapper.setLayout(new GridLayout());
+		Composite comp = form.getBody();
+		comp.setLayout(new GridLayout());
 
+		textWrapper = comp;
 //		textWrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		productTypeCategory = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.dynamictrade.ui.detail.DynamicProductTypeDetailViewComposite.categoryLabel.text"), SWT.BORDER); //$NON-NLS-1$
 		productTypeCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
