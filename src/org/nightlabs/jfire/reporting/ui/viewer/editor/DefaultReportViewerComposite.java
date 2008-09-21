@@ -138,7 +138,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		browser = new BrowserWrapperComposite(stack, SWT.NONE);
 
 		pdfViewer = new PdfViewer();
-		pdfViewer.createControl(stack);
+		pdfViewer.createControl(stack, SWT.BORDER);
 
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
