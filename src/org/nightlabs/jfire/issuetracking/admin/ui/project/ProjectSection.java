@@ -60,4 +60,8 @@ extends ToolBarSectionPart
 		});
 		
 	}
+	
+	public Project getProject() {
+		return project;
+	}
 }
