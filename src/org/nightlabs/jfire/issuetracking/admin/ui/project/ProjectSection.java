@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -37,12 +39,14 @@ extends ToolBarSectionPart
 		nameLabel.setText("Name:");
 		
 		nameText = new I18nTextEditor(client);
+		nameText.addModifyListener(modifyListener);
 		
 		descriptionLabel = new Label(client, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description:");
 		
 		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
+		descriptionText.addModifyListener(modifyListener);
 		
 		getSection().setClient(client);
 	}
@@ -64,4 +68,10 @@ extends ToolBarSectionPart
 	public Project getProject() {
 		return project;
 	}
+	
+	private ModifyListener modifyListener = new ModifyListener() {
+		public void modifyText(ModifyEvent arg0) {
+			markDirty();
+		}
+	};
 }

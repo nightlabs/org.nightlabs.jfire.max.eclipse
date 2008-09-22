@@ -9,8 +9,11 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
 
-public class ProjectEditorPage extends EntityEditorPageWithProgress {
+public class ProjectEditorPage 
+extends EntityEditorPageWithProgress 
+{
 	/**
 	 * The id of this page.
 	 */
@@ -32,6 +35,7 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 	}
 
 	private ProjectSection projectSection;
+	
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
@@ -45,9 +49,11 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 		super(editor, ID_PAGE, "Project");
 	}
 
+	private ProjectEditorPageController controller;
+	
 	@Override
 	protected void addSections(Composite parent) {
-		ProjectEditorPageController controller = (ProjectEditorPageController)getPageController();
+		controller = (ProjectEditorPageController)getPageController();
 		
 		projectSection = new ProjectSection(this, parent, controller);
 		getManagedForm().addPart(projectSection);
@@ -69,7 +75,9 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 		switchToContent();		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				ProjectEditorPageController controller = (ProjectEditorPageController)getPageController();
+				if (projectSection != null && !projectSection.getSection().isDisposed()) {
+					projectSection.setProject(controller.getProject());
+				}
 			}
 		});
 		
@@ -78,5 +86,9 @@ public class ProjectEditorPage extends EntityEditorPageWithProgress {
 	@Override
 	protected String getPageFormTitle() {
 		return "Project";
+	}
+	
+	protected ProjectEditorPageController getController() {
+		return (ProjectEditorPageController)getPageController();
 	}
 }

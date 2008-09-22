@@ -3,12 +3,14 @@ package org.nightlabs.jfire.issuetracking.admin.ui.project;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class ProjectEditorPageController 
 extends ActiveEntityEditorPageController<Project>
@@ -46,6 +48,11 @@ extends ActiveEntityEditorPageController<Project>
 		return project;
 		
 	}
+	
+	@Override
+	protected IEditorInput createNewInstanceEditorInput() {
+		return new ProjectEditorInput(getProjectID());
+	}
 
 	@Override
 	protected Project storeEntity(Project controllerObject,
@@ -55,6 +62,11 @@ extends ActiveEntityEditorPageController<Project>
 			ProjectID projectID = (ProjectID) JDOHelper.getObjectId(controllerObject);
 			if (projectID == null)
 				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+			
+			project = ProjectDAO.sharedInstance().storeProject(
+						controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+						new SubProgressMonitor(monitor, 50)
+				);
 
 			return project;
 		} finally {
