@@ -90,6 +90,7 @@ extends AbstractTreeComposite<Project>
 		});
 
 		addContextMenuContribution(new CreateProjectAction());
+		addContextMenuContribution(new CreateSubProjectAction());
 		addContextMenuContribution(new RenameProjectAction());
 
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
@@ -198,6 +199,47 @@ extends AbstractTreeComposite<Project>
 		private InputDialog dialog;
 		public CreateProjectAction() {
 			setId(CreateProjectAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					ProjectTreeComposite.class, 
+			"Create"));
+			setToolTipText("Create Project");
+			setText("Create Project");
+		}
+
+		@Override
+		public void run() {
+			dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Project", "Enter project's name", "Name", null) {
+				@Override
+				protected void okPressed() {
+					try {
+						TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
+						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
+						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
+
+						ProjectDAO.sharedInstance().storeProject(project, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+						dialog.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				};
+
+				@Override
+				protected Control createDialogArea(Composite parent) {
+					Control dialogArea = super.createDialogArea(parent);
+					return dialogArea;
+				}
+			};
+
+			if (dialog.open() != Window.OK)
+				return;
+		}		
+	}
+
+	public class CreateSubProjectAction extends Action {
+		private InputDialog dialog;
+		public CreateSubProjectAction() {
+			setId(CreateSubProjectAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					ProjectTreeComposite.class, 
