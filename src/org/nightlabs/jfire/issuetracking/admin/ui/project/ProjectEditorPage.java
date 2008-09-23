@@ -1,21 +1,15 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
 
 public class ProjectEditorPage 
 extends EntityEditorPageWithProgress 
@@ -41,7 +35,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	private ProjectSection projectSection;
-	private ProjectMemberSection projectmemberSection;
+	private ProjectMemberSection projectMemberSection;
 	
 	/**
 	 * <p>
@@ -66,11 +60,12 @@ extends EntityEditorPageWithProgress
 		projectSection = new ProjectSection(this, parent, controller);
 		getManagedForm().addPart(projectSection);
 		
-		projectmemberSection = new ProjectMemberSection(this, parent, controller);
-		getManagedForm().addPart(projectmemberSection);
+		projectMemberSection = new ProjectMemberSection(this, parent, controller);
+		getManagedForm().addPart(projectMemberSection);
 		
 		if (controller.isLoaded()) {
 			projectSection.setProject(controller.getProject());
+			projectMemberSection.setProject(controller.getProject());
 		}
 	}
 

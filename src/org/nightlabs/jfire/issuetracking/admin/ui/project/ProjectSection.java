@@ -124,11 +124,6 @@ extends ToolBarSectionPart
 			@Override
 			public void run() {
 				ProjectType projectType = project.getProjectType();
-//				projectTypeLabel.setText(
-//						String.format(
-//								"Project Type: %s", 
-//								projectType == null? "" : projectType.getName().getText())
-//				);
 				
 				nameText.setI18nText(project.getName(), EditMode.DIRECT);
 				descriptionText.setI18nText(project.getDescription(), EditMode.DIRECT);

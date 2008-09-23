@@ -4,9 +4,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -21,13 +19,12 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.base.ui.security.UserTable;
-import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePriorityEditWizard;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection;
+import org.nightlabs.jfire.security.User;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -47,29 +44,18 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		projectManagerNameLabel = new Label(client, SWT.WRAP);
-		projectManagerNameLabel.setLayoutData(new GridData());
+		projectManagerNameLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectManagerNameLabel.setText("Project Manager: ");
 		
 		userTable = new UserTable(client, SWT.NONE);
-		userTable.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent e) {
-//				StructuredSelection s = (StructuredSelection)e.getSelection();
-//				if (s.isEmpty())
-//					return;
-//
-//				IssuePriority issuePriority = (IssuePriority)s.getFirstElement();
-//				IssueTypePriorityEditWizard wizard = new IssueTypePriorityEditWizard(issuePriority, false, null);
-//				try {
-//					DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
-//					dialog.open();
-//				} catch (Exception ex) {
-//					throw new RuntimeException(ex);
-//				}
-//				issuePriorityTable.refresh(true);
-			}
-		});	
 		
 		getSection().setClient(client);
+		
+		getToolBarManager().add(new AssignPMAction());
+		getToolBarManager().add(new AddMemberAction());
+
+		updateToolBarManager();
+
 	}
 
 	private Project project;
@@ -79,7 +65,17 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-//				nameText.setI18nText(project.getName(), EditMode.DIRECT);
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						User p = project.getProjectManager();
+						projectManagerNameLabel.setText(
+								String.format(
+										"Project Manager: %s", 
+										p == null? "" : p.getName())
+						);
+					}
+				});
 			}
 		});
 		
@@ -95,6 +91,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		}
 	};
 	
+	private User projectManager;
 	public class AssignPMAction extends Action {		
 		public AssignPMAction() {
 			super();
@@ -102,23 +99,48 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-					"Assign"));
-			setToolTipText("Assign");
+					"Assign Project Manager"));
+			setToolTipText("Assign Project Manager");
 			setText("Assign");
 		}
 
 		@Override
 		public void run() {
-//			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
-//			int returnCode = userSearchDialog.open();
-//			if (returnCode == Dialog.OK) {
-//				assigneeUser = userSearchDialog.getSelectedUser();
-//				if (assigneeUser != null) {
-//					issue.setAssignee(assigneeUser);
-//					assigneeTextLabel.setText(issue.getAssignee().getName());
-//				}
-//				markDirty();
-//			}//if
+			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+			int returnCode = userSearchDialog.open();
+			if (returnCode == Dialog.OK) {
+				projectManager = userSearchDialog.getSelectedUser();
+				if (projectManager != null) {
+					project.setProjectManager(projectManager);
+				}
+				markDirty();
+			}//if
+		}		
+	}
+	
+	public class AddMemberAction extends Action {		
+		public AddMemberAction() {
+			super();
+			setId(AssignPMAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					IssueDetailSection.class, 
+					"Add Members"));
+			setToolTipText("Add Members");
+			setText("Add Members");
+		}
+
+		@Override
+		public void run() {
+			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+			int returnCode = userSearchDialog.open();
+			if (returnCode == Dialog.OK) {
+				User user = userSearchDialog.getSelectedUser();
+				if (user != null) {
+					project.addMember(user);
+				}
+				markDirty();
+			}//if
 		}		
 	}
 }

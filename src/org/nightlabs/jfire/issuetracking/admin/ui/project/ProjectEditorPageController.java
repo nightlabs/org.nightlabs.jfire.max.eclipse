@@ -40,7 +40,9 @@ extends ActiveEntityEditorPageController<Project>
 				Project.FETCH_GROUP_PROJECT_TYPE,
 				Project.FETCH_GROUP_NAME,
 				ProjectType.FETCH_GROUP_NAME,
-				Project.FETCH_GROUP_DESCRIPTION};
+				Project.FETCH_GROUP_DESCRIPTION,
+				Project.FETCH_GROUP_PROJECT_MANAGER,
+				Project.FETCH_GROUP_MEMBERS};
 //				Project.FETCH_GROUP_PARENT_PROJECT,
 //				Project.FETCH_GROUP_SUBPROJECTS
 	}
@@ -49,7 +51,6 @@ extends ActiveEntityEditorPageController<Project>
 	protected Project retrieveEntity(ProgressMonitor monitor) {
 		Project project = ProjectDAO.sharedInstance().getProject(getProjectID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 		return project;
-		
 	}
 	
 	@Override
