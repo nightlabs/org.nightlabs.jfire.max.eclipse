@@ -8,6 +8,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
+import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -36,7 +37,9 @@ extends ActiveEntityEditorPageController<Project>
 	protected String[] getEntityFetchGroups() {
 		return new String[] {
 				FetchPlan.DEFAULT,
+				Project.FETCH_GROUP_PROJECT_TYPE,
 				Project.FETCH_GROUP_NAME,
+				ProjectType.FETCH_GROUP_NAME,
 				Project.FETCH_GROUP_DESCRIPTION};
 //				Project.FETCH_GROUP_PARENT_PROJECT,
 //				Project.FETCH_GROUP_SUBPROJECTS
