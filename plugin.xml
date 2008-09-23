@@ -1152,5 +1152,9 @@
              articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.DefaultArticleContainerEdit$Factory">
        </articleContainerEditFactory>
+       <articleContainerEditFactory
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.RecurringArticleContainerEdit$RecurringFactory">
+       </articleContainerEditFactory>
     </extension>
 </plugin>

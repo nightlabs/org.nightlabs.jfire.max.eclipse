@@ -376,14 +376,10 @@ implements ArticleContainerEdit
 	 */
 	protected HeaderComposite createHeaderComposite(Composite parent) {
 
-		if (articleContainer.getClass().equals(RecurringOrder.class))
-			return new RecurringOrderHeaderComposite(this, (RecurringOrder) articleContainer);
-		if (articleContainer.getClass().equals(Order.class))
+		if (articleContainer instanceof Order)
 			return new OrderHeaderComposite(this, (Order) articleContainer);
-		if(articleContainer.getClass().equals(Offer.class))
+		if(articleContainer instanceof Offer)
 			return new OfferHeaderComposite(this, (Offer) articleContainer);
-		if(articleContainer.getClass().equals(RecurringOffer.class))
-			return new RecurringOfferHeaderComposite(this, (RecurringOffer) articleContainer);
 		if (articleContainer instanceof Invoice)
 			return new InvoiceHeaderComposite(this, (Invoice) articleContainer);
 		if (articleContainer instanceof DeliveryNote)

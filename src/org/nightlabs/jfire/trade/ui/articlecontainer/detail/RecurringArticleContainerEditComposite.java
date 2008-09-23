@@ -15,6 +15,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
+import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOrderDAO;
@@ -22,10 +23,10 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringO
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderHeaderComposite;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class RecurringContainerEditComposite extends ArticleContainerEditComposite {
+public class RecurringArticleContainerEditComposite extends ArticleContainerEditComposite {
 
 
-	public RecurringContainerEditComposite(Composite parent,
+	public RecurringArticleContainerEditComposite(Composite parent,
 			ArticleContainerID containerID) {
 		super(parent, containerID);
 	}
@@ -48,6 +49,7 @@ public class RecurringContainerEditComposite extends ArticleContainerEditComposi
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
 		RecurringOffer.FETCH_GROUP_ARTICLES,
 		RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION,
+		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK,
 		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 		Segment.FETCH_GROUP_THIS_SEGMENT,
