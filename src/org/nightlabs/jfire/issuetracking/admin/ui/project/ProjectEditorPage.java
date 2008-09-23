@@ -84,6 +84,10 @@ extends EntityEditorPageWithProgress
 				if (projectSection != null && !projectSection.getSection().isDisposed()) {
 					projectSection.setProject(controller.getProject());
 				}
+				
+				if (projectMemberSection != null && !projectMemberSection.getSection().isDisposed()) {
+					projectMemberSection.setProject(controller.getProject());
+				}
 			}
 		});
 		
