@@ -127,13 +127,13 @@ import org.nightlabs.progress.ProgressMonitor;
  * One of its known uses is the implementation of {@link DefaultArticleContainerEdit}.
  * It might also be sub-classed in order to configure the header and footer composites.
  * <p>
- * For its main part it loads the {@link ArticleContainer} from the articleContainerID it is instantiated with 
- * and creates a {@link ClientArticleSegmentGroupSet} to manage the articles within the container. 
+ * For its main part it loads the {@link ArticleContainer} from the articleContainerID it is instantiated with
+ * and creates a {@link ClientArticleSegmentGroupSet} to manage the articles within the container.
  * It also asks the {@link org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEditFactoryRegistry}
  * for the right factories for all the {@link org.nightlabs.jfire.trade.ui.Segment}s
  * and displays the edits which are delivered from the factory.
  * </p>
- * 
+ *
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
@@ -234,7 +234,7 @@ implements ArticleContainerEdit
 					loadingDataLabel.dispose();
 					loadingDataLabel = null;
 
-					headerComposite = createHeaderComposite(ArticleContainerEditComposite.this);					
+					headerComposite = createHeaderComposite(ArticleContainerEditComposite.this);
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -318,7 +318,7 @@ implements ArticleContainerEdit
 					} catch (EPProcessorException e) {
 						throw new RuntimeException(e);
 					}
-				} // void run()				
+				} // void run()
 			});
 
 			return Status.OK_STATUS;
@@ -366,7 +366,7 @@ implements ArticleContainerEdit
 	 * This method is called to create the {@link HeaderComposite} of this composite.
 	 * It might be overridden to create custom headers.
 	 * <p>
-	 * This implementations will check if one of the supported implementations of 
+	 * This implementations will check if one of the supported implementations of
 	 * {@link ArticleContainer} was loaded and then create one of the following:
 	 * {@link OrderHeaderComposite}, {@link OfferHeaderComposite}, {@link InvoiceHeaderComposite}
 	 * or {@link DeliveryNoteHeaderComposite}.
@@ -398,7 +398,7 @@ implements ArticleContainerEdit
 	 * This method is called to create the {@link FooterComposite} of this composite.
 	 * It might be overridden to create custom footers.
 	 * <p>
-	 * This implementations will check if one of the supported implementations of 
+	 * This implementations will check if one of the supported implementations of
 	 * {@link ArticleContainer} was loaded and then create one of the following:
 	 * {@link OrderFooterComposite}, {@link OfferFooterComposite}, {@link InvoiceFooterComposite}
 	 * or {@link DeliveryNoteFooterComposite}.
@@ -426,12 +426,12 @@ implements ArticleContainerEdit
 	}
 
 	/**
-	 * This method is called to determine the {@link EditLockTypeID} 
+	 * This method is called to determine the {@link EditLockTypeID}
 	 * that should be used to acquire an edit lock for the edited ArticleContainer.
 	 * This implementation supports Orders, Offers, Invoices and DeliveryNotes
 	 * for all other implementations of {@link ArticleContainer} this method
 	 * should be overridden.
-	 * 
+	 *
 	 * @return The {@link EditLockTypeID} that should be used to acquire an edit lock.
 	 */
 	protected EditLockTypeID getEditLockTypeID() {
@@ -913,7 +913,10 @@ implements ArticleContainerEdit
 	 * @param _articleContainerID the articleContainerID to be set.
 	 * @param monitor the monitor to provide feedback.
 	 */
-	protected synchronized void initArticleContainer(ArticleContainerID _articleContainerID, ProgressMonitor monitor) {
+	protected synchronized void initArticleContainer(ArticleContainerID _articleContainerID, ProgressMonitor monitor)
+	{
+		// When reloading an ArticleContainer (because it changed), we do *NOT* load the articles again, because
+		// they are independently updated.
 		boolean reloadArticleContainerWithoutArticles = this.articleContainerID != null;
 
 		if (this.articleContainerID == null && _articleContainerID == null)
@@ -927,33 +930,7 @@ implements ArticleContainerEdit
 //		monitor.beginTask("Loading article container", 100); // the monitor is directly passed to the DAOs - no need to use a sub-monitor
 		try {
 			this.articleContainerID = _articleContainerID;
-
-			if (articleContainerID instanceof OrderID) {
-				OrderID orderID = (OrderID) articleContainerID;
-				if (reloadArticleContainerWithoutArticles)
-					articleContainer = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				else
-					articleContainer = OrderDAO.sharedInstance().getOrder(orderID, FETCH_GROUPS_ORDER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (articleContainerID instanceof OfferID) {
-				OfferID offerID = (OfferID) articleContainerID;
-				if (reloadArticleContainerWithoutArticles)
-					articleContainer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				else
-					articleContainer = OfferDAO.sharedInstance().getOffer(offerID, FETCH_GROUPS_OFFER_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (articleContainerID instanceof InvoiceID) {
-				InvoiceID invoiceID = (InvoiceID) articleContainerID;
-				if (reloadArticleContainerWithoutArticles)
-					articleContainer = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				else
-					articleContainer = InvoiceDAO.sharedInstance().getInvoice(invoiceID, FETCH_GROUPS_INVOICE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else if (articleContainerID instanceof DeliveryNoteID) {
-				DeliveryNoteID deliveryNoteID = (DeliveryNoteID) articleContainerID;
-				if (reloadArticleContainerWithoutArticles)
-					articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-				else
-					articleContainer = DeliveryNoteDAO.sharedInstance().getDeliveryNote(deliveryNoteID, FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-			} else
-				throw new IllegalArgumentException("articleContainerID type \"" + articleContainerID.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.articleContainer = retrieveArticleContainer(articleContainerID, !reloadArticleContainerWithoutArticles, monitor);
 
 			if (logger.isDebugEnabled())
 				logger.debug("initArticleContainerEditorInput: loaded version " + JDOHelper.getVersion(articleContainer) + " of " + JDOHelper.getObjectId(articleContainer)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -965,6 +942,65 @@ implements ArticleContainerEdit
 //			} finally {
 //			monitor.done();
 		}
+	}
+
+	/**
+	 * Get an {@link ArticleContainer} from the server (or the cache, if present there) using a DAO.
+	 * Override this method, if you need to retrieve a custom <code>ArticleContainer</code> implementation
+	 * with specialized fetch-groups.
+	 *
+	 * @param articleContainerID the object-id of the {@link ArticleContainer} to be loaded.
+	 * @param withArticles <code>true</code>, if the {@link ArticleContainer} should be loaded with its {@link Article}s;
+	 *		<code>false</code>, if the <code>Article</code>s should <b>not</b> be detached. You must take this into account
+	 *		when choosing your fetch-groups. This is necessary, because it makes no sense to detach a huge <code>ArticleContainer</code>
+	 *		with all its articles again (when it changed), even though most of the articles didn't change. That's why,
+	 *		the articles are independently updated ({@link ClientArticleSegmentGroupSet} takes care about that).
+	 * @param monitor the monitor for progress feedback.
+	 * @return the {@link ArticleContainer} for the specified {@link ArticleContainerID}.
+	 */
+	protected ArticleContainer retrieveArticleContainer(ArticleContainerID articleContainerID, boolean withArticles, ProgressMonitor monitor)
+	{
+		if (articleContainerID instanceof OrderID)
+			return OrderDAO.sharedInstance().getOrder(
+					(OrderID) articleContainerID,
+					withArticles ? FETCH_GROUPS_ORDER_WITH_ARTICLES : FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					monitor
+			);
+
+		if (articleContainerID instanceof OfferID)
+			return OfferDAO.sharedInstance().getOffer(
+					(OfferID) articleContainerID,
+					withArticles ? FETCH_GROUPS_OFFER_WITH_ARTICLES : FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					monitor
+			);
+
+		if (articleContainerID instanceof InvoiceID)
+			return InvoiceDAO.sharedInstance().getInvoice(
+					(InvoiceID) articleContainerID,
+					withArticles ? FETCH_GROUPS_INVOICE_WITH_ARTICLES : FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					monitor
+			);
+
+		if (articleContainerID instanceof DeliveryNoteID)
+			return DeliveryNoteDAO.sharedInstance().getDeliveryNote(
+					(DeliveryNoteID) articleContainerID,
+					withArticles ? FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES : FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					monitor
+			);
+
+//		if (articleContainerID instanceof ReceptionNoteID)
+//			return ReceptionNoteDAO.sharedInstance().getReceptionNote(
+//					(ReceptionNoteID) articleContainerID,
+//					fetchGroups,
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+//					monitor
+//			);
+
+		throw new IllegalArgumentException("articleContainerID type \"" + articleContainerID.getClass().getName() + "\" unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public Menu createArticleContainerContextMenu(Control parent) {
