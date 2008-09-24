@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -28,6 +29,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
@@ -39,6 +41,8 @@ public class ProjectComboComposite
 extends XComposite
 implements ISelectionProvider
 {
+	private Project notSpecificProject;
+	
 	public ProjectComboComposite(Composite parent, int style)
 	{
 		this(parent, style, getLocalOrganisationID(), false);
@@ -75,6 +79,7 @@ implements ISelectionProvider
 				fireSelectionChangedEvent();
 			}
 		});
+		
 		loadProjects();
 	}
 	
@@ -112,6 +117,11 @@ implements ISelectionProvider
 
 							projectCombo.removeAll();
 							
+							notSpecificProject = new Project(IDGenerator.getOrganisationID(), IDGenerator.nextID(Project.class));
+							notSpecificProject.getName().setText(Locale.ENGLISH.getLanguage(), "Not Specific");
+							notSpecificProject.setLevel(0);
+							projectList.add(0, notSpecificProject);
+							
 							for (Project pj : projectList) {
 								StringBuffer sb = new StringBuffer("");
 								for (int i = 0; i < pj.getLevel(); i++) 
@@ -120,12 +130,6 @@ implements ISelectionProvider
 							}
 							
 							ProjectComboComposite.this.getParent().layout(true);
-							
-							try {
-								setSelectedProject(ProjectID.create(Login.getLogin().getOrganisationID(), -1));
-							} catch (Exception e) {
-								throw new RuntimeException(e);
-							}
 						}
 					});
 				} catch (Exception x) {
@@ -198,8 +202,6 @@ implements ISelectionProvider
 		IStructuredSelection sel = (IStructuredSelection) selection;
 		Object selObj = sel.getFirstElement();
 
-		if (selObj == null)
-			setSelectedProjectID(-1);
 		if (selObj instanceof Project)
 			setSelectedProject((Project) selObj);
 		else if (selObj instanceof ProjectID)

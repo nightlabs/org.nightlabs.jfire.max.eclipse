@@ -300,7 +300,7 @@ extends WizardHopPage
 		boolean result = true;
 		setErrorMessage(null);
 		
-		if (projectComboComposite.getSelectedProject() == null) {
+		if (issue.getProject() == null) {
 			result = false;
 		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
