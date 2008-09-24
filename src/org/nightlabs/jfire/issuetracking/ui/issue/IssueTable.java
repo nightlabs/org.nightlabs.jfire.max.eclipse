@@ -278,8 +278,8 @@ extends AbstractTableComposite<Issue>
 							return descriptionText;
 					}
 				break;
-				case(5): return issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
-				case(6): return issue.getIssuePriority().getIssuePriorityText().getText();
+				case(5): return issue.getIssueSeverityType() == null ? "None" : issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
+				case(6): return issue.getIssuePriority() == null ? "None" : issue.getIssuePriority().getIssuePriorityText().getText();
 				case(7): return getStateName(issue);					
 				case(8): return issue.isStarted()? "Working" : "Stopped";
 				default: return ""; //$NON-NLS-1$

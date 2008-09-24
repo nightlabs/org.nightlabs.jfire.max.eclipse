@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue.create;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,12 +30,14 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
@@ -297,7 +300,7 @@ extends WizardHopPage
 		boolean result = true;
 		setErrorMessage(null);
 		
-		if (selectedProject == null) {
+		if (projectComboComposite.getSelectedProject() == null) {
 			result = false;
 		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {

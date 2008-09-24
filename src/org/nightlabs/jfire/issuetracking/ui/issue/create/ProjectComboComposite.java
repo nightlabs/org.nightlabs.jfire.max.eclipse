@@ -100,7 +100,6 @@ implements ISelectionProvider
 					CollectionUtil.addAllToCollection(_projects.toArray(new Project[0]), tempProjectList);
 					Collections.sort(tempProjectList);
 					for (Project project : tempProjectList) {
-//						projectList.add(project);
 						generateSub(project);
 					}
 					
@@ -121,6 +120,12 @@ implements ISelectionProvider
 							}
 							
 							ProjectComboComposite.this.getParent().layout(true);
+							
+							try {
+								setSelectedProject(ProjectID.create(Login.getLogin().getOrganisationID(), -1));
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
 						}
 					});
 				} catch (Exception x) {
