@@ -3,6 +3,8 @@
  */
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -22,6 +24,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.base.ui.security.UserTable;
 import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection;
 import org.nightlabs.jfire.security.User;
@@ -48,6 +51,8 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		projectManagerNameLabel.setText("Project Manager: ");
 		
 		userTable = new UserTable(client, SWT.NONE);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		userTable.setLayoutData(gd);
 		
 		getSection().setClient(client);
 		
@@ -55,7 +60,6 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		getToolBarManager().add(new AddMemberAction());
 
 		updateToolBarManager();
-
 	}
 
 	private Project project;
@@ -74,6 +78,9 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 										"Project Manager: %s", 
 										p == null? "" : p.getName())
 						);
+						
+						List<User> members = project.getMembers();
+						userTable.setInput(members);
 					}
 				});
 			}
@@ -97,9 +104,9 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 			super();
 			setId(AssignPMAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
-					"Assign Project Manager"));
+					IssueTrackingAdminPlugin.getDefault(), 
+					ProjectMemberSection.class, 
+					"Assign"));
 			setToolTipText("Assign Project Manager");
 			setText("Assign");
 		}
@@ -123,9 +130,9 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 			super();
 			setId(AssignPMAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueDetailSection.class, 
-					"Add Members"));
+					IssueTrackingAdminPlugin.getDefault(), 
+					ProjectMemberSection.class, 
+					"Add"));
 			setToolTipText("Add Members");
 			setText("Add Members");
 		}
