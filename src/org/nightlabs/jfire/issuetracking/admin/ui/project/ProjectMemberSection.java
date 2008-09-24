@@ -120,6 +120,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 				if (projectManager != null) {
 					project.setProjectManager(projectManager);
 				}
+				setProject(project);
 				markDirty();
 			}//if
 		}		

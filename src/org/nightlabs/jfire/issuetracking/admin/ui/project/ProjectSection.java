@@ -30,6 +30,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.ProjectTypeDAO;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -113,7 +114,6 @@ extends ToolBarSectionPart
 		};
 		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
-
 	}
 	
 	private Project project;
@@ -124,6 +124,9 @@ extends ToolBarSectionPart
 			@Override
 			public void run() {
 				ProjectType projectType = project.getProjectType();
+				if (projectType != null) {
+					projectTypeCombo.selectElement(projectType);
+				}
 				
 				nameText.setI18nText(project.getName(), EditMode.DIRECT);
 				descriptionText.setI18nText(project.getDescription(), EditMode.DIRECT);
