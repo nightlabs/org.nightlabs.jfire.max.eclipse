@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +19,6 @@ import org.nightlabs.jfire.issue.project.ProjectParentResolver;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -47,11 +45,11 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 			Project project = ProjectDAO.sharedInstance().getProject(
 					parentID, FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
 			Collection<Project> res = project.getSubProjects();
-			return sortCollection(res);
+			return res;
 		}
 		
 		Collection<Project> projects = ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID(), FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
-		return sortCollection(projects);
+		return projects;
 	}
 
 	@Implement
@@ -67,7 +65,7 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 	@Override
 	protected void sortJDOObjects(List<Project> objects)
 	{
-		// no need to sort now - later maybe
+		Collections.sort(objects);
 	}
 
 	@Implement
@@ -82,12 +80,5 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 	protected Class<Project> getJDOObjectClass()
 	{
 		return Project.class;
-	}
-	
-	private Collection<Project> sortCollection(Collection<Project> projects) {
-		List<Project> sortedProjectList = new ArrayList<Project>();
-		CollectionUtil.addAllToCollection(projects.toArray(new Project[0]), sortedProjectList);
-		Collections.sort(sortedProjectList);
-		return sortedProjectList;
 	}
 }
