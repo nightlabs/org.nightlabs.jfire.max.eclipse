@@ -4,6 +4,7 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
@@ -25,8 +26,6 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.base.ui.security.UserTable;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
-import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -51,7 +50,8 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		projectManagerNameLabel.setText("Project Manager: ");
 		
 		userTable = new UserTable(client, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 200;
 		userTable.setLayoutData(gd);
 		
 		getSection().setClient(client);
@@ -79,7 +79,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 										p == null? "" : p.getName())
 						);
 						
-						List<User> members = project.getMembers();
+						Set<User> members = project.getMembers();
 						userTable.setInput(members);
 					}
 				});
@@ -146,6 +146,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 				if (user != null) {
 					project.addMember(user);
 				}
+				userTable.setInput(project.getMembers());
 				markDirty();
 			}//if
 		}		
