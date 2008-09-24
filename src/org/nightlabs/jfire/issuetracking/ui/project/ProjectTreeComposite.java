@@ -14,6 +14,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
@@ -92,6 +93,7 @@ extends AbstractTreeComposite<Project>
 		addContextMenuContribution(new CreateProjectAction());
 		addContextMenuContribution(new CreateSubProjectAction());
 		addContextMenuContribution(new RenameProjectAction());
+		addContextMenuContribution(new DeleteProjectAction());
 
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
@@ -213,7 +215,6 @@ extends AbstractTreeComposite<Project>
 				@Override
 				protected void okPressed() {
 					try {
-						TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
 						Project project = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
 						project.getName().setText(Locale.ENGLISH.getLanguage(), getValue());
 
@@ -318,6 +319,31 @@ extends AbstractTreeComposite<Project>
 
 			if (dialog.open() != Window.OK)
 				return;
+		}		
+	}
+	
+	class DeleteProjectAction 
+	extends Action {		
+		public DeleteProjectAction() {
+			super();
+			setId(DeleteProjectAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(), 
+					ProjectTreeComposite.class, 
+					"Delete"));
+			setToolTipText("Delete the selected project");
+			setText("Delete");
+		}
+		
+		@Override
+		public void run() {
+			boolean confirm = MessageDialog.openConfirm(getShell(), "Confirm Delete", "Delete this item(s)?");
+			if(confirm) {
+				TreeSelection selection = (TreeSelection)getTreeViewer().getSelection();
+				Project project = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
+				ProjectDAO.sharedInstance().deleteProject(project.getObjectId(), new NullProgressMonitor());
+				refresh();
+			}
 		}		
 	}
 }
