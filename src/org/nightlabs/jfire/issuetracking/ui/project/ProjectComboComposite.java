@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.issue.create;
+package org.nightlabs.jfire.issuetracking.ui.project;
 
 import java.util.ArrayList;
 import java.util.Collection;

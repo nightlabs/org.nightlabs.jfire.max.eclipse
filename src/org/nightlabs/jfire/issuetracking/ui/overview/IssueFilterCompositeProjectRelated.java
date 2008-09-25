@@ -23,7 +23,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.ProjectComboComposite;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 
