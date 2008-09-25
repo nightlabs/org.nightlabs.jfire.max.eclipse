@@ -68,13 +68,11 @@ extends ToolBarSectionPart
 		client.setLayout(gl);
 		
 		projectTypeLabel = new Label(client, SWT.WRAP);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		projectTypeLabel.setLayoutData(gd);
 		projectTypeLabel.setText("Project Type: ");
 		
 		projectTypeCombo = new XComboComposite<ProjectType>(client, SWT.NONE);
 		projectTypeCombo.setLabelProvider(new ProjectTypeLabelProvider());
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeCombo.setLayoutData(gd);
 		projectTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -84,15 +82,13 @@ extends ToolBarSectionPart
 		});
 		
 		nameLabel = new Label(client, SWT.WRAP);
-		nameLabel.setLayoutData(new GridData());
 		nameLabel.setText("Name: ");
 		
 		nameText = new I18nTextEditor(client);
 		nameText.addModifyListener(modifyListener);
 		
 		descriptionLabel = new Label(client, SWT.WRAP);
-		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText("Description:");
+		descriptionLabel.setText("Description: ");
 		
 		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);
