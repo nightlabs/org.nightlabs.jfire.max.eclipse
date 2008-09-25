@@ -176,8 +176,8 @@ extends XComposite
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		parent.setBackground(toolkit.getColors().getBackground());
 		Form form = toolkit.createForm(parent);
-		form.setText("Details");
-		toolkit.decorateFormHeading(form);
+//		form.setText("Details");
+//		toolkit.decorateFormHeading(form);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		form.setLayout(new GridLayout());
 		Composite comp = form.getBody();
@@ -195,7 +195,7 @@ extends XComposite
 		productTypeDescription = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.productTypeDescription.caption"), SWT.BORDER); // | SWT.MULTI | SWT.READ_ONLY); //$NON-NLS-1$
 		productTypeDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeDescription.getTextControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		imageWrapper = new XComposite(sashForm, SWT.BORDER, LayoutMode.TIGHT_WRAPPER) {
+		imageWrapper = new XComposite(sashForm, getBorderStyle(), LayoutMode.TIGHT_WRAPPER) {
 			@Override
 			public void layout(boolean arg0, boolean arg1) {
 				layoutingImageWrapper = true;
