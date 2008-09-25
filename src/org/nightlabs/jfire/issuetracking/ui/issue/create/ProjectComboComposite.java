@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -29,7 +28,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
@@ -41,8 +39,6 @@ public class ProjectComboComposite
 extends XComposite
 implements ISelectionProvider
 {
-	private Project notSpecificProject;
-	
 	public ProjectComboComposite(Composite parent, int style)
 	{
 		this(parent, style, getLocalOrganisationID(), false);
@@ -83,7 +79,8 @@ implements ISelectionProvider
 		loadProjects();
 	}
 	
-	private static String[] FETCH_GROUP_PROJECT = new String[] {FetchPlan.DEFAULT, 
+	private static String[] FETCH_GROUP_PROJECT = new String[] {
+		FetchPlan.DEFAULT, 
 		Project.FETCH_GROUP_NAME, 
 		Project.FETCH_GROUP_PARENT_PROJECT, 
 		Project.FETCH_GROUP_SUBPROJECTS, 
@@ -94,7 +91,7 @@ implements ISelectionProvider
 	{
 		projectCombo.removeAll();
 
-		new Job("Loading Projects............") {
+		Job loadJob = new Job("Loading Projects............") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
@@ -117,11 +114,6 @@ implements ISelectionProvider
 
 							projectCombo.removeAll();
 							
-							notSpecificProject = new Project(IDGenerator.getOrganisationID(), IDGenerator.nextID(Project.class));
-							notSpecificProject.getName().setText(Locale.ENGLISH.getLanguage(), "Not Specific");
-							notSpecificProject.setLevel(0);
-							projectList.add(0, notSpecificProject);
-							
 							for (Project pj : projectList) {
 								StringBuffer sb = new StringBuffer("");
 								for (int i = 0; i < pj.getLevel(); i++) 
@@ -129,6 +121,7 @@ implements ISelectionProvider
 								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage()));
 							}
 							
+							projectCombo.select(0);
 							ProjectComboComposite.this.getParent().layout(true);
 						}
 					});
@@ -138,7 +131,10 @@ implements ISelectionProvider
 
 				return Status.OK_STATUS;
 			}
-		}.schedule();
+		};
+		
+		loadJob.setPriority(Job.SHORT);
+		loadJob.schedule();
 	}
 	
 	private int level = 0;
