@@ -21,6 +21,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
@@ -47,17 +48,25 @@ extends ToolBarSectionPart
 	private Label descriptionLabel;
 	private I18nTextEditor descriptionText;
 	
+	private Label createdTimeLabel;
+	private Label createdTimeTextLabel;
+
+	private Label updatedTimeLabel;
+	private Label updatedTimeTextLabel;
+	
 	private Collection<ProjectType> projectTypes;
 	private ProjectType selectedProjectType;
 	
 	public ProjectSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Projects");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project");
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		getSection().setLayout(new GridLayout());
 		
-		XComposite client = new XComposite(getSection(), SWT.NONE);
-
+		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		GridLayout gl = new GridLayout();
+		gl.numColumns = 2;
+		client.setLayout(gl);
+		
 		projectTypeLabel = new Label(client, SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeLabel.setLayoutData(gd);
@@ -87,6 +96,18 @@ extends ToolBarSectionPart
 		
 		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);
+	
+		createdTimeLabel = new Label(client, SWT.WRAP);
+		createdTimeLabel.setText("Created Time: ");
+
+		createdTimeTextLabel = new Label(client, SWT.NONE);
+		createdTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		updatedTimeLabel = new Label(client, SWT.WRAP);
+		updatedTimeLabel.setText("Updated Time: ");
+
+		updatedTimeTextLabel = new Label(client, SWT.NONE);
+		updatedTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		getSection().setClient(client);
 		
@@ -130,6 +151,9 @@ extends ToolBarSectionPart
 				
 				nameText.setI18nText(project.getName(), EditMode.DIRECT);
 				descriptionText.setI18nText(project.getDescription(), EditMode.DIRECT);
+				
+				createdTimeTextLabel.setText(project.getCreateTimestamp().toString());
+				updatedTimeTextLabel.setText(project.getUpdateTimestamp() == null? "-" : project.getUpdateTimestamp().toString());
 			}
 		});
 		
@@ -137,6 +161,10 @@ extends ToolBarSectionPart
 	
 	public Project getProject() {
 		return project;
+	}
+	
+	public ProjectType getSelectedProjectType() {
+		return selectedProjectType;
 	}
 	
 	private ModifyListener modifyListener = new ModifyListener() {

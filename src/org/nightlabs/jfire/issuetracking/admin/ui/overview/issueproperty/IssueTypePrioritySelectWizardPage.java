@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -92,7 +94,8 @@ extends WizardHopPage {
 		issuePriorityTable = new IssuePriorityTable(wrapper, SWT.NONE);
 		Display.getCurrent().asyncExec(new Runnable(){
 			public void run() {
-				List<IssuePriority> issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(new String[] { IssuePriority.FETCH_GROUP_NAME }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				List<IssuePriority> issuePriorities = IssuePriorityDAO.sharedInstance().getIssuePriorities(
+						new String[] { FetchPlan.DEFAULT, IssuePriority.FETCH_GROUP_NAME }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				issuePriorities.removeAll(issueType.getIssuePriorities());
 				
 				issuePriorityTable.setInput(issuePriorities);
