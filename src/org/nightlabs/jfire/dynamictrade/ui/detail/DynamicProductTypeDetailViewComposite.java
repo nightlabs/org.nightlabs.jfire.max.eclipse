@@ -111,8 +111,8 @@ extends XComposite
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		parent.setBackground(toolkit.getColors().getBackground());
 		Form form = toolkit.createForm(parent);
-		form.setText("Details");
-		toolkit.decorateFormHeading(form);
+//		form.setText("Details");
+//		toolkit.decorateFormHeading(form);
 		form.setLayoutData(new GridData(GridData.FILL_BOTH));
 		form.setLayout(new GridLayout());
 		Composite comp = form.getBody();
