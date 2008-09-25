@@ -27,4 +27,14 @@
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.store.repository.ValueProviderGUIRepository$Factory"/>
       <valueProviderGUIFactory class="org.nightlabs.jfire.reporting.trade.ui.store.repository.ValueProviderGUIRepositories$Factory"/>      
    </extension>
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
+      <articleContainerEditorPageFactory
+            articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+            class="org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPage$Factory"
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+            id="org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationPage"
+            indexHint="500">
+      </articleContainerEditorPageFactory>
+   </extension>
 </plugin>
