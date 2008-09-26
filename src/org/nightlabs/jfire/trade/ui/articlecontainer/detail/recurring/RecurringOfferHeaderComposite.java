@@ -10,7 +10,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
@@ -24,6 +27,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
@@ -37,7 +41,7 @@ extends HeaderComposite{
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
-	private XComposite executionTaskComp;
+	private XComposite infoDateComp;
 	private Label nextExecutionstampTask;
 	private Label lastExecutionstampTask;
 
@@ -66,27 +70,17 @@ extends HeaderComposite{
 			}
 		});
 
+		XComposite infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 
-		executionTaskComp = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-		executionTaskComp.setLayoutData(null);
-		executionTaskComp.getGridLayout().numColumns = 7;
-		new Label(executionTaskComp, SWT.NONE).setText("Last Task:");
-		lastExecutionstampTask = new Label(executionTaskComp, SWT.NONE);
-		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
-		if(date != null)
-			lastExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
-
-		new Label(executionTaskComp, SWT.NONE).setText("Next Task:");
-		nextExecutionstampTask = new Label(executionTaskComp, SWT.NONE);
-		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
-		if(date != null)
-			nextExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+		XComposite infoStatuesComp = new XComposite(infoStatuesContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+		infoStatuesComp.setLayoutData(null);
+		infoStatuesComp.getGridLayout().numColumns = 1;
 
 
-		new Label(executionTaskComp, SWT.NONE).setText("RecurredOffers:");
-		new Label(executionTaskComp, SWT.NONE).setText(String.valueOf(recurringOffer.getRecurredOfferCount()));
+		new Label(infoStatuesComp, SWT.NONE).setText("RecurredOffers:");
+		new Label(infoStatuesComp, SWT.NONE).setText(String.valueOf(recurringOffer.getRecurredOfferCount()));
 
-		Label statuesLabel  = new Label(executionTaskComp, SWT.NONE);
+		Label statuesLabel  = new Label(infoStatuesComp, SWT.NONE);
 
 
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL)) 
@@ -97,6 +91,43 @@ extends HeaderComposite{
 
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE)) 
 			statuesLabel.setText("Active");
+
+
+		XComposite infoDateContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+
+		infoDateComp = new XComposite(infoDateContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
+		infoDateComp.setLayoutData(null);
+		infoDateComp.getGridLayout().numColumns = 3;
+		new Label(infoDateComp, SWT.NONE).setText("Last Task:");
+
+
+		lastExecutionstampTask = new Label(infoDateComp, SWT.NONE);
+		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
+		if(date != null)
+			lastExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+
+		new Label(infoDateComp, SWT.NONE).setText("Next Task:");
+		nextExecutionstampTask = new Label(infoDateComp, SWT.NONE);
+		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
+		if(date != null)
+			nextExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	}
 
