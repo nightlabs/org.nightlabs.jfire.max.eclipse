@@ -36,7 +36,6 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -192,7 +191,7 @@ extends FadeableComposite
 				productNameModified = true;
 			}
 		});
-		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
+//		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
 		productNameDialogButton = new Button(comp3, SWT.PUSH);
 		productNameDialogButton.setText("..."); //$NON-NLS-1$
