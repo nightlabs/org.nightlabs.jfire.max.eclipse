@@ -440,6 +440,16 @@
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction#toolbar"
             name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction#toolbar.name"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustomer.AssignCustomerAction#toolbar.tooltip"/>
+<!--            
+        <articleContainerAction
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+              name="Reserve All..."
+              tooltip="Reserve All">
+        </articleContainerAction>
+-->        
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
