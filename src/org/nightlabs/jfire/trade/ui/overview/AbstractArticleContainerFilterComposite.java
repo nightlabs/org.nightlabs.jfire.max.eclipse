@@ -33,11 +33,15 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
+import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.query.AbstractArticleContainerQuery;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchDialog;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -65,6 +69,10 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	private Button customerActiveButton;
 	private Text customerText;
 	private Button customerBrowseButton;
+
+	private Button productTypeActiveButton;
+	private Text productTypeText;
+	private Button productTypeBrowseButton;
 
 	/**
 	 * @param parent
@@ -151,7 +159,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		createDTGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		Composite wrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
-			LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
+			LayoutDataMode.GRID_DATA_HORIZONTAL, 4);
 
 		final Group userGroup = new Group(wrapper, SWT.NONE);
 		userGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userGroup.text")); //$NON-NLS-1$
@@ -230,7 +238,52 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.customerID, active);
 			}
 		});
+
+		final Group productTypeGroup = new Group(wrapper, SWT.NONE);
+		productTypeGroup.setText("ProductType");
+		productTypeGroup.setLayout(new GridLayout(2, false));
+		productTypeGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		productTypeActiveButton = new Button(productTypeGroup, SWT.CHECK);
+		productTypeActiveButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerActiveButton.text")); //$NON-NLS-1$
+		GridData productTypeLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		productTypeLabelData.horizontalSpan = 2;
+		productTypeActiveButton.setLayoutData(productTypeLabelData);
+		productTypeText = new Text(productTypeGroup, getBorderStyle());
+		productTypeText.setEnabled(false);
+		productTypeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		productTypeText.addSelectionListener(productTypeSelectionListener);
+		productTypeBrowseButton = new Button(productTypeGroup, SWT.NONE);
+		productTypeBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerBrowseButton.text"));
+		productTypeBrowseButton.addSelectionListener(productTypeSelectionListener);
+		productTypeBrowseButton.setEnabled(false);
+		productTypeActiveButton.addSelectionListener(new ButtonSelectionListener()
+		{
+			@Override
+			protected void handleSelection(boolean active)
+			{
+				getQuery().setFieldEnabled(AbstractArticleContainerQuery.FieldName.productTypeID, active);
+			}
+		});
 	}
+
+	private SelectionListener productTypeSelectionListener = new SelectionAdapter()
+	{
+		@Override
+		public void widgetSelected(SelectionEvent e)
+		{
+			GenericProductTypeSearchDialog dialog = new GenericProductTypeSearchDialog(
+					getShell());
+			int returnCode = dialog.open();
+			if (returnCode == Window.OK) {
+				ProductType productType = dialog.getProductType();
+				if (productType != null) {
+					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
+					getQuery().setProductTypeID(productTypeID);
+					productTypeText.setText(productType.getName().getText());
+				}
+			}
+		}
+	};
 
 	private SelectionListener userSelectionListener = new SelectionAdapter()
 	{
@@ -300,6 +353,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		fieldNames.add(AbstractArticleContainerQuery.FieldName.createUserID);
 		fieldNames.add(AbstractArticleContainerQuery.FieldName.customerID);
 		fieldNames.add(AbstractArticleContainerQuery.FieldName.vendorID);
+		fieldNames.add(AbstractArticleContainerQuery.FieldName.productTypeID);
 	}
 
 	@Override
@@ -425,6 +479,31 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 				vendorText.setEnabled(active);
 				vendorBrowseButton.setEnabled(active);
 				setSearchSectionActive(vendorActiveButton, active);
+			}
+			else if (AbstractArticleContainerQuery.FieldName.productTypeID.equals(propertyName))
+			{
+				ProductTypeID productTypeID = (ProductTypeID) changedField.getNewValue();
+				if (productTypeID == null)
+				{
+					productTypeText.setText(""); //$NON-NLS-1$
+				}
+				else
+				{
+					final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
+						productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+					);
+
+					productTypeText.setText(productType.getName().getText());
+				}
+			}
+			else if (AbstractSearchQuery.getEnabledFieldName(
+					AbstractArticleContainerQuery.FieldName.productTypeID).equals(propertyName))
+			{
+				final boolean active = (Boolean) changedField.getNewValue();
+				productTypeText.setEnabled(active);
+				productTypeBrowseButton.setEnabled(active);
+				setSearchSectionActive(productTypeActiveButton, active);
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
