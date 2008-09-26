@@ -63,8 +63,8 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public class ArticleContainerQuickSaleEditorPage
 extends ArticleContainerEditorPage
-{	
-	
+{
+
 	public static class Factory implements IEntityEditorPageFactory {
 		@Override
 		public IFormPage createPage(FormEditor formEditor) {
@@ -83,7 +83,7 @@ extends ArticleContainerEditorPage
 			};
 		}
 	}
-	
+
 	private XComposite wrapper;
 	private Composite buttonComp;
 	private Button okButtonCustomer;
@@ -92,51 +92,51 @@ extends ArticleContainerEditorPage
 	private Text customerSearchText;
 	private Button deleteAllButton;
 //	private Button reverseButton;
-	
+
 	/**
 	 */
 	public ArticleContainerQuickSaleEditorPage(FormEditor editor) {
 		super(editor);
 	}
-	
+
 	@Override
 	protected Composite createComposite(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		createComposite(wrapper, ((ArticleContainerEditorInput)getEditorInput()).getArticleContainerID());
 		return wrapper;
 	}
-	
+
 	protected void createComposite(Composite parent, ArticleContainerID articleContainerID) {
 		getArticleContainerEdit().createComposite(parent);
 		XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
-		
+
 		buttonComp = new XComposite(wrapper, SWT.NONE);
 		buttonComp.setLayout(new GridLayout(8, false));
 		buttonComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		deleteAllButton = new Button(buttonComp, SWT.NONE);
+
+		deleteAllButton = new Button(buttonComp, SWT.FLAT);
 		deleteAllButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage.deleteAllButton.text")); //$NON-NLS-1$
 		deleteAllButton.setImage(SharedImages.DELETE_16x16.createImage());
 		deleteAllButton.addSelectionListener(deleteAllListener);
 
-		deleteSelectionButton = new Button(buttonComp, SWT.NONE);
+		deleteSelectionButton = new Button(buttonComp, SWT.FLAT);
 		deleteSelectionButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage.button.deleteSelection.text")); //$NON-NLS-1$
 		deleteSelectionButton.setImage(SharedImages.DELETE_16x16.createImage());
 		deleteSelectionButton.addSelectionListener(deleteSelectionListener);
 		deleteSelectionButton.setEnabled(false);
-				
+
 		// need to add listeners for activeSegmentEdit by this listener, because at this time activeSegementEdit is null
 		getArticleContainerEdit().addActiveSegmentEditSelectionListener(new ActiveSegmentEditSelectionListener(){
 			@Override
 			public void selected(ActiveSegmentEditSelectionEvent event) {
 				// add listener to check for articleSelection to set enable state for deleteSelectionButton
-				event.getActiveSegmentEdit().addSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);				
+				event.getActiveSegmentEdit().addSegmentEditArticleSelectionListener(segmentEditArticleSelectionListener);
 			}
 		});
-		
+
 		Label spacerLabel = new Label(buttonComp, SWT.NONE);
 		spacerLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		Label customerSearchLabel = new Label(buttonComp, SWT.NONE);
 		customerSearchLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage.customerSearchLabel.text")); //$NON-NLS-1$
 		customerSearchText = new Text(buttonComp, wrapper.getBorderStyle());
@@ -146,15 +146,15 @@ extends ArticleContainerEditorPage
 		textData.minimumWidth = 100;
 		customerSearchText.setLayoutData(textData);
 		customerSearchText.addSelectionListener(okListenerCustomer);
-		
-		okButtonCustomer = new Button(buttonComp, SWT.NONE);
+
+		okButtonCustomer = new Button(buttonComp, SWT.FLAT);
 		okButtonCustomer.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage.okButtonCustomer.text")); //$NON-NLS-1$
 		okButtonCustomer.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), LegalEntityEditorView.class));
 		okButtonCustomer.addSelectionListener(okListenerCustomer);
-		
+
 //		Label separator = new Label(buttonComp, SWT.SEPARATOR);
-		
-		okButtonAnonymous = new Button(buttonComp, SWT.NONE);
+
+		okButtonAnonymous = new Button(buttonComp, SWT.FLAT);
 		okButtonAnonymous.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditorPage.okButtonAnonymous.text")); //$NON-NLS-1$
 		okButtonAnonymous.setImage(SharedImages.getSharedImage(TradePlugin.getDefault(), SelectAnonymousViewAction.class));
 		okButtonAnonymous.addSelectionListener(okListenerAnonymous);
@@ -164,18 +164,18 @@ extends ArticleContainerEditorPage
 
 		buttonComp.setEnabled(false);
 	}
-	
+
 	/**
 	 * Returns a Set of all {@link ArticleID} of those {@link Article}s which do not have the allocated or reversed status
 	 * form the given Set of {@link ArticleSelection}s.
-	 * 
+	 *
 	 * @param selections a Set of {@link ArticleSelection} which should be checked
 	 * @return a Set of all {@link ArticleID} of those {@link Article}s which do not have the allocated or reversed status
 	 */
 	protected ArticleStatusCheckResult getArticleStatusCheckResult(Set<ArticleSelection> selections) {
 		return new ArticleStatusCheckResult(ArticleSelection.getSelectedArticles(selections));
 	}
-	
+
 	private SegmentEditArticleSelectionListener segmentEditArticleSelectionListener = new SegmentEditArticleSelectionListener() {
 		public void selected(SegmentEditArticleSelectionEvent event) {
 			if (!event.getArticleSelections().isEmpty()) {
@@ -185,10 +185,10 @@ extends ArticleContainerEditorPage
 			}
 			else {
 				deleteSelectionButton.setEnabled(false);
-			}			
+			}
 		}
-	};	
-	
+	};
+
 	private SelectionListener okListenerCustomer = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			String text = customerSearchText.getText();
@@ -226,19 +226,21 @@ extends ArticleContainerEditorPage
 			widgetSelected(e);
 		}
 	};
-	
+
 	private SelectionListener deleteAllListener = new SelectionAdapter(){
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			deleteAll();
 		}
 	};
 
 	private SelectionListener deleteSelectionListener = new SelectionAdapter(){
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			deleteSelection();
 		}
 	};
-		
+
 	public static ArticleContainerEditorInput createEditorInput()
 	{
 		TradeManager tm;
@@ -278,40 +280,40 @@ extends ArticleContainerEditorPage
 	}
 
 //	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
-//		public void articlesCreated(ArticleCreateEvent articleCreateEvent) { 
+//		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
 //			if (buttonComp != null && !buttonComp.isDisposed())
 //				buttonComp.setEnabled(true);
 //		}
 //	};
 
 	private Set<Article> articlesWithWrongState = new HashSet<Article>();
-	
-	private void checkAllArticlesAreAllocatedOrReversed() 
+
+	private void checkAllArticlesAreAllocatedOrReversed()
 	{
-		ArticleStatusCheckResult articleStatusCheckResult = new ArticleStatusCheckResult(getArticleContainerEdit().getArticles());			
-		
+		ArticleStatusCheckResult articleStatusCheckResult = new ArticleStatusCheckResult(getArticleContainerEdit().getArticles());
+
 		if (!articleStatusCheckResult.getNotAllocatedNorReversedArticles().isEmpty())
 			articlesWithWrongState.addAll(articleStatusCheckResult.getNotAllocatedNorReversedArticles());
-		
+
 		if (!articleStatusCheckResult.getAllocatedOrReversedArticles().isEmpty())
 			articlesWithWrongState.removeAll(articleStatusCheckResult.getAllocatedOrReversedArticles());
-		
+
 		if (buttonComp != null && !buttonComp.isDisposed())
-			buttonComp.setEnabled(articlesWithWrongState.isEmpty());		
+			buttonComp.setEnabled(articlesWithWrongState.isEmpty());
 	}
-	
+
 	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
 		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
 			checkAllArticlesAreAllocatedOrReversed();
 		}
 	};
-	
+
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
 			checkAllArticlesAreAllocatedOrReversed();
 		}
 	};
-	
+
 	protected void assignToCustomer(LegalEntity legalEntity)
 	{
 		TradeManager tm = TradePlugin.getDefault().getTradeManager();
@@ -323,7 +325,7 @@ extends ArticleContainerEditorPage
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	protected boolean payAndDeliverAll()
 	{
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
@@ -335,7 +337,7 @@ extends ArticleContainerEditorPage
 			return false;
 		return true;
 	}
-	
+
 	protected void deleteAll()
 	{
 		try {
@@ -345,7 +347,7 @@ extends ArticleContainerEditorPage
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getArticleContainerEdit().getArticles());
 			tradeManager.deleteArticles(articleIDs, true);
-			
+
 			createNewOrder();
 		}
 		catch (Exception e) {
@@ -388,9 +390,9 @@ extends ArticleContainerEditorPage
 				getArticleContainerEdit().addArticleChangeListener(articleChangeListener);
 
 				TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
-				Collection<Article> articles = tradeManager.releaseArticles(articleIDs, 
+				Collection<Article> articles = tradeManager.releaseArticles(articleIDs,
 						true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-				tradeManager.deleteArticles(articleIDs, true);				
+				tradeManager.deleteArticles(articleIDs, true);
 			}
 			catch (Exception e) {
 				if (!composite.isDisposed()) {
@@ -401,7 +403,7 @@ extends ArticleContainerEditorPage
 			}
 		}
 	}
-		
+
 	protected void createNewOrder()
 	{
 		// only close, open will occur automatically because of partListener in ArticleContainerQuickSaleEditor
