@@ -202,7 +202,7 @@ extends AbstractIssueEditorGeneralSection
 		projectLabel.setText(
 				String.format(
 						"Project: %s", 
-						issue.getProject().getName().getText())
+						issue.getProject() == null?"":issue.getProject().getName().getText())
 		);
 		
 		currentStateComposite.setStatable(issue);

@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -38,6 +39,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -106,6 +108,7 @@ extends WizardHopPage
 
 		new Label(mainComposite, SWT.NONE).setText("Project");
 		projectComboComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
+		prepareProject();
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 5;
 		projectComboComposite.setLayoutData(gridData);
@@ -297,9 +300,9 @@ extends WizardHopPage
 		boolean result = true;
 		setErrorMessage(null);
 		
-		if (issue.getProject() == null) {
-			result = false;
-		}
+//		if (issue.getProject() == null) {
+//			result = false;
+//		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
 			result = false;
 		}
@@ -368,4 +371,15 @@ extends WizardHopPage
 //	public Date getToDateTime() {
 //		return toDateTimeControl.getDate();
 //	}
+	
+	private static Project PROJECT_NOT_SPECIFIC = new Project(Organisation.DEV_ORGANISATION_ID, -1);
+	private void prepareProject(){
+		PROJECT_NOT_SPECIFIC.getName().setText(Locale.ENGLISH.getLanguage(), "Not specific");
+		projectComboComposite.addProject(PROJECT_NOT_SPECIFIC, 0);
+		
+		if (selectedProject == null)
+			selectedProject = PROJECT_NOT_SPECIFIC;
+
+		setSelectedProject(selectedProject);
+	}
 }
