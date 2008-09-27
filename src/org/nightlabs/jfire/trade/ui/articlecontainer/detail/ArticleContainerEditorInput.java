@@ -126,7 +126,7 @@ implements IEditorInput
 	{
 		if (obj == this) return true;
 
-		if (!(obj instanceof ArticleContainerEditor))
+		if (!(obj instanceof ArticleContainerEditorInput))
 			return false;
 
 		ArticleContainerEditorInput other = (ArticleContainerEditorInput)obj;
