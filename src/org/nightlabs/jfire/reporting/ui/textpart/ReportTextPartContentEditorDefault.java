@@ -3,6 +3,9 @@
  */
 package org.nightlabs.jfire.reporting.ui.textpart;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -23,7 +26,10 @@ implements IReportTextPartContentEditor {
 	 * @param style
 	 */
 	public ReportTextPartContentEditorDefault(Composite parent, int style) {
-		super(parent, style, LayoutMode.TIGHT_WRAPPER);
+		super(parent, style, LayoutMode.ORDINARY_WRAPPER);
+		text = new Text(this, getBorderStyle() | SWT.MULTI);
+		text.setLayoutData(new GridData(GridData.FILL_BOTH));
+		adaptToToolkit();
 	}
 
 	
@@ -49,6 +55,18 @@ implements IReportTextPartContentEditor {
 	@Override
 	public void setContent(String content) {
 		text.setText(content);
+	}
+
+
+	@Override
+	public void addModifyListener(ModifyListener modifyListener) {
+		text.addModifyListener(modifyListener);
+	}
+
+
+	@Override
+	public void removeModifyListener(ModifyListener modifyListener) {
+		text.removeModifyListener(modifyListener);
 	}
 
 }

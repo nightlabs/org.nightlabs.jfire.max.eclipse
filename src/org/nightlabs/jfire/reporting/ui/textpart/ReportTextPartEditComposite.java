@@ -8,10 +8,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -49,16 +54,32 @@ public class ReportTextPartEditComposite extends XComposite {
 	private StackLayout editorWrapperLayout;
 	private II18nTextEditor nameEditor;
 	private Map<String, IReportTextPartContentEditor> contentEditors = new HashMap<String, IReportTextPartContentEditor>();
+	private ListenerList changedListeners = new ListenerList();
+
+	private ModifyListener modifyListener = new ModifyListener() {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			notifyChangedListeners();
+		}
+	};
 	
+	private LanguageChangeListener languageListener = new LanguageChangeListener() {
+		@Override
+		public void languageChanged(LanguageChangeEvent event)
+		{
+			switchLanguage(event.getNewLanguage().getLanguageID());
+		}
+	};
 	/**
 	 * Create a new {@link ReportTextPartEditComposite}.
 	 * 
 	 * @param parent The parent {@link Composite} to use.
 	 * @param style The style to apply to the {@link Composite}.
 	 */
-	public ReportTextPartEditComposite(Composite parent, int style, ReportTextPart reportTextPart) {
+	public ReportTextPartEditComposite(Composite parent, int style, ReportTextPart reportTextPart, LanguageChooser languageChooser) {
 		super(parent, style, LayoutMode.LEFT_RIGHT_WRAPPER);
 		this.reportTextPart = reportTextPart;
+		this.languageChooser = languageChooser;
 		createContents();
 	}
 
@@ -85,11 +106,11 @@ public class ReportTextPartEditComposite extends XComposite {
 		
 		GridLayout layout = new GridLayout(2, false);
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, layout);
-		setLayout(layout);
-		
 		header.setLayout(layout);
 		
-		typeCombo = new XComboComposite<ReportTextPart.Type>(header, SWT.READ_ONLY);
+		typeCombo = new XComboComposite<ReportTextPart.Type>(
+				header, getBorderStyle() | SWT.READ_ONLY,
+				"Text part type");
 		typeCombo.setLabelProvider(new TableLabelProvider() {
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
@@ -102,21 +123,26 @@ public class ReportTextPartEditComposite extends XComposite {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				switchMode(typeCombo.getSelectedElement());
+				notifyChangedListeners();
 			}
 		});
 		
-		languageChooser = new LanguageChooserCombo(header);
-		languageChooser.addLanguageChangeListener(new LanguageChangeListener() {
+		Composite nameParent = languageChooser != null ? header : this;
+		
+		if (languageChooser == null) {
+			languageChooser = new LanguageChooserCombo(header);
+		}
+		languageChooser.addLanguageChangeListener(languageListener);
+		addDisposeListener(new DisposeListener() {
 			@Override
-			public void languageChanged(LanguageChangeEvent event)
-			{
-				switchLanguage(event.getNewLanguage().getLanguageID());
+			public void widgetDisposed(DisposeEvent e) {
+				languageChooser.removeLanguageChangeListener(languageListener);
 			}
 		});
 
-		nameEditor = new I18nTextEditor(this, languageChooser, "Name");
+		nameEditor = new I18nTextEditor(nameParent, languageChooser, "Name");
 		nameEditor.setI18nText(reportTextPart.getName(), EditMode.BUFFERED);
-		
+		nameEditor.addModifyListener(modifyListener);
 		editorWrapper = new Composite(this, SWT.NONE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		editorWrapper.setLayoutData(gd);
@@ -143,9 +169,13 @@ public class ReportTextPartEditComposite extends XComposite {
 				contentEditor = new ReportTextPartContentEditorDefault(editorWrapper, SWT.NONE); // TODO: integrate rich editor
 			}
 			if (content == null) {
-				content = reportTextPart.getContent().getText(language.getLanguageID());
+				if (reportTextPart.getContent().containsLanguageID(language.getLanguageID()))
+					content = reportTextPart.getContent().getText(language.getLanguageID());
+				else
+					content = "";
 			}
 			contentEditor.setContent(content);
+			contentEditor.addModifyListener(modifyListener);
 			contentEditors.put(language.getLanguageID(), contentEditor);			
 		}
 		switchLanguage(languageChooser.getLanguage().getLanguageID());
@@ -176,4 +206,25 @@ public class ReportTextPartEditComposite extends XComposite {
 			}
 		}
 	}
+	
+	public void addReportTextPartChangedListener(IReportTextPartChangedListener listener) {
+		changedListeners.add(listener);
+	}
+	
+	public void removeReportTextPartChangedListener(IReportTextPartChangedListener listener) {
+		changedListeners.remove(listener);
+	}
+	
+	protected void notifyChangedListeners() {
+		Object[] listeners = changedListeners.getListeners();
+		if (listeners.length <= 0)
+			return;
+		ReportTextPartChangedEvent event = new ReportTextPartChangedEvent(reportTextPart);
+		for (Object listener : listeners) {
+			if (listener instanceof IReportTextPartChangedListener) {
+				((IReportTextPartChangedListener) listener).reportTextPartChanged(event);
+			}
+		}
+	}
+	
 }
