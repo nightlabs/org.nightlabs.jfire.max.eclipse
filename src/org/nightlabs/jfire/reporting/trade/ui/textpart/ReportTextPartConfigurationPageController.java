@@ -20,7 +20,9 @@ import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
+import org.nightlabs.jfire.reporting.textpart.dao.ReportTextPartConfigurationDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.report.ReportTradeUtil;
@@ -33,6 +35,11 @@ import org.nightlabs.progress.SubProgressMonitor;
  */
 public class ReportTextPartConfigurationPageController extends EntityEditorPageController {
 
+	private static final String[] FETCH_GROUPS_CONFIG = new String[] {
+		FetchPlan.DEFAULT, ReportTextPartConfiguration.FETCH_GROUP_REPORT_TEXT_PARTS,
+		ReportTextPart.FETCH_GROUP_NAME, ReportTextPart.FETCH_GROUP_CONTENT
+	};
+	
 	private Map<ReportRegistryItemID, ReportTextPartConfiguration> configurations = new HashMap<ReportRegistryItemID, ReportTextPartConfiguration>();
 	private Set<ReportTextPartConfiguration> dirtyConfigurations = new HashSet<ReportTextPartConfiguration>(); 
 	
@@ -88,21 +95,41 @@ public class ReportTextPartConfigurationPageController extends EntityEditorPageC
 	 */
 	@Override
 	public boolean doSave(ProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		return false;
+		monitor.beginTask("Store ReporTextPartConfiguration", dirtyConfigurations.size() * 5 + 1);
+		monitor.worked(1);
+		try {
+			for (Map.Entry<ReportRegistryItemID, ReportTextPartConfiguration> configs : configurations.entrySet()) {
+				if (dirtyConfigurations.contains(configs.getValue())) {
+					ReportTextPartConfiguration storedConfig = ReportTextPartConfigurationDAO.sharedInstance().storeLinkedObjectReportTextPartConfiguration(
+							configs.getValue(), true, FETCH_GROUPS_CONFIG, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 5));
+					dirtyConfigurations.remove(configs.getValue());
+					configurations.put(configs.getKey(), storedConfig);
+				}
+			}
+			fireModifyEvent(null, null);
+		} finally {
+			monitor.done();
+		}
+		return dirtyConfigurations.size() == 0;
 	}
 
 	public ReportTextPartConfiguration getReportTextPartConfiguration(ReportRegistryItemID reportRegistryItemID, ProgressMonitor monitor) {
-		ReportTextPartConfiguration configuration = configurations.get(reportRegistryItemID);
-		if (configuration != null)
+		monitor.beginTask("Loading ReporTextPartConfiguration", 10);
+		try {
+			if (configurations.containsKey(reportRegistryItemID))
+				return configurations.get(reportRegistryItemID);
+			
+			monitor.worked(5);
+			ReportTextPartConfiguration configuration = ReportTextPartConfigurationDAO.sharedInstance().getReportTextPartConfiguration(
+					reportRegistryItemID, articleContainerID, true, 
+					FETCH_GROUPS_CONFIG, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					new SubProgressMonitor(monitor, 5));
+			configurations.put(reportRegistryItemID, configuration);
+			
 			return configuration;
-		// TODO: Implement using DAO
-		return configuration;
-	}
-	
-	@Override
-	public void markDirty() {
-		throw new UnsupportedOperationException("This method should not be called, use markDirty(ReportTextPartConfiguration)");
+		} finally {
+			monitor.done();
+		}
 	}
 	
 	@Override
