@@ -53,6 +53,7 @@ extends HeaderComposite
 		
 		setLayout(new GridLayout(4, false));
 		
+		
 		createdLabel = new Label(this, SWT.NONE);
 		createdLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite.createLabel.text")); //$NON-NLS-1$
 		timestamp = new Label(this, SWT.NONE);

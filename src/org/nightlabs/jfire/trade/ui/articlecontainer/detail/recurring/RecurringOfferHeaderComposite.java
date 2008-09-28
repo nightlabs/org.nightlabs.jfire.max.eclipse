@@ -44,7 +44,8 @@ extends HeaderComposite{
 	private XComposite infoDateComp;
 	private Label nextExecutionstampTask;
 	private Label lastExecutionstampTask;
-
+	XComposite infoStatuesContainerComp;
+	
 	private volatile RecurringOffer recurringOffer;
 
 	public RecurringOfferHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite,
@@ -70,11 +71,14 @@ extends HeaderComposite{
 			}
 		});
 
-		XComposite infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+			
+		
+		if(infoStatuesContainerComp == null)
+		 infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 
 		XComposite infoStatuesComp = new XComposite(infoStatuesContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		infoStatuesComp.setLayoutData(null);
-		infoStatuesComp.getGridLayout().numColumns = 1;
+		infoStatuesComp.getGridLayout().numColumns = 3;
 
 
 		new Label(infoStatuesComp, SWT.NONE).setText("RecurredOffers:");
@@ -114,13 +118,21 @@ extends HeaderComposite{
 
 
 
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				if (isDisposed())
+					return;
+				getShell().layout(true, true);
 
-
-
-
-
-
-
+				getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						if (isDisposed())
+							return;
+						getShell().layout(true, true);
+					}
+				});
+			}
+		});
 
 
 
