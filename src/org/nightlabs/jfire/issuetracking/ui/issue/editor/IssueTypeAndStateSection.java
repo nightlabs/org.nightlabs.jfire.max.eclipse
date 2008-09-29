@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
@@ -28,6 +29,8 @@ public class IssueTypeAndStateSection
 extends AbstractIssueEditorGeneralSection 
 {
 	private Label projectLabel;
+	private ProjectComboComposite pc;
+	
 	private Label issueTypeLabel;
 	private Label statusLabel;
 
@@ -52,10 +55,15 @@ extends AbstractIssueEditorGeneralSection
 		issueTypeLabel.setLayoutData(gd);
 		
 		projectLabel = new Label(getClient(), SWT.WRAP);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
+		gd = new GridData();
+		gd.horizontalSpan = 2;
 		projectLabel.setLayoutData(gd);
 
+		pc = new ProjectComboComposite(getClient(), SWT.NONE);
+		gd = new GridData();
+		gd.horizontalSpan = 1;
+		pc.setLayoutData(gd);
+		
 		statusLabel = new Label(getClient(), SWT.WRAP);
 		statusLabel.setText("Status: ");
 		gd = new GridData();
@@ -201,9 +209,10 @@ extends AbstractIssueEditorGeneralSection
 		
 		projectLabel.setText(
 				String.format(
-						"Project: %s", 
-						issue.getProject() == null?"":issue.getProject().getName().getText())
+						"Project:")
 		);
+		
+		pc.setSelectedProject(issue.getProject());
 		
 		currentStateComposite.setStatable(issue);
 		nextTransitionComposite.setStatable(issue);		

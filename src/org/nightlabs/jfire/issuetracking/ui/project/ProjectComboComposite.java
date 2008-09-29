@@ -209,11 +209,11 @@ implements ISelectionProvider
 	}
 	
 	public void setSelectedProject(Project project) {
-		setSelectedProjectID(project == null ? null : project.getProjectID());
+		setSelectedProjectID(project == null ? -1 : project.getProjectID());
 	}
 
 	public void setSelectedProject(ProjectID projectID) {
-		setSelectedProjectID(projectID == null ? null : projectID.projectID);
+		setSelectedProjectID(projectID == null ? -1 : projectID.projectID);
 	}
 	
 	private void setSelectedProjectID(long projectID) {
