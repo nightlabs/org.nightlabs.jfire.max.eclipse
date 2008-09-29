@@ -17,9 +17,15 @@
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView"
             icon="icons/IssuePerspective.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView" name="Issue View"/>
+        <category
+    		id="org.nightlabs.jfire.issuetracking.project" name="Project"/>
+		<view 
+			category="org.nightlabs.jfire.issuetracking.project"
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView"
+            icon="icons/project/ProjectAdminView.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminView" name="Project Admin View"/>
     </extension>
 
-   
    <extension
          point="org.eclipse.ui.editors">
       <editor
