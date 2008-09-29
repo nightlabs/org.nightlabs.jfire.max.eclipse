@@ -1,6 +1,10 @@
-package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
+package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditFactory;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.DefaultArticleContainerEdit;
 import org.eclipse.swt.widgets.Composite;
 
 public class RecurringArticleContainerEdit extends DefaultArticleContainerEdit {

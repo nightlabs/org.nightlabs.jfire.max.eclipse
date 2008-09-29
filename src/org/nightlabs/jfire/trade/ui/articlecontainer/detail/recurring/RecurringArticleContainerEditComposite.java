@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
+package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
 import javax.jdo.FetchPlan;
 
@@ -19,8 +19,8 @@ import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOrderDAO;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderHeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class RecurringArticleContainerEditComposite extends ArticleContainerEditComposite {
