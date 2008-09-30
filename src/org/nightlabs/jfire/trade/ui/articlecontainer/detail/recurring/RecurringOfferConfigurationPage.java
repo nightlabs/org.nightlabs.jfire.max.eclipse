@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -29,21 +30,24 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 
 	}
 
-
+	RecurringTimingConfigSection recurringTimingConfigSection;
+	
 	public RecurringOfferConfigurationPage(FormEditor editor) {
 		super(editor, RecurringOfferConfigurationPage.class.getName(), "Recurring Offer Configuration");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void addSections(Composite parent) {
-		// TODO Auto-generated method stub
-
+		
+		final RecurringOfferConfigurationPageController controller = (RecurringOfferConfigurationPageController) getPageController();
+		
+		
+		recurringTimingConfigSection = new RecurringTimingConfigSection(this, parent, controller);
+		getManagedForm().addPart(recurringTimingConfigSection);
 	}
 
 	@Override
 	protected String getPageFormTitle() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
