@@ -33,7 +33,7 @@ public class IssueTypeAndStateSection
 extends AbstractIssueEditorGeneralSection 
 {
 	private Label projectLabel;
-	private ProjectComboComposite pc;
+	private ProjectComboComposite projectComboComposite;
 
 	private Label issueTypeLabel;
 	private Label statusLabel;
@@ -53,34 +53,38 @@ extends AbstractIssueEditorGeneralSection
 		getClient().getGridLayout().numColumns = 3;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
 
+		// Issue Type
 		issueTypeLabel = new Label(getClient(), SWT.WRAP);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 3;
 		issueTypeLabel.setLayoutData(gd);
 
+		// Project
 		projectLabel = new Label(getClient(), SWT.WRAP);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		projectLabel.setLayoutData(gd);
 
-		pc = new ProjectComboComposite(getClient(), SWT.NONE);
+		projectComboComposite = new ProjectComboComposite(getClient(), SWT.NONE);
 		gd = new GridData();
 		gd.horizontalSpan = 1;
-		pc.setLayoutData(gd);
-		pc.addSelectionChangedListener(new ISelectionChangedListener() {
+		projectComboComposite.setLayoutData(gd);
+		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
-				getController().getIssue().setProject(pc.getSelectedProject());
+				getController().getIssue().setProject(projectComboComposite.getSelectedProject());
 				markDirty();
 			}
 		});
 
+		// Status
 		statusLabel = new Label(getClient(), SWT.WRAP);
 		statusLabel.setText("Status: ");
 		gd = new GridData();
+		gd.horizontalSpan = 1;
 		statusLabel.setLayoutData(gd);
 
-		currentStateComposite = new CurrentStateComposite(getClient(), SWT.NONE);
+		currentStateComposite = new CurrentStateComposite(getClient(), SWT.WRAP);
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		currentStateComposite.setLayoutData(gd);
@@ -223,7 +227,7 @@ extends AbstractIssueEditorGeneralSection
 				"Project:")
 		);
 
-		pc.setSelectedProject(issue.getProject());
+		projectComboComposite.setSelectedProject(issue.getProject());
 
 		currentStateComposite.setStatable(issue);
 		nextTransitionComposite.setStatable(issue);		
