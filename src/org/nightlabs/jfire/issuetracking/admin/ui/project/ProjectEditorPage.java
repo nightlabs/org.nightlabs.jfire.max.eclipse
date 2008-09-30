@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.issuetracking.admin.ui.project;
 
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -52,7 +51,6 @@ extends EntityEditorPageWithProgress
 
 	private ProjectEditorPageController controller;
 	
-	private ScrolledComposite sc;
 	@Override
 	protected void addSections(Composite parent) {
 		controller = (ProjectEditorPageController)getPageController();

@@ -31,7 +31,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.ProjectTypeDAO;
-import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
