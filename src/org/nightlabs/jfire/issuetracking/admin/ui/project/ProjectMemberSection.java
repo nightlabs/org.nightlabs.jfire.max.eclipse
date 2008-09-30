@@ -84,6 +84,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 						
 						if (project.getObjectId().equals(Project.PROJECT_ID_DEFAULT)) {
 							userTable.setEnabled(false);
+							getToolBarManager().getControl().setEnabled(false);
 						}
 					}
 				});
