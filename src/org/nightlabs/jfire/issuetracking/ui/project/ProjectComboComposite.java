@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -32,7 +31,6 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
-import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
@@ -99,7 +97,6 @@ implements ISelectionProvider
 			{
 				try {
 					final Collection<Project> _projects = ProjectDAO.sharedInstance().getRootProjects(getLocalOrganisationID(), FETCH_GROUP_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					
 					List<Project> tempProjectList = new ArrayList<Project>();
 					CollectionUtil.addAllToCollection(_projects.toArray(new Project[0]), tempProjectList);
 					Collections.sort(tempProjectList);
@@ -123,7 +120,7 @@ implements ISelectionProvider
 								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage()));
 							}
 							
-							projectCombo.select(0);
+							setSelectedProject(Project.PROJECT_ID_DEFAULT);
 							ProjectComboComposite.this.getParent().layout(true);
 						}
 					});
