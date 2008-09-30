@@ -56,7 +56,7 @@ extends AbstractTreeComposite<Project>
 		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
 	};
 
-	protected static class ProjectTreeContentProvider
+	protected static class ProjectAdminTreeContentProvider
 	extends JDOObjectTreeContentProvider<ProjectID, Project, ProjectTreeNode>
 	{
 		@Override
@@ -184,7 +184,7 @@ extends AbstractTreeComposite<Project>
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer)
 	{
-		treeViewer.setContentProvider(new ProjectTreeContentProvider());
+		treeViewer.setContentProvider(new ProjectAdminTreeContentProvider());
 		treeViewer.setLabelProvider(new ProjectTreeLabelProvider());
 	}
 
