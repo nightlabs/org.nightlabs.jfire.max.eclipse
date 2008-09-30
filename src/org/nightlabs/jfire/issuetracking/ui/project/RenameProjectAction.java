@@ -27,7 +27,7 @@ public class RenameProjectAction extends Action {
 		setId(CreateProjectAction.class.getName());
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
+				ProjectAdminTreeComposite.class, 
 		"Rename"));
 		setToolTipText("Rename Project");
 		setText("Rename Project");

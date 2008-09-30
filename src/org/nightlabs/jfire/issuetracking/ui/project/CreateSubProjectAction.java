@@ -31,7 +31,7 @@ extends Action
 		setId(CreateSubProjectAction.class.getName());
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
+				ProjectAdminTreeComposite.class, 
 		"Create"));
 		setToolTipText("Create Sub Project");
 		setText("Create Sub Project");

@@ -49,7 +49,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  *
  */
-public class ProjectTreeComposite 
+public class ProjectAdminTreeComposite 
 extends AbstractTreeComposite<Project> 
 {
 	private static String[] FETCH_GROUPS = new String[]{
@@ -69,7 +69,7 @@ extends AbstractTreeComposite<Project>
 
 	private ActiveProjectTreeController activeProjectTreeController;
 
-	public ProjectTreeComposite(Composite parent, int treeStyle)
+	public ProjectAdminTreeComposite(Composite parent, int treeStyle)
 	{
 		super(parent, treeStyle, true, true, false);
 		activeProjectTreeController = new ActiveProjectTreeController()
@@ -99,7 +99,7 @@ extends AbstractTreeComposite<Project>
 		hookContextMenu();
 	}
 
-	public ProjectTreeComposite(Composite parent)
+	public ProjectAdminTreeComposite(Composite parent)
 	{
 		this(parent, DEFAULT_STYLE_SINGLE);
 	}
@@ -109,7 +109,7 @@ extends AbstractTreeComposite<Project>
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				ProjectTreeComposite.this.fillContextMenu(manager);
+				ProjectAdminTreeComposite.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(getTreeViewer().getControl());
@@ -168,7 +168,7 @@ extends AbstractTreeComposite<Project>
 		protected Image getJDOObjectImage(Project project, int columnIndex) {
 			if (columnIndex == 0)
 				return SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(),
-						ProjectTreeComposite.class, "project");
+						ProjectAdminTreeComposite.class, "project");
 
 			return super.getJDOObjectImage(project, columnIndex);
 		}

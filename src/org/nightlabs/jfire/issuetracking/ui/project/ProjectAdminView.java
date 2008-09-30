@@ -14,11 +14,11 @@ extends LSDViewPart
 	private CreateProjectAction createProjectAction;
 
 	//Components
-	private ProjectTreeComposite projectTreeComposite;
+	private ProjectAdminTreeComposite projectTreeComposite;
 
 	@Override
 	public void createPartContents(Composite parent) {
-		projectTreeComposite = new ProjectTreeComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+		projectTreeComposite = new ProjectAdminTreeComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
 		createActions();
 		createToolbarButtons();

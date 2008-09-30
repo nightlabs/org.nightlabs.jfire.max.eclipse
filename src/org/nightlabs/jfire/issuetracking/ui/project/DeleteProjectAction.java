@@ -20,7 +20,7 @@ extends Action
 		setId(DeleteProjectAction.class.getName());
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
+				ProjectAdminTreeComposite.class, 
 				"Delete"));
 		setToolTipText("Delete the selected project");
 		setText("Delete");

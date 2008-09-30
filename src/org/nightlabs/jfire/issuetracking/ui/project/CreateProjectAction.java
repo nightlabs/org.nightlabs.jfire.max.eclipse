@@ -27,7 +27,7 @@ extends Action
 		setId(CreateProjectAction.class.getName());
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
-				ProjectTreeComposite.class, 
+				ProjectAdminTreeComposite.class, 
 		"Create"));
 		setToolTipText("Create Project");
 		setText("Create Project");
