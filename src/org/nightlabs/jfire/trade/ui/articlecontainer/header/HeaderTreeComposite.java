@@ -80,8 +80,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.CreateRecurringOrderAction;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderRootTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -179,13 +178,10 @@ implements ISelectionProvider
 				else
 					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();
 
-				//PurchaseRootTreeNode
-				//SaleRootTreeNode
 				createOrderAction.setEnabled(true);
-				
-				
+
 				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
-				
+				createOfferAction.setEnabled(selectedNode instanceof RecurringOrderTreeNode);
 
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(

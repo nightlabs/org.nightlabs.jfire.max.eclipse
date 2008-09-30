@@ -1157,16 +1157,16 @@
        </articleContainerEditorPageFactory>
        <articleContainerEditorPageFactory
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigurationPage$Factory"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorPage"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigurationPage"
              articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
              editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
-             indexHint="500">
+             indexHint="1">
        </articleContainerEditorPageFactory>       
     </extension>
     <extension
           point="org.nightlabs.jfire.trade.ui.articleContainerEditFactory">
        <articleContainerEditFactory
-             articleContainerClass="org.nightlabs.jf0ire.trade.ArticleContainer"
+             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.DefaultArticleContainerEdit$Factory">
        </articleContainerEditFactory>
        <articleContainerEditFactory
