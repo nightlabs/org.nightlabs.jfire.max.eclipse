@@ -81,6 +81,10 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 						
 						Set<User> members = project.getMembers();
 						userTable.setInput(members);
+						
+						if (project.getObjectId().equals(Project.PROJECT_ID_DEFAULT)) {
+							userTable.setEnabled(false);
+						}
 					}
 				});
 			}

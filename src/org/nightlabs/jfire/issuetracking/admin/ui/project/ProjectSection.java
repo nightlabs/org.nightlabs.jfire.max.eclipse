@@ -149,6 +149,12 @@ extends ToolBarSectionPart
 				
 				createdTimeTextLabel.setText(project.getCreateTimestamp().toString());
 				updatedTimeTextLabel.setText(project.getUpdateTimestamp() == null? "-" : project.getUpdateTimestamp().toString());
+				
+				if (project.getObjectId().equals(Project.PROJECT_ID_DEFAULT)) {
+					projectTypeCombo.setEnabled(false);
+					nameText.setEnabled(false);
+					descriptionText.setEnabled(false);
+				}
 			}
 		});
 		
