@@ -45,7 +45,7 @@ extends HeaderComposite{
 	private Label nextExecutionstampTask;
 	private Label lastExecutionstampTask;
 	XComposite infoStatuesContainerComp;
-	
+
 	private volatile RecurringOffer recurringOffer;
 
 	public RecurringOfferHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite,
@@ -71,10 +71,10 @@ extends HeaderComposite{
 			}
 		});
 
-			
-		
+
+
 		if(infoStatuesContainerComp == null)
-		 infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+			infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 
 		XComposite infoStatuesComp = new XComposite(infoStatuesContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		infoStatuesComp.setLayoutData(null);
@@ -86,16 +86,17 @@ extends HeaderComposite{
 
 		Label statuesLabel  = new Label(infoStatuesComp, SWT.NONE);
 
+		if(recurringOffer.getStatusKey() != null)
+		{
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL)) 
+				statuesLabel.setText("Non equal Prices");
 
-		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL)) 
-			statuesLabel.setText("Non equal Prices");
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED)) 
+				statuesLabel.setText("Suspended");
 
-		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED)) 
-			statuesLabel.setText("Suspended");
-
-		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE)) 
-			statuesLabel.setText("Active");
-
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE)) 
+				statuesLabel.setText("Active");
+		}
 
 		XComposite infoDateContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 
