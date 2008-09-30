@@ -12,7 +12,7 @@ import org.nightlabs.jfire.base.ui.overview.CustomCompositeCategory;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditor;
 import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectEditorInput;
-import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeComposite;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 
 /**
  * @author Chairat Kongarayawetchakun chairat[at] NightLabs [dot] de
@@ -29,7 +29,7 @@ extends CustomCompositeCategory {
 	@Override
 	public Composite createComposite(Composite composite) {
 		XComposite wrapper = new XComposite(composite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		final ProjectTreeComposite pc = new ProjectTreeComposite(wrapper);
+		final ProjectAdminTreeComposite pc = new ProjectAdminTreeComposite(wrapper);
 		
 		pc.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
