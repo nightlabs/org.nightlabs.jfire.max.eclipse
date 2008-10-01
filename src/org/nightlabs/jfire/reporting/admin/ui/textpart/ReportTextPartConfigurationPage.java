@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.textpart;
 
-import org.apache.log4j.Logger;
 import org.eclipse.birt.report.designer.internal.ui.editors.FileReportProvider;
 import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;
 import org.eclipse.birt.report.designer.ui.editors.IReportProvider;
@@ -42,16 +41,15 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
+import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
 import org.nightlabs.jfire.reporting.ui.textpart.IReportTextPartConfigurationChangedListener;
 import org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationChangedEvent;
-import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 
 /**
- * A page for the Report Designer that lets the user preview
- * his reports within the JFire server environment.
- * 
- * It uses an adapted {@link ReportViewer} to
- * view ReportLayouts.
+ * A page for the Report Designer that lets the edit the
+ * {@link ReportTextPartConfiguration} for the current 
+ * {@link ReportRegistryItem}.
  * 
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
@@ -61,11 +59,6 @@ extends ReportTextPartConfigurationEditor
 implements IReportEditorPage
 {
 
-	/**
-	 * Logger used by this class.
-	 */
-	private static final Logger logger = Logger.getLogger(ReportTextPartConfigurationPage.class);
-	
 	public static final String ID_PAGE = ReportTextPartConfigurationPage.class.getName();
 	
 	private XComposite wrapper;
