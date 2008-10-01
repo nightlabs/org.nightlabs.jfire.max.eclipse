@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issuetracking.admin.ui.project.ProjectSection;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectSection;
 
 public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	/**
