@@ -44,9 +44,9 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 
 	private String filterOrganisationID;
 	private boolean filterOrganisationIDInverse = false;
-	
-	private List<Tariff> tariffs;
-	
+
+	private volatile List<Tariff> tariffs;
+
 	private LabelProvider labelProvider = new TableLabelProvider() {
 		public String getColumnText(Object element, int columnIndex) {
 			Tariff tariff = (Tariff) element;
@@ -88,10 +88,10 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		this.tariffFilter = tariffFilter;
 		this.filterOrganisationID = filterOrganisationID;
 		this.filterOrganisationIDInverse = filterOrganisationIDInverse;
-		
+
 		getTable().setHeaderVisible(false);
 		getTable().setLinesVisible(false);
-		
+
 		initTable();
 	}
 
@@ -156,7 +156,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 								it.remove();
 						}
 					}
-					
+
 					Comparator<Tariff> tariffComparator = _tariffComparator;
 					if (tariffComparator == null) {
 						tariffComparator = new Comparator<Tariff>() {
@@ -167,7 +167,8 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 							}
 						};
 					}
-					Collections.sort(tariffs, tariffComparator);
+					if (!tariffs.isEmpty())
+						Collections.sort(tariffs, tariffComparator);
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
@@ -219,21 +220,21 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		if (this.tariffs != null)
 			super.setSelectedElements(elements);
 	}
-	
+
 	public void moveSelectedTariffOneUp() {
 		int selected = tariffs.indexOf(getSelectedTariff());
 		if (selected <= 0)
 			return;
-		
+
 		Collections.swap(tariffs, selected, selected - 1);
 		refresh();
 	}
-	
+
 	public void moveSelectedTariffOneDown() {
 		int selected = tariffs.indexOf(getSelectedTariff());
 		if (selected >= tariffs.size()-1)
 			return;
-		
+
 		Collections.swap(tariffs, selected, selected + 1);
 		refresh();
 	}
@@ -249,7 +250,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		tableViewer.setLabelProvider(labelProvider);
 		tableViewer.setContentProvider(new TableContentProvider());
 	}
-	
+
 	public List<Tariff> getOrderedTariffs() {
 		return tariffs;
 	}
