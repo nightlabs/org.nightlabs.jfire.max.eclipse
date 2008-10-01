@@ -44,6 +44,14 @@
             id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
             name="Issue Editor">
       </editor>
+      <editor
+        	class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+            default="false"
+            contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
+            icon="icons/project/ProjectTreeComposite-project.16x16.png"
+            id="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+            name="Project">
+      </editor>
    </extension>
    
    <extension point="org.nightlabs.base.ui.entityEditor">
@@ -59,6 +67,10 @@
 			class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage$Factory"
 			editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
 			indexHint="30" />
+		<pageFactory 
+			class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPage$Factory"
+			editorID="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
+			indexHint="20" />
    </extension>  
   
   <extension point="org.nightlabs.base.ui.editorActionBarContribution">
@@ -221,5 +233,11 @@
             index="0"
             name="Issue List">
       </entryFactory>
+      <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
+            class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
+            index="20" 
+            name="Project" 
+            scope="IssueShelf"/>
    </extension>
 </plugin>
