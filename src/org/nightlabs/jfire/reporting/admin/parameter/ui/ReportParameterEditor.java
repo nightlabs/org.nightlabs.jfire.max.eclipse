@@ -40,7 +40,6 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -64,7 +63,7 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
-import org.nightlabs.base.ui.composite.ComboComposite;
+import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -565,7 +564,7 @@ extends GraphicalEditorWithFlyoutPalette
 	private Composite wrapper = null;
 	private Composite topWrapper = null;
 	private Composite contentWrapper = null;
-	private ComboComposite<ReportParameterAcquisitionUseCase> useCaseCombo = null;
+	private XComboComposite<ReportParameterAcquisitionUseCase> useCaseCombo = null;
 	private Button defaultUseCaseButton = null;
 	private Button newUseCaseButton = null;
 	private Button editUseCaseButton = null;
@@ -583,8 +582,9 @@ extends GraphicalEditorWithFlyoutPalette
 		topWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		List<ReportParameterAcquisitionUseCase> useCases = new ArrayList<ReportParameterAcquisitionUseCase>(
 				reportParameterAcquisitionSetup.getValueAcquisitionSetups().keySet());
-		useCaseCombo = new ComboComposite<ReportParameterAcquisitionUseCase>(
-				topWrapper, SWT.NONE, useCases, useCaseLabelProvider);
+		useCaseCombo = new XComboComposite<ReportParameterAcquisitionUseCase>(
+				topWrapper, SWT.READ_ONLY, useCaseLabelProvider);
+		useCaseCombo.setInput(useCases);
 		useCaseCombo.addSelectionChangedListener(useCaseComboListener);
 		defaultUseCaseButton = new Button(topWrapper, SWT.CHECK);
 		defaultUseCaseButton.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor.defaultUseCaseButton.text")); //$NON-NLS-1$
@@ -634,9 +634,8 @@ extends GraphicalEditorWithFlyoutPalette
 	
 	private ISelectionChangedListener useCaseComboListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
-			if (!event.getSelection().isEmpty() && event.getSelection() instanceof StructuredSelection) {
-				StructuredSelection sel = (StructuredSelection) event.getSelection();
-				ReportParameterAcquisitionUseCase useCase = (ReportParameterAcquisitionUseCase) sel.getFirstElement();
+			ReportParameterAcquisitionUseCase useCase = useCaseCombo.getSelectedElement();
+			if (useCase != null) {
 				ValueAcquisitionSetup setup = reportParameterAcquisitionSetup.getValueAcquisitionSetups().get(useCase);
 				ReportParameterEditor.this.currentSetup = setup;
 				if (reportParameterAcquisitionSetup.getDefaultSetup().equals(currentSetup))
