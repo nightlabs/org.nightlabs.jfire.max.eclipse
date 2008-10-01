@@ -34,7 +34,7 @@ import org.nightlabs.base.ui.exceptionhandler.IExceptionHandler;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
-import org.nightlabs.eclipse.ui.pdfviewer.PdfViewer;
+import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PdfViewerComposite;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -77,7 +77,8 @@ public class DefaultReportViewerComposite extends XComposite {
 //	private Composite awtWrapper;
 //	private Frame awtFrame;
 //	private Viewer viewer;
-	private PdfViewer pdfViewer;
+//	private PdfViewer pdfViewer;
+	private PdfViewerComposite pdfViewerComposite;
 
 	/**
 	 * The {@link PreparedRenderedReportLayout} for the currently
@@ -137,8 +138,10 @@ public class DefaultReportViewerComposite extends XComposite {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		browser = new BrowserWrapperComposite(stack, SWT.NONE);
 
-		pdfViewer = new PdfViewer();
-		pdfViewer.createControl(stack, SWT.BORDER);
+//		pdfViewer = new PdfViewer();
+//		pdfViewer.createControl(stack, SWT.BORDER);
+
+		pdfViewerComposite = new PdfViewerComposite(stack, SWT.BORDER);
 
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
@@ -219,13 +222,15 @@ public class DefaultReportViewerComposite extends XComposite {
 		this.preparedLayout = preparedLayout;
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
 		if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
-			stackLayout.topControl = pdfViewer.getControl();
+			stackLayout.topControl = pdfViewerComposite;
 			threadDeathWorkaround.registerComposite(this);
 			try {
 				IProgressMonitor monitor = new NullProgressMonitor();
 				// TODO: This is a expensive operation it should be done in a Job
 				PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), monitor);
-				pdfViewer.setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
+//				pdfViewer.setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
+				pdfViewerComposite.getPdfViewer().setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
+
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

@@ -52,10 +52,10 @@ implements IWorkbenchPreferencePage
 {
 
 	private XComposite wrapper;
-	private Button useAcrobatJavaBeanForPDFs;
-	
+	private Button useInternalBrowserForPDFs;
+
 	/**
-	 * 
+	 *
 	 */
 	public DefaultReportViewerPreferencePage() {
 	}
@@ -84,17 +84,17 @@ implements IWorkbenchPreferencePage
 		Label description = new Label(wrapper, SWT.WRAP);
 		description.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.DefaultReportViewerPreferencePage.descriptionLabel.text")); //$NON-NLS-1$
 		description.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		useAcrobatJavaBeanForPDFs = new Button(wrapper, SWT.CHECK);
-		useAcrobatJavaBeanForPDFs.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.DefaultReportViewerPreferencePage.useAcrobatJavaBeanForPDFsButton.text")); //$NON-NLS-1$
+		useInternalBrowserForPDFs = new Button(wrapper, SWT.CHECK);
+		useInternalBrowserForPDFs.setText(Messages.getString("org.nightlabs.jfire.reporting.ui.config.DefaultReportViewerPreferencePage.useInternalBrowserForPDFs.text")); //$NON-NLS-1$
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		useAcrobatJavaBeanForPDFs.setSelection(cfMod.isUseInternalBrowserForPDFs());
+		useInternalBrowserForPDFs.setSelection(cfMod.isUseInternalBrowserForPDFs());
 		return wrapper;
 	}
-	
+
 	@Override
 	public boolean performOk() {
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
-		cfMod.setUseInternalBrowserForPDFs(useAcrobatJavaBeanForPDFs.getSelection());
+		cfMod.setUseInternalBrowserForPDFs(useInternalBrowserForPDFs.getSelection());
 		try {
 			Config.sharedInstance().save();
 		} catch (ConfigException e) {

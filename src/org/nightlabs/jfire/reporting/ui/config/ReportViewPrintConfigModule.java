@@ -44,12 +44,12 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
  */
 public class ReportViewPrintConfigModule extends ConfigModule {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static class UseCaseConfig implements Cloneable, Serializable {
 		private static final long serialVersionUID = 1L;
-		
+
 		private String reportUseCaseID;
-		
+
 		private String viewerFormat;
 		private String reportViewerID;
 		private String printFormat;
@@ -61,15 +61,15 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 		@Deprecated
 		public UseCaseConfig() {
 		}
-		
+
 		public UseCaseConfig(String reportUseCaseID) {
 			this.reportUseCaseID = reportUseCaseID;
 		}
-		
+
 		public String getReportUseCaseID() {
 			return reportUseCaseID;
 		}
-		
+
 		/**
 		 * @return the printFormat
 		 */
@@ -106,21 +106,21 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 		public void setViewerFormat(String viewerFormat) {
 			this.viewerFormat = viewerFormat;
 		}
-		
+
 		/**
 		 * @return the printerUseCase
 		 */
 		public String getPrinterUseCase() {
 			return printerUseCase;
 		}
-		
+
 		/**
 		 * @param printerUseCase the printerUseCase to set
 		 */
 		public void setPrinterUseCase(String printerUseCase) {
 			this.printerUseCase = printerUseCase;
 		}
-		
+
 		@Override
 		public Object clone() {
 			try {
@@ -129,18 +129,18 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 				throw new RuntimeException("This should never happen", e); //$NON-NLS-1$
 			}
 		}
-		
+
 	}
 
 	private boolean useSameForAll;
 	private Map<String, UseCaseConfig> reportUseCaseConfigs;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public ReportViewPrintConfigModule() {
 	}
-	
+
 	@Override
 	public void init() throws InitException {
 		super.init();
@@ -148,8 +148,8 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 			setUseSameForAll(true);
 			reportUseCaseConfigs = new HashMap<String, UseCaseConfig>();
 			UseCaseConfig useCaseConfig = new UseCaseConfig(null);
-//			useCaseConfig.setViewerFormat(Birt.OutputFormat.pdf.toString());
-			useCaseConfig.setViewerFormat(Birt.OutputFormat.html.toString());
+			useCaseConfig.setViewerFormat(Birt.OutputFormat.pdf.toString());
+//			useCaseConfig.setViewerFormat(Birt.OutputFormat.html.toString());
 			useCaseConfig.setReportViewerID(ReportViewerRegistry.DEFAULT_REPORT_VIEWER_ID);
 			useCaseConfig.setPrintFormat(Birt.OutputFormat.pdf.toString());
 			Collection<ReportUseCase> useCases = ReportUseCaseRegistry.sharedInstance().getReportUseCases();
@@ -190,7 +190,7 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 		this.useSameForAll = useSameForAll;
 		setChanged();
 	}
-	
+
 	/**
 	 * Returns and layzily creates the {@link ReportViewPrintConfigModule} with
 	 * the help of the static {@link Config} instance.
@@ -202,5 +202,5 @@ public class ReportViewPrintConfigModule extends ConfigModule {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }
