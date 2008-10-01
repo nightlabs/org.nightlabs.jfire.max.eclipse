@@ -131,6 +131,7 @@ public class ReportTextPartEditComposite extends XComposite {
 		
 		if (languageChooser == null) {
 			languageChooser = new LanguageChooserCombo(header);
+			((LanguageChooserCombo) languageChooser).setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END));
 		}
 		languageChooser.addLanguageChangeListener(languageListener);
 		addDisposeListener(new DisposeListener() {
