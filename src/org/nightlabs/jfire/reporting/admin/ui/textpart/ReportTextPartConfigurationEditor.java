@@ -134,7 +134,6 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 	 */
 	@Override
 	public boolean isDirty() {
-		new Exception("isDirty() called, returning " + dirty).printStackTrace();
 		return dirty;
 	}
 
