@@ -180,8 +180,10 @@ implements ISelectionProvider
 
 				createOrderAction.setEnabled(true);
 
-				createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
-				createOfferAction.setEnabled(selectedNode instanceof RecurringOrderTreeNode);
+				if(selectedNode instanceof OrderTreeNode)
+					createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
+				else
+					createOfferAction.setEnabled(selectedNode instanceof RecurringOrderTreeNode);
 
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(

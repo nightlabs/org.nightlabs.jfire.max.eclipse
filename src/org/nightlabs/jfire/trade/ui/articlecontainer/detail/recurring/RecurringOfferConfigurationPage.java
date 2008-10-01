@@ -31,24 +31,30 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 	}
 
 	RecurringTimingConfigSection recurringTimingConfigSection;
-	
+	RecurringOfferConfigSection recurringOfferConfigSection;
+
+
+
 	public RecurringOfferConfigurationPage(FormEditor editor) {
 		super(editor, RecurringOfferConfigurationPage.class.getName(), "Recurring Offer Configuration");
 	}
 
 	@Override
 	protected void addSections(Composite parent) {
-		
+
 		final RecurringOfferConfigurationPageController controller = (RecurringOfferConfigurationPageController) getPageController();
-		
-		
+
+
+		recurringOfferConfigSection = new RecurringOfferConfigSection(this, parent, controller);
+		getManagedForm().addPart(recurringOfferConfigSection);
+
 		recurringTimingConfigSection = new RecurringTimingConfigSection(this, parent, controller);
 		getManagedForm().addPart(recurringTimingConfigSection);
 	}
 
 	@Override
 	protected String getPageFormTitle() {
-		return null;
+		return "Recurring Offer Configuration";
 	}
-
+	
 }
