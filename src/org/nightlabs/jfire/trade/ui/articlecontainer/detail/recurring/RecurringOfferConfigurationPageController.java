@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
@@ -11,6 +12,7 @@ import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
@@ -46,15 +48,28 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 
 		RecurringOffer recurringOffer = RecurringOfferDAO.sharedInstance().getRecurringOffer(getOfferID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 		return recurringOffer.getRecurringOfferConfiguration(); 
-				
+
 	}
 
 	@Override
 	protected RecurringOfferConfiguration storeEntity(
 			RecurringOfferConfiguration controllerObject,
 			ProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-		return null;
+		monitor.beginTask("Saving Configuration", 100);
+		try {
+			OfferID offerID = (OfferID) JDOHelper.getObjectId(controllerObject);
+			if (offerID == null)
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+
+			RecurringOfferConfiguration recurringOfferConfiguration = RecurringOfferDAO.sharedInstance().storeRecurringOfferConfiguration(
+					controllerObject, false, getEntityFetchGroups(), getEntityMaxFetchDepth());
+
+			monitor.worked(100);
+
+			return recurringOfferConfiguration;
+		} finally {
+			monitor.done();
+		}
 	}
 
 }

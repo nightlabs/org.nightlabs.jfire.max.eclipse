@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -9,7 +10,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-
 
 /**
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
@@ -68,7 +68,22 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent)
 	{
-		switchToContent();
+		switchToContent(); 
+
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (recurringOfferConfigSection != null ) 
+					recurringOfferConfigSection.setRecurringOfferConfiguration(getController().getControllerObject());
+			}
+		});
+
+
+
+	}
+
+
+	protected RecurringOfferConfigurationPageController getController() {
+		return (RecurringOfferConfigurationPageController)getPageController();
 	}
 
 	@Override
