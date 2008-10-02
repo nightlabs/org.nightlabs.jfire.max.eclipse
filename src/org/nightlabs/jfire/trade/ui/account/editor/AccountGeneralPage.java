@@ -86,11 +86,6 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 	}
 	
 	@Override
-	protected void asyncCallback() {
-
-	}
-	
-	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent)
 	{
 		switchToContent();
