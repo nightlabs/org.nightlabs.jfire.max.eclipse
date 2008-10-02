@@ -19,6 +19,7 @@ public class RecurringOfferConfigSection extends ToolBarSectionPart {
 
 	private Button createInvoiceCheck;
 	private Button createDeliveryCheck;
+	private Button bookInvoiceCheck;
 	private RecurringOfferConfigurationPageController controller;
 
 
@@ -27,14 +28,13 @@ public class RecurringOfferConfigSection extends ToolBarSectionPart {
 	{
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR,
 		"Offer configuration");
-		
+
 		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 2; // TODO when adding more UI, we might want to switch to 1 and use wrapper-composites
-
+		client.getGridLayout().numColumns = 3; 
 		createInvoiceCheck = new Button(client, SWT.CHECK);
 		createInvoiceCheck.setText("Create Invoice");
 		createInvoiceCheck.setToolTipText("");
@@ -44,6 +44,12 @@ public class RecurringOfferConfigSection extends ToolBarSectionPart {
 		createDeliveryCheck.setText("Create Delivery");
 		createDeliveryCheck.setToolTipText("");
 		createDeliveryCheck.setSelection(controller.getControllerObject().isCreateDelivery());
+
+		bookInvoiceCheck = new Button(client, SWT.CHECK);
+		bookInvoiceCheck.setText("Book Invoice");
+		bookInvoiceCheck.setToolTipText("");
+		bookInvoiceCheck.setSelection(controller.getControllerObject().isBookInvoice());
+
 
 		getSection().setClient(client);
 
