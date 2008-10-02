@@ -88,10 +88,6 @@ public class MoneyTransferPage extends EntityEditorPageWithProgress
 	}
 
 	@Override
-	protected void asyncCallback() {
-	}
-	
-	@Override
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent(); // multiple calls don't hurt
