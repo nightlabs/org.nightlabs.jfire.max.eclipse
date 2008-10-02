@@ -6,13 +6,14 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -23,7 +24,8 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
-import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -36,9 +38,11 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeProjectRelated.class);
 
-	private ProjectComboComposite projectCombo;
-
-	private volatile Project selectedProject;
+//	private ProjectComboComposite projectCombo;
+	private ProjectAdminTreeComposite projectTreeComposite;
+	private CheckboxTreeViewer checkboxTreeViewer;
+	
+	private volatile Set<ProjectID> selectedProjectIDs = new HashSet<ProjectID>();
 
 	/**
 	 * @param parent
@@ -93,24 +97,44 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		projectComposite.getGridLayout().numColumns = 2;
 
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
-		projectCombo = new ProjectComboComposite(projectComposite, SWT.NONE);
-		projectCombo.addSelectionChangedListener(new ISelectionChangedListener()
-		{
-			public void selectionChanged(SelectionChangedEvent e)
-			{
-				final Project selectedProject = projectCombo.getSelectedProject();
+		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK);
+		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 
-				boolean selectAll = selectedProject.equals(PROJECT_ALL);
-				if (selectAll)
-					getQuery().setProjectID(null);
-				else
-					getQuery().setProjectID(selectedProject.getObjectId());
+		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				if (event.getChecked()) {
+					selectedProjectIDs.clear();
+					for (Object object : checkboxTreeViewer.getCheckedElements()) {
+						ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
+						selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
+					}
+				}
 				
-				getQuery().setFieldEnabled(IssueQuery.FieldName.projectID, ! selectAll);
+				getQuery().setProjectIDs(selectedProjectIDs);
+				boolean selectAll = selectedProjectIDs.isEmpty();
+				if (selectedProjectIDs.size() > 0) {
+					getQuery().setFieldEnabled(IssueQuery.FieldName.projectIDs, ! selectAll);
+				}
 			}
 		});
+//		projectCombo = new ProjectComboComposite(projectComposite, SWT.NONE);
+//		projectCombo.addSelectionChangedListener(new ISelectionChangedListener()
+//		{
+//		public void selectionChanged(SelectionChangedEvent e)
+//		{
+//		final Project selectedProject = projectCombo.getSelectedProject();
+
+//		boolean selectAll = selectedProject.equals(PROJECT_ALL);
+//		if (selectAll)
+//		getQuery().setProjectID(null);
+//		else
+//		getQuery().setProjectID(selectedProject.getObjectId());
+
+//		getQuery().setFieldEnabled(IssueQuery.FieldName.projectID, ! selectAll);
+//		}
+//		});
 		
-		prepareIssueProperties();
+//		prepareIssueProperties();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,26 +143,33 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
-			if (IssueQuery.FieldName.projectID.equals(changedField.getPropertyName()))
+			if (IssueQuery.FieldName.projectIDs.equals(changedField.getPropertyName()))
 			{
-				ProjectID tmpProjectID = (ProjectID) changedField.getNewValue();
-				if (tmpProjectID == null)
+				Set<ProjectID> tmpProjectIDs = (Set<ProjectID>) changedField.getNewValue();
+				if (tmpProjectIDs == null)
 				{
-					projectCombo.setSelection(new StructuredSelection(PROJECT_ALL));
+//					projectCombo.setSelection(new StructuredSelection(PROJECT_ALL));
 				}
 				else
 				{
-					final Project newProject = ProjectDAO.sharedInstance().getProject(
-							tmpProjectID, new String[] { Project.FETCH_GROUP_NAME },
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-					);
-					projectCombo.setSelectedProject(newProject);
-					if (! newProject.equals(projectCombo.getSelectedProject()))
-						selectedProject = newProject;
+					for (ProjectID projectID : tmpProjectIDs) {
+						TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
+						for (TreeItem treeItem : treeItems) {
+							Object o = treeItem.getData();
+						}
+					}
+//					checkboxTreeViewer.setChecked(element, state)
+//					final Project newProject = ProjectDAO.sharedInstance().getProject(
+//							tmpProjectID, new String[] { Project.FETCH_GROUP_NAME },
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+//					);
+//					projectCombo.setSelectedProject(newProject);
+//					if (! newProject.equals(projectCombo.getSelectedProject()))
+//					selectedProject = newProject;
 
 				}
 			}
-			else if (getEnableFieldName(IssueQuery.FieldName.projectID).equals(
+			else if (getEnableFieldName(IssueQuery.FieldName.projectIDs).equals(
 					changedField.getPropertyName()))
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
@@ -146,27 +177,27 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 
-		
-	}
-
-	private static Project PROJECT_ALL = new Project(Organisation.DEV_ORGANISATION_ID, -1);
-
-	private void prepareIssueProperties(){
-		PROJECT_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
-		projectCombo.addProject(PROJECT_ALL, 0);
-		
-		if (selectedProject == null)
-			selectedProject = PROJECT_ALL;
-
-		projectCombo.setSelectedProject(selectedProject);
 
 	}
+
+//	private static Project PROJECT_ALL = new Project(Organisation.DEV_ORGANISATION_ID, -1);
+
+//	private void prepareIssueProperties(){
+//		PROJECT_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+//		projectCombo.addProject(PROJECT_ALL, 0);
+
+//		if (selectedProject == null)
+//		selectedProject = PROJECT_ALL;
+
+//		projectCombo.setSelectedProject(selectedProject);
+
+//	}
 
 	private static final Set<String> fieldNames;
 	static
 	{
 		fieldNames = new HashSet<String>(1);
-		fieldNames.add(IssueQuery.FieldName.projectID);
+		fieldNames.add(IssueQuery.FieldName.projectIDs);
 	}
 
 	@Override

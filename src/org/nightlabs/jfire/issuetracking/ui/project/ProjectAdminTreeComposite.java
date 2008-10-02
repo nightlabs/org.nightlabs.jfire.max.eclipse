@@ -2,27 +2,20 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -30,20 +23,14 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
-import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeLabelProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEventHandler;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
