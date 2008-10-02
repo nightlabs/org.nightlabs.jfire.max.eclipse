@@ -146,11 +146,11 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				try {
-					tariffs = TariffDAO.sharedInstance().getTariffs(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF,
+					final List<Tariff> _tariffs = TariffDAO.sharedInstance().getTariffs(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 					if (tariffFilter != null) {
-						for (Iterator<Tariff> it = tariffs.iterator(); it.hasNext();) {
+						for (Iterator<Tariff> it = _tariffs.iterator(); it.hasNext();) {
 							Tariff tariff = it.next();
 							if (!tariffFilter.includeTariff(tariff))
 								it.remove();
@@ -167,15 +167,15 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 							}
 						};
 					}
-					if (!tariffs.isEmpty())
-						Collections.sort(tariffs, tariffComparator);
+					Collections.sort(_tariffs, tariffComparator);
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							if (isDisposed())
 								return;
 
-							setInput(tariffs);
+							tariffs = _tariffs;
+							setInput(_tariffs);
 							if (!selectedTariffs.isEmpty())
 								setSelectedElements(selectedTariffs);
 
