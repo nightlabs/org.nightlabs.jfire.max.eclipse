@@ -1,5 +1,8 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -14,6 +17,7 @@ import org.nightlabs.base.ui.timepattern.builder.TimePatternSetBuilderWizard;
 
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.timepattern.TimePattern;
 
 
 
@@ -50,7 +54,14 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 				(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 				{
 					timePatternSetComposite.refresh(true);
-					RecurringTimingConfigSection.this.markDirty();
+
+					Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();  
+					Iterator<TimePattern> i=patterns.iterator();
+					while(i.hasNext()) 
+					{
+						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(i.next());	
+					}
+					markDirty();
 				}
 			}
 		});
@@ -66,16 +77,30 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				stopDateControl.setEnabled(enableEndCheck.getSelection());
+
+				if(!enableEndCheck.getSelection())
+				{
+					getController().getControllerObject().setSuspendDate(null);	
+					markDirty();
+				}
+
 			}
 		});
 
 		stopDateControl = new DateTimeControl(getClient(), SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 		stopDateControl.setEnabled(false);
+		stopDateControl.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(stopDateControl.getDate()!=null)
+					getController().getControllerObject().setSuspendDate(stopDateControl.getDate());	
+				markDirty();
+
+			}
+		});
 
 	}
-
-
-
 	@Override
 	protected void updateConfigOffer(
 			RecurringOfferConfiguration recurringOfferConfiguration) {
