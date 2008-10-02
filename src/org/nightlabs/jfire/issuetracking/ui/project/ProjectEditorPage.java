@@ -68,14 +68,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	@Override
-	protected void asyncCallback() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void handleControllerObjectModified(
-			EntityEditorPageControllerModifyEvent modifyEvent) {
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent();		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
