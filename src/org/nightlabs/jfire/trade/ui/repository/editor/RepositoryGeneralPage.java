@@ -41,11 +41,6 @@ extends EntityEditorPageWithProgress
 	}
 
 	@Override
-	protected void asyncCallback() // this method will soon be deprecated => handleControllerObjectModified does all the work
-	{
-	}
-
-	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent)
 	{
 		switchToContent();
