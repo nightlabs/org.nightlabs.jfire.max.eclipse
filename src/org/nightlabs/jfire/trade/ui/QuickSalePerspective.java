@@ -92,13 +92,15 @@ implements IPerspectiveFactory
 
 		IFolderLayout folder = layout.createFolder("right_bottom", IPageLayout.RIGHT, 0.7f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		folder.addView(ProductTypeQuickListView.ID_VIEW);
-		folder.addView(DeliveryQueueBrowsingView.ID_VIEW);
+		// The DeliveryQueueBrowsingView is not required in the quick sale perspective and doesn't have sufficient space here anyway!
+		// Commented it out. 2008-10-02 Marco.
+//		folder.addView(DeliveryQueueBrowsingView.ID_VIEW);
 
 		layout.addPerspectiveShortcut(ID_PERSPECTIVE);
 		layout.addShowViewShortcut(ProductTypeDetailView.ID_VIEW);
 		layout.addShowViewShortcut(ProductTypeQuickListView.ID_VIEW);
 		layout.addShowViewShortcut(DeliveryQueueBrowsingView.ID_VIEW);
-		
+
 		RCPUtil.addAllPerspectiveShortcuts(layout);
 	}
 
@@ -149,7 +151,7 @@ implements IPerspectiveFactory
 	 * @param perspectiveID The current perspective's ID. If this method is used in a perspective-listener, this identifier is passed to the listener method.
 	 *		If it is not known in the current context, it can be obtained by {@link RCPUtil#getActivePerspectiveID()}. Note, that you should always use the
 	 *		identifier passed to your listener instead of the <code>RCPUtil</code>'s method, since during boot-up or transitions the listener's perspective-id
-	 *		is likely more correct and reliable. 
+	 *		is likely more correct and reliable.
 	 */
 	public static void checkOrderOpen(String perspectiveID)
 	{
@@ -170,7 +172,7 @@ implements IPerspectiveFactory
 				else
 					logger.warn("Opening QuickSaleEditor not possible, because input is null!"); //$NON-NLS-1$
 			}
-			// commented because now with reverse product action additional editor can be opened in QuickSalePerspective 
+			// commented because now with reverse product action additional editor can be opened in QuickSalePerspective
 //			if (page != null) {
 //				// close additional editors if more than one is open
 //				IEditorReference[] references = page.getEditorReferences();
@@ -206,14 +208,14 @@ implements IPerspectiveFactory
 			try {
 				if (Login.sharedInstance().getLoginState() == LoginState.LOGGED_IN) {
 					// sometimes causes a ClassNotFoundException for ProductType
-					// when trying to switch open the perspective					
+					// when trying to switch open the perspective
 					SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE, ProductType.class, selectionListener);
 					selectionListenerAdded = true;
-					logger.info("selectionListener added"); //$NON-NLS-1$					
+					logger.info("selectionListener added"); //$NON-NLS-1$
 				}
 				else {
 					selectionListenerAdded = false;
-					logger.info("adding selectionListener failed, because not logined in"); //$NON-NLS-1$					
+					logger.info("adding selectionListener failed, because not logined in"); //$NON-NLS-1$
 				}
 			} catch (Exception e) {
 				selectionListenerAdded = false;

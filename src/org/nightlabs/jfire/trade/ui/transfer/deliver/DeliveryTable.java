@@ -26,15 +26,17 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This table serves to display the deliveries in a {@link PrintQueue}.
- * 
+ *
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 class DeliveryTable extends AbstractTableComposite<Delivery> {
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-	
+
 	private static class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
+			String localOrganisationID = org.nightlabs.jfire.base.ui.login.Login.sharedInstance().getOrganisationID();
+
 			if (element instanceof Delivery) {
 				Delivery delivery = (Delivery) element;
 				switch (columnIndex) {
@@ -42,8 +44,13 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 				case 1: {
 					Set<DeliveryNoteID> deliveryNoteIDs = delivery.getDeliveryNoteIDs();
 					StringBuilder sb = new StringBuilder();
-					for (DeliveryNoteID deliveryNoteID : deliveryNoteIDs)
+					for (DeliveryNoteID deliveryNoteID : deliveryNoteIDs) {
+						if (!localOrganisationID.equals(deliveryNoteID.organisationID))
+							sb.append(deliveryNoteID.organisationID).append('/');
+
+						sb.append(deliveryNoteID.deliveryNoteIDPrefix).append('/');
 						sb.append(ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID)).append(", "); //$NON-NLS-1$
+					}
 					return sb.substring(0, sb.length()-2);
 				}
 				case 2: {
@@ -51,9 +58,13 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 					for (Article article : delivery.getArticles()) {
 						orderIDs.add(article.getOrderID());
 					}
-					
+
 					StringBuilder sb = new StringBuilder();
 					for (OrderID orderID : orderIDs) {
+						if (!localOrganisationID.equals(orderID.organisationID))
+							sb.append(orderID.organisationID).append('/');
+
+						sb.append(orderID.orderIDPrefix).append('/');
 						sb.append(ObjectIDUtil.longObjectIDFieldToString(orderID.orderID)).append(", "); //$NON-NLS-1$
 					}
 					return sb.substring(0, sb.length()-2);
@@ -68,7 +79,7 @@ class DeliveryTable extends AbstractTableComposite<Delivery> {
 			return null;
 		}
 	}
-	
+
 	public DeliveryTable(Composite parent, int style) {
 		super(parent, style, true, SWT.CHECK | SWT.FULL_SELECTION | SWT.BORDER);
 		getTableViewer().setComparator(new ViewerComparator() {
