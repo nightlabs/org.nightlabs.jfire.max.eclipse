@@ -16,24 +16,16 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 	private Button createInvoiceCheck;
 	private Button createDeliveryCheck;
 	private Button bookInvoiceCheck;
-	private RecurringOfferConfigurationPageController controller;
-
 
 
 	public RecurringOfferConfigSection(FormPage page, Composite parent, final RecurringOfferConfigurationPageController controller)
 	{
 
 		super(page, parent, controller);
+		getSection().setText("Offer configuration");		
 		getClient().getGridLayout().numColumns = 3;
-		getClient().getGridLayout().makeColumnsEqualWidth = false;
-		getSection().setText("Offer configuration");
-
-//		this.controller = controller;
-//		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//		getSection().setLayout(new GridLayout());
-
-//		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//		client.getGridLayout().numColumns = 3; 
+		getClient().getGridLayout().makeColumnsEqualWidth = true;
+		
 		createInvoiceCheck = new Button(getClient(), SWT.CHECK);
 		createInvoiceCheck.setText("Create Invoice");
 		createInvoiceCheck.setToolTipText("");
@@ -46,7 +38,8 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 		bookInvoiceCheck.setText("Book Invoice");
 		bookInvoiceCheck.setToolTipText("");
 
-
+		getClient().pack();
+        
 	}
 
 

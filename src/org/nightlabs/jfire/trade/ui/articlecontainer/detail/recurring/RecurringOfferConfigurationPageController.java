@@ -12,7 +12,7 @@ import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
+
 
 /**
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
@@ -62,7 +62,7 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
 
 			RecurringOfferConfiguration recurringOfferConfiguration = RecurringOfferDAO.sharedInstance().storeRecurringOfferConfiguration(
-					controllerObject, false, getEntityFetchGroups(), getEntityMaxFetchDepth());
+					controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 
 			monitor.worked(100);
 
