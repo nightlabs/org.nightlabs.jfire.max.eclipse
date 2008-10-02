@@ -173,10 +173,10 @@ implements ISelectionProvider
 				return simpleProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return voucher.getVoucherKey() == null ? "" : voucher.getVoucherKey().getVoucherKey(); //$NON-NLS-1$
+				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : voucher.getVoucherKey().getVoucherKey(); //$NON-NLS-1$
 
 			if (++ci == columnIndex)
-				return voucher.getVoucherKey() == null ? "" : getValidity(voucher.getVoucherKey()); //$NON-NLS-1$
+				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : getValidity(voucher.getVoucherKey()); //$NON-NLS-1$
 
 			if (++ci == columnIndex) {
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
