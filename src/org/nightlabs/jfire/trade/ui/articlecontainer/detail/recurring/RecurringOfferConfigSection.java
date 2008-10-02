@@ -1,21 +1,17 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
-import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
+
 
 /**
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
  *
  */
-public class RecurringOfferConfigSection extends ToolBarSectionPart {
+public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralSection {
 
 	private Button createInvoiceCheck;
 	private Button createDeliveryCheck;
@@ -26,34 +22,48 @@ public class RecurringOfferConfigSection extends ToolBarSectionPart {
 
 	public RecurringOfferConfigSection(FormPage page, Composite parent, final RecurringOfferConfigurationPageController controller)
 	{
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR,
-		"Offer configuration");
 
-		this.controller = controller;
-		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		getSection().setLayout(new GridLayout());
+		super(page, parent, controller);
+		getClient().getGridLayout().numColumns = 3;
+		getClient().getGridLayout().makeColumnsEqualWidth = false;
+		getSection().setText("Offer configuration");
 
-		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 3; 
-		createInvoiceCheck = new Button(client, SWT.CHECK);
+//		this.controller = controller;
+//		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		getSection().setLayout(new GridLayout());
+
+//		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		client.getGridLayout().numColumns = 3; 
+		createInvoiceCheck = new Button(getClient(), SWT.CHECK);
 		createInvoiceCheck.setText("Create Invoice");
 		createInvoiceCheck.setToolTipText("");
-		createInvoiceCheck.setSelection(controller.getControllerObject().isCreateInvoice());
 
-		createDeliveryCheck = new Button(client, SWT.CHECK);
+		createDeliveryCheck = new Button(getClient(), SWT.CHECK);
 		createDeliveryCheck.setText("Create Delivery");
 		createDeliveryCheck.setToolTipText("");
-		createDeliveryCheck.setSelection(controller.getControllerObject().isCreateDelivery());
 
-		bookInvoiceCheck = new Button(client, SWT.CHECK);
+		bookInvoiceCheck = new Button(getClient(), SWT.CHECK);
 		bookInvoiceCheck.setText("Book Invoice");
 		bookInvoiceCheck.setToolTipText("");
-		bookInvoiceCheck.setSelection(controller.getControllerObject().isBookInvoice());
 
-
-		getSection().setClient(client);
 
 	}
+
+
+
+	@Override
+	protected void updateConfigOffer(
+			RecurringOfferConfiguration recurringOfferConfiguration) {
+
+		createDeliveryCheck.setSelection(recurringOfferConfiguration.isCreateDelivery());
+		createInvoiceCheck.setSelection(recurringOfferConfiguration.isCreateInvoice());
+		bookInvoiceCheck.setSelection(recurringOfferConfiguration.isBookInvoice());
+
+		getClient().pack();
+
+	}		
+
+
 
 
 
