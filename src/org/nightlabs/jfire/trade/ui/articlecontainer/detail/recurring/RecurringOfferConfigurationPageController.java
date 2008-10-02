@@ -4,8 +4,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
-import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
@@ -17,7 +16,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
  *
  */
-public class RecurringOfferConfigurationPageController extends EntityEditorPageController {
+public class RecurringOfferConfigurationPageController extends  ActiveEntityEditorPageController<RecurringOfferConfiguration> {
 
 
 	public static final String[] FETCH_GROUPS_RECURRING_OFFER = {
@@ -25,8 +24,6 @@ public class RecurringOfferConfigurationPageController extends EntityEditorPageC
 		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK
 		, FetchPlan.DEFAULT };
 
-
-	private RecurringOfferConfiguration recurringOfferConfiguration;
 
 	public RecurringOfferConfigurationPageController(EntityEditor editor) {
 		super(editor);
@@ -38,24 +35,26 @@ public class RecurringOfferConfigurationPageController extends EntityEditorPageC
 		return (OfferID) input.getArticleContainerID();
 	}
 
+
 	@Override
-	public void doLoad(ProgressMonitor monitor) {
-
-		monitor.beginTask("Loading Configuration", 100); 
-		RecurringOffer recurringOffer = RecurringOfferDAO.sharedInstance().getRecurringOffer(getOfferID(), FETCH_GROUPS_RECURRING_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		this.recurringOfferConfiguration = recurringOffer.getRecurringOfferConfiguration(); 
-		monitor.done();
-		setLoaded(true); 
-
+	protected String[] getEntityFetchGroups() {
+		return FETCH_GROUPS_RECURRING_OFFER;
 	}
 
 	@Override
-	public boolean doSave(ProgressMonitor monitor) {
-		return true;
+	protected RecurringOfferConfiguration retrieveEntity(ProgressMonitor monitor) {
+
+		RecurringOffer recurringOffer = RecurringOfferDAO.sharedInstance().getRecurringOffer(getOfferID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
+		return recurringOffer.getRecurringOfferConfiguration(); 
+				
 	}
 
-	public RecurringOfferConfiguration getRecurringOfferConfiguration() {
-		return recurringOfferConfiguration;
+	@Override
+	protected RecurringOfferConfiguration storeEntity(
+			RecurringOfferConfiguration controllerObject,
+			ProgressMonitor monitor) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

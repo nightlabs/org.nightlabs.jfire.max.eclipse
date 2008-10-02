@@ -38,15 +38,14 @@ public class RecurringOfferConfigSection extends ToolBarSectionPart {
 		createInvoiceCheck = new Button(client, SWT.CHECK);
 		createInvoiceCheck.setText("Create Invoice");
 		createInvoiceCheck.setToolTipText("");
-		createInvoiceCheck.setSelection(controller.getRecurringOfferConfiguration().isCreateInvoice());
+		createInvoiceCheck.setSelection(controller.getControllerObject().isCreateInvoice());
 
 		createDeliveryCheck = new Button(client, SWT.CHECK);
 		createDeliveryCheck.setText("Create Delivery");
 		createDeliveryCheck.setToolTipText("");
-		createDeliveryCheck.setSelection(controller.getRecurringOfferConfiguration().isCreateDelivery());
+		createDeliveryCheck.setSelection(controller.getControllerObject().isCreateDelivery());
 
-
-
+		getSection().setClient(client);
 
 	}
 
