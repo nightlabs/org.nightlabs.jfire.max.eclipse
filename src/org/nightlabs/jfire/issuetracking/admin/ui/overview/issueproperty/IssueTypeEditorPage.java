@@ -74,12 +74,6 @@ public class IssueTypeEditorPage extends EntityEditorPageWithProgress {
 	}
 
 	@Override
-	protected void asyncCallback() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	protected void handleControllerObjectModified(
 			EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent();		
