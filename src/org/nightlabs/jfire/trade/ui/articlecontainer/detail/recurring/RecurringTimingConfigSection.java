@@ -41,7 +41,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 
 		taskTimePattern = new Button(getClient(), SWT.PUSH);
-		taskTimePattern.setText("Task Timer...");		
+		taskTimePattern.setText("Recurring Date...");		
 		taskTimePattern.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
