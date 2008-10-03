@@ -131,7 +131,7 @@ public class FooterComposite extends XComposite
 			setFooterText(
 					String.format(
 							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), //$NON-NLS-1$
-							articleContainerEditComposite.getArticles().size(), price));
+							getArticleContainer().getArticleCount(), price));
 		}
 		else {
 			logger.info("currency == null!"); //$NON-NLS-1$
