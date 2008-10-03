@@ -50,16 +50,12 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 			public void widgetSelected(SelectionEvent e) {
-				if
-				(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
+				if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 				{
 					timePatternSetComposite.refresh(true);
-
 					Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();  
-					Iterator<TimePattern> i=patterns.iterator();
-					while(i.hasNext()) 
-					{
-						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(i.next());	
+					for (TimePattern p : patterns) {
+						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);	
 					}
 					markDirty();
 				}
