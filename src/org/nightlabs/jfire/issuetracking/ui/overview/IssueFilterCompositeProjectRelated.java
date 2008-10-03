@@ -102,19 +102,15 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				if (event.getChecked()) {
-					selectedProjectIDs.clear();
-					for (Object object : checkboxTreeViewer.getCheckedElements()) {
-						ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
-						selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
-					}
+				selectedProjectIDs.clear();
+				for (Object object : checkboxTreeViewer.getCheckedElements()) {
+					ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
+					selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
 				}
 				
 				getQuery().setProjectIDs(selectedProjectIDs);
-				boolean selectAll = selectedProjectIDs.isEmpty();
-				if (selectedProjectIDs.size() > 0) {
-					getQuery().setFieldEnabled(IssueQuery.FieldName.projectIDs, ! selectAll);
-				}
+				boolean enable = !selectedProjectIDs.isEmpty();
+				getQuery().setFieldEnabled(IssueQuery.FieldName.projectIDs, enable);
 			}
 		});
 //		projectCombo = new ProjectComboComposite(projectComposite, SWT.NONE);
