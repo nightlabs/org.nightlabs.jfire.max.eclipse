@@ -113,9 +113,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderCom
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderFooterComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferFooterComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderFooterComposite;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOrderHeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;

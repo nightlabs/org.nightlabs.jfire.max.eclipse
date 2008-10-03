@@ -49,7 +49,7 @@ import org.nightlabs.l10n.NumberFormatter;
 public class FooterComposite extends XComposite
 {
 	private static final Logger logger = Logger.getLogger(FooterComposite.class);
-	
+
 	private ArticleContainerEditComposite articleContainerEditComposite;
 //	private ArticleContainer articleContainer;
 
@@ -57,9 +57,9 @@ public class FooterComposite extends XComposite
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.articleContainerEditComposite = articleContainerEditComposite;
-		
+
 		setBackground(DEFAULT_BG_COLOR);
-		
+
 		setLayout(new GridLayout(1, true));
 		label = new Label(this, SWT.RIGHT);
 		label.setBackground(bgColor);
@@ -71,7 +71,7 @@ public class FooterComposite extends XComposite
 	public void setBgColor(Color c) {
 		bgColor = c;
 	}
-		
+
 //	private Label spacerLabel;
 	private Label label;
 	public void setFooterText(String text)
@@ -84,7 +84,7 @@ public class FooterComposite extends XComposite
 		layout(true, true);
 //		spacerLabel.setBackground(bgColor);
 	}
-		
+
 	/**
 	 * @return Returns the articleContainer.
 	 */
@@ -99,7 +99,7 @@ public class FooterComposite extends XComposite
 	{
 		return articleContainerEditComposite;
 	}
-	
+
 	/**
 	 * updates / refreshes the content if a refresh is needed
 	 * the default implementation shows the total price of all articles in the articleContainer
@@ -125,13 +125,13 @@ public class FooterComposite extends XComposite
 //				return;
 //			}
 		}
-		
+
 		if (currency != null) {
 			String price = NumberFormatter.formatCurrency(priceAmount , currency);
 			setFooterText(
 					String.format(
-							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), //$NON-NLS-1$ 
-							getArticleContainer().getArticleCount(), price));
+							Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.FooterComposite.text"), //$NON-NLS-1$
+							articleContainerEditComposite.getArticles().size(), price));
 		}
 		else {
 			logger.info("currency == null!"); //$NON-NLS-1$
