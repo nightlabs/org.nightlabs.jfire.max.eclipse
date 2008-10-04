@@ -27,21 +27,26 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
 
 public class ReleaseAction extends ArticleEditAction
 {
@@ -75,14 +80,14 @@ public class ReleaseAction extends ArticleEditAction
 
 				if (article.isReversing()) {
 					// reversing article
-					Article reversingArticle = article; 
+					Article reversingArticle = article;
 
 					// If the reversed article is in a DeliveryNote, both - reversed and reversing - articles must be in a DeliveryNote.
 					// The DeliveryNotes must be booked!
 
 					Article reversedArticle = ArticleDAO.sharedInstance().getArticle(
-							reversingArticle.getReversedArticleID(), 
-							FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID, 
+							reversingArticle.getReversedArticleID(),
+							FETCH_GROUPS_ARTICLE_DELIVERY_NOTE_ID,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new NullProgressMonitor());
 					if (reversedArticle.getDeliveryNoteID() != null) {
@@ -113,11 +118,37 @@ public class ReleaseAction extends ArticleEditAction
 	@Override
 	public void run()
 	{
-		try {
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			tradeManager.releaseArticles(NLJDOHelper.getObjectIDSet(articles), false, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		final ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = getArticleContainerEdit().getArticleSegmentGroupSet();
+//		final Collection<Article> oldArticles = articles;
+		final Collection<ArticleID> articleIDs = NLJDOHelper.getObjectIDSet(articles);
+//		final Display display = Display.getCurrent();
+
+		Job job = new Job("Releasing articles") {
+			@Override
+			protected IStatus run(ProgressMonitor monitor) throws Exception
+			{
+				final List<Article> newArticles = ArticleDAO.sharedInstance().releaseArticles(
+						articleIDs, false,
+						true,
+						clientArticleSegmentGroupSet.getFetchGroupsArticle(),
+						clientArticleSegmentGroupSet.getMaxFetchDepthArticle(),
+						new NullProgressMonitor()
+				);
+
+				Collection<ArticleID> deletedArticleIDs = Collections.emptyList();
+				clientArticleSegmentGroupSet.updateArticles(deletedArticleIDs, newArticles);
+
+//				display.asyncExec(new Runnable() {
+//					public void run() {
+//						if (articles == oldArticles) // prevent articles to be overwritten with older data - do it only, if it's not yet changed!
+//							articles = newArticles;
+//					}
+//				});
+
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(true);
+		job.schedule();
 	}
 }

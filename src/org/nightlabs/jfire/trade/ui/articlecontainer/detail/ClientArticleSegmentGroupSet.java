@@ -70,6 +70,7 @@ import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * This is a {@link ArticleSegmentGroupSet} that manages listeners for the creation, change and deletion
@@ -120,6 +121,8 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 			fetchGroupsArticle = FETCH_GROUPS_ARTICLE_IN_INVOICE_EDITOR;
 		else if (articleContainer instanceof DeliveryNote)
 			fetchGroupsArticle = FETCH_GROUPS_ARTICLE_IN_DELIVERY_NOTE_EDITOR;
+		else
+			throw new IllegalStateException("Unknown ArticleContainer implementation: " + articleContainer);
 
 		if (articleCreateListeners != null) {
 			for (ArticleCreateListener listener : articleCreateListeners)
@@ -132,7 +135,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 		}
 
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(lifecycleListenerNewArticles);
-		JDOLifecycleManager.sharedInstance().addNotificationListener(ArticleID.class, notificationListenerArticlesChanged);
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Article.class, notificationListenerArticlesChanged);
 	}
 
 	/**
@@ -141,7 +144,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 	public void onDispose()
 	{
 		JDOLifecycleManager.sharedInstance().removeLifecycleListener(lifecycleListenerNewArticles);
-		JDOLifecycleManager.sharedInstance().removeNotificationListener(ArticleID.class, notificationListenerArticlesChanged);
+		JDOLifecycleManager.sharedInstance().removeNotificationListener(Article.class, notificationListenerArticlesChanged);
 	}
 
 	public static final String[] FETCH_GROUPS_ARTICLE_IN_OFFER_EDITOR = new String[] {
@@ -312,135 +315,180 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 		{
 			synchronized (ClientArticleSegmentGroupSet.this) { // there is no guarantee, that a job enqueued first is executed first or is there?!???!???
 				if (getActiveNotificationEvent() != notificationEvent) {
-					logger.error("Job executed too late!!! How do we prevent this??? getActiveNotificationEvent()=" + getActiveNotificationEvent() + " event=" + notificationEvent); //$NON-NLS-1$ //$NON-NLS-2$
+					logger.error("notificationListenerArticlesChanged.notify: Job executed too late!!! How do we prevent this??? getActiveNotificationEvent()=" + getActiveNotificationEvent() + " event=" + notificationEvent); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
 				if (logger.isDebugEnabled())
-					logger.debug("NotificationAdapterJob.notify: begin"); //$NON-NLS-1$
+					logger.debug("notificationListenerArticlesChanged.notify: begin"); //$NON-NLS-1$
 
 				// find out, which ArticleID s are interesting (i.e. managed by us).
 				Set<ArticleID> dirtyArticleIDs = new HashSet<ArticleID>(notificationEvent.getSubjects().size());
 				Set<ArticleID> deletedArticleIDs = new HashSet<ArticleID>(notificationEvent.getSubjects().size());
 //				for (Iterator it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
 //					DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
-				for (DirtyObjectID dirtyObjectID : (Collection<DirtyObjectID>) notificationEvent.getSubjects()) {
+				Collection<DirtyObjectID> subjects = CollectionUtil.castCollection(notificationEvent.getSubjects());
+				for (DirtyObjectID dirtyObjectID : subjects) {
 					ArticleID articleID = (ArticleID) dirtyObjectID.getObjectID();
 					if (containsArticle(articleID)) {
+						if (logger.isTraceEnabled()) {
+							logger.trace("notificationListenerArticlesChanged.notify: is contained: " + dirtyObjectID);
+						}
+
 						if (JDOLifecycleState.DIRTY.equals(dirtyObjectID.getLifecycleState()))
 							dirtyArticleIDs.add(articleID);
 						else if (JDOLifecycleState.DELETED.equals(dirtyObjectID.getLifecycleState()))
 							deletedArticleIDs.add(articleID);
 						else
-							logger.warn("Why the hell does this happen? dirtyObjectID.getLifecycleState()=" + dirtyObjectID.getLifecycleState(), new Exception()); //$NON-NLS-1$
+							logger.warn("notificationListenerArticlesChanged.notify: Why the hell does this happen? dirtyObjectID.getLifecycleState()=" + dirtyObjectID.getLifecycleState(), new Exception()); //$NON-NLS-1$
 					}
 					else {
 						if (logger.isDebugEnabled())
-							logger.debug("NotificationAdapterJob.notify: ignoring unknown ArticleID=" + articleID); //$NON-NLS-1$
+							logger.debug("notificationListenerArticlesChanged.notify: ignoring unknown ArticleID=" + articleID); //$NON-NLS-1$
 					}
 				}
 
 				if (logger.isDebugEnabled())
-					logger.debug("NotificationAdapterJob.notify: before deduplication: dirtyArticleIDs.size()="+dirtyArticleIDs.size()+" deletedArticleIDs.size()=" + deletedArticleIDs.size()); //$NON-NLS-1$ //$NON-NLS-2$
+					logger.debug("notificationListenerArticlesChanged.notify: before deduplication: dirtyArticleIDs.size()="+dirtyArticleIDs.size()+" deletedArticleIDs.size()=" + deletedArticleIDs.size()); //$NON-NLS-1$ //$NON-NLS-2$
 
 				// in case there are some dirty and deleted - though I'm not sure whether the notification-mechanism (i.e. Cache) already prevents this.
 				dirtyArticleIDs.removeAll(deletedArticleIDs);
 
 				if (logger.isDebugEnabled())
-					logger.debug("NotificationAdapterJob.notify: after deduplication: dirtyArticleIDs.size()="+dirtyArticleIDs.size()+" deletedArticleIDs.size()=" + deletedArticleIDs.size()); //$NON-NLS-1$ //$NON-NLS-2$
+					logger.debug("notificationListenerArticlesChanged.notify: after deduplication: dirtyArticleIDs.size()="+dirtyArticleIDs.size()+" deletedArticleIDs.size()=" + deletedArticleIDs.size()); //$NON-NLS-1$ //$NON-NLS-2$
 
 				// if none of the changed articles is interesting, we return
 				if (dirtyArticleIDs.isEmpty() && deletedArticleIDs.isEmpty())
 					return;
 
-				final Collection<Article> deletedArticles = new ArrayList<Article>(deletedArticleIDs.size());
-				final Collection<ArticleCarrier> deletedArticleCarriers = new ArrayList<ArticleCarrier>(deletedArticleIDs.size());
-				for (ArticleID articleID : deletedArticleIDs) {
-					ArticleCarrier articleCarrier = getArticleCarrier(articleID, true);
-
-					if (logger.isDebugEnabled())
-						logger.debug("NotificationAdapterJob.notify: deletedArticleID=" + articleID); //$NON-NLS-1$
-
-					deletedArticleCarriers.add(articleCarrier);
-					deletedArticles.add(articleCarrier.getArticle());
-				}
-
 				// reload the Article s and update the ArticleCarrier s
 				final Collection<Article> dirtyArticles = ArticleDAO.sharedInstance().getArticles(
-						dirtyArticleIDs, fetchGroupsArticle, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				final ArrayList<ArticleCarrier> dirtyArticleCarriers = new ArrayList<ArticleCarrier>(dirtyArticles.size());
-				ArticleContainerID articleContainerID = getArticleContainerID();
-				for (Iterator<Article> itArticle = dirtyArticles.iterator(); itArticle.hasNext(); ) {
-					Article newArticle = itArticle.next();
-					ArticleCarrier articleCarrier = getArticleCarrier((ArticleID) JDOHelper.getObjectId(newArticle), true);
-					articleCarrier.setArticle(newArticle);
+						dirtyArticleIDs, fetchGroupsArticle, getMaxFetchDepthArticle(), new NullProgressMonitor());
 
-					// If we're in an ArticleContainer from which an Article can be removed without being deleted (e.g. in an Invoice),
-					// we need to check, whether the still existing Article's field referencing the ArticleContainer is changed.
-					boolean removedFromArticleContainer = false;
-					if (articleContainerID instanceof InvoiceID)
-						removedFromArticleContainer = !articleContainerID.equals(newArticle.getInvoiceID());
-					if (articleContainerID instanceof DeliveryNoteID)
-						removedFromArticleContainer = !articleContainerID.equals(newArticle.getDeliveryNoteID());
-					if (articleContainerID instanceof ReceptionNoteID)
-						removedFromArticleContainer = !articleContainerID.equals(newArticle.getReceptionNoteID());
-					// The above is NOT necessary for Order and Offer, because it can only be removed from these ArticleContainers by being deleted from the datastore.
+				updateArticles(deletedArticleIDs, dirtyArticles);
 
-					if (!removedFromArticleContainer) {
-						if (logger.isDebugEnabled())
-							logger.debug("NotificationAdapterJob.notify: dirtyArticleID=" + JDOHelper.getObjectId(newArticle)); //$NON-NLS-1$
-
-						dirtyArticleCarriers.add(articleCarrier);
-					}
-					else {
-						if (logger.isDebugEnabled())
-							logger.debug("NotificationAdapterJob.notify: dirty transformed to deletedArticleID=" + JDOHelper.getObjectId(newArticle)); //$NON-NLS-1$
-
-						itArticle.remove();
-						deletedArticles.add(newArticle);
-						deletedArticleCarriers.add(articleCarrier);
-					}
-				}
-
-				// We remove the deleted articles, before notifying the listeners, so that the
-				// listeners are triggered with the new situation in place. In case they still need
-				// the deleted articles/articleCarriers, they can access the references passed in the
-				// event. Marco.
-				ClientArticleSegmentGroupSet.super.removeArticles(deletedArticles);
-
-				final ArticleChangeEvent articleChangeEvent = new ArticleChangeEvent(
-						ClientArticleSegmentGroupSet.this,
-						dirtyArticles, dirtyArticleCarriers,
-						deletedArticles, deletedArticleCarriers);
-
-				Display.getDefault().asyncExec(new Runnable()
-				{
-					public void run()
-					{
-						Object[] listeners = articleChangeListeners.getListeners();
-						if (logger.isDebugEnabled()) {
-							logger.debug("NotificationAdapterJob.notify: calling listeners with ArticleChangeEvent:"); //$NON-NLS-1$
-							logger.debug("NotificationAdapterJob.notify:     ArticleChangeEvent.dirtyArticles (" + articleChangeEvent.getDirtyArticles().size() + "):"); //$NON-NLS-1$ //$NON-NLS-2$
-							for (Article article : articleChangeEvent.getDirtyArticles())
-								logger.debug("NotificationAdapterJob.notify:       - " + article.getPrimaryKey()); //$NON-NLS-1$
-
-							logger.debug("NotificationAdapterJob.notify:     ArticleChangeEvent.deletedArticles (" + articleChangeEvent.getDeletedArticles().size() + "):"); //$NON-NLS-1$ //$NON-NLS-2$
-							for (Article article : articleChangeEvent.getDeletedArticles())
-								logger.debug("NotificationAdapterJob.notify:       - " + article.getPrimaryKey()); //$NON-NLS-1$
-						}
-						for (int i = 0; i < listeners.length; i++) {
-							if (logger.isDebugEnabled())
-								logger.debug("NotificationAdapterJob.notify:     listener: " + listeners[i]); //$NON-NLS-1$
-
-							((ArticleChangeListener) listeners[i]).articlesChanged(articleChangeEvent);
-						}
-					}
-				});
-
-				if (logger.isDebugEnabled())
-					logger.debug("NotificationAdapterJob.notify: end"); //$NON-NLS-1$
+				if (logger.isTraceEnabled())
+					logger.trace("notificationListenerArticlesChanged.notify: end"); //$NON-NLS-1$
 			} // synchronized
 		}
 	};
+
+	public String[] getFetchGroupsArticle() {
+		return fetchGroupsArticle;
+	}
+	public int getMaxFetchDepthArticle() {
+		return NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT;
+	}
+
+	public synchronized void updateArticles(final Collection<ArticleID> deletedArticleIDs, final Collection<Article> dirtyArticles)
+	{
+		if (logger.isTraceEnabled()) {
+			logger.trace("updateArticles: Got " + dirtyArticles.size() + " articles from ArticleDAO.");
+			for (Article article : dirtyArticles) {
+				logger.trace("updateArticles: * " + article);
+				StringBuilder sb = new StringBuilder();
+				if (article.isAllocated())
+					sb.append("allocated ");
+				else
+					sb.append("not-allocated ");
+
+				if (article.isAllocationPending())
+					sb.append("allocationPending ");
+
+				if (article.isReleasePending())
+					sb.append("releasePending ");
+
+				logger.trace("updateArticles: articleStatus: " + sb.toString());
+			}
+		}
+
+		final Collection<Article> deletedArticles = new ArrayList<Article>(deletedArticleIDs.size());
+		final Collection<ArticleCarrier> deletedArticleCarriers = new ArrayList<ArticleCarrier>(deletedArticleIDs.size());
+		for (ArticleID articleID : deletedArticleIDs) {
+			ArticleCarrier articleCarrier = getArticleCarrier(articleID, true);
+
+			if (logger.isDebugEnabled())
+				logger.debug("NotificationAdapterJob.notify: deletedArticleID=" + articleID); //$NON-NLS-1$
+
+			deletedArticleCarriers.add(articleCarrier);
+			deletedArticles.add(articleCarrier.getArticle());
+		}
+
+		final ArrayList<ArticleCarrier> dirtyArticleCarriers = new ArrayList<ArticleCarrier>(dirtyArticles.size());
+		ArticleContainerID articleContainerID = getArticleContainerID();
+		for (Iterator<Article> itArticle = dirtyArticles.iterator(); itArticle.hasNext(); ) {
+			Article newArticle = itArticle.next();
+			ArticleCarrier articleCarrier = getArticleCarrier((ArticleID) JDOHelper.getObjectId(newArticle), true);
+			Article oldArticle = articleCarrier.getArticle();
+			Long oldVersion = (Long) JDOHelper.getVersion(oldArticle);
+			Long newVersion = (Long) JDOHelper.getVersion(newArticle);
+			if (newVersion.longValue() < oldVersion.longValue()) {
+				logger.info("updateArticles: Article is older (version " + newVersion + ") than the one we already have (version "+ oldVersion +")! Ignoring it: " + newArticle);
+				continue;
+			}
+			articleCarrier.setArticle(newArticle);
+
+			// If we're in an ArticleContainer from which an Article can be removed without being deleted (e.g. in an Invoice),
+			// we need to check, whether the still existing Article's field referencing the ArticleContainer is changed.
+			boolean removedFromArticleContainer = false;
+			if (articleContainerID instanceof InvoiceID)
+				removedFromArticleContainer = !articleContainerID.equals(newArticle.getInvoiceID());
+			if (articleContainerID instanceof DeliveryNoteID)
+				removedFromArticleContainer = !articleContainerID.equals(newArticle.getDeliveryNoteID());
+			if (articleContainerID instanceof ReceptionNoteID)
+				removedFromArticleContainer = !articleContainerID.equals(newArticle.getReceptionNoteID());
+			// The above is NOT necessary for Order and Offer, because it can only be removed from these ArticleContainers by being deleted from the datastore.
+
+			if (!removedFromArticleContainer) {
+				if (logger.isDebugEnabled())
+					logger.debug("NotificationAdapterJob.notify: dirtyArticleID=" + JDOHelper.getObjectId(newArticle)); //$NON-NLS-1$
+
+				dirtyArticleCarriers.add(articleCarrier);
+			}
+			else {
+				if (logger.isDebugEnabled())
+					logger.debug("NotificationAdapterJob.notify: dirty transformed to deletedArticleID=" + JDOHelper.getObjectId(newArticle)); //$NON-NLS-1$
+
+				itArticle.remove();
+				deletedArticles.add(newArticle);
+				deletedArticleCarriers.add(articleCarrier);
+			}
+		}
+
+		// We remove the deleted articles, before notifying the listeners, so that the
+		// listeners are triggered with the new situation in place. In case they still need
+		// the deleted articles/articleCarriers, they can access the references passed in the
+		// event. Marco.
+		ClientArticleSegmentGroupSet.super.removeArticles(deletedArticles);
+
+		final ArticleChangeEvent articleChangeEvent = new ArticleChangeEvent(
+				ClientArticleSegmentGroupSet.this,
+				dirtyArticles, dirtyArticleCarriers,
+				deletedArticles, deletedArticleCarriers);
+
+		Display.getDefault().asyncExec(new Runnable()
+		{
+			public void run()
+			{
+				Object[] listeners = articleChangeListeners.getListeners();
+				if (logger.isDebugEnabled()) {
+					logger.debug("NotificationAdapterJob.notify: calling listeners with ArticleChangeEvent:"); //$NON-NLS-1$
+					logger.debug("NotificationAdapterJob.notify:     ArticleChangeEvent.dirtyArticles (" + articleChangeEvent.getDirtyArticles().size() + "):"); //$NON-NLS-1$ //$NON-NLS-2$
+					for (Article article : articleChangeEvent.getDirtyArticles())
+						logger.debug("NotificationAdapterJob.notify:       - " + article.getPrimaryKey()); //$NON-NLS-1$
+
+					logger.debug("NotificationAdapterJob.notify:     ArticleChangeEvent.deletedArticles (" + articleChangeEvent.getDeletedArticles().size() + "):"); //$NON-NLS-1$ //$NON-NLS-2$
+					for (Article article : articleChangeEvent.getDeletedArticles())
+						logger.debug("NotificationAdapterJob.notify:       - " + article.getPrimaryKey()); //$NON-NLS-1$
+				}
+				for (int i = 0; i < listeners.length; i++) {
+					if (logger.isDebugEnabled())
+						logger.debug("NotificationAdapterJob.notify:     listener: " + listeners[i]); //$NON-NLS-1$
+
+					((ArticleChangeListener) listeners[i]).articlesChanged(articleChangeEvent);
+				}
+			}
+		});
+	}
 
 	@Override
 	public synchronized void removeArticles(Collection<Article> articles)

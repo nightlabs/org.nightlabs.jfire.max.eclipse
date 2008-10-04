@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -33,7 +34,6 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
@@ -41,6 +41,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
@@ -179,7 +180,7 @@ extends ArticleContainerEditorPage
 	private SegmentEditArticleSelectionListener segmentEditArticleSelectionListener = new SegmentEditArticleSelectionListener() {
 		public void selected(SegmentEditArticleSelectionEvent event) {
 			if (!event.getArticleSelections().isEmpty()) {
-				// we check if all articles are allocated or reversed, only then they can be removed
+				// we check if all articles are non-allocated, allocated or reversed, only then they can be removed
 				ArticleStatusCheckResult articleStatusCheckResult = getArticleStatusCheckResult(event.getArticleSelections());
 				deleteSelectionButton.setEnabled(articleStatusCheckResult.isAllArticlesAllocatedOrReversed());
 			}
@@ -288,15 +289,15 @@ extends ArticleContainerEditorPage
 
 	private Set<Article> articlesWithWrongState = new HashSet<Article>();
 
-	private void checkAllArticlesAreAllocatedOrReversed()
+	private void checkAllArticlesAreAllocatedOrReversed(Collection<? extends Article> deletedArticles)
 	{
 		ArticleStatusCheckResult articleStatusCheckResult = new ArticleStatusCheckResult(getArticleContainerEdit().getArticles());
 
-		if (!articleStatusCheckResult.getNotAllocatedNorReversedArticles().isEmpty())
-			articlesWithWrongState.addAll(articleStatusCheckResult.getNotAllocatedNorReversedArticles());
+		articlesWithWrongState.addAll(articleStatusCheckResult.getNotAllocatedNorReversedArticles());
+		articlesWithWrongState.removeAll(articleStatusCheckResult.getAllocatedOrReversedArticles());
 
-		if (!articleStatusCheckResult.getAllocatedOrReversedArticles().isEmpty())
-			articlesWithWrongState.removeAll(articleStatusCheckResult.getAllocatedOrReversedArticles());
+		if (deletedArticles != null)
+			articlesWithWrongState.removeAll(deletedArticles);
 
 		if (buttonComp != null && !buttonComp.isDisposed())
 			buttonComp.setEnabled(articlesWithWrongState.isEmpty());
@@ -304,13 +305,13 @@ extends ArticleContainerEditorPage
 
 	private ArticleCreateListener articleCreateListener = new ArticleCreateListener(){
 		public void articlesCreated(ArticleCreateEvent articleCreateEvent) {
-			checkAllArticlesAreAllocatedOrReversed();
+			checkAllArticlesAreAllocatedOrReversed(null);
 		}
 	};
 
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener(){
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent) {
-			checkAllArticlesAreAllocatedOrReversed();
+			checkAllArticlesAreAllocatedOrReversed(articleChangeEvent.getDeletedArticles());
 		}
 	};
 
@@ -341,12 +342,13 @@ extends ArticleContainerEditorPage
 	protected void deleteAll()
 	{
 		try {
-			TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
-			Collection<Article> articles = tradeManager.releaseArticles(NLJDOHelper.getObjectIDSet(
-					getArticleContainerEdit().getArticles()), true, false, null,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getArticleContainerEdit().getArticles());
-			tradeManager.deleteArticles(articleIDs, true);
+//			TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
+//			Collection<Article> articles = tradeManager.releaseArticles(NLJDOHelper.getObjectIDSet(
+//					getArticleContainerEdit().getArticles()), true, false, null,
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//			Set<ObjectID> articleIDs = NLJDOHelper.getObjectIDSet(getArticleContainerEdit().getArticles());
+//			tradeManager.deleteArticles(articleIDs, true);
+			// I think this is not necessary, because the articles are deleted automatically via the EditLock-release-hook
 
 			createNewOrder();
 		}
@@ -389,10 +391,23 @@ extends ArticleContainerEditorPage
 				};
 				getArticleContainerEdit().addArticleChangeListener(articleChangeListener);
 
-				TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
-				Collection<Article> articles = tradeManager.releaseArticles(articleIDs,
-						true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-				tradeManager.deleteArticles(articleIDs, true);
+//				TradeManager tradeManager = TradePlugin.getDefault().getTradeManager();
+//				Collection<Article> articles = tradeManager.releaseArticles(articleIDs,
+//						true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//				tradeManager.deleteArticles(articleIDs, true);
+
+				ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = getArticleContainerEdit().getArticleSegmentGroupSet();
+
+				List<Article> articles = ArticleDAO.sharedInstance().deleteArticles(
+						articleIDs, true, true, clientArticleSegmentGroupSet.getFetchGroupsArticle(), clientArticleSegmentGroupSet.getMaxFetchDepthArticle(),
+						new NullProgressMonitor()
+				);
+				Set<ArticleID> deletedArticleIDs = new HashSet<ArticleID>(articleIDs);
+				for (Article article : articles) {
+					deletedArticleIDs.remove(JDOHelper.getObjectId(article));
+				}
+
+				clientArticleSegmentGroupSet.updateArticles(deletedArticleIDs, articles);
 			}
 			catch (Exception e) {
 				if (!composite.isDisposed()) {

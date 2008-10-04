@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.jdo.JDOHelper;
@@ -44,8 +45,7 @@ import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
@@ -53,6 +53,7 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditActionDelegate;
@@ -85,9 +86,9 @@ public class RemoveAction extends ArticleEditAction
 
 			for (Article article : articleSelection.getSelectedArticles()) {
 
-				// Deletion is possible for allocated articles too since it 
+				// Deletion is possible for allocated articles too since it
 				// releases allocated articles before.
-				
+
 //				if (Offer.class.getName().equals(articleContainerClass) ||
 //						Order.class.getName().equals(articleContainerClass)) {
 //					// removal here means deletion => must NOT be allocated/allocationPending
@@ -154,8 +155,22 @@ public class RemoveAction extends ArticleEditAction
 				ArticleContainerID articleContainerID = segmentEdit.getArticleContainerID();
 
 				if (articleContainerID instanceof OfferID || articleContainerID instanceof OrderID) {
-					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					tradeManager.deleteArticles(articleIDs, true);
+//					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					tradeManager.deleteArticles(articleIDs, true);
+
+					ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = getArticleContainerEdit().getArticleSegmentGroupSet();
+
+					List<Article> articles = ArticleDAO.sharedInstance().deleteArticles(
+							articleIDs, true, true, clientArticleSegmentGroupSet.getFetchGroupsArticle(), clientArticleSegmentGroupSet.getMaxFetchDepthArticle(),
+							new NullProgressMonitor()
+					);
+					Set<ArticleID> deletedArticleIDs = new HashSet<ArticleID>(articleIDs);
+					for (Article article : articles) {
+						deletedArticleIDs.remove(JDOHelper.getObjectId(article));
+					}
+
+					clientArticleSegmentGroupSet.updateArticles(deletedArticleIDs, articles);
+
 				}
 				else if (articleContainerID instanceof InvoiceID) {
 					AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
