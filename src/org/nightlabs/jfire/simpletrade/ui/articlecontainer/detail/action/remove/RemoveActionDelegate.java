@@ -26,7 +26,10 @@
 
 package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.action.remove;
 
-
+/**
+ * @deprecated I think, this class is not used anymore, because the default remove action is sufficient and does not need to be overridden. Marco.
+ */
+@Deprecated
 public class RemoveActionDelegate
 extends org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.remove.RemoveActionDelegate
 {
