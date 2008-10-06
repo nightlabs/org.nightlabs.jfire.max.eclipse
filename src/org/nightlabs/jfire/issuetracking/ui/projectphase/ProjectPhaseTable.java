@@ -2,7 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.projectphase;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -13,7 +12,6 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
 
 /**
@@ -22,13 +20,12 @@ import org.nightlabs.jfire.issue.project.ProjectPhase;
 public class ProjectPhaseTable 
 extends AbstractTableComposite<ProjectPhase> 
 {
-
 	/**
 	 * The fetch groups of issue data.
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		IssueType.FETCH_GROUP_NAME};
+		ProjectPhase.FETCH_GROUP_NAME};
 	
 	public ProjectPhaseTable(Composite parent, int style)
 	{
