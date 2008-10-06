@@ -57,11 +57,11 @@ extends HeaderComposite{
 		infoStatuesContainerComp.getGridLayout().numColumns = 3;
 		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
 		currentStateComposite.setStatable(recurringOffer);
-		//currentStateComposite.setLayoutData(null);
+		currentStateComposite.setLayoutData(null);
 
 		nextTransitionComposite = new NextTransitionComposite(infoStatuesContainerComp ,SWT.WRAP | SWT.NONE);
 		nextTransitionComposite.setStatable(recurringOffer);
-		//	nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
+		nextTransitionComposite.setLayoutData(null);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			@Implement
 			public void signal(SignalEvent event)
@@ -93,7 +93,6 @@ extends HeaderComposite{
 			new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
 
 
-
 		getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				if (isDisposed())
@@ -109,12 +108,6 @@ extends HeaderComposite{
 				});
 			}
 		});
-
-
-
-
-
-
 
 
 	}
