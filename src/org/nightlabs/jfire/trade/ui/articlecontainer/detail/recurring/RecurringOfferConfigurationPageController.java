@@ -5,7 +5,9 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
+import org.nightlabs.jdo.timepattern.TimePatternSetJDOImpl;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
+import org.nightlabs.jfire.timer.Task;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
@@ -24,9 +26,10 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 
 	public static final String[] FETCH_GROUPS_RECURRING_OFFER = {
 		RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION,
-		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK
-		, FetchPlan.DEFAULT };
-
+		Task.FETCH_GROUP_TIME_PATTERN_SET,
+		TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS,
+		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK,
+		FetchPlan.DEFAULT };
 
 	public RecurringOfferConfigurationPageController(EntityEditor editor) {
 		super(editor);
@@ -48,7 +51,10 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 	protected RecurringOfferConfiguration retrieveEntity(ProgressMonitor monitor) {
 
 		RecurringOffer recurringOffer = RecurringOfferDAO.sharedInstance().getRecurringOffer(getOfferID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
-		return recurringOffer.getRecurringOfferConfiguration(); 
+
+		recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getTimePatternSet();
+
+		return recurringOffer.getRecurringOfferConfiguration();
 
 	}
 

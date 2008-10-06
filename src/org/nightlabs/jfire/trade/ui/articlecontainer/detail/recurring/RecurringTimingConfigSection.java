@@ -1,23 +1,22 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
-import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.timepattern.TimePatternSetComposite;
 import org.nightlabs.base.ui.timepattern.builder.TimePatternSetBuilderWizard;
-
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.timepattern.TimePattern;
+import org.nightlabs.util.Util;
 
 
 
@@ -100,8 +99,10 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 	@Override
 	protected void updateConfigOffer(
 			RecurringOfferConfiguration recurringOfferConfiguration) {
-		// TODO Auto-generated method stub
-
+		
+		timePatternSetComposite.setTimePatternSet(Util.cloneSerializable(recurringOfferConfiguration.getCreatorTask().getTimePatternSet()));
+		getClient().pack();
+		
 	}
 
 

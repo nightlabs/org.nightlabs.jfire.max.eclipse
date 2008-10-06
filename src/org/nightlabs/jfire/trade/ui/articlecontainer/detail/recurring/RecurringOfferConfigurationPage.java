@@ -60,6 +60,8 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 
 		if (controller.isLoaded()) {
 			recurringOfferConfigSection.setRecurringOfferConfiguration(controller.getControllerObject());
+			recurringTimingConfigSection.setRecurringOfferConfiguration(controller.getControllerObject());
+
 		}
 
 
@@ -74,6 +76,10 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 			public void run() {
 				if (recurringOfferConfigSection != null ) 
 					recurringOfferConfigSection.setRecurringOfferConfiguration(getController().getControllerObject());
+
+				if (recurringTimingConfigSection != null ) 
+					recurringTimingConfigSection.setRecurringOfferConfiguration(getController().getControllerObject());
+
 			}
 		});
 
