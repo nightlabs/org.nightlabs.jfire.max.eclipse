@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -42,24 +43,20 @@ extends AbstractTableComposite<ProjectPhase>
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("ID.");
-		layout.addColumnData(new ColumnWeightData(30));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Phase Name");
-		layout.addColumnData(new ColumnWeightData(30));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Description");
-		layout.addColumnData(new ColumnWeightData(30));
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText("Status");
-		layout.addColumnData(new ColumnWeightData(30));
 		
-		table.setLayout(layout);
+		table.setLayout(new WeightedTableLayout(new int[] {5, 30, 30, 30}));
 	}
 
 	class ProjectPhaseLabelProvider
