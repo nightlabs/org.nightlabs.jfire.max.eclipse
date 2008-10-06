@@ -133,7 +133,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 	public class AddMemberAction extends Action {		
 		public AddMemberAction() {
 			super();
-			setId(AssignPMAction.class.getName());
+			setId(AddMemberAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					ProjectMemberSection.class, 

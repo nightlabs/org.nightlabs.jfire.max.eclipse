@@ -34,6 +34,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	private ProjectSection projectSection;
+	private ProjectPhaseSection projectPhaseSection;
 	private ProjectMemberSection projectMemberSection;
 	
 	/**
@@ -58,11 +59,15 @@ extends EntityEditorPageWithProgress
 		projectSection = new ProjectSection(this, parent, controller);
 		getManagedForm().addPart(projectSection);
 		
+		projectPhaseSection = new ProjectPhaseSection(this, parent, controller);
+		getManagedForm().addPart(projectPhaseSection);
+		
 		projectMemberSection = new ProjectMemberSection(this, parent, controller);
 		getManagedForm().addPart(projectMemberSection);
 		
 		if (controller.isLoaded()) {
 			projectSection.setProject(controller.getProject());
+			projectPhaseSection.setProject(controller.getProject());
 			projectMemberSection.setProject(controller.getProject());
 		}
 	}
@@ -74,6 +79,10 @@ extends EntityEditorPageWithProgress
 			public void run() {
 				if (projectSection != null && !projectSection.getSection().isDisposed()) {
 					projectSection.setProject(controller.getProject());
+				}
+				
+				if (projectPhaseSection != null && !projectPhaseSection.getSection().isDisposed()) {
+					projectPhaseSection.setProject(controller.getProject());
 				}
 				
 				if (projectMemberSection != null && !projectMemberSection.getSection().isDisposed()) {

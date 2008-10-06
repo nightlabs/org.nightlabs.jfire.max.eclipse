@@ -42,7 +42,8 @@ extends ActiveEntityEditorPageController<Project>
 				ProjectType.FETCH_GROUP_NAME,
 				Project.FETCH_GROUP_DESCRIPTION,
 				Project.FETCH_GROUP_PROJECT_MANAGER,
-				Project.FETCH_GROUP_MEMBERS};
+				Project.FETCH_GROUP_MEMBERS,
+				Project.FETCH_GROUP_PROJECT_PHASES};
 //				Project.FETCH_GROUP_PARENT_PROJECT,
 //				Project.FETCH_GROUP_SUBPROJECTS
 	}
