@@ -17,6 +17,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class RenameProjectAction extends Action {
