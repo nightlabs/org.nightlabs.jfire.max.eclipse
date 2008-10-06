@@ -36,7 +36,7 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 	private ProjectPhaseTable projectPhaseTable;
 	
 	public ProjectPhaseSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project's Phases");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project Phases");
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());

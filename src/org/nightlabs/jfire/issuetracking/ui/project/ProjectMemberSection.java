@@ -37,7 +37,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 	private UserTable userTable;
 	
 	public ProjectMemberSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project's Members");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project Members");
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
