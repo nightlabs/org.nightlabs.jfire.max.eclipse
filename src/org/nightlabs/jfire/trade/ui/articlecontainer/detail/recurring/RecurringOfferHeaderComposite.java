@@ -9,6 +9,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -24,9 +27,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 
 
 /**
@@ -37,9 +37,6 @@ extends HeaderComposite{
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
-	private XComposite infoDateComp;
-	private Label nextExecutionstampTask;
-	private Label lastExecutionstampTask;
 	XComposite infoStatuesContainerComp;
 
 	private volatile RecurringOffer recurringOffer;
@@ -50,15 +47,21 @@ extends HeaderComposite{
 
 		this.recurringOffer = recurringOffer;
 
-		this.setLayout(new RowLayout());
 
-		currentStateComposite = new CurrentStateComposite(this, SWT.NONE);
+		this.setLayout(new GridLayout());
+		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL|GridData.HORIZONTAL_ALIGN_CENTER));
+
+
+		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+		infoStatuesContainerComp.setLayoutData(null);
+		infoStatuesContainerComp.getGridLayout().numColumns = 3;
+		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
 		currentStateComposite.setStatable(recurringOffer);
-		currentStateComposite.setLayoutData(null);
+		//currentStateComposite.setLayoutData(null);
 
-		nextTransitionComposite = new NextTransitionComposite(this, SWT.NONE);
+		nextTransitionComposite = new NextTransitionComposite(infoStatuesContainerComp ,SWT.WRAP | SWT.NONE);
 		nextTransitionComposite.setStatable(recurringOffer);
-		nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
+		//	nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
 		nextTransitionComposite.addSignalListener(new SignalListener() {
 			@Implement
 			public void signal(SignalEvent event)
@@ -67,51 +70,27 @@ extends HeaderComposite{
 			}
 		});
 
-
-
-		if(infoStatuesContainerComp == null)
-			infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
-
-		XComposite infoStatuesComp = new XComposite(infoStatuesContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-		infoStatuesComp.setLayoutData(null);
-		infoStatuesComp.getGridLayout().numColumns = 3;
-
-
-		new Label(infoStatuesComp, SWT.NONE).setText("RecurredOffers:");
-		new Label(infoStatuesComp, SWT.NONE).setText(String.valueOf(recurringOffer.getRecurredOfferCount()));
-
-		Label statuesLabel  = new Label(infoStatuesComp, SWT.NONE);
+		new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("RecurredOffers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
 		if(recurringOffer.getStatusKey() != null)
 		{
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL)) 
-				statuesLabel.setText("Non equal Prices");
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL))
+				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Non equal Prices");
 
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED)) 
-				statuesLabel.setText("Suspended");
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED))
+				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Suspended");
 
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE)) 
-				statuesLabel.setText("Active");
+			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
+				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Active");
 		}
 
-		XComposite infoDateContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
-
-		infoDateComp = new XComposite(infoDateContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
-		infoDateComp.setLayoutData(null);
-		infoDateComp.getGridLayout().numColumns = 3;
-		new Label(infoDateComp, SWT.NONE).setText("Last Task:");
-
-
-		lastExecutionstampTask = new Label(infoDateComp, SWT.NONE);
 		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
 		if(date != null)
-			lastExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Last Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
 
-		new Label(infoDateComp, SWT.NONE).setText("Next Task:");
-		nextExecutionstampTask = new Label(infoDateComp, SWT.NONE);
 		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
 		if(date != null)
-			nextExecutionstampTask.setText(DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
 
 
 
