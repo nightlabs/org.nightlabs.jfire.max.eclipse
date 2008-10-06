@@ -44,7 +44,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 
 		taskTimePattern = new Button(getClient(), SWT.PUSH);
-		taskTimePattern.setText("Recurring Date...");		
+		taskTimePattern.setText("Recurring Date...");
 		taskTimePattern.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
@@ -52,9 +52,9 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 				if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 				{
 					timePatternSetComposite.refresh(true);
-					Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();  
+					Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
 					for (TimePattern p : patterns) {
-						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);	
+						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);
 					}
 					markDirty();
 				}
@@ -62,7 +62,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		});
 
 		timePatternSetComposite = new TimePatternSetComposite(getClient(),SWT.NONE);
-		timePatternSetComposite.setLayoutData(new GridData(550,50));
+		timePatternSetComposite.setLayoutData(new GridData(550,75));
 
 		enableEndCheck = new Button(getClient(), SWT.CHECK);
 		enableEndCheck.setText("Activate End Date");
@@ -75,7 +75,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 				if(!enableEndCheck.getSelection())
 				{
-					getController().getControllerObject().setSuspendDate(null);	
+					getController().getControllerObject().setSuspendDate(null);
 					markDirty();
 				}
 
@@ -89,7 +89,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 			public void widgetSelected(SelectionEvent e) {
 
 				if(stopDateControl.getDate()!=null)
-					getController().getControllerObject().setSuspendDate(stopDateControl.getDate());	
+					getController().getControllerObject().setSuspendDate(stopDateControl.getDate());
 				markDirty();
 
 			}
@@ -99,10 +99,10 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 	@Override
 	protected void updateConfigOffer(
 			RecurringOfferConfiguration recurringOfferConfiguration) {
-		
+
 		timePatternSetComposite.setTimePatternSet(Util.cloneSerializable(recurringOfferConfiguration.getCreatorTask().getTimePatternSet()));
 		getClient().pack();
-		
+
 	}
 
 
