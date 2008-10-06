@@ -52,6 +52,9 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 				if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 				{
 					timePatternSetComposite.refresh(true);
+
+					getController().getControllerObject().getCreatorTask().getTimePatternSet().clearTimePatterns();
+
 					Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
 					for (TimePattern p : patterns) {
 						getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);

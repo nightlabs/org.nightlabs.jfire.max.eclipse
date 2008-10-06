@@ -51,9 +51,6 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 	protected RecurringOfferConfiguration retrieveEntity(ProgressMonitor monitor) {
 
 		RecurringOffer recurringOffer = RecurringOfferDAO.sharedInstance().getRecurringOffer(getOfferID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
-
-		recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getTimePatternSet();
-
 		return recurringOffer.getRecurringOfferConfiguration();
 
 	}
