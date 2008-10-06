@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection;
 
 public class ProjectEditorPage 
 extends EntityEditorPageWithProgress 

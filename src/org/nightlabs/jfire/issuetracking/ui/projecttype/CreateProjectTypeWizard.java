@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.project;
+package org.nightlabs.jfire.issuetracking.ui.projecttype;
 
 import javax.jdo.FetchPlan;
 
@@ -11,6 +11,8 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorInput;
 
 public class CreateProjectTypeWizard
 extends DynamicPathWizard

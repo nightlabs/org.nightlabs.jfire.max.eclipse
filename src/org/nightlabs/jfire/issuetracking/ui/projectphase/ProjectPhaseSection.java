@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.issuetracking.ui.project;
+package org.nightlabs.jfire.issuetracking.ui.projectphase;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->

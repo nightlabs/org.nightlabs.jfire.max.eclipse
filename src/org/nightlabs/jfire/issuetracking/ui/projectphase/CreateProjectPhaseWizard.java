@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.project;
+package org.nightlabs.jfire.issuetracking.ui.projectphase;
 
 import javax.jdo.FetchPlan;
 

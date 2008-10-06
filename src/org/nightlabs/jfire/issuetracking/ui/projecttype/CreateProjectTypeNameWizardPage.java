@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.issuetracking.ui.project;
+package org.nightlabs.jfire.issuetracking.ui.projecttype;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -16,14 +16,14 @@ import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 
-public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
+public class CreateProjectTypeNameWizardPage extends DynamicPathWizardPage
 {
-	public CreateProjectPhaseWizardPage(String pageName) {
+	public CreateProjectTypeNameWizardPage(String pageName) {
 		super(pageName);
 	}
 
-	private I18nTextBuffer projectPhaseNameBuffer;
-	private II18nTextEditor projectPhaseNameEditor;
+	private I18nTextBuffer projectTypeNameBuffer;
+	private II18nTextEditor projectTypeNameEditor;
 
 	private ProjectID projectID;
 
@@ -31,11 +31,11 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent) {
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		new Label(page, SWT.NONE).setText("Project Phase Name");
-		projectPhaseNameBuffer = new I18nTextBuffer();
-		projectPhaseNameEditor = new I18nTextEditorTable(page);
-		projectPhaseNameEditor.setI18nText(projectPhaseNameBuffer);
-		projectPhaseNameEditor.addModifyListener(new ModifyListener() {
+		new Label(page, SWT.NONE).setText("Project Name");
+		projectTypeNameBuffer = new I18nTextBuffer();
+		projectTypeNameEditor = new I18nTextEditorTable(page);
+		projectTypeNameEditor.setI18nText(projectTypeNameBuffer);
+		projectTypeNameEditor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent arg0)
 			{
 				getWizard().getContainer().updateButtons();
@@ -45,27 +45,27 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		return page;
 	}
 
-	public CreateProjectPhaseWizardPage(ProjectID projectID)
+	public CreateProjectTypeNameWizardPage(ProjectID projectID)
 	{
-		super(CreateProjectPhaseWizardPage.class.getName(), "Project Phase Page", 
-				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectPhaseWizardPage.class));
+		super(CreateProjectTypeNameWizardPage.class.getName(), "Project Page", 
+				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectTypeNameWizardPage.class));
 		this.setDescription("Description");
 		this.projectID = projectID;
 	}
 
-	public II18nTextEditor getVoucherPhaseNameEditor()
+	public II18nTextEditor getVoucherTypeNameEditor()
 	{
-		return projectPhaseNameEditor;
+		return projectTypeNameEditor;
 	}
 
-	public I18nTextBuffer getProjectPhaseNameBuffer()
+	public I18nTextBuffer getProjectTypeNameBuffer()
 	{
-		return projectPhaseNameBuffer;
+		return projectTypeNameBuffer;
 	}
 
 	@Override
 	public boolean isPageComplete()
 	{
-		return !projectPhaseNameBuffer.isEmpty();
+		return !projectTypeNameBuffer.isEmpty();
 	}
 }
