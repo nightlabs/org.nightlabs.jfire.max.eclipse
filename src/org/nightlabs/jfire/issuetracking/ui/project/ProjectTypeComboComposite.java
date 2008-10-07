@@ -185,7 +185,7 @@ implements ISelectionProvider
 		int idx = -1;
 		int i = 0;
 		for (ProjectType projectType : projectTypeList) {
-			if (projectType.getProjectTypeID() == projectTypeID) {
+			if (projectType.getProjectTypeID().equals(projectTypeID)) {
 				idx = i;
 				break;
 			}

@@ -2,10 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import java.util.Collection;
 
-import javax.jdo.FetchPlan;
-
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -20,19 +16,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectType;
-import org.nightlabs.jfire.issue.project.ProjectTypeDAO;
-import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -42,7 +33,8 @@ public class ProjectSection
 extends ToolBarSectionPart
 {
 	private Label projectTypeLabel;
-	private XComboComposite<ProjectType> projectTypeCombo;
+	private ProjectTypeComboComposite projectTypeCombo;
+	
 	private Label nameLabel;
 	private I18nTextEditor nameText;
 	private Label descriptionLabel;
@@ -72,13 +64,13 @@ extends ToolBarSectionPart
 		projectTypeLabel = new Label(client, SWT.WRAP);
 		projectTypeLabel.setText("Project Type: ");
 		
-		projectTypeCombo = new XComboComposite<ProjectType>(client, SWT.NONE);
-		projectTypeCombo.setLabelProvider(new ProjectTypeLabelProvider());
+		projectTypeCombo = new ProjectTypeComboComposite(client, SWT.NONE);
+//		projectTypeCombo.setLabelProvider(new ProjectTypeLabelProvider());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeCombo.setLayoutData(gd);
 		projectTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
-				controller.getProject().setProjectType(projectTypeCombo.getSelectedElement());
+				controller.getProject().setProjectType(projectTypeCombo.getSelectedProjectType());
 				markDirty();
 			}
 		});
@@ -113,31 +105,6 @@ extends ToolBarSectionPart
 		updatedTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		getSection().setClient(client);
-		
-		//Loading Data
-		Job loadJob = new Job("Loading Project Types....") {
-			@Override
-			protected IStatus run(final ProgressMonitor monitor) throws Exception
-			{
-				projectTypes = 
-					ProjectTypeDAO.sharedInstance().getProjectTypes(new String[] {FetchPlan.DEFAULT, ProjectType.FETCH_GROUP_NAME}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						projectTypeCombo.removeAll();
-						for (ProjectType projectType : projectTypes) {
-							projectTypeCombo.addElement(projectType);
-						}
-						selectedProjectType = projectTypeCombo.getSelectedElement();
-					}
-				});
-
-				return Status.OK_STATUS;
-			} 
-		};
-		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
-		loadJob.schedule();
 	}
 	
 	private Project project;
@@ -149,7 +116,7 @@ extends ToolBarSectionPart
 			public void run() {
 				ProjectType projectType = project.getProjectType();
 				if (projectType != null) {
-					projectTypeCombo.selectElement(projectType);
+					projectTypeCombo.setSelectedProjectType(projectType);
 				}
 				
 				nameText.setI18nText(project.getName(), EditMode.DIRECT);

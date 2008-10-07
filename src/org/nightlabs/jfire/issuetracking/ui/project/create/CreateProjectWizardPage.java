@@ -32,9 +32,10 @@ extends DynamicPathWizardPage
 		XComposite page = new XComposite(parent, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER);
 
+		new Label(page, SWT.NONE).setText("Project Type: ");
 		projectTypeCombo = new ProjectTypeComboComposite(page, SWT.NONE);
 
-		new Label(page, SWT.NONE).setText("Project Name");
+		new Label(page, SWT.NONE).setText("Project Name: ");
 		projectTypeNameBuffer = new I18nTextBuffer();
 		projectTypeNameEditor = new I18nTextEditorTable(page);
 		projectTypeNameEditor.setI18nText(projectTypeNameBuffer);
