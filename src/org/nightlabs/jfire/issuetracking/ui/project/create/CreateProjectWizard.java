@@ -22,7 +22,7 @@ extends DynamicPathWizard
 	};
 
 	private ProjectID parentProjectID;
-	private CreateProjectTypeNameWizardPage namePage;
+	private CreateProjectWizardPage page;
 
 	public CreateProjectWizard(ProjectID parentProjectID) {
 		this.parentProjectID = parentProjectID;
@@ -30,8 +30,8 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		namePage = new CreateProjectTypeNameWizardPage(parentProjectID);
-		addPage(namePage);
+		page = new CreateProjectWizardPage(null);
+		addPage(page);
 	}
 
 	@Override

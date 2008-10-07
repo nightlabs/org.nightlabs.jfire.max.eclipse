@@ -15,29 +15,31 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectTypeComboComposite;
 
-public class CreateProjectWizardPage extends DynamicPathWizardPage
+public class CreateProjectWizardPage
+extends DynamicPathWizardPage 
 {
-	public CreateProjectWizardPage(String pageName) {
-		super(pageName);
-	}
-
 	private I18nTextBuffer projectTypeNameBuffer;
 	private II18nTextEditor projectTypeNameEditor;
+
+	private ProjectTypeComboComposite projectTypeCombo;
 
 	private ProjectID projectID;
 
 	@Override
 	public Control createPageContents(Composite parent) {
-		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite page = new XComposite(parent, SWT.NONE,
+				LayoutMode.TIGHT_WRAPPER);
+
+		projectTypeCombo = new ProjectTypeComboComposite(page, SWT.NONE);
 
 		new Label(page, SWT.NONE).setText("Project Name");
 		projectTypeNameBuffer = new I18nTextBuffer();
 		projectTypeNameEditor = new I18nTextEditorTable(page);
 		projectTypeNameEditor.setI18nText(projectTypeNameBuffer);
 		projectTypeNameEditor.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0)
-			{
+			public void modifyText(ModifyEvent arg0) {
 				getWizard().getContainer().updateButtons();
 			}
 		});
@@ -45,27 +47,24 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage
 		return page;
 	}
 
-	public CreateProjectWizardPage(ProjectID projectID)
-	{
-		super(CreateProjectWizardPage.class.getName(), "Project Page", 
-				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectWizardPage.class));
+	public CreateProjectWizardPage(ProjectID projectID) {
+		super(CreateProjectWizardPage.class.getName(), "Project Page",
+				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin
+						.getDefault(), CreateProjectWizardPage.class));
 		this.setDescription("Description");
 		this.projectID = projectID;
 	}
 
-	public II18nTextEditor getVoucherTypeNameEditor()
-	{
+	public II18nTextEditor getVoucherTypeNameEditor() {
 		return projectTypeNameEditor;
 	}
 
-	public I18nTextBuffer getProjectTypeNameBuffer()
-	{
+	public I18nTextBuffer getProjectTypeNameBuffer() {
 		return projectTypeNameBuffer;
 	}
 
 	@Override
-	public boolean isPageComplete()
-	{
+	public boolean isPageComplete() {
 		return !projectTypeNameBuffer.isEmpty();
 	}
 }

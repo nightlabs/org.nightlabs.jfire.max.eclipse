@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -31,6 +32,7 @@ import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.ProjectTypeDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectTypeID;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
 
 public class ProjectTypeComboComposite 
@@ -92,6 +94,8 @@ implements ISelectionProvider
 			{
 				try {
 					final Collection<ProjectType> _projectTypes = ProjectTypeDAO.sharedInstance().getProjectTypes(FETCH_GROUP_PROJECT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					CollectionUtil.addAllToCollection(_projectTypes.toArray(new ProjectType[0]), projectTypeList);
+					Collections.sort(projectTypeList);
 					
 					Display.getDefault().asyncExec(new Runnable()
 					{
