@@ -10,9 +10,15 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorInput;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class CreateProjectWizard
 extends DynamicPathWizard
@@ -48,9 +54,15 @@ extends DynamicPathWizard
 					public void run()
 					{
 						try {
+							Project projectToStore = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
+							projectToStore.getName().copyFrom(page.getProjectTypeNameEditor().getI18nText());
+							projectToStore.setProjectType(page.getSelectedProjectType());
+							
+							Project storedProject = ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
 							RCPUtil.openEditor(
-							new ProjectEditorInput(parentProjectID),
-							ProjectEditor.EDITOR_ID);
+									new ProjectEditorInput(storedProject.getObjectId()),
+									ProjectEditor.EDITOR_ID);
 						} catch (Exception e) {
 							throw new RuntimeException(e);
 						}

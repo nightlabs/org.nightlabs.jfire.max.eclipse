@@ -9,7 +9,6 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
-import org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizard;
 
 public class CreateSubProjectAction 
 extends Action 
@@ -31,7 +30,7 @@ extends Action
 	public void run() {
 		TreeSelection selection = (TreeSelection)projectTreeViewer.getSelection();
 		Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
-		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateProjectPhaseWizard(projectToStore.getObjectId()));
+		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateProjectWizard(projectToStore.getObjectId()));
 		dialog.open();
 		
 //		dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Sub Project", "Enter project's name", "Name", null) {
