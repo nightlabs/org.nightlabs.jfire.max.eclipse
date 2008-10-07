@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -31,10 +32,15 @@ public class RecurringArticleAdder extends ArticleAdder {
 			throws ModuleException, RemoteException, LoginException,
 			CreateException, NamingException {
 		
+		Collection<ProductTypeID> productTypeIDs = new ArrayList<ProductTypeID>( quantity);
+		for (int i = 0; i <  quantity; i++) {
+			productTypeIDs.add(productTypeID);
+		}
+		
 		SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 		Collection<Article> articles = stm.createArticles(
 				segmentID, offerID,
-				Collections.singleton(productTypeID), tariffID,
+				productTypeIDs, tariffID,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		return articles;
 	}

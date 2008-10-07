@@ -119,7 +119,7 @@
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Offer"/>
       <articleAdderFactory
-            articleContainerClass="org.nightlabs.jfire.trade.RecurringOrder"
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOrder"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.RecurringArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
