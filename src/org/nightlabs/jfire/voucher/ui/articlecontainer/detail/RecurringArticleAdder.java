@@ -2,7 +2,6 @@ package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -20,8 +19,12 @@ public class RecurringArticleAdder extends ArticleAdder {
 	throws Exception {
 
 		VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		Collection<ProductTypeID> productTypeIDs = new ArrayList<ProductTypeID>(qty);
+		for (int i = 0; i < qty; i++) {
+			productTypeIDs.add(productTypeID);
+		}
 		return vm.createArticles(
-				segmentID, offerID, Collections.singleton(productTypeID),
+				segmentID, offerID, productTypeIDs,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}
 
