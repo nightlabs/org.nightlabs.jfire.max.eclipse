@@ -96,8 +96,10 @@
                name="remove (#toolbar)"/>
       </articleEditFactory>
    </extension>
+   
    <extension
          point="org.nightlabs.jfire.trade.ui.articleAdderFactory">
+      
       <articleAdderFactory
             articleContainerClass="org.nightlabs.jfire.trade.Order"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
@@ -105,12 +107,25 @@
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Order"/>
       <articleAdderFactory
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
+            class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            name="Default - Offer"/>
+      <articleAdderFactory
             articleContainerClass="org.nightlabs.jfire.trade.Offer"
             class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdderFactory"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
             productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
             name="Default - Offer"/>
+      <articleAdderFactory
+            articleContainerClass="org.nightlabs.jfire.trade.RecurringOrder"
+            class="org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"
+            productTypeClass="org.nightlabs.jfire.simpletrade.store.SimpleProductType"
+            name="Default - Recurring Order"/>
    </extension>
+   
    <extension
          point="org.nightlabs.jfire.trade.ui.productTypeDetailView">
       <productTypeDetailView productTypeDetailViewFactory="org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewFactory"/>

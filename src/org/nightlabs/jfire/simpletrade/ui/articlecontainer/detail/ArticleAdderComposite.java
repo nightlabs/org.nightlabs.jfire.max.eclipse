@@ -130,7 +130,7 @@ public class ArticleAdderComposite extends FadeableComposite
 			tariffCombo.setSelection(0); // TODO later on we need to store a priority in the server
 
 //		quantitySelector =
-			new QuantitySelector(this) {
+		new QuantitySelector(this) {
 			@Override
 			protected void quantitySelected(int qty)
 			{
@@ -162,23 +162,8 @@ public class ArticleAdderComposite extends FadeableComposite
 				ProductType productType = articleAdder.getProductType();
 				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 
-				Class<?> articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
-				String fetchGroupTrade_article;
-				if (Order.class.isAssignableFrom(articleContainerClass)) {
-					fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
-				}
-				else if (Offer.class.isAssignableFrom(articleContainerClass)) {
-					fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
-				}
-				else
-					throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
+				Collection<Article> articles = articleAdder.createArticles(segmentID, offerID, productTypeID, qty, tariffID);
 
-				SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-				Collection<Article> articles = stm.createArticles(
-						segmentID, offerID, productTypeID, qty, tariffID, true, false,
-						new String[] {
-								fetchGroupTrade_article,
-								FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 				segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 				return Status.OK_STATUS;

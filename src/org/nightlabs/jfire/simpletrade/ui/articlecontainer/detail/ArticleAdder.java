@@ -28,8 +28,11 @@ package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 
 import java.util.Collection;
 
+import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
+import javax.naming.NamingException;
+import javax.security.auth.login.LoginException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -40,12 +43,17 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
+import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.dao.TariffPricePairDAO;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.CustomerGroup;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
@@ -56,6 +64,7 @@ import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
@@ -78,7 +87,7 @@ public class ArticleAdder extends AbstractArticleAdder
 		Offer.FETCH_GROUP_ORDER,
 		Order.FETCH_GROUP_CUSTOMER_GROUP
 	};
-	
+
 	private ArticleAdderComposite articleAdderComposite = null;
 	private Collection<TariffPricePair> tariffPricePairs = null;
 	private ProductType productType = null;
@@ -119,7 +128,7 @@ public class ArticleAdder extends AbstractArticleAdder
 							FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR,
 							ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new SubProgressMonitor(monitor, 1)
-						);
+			);
 			Order order = OrderDAO.sharedInstance().getOrder((OrderID) articleContainerID, FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			customerGroup = order.getCustomerGroup();
 			currency = order.getCurrency();
@@ -131,7 +140,7 @@ public class ArticleAdder extends AbstractArticleAdder
 							FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR,
 							ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new SubProgressMonitor(monitor, 1)
-						);
+			);
 			Offer offer = OfferDAO.sharedInstance().getOffer(
 					(OfferID) articleContainerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			customerGroup = offer.getOrder().getCustomerGroup();
@@ -174,6 +183,37 @@ public class ArticleAdder extends AbstractArticleAdder
 		}
 
 		return super.createRequirementsNotFulfilledComposite(parent);
+	}
+
+	public Collection<Article> createArticles(
+			SegmentID segmentID, OfferID offerID,
+			ProductTypeID productTypeID, int quantity,
+			TariffID tariffID)
+	throws org.nightlabs.ModuleException, java.rmi.RemoteException, LoginException, CreateException, NamingException
+	{
+
+		SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		return stm.createArticles(
+				segmentID, offerID, productTypeID, quantity, tariffID, true, false,
+				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+	}
+	
+	protected String[] getFetchGroups() {
+		Class<?> articleContainerClass = getSegmentEdit().getArticleContainerClass();
+		String fetchGroupTrade_article;
+		if (Order.class.isAssignableFrom(articleContainerClass)) {
+			fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
+		}
+		else if (Offer.class.isAssignableFrom(articleContainerClass)) {
+			fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
+		}
+		else
+			throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
+		
+		return new String[] {
+				fetchGroupTrade_article,
+				FetchPlan.DEFAULT};
+
 	}
 
 }
