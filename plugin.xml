@@ -42,6 +42,18 @@
             productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
             articleContainerClass="org.nightlabs.jfire.trade.Offer"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleAdderFactory
+            class="org.nightlabs.jfire.voucher.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            name="Default - Recurring Offer"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleAdderFactory
+            class="org.nightlabs.jfire.voucher.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            name="Default - Recurring Order"
+            productTypeClass="org.nightlabs.jfire.voucher.store.VoucherType"
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOrder"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
    </extension>
    <extension
          point="org.nightlabs.jfire.trade.ui.productTypeQuickListFilterFactory">

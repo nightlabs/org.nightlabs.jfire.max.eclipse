@@ -1,13 +1,24 @@
 package org.nightlabs.jfire.voucher.ui.articlecontainer.detail;
 
+import java.util.Collection;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.FetchGroupsTrade;
+import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
+import org.nightlabs.jfire.trade.id.OfferID;
+import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder;
+import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.ProgressMonitor;
@@ -40,4 +51,36 @@ extends AbstractArticleAdder
 	{
 		return voucherType;
 	}
+
+	public Collection<Article> createArticles(SegmentID segmentID, OfferID offerID, ProductTypeID productTypeID, int qty)
+	throws Exception
+	{
+		VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+
+		return vm.createArticles(
+				segmentID, offerID, productTypeID, qty,
+				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+	}	
+
+
+
+
+	protected String[] getFetchGroups() {
+		Class<?> articleContainerClass = getSegmentEdit().getArticleContainerClass();
+		String fetchGroupTrade_article;
+		if (Order.class.isAssignableFrom(articleContainerClass)) {
+			fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
+		}
+		else if (Offer.class.isAssignableFrom(articleContainerClass)) {
+			fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
+		}
+		else
+			throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
+
+		return new String[] {
+				fetchGroupTrade_article,
+				FetchPlan.DEFAULT};
+
+	}
+
 }
