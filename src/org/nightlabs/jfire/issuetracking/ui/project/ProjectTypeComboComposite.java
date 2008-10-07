@@ -110,7 +110,7 @@ implements ISelectionProvider
 								projectTypeCombo.add(null, (pt.getName().getText(NLLocale.getDefault().getLanguage())));
 							}
 							
-//							setSelectedProject(Project.PROJECT_ID_DEFAULT);
+							setSelectedProjectType(ProjectType.PROJECT_TYPE_ID_DEFAULT);
 							ProjectTypeComboComposite.this.getParent().layout(true);
 						}
 					});

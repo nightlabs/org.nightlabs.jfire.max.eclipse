@@ -65,7 +65,6 @@ extends ToolBarSectionPart
 		projectTypeLabel.setText("Project Type: ");
 		
 		projectTypeCombo = new ProjectTypeComboComposite(client, SWT.NONE);
-//		projectTypeCombo.setLabelProvider(new ProjectTypeLabelProvider());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeCombo.setLayoutData(gd);
 		projectTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
