@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -11,14 +12,10 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
-import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
-import org.nightlabs.base.ui.wizard.WizardHop;
-import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueOptionalWizardPage;
 
 public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 {
@@ -26,11 +23,13 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		super(pageName);
 	}
 
-	private Label nameLabel;
-	private I18nTextEditor nameText;
+	private Label phaseNameLabel;
+	private I18nTextEditor phaseNameText;
 
 	private Label descriptionLabel;
 	private I18nTextEditor descriptionText;
+	
+	private Button activeButton;
 	
 	private ProjectID projectID;
 
@@ -38,20 +37,27 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent) {
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		nameLabel = new Label(page, SWT.WRAP);
-		nameLabel.setLayoutData(new GridData());
-		nameLabel.setText("Subject:");
+		phaseNameLabel = new Label(page, SWT.WRAP);
+		phaseNameLabel.setLayoutData(new GridData());
+		phaseNameLabel.setText("Phase Name:");
 		
-		nameText = new I18nTextEditor(page);
-		nameText.addModifyListener(modifyListener);
+		phaseNameText = new I18nTextEditor(page);
+		phaseNameText.addModifyListener(modifyListener);
 
 		descriptionLabel = new Label(page, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description:");
 		
-		descriptionText = new I18nTextEditorMultiLine(page, nameText.getLanguageChooser());		
+		descriptionText = new I18nTextEditorMultiLine(page, phaseNameText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);
+		
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.minimumHeight = 100;
+		descriptionText.setLayoutData(gridData);
 
+		activeButton = new Button(page, SWT.CHECK);
+		activeButton.setText("Active");
+		
 		return page;
 	}
 
@@ -71,7 +77,7 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 
 	@Override
 	public void onShow() {
-		nameText.forceFocus();
+		phaseNameText.forceFocus();
 	}
 	
 	@Override
@@ -85,7 +91,7 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		boolean result = true;
 		setErrorMessage(null);
 		
-		if (nameText.getEditText().equals("") || nameText.getI18nText().getText() == null) {
+		if (phaseNameText.getEditText().equals("") || phaseNameText.getI18nText().getText() == null) {
 			result = false;
 		}
 		

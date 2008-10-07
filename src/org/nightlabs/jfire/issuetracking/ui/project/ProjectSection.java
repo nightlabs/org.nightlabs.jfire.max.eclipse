@@ -14,6 +14,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -56,6 +57,8 @@ extends ToolBarSectionPart
 	private Collection<ProjectType> projectTypes;
 	private ProjectType selectedProjectType;
 	
+	private Button activeButton;
+	
 	public ProjectSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project");
 		
@@ -91,7 +94,12 @@ extends ToolBarSectionPart
 		
 		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);
-	
+		
+		new Label(client, SWT.NONE).setText("");
+		
+		activeButton = new Button(client, SWT.CHECK);
+		activeButton.setText("Active");
+		
 		createdTimeLabel = new Label(client, SWT.WRAP);
 		createdTimeLabel.setText("Created Time: ");
 

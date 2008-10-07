@@ -14,23 +14,23 @@ import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorInput;
 
-public class CreateProjectTypeWizard
+public class CreateProjectWizard
 extends DynamicPathWizard
 {
 	private static String[] FETCH_GROUPS_PROJECT_TYPE = {
 		FetchPlan.DEFAULT
 	};
 
-	private ProjectID projectID;
+	private ProjectID parentProjectID;
 	private CreateProjectTypeNameWizardPage namePage;
 
-	public CreateProjectTypeWizard(ProjectID projectID) {
-		this.projectID = projectID;
+	public CreateProjectWizard(ProjectID parentProjectID) {
+		this.parentProjectID = parentProjectID;
 	}
 
 	@Override
 	public void addPages() {
-		namePage = new CreateProjectTypeNameWizardPage(projectID);
+		namePage = new CreateProjectTypeNameWizardPage(parentProjectID);
 		addPage(namePage);
 	}
 
@@ -38,8 +38,7 @@ extends DynamicPathWizard
 	@Implement
 	public boolean performFinish()
 	{
-
-		Job job = new Job("Storing Project Type") {
+		Job job = new Job("Storing Project") {
 			@Override
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)
@@ -50,7 +49,7 @@ extends DynamicPathWizard
 					{
 						try {
 							RCPUtil.openEditor(
-							new ProjectEditorInput(projectID),
+							new ProjectEditorInput(parentProjectID),
 							ProjectEditor.EDITOR_ID);
 						} catch (Exception e) {
 							throw new RuntimeException(e);
