@@ -85,7 +85,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 			}
 		});
 
-		stopDateControl = new DateTimeControl(getClient(), SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+		stopDateControl = new DateTimeControl(getClient(),false,SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 		stopDateControl.setEnabled(false);
 		stopDateControl.addSelectionListener(new SelectionAdapter() {
 			@Override
