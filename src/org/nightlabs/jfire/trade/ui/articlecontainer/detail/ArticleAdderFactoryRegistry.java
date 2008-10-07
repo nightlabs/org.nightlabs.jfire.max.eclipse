@@ -77,9 +77,11 @@ extends SegmentTypeProductTypeDependentFactoryRegistry
 	{
 		if (!(factory instanceof ArticleAdderFactory))
 			throw new ClassCastException("Factory is an instance of \""+(factory == null ? "null" : factory.getClass().getName())+"\", but expected is \""+ArticleAdderFactory.class.getName()+"\"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		if (!Order.class.getName().equals(factory.getArticleContainerClass()) &&
-				!Offer.class.getName().equals(factory.getArticleContainerClass()))
-			throw new IllegalArgumentException("Unsupported ArticleContainer class! Can only add Articles to Orders and Offers!"); //$NON-NLS-1$
+		// TODO: Think of a better way to check for subclasses of Order and Offer as well, 
+		// check commented for now
+//		if (!Order.class.getName().equals(factory.getArticleContainerClass()) &&
+//				!Offer.class.getName().equals(factory.getArticleContainerClass()))
+//			throw new IllegalArgumentException("Unsupported ArticleContainer class! Can only add Articles to Orders and Offers!"); //$NON-NLS-1$
 		super.addFactory(factory);
 	}
 

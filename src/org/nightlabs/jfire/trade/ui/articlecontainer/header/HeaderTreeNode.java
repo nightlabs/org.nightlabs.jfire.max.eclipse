@@ -331,7 +331,7 @@ public abstract class HeaderTreeNode
 		if (children == null)
 			return dirtyObjectIDs;
 
-		for (HeaderTreeNode node : children) {
+		for (HeaderTreeNode node : getChildren()) {
 			dirtyObjectIDs = node.onNewElementsCreated(dirtyObjectIDs, monitor);
 			if (dirtyObjectIDs == null || dirtyObjectIDs.isEmpty())
 				return dirtyObjectIDs;
