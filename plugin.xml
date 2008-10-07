@@ -21,6 +21,18 @@
             productTypeClass="org.nightlabs.jfire.dynamictrade.store.DynamicProductType"
             articleContainerClass="org.nightlabs.jfire.trade.Offer"
             segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleAdderFactory
+            class="org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            name="Default - Recurring Offer"
+            productTypeClass="org.nightlabs.jfire.dynamictrade.store.DynamicProductType"
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
+      <articleAdderFactory
+            class="org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.RecurringArticleAdderFactory"
+            name="Default - Recurring Order"
+            productTypeClass="org.nightlabs.jfire.dynamictrade.store.DynamicProductType"
+            articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOrder"
+            segmentTypeClass="org.nightlabs.jfire.trade.SegmentType"/>
    </extension>
    <extension
          point="org.nightlabs.jfire.trade.ui.articleEditFactory">
