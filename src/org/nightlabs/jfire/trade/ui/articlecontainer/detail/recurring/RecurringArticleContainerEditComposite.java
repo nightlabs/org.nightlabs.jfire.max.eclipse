@@ -4,7 +4,9 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.timepattern.TimePatternSetJDOImpl;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.timer.Task;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.OfferLocal;
@@ -36,6 +38,10 @@ public class RecurringArticleContainerEditComposite extends ArticleContainerEdit
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
 		Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
+		RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION,
+		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK,
+		Task.FETCH_GROUP_TIME_PATTERN_SET,
+		TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS,
 		StatableLocal.FETCH_GROUP_STATE
 	};
 
@@ -50,6 +56,8 @@ public class RecurringArticleContainerEditComposite extends ArticleContainerEdit
 		RecurringOffer.FETCH_GROUP_ARTICLES,
 		RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION,
 		RecurringOfferConfiguration.FETCH_GROUP_CREATOR_TASK,
+		Task.FETCH_GROUP_TIME_PATTERN_SET,
+		TimePatternSetJDOImpl.FETCH_GROUP_TIME_PATTERNS,
 		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 		Segment.FETCH_GROUP_THIS_SEGMENT,

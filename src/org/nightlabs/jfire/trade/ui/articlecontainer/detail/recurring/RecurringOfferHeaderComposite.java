@@ -10,11 +10,16 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
@@ -25,11 +30,16 @@ import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
+import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.jbpm.JbpmConstantsRecurringOffer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 
 /**
@@ -96,6 +106,14 @@ extends HeaderComposite{
 			new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
 
 
+		JDOLifecycleManager.sharedInstance().addNotificationListener(RecurringOffer.class, offerChangedListener);
+		addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e)
+			{
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(RecurringOffer.class, offerChangedListener);
+			}
+		});
+
 		getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				if (isDisposed())
@@ -115,8 +133,50 @@ extends HeaderComposite{
 
 	}
 
+
+	private void onOfferModified(final RecurringOffer recurringOffer, ProgressMonitor monitor)
+	{
+		monitor.beginTask("Updating UI for recurring offer", 100);
+		try {
+			this.recurringOffer = recurringOffer;
+			currentStateComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
+			nextTransitionComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
+
+			getDisplay().asyncExec(new Runnable() {
+				public void run() {
+
+					getShell().layout(true, true);
+				}
+			});
+		} finally {
+			monitor.done();
+		}	
+
+	}
+
+	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
+		public void notify(NotificationEvent notificationEvent)
+		{
+			ProgressMonitor monitor = getProgressMonitorWrapper();
+			monitor.beginTask(
+					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), //$NON-NLS-1$
+					3
+			);
+			RecurringOffer _offer = RecurringOfferDAO.sharedInstance().getRecurringOffer(
+					(OfferID) JDOHelper.getObjectId(recurringOffer),
+					RecurringArticleContainerEditComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
+
+			onOfferModified(_offer, new SubProgressMonitor(monitor, 2));
+			monitor.done();
+		}
+	};
+
+
+
 	private void signalNextTransition(final SignalEvent event)
 	{
+
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
 			@Override
 			@Implement
@@ -128,10 +188,10 @@ extends HeaderComposite{
 					if (JbpmConstantsRecurringOffer.Vendor.TRANSITION_NAME_START_RECURRENCE.equals(event.getTransition().getJbpmTransitionName()))
 					{
 						Task recurringTask = recurringOffer.getRecurringOfferConfiguration().getCreatorTask();
-						if(	recurringTask.getTimePatternSet().getTimePatterns() != null	)
+						if(!recurringTask.getTimePatternSet().getTimePatterns().isEmpty())
 							tm.signalOffer((OfferID)JDOHelper.getObjectId(recurringOffer), event.getTransition().getJbpmTransitionName());
-						else
-							MessageDialog.openError(getShell(), "Pattern set", "you can't start the Recurrence if the Pattern is not set"); 
+//						else
+//							MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Pattern is not set"); 
 
 					}
 
