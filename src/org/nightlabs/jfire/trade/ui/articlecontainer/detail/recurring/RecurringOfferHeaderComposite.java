@@ -190,11 +190,14 @@ extends HeaderComposite{
 						Task recurringTask = recurringOffer.getRecurringOfferConfiguration().getCreatorTask();
 						if(!recurringTask.getTimePatternSet().getTimePatterns().isEmpty())
 							tm.signalOffer((OfferID)JDOHelper.getObjectId(recurringOffer), event.getTransition().getJbpmTransitionName());
-//						else
-//							MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Pattern is not set"); 
-
+						else {
+							nextTransitionComposite.getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Pattern is not set");
+								}
+							});
+						}
 					}
-
 					else
 						tm.signalOffer((OfferID)JDOHelper.getObjectId(recurringOffer), event.getTransition().getJbpmTransitionName());
 
