@@ -179,11 +179,8 @@ implements ISelectionProvider
 					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();
 
 				createOrderAction.setEnabled(true);
-
-				if(selectedNode instanceof OrderTreeNode)
-					createOfferAction.setEnabled(selectedNode instanceof OrderTreeNode);
-				else
-					createOfferAction.setEnabled(selectedNode instanceof RecurringOrderTreeNode);
+				createOfferAction.setEnabled(
+						selectedNode instanceof OrderTreeNode || selectedNode instanceof RecurringOrderTreeNode);
 
 				if (!selectionChangedListeners.isEmpty()) {
 					SelectionChangedEvent newEvent = new SelectionChangedEvent(
