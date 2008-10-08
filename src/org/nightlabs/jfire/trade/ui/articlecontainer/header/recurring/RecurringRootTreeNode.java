@@ -19,18 +19,15 @@ extends HeaderTreeNode.RootNode
 	private HeaderTreeNode[] _children;
 
 	private RecurringSaleRootTreeNode recurringSaleRootTreeNode;
-	private RecurringPurchaseRootTreeNode recurringPurchaseRootTreeNode;
-
+	
 	public RecurringRootTreeNode(HeaderTreeComposite headerTreeComposite)
 	{
 		super(headerTreeComposite, "Recurring Trade", headerTreeComposite.getImageVendorRootTreeNode()); //$NON-NLS-1$
 
 		recurringSaleRootTreeNode = new RecurringSaleRootTreeNode(this);
-		recurringPurchaseRootTreeNode = new RecurringPurchaseRootTreeNode(this);
-
+		
 		_children = new HeaderTreeNode[] {
-				recurringSaleRootTreeNode,
-				recurringPurchaseRootTreeNode
+				recurringSaleRootTreeNode
 		};
 
 		children = CollectionUtil.array2ArrayList(_children, true);

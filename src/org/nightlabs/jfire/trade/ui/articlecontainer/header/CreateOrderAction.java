@@ -54,7 +54,6 @@ import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
 import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringPurchaseRootTreeNode;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringSaleRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -115,7 +114,7 @@ public class CreateOrderAction extends Action
 					boolean recurring = false;
 					HeaderTreeNode checkNode = selectedNode;
 					while (checkNode != null) {
-						recurring = recurring || checkNode instanceof RecurringSaleRootTreeNode || checkNode instanceof RecurringPurchaseRootTreeNode;
+						recurring = recurring || checkNode instanceof RecurringSaleRootTreeNode;
 						saleOrder = saleOrder || checkNode instanceof RecurringSaleRootTreeNode || checkNode instanceof SaleRootTreeNode;
 						checkNode = checkNode.getParent();
 					}
