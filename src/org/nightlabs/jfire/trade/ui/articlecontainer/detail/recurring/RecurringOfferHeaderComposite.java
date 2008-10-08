@@ -16,7 +16,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
+import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
@@ -50,7 +52,11 @@ extends HeaderComposite{
 
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
-	XComposite infoStatuesContainerComp;
+	private XComposite infoStatuesContainerComp;
+	private XComposite infodateContainerComp;
+	private Label lastTaskDateLabel;
+	private Label nextTaskDateLabel;
+	private MessageComposite statusMsg;
 
 	private volatile RecurringOffer recurringOffer;
 
@@ -63,11 +69,12 @@ extends HeaderComposite{
 
 		this.setLayout(new GridLayout());
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL|GridData.HORIZONTAL_ALIGN_CENTER));
+		this.getGridLayout().numColumns = 1;
 
 
 		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 		infoStatuesContainerComp.setLayoutData(null);
-		infoStatuesContainerComp.getGridLayout().numColumns = 3;
+		infoStatuesContainerComp.getGridLayout().numColumns = 2;
 		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
 		currentStateComposite.setStatable(recurringOffer);
 		currentStateComposite.setLayoutData(null);
@@ -83,28 +90,22 @@ extends HeaderComposite{
 			}
 		});
 
-		new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("RecurredOffers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
+		new Label(this, SWT.WRAP |SWT.NONE).setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
-		if(recurringOffer.getStatusKey() != null)
-		{
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_PRICES_NOT_EQUAL))
-				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Non equal Prices");
+		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING);
+		statusMsg.setLayoutData(new GridData());
 
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED))
-				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Suspended");
+		XComposite infodateContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+		infodateContainerComp.setLayoutData(null);
+		infodateContainerComp.getGridLayout().numColumns = 2;
 
-			if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
-				new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Active");
-		}
+		lastTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP |SWT.NONE);
+		lastTaskDateLabel.setLayoutData(new GridData());
 
-		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
-		if(date != null)
-			new Label(infoStatuesContainerComp,SWT.WRAP |SWT.NONE).setText("Last Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+		nextTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP |SWT.NONE);
+		nextTaskDateLabel.setLayoutData(new GridData());
 
-		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
-		if(date != null)
-			new Label(infoStatuesContainerComp, SWT.WRAP |SWT.NONE).setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
-
+		updateStatues();
 
 		JDOLifecycleManager.sharedInstance().addNotificationListener(RecurringOffer.class, offerChangedListener);
 		addDisposeListener(new DisposeListener() {
@@ -130,9 +131,51 @@ extends HeaderComposite{
 			}
 		});
 
+	}
+
+	private void updateStatues()
+	{
+		MessageComposite.MessageType iconType = MessageComposite.MessageType.INFO;
+
+		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
+			setWidgetExcluded((GridData) statusMsg.getLayoutData(),true);
+		else				
+		{
+			setWidgetExcluded((GridData) statusMsg.getLayoutData(),false);
+
+			String msgtype = Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.type" + recurringOffer.getStatusKey());
+			if (msgtype != null)
+				iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
+
+			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message" + recurringOffer.getStatusKey()), iconType);
+		}
+
+		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
+		if(date != null)
+		{
+			lastTaskDateLabel.setText("Last Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			setWidgetExcluded((GridData) lastTaskDateLabel.getLayoutData(),false);
+
+		}
+		else
+			setWidgetExcluded((GridData) lastTaskDateLabel.getLayoutData(),true);
+
+		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
+		if(date != null)
+		{	
+			nextTaskDateLabel.setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			setWidgetExcluded((GridData) nextTaskDateLabel.getLayoutData(),false);
+
+		}
+		else		
+			setWidgetExcluded((GridData) nextTaskDateLabel.getLayoutData(),true);
 
 	}
 
+	private void setWidgetExcluded(GridData data , boolean exclude)
+	{
+		data.exclude = exclude;	
+	}
 
 	private void onOfferModified(final RecurringOffer recurringOffer, ProgressMonitor monitor)
 	{
@@ -141,10 +184,9 @@ extends HeaderComposite{
 			this.recurringOffer = recurringOffer;
 			currentStateComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
 			nextTransitionComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
-
 			getDisplay().asyncExec(new Runnable() {
 				public void run() {
-
+					updateStatues();
 					getShell().layout(true, true);
 				}
 			});
@@ -164,14 +206,13 @@ extends HeaderComposite{
 			);
 			RecurringOffer _offer = RecurringOfferDAO.sharedInstance().getRecurringOffer(
 					(OfferID) JDOHelper.getObjectId(recurringOffer),
-					RecurringArticleContainerEditComposite.FETCH_GROUPS_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
+					RecurringArticleContainerEditComposite.FETCH_GROUPS_RECURRING_ARTICLE_CONTAINER_WITHOUT_ARTICLES,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 
 			onOfferModified(_offer, new SubProgressMonitor(monitor, 2));
 			monitor.done();
 		}
 	};
-
 
 
 	private void signalNextTransition(final SignalEvent event)
