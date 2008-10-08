@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring;
 
 
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -53,6 +54,7 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 
 		recurringOfferConfigSection = new RecurringOfferConfigSection(this, parent, controller);
 		getManagedForm().addPart(recurringOfferConfigSection);
+		recurringOfferConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		recurringTimingConfigSection = new RecurringTimingConfigSection(this, parent, controller);
 		getManagedForm().addPart(recurringTimingConfigSection);
@@ -70,8 +72,6 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent)
 	{
-		switchToContent(); 
-
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (recurringOfferConfigSection != null ) 
@@ -80,6 +80,8 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 				if (recurringTimingConfigSection != null ) 
 					recurringTimingConfigSection.setRecurringOfferConfiguration(getController().getControllerObject());
 
+				switchToContent();
+				getManagedForm().getForm().reflow(true);
 			}
 		});
 
