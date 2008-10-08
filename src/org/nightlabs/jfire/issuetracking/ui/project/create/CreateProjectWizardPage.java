@@ -52,7 +52,7 @@ extends DynamicPathWizardPage
 	public CreateProjectWizardPage(ProjectID projectID) {
 		super(CreateProjectWizardPage.class.getName(), "Project Page",
 				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin
-						.getDefault(), CreateProjectWizardPage.class));
+						.getDefault(), CreateProjectWizard.class));
 		this.setDescription("Description");
 		
 		this.parentProjectID = projectID;

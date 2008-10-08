@@ -70,7 +70,7 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	public CreateProjectPhaseWizardPage(ProjectID projectID)
 	{
 		super(CreateProjectPhaseWizardPage.class.getName(), "Project Phase Page", 
-				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectPhaseWizardPage.class));
+				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectPhaseWizard.class));
 		this.setDescription("Description");
 		this.projectID = projectID;
 	}
