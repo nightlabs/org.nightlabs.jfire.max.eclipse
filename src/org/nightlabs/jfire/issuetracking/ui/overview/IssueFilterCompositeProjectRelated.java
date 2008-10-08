@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -14,6 +15,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
@@ -40,7 +42,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 //	private ProjectComboComposite projectCombo;
 	private ProjectAdminTreeComposite projectTreeComposite;
-	private CheckboxTreeViewer checkboxTreeViewer;
+	private ContainerCheckedTreeViewer checkboxTreeViewer;
 	
 	private volatile Set<ProjectID> selectedProjectIDs = new HashSet<ProjectID>();
 
@@ -98,11 +100,18 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK);
-		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
+		checkboxTreeViewer = new ContainerCheckedTreeViewer(projectTreeComposite.getTree());
 
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				selectedProjectIDs.clear();
+				
+				boolean isChecked = event.getChecked();
+				ProjectTreeNode node = (ProjectTreeNode)event.getElement();
+				
+				checkboxTreeViewer.expandToLevel(event.getElement(), AbstractTreeViewer.ALL_LEVELS);
+				checkboxTreeViewer.setSubtreeChecked(event.getElement(), isChecked);
+				
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
 					ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
 					selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
