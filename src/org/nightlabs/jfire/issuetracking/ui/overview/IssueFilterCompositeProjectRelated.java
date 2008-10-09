@@ -2,14 +2,13 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -17,19 +16,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
+import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
-import org.nightlabs.jfire.organisation.Organisation;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -107,10 +102,12 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				selectedProjectIDs.clear();
 				
 				boolean isChecked = event.getChecked();
+				
 				ProjectTreeNode node = (ProjectTreeNode)event.getElement();
 				
-				checkboxTreeViewer.expandToLevel(event.getElement(), AbstractTreeViewer.ALL_LEVELS);
-				checkboxTreeViewer.setSubtreeChecked(event.getElement(), isChecked);
+				TreePath treePath = node.getTreePath();
+				checkboxTreeViewer.expandToLevel(treePath, AbstractTreeViewer.ALL_LEVELS);
+				checkboxTreeViewer.setSubtreeChecked(node, isChecked);
 				
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
 					ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
