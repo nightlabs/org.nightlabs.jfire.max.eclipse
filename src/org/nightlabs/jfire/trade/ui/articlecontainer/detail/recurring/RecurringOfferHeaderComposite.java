@@ -116,7 +116,7 @@ extends HeaderComposite{
 		nextTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP |SWT.NONE);
 		nextTaskDateLabel.setLayoutData(new RowData());
 
-		updateStatues();
+		updateState();
 
 		JDOLifecycleManager.sharedInstance().addNotificationListener(RecurringOffer.class, offerChangedListener);
 		addDisposeListener(new DisposeListener() {
@@ -144,7 +144,7 @@ extends HeaderComposite{
 
 	}
 
-	private void updateStatues()
+	private void updateState()
 	{
 		MessageComposite.MessageType iconType = MessageComposite.MessageType.INFO;
 
@@ -206,7 +206,7 @@ extends HeaderComposite{
 				public void run() {
 					if (isDisposed())
 						return;
-					updateStatues();
+					updateState();
 					getShell().layout(true, true);
 				}
 			});
