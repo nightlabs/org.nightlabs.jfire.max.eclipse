@@ -137,6 +137,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="articleContainerClass" type="string">
+            <annotation>
+               <documentation>
+                  Name of the concrete implementation of an ArticleContainer or of an interface that is implemented (directly or indirectly) in the concrete ArticleContainer you want to match. If it is not specified, it defaults to &lt;code&gt;org.nightlabs.jfire.trade.ArticleContainer&lt;/code&gt;.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

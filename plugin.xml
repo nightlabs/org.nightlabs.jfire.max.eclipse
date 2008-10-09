@@ -341,14 +341,14 @@
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
             contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverActionAll"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.deliverAll.label" tooltip="%articleContainerAction.deliverAll.tooltip"/>
         <articleContainerAction
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction"
             contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             icon="icons/articlecontainer/detail/action/transfer/PayAllAction.16x16.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayActionAll"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
             name="%articleContainerAction.payAll.label" tooltip="%articleContainerAction.payAll.tooltip"/>
         <articleContainerAction
@@ -407,7 +407,7 @@
         <articleContainerAction
             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
             icon="icons/articlecontainer/detail/action/transfer/DeliverAllAction.24x24.png"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverActionAll#toolbar"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction#toolbar"
             name="%articleContainerAction.deliverAll.label"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction" tooltip="%articleContainerAction.deliverAll.tooltip"/>
         <articleContainerAction
@@ -450,6 +450,46 @@
               tooltip="Reserve All">
         </articleContainerAction>
 -->        
+    </extension>
+    <extension
+          name="Suppressed actions for RecurringOrder/RecurringOffer"
+          point="org.nightlabs.jfire.trade.ui.articleContainerAction">
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction"
+             name="Pay and deliver all... INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAllAction#toolbar"
+             name="Pay and deliver all... INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction"
+             name="Pay all... INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAllAction#toolbar"
+             name="Pay all... INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
+             name="Deliver all... INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction#toolbar"
+             name="Deliver all... INVISIBLE TOOLBAR">
+       </articleContainerAction>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
@@ -608,6 +648,28 @@
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
             name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.name"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.tooltip"/>
+    </extension>
+    <extension
+          name="Suppressed actions for RecurringOrder/RecurringOffer"
+          point="org.nightlabs.jfire.trade.ui.articleEditAction">
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAndDeliverAction"
+             name="Pay and deliver... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.PayAction"
+             name="Pay... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
+             name="Deliver... INVISIBLE">
+       </articleEditAction>
     </extension>
     <extension point="org.nightlabs.jfire.reporting.ui.reportUseCase">
         <reportUseCase description="%reportUseCase.invoice.description"

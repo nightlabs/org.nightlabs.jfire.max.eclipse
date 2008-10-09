@@ -58,6 +58,7 @@ import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.ArticleCarrier;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
 import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
 import org.nightlabs.jfire.trade.ui.TradePerspective;
@@ -87,48 +88,67 @@ implements IArticleContainerEditActionContributor
 
 	public static final String SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS = "betweenArticleContainerActionsAndArticleEditActions"; //$NON-NLS-1$
 	public static final String EDIT_MENU_ID = ArticleContainerEditorActionBarContributor.class.getPackage().getName();
-	
+
 	private IArticleContainerEditor activeArticleContainerEditor = null;
 	private ArticleContainerEdit activeArticleContainerEdit = null;
 	private SegmentEdit activeSegmentEdit = null;
 
 	public ArticleContainerEditorActionBarContributor()
 	{
-		// TODO: WORKAROUND This is a workaround as setActiveEditor is not called when 
+		// TODO: WORKAROUND This is a workaround as setActiveEditor is not called when
 		// the perspective is switched and therefore the contributions are not removed
 		RCPUtil.getActiveWorkbenchPage().addPartListener(partListener);
 		RCPUtil.getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);
 	}
 
-	/**
-	 * @see org.eclipse.ui.part.EditorActionBarContributor#setActiveEditor(org.eclipse.ui.IEditorPart)
-	 */
 	@Override
 	public void setActiveEditor(IEditorPart targetEditor)
 	{
 		if (activeArticleContainerEditor == targetEditor)
 			return;
 
+		// First clean up everything (the ActionRegistry might change or become null (if targetEditor is null, which we emulate even though Eclipse doesn't notify this contributor).
+		if (activeArticleContainerEdit != null) {
+			removeContributions();
+//			ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+//			try {
+//				ArticleContainerActionRegistry.sharedInstance(articleContainer).setActiveArticleContainerEditorActionBarContributor(null);
+//				ArticleEditActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(null);
+//			} catch (EPProcessorException e) {
+//				throw new RuntimeException(e);
+//			}
+		}
+
 		if (activeArticleContainerEdit != null && !activeArticleContainerEdit.getComposite().isDisposed()) {
 			activeArticleContainerEdit.removeActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
 			activeArticleContainerEdit.getComposite().removeDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
+		// Make sure we have no active stuff.
+		activeArticleContainerEditor = null;
+		activeArticleContainerEdit = null;
+		activeSegmentEdit = null;
+
+		// Assign the new active stuff.
 		activeArticleContainerEditor = (IArticleContainerEditor) targetEditor;
 		activeArticleContainerEdit = activeArticleContainerEditor != null ? activeArticleContainerEditor.getArticleContainerEdit() : null;
 
+		// If the new active stuff is not null, we register various listeners and assign other stuff.
 		if (activeArticleContainerEdit != null && !activeArticleContainerEdit.getComposite().isDisposed()) {
 			activeArticleContainerEdit.setArticleContainerEditActionContributor(this);
 			activeArticleContainerEdit.addActiveSegmentEditSelectionListener(activeSegmentEditSelectionListener);
 			activeArticleContainerEdit.getComposite().addDisposeListener(articleContainerEditorCompositeDisposeListener);
 		}
 
-		try {
-			ArticleContainerActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
-			ArticleEditActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
-		} catch (EPProcessorException e) {
-			throw new RuntimeException(e);
-		}
+//		if (activeArticleContainerEdit != null) {
+//			ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+//			try {
+//				ArticleContainerActionRegistry.sharedInstance(articleContainer).setActiveArticleContainerEditorActionBarContributor(this);
+//				ArticleEditActionRegistry.sharedInstance().setActiveArticleContainerEditorActionBarContributor(this);
+//			} catch (EPProcessorException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
 
 		activeSegmentEditSelected();
 	}
@@ -146,7 +166,7 @@ implements IArticleContainerEditActionContributor
 	{
 		return activeArticleContainerEdit;
 	}
-	
+
 	private ActiveSegmentEditSelectionListener activeSegmentEditSelectionListener = new ActiveSegmentEditSelectionListener() {
 		public void selected(ActiveSegmentEditSelectionEvent event) {
 			activeSegmentEditSelected();
@@ -189,7 +209,7 @@ implements IArticleContainerEditActionContributor
 			contributeActionsIfArticleCarriersAffectActiveSegmentEdit(articleCreateEvent.getArticleCarriers());
 		}
 	};
-	
+
 	private ArticleChangeListener articleChangeListener = new ArticleChangeListener() {
 		public void articlesChanged(ArticleChangeEvent articleChangeEvent)
 		{
@@ -200,12 +220,20 @@ implements IArticleContainerEditActionContributor
 
 	protected void calculateArticleContainerActionsEnabled()
 	{
+		if (activeArticleContainerEdit == null)
+			return;
+
+		ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+		if (articleContainer == null)
+			return;
+
 		ArticleContainerActionRegistry articleContainerActionRegistry;
 		try {
-			articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance();
+			articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance(articleContainer);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
+		articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
 
 		for (Iterator<ActionDescriptor> it = articleContainerActionRegistry.getActionDescriptors().iterator(); it.hasNext(); ) {
 			ActionDescriptor actionDescriptor = it.next();
@@ -236,12 +264,17 @@ implements IArticleContainerEditActionContributor
 	 */
 	protected void calculateArticleEditActionsEnabled(Set<ArticleSelection> articleSelections)
 	{
+		ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+		if (articleContainer == null)
+			return;
+
 		ArticleEditActionRegistry articleEditActionRegistry;
 		try {
-			articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance();
+			articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance(articleContainer);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
+		articleEditActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
 
 		for (Iterator<ActionDescriptor> itAC = articleEditActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
 			ActionDescriptor actionDescriptor = itAC.next();
@@ -315,6 +348,26 @@ implements IArticleContainerEditActionContributor
 		contributeActions();
 	}
 
+	private ICoolBarManager getCoolBarManager()
+	{
+		IActionBars2 actionBars = (IActionBars2) getActionBars();
+		ICoolBarManager coolBarManager = actionBars.getCoolBarManager();
+		if (coolBarManager == null)
+			throw new IllegalStateException("coolBarManager is null! Why has init(...) not been called?!"); //$NON-NLS-1$
+		return coolBarManager;
+	}
+
+	private IMenuManager getPulldownMenuManager()
+	{
+		IActionBars2 actionBars = (IActionBars2) getActionBars();
+		IMenuManager pulldownMenuManager = actionBars.getMenuManager();
+		if (pulldownMenuManager == null)
+			throw new IllegalStateException("pulldownMenuManager is null! Why has init(...) not been called?!"); //$NON-NLS-1$
+
+		IMenuManager realPulldownMenuManager = (IMenuManager) ((SubContributionManager)pulldownMenuManager).getParent();
+		return realPulldownMenuManager;
+	}
+
 	/**
 	 * This method is called by {@link #activeSegmentEditSelected()} and {@link #createArticleEditListener} TODO it must be called, too, when an ArticleEdit is removed.
 	 * It flushes all Actions (in the toolbar, the pulldown menu, the articleContainerContextMenu and
@@ -324,30 +377,29 @@ implements IArticleContainerEditActionContributor
 	 */
 	protected void contributeActions()
 	{
-		IActionBars2 actionBars = (IActionBars2) getActionBars();
-		logger.debug("contributeActions"); //$NON-NLS-1$
+		if (logger.isDebugEnabled())
+			logger.debug("contributeActions"); //$NON-NLS-1$
 
-//		if (toolBarManager == null)
-//			throw new IllegalStateException("toolBarManager is null! Why has contributeToCoolBar(...) not been called?!");
+		if (activeArticleContainerEdit == null)
+			return;
 
-		ICoolBarManager coolBarManager = actionBars.getCoolBarManager();
-		if (coolBarManager == null)
-			throw new IllegalStateException("coolBarManager is null! Why has init(...) not been called?!"); //$NON-NLS-1$
-		
-		IMenuManager pulldownMenuManager = actionBars.getMenuManager();
-		if (pulldownMenuManager == null)
-			throw new IllegalStateException("pulldownMenuManager is null! Why has init(...) not been called?!"); //$NON-NLS-1$
+		ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+		if (articleContainer == null)
+			return;
 
-		IMenuManager realPulldownMenuManager = (IMenuManager) ((SubContributionManager)pulldownMenuManager).getParent();
+		ICoolBarManager coolBarManager = getCoolBarManager();
+		IMenuManager realPulldownMenuManager = getPulldownMenuManager();
 
 		ArticleContainerActionRegistry articleContainerActionRegistry;
 		ArticleEditActionRegistry articleEditActionRegistry;
 		try {
-			articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance();
-			articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance();
+			articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance(articleContainer);
+			articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance(articleContainer);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
+		articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
+		articleEditActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
 
 		// disable all ArticleContainerActions and calculate which ones must be visible
 		for (Iterator<ActionDescriptor> itAC = articleContainerActionRegistry.getActionDescriptors().iterator(); itAC.hasNext(); ) {
@@ -356,7 +408,7 @@ implements IArticleContainerEditActionContributor
 			IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 			if (action != null) {
 				action.setEnabled(false);
-	
+
 				if (activeArticleContainerEditor == null)
 					actionDescriptor.setVisible(false);
 				else
@@ -385,7 +437,7 @@ implements IArticleContainerEditActionContributor
 			IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 			if (action != null) {
 				action.setEnabled(false);
-	
+
 				if (activeSegmentEdit == null || activeSegmentEdit.getArticleEdits().isEmpty())
 					actionDescriptor.setVisible(false);
 				else
@@ -410,22 +462,22 @@ implements IArticleContainerEditActionContributor
 		// contribute to the main pulldown menu
 		if (localPulldownMenuManager == null) {
 			// do we have the menu already from a previous session (=> workbench.xml)?
-			IContributionItem contributionItem = (IContributionItem) realPulldownMenuManager.find(EDIT_MENU_ID);
+			IContributionItem contributionItem = realPulldownMenuManager.find(EDIT_MENU_ID);
 			if (contributionItem instanceof IMenuManager) {
-				localPulldownMenuManager = (IMenuManager) contributionItem;				
+				localPulldownMenuManager = (IMenuManager) contributionItem;
 			}
 			// added to avoid ClasscastException when same menu already comes from actionSet extension-point
 			else if (contributionItem instanceof ActionSetContributionItem) {
 				ActionSetContributionItem actionItem = (ActionSetContributionItem) contributionItem;
 				IContributionItem innerItem = actionItem.getInnerItem();
 				if (innerItem != null && innerItem instanceof IMenuManager) {
-					localPulldownMenuManager = (IMenuManager) innerItem;					
+					localPulldownMenuManager = (IMenuManager) innerItem;
 				}
 			}
 
 			if (localPulldownMenuManager == null) {
-				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.pulldownMenu.text"), //$NON-NLS-1$ 
-						EDIT_MENU_ID); 
+				localPulldownMenuManager = new MenuManager(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerEditorActionBarContributor.pulldownMenu.text"), //$NON-NLS-1$
+						EDIT_MENU_ID);
 				realPulldownMenuManager.insertAfter(
 						// IWorkbenchActionConstants.MB_ADDITIONS,
 						IWorkbenchActionConstants.M_FILE,
@@ -433,9 +485,9 @@ implements IArticleContainerEditActionContributor
 			}
 		}
 //		localPulldownMenuManager.removeAll();
-		articleContainerActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);		
+		articleContainerActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);
 		articleEditActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);
-		
+
 		articleContainerActionRegistry.contributeToMenuBar(localPulldownMenuManager);
 		localPulldownMenuManager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
 		articleEditActionRegistry.contributeToMenuBar(localPulldownMenuManager);
@@ -451,7 +503,7 @@ implements IArticleContainerEditActionContributor
 
 		getActionBars().updateActionBars();
 	}
-	
+
 	/**
 	 * This is the manager for the local (article container/edit actions) pulldown menu.
 	 */
@@ -466,16 +518,24 @@ implements IArticleContainerEditActionContributor
 			menu = null;
 		}
 
+		final ArticleContainer articleContainer = activeArticleContainerEdit == null ? null : activeArticleContainerEdit.getArticleContainer();
+
 		MenuManager menuManager = new MenuManager();
 		menuManager.setRemoveAllWhenShown(true);
 		menuManager.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager)
 			{
+				if (articleContainer == null)
+					return;
+
+				ArticleContainerActionRegistry articleContainerActionRegistry;
 				try {
-					ArticleContainerActionRegistry.sharedInstance().contributeToContextMenu(manager);
+					articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance(articleContainer);
 				} catch (EPProcessorException e) {
 					throw new RuntimeException(e);
 				}
+				articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(ArticleContainerEditorActionBarContributor.this);
+				articleContainerActionRegistry.contributeToContextMenu(manager);
 			}
 		});
 
@@ -493,19 +553,30 @@ implements IArticleContainerEditActionContributor
 			menu = null;
 		}
 
+		final ArticleContainer articleContainer = activeArticleContainerEdit == null ? null : activeArticleContainerEdit.getArticleContainer();
+
 		MenuManager menuManager = new MenuManager();
 		menuManager.setRemoveAllWhenShown(true);
 		menuManager.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager)
 			{
+				if (articleContainer == null)
+					return;
+
+				ArticleContainerActionRegistry articleContainerActionRegistry;
+				ArticleEditActionRegistry articleEditActionRegistry;
 				try {
-					ArticleContainerActionRegistry.sharedInstance().contributeToContextMenu(manager);
-					if (activeSegmentEdit != null) {
-						manager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
-						ArticleEditActionRegistry.sharedInstance().contributeToContextMenu(manager);
-					}
+					articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance(articleContainer);
+					articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance(articleContainer);
 				} catch (EPProcessorException e) {
 					throw new RuntimeException(e);
+				}
+				articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(ArticleContainerEditorActionBarContributor.this);
+				articleEditActionRegistry.setActiveArticleContainerEditorActionBarContributor(ArticleContainerEditorActionBarContributor.this);
+				articleContainerActionRegistry.contributeToContextMenu(manager);
+				if (activeSegmentEdit != null) {
+					manager.add(new Separator(SEPARATOR_BETWEEN_ARTICLE_CONTAINER_ACTIONS_AND_ARTICLE_EDIT_ACTIONS));
+					articleEditActionRegistry.contributeToContextMenu(manager);
 				}
 			}
 		});
@@ -514,16 +585,18 @@ implements IArticleContainerEditActionContributor
 		parent.setMenu(menu);
 		return menu;
 	}
-	
+
 	private IPartListener2 partListener = new IPartListener2 () {
 		public void partActivated(IWorkbenchPartReference partRef) {
 			if (activeArticleContainerEditor != null &&
 				(partRef.getPart(false) instanceof IEditorPart) &&
-				(!activeArticleContainerEditor.equals(partRef.getPart(false))))
+				(!activeArticleContainerEditor.equals(partRef.getPart(false)))
+			)
 			{
 				logger.debug("Part activated"); //$NON-NLS-1$
-				removeContributions();
-				activeArticleContainerEditor = null;
+//				removeContributions();
+//				activeArticleContainerEditor = null;
+				setActiveEditor(null);
 			}
 		}
 		public void partBroughtToTop(IWorkbenchPartReference arg0) {
@@ -541,32 +614,50 @@ implements IArticleContainerEditActionContributor
 		public void partVisible(IWorkbenchPartReference arg0) {
 		}
 	};
-	
+
 	private IPerspectiveListener4 perspectiveListener = new PerspectiveAdapter() {
 		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) || 
+			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) ||
 				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
 			{
 				logger.debug("Perspective activated: " + perspective.getId() + ", contributions will be removed.");					 //$NON-NLS-1$ //$NON-NLS-2$
-				removeContributions();				
-				activeArticleContainerEditor = null;
+//				removeContributions();
+//				activeArticleContainerEditor = null;
+				setActiveEditor(null);
 			}
 		}
 	};
-	
-	private void removeContributions() {
-		IActionBars2 actionBars = (IActionBars2) getActionBars();
-		IMenuManager menuManager = actionBars.getMenuManager();
-		ICoolBarManager coolBarManager = actionBars.getCoolBarManager();				
-		try {
-			ArticleContainerActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
-			ArticleEditActionRegistry.sharedInstance().removeAllFromCoolBar(coolBarManager);
 
-			ArticleContainerActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
-			ArticleEditActionRegistry.sharedInstance().removeAllFromMenuBar(localPulldownMenuManager);
+	private void removeContributions() {
+		if (activeArticleContainerEdit == null)
+			return;
+
+		ArticleContainer articleContainer = activeArticleContainerEdit.getArticleContainer();
+		if (articleContainer == null)
+			return;
+
+		IActionBars2 actionBars = (IActionBars2) getActionBars();
+//		IMenuManager menuManager = actionBars.getMenuManager();
+		ICoolBarManager coolBarManager = actionBars.getCoolBarManager();
+
+		ArticleContainerActionRegistry articleContainerActionRegistry;
+		ArticleEditActionRegistry articleEditActionRegistry;
+		try {
+			articleContainerActionRegistry = ArticleContainerActionRegistry.sharedInstance(articleContainer);
+			articleEditActionRegistry = ArticleEditActionRegistry.sharedInstance(articleContainer);
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
+		}
+		articleContainerActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
+		articleEditActionRegistry.setActiveArticleContainerEditorActionBarContributor(this);
+
+		articleContainerActionRegistry.removeAllFromCoolBar(coolBarManager);
+		articleEditActionRegistry.removeAllFromCoolBar(coolBarManager);
+
+		if (localPulldownMenuManager != null) {
+			articleContainerActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);
+			articleEditActionRegistry.removeAllFromMenuBar(localPulldownMenuManager);
 		}
 	}
 }

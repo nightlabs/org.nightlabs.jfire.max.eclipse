@@ -26,31 +26,54 @@
 
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.IAction;
 import org.nightlabs.base.ui.action.IXContributionItem;
 import org.nightlabs.base.ui.action.registry.AbstractActionRegistry;
+import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 
 public class ArticleEditActionRegistry extends AbstractActionRegistry
 {
-	private static ArticleEditActionRegistry _sharedInstance;
+	public static final String ATTRIBUTE_ARTICLE_CONTAINER_CLASS = "articleContainerClass"; //$NON-NLS-1$
+
+//	private static ArticleEditActionRegistry _sharedInstance;
+	private static Map<Class<? extends ArticleContainer>, ArticleEditActionRegistry> articleContainerClass2sharedInstance = new HashMap<Class<? extends ArticleContainer>, ArticleEditActionRegistry>();
 
 	private static boolean initializingSharedInstance = false;
-	public static synchronized ArticleEditActionRegistry sharedInstance()
+
+	public static ArticleEditActionRegistry sharedInstance(ArticleContainer articleContainer)
 	throws EPProcessorException
 	{
+		if (articleContainer == null)
+			throw new IllegalArgumentException("articleContainer == null");
+
+		return sharedInstance(articleContainer.getClass());
+	}
+
+	private static synchronized ArticleEditActionRegistry sharedInstance(Class<? extends ArticleContainer> articleContainerClass)
+	throws EPProcessorException
+	{
+		if (articleContainerClass == null)
+			throw new IllegalArgumentException("articleContainerClass == null");
+
 		if (initializingSharedInstance)
 			throw new IllegalStateException("Circular call to the method sharedInstance() during initialization!"); //$NON-NLS-1$
 
+		ArticleEditActionRegistry _sharedInstance = articleContainerClass2sharedInstance.get(articleContainerClass);
 		if (_sharedInstance == null) {
 			initializingSharedInstance = true;
 			try {
-				_sharedInstance = new ArticleEditActionRegistry();
+				_sharedInstance = new ArticleEditActionRegistry(articleContainerClass);
 				_sharedInstance.process();
+				articleContainerClass2sharedInstance.put(articleContainerClass, _sharedInstance);
 			} finally {
 				initializingSharedInstance = false;
 			}
@@ -59,7 +82,50 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 		return _sharedInstance;
 	}
 
-	protected ArticleEditActionRegistry() { }
+	private Class<? extends ArticleContainer> articleContainerClass;
+
+	protected ArticleEditActionRegistry(Class<? extends ArticleContainer> articleContainerClass) {
+		if (articleContainerClass == null)
+			throw new IllegalArgumentException("articleContainerClass == null");
+
+		this.articleContainerClass = articleContainerClass;
+	}
+
+	protected Class<? extends ArticleContainer> getArticleContainerClass() {
+		return articleContainerClass;
+	}
+
+	@Override
+	protected ActionDescriptor createActionDescriptor() {
+		return new ArticleContainerActionDescriptor();
+	}
+
+	@Override
+	protected boolean initActionDescriptor(ActionDescriptor _actionDescriptor, IExtension extension, IConfigurationElement element)
+	throws EPProcessorException
+	{
+		ArticleContainerActionDescriptor actionDescriptor = (ArticleContainerActionDescriptor) _actionDescriptor;
+		String actionID = actionDescriptor.getID();
+
+		String actionDescriptorArticleContainerClass = element.getAttribute(ATTRIBUTE_ARTICLE_CONTAINER_CLASS);
+		if (actionDescriptorArticleContainerClass == null || "".equals(actionDescriptorArticleContainerClass))
+			actionDescriptorArticleContainerClass = ArticleContainer.class.getName();
+
+		actionDescriptor.setArticleContainerClass(actionDescriptorArticleContainerClass);
+
+		int matchDistanceNewActionDescriptor = actionDescriptor.calculateArticleContainerClassMatchDistance(this.articleContainerClass);
+		if (matchDistanceNewActionDescriptor < 0)
+			return false;
+
+		ArticleContainerActionDescriptor oldActionDescriptor = (ArticleContainerActionDescriptor) getActionDescriptor(actionID, false);
+		if (oldActionDescriptor != null) {
+			int matchDistanceOldActionDescriptor = oldActionDescriptor.calculateArticleContainerClassMatchDistance(this.articleContainerClass);
+			if (matchDistanceOldActionDescriptor < matchDistanceNewActionDescriptor)
+				return false; // keep the old one - it's more specific than the new one
+		}
+
+		return true;
+	}
 
 	@Override
 	public String getExtensionPointID()
@@ -79,12 +145,12 @@ public class ArticleEditActionRegistry extends AbstractActionRegistry
 //	{
 //		return activeArticleContainerEditorActionBarContributor;
 //	}
-	
+
 	public ArticleContainerEdit getActiveArticleContainerEdit()
 	{
 		return activeArticleContainerEditorActionBarContributor.getActiveArticleContainerEdit();
 	}
-	
+
 	protected void setActiveArticleContainerEditorActionBarContributor(
 			ArticleContainerEditorActionBarContributor activeArticleContainerEditorActionBarContributor)
 	{
