@@ -58,6 +58,7 @@ extends HeaderComposite{
 	private XComposite infodateContainerComp;
 	private Label lastTaskDateLabel;
 	private Label nextTaskDateLabel;
+	private Label recurredOfferCount;
 	private MessageComposite statusMsg;
 
 	private volatile RecurringOffer recurringOffer;
@@ -97,7 +98,8 @@ extends HeaderComposite{
 
 		XComposite ordinaryWrapper = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER);
 
-		new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE).setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
+		recurredOfferCount = new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE);
+		recurredOfferCount.setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
 		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING);
 		statusMsg.setLayoutData(new GridData());
@@ -154,13 +156,13 @@ extends HeaderComposite{
 		{
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),false);
 
-			String typeKey = RecurringOfferHeaderComposite.class.getName() + ".status.type" + recurringOffer.getStatusKey();
+			String typeKey = RecurringOfferHeaderComposite.class.getName() + ".status.type." + recurringOffer.getStatusKey();
 			if (Messages.RESOURCE_BUNDLE.containsKey(typeKey)) {
 				String msgtype = Messages.getString(typeKey);
 				if (msgtype != null && !"".equals(msgtype))
 					iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
 			}
-			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message" + recurringOffer.getStatusKey()), iconType);
+			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message." + recurringOffer.getStatusKey()), iconType);
 		}
 
 		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
@@ -182,6 +184,11 @@ extends HeaderComposite{
 		}
 		else		
 			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);
+
+		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED))
+		setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);	
+				
+		recurredOfferCount.setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
 	}
 

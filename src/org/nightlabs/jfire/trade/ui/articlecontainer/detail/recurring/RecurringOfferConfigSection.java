@@ -41,7 +41,7 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 		});
 
 		createDeliveryCheck = new Button(getContainer(), SWT.CHECK);
-		createDeliveryCheck.setText("Create Delivery");
+		createDeliveryCheck.setText("Create Delivery note");
 		createDeliveryCheck.setToolTipText("");
 		createDeliveryCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
