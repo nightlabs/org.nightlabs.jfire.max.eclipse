@@ -14,6 +14,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.MessageComposite;
@@ -71,14 +73,17 @@ extends HeaderComposite{
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL|GridData.HORIZONTAL_ALIGN_CENTER));
 		this.getGridLayout().numColumns = 1;
 
+		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);		
+		RowLayout rowLayout = new RowLayout();
+		rowLayout.wrap = true;
+		rowLayout.pack = false;
+		rowLayout.marginLeft = 0;	
+		infoStatuesContainerComp.setLayout(rowLayout);
 
-		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
-		infoStatuesContainerComp.setLayoutData(null);
-		infoStatuesContainerComp.getGridLayout().numColumns = 2;
 		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
 		currentStateComposite.setStatable(recurringOffer);
 		currentStateComposite.setLayoutData(null);
-
+		
 		nextTransitionComposite = new NextTransitionComposite(infoStatuesContainerComp ,SWT.WRAP | SWT.NONE);
 		nextTransitionComposite.setStatable(recurringOffer);
 		nextTransitionComposite.setLayoutData(null);
@@ -90,20 +95,26 @@ extends HeaderComposite{
 			}
 		});
 
-		new Label(this, SWT.WRAP |SWT.NONE).setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
+		XComposite ordinaryWrapper = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER);
+		
+		new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE).setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
 		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING);
 		statusMsg.setLayoutData(new GridData());
 
-		XComposite infodateContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
-		infodateContainerComp.setLayoutData(null);
-		infodateContainerComp.getGridLayout().numColumns = 2;
+		XComposite infodateContainerComp = new XComposite(ordinaryWrapper, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
+		rowLayout = new RowLayout();
+		rowLayout.wrap = true;
+		rowLayout.pack = false;
+		rowLayout.marginLeft = 0;
+		infodateContainerComp.setLayout(rowLayout);
 
-		lastTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP |SWT.NONE);
-		lastTaskDateLabel.setLayoutData(new GridData());
+		
+		lastTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP|SWT.NONE);
+		lastTaskDateLabel.setLayoutData(new RowData());
 
 		nextTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP |SWT.NONE);
-		nextTaskDateLabel.setLayoutData(new GridData());
+		nextTaskDateLabel.setLayoutData(new RowData());
 
 		updateStatues();
 
@@ -143,10 +154,12 @@ extends HeaderComposite{
 		{
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),false);
 
-			String msgtype = Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.type" + recurringOffer.getStatusKey());
-			if (msgtype != null)
-				iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
-
+			String typeKey = RecurringOfferHeaderComposite.class.getName() + ".status.type" + recurringOffer.getStatusKey();
+			if (Messages.RESOURCE_BUNDLE.containsKey(typeKey)) {
+				String msgtype = Messages.getString(typeKey);
+				if (msgtype != null && !"".equals(msgtype))
+					iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
+			}
 			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message" + recurringOffer.getStatusKey()), iconType);
 		}
 
@@ -154,24 +167,29 @@ extends HeaderComposite{
 		if(date != null)
 		{
 			lastTaskDateLabel.setText("Last Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
-			setWidgetExcluded((GridData) lastTaskDateLabel.getLayoutData(),false);
+			setWidgetExcluded((RowData) lastTaskDateLabel.getLayoutData(),false);
 
 		}
 		else
-			setWidgetExcluded((GridData) lastTaskDateLabel.getLayoutData(),true);
+			setWidgetExcluded((RowData) lastTaskDateLabel.getLayoutData(),true);
 
 		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
 		if(date != null)
 		{	
 			nextTaskDateLabel.setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
-			setWidgetExcluded((GridData) nextTaskDateLabel.getLayoutData(),false);
+			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),false);
 
 		}
 		else		
-			setWidgetExcluded((GridData) nextTaskDateLabel.getLayoutData(),true);
+			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);
 
 	}
 
+	private void setWidgetExcluded(RowData data , boolean exclude)
+	{
+		data.exclude = exclude;	
+	}
+	
 	private void setWidgetExcluded(GridData data , boolean exclude)
 	{
 		data.exclude = exclude;	
