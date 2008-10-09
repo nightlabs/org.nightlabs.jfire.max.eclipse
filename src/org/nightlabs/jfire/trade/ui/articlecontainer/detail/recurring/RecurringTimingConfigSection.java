@@ -13,6 +13,8 @@ import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.timepattern.TimePatternSetComposite;
+import org.nightlabs.base.ui.timepattern.TimePatternSetModifyEvent;
+import org.nightlabs.base.ui.timepattern.TimePatternSetModifyListener;
 import org.nightlabs.base.ui.timepattern.builder.TimePatternSetBuilderWizard;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.l10n.DateFormatter;
@@ -40,6 +42,15 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		getSection().setText("Recurring Timer");
 
 		timePatternSetComposite = new TimePatternSetComposite(getContainer(), SWT.NONE);
+		timePatternSetComposite.addTimePatternSetModifyListener(new TimePatternSetModifyListener(){
+			@Override			
+			public void timePatternSetModified(TimePatternSetModifyEvent event)
+			{
+				saveTimePattern();
+			}
+
+		});
+
 
 		XComposite enableDateContainer = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		enableDateContainer.getGridLayout().numColumns = 2;
@@ -95,6 +106,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 		timePatternSetComposite.setTimePatternSet(Util.cloneSerializable(recurringOfferConfiguration.getCreatorTask().getTimePatternSet()));
 	}
+
 
 
 	class AddRecurringTimePatternAction
@@ -165,22 +177,25 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 	{	
 		if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 		{
-			timePatternSetComposite.refresh(true);
-
-			getController().getControllerObject().getCreatorTask().getTimePatternSet().clearTimePatterns();
-
-			Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
-			for (TimePattern p : patterns) {
-				getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);
-			}
-			markDirty();
+			saveTimePattern();
 		}
 
 
 	}
 
 
+	protected void saveTimePattern()
+	{
+		timePatternSetComposite.refresh(true);
 
+		getController().getControllerObject().getCreatorTask().getTimePatternSet().clearTimePatterns();
+
+		Set<TimePattern> patterns = timePatternSetComposite.getTimePatternSet().getTimePatterns();
+		for (TimePattern p : patterns) {
+			getController().getControllerObject().getCreatorTask().getTimePatternSet().addTimePattern(p);
+		}
+		markDirty();	
+	}
 
 
 }

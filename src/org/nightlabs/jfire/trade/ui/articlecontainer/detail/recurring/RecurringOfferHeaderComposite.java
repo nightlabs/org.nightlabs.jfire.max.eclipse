@@ -83,7 +83,7 @@ extends HeaderComposite{
 		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
 		currentStateComposite.setStatable(recurringOffer);
 		currentStateComposite.setLayoutData(null);
-		
+
 		nextTransitionComposite = new NextTransitionComposite(infoStatuesContainerComp ,SWT.WRAP | SWT.NONE);
 		nextTransitionComposite.setStatable(recurringOffer);
 		nextTransitionComposite.setLayoutData(null);
@@ -96,7 +96,7 @@ extends HeaderComposite{
 		});
 
 		XComposite ordinaryWrapper = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER);
-		
+
 		new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE).setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
 
 		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING);
@@ -109,7 +109,7 @@ extends HeaderComposite{
 		rowLayout.marginLeft = 0;
 		infodateContainerComp.setLayout(rowLayout);
 
-		
+
 		lastTaskDateLabel = new Label(infodateContainerComp,SWT.WRAP|SWT.NONE);
 		lastTaskDateLabel.setLayoutData(new RowData());
 
@@ -189,7 +189,7 @@ extends HeaderComposite{
 	{
 		data.exclude = exclude;	
 	}
-	
+
 	private void setWidgetExcluded(GridData data , boolean exclude)
 	{
 		data.exclude = exclude;	
@@ -204,6 +204,8 @@ extends HeaderComposite{
 			nextTransitionComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
 			getDisplay().asyncExec(new Runnable() {
 				public void run() {
+					if (isDisposed())
+						return;
 					updateStatues();
 					getShell().layout(true, true);
 				}
@@ -252,7 +254,8 @@ extends HeaderComposite{
 						else {
 							nextTransitionComposite.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Pattern is not set");
+									MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Time Pattern is not set !!!");
+									nextTransitionComposite.setEnabled(true);				
 								}
 							});
 						}
