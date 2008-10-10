@@ -20,21 +20,21 @@ import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWiza
  * @author Fitas [at] NightLabs [dot] de
  * @author Daniel [at] NightLabs [dot] de
  */
-public class LegalEntityEditComposite 
+public class LegalEntityEditComposite
 extends XComposite
-{	
+{
 	private Text legalText;
 	private LegalEntity legalEntity;
 	private ListenerList legalEntityValueChangedListeners = new ListenerList();
-	
-	public LegalEntityEditComposite(Composite parent, int style) 
+
+	public LegalEntityEditComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		this.getGridLayout().numColumns = 2;
 		this.getGridData().grabExcessVerticalSpace = false;
 		legalText = new Text(this, XComposite.getBorderStyle(this) | SWT.SINGLE | SWT.READ_ONLY);
 		legalText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Button legalButton = new Button(this, SWT.NONE);
+		Button legalButton = new Button(this, SWT.FLAT);
 		legalButton.setText("...");
 		legalButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
@@ -42,11 +42,11 @@ extends XComposite
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-			}		
+			}
 		});
 	}
 
-	protected void legalPressed() 
+	protected void legalPressed()
 	{
 		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
@@ -69,11 +69,11 @@ extends XComposite
 	 * sets the {@link ProductType} to display the MoneyFlowConfiguration for
 	 * @param productType the proudctType to set
 	 */
-	public void setLegalEntity(final LegalEntity legalEntity) 
+	public void setLegalEntity(final LegalEntity legalEntity)
 	{
 		this.legalEntity = legalEntity;
 		updateUI();
-	}	
+	}
 
 	protected void updateDelegate(final LocalAccountantDelegate delegate) {
 

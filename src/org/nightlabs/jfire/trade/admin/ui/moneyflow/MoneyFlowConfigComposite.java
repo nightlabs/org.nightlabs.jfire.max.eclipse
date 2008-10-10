@@ -74,18 +74,18 @@ extends XComposite
 	public MoneyFlowMappingTree getProductTypeMappingTree() {
 		return productTypeMappingTree;
 	}
-	
+
 	private ResolvedMappingTree resolvedMappingTree;
 	private ProductTypeID currProductTypeID;
-	
+
 	private FadeableComposite fadeableComposite;
-	
+
 	private Composite stackWrapper;
 	private StackLayout stackLayout;
 	private XComposite treeWrapper;
-	
+
 	private XComposite noDelegateComp;
-	
+
 	private NotificationListener notificationListenerProductTypeSelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite.loadMoneyFlowConfigJob.name")) {		 //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 			boolean doRefresh = false;
@@ -113,11 +113,11 @@ extends XComposite
 			}
 		}
 	};
-	
+
 	public NotificationListener getNotificationListener() {
 		return notificationListenerProductTypeSelected;
 	}
-			
+
 	private ProductType productType;
 	public ProductType getProductType() {
 		return productType;
@@ -125,7 +125,7 @@ extends XComposite
 
 	/**
 	 * @deprecated use {@link #setProductType(ProductType)} instead
-	 * 
+	 *
 	 * sets the id of the {@link ProductType} to load
 	 * @param productTypeID the id of the {@link ProductType} to set
 	 */
@@ -158,7 +158,7 @@ extends XComposite
 					});
 				}
 				productTypeMappingTree.setProductTypeID(productTypeID, monitor);
-				
+
 				ProductType pType = ProductTypeDAO.sharedInstance().getProductType(
 						productTypeID, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor);
@@ -166,13 +166,13 @@ extends XComposite
 					resolvedMappingTree.setProductTypeID(productTypeID, monitor);
 				else
 					resolvedMappingTree.clear();
-				
+
 				return Status.OK_STATUS;
 			}
 		};
 		updateJob.schedule();
 	}
-	
+
 	/**
 	 * sets the {@link ProductType} to display the MoneyFlowConfiguration for
 	 * @param productType the proudctType to set
@@ -208,13 +208,13 @@ extends XComposite
 				}
 				productTypeMappingTree.setProductType(productType);
 				resolvedMappingTree.setProductType(productType);
-				
+
 				return Status.OK_STATUS;
 			}
 		};
 		updateJob.schedule();
 	}
-	
+
 	protected void updateDelegate(final LocalAccountantDelegate delegate) {
 		if (currProductTypeID != null) {
 			Display.getDefault().asyncExec(new Runnable() {
@@ -226,7 +226,7 @@ extends XComposite
 			});
 		}
 	}
-	
+
 	/**
 	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -237,11 +237,12 @@ extends XComposite
 		stackLayout = new StackLayout();
 		stackWrapper.setLayout(stackLayout);
 		stackWrapper.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		treeWrapper = new XComposite(stackWrapper, SWT.NONE);
 		treeWrapper.getGridLayout().makeColumnsEqualWidth = true;
 		treeWrapper.setLayout(new GridLayout(2, false));
-		XComposite comp = new XComposite(treeWrapper, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
+//		XComposite comp = new XComposite(treeWrapper, SWT.BORDER, LayoutMode.TIGHT_WRAPPER);
+		XComposite comp = new XComposite(treeWrapper, getBorderStyle(), LayoutMode.TIGHT_WRAPPER);
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productTypeMappingTree = new MoneyFlowMappingTree(comp, null);
 		resolvedMappingTree = new ResolvedMappingTree(comp);
@@ -272,15 +273,15 @@ extends XComposite
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		
+
 		stackLayout.topControl = treeWrapper;
 	}
-		
+
 	public void addDelegate()
 	{
 		if (getCurrProductTypeID() == null || getCurrDelegate() == null)
 			return;
-				
+
 		AddMoneyFlowMappingWizard wiz = new AddMoneyFlowMappingWizard(
 				getCurrDelegate(),
 				getCurrProductTypeID()
@@ -295,12 +296,12 @@ extends XComposite
 		if (wizardDialog.open() == Window.OK) {
 			setNextRefreshSelectMapping(wiz.getCreatedMapping());
 			refresh(true);
-		
+
 			if (dirtyStateManager != null)
 				dirtyStateManager.markDirty();
 		}
 	}
-	
+
 	private SelectionListener addDelegateListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			addDelegate();
@@ -309,7 +310,7 @@ extends XComposite
 			widgetSelected(e);
 		}
 	};
-	
+
 	public void removeDelegate()
 	{
 		if (getCurrProductTypeID() == null)
@@ -327,11 +328,11 @@ extends XComposite
 		// TODO: Popup confirmation dialog
 		delegate.removeMoneyFlowMapping(mapping);
 		refresh(true);
-		
+
 		if (dirtyStateManager != null)
 			dirtyStateManager.markDirty();
 	}
-	
+
 	private SelectionListener removeDelegateListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			removeDelegate();
@@ -340,15 +341,15 @@ extends XComposite
 			widgetSelected(e);
 		}
 	};
-		
+
 	public ProductTypeID getCurrProductTypeID() {
 		return currProductTypeID;
 	}
-	
+
 	public MappingBasedAccountantDelegate getCurrDelegate() {
 		return productTypeMappingTree.getCurrentDelegate();
 	}
-	
+
 	public void refresh(boolean refreshInput) {
 		productTypeMappingTree.refresh(refreshInput);
 	}
@@ -373,7 +374,7 @@ extends XComposite
 	public MoneyFlowMapping getSelectedMoneyFlowMapping() {
 		return productTypeMappingTree.getSelectedMoneyFlowMapping();
 	}
-	
+
 //	public void openSelectedAccountDelegateWizard()
 //	{
 //		final SelectCreateAccountantDelegateWizard wiz = new SelectCreateAccountantDelegateWizard();
@@ -429,5 +430,5 @@ extends XComposite
 			resolvedMappingTree.setProductType(getProductType());
 		}
 	}
-	
+
 }
