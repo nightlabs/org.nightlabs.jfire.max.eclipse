@@ -100,6 +100,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
+		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
 		
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
