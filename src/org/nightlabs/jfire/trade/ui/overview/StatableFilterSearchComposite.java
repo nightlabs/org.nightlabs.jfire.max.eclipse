@@ -1,11 +1,14 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.FetchPlan;
@@ -68,10 +71,16 @@ public class StatableFilterSearchComposite
 	private DateTimeEdit createDTMax;
 	private Button stateDefinitionActiveButton;
 	private Button onlyInSelectedStateButton;
+	private Button notInSelectedStateButton;
+	private Map<ProcessDefinition, List<StateDefinition>> processDefinition2StateDefinitions;
 
 	private static final String[] FETCH_GROUPS_STATE_DEFINITON = new String[] {
 		FetchPlan.DEFAULT,
 		StateDefinition.FETCH_GROUP_NAME
+	};
+
+	private static final String[] FETCH_GROUPS_PROCESS_DEFINITON = new String[] {
+		FetchPlan.DEFAULT
 	};
 
 	/**
@@ -103,6 +112,7 @@ public class StatableFilterSearchComposite
 		LayoutDataMode layoutDataMode, QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, layoutMode, layoutDataMode, queryProvider);
+		processDefinition2StateDefinitions = new HashMap<ProcessDefinition, List<StateDefinition>>();
 		createComposite();
 	}
 
@@ -113,6 +123,7 @@ public class StatableFilterSearchComposite
 		QueryProvider<? super StatableQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
+		processDefinition2StateDefinitions = new HashMap<ProcessDefinition, List<StateDefinition>>();
 		createComposite();
 	}
 
@@ -131,7 +142,7 @@ public class StatableFilterSearchComposite
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.TIGHT_WRAPPER,
-			LayoutDataMode.GRID_DATA_HORIZONTAL, 2);
+			LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
 		wrapper.getGridLayout().makeColumnsEqualWidth = true;
 		wrapper.getGridData().horizontalSpan = 2;
 		stateDefinitionActiveButton = new Button(wrapper, SWT.CHECK);
@@ -160,18 +171,53 @@ public class StatableFilterSearchComposite
 			}
 		});
 
-		stateDefinitions = new XComboComposite<StateDefinition>(wrapper, getBorderStyle(), labelProvider);
+		notInSelectedStateButton = new Button(wrapper, SWT.CHECK);
+		notInSelectedStateButton.setText("Not In Selected State");
+		GridData notSelectedStateButtonData = new GridData();
+//		selectedStateButtonData.horizontalSpan = 2;
+		notInSelectedStateButton.setLayoutData(notSelectedStateButtonData);
+		notInSelectedStateButton.setEnabled(false);
+		notInSelectedStateButton.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				final Boolean notInSelectedState = notInSelectedStateButton.getSelection();
+				getQuery().setNotInSelectedState(notInSelectedState);
+			}
+		});
+
+		processDefinitionsCombo = new XComboComposite<ProcessDefinition>(wrapper, getBorderStyle(), processDefinitionLabelProvider);
+		GridData data2 = new GridData(GridData.FILL_HORIZONTAL);
+		data2.horizontalSpan = 1;
+		processDefinitionsCombo.setLayoutData(data2);
+		processDefinitionsCombo.setEnabled(false);
+		processDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
+		{
+			@Override
+			public void selectionChanged(SelectionChangedEvent e)
+			{
+				ProcessDefinition selectedProcessDefinition = processDefinitionsCombo.getSelectedElement();
+				List<StateDefinition> stateDefinitions = processDefinition2StateDefinitions.get(selectedProcessDefinition);
+				stateDefinitionsCombo.removeAll();
+				stateDefinitionsCombo.addElements(stateDefinitions);
+				if (!stateDefinitionsCombo.getElements().isEmpty())
+					stateDefinitionsCombo.selectElementByIndex(0);
+			}
+		});
+
+		stateDefinitionsCombo = new XComboComposite<StateDefinition>(wrapper, getBorderStyle(), stateDefinitionLabelProvider);
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
-		stateDefinitions.setLayoutData(data);
-		stateDefinitions.setEnabled(false);
-		stateDefinitions.addSelectionChangedListener(new ISelectionChangedListener()
+		stateDefinitionsCombo.setLayoutData(data);
+		stateDefinitionsCombo.setEnabled(false);
+		stateDefinitionsCombo.addSelectionChangedListener(new ISelectionChangedListener()
 		{
 			@Override
 			public void selectionChanged(SelectionChangedEvent e)
 			{
 				final StateDefinitionID stateDefinitionID = (StateDefinitionID)
-					JDOHelper.getObjectId(stateDefinitions.getSelectedElement());
+					JDOHelper.getObjectId(stateDefinitionsCombo.getSelectedElement());
 
 				getQuery().setStateDefinitionID(stateDefinitionID);
 			}
@@ -236,8 +282,8 @@ public class StatableFilterSearchComposite
 		});
 	}
 
-	private XComboComposite<StateDefinition> stateDefinitions;
-	private ILabelProvider labelProvider = new LabelProvider() {
+	private XComboComposite<StateDefinition> stateDefinitionsCombo;
+	private ILabelProvider stateDefinitionLabelProvider = new LabelProvider() {
 		@Override
 		public String getText(Object element)
 		{
@@ -249,6 +295,20 @@ public class StatableFilterSearchComposite
 			return super.getText(element);
 		}
 	};
+
+	private XComboComposite<ProcessDefinition> processDefinitionsCombo;
+	private ILabelProvider processDefinitionLabelProvider = new LabelProvider() {
+		@Override
+		public String getText(Object element)
+		{
+			if (element instanceof ProcessDefinition) {
+				ProcessDefinition processDefinition = (ProcessDefinition) element;
+				return processDefinition.getProcessDefinitionID();
+			}
+			return super.getText(element);
+		}
+	};
+
 
 	private Class<? extends Statable> statableClass;
 
@@ -283,13 +343,12 @@ public class StatableFilterSearchComposite
 							FetchPlan.DEFAULT,
 							ProcessDefinition.FETCH_GROUP_THIS_PROCESS_DEFINITION
 					};
-					Collection<ProcessDefinition> processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
+					final Collection<ProcessDefinition> processDefinitions = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
 							processDefinitionIDs,
 							PROCESS_DEFINITION_FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
 
-					final Set<StateDefinition> allStateDefinitions = new HashSet<StateDefinition>();
 					for (ProcessDefinition processDefinition : processDefinitions)
 					{
 						Set<StateDefinitionID> statedDefinitionIDs = jbpmManager.getStateDefinitionIDs(processDefinition);
@@ -298,17 +357,29 @@ public class StatableFilterSearchComposite
 								FETCH_GROUPS_STATE_DEFINITON,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								monitor);
-						allStateDefinitions.addAll(stateDefinitions);
+						// TODO: sort stateDefinitions
+						processDefinition2StateDefinitions.put(processDefinition, new ArrayList<StateDefinition>(stateDefinitions));
 					}
+
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							if (stateDefinitions == null || stateDefinitions.isDisposed())
+							if (stateDefinitionsCombo == null || stateDefinitionsCombo.isDisposed())
 								return;
 
-							stateDefinitions.addElements(allStateDefinitions);
+							processDefinitionsCombo.addElements(processDefinitions);
+							if (!processDefinitions.isEmpty()) {
+								ProcessDefinition firstProcessDefinition = processDefinitions.iterator().next();
+								processDefinitionsCombo.selectElement(firstProcessDefinition);
+								List<StateDefinition> stateDefinitionList = processDefinition2StateDefinitions.get(firstProcessDefinition);
+								stateDefinitionsCombo.addElements(stateDefinitionList);
+								if (!stateDefinitionList.isEmpty()) {
+									stateDefinitionsCombo.selectElementByIndex(0);
+								}
+							}
+
 							if (deferredSelectedStateDefinition != null) {
-								stateDefinitions.selectElement(deferredSelectedStateDefinition);
+								stateDefinitionsCombo.selectElement(deferredSelectedStateDefinition);
 								deferredSelectedStateDefinition = null;
 							}
 						}
@@ -328,6 +399,7 @@ public class StatableFilterSearchComposite
 	{
 		fieldNames = new HashSet<String>();
 		fieldNames.add(StatableQuery.FieldName.onlyInSelectedState);
+		fieldNames.add(StatableQuery.FieldName.notInSelectedState);
 		fieldNames.add(StatableQuery.FieldName.stateCreateDTMax);
 		fieldNames.add(StatableQuery.FieldName.stateCreateDTMin);
 		fieldNames.add(StatableQuery.FieldName.stateDefinitionID);
@@ -346,6 +418,7 @@ public class StatableFilterSearchComposite
 	}
 
 	private StateDefinition deferredSelectedStateDefinition = null;
+	private ProcessDefinition deferredProcessDefinition = null;
 
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
@@ -358,6 +431,10 @@ public class StatableFilterSearchComposite
 			if (StatableQuery.FieldName.onlyInSelectedState.equals(fieldChange.getPropertyName()))
 			{
 				onlyInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
+			}
+			else if (StatableQuery.FieldName.notInSelectedState.equals(fieldChange.getPropertyName()))
+			{
+				notInSelectedStateButton.setSelection((Boolean) fieldChange.getNewValue());
 			}
 			else if (StatableQuery.FieldName.stateCreateDTMax.equals(fieldChange.getPropertyName()))
 			{
@@ -388,7 +465,7 @@ public class StatableFilterSearchComposite
 				StateDefinitionID tmpID = (StateDefinitionID) fieldChange.getNewValue();
 				if (tmpID == null)
 				{
-					stateDefinitions.setSelection((StateDefinition) null);
+					stateDefinitionsCombo.setSelection((StateDefinition) null);
 				}
 				else
 				{
@@ -410,8 +487,8 @@ public class StatableFilterSearchComposite
 						throw new RuntimeException(e);
 					}
 
-					stateDefinitions.setSelection(selection);
-					if (!Util.equals(selection, stateDefinitions.getSelectedElement()))
+					stateDefinitionsCombo.setSelection(selection);
+					if (!Util.equals(selection, stateDefinitionsCombo.getSelectedElement()))
 						deferredSelectedStateDefinition = selection;
 				}
 			}
@@ -419,10 +496,56 @@ public class StatableFilterSearchComposite
 					fieldChange.getPropertyName()))
 			{
 				final Boolean active = (Boolean) fieldChange.getNewValue();
-				stateDefinitions.setEnabled(active);
+				stateDefinitionsCombo.setEnabled(active);
 				onlyInSelectedStateButton.setEnabled(active);
+				notInSelectedStateButton.setEnabled(active);
+				processDefinitionsCombo.setEnabled(active);
 				setSearchSectionActive(stateDefinitionActiveButton, active);
 			}
+
+			else if (StatableQuery.FieldName.processDefinitionID.equals(fieldChange.getPropertyName()))
+			{
+				ProcessDefinitionID tmpID = (ProcessDefinitionID) fieldChange.getNewValue();
+				if (tmpID == null)
+				{
+					processDefinitionsCombo.setSelection((ProcessDefinition) null);
+				}
+				else
+				{
+					ProcessDefinition selection;
+					try
+					{
+						selection = ProcessDefinitionDAO.sharedInstance().getProcessDefinitions(
+							Collections.singleton(tmpID), FETCH_GROUPS_PROCESS_DEFINITON,
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
+						).iterator().next();
+					}
+					catch (Exception e)
+					{
+						if (e instanceof RuntimeException)
+						{
+							throw (RuntimeException) e;
+						}
+
+						throw new RuntimeException(e);
+					}
+
+					processDefinitionsCombo.setSelection(selection);
+					if (!Util.equals(selection, processDefinitionsCombo.getSelectedElement()))
+						deferredProcessDefinition = selection;
+				}
+			}
+			else if (getEnableFieldName(StatableQuery.FieldName.processDefinitionID).equals(
+					fieldChange.getPropertyName()))
+			{
+				final Boolean active = (Boolean) fieldChange.getNewValue();
+				stateDefinitionsCombo.setEnabled(active);
+				onlyInSelectedStateButton.setEnabled(active);
+				notInSelectedStateButton.setEnabled(active);
+				processDefinitionsCombo.setEnabled(active);
+				setSearchSectionActive(stateDefinitionActiveButton, active);
+			}
+
 		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
 

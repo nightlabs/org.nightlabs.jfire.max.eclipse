@@ -12,6 +12,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
+import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
@@ -24,12 +25,6 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
  *
  */
 public class ReserveAction extends ArticleContainerAction {
-
-	/**
-	 *
-	 */
-	public ReserveAction() {
-	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.action.IUpdateActionOrContributionItem#calculateVisible()
@@ -46,13 +41,19 @@ public class ReserveAction extends ArticleContainerAction {
 			return false;
 
 		ArticleContainer articleContainer = getArticleContainer();
-		if (articleContainer instanceof Offer)
-			return true;
+		if (!(articleContainer instanceof Order) || articleContainer.getArticleCount() < 1)
+			return false;
 
-//		if (articleContainer.getArticleCount() > 0)
-//			return true;
+		Order order = (Order) articleContainer;
 
-		return false;
+		boolean hasNonFinalizedOffer = false;
+		for (Offer offer : order.getOffers()) {
+			if (!offer.isFinalized()) {
+				hasNonFinalizedOffer = true;
+				break;
+			}
+		}
+		return hasNonFinalizedOffer;
 	}
 
 	@Override
@@ -61,14 +62,18 @@ public class ReserveAction extends ArticleContainerAction {
 		// TODO get quickSearch text from quickSaleEditor
 		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", true);
 		if (legalEntity != null) {
-			Offer offer = (Offer) getArticleContainer();
+			Order order = (Order) getArticleContainer();
 			try {
-				offer.setFinalized(Login.getLogin().getUser(new String[]{FetchPlan.DEFAULT},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
-//				offer.getOrder().setCustomer(legalEntity);
+				for (Offer offer : order.getOffers())
+				{
+					if (!offer.isFinalized()) {
+						offer.setFinalized(Login.getLogin().getUser(new String[]{FetchPlan.DEFAULT},
+								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
+					}
+				}
 				TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-				tm.assignCustomer((OrderID) JDOHelper.getObjectId(offer.getOrder()), customerID, true, null, 1);
+				tm.assignCustomer((OrderID) JDOHelper.getObjectId(order), customerID, true, null, 1);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
