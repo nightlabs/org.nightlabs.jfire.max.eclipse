@@ -94,7 +94,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
-		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
 		
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
@@ -107,11 +106,13 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				projectTreeComposite.expandAll(node);
 				
 				//Doesn't work!!!!
-				checkboxTreeViewer.setSubtreeChecked(node, isChecked);
+				checkboxTreeViewer.setAllChecked(isChecked);
 				
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
-					ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
-					selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
+					if (object instanceof ProjectTreeNode) {
+						ProjectTreeNode projectTreeNode = (ProjectTreeNode)object;
+						selectedProjectIDs.add(projectTreeNode.getJdoObject().getObjectId());
+					}
 				}
 				
 				getQuery().setProjectIDs(selectedProjectIDs);
