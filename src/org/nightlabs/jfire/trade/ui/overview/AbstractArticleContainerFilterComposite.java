@@ -114,6 +114,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 	@Override
 	protected void createComposite()
 	{
+		int buttonStyle = SWT.FLAT;
 		Group createDTGroup = new Group(this, SWT.NONE);
 		createDTGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.createDateGroup.text")); //$NON-NLS-1$
 		createDTGroup.setLayout(new GridLayout(2, true));
@@ -182,7 +183,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		userText.setEnabled(false);
 		userText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		userText.addSelectionListener(userSelectionListener);
-		userBrowseButton = new Button(userGroup, SWT.NONE);
+		userBrowseButton = new Button(userGroup, buttonStyle);
 		userBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.userBrowseButton.text")); //$NON-NLS-1$
 		userBrowseButton.addSelectionListener(userSelectionListener);
 		userBrowseButton.setEnabled(false);
@@ -208,7 +209,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		vendorText.setEnabled(false);
 		vendorText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorText.addSelectionListener(vendorSelectionListener);
-		vendorBrowseButton = new Button(vendorGroup, SWT.NONE);
+		vendorBrowseButton = new Button(vendorGroup, buttonStyle);
 		vendorBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.vendorBrowseButton.text")); //$NON-NLS-1$
 		vendorBrowseButton.addSelectionListener(vendorSelectionListener);
 		vendorBrowseButton.setEnabled(false);
@@ -226,7 +227,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		customerText.setEnabled(false);
 		customerText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		customerText.addSelectionListener(customerSelectionListener);
-		customerBrowseButton = new Button(customerGroup, SWT.NONE);
+		customerBrowseButton = new Button(customerGroup, buttonStyle);
 		customerBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerBrowseButton.text")); //$NON-NLS-1$
 		customerBrowseButton.addSelectionListener(customerSelectionListener);
 		customerBrowseButton.setEnabled(false);
@@ -252,7 +253,7 @@ public abstract class AbstractArticleContainerFilterComposite<Q extends Abstract
 		productTypeText.setEnabled(false);
 		productTypeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeText.addSelectionListener(productTypeSelectionListener);
-		productTypeBrowseButton = new Button(productTypeGroup, SWT.NONE);
+		productTypeBrowseButton = new Button(productTypeGroup, buttonStyle);
 		productTypeBrowseButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.ArticleContainerFilterComposite.customerBrowseButton.text"));
 		productTypeBrowseButton.addSelectionListener(productTypeSelectionListener);
 		productTypeBrowseButton.setEnabled(false);
