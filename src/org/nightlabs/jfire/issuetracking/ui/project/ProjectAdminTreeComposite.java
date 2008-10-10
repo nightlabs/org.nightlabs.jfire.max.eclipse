@@ -11,6 +11,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -22,7 +23,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.tree.AbstractTreeComposite;
+import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
+import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeLabelProvider;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
@@ -39,7 +41,7 @@ import org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectActio
  *
  */
 public class ProjectAdminTreeComposite 
-extends AbstractTreeComposite<Project> 
+extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode> 
 {
 	private static String[] FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
@@ -184,5 +186,14 @@ extends AbstractTreeComposite<Project>
 			return ((ProjectTreeNode)obj).getJdoObject();
 
 		return null;
+	}
+
+	@Override
+	protected ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode> getJDOObjectTreeController() {
+		return activeProjectTreeController;
+	}
+	
+	public void expandAll(Object obj) {
+		getTreeViewer().expandToLevel(obj, AbstractTreeViewer.ALL_LEVELS);
 	}
 }
