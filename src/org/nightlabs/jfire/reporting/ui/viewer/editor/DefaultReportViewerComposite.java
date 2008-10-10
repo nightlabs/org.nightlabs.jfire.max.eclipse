@@ -5,8 +5,6 @@ package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -17,8 +15,6 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,9 +24,7 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerParam;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
-import org.nightlabs.base.ui.exceptionhandler.IExceptionHandler;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
@@ -90,7 +84,7 @@ public class DefaultReportViewerComposite extends XComposite {
 	 */
 	private ImageHyperlink errorLink;
 
-	private static class ThreadDeathWorkaround implements IExceptionHandler {
+/*	private static class ThreadDeathWorkaround implements IExceptionHandler {
 		private Set<DefaultReportViewerComposite> registeredComposites = new HashSet<DefaultReportViewerComposite>();
 
 		public boolean handleException(ExceptionHandlerParam handlerParam) {
@@ -121,9 +115,9 @@ public class DefaultReportViewerComposite extends XComposite {
 				logger.info("Removed WORKAROUND ExceptionHandler for Adobe PDF bean ThreadDeath"); //$NON-NLS-1$
 			}
 		}
-	}
+	}*/
 
-	private static ThreadDeathWorkaround threadDeathWorkaround = new ThreadDeathWorkaround();
+//	private static ThreadDeathWorkaround threadDeathWorkaround = new ThreadDeathWorkaround();
 
 	public DefaultReportViewerComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
@@ -223,7 +217,7 @@ public class DefaultReportViewerComposite extends XComposite {
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
 		if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
 			stackLayout.topControl = pdfViewerComposite;
-			threadDeathWorkaround.registerComposite(this);
+//			threadDeathWorkaround.registerComposite(this);
 			try {
 				IProgressMonitor monitor = new NullProgressMonitor();
 				// TODO: This is a expensive operation it should be done in a Job
