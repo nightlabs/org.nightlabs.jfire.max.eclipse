@@ -48,7 +48,9 @@ import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.datafield.NumberDataField;
+import org.nightlabs.jfire.prop.datafield.SelectionDataField;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
+import org.nightlabs.jfire.prop.structfield.StructFieldValue;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CreditCardPage;
@@ -170,7 +172,13 @@ extends AbstractClientPaymentProcessor
 
 						// TODO the person should store a special year and month field for expiry - not simply text.
 						int expiryYear = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYYEAR)).getIntValue();
-						int expiryMonth = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH)).getIntValue();
+//						int expiryMonth = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH)).getIntValue();
+						SelectionDataField expiryMonthDataField = (SelectionDataField) person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH);
+						StructFieldValue expiryMonthFieldValue = expiryMonthDataField.getStructFieldValue();
+						int expiryMonth = 0;
+						if (expiryMonthFieldValue != null)
+							expiryMonth = Integer.parseInt(expiryMonthFieldValue.getStructFieldValueID());
+
 
 						paymentData.setNameOnCard(nameOnCard);
 						paymentData.setCardNumber(cardNumber);
