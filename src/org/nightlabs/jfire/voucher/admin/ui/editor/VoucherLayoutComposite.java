@@ -42,13 +42,13 @@ extends XComposite
 		voucherLayoutText = new Text(parent, SWT.BORDER);
 		voucherLayoutText.setEditable(false);
 		voucherLayoutText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		browseButton = new Button(parent, SWT.NONE);
+		browseButton = new Button(parent, SWT.FLAT);
 		browseButton.setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherLayoutComposite.browseButton.text")); //$NON-NLS-1$
 		browseButton.addSelectionListener(buttonListener);
 
 		setVoucherType(voucherType);
 	}
-		
+
 	private VoucherType voucherType = null;
 	protected VoucherType getVoucherType() {
 		return voucherType;
@@ -67,12 +67,12 @@ extends XComposite
 			voucherLayoutText.setText(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherLayoutComposite.voucherLayoutText.text_noVoucherType")); //$NON-NLS-1$
 		}
 	}
-	
+
 	private File selectedFile = null;
 	public File getSelectedFile() {
 		return selectedFile;
 	}
-	
+
 	private SelectionListener buttonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog fileDialog = new FileDialog(getShell());
@@ -81,7 +81,7 @@ extends XComposite
 			if (fileName != null) {
 				selectedFile = new File(fileName);
 				voucherLayoutText.setText(selectedFile.getName());
-				
+
 				if (dirtyStateManager != null)
 					dirtyStateManager.markDirty();
 			}
