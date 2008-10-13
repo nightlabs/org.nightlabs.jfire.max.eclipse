@@ -49,6 +49,7 @@ import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveListener4;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.internal.ActionSetContributionItem;
@@ -60,8 +61,6 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
-import org.nightlabs.jfire.trade.ui.QuickSalePerspective;
-import org.nightlabs.jfire.trade.ui.TradePerspective;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionEvent;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ActiveSegmentEditSelectionListener;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleChangeEvent;
@@ -588,44 +587,59 @@ implements IArticleContainerEditActionContributor
 
 	private IPartListener2 partListener = new IPartListener2 () {
 		public void partActivated(IWorkbenchPartReference partRef) {
-			if (activeArticleContainerEditor != null &&
-				(partRef.getPart(false) instanceof IEditorPart) &&
-				(!activeArticleContainerEditor.equals(partRef.getPart(false)))
-			)
-			{
-				logger.debug("Part activated"); //$NON-NLS-1$
-//				removeContributions();
-//				activeArticleContainerEditor = null;
-				setActiveEditor(null);
+//			if (activeArticleContainerEditor != null &&
+//				(partRef.getPart(false) instanceof IEditorPart) &&
+//				(!activeArticleContainerEditor.equals(partRef.getPart(false)))
+//			)
+//			{
+//				logger.debug("Part activated"); //$NON-NLS-1$
+////				removeContributions();
+////				activeArticleContainerEditor = null;
+//				setActiveEditor(null);
+//			}
+		}
+		public void partBroughtToTop(IWorkbenchPartReference partRef) {
+		}
+		public void partClosed(IWorkbenchPartReference partRef) {
+			if (activeArticleContainerEditor != null) {
+				IWorkbenchPart part = partRef.getPart(false);
+				if (activeArticleContainerEditor.equals(part))
+					setActiveEditor(null);
 			}
 		}
-		public void partBroughtToTop(IWorkbenchPartReference arg0) {
-		}
-		public void partClosed(IWorkbenchPartReference arg0) {
-		}
 		public void partDeactivated(IWorkbenchPartReference partRef) {
+//			if (activeArticleContainerEditor != null) {
+//				IWorkbenchPart part = partRef.getPart(false);
+//				if (activeArticleContainerEditor.equals(part))
+//					setActiveEditor(null);
+//			}
 		}
-		public void partHidden(IWorkbenchPartReference arg0) {
+		public void partHidden(IWorkbenchPartReference partRef) {
 		}
-		public void partInputChanged(IWorkbenchPartReference arg0) {
+		public void partInputChanged(IWorkbenchPartReference partRef) {
 		}
-		public void partOpened(IWorkbenchPartReference arg0) {
+		public void partOpened(IWorkbenchPartReference partRef) {
 		}
-		public void partVisible(IWorkbenchPartReference arg0) {
+		public void partVisible(IWorkbenchPartReference partRef) {
 		}
 	};
 
 	private IPerspectiveListener4 perspectiveListener = new PerspectiveAdapter() {
 		@Override
 		public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) ||
-				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
-			{
-				logger.debug("Perspective activated: " + perspective.getId() + ", contributions will be removed.");					 //$NON-NLS-1$ //$NON-NLS-2$
-//				removeContributions();
-//				activeArticleContainerEditor = null;
-				setActiveEditor(null);
-			}
+//			if ((!(TradePerspective.ID_PERSPECTIVE.equals(perspective.getId()) ||
+//				 (QuickSalePerspective.ID_PERSPECTIVE.equals(perspective.getId())))))
+//			{
+//				logger.debug("Perspective activated: " + perspective.getId() + ", contributions will be removed.");					 //$NON-NLS-1$ //$NON-NLS-2$
+////				removeContributions();
+////				activeArticleContainerEditor = null;
+//				setActiveEditor(null);
+//			}
+		}
+		@Override
+		public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective)
+		{
+			setActiveEditor(null);
 		}
 	};
 
