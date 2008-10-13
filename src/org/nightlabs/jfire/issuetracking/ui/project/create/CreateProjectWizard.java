@@ -28,7 +28,7 @@ extends DynamicPathWizard
 	};
 
 	private ProjectID parentProjectID;
-	private CreateProjectWizardPage page;
+	private CreateProjectWizardPage projectPage;
 
 	public CreateProjectWizard(ProjectID parentProjectID) {
 		this.parentProjectID = parentProjectID;
@@ -36,8 +36,8 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		page = new CreateProjectWizardPage(null);
-		addPage(page);
+		projectPage = new CreateProjectWizardPage(null);
+		addPage(projectPage);
 	}
 
 	@Override
@@ -55,10 +55,10 @@ extends DynamicPathWizard
 					{
 						try {
 							Project projectToStore = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-							projectToStore.getName().copyFrom(page.getProjectTypeNameEditor().getI18nText());
-							projectToStore.setProjectType(page.getSelectedProjectType());
+							projectToStore.getName().copyFrom(projectPage.getProjectTypeNameEditor().getI18nText());
+							projectToStore.setProjectType(projectPage.getSelectedProjectType());
 							
-							Project storedProject = ProjectDAO.sharedInstance().storeProject(projectToStore, false, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+							Project storedProject = ProjectDAO.sharedInstance().storeProject(projectToStore, true, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
 							RCPUtil.openEditor(
 									new ProjectEditorInput(storedProject.getObjectId()),

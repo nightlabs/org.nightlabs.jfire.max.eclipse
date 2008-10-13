@@ -131,7 +131,6 @@ extends ToolBarSectionPart
 				}
 			}
 		});
-		
 	}
 	
 	public Project getProject() {
