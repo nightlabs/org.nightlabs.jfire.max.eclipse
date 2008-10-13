@@ -7,6 +7,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 
 
@@ -26,10 +28,11 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 
 		super(page, parent, controller);
 		getSection().setText("Offer configuration");
-		GridLayout gl = new GridLayout(3, true);
-		getContainer().setLayout(gl);
-
-		createInvoiceCheck = new Button(getContainer(), SWT.CHECK);
+		XComposite checkboxContainer = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		checkboxContainer.getGridLayout().numColumns = 3;
+		checkboxContainer.getGridLayout().makeColumnsEqualWidth = false;
+		
+		createInvoiceCheck = new Button(checkboxContainer, SWT.CHECK);
 		createInvoiceCheck.setText("Create Invoice");
 		createInvoiceCheck.setToolTipText("");
 		createInvoiceCheck.addSelectionListener(new SelectionAdapter() {
@@ -40,7 +43,7 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 			}
 		});
 
-		createDeliveryCheck = new Button(getContainer(), SWT.CHECK);
+		createDeliveryCheck = new Button(checkboxContainer, SWT.CHECK);
 		createDeliveryCheck.setText("Create Delivery note");
 		createDeliveryCheck.setToolTipText("");
 		createDeliveryCheck.addSelectionListener(new SelectionAdapter() {
@@ -51,7 +54,7 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 			}
 		});
 
-		bookInvoiceCheck = new Button(getContainer(), SWT.CHECK);
+		bookInvoiceCheck = new Button(checkboxContainer, SWT.CHECK);
 		bookInvoiceCheck.setText("Book Invoice");
 		bookInvoiceCheck.setToolTipText("");
 		bookInvoiceCheck.addSelectionListener(new SelectionAdapter() {
