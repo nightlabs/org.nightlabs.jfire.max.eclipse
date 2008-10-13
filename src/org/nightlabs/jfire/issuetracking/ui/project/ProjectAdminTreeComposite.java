@@ -192,8 +192,4 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 	protected ActiveJDOObjectTreeController<ProjectID, Project, ProjectTreeNode> getJDOObjectTreeController() {
 		return activeProjectTreeController;
 	}
-	
-	public void expandAll(Object obj) {
-		getTreeViewer().expandToLevel(obj, AbstractTreeViewer.ALL_LEVELS);
-	}
 }
