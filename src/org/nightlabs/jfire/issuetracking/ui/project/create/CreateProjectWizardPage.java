@@ -3,6 +3,9 @@ package org.nightlabs.jfire.issuetracking.ui.project.create;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +35,9 @@ extends DynamicPathWizardPage
 	private I18nTextBuffer projectNameBuffer;
 	private I18nTextEditorTable projectNameEditor;
 
+	private Button activeButton;
+	private boolean isActive = true;
+	
 	private ProjectID parentProjectID;
 	
 	@Override
@@ -58,14 +64,19 @@ extends DynamicPathWizardPage
 		gridData = new GridData(GridData.FILL_BOTH);
 		projectNameEditor.setLayoutData(gridData);
 
-//		Button activeButton = new Button(page, SWT.CHECK);
-//		activeButton.setText("Active");
-//		gridData = new GridData();
-//		gridData.horizontalAlignment = GridData.END;
-//		activeButton.setLayoutData(gridData);
+		new Label(page, SWT.NONE).setText("Properties: ");
 		
-//		Button advanceButton = new Button(page, SWT.PUSH);
-//		advanceButton.setText("Advance");
+		activeButton = new Button(page, SWT.CHECK);
+		activeButton.setText("Active");
+		activeButton.setSelection(isActive);
+		activeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				isActive = activeButton.getSelection();
+			}
+		});
+		gridData = new GridData();
+		activeButton.setLayoutData(gridData);
 		
 		return page;
 	}
@@ -94,5 +105,9 @@ extends DynamicPathWizardPage
 	
 	public ProjectType getSelectedProjectType() {
 		return projectTypeCombo.getSelectedProjectType();
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 }

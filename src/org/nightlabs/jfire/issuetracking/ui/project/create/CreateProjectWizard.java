@@ -57,6 +57,7 @@ extends DynamicPathWizard
 							Project projectToStore = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
 							projectToStore.getName().copyFrom(projectPage.getProjectTypeNameEditor().getI18nText());
 							projectToStore.setProjectType(projectPage.getSelectedProjectType());
+							projectToStore.setActive(projectPage.isActive());
 							
 							Project storedProject = ProjectDAO.sharedInstance().storeProject(projectToStore, true, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 

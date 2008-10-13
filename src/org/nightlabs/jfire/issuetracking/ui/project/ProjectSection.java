@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -90,6 +92,13 @@ extends ToolBarSectionPart
 		
 		activeButton = new Button(client, SWT.CHECK);
 		activeButton.setText("Active");
+		activeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				controller.getProject().setActive(activeButton.getSelection());
+				markDirty();
+			}
+		});
 		
 		createdTimeLabel = new Label(client, SWT.WRAP);
 		createdTimeLabel.setText("Created Time: ");
@@ -123,6 +132,8 @@ extends ToolBarSectionPart
 				
 				createdTimeTextLabel.setText(project.getCreateTimestamp().toString());
 				updatedTimeTextLabel.setText(project.getUpdateTimestamp() == null? "-" : project.getUpdateTimestamp().toString());
+				
+				activeButton.setSelection(project.isActive());
 				
 				if (project.getObjectId().equals(Project.PROJECT_ID_DEFAULT)) {
 					projectTypeCombo.setEnabled(false);
