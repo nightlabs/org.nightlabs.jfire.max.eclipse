@@ -47,7 +47,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 		return new MessageComposite(parent, SWT.NONE, message, MessageType.INFO);
 	}
 
-	public Article createArticles(
+	public Article createRecurringArticle(
 			SegmentID segmentID, OfferID offerID,
 			ProductTypeID productTypeID, int quantity,
 			TariffID tariffID,
