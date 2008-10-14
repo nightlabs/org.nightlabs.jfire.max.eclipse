@@ -36,7 +36,8 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-
+		page.getGridLayout().numColumns = 2;
+		
 		phaseNameLabel = new Label(page, SWT.WRAP);
 		phaseNameLabel.setLayoutData(new GridData());
 		phaseNameLabel.setText("Phase Name:");
@@ -55,6 +56,8 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		gridData.minimumHeight = 100;
 		descriptionText.setLayoutData(gridData);
 
+		new Label(page, SWT.NONE).setText("Properties: ");
+		
 		activeButton = new Button(page, SWT.CHECK);
 		activeButton.setText("Active");
 		

@@ -55,7 +55,7 @@ extends DynamicPathWizard
 					{
 						try {
 							Project projectToStore = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-							projectToStore.getName().copyFrom(projectPage.getProjectTypeNameEditor().getI18nText());
+							projectToStore.getName().copyFrom(projectPage.getProjectNameText().getI18nText());
 							projectToStore.setProjectType(projectPage.getSelectedProjectType());
 							projectToStore.setActive(projectPage.isActive());
 							
