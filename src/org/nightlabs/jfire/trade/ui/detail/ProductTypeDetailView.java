@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.store.ProductType;
@@ -40,13 +39,20 @@ extends LSDViewPart
 	}
 
 	private IMemento initMemento = null;
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
+	 */
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 		this.initMemento = memento;
 	}
 
-	@Implement
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.ui.part.ControllablePart#createPartContents(org.eclipse.swt.widgets.Composite)
+	 */
+	@Override
 	public void createPartContents(Composite parent)
 	{
 		productTypeDetailComposite = new ProductTypeDetailViewComposite(parent, SWT.NONE);
@@ -67,6 +73,9 @@ extends LSDViewPart
 
 	private ProductTypeDetailViewComposite productTypeDetailComposite;
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.base.ui.login.part.LSDViewPart#setFocus()
+	 */
 	@Override
 	public void setFocus() {
 	}
@@ -83,6 +92,9 @@ extends LSDViewPart
 	};
 
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
+	 */
 	@Override
 	public void saveState(IMemento memento) {
 		super.saveState(memento);

@@ -4,9 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
@@ -29,17 +34,26 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	 */
 	public ProductTypeDetailViewComposite(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new StackLayout());
-	}
 
-	protected void createComposite(XComposite parent) {
-		parent.setLayout(new StackLayout());
+		setLayout(new StackLayout());
+
+		FormToolkit toolkit = new FormToolkit(getDisplay());
+
+		Composite composite = toolkit.createComposite(this);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayout(new GridLayout(1, false));
+
+		Label label = toolkit.createLabel(composite, "Select a product type to see details");
+		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.BEGINNING, false, false));
+
+		getStackLayout().topControl = composite;
 	}
 
 	protected StackLayout getStackLayout() {
 		return (StackLayout) getLayout();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void showProductTypeDetail(ProductTypeID productTypeID) {
 		Class<? extends ProductType> pTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 		IProductTypeDetailView detailView = detailViews.get(pTypeClass);
