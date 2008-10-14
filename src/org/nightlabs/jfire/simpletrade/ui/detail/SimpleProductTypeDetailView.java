@@ -7,15 +7,12 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.detail.IProductTypeDetailView;
 
 /**
- *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
  */
 public class SimpleProductTypeDetailView
 implements IProductTypeDetailView
 {
 	private SimpleProductTypeDetailViewComposite simpleProductTypeDetailViewComposite = null;
-	private ProductTypeID productTypeID;
 	private IMemento initMemento;
 
 	public Composite createComposite(Composite parent)
@@ -26,9 +23,7 @@ implements IProductTypeDetailView
 		return simpleProductTypeDetailViewComposite;
 	}
 
-	@SuppressWarnings("unused")
 	public void setProductTypeID(ProductTypeID productTypeID) {
-		this.productTypeID = productTypeID;
 		if (simpleProductTypeDetailViewComposite != null)
 			simpleProductTypeDetailViewComposite.setProductTypeID(productTypeID);
 	}
@@ -43,5 +38,4 @@ implements IProductTypeDetailView
 		if (simpleProductTypeDetailViewComposite != null)
 			simpleProductTypeDetailViewComposite.saveState(memento);
 	}
-
 }

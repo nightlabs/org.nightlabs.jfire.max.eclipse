@@ -187,6 +187,9 @@ extends XComposite
 		sashForm = new SashForm(comp, SWT.HORIZONTAL);
 		sashForm.setLayout(new FillLayout());
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
+		sashForm.setForeground(sashForm.getParent().getBackground());
+		sashForm.setBackground(sashForm.getParent().getBackground());
+		toolkit.adapt(sashForm);
 //		textWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		textWrapper = toolkit.createComposite(sashForm);
 		textWrapper.setLayout(new GridLayout());
@@ -195,7 +198,7 @@ extends XComposite
 		productTypeDescription = new ReadOnlyLabeledText(textWrapper, Messages.getString("org.nightlabs.jfire.simpletrade.ui.detail.SimpleProductTypeDetailViewComposite.productTypeDescription.caption"), SWT.BORDER); // | SWT.MULTI | SWT.READ_ONLY); //$NON-NLS-1$
 		productTypeDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		productTypeDescription.getTextControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		imageWrapper = new XComposite(sashForm, getBorderStyle(), LayoutMode.TIGHT_WRAPPER) {
+		imageWrapper = new XComposite(sashForm, SWT.NONE, LayoutMode.TIGHT_WRAPPER) {
 			@Override
 			public void layout(boolean arg0, boolean arg1) {
 				layoutingImageWrapper = true;
