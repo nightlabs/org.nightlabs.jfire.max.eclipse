@@ -11,7 +11,6 @@ import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
@@ -27,15 +26,19 @@ extends DynamicPathWizard
 	};
 
 	private Project parentProject;
+	private Project newProject;
+	
 	private CreateProjectWizardPage projectPage;
 
 	public CreateProjectWizard(Project parentProject) {
 		this.parentProject = parentProject;
+		
+		newProject = new Project(IDGenerator.getOrganisationID(), IDGenerator.nextID(Project.class));
 	}
 
 	@Override
 	public void addPages() {
-		projectPage = new CreateProjectWizardPage(parentProject);
+		projectPage = new CreateProjectWizardPage(parentProject, newProject);
 		addPage(projectPage);
 	}
 
@@ -53,12 +56,7 @@ extends DynamicPathWizard
 					public void run()
 					{
 						try {
-							Project projectToStore = new Project(Login.getLogin().getOrganisationID(), IDGenerator.nextID(Project.class));
-							projectToStore.getName().copyFrom(projectPage.getProjectNameText().getI18nText());
-							projectToStore.setProjectType(projectPage.getSelectedProjectType());
-							projectToStore.setActive(projectPage.isActive());
-							
-							Project storedProject = ProjectDAO.sharedInstance().storeProject(projectToStore, true, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+							Project storedProject = ProjectDAO.sharedInstance().storeProject(newProject, true, new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
 							RCPUtil.openEditor(
 									new ProjectEditorInput(storedProject.getObjectId()),

@@ -1,17 +1,12 @@
 package org.nightlabs.jfire.issuetracking.ui.project.create;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.viewers.ITreeViewerListener;
-import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TreeAdapter;
-import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +17,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutDataMode;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
@@ -49,6 +45,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 	private boolean isActive = true;
 
 	private Project parentProject;
+	private Project newProject;
 
 	@Override
 	public Control createPageContents(Composite parent) {
@@ -63,7 +60,13 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		projectTypeCombo = new ProjectTypeComboComposite(page, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeCombo.setLayoutData(gridData);
-
+		projectTypeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				newProject.setProjectType(projectTypeCombo.getSelectedProjectType());
+			}
+		});
+		
 		if (parentProject != null) {
 			new Label(page, SWT.NONE).setText("Parent Project: ");
 			final ProjectAdminTreeComposite projectTree = new ProjectAdminTreeComposite(
@@ -79,24 +82,6 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 				}
 			});
 
-			projectTree.getTreeViewer().addTreeListener(new ITreeViewerListener() {
-				@Override
-				public void treeExpanded(TreeExpansionEvent event) {
-					event.getSource();
-				}
-				@Override
-				public void treeCollapsed(TreeExpansionEvent event) {
-
-				}
-			});
-
-//			Job job = new Job("Waiting for Project Tree....") {
-//			@Override
-//			protected IStatus run(IProgressMonitor monitor) {
-
-//			}
-//			};
-
 			projectTree.setLayoutData(gridData);
 		}
 
@@ -111,13 +96,15 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 
 		projectNameText = new I18nTextEditor(page);
 		projectNameText.addModifyListener(modifyListener);
-
+		projectNameText.setI18nText(newProject.getName(), EditMode.DIRECT);
+		
 		descriptionLabel = new Label(page, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description:");
 
 		descriptionText = new I18nTextEditorMultiLine(page, projectNameText
 				.getLanguageChooser());
+		descriptionText.setI18nText(newProject.getDescription(), EditMode.DIRECT);
 		descriptionText.addModifyListener(modifyListener);
 		gridData = new GridData(GridData.FILL_BOTH);
 		descriptionText.setLayoutData(gridData);
@@ -131,6 +118,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				isActive = activeButton.getSelection();
+				newProject.setActive(isActive);
 			}
 		});
 		gridData = new GridData();
@@ -145,18 +133,29 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		}
 	};
 
-	public CreateProjectWizardPage(Project project) {
+	public CreateProjectWizardPage(Project parentProject, Project newProject) {
 		super(CreateProjectWizardPage.class.getName(), "Project Page",
 				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin
 						.getDefault(), CreateProjectWizard.class));
 		this.setDescription("Description");
-		this.parentProject = project;
+		this.parentProject = parentProject;
+		this.newProject = newProject;
 	}
 
 	public I18nTextEditor getProjectNameText() {
 		return projectNameText;
 	}
 
+	@Override
+	public void onShow() {
+		projectNameText.forceFocus();
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return isPageComplete();
+	}
+	
 	@Override
 	public boolean isPageComplete() {
 		return !projectNameText.getEditText().isEmpty();

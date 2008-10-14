@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.jdo.FetchPlan;
 
@@ -39,7 +38,6 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
-import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
