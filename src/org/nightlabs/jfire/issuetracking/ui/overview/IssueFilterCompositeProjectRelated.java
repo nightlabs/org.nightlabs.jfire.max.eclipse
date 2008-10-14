@@ -91,7 +91,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		projectComposite.getGridLayout().numColumns = 2;
 
 		new Label(projectComposite, SWT.NONE).setText("Project: ");
-		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK);
+		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK, true);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
 		

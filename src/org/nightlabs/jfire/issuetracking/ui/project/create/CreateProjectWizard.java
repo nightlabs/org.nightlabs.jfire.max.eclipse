@@ -36,7 +36,7 @@ extends DynamicPathWizard
 
 	@Override
 	public void addPages() {
-		projectPage = new CreateProjectWizardPage(null);
+		projectPage = new CreateProjectWizardPage(parentProjectID);
 		addPage(projectPage);
 	}
 

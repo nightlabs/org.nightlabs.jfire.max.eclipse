@@ -26,7 +26,7 @@ extends CustomCompositeCategory {
 	@Override
 	public Composite createComposite(Composite composite) {
 		XComposite wrapper = new XComposite(composite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		final ProjectAdminTreeComposite pc = new ProjectAdminTreeComposite(wrapper);
+		final ProjectAdminTreeComposite pc = new ProjectAdminTreeComposite(wrapper, true);
 		
 		pc.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {

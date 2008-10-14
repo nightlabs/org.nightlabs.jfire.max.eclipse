@@ -11,7 +11,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -60,7 +59,7 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 
 	private ActiveProjectTreeController activeProjectTreeController;
 
-	public ProjectAdminTreeComposite(Composite parent, int treeStyle)
+	public ProjectAdminTreeComposite(Composite parent, int treeStyle, boolean needActions)
 	{
 		super(parent, treeStyle, true, true, false);
 		activeProjectTreeController = new ActiveProjectTreeController()
@@ -81,18 +80,20 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 			}
 		});
 
-		addContextMenuContribution(new CreateProjectAction());
-		addContextMenuContribution(new CreateSubProjectAction(getTreeViewer()));
-		addContextMenuContribution(new RenameProjectAction(getTreeViewer()));
-		addContextMenuContribution(new DeleteProjectAction(getTreeViewer()));
-
+		if (needActions) {
+			addContextMenuContribution(new CreateProjectAction());
+			addContextMenuContribution(new CreateSubProjectAction(getTreeViewer()));
+			addContextMenuContribution(new RenameProjectAction(getTreeViewer()));
+			addContextMenuContribution(new DeleteProjectAction(getTreeViewer()));
+		}
+		
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
 	}
 
-	public ProjectAdminTreeComposite(Composite parent)
+	public ProjectAdminTreeComposite(Composite parent, boolean needActions)
 	{
-		this(parent, DEFAULT_STYLE_SINGLE);
+		this(parent, DEFAULT_STYLE_SINGLE, needActions);
 	}
 
 	private void hookContextMenu() {
