@@ -29,10 +29,9 @@ public abstract class AbstractClientDeliveryProcessorOSPrint
 extends AbstractClientDeliveryProcessorPrint
 {
 	private static final Logger logger = Logger.getLogger(AbstractClientDeliveryProcessorOSPrint.class);
-	
+
 	private long printStart;
 	@Override
-	@Implement
 	protected DeliveryResult printBegin()
 			throws DeliveryException
 	{
@@ -41,7 +40,6 @@ extends AbstractClientDeliveryProcessorPrint
 	}
 
 	@Override
-	@Implement
 	protected DeliveryResult printEnd()
 			throws DeliveryException
 	{
@@ -57,14 +55,14 @@ extends AbstractClientDeliveryProcessorPrint
 	{
 		long start = System.currentTimeMillis();
 		AWTPrinter awtPrinter = getAWTPrinter();
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("getting printer took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 			start = System.currentTimeMillis();
 		}
-		
+
 		PrinterConfiguration printerConfiguration = awtPrinter.getConfiguration();
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("getting printer configuration took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 			start = System.currentTimeMillis();
@@ -72,12 +70,12 @@ extends AbstractClientDeliveryProcessorPrint
 
 		PrinterJob printJob = awtPrinter.getPrinterJob();
 		printJob.setJobName("Ipanema Ticket"); //$NON-NLS-1$
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("getting print job took "+(System.currentTimeMillis()-start)+" ms!");				 //$NON-NLS-1$ //$NON-NLS-2$
 			start = System.currentTimeMillis();
 		}
-		
+
 		if (printerConfiguration != null) {
 			if (printerConfiguration.getPageFormat() != null)
 				pageFormat = printJob.defaultPage(printerConfiguration.getPageFormat());
@@ -86,10 +84,10 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 		if (logger.isDebugEnabled())
 			logger.debug("printJob.defaultPage(...) took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
-		
+
 		return printJob;
 	}
-	
+
 	protected AWTPrinter getAWTPrinter()
 	{
 		PrinterInterface printer;
@@ -103,19 +101,19 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 		return (AWTPrinter) printer;
 	}
-	
+
 	/**
 	 * Returns the Printer Use Case.
 	 * @return the Printer Use Case
 	 */
 	protected abstract String getPrinterUseCase();
-	
+
 	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
 	{
 		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
 		return new DrawComponentPrintable(dcs, PrintConstant.FIT_PAGE);
 	}
-	
+
 	private List<ScriptRootDrawComponent> buffer;
 	protected List<ScriptRootDrawComponent> getBuffer() {
 		if (buffer == null) {
@@ -123,7 +121,7 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 		return buffer;
 	}
-	
+
 	@Override
 	@Implement
 	protected void printDocuments(List<ScriptRootDrawComponent> scriptRootDrawComponents, boolean lastEntry)
@@ -137,14 +135,14 @@ extends AbstractClientDeliveryProcessorPrint
 
 		PrinterJob printJob = configurePrinter();
 		printTickets(scriptRootDrawComponents, printJob);
-		
+
 		if (logger.isDebugEnabled())
 			logger.info("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * Prints the given {@link ScriptRootDrawComponent}s to the given {@link PrinterJob}.
-	 *   
+	 *
 	 * @param tickets the List of {@link ScriptRootDrawComponent}s to print
 	 * @param printJob the {@link PrinterJob} to print the tickets
 	 */
