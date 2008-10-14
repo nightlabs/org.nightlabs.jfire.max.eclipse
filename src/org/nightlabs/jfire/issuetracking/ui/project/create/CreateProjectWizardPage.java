@@ -1,7 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.project.create;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -71,13 +74,29 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 			new Label(page, SWT.NONE).setText("Parent Project: ");
 			final ProjectAdminTreeComposite projectTree = new ProjectAdminTreeComposite(
 					page, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER, false);
+			projectTree.addSelectionChangedListener(new ISelectionChangedListener() {
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					newProject.setParentProject(projectTree.getFirstSelectedElement());
+				}
+			});
+			
 			gridData = new GridData(GridData.FILL_BOTH);
 			gridData.heightHint = 20;
+			
 			ActiveProjectTreeController c = (ActiveProjectTreeController)projectTree.getInput();
 			c.addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener<ProjectID, Project, ProjectTreeNode>() {
 				@Override
 				public void onJDOObjectsChanged(
 						JDOTreeNodesChangedEvent<ProjectID, ProjectTreeNode> changedEvent) {
+					List<ProjectTreeNode> loadedNodes = changedEvent.getLoadedTreeNodes();
+					for (ProjectTreeNode node : loadedNodes) {
+						if (node.getJdoObject().equals(parentProject)) { 
+//							projectTree.setSelection(node.getJdoObject()); Doesn't work!!!!!!!!!!!!!
+							projectTree.setSelection(new StructuredSelection(node));
+						}
+					}
+					
 					projectTree.getTreeViewer().expandAll();
 				}
 			});
