@@ -73,7 +73,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.pay.CheckRequirementsEnvironment;
-import org.nightlabs.jfire.accounting.pay.CheckRequirementsResult;
 import org.nightlabs.jfire.accounting.pay.ModeOfPayment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavourName;
@@ -93,6 +92,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRegistry;
+import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -965,7 +965,7 @@ implements IPaymentEntryPage
 		int idx = serverPaymentProcessorCombo.getSelectionIndex();
 		if (idx >= 0) {
 			selectedServerPaymentProcessor = serverPaymentProcessorList.get(idx);
-			CheckRequirementsResult result = selectedServerPaymentProcessor.getRequirementCheckResult();
+			RequirementCheckResult result = selectedServerPaymentProcessor.getRequirementCheckResult();
 			if (result != null) {
 				this.setErrorMessage(result.getMessage());
 				wizard.updateDialog();

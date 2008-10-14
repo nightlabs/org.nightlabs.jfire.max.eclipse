@@ -32,6 +32,7 @@ import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IDeliveryEntryPage;
+import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -65,7 +66,11 @@ implements ClientDeliveryProcessor
 		// nothing to do - but this might change
 	}
 
-	public String getRequirementCheckKey()
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getRequirementCheckResult()
+	 */
+	@Override
+	public RequirementCheckResult getRequirementCheckResult()
 	{
 		return null;
 	}
@@ -74,6 +79,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#setClientDeliveryProcessorFactory(org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory)
 	 */
+	@Override
 	public void setClientDeliveryProcessorFactory(
 			ClientDeliveryProcessorFactory clientDeliveryProcessorFactory)
 	{
@@ -84,6 +90,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#setCustomerID(org.nightlabs.jfire.transfer.id.AnchorID)
 	 */
+	@Override
 	public void setCustomerID(AnchorID customerID)
 	{
 		this.customerID = customerID;
@@ -123,6 +130,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getDeliveryNoteID()
 	 */
+	@Override
 	public DeliveryNoteID getDeliveryNoteID()
 	{
 		return deliveryNoteID;
@@ -132,6 +140,7 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#setDeliveryNoteID(org.nightlabs.jfire.store.id.DeliveryNoteID)
 	 */
+	@Override
 	public void setDeliveryNoteID(DeliveryNoteID deliveryNoteID)
 	{
 		this.deliveryNoteID = deliveryNoteID;
@@ -141,15 +150,17 @@ implements ClientDeliveryProcessor
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getIncludedServerDeliveryProcessorIDs()
 	 */
+	@Override
 	public Set<ServerDeliveryProcessorID> getIncludedServerDeliveryProcessorIDs()
 	{
 		return null;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor#getExcludedServerDeliveryProcessorIDs()
 	 */
+	@Override
 	public Set<ServerDeliveryProcessorID> getExcludedServerDeliveryProcessorIDs()
 	{
 		return null;

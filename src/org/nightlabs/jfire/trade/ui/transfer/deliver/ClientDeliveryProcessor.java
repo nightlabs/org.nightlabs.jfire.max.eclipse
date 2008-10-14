@@ -38,6 +38,7 @@ import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.IDeliveryEntryPage;
+import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -92,7 +93,11 @@ public interface ClientDeliveryProcessor
 	 */
 	void init();
 
-	String getRequirementCheckKey();
+	/**
+	 * Check the requirements for this processor.
+	 * @return A CheckRequirementsResult instance if not all requirements are met or <code>null</code> if everything is fine.
+	 */
+	RequirementCheckResult getRequirementCheckResult();
 
 	/**
 	 * This method is called after {@link #init()}.
@@ -175,7 +180,7 @@ public interface ClientDeliveryProcessor
 	 * {@link #getDelivery()}.{@link Delivery#isFailed()}.
 	 * @return You may return <tt>null</tt>, which will cause automatic creation of
 	 *		a <tt>DeliveryResult</tt> with <tt>code = </tt>{@link DeliveryResult#CODE_APPROVED_NO_EXTERNAL}
-	 * 
+	 *
 	 * @throws DeliveryException TODO
 	 */
 	DeliveryResult deliverBegin() throws DeliveryException;

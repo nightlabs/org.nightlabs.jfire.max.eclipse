@@ -72,7 +72,6 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
-import org.nightlabs.jfire.store.deliver.CheckRequirementsResult;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
@@ -91,6 +90,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessorFactoryRegistry;
+import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
@@ -131,10 +131,10 @@ implements IDeliveryEntryPage
 	private ClientDeliveryProcessorFactory selectedClientDeliveryProcessorFactory = null;
 	private ClientDeliveryProcessor clientDeliveryProcessor = null;
 	private ServerDeliveryProcessor selectedServerDeliveryProcessor = null;
-	
+
 	private TradePrintingConfigModule tradePrintingCfMod = null;
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup = null;
-	
+
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
 		return (DeliveryWizardHop) getWizardHop();
@@ -152,7 +152,7 @@ implements IDeliveryEntryPage
 		new DeliveryWizardHop(this, delivery); // self-registering
 		this.productTypes = productTypes;
 	}
-	
+
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
 	 */
@@ -192,7 +192,8 @@ implements IDeliveryEntryPage
 		spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		spacer.getGridData().grabExcessVerticalSpace = false;
 		spacer.getGridData().heightHint = 4;
-		(clientDeliveryProcessorFactoryLabel = new Label(page, SWT.NONE)).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.clientDeliveryProcessorFactoryLabel.text")); //$NON-NLS-1$
+		clientDeliveryProcessorFactoryLabel = new Label(page, SWT.NONE);
+		clientDeliveryProcessorFactoryLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.clientDeliveryProcessorFactoryLabel.text")); //$NON-NLS-1$
 		clientDeliveryProcessorFactoryCombo = new Combo(page, SWT.BORDER | SWT.READ_ONLY);
 		clientDeliveryProcessorFactoryCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -212,7 +213,8 @@ implements IDeliveryEntryPage
 		spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		spacer.getGridData().grabExcessVerticalSpace = false;
 		spacer.getGridData().heightHint = 4;
-		(serverDeliveryProcessorLabel = new Label(page, SWT.NONE)).setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.serverDeliveryProcessorLabel.text")); //$NON-NLS-1$
+		serverDeliveryProcessorLabel = new Label(page, SWT.NONE);
+		serverDeliveryProcessorLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.serverDeliveryProcessorLabel.text")); //$NON-NLS-1$
 		serverDeliveryProcessorCombo = new Combo(page, SWT.BORDER | SWT.READ_ONLY);
 		serverDeliveryProcessorCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -228,16 +230,16 @@ implements IDeliveryEntryPage
 				}
 			}
 		});
-		
+
 		automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.deliveryNote"), null); //$NON-NLS-1$ //$NON-NLS-2$
-		
+
 		loadModeOfDeliveries();
 
 		return page;
 	}
-	
+
 	protected static String sessionLastSelectedMOPFPK = null;
-	
+
 	private StoreManager storeManager = null;
 
 	protected StoreManager getStoreManager()
@@ -312,12 +314,13 @@ implements IDeliveryEntryPage
 		getContainer().updateButtons();
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void clientDeliveryProcessorFactoryComboSelectionChanged()
 	{
 		DeliveryWizard wizard = ((DeliveryWizard)getWizard());
-	
+
 		removeDeliveryPages();
-		
+
 		selectedClientDeliveryProcessorFactory = null;
 		clientDeliveryProcessor = null;
 		serverDeliveryProcessorCombo.removeAll();
@@ -336,9 +339,9 @@ implements IDeliveryEntryPage
 			clientDeliveryProcessor.setDelivery(getDeliveryWizardHop().getDelivery());
 			clientDeliveryProcessor.init();
 
-			String reqMsg = clientDeliveryProcessor.getRequirementCheckKey();
-			if (reqMsg != null) {
-				this.setErrorMessage(reqMsg.trim()); // TODO we need l10n!
+			RequirementCheckResult checkResult = clientDeliveryProcessor.getRequirementCheckResult();
+			if (checkResult != null) {
+				this.setErrorMessage(checkResult.getMessage());
 				return;
 			}
 
@@ -453,7 +456,7 @@ implements IDeliveryEntryPage
 			getDeliveryWizardHop().getDelivery().setServerDeliveryProcessorID(
 					(ServerDeliveryProcessorID) JDOHelper.getObjectId(selectedServerDeliveryProcessor));
 
-			CheckRequirementsResult result = selectedServerDeliveryProcessor.getRequirementCheckResult();
+			RequirementCheckResult result = selectedServerDeliveryProcessor.getRequirementCheckResult();
 			if (result != null) {
 				this.setErrorMessage(result.getMessage());
 //				wizard.updateDialog(); // this is already done be setErrorMessage(...)
@@ -507,16 +510,16 @@ implements IDeliveryEntryPage
 	{
 		return
 				clientDeliveryProcessor != null &&
-				clientDeliveryProcessor.getRequirementCheckKey() == null &&
+				clientDeliveryProcessor.getRequirementCheckResult() == null &&
 				selectedClientDeliveryProcessorFactory != null &&
 				selectedServerDeliveryProcessor != null &&
 				selectedServerDeliveryProcessor.getRequirementCheckResult() == null;
 	}
-	
+
 	private Job loadModeOfDeliveriesJob = null;
-	
+
 	public void loadModeOfDeliveries() {
-		
+
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.job.loadingDeliveryModes")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -535,29 +538,29 @@ implements IDeliveryEntryPage
 							ModeOfDeliveryFlavour.FETCH_GROUP_ICON_16X16_DATA,
 							ModeOfDeliveryFlavourName.FETCH_GROUP_NAMES
 						}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-				
+
 				Map<ProductTypeID, ProductType> productTypeByIDMap = deliveryWizard.getProductTypeByIDMap();
-				
+
 				for (Iterator<ModeOfDeliveryFlavourProductTypeGroup> itG = carrier.getModeOfDeliveryFlavourProductTypeGroups().iterator(); itG.hasNext(); ) {
 					ModeOfDeliveryFlavourProductTypeGroup group = itG.next();
-					
+
 					List<ProductType> productTypes = new ArrayList<ProductType>();
 					for (Iterator<ProductTypeID> itPT = group.getProductTypeIDs().iterator(); itPT.hasNext();) {
 						ProductTypeID productTypeID = itPT.next();
 						ProductType productType = productTypeByIDMap.get(productTypeID);
 						if (productType == null)
 							throw new IllegalStateException("ProductType with ID \"" + productTypeID + "\" missing in map!"); //$NON-NLS-1$ //$NON-NLS-2$
-						
+
 						productTypes.add(productType);
 					}
-					
+
 					for (Iterator<ModeOfDeliveryFlavourID> itMDOFID = group.getModeOfDeliveryFlavourIDs().iterator(); itMDOFID.hasNext(); ) {
 						ModeOfDeliveryFlavourID modfID = itMDOFID.next();
 						ModeOfDeliveryFlavour modf = carrier.getModeOfDeliveryFlavour(modfID);
 						modeOfDeliveryFlavours.add(modf);
 					}
 				}
-				
+
 				Collections.sort(modeOfDeliveryFlavours, new Comparator<ModeOfDeliveryFlavour>() {
 					public int compare(ModeOfDeliveryFlavour mopf0, ModeOfDeliveryFlavour mopf1)
 					{
@@ -566,7 +569,7 @@ implements IDeliveryEntryPage
 						return name0.compareTo(name1);
 					}
 				});
-				
+
 				DeliveryEntryPageCfMod deliveryEntryPageCfMod = getDeliveryEntryPageCfMod();
 				final List<ModeOfDeliveryFlavour> selList = new ArrayList<ModeOfDeliveryFlavour>(1);
 				for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
@@ -575,19 +578,19 @@ implements IDeliveryEntryPage
 						break;
 					}
 				}
-				
+
 				tradePrintingCfMod = ConfigUtil.getWorkstationCfMod(TradePrintingConfigModule.class,
 						new String[] { FetchPlan.DEFAULT }, 1, new NullProgressMonitor());
-				
+
 				final Job thisJob = this;
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						if (loadModeOfDeliveriesJob != thisJob)
 							return;
-						
+
 						DeliveryEntryPage.this.modeOfDeliveryFlavours = modeOfDeliveryFlavours;
-						
+
 						setMessage(null);
 						if (modeOfDeliveryFlavourTable != null) {
 							modeOfDeliveryFlavourTable.setInput(modeOfDeliveryFlavours);
@@ -595,22 +598,22 @@ implements IDeliveryEntryPage
 							setMessage(null);
 							modeOfDeliveryFlavourGUIListSelectionChanged();
 						}
-						
+
 						if (automaticPrintingGroup != null) {
 							automaticPrintingGroup.setEnteredPrintCount(tradePrintingCfMod.getDeliveryNoteCopyCount());
 							automaticPrintingGroup.setDoPrint(tradePrintingCfMod.isPrintDeliveryNoteByDefault());
 						}
 					}
 				});
-				
+
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		loadModeOfDeliveriesJob = loadJob;
 		loadJob.schedule();
 	}
-	
+
 	public int getDeliveryNotesToPrintCount() {
 		return automaticPrintingGroup.getActualPrintCount();
 	}

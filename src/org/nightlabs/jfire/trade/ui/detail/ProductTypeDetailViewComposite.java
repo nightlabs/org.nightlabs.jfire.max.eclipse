@@ -16,10 +16,11 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
- *
+ * @author Marc Klinger - marc[at]nightlabs[dot]de
  */
 public class ProductTypeDetailViewComposite extends XComposite {
 
@@ -28,10 +29,6 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	private Map<Class<? extends ProductType>, IProductTypeDetailView> detailViews = new HashMap<Class<? extends ProductType>, IProductTypeDetailView>();
 	private Map<IProductTypeDetailView, Composite> detailComposites = new HashMap<IProductTypeDetailView, Composite>();
 
-	/**
-	 * @param parent
-	 * @param style
-	 */
 	public ProductTypeDetailViewComposite(Composite parent, int style) {
 		super(parent, style);
 
@@ -43,7 +40,7 @@ public class ProductTypeDetailViewComposite extends XComposite {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setLayout(new GridLayout(1, false));
 
-		Label label = toolkit.createLabel(composite, "Select a product type to see details");
+		Label label = toolkit.createLabel(composite, Messages.getString("org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewComposite.emptySelectionLabel")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.BEGINNING, false, false));
 
 		getStackLayout().topControl = composite;
@@ -92,5 +89,4 @@ public class ProductTypeDetailViewComposite extends XComposite {
 	public void init(IMemento memento) {
 		this.restoreMemento = memento;
 	}
-
 }
