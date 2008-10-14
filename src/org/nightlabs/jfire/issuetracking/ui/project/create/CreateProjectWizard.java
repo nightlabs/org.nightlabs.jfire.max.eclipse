@@ -15,7 +15,6 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
-import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorInput;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -27,16 +26,16 @@ extends DynamicPathWizard
 		FetchPlan.DEFAULT
 	};
 
-	private ProjectID parentProjectID;
+	private Project parentProject;
 	private CreateProjectWizardPage projectPage;
 
-	public CreateProjectWizard(ProjectID parentProjectID) {
-		this.parentProjectID = parentProjectID;
+	public CreateProjectWizard(Project parentProject) {
+		this.parentProject = parentProject;
 	}
 
 	@Override
 	public void addPages() {
-		projectPage = new CreateProjectWizardPage(parentProjectID);
+		projectPage = new CreateProjectWizardPage(parentProject);
 		addPage(projectPage);
 	}
 

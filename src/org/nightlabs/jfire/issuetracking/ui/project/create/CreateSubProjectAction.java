@@ -30,7 +30,7 @@ extends Action
 	public void run() {
 		TreeSelection selection = (TreeSelection)projectTreeViewer.getSelection();
 		Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
-		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateProjectWizard(projectToStore.getObjectId()));
+		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateProjectWizard(projectToStore));
 		dialog.open();
 		
 //		dialog = new InputDialog(RCPUtil.getActiveShell(), "Create Sub Project", "Enter project's name", "Name", null) {
