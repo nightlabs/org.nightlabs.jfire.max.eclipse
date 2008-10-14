@@ -12,18 +12,17 @@ import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorOSPrint;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractScriptDataProviderThread;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
+import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- *
  */
 public class ClientDeliveryProcessorOSPrint
-//extends AbstractClientDeliveryProcessorPrint
 extends AbstractClientDeliveryProcessorOSPrint
 {
 	private static final Logger logger = Logger.getLogger(ClientDeliveryProcessorOSPrint.class);
-	
+
 	@Override
 	protected AbstractScriptDataProviderThread createScriptDataProviderThread(
 			AbstractClientDeliveryProcessor clientDeliveryProcessor)
@@ -31,41 +30,44 @@ extends AbstractClientDeliveryProcessorOSPrint
 		return new VoucherDataProviderThread(clientDeliveryProcessor);
 	}
 
-	private String requirementCheckKey = null;
+	private RequirementCheckResult checkRequirementsResult = null;
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor#getRequirementCheckResult()
+	 */
 	@Override
-	public String getRequirementCheckKey()
+	public RequirementCheckResult getRequirementCheckResult()
 	{
-		return requirementCheckKey;
-	}
+		return checkRequirementsResult;
+	};
 
 	@Override
 	public void init()
 	{
-//		super.init();
-//
-//		requirementCheckKey = null;
-//
-//		// check, whether all Article's VoucherType s have a layout assigned
-//		try {
-//			VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-//			Map<ArticleID, PrintabilityStatus> m = vm.getArticleID2PrintabilityStatusMap(new HashSet<ArticleID>(getDelivery().getArticleIDs()));
-//			for (PrintabilityStatus s : m.values()) {
-//				if (PrintabilityStatus.MISSING_VOUCHER_LAYOUT == s) {
-//					requirementCheckKey = PrintabilityStatus.class.getName() + '.' + PrintabilityStatus.MISSING_VOUCHER_LAYOUT.toString();
-//					MessageDialog.openError(getDeliveryEntryPage().getShell(), "Missing Voucher Layout", "Cannot print, because at least one VoucherType has no VoucherLayout assigned!");
-//				}
-//				else if (PrintabilityStatus.OK != s)
-//					throw new IllegalStateException("Unexpected PrintabilityStatus: " + s);
-//
-//				if (PrintabilityStatus.OK != s) {
-//					// TODO deactivate the wizard's next button somehow!
-//					break;
-//				}
-//			}
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
+		//		super.init();
+		//
+		//		requirementCheckKey = null;
+		//
+		//		// check, whether all Article's VoucherType s have a layout assigned
+		//		try {
+		//			VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		//			Map<ArticleID, PrintabilityStatus> m = vm.getArticleID2PrintabilityStatusMap(new HashSet<ArticleID>(getDelivery().getArticleIDs()));
+		//			for (PrintabilityStatus s : m.values()) {
+		//				if (PrintabilityStatus.MISSING_VOUCHER_LAYOUT == s) {
+		//					requirementCheckKey = PrintabilityStatus.class.getName() + '.' + PrintabilityStatus.MISSING_VOUCHER_LAYOUT.toString();
+		//					MessageDialog.openError(getDeliveryEntryPage().getShell(), "Missing Voucher Layout", "Cannot print, because at least one VoucherType has no VoucherLayout assigned!");
+		//				}
+		//				else if (PrintabilityStatus.OK != s)
+		//					throw new IllegalStateException("Unexpected PrintabilityStatus: " + s);
+		//
+		//				if (PrintabilityStatus.OK != s) {
+		//					// TODO deactivate the wizard's next button somehow!
+		//					break;
+		//				}
+		//			}
+		//		} catch (Exception e) {
+		//			throw new RuntimeException(e);
+		//		}
 	}
 
 	@Override
@@ -76,23 +78,23 @@ extends AbstractClientDeliveryProcessorOSPrint
 			start = System.currentTimeMillis();
 			logger.debug("print "+tickets.size()+" in printJob");
 		}
-		
+
 		if (pageFormat != null)
 			printJob.setPrintable(getPrintable(tickets), pageFormat);
 		else
 			printJob.setPrintable(getPrintable(tickets));
-		
+
 		try {
 			printJob.print();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		if (logger.isDebugEnabled()) {
 			logger.debug("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!");
 		}
 	}
-	
+
 	public static final String PRINTER_USE_CASE_VOUCHER_PRINT = "PrinterUseCase-OSVoucherPrint";
 	@Override
 	protected String getPrinterUseCase() {
@@ -109,7 +111,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 			try {
 				VoucherXStreamFilter xStreamFilter = new VoucherXStreamFilter();
 				scriptRootDrawComponent = (ScriptRootDrawComponent) xStreamFilter
-						.read(in);
+				.read(in);
 				return scriptRootDrawComponent;
 			} finally {
 				in.close();
