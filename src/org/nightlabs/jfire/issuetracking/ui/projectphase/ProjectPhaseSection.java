@@ -23,8 +23,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
-import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 
 /**
@@ -103,7 +101,14 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 
 		@Override
 		public void run() {
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateProjectPhaseWizard(project.getObjectId()));
+			CreateProjectPhaseWizard projectPhaseWizard = new CreateProjectPhaseWizard(project) {
+				@Override
+				public boolean performFinish() {
+					markDirty();
+					return super.performFinish();
+				}
+			};
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(projectPhaseWizard);
 			dialog.open();
 		}		
 	}

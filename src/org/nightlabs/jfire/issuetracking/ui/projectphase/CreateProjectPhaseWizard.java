@@ -8,7 +8,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.issue.project.Project;
+import org.nightlabs.jfire.issue.project.ProjectPhase;
 
 public class CreateProjectPhaseWizard
 extends DynamicPathWizard
@@ -17,17 +19,21 @@ extends DynamicPathWizard
 		FetchPlan.DEFAULT
 	};
 
-	private ProjectID projectID;
-	private CreateProjectPhaseWizardPage page;
+	private Project project;
+	private CreateProjectPhaseWizardPage projectPhasePage;
+	
+	private ProjectPhase newProjectPhase;
 
-	public CreateProjectPhaseWizard(ProjectID projectID) {
-		this.projectID = projectID;
+	public CreateProjectPhaseWizard(Project project) {
+		this.project = project;
+		
+		newProjectPhase = new ProjectPhase(IDGenerator.getOrganisationID(), Long.toString(IDGenerator.nextID(ProjectPhase.class)));
 	}
 
 	@Override
 	public void addPages() {
-		page = new CreateProjectPhaseWizardPage(projectID);
-		addPage(page);
+		projectPhasePage = new CreateProjectPhaseWizardPage(project, newProjectPhase);
+		addPage(projectPhasePage);
 	}
 
 	@Override
@@ -40,7 +46,7 @@ extends DynamicPathWizard
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{
-
+				project.addProjectPhase(newProjectPhase);
 //				Display.getDefault().asyncExec(new Runnable() {
 //					public void run()
 //					{

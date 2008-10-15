@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -17,6 +19,8 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
+import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
+import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedListener;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
@@ -94,6 +98,27 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK, true);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
+		
+		checkboxTreeViewer.addTreeListener(new ITreeViewerListener() {
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				final ProjectTreeNode node = (ProjectTreeNode)event.getElement();
+				final boolean isChecked = checkboxTreeViewer.getChecked(node);
+				
+				node.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener() {
+					@Override
+					public void onJDOObjectsChanged(
+							JDOTreeNodesChangedEvent changedEvent) {
+						for (Object o : changedEvent.getLoadedTreeNodes())
+							checkboxTreeViewer.setChecked(o, isChecked);
+					}
+				});
+			}
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+				
+			}
+		});
 		
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
