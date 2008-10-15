@@ -6,6 +6,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireHTMLProp"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
 	<classpathentry kind="var" path="JDO2"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsHTMLContent"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
