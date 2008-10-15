@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.project.create;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -93,7 +94,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 					for (ProjectTreeNode node : loadedNodes) {
 						if (node.getJdoObject().equals(parentProject)) { 
 //							projectTree.setSelection(node.getJdoObject()); Doesn't work!!!!!!!!!!!!!
-							projectTree.setSelection(new StructuredSelection(node));
+							projectTree.getTreeViewer().setSelection(new StructuredSelection(node), true);
 						}
 					}
 					
