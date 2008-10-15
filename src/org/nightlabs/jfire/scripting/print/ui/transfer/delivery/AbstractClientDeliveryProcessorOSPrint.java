@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.DrawComponent;
 import org.nightlabs.editor2d.print.DrawComponentPrintable;
@@ -33,7 +32,7 @@ extends AbstractClientDeliveryProcessorPrint
 	private long printStart;
 	@Override
 	protected DeliveryResult printBegin()
-			throws DeliveryException
+	throws DeliveryException
 	{
 		printStart = System.currentTimeMillis();
 		return null;
@@ -41,7 +40,7 @@ extends AbstractClientDeliveryProcessorPrint
 
 	@Override
 	protected DeliveryResult printEnd()
-			throws DeliveryException
+	throws DeliveryException
 	{
 		if (logger.isDebugEnabled()) {
 			long printDuration = System.currentTimeMillis() - printStart;
@@ -95,7 +94,7 @@ extends AbstractClientDeliveryProcessorPrint
 			printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
 					org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
 					getPrinterUseCase()
-				);
+			);
 		} catch (PrinterException e) {
 			throw new RuntimeException(e);
 		}
@@ -123,9 +122,8 @@ extends AbstractClientDeliveryProcessorPrint
 	}
 
 	@Override
-	@Implement
 	protected void printDocuments(List<ScriptRootDrawComponent> scriptRootDrawComponents, boolean lastEntry)
-			throws DeliveryException
+	throws DeliveryException
 	{
 		long start = 0;
 		if (logger.isDebugEnabled())  {
