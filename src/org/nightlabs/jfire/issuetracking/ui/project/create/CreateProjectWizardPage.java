@@ -51,6 +51,9 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 	private Project parentProject;
 	private Project newProject;
 
+	//For Tree
+	private ProjectTreeNode selectedNode;
+	
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite page = new XComposite(parent, SWT.NONE,
@@ -91,14 +94,16 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 				public void onJDOObjectsChanged(
 						JDOTreeNodesChangedEvent<ProjectID, ProjectTreeNode> changedEvent) {
 					List<ProjectTreeNode> loadedNodes = changedEvent.getLoadedTreeNodes();
+					projectTree.getTreeViewer().expandAll();
+				
 					for (ProjectTreeNode node : loadedNodes) {
-						if (node.getJdoObject().equals(parentProject)) { 
+						if (node.getJdoObject().equals(parentProject)) {
+							selectedNode = node;
 //							projectTree.setSelection(node.getJdoObject()); Doesn't work!!!!!!!!!!!!!
-							projectTree.getTreeViewer().setSelection(new StructuredSelection(node), true);
+//							projectTree.getTreeViewer().setSelection(new StructuredSelection(node), true);
 						}
 					}
-					
-					projectTree.getTreeViewer().expandAll();
+					projectTree.getTreeViewer().setSelection(new StructuredSelection(selectedNode), true);
 				}
 			});
 
