@@ -45,6 +45,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
@@ -171,19 +172,24 @@ extends AbstractTableComposite<Article>
 
 			DynamicProduct dynamicProduct = (DynamicProduct) article.getProduct();
 			DynamicProductType dynamicProductType = (DynamicProductType) article.getProductType();
+			DynamicProductInfo dynamicProductInfo; 
+			if (dynamicProduct != null)
+				dynamicProductInfo = dynamicProduct;
+			else
+				dynamicProductInfo = (DynamicProductInfo) article;
 
 			int ci = 0;
 			if (ci == columnIndex)
 				return dynamicProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return dynamicProduct.getName().getText(NLLocale.getDefault().getLanguage());
+				return dynamicProductInfo.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return NumberFormatter.formatFloat(dynamicProduct.getQuantityAsDouble(), dynamicProduct.getUnit().getDecimalDigitCount());
+				return NumberFormatter.formatFloat(dynamicProductInfo.getQuantityAsDouble(), dynamicProductInfo.getUnit().getDecimalDigitCount());
 
 			if (++ci == columnIndex)
-				return dynamicProduct.getUnit().getSymbol().getText();
+				return dynamicProductInfo.getUnit().getSymbol().getText();
 
 			if (++ci == columnIndex) {
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
