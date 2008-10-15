@@ -3,7 +3,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
@@ -16,12 +15,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
@@ -29,9 +24,7 @@ import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.Segment;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
@@ -83,7 +76,7 @@ extends ArticleBaseComposite
 	{
 		try {
 			final double qty = NumberFormatter.parseFloat(quantity.getText());
-			
+
 			final TariffID tariffID = (TariffID) JDOHelper.getObjectId(tariffCombo.getSelectedElement());
 			if (tariffID == null)
 				throw new IllegalStateException("No tariff selected (tariffID is null)!"); //$NON-NLS-1$
@@ -99,8 +92,8 @@ extends ArticleBaseComposite
 			// we must create a new instance (with a new ID), because it would otherwise cause duplicate-key-exceptions when adding multiple articles
 			final Price singlePrice = new Price(resultPriceConfig.getOrganisationID(), resultPriceConfig.getPriceConfigID(), resultPriceConfig.createPriceID(), singlePriceOrig.getCurrency());
 			singlePrice.sumPrice(singlePriceOrig);
-			
-			
+
+
 			FadeableCompositeJob addJob = new FadeableCompositeJob(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleAdderComposite.addArticleJob.text"), this, this) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor, Object source) throws Exception {
@@ -114,25 +107,8 @@ extends ArticleBaseComposite
 					SegmentID segmentID = (SegmentID) JDOHelper.getObjectId(segment);
 					ProductType productType = articleAdder.getProductType();
 					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
-
-					Class<?> articleContainerClass = articleAdder.getSegmentEdit().getArticleContainerClass();
-					String fetchGroupTrade_article;
-					if (Order.class.isAssignableFrom(articleContainerClass)) {
-						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR;
-					}
-					else if (Offer.class.isAssignableFrom(articleContainerClass)) {
-						fetchGroupTrade_article = FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR;
-					}
-					else
-						throw new IllegalStateException("Why is this ArticleAdder used with an unknown ArticleContainer? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
-
-					DynamicTradeManager dm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Article article = dm.createArticle(
-							segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false,
-							new String[] {
-									fetchGroupTrade_article,
-									FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
+					
+					Article article = articleAdder.createArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false);
 					List<Article> articles = new ArrayList<Article>(1); articles.add(article);
 					segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 					return Status.OK_STATUS;
