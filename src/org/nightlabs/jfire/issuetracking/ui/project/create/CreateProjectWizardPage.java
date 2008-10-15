@@ -103,7 +103,9 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 //							projectTree.getTreeViewer().setSelection(new StructuredSelection(node), true);
 						}
 					}
-					projectTree.getTreeViewer().setSelection(new StructuredSelection(selectedNode), true);
+					
+					if (selectedNode != null)
+						projectTree.getTreeViewer().setSelection(new StructuredSelection(selectedNode), true);
 				}
 			});
 
