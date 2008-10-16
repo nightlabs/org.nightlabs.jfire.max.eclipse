@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.issuetracking.ui.projectphase;
 
-import javax.jdo.FetchPlan;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -15,10 +13,6 @@ import org.nightlabs.jfire.issue.project.ProjectPhase;
 public class CreateProjectPhaseWizard
 extends DynamicPathWizard
 {
-	private static String[] FETCH_GROUPS_PROJECT = {
-		FetchPlan.DEFAULT
-	};
-
 	private Project project;
 	private CreateProjectPhaseWizardPage projectPhasePage;
 	
@@ -66,5 +60,9 @@ extends DynamicPathWizard
 		job.setPriority(Job.SHORT);
 		job.schedule();
 		return true;
+	}
+	
+	public ProjectPhase getNewProjectPhase() {
+		return newProjectPhase;
 	}
 }

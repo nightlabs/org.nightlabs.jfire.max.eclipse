@@ -72,7 +72,7 @@ extends AbstractTableComposite<ProjectPhase>
 				case(2):
 					return projectPhase.getDescription().getText();
 				case(3):
-					return projectPhase.getDescription().getText();
+					return projectPhase.isActive() ? "Active" : "Inactive";
 				default:
 					return ""; //$NON-NLS-1$
 				}

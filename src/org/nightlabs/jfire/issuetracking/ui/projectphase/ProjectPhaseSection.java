@@ -104,6 +104,7 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 			CreateProjectPhaseWizard projectPhaseWizard = new CreateProjectPhaseWizard(project) {
 				@Override
 				public boolean performFinish() {
+					projectPhaseTable.addElement(getNewProjectPhase());
 					markDirty();
 					return super.performFinish();
 				}
