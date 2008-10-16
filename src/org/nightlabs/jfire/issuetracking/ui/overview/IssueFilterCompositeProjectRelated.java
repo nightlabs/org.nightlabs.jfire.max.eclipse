@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -22,6 +23,7 @@ import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedListener;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
+import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
@@ -98,36 +100,17 @@ extends AbstractQueryFilterComposite<IssueQuery>
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK, true);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
-		
-		checkboxTreeViewer.addTreeListener(new ITreeViewerListener() {
-			@Override
-			public void treeExpanded(TreeExpansionEvent event) {
-				final ProjectTreeNode node = (ProjectTreeNode)event.getElement();
-				final boolean isChecked = checkboxTreeViewer.getChecked(node);
-				
-				node.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener() {
-					@Override
-					public void onJDOObjectsChanged(
-							JDOTreeNodesChangedEvent changedEvent) {
-						for (Object o : changedEvent.getLoadedTreeNodes())
-							checkboxTreeViewer.setChecked(o, isChecked);
-					}
-				});
-			}
-			@Override
-			public void treeCollapsed(TreeExpansionEvent event) {
-				
-			}
-		});
+		checkboxTreeViewer.setInput(projectTreeComposite.getTreeViewer().getInput());
 		
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				selectedProjectIDs.clear();
 				
+				//Child Checking
 				final boolean isChecked = event.getChecked();
-				final ProjectTreeNode node = (ProjectTreeNode)event.getElement();
+				ProjectTreeNode node = (ProjectTreeNode)event.getElement();
 				
-//				projectTreeComposite.getTreeViewer().expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
+				projectTreeComposite.getTreeViewer().expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
 //				checkboxTreeViewer.addTreeListener(new ITreeViewerListener() {
 //					@Override
 //					public void treeCollapsed(TreeExpansionEvent event) {
@@ -138,16 +121,20 @@ extends AbstractQueryFilterComposite<IssueQuery>
 //						checkboxTreeViewer.setAllChecked(isChecked);
 //					}
 //				});
-//				node.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener() {
-//					@Override
-//					public void onJDOObjectsChanged(
-//							JDOTreeNodesChangedEvent changedEvent) {
-//						checkboxTreeViewer.setAllChecked(isChecked);
-//						for (Object o : changedEvent.getLoadedTreeNodes())
-//							checkboxTreeViewer.setChecked(o, isChecked);
-//					}
-//				});
 				
+				node.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener<ProjectID, Project, ProjectTreeNode>() {
+					@Override
+					public void onJDOObjectsChanged(
+							JDOTreeNodesChangedEvent<ProjectID, ProjectTreeNode> changedEvent) {
+						for (ProjectTreeNode o : changedEvent.getLoadedTreeNodes()) {
+							projectTreeComposite.getTreeViewer().expandToLevel(o, AbstractTreeViewer.ALL_LEVELS);
+							checkboxTreeViewer.setChecked(o, isChecked);
+						}
+					}
+				});
+				
+				checkboxTreeViewer.setSubtreeChecked(node,	isChecked);
+				//End Child Checking
 				
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
 					if (object instanceof ProjectTreeNode) {
