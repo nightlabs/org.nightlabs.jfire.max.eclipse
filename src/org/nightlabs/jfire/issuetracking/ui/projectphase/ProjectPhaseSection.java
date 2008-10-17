@@ -6,6 +6,9 @@ package org.nightlabs.jfire.issuetracking.ui.projectphase;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -13,15 +16,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
+import org.nightlabs.jfire.issue.project.id.ProjectPhaseID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 
@@ -45,6 +51,24 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 200;
 		projectPhaseTable.setLayoutData(gd);
+		
+		projectPhaseTable.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
+
+				ProjectPhase projectPhase = (ProjectPhase)s.getFirstElement();
+
+				ProjectPhaseEditorInput projectPhaseEditorInput = 
+					new ProjectPhaseEditorInput(ProjectPhaseID.create(projectPhase.getOrganisationID(), projectPhase.getProjectPhaseID()));
+				try {
+					RCPUtil.openEditor(projectPhaseEditorInput, ProjectPhaseEditor.EDITOR_ID);
+				} catch (PartInitException e1) {
+					throw new RuntimeException(e1);
+				}
+			}
+		});
 		
 		getSection().setClient(client);
 		
