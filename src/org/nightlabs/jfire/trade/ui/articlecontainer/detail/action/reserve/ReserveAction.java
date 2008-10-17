@@ -3,11 +3,11 @@
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve;
 
-import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.nightlabs.jdo.NLJDOHelper;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -16,6 +16,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -64,16 +65,21 @@ public class ReserveAction extends ArticleContainerAction {
 		if (legalEntity != null) {
 			Order order = (Order) getArticleContainer();
 			try {
-				for (Offer offer : order.getOffers())
-				{
-					if (!offer.isFinalized()) {
-						offer.setFinalized(Login.getLogin().getUser(new String[]{FetchPlan.DEFAULT},
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()));
-					}
-				}
 				TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 				AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
-				tm.assignCustomer((OrderID) JDOHelper.getObjectId(order), customerID, true, null, 1);
+				tm.createReservation((OrderID) JDOHelper.getObjectId(order), customerID);
+
+				// close editor for the reservation
+				IEditorReference[] editorReferences = RCPUtil.getActiveWorkbenchPage().getEditorReferences();
+				for (IEditorReference editorReference : editorReferences) {
+					IEditorInput input = editorReference.getEditorInput();
+					if (input instanceof ArticleContainerEditorInput) {
+						ArticleContainerEditorInput editorInput = (ArticleContainerEditorInput) input;
+						if (editorInput.getArticleContainerID().equals(getArticleContainerID())) {
+							RCPUtil.closeEditor(input, false);
+						}
+					}
+				}
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

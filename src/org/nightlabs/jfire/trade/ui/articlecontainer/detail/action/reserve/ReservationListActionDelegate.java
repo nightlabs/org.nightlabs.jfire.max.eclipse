@@ -11,24 +11,18 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
-import org.nightlabs.jdo.query.AbstractSearchQuery;
-import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
 import org.nightlabs.jfire.base.ui.login.action.LSDWorkbenchWindowActionDelegate;
-import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
-import org.nightlabs.jfire.jbpm.query.StatableQuery;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
-import org.nightlabs.jfire.trade.TradeSide;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.reserve.ReservationEditor;
+import org.nightlabs.jfire.trade.ui.reserve.ReservationEditorInput;
 import org.nightlabs.notification.NotificationAdapterCallerThread;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -51,24 +45,19 @@ public class ReservationListActionDelegate extends LSDWorkbenchWindowActionDeleg
 		private ProductTypeID productTypeID = null;
 		private IAction action = null;
 
-		public void run(IAction action) {
+		public void run(IAction action)
+		{
 			if (productTypeID != null)
 			{
-				QueryCollection<AbstractSearchQuery> queryCollection = new QueryCollection<AbstractSearchQuery>(ArticleContainer.class);
-				StatableQuery query = new StatableQuery(Offer.class);
-				query.setNotInSelectedState(true);
 				try {
-					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-					Collection<ProcessDefinitionID> processDefinitionIDs = tm.getProcessDefinitionIDs(Offer.class.getName(), TradeSide.vendor);
-
+					Editor2PerspectiveRegistry.sharedInstance().openEditor(
+							new ReservationEditorInput(productTypeID),
+							ReservationEditor.EDITOR_ID);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
-
-//				query.setStateDefinitionID();
 			}
 		}
-
 		private final NotificationListener selectionListener = new NotificationAdapterCallerThread(){
 			@SuppressWarnings("unchecked") //$NON-NLS-1$
 			public void notify(NotificationEvent notificationEvent) {
@@ -100,7 +89,7 @@ public class ReservationListActionDelegate extends LSDWorkbenchWindowActionDeleg
 			if (action != null) {
 				if (productTypeID != null) {
 					Class<?> clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
-					if (clazz.equals(ProductType.class)) {
+					if (ProductType.class.isAssignableFrom(clazz)) {
 						action.setEnabled(true);
 						return;
 					}

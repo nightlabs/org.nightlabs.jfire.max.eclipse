@@ -27,7 +27,7 @@ extends AbstractArticleContainerAction
 		super();
 		init();
 	}
-		
+
 	protected void init() {
 		setId(ID);
 		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractShowArticleContainerAction.text")); //$NON-NLS-1$
@@ -35,7 +35,7 @@ extends AbstractArticleContainerAction
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(),
 				AbstractShowArticleContainerAction.class));
 	}
-	
+
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
 		@Override
 		protected String getReportUseCaseID() {
@@ -43,7 +43,7 @@ extends AbstractArticleContainerAction
 			return null;
 		}
 	};
-	
+
 	@Override
 	public void run()
 	{
@@ -59,24 +59,24 @@ extends AbstractArticleContainerAction
 		showReportAction.setNextRunParams(params);
 		showReportAction.runWithRegistryItemIDs(itemIDs);
 	}
-	
+
 	/**
 	 * Prepare the parameter for the ReportLayout in order to view
 	 * the selected {@link ArticleContainer}.
 	 * The default implementation puts {@link #getArticleContainerID()}
 	 * with the key "articleContainerID" into the map.
 	 * Override to customize this behaviour;
-	 * 
+	 *
 	 * @param params The params that will be passed to the {@link AbstractViewReportLayoutAction}
 	 */
 	protected void prepareParams(Map<String, Object> params) {
 		params.put("articleContainerID", getArticleContainerID()); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Returns the report registry type that should be used to
 	 * show the selected {@link ArticleContainer}.
-	 * 
+	 *
 	 * @return The report registry type that should be used to
 	 * show the selected {@link ArticleContainer}.
 	 */

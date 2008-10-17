@@ -187,6 +187,12 @@
             default="true"
             icon="icons/repository/editor/RepositoryEditor.16x16.png"
             id="org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor" name="%org.nightlabs.jfire.trade.ui.repository.editor.RepositoryEditor.name"/>
+        <editor
+              class="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
+              icon="icons/reserve/ReservationEditor.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
+              name="Reservations">
+        </editor>
     </extension>
     <extension point="org.nightlabs.base.ui.entityEditor">
         <pageFactory
@@ -947,6 +953,10 @@
             editorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor" perspectiveID="org.nightlabs.jfire.base.ui.overview.OverviewPerspective"/>
         <registry
             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerQuickSaleEditor" perspectiveID="org.nightlabs.jfire.trade.ui.QuickSalePerspective"/>
+        <registry
+              editorID="org.nightlabs.jfire.trade.ui.reserve.ReservationEditor"
+              perspectiveID="org.nightlabs.jfire.trade.ui.overview.TradeOverviewPerspective">
+        </registry>
     </extension>
     <extension point="org.nightlabs.base.ui.workbenchListener">
         <workbenchListener class="org.nightlabs.jfire.trade.ui.QuickSaleWorkbenchListener"/>
@@ -1191,6 +1201,21 @@
                 label="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductActionDelegate#toolbar.label"
                 toolbarPath="ReverseProduct/reverseGroup" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductActionDelegate#toolbar.tooltip"/>
         </actionSet>
+        <actionSet
+              description="Shows the reservations for the selected product type"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate"
+              label="Reservation List"
+              visible="false">
+           <action
+                 class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate"
+                 icon="icons/articlecontainer/detail/action/reserve/ReservationListActionDelegate.24x24.png"
+                 id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate"
+                 label="Reservation List ..."
+                 style="push"
+                 toolbarPath="additions"
+                 tooltip="Shows the reservations for the selected product type">
+           </action>
+        </actionSet>
     </extension>
     <extension point="org.eclipse.ui.perspectiveExtensions">
         <!--
@@ -1200,6 +1225,9 @@
 -->
         <perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.QuickSalePerspective">
             <actionSet id="org.nightlabs.jfire.trade.ui.action.reverseProduct"/>
+            <actionSet
+                  id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate">
+            </actionSet>
         </perspectiveExtension>
     </extension>
     <extension

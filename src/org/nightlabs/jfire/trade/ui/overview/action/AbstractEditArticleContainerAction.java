@@ -5,6 +5,7 @@ import javax.jdo.FetchPlan;
 import org.eclipse.ui.IEditorInput;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.base.ui.overview.action.IOverviewEditAction;
@@ -28,8 +29,18 @@ public abstract class AbstractEditArticleContainerAction
 extends AbstractArticleContainerAction
 implements IOverviewEditAction
 {
+	public static final String ID = AbstractEditArticleContainerAction.class.getName();
+
 	public AbstractEditArticleContainerAction() {
 		super();
+		init();
+	}
+
+	protected void init() {
+		setId(ID);
+		setText("Edit");
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(
+				TradePlugin.getDefault(), AbstractEditArticleContainerAction.class));
 	}
 
 	public static String[] FETCH_GROUPS  = new String[] {
@@ -40,7 +51,7 @@ implements IOverviewEditAction
 		Invoice.FETCH_GROUP_CUSTOMER_ID,
 		ReceptionNote.FETCH_GROUP_CUSTOMER_ID
 	};
-	
+
 	@Override
 	public void run()
 	{
@@ -50,20 +61,20 @@ implements IOverviewEditAction
 				throw new IllegalArgumentException("This subclass: "+this+" does not return an input type, which is not a subclass of ArticleContainerEditorInput. This must not be allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			Editor2PerspectiveRegistry.sharedInstance().openEditor(getEditorInput(), getEditorID());
-			
+
 			ArticleContainerEditorInput articleContainerEditorInput = (ArticleContainerEditorInput) input;
-			
+
 			ArticleContainer articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
 					articleContainerEditorInput.getArticleContainerID(), FETCH_GROUPS,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			
+
 			// TODO: Which object should be set as source?
 			// TODO: maybe rewrite Editor2PerspectiveRegistry to automatically send an event to the perspective
 			// 		with the new input so that all elements that need to be updated if an editor is updated can
 			// 		listen for that event. => This would unify the handling of new editors in a perspective.
 			NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, articleContainer.getCustomerID(), LegalEntity.class);
 			SelectionManager.sharedInstance().notify(event);
-			
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
