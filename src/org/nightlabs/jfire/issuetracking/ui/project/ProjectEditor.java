@@ -42,7 +42,7 @@ implements ICloseOnLogoutEditorPart
 				{
 					public void run()
 					{
-						setPartName(project.getName().getText());
+						setPartName("Project: " + project.getName().getText());
 						setTitleToolTip(project.getDescription().getText());
 					}
 				});
