@@ -84,7 +84,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
 
-		composite = createRequirementsNotFulfilledComposite(parent);		
+		composite = createRequirementsNotFulfilledComposite(parent);
 		if (composite == null) {
 			composite = _createComposite(parent);
 		}
@@ -114,8 +114,8 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	 */
 	protected abstract Composite _createComposite(Composite parent);
 
-	
-	
+
+
 	public void onDispose()
 	{
 		composite = null;
@@ -128,7 +128,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	}
 
 	/**
-	 * This method is invoked to check if the requirements 
+	 * This method is invoked to check if the requirements
 	 * (concerning the current {@link ProductType} or the current {@link ArticleContainer})
 	 * are all fulfilled in order to show this {@link ArticleAdder}s Composite.
 	 * <p>
@@ -142,12 +142,22 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	 * </p>
 	 * @return <code>null</code> if all requirements are fulfilled, a Composite which shows a appropriate message which requirements are not fulfilled otherwise.
 	 */
-	protected Composite createRequirementsNotFulfilledComposite(Composite parent) 
+	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 	{
-		if (!getProductType().isSaleable()) {
-			String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.notSaleable"), getProductType().getName().getText(NLLocale.getDefault()));  //$NON-NLS-1$
+		if (!getSegmentEdit().getArticleContainer().getVendor().equals(getProductType().getVendor())) {
+			String message = String.format("The product type %s has a different vendor than the current article container!",
+					getProductType().getName().getText(NLLocale.getDefault())
+			);
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
+
+		if (!getProductType().isSaleable()) {
+			String message = String.format(
+					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.notSaleable"), //$NON-NLS-1$
+					getProductType().getName().getText(NLLocale.getDefault()));
+			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
+		}
+
 		if (isNonOrderArticleContainerFinilized()) {
 			ArticleContainer ac = getSegmentEdit().getArticleContainer();
 			String message = String.format(
@@ -176,5 +186,5 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 		} // TODO: Handle ReceptionNotes
 		return false;
 	}
-	
+
 }
