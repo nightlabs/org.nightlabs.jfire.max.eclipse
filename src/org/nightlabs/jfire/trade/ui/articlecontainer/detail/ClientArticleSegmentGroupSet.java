@@ -122,7 +122,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 		else if (articleContainer instanceof DeliveryNote)
 			fetchGroupsArticle = FETCH_GROUPS_ARTICLE_IN_DELIVERY_NOTE_EDITOR;
 		else
-			throw new IllegalStateException("Unknown ArticleContainer implementation: " + articleContainer);
+			throw new IllegalStateException("Unknown ArticleContainer implementation: " + articleContainer); //$NON-NLS-1$
 
 		if (articleCreateListeners != null) {
 			for (ArticleCreateListener listener : articleCreateListeners)
@@ -331,7 +331,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 					ArticleID articleID = (ArticleID) dirtyObjectID.getObjectID();
 					if (containsArticle(articleID)) {
 						if (logger.isTraceEnabled()) {
-							logger.trace("notificationListenerArticlesChanged.notify: is contained: " + dirtyObjectID);
+							logger.trace("notificationListenerArticlesChanged.notify: is contained: " + dirtyObjectID); //$NON-NLS-1$
 						}
 
 						if (JDOLifecycleState.DIRTY.equals(dirtyObjectID.getLifecycleState()))
@@ -382,22 +382,22 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 	public synchronized void updateArticles(final Collection<ArticleID> deletedArticleIDs, final Collection<Article> dirtyArticles)
 	{
 		if (logger.isTraceEnabled()) {
-			logger.trace("updateArticles: Got " + dirtyArticles.size() + " articles from ArticleDAO.");
+			logger.trace("updateArticles: Got " + dirtyArticles.size() + " articles from ArticleDAO."); //$NON-NLS-1$ //$NON-NLS-2$
 			for (Article article : dirtyArticles) {
-				logger.trace("updateArticles: * " + article);
+				logger.trace("updateArticles: * " + article); //$NON-NLS-1$
 				StringBuilder sb = new StringBuilder();
 				if (article.isAllocated())
-					sb.append("allocated ");
+					sb.append("allocated "); //$NON-NLS-1$
 				else
-					sb.append("not-allocated ");
+					sb.append("not-allocated "); //$NON-NLS-1$
 
 				if (article.isAllocationPending())
-					sb.append("allocationPending ");
+					sb.append("allocationPending "); //$NON-NLS-1$
 
 				if (article.isReleasePending())
-					sb.append("releasePending ");
+					sb.append("releasePending "); //$NON-NLS-1$
 
-				logger.trace("updateArticles: articleStatus: " + sb.toString());
+				logger.trace("updateArticles: articleStatus: " + sb.toString()); //$NON-NLS-1$
 			}
 		}
 
@@ -422,7 +422,7 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 			Long oldVersion = (Long) JDOHelper.getVersion(oldArticle);
 			Long newVersion = (Long) JDOHelper.getVersion(newArticle);
 			if (newVersion.longValue() < oldVersion.longValue()) {
-				logger.info("updateArticles: Article is older (version " + newVersion + ") than the one we already have (version "+ oldVersion +")! Ignoring it: " + newArticle);
+				logger.info("updateArticles: Article is older (version " + newVersion + ") than the one we already have (version "+ oldVersion +")! Ignoring it: " + newArticle); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				continue;
 			}
 			articleCarrier.setArticle(newArticle);

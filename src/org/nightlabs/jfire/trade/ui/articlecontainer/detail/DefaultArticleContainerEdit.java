@@ -10,6 +10,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerEditActionContributor;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This is the default implementation of {@link ArticleContainerEdit}.
@@ -59,7 +60,7 @@ public class DefaultArticleContainerEdit implements ArticleContainerEdit {
 	@Override
 	public Composite createComposite(Composite parent) {
 		if (articleContainerID == null)
-			throw new IllegalStateException("createComposite() called before init(). Call init() first to set the articleContainerID.");
+			throw new IllegalStateException("createComposite() called before init(). Call init() first to set the articleContainerID."); //$NON-NLS-1$
 		articleContainerEditComposite = createArticleContainerEditComposite(parent, articleContainerID);
 		return articleContainerEditComposite;
 	}
@@ -80,7 +81,7 @@ public class DefaultArticleContainerEdit implements ArticleContainerEdit {
 	@Override
 	public ArticleContainerEditComposite getComposite() {
 		if (articleContainerEditComposite == null)
-			throw new IllegalStateException("getComposite() called before createComposite(). Note that the methods of " + this.getClass().getSimpleName() + " only will work if its composite was created.");
+			throw new IllegalStateException("getComposite() called before createComposite(). Note that the methods of " + this.getClass().getSimpleName() + " only will work if its composite was created."); //$NON-NLS-1$ //$NON-NLS-2$
 		return articleContainerEditComposite;
 	}
 	

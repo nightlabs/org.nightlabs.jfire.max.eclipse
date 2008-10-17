@@ -24,6 +24,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 
 /**
@@ -64,7 +65,7 @@ implements IArticleContainerEditor
 			public void controllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						setPartName("Lala");
+						setPartName("Lala"); //$NON-NLS-1$
 						setTitleImage(null);
 //						controller.removeModifyListener(listener);
 					}
@@ -93,10 +94,10 @@ implements IArticleContainerEditor
 	protected List<EntityEditorPageSettings> getPageSettingsOrdered() {
 		ArticleContainerID articleContainerID = getArticleContainerEditorInput().getArticleContainerID();
 		if (articleContainerID == null)
-			throw new IllegalStateException("No articleContainerID was set");
+			throw new IllegalStateException("No articleContainerID was set"); //$NON-NLS-1$
 		Class<?> articleContainerEditorClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(articleContainerID);
 		if (articleContainerEditorClass == null)
-			throw new IllegalStateException("The class of the ArticleContainer with id " + articleContainerID + " could not be determined");
+			throw new IllegalStateException("The class of the ArticleContainer with id " + articleContainerID + " could not be determined"); //$NON-NLS-1$ //$NON-NLS-2$
 		return ArticleContainerEditorPageFactoryRegistry.sharedInstance().getPagesSettingsOrdered(
 				getEditorID(), articleContainerEditorClass);
 	}

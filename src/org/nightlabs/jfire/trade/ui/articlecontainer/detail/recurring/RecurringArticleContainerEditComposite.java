@@ -23,6 +23,7 @@ import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOrderDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class RecurringArticleContainerEditComposite extends ArticleContainerEditComposite {
@@ -98,7 +99,7 @@ public class RecurringArticleContainerEditComposite extends ArticleContainerEdit
 			return new RecurringOfferHeaderComposite(this, (RecurringOffer) getArticleContainer());
 
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
-				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 

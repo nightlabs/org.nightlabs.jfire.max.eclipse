@@ -99,9 +99,9 @@ extends HeaderComposite{
 		XComposite ordinaryWrapper = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER);
 
 		recurredOfferCount = new Label(ordinaryWrapper, SWT.WRAP |SWT.NONE);
-		recurredOfferCount.setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
+		recurredOfferCount.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.recurredOffers") + String.valueOf(recurringOffer.getRecurredOfferCount())); //$NON-NLS-1$
 
-		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING);
+		statusMsg = new MessageComposite(this, SWT.NONE, "", MessageType.WARNING); //$NON-NLS-1$
 		statusMsg.setLayoutData(new GridData());
 
 		XComposite infodateContainerComp = new XComposite(ordinaryWrapper, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
@@ -156,19 +156,19 @@ extends HeaderComposite{
 		{
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),false);
 
-			String typeKey = RecurringOfferHeaderComposite.class.getName() + ".status.type." + recurringOffer.getStatusKey();
+			String typeKey = RecurringOfferHeaderComposite.class.getName() + ".status.type." + recurringOffer.getStatusKey(); //$NON-NLS-1$
 			if (Messages.RESOURCE_BUNDLE.containsKey(typeKey)) {
 				String msgtype = Messages.getString(typeKey);
-				if (msgtype != null && !"".equals(msgtype))
+				if (msgtype != null && !"".equals(msgtype)) //$NON-NLS-1$
 					iconType = MessageComposite.MessageType.valueOf(msgtype.toUpperCase());
 			}
-			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message." + recurringOffer.getStatusKey()), iconType);
+			statusMsg.setMessage(Messages.getString(RecurringOfferHeaderComposite.class.getName() + ".status.message." + recurringOffer.getStatusKey()), iconType); //$NON-NLS-1$
 		}
 
 		Date date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getLastExecDT();
 		if(date != null)
 		{
-			lastTaskDateLabel.setText("Last Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			lastTaskDateLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.lastTask") + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM)); //$NON-NLS-1$
 			setWidgetExcluded((RowData) lastTaskDateLabel.getLayoutData(),false);
 
 		}
@@ -178,7 +178,7 @@ extends HeaderComposite{
 		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
 		if(date != null)
 		{	
-			nextTaskDateLabel.setText("Next Task:" + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM));
+			nextTaskDateLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.nextTask") + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM)); //$NON-NLS-1$
 			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),false);
 
 		}
@@ -188,7 +188,7 @@ extends HeaderComposite{
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED))
 		setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);	
 				
-		recurredOfferCount.setText("Recurred Offers:" + String.valueOf(recurringOffer.getRecurredOfferCount()));
+		recurredOfferCount.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.recurredOffers") + String.valueOf(recurringOffer.getRecurredOfferCount())); //$NON-NLS-1$
 
 	}
 
@@ -204,7 +204,7 @@ extends HeaderComposite{
 
 	private void onOfferModified(final RecurringOffer recurringOffer, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Updating UI for recurring offer", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.job.task.name.updateUI"), 100); //$NON-NLS-1$
 		try {
 			this.recurringOffer = recurringOffer;
 			currentStateComposite.setStatable(recurringOffer, new SubProgressMonitor(monitor, 1));
@@ -261,7 +261,7 @@ extends HeaderComposite{
 						else {
 							nextTransitionComposite.getDisplay().asyncExec(new Runnable() {
 								public void run() {
-									MessageDialog.openError(getDisplay().getActiveShell(), "Pattern set", "you can't start the Recurrence if the Time Pattern is not set !!!");
+									MessageDialog.openError(getDisplay().getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.dialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
 									nextTransitionComposite.setEnabled(true);				
 								}
 							});

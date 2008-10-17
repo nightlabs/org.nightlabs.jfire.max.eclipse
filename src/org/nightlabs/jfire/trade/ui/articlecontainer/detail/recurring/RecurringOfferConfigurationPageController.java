@@ -14,6 +14,7 @@ import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.id.RecurringOfferConfigurationID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 
@@ -59,11 +60,11 @@ public class RecurringOfferConfigurationPageController extends  ActiveEntityEdit
 	protected RecurringOfferConfiguration storeEntity(
 			RecurringOfferConfiguration controllerObject,
 			ProgressMonitor monitor) {
-		monitor.beginTask("Saving Configuration", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigurationPageController.job.task.name.saveConfiguration"), 100); //$NON-NLS-1$
 		try {
 			RecurringOfferConfigurationID offerID = (RecurringOfferConfigurationID) JDOHelper.getObjectId(controllerObject);
 			if (offerID == null)
-				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject); //$NON-NLS-1$
 
 			RecurringOfferConfiguration recurringOfferConfiguration = RecurringOfferDAO.sharedInstance().storeRecurringOfferConfiguration(
 					controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth());

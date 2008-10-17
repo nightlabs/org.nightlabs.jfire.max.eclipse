@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This registry processes the extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory</code>.
@@ -36,9 +37,9 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
  */
 public class ArticleContainerEditorPageFactoryRegistry extends AbstractEPProcessor {
 	
-	protected static final String FACTOY_ELEMENT_NAME = "articleContainerEditorPageFactory";
-	protected static final String ARTICLE_CONTAINER_ATTRIBUTE_NAME = "articleContainerClass";
-	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME;
+	protected static final String FACTOY_ELEMENT_NAME = "articleContainerEditorPageFactory"; //$NON-NLS-1$
+	protected static final String ARTICLE_CONTAINER_ATTRIBUTE_NAME = "articleContainerClass"; //$NON-NLS-1$
+	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME; //$NON-NLS-1$
 	
 
 	/**
@@ -75,12 +76,12 @@ public class ArticleContainerEditorPageFactoryRegistry extends AbstractEPProcess
 	}
 	
 	public void addPage(String editorID, String id, String articleContainerClass, EntityEditorPageSettings settings) {
-		if (editorID == null || "".equals(editorID))
-			throw new IllegalArgumentException("Missing/Invalid editorID for page settings: " + settings);
-		if (id == null || "".equals(id))
-			throw new IllegalArgumentException("Missing/Invalid id for page settings: " + settings);
-		if (articleContainerClass == null || "".equals(articleContainerClass))
-			throw new IllegalArgumentException("Missing/Invalid articleContainerClass for page settings: " + settings);
+		if (editorID == null || "".equals(editorID)) //$NON-NLS-1$
+			throw new IllegalArgumentException("Missing/Invalid editorID for page settings: " + settings); //$NON-NLS-1$
+		if (id == null || "".equals(id)) //$NON-NLS-1$
+			throw new IllegalArgumentException("Missing/Invalid id for page settings: " + settings); //$NON-NLS-1$
+		if (articleContainerClass == null || "".equals(articleContainerClass)) //$NON-NLS-1$
+			throw new IllegalArgumentException("Missing/Invalid articleContainerClass for page settings: " + settings); //$NON-NLS-1$
 		
 		Map<String, Map<String, EntityEditorPageSettings>> editorID2PageSettings = pageSettings.get(editorID);
 		if (editorID2PageSettings == null) {
@@ -94,10 +95,10 @@ public class ArticleContainerEditorPageFactoryRegistry extends AbstractEPProcess
 		}
 		EntityEditorPageSettings pageSettings = class2PageSetting.get(articleContainerClass);
 		if(pageSettings != null)
-			throw new IllegalStateException("An entityEditorPageFactory was already registered for: " +
-					"editorID = " + editorID + 
-					", id = " + id +
-					", articleContainerClass = " + articleContainerClass);
+			throw new IllegalStateException("An entityEditorPageFactory was already registered for: " + //$NON-NLS-1$
+					"editorID = " + editorID +  //$NON-NLS-1$
+					", id = " + id + //$NON-NLS-1$
+					", articleContainerClass = " + articleContainerClass); //$NON-NLS-1$
 		class2PageSetting.put(articleContainerClass, settings);
 	}
 	

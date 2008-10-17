@@ -50,7 +50,7 @@ public class ProductTypeDetailViewComposite extends XComposite {
 		return (StackLayout) getLayout();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public void showProductTypeDetail(ProductTypeID productTypeID) {
 		Class<? extends ProductType> pTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 		IProductTypeDetailView detailView = detailViews.get(pTypeClass);

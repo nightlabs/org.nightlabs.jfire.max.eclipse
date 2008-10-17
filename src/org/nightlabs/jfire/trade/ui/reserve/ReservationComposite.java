@@ -28,6 +28,7 @@ import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerActi
 import org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -117,7 +118,7 @@ extends XComposite
 	public void setInput(ProductTypeID productTypeID, String title)
 	{
 		loadReservations(productTypeID);
-		form.setText("Reservations list");
+		form.setText(Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationComposite.form.text.reservationList")); //$NON-NLS-1$
 		form.setMessage(title);
 	}
 }

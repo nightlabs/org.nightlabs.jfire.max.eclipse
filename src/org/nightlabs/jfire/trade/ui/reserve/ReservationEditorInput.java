@@ -7,6 +7,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -32,7 +33,7 @@ public class ReservationEditorInput extends NullEditorInput {
 	@Override
 	public String getName()
 	{
-		return "Reservation list "+getProductTypeName();
+		return Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationEditorInput.reservationList") + " " + getProductTypeName(); //$NON-NLS-1$
 	}
 
 	public String getProductTypeName()

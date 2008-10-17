@@ -451,8 +451,8 @@
               contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
               id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
               menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
-              name="Reserve All..."
-              tooltip="Reserve All...">
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction.tooltip">
         </articleContainerAction>
 <!--            
         <articleContainerAction
@@ -1210,10 +1210,10 @@
                  class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate"
                  icon="icons/articlecontainer/detail/action/reserve/ReservationListActionDelegate.24x24.png"
                  id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate"
-                 label="Reservation List ..."
+                 label="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate.label"
                  style="push"
                  toolbarPath="additions"
-                 tooltip="Shows the reservations for the selected product type">
+                 tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListActionDelegate.tooltip">
            </action>
         </actionSet>
     </extension>

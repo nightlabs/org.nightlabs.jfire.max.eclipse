@@ -14,6 +14,7 @@ import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * Abstract action that prints an '{@link ArticleContainer}-report' of a certain category,
@@ -40,7 +41,7 @@ extends AbstractArticleContainerAction
 
 	protected void init() {
 		setId(ID);
-		setText("Print");
+		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractPrintArticleContainerAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradePlugin.getDefault(), AbstractPrintArticleContainerAction.class));
 	}

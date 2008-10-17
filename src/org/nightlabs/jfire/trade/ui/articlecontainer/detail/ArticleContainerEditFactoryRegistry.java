@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This registry processes the extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditFactory</code>
@@ -24,9 +25,9 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 public class ArticleContainerEditFactoryRegistry
 extends AbstractEPProcessor
 {
-	protected static final String FACTOY_ELEMENT_NAME = "articleContainerEditFactory";
-	protected static final String ARTICLE_CONTAINER_ATTRIBUTE_NAME = "articleContainerClass";
-	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME;
+	protected static final String FACTOY_ELEMENT_NAME = "articleContainerEditFactory"; //$NON-NLS-1$
+	protected static final String ARTICLE_CONTAINER_ATTRIBUTE_NAME = "articleContainerClass"; //$NON-NLS-1$
+	public static final String EXTENSION_POINT_ID = TradePlugin.getDefault().getBundle().getSymbolicName() + "." + FACTOY_ELEMENT_NAME; //$NON-NLS-1$
 	
 	protected static ArticleContainerEditFactoryRegistry _sharedInstance = null;
 
@@ -64,7 +65,7 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element) throws Exception {
 		if (element.getName().equals(FACTOY_ELEMENT_NAME)) {
 			String articleContainerClass = element.getAttribute(ARTICLE_CONTAINER_ATTRIBUTE_NAME);
-			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) element.createExecutableExtension("class");
+			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
 			articleContainerEditoFactories.put(articleContainerClass, factory);
 		}
 	}
@@ -81,7 +82,7 @@ extends AbstractEPProcessor
 		try {
 			searchClass = Class.forName(articleContainerClass);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Could not resolve ArticleContainer class: " + articleContainerClass, e);
+			throw new RuntimeException("Could not resolve ArticleContainer class: " + articleContainerClass, e); //$NON-NLS-1$
 		}
 		while (searchClass != null) {
 			ArticleContainerEditFactory factory = (ArticleContainerEditFactory) articleContainerEditoFactories.get(searchClass.getName());

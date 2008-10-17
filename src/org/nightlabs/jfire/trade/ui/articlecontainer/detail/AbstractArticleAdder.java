@@ -145,7 +145,7 @@ public abstract class AbstractArticleAdder implements ArticleAdder
 	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 	{
 		if (!getSegmentEdit().getArticleContainer().getVendor().equals(getProductType().getVendor())) {
-			String message = String.format("The product type %s has a different vendor than the current article container!",
+			String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder.message.differentVendor"), //$NON-NLS-1$
 					getProductType().getName().getText(NLLocale.getDefault())
 			);
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);

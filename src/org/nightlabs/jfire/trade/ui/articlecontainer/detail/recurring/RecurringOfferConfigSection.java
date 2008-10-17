@@ -10,6 +10,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 
 /**
@@ -27,14 +28,14 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 	{
 
 		super(page, parent, controller);
-		getSection().setText("Offer configuration");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigSection.section.text")); //$NON-NLS-1$
 		XComposite checkboxContainer = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		checkboxContainer.getGridLayout().numColumns = 3;
 		checkboxContainer.getGridLayout().makeColumnsEqualWidth = false;
 		
 		createInvoiceCheck = new Button(checkboxContainer, SWT.CHECK);
-		createInvoiceCheck.setText("Create Invoice");
-		createInvoiceCheck.setToolTipText("");
+		createInvoiceCheck.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigSection.button.text.createInvoice")); //$NON-NLS-1$
+		createInvoiceCheck.setToolTipText(""); //$NON-NLS-1$
 		createInvoiceCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -44,8 +45,8 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 		});
 
 		createDeliveryCheck = new Button(checkboxContainer, SWT.CHECK);
-		createDeliveryCheck.setText("Create Delivery note");
-		createDeliveryCheck.setToolTipText("");
+		createDeliveryCheck.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigSection.button.text.createDeliveryNote")); //$NON-NLS-1$
+		createDeliveryCheck.setToolTipText(""); //$NON-NLS-1$
 		createDeliveryCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -55,8 +56,8 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 		});
 
 		bookInvoiceCheck = new Button(checkboxContainer, SWT.CHECK);
-		bookInvoiceCheck.setText("Book Invoice");
-		bookInvoiceCheck.setToolTipText("");
+		bookInvoiceCheck.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigSection.button.text.bookInvoice")); //$NON-NLS-1$
+		bookInvoiceCheck.setToolTipText(""); //$NON-NLS-1$
 		bookInvoiceCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

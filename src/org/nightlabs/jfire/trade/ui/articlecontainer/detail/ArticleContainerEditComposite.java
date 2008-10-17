@@ -384,7 +384,7 @@ implements ArticleContainerEdit
 			return new DeliveryNoteHeaderComposite(this, (DeliveryNote) articleContainer);
 
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
-				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -416,7 +416,7 @@ implements ArticleContainerEdit
 			return new DeliveryNoteFooterComposite(parent, this);
 
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
-				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -444,7 +444,7 @@ implements ArticleContainerEdit
 			return EditLockTypeDeliveryNote.EDIT_LOCK_TYPE_ID;
 
 		throw new IllegalStateException("The current ArticleContainer is of an unsupported type: " + //$NON-NLS-1$
-				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$
+				(getArticleContainer() != null ? getArticleContainer().getClass().getName() : "null") + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected boolean hasDifferentSegments()

@@ -126,12 +126,12 @@ extends HeaderComposite
 			expiryTimestampUnfinalizedComp = new XComposite(expiryTimestampContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 			expiryTimestampUnfinalizedComp.setLayoutData(null);
 			expiryTimestampUnfinalizedComp.getGridLayout().numColumns = 2;
-			new Label(expiryTimestampUnfinalizedComp, SWT.NONE).setText("Expiry (unfinalized):");
+			new Label(expiryTimestampUnfinalizedComp, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.label.expiry.unfinalized")); //$NON-NLS-1$
 			expiryTimestampUnfinalized = new DateTimeControl(expiryTimestampUnfinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 			new Label(expiryTimestampUnfinalizedComp, SWT.NONE);
 			expiryTimestampUnfinalizedAutoManaged = new Button(expiryTimestampUnfinalizedComp, SWT.CHECK);
-			expiryTimestampUnfinalizedAutoManaged.setText("Manage automatically");
-			expiryTimestampUnfinalizedAutoManaged.setToolTipText("Manage the date and time of expiry automatically according to the configuration.");
+			expiryTimestampUnfinalizedAutoManaged.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.text.manageAutomatically")); //$NON-NLS-1$
+			expiryTimestampUnfinalizedAutoManaged.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.tooltip.manageAutomatically")); //$NON-NLS-1$
 
 			expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
 			expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
@@ -177,12 +177,12 @@ extends HeaderComposite
 			expiryTimestampFinalizedComp = new XComposite(expiryTimestampContainerComp, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 			expiryTimestampFinalizedComp.setLayoutData(null);
 			expiryTimestampFinalizedComp.getGridLayout().numColumns = 2;
-			new Label(expiryTimestampFinalizedComp, SWT.NONE).setText("Expiry (finalized):");
+			new Label(expiryTimestampFinalizedComp, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.label.expiry.finalized")); //$NON-NLS-1$
 			expiryTimestampFinalized = new DateTimeControl(expiryTimestampFinalizedComp, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
 			new Label(expiryTimestampFinalizedComp, SWT.NONE);
 			expiryTimestampFinalizedAutoManaged = new Button(expiryTimestampFinalizedComp, SWT.CHECK);
-			expiryTimestampFinalizedAutoManaged.setText("Manage automatically");
-			expiryTimestampFinalizedAutoManaged.setToolTipText("Manage the date and time of expiry automatically according to the configuration.");
+			expiryTimestampFinalizedAutoManaged.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.text.manageAutomatically")); //$NON-NLS-1$
+			expiryTimestampFinalizedAutoManaged.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.button.tooltip.manageAutomatically")); //$NON-NLS-1$
 
 			expiryTimestampFinalized.setDate(offer.getExpiryTimestampFinalized());
 			expiryTimestampFinalizedAutoManaged.setSelection(offer.isExpiryTimestampFinalizedAutoManaged());
@@ -263,10 +263,10 @@ extends HeaderComposite
 		final Date _expiryTimestampFinalized = expiryTimestampFinalized == null ? offer.getExpiryTimestampFinalized() : expiryTimestampFinalized.getDate();
 		final boolean _expiryTimestampFinalizedAutoManaged = expiryTimestampFinalizedAutoManaged == null ? offer.isExpiryTimestampFinalizedAutoManaged() : expiryTimestampFinalizedAutoManaged.getSelection();
 
-		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job("Saving expiry timestamp") {
+		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.name.savingExpiryTimeStamp")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				monitor.beginTask("Saving expiry timestamp", 2);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.name.savingExpiryTimeStamp"), 2); //$NON-NLS-1$
 				try {
 					Offer _offer = OfferDAO.sharedInstance().setOfferExpiry(
 							getOfferID(),
@@ -290,7 +290,7 @@ extends HeaderComposite
 
 	private void onOfferModified(final Offer offer, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Updating UI for offer", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.job.task.name.updateUI"), 100); //$NON-NLS-1$
 		try {
 			this.offer = offer;
 			currentStateComposite.setStatable(offer, new SubProgressMonitor(monitor, 1));

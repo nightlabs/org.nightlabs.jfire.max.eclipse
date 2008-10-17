@@ -5,6 +5,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 
 
@@ -28,7 +29,7 @@ public abstract class AbstractRecurringConfigGeneralSection extends ToolBarSecti
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR,
-				"Title"
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.AbstractRecurringConfigGeneralSection.title") //$NON-NLS-1$
 		);
 		this.controller = controller;
 	}

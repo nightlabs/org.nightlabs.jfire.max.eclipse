@@ -19,6 +19,7 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
 /**
@@ -61,7 +62,7 @@ public class ReserveAction extends ArticleContainerAction {
 	public void run()
 	{
 		// TODO get quickSearch text from quickSaleEditor
-		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", true);
+		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open("", true); //$NON-NLS-1$
 		if (legalEntity != null) {
 			Order order = (Order) getArticleContainer();
 			try {

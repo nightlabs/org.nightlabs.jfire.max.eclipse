@@ -172,7 +172,7 @@ public class StatableFilterSearchComposite
 		});
 
 		notInSelectedStateButton = new Button(wrapper, SWT.CHECK);
-		notInSelectedStateButton.setText("Not In Selected State");
+		notInSelectedStateButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.StatableFilterSearchComposite.button.text.notInSelectedState")); //$NON-NLS-1$
 		GridData notSelectedStateButtonData = new GridData();
 //		selectedStateButtonData.horizontalSpan = 2;
 		notInSelectedStateButton.setLayoutData(notSelectedStateButtonData);

@@ -17,6 +17,7 @@ import org.nightlabs.base.ui.timepattern.TimePatternSetModifyEvent;
 import org.nightlabs.base.ui.timepattern.TimePatternSetModifyListener;
 import org.nightlabs.base.ui.timepattern.builder.TimePatternSetBuilderWizard;
 import org.nightlabs.jfire.trade.recurring.RecurringOfferConfiguration;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.timepattern.TimePattern;
 import org.nightlabs.util.Util;
@@ -39,7 +40,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 	public RecurringTimingConfigSection(FormPage page, Composite parent, final RecurringOfferConfigurationPageController controller) {
 
 		super(page, parent, controller);
-		getSection().setText("Recurring Timer");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.setion.text")); //$NON-NLS-1$
 
 		timePatternSetComposite = new TimePatternSetComposite(getContainer(), SWT.NONE);
 		timePatternSetComposite.addTimePatternSetModifyListener(new TimePatternSetModifyListener(){
@@ -56,8 +57,8 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		enableDateContainer.getGridLayout().numColumns = 2;
 
 		enableEndCheck = new Button(enableDateContainer, SWT.CHECK);
-		enableEndCheck.setText("Activate End Date");
-		enableEndCheck.setToolTipText("");
+		enableEndCheck.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.button.text.activateEndDate")); //$NON-NLS-1$
+		enableEndCheck.setToolTipText(""); //$NON-NLS-1$
 		enableEndCheck.setSelection(false);
 		enableEndCheck.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -115,8 +116,8 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		public AddRecurringTimePatternAction() {
 			super();
 			setId(AddRecurringTimePatternAction.class.getName());
-			setText("+");
-			setToolTipText("adds a new time pattern to the list");
+			setText("+"); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.addAction.tooltip")); //$NON-NLS-1$
 
 
 		}
@@ -133,8 +134,8 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		public RemoveRecurringTimePatternAction() {
 			super();		
 			setId(RemoveRecurringTimePatternAction.class.getName());
-			setText("-");
-			setToolTipText("removes a time pattern from the list");
+			setText("-"); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.removeAction.tooltip")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -150,8 +151,8 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 		public DefineRecurringTimePatternAction() {
 			super();
 			setId(DefineRecurringTimePatternAction.class.getName());
-			setText("Define Pattern...");
-			setToolTipText("defines a new time pattern through a wizard window");
+			setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.defineAction.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringTimingConfigSection.defineAction.tooltip")); //$NON-NLS-1$
 		}
 
 		@Override

@@ -314,7 +314,7 @@ implements IDeliveryEntryPage
 		getContainer().updateButtons();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	protected void clientDeliveryProcessorFactoryComboSelectionChanged()
 	{
 		DeliveryWizard wizard = ((DeliveryWizard)getWizard());

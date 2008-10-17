@@ -99,7 +99,7 @@ extends AbstractTableComposite<ProductHistoryItem>
 					case 4:
 //						return item.getArticleContainer().getArticleContainerIDAsString();
 						String id = ArticleContainerUtil.getArticleContainerID(item.getArticleContainer());
-						return id != null ? id : "";
+						return id != null ? id : ""; //$NON-NLS-1$
 					// payment
 					case 5:
 						ModeOfPaymentFlavour paymentFlavour = item.getModeOfPaymentFlavour();

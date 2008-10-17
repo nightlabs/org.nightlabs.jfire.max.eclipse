@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
@@ -44,7 +45,7 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 
 
 	public RecurringOfferConfigurationPage(FormEditor editor) {
-		super(editor,ID_PAGE, "Recurring Offer Configuration");
+		super(editor,ID_PAGE, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigurationPage.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class RecurringOfferConfigurationPage extends EntityEditorPageWithProgres
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Recurring Offer Configuration";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferConfigurationPage.formTitle"); //$NON-NLS-1$
 	}
 
 }

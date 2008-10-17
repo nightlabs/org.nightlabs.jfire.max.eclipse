@@ -18,6 +18,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -38,7 +39,7 @@ implements IOverviewEditAction
 
 	protected void init() {
 		setId(ID);
-		setText("Edit");
+		setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.action.AbstractEditArticleContainerAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradePlugin.getDefault(), AbstractEditArticleContainerAction.class));
 	}

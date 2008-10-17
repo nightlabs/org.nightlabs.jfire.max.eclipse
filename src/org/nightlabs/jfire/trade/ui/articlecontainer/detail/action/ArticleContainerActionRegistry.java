@@ -39,6 +39,7 @@ import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ArticleContainerActionRegistry extends AbstractActionRegistry
 {
@@ -51,7 +52,7 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 	throws EPProcessorException
 	{
 		if (articleContainer == null)
-			throw new IllegalArgumentException("articleContainer == null");
+			throw new IllegalArgumentException("articleContainer == null"); //$NON-NLS-1$
 
 		return sharedInstance(articleContainer.getClass());
 	}
@@ -60,7 +61,7 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 	throws EPProcessorException
 	{
 		if (articleContainerClass == null)
-			throw new IllegalArgumentException("articleContainerClass == null");
+			throw new IllegalArgumentException("articleContainerClass == null"); //$NON-NLS-1$
 
 		ArticleContainerActionRegistry _sharedInstance = articleContainerClass2sharedInstance.get(articleContainerClass);
 		if (_sharedInstance == null) {
@@ -76,7 +77,7 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 
 	protected ArticleContainerActionRegistry(Class<? extends ArticleContainer> articleContainerClass) {
 		if (articleContainerClass == null)
-			throw new IllegalArgumentException("articleContainerClass == null");
+			throw new IllegalArgumentException("articleContainerClass == null"); //$NON-NLS-1$
 
 		this.articleContainerClass = articleContainerClass;
 	}
@@ -100,7 +101,7 @@ public class ArticleContainerActionRegistry extends AbstractActionRegistry
 		String actionID = actionDescriptor.getID();
 
 		String actionDescriptorArticleContainerClass = element.getAttribute(ATTRIBUTE_ARTICLE_CONTAINER_CLASS);
-		if (actionDescriptorArticleContainerClass == null || "".equals(actionDescriptorArticleContainerClass))
+		if (actionDescriptorArticleContainerClass == null || "".equals(actionDescriptorArticleContainerClass)) //$NON-NLS-1$
 			actionDescriptorArticleContainerClass = ArticleContainer.class.getName();
 
 		actionDescriptor.setArticleContainerClass(actionDescriptorArticleContainerClass);

@@ -45,6 +45,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.ArticleUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditAction;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -123,7 +124,7 @@ public class ReleaseAction extends ArticleEditAction
 		final Collection<ArticleID> articleIDs = NLJDOHelper.getObjectIDSet(articles);
 //		final Display display = Display.getCurrent();
 
-		Job job = new Job("Releasing articles") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction.job.name.releasingArticles")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
