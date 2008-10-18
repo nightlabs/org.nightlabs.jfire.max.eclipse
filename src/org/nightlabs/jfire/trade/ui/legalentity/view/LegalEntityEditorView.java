@@ -32,6 +32,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
@@ -51,7 +53,7 @@ public class LegalEntityEditorView
 extends LSDViewPart
 {
 	public static String ID_VIEW = LegalEntityEditorView.class.getName();
-	
+
 	private LegalEntitySelectionComposite selectionComposite;
 	private SelectAnonymousViewAction selectAnonymousAction = new SelectAnonymousViewAction();
 	private EditLegalEntityViewAction editLegalEntityAction = new EditLegalEntityViewAction();
@@ -63,11 +65,18 @@ extends LSDViewPart
 
 	public void createPartContents(Composite parent) {
 		selectionComposite = new LegalEntitySelectionComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		selectionComposite.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+				toolBarManager.removeAll();
+			}
+		});
 		contributeToActionBars();
 		selectionComposite.setSearchAction(searchLegalEntityAction);
 		setSelectedLegalEntityID(null);
 	}
-	
+
 	public String getQuickSearchText() {
 		return selectionComposite.getQuickSearchText();
 	}
@@ -75,8 +84,8 @@ extends LSDViewPart
 	public LegalEntity getSelectedLegalEntity() {
 		return selectionComposite.getSelectedLegalEntity();
 	}
-	
-	public void setSelectedLegalEntityID(final AnchorID legalEntityID) 
+
+	public void setSelectedLegalEntityID(final AnchorID legalEntityID)
 	{
 		if (selectionComposite == null || selectionComposite.isDisposed())
 			return;
@@ -95,7 +104,7 @@ extends LSDViewPart
 			job.schedule();
 		}
 	}
-	
+
 	private void contributeToActionBars() {
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		selectAnonymousAction.init(this);
@@ -103,7 +112,7 @@ extends LSDViewPart
 		editLegalEntityAction.init(this);
 		toolBarManager.add(editLegalEntityAction);
 		searchLegalEntityAction.init(this);
-		toolBarManager.add(searchLegalEntityAction);		
+		toolBarManager.add(searchLegalEntityAction);
 	}
-	
+
 }

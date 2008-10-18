@@ -32,15 +32,15 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 
 	@Override
 	public void addPages() {
-		personSearchWizardPage = new ExtendedPersonSearchWizardPage(personSearchText) {
+		personSearchWizardPage = new ExtendedPersonSearchWizardPage(personSearchText, true, true) {
 			@Override
 			public void onAdditionalDataLoaded() {
 				clearCustomerGroupIDs();
-			addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(getDefaultCustomerGroup()));
+				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(getDefaultCustomerGroup()));
 //			if (getSelectedLegalEntity() != null)
 //				setCustomerID((AnchorID) JDOHelper.getObjectId(getSelectedLegalEntity()));
 
-			reloadPaymentDeliveryModes();
+				reloadPaymentDeliveryModes();
 			}
 		};
 

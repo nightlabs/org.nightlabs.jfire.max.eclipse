@@ -44,7 +44,7 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 public class SearchLegalEntityViewAction extends Action {
 
 	/**
-	 * 
+	 *
 	 */
 	public SearchLegalEntityViewAction() {
 		super();
@@ -57,29 +57,27 @@ public class SearchLegalEntityViewAction extends Action {
 	public void init(LegalEntityEditorView view) {
 		this.view = view;
 	}
-	
-	/**
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
+
+	@Override
 	public void run() {
-		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(view.getQuickSearchText(), true);
+		LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(view.getQuickSearchText(), true, true);
 		if (legalEntity != null) {
 			view.setSelectedLegalEntityID(
 				(AnchorID) JDOHelper.getObjectId(legalEntity)
 			);
 		}
 	}
-	
+
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), this.getClass());
 	}
-	
+
 	@Override
 	public String getText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction.text"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	public String getToolTipText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.SearchLegalEntityViewAction.tooltip"); //$NON-NLS-1$

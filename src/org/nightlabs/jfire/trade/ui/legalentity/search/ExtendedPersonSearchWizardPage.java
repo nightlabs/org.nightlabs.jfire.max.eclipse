@@ -35,8 +35,13 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 		super(quickSearchText);
 	}
 
+	public ExtendedPersonSearchWizardPage(String quickSearchText, boolean allowNewLegalEntityCreation, boolean allowEditLegalEntity) {
+		super(quickSearchText, allowNewLegalEntityCreation, allowEditLegalEntity);
+	}
+
 	@Override
 	protected void onPersonSelectionChanged() {
+		super.onPersonSelectionChanged();
 		getLoadAdditionalDataJob(null).schedule();
 	}
 

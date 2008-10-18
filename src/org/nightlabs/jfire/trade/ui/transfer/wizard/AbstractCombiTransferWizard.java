@@ -111,11 +111,11 @@ implements CombiTransferWizard
 			throw new IllegalStateException("Side was not determined yet"); //$NON-NLS-1$
 		return side;
 	}
-	
+
 	protected void setSide(Side side) {
 		this.side = side;
 	}
-	
+
 //	{
 //		return side;
 //	}
@@ -140,7 +140,7 @@ implements CombiTransferWizard
 //			throw new RuntimeException(e);
 //		}
 //	}
-	
+
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getPaymentEntryPages()
 	 */
@@ -234,7 +234,7 @@ implements CombiTransferWizard
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		return paymentEntryPages;
 	}
 
@@ -260,9 +260,6 @@ implements CombiTransferWizard
 		return deliveryEntryPages;
 	}
 
-	/**
-	 * @see org.eclipse.jface.wizard.Wizard#addPages()
-	 */
 	@Override
 	public void addPages()
 	{
@@ -339,7 +336,7 @@ implements CombiTransferWizard
 	{
 		this.currency = currency;
 	}
-	
+
 	/**
 	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentWizard#getTotalAmount()
 	 */
@@ -372,7 +369,7 @@ implements CombiTransferWizard
 	{
 		this.customerID = customerID;
 	}
-	
+
 	public AnchorID getCustomerID() {
 		return customerID;
 	}
@@ -395,7 +392,7 @@ implements CombiTransferWizard
 	{
 		customerGroupIDs.clear();
 	}
-	
+
 	@Override
 	public void addDynamicWizardPage(int index, IWizardPage page)
 	{
@@ -445,14 +442,14 @@ implements CombiTransferWizard
 	{
 		throw new UnsupportedOperationException("This method is not supported!"); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Calling this method triggers asynchronous reloading of the modes of payment/delivery based on the {@link CustomerGroupID}s set in this wizard.
 	 */
 	public void reloadPaymentDeliveryModes() {
 		for (PaymentEntryPage page : paymentEntryPages)
 			page.loadModeOfPayments();
-		
+
 		for (DeliveryEntryPage page : deliveryEntryPages)
 			page.loadModeOfDeliveries();
 	}
