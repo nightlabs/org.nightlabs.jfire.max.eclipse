@@ -9,7 +9,6 @@ import javax.security.auth.login.LoginException;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.ModuleException;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
@@ -37,24 +36,25 @@ extends AbstractArticleAdder
 	private DynamicProductType dynamicProductType;
 
 	@Override
-	@Implement
 	protected Composite _createComposite(Composite parent)
 	{
 		return new ArticleAdderComposite(parent, this);
 	}
 
-	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = {
-		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME
-	};
+//	public static final String[] FETCH_GROUPS_VOUCHER_TYPE = {
+//		FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME
+//	};
 
-	@Implement
+	@Override
 	public void setProductTypeID(ProductTypeID productTypeID, ProgressMonitor monitor)
 	{
+//		this.dynamicProductType = DynamicProductTypeDAO.sharedInstance().getDynamicProductType(
+//				productTypeID, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		this.dynamicProductType = DynamicProductTypeDAO.sharedInstance().getDynamicProductType(
-				productTypeID, FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+				productTypeID, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
-	@Implement
+	@Override
 	public ProductType getProductType()
 	{
 		return dynamicProductType;
@@ -80,7 +80,7 @@ extends AbstractArticleAdder
 
 	}
 
-	
+
 	public Article createArticle(
 			SegmentID segmentID,
 			OfferID offerID,
@@ -95,7 +95,7 @@ extends AbstractArticleAdder
 	{
 
 		DynamicTradeManager dm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-		
+
 		return dm.createArticle(
 				segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
