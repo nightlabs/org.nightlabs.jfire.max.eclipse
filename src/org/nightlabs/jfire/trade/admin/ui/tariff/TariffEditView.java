@@ -28,8 +28,7 @@ package org.nightlabs.jfire.trade.admin.ui.tariff;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.language.LanguageChangeEvent;
@@ -52,11 +51,11 @@ extends LSDViewPart
 	public void createPartContents(Composite parent)
 	{
 		Composite composite = parent;
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new FillLayout());
+
+		SashForm sf = new SashForm(composite, SWT.NONE);
 		
-		SashForm sf = new SashForm(composite, SWT.BORDER);
-		sf.setLayoutData(new GridData(GridData.FILL_BOTH));
-		languageChooser = new LanguageChooserList(sf, false, true);
+		languageChooser = new LanguageChooserList(sf, SWT.H_SCROLL | SWT.FULL_SELECTION, true);
 		tariffListComposite = new TariffListComposite(sf, SWT.NONE);
 
 		sf.setWeights(new int[] {1, 2});
