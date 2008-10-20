@@ -6,6 +6,7 @@ package org.nightlabs.jfire.issuetracking.ui.projectphase;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -58,10 +59,17 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 				if (s.isEmpty())
 					return;
 
-				ProjectPhase projectPhase = (ProjectPhase)s.getFirstElement();
+				ProjectPhase selectedProjectPhase = (ProjectPhase)s.getFirstElement();
 
+				if (selectedProjectPhase.getObjectId() == null) {
+					MessageDialog.openError(getSection().getShell(), 
+							"Save Project", 
+							"The selected proect phase doesn't exist in the datastore yet. You need to save it first.");
+					return;
+				}
+				
 				ProjectPhaseEditorInput projectPhaseEditorInput = 
-					new ProjectPhaseEditorInput(ProjectPhaseID.create(projectPhase.getOrganisationID(), projectPhase.getProjectPhaseID()));
+					new ProjectPhaseEditorInput(ProjectPhaseID.create(selectedProjectPhase.getOrganisationID(), selectedProjectPhase.getProjectPhaseID()));
 				try {
 					RCPUtil.openEditor(projectPhaseEditorInput, ProjectPhaseEditor.EDITOR_ID);
 				} catch (PartInitException e1) {
