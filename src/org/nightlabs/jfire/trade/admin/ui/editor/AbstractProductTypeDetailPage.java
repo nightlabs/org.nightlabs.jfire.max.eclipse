@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.store.ProductType;
@@ -24,6 +26,9 @@ public abstract class AbstractProductTypeDetailPage
 extends EntityEditorPageWithProgress
 implements IProductTypeDetailPage
 {
+	
+	private static final Logger logger = Logger.getLogger(AbstractProductTypeDetailPage.class);
+	
 	/**
 	 * @param editor the FormEditor the page belongs to
 	 * @param id the ID of the page
@@ -154,17 +159,23 @@ implements IProductTypeDetailPage
 		}
 	}
 
+	public AbstractProductTypePageController getPageController() {
+		return (AbstractProductTypePageController) super.getPageController();
+	}
+	
 	@Override
-	protected void asyncCallback()
-	{
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		//final AbstractProductTypePageController controller = (AbstractProductTypePageController) getPageController();
 	//	final ProductType productType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (isDisposed())
 					return;
-
-				setProductTypePageController((AbstractProductTypePageController) getPageController());
+				if (logger.isDebugEnabled()) {
+					logger.debug("handleControllerObjectModified: Calling setProductTypePageController()");
+					logger.debug("ControllerObject: " + getPageController().getControllerObject());
+				}
+				setProductTypePageController(getPageController());
 				switchToContent();
 			}
 		});

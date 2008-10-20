@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.events.ModifyEvent;
@@ -35,6 +36,8 @@ implements IProductTypeSectionPart
 	// TODO should be named FETCH_GROUPS_NAME (plural since it is an array) 
 	public String[] FETCH_GROUP_NAME = new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME};
 
+	private static final Logger logger = Logger.getLogger(AbstractProductTypeNameSection.class);
+	
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent) {
 		this(page, parent, ExpandableComposite.TITLE_BAR);
 	}
@@ -120,6 +123,8 @@ implements IProductTypeSectionPart
 		productTypePageController = pageController; 
 
 		this.productType = pageController.getProductType();
+		if (logger.isDebugEnabled())
+			logger.debug("setProductTypePageController: PageControllerObject (ProductType) is " + this.productType);
 		
 		if (productType == null) {
 			setInheritanceSelection(false);

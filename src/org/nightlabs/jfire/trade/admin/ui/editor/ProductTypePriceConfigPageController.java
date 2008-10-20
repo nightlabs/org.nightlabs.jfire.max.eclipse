@@ -45,6 +45,7 @@ extends EntityEditorPageController
 				PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(
 						getProductTypeID(), monitor));
 		setProductType(productType);
+		fireModifyEvent(null, productType);
 		monitor.worked(1);
 	}
 
