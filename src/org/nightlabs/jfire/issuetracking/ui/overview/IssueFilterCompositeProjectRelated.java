@@ -9,8 +9,6 @@ import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ITreeViewerListener;
-import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -20,6 +18,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
+import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeNode;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedEvent;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOTreeNodesChangedListener;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
@@ -108,11 +107,11 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				
 				//Child Checking
 				final boolean isChecked = event.getChecked();
-				ProjectTreeNode node = (ProjectTreeNode)event.getElement();
+				ProjectTreeNode checkedNode = (ProjectTreeNode)event.getElement();
 				
-				projectTreeComposite.getTreeViewer().expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
+				projectTreeComposite.getTreeViewer().expandToLevel(checkedNode, AbstractTreeViewer.ALL_LEVELS);
 				
-				node.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener<ProjectID, Project, ProjectTreeNode>() {
+				checkedNode.getActiveJDOObjectTreeController().addJDOTreeNodesChangedListener(new JDOTreeNodesChangedListener<ProjectID, Project, ProjectTreeNode>() {
 					@Override
 					public void onJDOObjectsChanged(
 							JDOTreeNodesChangedEvent<ProjectID, ProjectTreeNode> changedEvent) {
@@ -127,8 +126,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				});
 				
 				//for isChecked == false
-				checkboxTreeViewer.setSubtreeChecked(node,	isChecked);
-
+				checkboxTreeViewer.setSubtreeChecked(checkedNode,	isChecked);
+				automateParentCheck((ProjectTreeNode)checkedNode.getParent());
+				
 				//End Child Checking
 				
 				for (Object object : checkboxTreeViewer.getCheckedElements()) {
@@ -161,6 +161,23 @@ extends AbstractQueryFilterComposite<IssueQuery>
 //		});
 		
 //		prepareIssueProperties();
+	}
+
+	private void automateParentCheck(ProjectTreeNode parentNode) {
+		if (parentNode != null) {
+			List<JDOObjectTreeNode> childCheckedNodes = parentNode.getChildNodes();
+			boolean needChecking = false;
+			for (JDOObjectTreeNode childCheckedNode : childCheckedNodes) {
+				if (checkboxTreeViewer.getChecked(childCheckedNode)) {
+					needChecking = true;
+					break;
+				}
+			}
+
+			checkboxTreeViewer.setChecked(parentNode, needChecking);
+			if (!needChecking)
+				automateParentCheck((ProjectTreeNode)parentNode.getParent());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
