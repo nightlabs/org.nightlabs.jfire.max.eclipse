@@ -2,7 +2,9 @@ package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
@@ -22,6 +24,7 @@ public class SimpleProductTypeDetailPageController
 //extends AbstractSimpleProductTypePageController
 extends AbstractProductTypeDetailPageController<SimpleProductType>
 {
+	private static final Logger logger = Logger.getLogger(SimpleProductTypeDetailPageController.class);
 	private static final String[] FETCH_GROUPS;
 	
 	static {
@@ -72,10 +75,23 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 	protected SimpleProductType storeProductType(SimpleProductType productType, ProgressMonitor monitor)
 	{
 		try {
+			if (logger.isDebugEnabled()) {
+				logger.debug("ProductType (" + productType + ") -name before store");
+				for (Map.Entry<String, String> entry : productType.getName().getTexts()) {
+					logger.debug("  " + entry.getKey() + " = " + entry.getValue());
+				}
+			}
 			SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			// take the simple product type from the controller, as this is the same instance
 			// which was set to the GUI elements and which they edit directly
-			return stm.storeProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
+			SimpleProductType spt = stm.storeProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
+			if (logger.isDebugEnabled()) {
+				logger.debug("ProductType (" + spt + ") -name after store");
+				for (Map.Entry<String, String> entry : spt.getName().getTexts()) {
+					logger.debug("  " + entry.getKey() + " = " + entry.getValue());
+				}
+			}
+			return spt;
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
