@@ -12,11 +12,14 @@ import org.nightlabs.jdo.ui.search.SearchFilterProvider;
 import org.nightlabs.jdo.ui.search.SearchResultFetcher;
 import org.nightlabs.jfire.base.ui.person.search.DynamicPersonSearchFilterProvider;
 import org.nightlabs.jfire.base.ui.person.search.StaticPersonSearchFilterProvider;
+import org.nightlabs.jfire.base.ui.prop.DefaultPropertySetTableConfig;
+import org.nightlabs.jfire.base.ui.prop.IPropertySetTableConfig;
 import org.nightlabs.jfire.base.ui.prop.PropertySetSearchComposite;
 import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterItemListMutator;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.person.PersonStruct;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructFieldID;
@@ -86,19 +89,35 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 	@Override
 	protected PropertySetTable<LegalEntity> createResultTable(Composite parent) {
 		PropertySetTable<LegalEntity> resultTable = new PropertySetTable<LegalEntity>(
-				parent, SWT.NONE,
-				StructLocalDAO.sharedInstance().getStructLocal(
-						Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor()),
-				new StructFieldID[] {
-					PersonStruct.PERSONALDATA_COMPANY, PersonStruct.PERSONALDATA_NAME, PersonStruct.PERSONALDATA_FIRSTNAME,
-					PersonStruct.POSTADDRESS_CITY, PersonStruct.POSTADDRESS_ADDRESS
-				}
+				parent, SWT.NONE
 		) {
 			@Override
 			protected PropertySet getPropertySetFromElement(Object element) {
 				if (element instanceof LegalEntity)
 					return ((LegalEntity) element).getPerson();
 				return super.getPropertySetFromElement(element);
+			}
+
+			@Override
+			protected IPropertySetTableConfig getPropertySetTableConfig() {
+				
+				return new LegalEntityTableConfig();
+			}
+			
+			class LegalEntityTableConfig extends DefaultPropertySetTableConfig {
+				@Override
+				public IStruct getIStruct() {
+					return StructLocalDAO.sharedInstance().getStructLocal(
+							Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
+				}
+				
+				@Override
+				public StructFieldID[] getStructFieldIDs() {
+					return new StructFieldID[] {
+							PersonStruct.PERSONALDATA_COMPANY, PersonStruct.PERSONALDATA_NAME, PersonStruct.PERSONALDATA_FIRSTNAME,
+							PersonStruct.POSTADDRESS_CITY, PersonStruct.POSTADDRESS_ADDRESS
+						};
+				}
 			}
 		};
 		return resultTable;
