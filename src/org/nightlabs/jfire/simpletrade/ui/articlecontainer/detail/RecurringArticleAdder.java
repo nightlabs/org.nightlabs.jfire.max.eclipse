@@ -3,11 +3,8 @@ package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import javax.ejb.CreateException;
-import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 

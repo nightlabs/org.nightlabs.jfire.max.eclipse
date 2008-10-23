@@ -111,7 +111,9 @@ implements ISelectionProvider
 				return null; // tariff
 
 			if (++ci == columnIndex) {
-				return AllocationStatusImageUtil.getAllocationStatusImage(article);
+				return AllocationStatusImageUtil.getAllocationStatusImage(
+						article, 
+						articleEdit.getSegmentEdit().getArticleContainer());
 //				if (article.isAllocationAbandoned())
 //					return SharedImages.getSharedImage(SimpletradePlugin.getDefault(), ArticleTable.class, "allocationAbandoned");
 //				else if (article.isAllocationPending())
