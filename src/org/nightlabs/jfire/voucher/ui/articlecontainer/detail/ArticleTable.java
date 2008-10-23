@@ -124,7 +124,9 @@ implements ISelectionProvider
 				return null; // validity
 
 			if (++ci == columnIndex) {
-				return AllocationStatusImageUtil.getAllocationStatusImage(article);
+				return AllocationStatusImageUtil.getAllocationStatusImage(
+						article, 
+						articleEdit.getSegmentEdit().getArticleContainer());
 			}
 
 			if (!isInOrder() && !isInOffer()) {
