@@ -24,11 +24,11 @@ import org.nightlabs.jfire.transfer.TransferData;
 public class TransferCoordinator {
 	private List<PaymentData> paymentDatas;
 	private List<DeliveryData> deliveryDatas;
-	
+
 	public TransferCoordinator() {
-		
+
 	}
-	
+
 	public boolean payAndDeliver(
 			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
 			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
@@ -50,9 +50,9 @@ public class TransferCoordinator {
 		else
 			// if no delivery is to be done, assign a noop instance to avoid endless if (deliveryController == null) checks
 			deliveryController = new DummyDeliveryController();
-		
+
 		performStages(deliveryController, paymentController);
-		
+
 		this.paymentDatas = paymentController.getTransferDatas();
 		this.deliveryDatas = deliveryController.getTransferDatas();
 
@@ -66,7 +66,7 @@ public class TransferCoordinator {
 
 //	 TODO check both: delivery (only if deliveryWizard != null)
 // TODO in case of an error, a detailed status message showing all payments/deliveries should be shown
-		
+
 //		if (paymentWizard != null) {
 //			// If we come here, payment was successful
 //
@@ -81,76 +81,76 @@ public class TransferCoordinator {
 
 		return true;
 	}
-	
+
 	public void performStages(DeliveryController deliveryController, PaymentController paymentController) throws LoginException {
 		boolean skipServerPayment = false;
 		boolean skipServerDelivery = false;
-		
+
 		///////////
 		// BEGIN //
 		///////////
-		
+
 		// if the client approve failed on ALL client payments, we don't do anything
 		// in the server, but call the client's payEnd to allow clean-up.
 		skipServerPayment = !paymentController.clientBegin();
-		
+
 		// if the client approve failed for ALL deliveries, we don't do anything
 		// in the server, but call the client's deliverEnd to allow clean-up.
 		skipServerDelivery = !deliveryController.clientBegin();
-		
+
 		if (skipServerDelivery)
 			deliveryController.skipServerStages();
 		if (skipServerPayment)
 			paymentController.skipServerStages();
 
-		
+
 //	TODO perform Server-Payment and -Delivery in one step if both must be done
-		
+
 		deliveryController.serverBegin();
 		paymentController.serverBegin();
-		
+
 		if (paymentController.isRollbackRequired() || deliveryController.isRollbackRequired()) {
 			paymentController.forceRollback();
 			deliveryController.forceRollback();
 		}
-		
+
 		////////////
 		// DOWORK //
 		////////////
-		
+
 		deliveryController.clientDoWork();
 		paymentController.clientDoWork();
-		
+
 		deliveryController.serverDoWork();
 		paymentController.serverDoWork();
-		
+
 		if (paymentController.isRollbackRequired() || deliveryController.isRollbackRequired()) {
 			paymentController.forceRollback();
 			deliveryController.forceRollback();
 		}
-		
+
 		/////////
 		// END //
 		/////////
-		
+
 		deliveryController.clientEnd();
 		paymentController.clientEnd();
-		
+
 		deliveryController.serverEnd();
 		paymentController.serverEnd();
-			
+
 		////////////
 		// VERIFY //
 		////////////
-		
+
 		paymentController.verifyData();
 		deliveryController.verifyData();
 	}
-	
+
 	public List<PaymentData> getPaymentDatas() {
 		return paymentDatas;
 	}
-	
+
 	public List<DeliveryData> getDeliveryDatas() {
 		return deliveryDatas;
 	}
@@ -158,19 +158,26 @@ public class TransferCoordinator {
 
 /**
  * A {@link DeliveryController} that does absolutely nothing.
- * 
+ *
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
 class DummyController<D extends TransferData> implements TransferController<D> {
 	public boolean clientBegin() { return true; }
 	public void clientDoWork() {}
 	public void clientEnd() {}
-	public boolean isRollbackRequired() { return false; }
+	public boolean isRollbackRequired() {
+		return rollbackRequired;
+	}
 	public void serverBegin() {}
 	public void serverDoWork() {}
 	public void serverEnd() {}
 	public void verifyData() {}
-	public void forceRollback() {}
+
+	private boolean rollbackRequired = false;
+
+	public void forceRollback() {
+		rollbackRequired = true;
+	}
 	public List<D> getTransferDatas() { return new LinkedList<D>(); }
 	public void skipServerStages() {}
 }
