@@ -64,7 +64,8 @@ public class ReportTextPartConfigurationPage extends EntityEditorPageWithProgres
 			public void run() {
 				reportTextPartConfigurationSection.updateReportRegistryItems();
 			}
-		});		
+		});
+		switchToContent();
 	}
 
 	/* (non-Javadoc)
