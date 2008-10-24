@@ -66,4 +66,9 @@ extends AbstractArticleContainerEditor
 		if (img != null)
 			setTitleImage(img.createImage());
 	}
+	
+	@Override
+	protected boolean maintainLastPageID() {
+		return false;
+	}
 }
