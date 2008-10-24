@@ -782,6 +782,12 @@
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
              name="Deliver... INVISIBLE">
        </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
+             name="Add to Deliverynote... INVISIBLE">
+       </articleEditAction>
     </extension>
     <extension point="org.nightlabs.jfire.reporting.ui.reportUseCase">
         <reportUseCase description="%reportUseCase.invoice.description"
