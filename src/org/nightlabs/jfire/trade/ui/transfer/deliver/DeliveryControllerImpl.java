@@ -18,14 +18,14 @@ import org.nightlabs.jfire.transfer.TransferController;
 /**
  * A controller for the different stages of the delivery process as described in the
  * <a href="https://www.jfire.org/modules/phpwiki/index.php/WorkflowPaymentAndDelivery">JFire Wiki</a>.
- * 
+ *
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  * @see TransferController
  */
 public class DeliveryControllerImpl extends AbstractDeliveryController {
-	
+
 	private Map<DeliveryData, ClientDeliveryProcessor> deliveryProcessorMap;
-	
+
 	/**
 	 * Initialises a DeliveryControllerImpl with the list of tuples of the type ({@link DeliveryData}, {@link ClientDeliveryProcessor}). The controller
 	 * will process all given {@link DeliveryData}s using the respective {@link ClientDeliveryProcessor} in the client stages.
@@ -41,16 +41,16 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 //		}
 //		setTransferDatas(deliveryDatas);
 //	}
-	
+
 	public DeliveryControllerImpl(List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
 		super(getDeliveryDatas(deliveryTuples));
-		
+
 		deliveryProcessorMap = new HashMap<DeliveryData, ClientDeliveryProcessor>();
 		for (Pair<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
 			deliveryProcessorMap.put(tuple.getFirst(), tuple.getSecond());
 		}
 	}
-	
+
 	private static List<DeliveryData> getDeliveryDatas(List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples) {
 		List<DeliveryData> deliveryDatas = new LinkedList<DeliveryData>();
 		for (Pair<DeliveryData, ClientDeliveryProcessor> tuple : deliveryTuples) {
@@ -59,7 +59,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		}
 		return deliveryDatas;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#clientBegin()
@@ -70,11 +70,11 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		ClientDeliveryProcessor clientDeliveryProcessor = null;
 		Delivery delivery = null;
 		ArrayList<DeliveryResult> deliverBeginClientResults = new ArrayList<DeliveryResult>(getTransferDatas().size());
-		
+
 		for (DeliveryData deliveryData : getTransferDatas()) {
 			clientDeliveryProcessor = deliveryProcessorMap.get(deliveryData);
 			delivery = deliveryData.getDelivery();
-			
+
 			try {
 				DeliveryResult deliverBeginClientResult = clientDeliveryProcessor.deliverBegin();
 				if (deliverBeginClientResult == null)
@@ -91,14 +91,14 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 				delivery.setDeliverBeginClientResult(deliverBeginClientResult);
 			}
 			deliverBeginClientResults.add(delivery.getDeliverBeginClientResult());
-			
+
 			allFailed &= delivery.isFailed();
 		}
 		setLastStageResults(deliverBeginClientResults);
-		
+
 		return !allFailed;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#clientDoWork()
@@ -108,11 +108,11 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		List<DeliveryID> deliveryIDs = new ArrayList<DeliveryID>(getTransferDatas().size());
 		ArrayList<DeliveryResult> deliverDoWorkClientResults = new ArrayList<DeliveryResult>(getTransferDatas().size());
 		ClientDeliveryProcessor clientDeliveryProcessor = null;
-		
+
 		for (DeliveryData deliveryData : getTransferDatas()) {
 			Delivery delivery = deliveryData.getDelivery();
 			clientDeliveryProcessor = deliveryProcessorMap.get(deliveryData);
-			
+
 			deliveryIDs.add(DeliveryID.create(delivery.getOrganisationID(), delivery.getDeliveryID()));
 			try {
 				DeliveryResult deliverDoWorkClientResult = clientDeliveryProcessor.deliverDoWork();
@@ -135,7 +135,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		}
 		setLastStageResults(deliverDoWorkClientResults);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#clientEnd()
@@ -144,7 +144,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 	public void _clientEnd() {
 		ClientDeliveryProcessor clientDeliveryProcessor = null;
 		Delivery delivery = null;
-		
+
 		List<DeliveryResult> deliverEndClientResults = new ArrayList<DeliveryResult>(getTransferDatas().size());
 		for (DeliveryData deliveryData : getTransferDatas()) {
 			clientDeliveryProcessor = deliveryProcessorMap.get(deliveryData);
@@ -166,7 +166,7 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 								(Throwable)null);
 					}
 				}
-	
+
 				delivery.setDeliverEndClientResult(deliverEndClientResult);
 			} catch (DeliveryException x) {
 				delivery.setDeliverEndClientResult(x.getDeliveryResult());
@@ -180,23 +180,23 @@ public class DeliveryControllerImpl extends AbstractDeliveryController {
 		setLastStageResults(deliverEndClientResults);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#isRollbackRequired()
-	 */
-	@Override
-	public boolean isRollbackRequired() {
-		if (isForceRollback())
-			return true;
-		
-		for (DeliveryData deliveryData : getTransferDatas()) {
-			Delivery delivery = deliveryData.getDelivery();
-			if (delivery.isFailed() || delivery.isForceRollback())
-				return true;
-		}
-		
-		return false;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see org.nightlabs.jfire.trade.ui.transfer.TransferController#isRollbackRequired()
+//	 */
+//	@Override
+//	public boolean isRollbackRequired() {
+//		if (isForceRollback())
+//			return true;
+//
+//		for (DeliveryData deliveryData : getTransferDatas()) {
+//			Delivery delivery = deliveryData.getDelivery();
+//			if (delivery.isFailed() || delivery.isForceRollback())
+//				return true;
+//		}
+//
+//		return false;
+//	}
 
 	/*
 	 * (non-Javadoc)
