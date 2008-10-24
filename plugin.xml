@@ -453,17 +453,7 @@
               menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
               name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction.name"
               tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction.tooltip">
-        </articleContainerAction>
-<!--            
-        <articleContainerAction
-              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
-              contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
-              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
-              menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
-              name="Reserve All..."
-              tooltip="Reserve All">
-        </articleContainerAction>
--->        
+         </articleContainerAction>
     </extension>
     <extension
           name="Suppressed actions for RecurringOrder/RecurringOffer"
@@ -504,6 +494,114 @@
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction#toolbar"
              name="Deliver all... INVISIBLE TOOLBAR">
        </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="rg.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseActionAll#toolbar"
+             name="Reverse All INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseActionAll"
+             name="Reverse All INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction"
+             name="Add all to invoice INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"       
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddAllToInvoiceAction#toolbar"
+             name="Add all to Invoice INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction"
+             name="Deliver All INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer" 
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAllAction#toolbar"
+             name="Deliver All INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction"
+             name="Add all to Deliverynote INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddAllToDeliveryNoteAction#toolbar"
+             name="Add all to Deliverynote INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
+             name="Release INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
+             name="Release INVISIBLE TOOLBAR">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
+             name="Reserve INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction#toolbar"
+             name="Reserve INVISIBLE TOOLBAR">
+       </articleContainerAction>     
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
+             name="Release INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
+             name="Release INVISIBLE TOOLBAR">
+       </articleContainerAction>       
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
+             name="Add to Deliverynote INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction#toolbar"
+             name="Add to Deliverynote INVISIBLE TOOLBAR">
+       </articleContainerAction>
+              <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
+             name="Add to invoice INVISIBLE">
+       </articleContainerAction>
+       <articleContainerAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction#toolbar"
+             name="Add to invoice INVISIBLE TOOLBAR">
+       </articleContainerAction>           
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
