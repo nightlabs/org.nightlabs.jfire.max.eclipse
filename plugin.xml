@@ -578,30 +578,6 @@
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
              name="Release INVISIBLE TOOLBAR">
        </articleContainerAction>       
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction"
-             name="Add to Deliverynote INVISIBLE">
-       </articleContainerAction>
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtodeliverynote.AddToDeliveryNoteAction#toolbar"
-             name="Add to Deliverynote INVISIBLE TOOLBAR">
-       </articleContainerAction>
-              <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
-             name="Add to invoice INVISIBLE">
-       </articleContainerAction>
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction#toolbar"
-             name="Add to invoice INVISIBLE TOOLBAR">
-       </articleContainerAction>           
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
@@ -781,6 +757,30 @@
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.transfer.DeliverAction"
              name="Deliver... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
+             name="Release... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.addtoinvoice.AddToInvoiceAction"
+             name="Add to Invoice... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction"
+             name="Add to Invoice... INVISIBLE">
+       </articleEditAction>
+       <articleEditAction
+             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleEditAction"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseAction"
+             name="Reverse... INVISIBLE">
        </articleEditAction>
        <articleEditAction
              articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
