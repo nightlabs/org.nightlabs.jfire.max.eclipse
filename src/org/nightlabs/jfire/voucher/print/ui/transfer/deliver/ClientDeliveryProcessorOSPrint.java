@@ -79,10 +79,11 @@ extends AbstractClientDeliveryProcessorOSPrint
 			logger.debug("print "+tickets.size()+" in printJob");
 		}
 
-		if (pageFormat != null)
-			printJob.setPrintable(getPrintable(tickets), pageFormat);
-		else
-			printJob.setPrintable(getPrintable(tickets));
+//		if (pageFormat != null)
+//			printJob.setPrintable(getPrintable(tickets), pageFormat);
+//		else
+//			printJob.setPrintable(getPrintable(tickets));
+		printJob.setPageable(getPageable(tickets, printJob.defaultPage()));
 
 		try {
 			printJob.print();
