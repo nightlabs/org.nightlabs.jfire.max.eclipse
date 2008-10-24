@@ -545,18 +545,6 @@
        <articleContainerAction
              articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
-             name="Release INVISIBLE">
-       </articleContainerAction>
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
-             name="Release INVISIBLE TOOLBAR">
-       </articleContainerAction>
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction"
              name="Reserve INVISIBLE">
        </articleContainerAction>
@@ -566,18 +554,6 @@
              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReserveAction#toolbar"
              name="Reserve INVISIBLE TOOLBAR">
        </articleContainerAction>     
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction"
-             name="Release INVISIBLE">
-       </articleContainerAction>
-       <articleContainerAction
-             articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringArticleContainer"
-             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.InvisibleArticleContainerAction"
-             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.release.ReleaseAction#toolbar"
-             name="Release INVISIBLE TOOLBAR">
-       </articleContainerAction>       
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.articleEditAction">
         <separator name="org.nightlabs.jfire.trade.ui.articleEditAction"/>
