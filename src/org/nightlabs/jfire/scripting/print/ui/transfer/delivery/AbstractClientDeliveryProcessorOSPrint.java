@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.scripting.print.ui.transfer.delivery;
 
 import java.awt.print.PageFormat;
-import java.awt.print.Printable;
+import java.awt.print.Pageable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.print.PrinterInterfaceManager;
 import org.nightlabs.editor2d.DrawComponent;
-import org.nightlabs.editor2d.print.DrawComponentPrintable;
+import org.nightlabs.editor2d.print.DrawComponentPageable;
 import org.nightlabs.editor2d.print.DrawComponentPrintable.PrintConstant;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
@@ -68,7 +68,7 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 
 		PrinterJob printJob = awtPrinter.getPrinterJob();
-		printJob.setJobName("Ipanema Ticket"); //$NON-NLS-1$
+		printJob.setJobName("CrossTicket Ticket");
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("getting print job took "+(System.currentTimeMillis()-start)+" ms!");				 //$NON-NLS-1$ //$NON-NLS-2$
@@ -107,10 +107,15 @@ extends AbstractClientDeliveryProcessorPrint
 	 */
 	protected abstract String getPrinterUseCase();
 
-	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
+//	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
+//	{
+//		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
+//		return new DrawComponentPrintable(dcs, PrintConstant.ORIGINAL_SIZE);
+//	}
+	protected Pageable getPageable(List<ScriptRootDrawComponent> drawComponents, PageFormat pageFormat)
 	{
 		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
-		return new DrawComponentPrintable(dcs, PrintConstant.FIT_PAGE);
+		return new DrawComponentPageable(pageFormat, dcs, PrintConstant.ORIGINAL_SIZE, true);
 	}
 
 	private List<ScriptRootDrawComponent> buffer;
