@@ -73,12 +73,14 @@ import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
 import org.nightlabs.jfire.store.deliver.Delivery;
+import org.nightlabs.jfire.store.deliver.DeliveryConfiguration;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavourName;
 import org.nightlabs.jfire.store.deliver.ServerDeliveryProcessor;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroup;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour.ModeOfDeliveryFlavourProductTypeGroupCarrier;
+import org.nightlabs.jfire.store.deliver.id.DeliveryConfigurationID;
 import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
 import org.nightlabs.jfire.store.deliver.id.ServerDeliveryProcessorID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -135,12 +137,16 @@ implements IDeliveryEntryPage
 	private TradePrintingConfigModule tradePrintingCfMod = null;
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup = null;
 
+	private DeliveryConfigurationID deliveryConfigurationID;
+
 	protected DeliveryWizardHop getDeliveryWizardHop()
 	{
 		return (DeliveryWizardHop) getWizardHop();
 	}
 
-	public DeliveryEntryPage(Delivery delivery,
+	public DeliveryEntryPage(
+			DeliveryConfigurationID deliveryConfigurationID,
+			Delivery delivery,
 			List<? extends ProductType> productTypes,
 			List<Article> articles)
 	{
@@ -150,12 +156,10 @@ implements IDeliveryEntryPage
 		setDescription(
 				Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryEntryPage.description")); //$NON-NLS-1$
 		new DeliveryWizardHop(this, delivery); // self-registering
+		this.deliveryConfigurationID = deliveryConfigurationID;
 		this.productTypes = productTypes;
 	}
 
-	/**
-	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public Control createPageContents(Composite parent)
 	{
@@ -276,7 +280,7 @@ implements IDeliveryEntryPage
 		selectedModeOfDeliveryFlavour = modeOfDeliveryFlavourTable.getSelectedModeOfDeliveryFlavour();
 		if (selectedModeOfDeliveryFlavour != null) {
 //			selectedModeOfDeliveryFlavour = (ModeOfDeliveryFlavour) modeOfDeliveryFlavours.get(idx);
-			getDeliveryEntryPageCfMod().setModeOfDeliveryFlavourPK(selectedModeOfDeliveryFlavour.getPrimaryKey());
+			getDeliveryEntryPageCfMod().setModeOfDeliveryFlavourPK(getDeliveryConfigurationPK(), selectedModeOfDeliveryFlavour.getPrimaryKey());
 
 			try {
 				clientDeliveryProcessorFactoryList =
@@ -516,6 +520,10 @@ implements IDeliveryEntryPage
 				selectedServerDeliveryProcessor.getRequirementCheckResult() == null;
 	}
 
+	private String getDeliveryConfigurationPK() {
+		return DeliveryConfiguration.getPrimaryKey(deliveryConfigurationID.organisationID, deliveryConfigurationID.deliveryConfigurationID);
+	}
+
 	private Job loadModeOfDeliveriesJob = null;
 
 	public void loadModeOfDeliveries() {
@@ -571,13 +579,29 @@ implements IDeliveryEntryPage
 				});
 
 				DeliveryEntryPageCfMod deliveryEntryPageCfMod = getDeliveryEntryPageCfMod();
-				final List<ModeOfDeliveryFlavour> selList = new ArrayList<ModeOfDeliveryFlavour>(1);
-				for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
-					if (Util.equals(deliveryEntryPageCfMod.getModeOfDeliveryFlavourPK(), modeOfDeliveryFlavour.getPrimaryKey())) {
-						selList.add(modeOfDeliveryFlavour);
-						break;
+				ModeOfDeliveryFlavour selectedModeOfDeliveryFlavour = null;
+
+				String lastSelectedModeOfDeliveryFlavourPK = deliveryEntryPageCfMod.getDeliveryConfigurationPK2modeOfDeliveryFlavourPK().get(getDeliveryConfigurationPK());
+				if (lastSelectedModeOfDeliveryFlavourPK != null) {
+					for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
+						if (lastSelectedModeOfDeliveryFlavourPK.equals(modeOfDeliveryFlavour.getPrimaryKey())) {
+							selectedModeOfDeliveryFlavour = modeOfDeliveryFlavour;
+							break;
+						}
 					}
 				}
+
+				if (selectedModeOfDeliveryFlavour == null) {
+					for (ModeOfDeliveryFlavour modeOfDeliveryFlavour : modeOfDeliveryFlavours) {
+						if (Util.equals(deliveryEntryPageCfMod.getModeOfDeliveryFlavourPK(), modeOfDeliveryFlavour.getPrimaryKey())) {
+							selectedModeOfDeliveryFlavour = modeOfDeliveryFlavour;
+							break;
+						}
+					}
+				}
+				final List<ModeOfDeliveryFlavour> selList = new ArrayList<ModeOfDeliveryFlavour>(1);
+				if (selectedModeOfDeliveryFlavour != null)
+					selList.add(selectedModeOfDeliveryFlavour);
 
 				tradePrintingCfMod = ConfigUtil.getWorkstationCfMod(TradePrintingConfigModule.class,
 						new String[] { FetchPlan.DEFAULT }, 1, new NullProgressMonitor());

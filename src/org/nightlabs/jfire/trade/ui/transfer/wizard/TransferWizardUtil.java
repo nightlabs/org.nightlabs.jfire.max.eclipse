@@ -92,7 +92,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class TransferWizardUtil
 {
 	private static final Logger logger = Logger.getLogger(TransferWizardUtil.class);
-	
+
 		protected TransferWizardUtil() { }
 //
 //	private static AccountingManager accountingManager = null;
@@ -109,7 +109,7 @@ public class TransferWizardUtil
 //
 //		return accountingManager;
 	}
-	
+
 	public static StoreManager getStoreManager()
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
@@ -120,7 +120,7 @@ public class TransferWizardUtil
 //
 //		return storeManager;
 	}
-	
+
 	/**
 	 * This method calls
 	 * {@link #payAndDeliver(Shell, CombiTransferWizard, PaymentWizard, DeliveryWizard)}
@@ -134,7 +134,7 @@ public class TransferWizardUtil
 		return payAndDeliver(shell, (CombiTransferWizard)null, paymentWizard, (DeliveryWizard)null);
 //				bookInvoiceMode);
 	}
-	
+
 	/**
 	 * This method calls
 	 * {@link #payAndDeliver(CombiTransferWizard, PaymentWizard, DeliveryWizard, byte)}
@@ -147,7 +147,7 @@ public class TransferWizardUtil
 	{
 		return payAndDeliver(shell, (CombiTransferWizard)null, (PaymentWizard)null, deliveryWizard);
 	}
-	
+
 
 //	/**
 //	 * When paying using one of the pay/transfer methods, you can specify if and when
@@ -189,8 +189,8 @@ public class TransferWizardUtil
 	{
 		return payAndDeliver(shell, transferWizard, (PaymentWizard)null, (DeliveryWizard)null); //, bookInvoiceMode);
 	}
-	
-	
+
+
 	/**
 	 * This method is able to either perform an isolated payment or an isolated delivery
 	 * or to combine both. The combination has the advantage that the 4 phases of each will
@@ -260,50 +260,50 @@ public class TransferWizardUtil
 //
 		List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
 		List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
-		
+
 		int invoicesToPrintCount = -1;
 		int deliveryNotesToPrintCount = -1;
-		
+
 		// prepare payment information
 		if (paymentWizard != null) {
 			paymentTuples = new ArrayList<Pair<PaymentData,ClientPaymentProcessor>>();
-			
+
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				PaymentData paymentData = paymentEntryPage.getPaymentWizardHop().getPaymentData();
 				paymentTuples.add(new Pair<PaymentData, ClientPaymentProcessor>(paymentData, paymentEntryPage.getClientPaymentProcessor()));
 				invoicesToPrintCount = paymentEntryPage.getInvoicesToPrintCount();
 			}
 		}
-		
+
 		// prepare delivery information
 		if (deliveryWizard != null) {
 			deliveryTuples = new ArrayList<Pair<DeliveryData,ClientDeliveryProcessor>>();
-			
+
 			for (DeliveryEntryPage deliveryEntryPage : deliveryWizard.getDeliveryEntryPages()) {
 				DeliveryData deliveryData = deliveryEntryPage.getDeliveryWizardHop().getDeliveryData();
 				deliveryTuples.add(new Pair<DeliveryData, ClientDeliveryProcessor>(deliveryData, deliveryEntryPage.getClientDeliveryProcessor()));
 				deliveryNotesToPrintCount = deliveryEntryPage.getDeliveryNotesToPrintCount();
 			}
 		}
-		
+
 		// Now do the actual payment/delivery
 		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples);
-		
+
 		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
-		
+
 		try {
 			// if a payment was done
 			if (invoicesToPrintCount > 0 && paymentTuples != null) {
 				Set<InvoiceID> invoiceIDsToBePrinted = new HashSet<InvoiceID>();
-				
+
 				for (Pair<PaymentData, ClientPaymentProcessor> paymentPair : paymentTuples) {
 					PaymentData paymentData = paymentPair.getFirst();
-					
+
 					if (paymentData.getPayment().isSuccessfulAndComplete()) {
 						invoiceIDsToBePrinted.addAll(paymentData.getPayment().getInvoiceIDs());
 					}
 				}
-	
+
 				for (InvoiceID invoiceID : invoiceIDsToBePrinted) {
 					for (int i = 1; i <= invoicesToPrintCount; i++) {
 						printArticleContainer(invoiceID);
@@ -311,23 +311,23 @@ public class TransferWizardUtil
 				}
 
 			}
-			
+
 			// if a delivery was done
 			if (deliveryNotesToPrintCount > 0 && deliveryTuples != null) {
 				Set<DeliveryNoteID> deliveryNoteIDsToBePrinted = new HashSet<DeliveryNoteID>();
-				
+
 				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
 					DeliveryData deliveryData = deliveryPair.getFirst();
-					
+
 					StoreManager storeManager = StoreManagerUtil.getHome().create();
 					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
 						DeliveryID deliveryID = (DeliveryID) JDOHelper.getObjectId(deliveryData);
 						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, -1);
-						
+
 						deliveryNoteIDsToBePrinted.addAll(delivery.getDeliveryNoteIDs());
 					}
 				}
-				
+
 				for (DeliveryNoteID deliveryNoteID : deliveryNoteIDsToBePrinted) {
 					for (int i = 1; i <= deliveryNotesToPrintCount; i++) {
 						printArticleContainer(deliveryNoteID);
@@ -338,10 +338,10 @@ public class TransferWizardUtil
 			MessageDialog.openError(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizardUtil.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizardUtil.dialog.message") + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			logger.error("Printing failed", e); //$NON-NLS-1$
 		}
-		
+
 		return transferResult;
 	}
-	
+
 	private static boolean payAndDeliver(
 			Shell shell,
 			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
@@ -350,16 +350,16 @@ public class TransferWizardUtil
 	{
 		TransferCoordinator transferCoordinator = new TransferCoordinator();
 		boolean toReturn = transferCoordinator.payAndDeliver(paymentTuples, deliveryTuples);
-		
+
 		ErrorDialog errorDialog = new ErrorDialog(shell, transferCoordinator.getPaymentDatas(), transferCoordinator.getDeliveryDatas());
 		if (errorDialog.isFailed()) {
 			errorDialog.open();
 			return false;
 		}
-		
+
 		return toReturn;
 	}
-	
+
 	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
@@ -572,14 +572,14 @@ public class TransferWizardUtil
 ////			delivery.setDeliveryNoteIDs(deliveryWizard.getDeliveryNoteIDs());
 //			delivery.setProductIDs(deliveryWizard.getProductIDs(group.getProductTypeIDs()));
 			boolean[] reverseFilters = new boolean [] {false, true};
-			
+
 			for (int i = 0; i < reverseFilters.length; ++i) {
 				boolean reverse = reverseFilters[i];
 				List<Article> articles = deliveryWizard.getArticles(group.getProductTypeIDs(), reverse);
 
 				if (articles == null || articles.isEmpty())
 					continue;
-				
+
 				Delivery delivery = new Delivery(IDGenerator.getOrganisationID(), IDGenerator.nextID(Delivery.class));
 
 				delivery.setArticleIDs(getArticleIDsFromArticles(articles));
@@ -590,8 +590,8 @@ public class TransferWizardUtil
 					deliveryDirection = Delivery.DELIVERY_DIRECTION_INCOMING;
 
 				delivery.setDeliveryDirection(deliveryDirection);
-
 				DeliveryEntryPage page = new DeliveryEntryPage(
+						group.getDeliveryConfigurationID(),
 						delivery,
 						productTypes,
 						articles);
@@ -602,7 +602,7 @@ public class TransferWizardUtil
 
 		return res;
 	}
-	
+
 	public static Delivery createDelivery(DeliveryWizard deliveryWizard, ModeOfDeliveryFlavourProductTypeGroup group, List<Article> onlyArticles) {
 		Delivery delivery = new Delivery(IDGenerator.getOrganisationID(), IDGenerator.nextID(Delivery.class));
 		boolean[] reverseFilters = new boolean [] {false, true};
@@ -612,10 +612,10 @@ public class TransferWizardUtil
 		for (int i = 0; i < reverseFilters.length; ++i) {
 			boolean reverse = reverseFilters[i];
 			List<Article> articles = deliveryWizard.getArticles(group.getProductTypeIDs(), reverse);
-			
+
 			if (articles == null || articles.isEmpty())
 				continue;
-		
+
 			delivery.setArticleIDs(getArticleIDsFromArticles(articles));
 			String deliveryDirection;
 			if (reverse ^ DeliveryWizard.Side.Vendor.equals(deliveryWizard.getSide()))
@@ -625,18 +625,18 @@ public class TransferWizardUtil
 
 			delivery.setDeliveryDirection(deliveryDirection);
 		}
-			
+
 		return delivery;
 	}
-	
+
 	public <T1, T2> List<Pair<T1, T2>> createTupleList(List<T1> list1, List<T2> list2) {
 		Assert.isLegal(list1.size() == list2.size());
-		
+
 		List<Pair<T1, T2>> list = new ArrayList<Pair<T1, T2>>(list1.size());
-		
+
 		for (Iterator<?> it1 = list1.iterator(), it2 = list2.iterator(); it1.hasNext(); )
 			list.add(new Pair<T1, T2>((T1) it1.next(), (T2) it2.next()));
-		
+
 		return list;
 	}
 
