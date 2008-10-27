@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -14,9 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.store.ProductTransfer;
 import org.nightlabs.jfire.store.ProductType;
@@ -54,7 +53,7 @@ extends AbstractTableComposite<ProductTransfer>
 			if (!(element instanceof ProductTransfer)) {
 				if (columnIndex == 0)
 					return String.valueOf(element);
-				
+
 				return ""; //$NON-NLS-1$
 			}
 
@@ -92,7 +91,7 @@ extends AbstractTableComposite<ProductTransfer>
 					return direction.name();
 				case 3:
 					String otherStr = null;
-					
+
 					if (other instanceof Repository)
 						otherStr = ((Repository)other).getName().getText();
 					if (other instanceof LegalEntity)
@@ -100,8 +99,8 @@ extends AbstractTableComposite<ProductTransfer>
 
 					if (otherStr == null || "".equals(otherStr)) //$NON-NLS-1$
 						return String.valueOf(JDOHelper.getObjectId(other));
-					
-					return ""; //$NON-NLS-1$
+
+					return otherStr; //$NON-NLS-1$
 				case 4:
 					if (other instanceof Repository)
 						return ((Repository)other).getOwner().getPerson().getDisplayName();
@@ -121,7 +120,6 @@ extends AbstractTableComposite<ProductTransfer>
 		super(parent, style);
 	}
 
-	@Implement
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -159,11 +157,10 @@ extends AbstractTableComposite<ProductTransfer>
 		table.setLayout(layout);
 	}
 
-	@Implement
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new ProductTransferLabelProvider());
 	}
 
