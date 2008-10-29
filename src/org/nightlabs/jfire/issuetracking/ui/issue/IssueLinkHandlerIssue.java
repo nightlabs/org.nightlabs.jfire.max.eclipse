@@ -19,6 +19,7 @@ import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.overview.action.EditIssueAction;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -31,7 +32,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 	@Override
 	public String getLinkedObjectName(IssueLink issueLink, Issue linkedObject) {
 		return String.format(
-				"Issue %s",
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerIssue.linkedObjectName"), //$NON-NLS-1$
 				linkedObject.getPrimaryKey()); // TODO there must be the subject and maybe some other data be shown
 	}
 
@@ -40,7 +41,7 @@ extends AbstractIssueLinkHandler<IssueID, Issue>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				IssueLinkHandlerIssue.class, 
-		"LinkedObject").createImage();
+		"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
 	@Override
