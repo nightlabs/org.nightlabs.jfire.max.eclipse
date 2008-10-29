@@ -18,7 +18,7 @@ extends WorkbenchPartSelectionAction
 	public AbstractArticleContainerAction() {
 		super();
 	}
-			
+
 	private ArticleContainerID articleContainerID;
 	protected ArticleContainerID getArticleContainerID() {
 		return articleContainerID;
@@ -43,7 +43,7 @@ extends WorkbenchPartSelectionAction
 	public void setArticleContainerID(ObjectID objectID) {
 		articleContainerID = (ArticleContainerID)objectID;
 	}
-	
+
 	public boolean calculateEnabled() {
 		return articleContainerID != null;
 	}
@@ -51,5 +51,5 @@ extends WorkbenchPartSelectionAction
 	public boolean calculateVisible() {
 		return articleContainerID != null;
 	}
-	
+
 }

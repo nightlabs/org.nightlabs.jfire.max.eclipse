@@ -25,6 +25,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
@@ -65,9 +66,9 @@ public class ManualMoneyTransferComposite extends XComposite {
 	private CurrencyEdit amountText;
 
 	private Button transferButton;
-	
+
 	private boolean isFromTo = true;
-	
+
 	public ManualMoneyTransferComposite(Composite parent, int style) {
 		super(parent, style);
 
@@ -274,7 +275,7 @@ public class ManualMoneyTransferComposite extends XComposite {
 		if (fromAccountID != null) {
 			Account fromAccount = AccountDAO.sharedInstance().getAccount(
 					fromAccountID, FETCH_GROUPS_ACCOUNT,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, null);
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()); // TODO use real progressMonitor and execute asynchronously!
 			fAccountIDDataLabel.setText(fromAccount.getAnchorID());
 			fAccountNameDataLabel.setText(fromAccount.getName().getText());
 			fBalanceDataLabel.setText(NumberFormatter.formatCurrency(fromAccount.getBalance(), fromAccount.getCurrency()));
@@ -286,7 +287,7 @@ public class ManualMoneyTransferComposite extends XComposite {
 		if (toAccountID != null) {
 			Account toAccount = AccountDAO.sharedInstance().getAccount(
 					toAccountID, FETCH_GROUPS_ACCOUNT,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, null);
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			tAccountIDDataLabel.setText(toAccount.getAnchorID());
 			tAccountNameDataLabel.setText(toAccount.getName().getText());
 			tBalanceDataLabel.setText(NumberFormatter.formatCurrency(toAccount.getBalance(), toAccount.getCurrency()));
