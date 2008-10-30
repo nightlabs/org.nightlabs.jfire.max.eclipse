@@ -108,7 +108,6 @@ public class LegalEntityPersonEditor extends FieldBasedEditor {
 
 		LegalEntityViewConfigModule cfMod = (LegalEntityViewConfigModule)ConfigUtil.getUserCfMod(
 				LegalEntityViewConfigModule.class,
-//				new String[] {FetchPlan.DEFAULT, FetchPlan.ALL},  // TODO FetchPlan.ALL is probably not a perfect idea?!
 				new String[] {FetchPlan.DEFAULT, LegalEntityViewConfigModule.FETCH_GROUP_PERSONSTRUCTFIELDS},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor()
