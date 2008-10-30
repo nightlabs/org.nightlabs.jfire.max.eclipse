@@ -44,9 +44,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.accounting.Invoice;
+import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
+import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
+import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffWizard;
 
@@ -344,6 +348,19 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 			dialog.open();
 		}
 	}
+	
+	public boolean isNonOrderArticleContainerFinilized() {
+		ArticleContainer ac = getSegmentEdit().getArticleContainer();
+		if (ac instanceof Offer) {
+			return ((Offer) ac).isFinalized();
+		} else if (ac instanceof Invoice) {
+			return ((Invoice) ac).isFinalized();
+		} else if (ac instanceof DeliveryNote) {
+			return ((DeliveryNote) ac).isFinalized();
+		} // TODO: Handle ReceptionNotes
+		return false;
+	}
+
 
 //	public boolean isInOrder()
 //	{
