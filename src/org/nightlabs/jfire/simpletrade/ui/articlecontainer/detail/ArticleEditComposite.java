@@ -81,78 +81,81 @@ public class ArticleEditComposite extends XComposite
 				articleEdit.fireArticleEditArticleSelectionEvent();
 			}
 		});
-		
+
 		articleTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener(){
 			@Override
 			public void doubleClick(DoubleClickEvent arg0) {
+
+				if(articleEdit.isNonOrderArticleContainerFinilized())
+					return;
 				articleEdit.changeTariffForSelectedArticles();
 			}
 		});
 	}
 
 //	private void hookContextMenu() {
-//		MenuManager menuMgr = new MenuManager("#PopupMenu");
-//		menuMgr.setRemoveAllWhenShown(true);
-//		menuMgr.addMenuListener(new IMenuListener() {
-//			public void menuAboutToShow(IMenuManager manager) {
-//				fillContextMenu(manager);
-//			}
-//		});
-//		Menu menu = menuMgr.createContextMenu(articleTable);
-//		articleTable.setMenu(menu);
-//		// TODO we should somehow register this menu with a logical ID to allow other plugins to
-//		// add some logic.
-////		site.registerContextMenu(menuMgr, articleTable);
+//	MenuManager menuMgr = new MenuManager("#PopupMenu");
+//	menuMgr.setRemoveAllWhenShown(true);
+//	menuMgr.addMenuListener(new IMenuListener() {
+//	public void menuAboutToShow(IMenuManager manager) {
+//	fillContextMenu(manager);
+//	}
+//	});
+//	Menu menu = menuMgr.createContextMenu(articleTable);
+//	articleTable.setMenu(menu);
+//	// TODO we should somehow register this menu with a logical ID to allow other plugins to
+//	// add some logic.
+////	site.registerContextMenu(menuMgr, articleTable);
 //	}
 
 //	private void fillContextMenu(IMenuManager manager)
 //	{
-//		boolean hasRemovableItems = false;
-//		boolean hasNonRemovableItems = false;
-//
-//		if (articleEdit.isInOffer()) {
-//			Offer offer = (Offer)articleEdit.getSegmentEdit().getArticleContainer();
-//			if (offer.isFinalized())
-//				hasNonRemovableItems = true;
-//
-//			hasRemovableItems = !articleTable.getSelection().isEmpty();
-//		}
-//		else {
-//			for (Iterator it = ((IStructuredSelection)articleTable.getSelection()).iterator(); it.hasNext(); ) {
-//				Article article = (Article) it.next();
-//				if (article.getOffer().isFinalized())
-//					hasNonRemovableItems = true;
-//				else
-//					hasRemovableItems = true;
-//			}
-//		}
-//
-//		removeSelectedArticlesAction.setText("Remove Selected Articles");
-//		manager.add(removeSelectedArticlesAction);
-//		removeSelectedArticlesAction.setEnabled(hasRemovableItems && !hasNonRemovableItems);
-//
-//		//	manager.add(action2);
-//		//	manager.add(new Separator());
-////			manager.add(createProductAction);
-//
-////			manager.add(new TestAction());
-//
-////			drillDownAdapter.addNavigationActions(manager);
-//			// Other plug-ins can contribute their actions here
-//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+//	boolean hasRemovableItems = false;
+//	boolean hasNonRemovableItems = false;
+
+//	if (articleEdit.isInOffer()) {
+//	Offer offer = (Offer)articleEdit.getSegmentEdit().getArticleContainer();
+//	if (offer.isFinalized())
+//	hasNonRemovableItems = true;
+
+//	hasRemovableItems = !articleTable.getSelection().isEmpty();
+//	}
+//	else {
+//	for (Iterator it = ((IStructuredSelection)articleTable.getSelection()).iterator(); it.hasNext(); ) {
+//	Article article = (Article) it.next();
+//	if (article.getOffer().isFinalized())
+//	hasNonRemovableItems = true;
+//	else
+//	hasRemovableItems = true;
+//	}
+//	}
+
+//	removeSelectedArticlesAction.setText("Remove Selected Articles");
+//	manager.add(removeSelectedArticlesAction);
+//	removeSelectedArticlesAction.setEnabled(hasRemovableItems && !hasNonRemovableItems);
+
+//	//	manager.add(action2);
+//	//	manager.add(new Separator());
+////	manager.add(createProductAction);
+
+////	manager.add(new TestAction());
+
+////	drillDownAdapter.addNavigationActions(manager);
+//	// Other plug-ins can contribute their actions here
+//	manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 //	}
 
 //	private Action removeSelectedArticlesAction = new Action() {
-//		public void run() {
-//			IStructuredSelection sel = (IStructuredSelection) articleTable.getSelection();
-//			if (sel.isEmpty())
-//				return;
-//
-//			for (Iterator it = sel.iterator(); it.hasNext(); ) {
-//				Article article = (Article) it.next();
-//				System.out.println(article.getPrimaryKey());
-//			}
-//		}
+//	public void run() {
+//	IStructuredSelection sel = (IStructuredSelection) articleTable.getSelection();
+//	if (sel.isEmpty())
+//	return;
+
+//	for (Iterator it = sel.iterator(); it.hasNext(); ) {
+//	Article article = (Article) it.next();
+//	System.out.println(article.getPrimaryKey());
+//	}
+//	}
 //	};
 
 	protected static final Set<Article> EMPTY_SET_ARTICLE = Collections.unmodifiableSet(new HashSet<Article>(0));
