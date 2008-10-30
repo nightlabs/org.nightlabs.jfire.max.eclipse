@@ -10,6 +10,7 @@ import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
@@ -53,13 +54,20 @@ extends ArticleBaseComposite
 			Price singlePrice = null;
 
 			DynamicProduct product = (DynamicProduct) this.article.getProduct();
-
+			DynamicProductInfo dynamicProductInfo; 
+			
+			if (product != null)
+				dynamicProductInfo = product;
+			else
+				dynamicProductInfo = (DynamicProductInfo) this.article;
+		
+			
 			Unit u = this.unitCombo.getSelectedElement();
-			if (!u.equals(product.getUnit()))
+			if (!u.equals(dynamicProductInfo.getUnit()))
 				unitID = (UnitID) JDOHelper.getObjectId(u);
 
 			double q = NumberFormatter.parseFloat(this.quantity.getText());
-			if (Math.abs(product.getQuantityAsDouble() - q) > 0.0001)
+			if (Math.abs(dynamicProductInfo.getQuantityAsDouble() - q) > 0.0001)
 				quantity = new Long(u.toLong(q));
 
 			Tariff t = this.tariffCombo.getSelectedElement();
