@@ -57,7 +57,9 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
+import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
+import org.nightlabs.jfire.dynamictrade.recurring.DynamicProductTypeRecurringArticle;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
@@ -708,19 +710,28 @@ extends FadeableComposite
 		if (!tariffCombo.selectElement(article.getTariff()))
 			throw new IllegalStateException("Tariff not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 
-		productName.copyFrom(product.getName());
+		DynamicProductInfo dynamicProductInfo; 
+		if (product != null)
+			dynamicProductInfo = product;
+		else
+			dynamicProductInfo = (DynamicProductInfo) article;
+		
+		
+		
+		
+		productName.copyFrom(dynamicProductInfo.getName());
 		updateProductNameUI();
 		productNameModified = false;
-
-		if (!unitCombo.selectElement(product.getUnit()))
+		
+		if (!unitCombo.selectElement(dynamicProductInfo.getUnit()))
 			throw new IllegalStateException("Unit not in combo!"); // TODO we should handle this situation - it might happen //$NON-NLS-1$
 
-		quantity.setText(NumberFormatter.formatFloat(product.getQuantityAsDouble(), product.getUnit().getDecimalDigitCount()));
+		quantity.setText(NumberFormatter.formatFloat(dynamicProductInfo.getQuantityAsDouble(), dynamicProductInfo.getUnit().getDecimalDigitCount()));
 
 		// product.singlePrice.fragments is probably not detached in the ArticleEdit's Articles
 		try {
 			for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
-				long amount = product.getSinglePrice().getAmount(ipft.getPriceFragmentType());
+				long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
 				PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
 				if (priceCell != null)
 					priceCell.getPrice().setAmount(ipft.getPriceFragmentType(), amount);
@@ -741,7 +752,8 @@ extends FadeableComposite
 						ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
 						final Article articleWithPriceFragments = ArticleDAO.sharedInstance().getArticle(
 								articleID,
-								new String[] { FetchPlan.DEFAULT, Article.FETCH_GROUP_PRODUCT, DynamicProduct.FETCH_GROUP_SINGLE_PRICE, Price.FETCH_GROUP_THIS_PRICE },
+								new String[] { FetchPlan.DEFAULT, DynamicProductTypeRecurringArticle.FETCH_GROUP_DYNAMIC_PRODUCT_TYPE_RECURRING_ARTICLE_SINGLEPRICE, 
+										Article.FETCH_GROUP_PRODUCT, DynamicProduct.FETCH_GROUP_SINGLE_PRICE, Price.FETCH_GROUP_THIS_PRICE },
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new SubProgressMonitor(monitor, 100));
 
@@ -749,9 +761,15 @@ extends FadeableComposite
 						{
 							public void run()
 							{
-								DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();
+								DynamicProduct product = (DynamicProduct) articleWithPriceFragments.getProduct();		
+								DynamicProductInfo dynamicProductInfo; 
+								if (product != null)
+									dynamicProductInfo = product;
+								else
+									dynamicProductInfo = (DynamicProductInfo) articleWithPriceFragments;
+								
 								for (InputPriceFragmentType ipft : inputPriceFragmentTypes) {
-									long amount = product.getSinglePrice().getAmount(ipft.getPriceFragmentType());
+									long amount = dynamicProductInfo.getSinglePrice().getAmount(ipft.getPriceFragmentType());
 									PriceCell priceCell = resultPriceConfig.getPriceCell(createPriceCoordinate(), false);
 									if (priceCell != null)
 										priceCell.getPrice().setAmount(ipft.getPriceFragmentType(), amount);
