@@ -47,6 +47,7 @@ extends AbstractTableComposite<MoneyTransfer>
 		Transfer.FETCH_GROUP_TO,
 		MoneyTransfer.FETCH_GROUP_CURRENCY,
 		ManualMoneyTransfer.FETCH_GROUP_DESCRIPTION,
+		ManualMoneyTransfer.FETCH_GROUP_REASON,
 		Account.FETCH_GROUP_NAME,
 		Account.FETCH_GROUP_ACCOUNT_TYPE,
 		AccountType.FETCH_GROUP_NAME,
@@ -64,16 +65,16 @@ extends AbstractTableComposite<MoneyTransfer>
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.timestampTableColumn.text")); //$NON-NLS-1$
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.directionTableColumn.text")); //$NON-NLS-1$
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTableColumn.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.otherAccountTypeTableColumn.text")); //$NON-NLS-1$
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.amountTableColumn.text")); //$NON-NLS-1$
 
@@ -82,7 +83,7 @@ extends AbstractTableComposite<MoneyTransfer>
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 10, 30, 30, 30, 50});
 		table.setLayout(layout);
-		
+
 		table.setLayout(layout);
 	}
 
@@ -115,43 +116,34 @@ extends AbstractTableComposite<MoneyTransfer>
 		} else
 			return transfer.getFrom();
 	}
-	
+
 	class MoneyTransferListLabelProvider
 	extends TableLabelProvider
 	{
 		public String getColumnText(Object element, int columnIndex)
 		{
-			if (element instanceof MoneyTransfer) {
-				MoneyTransfer moneyTransfer = (MoneyTransfer) element;
-				int idx = 0;
-				if (columnIndex == idx++) {
-					return DateFormatter.formatDateShortTimeHM(moneyTransfer.getTimestamp(), false);
-				}
-				if (columnIndex == idx++) {
-					if (JDOHelper.getObjectId(moneyTransfer.getFrom()).equals(currentAnchorID)) {
+			if (element instanceof ManualMoneyTransfer) {
+				ManualMoneyTransfer manualMoneyTransfer = (ManualMoneyTransfer) element;
+				Anchor other = getOtherAnchor(manualMoneyTransfer);
+				switch (columnIndex) {
+				case(0): return DateFormatter.formatDateShortTimeHM(manualMoneyTransfer.getTimestamp(), false);	//Timestamp
+				case(1):	//Direction
+					if (JDOHelper.getObjectId(manualMoneyTransfer.getFrom()).equals(currentAnchorID)) {
 						return "->"; //$NON-NLS-1$
 					}
 					return "<-"; //$NON-NLS-1$
-				}
-				if (columnIndex == idx++) {
-					Anchor other = getOtherAnchor(moneyTransfer);
+				case(2):	//Other
 					if (other instanceof Account)
 						return ((Account)other).getName().getText();
 					else
 						return ((LegalEntity)other).getPerson().getDisplayName();
-				}
-				if (columnIndex == idx++) {
-					Anchor other = getOtherAnchor(moneyTransfer);
+				case(3):	//Other type
 					if (other instanceof Account)
 						return ((Account)other).getAccountType().getName().getText();
 					else
 						return Messages.getString("org.nightlabs.jfire.trade.ui.account.transfer.MoneyTransferTable.column.legalEntity"); //$NON-NLS-1$
-				}
-				if (columnIndex == idx++) {
-					return NumberFormatter.formatCurrency(moneyTransfer.getAmount(), moneyTransfer.getCurrency(), true);
-				}
-				if (columnIndex == idx++) {
-					return moneyTransfer.getDescription();
+				case(4): return NumberFormatter.formatCurrency(manualMoneyTransfer.getAmount(), manualMoneyTransfer.getCurrency(), true);	//Amount
+				case(5):return manualMoneyTransfer.getReason().getText();	//Reasons
 				}
 				return ""; //$NON-NLS-1$
 			}
