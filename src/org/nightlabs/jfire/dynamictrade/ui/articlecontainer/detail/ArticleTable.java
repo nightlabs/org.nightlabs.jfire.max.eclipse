@@ -121,17 +121,17 @@ extends AbstractTableComposite<Article>
 						article, 
 						articleEdit.getSegmentEdit().getArticleContainer());
 //				if (article.isAllocationAbandoned())
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocationAbandoned");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocationAbandoned");
 //				else if (article.isAllocationPending())
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocationPending");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocationPending");
 //				else if (article.isReleaseAbandoned())
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "releaseAbandoned");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "releaseAbandoned");
 //				else if (article.isReleasePending())
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "releasePending");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "releasePending");
 //				else if (article.isAllocated())
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocated");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "allocated");
 //				else
-//					return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "notAllocated");
+//				return SharedImages.getSharedImage(DynamictradePlugin.getDefault(), ArticleTable.class, "notAllocated");
 			}
 
 			if (!isInOrder() && !isInOffer()) {
@@ -392,4 +392,6 @@ extends AbstractTableComposite<Article>
 	{
 		return articleEdit.getSegmentEdit().getArticleContainer() instanceof DeliveryNote;
 	}
+
+
 }
