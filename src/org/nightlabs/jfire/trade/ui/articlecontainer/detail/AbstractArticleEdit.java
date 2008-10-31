@@ -349,7 +349,9 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 		}
 	}
 	
-	public boolean isNonOrderArticleContainerFinilized() {
+	
+	
+	public boolean isNonOrderArticleContainerFinalized() {
 		ArticleContainer ac = getSegmentEdit().getArticleContainer();
 		if (ac instanceof Offer) {
 			return ((Offer) ac).isFinalized();
@@ -359,9 +361,8 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 			return ((DeliveryNote) ac).isFinalized();
 		} // TODO: Handle ReceptionNotes
 		return false;
-	}
-
-
+	}	
+		
 //	public boolean isInOrder()
 //	{
 //		return Order.class.getName().equals(getSegmentEdit().getArticleContainerClass());
