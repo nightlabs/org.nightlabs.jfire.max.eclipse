@@ -23,8 +23,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class IssueTypeTable 
 extends AbstractTableComposite<IssueType> 
-{//ActiveJDOObjectTableComposite<IssueTypeID, IssueType>{
-
+{
 	/**
 	 * The fetch groups of issue data.
 	 */

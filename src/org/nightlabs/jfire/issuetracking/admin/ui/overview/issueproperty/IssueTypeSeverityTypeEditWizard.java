@@ -10,12 +10,12 @@ import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypeSeverityTypeEditWizard 
-extends DynamicPathWizard {
-
+extends DynamicPathWizard 
+{
 	private IssueSeverityType issueSeverityType;
 	private IssueTypeSeverityTypeGeneralWizardPage severityTypeCreatePage;
 	

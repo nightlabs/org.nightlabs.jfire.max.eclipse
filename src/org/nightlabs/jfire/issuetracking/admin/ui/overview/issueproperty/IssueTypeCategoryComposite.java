@@ -12,9 +12,13 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
 public class IssueTypeCategoryComposite
-extends XComposite {
-
+extends XComposite 
+{
 	public IssueTypeCategoryComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		createComposite();

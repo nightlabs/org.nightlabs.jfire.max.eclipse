@@ -14,8 +14,13 @@ import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class IssueTypeEditorPageController extends EntityEditorPageController {
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
+public class IssueTypeEditorPageController 
+extends EntityEditorPageController 
+{
 	/**
 	 * The fetch groups of issue data.
 	 */

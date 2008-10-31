@@ -7,12 +7,12 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.IssueResolution;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypeResolutionEditWizard 
-extends DynamicPathWizard {
-
+extends DynamicPathWizard 
+{
 	private IssueResolution issueResolution;
 	private IssueTypeResolutionGeneralWizardPage resolutionCreatePage;
 	

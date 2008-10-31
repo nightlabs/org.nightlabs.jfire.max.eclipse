@@ -6,8 +6,12 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
+ * 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  */
-public class IssueTrackingAdminPlugin extends AbstractUIPlugin {
+public class IssueTrackingAdminPlugin 
+extends AbstractUIPlugin 
+{
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.admin.ui";
@@ -16,7 +20,7 @@ public class IssueTrackingAdminPlugin extends AbstractUIPlugin {
 	private static IssueTrackingAdminPlugin plugin;
 	
 	/**
-	 * The constructor
+	 * The default constructor
 	 */
 	public IssueTrackingAdminPlugin() {
 	}

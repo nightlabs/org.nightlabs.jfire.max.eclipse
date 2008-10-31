@@ -26,8 +26,13 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
-public class IssueTypePrioritySection extends ToolBarSectionPart {
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
+public class IssueTypePrioritySection 
+extends ToolBarSectionPart 
+{
 	private IssueTypeEditorPageController controller;
 	private IssuePriorityTable issuePriorityTable;
 	

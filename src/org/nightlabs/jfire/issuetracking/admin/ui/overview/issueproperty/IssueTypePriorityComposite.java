@@ -19,9 +19,13 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.security.SecurityReflector;
 
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
 public class IssueTypePriorityComposite 
-extends XComposite{
-
+extends XComposite
+{
 	private I18nTextEditor priorityNameI18nTextEditor;
 	private Button autoCreateIDCheckBox;
 	private Label idLabel; 

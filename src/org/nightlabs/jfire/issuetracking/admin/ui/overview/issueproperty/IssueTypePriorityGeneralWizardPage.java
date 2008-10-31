@@ -14,12 +14,12 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypePriorityGeneralWizardPage 
-extends WizardHopPage {
-	
+extends WizardHopPage 
+{
 	private IssuePriority issuePriority;
 	private IssueTypePriorityComposite priorityComposite;
 	

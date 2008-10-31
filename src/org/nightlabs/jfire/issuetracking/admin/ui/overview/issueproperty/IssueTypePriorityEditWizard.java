@@ -10,12 +10,12 @@ import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypePriorityEditWizard 
-extends DynamicPathWizard {
-
+extends DynamicPathWizard 
+{
 	private IssuePriority issuePriority;
 	private IssueTypePriorityGeneralWizardPage priorityCreatePage;
 	

@@ -13,8 +13,13 @@ import org.nightlabs.jfire.base.ui.overview.EntryFactory;
 import org.nightlabs.jfire.base.ui.overview.EntryViewer;
 import org.nightlabs.jfire.base.ui.overview.OverviewEntryEditorInput;
 
-public class IssueTypeEntry extends AbstractEntry{
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
+public class IssueTypeEntry 
+extends AbstractEntry
+{
 	private IssueTypeCategoryComposite composite;
 	
 	public IssueTypeEntry(EntryFactory entryFactory) {

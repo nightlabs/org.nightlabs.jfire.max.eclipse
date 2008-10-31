@@ -14,12 +14,12 @@ import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypeResolutionGeneralWizardPage 
-extends WizardHopPage {
-	
+extends WizardHopPage 
+{
 	private IssueResolution issueResolution;
 	private IssueTypeResolutionComposite resolutionComposite;
 	

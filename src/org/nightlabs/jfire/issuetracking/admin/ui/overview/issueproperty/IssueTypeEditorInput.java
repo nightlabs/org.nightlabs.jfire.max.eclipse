@@ -30,9 +30,10 @@ import org.nightlabs.jfire.issue.id.IssueTypeID;
 /**
  * Editor input for {@link IssueTypeEditor}s.
  * 
- * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  */
-public class IssueTypeEditorInput extends JDOObjectEditorInput<IssueTypeID>
+public class IssueTypeEditorInput 
+extends JDOObjectEditorInput<IssueTypeID>
 {
 	/**
 	 * Constructor for an existing issue type.

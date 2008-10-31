@@ -16,6 +16,10 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
 public class IssueTypeEditor extends EntityEditor
 implements ICloseOnLogoutEditorPart
 {

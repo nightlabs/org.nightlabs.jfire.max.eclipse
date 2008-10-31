@@ -5,12 +5,14 @@ import java.util.Collection;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
+
 /**
- *  @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
  */
 public class IssueTypePrioritySelectCreateWizard
-extends DynamicPathWizard {
-
+extends DynamicPathWizard 
+{
 	private IssueType issueType;
 	private Collection<IssuePriority> selectedIssuePriorities;
 	

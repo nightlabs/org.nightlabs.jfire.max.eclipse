@@ -7,12 +7,12 @@ import org.nightlabs.jfire.base.ui.overview.Category;
 import org.nightlabs.jfire.base.ui.overview.DefaultCategoryFactory;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypeCategoryFactory
-extends DefaultCategoryFactory {
-
+extends DefaultCategoryFactory 
+{
 	/**
 	 * 
 	 */

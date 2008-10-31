@@ -19,9 +19,13 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.security.SecurityReflector;
 
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
 public class IssueTypeSeverityTypeComposite 
-extends XComposite{
-
+extends XComposite
+{
 	private I18nTextEditor severityTypeNameI18nTextEditor;
 	private Button autoCreateIDCheckBox;
 	private Label idLabel; 

@@ -38,12 +38,12 @@ import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
- * @author Chairat Kongarayawetchakun 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssueTypeSeverityTypeSelectWizardPage 
-extends WizardHopPage {
-
+extends WizardHopPage 
+{
 	private Group choiceGroup;	
 	private Button createNewCheckBox;
 	private Button selectFromCheckBox;

@@ -15,8 +15,13 @@ import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.jfire.issue.IssueType;
 
-public class IssueTypeNameSection extends RestorableSectionPart {
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
+public class IssueTypeNameSection 
+extends RestorableSectionPart 
+{
 	private IssueTypeEditorPageController controller;
 	private IssueType issueType;
 	

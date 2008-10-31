@@ -16,7 +16,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.IssuePriority;
 
 /**
- * @author Chairat Kongarayawetchakun
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
  *
  */
 public class IssuePriorityTable

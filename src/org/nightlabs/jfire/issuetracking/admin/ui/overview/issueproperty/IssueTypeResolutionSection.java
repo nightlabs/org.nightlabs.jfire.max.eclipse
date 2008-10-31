@@ -27,8 +27,13 @@ import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
 
-public class IssueTypeResolutionSection extends ToolBarSectionPart {
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ *
+ */
+public class IssueTypeResolutionSection 
+extends ToolBarSectionPart 
+{
 	private IssueTypeEditorPageController controller;
 	private IssueResolutionTable issueResolutionTable;
 	
