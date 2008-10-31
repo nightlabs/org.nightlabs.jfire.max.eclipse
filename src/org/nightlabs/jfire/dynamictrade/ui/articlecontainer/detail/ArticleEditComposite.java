@@ -87,8 +87,9 @@ public class ArticleEditComposite extends XComposite
 			public void doubleClick(DoubleClickEvent event)
 			{
 
-				if(articleEdit.isNonOrderArticleContainerFinilized())
+				if(articleEdit.isNonOrderArticleContainerFinalized())
 					return;
+
 				Collection<Article> c = articleTable.getSelectedElements();
 				if (c.isEmpty())
 					return;
