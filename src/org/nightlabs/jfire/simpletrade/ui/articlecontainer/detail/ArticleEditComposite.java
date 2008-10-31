@@ -86,7 +86,7 @@ public class ArticleEditComposite extends XComposite
 			@Override
 			public void doubleClick(DoubleClickEvent arg0) {
 
-				if(articleEdit.isNonOrderArticleContainerFinilized())
+				if(articleEdit.isNonOrderArticleContainerFinalized())
 					return;
 				articleEdit.changeTariffForSelectedArticles();
 			}
