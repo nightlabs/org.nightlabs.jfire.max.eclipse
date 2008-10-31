@@ -350,7 +350,11 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	}
 	
 	
-	
+	/**
+	 * This method checks of the Article Container has been finalized and if so it returns True.
+	 * 
+	 * @return Boolean value if it has been finalized or no.
+	 */
 	public boolean isNonOrderArticleContainerFinalized() {
 		ArticleContainer ac = getSegmentEdit().getArticleContainer();
 		if (ac instanceof Offer) {
