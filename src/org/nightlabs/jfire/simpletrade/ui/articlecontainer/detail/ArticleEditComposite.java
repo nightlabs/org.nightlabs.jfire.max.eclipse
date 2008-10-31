@@ -85,7 +85,7 @@ public class ArticleEditComposite extends XComposite
 		articleTable.getTableViewer().addDoubleClickListener(new IDoubleClickListener(){
 			@Override
 			public void doubleClick(DoubleClickEvent arg0) {
-
+				// prevents the dialog from opening if it has been finalized 
 				if(articleEdit.isNonOrderArticleContainerFinalized())
 					return;
 				articleEdit.changeTariffForSelectedArticles();
