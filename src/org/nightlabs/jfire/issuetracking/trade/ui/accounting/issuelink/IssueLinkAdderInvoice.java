@@ -20,7 +20,6 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
-import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;
