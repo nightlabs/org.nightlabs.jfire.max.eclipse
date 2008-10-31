@@ -14,6 +14,13 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 
 /**
+ * This class should be subclassed to create a composite that can contain the UI 
+ * for selecting the object to be linked to an issue.
+ * <p>
+ * Normally, The UI created in the adder composite is an instance of <link>SearchEntryViewer</link> 
+ * that has the seach button to do searching.  
+ * </p>
+ * 
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  */
 public abstract class AbstractIssueLinkAdder 

@@ -14,7 +14,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * TODO document what this interface is doing.
+ * An interface for all issue link adder things.
  * 
  * <p>
  * Implementors are advised not to directly implement this interface but instead subclass {@link AbstractIssueLinkAdder}.
