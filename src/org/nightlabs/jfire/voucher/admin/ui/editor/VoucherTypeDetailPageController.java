@@ -52,6 +52,9 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 	protected void createVoucherLayout(VoucherTypeDetailPage page)
 	{
+		if (page.getVoucherLayoutSection().getVoucherLayoutComposite() == null) // no UI created, yet
+			return;
+
 		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
 		VoucherLayout voucherLayout = getVoucherType().getVoucherLayout();
 		if (voucherLayout == null) {
