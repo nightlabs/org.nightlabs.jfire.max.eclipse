@@ -24,12 +24,12 @@ import org.nightlabs.jfire.issue.IssueComment;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueCommentCreateSection 
+public class IssueCommentCreateSection
 extends AbstractIssueEditorGeneralSection
 {
 	private Issue issue;
 	private Text commentText;
-	
+
 	public IssueCommentCreateSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
 		getSection().setText("New Comment");
@@ -37,11 +37,11 @@ extends AbstractIssueEditorGeneralSection
 		getSection().setLayout(new GridLayout());
 
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
+		client.getGridLayout().numColumns = 1;
 
 		commentText = new Text(client, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		commentText.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 60;
 		commentText.setLayoutData(gridData);
@@ -54,7 +54,7 @@ extends AbstractIssueEditorGeneralSection
 					markUndirty();
 			}
 		});
-		
+
 		getSection().setClient(client);
 	}
 	@Override
@@ -62,15 +62,16 @@ extends AbstractIssueEditorGeneralSection
 		this.issue = issue;
 		commentText.setText("");
 	}
-	
+
 	@Override
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 		if (commentText != null && !commentText.equals("")) {
-			IssueComment comment = new IssueComment(issue.getOrganisationID(), 
-					issue.getIssueID(), 
-					Long.toString(IDGenerator.nextID(IssueComment.class)), 
-					commentText.getText(), 
+			IssueComment comment = new IssueComment(
+					IDGenerator.getOrganisationID(),
+					IDGenerator.nextID(IssueComment.class),
+					issue,
+					commentText.getText(),
 					Login.sharedInstance().getUser(new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
 			issue.getComments().add(comment);
 		}
