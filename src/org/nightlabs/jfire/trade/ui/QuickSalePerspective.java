@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui;
 
+import javax.security.auth.login.LoginException;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IFolderLayout;
@@ -164,6 +166,11 @@ implements IPerspectiveFactory
 			// open editor if necessary
 			if (page != null && page.getActiveEditor() == null && page.getEditorReferences().length == 0)
 			{
+				try {
+					Login.getLogin();
+				} catch (LoginException e) {
+					throw new RuntimeException(e);
+				}
 				ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorPage.createEditorInput();
 				if (input != null) {
 					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
