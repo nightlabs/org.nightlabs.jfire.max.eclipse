@@ -3,7 +3,10 @@
  */
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -11,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -19,6 +23,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -26,8 +31,10 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
+import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PdfViewerComposite;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
@@ -38,6 +45,7 @@ import org.nightlabs.jfire.reporting.ui.layout.PreparedRenderedReportLayout;
 import org.nightlabs.jfire.reporting.ui.layout.RenderedReportLayoutProvider;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.util.IOUtil;
 
 import com.sun.pdfview.PDFFile;
 
@@ -136,7 +144,69 @@ public class DefaultReportViewerComposite extends XComposite {
 //		pdfViewer.createControl(stack, SWT.BORDER);
 
 		pdfViewerComposite = new PdfViewerComposite(stack, SWT.BORDER);
+		new SaveAsActionHandler(pdfViewerComposite.getPdfViewer()) {
+			@Override
+			public void saveAs() {
+				String suggestedDirectory;
+				String suggestedFilePath;
+				String suggestedFileName;
 
+				if (lastSaveDirectory == null)
+					lastSaveDirectory = IOUtil.getUserHome();
+
+				suggestedFileName = Long.toHexString(System.currentTimeMillis()) + ".pdf"; // TODO is there a way to get a nicer name? i.e. the name of the report and its currently displayed data - e.g. sth. like "Offer-2008-234"???
+				File f = new File(lastSaveDirectory, suggestedFileName);
+				suggestedDirectory = lastSaveDirectory.getAbsolutePath();
+				suggestedFilePath = f.getAbsolutePath();
+
+				FileDialog fileDialog = new FileDialog(RCPUtil.getActiveShell(), SWT.SAVE);
+				fileDialog.setFileName(suggestedFileName);
+
+				if (suggestedFilePath != null && !"".equals(suggestedFilePath))
+					fileDialog.setFilterPath(suggestedDirectory);
+
+				fileDialog.setText(String.format("Save PDF file %s", suggestedFileName, suggestedFilePath));
+				String fileName = fileDialog.open();
+				if (fileName != null) {
+					final File file = new File(fileName);
+					if (file.exists()) {
+						if (!MessageDialog.openQuestion(RCPUtil.getActiveShell(), String.format("Overwrite?", file.getName(), file.getAbsolutePath()), String.format("The file \"%s\" already exists. Do you want to overwrite it?", file.getName(), file.getAbsolutePath())))
+							return;
+					}
+
+					lastSaveDirectory = file.getParentFile();
+
+					Job job = new Job(String.format("Saving PDF file %s", file.getName())) {
+						@Override
+						protected IStatus run(ProgressMonitor monitor)
+						throws Exception
+						{
+							monitor.beginTask(String.format("Saving PDF file %s", file.getName()), 100);
+							try {
+								monitor.worked(10);
+
+								InputStream in = preparedLayout.getEntryFileAsURL().openStream();
+								try {
+									FileOutputStream out = new FileOutputStream(file);
+									try {
+										IOUtil.transferStreamData(in, out);
+									} finally {
+										out.close();
+									}
+								} finally {
+									in.close();
+								}
+
+							} finally {
+								monitor.done();
+							}
+							return Status.OK_STATUS;
+						}
+					};
+					job.schedule();
+				}
+			}
+		};
 		stackLayout.topControl = fetchingLayoutComposite;
 	}
 
@@ -219,11 +289,13 @@ public class DefaultReportViewerComposite extends XComposite {
 			stackLayout.topControl = pdfViewerComposite;
 //			threadDeathWorkaround.registerComposite(this);
 			try {
-				IProgressMonitor monitor = new NullProgressMonitor();
 				// TODO: This is a expensive operation it should be done in a Job
+				IProgressMonitor monitor = new NullProgressMonitor();
 				PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), monitor);
-//				pdfViewer.setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
 				pdfViewerComposite.getPdfViewer().setPdfDocument(new OneDimensionalPdfDocument(pdfFile, monitor));
+				// end TO DO
+
+
 
 			} catch (IOException e) {
 				throw new RuntimeException(e);
@@ -264,4 +336,6 @@ public class DefaultReportViewerComposite extends XComposite {
 	public PreparedRenderedReportLayout getPreparedLayout() {
 		return preparedLayout;
 	}
+
+	private static File lastSaveDirectory;
 }
