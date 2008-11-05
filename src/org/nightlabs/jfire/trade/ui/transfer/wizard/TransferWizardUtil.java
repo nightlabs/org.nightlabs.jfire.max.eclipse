@@ -64,6 +64,7 @@ import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
+import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.StoreManagerUtil;
@@ -319,10 +320,10 @@ public class TransferWizardUtil
 				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
 					DeliveryData deliveryData = deliveryPair.getFirst();
 
-					StoreManager storeManager = StoreManagerUtil.getHome().create();
+					StoreManager storeManager = StoreManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
 					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
-						DeliveryID deliveryID = (DeliveryID) JDOHelper.getObjectId(deliveryData);
-						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, -1);
+						DeliveryID deliveryID = DeliveryID.create(deliveryData.getDelivery().getOrganisationID(), deliveryData.getDelivery().getDeliveryID());
+						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 						deliveryNoteIDsToBePrinted.addAll(delivery.getDeliveryNoteIDs());
 					}

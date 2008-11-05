@@ -66,7 +66,12 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 		doPrintCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				boolean checkForMin = !doPrint;
 				doPrint = doPrintCheckbox.getSelection();
+				if (checkForMin) {
+					printCountSpinner.setSelection(Math.max(1, printCountSpinner.getSelection()));
+					printCount = printCountSpinner.getSelection();
+				}
 				updateInfoLabel();
 			}
 		});
@@ -74,6 +79,7 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				doPrintCheckbox.setSelection(printCountSpinner.getSelection() != 0);
+				doPrint = doPrintCheckbox.getSelection();
 				printCount = printCountSpinner.getSelection();
 				updateInfoLabel();
 			}
@@ -81,7 +87,7 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 	}
 
 	protected void updateInfoLabel() {
-		if (getEnteredPrintCount() == 0)
+		if (getActualPrintCount() == 0)
 			infoLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.infoLabel.text")); //$NON-NLS-1$
 		else {
 			String copyText = printCount == 1 ? Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.copy") : Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.copies"); //$NON-NLS-1$ //$NON-NLS-2$
