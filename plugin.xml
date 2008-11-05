@@ -778,7 +778,7 @@
         <reportUseCase
             description="%reportUseCase.deliveryNote.description"
             id="org.nightlabs.jfire.trade.ui.reportUseCase.deliveryNote"
-            name="%reportUseCase.deliveryNote.name" reportLayoutType="JFireReportingTrade-Reporting-Delivery"/>
+            name="%reportUseCase.deliveryNote.name" reportLayoutType="JFireReportingTrade-Reporting-DeliveryNote"/>
     </extension>
     <extension point="org.nightlabs.base.ui.contributionItemSet">
         <contributionItem
