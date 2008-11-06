@@ -14,7 +14,7 @@ public class IssueLinkItemChangeEvent extends EventObject {
 
 	/**
 	 * 
-	 * An Enum defining values used for specifying the event types.
+	 * An Enum defining values used for specifying the event type.
 	 */
 	public static enum ChangeType {
 		add,
