@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
@@ -24,7 +24,6 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 
 /**
@@ -33,28 +32,28 @@ import org.nightlabs.notification.NotificationEvent;
  * custom pages using the <code>org.nightlabs.base.ui.entityEditor</code> extension point.
  * Additionally page-factories can be registered to as extensions to the
  * extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory</code>
- * where different pages can be defined for specific implementations of {@link ArticleContainer}. 
+ * where different pages can be defined for specific implementations of {@link ArticleContainer}.
  * <p>
- * Note, however, that this Editor relies on the fact that one 
+ * Note, however, that this Editor relies on the fact that one
  * Page of type {@link ArticleContainerEditorPage} is added using the page-id {@link ArticleContainerEditorPage#PAGE_ID}.
- * </p>  
+ * </p>
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public abstract class AbstractArticleContainerEditor 
-extends EntityEditor 
-implements IArticleContainerEditor 
+public abstract class AbstractArticleContainerEditor
+extends EntityEditor
+implements IArticleContainerEditor
 {
 	private static final Logger logger = Logger.getLogger(AbstractArticleContainerEditor.class);
 	private static int numEditorsOpen = 0;
 	private static boolean partInitialized = false;
-	
+
 	private ArticleContainerEdit articleContainerEdit;
-	
+
 	public AbstractArticleContainerEditor() {
 		registerActivatePartListener();
 	}
-	
+
 	@Override
 	protected void addPages() {
 		super.addPages();
@@ -74,9 +73,9 @@ implements IArticleContainerEditor
 		};
 		controller.addModifyListener(listener);
 	}
-	
+
 	private ArticleContainerEditorPage articleContainerEditorPage;
-	
+
 	protected ArticleContainerEditorPage getArticleContainerEditorPage() {
 		if (articleContainerEditorPage == null) {
 			IFormPage page = findPage(ArticleContainerEditorPage.PAGE_ID);
@@ -87,7 +86,7 @@ implements IArticleContainerEditor
 		return articleContainerEditorPage;
 	}
 	/**
-	 * Overrides and returns the result of the processing of extensions to the  
+	 * Overrides and returns the result of the processing of extensions to the
 	 * entityEditor and articleContainerEditorPageFactory extension-points.
 	 */
 	@Override
@@ -101,7 +100,7 @@ implements IArticleContainerEditor
 		return ArticleContainerEditorPageFactoryRegistry.sharedInstance().getPagesSettingsOrdered(
 				getEditorID(), articleContainerEditorClass);
 	}
-	
+
 	/**
 	 * Gets the {@link ArticleContainerEdit} from the {@link ArticleContainerEditorPage}
 	 * registered to this editor. The page should be added with the page-id {@link ArticleContainerEditorPage#PAGE_ID}.
@@ -120,7 +119,7 @@ implements IArticleContainerEditor
 	protected ArticleContainerEditorInput getArticleContainerEditorInput() {
 		return (ArticleContainerEditorInput) getEditorInput();
 	}
-	
+
 	private static synchronized void registerActivatePartListener() {
 		if (partInitialized)
 			return;
@@ -137,8 +136,8 @@ implements IArticleContainerEditor
 
 			ArticleContainerID articleContainerID = null;
 
-			if (articleContainerEditor != null && 
-					articleContainerEditor.getEditorInput() != null) 
+			if (articleContainerEditor != null &&
+					articleContainerEditor.getEditorInput() != null)
 			{
 				articleContainerID = articleContainerEditor.getArticleContainerEditorInput().getArticleContainerID();
 			}
@@ -152,20 +151,22 @@ implements IArticleContainerEditor
 			SelectionManager.sharedInstance().notify(event);
 		}
 
-		public void partActivated(final IWorkbenchPart part) {
+		@Override
+		public void partActivated(IWorkbenchPartReference ref) {
+			IWorkbenchPart part = ref.getPart(false);
 			if (part instanceof AbstractArticleContainerEditor)
 				fireEvent((AbstractArticleContainerEditor)part);
 		}
 
 		@Override
-		public void partClosed(final IWorkbenchPartReference ref) 
+		public void partClosed(final IWorkbenchPartReference ref)
 		{
 			IWorkbenchPart part = ref.getPart(false);
 			if(Login.sharedInstance().getLoginState() == LoginState.ABOUT_TO_LOG_OUT)
 			{
 				if (RCPUtil.getActiveWorkbenchPage() != null)
 					RCPUtil.getActiveWorkbenchPage().removePartListener(partListener);
-				
+
 				partInitialized = false;
 				return;
 			}
@@ -184,7 +185,7 @@ implements IArticleContainerEditor
 
 			if (numEditorsOpen == 0  && RCPUtil.getActiveWorkbenchPage() != null) {
 				// should only be fired when this was the last active editor in the current perspective
-				// so an additional map with perspectiveID2numEditorsOpen should be added 
+				// so an additional map with perspectiveID2numEditorsOpen should be added
 				fireEvent(null);
 
 				if (RCPUtil.getActiveWorkbenchPage() != null)
