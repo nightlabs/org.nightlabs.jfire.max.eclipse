@@ -144,7 +144,7 @@ implements IPaymentEntryPage
 	private ServerPaymentProcessor selectedServerPaymentProcessor = null;
 
 	private Payment payment;
-	
+
 	private TradePrintingConfigModule tradePrintingCfMod = null;
 	private AutomaticPrintingOptionsGroup automaticPrintingGroup;
 
@@ -183,7 +183,7 @@ implements IPaymentEntryPage
 
 		return accountingManager;
 	}
-	
+
 	protected void updateAmountGUI()
 	{
 		logger.debug("page<"+getName()+">.updateAmountGUI()"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -222,9 +222,6 @@ implements IPaymentEntryPage
 			getContainer().updateButtons();
 	}
 
-	/**
-	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public Control createPageContents(Composite parent)
 	{
@@ -276,7 +273,7 @@ implements IPaymentEntryPage
 			modeOfPaymentFlavourTable = new ModeOfPaymentFlavourTable(page);
 //			modeOfPaymentFlavourGUIList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 //			modeOfPaymentFlavourGUIList.setLayoutData(new GridData(GridData.FILL_BOTH));
-			
+
 			spacer = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			spacer.getGridData().grabExcessVerticalSpace = false;
 			spacer.getGridData().heightHint = 4;
@@ -350,9 +347,9 @@ implements IPaymentEntryPage
 //					modeOfPaymentFlavourGUIListSelectionChanged();
 //				}
 //			});
-			
+
 			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.group.invoicePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.invoice"), null); //$NON-NLS-1$ //$NON-NLS-2$
-			
+
 //			Group printGroup = new Group(page, SWT.BORDER);
 //			printGroup.setText("Invoice printing options");
 //			printGroup.setLayout(new GridLayout(3, false));
@@ -393,7 +390,7 @@ implements IPaymentEntryPage
 //					updateInvoicesToBePrinted();
 //				}
 //			});
-			
+
 			loadModeOfPayments();
 
 			return page;
@@ -403,21 +400,21 @@ implements IPaymentEntryPage
 			throw new RuntimeException(x);
 		}
 	}
-	
+
 	protected PaymentWizardHop getPaymentWizardHop()
 	{
 		return (PaymentWizardHop) getWizardHop();
 	}
-	
+
 	private volatile Job loadModeOfPaymentsJob = null;
-	
+
 	public void loadModeOfPayments() {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.job.loadingModesOfPayment")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				PaymentWizard wizard = (PaymentWizard) getWizard();
 				final List<ModeOfPaymentFlavour> modeOfPaymentFlavourList = new LinkedList<ModeOfPaymentFlavour>();
-				
+
 				// load ModeOfPaymentFlavour s
 				// AnchorID legalEntityID = (AnchorID) JDOHelper.getObjectId(offer.getOrder().getCustomer());
 				Collection<ModeOfPaymentFlavour> c;
@@ -446,7 +443,7 @@ implements IPaymentEntryPage
 						return name0.compareTo(name1);
 					}
 				});
-				
+
 				PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
 				final List<ModeOfPaymentFlavour> selList = new ArrayList<ModeOfPaymentFlavour>(1);
 				for (ModeOfPaymentFlavour modeOfPaymentFlavour : modeOfPaymentFlavourList) {
@@ -455,26 +452,26 @@ implements IPaymentEntryPage
 						break;
 					}
 				}
-				
+
 				tradePrintingCfMod = ConfigUtil.getWorkstationCfMod(TradePrintingConfigModule.class,
 						new String[] { FetchPlan.DEFAULT }, 1, new NullProgressMonitor());
-				
+
 				final Job thisJob = this;
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						if (loadModeOfPaymentsJob != thisJob)
 							return;
-						
+
 						PaymentEntryPage.this.modeOfPaymentFlavourList = modeOfPaymentFlavourList;
-						
+
 						if (modeOfPaymentFlavourTable != null && !modeOfPaymentFlavourTable.isDisposed()) {
 							modeOfPaymentFlavourTable.setInput(modeOfPaymentFlavourList);
 							modeOfPaymentFlavourTable.setSelectedElements(selList);
 							setMessage(null);
 							modeOfPaymentFlavourGUIListSelectionChanged();
 						}
-						
+
 						if (automaticPrintingGroup != null && !automaticPrintingGroup.isDisposed()) {
 							automaticPrintingGroup.setEnteredPrintCount(tradePrintingCfMod.getInvoiceCopyCount());
 							automaticPrintingGroup.setDoPrint(tradePrintingCfMod.isPrintInvoiceByDefault());
@@ -493,11 +490,11 @@ implements IPaymentEntryPage
 //					modeOfPaymentFlavourGUIList.add(modeOfPaymentFlavour.getName().getText(NLLocale.getDefault().getLanguage()));
 //				}
 //				if (selIdx  < 0) selIdx = 0;
-				
+
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		loadModeOfPaymentsJob = loadJob;
 		loadJob.schedule();
 	}
@@ -971,9 +968,9 @@ implements IPaymentEntryPage
 				wizard.updateDialog();
 				return;
 			}
-			
+
 			this.setErrorMessage(null);
-			
+
 			getPaymentWizardHop().getPayment().setServerPaymentProcessorID(
 					(ServerPaymentProcessorID) JDOHelper.getObjectId(selectedServerPaymentProcessor));
 		}
@@ -1025,7 +1022,7 @@ implements IPaymentEntryPage
 				selectedServerPaymentProcessor != null &&
 				selectedServerPaymentProcessor.getRequirementCheckResult() == null;
 	}
-	
+
 	public int getInvoicesToPrintCount() {
 		return automaticPrintingGroup.getActualPrintCount();
 	}
