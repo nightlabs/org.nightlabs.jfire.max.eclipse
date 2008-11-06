@@ -5,9 +5,17 @@ import java.util.EventObject;
 
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 
+/**
+ * 
+ * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
+ */
 public class IssueLinkItemChangeEvent extends EventObject {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 
+	 * An Enum defining values used for specifying the event types.
+	 */
 	public static enum ChangeType {
 		add,
 		remove
@@ -16,6 +24,12 @@ public class IssueLinkItemChangeEvent extends EventObject {
 	private ChangeType changeType;
 	private Collection<IssueLinkTableItem> issueLinkTableItems;
 
+	/**
+	 * 
+	 * @param source
+	 * @param changeType
+	 * @param issueLinkTableItems
+	 */
 	public IssueLinkItemChangeEvent(Object source, ChangeType changeType, Collection<IssueLinkTableItem> issueLinkTableItems) {
 		super(source);
 		assert changeType != null : "changeType != null";
@@ -24,10 +38,18 @@ public class IssueLinkItemChangeEvent extends EventObject {
 		this.issueLinkTableItems = issueLinkTableItems;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ChangeType getChangeType() {
 		return changeType;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Collection<IssueLinkTableItem> getIssueLinkTableItems() {
 		return issueLinkTableItems;
 	}

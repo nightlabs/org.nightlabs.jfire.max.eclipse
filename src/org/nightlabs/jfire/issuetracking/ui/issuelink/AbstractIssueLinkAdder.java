@@ -29,11 +29,18 @@ implements IssueLinkAdder
 	private IssueLinkHandlerFactory issueLinkHandlerFactory;
 	private ListenerList selectionDoubleClickListeners = new ListenerList();
 	
+	/**
+	 * 
+	 */
 	public void init(IssueLinkHandlerFactory issueLinkHandlerFactory) 
 	{
 		this.issueLinkHandlerFactory = issueLinkHandlerFactory;
 	}
 	
+	/**
+	 * Gets the {@link IssueLinkHandlerFactory}.
+	 * @return  the {@link IssueLinkHandlerFactory}
+	 */
 	public IssueLinkHandlerFactory getIssueLinkHandlerFactory() 
 	{
 		return issueLinkHandlerFactory;
@@ -41,6 +48,9 @@ implements IssueLinkAdder
 	
 	private Composite composite = null;
 	
+	/**
+	 * Creates the composite and then calls the search function to show elements for choosing.
+	 */
 	public Composite createComposite(Composite parent) {
 		if (composite != null)
 			throw new IllegalStateException("createComposite(...) has already been called! Have already a composite!"); //$NON-NLS-1$
@@ -69,6 +79,10 @@ implements IssueLinkAdder
 	 */
 	protected abstract Composite doCreateComposite(Composite parent);
 	
+	/**
+	 * This method does searching thing to choose the object to be linked.
+	 * Implement it and do searching thing in its.
+	 */
 	protected abstract void doSearch();
 
 	public void dispose()
@@ -77,6 +91,9 @@ implements IssueLinkAdder
 			composite.dispose();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Composite getComposite()
 	{
 		return composite;
@@ -111,10 +128,16 @@ implements IssueLinkAdder
 			((ISelectionChangedListener ) l).selectionChanged(event);
 	}
 
+	/**
+	 * 
+	 */
 	public void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
 		selectionDoubleClickListeners.add(listener);
 	}
 	
+	/**
+	 * 
+	 */
 	public void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
 		selectionDoubleClickListeners.remove(listener);
 	}

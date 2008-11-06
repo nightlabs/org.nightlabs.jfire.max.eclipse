@@ -28,6 +28,8 @@ import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 
 /**
+ * The table used for listing {@link Issue} elements.
+ * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueTable
@@ -55,6 +57,12 @@ extends AbstractTableComposite<Issue>
 		StateDefinition.FETCH_GROUP_NAME
 	};
 
+	/**
+	 * Constructs the issue table.
+	 * 
+	 * @param parent - the parent composite for holding this table
+	 * @param style - SWT style constant
+	 */
 	public IssueTable(Composite parent, int style)
 	{
 		super(parent, style);

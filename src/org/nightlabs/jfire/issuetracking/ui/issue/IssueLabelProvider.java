@@ -8,6 +8,8 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 
 /**
+ * An extended class of the {@link LabelProvider}.
+ * 
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */

@@ -24,19 +24,31 @@ import org.nightlabs.progress.ProgressMonitor;
  */
 public interface IssueLinkAdder extends ISelectionProvider
 {
+	/**
+	 * 
+	 * @param handlerFactory
+	 */
 	void init(IssueLinkHandlerFactory handlerFactory);
 
+	/**
+	 * 
+	 * @return
+	 */
 	IssueLinkHandlerFactory getIssueLinkHandlerFactory();
 	
 	/**
 	 * Create the <tt>Composite</tt> which serves the functionality to add
 	 * a {@link org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer}.
 	 *
-	 * @param parent The parent composite into all GUI elements should be created.
-	 * @return The newly created <tt>Composite</tt>.
+	 * @param parent The parent composite into all GUI elements should be created
+	 * @return The newly created <tt>Composite</tt>
 	 */
 	Composite createComposite(Composite parent);
 
+	/**
+	 * 
+	 * @return The composite of the link adder
+	 */
 	Composite getComposite();
 
 	/**
@@ -45,8 +57,16 @@ public interface IssueLinkAdder extends ISelectionProvider
 	 */
 	void onDispose();
 
+	/**
+	 * 
+	 * @param listener
+	 */
 	void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
 	
+	/**
+	 * 
+	 * @param listener
+	 */
 	void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener);
 
 	/**
@@ -69,6 +89,13 @@ public interface IssueLinkAdder extends ISelectionProvider
 	 */
 	Set<ObjectID> getLinkedObjectIDs();
 	
+	/**
+	 * 
+	 * @param issue
+	 * @param issueLinkType
+	 * @param monitor
+	 * @return
+	 */
 	Set<IssueLink> createIssueLinks(
 			Issue issue,
 			IssueLinkType issueLinkType,

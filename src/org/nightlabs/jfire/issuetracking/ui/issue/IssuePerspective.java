@@ -7,6 +7,8 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueOverviewView;
 
 /**
+ * The RCP perspective holding views and other things for managing {@link Issue}.
+ * 
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */

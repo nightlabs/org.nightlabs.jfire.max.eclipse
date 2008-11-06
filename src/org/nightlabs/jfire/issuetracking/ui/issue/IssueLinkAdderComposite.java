@@ -15,6 +15,8 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 
 /**
+ * A composite that contains UIs for adding {@link IssueLink}.
+ * 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueLinkAdderComposite 
@@ -27,9 +29,12 @@ extends XComposite
 	private Issue issue;
 
 	/**
-	 * @param parent
-	 * @param style
-	 * @param haveButton the boolean flag uses for displaying button.
+	 * Contructs a composite used for adding {@link IssueLink}.
+	 * 
+	 * @param parent -the parent composite
+	 * @param style - the SWT style flag 
+	 * @param haveButton - the boolean flag uses for displaying button
+	 * @param issue - the {@link Issue} used in adding process
 	 */
 	public IssueLinkAdderComposite(Composite parent, int style, boolean haveButton, Issue issue) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
@@ -90,6 +95,10 @@ extends XComposite
 			issueLinkTable.setIssue(issue);
 	}
 
+	/**
+	 * Gets the {@link IssueTable}.
+	 * @return Returns the {@link IssueTable}
+	 */
 	public IssueLinkTable getIssueLinkTable() {
 		return issueLinkTable;
 	}

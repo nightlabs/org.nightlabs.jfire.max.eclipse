@@ -45,6 +45,7 @@ import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
 /**
+ * The composite that has a table for listing {@link IssueLink}.
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  *
  */
@@ -133,7 +134,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	 * Set the issue to work with. This method should normally used. It causes this table to load all its
 	 * data itself, so you don't need to care about fetch-groups. The IssueID
 	 *
-	 * @param issueID
+	 * @param issueID - the issue's {@link IssueID} used in the table
 	 */
 	public void setIssueID(final IssueID issueID)
 	{

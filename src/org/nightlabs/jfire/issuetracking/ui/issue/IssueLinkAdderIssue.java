@@ -26,6 +26,7 @@ import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
+ * 
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
@@ -35,6 +36,10 @@ extends AbstractIssueLinkAdder
 	private IssueEntryListViewer iViewer;
 	private Issue issue;
 	
+	/**
+	 * Constructs an issue-issue link adder.
+	 * @param issue - the {@link Issue} used in adding process
+	 */
 	public IssueLinkAdderIssue(Issue issue) {
 		this.issue = issue;
 	}
@@ -75,11 +80,18 @@ extends AbstractIssueLinkAdder
 		iViewer.search();
 	}
 	
+	/**
+	 * 
+	 */
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
 		return NLJDOHelper.getObjectIDSet(elements);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isComplete() {
 		if (iViewer == null)
 			return false;
