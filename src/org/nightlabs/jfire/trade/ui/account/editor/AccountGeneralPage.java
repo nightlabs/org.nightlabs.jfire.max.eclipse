@@ -37,7 +37,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * An editor page for account.
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairatk[at]nightlabs[dot]de
  */
 public class AccountGeneralPage extends EntityEditorPageWithProgress
@@ -46,12 +46,12 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 	 * The id of this page.
 	 */
 	public static final String ID_PAGE = AccountGeneralPage.class.getName();
-	
+
 	private AccountGeneralSection accountGeneralSection;
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link PersonPreferencesPage}.
+	 * new instances of {@link AccountGeneralPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -67,7 +67,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 	 * <p>
 	 * This constructor is used by the entity editor
 	 * page extension system.
-	 * 
+	 *
 	 * @param editor The editor for which to create this
 	 * 		form page.
 	 */
@@ -80,11 +80,11 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 		accountGeneralSection = new AccountGeneralSection(this, parent);
 		getManagedForm().addPart(accountGeneralSection);
 	}
-	
+
 	public AccountGeneralSection getAccountGeneralSection() {
 		return accountGeneralSection;
 	}
-	
+
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent)
 	{
@@ -99,7 +99,7 @@ public class AccountGeneralPage extends EntityEditorPageWithProgress
 			}
 		});
 	}
-	
+
 	@Override
 	protected String getPageFormTitle() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountGeneralPage.pageFormTitle"); //$NON-NLS-1$

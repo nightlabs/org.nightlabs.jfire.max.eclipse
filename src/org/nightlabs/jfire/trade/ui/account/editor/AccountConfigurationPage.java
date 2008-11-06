@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.account.editor;
 
@@ -25,15 +25,15 @@ public class AccountConfigurationPage
 extends EntityEditorPageWithProgress
 {
 	private static final Logger logger = Logger.getLogger(AccountConfigurationPage.class);
-	
+
 	/**
 	 * The id of this page.
 	 */
 	public static final String ID_PAGE = AccountConfigurationPage.class.getName();
-	
+
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link PersonPreferencesPage}.
+	 * new instances of {@link AccountConfigurationPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -44,7 +44,7 @@ extends EntityEditorPageWithProgress
 			return new AccountConfigurationPageController(editor);
 		}
 	}
-	
+
 	public AccountConfigurationPage(FormEditor editor) {
 		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountConfigurationPage.title")); //$NON-NLS-1$
 	}
@@ -53,7 +53,7 @@ extends EntityEditorPageWithProgress
 	public AccountConfigurationSection getAccountConfigurationSection() {
 		return accountConfigurationSection;
 	}
-	
+
 	@Override
 	protected void addSections(Composite parent) {
 		accountConfigurationSection = new AccountConfigurationSection(this, parent);
@@ -79,7 +79,7 @@ extends EntityEditorPageWithProgress
 			}
 		});
 	}
-	
+
 	@Override
 	protected String getPageFormTitle() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountConfigurationPage.title"); //$NON-NLS-1$
