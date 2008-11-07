@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorOSPrint;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractScriptDataProviderThread;
@@ -79,11 +80,12 @@ extends AbstractClientDeliveryProcessorOSPrint
 			logger.debug("print "+tickets.size()+" in printJob");
 		}
 
-//		if (pageFormat != null)
-//			printJob.setPrintable(getPrintable(tickets), pageFormat);
-//		else
-//			printJob.setPrintable(getPrintable(tickets));
 		printJob.setPageable(getPageable(tickets, printJob.defaultPage()));
+		printJob.setJobName(
+				"CrossTicket_Ticket_"
+				+ getDelivery().getOrganisationID()
+				+ "_" + ObjectIDUtil.longObjectIDFieldToString(getDelivery().getDeliveryID())
+				+ "_" + ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis()));
 
 		try {
 			printJob.print();
