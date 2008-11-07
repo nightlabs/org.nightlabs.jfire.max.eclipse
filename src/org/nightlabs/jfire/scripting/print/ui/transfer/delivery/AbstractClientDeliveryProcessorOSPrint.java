@@ -68,7 +68,7 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 
 		PrinterJob printJob = awtPrinter.getPrinterJob();
-		printJob.setJobName("CrossTicket Ticket");
+//		printJob.setJobName("CrossTicket Ticket");
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("getting print job took "+(System.currentTimeMillis()-start)+" ms!");				 //$NON-NLS-1$ //$NON-NLS-2$

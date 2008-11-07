@@ -33,7 +33,7 @@ public abstract class AbstractScriptDataProviderThread
 extends Thread
 {
 	private static final Logger logger = Logger.getLogger(AbstractScriptDataProviderThread.class);
-	
+
 	private AbstractClientDeliveryProcessor clientDeliveryProcessor;
 //	private AbstractClientDeliveryProcessorFactory clientDeliveryProcessorFactoryPrint;
 	private volatile Throwable error;
@@ -48,7 +48,7 @@ extends Thread
 	private LinkedList<ArticleID> articleIDsToProcess = new LinkedList<ArticleID>();
 	private LinkedList<ArticleID> articleIDsReady = new LinkedList<ArticleID>();
 	private Object articleIDsMutex = new Object();
-	
+
 	public AbstractScriptDataProviderThread(AbstractClientDeliveryProcessor clientDeliveryProcessor)
 	{
 		this.clientDeliveryProcessor = clientDeliveryProcessor;
@@ -58,7 +58,7 @@ extends Thread
 		if (logger.isDebugEnabled())
 			logger.debug("New instance of TicketDataProviderThread created."); //$NON-NLS-1$
 	}
-			
+
 //	/**
 //	 * returns the Layout File of the ProductID
 //	 *
@@ -66,7 +66,7 @@ extends Thread
 //	 * @return the Layout File of the ProductID
 //	 */
 //	public abstract File getLayoutFile(ProductID productID);
-		
+
 	/**
 	 * @return Returns <code>true</code>, if the method {@link #fetchReadyArticleID()}
 	 *		would immediately return (either with an object result or <code>null</code>).
@@ -137,14 +137,14 @@ extends Thread
 	public boolean isInterrupted() {
 		return interrupted || super.isInterrupted();
 	}
-	
+
 	protected boolean isArticleIDsToProcessEmpty()
 	{
 		synchronized (articleIDsMutex) {
 			return articleIDsToProcess.isEmpty();
 		}
 	}
-	
+
 	protected Map<ScriptRegistryItemID, Object> getScriptResultMap(ProductID ticketID, boolean throwExceptionIfNotFound)
 	{
 		Map<ScriptRegistryItemID, Object> scriptResultMap;
@@ -162,7 +162,7 @@ extends Thread
 	{
 		return scriptingResult;
 	}
-	
+
 //	/**
 //	 * returns the corresponding {@link ProductID} for the given {@link ArticleID}
 //	 *
@@ -184,10 +184,10 @@ extends Thread
 
 		return productID;
 	}
-	
+
 	private Object layoutMapForArticleIDSetMutex = new Object();
 	private LayoutMapForArticleIDSet layoutMapForArticleIDSet;
-	
+
 	private File cacheDir;
 
 	/**
@@ -212,12 +212,13 @@ extends Thread
 		}
 		return cacheDir;
 	}
-	
+
 	private static final int bulkProcessSize = 2;
-	
+
 	@Override
 	public void run()
 	{
+		long start = System.currentTimeMillis();
 		if (logger.isDebugEnabled())
 			logger.debug("run: enter"); //$NON-NLS-1$
 
@@ -269,7 +270,7 @@ extends Thread
 						if (!layoutFile.exists()) {
 							if (logger.isDebugEnabled())
 								logger.debug("run: layoutFile does not exist: " + layoutFile); //$NON-NLS-1$
-							
+
 							layoutIDsToDownload.add(layoutID);
 							continue iterateTicketLayout;
 						}
@@ -375,13 +376,16 @@ extends Thread
 			synchronized (articleIDsMutex) {
 				articleIDsMutex.notifyAll();
 			}
-			if (logger.isDebugEnabled())
+			if (logger.isDebugEnabled()) {
 				logger.debug("run: exit"); //$NON-NLS-1$
+				long duration = System.currentTimeMillis() - start;
+				logger.debug("Retrieving data took "+duration);
+			}
 		}
 	}
-	
+
 	protected abstract LayoutMapForArticleIDSet getLayoutMapForArticleIDSet(List<ArticleID> articleIDs);
-	
+
 	protected abstract Map<ProductID, Map<ScriptRegistryItemID, Object>> getScriptingResults(
 			List<ProductID> productIDs);
 
