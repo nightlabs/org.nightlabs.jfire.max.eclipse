@@ -81,11 +81,17 @@ extends AbstractClientDeliveryProcessorOSPrint
 		}
 
 		printJob.setPageable(getPageable(tickets, printJob.defaultPage()));
+//		printJob.setJobName(
+//				"CrossTicket_Ticket_"
+//				+ getDelivery().getOrganisationID()
+//				+ "_" + ObjectIDUtil.longObjectIDFieldToString(getDelivery().getDeliveryID())
+//				+ "_" + ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis()));
 		printJob.setJobName(
-				"CrossTicket_Ticket_"
-				+ getDelivery().getOrganisationID()
+				"JFireVoucher_Voucher_" +
+				ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis())
+				+ "_" + getDelivery().getOrganisationID()
 				+ "_" + ObjectIDUtil.longObjectIDFieldToString(getDelivery().getDeliveryID())
-				+ "_" + ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis()));
+		);
 
 		try {
 			printJob.print();
