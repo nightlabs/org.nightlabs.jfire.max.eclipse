@@ -20,7 +20,7 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProce
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
- * 
+ *
  */
 public abstract class AbstractClientDeliveryProcessorPrint
 extends AbstractClientDeliveryProcessor
@@ -146,7 +146,7 @@ extends AbstractClientDeliveryProcessor
 					ticketDrawComponent.assignScriptResults(scriptResultMap);
 					// evaluate visible scripts
 					VisibleScriptUtil.assignVisibleScriptResults(ticketDrawComponent, scriptResultMap);
-					
+
 					ticketDrawComponents.add(ticketDrawComponent);
 				}
 				if (waitUntilPreferredCountFetched) {
@@ -160,7 +160,9 @@ extends AbstractClientDeliveryProcessor
 				}
 				else {
 					if (articleID == null
-							|| !abstractScriptDataProviderThread.canInvokeFetchReadyArticleIDWithoutBlocking())
+							|| ticketDrawComponents.size() >= 5 // if we already have a few, we already start printing - even though we might still fetch more from the data-provider-thread. this way, the printing system can already start processing the job. This number might be changed later for performance tuning! Maybe we even make it configurable. Marco.
+							|| !abstractScriptDataProviderThread.canInvokeFetchReadyArticleIDWithoutBlocking()
+					)
 					{
 						printDocuments(ticketDrawComponents, articleID == null);
 						// imho we should remove all from this list now - otherwise it would
@@ -189,7 +191,7 @@ extends AbstractClientDeliveryProcessor
 	 * This method may be called multiple times (between printBegin and printEnd),
 	 * because the data retrieval and the printing are done asynchronously in
 	 * parallel.
-	 * 
+	 *
 	 * @param ticketDrawComponents
 	 * @param lastEntry
 	 *          determines if this is the last call for this method before
@@ -227,7 +229,7 @@ extends AbstractClientDeliveryProcessor
 	}
 
 	protected abstract ScriptRootDrawComponent getScriptRootDrawComponent(File file);
-	
+
 	/**
 	 * This method returns the preferred count of documents that should
 	 * be passed to {@link #printDocuments(List, boolean)} at once.
@@ -237,11 +239,11 @@ extends AbstractClientDeliveryProcessor
 	 * more documents are in the queue.
 	 * <p>
 	 * The implementation in {@link AbstractClientDeliveryProcessorPrint} returns <code>0</code>.
-	 * 
+	 *
 	 * @return The preferred cound of documents that should be passed to {@link #printDocuments(List, boolean)}
 	 */
 	protected int getPreferredDocumentCount() {
 		return 0;
 	}
-	
+
 }

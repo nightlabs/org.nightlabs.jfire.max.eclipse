@@ -112,7 +112,7 @@ extends AbstractClientDeliveryProcessorPrint
 //		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
 //		return new DrawComponentPrintable(dcs, PrintConstant.ORIGINAL_SIZE);
 //	}
-	protected Pageable getPageable(List<ScriptRootDrawComponent> drawComponents, PageFormat pageFormat)
+	protected Pageable getPageable(List<? extends ScriptRootDrawComponent> drawComponents, PageFormat pageFormat)
 	{
 		List<DrawComponent> dcs = CollectionUtil.castList(drawComponents);
 		return new DrawComponentPageable(pageFormat, dcs, PrintConstant.ORIGINAL_SIZE, true);
