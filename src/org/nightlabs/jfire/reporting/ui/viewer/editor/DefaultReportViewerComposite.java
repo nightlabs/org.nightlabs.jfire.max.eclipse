@@ -289,11 +289,15 @@ public class DefaultReportViewerComposite extends XComposite {
 //			threadDeathWorkaround.registerComposite(this);
 			org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
 				@Override
-				protected IStatus run(IProgressMonitor monitor) {
+				protected IStatus run(final IProgressMonitor monitor) {
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
 					try {
-						PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
-						pdfViewerComposite.getPdfViewer().setPdfDocument(new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80)));
+						final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								pdfViewerComposite.getPdfViewer().setPdfDocument(new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80)));
+							}
+						});
 					}
 					catch (final Exception x) {
 						throw new RuntimeException(x);
