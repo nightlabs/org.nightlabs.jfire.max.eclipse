@@ -198,7 +198,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 					@Override
 					public void run() {
 						File file = new File(selectedFile);
-						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue, IDGenerator.nextID(IssueFileAttachment.class));
+						IssueFileAttachment issueFileAttachment = new IssueFileAttachment(issue.getOrganisationID(), IDGenerator.nextID(IssueFileAttachment.class), issue);
 						try {
 							issueFileAttachment.loadFile(file);
 						} catch (IOException e) {
