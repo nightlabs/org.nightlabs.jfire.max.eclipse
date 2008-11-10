@@ -67,10 +67,8 @@ extends AbstractIssueEditorGeneralSection
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 		if (commentText != null && !commentText.equals("")) {
-			IssueComment comment = new IssueComment(
-					IDGenerator.getOrganisationID(),
+			IssueComment comment = new IssueComment(issue,
 					IDGenerator.nextID(IssueComment.class),
-					issue,
 					commentText.getText(),
 					Login.sharedInstance().getUser(new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
 			issue.getComments().add(comment);
