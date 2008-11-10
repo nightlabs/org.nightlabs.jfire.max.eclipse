@@ -7,9 +7,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.util.VisibleScriptUtil;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
+import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
@@ -31,7 +34,7 @@ extends AbstractClientDeliveryProcessor
 
 	private AbstractScriptDataProviderThread abstractScriptDataProviderThread;
 	protected abstract AbstractScriptDataProviderThread createScriptDataProviderThread(
-			AbstractClientDeliveryProcessor clientDeliveryProcessor);
+			AbstractClientDeliveryProcessorPrint clientDeliveryProcessor);
 
 	/**
 	 * If you inherit this class and override this method, you <b>must</b> call
@@ -52,11 +55,15 @@ extends AbstractClientDeliveryProcessor
 	 */
 	private boolean noopAll = false;
 
+	private long totalTimeMeasure = 0;
+	
 	/**
 	 * When subclassing this class, you should <b>not</b> override this method
 	 * but implement {@link #printBegin()} instead!
 	 */
 	public DeliveryResult deliverBegin() throws DeliveryException {
+		DeliveryProcessorPrintDebugInfo.beginMeasure();
+		totalTimeMeasure = System.currentTimeMillis();
 		if (noopAll)
 			return null;
 
@@ -137,8 +144,9 @@ extends AbstractClientDeliveryProcessor
 				ArticleID articleID = abstractScriptDataProviderThread.fetchReadyArticleID();
 				if (articleID != null) {
 					ProductID productID = abstractScriptDataProviderThread.getProductID(articleID, true);
-					File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
-					ScriptRootDrawComponent ticketDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
+//					File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
+//					ScriptRootDrawComponent ticketDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
+					ScriptRootDrawComponent ticketDrawComponent = getScriptRootDrawComponent(productID);
 
 					Map<ScriptRegistryItemID, Object> scriptResultMap = abstractScriptDataProviderThread.getScriptResultMap(productID, true);
 					// inject the data into the TicketDrawComponent
@@ -210,7 +218,13 @@ extends AbstractClientDeliveryProcessor
 		if (noopAll)
 			return null;
 
-		return printEnd();
+		DeliveryResult printEndResult = printEnd();
+		DeliveryProcessorPrintDebugInfo.addTime(
+				DeliveryProcessorPrintDebugInfo.CAT_TOTAL_TIME,
+				System.currentTimeMillis() - totalTimeMeasure
+		);
+		DeliveryProcessorPrintDebugInfo.print();
+		return printEndResult;
 	}
 
 	protected abstract DeliveryResult printEnd() throws DeliveryException;
@@ -228,6 +242,34 @@ extends AbstractClientDeliveryProcessor
 		return null;
 	}
 
+	private static final String SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT = ScriptingPlugin.class.getPackage().getName() + ".ScriptRootDrawComponents";
+	private static final String[] SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS = new String[] {};
+	private ScriptRootDrawComponent getScriptRootDrawComponent(ProductID productID) {
+		long start = System.currentTimeMillis();
+		ObjectID layoutID = abstractScriptDataProviderThread.getLayoutByProductID(productID);
+		ScriptRootDrawComponent rootDrawComponent = (ScriptRootDrawComponent) Cache.sharedInstance().get(
+				SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT,
+				layoutID,
+				SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
+		if (rootDrawComponent != null) {
+			DeliveryProcessorPrintDebugInfo.addTime(
+					DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
+			return rootDrawComponent;
+		}
+		
+		File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
+		rootDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
+		Cache.sharedInstance().put(
+				SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT,
+				layoutID,
+				rootDrawComponent,
+				SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
+		
+		DeliveryProcessorPrintDebugInfo.addTime(
+				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
+		return rootDrawComponent;
+	}
+	
 	protected abstract ScriptRootDrawComponent getScriptRootDrawComponent(File file);
 
 	/**

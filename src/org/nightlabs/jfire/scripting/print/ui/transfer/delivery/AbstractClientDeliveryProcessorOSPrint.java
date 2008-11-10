@@ -15,9 +15,7 @@ import org.nightlabs.editor2d.print.DrawComponentPrintable.PrintConstant;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.store.deliver.DeliveryResult;
-import org.nightlabs.print.AWTPrinter;
 import org.nightlabs.print.PrinterConfiguration;
-import org.nightlabs.print.PrinterInterface;
 import org.nightlabs.util.CollectionUtil;
 
 /**
@@ -48,64 +46,58 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 		return null;
 	}
-
-	protected PageFormat pageFormat;
-	protected PrinterJob configurePrinter()
-	{
-		long start = System.currentTimeMillis();
-		AWTPrinter awtPrinter = getAWTPrinter();
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getting printer took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
-			start = System.currentTimeMillis();
-		}
-
-		PrinterConfiguration printerConfiguration = awtPrinter.getConfiguration();
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getting printer configuration took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
-			start = System.currentTimeMillis();
-		}
-
-		PrinterJob printJob = awtPrinter.getPrinterJob();
-//		printJob.setJobName("CrossTicket Ticket");
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getting print job took "+(System.currentTimeMillis()-start)+" ms!");				 //$NON-NLS-1$ //$NON-NLS-2$
-			start = System.currentTimeMillis();
-		}
-
-		if (printerConfiguration != null) {
-			if (printerConfiguration.getPageFormat() != null)
-				pageFormat = printJob.defaultPage(printerConfiguration.getPageFormat());
-			else
-				pageFormat = null; // printJob.defaultPage();
-		}
-		if (logger.isDebugEnabled())
-			logger.debug("printJob.defaultPage(...) took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		return printJob;
+	
+	private volatile boolean defaultPageQueried = false;
+	protected PageFormat cachedPrinterDefaultPageFormat;
+	private PrinterConfiguration printerConfiguration;
+	
+	/**
+	 * Creates the {@link PrinterConfiguration} (if necessary asks the user) 
+	 * that should be used for one run of this delivery processor.
+	 * This is the (possibly modified) stored configuration for the printer
+	 * useCaseID used for this processor (see {@link #getPrinterUseCaseID()}). 
+	 * 
+	 * @return The {@link PrinterConfiguration} for this run. 
+	 */
+	protected synchronized PrinterConfiguration getPrinterConfiguration() {
+		if (printerConfiguration == null)
+			printerConfiguration = PrinterInterfaceManager.sharedInstance().getPrinterConfiguration(getPrinterUseCaseID());
+		return printerConfiguration;
 	}
-
-	protected AWTPrinter getAWTPrinter()
-	{
-		PrinterInterface printer;
+	
+	/**
+	 * Creates a new {@link PrinterJob} and configures it with 
+	 * the {@link PrinterConfiguration} obtained via {@link #getPrinterConfiguration()}.
+	 * 
+	 * @return
+	 */
+	protected PrinterJob createConfiguredPrinterJob() {
+		long start = System.currentTimeMillis();
+		PrinterJob printerJob = PrinterJob.getPrinterJob();
+		if (logger.isDebugEnabled()) {
+			logger.debug("createConfiguredPrinterJob() PrinterJob.getPrinterJob() took: " + (System.currentTimeMillis() - start) + " ms.");
+			start = System.currentTimeMillis();
+		}
+		PrinterConfiguration configuration = getPrinterConfiguration();
+		if (!defaultPageQueried) {
+			cachedPrinterDefaultPageFormat = printerJob.defaultPage();
+			if (logger.isDebugEnabled())
+				logger.debug("createConfiguredPrinterJob() printerJob.defaultPage() took: " + (System.currentTimeMillis() - start) + " ms.");
+			defaultPageQueried = true;
+		}
 		try {
-			printer = PrinterInterfaceManager.sharedInstance().getConfiguredPrinterInterface(
-					org.nightlabs.print.PrinterInterfaceManager.INTERFACE_FACTORY_AWT,
-					getPrinterUseCase()
-			);
+			PrinterInterfaceManager.sharedInstance().configurePrinterJob(printerJob, configuration);
 		} catch (PrinterException e) {
 			throw new RuntimeException(e);
 		}
-		return (AWTPrinter) printer;
+		return printerJob;
 	}
 
 	/**
-	 * Returns the Printer Use Case.
-	 * @return the Printer Use Case
+	 * Returns the Printer Use Case ID to be used for this print.
+	 * @return the Printer Use Case ID
 	 */
-	protected abstract String getPrinterUseCase();
+	protected abstract String getPrinterUseCaseID();
 
 //	protected Printable getPrintable(List<ScriptRootDrawComponent> drawComponents)
 //	{
@@ -125,29 +117,4 @@ extends AbstractClientDeliveryProcessorPrint
 		}
 		return buffer;
 	}
-
-	@Override
-	protected void printDocuments(List<ScriptRootDrawComponent> scriptRootDrawComponents, boolean lastEntry)
-	throws DeliveryException
-	{
-		long start = 0;
-		if (logger.isDebugEnabled())  {
-			start = System.currentTimeMillis();
-			logger.info("printDocuments begin!");			 //$NON-NLS-1$
-		}
-
-		PrinterJob printJob = configurePrinter();
-		printTickets(scriptRootDrawComponents, printJob);
-
-		if (logger.isDebugEnabled())
-			logger.info("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	/**
-	 * Prints the given {@link ScriptRootDrawComponent}s to the given {@link PrinterJob}.
-	 *
-	 * @param tickets the List of {@link ScriptRootDrawComponent}s to print
-	 * @param printJob the {@link PrinterJob} to print the tickets
-	 */
-	protected abstract void printTickets(List<ScriptRootDrawComponent> tickets, PrinterJob printJob);
 }

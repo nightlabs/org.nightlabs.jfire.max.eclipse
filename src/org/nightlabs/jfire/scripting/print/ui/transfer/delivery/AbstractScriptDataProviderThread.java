@@ -14,14 +14,12 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
-import org.nightlabs.base.ui.app.AbstractApplication;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.trade.ILayout;
 import org.nightlabs.jfire.trade.LayoutMapForArticleIDSet;
 import org.nightlabs.jfire.trade.id.ArticleID;
-import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
 import org.nightlabs.util.CacheDirTag;
 import org.nightlabs.util.IOUtil;
 
@@ -34,7 +32,7 @@ extends Thread
 {
 	private static final Logger logger = Logger.getLogger(AbstractScriptDataProviderThread.class);
 
-	private AbstractClientDeliveryProcessor clientDeliveryProcessor;
+	private AbstractClientDeliveryProcessorPrint clientDeliveryProcessor;
 //	private AbstractClientDeliveryProcessorFactory clientDeliveryProcessorFactoryPrint;
 	private volatile Throwable error;
 	private Map<ProductID, Map<ScriptRegistryItemID, Object>> scriptingResult;
@@ -49,12 +47,15 @@ extends Thread
 	private LinkedList<ArticleID> articleIDsReady = new LinkedList<ArticleID>();
 	private Object articleIDsMutex = new Object();
 
-	public AbstractScriptDataProviderThread(AbstractClientDeliveryProcessor clientDeliveryProcessor)
+	public AbstractScriptDataProviderThread(AbstractClientDeliveryProcessorPrint clientDeliveryProcessor)
 	{
 		this.clientDeliveryProcessor = clientDeliveryProcessor;
 //		this.clientDeliveryProcessorFactoryPrint = (AbstractClientDeliveryProcessorFactory) clientDeliveryProcessor.getClientDeliveryProcessorFactory();
 		this.articleIDsToProcess.addAll(this.clientDeliveryProcessor.getDelivery().getArticleIDs());
-
+		this.bulkProcessSize = clientDeliveryProcessor.getPreferredDocumentCount();
+		if (this.bulkProcessSize < 1)
+			this.bulkProcessSize = 1;
+		
 		if (logger.isDebugEnabled())
 			logger.debug("New instance of TicketDataProviderThread created."); //$NON-NLS-1$
 	}
@@ -202,10 +203,14 @@ extends Thread
 	public File getCacheDir()
 	{
 		if (cacheDir == null) {
-			cacheDir = new File(AbstractApplication.getRootDir(), "OSPrint"); //$NON-NLS-1$
+			try {
+				cacheDir = IOUtil.createUserTempDir("JFirePrintCache.", null); //$NON-NLS-1$
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 			CacheDirTag cacheDirTag = new CacheDirTag(cacheDir);
 			try {
-				cacheDirTag.tag("NightLabs OS Printer", true, false); //$NON-NLS-1$
+				cacheDirTag.tag("JFire delivery print cache", true, false); //$NON-NLS-1$
 			} catch (Exception e) {
 				Logger.getLogger(AbstractScriptDataProviderThread.class).error("Tagging cache dir failed!", e); //$NON-NLS-1$
 			}
@@ -213,12 +218,18 @@ extends Thread
 		return cacheDir;
 	}
 
-	private static final int bulkProcessSize = 2;
+	/**
+	 * This is initialized in the constructor to be the value returned by
+	 * {@link AbstractClientDeliveryProcessorPrint#getPreferredDocumentCount()}.
+	 * It will be double with each loop the thread runs until it reaches a
+	 * maximum of 12.
+	 */
+	private int bulkProcessSize;
 
 	@Override
 	public void run()
 	{
-		long start = System.currentTimeMillis();
+		long runStart = System.currentTimeMillis();
 		if (logger.isDebugEnabled())
 			logger.debug("run: enter"); //$NON-NLS-1$
 
@@ -244,7 +255,9 @@ extends Thread
 
 					if (logger.isDebugEnabled())
 						logger.debug("run: getLayoutMapForArticleIDSet from server..."); //$NON-NLS-1$
-
+					
+					long localTimeMeasure = System.currentTimeMillis();
+					
 					LayoutMapForArticleIDSet tlm = getLayoutMapForArticleIDSet(articleIDs);
 					if (tlm == null)
 						throw new IllegalStateException("getLayoutMapForArticleIDSet(articleIDs) returned null! Check your implementation in class: " + this.getClass().getName()); //$NON-NLS-1$
@@ -256,6 +269,8 @@ extends Thread
 							layoutMapForArticleIDSet.append(tlm);
 						}
 					}
+					DeliveryProcessorPrintDebugInfo.addTime(
+							DeliveryProcessorPrintDebugInfo.CAT_FETCH_DATA_FETCH_LAYOUTS_MAP, System.currentTimeMillis() - localTimeMeasure);
 
 					if (isInterrupted())
 						throw new InterruptedException("interrupted!"); //$NON-NLS-1$
@@ -297,6 +312,7 @@ extends Thread
 
 					// fetch all the necessary TicketLayouts WITH their files from the server
 					if (!layoutIDsToDownload.isEmpty()) {
+						localTimeMeasure = System.currentTimeMillis();
 						if (logger.isDebugEnabled())
 							logger.debug("run: loading complete Layouts (with files) from server..."); //$NON-NLS-1$
 
@@ -325,14 +341,22 @@ extends Thread
 							}
 							layoutFile.setLastModified(layout.getFileTimestamp().getTime());
 						} // for (TicketLayout ticketLayout : ticketLayouts) {
+						
+						DeliveryProcessorPrintDebugInfo.addTime(
+								DeliveryProcessorPrintDebugInfo.CAT_FETCH_DATA_FETCH_LAYOUTS, System.currentTimeMillis() - localTimeMeasure);
 					} // if (!ticketLayoutIDsToDownload.isEmpty()) {
-
+					else {
+						// nothing to download, only register debug info
+						DeliveryProcessorPrintDebugInfo.addTime(
+								DeliveryProcessorPrintDebugInfo.CAT_FETCH_DATA_FETCH_LAYOUTS, 0);
+					}
 					if (isInterrupted())
 						throw new InterruptedException("interrupted!"); //$NON-NLS-1$
 
 					if (logger.isDebugEnabled())
-						logger.debug("run: get VoucherData from server..."); //$NON-NLS-1$
-
+						logger.debug("run: get ScriptingResult from server..."); //$NON-NLS-1$
+					localTimeMeasure = System.currentTimeMillis();
+					
 					LinkedList<ProductID> productIDs = new LinkedList<ProductID>();
 					for (ArticleID articleID : articleIDs) {
 						ProductID productID = layoutMapForArticleIDSet.getArticleID2ProductIDMap().get(articleID);
@@ -349,7 +373,10 @@ extends Thread
 						else
 							scriptingResult.putAll(tsr); // imho it's safe to do that, because no productID should ever occur twice
 					}
-
+					
+					DeliveryProcessorPrintDebugInfo.addTime(
+							DeliveryProcessorPrintDebugInfo.CAT_FETCH_DATA_SCRIPT_RESULTS, System.currentTimeMillis() - localTimeMeasure);
+					
 					if (isInterrupted())
 						throw new InterruptedException("interrupted!"); //$NON-NLS-1$
 
@@ -367,6 +394,10 @@ extends Thread
 						}
 						articleIDsMutex.notifyAll();
 					}
+					
+					bulkProcessSize *= 2;
+					if (bulkProcessSize > 12)
+						bulkProcessSize = 12;
 				} // while (!isArticleIDsToProcessEmpty()) {
 			} catch (Throwable t) {
 				logger.error("Retrieving data failed!", t); //$NON-NLS-1$
@@ -378,7 +409,9 @@ extends Thread
 			}
 			if (logger.isDebugEnabled()) {
 				logger.debug("run: exit"); //$NON-NLS-1$
-				long duration = System.currentTimeMillis() - start;
+				long duration = System.currentTimeMillis() - runStart;
+				DeliveryProcessorPrintDebugInfo.addTime(
+						DeliveryProcessorPrintDebugInfo.CAT_FETCH_DATA_TOTAL_TIME, duration);
 				logger.debug("Retrieving data took "+duration);
 			}
 		}
@@ -391,6 +424,17 @@ extends Thread
 
 	protected abstract File getLayoutFileByLayoutID(ObjectID layoutID);
 
+	protected ObjectID getLayoutByProductID(ProductID productID) {
+		ILayout layout;
+		synchronized (layoutMapForArticleIDSetMutex) {
+			layout = layoutMapForArticleIDSet.getProductID2LayoutMap().get(productID);
+		}
+		if (layout == null)
+			throw new IllegalArgumentException("productID unknown: " + productID); //$NON-NLS-1$
+
+		return (ObjectID) JDOHelper.getObjectId(layout);
+	}
+	
 	protected File getLayoutFileByProductID(ProductID productID)
 	{
 		ILayout layout;
