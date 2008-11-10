@@ -288,7 +288,7 @@ extends AbstractClientDeliveryProcessor
 	 * <p>
 	 * The implementation in {@link AbstractClientDeliveryProcessorPrint} returns <code>0</code>.
 	 *
-	 * @return The preferred cound of documents that should be passed to {@link #printDocuments(List, boolean)}
+	 * @return The preferred count of documents that should be passed to {@link #printDocuments(List, boolean)}
 	 */
 	protected int getPreferredDocumentCount() {
 		return 0;
