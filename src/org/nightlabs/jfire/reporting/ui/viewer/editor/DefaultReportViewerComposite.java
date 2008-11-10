@@ -32,6 +32,7 @@ import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.eclipse.ui.pdfviewer.OneDimensionalPdfDocument;
+import org.nightlabs.eclipse.ui.pdfviewer.PdfDocument;
 import org.nightlabs.eclipse.ui.pdfviewer.PdfFileLoader;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.action.save.SaveAsActionHandler;
 import org.nightlabs.eclipse.ui.pdfviewer.extension.composite.PdfViewerComposite;
@@ -64,10 +65,8 @@ import com.sun.pdfview.PDFFile;
  */
 public class DefaultReportViewerComposite extends XComposite {
 
-	/**
-	 * Log4J Logger for {@link DefaultReportViewerComposite}.
-	 */
-	private static final Logger logger = Logger.getLogger(DefaultReportViewerComposite.class);
+	@SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(DefaultReportViewerComposite.class);
 
 	private Composite stack;
 	private StackLayout stackLayout;
@@ -284,8 +283,8 @@ public class DefaultReportViewerComposite extends XComposite {
 	protected void updateViewer(Birt.OutputFormat format, final PreparedRenderedReportLayout preparedLayout) {
 		this.preparedLayout = preparedLayout;
 		DefaultReportViewerCfMod cfMod = DefaultReportViewerCfMod.sharedInstance();
+		final Display display = getDisplay();
 		if (format == OutputFormat.pdf && !cfMod.isUseInternalBrowserForPDFs()) {
-			stackLayout.topControl = pdfViewerComposite;
 //			threadDeathWorkaround.registerComposite(this);
 			org.eclipse.core.runtime.jobs.Job loadJob = new org.eclipse.core.runtime.jobs.Job(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadJob.name")) { //$NON-NLS-1$
 				@Override
@@ -293,9 +292,16 @@ public class DefaultReportViewerComposite extends XComposite {
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.ui.viewer.editor.DefaultReportViewerComposite.loadMonitor.task.name"), 100); //$NON-NLS-1$
 					try {
 						final PDFFile pdfFile = PdfFileLoader.loadPdf(preparedLayout.getEntryFileAsURL(), new SubProgressMonitor(monitor, 20));
-						Display.getDefault().asyncExec(new Runnable() {
+						final PdfDocument pdfDocument = new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80));
+
+						display.asyncExec(new Runnable() {
 							public void run() {
-								pdfViewerComposite.getPdfViewer().setPdfDocument(new OneDimensionalPdfDocument(pdfFile, new SubProgressMonitor(monitor, 80)));
+								if (isDisposed())
+									return;
+
+								pdfViewerComposite.getPdfViewer().setPdfDocument(pdfDocument);
+								stackLayout.topControl = pdfViewerComposite;
+								DefaultReportViewerComposite.this.layout(true, true);
 							}
 						});
 					}
@@ -338,8 +344,8 @@ public class DefaultReportViewerComposite extends XComposite {
 				).getImage()
 			);
 		}
-		// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
-		stackLayout.marginHeight = 1;
+//		// WORKAROUND: The marginHeiht = 1 is a workaround for the acrobat viewer, that won't layout well initially otherwise
+//		stackLayout.marginHeight = 1;
 		this.layout(true, true);
 	}
 
