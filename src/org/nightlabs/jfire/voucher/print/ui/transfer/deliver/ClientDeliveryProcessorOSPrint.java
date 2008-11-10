@@ -11,8 +11,10 @@ import org.apache.log4j.Logger;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.scripting.editor2d.ScriptRootDrawComponent;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorOSPrint;
+import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorPrint;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractScriptDataProviderThread;
-import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
+import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.DeliveryProcessorPrintDebugInfo;
+import org.nightlabs.jfire.store.deliver.DeliveryException;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter;
 
@@ -26,7 +28,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 
 	@Override
 	protected AbstractScriptDataProviderThread createScriptDataProviderThread(
-			AbstractClientDeliveryProcessor clientDeliveryProcessor)
+			AbstractClientDeliveryProcessorPrint clientDeliveryProcessor)
 	{
 		return new VoucherDataProviderThread(clientDeliveryProcessor);
 	}
@@ -72,15 +74,14 @@ extends AbstractClientDeliveryProcessorOSPrint
 	}
 
 	@Override
-	protected void printTickets(List<ScriptRootDrawComponent> tickets, PrinterJob printJob)
+	protected void printDocuments(List<ScriptRootDrawComponent> ticketDrawComponents, boolean lastEntry) 
+	throws DeliveryException 
 	{
-		long start = 0;
+		long start = System.currentTimeMillis();
 		if (logger.isDebugEnabled()) {
-			start = System.currentTimeMillis();
-			logger.debug("print "+tickets.size()+" in printJob");
+			logger.debug("print "+ticketDrawComponents.size()+" in printJob");
 		}
-
-		printJob.setPageable(getPageable(tickets, printJob.defaultPage()));
+		PrinterJob printJob = createConfiguredPrinterJob();		
 //		printJob.setJobName(
 //				"CrossTicket_Ticket_"
 //				+ getDelivery().getOrganisationID()
@@ -92,12 +93,18 @@ extends AbstractClientDeliveryProcessorOSPrint
 				+ "_" + getDelivery().getOrganisationID()
 				+ "_" + ObjectIDUtil.longObjectIDFieldToString(getDelivery().getDeliveryID())
 		);
+		DeliveryProcessorPrintDebugInfo.addTime(
+				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PREPARE_PRINT_ENGINE, System.currentTimeMillis() - start);
+		start = System.currentTimeMillis();
 
+		printJob.setPageable(getPageable(ticketDrawComponents, printJob.defaultPage()));
 		try {
 			printJob.print();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		DeliveryProcessorPrintDebugInfo.addTime(
+				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PRINT, System.currentTimeMillis() - start);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("printJob.print() took "+(System.currentTimeMillis()-start)+" ms!");
@@ -106,21 +113,24 @@ extends AbstractClientDeliveryProcessorOSPrint
 
 	public static final String PRINTER_USE_CASE_VOUCHER_PRINT = "PrinterUseCase-OSVoucherPrint";
 	@Override
-	protected String getPrinterUseCase() {
+	protected String getPrinterUseCaseID() {
 		return PRINTER_USE_CASE_VOUCHER_PRINT;
 	}
 
 	@Override
 	protected ScriptRootDrawComponent getScriptRootDrawComponent(File file)
 	{
+		long start = 0;
+		if (logger.isDebugEnabled())
+			start = System.currentTimeMillis();
 		try {
-			InputStream in = new BufferedInputStream(new FileInputStream(
-					file));
+			InputStream in = new BufferedInputStream(new FileInputStream(file));
 			ScriptRootDrawComponent scriptRootDrawComponent = null;
 			try {
 				VoucherXStreamFilter xStreamFilter = new VoucherXStreamFilter();
-				scriptRootDrawComponent = (ScriptRootDrawComponent) xStreamFilter
-				.read(in);
+				scriptRootDrawComponent = (ScriptRootDrawComponent) xStreamFilter.read(in);
+				if (logger.isDebugEnabled())
+					logger.debug("Parsing voucher file '" + file + "' took " + (System.currentTimeMillis() - start) + " ms.");
 				return scriptRootDrawComponent;
 			} finally {
 				in.close();
