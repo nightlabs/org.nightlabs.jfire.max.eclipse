@@ -56,7 +56,7 @@ extends AbstractClientDeliveryProcessor
 	private boolean noopAll = false;
 
 	private long totalTimeMeasure = 0;
-	
+
 	/**
 	 * When subclassing this class, you should <b>not</b> override this method
 	 * but implement {@link #printBegin()} instead!
@@ -256,7 +256,7 @@ extends AbstractClientDeliveryProcessor
 					DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
 			return rootDrawComponent;
 		}
-		
+
 		File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
 		rootDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
 		Cache.sharedInstance().put(
@@ -264,12 +264,18 @@ extends AbstractClientDeliveryProcessor
 				layoutID,
 				rootDrawComponent,
 				SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
-		
+
+		// Cloning, because data is copied into the object during print. Even thought this
+		// might currently run well, since the data is overwritten every time and no structural
+		// changes happen, we now clone in order to be safe in the future. Newer code might cause
+		// the object to be structurally modified during the printing process. Marco.
+		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
+
 		DeliveryProcessorPrintDebugInfo.addTime(
 				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
 		return rootDrawComponent;
 	}
-	
+
 	protected abstract ScriptRootDrawComponent getScriptRootDrawComponent(File file);
 
 	/**
