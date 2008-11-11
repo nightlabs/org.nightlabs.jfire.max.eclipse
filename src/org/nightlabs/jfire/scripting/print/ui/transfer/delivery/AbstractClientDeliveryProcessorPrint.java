@@ -20,6 +20,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryResult;
 import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.AbstractClientDeliveryProcessor;
+import org.nightlabs.util.Util;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -269,7 +270,10 @@ extends AbstractClientDeliveryProcessor
 		// might currently run well, since the data is overwritten every time and no structural
 		// changes happen, we now clone in order to be safe in the future. Newer code might cause
 		// the object to be structurally modified during the printing process. Marco.
-		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
+//		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
+		// TODO there is a bug that causes every ticket to be printed multiple times when using rootDrawComponent.clone()!
+		// Temporarily using cloneSerializable(...)
+		rootDrawComponent = Util.cloneSerializable(rootDrawComponent);
 
 		DeliveryProcessorPrintDebugInfo.addTime(
 				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
