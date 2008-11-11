@@ -248,32 +248,36 @@ extends AbstractClientDeliveryProcessor
 	private ScriptRootDrawComponent getScriptRootDrawComponent(ProductID productID) {
 		long start = System.currentTimeMillis();
 		ObjectID layoutID = abstractScriptDataProviderThread.getLayoutByProductID(productID);
+
+		// Try to get the object from the cache.
 		ScriptRootDrawComponent rootDrawComponent = (ScriptRootDrawComponent) Cache.sharedInstance().get(
 				SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT,
 				layoutID,
 				SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
-		if (rootDrawComponent != null) {
-			DeliveryProcessorPrintDebugInfo.addTime(
-					DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
-			return rootDrawComponent;
+
+		// If it was not in the cache, we load it from the file.
+		if (rootDrawComponent == null) {
+			File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
+			rootDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
+			Cache.sharedInstance().put(
+					SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT,
+					layoutID,
+					rootDrawComponent,
+					SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
 		}
 
-		File ticketLayoutFile = abstractScriptDataProviderThread.getLayoutFileByProductID(productID);
-		rootDrawComponent = getScriptRootDrawComponent(ticketLayoutFile);
-		Cache.sharedInstance().put(
-				SCOPE_SCRIPT_ROOT_DRAWCOMPONENT_BY_LAYOUT,
-				layoutID,
-				rootDrawComponent,
-				SCRIPT_ROOT_DRAWCOMPONENT_FETCH_GROUPS, -1);
-
-		// Cloning, because data is copied into the object during print. Even thought this
-		// might currently run well, since the data is overwritten every time and no structural
-		// changes happen, we now clone in order to be safe in the future. Newer code might cause
-		// the object to be structurally modified during the printing process. Marco.
-//		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
-		// TODO there is a bug that causes every ticket to be printed multiple times when using rootDrawComponent.clone()!
-		// Temporarily using cloneSerializable(...)
-		rootDrawComponent = Util.cloneSerializable(rootDrawComponent);
+		// Cloning, because data is copied into the object during print. 
+		// Using the same instance would cause problems, even though the data
+		// is overwritten every time and no structural changes happen.
+		// This is because certain print methods (e.g. printing on DIN-A4 with a
+		// TicketCarrier) collect multiple Tickets and print them at once. If
+		// we didn't clone, the data of one ticket would be overwritten before
+		// the printing happens and multiple tickets with the same contents would
+		// occur on the paper.
+		// Hence, it's essential to clone here! Marco.
+//		rootDrawComponent = Util.cloneSerializable(rootDrawComponent);
+		// Using cloneSerializable(...) is slightly slower and DrawComponent.clone() works fine again.
+		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
 
 		DeliveryProcessorPrintDebugInfo.addTime(
 				DeliveryProcessorPrintDebugInfo.CAT_PROCESS_DATA_PARSE_LAYOUT_FILE, System.currentTimeMillis() - start);
