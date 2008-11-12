@@ -26,12 +26,10 @@
 
 package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
-import java.text.Collator;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -360,7 +358,16 @@ extends AbstractTableComposite<Article>
 		tableViewer.setContentProvider(articleContentProvider);
 		tableViewer.setLabelProvider(articleLabelProvider);
 
-		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
+//		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
+		// sort by article id
+		tableViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				if (e1 instanceof Article && e2 instanceof Article)
+					return new Long(((Article) e1).getArticleID()).compareTo(((Article) e2).getArticleID());
+				return super.compare(viewer, e1, e2);
+			}
+		});
 	}
 
 	@Override
