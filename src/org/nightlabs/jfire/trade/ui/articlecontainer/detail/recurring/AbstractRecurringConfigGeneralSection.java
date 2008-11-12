@@ -13,11 +13,10 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
  * @author Fitas Amine <!-- fitas [AT] nightlabs [DOT] de -->
  *
  */
-public abstract class AbstractRecurringConfigGeneralSection extends ToolBarSectionPart{
+public abstract class AbstractRecurringConfigGeneralSection extends ToolBarSectionPart {
 
 	private RecurringOfferConfigurationPageController controller;
 	private RecurringOfferConfiguration recurringOfferConfiguration;
-	
 	
 	/**
 	 * @param page
