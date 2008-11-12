@@ -277,6 +277,7 @@ extends AbstractClientDeliveryProcessor
 		// Hence, it's essential to clone here! Marco.
 //		rootDrawComponent = Util.cloneSerializable(rootDrawComponent);
 		// Using cloneSerializable(...) is slightly slower and DrawComponent.clone() works fine again.
+		// Besides that, cloneSerializable(...) currently causes all images to disappear (because they're marked to be transient).
 		rootDrawComponent = (ScriptRootDrawComponent) rootDrawComponent.clone();
 
 		DeliveryProcessorPrintDebugInfo.addTime(
