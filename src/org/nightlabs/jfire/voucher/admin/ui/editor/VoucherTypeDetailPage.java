@@ -55,12 +55,12 @@ extends AbstractProductTypeDetailPage
 
 	@Override
 	protected IProductTypeSectionPart createOwnerSection(Composite parent) {
-		return new OwnerConfigSection(this, parent, SWT.NONE);
+		return new OwnerConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
 	}
 
 	@Override
 	protected IProductTypeSectionPart createVendorSection(Composite parent) {
-		return new VendorConfigSection(this, parent, SWT.NONE);
+		return new VendorConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
 	}
 
 	@Override
