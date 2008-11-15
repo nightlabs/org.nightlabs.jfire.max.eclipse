@@ -74,14 +74,14 @@ extends AbstractClientDeliveryProcessorOSPrint
 	}
 
 	@Override
-	protected void printDocuments(List<ScriptRootDrawComponent> ticketDrawComponents, boolean lastEntry) 
-	throws DeliveryException 
+	protected void printDocuments(List<ScriptRootDrawComponent> ticketDrawComponents, boolean lastEntry)
+	throws DeliveryException
 	{
 		long start = System.currentTimeMillis();
 		if (logger.isDebugEnabled()) {
 			logger.debug("print "+ticketDrawComponents.size()+" in printJob");
 		}
-		PrinterJob printJob = createConfiguredPrinterJob();		
+		PrinterJob printJob = createConfiguredPrinterJob();
 //		printJob.setJobName(
 //				"CrossTicket_Ticket_"
 //				+ getDelivery().getOrganisationID()
@@ -89,7 +89,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 //				+ "_" + ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis()));
 		printJob.setJobName(
 				"JFireVoucher_Voucher_" +
-				ObjectIDUtil.longObjectIDFieldToString(System.currentTimeMillis())
+				Long.toString(System.currentTimeMillis(), 36)
 				+ "_" + getDelivery().getOrganisationID()
 				+ "_" + ObjectIDUtil.longObjectIDFieldToString(getDelivery().getDeliveryID())
 		);
