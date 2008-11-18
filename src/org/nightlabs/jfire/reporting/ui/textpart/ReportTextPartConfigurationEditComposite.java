@@ -47,6 +47,7 @@ public class ReportTextPartConfigurationEditComposite extends XComposite {
 		}
 	};
 	private LanguageChooser languageChooser;
+	private boolean showTextPartID;
 	
 	private class TextPartTable extends AbstractTableComposite<ReportTextPart> {
 
@@ -80,9 +81,10 @@ public class ReportTextPartConfigurationEditComposite extends XComposite {
 	 * @param parent The parent to use.
 	 * @param style The style to apply.
 	 */
-	public ReportTextPartConfigurationEditComposite(Composite parent, int style, LanguageChooser languageChooser) {
+	public ReportTextPartConfigurationEditComposite(Composite parent, int style, LanguageChooser languageChooser, boolean showTextPartID) {
 		super(parent, style, LayoutMode.NONE);
 		this.languageChooser = languageChooser;
+		this.showTextPartID = showTextPartID;
 		createContents();
 	}
 
@@ -94,9 +96,10 @@ public class ReportTextPartConfigurationEditComposite extends XComposite {
 	 * @param layoutDataMode The layoutDataMode to apply.
 	 */
 	public ReportTextPartConfigurationEditComposite(Composite parent,
-			int style, LayoutDataMode layoutDataMode, LanguageChooser languageChooser) {
+			int style, LayoutDataMode layoutDataMode, LanguageChooser languageChooser, boolean showTextPartID) {
 		super(parent, style, LayoutMode.NONE, layoutDataMode);
 		this.languageChooser = languageChooser;
+		this.showTextPartID = showTextPartID;
 		createContents();
 	}
 
@@ -131,7 +134,8 @@ public class ReportTextPartConfigurationEditComposite extends XComposite {
 		}
 		editComposites.clear();
 		for (ReportTextPart part : parts) {
-			final ReportTextPartEditComposite editComposite = new ReportTextPartEditComposite(editorWrapper, SWT.NONE, part, languageChooser);
+			final ReportTextPartEditComposite editComposite = new ReportTextPartEditComposite(
+					editorWrapper, SWT.NONE, part, languageChooser, showTextPartID);
 			editComposite.addReportTextPartChangedListener(partChangedListener);
 			editComposite.addDisposeListener(new DisposeListener() {
 				@Override

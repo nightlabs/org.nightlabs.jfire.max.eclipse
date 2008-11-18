@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.base.ui.composite.LabeledText;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
@@ -55,7 +56,8 @@ public class ReportTextPartEditComposite extends XComposite {
 	private II18nTextEditor nameEditor;
 	private Map<String, IReportTextPartContentEditor> contentEditors = new HashMap<String, IReportTextPartContentEditor>();
 	private ListenerList changedListeners = new ListenerList();
-
+	boolean showTextPartID = false;
+	
 	private ModifyListener modifyListener = new ModifyListener() {
 		@Override
 		public void modifyText(ModifyEvent e) {
@@ -70,16 +72,20 @@ public class ReportTextPartEditComposite extends XComposite {
 			switchLanguage(event.getNewLanguage().getLanguageID());
 		}
 	};
+	private LabeledText reportTextPartID;
 	/**
 	 * Create a new {@link ReportTextPartEditComposite}.
 	 * 
 	 * @param parent The parent {@link Composite} to use.
 	 * @param style The style to apply to the {@link Composite}.
 	 */
-	public ReportTextPartEditComposite(Composite parent, int style, ReportTextPart reportTextPart, LanguageChooser languageChooser) {
+	public ReportTextPartEditComposite(
+			Composite parent, int style, ReportTextPart reportTextPart, 
+			LanguageChooser languageChooser, boolean showTextPartID) {
 		super(parent, style, LayoutMode.LEFT_RIGHT_WRAPPER);
 		this.reportTextPart = reportTextPart;
 		this.languageChooser = languageChooser;
+		this.showTextPartID = showTextPartID;
 		createContents();
 	}
 
@@ -108,24 +114,13 @@ public class ReportTextPartEditComposite extends XComposite {
 		XComposite.configureLayout(LayoutMode.TIGHT_WRAPPER, layout);
 		header.setLayout(layout);
 		
-		typeCombo = new XComboComposite<ReportTextPart.Type>(
-				header, getBorderStyle() | SWT.READ_ONLY,
-				"Text part type");
-		typeCombo.setLabelProvider(new TableLabelProvider() {
-			@Override
-			public String getColumnText(Object element, int columnIndex) {
-				return ((ReportTextPart.Type) element).toString();
-			}
-		});
-		typeCombo.setInput(Arrays.asList(new ReportTextPart.Type[] {ReportTextPart.Type.HTML, ReportTextPart.Type.JAVASCRIPT}));
-		typeCombo.setSelection(reportTextPart.getType());
-		typeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				switchMode(typeCombo.getSelectedElement());
-				notifyChangedListeners();
-			}
-		});
+		if (showTextPartID) {
+			reportTextPartID = new LabeledText(header, "identifier:", SWT.READ_ONLY);
+			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+			gd.horizontalSpan = 2;
+			reportTextPartID.setLayoutData(gd);
+			reportTextPartID.setText(reportTextPart.getReportTextPartID());
+		}
 		
 		Composite nameParent = languageChooser != null ? header : this;
 		
@@ -150,6 +145,27 @@ public class ReportTextPartEditComposite extends XComposite {
 
 		editorWrapperLayout = new StackLayout();
 		editorWrapper.setLayout(editorWrapperLayout);
+		
+		typeCombo = new XComboComposite<ReportTextPart.Type>(
+				header, getBorderStyle() | SWT.READ_ONLY,
+				"Text part type");
+		typeCombo.setLabelProvider(new TableLabelProvider() {
+			@Override
+			public String getColumnText(Object element, int columnIndex) {
+				return ((ReportTextPart.Type) element).toString();
+			}
+		});
+//		typeCombo.setInput(Arrays.asList(new ReportTextPart.Type[] {ReportTextPart.Type.HTML, ReportTextPart.Type.JAVASCRIPT}));
+		typeCombo.setInput(Arrays.asList(new ReportTextPart.Type[] {ReportTextPart.Type.JSHTML}));
+		typeCombo.setSelection(reportTextPart.getType());
+		typeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				switchMode(typeCombo.getSelectedElement());
+				notifyChangedListeners();
+			}
+		});
+		
 		switchMode(typeCombo.getSelectedElement());
 	}
 	
@@ -164,10 +180,10 @@ public class ReportTextPartEditComposite extends XComposite {
 				if (c != null && !c.isDisposed())
 					c.dispose();
 			}
-			if (type == ReportTextPart.Type.JAVASCRIPT) {
-				contentEditor = new ReportTextPartContentEditorDefault(editorWrapper, SWT.NONE);
-			} else if (type == ReportTextPart.Type.HTML) {
+			if (type == ReportTextPart.Type.JSHTML) {
 				contentEditor = new ReportTextPartContentEditorDefault(editorWrapper, SWT.NONE); // TODO: integrate rich editor
+//			} else if (type == ReportTextPart.Type.HTML) {
+//				contentEditor = new ReportTextPartContentEditorDefault(editorWrapper, SWT.NONE);
 			}
 			if (content == null) {
 				if (reportTextPart.getContent().containsLanguageID(language.getLanguageID()))
