@@ -381,9 +381,9 @@
         <expressionProviderEntry
               categoryId="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation"
               id="org.nightlabs.jfire.reporting.admin.ui.expressionProvider.category.jfireReporting.localisation.getReportTextPart"
-              insertText="eval(&quot;&quot; + ReportTextPartHelper.getEvalString(JFireReportingHelper.getDataSetParamObject(), &quot;&quot;));"
+              insertText="eval(String(ReportTextPartHelper.getEvalString(JFireReportingHelper.getDataSetParamObject(), &quot;&quot;)));"
               name="Get report text part"
-              tooltip="Get report text part. Fill in the missing linked object and the part id">
+              tooltip="Get report text part. Fill in the missing linked object (an ObjectID instance) and the part id (String).">
         </expressionProviderEntry>
      </extension>
      <extension

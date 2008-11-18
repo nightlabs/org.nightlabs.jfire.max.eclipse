@@ -30,7 +30,10 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.LanguageChooserCombo;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
+import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
@@ -39,6 +42,7 @@ import org.nightlabs.jfire.reporting.ui.textpart.IReportTextPartConfigurationCha
 import org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationChangedEvent;
 import org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationEditComposite;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -58,12 +62,13 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 	private IReportTextPartConfigurationChangedListener changedListener = new IReportTextPartConfigurationChangedListener() {
 		@Override
 		public void reportTextPartConfigurationChanged(ReportTextPartConfigurationChangedEvent evt) {
-			dirty = true;
-			firePropertyChange(IEditorPart.PROP_DIRTY);
+			markDirty();
 		}
 	};
 	
 	private volatile ReportTextPartConfiguration reportTextPartConfiguration;
+
+	private AddReportTextPartAction addReportTextPartAction;
 	
 	/**
 	 * 
@@ -86,11 +91,17 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			}
 			reportTextPartConfiguration = ReportTextPartConfigurationDAO.sharedInstance().storeReportTextPartConfiguration(
 					reportTextPartConfiguration, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
-			configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);
+			updateConfigurationEditComposite();
 		}
 		dirty = false;
 	}
 
+	protected void updateConfigurationEditComposite() {
+		if (configurationEditComposite == null)
+			return;
+		configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);		
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#doSaveAs()
 	 */
@@ -111,17 +122,28 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		Job loadJob = new Job("Loading ReportTextPartConfiguration") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				monitor.beginTask("Loading ReportTextPartConfiguration", 10);
 				ReportTextPartConfiguration config = ReportTextPartConfigurationDAO.sharedInstance().getReportTextPartConfiguration(
-						reportRegistryItemID, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+						reportRegistryItemID, true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 7));
 				synchronized (this) {
 					reportTextPartConfiguration = config;
+					if (reportTextPartConfiguration == null) {
+						reportTextPartConfiguration = new ReportTextPartConfiguration(
+								IDGenerator.getOrganisationID(),
+								IDGenerator.nextID(ReportTextPartConfiguration.class)
+							);
+						ReportRegistryItem item = ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(
+								reportRegistryItemID, new String[] {FetchPlan.DEFAULT}, new SubProgressMonitor(monitor, 3));
+						reportTextPartConfiguration.setReportRegistryItem(item);
+					}
 					if (configurationEditComposite != null && !configurationEditComposite.isDisposed()) {
 						configurationEditComposite.getDisplay().asyncExec(new Runnable() {
 							public void run() {
-								configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);
+								updateConfigurationEditComposite();
 							}
 						});
 					}
+					monitor.done();
 				}
 				return Status.OK_STATUS;
 			}
@@ -137,6 +159,11 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 		return dirty;
 	}
 
+	protected void markDirty() {
+		dirty = true;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.EditorPart#isSaveAsAllowed()
 	 */
@@ -168,9 +195,13 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			
 			form.setText("Text part configuration");
 			
+			addReportTextPartAction = new AddReportTextPartAction(this);
+			section.registerAction(addReportTextPartAction);
+			section.updateToolBarManager();
+			
 			LanguageChooserCombo languageChooser = new LanguageChooserCombo(comp);
 			languageChooser.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END));
-			configurationEditComposite = new ReportTextPartConfigurationEditComposite(comp, SWT.NONE, languageChooser);
+			configurationEditComposite = new ReportTextPartConfigurationEditComposite(comp, SWT.NONE, languageChooser, true);
 			configurationEditComposite.addReportTextPartConfigurationChangedListener(changedListener);
 			configurationEditComposite.addDisposeListener(new DisposeListener() {
 				@Override
@@ -182,7 +213,7 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 			comp.adaptToToolkit();
 			
 			if (reportTextPartConfiguration != null) {
-				configurationEditComposite.setReportTextPartConfiguration(reportTextPartConfiguration);
+				updateConfigurationEditComposite();
 			}
 		}
 	}
@@ -197,5 +228,9 @@ public class ReportTextPartConfigurationEditor extends EditorPart {
 	
 	protected ReportTextPartConfigurationEditComposite getConfigurationEditComposite() {
 		return configurationEditComposite;
+	}
+	
+	protected ReportTextPartConfiguration getReportTextPartConfiguration() {
+		return reportTextPartConfiguration;
 	}
 }

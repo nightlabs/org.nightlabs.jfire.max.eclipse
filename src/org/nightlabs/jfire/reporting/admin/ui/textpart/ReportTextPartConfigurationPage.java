@@ -30,6 +30,7 @@ import org.eclipse.birt.report.designer.internal.ui.editors.FileReportProvider;
 import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;
 import org.eclipse.birt.report.designer.ui.editors.IReportProvider;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -266,5 +267,18 @@ implements IReportEditorPage
 	protected void setProvider(IReportProvider provider) {
 		this.provider = provider;
 	}
-	
+
+	private ActionRegistry registry;
+	@Override
+	public Object getAdapter(Class required) {
+		if (required.equals( ActionRegistry.class ) )
+		{
+			if ( registry == null )
+			{
+				registry = new ActionRegistry( );
+			}
+			return registry;
+		}
+		return super.getAdapter(required);
+	}
 }
