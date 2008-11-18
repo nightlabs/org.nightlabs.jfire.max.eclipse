@@ -71,7 +71,8 @@ public class RenameRegistryItemAction extends ReportRegistryItemAction {
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.ReportRegistryItemAction#run(org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItem)
 	 */
-	public @Override void run(Collection<ReportRegistryItem> reportRegistryItems) {
+	@Override
+	public void run(Collection<ReportRegistryItem> reportRegistryItems) {
 		if (reportRegistryItems.isEmpty())
 			return;
 		ReportRegistryItem registryItem = reportRegistryItems.iterator().next();

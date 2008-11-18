@@ -36,7 +36,8 @@ public class RenameRegistryItemWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		reportRegistryItem.getName().copyFrom(wizardPage.getI18nText());
+		reportRegistryItem.getName().copyFrom(wizardPage.getNameBuffer());
+		reportRegistryItem.getDescription().copyFrom(wizardPage.getDescriptionBuffer());
 		ReportManager rm = ReportingAdminPlugin.getReportManager();
 		try {
 			rm.storeRegistryItem(reportRegistryItem, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

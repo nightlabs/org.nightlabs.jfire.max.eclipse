@@ -3,9 +3,12 @@
  */
 package org.nightlabs.jfire.reporting.admin.ui.layout.action.rename;
 
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditorWizardPage;
+import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.reporting.admin.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 
@@ -16,6 +19,7 @@ import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 public class RenameRegistryItemWizardPage extends I18nTextEditorWizardPage {
 
 	private ReportRegistryItem registryItem;
+	private I18nTextEditorMultiLine descriptionEditor;
 	
 	/**
 	 * @param pageName
@@ -33,12 +37,22 @@ public class RenameRegistryItemWizardPage extends I18nTextEditorWizardPage {
 	@Override
 	public Control createPageContents(Composite parent) {
 		Control result = super.createPageContents(parent);
-//		getI18nText().copyFrom(registryItem.getName());
 		setI18nText(registryItem.getName());
-//		get
 		return result;
 	}
 	
+	@Override
+	protected void createAdditionalContents(Composite wrapper) {
+		super.createAdditionalContents(wrapper);
+		descriptionEditor = new I18nTextEditorMultiLine(wrapper, getLanguageChooser());
+		descriptionEditor.setI18nText(registryItem.getDescription());
+		descriptionEditor.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
 	
-
+	protected I18nText getNameBuffer() {
+		return getI18nText();
+	}
+	protected I18nText getDescriptionBuffer() {
+		return descriptionEditor.getI18nText();
+	}
 }
