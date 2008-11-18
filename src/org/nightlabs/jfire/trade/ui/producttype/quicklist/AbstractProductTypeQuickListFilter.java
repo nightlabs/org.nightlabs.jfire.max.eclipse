@@ -85,17 +85,13 @@ implements IProductTypeQuickListFilter
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private QueryCollection<VendorDependentQuery> queryCollection;
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-	 */
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.add(listener);
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-	 */
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.remove(listener);
@@ -129,16 +125,15 @@ implements IProductTypeQuickListFilter
 	 * Returns an instance of {@link IStructuredSelection} with exactly
 	 * one instance of {@link ProductTypeID}.
 	 *
-	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public ISelection getSelection()
 	{
 		return selection;
 	}
 
-	/**
-	 * @see org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter#setSelection(org.eclipse.jface.viewers.ISelection)
-	 */
+	@Override
 	public void setSelection(final ISelection selection)
 	{
 		if (getResultViewerControl() instanceof ISelectionProvider) {
@@ -190,6 +185,7 @@ implements IProductTypeQuickListFilter
 	protected ISelectionChangedListener getSelectionChangedListener()
 	{
 		return new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				if (!(event.getSelection() instanceof IStructuredSelection))
 					throw new ClassCastException("selection is an instance of "+(event.getSelection()==null?"null":event.getSelection().getClass().getName())+" instead of "+IStructuredSelection.class.getName()+"!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -227,9 +223,9 @@ implements IProductTypeQuickListFilter
 		}
 	}
 
-//	public void setVendorID(AnchorID vendorID) {
-//		getQuery().setVendorID(vendorID);
-//	}
+	//	public void setVendorID(AnchorID vendorID) {
+	//		getQuery().setVendorID(vendorID);
+	//	}
 
 	/**
 	 * performs the search with the Query returned by {@link #getQuery()}
@@ -237,11 +233,9 @@ implements IProductTypeQuickListFilter
 	 */
 	protected abstract void search(ProgressMonitor monitor);
 
-//	public abstract Class<?> getQueryResultClass();
-	/**
-	 * Returns the class of the resultType of the Query which is used for searching.
-	 * @return the class of the resultType of the Query which is used for searching.
-	 */
+	//	public abstract Class<?> getQueryResultClass();
+
+	@Override
 	public Class<?> getQueryResultClass() {
 		return createQuery().getResultClass();
 	}
@@ -254,7 +248,7 @@ implements IProductTypeQuickListFilter
 	 */
 	protected abstract Class<? extends VendorDependentQuery> getQueryClass();
 
-//	protected abstract VendorDependentQuery createQuery();
+	//	protected abstract VendorDependentQuery createQuery();
 
 	/**
 	 * Creates an instance of the subclass of VendorDependentQuery which is used for searching
@@ -279,10 +273,12 @@ implements IProductTypeQuickListFilter
 		if (query instanceof AbstractProductTypeQuery) {
 			AbstractProductTypeQuery productTypeQuery = (AbstractProductTypeQuery) query;
 			productTypeQuery.setSaleable(true);
+			productTypeQuery.setPermissionGrantedToSell(true);
 		}
 		if (query instanceof AbstractProductTypeGroupQuery) {
 			AbstractProductTypeGroupQuery productTypeGroupQuery = (AbstractProductTypeGroupQuery) query;
 			productTypeGroupQuery.setSaleable(true);
+			productTypeGroupQuery.setPermissionGrantedToSell(true);
 		}
 	}
 

@@ -172,7 +172,7 @@ public class ProductTypeRelatedQueryStateTable
 					return new Object[0];
 
 				final ISaleAccessQuery query = (ISaleAccessQuery) inputElement;
-				ProductTypeStateDescription[] stateDescriptions = new ProductTypeStateDescription[4];
+				ProductTypeStateDescription[] stateDescriptions = new ProductTypeStateDescription[5];
 				stateDescriptions[0] = new ProductTypeStateDescription(
 						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.confirmed.text"), AbstractProductTypeQuery.FieldName.confirmed); //$NON-NLS-1$
 				stateDescriptions[1] = new ProductTypeStateDescription(
@@ -181,6 +181,12 @@ public class ProductTypeRelatedQueryStateTable
 						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.saleable.text"), AbstractProductTypeQuery.FieldName.saleable); //$NON-NLS-1$
 				stateDescriptions[3] = new ProductTypeStateDescription(
 						query, Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.column.closed.text"), AbstractProductTypeQuery.FieldName.closed); //$NON-NLS-1$
+
+				stateDescriptions[4] = new ProductTypeStateDescription(
+						query,
+						"User is allowed to sell",
+						AbstractProductTypeQuery.FieldName.permissionGrantedToSell
+				);
 				return stateDescriptions;
 			}
 
