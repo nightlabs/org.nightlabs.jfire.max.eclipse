@@ -83,7 +83,7 @@ public class ReportTextPartConfigurationSection extends ToolBarSectionPart {
 		languageChooser = new LanguageChooserCombo(header);
 		languageChooser.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END));
 		
-		configurationEditComposite = new ReportTextPartConfigurationEditComposite(client, SWT.NONE, languageChooser);
+		configurationEditComposite = new ReportTextPartConfigurationEditComposite(client, SWT.NONE, languageChooser, false);
 		configurationEditComposite.addReportTextPartConfigurationChangedListener(new IReportTextPartConfigurationChangedListener() {
 			@Override
 			public void reportTextPartConfigurationChanged(ReportTextPartConfigurationChangedEvent evt) {
