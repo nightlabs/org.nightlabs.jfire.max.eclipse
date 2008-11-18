@@ -1,13 +1,16 @@
 package org.nightlabs.jfire.reporting.ui.layout;
 
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerColumn;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.jdo.notification.SelectionNotificationProxy;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
@@ -21,7 +24,6 @@ import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
-import org.nightlabs.util.NLLocale;
 
 public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
@@ -61,7 +63,15 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 
 		@Override
 		protected String getJDOObjectText(ReportRegistryItem jdoObject, int columnIndex) {
-			return jdoObject.getName().getText(NLLocale.getDefault().getLanguage());
+			return jdoObject.getName().getText();
+		}
+		
+		protected String getTooltipText(Object element, int columnText) {
+			ReportRegistryItem item = ((ReportRegistryItemNode)element).getJdoObject();
+			if (item.getDescription().isEmpty())
+				return null;
+			else 
+				return item.getDescription().getText();
 		}
 		
 		@Override
@@ -114,44 +124,32 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	}
 	
 	@Override
-	@Implement
 	public void createTreeColumns(Tree tree)
 	{
 //		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 	}
 
 	@Override
-	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{
 		treeViewer.setContentProvider(new ContentProvider());
-		treeViewer.setLabelProvider(new LabelProvider());
+		ViewerColumn column = new ViewerColumn(treeViewer, treeViewer.getTree()) {
+		};
+		column.setLabelProvider(new CellLabelProvider() {
+			LabelProvider lp = new LabelProvider();
+			@Override
+			public void update(ViewerCell cell) {
+				cell.setText(lp.getColumnText(cell.getElement(), 0));
+				cell.setImage(lp.getColumnImage(cell.getElement(), 0));
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				return lp.getTooltipText(element, 0);
+			}
+		});
+		ColumnViewerToolTipSupport.enableFor(treeViewer);
 	}
 	
-//	/**
-//	 * Returns the (first) selected ReportRegistryItem or null.
-//	 * @return The (first) selected ReportRegistryItem or null.
-//	 */
-//	public ReportRegistryItem getSelectedRegistryItem() {
-//		if (getTree().getSelectionCount() == 1) {
-//			return ((ReportRegistryItemNode)getTree().getSelection()[0].getData()).getJdoObject();
-//		}
-//		return null;
-//	}
-//
-//	/**
-//	 * Returns all selected ReportRegistryItems in a Set.
-//	 * @return All selected ReportRegistryItems in a Set.
-//	 */
-//	public Set<ReportRegistryItem> getSelectedRegistryItems() {
-//		Set<ReportRegistryItem> result = new HashSet<ReportRegistryItem>();
-//		TreeItem[] items = getTree().getSelection();
-//		for (int i = 0; i < items.length; i++) {
-//			result.add(((ReportRegistryItemNode)items[i].getData()).getJdoObject());
-//		}
-//		return result;
-//	}
-
 	@Override
 	protected ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> getJDOObjectTreeController() {
 		return activeReportRegistryItemTreeController;

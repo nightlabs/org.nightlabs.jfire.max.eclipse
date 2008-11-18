@@ -57,6 +57,7 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	public static final String[] DEFAULT_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		ReportRegistryItem.FETCH_GROUP_NAME,
+		ReportRegistryItem.FETCH_GROUP_DESCRIPTION,
 		ReportRegistryItem.FETCH_GROUP_PARENT_CATEGORY_ID
 	};
 
