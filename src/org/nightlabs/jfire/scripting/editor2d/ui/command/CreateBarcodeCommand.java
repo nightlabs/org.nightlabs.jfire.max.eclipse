@@ -27,7 +27,6 @@ package org.nightlabs.jfire.scripting.editor2d.ui.command;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.editor2d.ui.command.CreateDrawComponentCommand;
-import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent;
 import org.nightlabs.jfire.scripting.editor2d.ScriptEditor2DFactory;
 import org.nightlabs.jfire.scripting.editor2d.ui.request.BarcodeCreateRequest;
 
@@ -39,30 +38,25 @@ public class CreateBarcodeCommand
 extends CreateDrawComponentCommand
 {
 public static final Logger LOGGER = Logger.getLogger(CreateBarcodeCommand.class);
-	
+
 	public CreateBarcodeCommand(BarcodeCreateRequest request) {
 		super();
 		this.request = request;
 	}
- 
+
 	private BarcodeCreateRequest request = null;
-	
+
   protected ScriptEditor2DFactory getScriptEditorFactory() {
   	return (ScriptEditor2DFactory) request.getModelCreationFactory().getFactory();
   }
-  
+
 	@Override
 	public void execute()
 	{
 	  int x = getBounds().x;
 	  int y = getBounds().y;
-	  BarcodeDrawComponent tb = getScriptEditorFactory().createBarcode(
-	  		request.getBarcodeType(), request.getValue(),
-	  		x, y,
-	  		request.getWidthScale(), request.getHeight(),
-	  		request.getOrientation(), request.isHumanReadable(),
-	  		parent, request.getScriptRegistryItemID());
-	  drawComponent = tb;
+
+	  drawComponent = request.createBarcode(parent, x, y);
 	  parent.addDrawComponent(drawComponent);
 		drawOrderIndex = parent.getDrawComponents().indexOf(drawComponent);
 	}

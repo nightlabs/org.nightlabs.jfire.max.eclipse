@@ -25,11 +25,14 @@
  ******************************************************************************/
 package org.nightlabs.jfire.scripting.editor2d.ui.request;
 
+import org.nightlabs.editor2d.DrawComponentContainer;
 import org.nightlabs.editor2d.ui.request.EditorCreateRequest;
 import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent;
+import org.nightlabs.jfire.scripting.editor2d.ScriptEditor2DFactory;
 import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent.Orientation;
 import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent.Type;
 import org.nightlabs.jfire.scripting.editor2d.BarcodeDrawComponent.WidthScale;
+import org.nightlabs.jfire.scripting.editor2d.ui.model.ScriptingEditorModelCreationFactory;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 
 /**
@@ -56,7 +59,7 @@ implements ScriptCreateRequest
 	public void setHumanReadable(boolean humanReadable) {
 		this.humanReadable = humanReadable;
 	}
-	
+
 	private Orientation orientation = BarcodeDrawComponent.ORIENTATION_DEFAULT;
 	public Orientation getOrientation() {
 		return orientation;
@@ -64,7 +67,7 @@ implements ScriptCreateRequest
 	public void setOrientation(Orientation orientation) {
 		this.orientation = orientation;
 	}
-	
+
 	private Type barcodeType = BarcodeDrawComponent.TYPE_DEFAULT;
 	public Type getBarcodeType() {
 		return barcodeType;
@@ -72,7 +75,7 @@ implements ScriptCreateRequest
 	public void setBarcodeType(Type type) {
 		this.barcodeType = type;
 	}
-	
+
 	private WidthScale widthScale = BarcodeDrawComponent.WIDTH_SCALE_DEFAULT;
 	public WidthScale getWidthScale() {
 		return widthScale;
@@ -80,7 +83,7 @@ implements ScriptCreateRequest
 	public void setWidthScale(WidthScale widthScale) {
 		this.widthScale = widthScale;
 	}
-	
+
 	private String value = BarcodeDrawComponent.VALUE_DEFAULT;
 	public String getValue() {
 		return value;
@@ -88,8 +91,9 @@ implements ScriptCreateRequest
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
 	private int height;
+	private BarcodeDrawComponent barcode;
 	public int getHeight() {
 		return height;
 	}
@@ -97,5 +101,21 @@ implements ScriptCreateRequest
 		this.height = height;
 	}
 
+
+	public BarcodeDrawComponent createBarcode(DrawComponentContainer parent, int x, int y) {
+		ScriptEditor2DFactory se2df = (ScriptEditor2DFactory) (((ScriptingEditorModelCreationFactory) getFactory()).getFactory());
+		barcode = se2df.createBarcode(
+				getBarcodeType(), getValue(),
+				x, y,
+				getWidthScale(), getHeight(),
+				getOrientation(), isHumanReadable(),
+				parent, getScriptRegistryItemID());
+		return barcode;
+	}
+
+	@Override
+	public Object getNewObject() {
+		return barcode;
+	}
 
 }
