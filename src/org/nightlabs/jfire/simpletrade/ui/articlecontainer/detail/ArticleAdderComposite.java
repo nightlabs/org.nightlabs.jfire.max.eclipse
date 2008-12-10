@@ -46,23 +46,17 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.QuantitySelector;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
-import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.TariffOrderConfigModule;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.FetchGroupsTrade;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.Segment;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
@@ -97,7 +91,7 @@ public class ArticleAdderComposite extends FadeableComposite
 		productTypeNameLabel.setText(
 				articleAdder.getProductType().getName().getText(NLLocale.getDefault().getLanguage()));
 
-		tariffCombo = new XComboComposite<TariffPricePair>(this, SWT.NONE, new LabelProvider() {
+		tariffCombo = new XComboComposite<TariffPricePair>(this, SWT.READ_ONLY, new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof TariffPricePair) {
@@ -113,7 +107,7 @@ public class ArticleAdderComposite extends FadeableComposite
 
 		// TODO This should be done in a job :)
 		String[] fetchGroups = new String[] { TariffOrderConfigModule.FETCH_GROUP_TARIFF_ORDER_CONFIG_MODULE , FetchPlan.DEFAULT };
-		TariffOrderConfigModule cfMod = (TariffOrderConfigModule) ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
+		TariffOrderConfigModule cfMod = ConfigUtil.getUserCfMod(TariffOrderConfigModule.class,
 				fetchGroups, -1, new NullProgressMonitor());
 
 		final Comparator<Tariff> tariffComparator = cfMod.getTariffComparator();
