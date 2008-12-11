@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
+import org.nightlabs.jfire.reporting.RoleConstants;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemActionMenuManager;
 
@@ -82,14 +83,18 @@ extends LSDViewPart
 
 	public void createPartContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE, XComposite.LayoutMode.TIGHT_WRAPPER);
-		registryItemTree = new ReportRegistryItemTree(wrapper, true, getNotificationZone());
+		registryItemTree = createReportRegistryItemTree(wrapper);
 		contextMenuManager = new ReportRegistryItemActionMenuManager(registryItemTree, getActionScope(), this);
 		registryItemTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedElements(), true, true);
 			}
 		});
-		registryItemTree.getTreeViewer().expandToLevel(4);
+//		registryItemTree.getTreeViewer().expandToLevel(4);
+	}
+	
+	protected ReportRegistryItemTree createReportRegistryItemTree(Composite parent) {
+		return new ReportRegistryItemTree(parent, true, getNotificationZone(), RoleConstants.renderReport);
 	}
 	
 	public abstract String getActionScope();

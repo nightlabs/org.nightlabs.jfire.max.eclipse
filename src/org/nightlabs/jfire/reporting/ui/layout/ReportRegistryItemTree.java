@@ -24,6 +24,7 @@ import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.jfire.security.id.RoleID;
 
 public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
@@ -46,6 +47,7 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	private SelectionProxy selectionProxy;
 	private String selectionZone;
 	private boolean addSelectionProxy;
+	private RoleID filterRoleID;
 	
 	// TODO: ignoreinheritance ?
 	private static final boolean IGNORE_INHERITANCE = false;
@@ -90,11 +92,11 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 	
 	private ActiveReportRegistryItemTreeController activeReportRegistryItemTreeController;
 
-	public ReportRegistryItemTree(Composite parent, boolean addSelectionProxy, String selectionZone)
+	public ReportRegistryItemTree(Composite parent, boolean addSelectionProxy, String selectionZone, RoleID filterRoleID)
 	{
 		super(parent, DEFAULT_STYLE_SINGLE, true, true, false);
 		this.addSelectionProxy = addSelectionProxy;
-		activeReportRegistryItemTreeController = new ActiveReportRegistryItemTreeController() {
+		activeReportRegistryItemTreeController = new ActiveReportRegistryItemTreeController(filterRoleID) {
 			
 			@Override
 			protected void onJDOObjectsChanged(JDOTreeNodesChangedEvent<ReportRegistryItemID, ReportRegistryItemNode> changedEvent)

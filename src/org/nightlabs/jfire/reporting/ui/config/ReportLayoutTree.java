@@ -185,7 +185,7 @@ implements ICellModifier
 	private static final String PROPERTY_AVAILABLE = "available"; //$NON-NLS-1$
 	private static final String PROPERTY_DEFAULT = "default"; //$NON-NLS-1$
 	
-	private ActiveReportRegistryItemTreeController itemTreeController = new ActiveReportRegistryItemTreeController() {
+	private ActiveReportRegistryItemTreeController itemTreeController = new ActiveReportRegistryItemTreeController(null) {
 		@Override
 		protected void onJDOObjectsChanged(JDOTreeNodesChangedEvent<ReportRegistryItemID, ReportRegistryItemNode> changedEvent) {
 			JDOTreeNodesChangedEventHandler.handle(getTreeViewer(), changedEvent);
