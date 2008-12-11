@@ -61,7 +61,14 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.progress.RCPProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
-
+/**
+ * This Editor serves as base class to use pages from the {@link EntityEditor} framework
+ * as pages of the {@link JFireReportEditor}.
+ * It creates a container for only one {@link IFormPage} that will be assigned to only one {@link IEntityEditorPageController},
+ * see the abstract methods {@link #createFormPage(EntityEditor)} and {@link #createPageController(EntityEditor)}.   
+ * 
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ */
 public abstract class ReportLayoutEntityEditor extends EditorPart
 {
 	private int staleType;
@@ -437,6 +444,11 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 		@Override
 		public JFireRemoteReportEditorInput getEditorInput() {
 			return ReportLayoutEntityEditor.this.getEditorInput();
+		}
+		
+		@Override
+		public void editorDirtyStateChanged() {
+			ReportLayoutEntityEditor.this.editorDirtyStateChanged();
 		}
 	}
 	
