@@ -29,10 +29,12 @@ package org.nightlabs.jfire.reporting.admin.ui.layout;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jfire.reporting.RoleConstants;
 import org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin;
 import org.nightlabs.jfire.reporting.admin.ui.layout.action.edit.EditReportLayoutAction;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
+import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemTree;
 import org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItemTreeView;
 
 /**
@@ -61,6 +63,11 @@ public class ReportLayoutView extends ReportRegistryItemTreeView
 	public void createPartContents(Composite parent) {
 		super.createPartContents(parent);
 		getRegistryItemTree().getTreeViewer().addDoubleClickListener(treeDoubleClickListener);
+	}
+	
+	@Override
+	protected ReportRegistryItemTree createReportRegistryItemTree(Composite parent) {
+		return new ReportRegistryItemTree(parent, true, getNotificationZone(), RoleConstants.editReport);
 	}
 
 	@Override

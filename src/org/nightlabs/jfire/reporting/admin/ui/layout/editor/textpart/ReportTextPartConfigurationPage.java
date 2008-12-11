@@ -24,7 +24,7 @@
  *                                                                             *
  ******************************************************************************/
 
-package org.nightlabs.jfire.reporting.admin.ui.textpart;
+package org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart;
 
 import org.eclipse.birt.report.designer.internal.ui.editors.FileReportProvider;
 import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;

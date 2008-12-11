@@ -44,12 +44,16 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPersistableElement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.reporting.RoleConstants;
 import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItemName;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
+import org.nightlabs.jfire.security.MissingRoleException;
+import org.nightlabs.jfire.security.SecurityReflector;
+import org.nightlabs.jfire.security.id.AuthorityID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.IOUtil;
 import org.nightlabs.util.NLLocale;
@@ -86,6 +90,9 @@ implements IJFireRemoteReportEditorInput
 	protected JFireLocalReportEditorInput getLocalInput() {
 		if (localInput == null) {
 			ReportLayout layout = (ReportLayout) ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(reportRegistryItemID, REPORT_LAYOUT_COMPLETE_FETCH_GROUPS, new NullProgressMonitor());
+			AuthorityID authorityID = layout.getSecuringAuthorityID();
+			if (authorityID != null && !SecurityReflector.authorityContainsRoleRef(authorityID, RoleConstants.editReport))
+				throw new MissingRoleException(SecurityReflector.getUserDescriptor().getUserObjectID(), authorityID, RoleConstants.editReport);
 			
 			File tempFolder = ReportingPlugin.createReportTempFolder();
 			

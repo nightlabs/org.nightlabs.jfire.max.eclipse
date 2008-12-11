@@ -140,7 +140,7 @@
             relative="org.eclipse.birt.report.designer.ui.editors.design.masterpage"
             visible="true"/>
       <formPage
-            class="org.nightlabs.jfire.reporting.admin.ui.textpart.ReportTextPartConfigurationPage"
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationPage"
             displayName="%layout.editor.page.textpart"
             id="org.nightlabs.jfire.reporting.admin.ui.textpart.ReportTextPartConfigurationPage"
             position="right"
@@ -164,6 +164,13 @@
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
             displayName="%layout.editor.page.preview"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
+            position="right"
+            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
+            visible="true"/>
+      <formPage
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
+            displayName="%layout.editor.page.authority"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
             position="right"
             relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             visible="true"/>

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.reporting.admin.ui.textpart;
+package org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart;
 
 import javax.jdo.FetchPlan;
 
