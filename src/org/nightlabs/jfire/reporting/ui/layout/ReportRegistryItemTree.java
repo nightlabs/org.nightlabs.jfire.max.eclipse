@@ -11,6 +11,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.nightlabs.base.ui.notification.NotificationManager;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.jdo.notification.SelectionNotificationProxy;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
@@ -26,10 +27,18 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.security.id.RoleID;
 
+/**
+ * An active tree of {@link ReportCategory}s and {@link ReportLayout}s.
+ *  
+ * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
+ */
 public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
-	
-	public static class SelectionProxy extends SelectionNotificationProxy {
+	/**
+	 * This proxy delegates to the {@link NotificationManager}.
+	 * It will extract the {@link ReportRegistryItem} from the {@link ReportRegistryItemNode}. 
+	 */
+	protected static class SelectionProxy extends SelectionNotificationProxy {
 
 		public SelectionProxy(ReportRegistryItemTree source, String zone, boolean ignoreInheritance, boolean clearOnEmptySelection) {
 			super(source, zone, ignoreInheritance, clearOnEmptySelection);
@@ -43,14 +52,6 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 		}
 		
 	}
-	
-	private SelectionProxy selectionProxy;
-	private String selectionZone;
-	private boolean addSelectionProxy;
-	private RoleID filterRoleID;
-	
-	// TODO: ignoreinheritance ?
-	private static final boolean IGNORE_INHERITANCE = false;
 	
 	protected class ContentProvider extends JDOObjectTreeContentProvider<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode> {
 
@@ -90,8 +91,45 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 		}
 	}
 	
+	private SelectionProxy selectionProxy;
+	private String selectionZone;
+	private boolean addSelectionProxy;
+	
+	// TODO: ignoreinheritance ?
+	private static final boolean IGNORE_INHERITANCE = false;
+	
 	private ActiveReportRegistryItemTreeController activeReportRegistryItemTreeController;
 
+	/**
+	 * Create a new {@link ReportRegistryItemTree}.
+	 * 
+	 * @param parent 
+	 * 		The parent to add the control to.
+	 * @param addSelectionProxy 
+	 * 		Whether to add a selection proxy that will delegate the 
+	 * 		selection events to the {@link NotificationManager}.
+	 * @param selectionZone
+	 * 		The selection zone to use when delegating the selection events.
+	 */
+	public ReportRegistryItemTree(Composite parent, boolean addSelectionProxy, String selectionZone)
+	{
+		this(parent, addSelectionProxy, selectionZone, null);
+	}
+	
+	/**
+	 * Create a new {@link ReportRegistryItemTree} that will filter the items
+	 * using on the basis of their associated authority and the given roleID.
+	 * 
+	 * @param parent 
+	 * 		The parent to add the control to.
+	 * @param addSelectionProxy 
+	 * 		Whether to add a selection proxy that will delegate the 
+	 * 		selection events to the {@link NotificationManager}.
+	 * @param selectionZone
+	 * 		The selection zone to use when delegating the selection events.
+	 * @param filterRoleID
+	 * 		The roleID that the current user requires to have for items to be visible.
+	 */
 	public ReportRegistryItemTree(Composite parent, boolean addSelectionProxy, String selectionZone, RoleID filterRoleID)
 	{
 		super(parent, DEFAULT_STYLE_SINGLE, true, true, false);
