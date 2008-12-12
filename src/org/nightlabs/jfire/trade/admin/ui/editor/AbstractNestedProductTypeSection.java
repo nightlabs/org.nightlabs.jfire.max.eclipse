@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
+import java.lang.reflect.Field;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -16,7 +18,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -67,10 +68,10 @@ implements IProductTypeSectionPart
 
 		AddNestedProductTypeAction addNestedProductTypeAction = new AddNestedProductTypeAction();
 		getToolBarManager().add(addNestedProductTypeAction);
-		
+
 		RemoveNestedProductTypeAction removeNestedProductTypeAction = new RemoveNestedProductTypeAction();
 		getToolBarManager().add(removeNestedProductTypeAction);
-		
+
 		inheritNestedProductTypesAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -80,14 +81,14 @@ implements IProductTypeSectionPart
 		};
 		getToolBarManager().add(inheritNestedProductTypesAction);
 		inheritNestedProductTypesAction.setEnabled(false);
-		
+
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addNestedProductTypeAction);
 		menuManager.add(removeNestedProductTypeAction);
-		
+
 		Menu menu = menuManager.createContextMenu(nestedProductTypeTable.getControl());
 		nestedProductTypeTable.setMenu(menu);
-		
+
 		updateToolBarManager();
 	}
 
@@ -109,7 +110,7 @@ implements IProductTypeSectionPart
 //				setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData("nestedProductTypeLocals").isValueInherited()); //$NON-NLS-1$
 ////			 TODO sort nestedProductTypes alphabetically
 //		}
-//		
+//
 //		nestedProductTypeTable.setInput(productType);
 //	}
 	//TODO I have to implement those two methods
@@ -121,7 +122,7 @@ implements IProductTypeSectionPart
 		if (pageController == null || getSection() == null || getSection().isDisposed()|| nestedProductTypeTable.isDisposed())
 			return;
 
-		productTypePageController = pageController; 
+		productTypePageController = pageController;
 
 		this.productType = pageController.getProductType();
 		if (productType == null) {
@@ -136,7 +137,7 @@ implements IProductTypeSectionPart
 						).isValueInherited()
 				);
 			}
-			inheritNestedProductTypesAction.setEnabled(productType.getExtendedProductTypeID() != null);			
+			inheritNestedProductTypesAction.setEnabled(productType.getExtendedProductTypeID() != null);
 		}
 
 		// TODO sort nestedProductTypes alphabetically
@@ -207,17 +208,18 @@ implements IProductTypeSectionPart
 		if (inherited) {
 			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.loadInheritanceDataJob.name")) { //$NON-NLS-1$
 				@Override
-				@Implement
 				protected IStatus run(ProgressMonitor monitor)
 				{
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.loadInheritanceDataMonitor.task.name"), 3); //$NON-NLS-1$
 					try {
 						ProductType mother = getExtendedProductTypeWithNestedProductTypes(monitor);
 
+						Field field = ProductTypeLocal.class.getDeclaredField(ProductTypeLocal.FieldName.nestedProductTypeLocals);
 						new NestedProductTypeLocalMapInheriter().copyFieldValue(
 								mother.getProductTypeLocal(), productType.getProductTypeLocal(),
 								mother.getProductTypeLocal().getClass(), productType.getProductTypeLocal().getClass(),
-								ProductTypeLocal.class.getDeclaredField(ProductTypeLocal.FieldName.nestedProductTypeLocals),
+								field,
+								field,
 								mother.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals),
 								productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals));
 						monitor.worked(1);
@@ -251,7 +253,7 @@ implements IProductTypeSectionPart
 		if (productType != null && productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals) != null)
 			setInheritanceSelection(productType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.nestedProductTypeLocals).isValueInherited());
 	}
-			
+
 	public void removeSelectedNestedProductTypes()
 	{
 		if (productType == null)
@@ -272,7 +274,7 @@ implements IProductTypeSectionPart
 	}
 
 	protected abstract void createNestedProductTypeClicked();
-	
+
 	class AddNestedProductTypeAction
 	extends Action
 	{
@@ -286,13 +288,13 @@ implements IProductTypeSectionPart
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.AddNestedProductTypeAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.AddNestedProductTypeAction.text"));	 //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
 			createNestedProductTypeClicked();
 		}
 	}
-	
+
 	class RemoveNestedProductTypeAction
 	extends Action
 	{
@@ -306,7 +308,7 @@ implements IProductTypeSectionPart
 			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.RemoveNestedProductTypeAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractNestedProductTypeSection.RemoveNestedProductTypeAction.text")); //$NON-NLS-1$
 		}
-		
+
 		@Override
 		public void run() {
 			removeSelectedNestedProductTypes();
