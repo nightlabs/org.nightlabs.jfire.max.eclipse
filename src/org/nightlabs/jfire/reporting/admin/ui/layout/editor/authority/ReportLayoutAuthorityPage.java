@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority;
 
-import org.eclipse.birt.report.designer.ui.editors.IReportEditorPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -34,22 +33,22 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthorityPage;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControllerHelper;
-import org.nightlabs.jfire.base.admin.ui.editor.authority.InheritedSecuringAuthorityResolver;
+import org.nightlabs.jfire.reporting.admin.ui.category.editor.AuthorityPageController;
+import org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportRegistryItemAuthoritySection;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.ReportLayoutEntityEditor;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
 
 /**
- * A page for the Report Designer that lets the edit the
- * {@link ReportTextPartConfiguration} for the current 
+ * A page for the Report Designer that lets the user edit the
+ * {@link ReportTextPartConfiguration} for the current
  * {@link ReportRegistryItem}.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
 public class ReportLayoutAuthorityPage
 extends ReportLayoutEntityEditor
-implements IReportEditorPage
 {
 
 	public static final String ID_PAGE = ReportLayoutAuthorityPage.class.getName();
@@ -60,26 +59,21 @@ implements IReportEditorPage
 
 			@Override
 			protected AbstractAuthoritySection createAuthoritySection(Composite parent) {
-				return new AbstractAuthoritySection(this, parent) {
-					@Override
-					protected InheritedSecuringAuthorityResolver createInheritedSecuringAuthorityResolver() {
-						return null;
-					}
-					@Override
-					public void setPageController(IEntityEditorPageController pageController) {
-						setAuthorityPageControllerHelper(((AuthorityPageController)pageController).getAuthorityPageControllerHelper());
-					}
-					
-				};
+				return new ReportRegistryItemAuthoritySection(this, parent, getPageController());
 			}
 
 			@Override
 			protected AuthorityPageControllerHelper getAuthorityPageControllerHelper() {
-				return ((AuthorityPageController)getPageController()).getAuthorityPageControllerHelper();
+				return (getPageController()).getAuthorityPageControllerHelper();
 			}
-			
+
+			@Override
+			public AuthorityPageController getPageController() {
+				return (AuthorityPageController) super.getPageController();
+			}
 		};
 	}
+
 
 	@Override
 	protected IEntityEditorPageController createPageController(EntityEditor entityEditor) {
@@ -90,5 +84,5 @@ implements IReportEditorPage
 	public String getId() {
 		return ID_PAGE;
 	}
-	
+
 }

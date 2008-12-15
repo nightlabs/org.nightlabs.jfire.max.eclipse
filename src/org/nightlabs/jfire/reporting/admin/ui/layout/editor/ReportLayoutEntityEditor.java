@@ -65,27 +65,27 @@ import org.nightlabs.progress.ProgressMonitor;
  * This Editor serves as base class to use pages from the {@link EntityEditor} framework
  * as pages of the {@link JFireReportEditor}.
  * It creates a container for only one {@link IFormPage} that will be assigned to only one {@link IEntityEditorPageController},
- * see the abstract methods {@link #createFormPage(EntityEditor)} and {@link #createPageController(EntityEditor)}.   
- * 
+ * see the abstract methods {@link #createFormPage(EntityEditor)} and {@link #createPageController(EntityEditor)}.
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
-public abstract class ReportLayoutEntityEditor extends EditorPart
+public abstract class ReportLayoutEntityEditor extends EditorPart implements IReportEditorPage
 {
 	private int staleType;
 	private Control control;
 	private FormEditor editor;
-	
+
 	private int index;
-	
+
 	/**
-	 * The provider is needed for the page to be correctly 
+	 * The provider is needed for the page to be correctly
 	 * integrated into the editor (otherwise the dirty notifications won't work).
 	 */
 	private IReportProvider provider;
-	
+
 	public ReportLayoutEntityEditor()
 	{	}
-	
+
 	/**
 	 * Get the editor id.
 	 * @return The editor id
@@ -109,7 +109,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * This implementation additionally creates this editor's controller.
@@ -122,12 +122,17 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 
 	private IRunnableWithProgress saveRunnable = new IRunnableWithProgress() {
 		public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-			pageController.doSave(new org.nightlabs.base.ui.progress.ProgressMonitorWrapper(monitor));
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					editorDirtyStateChanged();
+			if (isDirty()) {
+				for (IFormPage page : pageController.getPages()) {
+					page.getManagedForm().commit(true);
 				}
-			});
+				pageController.doSave(new org.nightlabs.base.ui.progress.ProgressMonitorWrapper(monitor));
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						editorDirtyStateChanged();
+					}
+				});
+			}
 		}
 	};
 
@@ -135,21 +140,21 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 
 	private IEntityEditorPageController pageController;
 
-	private ScrolledForm scrolledForm;	
-	
+	private ScrolledForm scrolledForm;
+
 	@Override
 	public boolean isDirty() {
 		return pageController != null ? pageController.isDirty() : false;
 	}
-	
+
 	protected void editorDirtyStateChanged() {
 		firePropertyChange(PROP_DIRTY);
-		getEditor().editorDirtyStateChanged();		
+		getEditor().editorDirtyStateChanged();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * This implementation will start a job to save the
 	 * editor. It will first let all pages commit and then
 	 * call its controllers doSave() method. This will
@@ -190,7 +195,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 //		saveJob.setUser(true);
 		saveJob.schedule();
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -202,7 +207,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 	public void createPartControl(Composite parent) {
 		toolkit = new NightlabsFormsToolkit(parent.getDisplay());
 		XComposite wrapper = new XComposite(parent, SWT.BORDER);
-		wrapper.setToolkit(toolkit);		
+		wrapper.setToolkit(toolkit);
 //		scrolledForm = toolkit.createScrolledForm(parent);
 //		GridLayout gl = new GridLayout();
 //		XComposite.configureLayout(LayoutMode.ORDINARY_WRAPPER, gl);
@@ -213,17 +218,17 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 //		gd.heightHint = 1;
 //		wrapper.setLayoutData(gd);
 //		wrapper.setToolkit(toolkit);
-//		
+//
 //		ManagedForm mForm = new ManagedForm(toolkit, scrolledForm);
-//		
+//
 		EntityEditor dummyEditor = getDummyEntityEditor();
-		
+
 		pageController = createPageController(dummyEditor);
 		formPage = createFormPage(dummyEditor);
 		pageController.addPage(formPage);
 		wrapper.setLayout(new FillLayout());
 		formPage.createPartControl(wrapper);
-		
+
 		wrapper.adaptToToolkit();
 //		scrolledForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 		control = wrapper;
@@ -233,25 +238,25 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 	public void setFocus() {
 		formPage.setFocus();
 	}
-	
+
 	protected abstract IEntityEditorPageController createPageController(EntityEditor entityEditor);
-	
+
 	protected abstract IFormPage createFormPage(EntityEditor entityEditor);
-	
+
 	protected ScrolledForm getForm() {
 		return scrolledForm;
 	}
-	
+
 	private IFormPage getPage() {
 		return formPage;
 	}
-	
+
 	@Override
 	public JFireRemoteReportEditorInput getEditorInput() {
 		return (JFireRemoteReportEditorInput) super.getEditorInput();
 	}
-	
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.forms.editor.IFormPage#getPartControl()
@@ -268,7 +273,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 		this.editor = editor;
 	}
 
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.birt.report.designer.ui.editors.IReportEditorPage#onBroughtToTop(org.eclipse.birt.report.designer.ui.editors.IReportEditorPage)
@@ -316,7 +321,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 	public int getIndex() {
 		return index;
 	}
-	
+
 
 	/*
 	 * (non-Javadoc)
@@ -364,18 +369,18 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 	public void setIndex(int index) {
 		this.index = index;
 	}
-	
+
 	@Override
 	public void setInput(IEditorInput input) {
 		super.setInput(input);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>
 	 * Returns the provider from the editor set in {@link #initialize(FormEditor)}
 	 * in order to share the provider with the other editor pages.
-	 * 
+	 *
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewEditor#getProvider()
 	 */
 	protected IReportProvider getProvider() {
@@ -399,7 +404,7 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 		}
 		return provider;
 	}
-	
+
 	protected void setProvider(IReportProvider provider) {
 		this.provider = provider;
 	}
@@ -418,10 +423,10 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 		}
 		return super.getAdapter(required);
 	}
-	
+
 	private class DummyEntityEditor extends EntityEditor {
 		private EntityEditorController c;
-		
+
 		public DummyEntityEditor() {
 			c = new EntityEditorController(this) {
 				@Override
@@ -430,28 +435,28 @@ public abstract class ReportLayoutEntityEditor extends EditorPart
 				}
 			};
 		}
-		
+
 		@Override
 		public EntityEditorController getController() {
 			return c;
 		}
-		
+
 		@Override
 		public FormToolkit getToolkit() {
 			return toolkit;
 		}
-		
+
 		@Override
 		public JFireRemoteReportEditorInput getEditorInput() {
 			return ReportLayoutEntityEditor.this.getEditorInput();
 		}
-		
+
 		@Override
 		public void editorDirtyStateChanged() {
 			ReportLayoutEntityEditor.this.editorDirtyStateChanged();
 		}
 	}
-	
+
 	public EntityEditor getDummyEntityEditor() {
 		return new DummyEntityEditor();
 	}

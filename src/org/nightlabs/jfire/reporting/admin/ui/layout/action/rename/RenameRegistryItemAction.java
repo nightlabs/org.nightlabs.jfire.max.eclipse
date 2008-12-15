@@ -39,7 +39,7 @@ import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
 public class RenameRegistryItemAction extends ReportRegistryItemAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public RenameRegistryItemAction() {
 		super();
@@ -77,6 +77,11 @@ public class RenameRegistryItemAction extends ReportRegistryItemAction {
 			return;
 		ReportRegistryItem registryItem = reportRegistryItems.iterator().next();
 		RenameRegistryItemWizard.show(registryItem);
+	}
+
+	@Override
+	public boolean calculateVisible(Collection<ReportRegistryItem> registryItems) {
+		return false;
 	}
 
 }

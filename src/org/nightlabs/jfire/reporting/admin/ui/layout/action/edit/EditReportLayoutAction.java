@@ -31,10 +31,14 @@ import java.util.Collection;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor;
+import org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportRegistryItemEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireRemoteReportEditorInput;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor;
+import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -47,7 +51,7 @@ import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
 public class EditReportLayoutAction extends ReportRegistryItemAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public EditReportLayoutAction() {
 		super();
@@ -80,27 +84,32 @@ public class EditReportLayoutAction extends ReportRegistryItemAction {
 	 * @see org.nightlabs.jfire.reporting.admin.ui.layout.ReportRegistryItemAction#run(org.nightlabs.jfire.reporting.ui.layout.ReportRegistryItem)
 	 */
 	public @Override void run(Collection<ReportRegistryItem> reportRegistryItems) {
-		ReportLayout layout = (ReportLayout)reportRegistryItems.iterator().next();
+		ReportRegistryItem registryItem = reportRegistryItems.iterator().next();
+
+		String editorID = null;
+		IEditorInput input = null;
+		if (registryItem instanceof ReportLayout) {
+			ReportLayout layout = (ReportLayout)reportRegistryItems.iterator().next();
+			editorID = JFireReportEditor.ID_EDITOR;
+			input = new JFireRemoteReportEditorInput((ReportRegistryItemID)JDOHelper.getObjectId(layout));
+		} else if (registryItem instanceof ReportCategory) {
+			input = new ReportRegistryItemEditorInput((ReportRegistryItemID) JDOHelper.getObjectId(registryItem));
+			editorID = ReportCategoryEditor.ID_EDITOR;
+		} else {
+			return;
+		}
 		try {
-			RCPUtil.openEditor(
-					new JFireRemoteReportEditorInput((ReportRegistryItemID)JDOHelper.getObjectId(layout)),
-					JFireReportEditor.ID_EDITOR
-//					"org.eclipse.birt.report.designer.ui.editors.ReportEditor"
-				);
+			RCPUtil.openEditor(input, editorID);
 		} catch (PartInitException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
 		if (registryItems.isEmpty() || (registryItems.size() != 1))
 			return false;
-		ReportRegistryItem registryItem = registryItems.iterator().next();
-		
-		if (registryItem instanceof ReportLayout)
-			return true;
-		return false;
+		return true;
 	}
 
 }

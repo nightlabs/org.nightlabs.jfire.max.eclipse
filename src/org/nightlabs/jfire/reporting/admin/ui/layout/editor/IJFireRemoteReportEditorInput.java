@@ -28,13 +28,10 @@ package org.nightlabs.jfire.reporting.admin.ui.layout.editor;
 
 import org.eclipse.birt.report.designer.internal.ui.editors.IStorageEditorInput;
 import org.eclipse.ui.IPathEditorInput;
-import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public interface IJFireRemoteReportEditorInput extends IStorageEditorInput, IPathEditorInput {
-	
-	public ReportRegistryItemID getReportRegistryItemID();
+public interface IJFireRemoteReportEditorInput extends IStorageEditorInput, IPathEditorInput, IReportRegistryItemEditorInput {
 }

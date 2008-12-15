@@ -26,6 +26,9 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.editor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.birt.report.designer.ui.ReportPlugin;
 import org.eclipse.birt.report.designer.ui.editors.RCPMultiPageReportEditor;
 import org.eclipse.birt.report.model.api.SessionHandle;
@@ -50,7 +53,7 @@ import org.nightlabs.jfire.reporting.admin.ui.platform.ClientResourceLocator;
  *
  */
 public class JFireReportEditor extends RCPMultiPageReportEditor {
-	
+
 	public static final String ID_EDITOR = JFireReportEditor.class.getName();
 
 	@Override
@@ -71,21 +74,21 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean isDirty() {
 		return super.isDirty();
 	}
-	
+
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		
+
 		if (getEditorInput() instanceof JFireRemoteReportEditorInput) {
 			ClientResourceLocator.setCurrentReportLayoutID(((JFireRemoteReportEditorInput)getEditorInput()).getReportRegistryItemID());
-			
+
 			String resourceString = ClientResourceLocator.getReportLayoutResourceFolderAsFile(((JFireRemoteReportEditorInput)getEditorInput()).getReportRegistryItemID()).getAbsoluteFile().toString();
-			
+
 			ReportPlugin.getDefault( ).setResourcePreference( resourceString );
 			SessionHandle.setBirtResourcePath(resourceString);
 //			SessionHandleAdapter.getInstance( )
@@ -96,9 +99,9 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 //					.setResourceFolder( resourceString );
 		}
 	}
-	
+
 	private PageBookView propView = null;
-	
+
 	private void refreshPropertiesView() {
 		if (propView == null)
 			return;
@@ -107,8 +110,8 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 		propView.partClosed(this);
 		propView.partActivated(this);
 	}
-	
-	
+
+
 	@Override
 	public Object getAdapter(Class type) {
 		if ( type == IPropertySheetPage.class )
@@ -120,25 +123,30 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 		}
 		return super.getAdapter(type);
 	}
-	
+
 	@Override
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		refreshPropertiesView();
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
-		
+
+		Collection<ReportLayoutEntityEditor> entityEditors = getPagesByType(ReportLayoutEntityEditor.class);
+		for (ReportLayoutEntityEditor entityEditor : entityEditors) {
+			entityEditor.doSave(monitor);
+		}
+
 		if (getEditorInput() instanceof JFireRemoteReportEditorInput)
 			JFireRemoteReportEditorInput.saveRemoteLayout((JFireRemoteReportEditorInput)getEditorInput(), monitor);
-		
+
 		IReportLayoutL10nManager layoutL10nManager = getReportLayoutL10nManager();
 		if (layoutL10nManager != null)
 			layoutL10nManager.saveLocalisationBundle(monitor);
 	}
-	
+
 	/**
 	 * Returns the first page implementing {@link IReportLayoutL10nManager} found, <code>null</code> otherwise.
 	 * @return The first page implementing {@link IReportLayoutL10nManager} found, <code>null</code> otherwise.
@@ -151,6 +159,18 @@ public class JFireReportEditor extends RCPMultiPageReportEditor {
 			}
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> getPagesByType(Class<T> _class) {
+		Collection<T> result = new ArrayList<T>();
+		for (int i = 0; i < getPageCount(); i++) {
+			Object page = pages.get(i);
+			if (_class.isAssignableFrom(page.getClass())) {
+				result.add((T) page);
+			}
+		}
+		return result;
 	}
 
 }

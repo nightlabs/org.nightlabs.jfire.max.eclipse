@@ -114,8 +114,13 @@
             icon="icons/layout/editor/JFireReportEditor.16x16.png"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.JFireReportEditor"
             contributorClass="org.eclipse.birt.report.designer.internal.ui.editors.DesignerActionBarContributor"
-            name="Report Editor"/>
-   </extension>
+            name="Report Layout Editor"/>
+      <editor
+            class="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor"
+            icon="icons/category/editor/ReportCategoryEditor.16x16.png"
+            id="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor"
+            name="Report Category Editor"/>
+   </extension>   
    
       <extension
          point="org.eclipse.birt.report.designer.ui.editors.multiPageEditorContributor">
@@ -140,11 +145,25 @@
             relative="org.eclipse.birt.report.designer.ui.editors.design.masterpage"
             visible="true"/>
       <formPage
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.general.ReportLayoutGeneralPage"
+            displayName="General"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.general.ReportLayoutGeneralPage"
+            position="right"
+            relative="org.eclipse.birt.report.designer.ui.editors.design.script"
+            visible="true"/>
+      <formPage
+            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
+            displayName="%layout.editor.page.authority"
+            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
+            position="right"
+            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.general.ReportLayoutGeneralPage"
+            visible="true"/>
+      <formPage
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.textpart.ReportTextPartConfigurationPage"
             displayName="%layout.editor.page.textpart"
             id="org.nightlabs.jfire.reporting.admin.ui.textpart.ReportTextPartConfigurationPage"
             position="right"
-            relative="org.eclipse.birt.report.designer.ui.editors.design.script"
+            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
             visible="true"/>
       <formPage
             class="org.eclipse.birt.report.designer.ui.editors.pages.ReportXMLSourceEditorFormPage"
@@ -164,13 +183,6 @@
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
             displayName="%layout.editor.page.preview"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.preview.ReportLayoutPreviewPage"
-            position="right"
-            relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
-            visible="true"/>
-      <formPage
-            class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
-            displayName="%layout.editor.page.authority"
-            id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority.ReportLayoutAuthorityPage"
             position="right"
             relative="org.nightlabs.jfire.reporting.admin.ui.layout.editor.l10n.ReportLayoutL10nPage"
             visible="true"/>
@@ -398,5 +410,18 @@
         <queryPropertySetEditor
               class="org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property.prop.PropertySetQueryPropertySetEditorFactory">
         </queryPropertySetEditor>
+     </extension>
+     <extension
+           point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
+              class="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportDetailPage$Factory"
+              editorID="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor"
+              indexHint="10">
+        </pageFactory>
+        <pageFactory
+              class="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryAuthorityPage$Factory"
+              editorID="org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportCategoryEditor"
+              indexHint="100">
+        </pageFactory>
      </extension>
 </plugin>
