@@ -73,6 +73,9 @@ public class RecurringOfferConfigSection extends AbstractRecurringConfigGeneralS
 	protected void updateConfigOffer(
 			RecurringOfferConfiguration recurringOfferConfiguration) {
 		
+	if(bookInvoiceCheck.isDisposed()||createDeliveryCheck.isDisposed()||createInvoiceCheck.isDisposed())
+	 return;
+	
 		createDeliveryCheck.setSelection(recurringOfferConfiguration.isCreateDelivery());
 		createInvoiceCheck.setSelection(recurringOfferConfiguration.isCreateInvoice());
 		bookInvoiceCheck.setSelection(recurringOfferConfiguration.isBookInvoice());
