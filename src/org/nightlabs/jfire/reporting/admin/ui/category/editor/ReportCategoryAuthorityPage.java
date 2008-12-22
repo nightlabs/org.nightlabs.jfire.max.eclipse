@@ -3,14 +3,12 @@
  */
 package org.nightlabs.jfire.reporting.admin.ui.category.editor;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthorityPage;
-import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControllerHelper;
 
 /**
@@ -40,14 +38,6 @@ public class ReportCategoryAuthorityPage extends AbstractAuthorityPage {
 	 */
 	public ReportCategoryAuthorityPage(FormEditor editor) {
 		super(editor, PAGE_ID);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthorityPage#createAuthoritySection(org.eclipse.swt.widgets.Composite)
-	 */
-	@Override
-	protected AbstractAuthoritySection createAuthoritySection(Composite parent) {
-		return new ReportRegistryItemAuthoritySection(this, parent, getPageController());
 	}
 
 	@Override

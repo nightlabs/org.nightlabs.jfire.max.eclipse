@@ -26,15 +26,12 @@
 
 package org.nightlabs.jfire.reporting.admin.ui.layout.editor.authority;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthorityPage;
-import org.nightlabs.jfire.base.admin.ui.editor.authority.AbstractAuthoritySection;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorityPageControllerHelper;
 import org.nightlabs.jfire.reporting.admin.ui.category.editor.AuthorityPageController;
-import org.nightlabs.jfire.reporting.admin.ui.category.editor.ReportRegistryItemAuthoritySection;
 import org.nightlabs.jfire.reporting.admin.ui.layout.editor.ReportLayoutEntityEditor;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
@@ -56,11 +53,6 @@ extends ReportLayoutEntityEditor
 	@Override
 	protected IFormPage createFormPage(EntityEditor entityEditor) {
 		return new AbstractAuthorityPage(entityEditor, getId()) {
-
-			@Override
-			protected AbstractAuthoritySection createAuthoritySection(Composite parent) {
-				return new ReportRegistryItemAuthoritySection(this, parent, getPageController());
-			}
 
 			@Override
 			protected AuthorityPageControllerHelper getAuthorityPageControllerHelper() {

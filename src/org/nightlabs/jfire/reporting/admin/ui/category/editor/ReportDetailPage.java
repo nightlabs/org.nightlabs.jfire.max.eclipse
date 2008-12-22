@@ -86,7 +86,7 @@ public class ReportDetailPage extends EntityEditorPageWithProgress {
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Name & description";
+		return "Name && description";
 	}
 
 }

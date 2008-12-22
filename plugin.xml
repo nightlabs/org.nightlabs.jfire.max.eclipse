@@ -146,7 +146,7 @@
             visible="true"/>
       <formPage
             class="org.nightlabs.jfire.reporting.admin.ui.layout.editor.general.ReportLayoutGeneralPage"
-            displayName="General"
+            displayName="Name &amp;&amp; Description"
             id="org.nightlabs.jfire.reporting.admin.ui.layout.editor.general.ReportLayoutGeneralPage"
             position="right"
             relative="org.eclipse.birt.report.designer.ui.editors.design.script"

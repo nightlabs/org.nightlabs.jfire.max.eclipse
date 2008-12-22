@@ -60,6 +60,7 @@ public class ReportDetailSection extends ToolBarSectionPart {
 				markDirty();
 			}
 		});
+		description.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	public void setReportRegistryItem(ReportRegistryItem reportRegistryItem) {
