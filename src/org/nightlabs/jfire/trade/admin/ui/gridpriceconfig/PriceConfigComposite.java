@@ -62,16 +62,13 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.TariffMapper;
 import org.nightlabs.jfire.accounting.dao.TariffMappingDAO;
 import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigCommand;
-import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculationException;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.CustomerGroupMapper;
@@ -178,19 +175,19 @@ public abstract class PriceConfigComposite extends XComposite
 	public PriceConfigComposite(Composite parent) {
 		this(parent, null);
 	}
-	
+
 	private IDirtyStateManager dirtyStateManager;
 	public IDirtyStateManager getDirtyStateManager() {
 		return dirtyStateManager;
 	}
-	
+
 	private boolean changed = true;
 	public boolean isChanged() {
 		return changed;
 	}
 
 	private Composite productTypeNotSetComposite;
-	
+
 	private Composite stackWrapper;
 	private StackLayout stackLayout;
 	private Composite priceConfigEditComposite = null;
@@ -201,7 +198,7 @@ public abstract class PriceConfigComposite extends XComposite
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		this.dirtyStateManager = dirtyStateManager;
-		
+
 		stackWrapper = new XComposite(this, SWT.NONE);
 		stackLayout = new StackLayout();
 		stackWrapper.setLayout(stackLayout);
@@ -253,7 +250,7 @@ public abstract class PriceConfigComposite extends XComposite
 			title.setText("Assigned:");
 			priceConfigName = new Text(this, getBorderStyle() | SWT.READ_ONLY);
 			priceConfigName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			
+
 			Label info = new Label(this, SWT.NONE | SWT.WRAP);
 			GridData gdInfo = new GridData(GridData.FILL_HORIZONTAL);
 			gdInfo.horizontalSpan = 2;
@@ -325,9 +322,9 @@ public abstract class PriceConfigComposite extends XComposite
 		dimensionValueSelector.addPropertyChangeListener(
 				DimensionValueSelector.PROPERTYCHANGEKEY_REMOVEDIMENSIONVALUE,
 				dimensionValueChangeListener);
-		
+
 		sfGrid.setWeights(new int[] {1, 1});
-		
+
 		return sfLeftRight;
 	}
 
@@ -370,18 +367,13 @@ public abstract class PriceConfigComposite extends XComposite
 
 	protected abstract IInnerPriceConfig retrieveInnerPriceConfigForEditing(PriceConfigID priceConfigID);
 
-	protected IInnerPriceConfig createInnerPriceConfig()
-	{
-		return new FormulaPriceConfig(IDGenerator.getOrganisationID(), PriceConfig.createPriceConfigID());
-	}
-
 //	private ModifyListener cellEditModifyListener = new ModifyListener(){
 //		public void modifyText(ModifyEvent e) {
 //			if (dirtyStateManager != null)
 //				dirtyStateManager.markDirty();
 //		}
 //	};
-	
+
 //	private boolean initalState = false;
 //	/**
 //	 * sets the initalState, to determine that while in this state no calls to the
@@ -400,7 +392,7 @@ public abstract class PriceConfigComposite extends XComposite
 //	public boolean isInitalState() {
 //		return initalState;
 //	}
-	
+
 //	private IDocumentListener cellEditModifyListener = new IDocumentListener(){
 //		public void documentAboutToBeChanged(DocumentEvent arg0) {
 //		}
@@ -430,7 +422,7 @@ public abstract class PriceConfigComposite extends XComposite
 				dirtyStateManager.markDirty();
 		}
 	};
-	
+
 	public static final String[] FETCH_GROUPS_TARIFF_MAPPING = {
 		FetchPlan.DEFAULT
 	};
@@ -462,7 +454,7 @@ public abstract class PriceConfigComposite extends XComposite
 	public ProductType getPackageProductType() {
 		return packageProductType;
 	}
-	
+
 	public void _setPackageProductType(ProductType packageProductType)
 //	throws ModuleException
 	{
@@ -526,7 +518,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 	/**
 	 * stores the Price Configurations
-	 * 
+	 *
 	 * @param priceConfigs the priceConfigs to store
 	 * @param assignInnerPriceConfigCommand TODO
 	 * @return a Collection of the stored gridPriceConfigs
@@ -536,27 +528,27 @@ public abstract class PriceConfigComposite extends XComposite
 	/**
 	 * returns an implementation of {@link AbstractChooseGridPriceConfigWizard} to let the user
 	 * choose a Price Configuration, if no Price Configuration has been assigned yet
-	 * 
+	 *
 	 * @param parentProductTypeID the parent product Type
 	 * @return an implementation of AbstractChooseGridPriceConfigWizard
 	 */
 	public abstract AbstractChooseGridPriceConfigWizard createChoosePriceConfigWizard(ProductTypeID parentProductTypeID);
-	
+
 	/**
 	 * Create an implementation of {@link CellReferenceProductTypeSelector} to let the user
 	 * choose a <code>ProductType</code> or return <code>null</code>, if this dimension is not
 	 * used in the concrete price config.
-	 * 
+	 *
 	 * @return an implementation of {@link CellReferenceProductTypeSelector} or <code>null</code>.
 	 */
 	public abstract CellReferenceProductTypeSelector createCellReferenceProductTypeSelector();
-	
+
 	/**
 	 * Stores the current PriceConfig.
 	 * Prior to saving it will show the user which other ProductTypes
-	 * are affected by this change and give him the possibility to 
+	 * are affected by this change and give him the possibility to
 	 * cancel this action.
-	 * 
+	 *
 	 * @return Whether the PriceConfig was saved or not.
 	 */
 	public boolean submit()
@@ -658,7 +650,7 @@ public abstract class PriceConfigComposite extends XComposite
 		// we ensure this now:
 		if (packageProductType.getInnerPriceConfig() != null)
 			priceCalculator.preparePriceCalculation();
-		
+
 		return true;
 	}
 
@@ -700,34 +692,16 @@ public abstract class PriceConfigComposite extends XComposite
 
 	public void assignNewPriceConfig(AbstractChooseGridPriceConfigWizard wizard) // TODO ProgressMonitor
 	{
-		IInnerPriceConfig innerPC = wizard.getAbstractChooseGridPriceConfigPage().getSelectedPriceConfig();
+		wizard.getAbstractChooseGridPriceConfigPage().configureProductType(packageProductType);
+
+		IInnerPriceConfig innerPC = packageProductType.getInnerPriceConfig();
 		if (innerPC != null) {
 			PriceConfigID innerPCID = (PriceConfigID) JDOHelper.getObjectId(innerPC);
-			if (innerPCID != null)
+			if (innerPCID != null) {
 				innerPC = retrieveInnerPriceConfigForEditing(innerPCID);
+				packageProductType.setInnerPriceConfig(innerPC);
+			}
 		}
-		packageProductType.setInnerPriceConfig(innerPC);
-
-		switch (wizard.getAbstractChooseGridPriceConfigPage().getAction()) {
-			case inherit:
-				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
-				break;
-			case later:
-				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-				// nothing
-				break;
-			case create:
-				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-				IInnerPriceConfig fpc = createInnerPriceConfig();
-				fpc.getName().copyFrom(wizard.getAbstractChooseGridPriceConfigPage().getNewPriceConfigNameBuffer());
-				packageProductType.setInnerPriceConfig(fpc);
-				break;
-			case select:
-				packageProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-				break;
-			default:
-				throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + wizard.getAbstractChooseGridPriceConfigPage().getAction()); //$NON-NLS-1$
-		} // switch (selectPriceConfigPage.getAction()) {
 
 		if (packageProductType.getInnerPriceConfig() != null) {
 			GridPriceConfig packagePriceConfig = (GridPriceConfig)packageProductType.getPackagePriceConfig();

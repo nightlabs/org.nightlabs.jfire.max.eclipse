@@ -55,6 +55,7 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
@@ -118,14 +119,14 @@ extends WizardHopPage
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				TradeAdminPlugin.getDefault(), AbstractChooseGridPriceConfigPage.class, "", ImageDimension._75x70)); //$NON-NLS-1$
 	}
-	
+
 	private void setInheritPriceConfigRadio_InnerPriceConfigName(String name)
 	{
 		inheritPriceConfigRadio.setText(
 				String.format(
 						Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage.inheritPriceConfigRadio.text"), //$NON-NLS-1$
 						name));
-				
+
 	}
 
 	@Override
@@ -358,12 +359,14 @@ extends WizardHopPage
 	{
 		return action;
 	}
-	
+
 	public I18nTextBuffer getNewPriceConfigNameBuffer() {
 		return newPriceConfigNameBuffer;
 	}
-	
+
 	protected abstract List<? extends IInnerPriceConfig> retrievePriceConfigs(ProgressMonitor monitor);
+
+	public abstract IInnerPriceConfig createPriceConfig(I18nText priceConfigName);
 
 	@Override
 	public void onShow()
@@ -372,7 +375,33 @@ extends WizardHopPage
 		getShell().layout(true, true);
 		getContainer().updateButtons();
 	}
-	
+
+	public void configureProductType(ProductType newProductType) {
+		switch (getAction()) {
+		case inherit:
+			newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
+			newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
+			break;
+		case later:
+			newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
+			newProductType.setInnerPriceConfig(null);
+			break;
+		case create:
+			newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
+			IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
+			priceConfig = createPriceConfig(getNewPriceConfigNameBuffer());
+			newProductType.setInnerPriceConfig(priceConfig);
+			break;
+		case select:
+			newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
+			newProductType.setInnerPriceConfig(getSelectedPriceConfig());
+			break;
+		default:
+			throw new IllegalStateException("Unknown action: " + getAction()); //$NON-NLS-1$
+		} // switch (selectPriceConfigPage.getAction()) {
+
+	}
+
 //	public boolean isCreateNewPriceConfigChosen() {
 //		return createPriceConfigRadio.getSelection();
 //	}

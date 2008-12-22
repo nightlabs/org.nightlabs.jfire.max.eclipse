@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -20,7 +19,7 @@ extends DynamicPathWizard
 
 	private ProductTypeID parentProductTypeID = null;
 	private AbstractChooseGridPriceConfigPage abstractChooseGridPriceConfigPage = null;
-	
+
 	@Override
 	public void addPages()
 	{
@@ -30,7 +29,6 @@ extends DynamicPathWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish() {
 		return true;
 	}
