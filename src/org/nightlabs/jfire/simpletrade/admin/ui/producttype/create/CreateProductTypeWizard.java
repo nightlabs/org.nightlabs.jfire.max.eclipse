@@ -34,15 +34,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.ModuleException;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
-import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -148,7 +145,6 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 
@@ -181,31 +177,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 											PriceConfig.createPriceConfigID()));
 						}
 
-						switch (selectPriceConfigPage.getAction()) {
-						case inherit:
-							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(true);
-							newProductType.setInnerPriceConfig(parentProductType.getInnerPriceConfig());
-							break;
-						case later:
-							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-							// nothing
-							break;
-						case create:
-							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-							IInnerPriceConfig priceConfig = parentProductType.getInnerPriceConfig();
-							priceConfig = new FormulaPriceConfig(
-									IDGenerator.getOrganisationID(),
-									PriceConfig.createPriceConfigID());
-							priceConfig.getName().copyFrom(selectPriceConfigPage.getNewPriceConfigNameBuffer());
-							newProductType.setInnerPriceConfig(priceConfig);
-							break;
-						case select:
-							newProductType.getFieldMetaData(ProductType.FieldName.innerPriceConfig).setValueInherited(false);
-							newProductType.setInnerPriceConfig(selectPriceConfigPage.getSelectedPriceConfig());
-							break;
-						default:
-							throw new IllegalStateException("selectPriceConfigPage.getAction() returned unknown action: " + selectPriceConfigPage.getAction()); //$NON-NLS-1$
-						} // switch (selectPriceConfigPage.getAction()) {
+						selectPriceConfigPage.configureProductType(newProductType);
 
 						// TODO: Add Wizardhop for PropertySet inherit/createnew
 						SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, 1);
