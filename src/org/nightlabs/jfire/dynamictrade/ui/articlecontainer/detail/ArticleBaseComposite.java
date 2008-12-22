@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -50,7 +49,6 @@ import org.nightlabs.jfire.accounting.dao.PriceConfigEditDAO;
 import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IPriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculationException;
-import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
@@ -59,6 +57,7 @@ import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
+import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.PriceCalculator;
 import org.nightlabs.jfire.dynamictrade.recurring.DynamicProductTypeRecurringArticle;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
@@ -211,7 +210,6 @@ extends FadeableComposite
 
 		inputPriceFragmentTypeTable = new InputPriceFragmentTypeTable(comp2) {
 			@Override
-			@Implement
 			protected void inputPriceFragmentTypeModified(InputPriceFragmentType inputPriceFragmentType)
 			{
 				if (dynamicTradePriceConfig == null)
@@ -399,7 +397,6 @@ extends FadeableComposite
 		setFaded(true);
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ArticleBaseComposite.loadDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				boolean error = true;
