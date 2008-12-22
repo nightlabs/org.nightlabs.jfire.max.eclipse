@@ -2,9 +2,11 @@ package org.nightlabs.jfire.trade.admin.ui.editor;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -28,11 +30,11 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * The Base Class of all {@link ProductType} AdminEditors. It automatically extracts the correct
  * title and checks for {@link EditLock}.
- * 
+ *
  * <p> Note: This Editor should only be subclassed if used for ProductType configuration. The
  * 			{@link EditLock}s should only be used if necessary.
  * </p>
- * 
+ *
  * @author Marius Heinzmann [marius[at]NightLabs[dot]de]
  * @author Tobias Langner <!-- tobias[dot]langner[at]nightlabs[dot]de -->
  */
@@ -40,8 +42,10 @@ public abstract class AbstractProductTypeAdminEditor
 extends EntityEditor
 implements ICloseOnLogoutEditorPart
 {
+	private String managedBy = null;
+
 	private EditLockHandle editLockHandle;
-	
+
 	private EditLockCallback editLockCallback = new EditLockCallback() {
 		@Override
 		public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
@@ -62,7 +66,7 @@ implements ICloseOnLogoutEditorPart
 			close(false);
 		}
 	};
-		
+
 	private IPropertyListener dirtyStateListener = new IPropertyListener() {
 		public void propertyChanged(Object source, int propID) {
 			if (PROP_DIRTY == propID) {
@@ -72,43 +76,61 @@ implements ICloseOnLogoutEditorPart
 	};
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		editLockHandle = EditLockMan.sharedInstance().acquireEditLockAsynchronously(
 				JFireTradeEAR.EDIT_LOCK_TYPE_ID_PRODUCT_TYPE, ((ProductTypeEditorInput)input).getJDOObjectID(),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.editLock.description"), editLockCallback //$NON-NLS-1$
 		);
-		
+
 		addPropertyListener(dirtyStateListener);
-		Job loadTitleJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.loadTitleJob.name")) { //$NON-NLS-1$
+		Job loadPropertiesJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.loadTitleJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				final String title = ProductTypeDAO.sharedInstance().getProductType(
+				final ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
 						((ProductTypeEditorInput)getEditorInput()).getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME },
-						1, monitor).getName().getText();
+						new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME, ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL },
+						1, monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
-						setPartName(title);
-						setTitle(title);
+						String partTitle = productType.getName().getText();
+						managedBy = productType.getProductTypeLocal().getManagedBy();
+						if (managedBy != null) {
+							MessageDialog.openInformation(site.getShell(),
+									"Managed product type",
+									String.format(
+											"The productType %s is tagged to be managed by a different system (%s). You won't be able to save changes you make to this product type",
+											partTitle, managedBy)
+									);
+							partTitle += String.format("[Managed By %s]", managedBy);
+						}
+						setPartName(partTitle);
+						setTitle(partTitle);
 					}
 				});
 				return Status.OK_STATUS;
 			}
 		};
-		loadTitleJob.schedule();		
+		loadPropertiesJob.schedule();
+	}
+
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		if (managedBy != null)
+			return;
+		super.doSave(monitor);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		
+
 		removePropertyListener(dirtyStateListener);
-		
+
 		if (editLockHandle != null)
 			editLockHandle.release();
 	}
-	
+
 //	/**
 //	 * Returns the Class of the ProductType this editor is used for.
 //	 * @return the Class of the ProductType this editor is used for
