@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.nightlabs.jfire.accounting.gridpriceconfig.TransientStablePriceConfig;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
@@ -52,7 +53,8 @@ extends DimensionValueSelectorComboImpl
 	@Override
 	protected void fillDimensionCombo(Dimension<?> dimension, Combo dimensionCombo)
 	{
-		DynamicTradePriceConfig dynamicTradePriceConfig = (DynamicTradePriceConfig) getGridPriceConfig();
+		TransientStablePriceConfig tspc = (TransientStablePriceConfig) getGridPriceConfig();
+		DynamicTradePriceConfig dynamicTradePriceConfig = (DynamicTradePriceConfig) tspc.getBasePriceConfig();
 
 		if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
 			List<PriceFragmentTypeDimensionValue> priceFragmentTypes = ((Dimension.PriceFragmentTypeDimension)dimension).getValues();

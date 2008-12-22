@@ -12,6 +12,7 @@ import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
+import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicTradePriceConfigDAO;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -20,6 +21,7 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValueSelector
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.ProductTypeSelector;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.Util;
 
 public class PriceConfigComposite
 extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
@@ -37,8 +39,14 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
 		try {
+			// We clear the packaging result price configs for optimisation reasons (prevent transferring to the server).
+			// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig. 
+			Collection<P> clonedPCs = Util.cloneSerializable(priceConfigs);
+			for (P priceConfig : clonedPCs) {
+				((DynamicTradePriceConfig) priceConfig).clearPackagingResultPriceConfigs();
+			}
 			DynamicTradeManager stm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
-			return stm.storeDynamicTradePriceConfigs(priceConfigs, true, assignInnerPriceConfigCommand);
+			return stm.storeDynamicTradePriceConfigs(clonedPCs, true, assignInnerPriceConfigCommand);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
