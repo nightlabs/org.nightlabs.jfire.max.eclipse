@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigPage;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
@@ -22,7 +21,6 @@ extends AbstractChooseGridPriceConfigWizard
 	 * @see org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard#createChooseGridPriceConfigPage(org.nightlabs.jfire.store.ProductType)
 	 */
 	@Override
-	@Implement
 	protected AbstractChooseGridPriceConfigPage createChooseGridPriceConfigPage(
 			ProductTypeID parentProductTypeID)
 	{

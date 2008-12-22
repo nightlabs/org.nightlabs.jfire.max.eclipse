@@ -6,7 +6,6 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -17,6 +16,7 @@ import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorInput;
+import org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig.ChooseDynamicTradePriceConfigPage;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -31,7 +31,9 @@ public class CreateDynamicProductTypeWizard
 extends DynamicPathWizard
 {
 	private ProductTypeID parentProductTypeID;
+	private ChooseDynamicTradePriceConfigPage selectPriceConfigPage;
 	private OwnerVendorPage ownerVendorPage;
+
 	private static String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME,
@@ -56,6 +58,9 @@ extends DynamicPathWizard
 		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentProductTypeID);
 		addPage(dynamicProductTypeNamePage);
 
+		selectPriceConfigPage = new ChooseDynamicTradePriceConfigPage(parentProductTypeID);
+		addPage(selectPriceConfigPage);
+
 		ownerVendorPage = new OwnerVendorPage(parentProductTypeID);
 		addPage(ownerVendorPage);
 
@@ -76,12 +81,14 @@ extends DynamicPathWizard
 		dynamicProductType.getName().copyFrom(dynamicProductTypeNamePage.getDynamicProductTypeNameBuffer());
 		dynamicProductType.getFieldMetaData(ProductType.FieldName.name).setValueInherited(false);
 
+		selectPriceConfigPage.configureProductType(dynamicProductType);
+
 		if(ownerVendorPage.isPageComplete())
 			ownerVendorPage.configureProductType(dynamicProductType);
 
+
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeWizard.createDynamicProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				DynamicTradeManager vm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
