@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigCommand;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
+import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -83,6 +84,12 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 				new NullProgressMonitor());
 	}
 
+	@Override
+	protected PriceCalculator createPriceCalculator(
+			ProductType packageProductType) {
+		return new org.nightlabs.jfire.dynamictrade.accounting.priceconfig.PriceCalculator(packageProductType, createCustomerGroupMapper(), createTariffMapper());
+	}
+	
 	@Override
 	public AbstractChooseGridPriceConfigWizard createChoosePriceConfigWizard(ProductTypeID parentProductTypeID)
 	{
