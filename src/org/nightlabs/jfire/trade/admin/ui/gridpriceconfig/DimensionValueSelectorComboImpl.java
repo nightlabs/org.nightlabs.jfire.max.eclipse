@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
@@ -176,7 +175,7 @@ public class DimensionValueSelectorComboImpl
 
 	private GridPriceConfig gridPriceConfig;
 
-	@Implement
+	@Override
 	public void setGridPriceConfig(GridPriceConfig gridPriceConfig)
 	{
 		this.gridPriceConfig = gridPriceConfig;
@@ -190,7 +189,7 @@ public class DimensionValueSelectorComboImpl
 		}
 	}
 
-	@Implement
+	@Override
 	public GridPriceConfig getGridPriceConfig()
 	{
 		return gridPriceConfig;
@@ -209,7 +208,7 @@ public class DimensionValueSelectorComboImpl
 //		return (DimensionValue) dimension.getValues().get(dimensionCombo.getSelectionIndex());
 //	}
 
-	@Implement
+	@Override
 	public PriceCoordinate preparePriceCoordinate()
 	{
 		PriceCoordinate res = createPriceCoordinate();
@@ -229,7 +228,7 @@ public class DimensionValueSelectorComboImpl
 		return res;
 	}
 
-	@Implement
+	@Override
 	public DimensionValue getSelectedDimensionValue(int dimensionIdx, boolean throwExceptionIfNothingSelected)
 	{
 		Combo combo = dimensionCombos[dimensionIdx];
@@ -243,20 +242,20 @@ public class DimensionValueSelectorComboImpl
 		return dimensions[dimensionIdx].getValues().get(combo.getSelectionIndex());
 	}
 
-	@Implement
+	@Override
 	public void setDimensionEnabled(int dimensionIdx, boolean enabled)
 	{
 		dimensionLabels[dimensionIdx].setEnabled(enabled);
 		dimensionCombos[dimensionIdx].setEnabled(enabled);
 	}
 
-	@Implement
+	@Override
 	public boolean isDimensionEnabled(int dimensionIdx)
 	{
 		return dimensionLabels[dimensionIdx].isEnabled();
 	}
 
-	@Implement
+	@Override
 	public Dimension<?>[] getDimensions()
 	{
 		return dimensions;
@@ -274,50 +273,50 @@ public class DimensionValueSelectorComboImpl
 		}
 	}
 
-	@Implement
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.add(listener);
 	}
 
-	@Implement
+	@Override
 	public ISelection getSelection()
 	{
 		return new DimensionValueSelection(this);
 	}
 
-	@Implement
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.remove(listener);
 	}
 
-	@Implement
+	@Override
 	public void setSelection(ISelection selection)
 	{
 		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
 	}
 
-	@Implement
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener)
 	{
 		propertyChangeSupport.addPropertyChangeListener(listener);
 	}
 
-	@Implement
+	@Override
 	public void addPropertyChangeListener(String propertyName,
 			PropertyChangeListener listener)
 	{
 		propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
 	}
 
-	@Implement
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener)
 	{
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
 
-	@Implement
+	@Override
 	public void removePropertyChangeListener(String propertyName,
 			PropertyChangeListener listener)
 	{
@@ -326,7 +325,7 @@ public class DimensionValueSelectorComboImpl
 
 	private int dimensionIdxPriceFragmentType = -1;
 
-	@Implement
+	@Override
 	public int getDimensionIdxPriceFragmentType()
 	{
 		if (dimensionIdxPriceFragmentType < 0) {

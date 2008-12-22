@@ -500,8 +500,15 @@ public abstract class PriceConfigComposite extends XComposite
 					// it has the same parameters (except PriceFragmentTypes) as the innerPriceConfig.
 					// The PriceFragmentTypes have already been collected from all the packaged PriceConfigs.
 					GridPriceConfig gridPriceConfig = (GridPriceConfig) packageProductType.getPackagePriceConfig();
+					if (gridPriceConfig == null) {
+						// if the package priceConfig is null in the prodcut-type we 
+						// take the one created by the PriceCalculator (this might be a non-persistent temporal one)
+						gridPriceConfig = (GridPriceConfig) priceCalculator.getPackagePriceConfig();
+					}
+
 					if (gridPriceConfig == null)
-						gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
+						throw new IllegalStateException("packageProductType.getPackagePriceConfig() and priceCalculator.getPackagePriceConfig() both returned null!");
+//						gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
 
 					dimensionValueSelector.setGridPriceConfig(gridPriceConfig);
 					productTypeSelector.setPackageProductType(packageProductType);
@@ -604,7 +611,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 		// remove null values - maybe not every product type has a price config assigned
 		while (priceConfigs.remove(null));
-
+		
 		priceConfigIDs = NLJDOHelper.getObjectIDSet(priceConfigs);
 		priceConfigIDs = new HashSet<PriceConfigID>(priceConfigIDs);
 
