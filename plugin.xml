@@ -810,7 +810,7 @@
             decorator="icons/store/search/GenericProductTypeSearchResultProviderFactory.10x10.png"
             icon="icons/store/search/GenericProductTypeSearchResultProviderFactory.16x16.png"
             id="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"
-            name="%GenericProductTypeSearchResultProviderFactory.name" priority="1"/>
+            name="%GenericProductTypeSearchResultProviderFactory.name" priority="100"/>
         <searchResultActionHandler
             class="org.nightlabs.jfire.trade.ui.store.search.ProductTypeSearchSelectionActionHandler" searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"/>
     </extension>
