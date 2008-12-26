@@ -53,6 +53,13 @@ extends AbstractProductTypeQuickListFilter
 		monitor.beginTask("Searching VoucherTypes", 100);
 		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					if (voucherTypeTable.isDisposed())
+						return;
+					voucherTypeTable.setLoadingMessage("Searching VoucherTypes");
+				}
+			});
 			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					queryCollection,
 					DEFAULT_FETCH_VOUCHER_TYPE_GROUP,
