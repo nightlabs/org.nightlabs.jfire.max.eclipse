@@ -89,6 +89,13 @@ extends AbstractCombiTransferWizard
 	private DeliveryNoteID deliveryNoteID = null;
 
 	private List<Article> articlesToTransfer = new ArrayList<Article>();
+	
+	/**
+	 * This is set after in perform finish to indicate 
+	 * whether the transfers where successful.
+	 * A specialized dialog is shown then, but the wizard will close.
+	 */
+	private boolean transfersSuccessful;
 
 	/**
 	 * @param articleContainerID Either an instance of {@link OrderID} or of {@link OfferID} or
@@ -412,6 +419,7 @@ extends AbstractCombiTransferWizard
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
+						transfersSuccessful = false;
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard.performFinish.monitor.task.name"),3); //$NON-NLS-1$
 						monitor.worked(1);
 						if (invoiceIDs == null) {
@@ -464,8 +472,9 @@ extends AbstractCombiTransferWizard
 //							}
 //						}
 
-						if (!TransferWizardUtil.payAndDeliver(getShell(), CombiTransferArticleContainerWizard.this)) {
-							// the TransferWizardUtil already shows a specialised ErrorDialog
+						if (TransferWizardUtil.payAndDeliver(getShell(), CombiTransferArticleContainerWizard.this)) {
+							// set the successful flag only if the transfers could be created
+							transfersSuccessful = true;
 						}
 						monitor.worked(1);
 					} catch (RuntimeException x) {
@@ -518,6 +527,17 @@ extends AbstractCombiTransferWizard
 		return TransferWizardUtil.getArticles(articlesToTransfer, productTypeIDs, reversing);
 	}
 
+	/**
+	 * This is set before the wizard closes and indicates 
+	 * whether the transfers could be successfully created.
+	 * In case of an error the wizard will show an error
+	 * but still close, then this flag will be <code>false</code>.
+	 * @return <code>true</code> if the transfers have been created successfully, <code>false</code> otherwise.
+	 */
+	public boolean isTransfersSuccessful() {
+		return transfersSuccessful;
+	}
+	
 //	public Collection getProductIDs(Set productTypeIDs)
 //	{
 //		return TransferWizardUtil.getProductIDs(articlesToTransfer, productTypeIDs);

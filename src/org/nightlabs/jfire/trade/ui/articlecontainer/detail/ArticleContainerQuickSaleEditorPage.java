@@ -205,7 +205,7 @@ extends ArticleContainerEditorPage
 					(OrderID) getArticleContainerEdit().getArticleContainerID(),
 					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 					TransferWizard.Side.Vendor);
-			if (new DynamicPathWizardDialog(wiz).open() == Dialog.OK)
+			if (new DynamicPathWizardDialog(wiz).open() == Dialog.OK && wiz.isTransfersSuccessful())
 				createNewOrder();
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
@@ -336,7 +336,7 @@ extends ArticleContainerEditorPage
 		int returnCode = dialog.open();
 		if (returnCode == Window.CANCEL)
 			return false;
-		return true;
+		return wizard.isTransfersSuccessful();
 	}
 
 	protected void deleteAll()
