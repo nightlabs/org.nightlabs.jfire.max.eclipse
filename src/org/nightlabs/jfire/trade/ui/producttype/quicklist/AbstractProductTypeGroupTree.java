@@ -28,7 +28,6 @@ import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeGroup;
-import org.nightlabs.jfire.store.ProductTypeGroupIDSearchResult;
 import org.nightlabs.jfire.store.ProductTypeGroupSearchResult;
 import org.nightlabs.jfire.store.ProductTypeGroupSearchResult.Entry;
 import org.nightlabs.jfire.store.id.ProductTypeGroupID;
@@ -72,6 +71,8 @@ implements ISelectionHandler
 			if (inputElement instanceof ProductTypeGroupSearchResult) {
 				searchResult = (ProductTypeGroupSearchResult) inputElement;
 				return getRootElements(searchResult).toArray();
+			} else if (inputElement instanceof String[]) {
+				return (String[]) inputElement;
 			}
 			return null;
 		}
@@ -139,6 +140,11 @@ implements ISelectionHandler
 	public static class LabelProvider extends TableLabelProvider 
 	{	
 		public String getColumnText(Object element, int columnIndex) {
+			if (element instanceof String) {
+				if (columnIndex == 0)
+					return (String) element;
+				return "";
+			}
 			if (!(element instanceof ProductTypeGroupNode))
 				throw new IllegalArgumentException("Expected ProductTypeGroupNode as element found "+element.getClass().getName()); //$NON-NLS-1$
 			
@@ -330,10 +336,6 @@ implements ISelectionHandler
 		treeViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 
-	public void setInput(ProductTypeGroupIDSearchResult result) {
-		getTreeViewer().setInput(result);
-	}
-
 	@Override
 	public boolean canHandleSelection(ISelection selection) 
 	{
@@ -390,5 +392,9 @@ implements ISelectionHandler
 	// TODO: maybe this should not come from the contentProvider
 	protected ProductTypeGroupSearchResult getSearchResult() {
 		return contentProvider.getSearchResult();
+	}
+	
+	public void setLoadingMessage(String message) {
+		setInput(new String[] {message});
 	}
 }
