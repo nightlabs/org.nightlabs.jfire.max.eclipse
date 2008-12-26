@@ -61,6 +61,11 @@ extends AbstractProductTypeQuickListFilter
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name"), 100); //$NON-NLS-1$
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					dynamicProductTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name")); //$NON-NLS-1$
+				}
+			});
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					productTypeQueries,
 					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE,
