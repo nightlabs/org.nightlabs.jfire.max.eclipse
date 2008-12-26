@@ -93,6 +93,11 @@ extends AbstractProductTypeQuickListFilter
 		monitor.beginTask("Searching Simple ProductTypes", 100);
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					resultTable.setLoadingMessage("Searching Simple ProductTypes");
+				}
+			});
 			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 					productTypeQueries,
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
