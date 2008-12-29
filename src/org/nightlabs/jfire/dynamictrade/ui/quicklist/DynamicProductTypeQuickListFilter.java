@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.store.search.DynamicProductTypeQuery;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
@@ -18,6 +19,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResultKey;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -55,28 +57,40 @@ extends AbstractProductTypeQuickListFilter
 		return classes;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void search(ProgressMonitor monitor)
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name"), 100); //$NON-NLS-1$
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					dynamicProductTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name")); //$NON-NLS-1$
-				}
-			});
-			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
-					productTypeQueries,
-					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new SubProgressMonitor(monitor, 50));
+			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
+			final Collection[] productTypes = new Collection[1];
+			productTypes[0] = (Collection<ProductType>) Cache.sharedInstance().get(
+					null, cacheKey, 
+					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			if (productTypes[0] == null) {
+
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						dynamicProductTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name")); //$NON-NLS-1$
+					}
+				});
+				productTypes[0] = ProductTypeDAO.sharedInstance().getProductTypes(
+						productTypeQueries,
+						FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 50));
+				Cache.sharedInstance().put(
+						null, cacheKey, productTypes[0], 
+						FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			}
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (dynamicProductTypeTable.isDisposed())
 						return;
 
-					dynamicProductTypeTable.setInput(productTypes);
+					dynamicProductTypeTable.setInput(productTypes[0]);
 				}
 			});
 			monitor.done();
