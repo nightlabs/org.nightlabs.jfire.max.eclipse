@@ -1,8 +1,9 @@
 package org.nightlabs.jfire.trade.ui.transfer.wizard;
 
+import org.eclipse.jface.wizard.IWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 
-public interface TransferWizard
+public interface TransferWizard extends IWizard
 {
 	public enum Side {
 		Vendor,
@@ -24,4 +25,16 @@ public interface TransferWizard
 	 * @return Returns an <tt>AnchorID</tt> which references a {@link org.nightlabs.jfire.trade.ui.LegalEntity}.
 	 */
 	AnchorID getPartnerID();
+
+	/**
+	 *
+	 * @return the set {@link IErrorHandler}
+	 */
+	IErrorHandler getErrorHandler();
+
+	/**
+	 *
+	 * @param errorHandler the {@link IErrorHandler} to set.
+	 */
+	void setErrorHandler(IErrorHandler errorHandler);
 }

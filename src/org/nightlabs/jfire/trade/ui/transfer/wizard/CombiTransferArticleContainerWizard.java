@@ -89,13 +89,37 @@ extends AbstractCombiTransferWizard
 	private DeliveryNoteID deliveryNoteID = null;
 
 	private List<Article> articlesToTransfer = new ArrayList<Article>();
-	
+
 	/**
-	 * This is set after in perform finish to indicate 
+	 * This is set after in perform finish to indicate
 	 * whether the transfers where successful.
 	 * A specialized dialog is shown then, but the wizard will close.
 	 */
 	private boolean transfersSuccessful;
+
+//	private static byte assumeTransferMode(InvoiceID invoiceID, DeliveryNoteID deliveryNoteID)
+//	{
+//		if (invoiceID != null && deliveryNoteID != null)
+//			return TRANSFER_MODE_BOTH;
+//
+//		if (invoiceID != null)
+//			return TRANSFER_MODE_PAYMENT;
+//
+//		if (deliveryNoteID != null)
+//			return TRANSFER_MODE_DELIVERY;
+//
+//		throw new IllegalArgumentException("invoiceID and deliveryNoteID are both null!");
+//	}
+//
+//	public CombiTransferArticleContainerWizard(InvoiceID invoiceID, DeliveryNoteID deliveryNoteID)
+//	{
+//		super(assumeTransferMode(invoiceID, deliveryNoteID));
+//
+//		this.invoiceID = invoiceID;
+//		this.deliveryNoteID = deliveryNoteID;
+//
+//		// TODO this whole wizard needs some refactoring to make this constructor usable (at the moment it assumes that only one ArticleContainer is passed).
+//	}
 
 	/**
 	 * @param articleContainerID Either an instance of {@link OrderID} or of {@link OfferID} or
@@ -528,7 +552,7 @@ extends AbstractCombiTransferWizard
 	}
 
 	/**
-	 * This is set before the wizard closes and indicates 
+	 * This is set before the wizard closes and indicates
 	 * whether the transfers could be successfully created.
 	 * In case of an error the wizard will show an error
 	 * but still close, then this flag will be <code>false</code>.
@@ -537,7 +561,7 @@ extends AbstractCombiTransferWizard
 	public boolean isTransfersSuccessful() {
 		return transfersSuccessful;
 	}
-	
+
 //	public Collection getProductIDs(Set productTypeIDs)
 //	{
 //		return TransferWizardUtil.getProductIDs(articlesToTransfer, productTypeIDs);

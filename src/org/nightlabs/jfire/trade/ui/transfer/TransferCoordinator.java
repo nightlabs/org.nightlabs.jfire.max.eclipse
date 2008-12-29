@@ -18,6 +18,7 @@ import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryControllerImpl;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.PaymentControllerImpl;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizardUtil;
 import org.nightlabs.jfire.transfer.TransferController;
 import org.nightlabs.jfire.transfer.TransferData;
 
@@ -79,7 +80,12 @@ public class TransferCoordinator {
 //			}
 //		} // if (paymentWizard != null) {
 
-		return true;
+//		return true;
+		// Daniel: moved failed check from ErrorDialog here
+		boolean paymentsFailed = TransferWizardUtil.isPaymentsFailed(paymentDatas);
+		boolean deliveriesFailed = TransferWizardUtil.isDeliveriesFailed(deliveryDatas);
+
+		return !(paymentsFailed && deliveriesFailed);
 	}
 
 	public void performStages(DeliveryController deliveryController, PaymentController paymentController) throws LoginException {

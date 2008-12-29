@@ -83,7 +83,6 @@ import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
-import org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -191,7 +190,6 @@ public class TransferWizardUtil
 		return payAndDeliver(shell, transferWizard, (PaymentWizard)null, (DeliveryWizard)null); //, bookInvoiceMode);
 	}
 
-
 	/**
 	 * This method is able to either perform an isolated payment or an isolated delivery
 	 * or to combine both. The combination has the advantage that the 4 phases of each will
@@ -288,7 +286,7 @@ public class TransferWizardUtil
 		}
 
 		// Now do the actual payment/delivery
-		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples);
+		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples, transferWizard);
 
 		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
 
@@ -346,19 +344,23 @@ public class TransferWizardUtil
 	private static boolean payAndDeliver(
 			Shell shell,
 			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
-			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
+			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples,
+			TransferWizard transferWizard)
 	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
 		TransferCoordinator transferCoordinator = new TransferCoordinator();
-		boolean toReturn = transferCoordinator.payAndDeliver(paymentTuples, deliveryTuples);
+		boolean successful = transferCoordinator.payAndDeliver(paymentTuples, deliveryTuples);
 
-		ErrorDialog errorDialog = new ErrorDialog(shell, transferCoordinator.getPaymentDatas(), transferCoordinator.getDeliveryDatas());
-		if (errorDialog.isFailed()) {
-			errorDialog.open();
-			return false;
+//		ErrorDialog errorDialog = new ErrorDialog(shell, transferCoordinator.getPaymentDatas(), transferCoordinator.getDeliveryDatas());
+//		if (errorDialog.isFailed()) {
+//			errorDialog.open();
+//			return false;
+//		}
+		if (!successful) {
+			transferWizard.getErrorHandler().handleError(transferCoordinator);
 		}
 
-		return toReturn;
+		return successful;
 	}
 
 	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException {
@@ -641,4 +643,27 @@ public class TransferWizardUtil
 		return list;
 	}
 
+	public static boolean isPaymentsFailed(List<PaymentData> paymentDatas)
+	{
+		if (paymentDatas != null) {
+			for (PaymentData paymentData : paymentDatas) {
+				Payment payment = paymentData.getPayment();
+				if (payment.isFailed())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isDeliveriesFailed(List<DeliveryData> deliveryDatas)
+	{
+		if (deliveryDatas != null) {
+			for (DeliveryData deliveryData : deliveryDatas) {
+				Delivery delivery = deliveryData.getDelivery();
+				if (delivery.isFailed())
+					return true;
+			}
+		}
+		return false;
+	}
 }

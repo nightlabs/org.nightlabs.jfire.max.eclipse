@@ -453,4 +453,24 @@ implements CombiTransferWizard
 		for (DeliveryEntryPage page : deliveryEntryPages)
 			page.loadModeOfDeliveries();
 	}
+
+	private IErrorHandler errorHandler;
+
+	@Override
+	public void setErrorHandler(IErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
+		errorHandler.initTransferWizard(this);
+	}
+
+	@Override
+	/**
+	 * Never returns null, but if no error handler is set the DefaultErrorHandler is used.
+	 */
+	public IErrorHandler getErrorHandler()
+	{
+		if (errorHandler == null) {
+			setErrorHandler(new DefaultErrorHandler());
+		}
+		return errorHandler;
+	}
 }
