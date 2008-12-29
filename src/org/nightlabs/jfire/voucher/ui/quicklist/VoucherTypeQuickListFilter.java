@@ -11,10 +11,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResultKey;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.search.VoucherTypeQuery;
 import org.nightlabs.jfire.voucher.ui.resource.Messages;
@@ -24,7 +26,7 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class VoucherTypeQuickListFilter
 extends AbstractProductTypeQuickListFilter
 {
-	public static String[] DEFAULT_FETCH_VOUCHER_TYPE_GROUP = new String[] {
+	public static String[] FETCH_GROUPS_VOUCHER_TYPE = new String[] {
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME};
 
@@ -47,29 +49,40 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void search(ProgressMonitor monitor)
 	{
 		monitor.beginTask("Searching VoucherTypes", 100);
 		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
+			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
+			final Collection[] voucherTypes = new Collection[1];
+			voucherTypes[0] = (Collection<ProductType>) Cache.sharedInstance().get(
+					null, cacheKey, 
+					FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			if (voucherTypes[0] == null) {
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						if (voucherTypeTable.isDisposed())
+							return;
+						voucherTypeTable.setLoadingMessage("Searching VoucherTypes");
+					}
+				});
+				voucherTypes[0] = ProductTypeDAO.sharedInstance().getProductTypes(
+						queryCollection,
+						FETCH_GROUPS_VOUCHER_TYPE,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 50));
+				Cache.sharedInstance().put(
+						null, cacheKey, voucherTypes[0], 
+						FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			}
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (voucherTypeTable.isDisposed())
 						return;
-					voucherTypeTable.setLoadingMessage("Searching VoucherTypes");
-				}
-			});
-			final Collection<ProductType> voucherTypes = ProductTypeDAO.sharedInstance().getProductTypes(
-					queryCollection,
-					DEFAULT_FETCH_VOUCHER_TYPE_GROUP,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new SubProgressMonitor(monitor, 50));
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					if (voucherTypeTable.isDisposed())
-						return;
-					voucherTypeTable.setInput(voucherTypes);
+					voucherTypeTable.setInput(voucherTypes[0]);
 				}
 			});
 			monitor.done();
