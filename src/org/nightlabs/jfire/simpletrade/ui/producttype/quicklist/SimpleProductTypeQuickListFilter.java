@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.simpletrade.store.search.SimpleProductTypeQuery;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
@@ -46,6 +47,7 @@ import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilterFactory;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter;
+import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResultKey;
 import org.nightlabs.progress.SubProgressMonitor;
 
 
@@ -87,27 +89,39 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.simpletrade.ui.producttype.quicklist.SimpleProductTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void search(org.nightlabs.progress.ProgressMonitor monitor)
 	{
 		monitor.beginTask("Searching Simple ProductTypes", 100);
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-					resultTable.setLoadingMessage("Searching Simple ProductTypes");
-				}
-			});
-			final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
-					productTypeQueries,
-					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					new SubProgressMonitor(monitor, 50));
+			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
+			final Collection[] productTypes = new Collection[1];
+			productTypes[0] = (Collection<ProductType>) Cache.sharedInstance().get(
+					null, cacheKey, 
+					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			if (productTypes[0] == null) {
+
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						resultTable.setLoadingMessage("Searching Simple ProductTypes");
+					}
+				});
+				productTypes[0] = ProductTypeDAO.sharedInstance().getProductTypes(
+						productTypeQueries,
+						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new SubProgressMonitor(monitor, 50));
+				Cache.sharedInstance().put(
+						null, cacheKey, productTypes[0], 
+						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			}
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (resultTable.isDisposed())
 						return;
-					resultTable.setInput(productTypes);
+					resultTable.setInput(productTypes[0]);
 				}
 			});
 			monitor.done();
