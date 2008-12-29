@@ -44,7 +44,6 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
@@ -152,7 +151,7 @@ public class ArticleAdder extends AbstractArticleAdder
 		try {
 			if (productType != null && productType.getPackagePriceConfig() != null && customerGroup != null && currency != null) {
 				tariffPricePairs = TariffPricePairDAO.sharedInstance().getTariffPricePairs(
-						(PriceConfigID) JDOHelper.getObjectId(productType.getPackagePriceConfig()),
+						productTypeID,
 						(CustomerGroupID)JDOHelper.getObjectId(customerGroup),
 						(CurrencyID)JDOHelper.getObjectId(currency),
 						new SubProgressMonitor(monitor, 1)
@@ -175,7 +174,7 @@ public class ArticleAdder extends AbstractArticleAdder
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder#createRequirementsNotFulFilledComposite(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	protected Composite createRequirementsNotFulfilledComposite(Composite parent) 
+	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 	{
 		if (tariffPricePairs == null) {
 			String message = String.format("No TariffPricePairs are available for the ProductType %s", getProductType().getName().getText(NLLocale.getDefault()));
@@ -197,7 +196,7 @@ public class ArticleAdder extends AbstractArticleAdder
 				segmentID, offerID, productTypeID, quantity, tariffID, true, false,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}
-	
+
 	protected String[] getFetchGroups() {
 		Class<?> articleContainerClass = getSegmentEdit().getArticleContainerClass();
 		String fetchGroupTrade_article;
@@ -209,7 +208,7 @@ public class ArticleAdder extends AbstractArticleAdder
 		}
 		else
 			throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
-		
+
 		return new String[] {
 				fetchGroupTrade_article,
 				FetchPlan.DEFAULT};
