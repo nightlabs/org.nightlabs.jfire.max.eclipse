@@ -54,6 +54,7 @@ import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
 import org.nightlabs.jfire.query.store.id.QueryStoreID;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeGroupQuery;
 import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
@@ -344,8 +345,22 @@ implements IProductTypeQuickListFilter
 	 * This key can be used to search and store the search results in the cache.
 	 */
 	protected QuickListFilterQueryResultKey createQueryResultCacheKey(ProgressMonitor monitor) {
-		Iterator<VendorDependentQuery> it = getQueryCollection(monitor).iterator(); 
+		QueryCollection<VendorDependentQuery> qc = getQueryCollection(monitor);
+		monitor.beginTask("Creating cache key for query", 10);
+		if (defaultQueryStoreID == null && qc != null) {
+			// FIXME: If this is null we have to obtain it this way, as a queryCollection does not know its QueryStore, 
+			// this should done more efficiently
+			UserID userID = Login.sharedInstance().getUserObjectID();
+			QueryStore qs = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+					queryCollection.getResultClass(), userID,
+					new String[] {FetchPlan.DEFAULT},
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+					new SubProgressMonitor(monitor, 5));
+			this.defaultQueryStoreID = (QueryStoreID) JDOHelper.getObjectId(qs);
+		}
+		Iterator<VendorDependentQuery> it = qc.iterator(); 
 		VendorDependentQuery query = it.hasNext() ? it.next() : null;
+		monitor.done();
 		return new QuickListFilterQueryResultKey(defaultQueryStoreID, query != null ? query.getVendorID() : null);
 	}
 
@@ -359,6 +374,7 @@ implements IProductTypeQuickListFilter
 		}
 
 		this.queryCollection = queryCollection;
+		this.defaultQueryStoreID = null;
 	}
 
 }
