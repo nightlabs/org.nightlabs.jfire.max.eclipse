@@ -26,6 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import java.util.Iterator;
+
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
@@ -50,6 +52,7 @@ import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.query.store.BaseQueryStore;
 import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
+import org.nightlabs.jfire.query.store.id.QueryStoreID;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.search.AbstractProductTypeGroupQuery;
@@ -84,6 +87,8 @@ implements IProductTypeQuickListFilter
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private QueryCollection<VendorDependentQuery> queryCollection;
+
+	private QueryStoreID defaultQueryStoreID;
 
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
@@ -228,7 +233,8 @@ implements IProductTypeQuickListFilter
 	//	}
 
 	/**
-	 * performs the search with the Query returned by {@link #getQuery()}
+	 * Performs the search with the {@link QueryCollection} returned by {@link #getQueryCollection(ProgressMonitor)}.
+	 * 
 	 * @param monitor the progressMonitor to show the progress
 	 */
 	protected abstract void search(ProgressMonitor monitor);
@@ -313,6 +319,7 @@ implements IProductTypeQuickListFilter
 				}
 			}
 			if (queryCollection == null && defaultQueryStore != null) {
+				defaultQueryStoreID = (QueryStoreID) JDOHelper.getObjectId(defaultQueryStore);
 				QueryCollection qc = defaultQueryStore.getQueryCollection();
 				if (qc != null) {
 					queryCollection = qc;
@@ -330,6 +337,16 @@ implements IProductTypeQuickListFilter
 		}
 		monitor.done();
 		return queryCollection;
+	}
+	
+	/**
+	 * Create a key object that identifies the current query (also with vendor set).
+	 * This key can be used to search and store the search results in the cache.
+	 */
+	protected QuickListFilterQueryResultKey createQueryResultCacheKey(ProgressMonitor monitor) {
+		Iterator<VendorDependentQuery> it = getQueryCollection(monitor).iterator(); 
+		VendorDependentQuery query = it.hasNext() ? it.next() : null;
+		return new QuickListFilterQueryResultKey(defaultQueryStoreID, query != null ? query.getVendorID() : null);
 	}
 
 	@Override
