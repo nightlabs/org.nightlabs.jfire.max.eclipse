@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
@@ -38,7 +38,7 @@ import org.nightlabs.util.NLLocale;
 
 /**
  * Abstract base implementation for trees which display {@link ProductTypeGroup}s.
- * 
+ *
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
@@ -55,18 +55,18 @@ implements ISelectionHandler
 		FetchPlan.DEFAULT,
 		ProductType.FETCH_GROUP_NAME
 	};
-	
+
 	/**
 	 * ContentProvider which holds the ProductTypeGroupIDSearchResult
 	 * which was set as input for the viewer.
-	 *  
+	 *
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 *
 	 */
-	public static class ContentProvider extends TreeContentProvider 
-	{		
+	public static class ContentProvider extends TreeContentProvider
+	{
 		private ProductTypeGroupSearchResult searchResult;
-		
+
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof ProductTypeGroupSearchResult) {
 				searchResult = (ProductTypeGroupSearchResult) inputElement;
@@ -76,7 +76,7 @@ implements ISelectionHandler
 			}
 			return null;
 		}
-		
+
 		private Collection<ProductTypeGroupNode> getRootElements(ProductTypeGroupSearchResult input) {
 			List<ProductTypeGroupNode> result = new LinkedList<ProductTypeGroupNode>();
 			for (Iterator<ProductTypeGroupSearchResult.Entry> it = input.getEntries().iterator(); it.hasNext();) {
@@ -85,7 +85,7 @@ implements ISelectionHandler
 			}
 			return result;
 		}
-		
+
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#getChildren(java.lang.Object)
 		 */
@@ -125,20 +125,20 @@ implements ISelectionHandler
 			super.inputChanged(viewer, oldInput, newInput);
 			searchResult = null;
 		}
-		
+
 		public ProductTypeGroupSearchResult getSearchResult() {
 			return searchResult;
 		}
-	}	
-	
+	}
+
 	/**
-	 * Simple LabelProvider which returns just the name for 
+	 * Simple LabelProvider which returns just the name for
 	 * {@link ProductTypeGroup}s, as well as for the contained
-	 * {@link ProductType}s 
+	 * {@link ProductType}s
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 */
-	public static class LabelProvider extends TableLabelProvider 
-	{	
+	public static class LabelProvider extends TableLabelProvider
+	{
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof String) {
 				if (columnIndex == 0)
@@ -147,14 +147,14 @@ implements ISelectionHandler
 			}
 			if (!(element instanceof ProductTypeGroupNode))
 				throw new IllegalArgumentException("Expected ProductTypeGroupNode as element found "+element.getClass().getName()); //$NON-NLS-1$
-			
+
 			ProductTypeGroupNode node = (ProductTypeGroupNode)element;
 			if (node.getType() == ProductTypeGroupNode.NODE_TYPE_GROUP) {
 				if (columnIndex == 0) {
 					ProductTypeGroup group = ((ProductTypeGroup) node.getNodeObject());
 //					ProductTypeGroup group = ProductTypeGroupDAO.sharedInstance().getProductTypeGroup(
 //							(ProductTypeGroupID)node.getNodeObject(),
-//							FETCH_GROUPS_PRODUCT_TYPE_GROUP, 
+//							FETCH_GROUPS_PRODUCT_TYPE_GROUP,
 //							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //							new NullProgressMonitor()
 //					);
@@ -166,37 +166,37 @@ implements ISelectionHandler
 				ProductType productType = (ProductType) node.getNodeObject();
 //				ProductType productType = ProductTypeDAO.sharedInstance().getProductType(
 //						(ProductTypeID)node.getNodeObject(),
-//						FETCH_GROUPS_PRODUCT_TYPE, 
+//						FETCH_GROUPS_PRODUCT_TYPE,
 //						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 //						new NullProgressMonitor()
 //					);
 				switch (columnIndex) {
-					case 0: return productType.getName().getText(); 
+					case 0: return productType.getName().getText();
 				}
 				return ""; //$NON-NLS-1$
 			}
 		}
-	}	
-	
+	}
+
 	/**
 	 * Node object for {@link AbstractProductTypeGroupTree}
 	 * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
 	 */
-//	public class ProductTypeGroupNode 
+//	public class ProductTypeGroupNode
 	public static class ProductTypeGroupNode
 	{
 		public static final int NODE_TYPE_GROUP = 1;
 		public static final int NODE_TYPE_SINGLE = 2;
 		private int type;
-		private ProductTypeGroup productTypeGroup;		
+		private ProductTypeGroup productTypeGroup;
 		private ProductType productType;
 		private ProductTypeGroupNode parent;
 		private Object[] children;
-		
+
 		public ProductTypeGroupNode(ProductTypeGroupSearchResult.Entry entry) {
 			if (entry.getProductTypes().size() > 1) {
 				this.productType = null;
-				this.productTypeGroup = entry.getProductTypeGroup();			
+				this.productTypeGroup = entry.getProductTypeGroup();
 				this.type = NODE_TYPE_GROUP;
 				List<ProductTypeGroupNode> c = new LinkedList<ProductTypeGroupNode>();
 				for (Iterator<ProductType> iter = entry.getProductTypes().iterator(); iter.hasNext();) {
@@ -210,51 +210,51 @@ implements ISelectionHandler
 			else {
 				if (entry.getProductTypes().size() <= 0) {
 					this.productType = null;
-					this.productTypeGroup = entry.getProductTypeGroup();			
+					this.productTypeGroup = entry.getProductTypeGroup();
 					this.type = NODE_TYPE_GROUP;
 					return;
 				}
 				this.productType = (ProductType)entry.getProductTypes().toArray()[0];
 				this.productTypeGroup = null;
-				this.type = NODE_TYPE_SINGLE; 
+				this.type = NODE_TYPE_SINGLE;
 			}
 		}
-		
+
 		public ProductTypeGroupNode(ProductType productType) {
 			this.productType = productType;
 			this.productTypeGroup = null;
-			this.type = NODE_TYPE_SINGLE; 
+			this.type = NODE_TYPE_SINGLE;
 		}
-		
+
 		public ProductType getProductType() {
 			return productType;
 		}
-		
+
 		public boolean hasChildren() {
-			return 
-				(type != NODE_TYPE_SINGLE) && 
+			return
+				(type != NODE_TYPE_SINGLE) &&
 				((children == null) ? false: children.length > 0 );
 		}
-		
+
 		public Object[] getChildren() {
 			return children;
 		}
-		
+
 		public ProductTypeGroupNode getParent() {
-			return parent;		
+			return parent;
 		}
-		
+
 		public void setParent(ProductTypeGroupNode parent) {
 			this.parent = parent;
 		}
-		
+
 		public Object getNodeObject() {
 			if (type == NODE_TYPE_GROUP)
 				return productTypeGroup;
 			else
 				return productType;
 		}
-		
+
 		public int getType() {
 			return type;
 		}
@@ -293,9 +293,9 @@ implements ISelectionHandler
 		}
 
 	}
-		
+
 	private ContentProvider contentProvider;
-	
+
 	/**
 	 * @param parent the parent composite
 	 */
@@ -332,16 +332,16 @@ implements ISelectionHandler
 		contentProvider = new ContentProvider();
 		treeViewer.setContentProvider(contentProvider);
 		treeViewer.setLabelProvider(new LabelProvider());
-		
+
 		treeViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
 
 	@Override
-	public boolean canHandleSelection(ISelection selection) 
+	public boolean canHandleSelection(ISelection selection)
 	{
 		SelectionContainment selectionContainment = SelectionUtil.getSelectionContainment(selection);
 		Set<ProductTypeGroupID> productTypeGroupsIDs = selectionContainment.getProductTypeGroupIDs();
-		Set<ProductTypeID> productTypeIDs = selectionContainment.getProductTypeIDs();		 
+		Set<ProductTypeID> productTypeIDs = selectionContainment.getProductTypeIDs();
 		if (!selectionContainment.isEmpty()) {
 			if (contentProvider != null && getSearchResult() != null) {
 				// first check for contained productTypeGroupIDs
@@ -376,7 +376,7 @@ implements ISelectionHandler
 				selectedNodes.add(new ProductTypeGroupNode(entry));
 			}
 			// then create nodes for productTypeIDs
-			for (ProductTypeID productTypeID : productTypeIDs) 
+			for (ProductTypeID productTypeID : productTypeIDs)
 			{
 				ProductType productType = getSearchResult().getProductType(productTypeID);
 				selectedNodes.add(new ProductTypeGroupNode(productType));
@@ -393,8 +393,10 @@ implements ISelectionHandler
 	protected ProductTypeGroupSearchResult getSearchResult() {
 		return contentProvider.getSearchResult();
 	}
-	
-	public void setLoadingMessage(String message) {
-		setInput(new String[] {message});
+
+	public void setLoadingMessage(String message)
+	{
+		if (getTreeViewer().getContentProvider() != null)
+			setInput(new String[] {message});
 	}
 }
