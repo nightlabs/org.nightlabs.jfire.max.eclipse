@@ -5,6 +5,10 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
 
 public interface TransferWizard extends IWizard
 {
+	public static byte TRANSFER_MODE_PAYMENT = 1;
+	public static byte TRANSFER_MODE_DELIVERY = 2;
+	public static byte TRANSFER_MODE_BOTH = (byte)(TRANSFER_MODE_PAYMENT | TRANSFER_MODE_DELIVERY);
+
 	public enum Side {
 		Vendor,
 		Customer;
@@ -37,4 +41,10 @@ public interface TransferWizard extends IWizard
 	 * @param errorHandler the {@link IErrorHandler} to set.
 	 */
 	void setErrorHandler(IErrorHandler errorHandler);
+
+	/**
+	 *
+	 * @return the transfer mode either {@link #TRANSFER_MODE_BOTH} or {@link #TRANSFER_MODE_DELIVERY} or {@link #TRANSFER_MODE_PAYMENT}.
+	 */
+	public byte getTransferMode();
 }

@@ -93,8 +93,8 @@ public class TransferWizardUtil
 {
 	private static final Logger logger = Logger.getLogger(TransferWizardUtil.class);
 
-		protected TransferWizardUtil() { }
-//
+	protected TransferWizardUtil() { }
+
 //	private static AccountingManager accountingManager = null;
 //
 //	private static StoreManager storeManager = null;
@@ -240,23 +240,20 @@ public class TransferWizardUtil
 
 			for (PaymentEntryPage paymentEntryPage : paymentWizard.getPaymentEntryPages()) {
 				Payment payment = paymentEntryPage.getPaymentWizardHop().getPayment();
-				payment.setInvoiceIDs(paymentWizard.getInvoiceIDs());
+				payment.setInvoiceIDs(new HashSet<InvoiceID>(paymentWizard.getInvoiceIDs()));
 			}
 		} // if (paymentWizard != null) {
 
 // Marco: Not necessary anymore, because the DeliveryNotes are read from the Articles.
-//		// prepare delivery
-//		StoreManager storeManager = null;
-////		if (deliveryWizard != null) {
-////			storeManager = getStoreManager();
-////
-////			for (Iterator it = deliveryWizard.getDeliveryEntryPages().iterator(); it.hasNext(); ) {
-////				DeliveryEntryPage deliveryEntryPage = (DeliveryEntryPage) it.next();
-////				Delivery delivery = deliveryEntryPage.getDeliveryWizardHop().getDelivery();
-////				delivery.setDeliveryNoteIDs(deliveryWizard.getDeliveryNoteIDs());
-////			}
-////		}
-//
+// Daniel: We still set the deliveryNoteIDs because in case of failure in an early delivery phase jdoPreStore of Delivery is never called
+		if (deliveryWizard != null) {
+			// prepare delivery
+			for (DeliveryEntryPage deliveryEntryPage : deliveryWizard.getDeliveryEntryPages()) {
+				Delivery delivery = deliveryEntryPage.getDeliveryWizardHop().getDelivery();
+				delivery.setDeliveryNoteIDs(new HashSet<DeliveryNoteID>(deliveryWizard.getDeliveryNoteIDs()));
+			}
+		}
+
 		List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples = null;
 		List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples = null;
 
@@ -350,16 +347,9 @@ public class TransferWizardUtil
 	{
 		TransferCoordinator transferCoordinator = new TransferCoordinator();
 		boolean successful = transferCoordinator.payAndDeliver(paymentTuples, deliveryTuples);
-
-//		ErrorDialog errorDialog = new ErrorDialog(shell, transferCoordinator.getPaymentDatas(), transferCoordinator.getDeliveryDatas());
-//		if (errorDialog.isFailed()) {
-//			errorDialog.open();
-//			return false;
-//		}
 		if (!successful) {
-			transferWizard.getErrorHandler().handleError(transferCoordinator);
+			successful = transferWizard.getErrorHandler().handleError(transferCoordinator);
 		}
-
 		return successful;
 	}
 

@@ -85,7 +85,7 @@ public class TransferCoordinator {
 		boolean paymentsFailed = TransferWizardUtil.isPaymentsFailed(paymentDatas);
 		boolean deliveriesFailed = TransferWizardUtil.isDeliveriesFailed(deliveryDatas);
 
-		return !(paymentsFailed && deliveriesFailed);
+		return !(paymentsFailed || deliveriesFailed);
 	}
 
 	public void performStages(DeliveryController deliveryController, PaymentController paymentController) throws LoginException {

@@ -53,6 +53,7 @@ import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
+import org.nightlabs.jfire.trade.ui.transfer.wizard.QuickSaleErrorHandler;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -332,6 +333,7 @@ extends ArticleContainerEditorPage
 		CombiTransferArticleContainerWizard wizard = new CombiTransferArticleContainerWizard(
 				getArticleContainerEdit().getArticleContainerID(),
 				AbstractCombiTransferWizard.TRANSFER_MODE_BOTH);
+		wizard.setErrorHandler(new QuickSaleErrorHandler());
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		int returnCode = dialog.open();
 		if (returnCode == Window.CANCEL)

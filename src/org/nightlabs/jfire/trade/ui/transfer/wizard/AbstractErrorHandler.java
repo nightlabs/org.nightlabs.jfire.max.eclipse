@@ -3,8 +3,8 @@
  */
 package org.nightlabs.jfire.trade.ui.transfer.wizard;
 
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator;
 
 /**
  * Abstract base implementation for the interface {@link IErrorHandler}.
@@ -33,10 +33,11 @@ public abstract class AbstractErrorHandler implements IErrorHandler
 		this.transferWizard = transferWizard;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.trade.ui.transfer.wizard.IErrorHandler#handleError(org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator)
-	 */
-	@Override
-//	public abstract boolean handleError(TransferCoordinator transferCoordinator);
-	public abstract void handleError(TransferCoordinator transferCoordinator);
+	protected void hideWizard()
+	{
+		if (getTransferWizard().getContainer() instanceof Window) {
+			Window window = (Window) getTransferWizard().getContainer();
+			window.getShell().setVisible(false);
+		}
+	}
 }

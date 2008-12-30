@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
@@ -100,7 +101,12 @@ extends AbstractTreeComposite<TransferTreeNode>
 
 	public TransferTreeComposite(Composite parent)
 	{
-		super(parent);
+		super(parent, AbstractTableComposite.DEFAULT_STYLE_SINGLE_BORDER);
+	}
+
+	public TransferTreeComposite(Composite parent, int style)
+	{
+		super(parent, style);
 	}
 
 	@Override
@@ -122,7 +128,7 @@ extends AbstractTreeComposite<TransferTreeNode>
 
 		tc = new TreeColumn(tree, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.TransferTreeComposite.rollbackOrErrorMessageTableColumn.text")); //$NON-NLS-1$
-		
+
 		tree.setLayout(new WeightedTableLayout(
 				new int[] {  -1, -1,  -1, 10 },
 				new int[] { 150, 150, 100, -1 }));

@@ -17,8 +17,8 @@ public interface IErrorHandler
 	void initTransferWizard(TransferWizard transferWizard);
 
 	/**
-	 * handles the error. All needed data can obtained from the given TransferCoordinator.
+	 * handles the error. All needed data can obtained from the given TransferCoordinator or {@link TransferWizard}.
+	 * @return true if the error could be successfully handled or false if not.
 	 */
-//	boolean handleError(TransferCoordinator transferCoordinator);
-	void handleError(TransferCoordinator transferCoordinator);
+	boolean handleError(TransferCoordinator transferCoordinator);
 }

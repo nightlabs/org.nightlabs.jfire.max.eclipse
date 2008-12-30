@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizardPage;
 import org.nightlabs.jfire.accounting.Currency;
@@ -50,11 +49,14 @@ public abstract class AbstractCombiTransferWizard
 extends DynamicPathWizard
 implements CombiTransferWizard
 {
-	public static byte TRANSFER_MODE_PAYMENT = 1;
-	public static byte TRANSFER_MODE_DELIVERY = 2;
-	public static byte TRANSFER_MODE_BOTH = (byte)(TRANSFER_MODE_PAYMENT | TRANSFER_MODE_DELIVERY);
-
 	private byte transferMode;
+
+	/**
+	 * This is set after in perform finish to indicate
+	 * whether the transfers where successful.
+	 * A specialized dialog is shown then, but the wizard will close.
+	 */
+	private boolean transfersSuccessful;
 
 	public boolean isDeliveryEnabled()
 	{
@@ -357,7 +359,7 @@ implements CombiTransferWizard
 	private AnchorID customerID;
 	private Collection<CustomerGroupID> customerGroupIDs = new HashSet<CustomerGroupID>();
 
-	@Implement
+	@Override
 	public AnchorID getPartnerID()
 	{
 		return customerID;
@@ -374,7 +376,7 @@ implements CombiTransferWizard
 		return customerID;
 	}
 
-	@Implement
+	@Override
 	public Collection<CustomerGroupID> getCustomerGroupIDs()
 	{
 		return Collections.unmodifiableCollection(customerGroupIDs);
@@ -472,5 +474,20 @@ implements CombiTransferWizard
 			setErrorHandler(new DefaultErrorHandler());
 		}
 		return errorHandler;
+	}
+
+	protected void setTransfersSuccessful(boolean transfersSuccessful) {
+		this.transfersSuccessful = transfersSuccessful;
+	}
+
+	/**
+	 * This is set before the wizard closes and indicates
+	 * whether the transfers could be successfully created.
+	 * In case of an error the wizard will show an error
+	 * but still close, then this flag will be <code>false</code>.
+	 * @return <code>true</code> if the transfers have been created successfully, <code>false</code> otherwise.
+	 */
+	public boolean isTransfersSuccessful() {
+		return transfersSuccessful;
 	}
 }

@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.transfer.error;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.pay.PaymentResult;
 
 public class PaymentResultTreeNode
@@ -16,7 +15,6 @@ public class PaymentResultTreeNode
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -34,7 +32,6 @@ public class PaymentResultTreeNode
 	}
 
 	@Override
-	@Implement
 	public Object[] getChildren()
 	{
 		return null;

@@ -112,11 +112,29 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
 			for (Article article : (Collection<Article>) tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
-				if (isPaymentEnabled() && article.getInvoice() != null)
-					throw new IllegalStateException("isPaymentEnabled() && article.getInvoice() != null"); //$NON-NLS-1$
+				if (isPaymentEnabled()) {
+					if (invoiceIDs == null)
+						invoiceIDs = new HashSet<InvoiceID>();
+					invoiceIDs.add(article.getInvoiceID());
+					if (article.getInvoice() == null) {
+						if (articlesToCreateInvoiceFor == null)
+							articlesToCreateInvoiceFor = new HashSet<ArticleID>();
+						articlesToCreateInvoiceFor.add((ArticleID) JDOHelper.getObjectId(article));
+//						throw new IllegalStateException("isPaymentEnabled() && article.getInvoice() != null"); //$NON-NLS-1$
+					}
+				}
 
-				if (isDeliveryEnabled() && article.getDeliveryNote() != null)
-					throw new IllegalStateException("isDeliveryEnabled() && article.getDeliveryNote() != null"); //$NON-NLS-1$
+				if (isDeliveryEnabled()) {
+					if (deliveryNoteIDs == null)
+						deliveryNoteIDs = new HashSet<DeliveryNoteID>();
+					deliveryNoteIDs.add(article.getDeliveryNoteID());
+					if (article.getDeliveryNote() == null) {
+						if (articlesToCreateDeliveryNoteFor == null)
+							articlesToCreateDeliveryNoteFor = new HashSet<ArticleID>();
+						articlesToCreateDeliveryNoteFor.add((ArticleID) JDOHelper.getObjectId(article));
+//						throw new IllegalStateException("isDeliveryEnabled() && article.getDeliveryNote() != null"); //$NON-NLS-1$
+					}
+				}
 
 				addCustomerGroupID(
 						(CustomerGroupID) JDOHelper.getObjectId(article.getOrder().getCustomerGroup()));
@@ -137,15 +155,15 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 			// The LegalEntityID of the local organisation
 			AnchorID mandatorID = AnchorID.create(
-					SecurityReflector.getUserDescriptor().getOrganisationID(), 
-					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());						
+					SecurityReflector.getUserDescriptor().getOrganisationID(),
+					OrganisationLegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY, OrganisationLegalEntity.class.getName());
 			setCurrency(currency);
 			setCustomerID(customerID);
 			if (mandatorID.equals(customerID))
 				setSide(Side.Customer);
 			else
 				setSide(Side.Vendor);
-			
+
 			setTotalAmount(amountToPay);
 
 		} catch (RuntimeException x) {
@@ -154,7 +172,8 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 			throw new RuntimeException(x);
 		}
 	}
-	
+
+	private Collection<ArticleID> articlesToCreateInvoiceFor = null;
 	private Collection<InvoiceID> invoiceIDs = null;
 
 	@Override
@@ -163,6 +182,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 		return invoiceIDs;
 	}
 
+	private Collection<ArticleID> articlesToCreateDeliveryNoteFor = null;
 	private Collection<DeliveryNoteID> deliveryNoteIDs = null;
 
 	// TODO shouldn't this method be defined in the interface DeliveryWizard ?
@@ -200,33 +220,36 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					setTransfersSuccessful(false);
 					try {
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticlesWizard.processTransfersJobMonitor.task.name"), 3); //$NON-NLS-1$
 						monitor.worked(1);
-						if (invoiceIDs == null) {
+						if (articlesToCreateInvoiceFor != null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
 								AccountingManager accountingManager = TransferWizardUtil.getAccountingManager();
-								invoiceIDs = new ArrayList<InvoiceID>(1);
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
-								Invoice invoice = accountingManager.createInvoice(articleIDs, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+								Invoice invoice = accountingManager.createInvoice(articlesToCreateInvoiceFor, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								InvoiceID invoiceID = (InvoiceID) JDOHelper.getObjectId(invoice);
+								if (invoiceIDs == null)
+									invoiceIDs = new ArrayList<InvoiceID>(1);
 								invoiceIDs.add(invoiceID);
 							}
 						}
 
-						if (deliveryNoteIDs == null) {
+						if (articlesToCreateDeliveryNoteFor != null) {
 							if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
 								StoreManager storeManager = TransferWizardUtil.getStoreManager();
-								deliveryNoteIDs = new ArrayList<DeliveryNoteID>(1);
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
-								DeliveryNote deliveryNote = storeManager.createDeliveryNote(articleIDs, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+								DeliveryNote deliveryNote = storeManager.createDeliveryNote(articlesToCreateDeliveryNoteFor, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								DeliveryNoteID deliveryNoteID = (DeliveryNoteID) JDOHelper.getObjectId(deliveryNote);
+								if (deliveryNoteIDs == null)
+									deliveryNoteIDs = new HashSet<DeliveryNoteID>();
 								deliveryNoteIDs.add(deliveryNoteID);
 							}
 						}
 						monitor.worked(1);
-						if (!TransferWizardUtil.payAndDeliver(getShell(), CombiTransferArticlesWizard.this)) {
-							// the TransferWizardUtil already shows a specialised ErrorDialog
+						if (TransferWizardUtil.payAndDeliver(getShell(), CombiTransferArticlesWizard.this)) {
+							setTransfersSuccessful(true);
 						}
 						monitor.worked(1);
 					} catch (RuntimeException x) {
@@ -245,7 +268,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	protected Set<ArticleID> getArticleIDs() {
 		return articleIDs;
 	}
-	
+
 	protected List<Article> getArticlesToTransfer() {
 		return articlesToTransfer;
 	}

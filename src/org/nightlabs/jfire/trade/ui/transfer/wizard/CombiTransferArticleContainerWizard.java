@@ -29,6 +29,7 @@ package org.nightlabs.jfire.trade.ui.transfer.wizard;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -89,13 +90,6 @@ extends AbstractCombiTransferWizard
 	private DeliveryNoteID deliveryNoteID = null;
 
 	private List<Article> articlesToTransfer = new ArrayList<Article>();
-
-	/**
-	 * This is set after in perform finish to indicate
-	 * whether the transfers where successful.
-	 * A specialized dialog is shown then, but the wizard will close.
-	 */
-	private boolean transfersSuccessful;
 
 //	private static byte assumeTransferMode(InvoiceID invoiceID, DeliveryNoteID deliveryNoteID)
 //	{
@@ -443,7 +437,7 @@ extends AbstractCombiTransferWizard
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					try {
-						transfersSuccessful = false;
+						setTransfersSuccessful(false);
 						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard.performFinish.monitor.task.name"),3); //$NON-NLS-1$
 						monitor.worked(1);
 						if (invoiceIDs == null) {
@@ -464,6 +458,7 @@ extends AbstractCombiTransferWizard
 						}
 
 						if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
+							deliveryNoteIDs = new HashSet<DeliveryNoteID>();
 							// find out which articles still miss a DeliveryNote
 							List<Article> articlesWithoutDeliveryNote = null;
 							for (Article article : articleContainer.getArticles()) {
@@ -472,13 +467,16 @@ extends AbstractCombiTransferWizard
 										articlesWithoutDeliveryNote = new LinkedList<Article>();
 
 									articlesWithoutDeliveryNote.add(article);
+								} else {
+									deliveryNoteIDs.add(article.getDeliveryNoteID());
 								}
 							}
 
 							if (articlesWithoutDeliveryNote != null) {
 								StoreManager storeManager = TransferWizardUtil.getStoreManager();
 //							 FIXME IDPREFIX (next line) should be asked from user if necessary!
-								storeManager.createDeliveryNote(articleContainerID, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+								DeliveryNote createdNote = storeManager.createDeliveryNote(articleContainerID, null, true, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+								deliveryNoteIDs.add((DeliveryNoteID) JDOHelper.getObjectId(createdNote));
 							}
 						}
 						monitor.worked(1);
@@ -498,7 +496,7 @@ extends AbstractCombiTransferWizard
 
 						if (TransferWizardUtil.payAndDeliver(getShell(), CombiTransferArticleContainerWizard.this)) {
 							// set the successful flag only if the transfers could be created
-							transfersSuccessful = true;
+							setTransfersSuccessful(true);
 						}
 						monitor.worked(1);
 					} catch (RuntimeException x) {
@@ -539,27 +537,16 @@ extends AbstractCombiTransferWizard
 		return invoiceIDs;
 	}
 
-//	private Collection deliveryNoteIDs = null;
-//
-//	public Collection getDeliveryNoteIDs()
-//	{
-//		return deliveryNoteIDs;
-//	}
+	private Collection<DeliveryNoteID> deliveryNoteIDs = null;
+
+	public Collection<DeliveryNoteID> getDeliveryNoteIDs()
+	{
+		return deliveryNoteIDs;
+	}
 
 	public List<Article> getArticles(Set<? extends ProductTypeID> productTypeIDs, boolean reversing)
 	{
 		return TransferWizardUtil.getArticles(articlesToTransfer, productTypeIDs, reversing);
-	}
-
-	/**
-	 * This is set before the wizard closes and indicates
-	 * whether the transfers could be successfully created.
-	 * In case of an error the wizard will show an error
-	 * but still close, then this flag will be <code>false</code>.
-	 * @return <code>true</code> if the transfers have been created successfully, <code>false</code> otherwise.
-	 */
-	public boolean isTransfersSuccessful() {
-		return transfersSuccessful;
 	}
 
 //	public Collection getProductIDs(Set productTypeIDs)
