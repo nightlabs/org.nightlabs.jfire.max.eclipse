@@ -50,6 +50,7 @@ import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -68,6 +69,12 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	private List<Article> articlesToTransfer = new ArrayList<Article>();
 
 	/**
+	 * In case some of the {@link Article}s of the given articleIDs do not belong to an
+	 * {@link Invoice} or {@link Delivery} (depends on the given transferMode)
+	 * an Invoice or Delivery is created.
+	 * Therefore it is possible to pass {@link ArticleID}s where some {@link Article}s are
+	 * already contained in an Invoice or Delivery and some are not.
+	 *
 	 * @param articleIDs Instances of {@link ArticleID} specifying all {@link org.nightlabs.jfire.trade.ui.Article}s
 	 *		that shall be paid/delivered.
 	 * @param transferMode One of {@link AbstractCombiTransferWizard#TRANSFER_MODE_DELIVERY},
