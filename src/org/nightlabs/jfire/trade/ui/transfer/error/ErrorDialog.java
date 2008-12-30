@@ -338,7 +338,8 @@ extends ResizableTitleAreaDialog
 			List<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(invoiceIDs, new String[] {FetchPlan.DEFAULT, Invoice.FETCH_GROUP_ARTICLES},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			for (Invoice invoice : invoices) {
-				articleIDs.addAll((Collection<? extends ArticleID>) NLJDOHelper.getObjectIDSet(invoice.getArticles()));
+				Collection<? extends ArticleID> tmpArticleIDSet = NLJDOHelper.getObjectIDSet(invoice.getArticles());
+				articleIDs.addAll(tmpArticleIDSet);
 			}
 		}
 		if (getDeliveryDatas() != null && (transferWizard.getTransferMode() & TransferWizard.TRANSFER_MODE_DELIVERY) > 0) {
