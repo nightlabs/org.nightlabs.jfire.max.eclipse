@@ -3,6 +3,7 @@
  */
 package org.nightlabs.jfire.trade.ui.producttype.quicklist;
 
+import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.id.QueryStoreID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.util.Util;
@@ -17,17 +18,28 @@ import org.nightlabs.util.Util;
  */
 public class QuickListFilterQueryResultKey {
 
-	private QueryStoreID queryStoreID;
+	/**
+	 * This is not an id 
+	 */
+	private QueryStore queryStore;
 	private AnchorID vendorID;
 	
-	public QuickListFilterQueryResultKey(QueryStoreID queryStoreID, AnchorID vendorID) {
-		this.queryStoreID = queryStoreID;
+	public QuickListFilterQueryResultKey(QueryStore queryStore, AnchorID vendorID) {
+		this.queryStore = queryStore;
 		this.vendorID = vendorID;
+	}
+	
+	public QueryStore getQueryStore() {
+		return queryStore;
+	}
+	
+	public AnchorID getVendorID() {
+		return vendorID;
 	}
 
 	@Override
 	public int hashCode() {
-		return Util.hashCode(this.queryStoreID) ^ Util.hashCode(this.vendorID);  
+		return Util.hashCode(this.queryStore) ^ Util.hashCode(this.vendorID);  
 	}
 	
 	@Override
@@ -39,7 +51,7 @@ public class QuickListFilterQueryResultKey {
 		if (obj.getClass() != QuickListFilterQueryResultKey.class)
 			return false;
 		return 
-			Util.equals(this.queryStoreID, ((QuickListFilterQueryResultKey)obj).queryStoreID) &&
+			Util.equals(this.queryStore, ((QuickListFilterQueryResultKey)obj).queryStore) &&
 			Util.equals(this.vendorID, ((QuickListFilterQueryResultKey)obj).vendorID);
 	}
 	

@@ -47,12 +47,12 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
+import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.query.store.BaseQueryStore;
 import org.nightlabs.jfire.query.store.QueryStore;
 import org.nightlabs.jfire.query.store.dao.QueryStoreDAO;
-import org.nightlabs.jfire.query.store.id.QueryStoreID;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -61,6 +61,7 @@ import org.nightlabs.jfire.store.search.AbstractProductTypeQuery;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -89,7 +90,7 @@ implements IProductTypeQuickListFilter
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private QueryCollection<VendorDependentQuery> queryCollection;
 
-	private QueryStoreID defaultQueryStoreID;
+	private QueryStore defaultQueryStore;
 
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
@@ -295,33 +296,33 @@ implements IProductTypeQuickListFilter
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.loadQuery"), 100); //$NON-NLS-1$
 		if (queryCollection == null)
 		{
-			QueryStore defaultQueryStore;
+			QueryStore defQueryStore;
 			// TODO this should be done in the server in order to make it [nearly] impossible that 2 defaults are created!
 			synchronized (AbstractProductTypeQuickListFilter.class) { // prevent having 2 defaultQueryStores due to multiple threads
-				defaultQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
+				defQueryStore = QueryStoreDAO.sharedInstance().getDefaultQueryStore(
 						getQueryResultClass(), Login.sharedInstance().getUserObjectID(),
 						FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
-				if (defaultQueryStore == null) {
+				if (defQueryStore == null) {
 					VendorDependentQuery query = createQuery();
 					configureQuery(query);
 					queryCollection = new QueryCollection<VendorDependentQuery>(getQueryResultClass());
 					queryCollection.add(query);
 					User owner = Login.sharedInstance().getUser(new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new org.eclipse.core.runtime.NullProgressMonitor());
-					defaultQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
-					defaultQueryStore.setDefaultQuery(true);
+					defQueryStore = new BaseQueryStore(owner, IDGenerator.nextID(BaseQueryStore.class), queryCollection);
+					defQueryStore.setDefaultQuery(true);
 					if (logger.isDebugEnabled()) {
 						logger.debug("No default query store available, create one for resultClass = "+getQueryResultClass()+" and user "+Login.sharedInstance().getUserObjectID()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
-					defaultQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defaultQueryStore,
+					defQueryStore = QueryStoreDAO.sharedInstance().storeQueryStore(defQueryStore,
 							FETCH_GROUPS_QUERY_STORE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							true, new SubProgressMonitor(monitor, 50));
 				}
 			}
-			if (queryCollection == null && defaultQueryStore != null) {
-				defaultQueryStoreID = (QueryStoreID) JDOHelper.getObjectId(defaultQueryStore);
-				QueryCollection qc = defaultQueryStore.getQueryCollection();
+			if (queryCollection == null && defQueryStore != null) {
+				defaultQueryStore = defQueryStore;
+				QueryCollection qc = defQueryStore.getQueryCollection();
 				if (qc != null) {
 					queryCollection = qc;
 					if (queryCollection.isEmpty()) {
@@ -347,7 +348,7 @@ implements IProductTypeQuickListFilter
 	protected QuickListFilterQueryResultKey createQueryResultCacheKey(ProgressMonitor monitor) {
 		QueryCollection<VendorDependentQuery> qc = getQueryCollection(monitor);
 		monitor.beginTask("Creating cache key for query", 10);
-		if (defaultQueryStoreID == null && qc != null) {
+		if (defaultQueryStore == null && qc != null) {
 			// FIXME: If this is null we have to obtain it this way, as a queryCollection does not know its QueryStore, 
 			// this should done more efficiently
 			UserID userID = Login.sharedInstance().getUserObjectID();
@@ -356,12 +357,12 @@ implements IProductTypeQuickListFilter
 					new String[] {FetchPlan.DEFAULT},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					new SubProgressMonitor(monitor, 5));
-			this.defaultQueryStoreID = (QueryStoreID) JDOHelper.getObjectId(qs);
+			this.defaultQueryStore = qs;
 		}
 		Iterator<VendorDependentQuery> it = qc.iterator(); 
 		VendorDependentQuery query = it.hasNext() ? it.next() : null;
 		monitor.done();
-		return new QuickListFilterQueryResultKey(defaultQueryStoreID, query != null ? query.getVendorID() : null);
+		return new QuickListFilterQueryResultKey(defaultQueryStore, query != null ? query.getVendorID() : null);
 	}
 
 	@Override
@@ -374,7 +375,9 @@ implements IProductTypeQuickListFilter
 		}
 
 		this.queryCollection = queryCollection;
-		this.defaultQueryStoreID = null;
+		QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new NullProgressMonitor());
+		Cache.sharedInstance().removeByObjectID(cacheKey, false);
+		this.defaultQueryStore = null;
 	}
 
 }
