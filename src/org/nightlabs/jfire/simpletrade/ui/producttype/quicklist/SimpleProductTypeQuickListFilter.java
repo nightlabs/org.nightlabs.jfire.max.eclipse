@@ -47,6 +47,7 @@ import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilterFactory;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.IProductTypeQuickListFilter;
+import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResult;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResultKey;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -97,31 +98,33 @@ extends AbstractProductTypeQuickListFilter
 		final QueryCollection<VendorDependentQuery> productTypeQueries = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
-			final Collection[] productTypes = new Collection[1];
-			productTypes[0] = (Collection<ProductType>) Cache.sharedInstance().get(
+			QuickListFilterQueryResult<Collection<ProductType>> cacheResult = (QuickListFilterQueryResult<Collection<ProductType>>) Cache.sharedInstance().get(
 					null, cacheKey, 
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			if (productTypes[0] == null) {
+			
+			if (cacheResult == null) {
 
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						resultTable.setLoadingMessage("Searching Simple ProductTypes");
 					}
 				});
-				productTypes[0] = ProductTypeDAO.sharedInstance().getProductTypes(
+				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
 						productTypeQueries,
 						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
+				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);
 				Cache.sharedInstance().put(
-						null, cacheKey, productTypes[0], 
+						null, cacheKey, cacheResult, 
 						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			}
+			final Collection<ProductType> productTypes = cacheResult.getResult();
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (resultTable.isDisposed())
 						return;
-					resultTable.setInput(productTypes[0]);
+					resultTable.setInput(productTypes);
 				}
 			});
 			monitor.done();
