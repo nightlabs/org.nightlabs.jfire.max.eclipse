@@ -16,6 +16,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.search.VendorDependentQuery;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter;
+import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResult;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.QuickListFilterQueryResultKey;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.jfire.voucher.store.search.VoucherTypeQuery;
@@ -57,11 +58,10 @@ extends AbstractProductTypeQuickListFilter
 		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
-			final Collection[] voucherTypes = new Collection[1];
-			voucherTypes[0] = (Collection<ProductType>) Cache.sharedInstance().get(
+			QuickListFilterQueryResult<Collection<ProductType>> cacheResult = (QuickListFilterQueryResult<Collection<ProductType>>) Cache.sharedInstance().get(
 					null, cacheKey, 
 					FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			if (voucherTypes[0] == null) {
+			if (cacheResult == null) {
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						if (voucherTypeTable.isDisposed())
@@ -69,20 +69,22 @@ extends AbstractProductTypeQuickListFilter
 						voucherTypeTable.setLoadingMessage("Searching VoucherTypes");
 					}
 				});
-				voucherTypes[0] = ProductTypeDAO.sharedInstance().getProductTypes(
+				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
 						queryCollection,
 						FETCH_GROUPS_VOUCHER_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
+				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);				
 				Cache.sharedInstance().put(
-						null, cacheKey, voucherTypes[0], 
+						null, cacheKey, cacheResult, 
 						FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			}
+			final Collection<ProductType> voucherTypes = cacheResult.getResult();
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (voucherTypeTable.isDisposed())
 						return;
-					voucherTypeTable.setInput(voucherTypes[0]);
+					voucherTypeTable.setInput(voucherTypes);
 				}
 			});
 			monitor.done();
