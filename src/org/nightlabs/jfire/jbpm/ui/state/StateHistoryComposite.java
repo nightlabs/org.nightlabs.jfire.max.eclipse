@@ -8,17 +8,16 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
@@ -64,7 +63,6 @@ extends AbstractTableComposite<State>
 	}
 
 	@Override
-	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
@@ -85,11 +83,10 @@ extends AbstractTableComposite<State>
 	}
 
 	@Override
-	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setLabelProvider(new StateHistoryLabelProvider());
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 	}
 
 	public static final String[] FETCH_GROUPS_STATE = {
@@ -112,7 +109,6 @@ extends AbstractTableComposite<State>
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.StateHistoryComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				final List<State> states = StateDAO.sharedInstance().getStates(statableID, FETCH_GROUPS_STATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
