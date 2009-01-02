@@ -11,9 +11,9 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorInput;
 import org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig.ChooseDynamicTradePriceConfigPage;
@@ -91,12 +91,12 @@ extends DynamicPathWizard
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				DynamicTradeManager vm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				DynamicTradeManager vm = JFireEjbUtil.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 				DynamicProductType vt = vm.storeDynamicProductType(dynamicProductType, true, new String[] { FetchPlan.DEFAULT }, 1);
 				final ProductTypeID dynamicProductTypeID = (ProductTypeID) JDOHelper.getObjectId(vt);
 
 				// TODO remove this DEBUG stuff
-//				StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//				StoreManager sm = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //				sm.setProductTypeStatus_published(dynamicProductTypeID, false, null, 1);
 //				if (ProductType.INHERITANCE_NATURE_LEAF == dynamicProductType.getInheritanceNature()) {
 //				sm.setProductTypeStatus_confirmed(dynamicProductTypeID, false, null, 1);
