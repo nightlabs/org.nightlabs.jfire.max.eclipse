@@ -40,10 +40,10 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.util.NLLocale;
@@ -416,7 +416,7 @@ public class SaleAccessControlComposite extends XComposite
 //				return;
 //			}
 //
-//			StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			StoreManager sm = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //			final ProductType productType = sm.getProductType(
 //					productTypeID, fetchGroupsProductType, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //
@@ -507,7 +507,7 @@ public class SaleAccessControlComposite extends XComposite
 
 //			setEnabled(false);
 
-			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 
 			if (make_published)
 				storeManager.setProductTypeStatus_published(productTypeID, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

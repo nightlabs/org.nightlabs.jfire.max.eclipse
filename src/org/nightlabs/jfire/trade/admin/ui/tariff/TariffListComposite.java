@@ -52,9 +52,9 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.dao.TariffDAO;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.JFireBasePlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -205,7 +205,7 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 				for (TariffCarrier tc : tariffCarriers) {
 					//				if (csc.isDirty()) { TODO
 					if (accountingManager == null)
-						accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+						accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 
 					Tariff tariff = tc.getTariff();
 					tariff.setTariffIndex(tariffIndex++);

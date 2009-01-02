@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueDAO;
@@ -303,7 +303,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			return storeManager;
 
 		try {
-			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 			return storeManager;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

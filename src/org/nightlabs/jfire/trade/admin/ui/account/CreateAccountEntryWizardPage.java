@@ -75,9 +75,9 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
@@ -365,7 +365,7 @@ extends DynamicPathWizardPage
 	 */
 	private AccountingManager getAccountingManager() {
 		try {
-			return AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			return JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

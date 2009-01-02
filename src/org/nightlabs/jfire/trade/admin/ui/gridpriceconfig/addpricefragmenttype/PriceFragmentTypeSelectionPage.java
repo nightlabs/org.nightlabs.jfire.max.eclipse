@@ -51,8 +51,8 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
@@ -117,7 +117,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 					priceFragmentTypes.clear();
 					// TODO not ALL!
 					// TODO use DAO

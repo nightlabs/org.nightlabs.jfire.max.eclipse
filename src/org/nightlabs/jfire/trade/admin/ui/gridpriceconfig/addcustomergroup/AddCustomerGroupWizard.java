@@ -93,7 +93,7 @@ public class AddCustomerGroupWizard extends DynamicPathWizard
 					}
 				});
 
-//				AccountingManager am = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//				AccountingManager am = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 //				customerGroup = am.storeCustomerGroup(customerGroup, true, new String[] {FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // TODO fetch-groups
 			}
 			else
