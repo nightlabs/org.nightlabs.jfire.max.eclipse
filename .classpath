@@ -17,5 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireVoucherEditor2D"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseBean"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
