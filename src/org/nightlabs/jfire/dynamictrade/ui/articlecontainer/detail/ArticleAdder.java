@@ -13,9 +13,9 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
@@ -94,7 +94,7 @@ extends AbstractArticleAdder
 			boolean allocateSynchronously) throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
 
-		DynamicTradeManager dm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		DynamicTradeManager dm = JFireEjbUtil.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 
 		return dm.createArticle(
 				segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false,

@@ -9,10 +9,10 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.UnitID;
@@ -83,7 +83,7 @@ extends ArticleBaseComposite
 			}
 
 			// TODO use DAO
-			DynamicTradeManager m = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			DynamicTradeManager m = JFireEjbUtil.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 			m.modifyArticle(articleID, quantity, unitID, tariffID, productName, singlePrice, false, null, 1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

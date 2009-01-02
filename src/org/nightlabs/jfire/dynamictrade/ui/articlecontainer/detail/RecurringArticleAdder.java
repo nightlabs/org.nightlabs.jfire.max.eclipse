@@ -12,9 +12,9 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerUtil;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.Article;
@@ -52,7 +52,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 			boolean allocate,
 			boolean allocateSynchronously) throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
-		DynamicTradeManager dtm = DynamicTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		DynamicTradeManager dtm = JFireEjbUtil.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 		return dtm.createRecurringArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID,
 				productName, singlePrice, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
