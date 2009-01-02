@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
@@ -20,7 +21,6 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
 import org.nightlabs.jfire.voucher.VoucherManager;
-import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditorInput;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
@@ -110,7 +110,7 @@ extends DynamicPathWizard
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					VoucherManager vm = VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					VoucherManager vm = JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 					VoucherType vt = vm.storeVoucherType(
 							voucherType, true,
 							new String[] {
@@ -142,7 +142,7 @@ extends DynamicPathWizard
 					vm.storeVoucherType(vt, false, null, 1);
 
 //					// remove this DEBUG stuff - this can now be done by the editor afterwards - still I keep it commented here ;-) Marco.
-//					StoreManager sm = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					StoreManager sm = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //					sm.setProductTypeStatus_published(voucherTypeID, false, null, 1);
 //					if (ProductType.INHERITANCE_NATURE_LEAF == voucherType.getInheritanceNature()) {
 //					sm.setProductTypeStatus_confirmed(voucherTypeID, false, null, 1);

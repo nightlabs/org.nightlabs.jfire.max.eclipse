@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
