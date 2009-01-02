@@ -10,9 +10,9 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigComm
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 import org.nightlabs.jfire.simpletrade.dao.FormulaPriceConfigDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.CellReferenceProductTypeSelector;
@@ -39,7 +39,7 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
 		try {
-			SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			SimpleTradeManager stm = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 			return stm.storePriceConfigs(priceConfigs, true, assignInnerPriceConfigCommand);
 		} catch (Exception x) {
 			throw new RuntimeException(x);

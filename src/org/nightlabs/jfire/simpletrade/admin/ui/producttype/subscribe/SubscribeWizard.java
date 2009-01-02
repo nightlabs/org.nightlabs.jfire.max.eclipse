@@ -2,9 +2,9 @@ package org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe;
 
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 
 public class SubscribeWizard
 		extends DynamicPathWizard
@@ -24,7 +24,7 @@ public class SubscribeWizard
 	{
 		String selectedOrganisationID = organisationSelectionPage.getSelectedOrganisationID().organisationID;
 		try {
-			SimpleTradeManager simpleTradeManager = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			SimpleTradeManager simpleTradeManager = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 			simpleTradeManager.importSimpleProductTypesForReselling(selectedOrganisationID);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

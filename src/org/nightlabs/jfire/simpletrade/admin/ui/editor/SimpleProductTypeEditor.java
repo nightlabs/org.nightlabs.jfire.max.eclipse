@@ -1,7 +1,5 @@
 package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
-import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor;
 
 

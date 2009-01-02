@@ -10,12 +10,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.organisation.OrganisationIDDataSource;
 import org.nightlabs.jfire.base.ui.organisation.OrganisationList;
 import org.nightlabs.jfire.organisation.id.OrganisationID;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 
 public class OrganisationSelectionPage
@@ -38,7 +38,7 @@ public class OrganisationSelectionPage
 			public Collection<OrganisationID> getOrganisationIDs()
 			{
 				try {
-					SimpleTradeManager m = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					SimpleTradeManager m = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 					return m.getCandidateOrganisationIDsForCrossTrade();
 				} catch (Exception x) {
 					throw new RuntimeException(x);
