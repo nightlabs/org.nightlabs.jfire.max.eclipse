@@ -11,11 +11,10 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerHome;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.ManualMoneyTransfer;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -69,8 +68,7 @@ public class ManualMoneyTransferWizard extends DynamicPathWizard{
 			getContainer().run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
 					try {
-						AccountingManagerHome accountingManagerHome = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties());
-						AccountingManager accountingManager = accountingManagerHome.create();
+						AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 
 						AnchorID toAccountID = moneyTransferPage.getToAccount();
 						I18nText reason = moneyTransferPage.getReason();
