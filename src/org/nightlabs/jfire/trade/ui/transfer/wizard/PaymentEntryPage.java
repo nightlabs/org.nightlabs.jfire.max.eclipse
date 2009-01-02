@@ -71,7 +71,6 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.pay.CheckRequirementsEnvironment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPayment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
@@ -82,6 +81,7 @@ import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.ServerPaymentProcessor;
 import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -179,7 +179,7 @@ implements IPaymentEntryPage
 		throws RemoteException, LoginException, CreateException, NamingException
 	{
 		if (accountingManager == null)
-			accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 
 		return accountingManager;
 	}

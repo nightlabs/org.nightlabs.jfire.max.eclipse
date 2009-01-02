@@ -7,9 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.ui.IEditorInput;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleSelection;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleEditActionRegistry;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleEditAction;

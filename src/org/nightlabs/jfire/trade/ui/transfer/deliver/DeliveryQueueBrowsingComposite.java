@@ -225,7 +225,7 @@ extends FadeableComposite
 //			return storeManager;
 //
 //		try {
-//			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //			return storeManager;
 //		} catch (Exception e) {
 //			throw new RuntimeException(e);

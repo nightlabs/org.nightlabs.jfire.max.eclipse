@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.deliver.Delivery;
@@ -26,7 +27,6 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -62,7 +62,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 			getArticlesToTransfer().clear();
 			AnchorID customerID = null;
 
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			int alreadyDeliveredArticles = 0;
 			for (Iterator<?> it = tradeManager.getArticles(getArticleIDs(), FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).iterator(); it.hasNext();) {
 				Article article = (Article) it.next();

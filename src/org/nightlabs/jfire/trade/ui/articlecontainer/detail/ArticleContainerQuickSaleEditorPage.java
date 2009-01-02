@@ -34,12 +34,12 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -259,7 +259,7 @@ extends ArticleContainerEditorPage
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()); // TODO async!
 
-				tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 					// by default get the customerID of the anonymous customer
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(
 						LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(

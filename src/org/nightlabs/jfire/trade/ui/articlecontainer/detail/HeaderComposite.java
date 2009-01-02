@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.toolkit.IToolkit;
 import org.nightlabs.jfire.trade.ArticleContainer;
 
 /**

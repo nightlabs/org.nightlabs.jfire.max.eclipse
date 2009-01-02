@@ -41,11 +41,11 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
@@ -119,7 +119,7 @@ public class CreateOrderAction extends Action
 						checkNode = checkNode.getParent();
 					}
 					
-					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 
 					Order order = null;
 					

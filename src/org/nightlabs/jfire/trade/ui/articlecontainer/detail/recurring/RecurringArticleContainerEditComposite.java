@@ -23,7 +23,6 @@ import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOrderDAO;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class RecurringArticleContainerEditComposite extends ArticleContainerEditComposite {

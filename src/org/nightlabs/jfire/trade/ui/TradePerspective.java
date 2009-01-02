@@ -33,7 +33,6 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.DeliveryQueueBrowsingView;
 
 /**

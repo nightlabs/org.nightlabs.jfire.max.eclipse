@@ -40,11 +40,11 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
@@ -83,7 +83,7 @@ public class CreateOfferAction extends Action
 						RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
 						offer = rtm.createRecurringOffer(orderID, null, null, 1);
 					} else {
-						TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+						TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 						offer = tradeManager.createOffer(orderID, null, null, 1);
 					}
 					

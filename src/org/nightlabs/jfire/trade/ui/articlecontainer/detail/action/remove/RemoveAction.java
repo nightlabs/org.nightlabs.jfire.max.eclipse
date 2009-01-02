@@ -34,13 +34,12 @@ import javax.jdo.JDOHelper;
 
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
@@ -155,7 +154,7 @@ public class RemoveAction extends ArticleEditAction
 				ArticleContainerID articleContainerID = segmentEdit.getArticleContainerID();
 
 				if (articleContainerID instanceof OfferID || articleContainerID instanceof OrderID) {
-//					TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//					TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 //					tradeManager.deleteArticles(articleIDs, true);
 
 					ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = getArticleContainerEdit().getArticleSegmentGroupSet();
@@ -173,11 +172,11 @@ public class RemoveAction extends ArticleEditAction
 
 				}
 				else if (articleContainerID instanceof InvoiceID) {
-					AccountingManager accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 					accountingManager.removeArticlesFromInvoice((InvoiceID) articleContainerID, articleIDs, true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				}
 				else if (articleContainerID instanceof DeliveryNoteID) {
-					StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 					storeManager.removeArticlesFromDeliveryNote((DeliveryNoteID) articleContainerID, articleIDs, true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				}
 				else

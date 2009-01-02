@@ -5,8 +5,6 @@ import java.util.Collection;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;

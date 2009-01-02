@@ -10,7 +10,6 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.IArticleContainerEditActionContributor;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This is the default implementation of {@link ArticleContainerEdit}.

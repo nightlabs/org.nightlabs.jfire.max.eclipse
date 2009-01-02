@@ -53,10 +53,10 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -67,7 +67,6 @@ import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUti
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
@@ -102,10 +101,10 @@ public class TransferWizardUtil
 	public static AccountingManager getAccountingManager()
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
-		return AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		return JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 //
 //		if (accountingManager == null)
-//			accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 //
 //		return accountingManager;
 	}
@@ -113,10 +112,10 @@ public class TransferWizardUtil
 	public static StoreManager getStoreManager()
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
-		return StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		return JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //
 //		if (storeManager == null)
-//			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+//			storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 //
 //		return storeManager;
 	}
@@ -315,7 +314,7 @@ public class TransferWizardUtil
 				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
 					DeliveryData deliveryData = deliveryPair.getFirst();
 
-					StoreManager storeManager = StoreManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+					StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, SecurityReflector.getInitialContextProperties());
 					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
 						DeliveryID deliveryID = DeliveryID.create(deliveryData.getDelivery().getOrganisationID(), deliveryData.getDelivery().getDeliveryID());
 						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

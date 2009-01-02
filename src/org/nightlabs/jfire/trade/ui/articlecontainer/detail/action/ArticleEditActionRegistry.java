@@ -39,7 +39,6 @@ import org.nightlabs.base.ui.action.registry.ActionDescriptor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEdit;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class ArticleEditActionRegistry extends AbstractActionRegistry
 {

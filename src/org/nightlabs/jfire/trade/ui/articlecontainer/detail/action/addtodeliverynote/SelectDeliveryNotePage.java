@@ -62,10 +62,10 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -188,7 +188,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 	private void loadDataInJob()
 	{
 		try {
-			StoreManager storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 			final List<DeliveryNote> l = storeManager.getNonFinalizedDeliveryNotes(
 					getAddToDeliveryNoteWizard().getVendorID(),
 					getAddToDeliveryNoteWizard().getCustomerID(),

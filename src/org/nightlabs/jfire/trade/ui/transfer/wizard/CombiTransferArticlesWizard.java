@@ -45,6 +45,7 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -57,7 +58,6 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -117,7 +117,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 			long amountToPay = 0;
 
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			for (Article article : (Collection<Article>) tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
 				if (isPaymentEnabled()) {
 					if (invoiceIDs == null)

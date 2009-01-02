@@ -36,14 +36,12 @@ import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.AccountingManagerUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -210,7 +208,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (tradeManager == null)
-				tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 
 			return tradeManager;
 		} catch (Exception e) {
@@ -223,7 +221,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (accountingManager == null)
-				accountingManager = AccountingManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 
 			return accountingManager;
 		} catch (Exception e) {
@@ -236,7 +234,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (storeManager == null)
-				storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+				storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 
 			return storeManager;
 		} catch (Exception e) {

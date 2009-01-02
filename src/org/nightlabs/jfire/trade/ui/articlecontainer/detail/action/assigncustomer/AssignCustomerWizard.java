@@ -4,10 +4,10 @@ import javax.jdo.JDOHelper;
 
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
@@ -37,7 +37,7 @@ public class AssignCustomerWizard
 		try {
 			LegalEntity legalEntity = getLegalEntity();
 			
-			TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
 
 			tm.assignCustomer(orderID, customerID, true, null, 1);

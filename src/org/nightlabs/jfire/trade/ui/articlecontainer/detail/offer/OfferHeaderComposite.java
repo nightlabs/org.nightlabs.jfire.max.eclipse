@@ -52,6 +52,7 @@ import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
@@ -60,7 +61,6 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
@@ -367,7 +367,7 @@ extends HeaderComposite
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					TradeManager tm = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 					tm.signalOffer((OfferID)JDOHelper.getObjectId(offer), event.getTransition().getJbpmTransitionName());
 				} catch (Exception x) {
 					throw new RuntimeException(x);

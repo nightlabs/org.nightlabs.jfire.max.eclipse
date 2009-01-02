@@ -66,11 +66,11 @@ import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
-import org.nightlabs.jfire.store.StoreManagerUtil;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryConfiguration;
@@ -250,7 +250,7 @@ implements IDeliveryEntryPage
 		throws RemoteException, LoginException, CreateException, NamingException
 	{
 		if (storeManager == null)
-			storeManager = StoreManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 
 		return storeManager;
 	}

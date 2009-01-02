@@ -9,7 +9,6 @@ import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * This registry processes the extension-point <code>org.nightlabs.jfire.trade.ui.articleContainerEditFactory</code>

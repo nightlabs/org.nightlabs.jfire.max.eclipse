@@ -32,6 +32,7 @@ import org.eclipse.jface.window.Window;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonEditorWizardHop;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -41,7 +42,6 @@ import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.TradeManagerUtil;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -96,7 +96,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		editorWizardHop.updatePerson();
 		legalEntity = null;
 		try {
-			TradeManager tradeManager = TradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
 					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 			lePerson.deflate();

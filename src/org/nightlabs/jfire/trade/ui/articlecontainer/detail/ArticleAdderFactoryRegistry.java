@@ -28,8 +28,6 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.SegmentType;
 
 /**
