@@ -44,9 +44,9 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManagerUtil;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.dao.TariffPricePairDAO;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
@@ -191,7 +191,7 @@ public class ArticleAdder extends AbstractArticleAdder
 	throws org.nightlabs.ModuleException, java.rmi.RemoteException, LoginException, CreateException, NamingException
 	{
 
-		SimpleTradeManager stm = SimpleTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		SimpleTradeManager stm = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 		return stm.createArticles(
 				segmentID, offerID, productTypeID, quantity, tariffID, true, false,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
