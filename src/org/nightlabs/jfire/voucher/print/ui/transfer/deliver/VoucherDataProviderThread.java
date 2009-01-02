@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.ObjectIDUtil;
+import org.nightlabs.jfire.base.JFireEjbUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorPrint;
@@ -21,7 +22,6 @@ import org.nightlabs.jfire.trade.ILayout;
 import org.nightlabs.jfire.trade.LayoutMapForArticleIDSet;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.voucher.VoucherManager;
-import org.nightlabs.jfire.voucher.VoucherManagerUtil;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.scripting.id.VoucherLayoutID;
 import org.nightlabs.util.CollectionUtil;
@@ -61,7 +61,7 @@ extends AbstractScriptDataProviderThread
 	private VoucherManager getVoucherManager()
 	{
 		try {
-			return VoucherManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+			return JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
