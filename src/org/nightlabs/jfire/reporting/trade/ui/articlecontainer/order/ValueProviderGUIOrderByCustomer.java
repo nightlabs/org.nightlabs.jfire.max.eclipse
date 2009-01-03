@@ -53,7 +53,7 @@ extends AbstractValueProviderGUI<OrderID>
 	
 	public static class Factory implements IValueProviderGUIFactory
 	{
-		public IValueProviderGUI<OrderID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<OrderID> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIOrderByCustomer(valueProviderConfig);
 		}
 

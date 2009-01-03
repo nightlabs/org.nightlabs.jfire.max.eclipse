@@ -38,7 +38,7 @@ extends AbstractValueProviderGUI<AnchorID>
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
-		public IValueProviderGUI<AnchorID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<AnchorID> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIRepository(valueProviderConfig);
 		}
 

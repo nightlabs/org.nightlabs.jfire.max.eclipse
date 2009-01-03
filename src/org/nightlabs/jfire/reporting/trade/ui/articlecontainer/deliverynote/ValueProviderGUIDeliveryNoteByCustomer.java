@@ -56,7 +56,7 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<DeliveryNoteID> createValueProviderGUI(
-				ValueProviderConfig valueProviderConfig)
+				ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig)
 		{
 			return new ValueProviderGUIDeliveryNoteByCustomer(valueProviderConfig);
 		}

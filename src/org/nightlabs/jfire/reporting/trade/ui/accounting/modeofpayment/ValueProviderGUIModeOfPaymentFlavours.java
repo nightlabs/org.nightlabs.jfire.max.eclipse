@@ -50,7 +50,7 @@ extends AbstractValueProviderGUI<Collection<ModeOfPaymentFlavourID>>
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
-		public IValueProviderGUI<Collection<ModeOfPaymentFlavourID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Collection<ModeOfPaymentFlavourID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIModeOfPaymentFlavours(valueProviderConfig);
 		}
 

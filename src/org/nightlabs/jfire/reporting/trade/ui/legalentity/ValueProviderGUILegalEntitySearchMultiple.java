@@ -36,7 +36,7 @@ public class ValueProviderGUILegalEntitySearchMultiple extends AbstractValueProv
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
-		public IValueProviderGUI<Collection<AnchorID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Collection<AnchorID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUILegalEntitySearchMultiple(valueProviderConfig);
 		}
 

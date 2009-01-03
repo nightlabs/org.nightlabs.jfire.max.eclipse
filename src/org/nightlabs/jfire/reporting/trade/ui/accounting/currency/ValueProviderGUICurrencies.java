@@ -48,7 +48,7 @@ extends AbstractValueProviderGUI<Collection<CurrencyID>>
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
-		public IValueProviderGUI<Collection<CurrencyID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Collection<CurrencyID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUICurrencies(valueProviderConfig);
 		}
 
