@@ -23,6 +23,7 @@ import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueDAO;
 import org.nightlabs.jfire.store.deliver.id.DeliveryID;
+import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
@@ -64,6 +65,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 
 			TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			int alreadyDeliveredArticles = 0;
+			Set<DeliveryNoteID> _deliveryNoteIDs = new HashSet<DeliveryNoteID>();
 			for (Iterator<?> it = tradeManager.getArticles(getArticleIDs(), FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).iterator(); it.hasNext();) {
 				Article article = (Article) it.next();
 
@@ -72,6 +74,10 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 					continue;
 				}
 
+				if (isDeliveryEnabled()) {
+					_deliveryNoteIDs.add(article.getDeliveryNoteID());
+				}
+				
 				if (customerID == null)
 					customerID = (AnchorID) JDOHelper.getObjectId(article.getOrder().getCustomer());
 				else if (!customerID.equals(JDOHelper.getObjectId(article.getOrder().getCustomer())))
@@ -85,6 +91,8 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 				String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogMessage"), alreadyDeliveredArticles); //$NON-NLS-1$
 				MessageDialog.openWarning(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogTitle"), message); //$NON-NLS-1$
 			}
+			
+			setDeliveryNoteIDs(_deliveryNoteIDs);
 
 			// The LegalEntityID of the local organisation
 			AnchorID mandatorID = AnchorID.create(

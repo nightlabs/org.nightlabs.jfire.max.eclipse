@@ -188,6 +188,14 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	{
 		return invoiceIDs;
 	}
+	
+	/**
+	 * This should be set if a subclass overrides {@link #loadData()}.
+	 * @param deliveryNoteIDs The invoice ids to set.
+	 */
+	protected void setInvoiceIDs(Collection<InvoiceID> invoiceIDs) {
+		this.invoiceIDs = invoiceIDs;
+	}
 
 	private Collection<ArticleID> articlesToCreateDeliveryNoteFor = null;
 	private Collection<DeliveryNoteID> deliveryNoteIDs = null;
@@ -196,6 +204,14 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	public Collection<DeliveryNoteID> getDeliveryNoteIDs()
 	{
 		return deliveryNoteIDs;
+	}
+	
+	/**
+	 * This should be set if a subclass overrides {@link #loadData()}.
+	 * @param deliveryNoteIDs The delivery note ids to set.
+	 */
+	protected void setDeliveryNoteIDs(Collection<DeliveryNoteID> deliveryNoteIDs) {
+		this.deliveryNoteIDs = deliveryNoteIDs;
 	}
 
 	@Override
