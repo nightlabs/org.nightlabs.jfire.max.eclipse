@@ -6,7 +6,7 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -56,7 +56,7 @@ extends AbstractArticleAdder
 	public Collection<Article> createArticles(SegmentID segmentID, OfferID offerID, ProductTypeID productTypeID, int qty)
 	throws Exception
 	{
-		VoucherManager vm = JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+		VoucherManager vm = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 
 		return vm.createArticles(
 				segmentID, offerID, productTypeID, qty,

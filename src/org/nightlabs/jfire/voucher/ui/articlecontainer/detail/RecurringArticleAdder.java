@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -18,7 +18,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 	public Collection<Article> createArticles(SegmentID segmentID, OfferID offerID, ProductTypeID productTypeID, int qty)
 	throws Exception {
 
-		VoucherManager vm = JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+		VoucherManager vm = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 		Collection<ProductTypeID> productTypeIDs = new ArrayList<ProductTypeID>(qty);
 		for (int i = 0; i < qty; i++) {
 			productTypeIDs.add(productTypeID);
