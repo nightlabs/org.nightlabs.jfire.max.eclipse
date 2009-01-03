@@ -6,7 +6,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -109,7 +109,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			}
 		}
 		try {
-			VoucherManager voucherManager = JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+			VoucherManager voucherManager = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
