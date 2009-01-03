@@ -147,7 +147,7 @@ implements IReportEditorPage
 			}
 			public void widgetSelected(SelectionEvent arg0) {
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
-				Map<String, Object> params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
+				Map<String, Object> params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
 				if (params == null)
 					return;
 				setReportParameters(params);
@@ -166,7 +166,7 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
+					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
 					if (params == null)
 						return;
 				}
@@ -184,7 +184,7 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID());
+					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
 					if (params == null)
 						return;
 				}
@@ -259,7 +259,7 @@ implements IReportEditorPage
 		if (input instanceof IJFireRemoteReportEditorInput) {
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
 			if (!isParameterAquisitionDone()) {
-				Result paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID());
+				Result paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
 				Map<String, Object> params = paramResult.getParameters();
 				if (paramResult.isAcquisitionFinished()) {
 					setParameterAquisitionDone(true);
