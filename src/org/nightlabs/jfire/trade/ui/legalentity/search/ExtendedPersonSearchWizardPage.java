@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.person.search.PersonSearchWizardPage;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -80,7 +80,7 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 				LegalEntity __legalEntity = null;
 				CustomerGroup __defaultCustomerGroup = null;
 				try {
-					TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+					TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 					if (selectedPerson != null) {
 						__legalEntity = tradeManager.getLegalEntityForPerson(
 								(PropertySetID) JDOHelper.getObjectId(selectedPerson),
@@ -141,7 +141,7 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 //			defaultCustomerGroup = legalEntity.getDefaultCustomerGroup();
 //		else {
 //			try {
-//				TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+//				TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 //				CustomerGroupID defaultCustomerGroupID = CustomerGroupID.create(IDGenerator.getOrganisationID(), CustomerGroup.CUSTOMER_GROUP_ID_DEFAULT);
 //				Collection<CustomerGroup> customerGroups = tradeManager.getCustomerGroups(Collections.singleton(defaultCustomerGroupID),
 //						new String[] { CustomerGroup.FETCH_GROUP_THIS_CUSTOMER_GROUP },	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

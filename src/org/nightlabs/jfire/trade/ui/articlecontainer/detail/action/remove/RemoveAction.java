@@ -36,7 +36,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.StoreManager;
@@ -154,7 +154,7 @@ public class RemoveAction extends ArticleEditAction
 				ArticleContainerID articleContainerID = segmentEdit.getArticleContainerID();
 
 				if (articleContainerID instanceof OfferID || articleContainerID instanceof OrderID) {
-//					TradeManager tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+//					TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 //					tradeManager.deleteArticles(articleIDs, true);
 
 					ClientArticleSegmentGroupSet clientArticleSegmentGroupSet = getArticleContainerEdit().getArticleSegmentGroupSet();
@@ -172,11 +172,11 @@ public class RemoveAction extends ArticleEditAction
 
 				}
 				else if (articleContainerID instanceof InvoiceID) {
-					AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+					AccountingManager accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 					accountingManager.removeArticlesFromInvoice((InvoiceID) articleContainerID, articleIDs, true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				}
 				else if (articleContainerID instanceof DeliveryNoteID) {
-					StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+					StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 					storeManager.removeArticlesFromDeliveryNote((DeliveryNoteID) articleContainerID, articleIDs, true, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				}
 				else

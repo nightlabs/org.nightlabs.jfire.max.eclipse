@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.Status;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.trade.TradeManager;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -44,7 +44,7 @@ public class ChangeTariffWizard
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception
 			{
-				TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, org.nightlabs.jfire.base.ui.login.Login.getLogin().getInitialContextProperties());
+				TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, org.nightlabs.jfire.base.ui.login.Login.getLogin().getInitialContextProperties());
 				tm.assignTariff(selectedArticleIDs, selectedTariffID, false, null, 1);
 				return Status.OK_STATUS;
 			}

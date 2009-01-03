@@ -34,7 +34,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
@@ -259,7 +259,7 @@ extends ArticleContainerEditorPage
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()); // TODO async!
 
-				tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 					// by default get the customerID of the anonymous customer
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(
 						LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(

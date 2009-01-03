@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.annotation.Implement;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -39,7 +39,7 @@ public class CustomerGroupDAO
 	{
 		TradeManager tm = tradeManager;
 		if (tm == null)
-			tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 
 		return tm.getCustomerGroups(customerGroupIDs, fetchGroups, maxFetchDepth);
 	}
@@ -63,7 +63,7 @@ public class CustomerGroupDAO
 	public synchronized List<CustomerGroup> getCustomerGroups(String organisationID, boolean inverse, String[] fetchGroups, int maxFetchDepth, IProgressMonitor monitor)
 	{
 		try {
-			tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			try {
 				Set<CustomerGroupID> customerGroupIDs = tradeManager.getCustomerGroupIDs(organisationID, inverse);
 				return getJDOObjects(null, customerGroupIDs, fetchGroups, maxFetchDepth, monitor);
@@ -83,7 +83,7 @@ public class CustomerGroupDAO
 	public CustomerGroup storeCustomerGroup(CustomerGroup customerGroup, boolean get, String[] fetchGroups, int maxFetchDepth, IProgressMonitor monitor)
 	{
 		try {
-			TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 
 			CustomerGroup cg = tm.storeCustomerGroup(customerGroup, get, fetchGroups, maxFetchDepth);
 			if (cg != null)

@@ -65,7 +65,7 @@ import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -187,7 +187,7 @@ public class SelectInvoicePage extends DynamicPathWizardPage
 	private void loadDataInJob()
 	{
 		try {
-			AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			AccountingManager accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 			final List<Invoice> l = accountingManager.getNonFinalizedInvoices(
 					getAddToInvoiceWizard().getVendorID(),
 					getAddToInvoiceWizard().getCustomerID(),

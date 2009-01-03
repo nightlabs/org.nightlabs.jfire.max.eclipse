@@ -31,7 +31,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -288,7 +288,7 @@ extends AbstractUIPlugin
 	public TradeManager getTradeManager()
 	{
 		try {
-			return JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -298,7 +298,7 @@ extends AbstractUIPlugin
 	public StoreManager getStoreManager()
 	{
 		try {
-			return JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -308,7 +308,7 @@ extends AbstractUIPlugin
 	public AccountingManager getAccountingManager()
 	{
 		try {
-			return JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

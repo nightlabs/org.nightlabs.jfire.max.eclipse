@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.trade.Article;
@@ -208,7 +208,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (tradeManager == null)
-				tradeManager = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 
 			return tradeManager;
 		} catch (Exception e) {
@@ -221,7 +221,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (accountingManager == null)
-				accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+				accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 
 			return accountingManager;
 		} catch (Exception e) {
@@ -234,7 +234,7 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 	{
 		try {
 			if (storeManager == null)
-				storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+				storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 
 			return storeManager;
 		} catch (Exception e) {

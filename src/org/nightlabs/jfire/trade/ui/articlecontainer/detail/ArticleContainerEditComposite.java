@@ -828,14 +828,14 @@ implements ArticleContainerEdit
 	// throws RemoteException, LoginException, CreateException, NamingException
 	// {
 	// return
-	// JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+	// JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 	// }
 	//
 	// protected StoreManager getStoreManager()
 	// throws RemoteException, LoginException, CreateException, NamingException
 	// {
 	// return
-	// JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+	// JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 	// }
 
 	private SegmentEdit activeSegmentEdit = null;

@@ -44,7 +44,7 @@ import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.jbpm.JbpmConstantsInvoice;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
@@ -143,7 +143,7 @@ extends HeaderComposite
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					AccountingManager am = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+					AccountingManager am = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 					am.signalInvoice((InvoiceID)JDOHelper.getObjectId(invoice), event.getTransition().getJbpmTransitionName());
 				} catch (Exception x) {
 					throw new RuntimeException(x);

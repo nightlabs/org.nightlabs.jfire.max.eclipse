@@ -27,7 +27,7 @@
 package org.nightlabs.jfire.trade.ui.accounting;
 
 import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 
 /**
@@ -41,7 +41,7 @@ public class AccountingUtil {
 	 */
 	public static AccountingManager getAccountingManager() {
 		try {
-			return JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

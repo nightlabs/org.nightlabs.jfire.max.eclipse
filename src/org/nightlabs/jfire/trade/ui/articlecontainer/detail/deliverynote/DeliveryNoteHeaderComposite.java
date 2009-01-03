@@ -38,7 +38,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
@@ -136,7 +136,7 @@ extends HeaderComposite
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				try {
-					StoreManager sm = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+					StoreManager sm = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 					sm.signalDeliveryNote((DeliveryNoteID)JDOHelper.getObjectId(deliveryNote), event.getTransition().getJbpmTransitionName());
 				} catch (Exception x) {
 					throw new RuntimeException(x);
