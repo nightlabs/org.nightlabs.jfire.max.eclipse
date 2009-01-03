@@ -27,7 +27,7 @@
 package org.nightlabs.jfire.simpletrade.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
 import org.osgi.framework.BundleContext;
@@ -104,7 +104,7 @@ public class SimpletradePlugin extends AbstractUIPlugin
 	
 	public static SimpleTradeManager getSimpleTradeManager() {
 		try {
-			return JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

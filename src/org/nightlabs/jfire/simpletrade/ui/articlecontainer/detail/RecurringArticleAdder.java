@@ -11,7 +11,7 @@ import javax.security.auth.login.LoginException;
 import org.nightlabs.ModuleException;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -34,7 +34,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 			productTypeIDs.add(productTypeID);
 		}
 		
-		SimpleTradeManager stm = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+		SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 		Collection<Article> articles = stm.createArticles(
 				segmentID, offerID,
 				productTypeIDs, tariffID,
