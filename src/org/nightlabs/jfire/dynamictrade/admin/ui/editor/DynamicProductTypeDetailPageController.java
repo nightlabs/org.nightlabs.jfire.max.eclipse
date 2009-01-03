@@ -3,7 +3,7 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
@@ -80,7 +80,7 @@ public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,Produ
 	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor)
 	{
 		try {
-			DynamicTradeManager stm = JFireEjbUtil.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
+			DynamicTradeManager stm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 			return stm.storeDynamicProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
