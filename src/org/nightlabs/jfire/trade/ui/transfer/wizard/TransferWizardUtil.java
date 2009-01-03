@@ -281,8 +281,27 @@ public class TransferWizardUtil
 			}
 		}
 
-		// Now do the actual payment/delivery
-		boolean transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples, transferWizard);
+		boolean transferResult = false;
+		if (transferWizard != null) {
+			// Now do the actual payment/delivery
+			transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples, transferWizard);
+		} else {
+			if (paymentWizard != null && deliveryWizard == null) {
+				transferResult = payAndDeliver(shell, paymentTuples, null, paymentWizard);
+			} else if (deliveryWizard != null && paymentWizard == null) {
+				transferResult = payAndDeliver(shell, null, deliveryTuples, deliveryWizard);
+			} else {
+				// TODO: FIXME: This case is not really clearly implemented
+				// The wizard used by payAndDeliver is only for the error-handler, 
+				// but if payment end delivery wizards are set it is not defined which one to use 
+				TransferWizard wiz = null;
+				if (paymentWizard != null)
+					wiz = paymentWizard;
+				else
+					wiz = deliveryWizard;				
+				transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples, wiz);
+			}
+		}
 
 		// Now we print delivery notes and invoices for all successful transfers if the user has requested to do so during the process
 
