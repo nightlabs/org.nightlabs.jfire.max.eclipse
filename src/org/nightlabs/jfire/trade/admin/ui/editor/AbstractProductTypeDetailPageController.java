@@ -6,7 +6,7 @@ import javax.jdo.JDOHelper;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
@@ -118,7 +118,7 @@ implements IProductTypeDetailPageController<ProductTypeType>
 			boolean make_saleable_false = !saleStatus.isSaleable() && productType.isSaleable();;
 			boolean make_closed = saleStatus.isClosed() && !productType.isClosed();
 			
-			StoreManager storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 
 			if (make_published)
 				storeManager.setProductTypeStatus_published(productTypeID, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

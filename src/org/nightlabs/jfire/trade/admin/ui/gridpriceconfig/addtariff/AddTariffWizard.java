@@ -35,7 +35,7 @@ import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.AccountingManager;
 import org.nightlabs.jfire.accounting.Tariff;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.Dimension;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
@@ -83,7 +83,7 @@ public class AddTariffWizard extends DynamicPathWizard
 //								priceFragmentTypeNameBuffer.getText(I18nText.DEFAULT_LANGUAGEID), true));
 				tariffNameBuffer.copyTo(tariff.getName());
 
-				AccountingManager accountingManager = JFireEjbUtil.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+				AccountingManager accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
 				tariff = accountingManager.storeTariff(tariff, true, new String[] {FetchPlan.ALL}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT); // TODO not ALL
 			}
 			else

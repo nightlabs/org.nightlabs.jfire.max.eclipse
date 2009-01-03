@@ -40,7 +40,7 @@ import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
 import org.nightlabs.jfire.trade.TradeManager;
@@ -98,7 +98,7 @@ extends DynamicPathWizard
 		Account newAccount = null;
 		// TODO async => Job!
 		try {
-			TradeManager tm = JFireEjbUtil.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			OrganisationLegalEntity owner = tm.getOrganisationLegalEntity(Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1); // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard
 
 			if (getCreateAccountEntryWizardPage().isCreateSummaryAccount()) {
