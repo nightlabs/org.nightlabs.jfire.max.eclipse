@@ -3,9 +3,10 @@ package org.nightlabs.jfire.reporting.ui.layout;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerColumn;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
@@ -160,7 +161,27 @@ public class ReportRegistryItemTree extends ActiveJDOObjectTreeComposite<ReportR
 			selectionProxy = new SelectionProxy(this, selectionZone, IGNORE_INHERITANCE, false);
 			getTreeViewer().addSelectionChangedListener(selectionProxy);
 		}
-		getTreeViewer().setSorter(new ViewerSorter());
+		getTreeViewer().setComparator(new ViewerComparator() {
+			@Override
+			public int category(Object element) {
+				if (element instanceof ReportRegistryItemNode) {
+					ReportRegistryItem item = ((ReportRegistryItemNode) element).getJdoObject();
+					if (item instanceof ReportCategory)
+						return 1;
+					else
+						return 2;
+				} else
+					return 3; 
+			}
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				if (! (e1 instanceof ReportRegistryItemNode && e2 instanceof ReportRegistryItemNode))
+					return super.compare(viewer, e1, e2);
+				ReportRegistryItemNode node1 = (ReportRegistryItemNode) e1;
+				ReportRegistryItemNode node2 = (ReportRegistryItemNode) e2;
+				return node1.getJdoObject().getName().getText().compareTo(node2.getJdoObject().getName().getText());
+			}
+		});
 	}
 	
 	@Override

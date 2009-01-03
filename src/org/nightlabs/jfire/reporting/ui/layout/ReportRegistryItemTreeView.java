@@ -90,7 +90,7 @@ extends LSDViewPart
 				contextMenuManager.setSelectedRegistryItems(registryItemTree.getSelectedElements(), true, true);
 			}
 		});
-//		registryItemTree.getTreeViewer().expandToLevel(4);
+		registryItemTree.getTreeViewer().expandToLevel(3);
 	}
 	
 	protected ReportRegistryItemTree createReportRegistryItemTree(Composite parent) {
