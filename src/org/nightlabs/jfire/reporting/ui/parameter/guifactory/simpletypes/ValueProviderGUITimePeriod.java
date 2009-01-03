@@ -38,7 +38,7 @@ public class ValueProviderGUITimePeriod extends AbstractValueProviderGUI<TimePer
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<TimePeriod> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<TimePeriod> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUITimePeriod(valueProviderConfig);
 		}
 

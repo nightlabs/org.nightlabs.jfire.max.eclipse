@@ -21,7 +21,7 @@ public class ValueProviderGUIOrganisation extends AbstractValueProviderGUIUser {
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<UserID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<UserID> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIOrganisation(valueProviderConfig);
 		}
 

@@ -112,8 +112,9 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	/**
 	 * Creates a new {@link ReportParameterWizard} for the given reportLayoutID.
 	 * @param reportLayoutID The id of the ReportLayout this wizard should query parameters from the user.
+	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
 	 */
-	public ReportParameterWizard(ReportRegistryItemID reportLayoutID) {
+	public ReportParameterWizard(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		this.reportLayoutID = reportLayoutID;
 		ReportParameterAcquisitionSetup setup = null;
 		try {
@@ -127,13 +128,15 @@ public class ReportParameterWizard extends DynamicPathWizard{
 		if (setup == null)
 			return;
 		if (setup.getValueAcquisitionSetups().size() > 1) {
-			ReportParameterAcquisitionUseCaseWizardPage wizardPage = new ReportParameterAcquisitionUseCaseWizardPage(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.wizardPage.pageName"), reportLayoutID); //$NON-NLS-1$
+			ReportParameterAcquisitionUseCaseWizardPage wizardPage = new ReportParameterAcquisitionUseCaseWizardPage(
+					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.wizardPage.pageName"), //$NON-NLS-1$ 
+					reportLayoutID, isScheduledReport); 
 			wizardHop = wizardPage.getReportParameterWizardHop();
 		}
 		else if (setup.getValueAcquisitionSetups().size() == 1){
 			ValueAcquisitionSetup acquisitionSetup = setup.getValueAcquisitionSetups().values().iterator().next();
 			wizardHop = new ReportParameterWizardHop();
-			ReportParameterAcquisitionUseCaseWizardPage.populateValueProviderSetupPages(acquisitionSetup, wizardHop, true);
+			ReportParameterAcquisitionUseCaseWizardPage.populateValueProviderSetupPages(acquisitionSetup, wizardHop, isScheduledReport, true);
 		}
 		if (wizardHop != null && wizardHop.getEntryPage() == null)
 			wizardHop = null;
@@ -191,13 +194,14 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * </p>
 	 *
 	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
+	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
 	 * @return The {@link Result} of the parameter acquisition process.
 	 */
-	public static Result openResult(ReportRegistryItemID reportLayoutID) {
+	public static Result openResult(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		if (reportLayoutID == null)
 			throw new IllegalArgumentException("reportLayoutID must not be null!"); //$NON-NLS-1$
 
-		final ReportParameterWizard wiz = new ReportParameterWizard(reportLayoutID);
+		final ReportParameterWizard wiz = new ReportParameterWizard(reportLayoutID, isScheduledReport);
 		final Result dialogResult = new Result();
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
@@ -222,10 +226,11 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * assigned, or the ReportLayout has no parameters.
 	 *
 	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
+	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
 	 * @return The acquired parameters or <code>null</code>.
 	 */
-	public static Map<String, Object> open(ReportRegistryItemID reportLayoutID) {
-		Result result = openResult(reportLayoutID);
+	public static Map<String, Object> open(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+		Result result = openResult(reportLayoutID, isScheduledReport);
 		return result.getParameters();
 	}
 

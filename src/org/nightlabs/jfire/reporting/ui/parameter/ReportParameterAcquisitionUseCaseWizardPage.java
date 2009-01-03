@@ -38,25 +38,25 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 	private ReportParameterAcquisitionSetup setup;
 	
 	private ReportParameterAcquisitionUseCaseTable useCaseTable;
-	
+	private boolean isScheduledReportConfiguration;
 	
 	/**
 	 * @param pageName
 	 */
-	public ReportParameterAcquisitionUseCaseWizardPage(String pageName, ReportRegistryItemID reportLayoutID) {
+	public ReportParameterAcquisitionUseCaseWizardPage(String pageName, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		super(pageName);
 		setTitle(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.title")); //$NON-NLS-1$
 		setDescription(Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.description")); //$NON-NLS-1$
-		init(reportLayoutID);
+		init(reportLayoutID, isScheduledReport);
 	}
 
 	/**
 	 * @param pageName
 	 * @param title
 	 */
-	public ReportParameterAcquisitionUseCaseWizardPage(String pageName, String title, ReportRegistryItemID reportLayoutID) {
+	public ReportParameterAcquisitionUseCaseWizardPage(String pageName, String title, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		super(pageName, title);
-		init(reportLayoutID);
+		init(reportLayoutID, isScheduledReport);
 	}
 
 	/**
@@ -65,15 +65,16 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 	 * @param titleImage
 	 */
 	public ReportParameterAcquisitionUseCaseWizardPage(String pageName, String title,
-			ImageDescriptor titleImage, ReportRegistryItemID reportLayoutID) {
+			ImageDescriptor titleImage, ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		super(pageName, title, titleImage);
-		init(reportLayoutID);
+		init(reportLayoutID, isScheduledReport);
 	}
 	
-	protected void init(ReportRegistryItemID reportLayoutID) {
+	protected void init(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		setWizardHop(new ReportParameterWizardHop(this));
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(ReportingPlugin.getDefault(), ReportParameterAcquisitionUseCaseWizardPage.class, null, ImageDimension._75x70));
 		this.reportLayoutID = reportLayoutID;
+		this.isScheduledReportConfiguration = isScheduledReport;
 	}
 
 	/* (non-Javadoc)
@@ -108,6 +109,7 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 				populateValueProviderSetupPages(
 						setup.getValueAcquisitionSetups().get(useCaseTable.getFirstSelectedElement()),
 						getReportParameterWizardHop(),
+						isScheduledReportConfiguration,
 						false
 					);
 				getContainer().updateButtons();
@@ -119,7 +121,7 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 	
 	public static void populateValueProviderSetupPages(
 			ValueAcquisitionSetup valueAcquisitionSetup, ReportParameterWizardHop wizardHop,
-			boolean populateAlsoEntryPage
+			boolean isScheduledReport, boolean populateAlsoEntryPage
 		)
 	{
 		wizardHop.removeAllHopPages();
@@ -134,7 +136,8 @@ public class ReportParameterAcquisitionUseCaseWizardPage extends WizardHopPage {
 					Messages.getString("org.nightlabs.jfire.reporting.ui.parameter.eportParameterAcquisitionUseCaseWizardPage.pagePrefix")+(++i),  //$NON-NLS-1$
 					valueAcquisitionSetup,
 					providerPageConfigs,
-					wizardHop
+					wizardHop, 
+					isScheduledReport
 				);
 			if (populateAlsoEntryPage) {
 				if (wizardHop.getEntryPage() == null)

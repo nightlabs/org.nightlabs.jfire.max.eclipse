@@ -26,7 +26,7 @@ public class ValueProviderGUIInteger extends AbstractValueProviderGUI<String> {
 
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<String> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<String> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIInteger(valueProviderConfig);
 		}
 

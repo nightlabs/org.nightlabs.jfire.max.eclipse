@@ -44,54 +44,49 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 	private IReportParameterController parameterController;
 	private Map<ValueProviderID, IValueProviderGUI<?>> valueProviderGUIs = new HashMap<ValueProviderID, IValueProviderGUI<?>>();
 	private Set<IValueProviderGUIListener> valueProviderGUIListeners = new HashSet<IValueProviderGUIListener>();
+	private boolean isScheduledReport;
 
-	/**
-	 * @param pageName
-	 */
 	public ReportParameterValueProviderWizardPage(
 			String pageName,
 			ValueAcquisitionSetup valueAcquisitionSetup,
 			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs,
-			IReportParameterController parameterController
+			IReportParameterController parameterController,
+			boolean isScheduledReport
 		)
 	{
 		super(pageName);
-		init(pageProviderConfigs, valueAcquisitionSetup, parameterController);
+		init(pageProviderConfigs, valueAcquisitionSetup, parameterController, isScheduledReport);
 	}
 
-	/**
-	 * @param pageName
-	 * @param title
-	 */
-	public ReportParameterValueProviderWizardPage(String pageName, String title, ValueAcquisitionSetup valueAcquisitionSetup, SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, IReportParameterController parameterController) {
+	public ReportParameterValueProviderWizardPage(
+			String pageName, String title, ValueAcquisitionSetup valueAcquisitionSetup, 
+			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, IReportParameterController parameterController,
+			boolean isScheduledReport) {
 		super(pageName, title);
-		init(pageProviderConfigs, valueAcquisitionSetup, parameterController);
+		init(pageProviderConfigs, valueAcquisitionSetup, parameterController, isScheduledReport);
 	}
 
-	/**
-	 * @param pageName
-	 * @param title
-	 * @param titleImage
-	 */
 	public ReportParameterValueProviderWizardPage(
 			String pageName, String title,
 			ImageDescriptor titleImage,
 			ValueAcquisitionSetup valueAcquisitionSetup,
 			SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs,
-			IReportParameterController parameterController
+			IReportParameterController parameterController,
+			boolean isScheduledReport
 		)
 	{
 		super(pageName, title, titleImage);
-		init(pageProviderConfigs, valueAcquisitionSetup, parameterController);
+		init(pageProviderConfigs, valueAcquisitionSetup, parameterController, isScheduledReport);
 		if (titleImage != null)
 			setImageDescriptor(titleImage);
 	}
 
-	protected void init(SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, ValueAcquisitionSetup valueAcquisitionSetup, IReportParameterController parameterController)  {
+	protected void init(SortedMap<Integer, SortedSet<ValueProviderConfig>> pageProviderConfigs, ValueAcquisitionSetup valueAcquisitionSetup, IReportParameterController parameterController, boolean isScheduledReport)  {
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(ReportingPlugin.getDefault(), ReportParameterValueProviderWizardPage.class, null, ImageDimension._75x70));
 		this.pageProviderConfigs = pageProviderConfigs;
 		this.valueAcquisitionSetup = valueAcquisitionSetup;
 		this.parameterController = parameterController;
+		this.isScheduledReport = isScheduledReport;
 	}
 
 
@@ -129,7 +124,7 @@ public class ReportParameterValueProviderWizardPage extends WizardHopPage {
 					continue;
 				}
 
-				final IValueProviderGUI<?> gui = factory.createValueProviderGUI(config);
+				final IValueProviderGUI<?> gui = factory.createValueProviderGUI(config, isScheduledReport);
 				valueProviderGUIs.put(providerID, gui);
 				Control guiControl = gui.createGUI(rowWrapper);
 				final IValueProviderGUIListener listener = new IValueProviderGUIListener() {

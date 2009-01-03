@@ -29,7 +29,7 @@ public class ValueProviderGUIWorkstation extends AbstractValueProviderGUI<Workst
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<WorkstationID> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<WorkstationID> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIWorkstation(valueProviderConfig);
 		}
 

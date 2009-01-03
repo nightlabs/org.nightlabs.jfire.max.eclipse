@@ -26,7 +26,7 @@ public class ValueProviderGUIDouble extends AbstractValueProviderGUI<Double> {
 
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<Double> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Double> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIDouble(valueProviderConfig);
 		}
 

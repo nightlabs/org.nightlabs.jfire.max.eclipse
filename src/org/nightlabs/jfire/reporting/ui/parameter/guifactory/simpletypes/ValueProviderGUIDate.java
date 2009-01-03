@@ -27,7 +27,7 @@ public class ValueProviderGUIDate extends AbstractValueProviderGUI<Date> {
 
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<Date> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Date> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIDate(valueProviderConfig);
 		}
 

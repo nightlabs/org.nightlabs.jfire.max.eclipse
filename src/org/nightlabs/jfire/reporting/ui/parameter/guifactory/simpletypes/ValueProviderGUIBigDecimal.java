@@ -28,7 +28,7 @@ public class ValueProviderGUIBigDecimal extends AbstractValueProviderGUI<BigDeci
 
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<BigDecimal> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<BigDecimal> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIBigDecimal(valueProviderConfig);
 		}
 

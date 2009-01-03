@@ -28,7 +28,7 @@ public class ValueProviderGUIBoolean extends AbstractValueProviderGUI<Boolean> {
 
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<Boolean> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Boolean> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUIBoolean(valueProviderConfig);
 		}
 

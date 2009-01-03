@@ -31,7 +31,7 @@ public class ValueProviderGUICurrentUserMultiple extends AbstractValueProviderGU
 	
 	public static class Factory implements IValueProviderGUIFactory {
 
-		public IValueProviderGUI<Collection<UserID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig) {
+		public IValueProviderGUI<Collection<UserID>> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
 			return new ValueProviderGUICurrentUserMultiple(valueProviderConfig);
 		}
 
