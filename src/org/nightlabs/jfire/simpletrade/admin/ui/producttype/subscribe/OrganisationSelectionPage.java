@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.organisation.OrganisationIDDataSource;
 import org.nightlabs.jfire.base.ui.organisation.OrganisationList;
@@ -38,7 +38,7 @@ public class OrganisationSelectionPage
 			public Collection<OrganisationID> getOrganisationIDs()
 			{
 				try {
-					SimpleTradeManager m = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+					SimpleTradeManager m = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 					return m.getCandidateOrganisationIDsForCrossTrade();
 				} catch (Exception x) {
 					throw new RuntimeException(x);

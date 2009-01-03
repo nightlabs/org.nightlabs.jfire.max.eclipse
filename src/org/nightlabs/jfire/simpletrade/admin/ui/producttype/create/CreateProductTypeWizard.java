@@ -41,7 +41,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
-import org.nightlabs.jfire.base.JFireEjbUtil;
+import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.prop.Struct;
@@ -90,7 +90,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	{
 		try {
 			if (_storeManager == null)
-				_storeManager = JFireEjbUtil.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+				_storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
 			return _storeManager;
 		} catch (RuntimeException e) {
 			throw e;
@@ -105,7 +105,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	{
 		try {
 			if (_simpleTradeManager == null)
-				_simpleTradeManager = JFireEjbUtil.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+				_simpleTradeManager = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 			return _simpleTradeManager;
 		} catch (RuntimeException e) {
 			throw e;
