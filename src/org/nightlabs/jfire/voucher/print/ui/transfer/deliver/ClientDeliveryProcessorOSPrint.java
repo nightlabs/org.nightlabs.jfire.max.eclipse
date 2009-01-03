@@ -53,7 +53,7 @@ extends AbstractClientDeliveryProcessorOSPrint
 		//
 		//		// check, whether all Article's VoucherType s have a layout assigned
 		//		try {
-		//			VoucherManager vm = JFireEjbUtil.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+		//			VoucherManager vm = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 		//			Map<ArticleID, PrintabilityStatus> m = vm.getArticleID2PrintabilityStatusMap(new HashSet<ArticleID>(getDelivery().getArticleIDs()));
 		//			for (PrintabilityStatus s : m.values()) {
 		//				if (PrintabilityStatus.MISSING_VOUCHER_LAYOUT == s) {
