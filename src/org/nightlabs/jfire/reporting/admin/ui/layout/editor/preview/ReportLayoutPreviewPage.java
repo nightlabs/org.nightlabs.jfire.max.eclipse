@@ -166,8 +166,11 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					params = ReportParameterWizard.open(jfireInput.getReportRegistryItemID(), false);
-					if (params == null)
+					Result wizardResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
+					if (wizardResult.isAcquisitionFinished()) {
+						params = wizardResult.getParameters();
+					}
+					else
 						return;
 				}
 				setReportParameters(params);
