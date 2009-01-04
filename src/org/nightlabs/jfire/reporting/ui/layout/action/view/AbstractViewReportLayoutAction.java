@@ -48,7 +48,7 @@ import org.nightlabs.jfire.reporting.ui.config.ReportViewPrintConfigModule;
 import org.nightlabs.jfire.reporting.ui.config.ReportViewPrintConfigModule.UseCaseConfig;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard;
-import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.Result;
+import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.WizardResult;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
@@ -123,7 +123,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 				for (ReportRegistryItemID itemID : reportRegistryItems) {
 					if (params == null && !paramsSet) {
 						// if no parameters set by now, get them from the user
-						Result dialogResult = ReportParameterWizard.openResult(itemID, false);
+						WizardResult dialogResult = ReportParameterWizard.openResult(itemID, false);
 						if (!dialogResult.isAcquisitionFinished())
 							return Status.OK_STATUS;
 						params = dialogResult.getParameters();

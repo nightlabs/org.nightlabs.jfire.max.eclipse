@@ -43,11 +43,11 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * This is used as return value of the static method
 	 * {@link ReportParameterWizard#openResult(ReportRegistryItemID)}.
 	 * <p>
-	 * It indicates wether the use finished the wizard and so the parameters
-	 * are avaiable and also provides the gathered parameters
+	 * It indicates whether the user finished the wizard and so the parameters
+	 * are available and also provides the gathered parameters.
 	 * </p>
 	 */
-	public static class Result {
+	public static class WizardResult {
 		private boolean acquisitionFinished;
 		private Map<String, Object> parameters;
 
@@ -184,25 +184,25 @@ public class ReportParameterWizard extends DynamicPathWizard{
 
 	/**
 	 * Opens the {@link ReportParameterWizard} for the given report layout
-	 * and returns its {@link Result}. The Result will indicate whether the
-	 * wizard finished or the user canceled the wizard. ({@link Result#isAcquistionFinished()})
+	 * and returns its {@link WizardResult}. The Result will indicate whether the
+	 * wizard finished or the user canceled the wizard. ({@link WizardResult#isAcquistionFinished()})
 	 * <p>
-	 * The parameters acquired by the wizard will also be avaiable in the Result. ({@link Result#getParameters()}).
-	 * This migt be <code>null</code>, if the user canceled the wizard,
+	 * The parameters acquired by the wizard will also be avaiable in the Result. ({@link WizardResult#getParameters()}).
+	 * This might be <code>null</code>, if the user canceled the wizard,
 	 * or the ReportLayout has no {@link ReportParameterAcquisitionSetup} assigned, or the
 	 * Report has not parameters.
 	 * </p>
 	 *
 	 * @param reportLayoutID The {@link ReportRegistryItemID} to acquire the parameters for.
 	 * @param isScheduledReport Whether the parameters should be acquired to configure a scheduled report.
-	 * @return The {@link Result} of the parameter acquisition process.
+	 * @return The {@link WizardResult} of the parameter acquisition process.
 	 */
-	public static Result openResult(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
+	public static WizardResult openResult(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
 		if (reportLayoutID == null)
 			throw new IllegalArgumentException("reportLayoutID must not be null!"); //$NON-NLS-1$
 
 		final ReportParameterWizard wiz = new ReportParameterWizard(reportLayoutID, isScheduledReport);
-		final Result dialogResult = new Result();
+		final WizardResult dialogResult = new WizardResult();
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				Dialog dlg = new Dialog(wiz);
@@ -230,7 +230,7 @@ public class ReportParameterWizard extends DynamicPathWizard{
 	 * @return The acquired parameters or <code>null</code>.
 	 */
 	public static Map<String, Object> open(ReportRegistryItemID reportLayoutID, boolean isScheduledReport) {
-		Result result = openResult(reportLayoutID, isScheduledReport);
+		WizardResult result = openResult(reportLayoutID, isScheduledReport);
 		return result.getParameters();
 	}
 

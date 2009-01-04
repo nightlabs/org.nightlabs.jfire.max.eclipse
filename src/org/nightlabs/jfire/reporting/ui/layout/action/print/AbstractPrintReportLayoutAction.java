@@ -46,7 +46,7 @@ import org.nightlabs.jfire.reporting.ui.config.ReportUseCase;
 import org.nightlabs.jfire.reporting.ui.config.ReportUseCaseRegistry;
 import org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard;
-import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.Result;
+import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.WizardResult;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -118,7 +118,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 				for (ReportRegistryItemID itemID : reportRegistryItems) {
 					if (params == null && !paramsSet) {
 						// if no parameters set by now, get them from the user
-						Result dialogResult = ReportParameterWizard.openResult(itemID, false);
+						WizardResult dialogResult = ReportParameterWizard.openResult(itemID, false);
 						if (!dialogResult.isAcquisitionFinished())
 							return Status.OK_STATUS;
 						params = dialogResult.getParameters();
