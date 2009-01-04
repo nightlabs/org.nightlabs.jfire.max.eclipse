@@ -73,7 +73,7 @@ import org.nightlabs.jfire.reporting.ui.config.ReportUseCaseRegistry;
 import org.nightlabs.jfire.reporting.ui.config.ReportViewPrintConfigModule;
 import org.nightlabs.jfire.reporting.ui.config.ReportViewPrintConfigModule.UseCaseConfig;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard;
-import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.Result;
+import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.WizardResult;
 import org.nightlabs.jfire.reporting.ui.viewer.NoReportViewerFoundException;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
@@ -166,7 +166,7 @@ implements IReportEditorPage
 				IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) getEditorInput();
 				Map<String, Object> params = getReportParameters();
 				if (params == null) {
-					Result wizardResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
+					WizardResult wizardResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
 					if (wizardResult.isAcquisitionFinished()) {
 						params = wizardResult.getParameters();
 					}
@@ -262,7 +262,7 @@ implements IReportEditorPage
 		if (input instanceof IJFireRemoteReportEditorInput) {
 			IJFireRemoteReportEditorInput jfireInput = (IJFireRemoteReportEditorInput) input;
 			if (!isParameterAquisitionDone()) {
-				Result paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
+				WizardResult paramResult = ReportParameterWizard.openResult(jfireInput.getReportRegistryItemID(), false);
 				Map<String, Object> params = paramResult.getParameters();
 				if (paramResult.isAcquisitionFinished()) {
 					setParameterAquisitionDone(true);
