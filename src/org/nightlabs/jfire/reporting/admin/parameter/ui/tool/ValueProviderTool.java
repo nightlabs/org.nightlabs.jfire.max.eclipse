@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.reporting.admin.parameter.ui.tool;
 
 import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.CreationTool;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.ModelCreationFactory;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.request.ValueProviderCreateRequest;
@@ -34,16 +35,31 @@ extends CreationTool
 		return (ValueProviderCreateRequest) getTargetRequest();
 	}
 	
+	private boolean creationInProgress = false;
 	@Override
-	protected boolean handleButtonDown(int button)
-	{
-		ValueProvider valueProvider = ValueProviderDialog.openDialog();
-		if (valueProvider != null) {
-			getValueProviderCreateRequest().setValueProvider(valueProvider);
-			getValueProviderCreateRequest().setValueAcquisitionSetup(valueAcquisitionSetup);
-			performCreation(1);
-			return true;
-		}
-		return false;
+	protected void performCreation(int button) {
+		creationInProgress = true;
+		try {
+			ValueProvider valueProvider = ValueProviderDialog.openDialog();
+			if (valueProvider != null) {
+				getValueProviderCreateRequest().setValueProvider(valueProvider);
+				getValueProviderCreateRequest().setValueAcquisitionSetup(valueAcquisitionSetup);
+				super.performCreation(button);
+			}
+		} finally {
+			creationInProgress = false;
+		}		
+	}
+
+	@Override
+	protected boolean handleFocusLost() {
+		if (creationInProgress)
+			return false;
+		return super.handleFocusLost();
+	}
+	
+	@Override
+	protected void setCurrentCommand(Command c) {
+		super.setCurrentCommand(c);
 	}
 }
