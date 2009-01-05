@@ -13,7 +13,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.FadeableCompositeJob;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
@@ -66,7 +65,6 @@ extends ArticleBaseComposite
 	}
 
 	@Override
-	@Implement
 	protected void fireCompositeContentChangeEvent()
 	{
 		articleAdder.getSegmentEdit().fireCompositeContentChangeEvent();

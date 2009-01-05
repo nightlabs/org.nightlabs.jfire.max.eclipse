@@ -411,6 +411,8 @@ extends FadeableComposite
 
 					dynamicProductType = (DynamicProductType) Util.cloneSerializable(
 							PriceConfigEditDAO.sharedInstance().getProductTypeForPriceConfigEditing(productTypeID, monitor));
+					
+					// TODO we should only list tariffs that are available to the current user according to the TariffUserSet. Marco.
 
 					dynamicTradePriceConfig = (DynamicTradePriceConfig) dynamicProductType.getInnerPriceConfig();
 					final List<Tariff> tariffs = new ArrayList<Tariff>(dynamicTradePriceConfig.getTariffs());
