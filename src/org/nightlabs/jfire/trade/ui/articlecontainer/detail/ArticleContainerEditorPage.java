@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.form.CompositeFormPage;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -64,7 +65,7 @@ extends CompositeFormPage
 	 * @param editor The editor the new page should be shown in.
 	 */
 	public ArticleContainerEditorPage(FormEditor editor) {
-		super(editor, ArticleContainerEditorPage.PAGE_ID, "Articles");
+		super(editor, ArticleContainerEditorPage.PAGE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorPage.page.name")); //$NON-NLS-1$
 	}
 	
 	/**
@@ -121,7 +122,7 @@ extends CompositeFormPage
 				throw new RuntimeException(e);
 			}
 			if (factory == null) 
-				throw new IllegalStateException("Could not find a ArticleContainerEdit for the articleContainerClass: " + articleEditorClass);
+				throw new IllegalStateException("Could not find a ArticleContainerEdit for the articleContainerClass: " + articleEditorClass); //$NON-NLS-1$
 			articleContainerEdit = factory.createArticleContainerEdit();
 			articleContainerEdit.init(getArticleContainerEditorInput().getArticleContainerID());
 		}

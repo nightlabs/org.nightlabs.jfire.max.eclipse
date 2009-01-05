@@ -101,7 +101,7 @@ extends XComposite
 
 	public ProductID getProductID(ProgressMonitor monitor)
 	{
-		monitor.beginTask("Check Product ID", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.job.name"), 100); //$NON-NLS-1$
 		try {
 			Collection<IProductIDParser> parsers = ProductIDParserRegistry.sharedInstance().getProductIDParser();
 			for (IProductIDParser parser : parsers) {

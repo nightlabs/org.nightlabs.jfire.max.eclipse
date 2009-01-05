@@ -33,7 +33,7 @@ public class ReservationEditorInput extends NullEditorInput {
 	@Override
 	public String getName()
 	{
-		return Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationEditorInput.reservationList") + " " + getProductTypeName(); //$NON-NLS-1$
+		return Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationEditorInput.reservationList") + " " + getProductTypeName(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public String getProductTypeName()

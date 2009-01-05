@@ -347,7 +347,7 @@ implements IProductTypeQuickListFilter
 	 */
 	protected QuickListFilterQueryResultKey createQueryResultCacheKey(ProgressMonitor monitor) {
 		QueryCollection<VendorDependentQuery> qc = getQueryCollection(monitor);
-		monitor.beginTask("Creating cache key for query", 10);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeQuickListFilter.job.name"), 10); //$NON-NLS-1$
 		if (defaultQueryStore == null && qc != null) {
 			// FIXME: If this is null we have to obtain it this way, as a queryCollection does not know its QueryStore, 
 			// this should done more efficiently

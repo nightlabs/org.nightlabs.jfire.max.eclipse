@@ -184,7 +184,7 @@ public class ProductTypeRelatedQueryStateTable
 
 				stateDescriptions[4] = new ProductTypeStateDescription(
 						query,
-						"User is allowed to sell",
+						Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeRelatedQueryStateTable.userAllowedToSell.text"), //$NON-NLS-1$
 						AbstractProductTypeQuery.FieldName.permissionGrantedToSell
 				);
 				return stateDescriptions;

@@ -143,7 +143,7 @@ implements ISelectionHandler
 			if (element instanceof String) {
 				if (columnIndex == 0)
 					return (String) element;
-				return "";
+				return ""; //$NON-NLS-1$
 			}
 			if (!(element instanceof ProductTypeGroupNode))
 				throw new IllegalArgumentException("Expected ProductTypeGroupNode as element found "+element.getClass().getName()); //$NON-NLS-1$

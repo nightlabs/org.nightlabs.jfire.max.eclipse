@@ -15,6 +15,7 @@ import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.TransferWizard;
 
 /**
@@ -39,7 +40,7 @@ extends ErrorDialog
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{
-		createButton(parent, MANUAL_SOLVE_ID, "Solve Manual", false);
+		createButton(parent, MANUAL_SOLVE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.QuickSaleErrorDialog.button.solveManual.text"), false); //$NON-NLS-1$
 		super.createButtonsForButtonBar(parent);
 	}
 

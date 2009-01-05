@@ -182,11 +182,11 @@ extends ResizableTitleAreaDialog
 	}
 
 	protected String getMessage() {
-		return "An Error Occured";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message"); //$NON-NLS-1$
 	}
 
 	protected String getTitle() {
-		String title = "Error";
+		String title = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title"); //$NON-NLS-1$
 		if (paymentDatas != null && deliveryDatas != null) {
 			title = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title_paymentAndDeliveryFailed"); //$NON-NLS-1$
 		}
@@ -220,10 +220,10 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{
-		createButton(parent, AUTOMATIC_SOLVE_ID, "Retry", true);
-		createButton(parent, SEND_ERROR_REPORT_ID, org.nightlabs.base.ui.resource.Messages.getString("org.nightlabs.base.ui.exceptionhandler.DefaultErrorDialog.errorReportButton.text"), false); //$NON-NLS-1$
+		createButton(parent, AUTOMATIC_SOLVE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.retry.text"), true); //$NON-NLS-1$
+		createButton(parent, SEND_ERROR_REPORT_ID, "", false); //$NON-NLS-1$
 //		super.createButtonsForButtonBar(parent);
-		createButton(parent, IGNORE_ID, "Ignore", false);
+		createButton(parent, IGNORE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.ignore.text"), false); //$NON-NLS-1$
 		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
 	}
 
