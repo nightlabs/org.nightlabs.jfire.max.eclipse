@@ -6,6 +6,7 @@ import javax.jdo.JDOHelper;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
@@ -65,6 +66,7 @@ implements IProductTypeDetailPageController<ProductTypeType>
 		NestedProductTypeLocal.FETCH_GROUP_PACKAGE_PRODUCT_TYPE,
 		ProductType.FETCH_GROUP_INNER_PRICE_CONFIG,
 		ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
+		FormulaPriceConfig.FETCH_GROUP_PACKAGING_RESULT_PRICE_CONFIGS,
 		ProductType.FETCH_GROUP_OWNER,
 		ProductType.FETCH_GROUP_VENDOR,
 		LegalEntity.FETCH_GROUP_PERSON,
