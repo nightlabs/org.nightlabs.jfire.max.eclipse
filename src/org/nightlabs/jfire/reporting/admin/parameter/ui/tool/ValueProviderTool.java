@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.reporting.admin.parameter.ui.tool;
 
 import org.eclipse.gef.Request;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.tools.CreationTool;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.ModelCreationFactory;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.request.ValueProviderCreateRequest;
@@ -56,10 +55,5 @@ extends CreationTool
 		if (creationInProgress)
 			return false;
 		return super.handleFocusLost();
-	}
-	
-	@Override
-	protected void setCurrentCommand(Command c) {
-		super.setCurrentCommand(c);
 	}
 }
