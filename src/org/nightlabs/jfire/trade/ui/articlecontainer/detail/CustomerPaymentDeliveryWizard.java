@@ -32,22 +32,27 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 
 	@Override
 	public void addPages() {
-		personSearchWizardPage = new ExtendedPersonSearchWizardPage(personSearchText, true, true) {
+		addPersonSearchPage();
+		super.addPages();
+	}
+
+	protected ExtendedPersonSearchWizardPage createPersonSearchWizardPage()
+	{
+		ExtendedPersonSearchWizardPage personPage = new ExtendedPersonSearchWizardPage(personSearchText, true, true) {
 			@Override
 			public void onAdditionalDataLoaded() {
 				clearCustomerGroupIDs();
 				addCustomerGroupID((CustomerGroupID) JDOHelper.getObjectId(getDefaultCustomerGroup()));
-//			if (getSelectedLegalEntity() != null)
-//				setCustomerID((AnchorID) JDOHelper.getObjectId(getSelectedLegalEntity()));
-
 				reloadPaymentDeliveryModes();
 			}
 		};
+		return personPage;
+	}
 
+	protected void addPersonSearchPage()
+	{
+		personSearchWizardPage = createPersonSearchWizardPage();
 		addPage(personSearchWizardPage);
-		super.addPages();
-
-//		getPaymentEntryPages().get(0);
 	}
 
 	@Override
@@ -75,5 +80,17 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		}
 
 		return super.performFinish();
+	}
+
+	protected ExtendedPersonSearchWizardPage getPersonSearchWizardPage() {
+		return personSearchWizardPage;
+	}
+
+	protected OrderID getOrderID() {
+		return orderID;
+	}
+
+	protected String getPersonSearchText() {
+		return personSearchText;
 	}
 }
