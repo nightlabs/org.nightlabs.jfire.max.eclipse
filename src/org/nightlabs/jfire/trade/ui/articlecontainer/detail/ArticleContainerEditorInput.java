@@ -37,7 +37,7 @@ import org.nightlabs.util.Util;
 
 
 /**
- * 
+ *
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
@@ -45,7 +45,7 @@ public class ArticleContainerEditorInput
 implements IEditorInput
 {
 	private ArticleContainerID articleContainerID;
-	
+
 	public ArticleContainerEditorInput(ArticleContainerID articleContainerID)
 	{
 		this.articleContainerID = articleContainerID;
@@ -72,8 +72,7 @@ implements IEditorInput
 	 */
 	public String getToolTipText()
 	{
-		// TODO this needs to be implemented correctly and display some useful info about the articleContainer
-		return "It needs a title tooltip to work!"; //$NON-NLS-1$
+		return getName(); //$NON-NLS-1$
 	}
 
 	/**
@@ -90,18 +89,18 @@ implements IEditorInput
 	}
 
 	private Class<?> articleContainerClass = null;
-	
+
 	public Class<?> getArticleContainerClass() {
 		if (articleContainerClass == null) {
 			articleContainerClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(getArticleContainerID());
 		}
 		return articleContainerClass;
 	}
-	
+
 	@Override
 	public String getName()
 	{
-		return 
+		return
 			TradePlugin.getArticleContainerTypeString(getArticleContainerClass(), true) + " " +  //$NON-NLS-1$
 			ArticleContainerUtil.getArticleContainerID(getArticleContainerID());
 	}
@@ -114,7 +113,7 @@ implements IEditorInput
 	{
 		return TradePlugin.getArticleContainerImageDescriptor(getArticleContainerClass());
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -133,6 +132,6 @@ implements IEditorInput
 
 		return Util.equals(this.articleContainerID, other.articleContainerID);
 	}
-	
-	
+
+
 }

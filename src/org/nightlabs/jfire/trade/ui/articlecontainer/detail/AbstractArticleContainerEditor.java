@@ -1,6 +1,3 @@
-/**
- *
- */
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail;
 
 import java.util.List;
