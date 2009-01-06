@@ -18,7 +18,10 @@ public class AccountNameQuickSearchEntry
 	@Override
 	protected void doSetSearchConditionValue(AccountQuery query, String value)
 	{
-		query.setAccountName(".*" + value + ".*"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (value != null && !value.isEmpty())
+			query.setAccountName(".*" + value + ".*"); //$NON-NLS-1$ //$NON-NLS-2$
+		else
+			query.setAccountName(null);
 	}
 
 	@Override
