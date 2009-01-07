@@ -1,9 +1,15 @@
 package org.nightlabs.jfire.issuetracking.ui.project;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
@@ -52,18 +58,31 @@ extends EntityEditorPageWithProgress
 	}
 
 	private ProjectEditorPageController controller;
+	private ScrolledComposite sc;
 	
 	@Override
 	protected void addSections(Composite parent) {
 		controller = (ProjectEditorPageController)getPageController();
 		
-		projectSection = new ProjectSection(this, parent, controller);
+		sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
+				  SWT.V_SCROLL);
+		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		final XComposite c = new XComposite(sc, SWT.NONE);
+		GridLayout layout = (GridLayout)c.getLayout();
+		layout.makeColumnsEqualWidth = true;
+
+		sc.setContent(c);
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+
+		projectSection = new ProjectSection(this, c, controller);
 		getManagedForm().addPart(projectSection);
 		
-		projectPhaseSection = new ProjectPhaseSection(this, parent, controller);
+		projectPhaseSection = new ProjectPhaseSection(this, c, controller);
 		getManagedForm().addPart(projectPhaseSection);
 		
-		projectMemberSection = new ProjectMemberSection(this, parent, controller);
+		projectMemberSection = new ProjectMemberSection(this, c, controller);
 		getManagedForm().addPart(projectMemberSection);
 		
 		if (controller.isLoaded()) {
@@ -101,5 +120,10 @@ extends EntityEditorPageWithProgress
 	
 	protected ProjectEditorPageController getController() {
 		return (ProjectEditorPageController)getPageController();
+	}
+	
+	@Override
+	protected boolean includeFixForVerticalScrolling() {
+		return false;
 	}
 }
