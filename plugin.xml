@@ -257,6 +257,14 @@
         <page
             class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
             id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.name"/>
+        <page
+            class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage"
+            id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage" name="Modes of Payment (User)"/>
+        <page
+              class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
+              name="Modes of Payment (Workstation)">
+        </page>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory

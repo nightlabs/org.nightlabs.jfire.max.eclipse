@@ -1,12 +1,17 @@
 package org.nightlabs.jfire.trade.ui.modeofpayment;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -15,8 +20,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.internal.forms.widgets.SWTUtil;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.dao.ModeOfPaymentFlavourDAO;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
+import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
 public class ModeOfPaymentFlavourTable
@@ -65,12 +73,22 @@ public class ModeOfPaymentFlavourTable
 		// header is not visible => no externalisation needed
 		new TableColumn(table, SWT.LEFT).setText("ModeOfPaymentFlavour"); //$NON-NLS-1$
 		table.setLayout(new WeightedTableLayout(new int[] {1}));
+		tableViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				if (!(e1 instanceof ModeOfPaymentFlavour && e2 instanceof ModeOfPaymentFlavour))
+					return super.compare(viewer, e1, e2);
+				String name1 = ((ModeOfPaymentFlavour) e1).getName().getText(NLLocale.getDefault().getLanguage());;
+				String name2 = ((ModeOfPaymentFlavour) e2).getName().getText(NLLocale.getDefault().getLanguage());;
+				return name1.compareTo(name2);
+			}
+		});
 	}
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
 
@@ -86,5 +104,26 @@ public class ModeOfPaymentFlavourTable
 		else
 			return (ModeOfPaymentFlavour) sel.getFirstElement();
 	}
-
+	
+	/**
+	 * Obtains the referenced {@link ModeOfPaymentFlavour}s using the {@link ModeOfPaymentFlavourDAO}
+	 * and sets them as input for the table.
+	 * <p>
+	 * This might be called from a non-UI thread.
+	 * </p>
+	 * 
+	 * @param modeOfPaymentFlavourIDs The ids of the {@link ModeOfPaymentFlavour}s to set.
+	 * @param monitor The monitor to report progress to.
+	 */
+	public void setModeOfPaymentFlavourIDs(Collection<ModeOfPaymentFlavourID> modeOfPaymentFlavourIDs, ProgressMonitor monitor) {
+		final Collection<ModeOfPaymentFlavour> flavours = ModeOfPaymentFlavourDAO.sharedInstance().getModeOfPaymentFlavours(
+				new HashSet<ModeOfPaymentFlavourID>(modeOfPaymentFlavourIDs), 
+				FETCH_GROUPS_MODE_OF_PAYMENT_FLAVOUR, 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		getTable().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				setInput(flavours);
+			}
+		});
+	}
 }

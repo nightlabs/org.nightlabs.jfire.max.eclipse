@@ -422,6 +422,7 @@ implements IPaymentEntryPage
 					c = getAccountingManager().getAvailableModeOfPaymentFlavoursForAllCustomerGroups(
 							wizard.getCustomerGroupIDs(),
 							ModeOfPaymentFlavour.MERGE_MODE_INTERSECTION,
+							true,
 							new String[]{
 									FetchPlan.DEFAULT,
 									ModeOfPaymentFlavour.FETCH_GROUP_THIS_MODE_OF_PAYMENT_FLAVOUR,
@@ -435,14 +436,30 @@ implements IPaymentEntryPage
 
 				modeOfPaymentFlavourList.clear();
 				modeOfPaymentFlavourList.addAll(c);
-				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
-					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
-					{
-						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
-						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
-						return name0.compareTo(name1);
-					}
-				});
+				
+//				// filter the list by the entries in the config-module, 
+//				// filtering is now done on server
+//				ModeOfPaymentConfigModule mopCfMod = ConfigUtil.getUserCfMod(
+//						ModeOfPaymentConfigModule.class, 
+//						new String[] {FetchPlan.DEFAULT, ModeOfPaymentConfigModule.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOURIDS}, 
+//						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+//				
+//				for (Iterator<ModeOfPaymentFlavour> it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
+//					ModeOfPaymentFlavourID flavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(it.next());
+//					if (mopCfMod.getModeOfPaymentFlavourIDs().contains(flavourID)) {
+//						it.remove();
+//					}
+//				}
+				
+				
+//				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
+//					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
+//					{
+//						String name0 = mopf0.getName().getText(NLLocale.getDefault().getLanguage());
+//						String name1 = mopf1.getName().getText(NLLocale.getDefault().getLanguage());
+//						return name0.compareTo(name1);
+//					}
+//				});
 
 				PaymentEntryPageCfMod paymentEntryPageCfMod = getPaymentEntryPageCfMod();
 				final List<ModeOfPaymentFlavour> selList = new ArrayList<ModeOfPaymentFlavour>(1);
