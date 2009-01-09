@@ -3,6 +3,7 @@ package org.nightlabs.jfire.trade.ui.store.search;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -35,42 +36,42 @@ extends AbstractTableComposite<ProductType>
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableLayout layout = new TableLayout();
-		
+
 		TableColumn name = new TableColumn(table, SWT.LEFT);
 		name.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.nameTableColumn.text")); //$NON-NLS-1$
 		name.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.nameTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-		 
+
 		TableColumn published = new TableColumn(table, SWT.LEFT);
 		published.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.publishedTableColumn.text")); //$NON-NLS-1$
 		published.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.publishedTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(1));
-		
+
 		TableColumn confirmed = new TableColumn(table, SWT.LEFT);
 		confirmed.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.confirmedTableColumn.text")); //$NON-NLS-1$
 		confirmed.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.confirmedTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(1));
-		
+
 		TableColumn saleable = new TableColumn(table, SWT.LEFT);
 		saleable.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.saleableTableColumn.text")); //$NON-NLS-1$
 		saleable.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.saleableTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(1));
-		
+
 		TableColumn closed = new TableColumn(table, SWT.LEFT);
 		closed.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.closedTableColumn.text")); //$NON-NLS-1$
 		closed.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.closedTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(1));
-		
+
 		TableColumn deliveryConf = new TableColumn(table, SWT.LEFT);
 		deliveryConf.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.deliveryConfigurationTableColumn.text")); //$NON-NLS-1$
 		deliveryConf.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.deliveryConfigurationTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-		
+
 		TableColumn innerPriceConf = new TableColumn(table, SWT.LEFT);
 		innerPriceConf.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.priceConfigTableColumn.text")); //$NON-NLS-1$
 		innerPriceConf.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.priceConfigTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-		
+
 //		TableColumn localAccountantDelegate = new TableColumn(table, SWT.LEFT);
 //		localAccountantDelegate.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.localAccountantDelegateTableColumn.text")); //$NON-NLS-1$
 //		localAccountantDelegate.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.localAccountantDelegateTableColumn.toolTipText")); //$NON-NLS-1$
@@ -80,12 +81,12 @@ extends AbstractTableComposite<ProductType>
 		owner.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.ownerTableColumn.text")); //$NON-NLS-1$
 		owner.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.ownerTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-		
+
 		TableColumn nestedProductTypeCount = new TableColumn(table, SWT.LEFT);
 		nestedProductTypeCount.setText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.nestedProductTypeCountTableColumn.text")); //$NON-NLS-1$
 		nestedProductTypeCount.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.store.search.ProductTypeTableComposite.nestedProductTypeCountTableColumn.toolTipText")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10));
-				
+
 		table.setLayout(layout);
 	}
 
@@ -93,6 +94,7 @@ extends AbstractTableComposite<ProductType>
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ProductTypeContentProvider());
 		tableViewer.setLabelProvider(new ProductTypeLabelProvider());
+		tableViewer.setSorter(new ViewerSorter());
 	}
 
 	class ProductTypeLabelProvider
@@ -142,7 +144,7 @@ extends AbstractTableComposite<ProductType>
 		{
 			if (element instanceof String)
 				return null;
-			
+
 			ProductType pt = (ProductType) element;
 			switch (columnIndex) {
 				case(1):
@@ -177,10 +179,10 @@ extends AbstractTableComposite<ProductType>
 			return super.getColumnImage(element, columnIndex);
 		}
 	}
-	
+
 	class ProductTypeContentProvider
 	extends TableContentProvider
 	{
-		
+
 	}
 }
