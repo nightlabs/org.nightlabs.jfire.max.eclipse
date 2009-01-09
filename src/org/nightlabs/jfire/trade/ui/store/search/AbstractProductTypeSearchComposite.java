@@ -189,8 +189,10 @@ public abstract class AbstractProductTypeSearchComposite
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						productTypeTableComposite.setInput(new String[] {Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.productTypeTableComposite.input_searching")}); //$NON-NLS-1$
+					public void run()
+					{
+						if (productTypeTableComposite != null && !productTypeTableComposite.isDisposed())
+							productTypeTableComposite.setInput(new String[] {Messages.getString("org.nightlabs.jfire.trade.ui.store.search.AbstractProductTypeSearchComposite.productTypeTableComposite.input_searching")}); //$NON-NLS-1$
 					}
 				});
 
@@ -229,10 +231,12 @@ public abstract class AbstractProductTypeSearchComposite
 
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							productTypeTableComposite.setInput(productTypes);
-							if (productTypeTableComposite.getItemCount() == 1) {
-								productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
-								productTypeTableComposite.setFocus();
+							if (productTypeTableComposite != null && !productTypeTableComposite.isDisposed()) {
+								productTypeTableComposite.setInput(productTypes);
+								if (productTypeTableComposite.getItemCount() == 1) {
+									productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
+									productTypeTableComposite.setFocus();
+								}
 							}
 						}
 					});
