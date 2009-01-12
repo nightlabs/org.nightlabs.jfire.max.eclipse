@@ -19,14 +19,18 @@ extends AbstractUserConfigModulePreferencePage
 	protected void updatePreferencePage()
 	{
 		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) getConfigModuleController().getConfigModule();
-		pqConfigComposite.loadData(pqcm);
+		if (!pqConfigComposite.isDisposed()) {
+			pqConfigComposite.loadData(pqcm);
+		}
 	}
 
 	@Override
 	public void updateConfigModule()
 	{
 		DeliveryQueueConfigModule pqcm = (DeliveryQueueConfigModule) getConfigModuleController().getConfigModule();
-		pqConfigComposite.storeChanges(pqcm);
+		if (!pqConfigComposite.isDisposed()) {
+			pqConfigComposite.storeChanges(pqcm);
+		}
 	}
 
 	@Override
@@ -37,6 +41,8 @@ extends AbstractUserConfigModulePreferencePage
 	@Override
 	protected void setBodyContentEditable(boolean editable)
 	{
-		pqConfigComposite.setReadOnly(! editable);
+		if (!pqConfigComposite.isDisposed()) {
+			pqConfigComposite.setReadOnly(! editable);
+		}
 	}
 }
