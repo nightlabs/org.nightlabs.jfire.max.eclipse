@@ -77,9 +77,11 @@ extends AbstractUserConfigModulePreferencePage
 
 	@Override
 	protected void updatePreferencePage() {
-		reportLayoutTree.setConfigModule((ReportLayoutConfigModule)
-				getConfigModuleController().getConfigModule());
-		reportLayoutTree.getTreeViewer().refresh();
+		if (!reportLayoutTree.isDisposed()) {
+			reportLayoutTree.setConfigModule((ReportLayoutConfigModule)
+					getConfigModuleController().getConfigModule());
+			reportLayoutTree.getTreeViewer().refresh();
+		}
 	}
 
 	@Override
@@ -104,7 +106,9 @@ extends AbstractUserConfigModulePreferencePage
 	@Override
 	protected void setBodyContentEditable(boolean editable)
 	{
-		reportLayoutTree.setEditable(editable);
+		if (!reportLayoutTree.isDisposed()) {
+			reportLayoutTree.setEditable(editable);
+		}
 	}
 
 }
