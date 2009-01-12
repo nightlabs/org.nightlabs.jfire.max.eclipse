@@ -53,27 +53,25 @@ extends AbstractArticleContainerListComposite<Offer>
 		return Offer.class;
 	}
 
-	@Implement
-	@Override
-	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDPrefixTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
-
-	@Implement
-	@Override
-	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
+//	@Override
+//	protected void createArticleContainerIDPrefixTableColumn(
+//			TableViewer tableViewer, Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.LEFT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDPrefixTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
+//
+//	@Override
+//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
+//			Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
 
 	@Implement
 	@Override
@@ -84,7 +82,7 @@ extends AbstractArticleContainerListComposite<Offer>
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.finalizeDateTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.finalizeUserTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));

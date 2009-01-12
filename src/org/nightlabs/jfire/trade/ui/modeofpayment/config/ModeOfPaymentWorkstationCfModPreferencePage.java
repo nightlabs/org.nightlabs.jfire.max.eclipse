@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.modeofpayment.config;
 
@@ -13,7 +13,7 @@ import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 /**
  * Workstation preference page for {@link ModeOfPaymentConfigModule}.
  * It delegates to {@link ModeOfPaymentConfigModuleComposite}.
- * 
+ *
  * @author Alexander Bieber
  * @version $Revision$, $Date$
  */
@@ -54,7 +54,9 @@ public class ModeOfPaymentWorkstationCfModPreferencePage extends AbstractWorksta
 	@Override
 	public void updateConfigModule() {
 		ModeOfPaymentConfigModule configModule = (ModeOfPaymentConfigModule) getConfigModuleController().getConfigModule();
-		configModuleComposite.updateConfigModule(configModule);
+		if (!configModuleComposite.isDisposed()) {
+			configModuleComposite.updateConfigModule(configModule);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +65,9 @@ public class ModeOfPaymentWorkstationCfModPreferencePage extends AbstractWorksta
 	@Override
 	protected void updatePreferencePage() {
 		ModeOfPaymentConfigModule configModule = (ModeOfPaymentConfigModule) getConfigModuleController().getConfigModule();
-		configModuleComposite.updateComposite(configModule);
+		if (!configModuleComposite.isDisposed()) {
+			configModuleComposite.updateComposite(configModule);
+		}
 	}
 
 }

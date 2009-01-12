@@ -67,12 +67,15 @@ public class TariffOrderCfModPrefPage extends AbstractUserConfigModulePreference
 
 	@Override
 	protected void updatePreferencePage() {
-		tariffOrderCfModComposite.loadTariffs(getConfigModule());
+		if (!tariffOrderCfModComposite.isDisposed()) {
+			tariffOrderCfModComposite.loadTariffs(getConfigModule());
+		}
 	}
 
 	@Override
-	protected void setEditable(boolean editable)
-	{
-		tariffOrderCfModComposite.setEditable(editable);
+	protected void setEditable(boolean editable) {
+		if (!tariffOrderCfModComposite.isDisposed()) {
+			tariffOrderCfModComposite.setEditable(editable);
+		}
 	}
 }

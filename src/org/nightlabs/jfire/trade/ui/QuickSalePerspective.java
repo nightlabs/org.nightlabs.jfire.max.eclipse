@@ -4,6 +4,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveDescriptor;
@@ -164,20 +165,24 @@ implements IPerspectiveFactory
 		{
 			final IWorkbenchPage page = RCPUtil.getActiveWorkbenchPage();
 			// open editor if necessary
-			if (page != null && page.getActiveEditor() == null && page.getEditorReferences().length == 0)
+			if (page != null)
 			{
-				try {
-					Login.getLogin();
-				} catch (LoginException e) {
-					throw new RuntimeException(e);
+				IEditorReference[] references = page.getEditorReferences();
+				if (references.length == 0) {
+					openQuickSaleEditor();
 				}
-				ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorPage.createEditorInput();
-				if (input != null) {
-					logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
-					openEditor(input, false);
+				else {
+					boolean articleContainerFound = false;
+					for (IEditorReference reference : references) {
+						if (ArticleContainerQuickSaleEditor.ID_EDITOR.equals(reference.getId())) {
+							articleContainerFound = true;
+							break;
+						}
+					}
+					if (!articleContainerFound) {
+						openQuickSaleEditor();
+					}
 				}
-				else
-					logger.warn("Opening QuickSaleEditor not possible, because input is null!"); //$NON-NLS-1$
 			}
 			// commented because now with reverse product action additional editor can be opened in QuickSalePerspective
 //			if (page != null) {
@@ -208,6 +213,22 @@ implements IPerspectiveFactory
 //				}
 //			}
 		}
+	}
+
+	private static void openQuickSaleEditor()
+	{
+		try {
+			Login.getLogin();
+		} catch (LoginException e) {
+			throw new RuntimeException(e);
+		}
+		ArticleContainerEditorInput input = ArticleContainerQuickSaleEditorPage.createEditorInput();
+		if (input != null) {
+			logger.info("Opening QuickSaleEditor: input=" + input); //$NON-NLS-1$
+			openEditor(input, false);
+		}
+		else
+			logger.warn("Opening QuickSaleEditor not possible, because input is null!"); //$NON-NLS-1$
 	}
 
 	private static void checkSelectionListenerAdded() {

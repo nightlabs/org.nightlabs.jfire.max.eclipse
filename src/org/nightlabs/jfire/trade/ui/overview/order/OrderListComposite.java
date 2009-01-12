@@ -23,12 +23,12 @@ import org.nightlabs.l10n.DateFormatter;
 public class OrderListComposite
 extends AbstractArticleContainerListComposite<Order>
 {
-	public static final String[] FETCH_GROUPS_ORDER = 
-		new String[] {FetchPlan.DEFAULT, Order.FETCH_GROUP_ARTICLES, 
+	public static final String[] FETCH_GROUPS_ORDER =
+		new String[] {FetchPlan.DEFAULT, Order.FETCH_GROUP_ARTICLES,
 		Order.FETCH_GROUP_CHANGE_USER, Order.FETCH_GROUP_CREATE_USER,
-		Order.FETCH_GROUP_CURRENCY, Order.FETCH_GROUP_CUSTOMER, 
+		Order.FETCH_GROUP_CURRENCY, Order.FETCH_GROUP_CUSTOMER,
 		Order.FETCH_GROUP_VENDOR, LegalEntity.FETCH_GROUP_PERSON};
-	
+
 	public OrderListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
@@ -38,27 +38,25 @@ extends AbstractArticleContainerListComposite<Order>
 		return Order.class;
 	}
 
-	@Implement
-	@Override
-	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDPrefixTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
-
-	@Implement
-	@Override
-	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
+//	@Override
+//	protected void createArticleContainerIDPrefixTableColumn(
+//			TableViewer tableViewer, Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.LEFT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDPrefixTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
+//
+//	@Override
+//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
+//			Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
 
 	@Implement
 	@Override
@@ -88,12 +86,12 @@ extends AbstractArticleContainerListComposite<Order>
 				if (order.getChangeDT() != null)
 					return DateFormatter.formatDateShort(order.getChangeDT(), false);
 			}
-			
+
 			if (columnIndex == (columnCount-2)) {
 				if (order.getChangeUser() != null)
 					return order.getChangeUser().getName();
 			}
-			
+
 			if (columnIndex == (columnCount-1))
 				return order.getOrderIDPrefix();
 		}

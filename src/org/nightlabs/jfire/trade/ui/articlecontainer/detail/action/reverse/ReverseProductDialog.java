@@ -103,7 +103,6 @@ implements IErrorMessageDisplayer
 	}
 
 	private ProgressMonitor getProgressMonitor() {
-//		return new NullProgressMonitor();
 		return new ProgressMonitorWrapper(progressMonitorPart);
 	}
 }

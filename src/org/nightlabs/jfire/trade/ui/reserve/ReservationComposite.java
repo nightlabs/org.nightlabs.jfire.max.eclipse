@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.layout.GridData;
@@ -16,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.nightlabs.base.ui.action.ISelectionAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.AbstractJDOQuery;
@@ -24,7 +28,6 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.query.OfferQuery;
-import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction;
@@ -40,7 +43,7 @@ extends XComposite
 {
 	private ReservationTable reservationTable = null;
 	private Form form;
-//	private Button refreshButton;
+	private EditOfferAction editAction;
 
 	/**
 	 * @param parent
@@ -75,23 +78,36 @@ extends XComposite
 		reservationTable = new ReservationTable(form.getBody(), getBorderStyle());
 		reservationTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		// add actions to context menu
 		MenuManager menuManager = new MenuManager();
-		final List<AbstractArticleContainerAction> actions = new ArrayList<AbstractArticleContainerAction>();
-		actions.add(new EditOfferAction());
+		final List<IAction> actions = new ArrayList<IAction>();
+		editAction = new EditOfferAction();
+		actions.add(editAction);
 		actions.add(new PrintOfferAction());
 		actions.add(new ShowOfferAction());
-		for (AbstractArticleContainerAction action : actions) {
+		actions.add(new PayAndDeliverReservationAction());
+		for (IAction action : actions) {
 			menuManager.add(action);
 		}
 		Menu contextMenu = menuManager.createContextMenu(reservationTable.getControl());
 		reservationTable.getControl().setMenu(contextMenu);
-
 		reservationTable.addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				for (AbstractArticleContainerAction action : actions) {
-					action.setSelection(event.getSelection());
+				for (IAction action : actions) {
+					if (action instanceof ISelectionAction) {
+						ISelectionAction selectionAction = (ISelectionAction) action;
+						selectionAction.setSelection(event.getSelection());
+					}
 				}
+			}
+		});
+
+		// double click is edit
+		reservationTable.addDoubleClickListener(new IDoubleClickListener(){
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				editAction.run();
 			}
 		});
 	}

@@ -20,6 +20,6 @@ public class OfferIDQuickSearchEntry
 	@Override
 	protected String getModifiedQueryFieldName()
 	{
-		return AbstractArticleContainerQuery.FieldName.articleContainerID;
+		return AbstractArticleContainerQuery.FieldName.articleContainerIDString;
 	}
 }

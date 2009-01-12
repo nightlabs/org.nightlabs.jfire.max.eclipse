@@ -43,16 +43,20 @@ extends AbstractWorkstationConfigModulePreferencePage
 
 	@Override
 	public void updateConfigModule() {
-		offerCfModPrefPageComposite.updateConfigModule(
-				(OfferConfigModule) getConfigModuleController().getConfigModule()
-		);
+		if (!offerCfModPrefPageComposite.isDisposed()) {
+			offerCfModPrefPageComposite.updateConfigModule(
+					(OfferConfigModule) getConfigModuleController().getConfigModule()
+			);
+		}
 	}
 
 	@Override
 	protected void updatePreferencePage() {
-		offerCfModPrefPageComposite.updatePreferencePage(
-				(OfferConfigModule) getConfigModuleController().getConfigModule()
-		);
+		if (!offerCfModPrefPageComposite.isDisposed()) {
+			offerCfModPrefPageComposite.updatePreferencePage(
+					(OfferConfigModule) getConfigModuleController().getConfigModule()
+			);
+		}
 	}
 
 }

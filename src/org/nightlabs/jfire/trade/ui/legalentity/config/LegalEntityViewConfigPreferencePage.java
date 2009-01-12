@@ -179,13 +179,11 @@ extends AbstractUserConfigModulePreferencePage
 		downButton.setEnabled((!structFieldTable.isSelectedLast()) && structFieldTable.getFirstSelectedElement() != null);
 	}
 
-//	@Override
-//	protected void updatePreferencePage(ConfigModule configModule) {
-//		structFieldTable.setInput(configModule);
-//	}
 	@Override
 	protected void updatePreferencePage() {
-		structFieldTable.setInput(getConfigModuleController().getConfigModule());
+		if (!structFieldTable.isDisposed()) {
+			structFieldTable.setInput(getConfigModuleController().getConfigModule());
+		}
 	}
 
 	protected void discardPreferencePageWidgets() {

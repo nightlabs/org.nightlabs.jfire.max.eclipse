@@ -9,7 +9,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -18,6 +17,7 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
@@ -38,7 +38,7 @@ extends AbstractTableComposite<O>
 
 	private LinkedList<Integer> weightedColumns;
 	private LinkedList<Integer> fixedColumns;
-	
+
 	protected void addFixedColumn(int columnWidth)
 	{
 		if (weightedColumns == null)
@@ -49,7 +49,7 @@ extends AbstractTableComposite<O>
 		weightedColumns.add(Integer.valueOf(-1));
 		fixedColumns.add(Integer.valueOf(columnWidth));
 	}
-	
+
 	protected void addWeightedColumn(int columnWeight)
 	{
 		if (weightedColumns == null)
@@ -60,7 +60,11 @@ extends AbstractTableComposite<O>
 		weightedColumns.add(Integer.valueOf(columnWeight));
 		fixedColumns.add(Integer.valueOf(-1));
 	}
-	
+
+	protected String getIDColumnText() {
+		return "ID";
+	}
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -71,46 +75,58 @@ extends AbstractTableComposite<O>
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.organisationIDTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(10, 50));
-		addWeightedColumn(10);
+		addWeightedColumn(15);
 
-		createArticleContainerIDPrefixTableColumn(tableViewer, table);
-		createArticleContainerIDTableColumn(tableViewer, table);
+//		createArticleContainerIDPrefixTableColumn(tableViewer, table);
+//		createArticleContainerIDTableColumn(tableViewer, table);
+
+		c = new TableColumn(table, SWT.LEFT);
+		c.setText(getIDColumnText());
+		c.setToolTipText(getIDColumnText());
+		addWeightedColumn(10);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.customerTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.customerTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(8, 50));
-		addWeightedColumn(8);
+		addWeightedColumn(15);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.vendorTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.vendorTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(9, 50));
-		addWeightedColumn(9);
+		addWeightedColumn(15);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createDateTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createDateTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(10));
 		addWeightedColumn(9);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createUserTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.createUserTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(10));
 		addWeightedColumn(10);
 
 		c = new TableColumn(table, SWT.LEFT);
 		c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.amountTableColumn.text")); //$NON-NLS-1$
+		c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.amountTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(c, new ColumnWeightData(10));
-		addWeightedColumn(8);
+		addWeightedColumn(5);
 
 		if (Statable.class.isAssignableFrom(getArticleContainerClass())) {
 			c = new TableColumn(table, SWT.LEFT);
 			c.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.currentStateTableColumn.text")); //$NON-NLS-1$
+			c.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.currentStateTableColumn.text")); //$NON-NLS-1$
 //			tableLayout.setColumnData(c, new ColumnWeightData(10));
 			addWeightedColumn(10);
 		}
 
 //		table.setLayout(new WeightedTableLayout(new int[] {10, 10, 10, 10, 10, 10, 10, 10}));
-		
+
 		createAdditionalTableColumns(tableViewer, table);
 
 		getTable().setLayout( new WeightedTableLayout(getPrimitiveArray(weightedColumns), getPrimitiveArray(fixedColumns)) );
@@ -129,9 +145,10 @@ extends AbstractTableComposite<O>
 	}
 
 	protected abstract Class<? extends ArticleContainer> getArticleContainerClass();
-	protected abstract void createArticleContainerIDPrefixTableColumn(TableViewer tableViewer, Table table);
-	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table);
 	protected abstract void createAdditionalTableColumns(TableViewer tableViewer, Table table);
+
+//	protected abstract void createArticleContainerIDPrefixTableColumn(TableViewer tableViewer, Table table);
+//	protected abstract void createArticleContainerIDTableColumn(TableViewer tableViewer, Table table);
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
@@ -142,7 +159,7 @@ extends AbstractTableComposite<O>
 			public Image getColumnImage(Object element, int columnIndex) {
 				return AbstractArticleContainerListComposite.this.getColumnImage(element, columnIndex);
 			}
-			@Implement
+			@Override
 			public String getColumnText(Object element, int columnIndex) {
 				return AbstractArticleContainerListComposite.this.getColumnText(element, columnIndex);
 			}
@@ -154,10 +171,10 @@ extends AbstractTableComposite<O>
 		if (articleContainer.getCreateUser() != null) {
 			return articleContainer.getCreateUser().getName();
 		}
-		
+
 		return ""; //$NON-NLS-1$
 	}
-	
+
 	protected String getStateName(Statable statable)
 	{
 		// I think we need to look for the newest State in both, statableLocal and statable! Marco.
@@ -177,11 +194,65 @@ extends AbstractTableComposite<O>
 		return ""; //$NON-NLS-1$
 	}
 
+//	protected Image getColumnImage(Object element, int columnIndex)
+//	{
+//		int firstAdditionalColumnIndex = 8;
+//		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
+//			firstAdditionalColumnIndex = 9;
+//
+//		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
+//		if (additionalColumnIndex < 0)
+//			return null;
+//
+//		return getAdditionalColumnImage(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
+//	}
+//
+//	protected String getColumnText(Object element, int columnIndex)
+//	{
+//		if (element instanceof ArticleContainer) {
+//			ArticleContainer articleContainer = (ArticleContainer) element;
+//			switch (columnIndex) {
+//				case 0:
+//					return articleContainer.getOrganisationID();
+//				case 1:
+//					return articleContainer.getArticleContainerIDPrefix();
+//				case 2:
+//					return articleContainer.getArticleContainerIDAsString();
+//				case 3:
+//					return articleContainer.getCustomer().getPerson().getDisplayName();
+//				case 4:
+//					return articleContainer.getVendor().getPerson().getDisplayName();
+//				case 5:
+//					return DateFormatter.formatDateShort(articleContainer.getCreateDT(), false);
+//				case 6:
+//					return getCreateUserName(articleContainer);
+//				case 7:
+//					return String.valueOf(articleContainer.getArticleCount());
+//			}
+//		}
+//		int firstAdditionalColumnIndex = 8;
+//		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
+//			firstAdditionalColumnIndex = 9;
+//
+//		if (element instanceof Statable && columnIndex == 8) {
+//			Statable statable = (Statable) element;
+//			return getStateName(statable);
+//		}
+//		if (columnIndex == 0)
+//			return String.valueOf(element);
+//
+//		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
+//		if (additionalColumnIndex < 0)
+//			return ""; //$NON-NLS-1$
+//
+//		return getAdditionalColumnText(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
+//	}
+
 	protected Image getColumnImage(Object element, int columnIndex)
 	{
-		int firstAdditionalColumnIndex = 8;
+		int firstAdditionalColumnIndex = 7;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-			firstAdditionalColumnIndex = 9;
+			firstAdditionalColumnIndex = 8;
 
 		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
 		if (additionalColumnIndex < 0)
@@ -198,27 +269,24 @@ extends AbstractTableComposite<O>
 				case 0:
 					return articleContainer.getOrganisationID();
 				case 1:
-					return articleContainer.getArticleContainerIDPrefix();
+					return ArticleContainerUtil.getArticleContainerID(articleContainer);
 				case 2:
-					return articleContainer.getArticleContainerIDAsString();
-//					return ""+articleContainer.getArticleContainerID();
-				case 3:
 					return articleContainer.getCustomer().getPerson().getDisplayName();
-				case 4:
+				case 3:
 					return articleContainer.getVendor().getPerson().getDisplayName();
-				case 5:
+				case 4:
 					return DateFormatter.formatDateShort(articleContainer.getCreateDT(), false);
-				case 6:
+				case 5:
 					return getCreateUserName(articleContainer);
-				case 7:
+				case 6:
 					return String.valueOf(articleContainer.getArticleCount());
 			}
 		}
-		int firstAdditionalColumnIndex = 8;
+		int firstAdditionalColumnIndex = 7;
 		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-			firstAdditionalColumnIndex = 9;
+			firstAdditionalColumnIndex = 8;
 
-		if (element instanceof Statable && columnIndex == 8) {
+		if (element instanceof Statable && columnIndex == 7) {
 			Statable statable = (Statable) element;
 			return getStateName(statable);
 		}

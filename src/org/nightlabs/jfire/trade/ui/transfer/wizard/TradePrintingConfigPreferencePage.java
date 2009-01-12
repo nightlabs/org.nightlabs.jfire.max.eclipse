@@ -12,7 +12,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 public class TradePrintingConfigPreferencePage extends AbstractWorkstationConfigModulePreferencePage {
 
-	
+
 	private AutomaticPrintingOptionsGroup invoiceGroup;
 	private AutomaticPrintingOptionsGroup deliveryNoteGroup;
 
@@ -23,7 +23,7 @@ public class TradePrintingConfigPreferencePage extends AbstractWorkstationConfig
 			public Set<String> getConfigModuleFetchGroups() {
 				return getCommonConfigModuleFetchGroups();
 			}
-		
+
 			@Override
 			public Class<? extends ConfigModule> getConfigModuleClass() {
 				return TradePrintingConfigModule.class;
@@ -38,7 +38,7 @@ public class TradePrintingConfigPreferencePage extends AbstractWorkstationConfig
 		desc = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.description.deliveryNotePrintingOptions"); //$NON-NLS-1$
 		deliveryNoteGroup = new AutomaticPrintingOptionsGroup(parent, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.deliveryNote"), desc); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	@Override
 	public void updateConfigModule() {
 		TradePrintingConfigModule configModule = (TradePrintingConfigModule) getConfigModuleController().getConfigModule();
@@ -51,10 +51,18 @@ public class TradePrintingConfigPreferencePage extends AbstractWorkstationConfig
 	@Override
 	protected void updatePreferencePage() {
 		TradePrintingConfigModule configModule = (TradePrintingConfigModule) getConfigModuleController().getConfigModule();
-		invoiceGroup.setDoPrint(configModule.isPrintInvoiceByDefault());
-		deliveryNoteGroup.setDoPrint(configModule.isPrintDeliveryNoteByDefault());
-		invoiceGroup.setEnteredPrintCount(configModule.getInvoiceCopyCount());
-		deliveryNoteGroup.setEnteredPrintCount(configModule.getDeliveryNoteCopyCount());
+		if (!invoiceGroup.isDisposed()) {
+			invoiceGroup.setDoPrint(configModule.isPrintInvoiceByDefault());
+		}
+		if (!deliveryNoteGroup.isDisposed()) {
+			deliveryNoteGroup.setDoPrint(configModule.isPrintDeliveryNoteByDefault());
+		}
+		if (!invoiceGroup.isDisposed()) {
+			invoiceGroup.setEnteredPrintCount(configModule.getInvoiceCopyCount());
+		}
+		if (!deliveryNoteGroup.isDisposed()) {
+			deliveryNoteGroup.setEnteredPrintCount(configModule.getDeliveryNoteCopyCount());
+		}
 	}
 
 }

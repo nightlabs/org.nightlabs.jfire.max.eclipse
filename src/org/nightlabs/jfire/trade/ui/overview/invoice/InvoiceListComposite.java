@@ -34,29 +34,29 @@ extends AbstractArticleContainerListComposite<Invoice>
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON
 	};
-	
+
 	public InvoiceListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
 
-	@Override
-	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDPrefixTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
-	@Override
-	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
+//	@Override
+//	protected void createArticleContainerIDPrefixTableColumn(
+//			TableViewer tableViewer, Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.LEFT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDPrefixTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
+//	@Override
+//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
+//			Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
 
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
@@ -116,5 +116,5 @@ extends AbstractArticleContainerListComposite<Invoice>
 	protected Class<? extends ArticleContainer> getArticleContainerClass() {
 		return Invoice.class;
 	}
-	
+
 }

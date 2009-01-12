@@ -20,6 +20,6 @@ public class InvoiceIDQuickSearchEntry
 	@Override
 	protected String getModifiedQueryFieldName()
 	{
-		return AbstractArticleContainerQuery.FieldName.articleContainerID;
+		return AbstractArticleContainerQuery.FieldName.articleContainerIDString;
 	}
 }

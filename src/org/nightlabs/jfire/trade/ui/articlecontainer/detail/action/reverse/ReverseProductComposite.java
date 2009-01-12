@@ -27,7 +27,6 @@ extends XComposite
 {
 	private Button reverseAllButton;
 	private Button reverseArticleButton;
-//	private Text productIDText;
 	private TimerText productIDText;
 	private String text;
 	private boolean reverseAll;
@@ -82,14 +81,6 @@ extends XComposite
 		reverseAll = true;
 		reverseArticle = false;
 	}
-
-//	public IProductIDParser getProductIDParser()
-//	{
-//		if (productIDParser == null) {
-//			productIDParser = ProductIDParserRegistry.sharedInstance().getProductIDParser().iterator().next();
-//		}
-//		return productIDParser;
-//	}
 
 	public boolean isReverseAll() {
 		return reverseAll;

@@ -38,12 +38,11 @@ import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContaine
 
 public class PayAndDeliverAllAction extends ArticleContainerAction
 {
-
 	public boolean calculateVisible()
 	{
 		return true;
 	}
-	
+
 	@Override
 	protected boolean excludeArticle(Article article) {
 //		return article.getDeliveryNoteID() != null && article.getInvoiceID() != null;
@@ -53,12 +52,12 @@ public class PayAndDeliverAllAction extends ArticleContainerAction
 	@Override
 	public boolean calculateEnabled() {
 		super.calculateEnabled(); // makes articles available via getArticles()
-		
+
 		boolean allPaid = true, allDelivered = true;
 		List<Article> articles = getArticles();
 		if (articles == null)
 			return false;
-		
+
 		for (Article article : articles) {
 			allDelivered &= article.getDeliveryNoteID() != null;
 			allPaid &= article.getInvoiceID() != null;

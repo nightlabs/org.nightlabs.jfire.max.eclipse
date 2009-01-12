@@ -22,25 +22,25 @@ public class DeliveryNoteListComposite
 		super(parent, style);
 	}
 
-	@Override
-	protected void createArticleContainerIDPrefixTableColumn(
-			TableViewer tableViewer, Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.LEFT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDPrefixTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
-	
-	@Override
-	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-			Table table)
-	{
-		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDTableColumn.text")); //$NON-NLS-1$
-//		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-		addWeightedColumn(10);
-	}
+//	@Override
+//	protected void createArticleContainerIDPrefixTableColumn(
+//			TableViewer tableViewer, Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.LEFT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDPrefixTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
+//
+//	@Override
+//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
+//			Table table)
+//	{
+//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
+//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDTableColumn.text")); //$NON-NLS-1$
+////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
+//		addWeightedColumn(10);
+//	}
 
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
