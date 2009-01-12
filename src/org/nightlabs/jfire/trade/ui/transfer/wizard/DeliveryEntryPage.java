@@ -539,6 +539,7 @@ implements IDeliveryEntryPage
 						NLJDOHelper.getObjectIDSet(productTypes), // only the productTypeIDs for this one page! not for all!
 						deliveryWizard.getCustomerGroupIDs(),
 						ModeOfDeliveryFlavour.MERGE_MODE_SUBTRACTIVE,
+						true,
 						new String[]{
 							FetchPlan.DEFAULT,
 							ModeOfDeliveryFlavour.FETCH_GROUP_MODE_OF_DELIVERY,

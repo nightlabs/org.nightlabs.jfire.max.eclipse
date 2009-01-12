@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.nightlabs.jfire.trade.ui.modeofpayment.config;
+package org.nightlabs.jfire.trade.ui.modeofdelivery.config;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,51 +28,51 @@ import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
-import org.nightlabs.jfire.accounting.pay.config.ModeOfPaymentConfigModule;
-import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
+import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
+import org.nightlabs.jfire.store.deliver.config.ModeOfDeliveryConfigModule;
+import org.nightlabs.jfire.store.deliver.id.ModeOfDeliveryFlavourID;
+import org.nightlabs.jfire.trade.ui.modeofdelivery.ModeOfDeliveryFlavourTable;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * Composite that shows the list of {@link ModeOfPaymentFlavour}s in an {@link ModeOfPaymentConfigModule}.
+ * Composite that shows the list of {@link ModeOfDeliveryFlavour}s in an {@link ModeOfDeliveryConfigModule}.
  * It also allows for the addition and removing of entries.
  * 
  * @author Alexander Bieber
  * @version $Revision$, $Date$
  */
-public class ModeOfPaymentConfigModuleComposite extends XComposite {
+public class ModeOfDeliveryConfigModuleComposite extends XComposite {
 
 	/**
 	 * Used internally when adding entries.
 	 */
 	private class AddDialog extends ResizableTitleAreaDialog {
 		
-		private ModeOfPaymentFlavourTable table;
-		private Collection<ModeOfPaymentFlavourID> selectedIDs;
-		private Collection<ModeOfPaymentFlavourID> newIDs;
+		private ModeOfDeliveryFlavourTable table;
+		private Collection<ModeOfDeliveryFlavourID> selectedIDs;
+		private Collection<ModeOfDeliveryFlavourID> newIDs;
 		
-		public AddDialog(Shell shell, final Collection<ModeOfPaymentFlavourID> selectedIDs) {
+		public AddDialog(Shell shell, final Collection<ModeOfDeliveryFlavourID> selectedIDs) {
 			super(shell, null);
 			this.selectedIDs = selectedIDs;
 		}
 		
 		@Override
 		protected Control createDialogArea(Composite parent) {
-			table = new ModeOfPaymentFlavourTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
+			table = new ModeOfDeliveryFlavourTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
 			Job loadJob = new Job("") {
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
-					AccountingManager am = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
-					final Set<ModeOfPaymentFlavourID> allIDs = am.getAllModeOfPaymentFlavourIDs();
+					StoreManager am = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+					final Set<ModeOfDeliveryFlavourID> allIDs = am.getAllModeOfDeliveryFlavourIDs();
 					allIDs.removeAll(selectedIDs);
 					table.getDisplay().asyncExec(new Runnable() {
 						public void run() {
-							table.setModeOfPaymentFlavourIDs(allIDs, new NullProgressMonitor());
+							table.setModeOfDeliveryFlavourIDs(allIDs, new NullProgressMonitor());
 							table.addSelectionChangedListener(new ISelectionChangedListener() {
 								@Override
 								public void selectionChanged(SelectionChangedEvent event) {
@@ -100,32 +100,32 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
-			newShell.setText("Add mode of payment flavour");
+			newShell.setText("Add mode of delivery flavour");
 		}
 		
-		public Collection<ModeOfPaymentFlavourID> getNewIDs() {
+		public Collection<ModeOfDeliveryFlavourID> getNewIDs() {
 			return newIDs;
 		}
 		
 	}
 	
-	private ModeOfPaymentFlavourTable modeOfPaymentFlavourTable;
+	private ModeOfDeliveryFlavourTable modeOfDeliveryFlavourTable;
 	private IDirtyStateManager dirtyStateManager;
 	
 	/**
-	 * Construct a new {@link ModeOfPaymentConfigModuleComposite}.
+	 * Construct a new {@link ModeOfDeliveryConfigModuleComposite}.
 	 * 
 	 * @param parent The parent {@link Composite} to use.
 	 * @param style The style to apply to the composite;
 	 * @param dirtyStateManager The manager to report changes to.
 	 */
-	public ModeOfPaymentConfigModuleComposite(Composite parent, int style, IDirtyStateManager dirtyStateManager) {
+	public ModeOfDeliveryConfigModuleComposite(Composite parent, int style, IDirtyStateManager dirtyStateManager) {
 		super(parent, style);
 		this.dirtyStateManager = dirtyStateManager;
 		getGridLayout().numColumns = 2;
 		getGridLayout().makeColumnsEqualWidth = false;
 		
-		modeOfPaymentFlavourTable = new ModeOfPaymentFlavourTable(this, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
+		modeOfDeliveryFlavourTable = new ModeOfDeliveryFlavourTable(this, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
 		
 		XComposite buttonWrapper = new XComposite(this, SWT.NONE);
 		buttonWrapper.getGridData().grabExcessHorizontalSpace = false;
@@ -136,16 +136,16 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Collection<ModeOfPaymentFlavour> flavours = modeOfPaymentFlavourTable.getElements();
-				List<ModeOfPaymentFlavourID> flavourIDs = NLJDOHelper.getObjectIDList(flavours);
+				Collection<ModeOfDeliveryFlavour> flavours = modeOfDeliveryFlavourTable.getElements();
+				List<ModeOfDeliveryFlavourID> flavourIDs = NLJDOHelper.getObjectIDList(flavours);
 				if (flavourIDs.size() <= 0)
 					return;
 				AddDialog dlg = new AddDialog(getShell(), flavourIDs);
 				if (dlg.open() == Window.OK && dlg.getNewIDs() != null) {
 					flavourIDs.addAll(dlg.getNewIDs());
-					modeOfPaymentFlavourTable.setModeOfPaymentFlavourIDs(flavourIDs, new NullProgressMonitor());
-					if (ModeOfPaymentConfigModuleComposite.this.dirtyStateManager != null)
-						ModeOfPaymentConfigModuleComposite.this.dirtyStateManager.markDirty();
+					modeOfDeliveryFlavourTable.setModeOfDeliveryFlavourIDs(flavourIDs, new NullProgressMonitor());
+					if (ModeOfDeliveryConfigModuleComposite.this.dirtyStateManager != null)
+						ModeOfDeliveryConfigModuleComposite.this.dirtyStateManager.markDirty();
 				}
 			}
 		});
@@ -156,38 +156,38 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		removeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Collection<ModeOfPaymentFlavour> selection = modeOfPaymentFlavourTable.getSelectedElements();
+				Collection<ModeOfDeliveryFlavour> selection = modeOfDeliveryFlavourTable.getSelectedElements();
 				if (selection.size() > 0) {
-					Collection<ModeOfPaymentFlavour> flavours = modeOfPaymentFlavourTable.getElements();
-					List<ModeOfPaymentFlavourID> flavourIDs = NLJDOHelper.getObjectIDList(flavours);
+					Collection<ModeOfDeliveryFlavour> flavours = modeOfDeliveryFlavourTable.getElements();
+					List<ModeOfDeliveryFlavourID> flavourIDs = NLJDOHelper.getObjectIDList(flavours);
 					flavourIDs.removeAll(NLJDOHelper.getObjectIDSet(selection));
-					modeOfPaymentFlavourTable.setModeOfPaymentFlavourIDs(flavourIDs, new NullProgressMonitor());
-					if (ModeOfPaymentConfigModuleComposite.this.dirtyStateManager != null)
-						ModeOfPaymentConfigModuleComposite.this.dirtyStateManager.markDirty();
+					modeOfDeliveryFlavourTable.setModeOfDeliveryFlavourIDs(flavourIDs, new NullProgressMonitor());
+					if (ModeOfDeliveryConfigModuleComposite.this.dirtyStateManager != null)
+						ModeOfDeliveryConfigModuleComposite.this.dirtyStateManager.markDirty();
 				}
 			}
 		});
 	}
 	
 	/**
-	 * Update the given {@link ModeOfPaymentConfigModule} to reflect what is currently shown to the user.
+	 * Update the given {@link ModeOfDeliveryConfigModule} to reflect what is currently shown to the user.
 	 * @param configModule The config module to udpate.
 	 */
-	public void updateConfigModule(ModeOfPaymentConfigModule configModule) {
-		Set<ModeOfPaymentFlavourID> modeOfPaymentFlavourIDs = NLJDOHelper.getObjectIDSet(modeOfPaymentFlavourTable.getElements());
-		configModule.setModeOfPaymentFlavourIDs(modeOfPaymentFlavourIDs);
+	public void updateConfigModule(ModeOfDeliveryConfigModule configModule) {
+		Set<ModeOfDeliveryFlavourID> ModeOfDeliveryFlavourIDs = NLJDOHelper.getObjectIDSet(modeOfDeliveryFlavourTable.getElements());
+		configModule.setModeOfDeliveryFlavourIDs(ModeOfDeliveryFlavourIDs);
 	}
 
 	/**
-	 * Update this composite to show the entries of the given {@link ModeOfPaymentConfigModule}.
+	 * Update this composite to show the entries of the given {@link ModeOfDeliveryConfigModule}.
 	 * @param configModule The config module to represent. 
 	 */
-	protected void updateComposite(final ModeOfPaymentConfigModule configModule) {
+	protected void updateComposite(final ModeOfDeliveryConfigModule configModule) {
 		Job loadJob = new Job("Loading modes of delivery") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				if (!modeOfPaymentFlavourTable.isDisposed())
-					modeOfPaymentFlavourTable.setModeOfPaymentFlavourIDs(configModule.getModeOfPaymentFlavourIDs(), new NullProgressMonitor());
+				if (!modeOfDeliveryFlavourTable.isDisposed())
+					modeOfDeliveryFlavourTable.setModeOfDeliveryFlavourIDs(configModule.getModeOfDeliveryFlavourIDs(), monitor);
 				return Status.OK_STATUS;
 			}
 		};

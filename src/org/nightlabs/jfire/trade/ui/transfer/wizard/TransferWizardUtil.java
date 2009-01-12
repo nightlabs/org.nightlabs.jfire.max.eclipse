@@ -550,6 +550,7 @@ public class TransferWizardUtil
 				deliveryWizard.getProductTypeIDs(),
 				deliveryWizard.getCustomerGroupIDs(),
 				ModeOfDeliveryFlavour.MERGE_MODE_SUBTRACTIVE,
+				true,
 				new String[]{
 						FetchPlan.DEFAULT,
 						ModeOfDeliveryFlavour.FETCH_GROUP_MODE_OF_DELIVERY,
