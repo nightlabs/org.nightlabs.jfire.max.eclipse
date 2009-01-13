@@ -48,6 +48,17 @@ extends AbstractArticleContainerListComposite<Offer>
 		super(parent, style);
 	}
 
+	/**
+	 * @param parent
+	 * @param style
+	 * @param initTable
+	 * @param viewerStyle
+	 */
+	public OfferListComposite(Composite parent, int style, boolean initTable,
+			int viewerStyle) {
+		super(parent, style, initTable, viewerStyle);
+	}
+
 	@Override
 	protected Class<? extends ArticleContainer> getArticleContainerClass() {
 		return Offer.class;

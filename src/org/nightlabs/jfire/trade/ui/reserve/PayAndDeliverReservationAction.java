@@ -3,8 +3,10 @@
  */
 package org.nightlabs.jfire.trade.ui.reserve;
 
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerAction;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
@@ -19,14 +21,13 @@ extends AbstractArticleContainerAction
 {
 	public static final String ID = PayAndDeliverReservationAction.class.getName();
 
-	private ArticleContainerID articleContainerID;
-
 	public PayAndDeliverReservationAction()
 	{
 		super();
 		setId(ID);
 		setText("Pay And Deliver...");
 		setToolTipText("Pays and delivers the selected reservation");
+		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), PayAndDeliverReservationAction.class));
 	}
 
 	@Override

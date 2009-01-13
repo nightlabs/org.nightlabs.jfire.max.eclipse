@@ -36,6 +36,18 @@ extends AbstractTableComposite<O>
 		super(parent, style);
 	}
 
+	/**
+	 * @param parent
+	 * @param style
+	 * @param initTable
+	 * @param viewerStyle
+	 */
+	public AbstractArticleContainerListComposite(Composite parent, int style,
+			boolean initTable, int viewerStyle)
+	{
+		super(parent, style, initTable, viewerStyle);
+	}
+
 	private LinkedList<Integer> weightedColumns;
 	private LinkedList<Integer> fixedColumns;
 

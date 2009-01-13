@@ -102,6 +102,14 @@ implements IErrorMessageDisplayer
 		return reverseProductComposite.isReverseArticle();
 	}
 
+//	public boolean isReleaseArticles() {
+//		return reverseProductComposite.isReleaseArticles();
+//	}
+//
+//	public boolean isReversePaymentAndDelivery() {
+//		return reverseProductComposite.isReversePaymentAndDelivery();
+//	}
+
 	private ProgressMonitor getProgressMonitor() {
 		return new ProgressMonitorWrapper(progressMonitorPart);
 	}

@@ -37,13 +37,13 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.GenericArticl
 public class ReverseAction
 extends GenericArticleEditAction
 {
+	private OrderID orderID = null;
+
 	@Override
 	public boolean calculateVisible()
 	{
 		return true;
 	}
-
-	private OrderID orderID = null;
 
 	@Override
 	protected boolean excludeArticle(Article article)

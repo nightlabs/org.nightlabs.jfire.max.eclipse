@@ -27,10 +27,15 @@ extends XComposite
 {
 	private Button reverseAllButton;
 	private Button reverseArticleButton;
-	private TimerText productIDText;
-	private String text;
+//	private Button reversePaymentAndDeliveryButton;
+//	private Button releaseArticlesButton;
 	private boolean reverseAll;
 	private boolean reverseArticle;
+//	private boolean reversePaymentAndDelivery;
+//	private boolean releaseArticles;
+
+	private TimerText productIDText;
+	private String text;
 	private IProductIDParser productIDParser;
 
 	/**
@@ -67,6 +72,7 @@ extends XComposite
 				reverseArticle = false;
 			}
 		});
+
 		reverseArticleButton = new Button(chooseComposite, SWT.RADIO);
 		reverseArticleButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductComposite.button.reverseOnlyArticle.text"));		 //$NON-NLS-1$
 		reverseArticleButton.addSelectionListener(new SelectionAdapter(){
@@ -77,9 +83,33 @@ extends XComposite
 			}
 		});
 
+//		reversePaymentAndDeliveryButton = new Button(chooseComposite, SWT.CHECK);
+//		reversePaymentAndDeliveryButton.setText("Reverse Payment And Delivery");
+//		reversePaymentAndDeliveryButton.addSelectionListener(new SelectionAdapter(){
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				reversePaymentAndDelivery = reversePaymentAndDeliveryButton.getSelection();
+//				releaseArticlesButton.setEnabled(reversePaymentAndDelivery);
+//				if (!reversePaymentAndDelivery) {
+//					releaseArticlesButton.setSelection(false);
+//				}
+//			}
+//		});
+//
+//		releaseArticlesButton = new Button(chooseComposite, SWT.CHECK);
+//		releaseArticlesButton.setText("Release Articles");
+//		releaseArticlesButton.addSelectionListener(new SelectionAdapter(){
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				releaseArticles = releaseArticlesButton.getSelection();
+//			}
+//		});
+
 		reverseAllButton.setSelection(true);
-		reverseAll = true;
-		reverseArticle = false;
+		reverseAll = reverseAllButton.getSelection();
+		reverseArticle = reverseArticleButton.getSelection();
+//		releaseArticles = releaseArticlesButton.getSelection();
+//		reversePaymentAndDelivery = reversePaymentAndDeliveryButton.getSelection();
 	}
 
 	public boolean isReverseAll() {
@@ -89,6 +119,14 @@ extends XComposite
 	public boolean isReverseArticle() {
 		return reverseArticle;
 	}
+
+//	public boolean isReleaseArticles() {
+//		return releaseArticles;
+//	}
+//
+//	public boolean isReversePaymentAndDelivery() {
+//		return reversePaymentAndDelivery;
+//	}
 
 	public ProductID getProductID(ProgressMonitor monitor)
 	{

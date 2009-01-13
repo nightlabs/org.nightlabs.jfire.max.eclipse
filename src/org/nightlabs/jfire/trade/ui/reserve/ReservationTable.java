@@ -21,4 +21,16 @@ public class ReservationTable extends OfferListComposite
 	public ReservationTable(Composite parent, int style) {
 		super(parent, style);
 	}
+
+	/**
+	 * @param parent
+	 * @param style
+	 * @param initTable
+	 * @param viewerStyle
+	 */
+	public ReservationTable(Composite parent, int style, boolean initTable,
+			int viewerStyle) {
+		super(parent, style, initTable, viewerStyle);
+	}
+
 }

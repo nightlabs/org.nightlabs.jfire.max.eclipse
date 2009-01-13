@@ -11,9 +11,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.login.LoginState;
 import org.nightlabs.base.ui.notification.SelectionManager;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.login.LoginStateChangeEvent;
@@ -50,8 +50,10 @@ public class ReservationListActionDelegate extends LSDWorkbenchWindowActionDeleg
 			if (productTypeID != null)
 			{
 				try {
-					Editor2PerspectiveRegistry.sharedInstance().openEditor(
-							new ReservationEditorInput(productTypeID),
+//					Editor2PerspectiveRegistry.sharedInstance().openEditor(
+//							new ReservationEditorInput(productTypeID),
+//							ReservationEditor.EDITOR_ID);
+					RCPUtil.openEditor(new ReservationEditorInput(productTypeID),
 							ReservationEditor.EDITOR_ID);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
