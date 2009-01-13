@@ -8,6 +8,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerAction;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
 
@@ -25,8 +26,8 @@ extends AbstractArticleContainerAction
 	{
 		super();
 		setId(ID);
-		setText("Pay And Deliver...");
-		setToolTipText("Pays and delivers the selected reservation");
+		setText(Messages.getString("org.nightlabs.jfire.trade.ui.reserve.PayAndDeliverReservationAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.reserve.PayAndDeliverReservationAction.tooltip")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), PayAndDeliverReservationAction.class));
 	}
 

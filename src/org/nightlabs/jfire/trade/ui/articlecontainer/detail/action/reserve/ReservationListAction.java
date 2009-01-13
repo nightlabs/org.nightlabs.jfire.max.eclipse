@@ -11,6 +11,7 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.ui.producttype.quicklist.AbstractProductTypeGroupTree.ProductTypeGroupNode;
 import org.nightlabs.jfire.trade.ui.reserve.ReservationEditor;
 import org.nightlabs.jfire.trade.ui.reserve.ReservationEditorInput;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author daniel[at]nightlabs[dot]de
@@ -27,8 +28,8 @@ extends SelectionAction
 	{
 		super();
 		setId(ID);
-		setText("Reservation list");
-		setToolTipText("Opens the reservation list for the selected event");
+		setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reserve.ReservationListAction.tooltip")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)

@@ -47,7 +47,7 @@ extends Action
 		super(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.text"),  //$NON-NLS-1$
 				SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), ReverseProductAction.class));
 		if (shell == null) {
-			throw new IllegalArgumentException("Param shell must not be null!");
+			throw new IllegalArgumentException("Param shell must not be null!"); //$NON-NLS-1$
 		}
 		this.shell = shell;
 	}

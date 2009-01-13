@@ -35,6 +35,7 @@ import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -64,7 +65,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			table = new ModeOfPaymentFlavourTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
-			Job loadJob = new Job("") {
+			Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.0")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					AccountingManager am = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
@@ -86,7 +87,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 				}
 			};
 			loadJob.schedule();
-			setTitle("Add mode of payment flavour");
+			setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.title")); //$NON-NLS-1$
 			table.addDoubleClickListener(new IDoubleClickListener() {
 				@Override
 				public void doubleClick(DoubleClickEvent event) {
@@ -100,7 +101,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
-			newShell.setText("Add mode of payment flavour");
+			newShell.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.window.title")); //$NON-NLS-1$
 		}
 		
 		public Collection<ModeOfPaymentFlavourID> getNewIDs() {
@@ -132,7 +133,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		
 		Button addButton = new Button(buttonWrapper, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addButton.setText("Add");
+		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.button.add.text")); //$NON-NLS-1$
 		addButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -152,7 +153,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		
 		Button removeButton = new Button(buttonWrapper, SWT.PUSH);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		removeButton.setText("Remove");
+		removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.button.remove.text")); //$NON-NLS-1$
 		removeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -183,7 +184,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 	 * @param configModule The config module to represent. 
 	 */
 	protected void updateComposite(final ModeOfPaymentConfigModule configModule) {
-		Job loadJob = new Job("Loading modes of delivery") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.job.loadModesOfDelivery")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				if (!modeOfPaymentFlavourTable.isDisposed())

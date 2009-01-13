@@ -68,9 +68,9 @@ extends XComposite
 		{
 			super();
 			setId(ID);
-			setText("Refresh");
-			setToolTipText("Refreshes the list of reservations");
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), RefreshAction.class, "", ImageFormat.gif));
+			setText(Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationComposite.action.refresh.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationComposite.action.refresh.tooltip")); //$NON-NLS-1$
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), RefreshAction.class, "", ImageFormat.gif)); //$NON-NLS-1$
 		}
 
 		@Override

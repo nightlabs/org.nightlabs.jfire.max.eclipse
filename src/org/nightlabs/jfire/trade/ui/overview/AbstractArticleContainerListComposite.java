@@ -74,7 +74,7 @@ extends AbstractTableComposite<O>
 	}
 
 	protected String getIDColumnText() {
-		return "ID";
+		return Messages.getString("org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite.column.id.text"); //$NON-NLS-1$
 	}
 
 	@Override
