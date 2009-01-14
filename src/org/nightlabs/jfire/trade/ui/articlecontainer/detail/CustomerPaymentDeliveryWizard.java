@@ -60,16 +60,8 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		LegalEntity selectedLegalEntity = personSearchWizardPage.getSelectedLegalEntity();
 		if (selectedLegalEntity == null) {
 			Person selectedPerson = personSearchWizardPage.getSelectedPerson();
-			try {
-				TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
-				String[] fetchGroups = new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP,	PropertySet.FETCH_GROUP_FULL_DATA };
-
-				selectedLegalEntity = tradeManager.storePersonAsLegalEntity(selectedPerson, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			selectedLegalEntity = createLegalEntityForPerson(selectedPerson);
 		}
-
 		// Assign the customer ID
 		setCustomerID((AnchorID) JDOHelper.getObjectId(selectedLegalEntity));
 		try {
@@ -78,8 +70,17 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
 		return super.performFinish();
+	}
+
+	protected LegalEntity createLegalEntityForPerson(Person person) {
+		try {
+			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			String[] fetchGroups = new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP,	PropertySet.FETCH_GROUP_FULL_DATA };
+			return tradeManager.storePersonAsLegalEntity(person, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected ExtendedPersonSearchWizardPage getPersonSearchWizardPage() {

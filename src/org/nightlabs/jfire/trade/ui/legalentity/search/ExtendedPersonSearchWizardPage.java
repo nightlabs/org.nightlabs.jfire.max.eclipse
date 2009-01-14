@@ -81,7 +81,9 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 				CustomerGroup __defaultCustomerGroup = null;
 				try {
 					TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
-					if (selectedPerson != null) {
+					if (selectedPerson != null && JDOHelper.getObjectId(selectedPerson) != null) {
+						// only if there is a person selected/edited we can make it a legal entity on the server
+						// if it is a newly (on the client) created person we can't
 						__legalEntity = tradeManager.getLegalEntityForPerson(
 								(PropertySetID) JDOHelper.getObjectId(selectedPerson),
 								new String[] {
@@ -171,4 +173,20 @@ public class ExtendedPersonSearchWizardPage extends PersonSearchWizardPage
 
 	public void onAdditionalDataLoaded() {
 	}
+
+	public boolean isLoadAdditionalDataJobRunning() {
+		return loadAdditionalDataJob != null;
+	}
+
+//	@Override
+//	protected void newPersonPressed() {
+//		super.newPersonPressed();
+//		legalEntity = null;
+//	}
+//
+//	@Override
+//	protected void editPersonPressed() {
+//		super.editPersonPressed();
+//		legalEntity = null;
+//	}
 }

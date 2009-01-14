@@ -9,6 +9,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.security.auth.login.LoginException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -50,6 +51,8 @@ import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView;
 import org.nightlabs.jfire.trade.ui.legalentity.view.SelectAnonymousViewAction;
+import org.nightlabs.jfire.trade.ui.reserve.ReservationPaymentDeliveryWizard;
+import org.nightlabs.jfire.trade.ui.reserve.ReservationWizardDialog;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
@@ -66,6 +69,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ArticleContainerQuickSaleEditorPage
 extends ArticleContainerEditorPage
 {
+	private static final Logger logger = Logger.getLogger(ArticleContainerQuickSaleEditorPage.class);
 
 	public static class Factory implements IEntityEditorPageFactory {
 		@Override
@@ -194,20 +198,25 @@ extends ArticleContainerEditorPage
 	private SelectionListener okListenerCustomer = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			String text = customerSearchText.getText();
-//			LegalEntity legalEntity = LegalEntitySearchCreateWizard.open(text, true);
-//			if (legalEntity != null) {
-//				assignToCustomer(legalEntity);
-//				if (payAndDeliverAll()) {
-//					createNewOrder();
-//				}
-//			}
-			CustomerPaymentDeliveryWizard wiz = new CustomerPaymentDeliveryWizard(
+			OrderID orderID = (OrderID) getArticleContainerEdit().getArticleContainerID();
+//			CustomerPaymentDeliveryWizard wiz = new CustomerPaymentDeliveryWizard(
+			ReservationPaymentDeliveryWizard wiz = new ReservationPaymentDeliveryWizard(
 					text,
-					(OrderID) getArticleContainerEdit().getArticleContainerID(),
+					orderID,
 					AbstractCombiTransferWizard.TRANSFER_MODE_BOTH,
 					TransferWizard.Side.Vendor);
-			if (new DynamicPathWizardDialog(wiz).open() == Dialog.OK && wiz.isTransfersSuccessful())
+//			DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
+			DynamicPathWizardDialog dlg = new ReservationWizardDialog(wiz);
+			int returnCode = dlg.open();
+			boolean transferSuccessful = wiz.isTransfersSuccessful();
+			if (logger.isDebugEnabled()) {
+				logger.debug("ReservationWizardDialog OrderID = "+orderID);
+				logger.debug("ReservationWizardDialog returnCode = "+returnCode);
+				logger.debug("ReservationWizardDialog.isTransfersSuccessful() = "+transferSuccessful);
+			}
+			if (returnCode == Dialog.OK && transferSuccessful) {
 				createNewOrder();
+			}
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {
 			widgetSelected(e);
