@@ -22,26 +22,6 @@ public class DeliveryNoteListComposite
 		super(parent, style);
 	}
 
-//	@Override
-//	protected void createArticleContainerIDPrefixTableColumn(
-//			TableViewer tableViewer, Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDPrefixTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-//
-//	@Override
-//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-//			Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteListComposite.deliveryNoteIDTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
 			Table table)
@@ -69,7 +49,7 @@ public class DeliveryNoteListComposite
 		switch (additionalColumnIndex) {
 			case 0:
 				if (deliveryNote.getFinalizeDT() != null)
-					return DateFormatter.formatDateShort(deliveryNote.getFinalizeDT(), false);
+					return DateFormatter.formatDateShortTimeHM(deliveryNote.getFinalizeDT(), false);
 			break;
 			case 1:
 				if (deliveryNote.getFinalizeUser() != null)

@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -64,27 +63,6 @@ extends AbstractArticleContainerListComposite<Offer>
 		return Offer.class;
 	}
 
-//	@Override
-//	protected void createArticleContainerIDPrefixTableColumn(
-//			TableViewer tableViewer, Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDPrefixTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-//
-//	@Override
-//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-//			Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.offerIDTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-
-	@Implement
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
 			Table table)
@@ -105,7 +83,6 @@ extends AbstractArticleContainerListComposite<Offer>
 		addWeightedColumn(10);
 	}
 
-	@Implement
 	@Override
 	protected String getAdditionalColumnText(Object element,
 			int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex)
@@ -117,7 +94,7 @@ extends AbstractArticleContainerListComposite<Offer>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (offer.getFinalizeDT() != null)
-					return DateFormatter.formatDateShort(offer.getFinalizeDT(), false);
+					return DateFormatter.formatDateShortTimeHM(offer.getFinalizeDT(), false);
 			break;
 			case 1:
 				if (offer.getFinalizeUser() != null)

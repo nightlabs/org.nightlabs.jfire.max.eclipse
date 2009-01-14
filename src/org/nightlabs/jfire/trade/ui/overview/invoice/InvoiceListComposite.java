@@ -39,25 +39,6 @@ extends AbstractArticleContainerListComposite<Invoice>
 		super(parent, style);
 	}
 
-//	@Override
-//	protected void createArticleContainerIDPrefixTableColumn(
-//			TableViewer tableViewer, Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDPrefixTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-//	@Override
-//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-//			Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.invoiceIDTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
 			Table table)
@@ -94,7 +75,7 @@ extends AbstractArticleContainerListComposite<Invoice>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (invoice.getFinalizeDT() != null)
-					return DateFormatter.formatDateShort(invoice.getFinalizeDT(), false);
+					return DateFormatter.formatDateShortTimeHM(invoice.getFinalizeDT(), false);
 			break;
 			case 1:
 				if (invoice.getFinalizeUser() != null)

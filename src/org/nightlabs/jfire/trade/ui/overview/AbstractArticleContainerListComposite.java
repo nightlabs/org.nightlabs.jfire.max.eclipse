@@ -206,60 +206,6 @@ extends AbstractTableComposite<O>
 		return ""; //$NON-NLS-1$
 	}
 
-//	protected Image getColumnImage(Object element, int columnIndex)
-//	{
-//		int firstAdditionalColumnIndex = 8;
-//		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-//			firstAdditionalColumnIndex = 9;
-//
-//		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
-//		if (additionalColumnIndex < 0)
-//			return null;
-//
-//		return getAdditionalColumnImage(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
-//	}
-//
-//	protected String getColumnText(Object element, int columnIndex)
-//	{
-//		if (element instanceof ArticleContainer) {
-//			ArticleContainer articleContainer = (ArticleContainer) element;
-//			switch (columnIndex) {
-//				case 0:
-//					return articleContainer.getOrganisationID();
-//				case 1:
-//					return articleContainer.getArticleContainerIDPrefix();
-//				case 2:
-//					return articleContainer.getArticleContainerIDAsString();
-//				case 3:
-//					return articleContainer.getCustomer().getPerson().getDisplayName();
-//				case 4:
-//					return articleContainer.getVendor().getPerson().getDisplayName();
-//				case 5:
-//					return DateFormatter.formatDateShort(articleContainer.getCreateDT(), false);
-//				case 6:
-//					return getCreateUserName(articleContainer);
-//				case 7:
-//					return String.valueOf(articleContainer.getArticleCount());
-//			}
-//		}
-//		int firstAdditionalColumnIndex = 8;
-//		if (Statable.class.isAssignableFrom(getArticleContainerClass()))
-//			firstAdditionalColumnIndex = 9;
-//
-//		if (element instanceof Statable && columnIndex == 8) {
-//			Statable statable = (Statable) element;
-//			return getStateName(statable);
-//		}
-//		if (columnIndex == 0)
-//			return String.valueOf(element);
-//
-//		int additionalColumnIndex = columnIndex - firstAdditionalColumnIndex;
-//		if (additionalColumnIndex < 0)
-//			return ""; //$NON-NLS-1$
-//
-//		return getAdditionalColumnText(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
-//	}
-
 	protected Image getColumnImage(Object element, int columnIndex)
 	{
 		int firstAdditionalColumnIndex = 7;
@@ -287,7 +233,7 @@ extends AbstractTableComposite<O>
 				case 3:
 					return articleContainer.getVendor().getPerson().getDisplayName();
 				case 4:
-					return DateFormatter.formatDateShort(articleContainer.getCreateDT(), false);
+					return DateFormatter.formatDateShortTimeHM(articleContainer.getCreateDT(), false);
 				case 5:
 					return getCreateUserName(articleContainer);
 				case 6:

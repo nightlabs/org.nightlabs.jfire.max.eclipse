@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
@@ -38,27 +37,6 @@ extends AbstractArticleContainerListComposite<Order>
 		return Order.class;
 	}
 
-//	@Override
-//	protected void createArticleContainerIDPrefixTableColumn(
-//			TableViewer tableViewer, Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDPrefixTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-//
-//	@Override
-//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-//			Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.RIGHT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.OrderListComposite.orderIDTableColumn.text")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-
-	@Implement
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
 			Table table)
@@ -98,7 +76,6 @@ extends AbstractArticleContainerListComposite<Order>
 		return super.getColumnText(element, columnIndex);
 	}
 
-	@Implement
 	@Override
 	protected String getAdditionalColumnText(Object element,
 			int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex)
@@ -110,7 +87,7 @@ extends AbstractArticleContainerListComposite<Order>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (order.getChangeDT() != null)
-					return DateFormatter.formatDateShort(order.getChangeDT(), false);
+					return DateFormatter.formatDateShortTimeHM(order.getChangeDT(), false);
 			break;
 			case 1:
 				if (order.getChangeUser() != null)

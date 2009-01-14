@@ -23,38 +23,16 @@ extends AbstractArticleContainerListComposite<ReceptionNote>
 		return ReceptionNote.class;
 	}
 
-//	@Override
-//	protected void createArticleContainerIDPrefixTableColumn(
-//			TableViewer tableViewer, Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteListComposite.column.prefix")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-//
-//	@Override
-//	protected void createArticleContainerIDTableColumn(TableViewer tableViewer,
-//			Table table)
-//	{
-//		TableColumn tc = new TableColumn(table, SWT.LEFT);
-//		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteListComposite.column.repositoryID")); //$NON-NLS-1$
-////		tableLayout.setColumnData(tc, new ColumnWeightData(10));
-//		addWeightedColumn(10);
-//	}
-
 	@Override
 	protected void createAdditionalTableColumns(TableViewer tableViewer,
 			Table table)
 	{
-//		throw new UnsupportedOperationException("NYI!"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected String getAdditionalColumnText(Object element,
 			int additionalColumnIndex, int firstAdditionalColumnIndex, int columnIndex)
 	{
-//		throw new UnsupportedOperationException("NYI!"); //$NON-NLS-1$
 		return null;
 	}
 }
