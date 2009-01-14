@@ -37,7 +37,7 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 		FetchPlan.DEFAULT, ModeOfDeliveryFlavour.FETCH_GROUP_NAME,
 		ModeOfDeliveryFlavour.FETCH_GROUP_ICON_16X16_DATA
 	};
-	
+
 	private static class ContentProvider implements IStructuredContentProvider {
 
 		@SuppressWarnings("unchecked") //$NON-NLS-1$
@@ -55,7 +55,7 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 	}
-	
+
 	private static class LabelProvider extends org.eclipse.jface.viewers.LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -83,7 +83,7 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 		super(parent, style, true, viewerStyle);
 		setHeaderVisible(false); // if this is changed to true, we need to localize the tableColumns
 	}
-	
+
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
@@ -111,26 +111,28 @@ extends AbstractTableComposite<ModeOfDeliveryFlavour>
 		else
 			return (ModeOfDeliveryFlavour) sel.getFirstElement();
 	}
-	
+
 	/**
 	 * Obtains the referenced {@link ModeOfDeliveryFlavour}s using the {@link ModeOfDeliveryFlavourDAO}
 	 * and sets them as input for the table.
 	 * <p>
 	 * This might be called from a non-UI thread.
 	 * </p>
-	 * 
+	 *
 	 * @param ModeOfDeliveryFlavourIDs The ids of the {@link ModeOfDeliveryFlavour}s to set.
 	 * @param monitor The monitor to report progress to.
 	 */
 	public void setModeOfDeliveryFlavourIDs(Collection<ModeOfDeliveryFlavourID> modeOfDeliveryFlavourIDs, ProgressMonitor monitor) {
 		final Collection<ModeOfDeliveryFlavour> flavours = ModeOfDeliveryFlavourDAO.sharedInstance().getModeOfDeliveryFlavours(
-				new HashSet<ModeOfDeliveryFlavourID>(modeOfDeliveryFlavourIDs), 
-				FETCH_GROUPS_MODE_OF_DELIVERY_FLAVOUR, 
+				new HashSet<ModeOfDeliveryFlavourID>(modeOfDeliveryFlavourIDs),
+				FETCH_GROUPS_MODE_OF_DELIVERY_FLAVOUR,
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		getTable().getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				setInput(flavours);
-			}
-		});
-	}	
+		if (!getTable().isDisposed()) {
+			getTable().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					setInput(flavours);
+				}
+			});
+		}
+	}
 }

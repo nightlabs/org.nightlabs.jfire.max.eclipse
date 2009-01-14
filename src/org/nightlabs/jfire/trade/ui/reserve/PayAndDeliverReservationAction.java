@@ -41,4 +41,27 @@ extends AbstractArticleContainerAction
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);
 		dialog.open();
 	}
+
+//	@Override
+//	public boolean calculateEnabled()
+//	{
+//		boolean enabled = super.calculateEnabled();
+//		if (enabled) {
+//			return !rejected;
+//		}
+//		return false;
+//	}
+//
+//	private boolean rejected = false;
+//
+//	@Override
+//	public void setArticleContainerID(ObjectID objectID) {
+//		super.setArticleContainerID(objectID);
+//		if (objectID instanceof OfferID) {
+//			OfferID offerID = (OfferID) objectID;
+//			Offer offer = OfferDAO.sharedInstance().getOffer(offerID, new String[] {FetchPlan.DEFAULT, Offer.FETCH_GROUP_OFFER_LOCAL},
+//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//			rejected = offer.getOfferLocal().isRejected();
+//		}
+//	}
 }

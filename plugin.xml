@@ -259,18 +259,20 @@
             id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.name"/>
         <page
             class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage" name="Modes of payment (User)"/>
+            id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage" 
+            name="%org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage.name"/>
         <page
               class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
               id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
-              name="Modes of payment (Workstation)"/>
+              name="%org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage.name"/>
         <page
             class="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage" name="Modes of delivery (User)"/>
+            id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage" 
+            name="%org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage.name"/>
         <page
               class="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage"
               id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage"
-              name="Modes of delivery (Workstation)"/>
+              name="%org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage.name"/>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory

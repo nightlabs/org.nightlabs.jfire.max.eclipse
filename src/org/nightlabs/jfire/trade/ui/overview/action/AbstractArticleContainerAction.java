@@ -32,7 +32,8 @@ extends WorkbenchPartSelectionAction
 			StructuredSelection sel = (StructuredSelection) getSelection();
 			Object objectID = JDOHelper.getObjectId(sel.getFirstElement());
 			if (objectID instanceof ArticleContainerID) {
-				articleContainerID = (ArticleContainerID) objectID;
+//				articleContainerID = (ArticleContainerID) objectID;
+				setArticleContainerID((ArticleContainerID) objectID);
 			}
 		}
 		else if (getSelection().isEmpty()) {

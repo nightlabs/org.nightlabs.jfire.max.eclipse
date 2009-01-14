@@ -65,7 +65,7 @@ public class ModeOfPaymentUserCfModPreferencePage extends AbstractUserConfigModu
 	@Override
 	protected void updatePreferencePage() {
 		ModeOfPaymentConfigModule configModule = (ModeOfPaymentConfigModule) getConfigModuleController().getConfigModule();
-		if (!configModuleComposite.isDisposed()) {
+		if (configModuleComposite != null && !configModuleComposite.isDisposed()) {
 			configModuleComposite.updateComposite(configModule);
 		}
 	}
