@@ -14,14 +14,14 @@ public class AllocationStatusImageUtil
 		if (articleContainer instanceof RecurringArticleContainer) {
 			return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "recurringArticle"); //$NON-NLS-1$
 		} else {
-			if (article.isAllocationAbandoned())
-				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "allocationAbandoned"); //$NON-NLS-1$
-			else if (article.isAllocationPending())
-				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "allocationPending"); //$NON-NLS-1$
-			else if (article.isReleaseAbandoned())
+			if (article.isReleaseAbandoned())
 				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "releaseAbandoned"); //$NON-NLS-1$
 			else if (article.isReleasePending())
 				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "releasePending"); //$NON-NLS-1$
+			else if (article.isAllocationAbandoned())
+				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "allocationAbandoned"); //$NON-NLS-1$
+			else if (article.isAllocationPending())
+				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "allocationPending"); //$NON-NLS-1$
 			else if (article.isAllocated())
 				return SharedImages.getSharedImage(TradePlugin.getDefault(), AllocationStatusImageUtil.class, "allocated"); //$NON-NLS-1$
 			else
