@@ -76,7 +76,11 @@ public class ReleaseAction extends ArticleEditAction
 //			ArticleContainer articleContainer = segmentEdit.getArticleContainer();
 
 			for (Article article : articleSelection.getSelectedArticles()) {
-				if (article.isAllocationPending() || article.isReleasePending() || !article.isAllocated())
+//				if (article.isAllocationPending() || article.isReleasePending() || !article.isAllocated())
+//					return false;
+//				if (!article.isAllocated() && !article.isAllocationAbandoned())
+//					return false;
+				if (!article.isAllocated() && !article.isAllocationPending())
 					return false;
 
 				if (article.isReversing()) {
