@@ -6,6 +6,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -44,7 +46,6 @@ extends WizardHopPage
 	public RemindIssueUserWizardPage(Issue issue) {
 		super(RemindIssueUserWizardPage.class.getName(), "Remind Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class));
 		setDescription("Choose users.");
-		
 	}
 
 	@Override
@@ -73,7 +74,7 @@ extends WizardHopPage
 		gd.horizontalSpan = 2;
 		sLabel.setLayoutData(gd);
 
-		userList = new ListComposite<User>(mainComposite, SWT.NONE);
+		userList = new ListComposite<User>(mainComposite, SWT.MULTI);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gd.minimumWidth = 30;
@@ -117,19 +118,51 @@ extends WizardHopPage
 		job.setPriority(Job.SHORT);
 		job.schedule();
 		
-		Button addButton = new Button(mainComposite, SWT.PUSH);
-		addButton.setText(" >> "); //$NON-NLS-1$
+		XComposite buttonComposite = new XComposite(mainComposite, SWT.PUSH);
+		buttonComposite.getGridLayout().numColumns = 1;
+		buttonComposite.getGridData().grabExcessHorizontalSpace = false;
+		
+		Button addButton = new Button(buttonComposite, SWT.PUSH);
+		addButton.setText(" Add >> "); //$NON-NLS-1$
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER,
 				GridData.VERTICAL_ALIGN_CENTER);
 		gd.heightHint = 20;
-		gd.horizontalAlignment = GridData.FILL;
 		addButton.setLayoutData(gd);
 		
-		selectedList = new ListComposite<User>(mainComposite, SWT.NONE);
+		addButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				selectedList.addElements(userList.getSelectedElements());
+				userList.removeAllSelected();
+			}
+		});
+		
+		Button removeButton = new Button(buttonComposite, SWT.PUSH);
+		removeButton.setText(" << Remove "); //$NON-NLS-1$
+		gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER,
+				GridData.VERTICAL_ALIGN_CENTER);
+		gd.heightHint = 20;
+		removeButton.setLayoutData(gd);
+		
+		removeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				userList.addElements(selectedList.getSelectedElements());
+				selectedList.removeAllSelected();
+			}
+		});
+		
+		selectedList = new ListComposite<User>(mainComposite, SWT.MULTI);
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		gd.minimumWidth = 30;
 		selectedList.setLayoutData(gd);
+		selectedList.setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((User)element).getName();
+			}
+		});
 		
 		return mainComposite;
 	}
