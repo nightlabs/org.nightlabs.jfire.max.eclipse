@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.trade.ui.tariff;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,7 +35,17 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
-public class TariffList extends AbstractTableComposite<Tariff> {
+public class TariffList
+extends AbstractTableComposite<Tariff>
+{
+	public static Comparator<Tariff> tariffComparator = new Comparator<Tariff>() {
+		public int compare(Tariff o1, Tariff o2) {
+			String s1 = o1.getName().getText(NLLocale.getDefault().getLanguage());
+			String s2 = o2.getName().getText(NLLocale.getDefault().getLanguage());
+			return Collator.getInstance().compare(s1, s2);
+		}
+	};
+
 	public static interface TariffFilter {
 		boolean includeTariff(Tariff tariff);
 	}
@@ -125,6 +136,73 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		loadTariffs(_tariffComparator, this.tariffFilter);
 	}
 
+//	/**
+//	 * Load the tariffs. When this composite is created, it is initially empty. In order to make it display
+//	 * the tariffs, this method needs to be called on the UI thread. It spawns a {@link Job} which loads the data,
+//	 * orders it with the given {@link Comparator} and displays it. If no <code>Comparator</code> is given, it
+//	 * sorts according to the tariff's name (obtained via {@link Tariff#getName()} and using the default {@link Locale}).
+//	 * <p>
+//	 * If not all {@link Tariff}s should be displayed, you can pass a {@link TariffFilter} to the constructor.
+//	 * </p>
+//	 *
+//	 * @param _tariffComparator The comparator to be used for sorting the {@link Tariff}s or <code>null</code> to use the built-in
+//	 *		default (sorting by the tariff's name).
+//	 * @param tariffFilter the filter to be used or <code>null</code> if the tariffs should not be filtered.
+//	 */
+//	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter) {
+//		this.tariffFilter = tariffFilter;
+//
+//		setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.message.loadingTariffs")); //$NON-NLS-1$
+//		new Job(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.loadTariffsJob.name")) { //$NON-NLS-1$
+//			@Override
+//			protected IStatus run(ProgressMonitor monitor) throws Exception {
+//				try {
+//					final List<Tariff> _tariffs = TariffDAO.sharedInstance().getTariffs(filterOrganisationID, filterOrganisationIDInverse, FETCH_GROUPS_TARIFF,
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+//
+//					if (tariffFilter != null) {
+//						for (Iterator<Tariff> it = _tariffs.iterator(); it.hasNext();) {
+//							Tariff tariff = it.next();
+//							if (!tariffFilter.includeTariff(tariff))
+//								it.remove();
+//						}
+//					}
+//
+//					Comparator<Tariff> tariffComparator = _tariffComparator;
+//					if (tariffComparator == null) {
+//						tariffComparator = TariffList.tariffComparator;
+//					}
+//					Collections.sort(_tariffs, tariffComparator);
+//
+//					Display.getDefault().asyncExec(new Runnable() {
+//						public void run() {
+//							if (isDisposed())
+//								return;
+//
+//							tariffs = _tariffs;
+//							setInput(_tariffs);
+//							if (!selectedTariffs.isEmpty()) {
+//								setSelectedElements(selectedTariffs);
+//							} else {
+//								setSelection(StructuredSelection.EMPTY);
+//							}
+//
+//							TariffList.this.getParent().layout(true);
+//						}
+//					});
+//				} catch (Exception x) {
+//					throw new RuntimeException(x);
+//				}
+//
+//				return Status.OK_STATUS;
+//			}
+//		}.schedule();
+//	}
+
+	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter) {
+		loadTariffs(_tariffComparator, tariffFilter, null);
+	}
+
 	/**
 	 * Load the tariffs. When this composite is created, it is initially empty. In order to make it display
 	 * the tariffs, this method needs to be called on the UI thread. It spawns a {@link Job} which loads the data,
@@ -138,7 +216,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 	 *		default (sorting by the tariff's name).
 	 * @param tariffFilter the filter to be used or <code>null</code> if the tariffs should not be filtered.
 	 */
-	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter) {
+	public void loadTariffs(final Comparator<Tariff> _tariffComparator, final TariffFilter tariffFilter, final String preselectedTariffName) {
 		this.tariffFilter = tariffFilter;
 
 		setLoadingMessage(Messages.getString("org.nightlabs.jfire.trade.ui.tariff.TariffList.message.loadingTariffs")); //$NON-NLS-1$
@@ -159,13 +237,7 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 
 					Comparator<Tariff> tariffComparator = _tariffComparator;
 					if (tariffComparator == null) {
-						tariffComparator = new Comparator<Tariff>() {
-							public int compare(Tariff o1, Tariff o2) {
-								String s1 = o1.getName().getText(NLLocale.getDefault().getLanguage());
-								String s2 = o2.getName().getText(NLLocale.getDefault().getLanguage());
-								return Collator.getInstance().compare(s1, s2);
-							}
-						};
+						tariffComparator = TariffList.tariffComparator;
 					}
 					Collections.sort(_tariffs, tariffComparator);
 
@@ -176,13 +248,17 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 
 							tariffs = _tariffs;
 							setInput(_tariffs);
-							if (!selectedTariffs.isEmpty())
-								setSelectedElements(selectedTariffs);
+							if (preselectedTariffName != null) {
+								for (Tariff tariff : tariffs) {
+									if (tariff.getName().getText().equals(preselectedTariffName)) {
+										selectedTariffs.add(tariff);
+									}
+								}
+							}
+							if (!selectedTariffs.isEmpty()) {
+								setSelectedElements(new ArrayList<Tariff>(selectedTariffs), true);
+							}
 
-//							for (Tariff tariff : _tariffs) {
-//								tariffList.add(tariff.getName().getText(NLLocale.getDefault().getLanguage())
-//										+ (organisationVisible ? (" (" + tariff.getOrganisationID() + ")") : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//							}
 							TariffList.this.getParent().layout(true);
 						}
 					});
@@ -219,6 +295,17 @@ public class TariffList extends AbstractTableComposite<Tariff> {
 		this.selectedTariffs.addAll(elements);
 		if (this.tariffs != null)
 			super.setSelectedElements(elements);
+	}
+
+	public void setSelectedElements(Collection<Tariff> elements, boolean reveal)
+	{
+		if (Display.getCurrent() == null)
+			throw new IllegalStateException("Wrong thread! This method must be called on the SWT UI thread!"); //$NON-NLS-1$
+
+		this.selectedTariffs.clear();
+		this.selectedTariffs.addAll(elements);
+		if (this.tariffs != null)
+			setSelection(new ArrayList<Tariff>(elements), reveal);
 	}
 
 	public void moveSelectedTariffOneUp() {
