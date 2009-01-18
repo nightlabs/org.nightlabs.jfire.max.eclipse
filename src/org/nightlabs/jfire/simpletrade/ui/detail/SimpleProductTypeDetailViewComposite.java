@@ -37,7 +37,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
-import org.nightlabs.jfire.prop.datafield.I18nTextDataField;
+import org.nightlabs.jfire.prop.datafield.II18nTextDataField;
 import org.nightlabs.jfire.prop.datafield.ImageDataField;
 import org.nightlabs.jfire.prop.id.StructFieldID;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
@@ -149,10 +149,10 @@ extends XComposite
 
 						displayImage();
 
-						I18nTextDataField description = null;
+						II18nTextDataField description = null;
 						try {
 							if (props != null)
-								description = (I18nTextDataField) props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG);
+								description = props.getDataField(SimpleProductTypeStruct.DESCRIPTION_LONG, II18nTextDataField.class);
 						} catch (Exception e) {
 							logger.warn("Loading image from propertySet failed!", e);
 						}
