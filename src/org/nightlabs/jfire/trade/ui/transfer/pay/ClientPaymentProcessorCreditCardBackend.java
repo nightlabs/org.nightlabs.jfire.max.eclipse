@@ -47,6 +47,7 @@ import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
+import org.nightlabs.jfire.prop.datafield.II18nTextDataField;
 import org.nightlabs.jfire.prop.datafield.NumberDataField;
 import org.nightlabs.jfire.prop.datafield.SelectionDataField;
 import org.nightlabs.jfire.prop.datafield.TextDataField;
@@ -139,9 +140,9 @@ extends AbstractClientPaymentProcessor
 								Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
 						person.inflate(struct);
 
-						String nameOnCard = ((TextDataField)person.getDataField(PersonStruct.CREDITCARD_CREDITCARDHOLDER)).getText();
+						String nameOnCard = person.getDataField(PersonStruct.CREDITCARD_CREDITCARDHOLDER, II18nTextDataField.class).getI18nText().getText();
 						if (nameOnCard == null) {
-							nameOnCard = ((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_FIRSTNAME)).getText() + ' ' + ((TextDataField)person.getDataField(PersonStruct.PERSONALDATA_NAME)).getText();
+							nameOnCard = person.getDataField(PersonStruct.PERSONALDATA_FIRSTNAME, II18nTextDataField.class).getI18nText().getText() + ' ' + person.getDataField(PersonStruct.PERSONALDATA_NAME, II18nTextDataField.class).getI18nText().getText();
 							nameOnCard = nameOnCard.trim();
 //							while (nameOnCard.startsWith(" "))
 //								nameOnCard = nameOnCard.substring(1);
@@ -171,9 +172,9 @@ extends AbstractClientPaymentProcessor
 
 
 						// TODO the person should store a special year and month field for expiry - not simply text.
-						int expiryYear = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYYEAR)).getIntValue();
+						int expiryYear = person.getDataField(PersonStruct.CREDITCARD_EXPIRYYEAR, NumberDataField.class).getIntValue();
 //						int expiryMonth = ((NumberDataField)person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH)).getIntValue();
-						SelectionDataField expiryMonthDataField = (SelectionDataField) person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH);
+						SelectionDataField expiryMonthDataField = person.getDataField(PersonStruct.CREDITCARD_EXPIRYMONTH, SelectionDataField.class);
 						StructFieldValue expiryMonthFieldValue = expiryMonthDataField.getStructFieldValue();
 						int expiryMonth = 0;
 						if (expiryMonthFieldValue != null)
