@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.order;
 
+import java.util.Comparator;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -14,6 +16,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.util.BaseComparator;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -27,6 +30,22 @@ extends AbstractArticleContainerListComposite<Order>
 		Order.FETCH_GROUP_CHANGE_USER, Order.FETCH_GROUP_CREATE_USER,
 		Order.FETCH_GROUP_CURRENCY, Order.FETCH_GROUP_CUSTOMER,
 		Order.FETCH_GROUP_VENDOR, LegalEntity.FETCH_GROUP_PERSON};
+
+	public static final Comparator<Order> ORDER_CHANGE_DT_COMPARATOR = new Comparator<Order>(){
+		@Override
+		public int compare(Order o1, Order o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getChangeDT(), o2.getChangeDT());
+				if (result2== BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return o1.getChangeDT().compareTo(o2.getChangeDT());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
 
 	public OrderListComposite(Composite parent, int style) {
 		super(parent, style);
@@ -62,7 +81,7 @@ extends AbstractArticleContainerListComposite<Order>
 
 			if (columnIndex == (columnCount-3)) {
 				if (order.getChangeDT() != null)
-					return DateFormatter.formatDateShort(order.getChangeDT(), false);
+					return DateFormatter.formatDateShortTimeHM(order.getChangeDT(), true);
 			}
 
 			if (columnIndex == (columnCount-2)) {
@@ -87,7 +106,7 @@ extends AbstractArticleContainerListComposite<Order>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (order.getChangeDT() != null)
-					return DateFormatter.formatDateShortTimeHM(order.getChangeDT(), false);
+					return formatDate(order.getChangeDT());
 			break;
 			case 1:
 				if (order.getChangeUser() != null)
@@ -96,5 +115,14 @@ extends AbstractArticleContainerListComposite<Order>
 		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	@Override
+	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
+	{
+		if (columnIndex == 7) {
+			return ORDER_CHANGE_DT_COMPARATOR;
+		}
+		return super.getColumnComparator(element, columnIndex);
 	}
 }

@@ -1,8 +1,11 @@
 package org.nightlabs.jfire.trade.ui.overview;
 
+import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -11,8 +14,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -20,6 +23,7 @@ import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.util.BaseComparator;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -28,6 +32,50 @@ import org.nightlabs.l10n.DateFormatter;
 public abstract class AbstractArticleContainerListComposite<O extends ArticleContainer>
 extends AbstractTableComposite<O>
 {
+	public static final Comparator<ArticleContainer> ARTICLE_CONTAINER_CREATE_DT_COMPARATOR = new Comparator<ArticleContainer>(){
+		@Override
+		public int compare(ArticleContainer o1, ArticleContainer o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getCreateDT(), o2.getCreateDT());
+				if (result2 == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return TableLabelProvider.DATE_COMPARATOR.compare(o1.getCreateDT(), o2.getCreateDT());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
+
+	public static final Comparator<Price> PRICE_COMPARATOR = new Comparator<Price>(){
+		@Override
+		public int compare(Price o1, Price o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				return (int) (o1.getAmount() - o2.getAmount());
+			}
+			return result;
+		}
+	};
+
+	public class LabelProvider extends TableLabelProvider
+	{
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+			return AbstractArticleContainerListComposite.this.getColumnImage(element, columnIndex);
+		}
+		@Override
+		public String getColumnText(Object element, int columnIndex) {
+			return AbstractArticleContainerListComposite.this.getColumnText(element, columnIndex);
+		}
+		@Override
+		public Comparator<?> getColumnComparator(Object element, int columnIndex) {
+			return AbstractArticleContainerListComposite.this.getColumnComparator(element, columnIndex);
+		}
+	}
+
 	/**
 	 * @param parent
 	 * @param style
@@ -165,17 +213,8 @@ extends AbstractTableComposite<O>
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setContentProvider(new TableContentProvider());
-		tableViewer.setLabelProvider(new TableLabelProvider(){
-			@Override
-			public Image getColumnImage(Object element, int columnIndex) {
-				return AbstractArticleContainerListComposite.this.getColumnImage(element, columnIndex);
-			}
-			@Override
-			public String getColumnText(Object element, int columnIndex) {
-				return AbstractArticleContainerListComposite.this.getColumnText(element, columnIndex);
-			}
-		});
+		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setLabelProvider(new LabelProvider());
 	}
 
 	protected String getCreateUserName(ArticleContainer articleContainer)
@@ -206,6 +245,16 @@ extends AbstractTableComposite<O>
 		return ""; //$NON-NLS-1$
 	}
 
+	protected Comparator<?> getColumnComparator(Object element, int columnIndex) {
+		if (columnIndex == 1) {
+			return ArticleContainerUtil.ARTICLE_CONTAINER_COMPARATOR;
+		}
+		else if (columnIndex == 4) {
+			return ARTICLE_CONTAINER_CREATE_DT_COMPARATOR;
+		}
+		return null;
+	}
+
 	protected Image getColumnImage(Object element, int columnIndex)
 	{
 		int firstAdditionalColumnIndex = 7;
@@ -217,6 +266,10 @@ extends AbstractTableComposite<O>
 			return null;
 
 		return getAdditionalColumnImage(element, additionalColumnIndex, firstAdditionalColumnIndex, columnIndex);
+	}
+
+	protected String formatDate(Date date) {
+		return DateFormatter.formatDateShortTimeHM(date, true);
 	}
 
 	protected String getColumnText(Object element, int columnIndex)
@@ -233,7 +286,7 @@ extends AbstractTableComposite<O>
 				case 3:
 					return articleContainer.getVendor().getPerson().getDisplayName();
 				case 4:
-					return DateFormatter.formatDateShortTimeHM(articleContainer.getCreateDT(), false);
+					return formatDate(articleContainer.getCreateDT());
 				case 5:
 					return getCreateUserName(articleContainer);
 				case 6:

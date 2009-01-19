@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.deliverynote;
 
+import java.util.Comparator;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -9,7 +11,7 @@ import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.util.BaseComparator;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -18,6 +20,22 @@ import org.nightlabs.l10n.DateFormatter;
 public class DeliveryNoteListComposite
 	extends AbstractArticleContainerListComposite<DeliveryNote>
 {
+	public static Comparator<DeliveryNote> DELIVERY_NOTE_FINALZE_DT_COMPARATOR = new Comparator<DeliveryNote>(){
+		@Override
+		public int compare(DeliveryNote o1, DeliveryNote o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getFinalizeDT(), o2.getFinalizeDT());
+				if (result2== BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return o1.getFinalizeDT().compareTo(o2.getFinalizeDT());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
+
 	public DeliveryNoteListComposite(Composite parent, int style) {
 		super(parent, style);
 	}
@@ -49,7 +67,7 @@ public class DeliveryNoteListComposite
 		switch (additionalColumnIndex) {
 			case 0:
 				if (deliveryNote.getFinalizeDT() != null)
-					return DateFormatter.formatDateShortTimeHM(deliveryNote.getFinalizeDT(), false);
+					return formatDate(deliveryNote.getFinalizeDT());
 			break;
 			case 1:
 				if (deliveryNote.getFinalizeUser() != null)
@@ -62,5 +80,14 @@ public class DeliveryNoteListComposite
 	@Override
 	protected Class<? extends ArticleContainer> getArticleContainerClass() {
 		return DeliveryNote.class;
+	}
+
+	@Override
+	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
+	{
+		if (columnIndex == 8) {
+			return DELIVERY_NOTE_FINALZE_DT_COMPARATOR;
+		}
+		return super.getColumnComparator(element, columnIndex);
 	}
 }

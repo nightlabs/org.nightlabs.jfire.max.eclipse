@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.invoice;
 
+import java.util.Comparator;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -15,12 +17,59 @@ import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.BaseComparator;
 
 public class InvoiceListComposite
 extends AbstractArticleContainerListComposite<Invoice>
 {
+	public static final Comparator<Invoice> INVOICE_FINALIZE_DT_COMPARATOR = new Comparator<Invoice>(){
+		@Override
+		public int compare(Invoice o1, Invoice o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getFinalizeDT(), o2.getFinalizeDT());
+				if (result2== BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return o1.getFinalizeDT().compareTo(o2.getFinalizeDT());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
+
+	public static final Comparator<Invoice> INVOICE_PRICE_COMPARATOR = new Comparator<Invoice>() {
+		@Override
+		public int compare(Invoice o1, Invoice o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getPrice(), o2.getPrice());
+				if (result2 == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return PRICE_COMPARATOR.compare(o1.getPrice(), o2.getPrice());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
+
+	public static final Comparator<Invoice> INVOICE_AMOUNT_TO_PAY_COMPARATOR = new Comparator<Invoice>() {
+		@Override
+		public int compare(Invoice o1, Invoice o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getInvoiceLocal(), o2.getInvoiceLocal());
+				if (result2 == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return (int) (o1.getInvoiceLocal().getAmountToPay() - o2.getInvoiceLocal().getAmountToPay());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
 
 	/**
 	 * The fetch-groups this list composite needs to display invoices.
@@ -53,12 +102,12 @@ extends AbstractArticleContainerListComposite<Invoice>
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.priceTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceListComposite.amountToPayTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
@@ -75,7 +124,7 @@ extends AbstractArticleContainerListComposite<Invoice>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (invoice.getFinalizeDT() != null)
-					return DateFormatter.formatDateShortTimeHM(invoice.getFinalizeDT(), false);
+					return formatDate(invoice.getFinalizeDT());
 			break;
 			case 1:
 				if (invoice.getFinalizeUser() != null)
@@ -98,4 +147,18 @@ extends AbstractArticleContainerListComposite<Invoice>
 		return Invoice.class;
 	}
 
+	@Override
+	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
+	{
+		if (columnIndex == 8) {
+			return INVOICE_FINALIZE_DT_COMPARATOR;
+		}
+		else if (columnIndex == 10) {
+			return INVOICE_PRICE_COMPARATOR;
+		}
+		else if (columnIndex == 11) {
+			return INVOICE_AMOUNT_TO_PAY_COMPARATOR;
+		}
+		return super.getColumnComparator(element, columnIndex);
+	}
 }

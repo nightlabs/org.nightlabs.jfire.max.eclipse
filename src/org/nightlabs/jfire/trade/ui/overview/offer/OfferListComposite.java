@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.overview.offer;
 
+import java.util.Comparator;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.TableViewer;
@@ -15,8 +17,8 @@ import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.OfferLocal;
 import org.nightlabs.jfire.trade.ui.overview.AbstractArticleContainerListComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
-import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.l10n.NumberFormatter;
+import org.nightlabs.util.BaseComparator;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -41,6 +43,38 @@ extends AbstractArticleContainerListComposite<Offer>
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON,
 		OfferLocal.FETCH_GROUP_THIS_OFFER_LOCAL
+	};
+
+	public static final Comparator<Offer> OFFER_FINALIZE_DT_COMPARATOR = new Comparator<Offer>(){
+		@Override
+		public int compare(Offer o1, Offer o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getFinalizeDT(), o2.getFinalizeDT());
+				if (result2== BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return o1.getFinalizeDT().compareTo(o2.getFinalizeDT());
+				}
+				return result2;
+			}
+			return result;
+		}
+	};
+
+	public static final Comparator<Offer> OFFER_PRICE_COMPARATOR = new Comparator<Offer>() {
+		@Override
+		public int compare(Offer o1, Offer o2)
+		{
+			int result = BaseComparator.comparatorNullCheck(o1, o2);
+			if (result == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+				int result2 = BaseComparator.comparatorNullCheck(o1.getPrice(), o2.getPrice());
+				if (result2 == BaseComparator.COMPARE_RESULT_NOT_NULL) {
+					return PRICE_COMPARATOR.compare(o1.getPrice(), o2.getPrice());
+				}
+				return result2;
+			}
+			return result;
+		}
 	};
 
 	public OfferListComposite(Composite parent, int style) {
@@ -77,7 +111,7 @@ extends AbstractArticleContainerListComposite<Offer>
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.RIGHT);
 		tc.setText(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.OfferListComposite.priceTableColumn.text")); //$NON-NLS-1$
 //		tableLayout.setColumnData(tc, new ColumnWeightData(10));
 		addWeightedColumn(10);
@@ -94,7 +128,7 @@ extends AbstractArticleContainerListComposite<Offer>
 		switch (additionalColumnIndex) {
 			case 0:
 				if (offer.getFinalizeDT() != null)
-					return DateFormatter.formatDateShortTimeHM(offer.getFinalizeDT(), false);
+					return formatDate(offer.getFinalizeDT());
 			break;
 			case 1:
 				if (offer.getFinalizeUser() != null)
@@ -107,5 +141,17 @@ extends AbstractArticleContainerListComposite<Offer>
 		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	@Override
+	protected Comparator<?> getColumnComparator(Object element, int columnIndex)
+	{
+		if (columnIndex == 8) {
+			return OFFER_FINALIZE_DT_COMPARATOR;
+		}
+		else if (columnIndex == 10) {
+			return OFFER_PRICE_COMPARATOR;
+		}
+		return super.getColumnComparator(element, columnIndex);
 	}
 }
