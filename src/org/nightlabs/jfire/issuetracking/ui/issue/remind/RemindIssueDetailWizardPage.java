@@ -1,6 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.remind;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -20,7 +22,10 @@ extends WizardHopPage
 {
 	//GUI
 	private Label optionLbl;
-	
+	private Button emailButton;
+	private Button messageButton;
+	private Button smsButton;
+
 	//Used objects
 	private Issue selectedIssue;
 
@@ -37,6 +42,23 @@ extends WizardHopPage
 
 		optionLbl = new Label(mainComposite, SWT.NONE);
 		optionLbl.setText("Notify via: ");
+		GridData gd = new GridData();
+		gd.verticalAlignment = SWT.TOP;
+		optionLbl.setLayoutData(gd);
+
+		//Check Buttons
+		XComposite buttonComposite = new XComposite(mainComposite, SWT.NONE);
+		buttonComposite.getGridLayout().numColumns = 1;
+		buttonComposite.getGridData().grabExcessHorizontalSpace = true;
+
+		emailButton = new Button(buttonComposite, SWT.CHECK);
+		emailButton.setText("E-Mail");
+
+		messageButton = new Button(buttonComposite, SWT.CHECK);
+		messageButton.setText("Message");
+
+		smsButton = new Button(buttonComposite, SWT.CHECK);
+		smsButton.setText("SMS");
 		
 		return mainComposite;
 	}
@@ -46,3 +68,10 @@ extends WizardHopPage
 		return getErrorMessage() == null;
 	}
 }
+
+//class SMTPAuthenticator extends javax.mail.Authenticator {
+//
+//	public PasswordAuthentication getPasswordAuthentication() {
+//		return new PasswordAuthentication(u_email, u_pass);
+//	}
+//}

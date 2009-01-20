@@ -23,7 +23,6 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
@@ -40,8 +39,6 @@ extends WizardHopPage
 	private ListComposite<User> selectedList;
 	
 	//Used objects
-	private java.util.List<IssueType> issueTypes;
-
 
 	public RemindIssueUserWizardPage(Issue issue) {
 		super(RemindIssueUserWizardPage.class.getName(), "Remind Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class));
@@ -88,14 +85,13 @@ extends WizardHopPage
 		
 		Job job = new Job("Loading users...") {
 			@Override
-			protected IStatus run(IProgressMonitor arg0) {
+			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					final java.util.List<User> users = UserDAO.sharedInstance().getUsers(
 							Login.getLogin().getOrganisationID(),
 							(String[]) null,
 							new String[] {
-								User.FETCH_GROUP_NAME,
-								User.FETCH_GROUP_USER_LOCAL
+								User.FETCH_GROUP_NAME
 							},
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							new NullProgressMonitor()
@@ -134,6 +130,7 @@ extends WizardHopPage
 			public void widgetSelected(SelectionEvent e) {
 				selectedList.addElements(userList.getSelectedElements());
 				userList.removeAllSelected();
+				getContainer().updateButtons();
 			}
 		});
 		
@@ -149,6 +146,7 @@ extends WizardHopPage
 			public void widgetSelected(SelectionEvent e) {
 				userList.addElements(selectedList.getSelectedElements());
 				selectedList.removeAllSelected();
+				getContainer().updateButtons();
 			}
 		});
 		
@@ -176,12 +174,15 @@ extends WizardHopPage
 		return isPageComplete();
 	}
 	
-	private WizardHopPage optionalPage; 
-	
 	@Override
 	public boolean isPageComplete() {
 		boolean result = true;
 		setErrorMessage(null);
+		
+		if (selectedList.getElements().size() <= 0) {
+			result = false;
+			setErrorMessage("Please add some users");
+		}
 		
 		return result;
 	}
