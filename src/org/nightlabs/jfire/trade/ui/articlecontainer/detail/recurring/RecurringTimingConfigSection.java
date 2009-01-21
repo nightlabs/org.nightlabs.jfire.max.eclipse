@@ -170,7 +170,7 @@ public class RecurringTimingConfigSection extends AbstractRecurringConfigGeneral
 
 	protected void defineRecurringTimePatternClicked()
 	{	// open the time pattern wizard and hide the date control
-		if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet(),false))
+		if(TimePatternSetBuilderWizard.open(timePatternSetComposite.getTimePatternSet()))
 		{
 			saveTimePattern();
 		}
