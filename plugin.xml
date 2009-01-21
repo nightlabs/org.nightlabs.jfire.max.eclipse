@@ -71,4 +71,15 @@
          </groupMarker>         
       </editorActionBarContributionRegistry>
    </extension-->
+   
+   <extension
+         point="org.nightlabs.jfire.trade.ui.articleContainerEditorPageFactory">
+      <articleContainerEditorPageFactory
+            articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage$Factory"
+            editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage"
+            indexHint="600">
+      </articleContainerEditorPageFactory>
+   </extension>
 </plugin>
