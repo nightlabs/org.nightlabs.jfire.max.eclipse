@@ -15,28 +15,28 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class ShowIssueLinkPage 
+public class ShowLinkedIssuePage 
 extends EntityEditorPageWithProgress 
 {
 	public static class Factory implements IEntityEditorPageFactory {
 		@Override
 		public IFormPage createPage(FormEditor formEditor) {
-			return new ShowIssueLinkPage(formEditor);
+			return new ShowLinkedIssuePage(formEditor);
 		}
 
 		@Override
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new ShowIssueLinkPageController(editor);
+			return new ShowLinkedIssuePageController(editor);
 		}
 	}
 	
-	private ShowIssueLinkSection showIssueLinkSection;
+	private ShowLinkedIssueSection showIssueLinkSection;
 	
 	/**
 	 * @param editor
 	 */
-	public ShowIssueLinkPage(FormEditor editor) {
-		super(editor, ShowIssueLinkPage.class.getName(), "Issue Links");
+	public ShowLinkedIssuePage(FormEditor editor) {
+		super(editor, ShowLinkedIssuePage.class.getName(), "Issue Links");
 	}
 
 	/* (non-Javadoc)
@@ -44,9 +44,9 @@ extends EntityEditorPageWithProgress
 	 */
 	@Override
 	protected void addSections(Composite parent) {
-		final ShowIssueLinkPageController controller = (ShowIssueLinkPageController) getPageController();
+		final ShowLinkedIssuePageController controller = (ShowLinkedIssuePageController) getPageController();
 		
-		showIssueLinkSection = new ShowIssueLinkSection(this, parent, controller);
+		showIssueLinkSection = new ShowLinkedIssueSection(this, parent, controller);
 		showIssueLinkSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getManagedForm().addPart(showIssueLinkSection);
 
@@ -71,7 +71,7 @@ extends EntityEditorPageWithProgress
 		return "Issue Links";
 	}
 	
-	protected ShowIssueLinkPageController getController() {
-		return (ShowIssueLinkPageController)getPageController();
+	protected ShowLinkedIssuePageController getController() {
+		return (ShowLinkedIssuePageController)getPageController();
 	}
 }

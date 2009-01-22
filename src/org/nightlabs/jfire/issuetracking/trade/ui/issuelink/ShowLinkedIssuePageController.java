@@ -23,7 +23,7 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class ShowIssueLinkPageController 
+public class ShowLinkedIssuePageController 
 extends EntityEditorPageController 
 {
 	private ArticleContainerID articleContainerID;
@@ -41,7 +41,7 @@ extends EntityEditorPageController
 	/**
 	 * @param editor
 	 */
-	public ShowIssueLinkPageController(EntityEditor editor) {
+	public ShowLinkedIssuePageController(EntityEditor editor) {
 		super(editor);
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
 		issueLinkTableItems = new HashSet<IssueLinkTableItem>();
@@ -51,7 +51,7 @@ extends EntityEditorPageController
 	 * @param editor
 	 * @param startBackgroundLoading
 	 */
-	public ShowIssueLinkPageController(EntityEditor editor, boolean startBackgroundLoading) {
+	public ShowLinkedIssuePageController(EntityEditor editor, boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
 	}
 	

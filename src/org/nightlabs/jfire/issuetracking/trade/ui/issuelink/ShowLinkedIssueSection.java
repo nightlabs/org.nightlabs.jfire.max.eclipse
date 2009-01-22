@@ -18,10 +18,10 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class ShowIssueLinkSection 
+public class ShowLinkedIssueSection 
 extends ToolBarSectionPart 
 {
-	private ShowIssueLinkPageController controller;
+	private ShowLinkedIssuePageController controller;
 	private IssueLinkTable issueLinkTable;
 	
 	/**
@@ -29,7 +29,7 @@ extends ToolBarSectionPart
 	 * @param parent
 	 * @param controller
 	 */
-	public ShowIssueLinkSection(IFormPage page, Composite parent, final ShowIssueLinkPageController controller) {
+	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Issue Links");
 		this.controller = controller;
 		
