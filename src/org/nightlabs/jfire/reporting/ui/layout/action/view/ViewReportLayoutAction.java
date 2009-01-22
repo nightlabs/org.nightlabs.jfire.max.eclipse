@@ -26,6 +26,10 @@
 
 package org.nightlabs.jfire.reporting.ui.layout.action.view;
 
+import java.util.Collection;
+
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
+
 
 /**
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
@@ -42,6 +46,11 @@ extends AbstractViewReportLayoutAction
 	@Override
 	protected String getReportUseCaseID() {
 		return null;
+	}
+	
+	@Override
+	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
+		return extractReportLayouts(registryItems).size() > 0;
 	}
 	
 }

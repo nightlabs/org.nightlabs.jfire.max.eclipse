@@ -26,7 +26,10 @@
 
 package org.nightlabs.jfire.reporting.ui.layout.action.print;
 
+import java.util.Collection;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -69,6 +72,11 @@ extends AbstractPrintReportLayoutAction
 	@Override
 	protected String getReportUseCaseID() {
 		return null;
+	}
+	
+	@Override
+	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
+		return extractReportLayouts(registryItems).size() > 0;
 	}
 
 }
