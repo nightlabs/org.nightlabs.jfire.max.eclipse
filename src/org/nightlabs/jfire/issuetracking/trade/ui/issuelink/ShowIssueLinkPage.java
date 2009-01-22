@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
@@ -30,6 +31,7 @@ extends EntityEditorPageWithProgress
 	}
 	
 	private ShowIssueLinkSection showIssueLinkSection;
+	
 	/**
 	 * @param editor
 	 */
@@ -49,19 +51,27 @@ extends EntityEditorPageWithProgress
 		getManagedForm().addPart(showIssueLinkSection);
 
 		if (controller.isLoaded()) {
+			showIssueLinkSection.setIssueLinkTableItems(controller.getIssueLinkTableItems());
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress#getPageFormTitle()
-	 */
+	@Override
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
+		switchToContent();
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				if (showIssueLinkSection != null && !showIssueLinkSection.getSection().isDisposed())
+					showIssueLinkSection.setIssueLinkTableItems(getController().getIssueLinkTableItems());
+			}
+		});
+	}
+	
 	@Override
 	protected String getPageFormTitle() {
 		return "Issue Links";
 	}
 	
-	@Override
-	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
-		switchToContent();
+	protected ShowIssueLinkPageController getController() {
+		return (ShowIssueLinkPageController)getPageController();
 	}
 }
