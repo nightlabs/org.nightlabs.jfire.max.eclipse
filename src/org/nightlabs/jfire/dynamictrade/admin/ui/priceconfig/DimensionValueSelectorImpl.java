@@ -53,23 +53,28 @@ extends DimensionValueSelectorComboImpl
 	@Override
 	protected void fillDimensionCombo(Dimension<?> dimension, Combo dimensionCombo)
 	{
-		TransientStablePriceConfig tspc = (TransientStablePriceConfig) getGridPriceConfig();
-		DynamicTradePriceConfig dynamicTradePriceConfig = (DynamicTradePriceConfig) tspc.getBasePriceConfig();
-
 		if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
+			TransientStablePriceConfig tspc = (TransientStablePriceConfig) getGridPriceConfig();
+			DynamicTradePriceConfig dynamicTradePriceConfig = null;
+			if (tspc != null)
+				dynamicTradePriceConfig = (DynamicTradePriceConfig) tspc.getBasePriceConfig();
+				
 			List<PriceFragmentTypeDimensionValue> priceFragmentTypes = ((Dimension.PriceFragmentTypeDimension)dimension).getValues();
 			inputPriceFragmentTypes = new ArrayList<InputPriceFragmentType>(priceFragmentTypes.size());
-			for (Iterator<PriceFragmentTypeDimensionValue> it = priceFragmentTypes.iterator(); it.hasNext();) {
-				PriceFragmentTypeDimensionValue priceFragmentTypeDimensionValue = it.next();
-//				PriceFragmentType priceFragmentType = (PriceFragmentType) it.next();
-				InputPriceFragmentType inputPriceFragmentType = new InputPriceFragmentType(priceFragmentTypeDimensionValue);
-				inputPriceFragmentType.setInput(dynamicTradePriceConfig.getInputPriceFragmentTypes().contains(priceFragmentTypeDimensionValue.getObject()));
-				inputPriceFragmentTypes.add(inputPriceFragmentType);
+			if (dynamicTradePriceConfig != null) {
+				for (Iterator<PriceFragmentTypeDimensionValue> it = priceFragmentTypes.iterator(); it.hasNext();) {
+					PriceFragmentTypeDimensionValue priceFragmentTypeDimensionValue = it.next();
+					//				PriceFragmentType priceFragmentType = (PriceFragmentType) it.next();
+					InputPriceFragmentType inputPriceFragmentType = new InputPriceFragmentType(priceFragmentTypeDimensionValue);
+					inputPriceFragmentType.setInput(dynamicTradePriceConfig.getInputPriceFragmentTypes().contains(priceFragmentTypeDimensionValue.getObject()));
+					inputPriceFragmentTypes.add(inputPriceFragmentType);
+				}
 			}
 			priceFragmentTypeTable.setInput(dynamicTradePriceConfig, inputPriceFragmentTypes);
 		}
-		else
+		else {
 			super.fillDimensionCombo(dimension, dimensionCombo);
+		}
 	}
 
 	private int priceFragmentTypeDimensionIndex = -1;
