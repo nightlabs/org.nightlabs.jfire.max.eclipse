@@ -11,8 +11,8 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -22,7 +22,7 @@ public class ShowLinkedIssueSection
 extends ToolBarSectionPart 
 {
 	private ShowLinkedIssuePageController controller;
-	private IssueLinkTable issueLinkTable;
+	private IssueTable issueTable;
 	
 	/**
 	 * @param page
@@ -30,7 +30,7 @@ extends ToolBarSectionPart
 	 * @param controller
 	 */
 	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Issue Links");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Linked Issue");
 		this.controller = controller;
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -41,11 +41,11 @@ extends ToolBarSectionPart
 
 		getSection().setClient(client);
 
-		issueLinkTable = new IssueLinkTable(client, SWT.NONE);
-		issueLinkTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+		issueTable = new IssueTable(client, SWT.NONE);
+		issueTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 	
-	public void setIssueLinkTableItems(Collection<IssueLinkTableItem> issueLinkTableItems) {
-		issueLinkTable.setInput(issueLinkTableItems);
+	public void setLinkedIssues(Collection<Issue> issues) {
+		issueTable.setInput(issues);
 	}
 }

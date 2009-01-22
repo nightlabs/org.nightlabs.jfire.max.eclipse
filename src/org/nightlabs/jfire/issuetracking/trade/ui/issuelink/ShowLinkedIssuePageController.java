@@ -10,9 +10,18 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
+import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
+import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.dao.ArticleContainerDAO;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -27,16 +36,27 @@ public class ShowLinkedIssuePageController
 extends EntityEditorPageController 
 {
 	private ArticleContainerID articleContainerID;
-	private Collection<IssueLink> issueLinks;
-	private Collection<IssueLinkTableItem> issueLinkTableItems;
+	private Collection<Issue> linkedIssues;
 	
 	/**
-	 * The fetch groups of issue link data.
+	 * The fetch groups of linked issue data.
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT,
-		IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE};
+		IssueLink.FETCH_GROUP_ISSUE,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Statable.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		IssueType.FETCH_GROUP_NAME,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssuePriority.FETCH_GROUP_NAME,
+		StateDefinition.FETCH_GROUP_NAME};
 	
 	/**
 	 * @param editor
@@ -44,7 +64,7 @@ extends EntityEditorPageController
 	public ShowLinkedIssuePageController(EntityEditor editor) {
 		super(editor);
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
-		issueLinkTableItems = new HashSet<IssueLinkTableItem>();
+		linkedIssues = new HashSet<Issue>();
 	}
 
 	/**
@@ -57,20 +77,20 @@ extends EntityEditorPageController
 	
 	@Override
 	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("Loading issue links...", 10);
+		monitor.beginTask("Loading issues...", 10);
 		
 		ArticleContainer articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		
 		ObjectID objectID = (ObjectID)JDOHelper.getObjectId(articleContainer);
-		issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(articleContainerID.getOrganisationID(), 
+		Collection<IssueLink> issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(articleContainerID.getOrganisationID(), 
 				objectID.toString(), 
 				FETCH_GROUPS, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 				monitor);
 		
 		for (IssueLink issueLink : issueLinks) {
-			issueLinkTableItems.add(new IssueLinkTableItem(objectID, issueLink.getIssueLinkType())); 
+			linkedIssues.add(issueLink.getIssue()); 
 		}
 		
 		fireModifyEvent(null, null);
@@ -81,11 +101,7 @@ extends EntityEditorPageController
 		return false;
 	}
 	
-	public Collection<IssueLink> getIssueLinks() {
-		return issueLinks;
-	}
-	
-	public Collection<IssueLinkTableItem> getIssueLinkTableItems() {
-		return issueLinkTableItems;
+	public Collection<Issue> getLinkedIssues() {
+		return linkedIssues;
 	}
 }

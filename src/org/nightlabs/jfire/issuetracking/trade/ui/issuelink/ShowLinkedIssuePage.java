@@ -30,13 +30,13 @@ extends EntityEditorPageWithProgress
 		}
 	}
 	
-	private ShowLinkedIssueSection showIssueLinkSection;
+	private ShowLinkedIssueSection showLinkedIssueSection;
 	
 	/**
 	 * @param editor
 	 */
 	public ShowLinkedIssuePage(FormEditor editor) {
-		super(editor, ShowLinkedIssuePage.class.getName(), "Issue Links");
+		super(editor, ShowLinkedIssuePage.class.getName(), "Linked Issue");
 	}
 
 	/* (non-Javadoc)
@@ -46,12 +46,12 @@ extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		final ShowLinkedIssuePageController controller = (ShowLinkedIssuePageController) getPageController();
 		
-		showIssueLinkSection = new ShowLinkedIssueSection(this, parent, controller);
-		showIssueLinkSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-		getManagedForm().addPart(showIssueLinkSection);
+		showLinkedIssueSection = new ShowLinkedIssueSection(this, parent, controller);
+		showLinkedIssueSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
+		getManagedForm().addPart(showLinkedIssueSection);
 
 		if (controller.isLoaded()) {
-			showIssueLinkSection.setIssueLinkTableItems(controller.getIssueLinkTableItems());
+			showLinkedIssueSection.setLinkedIssues(controller.getLinkedIssues());
 		}
 	}
 
@@ -60,15 +60,15 @@ extends EntityEditorPageWithProgress
 		switchToContent();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				if (showIssueLinkSection != null && !showIssueLinkSection.getSection().isDisposed())
-					showIssueLinkSection.setIssueLinkTableItems(getController().getIssueLinkTableItems());
+				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed())
+					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues());
 			}
 		});
 	}
 	
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Links";
+		return "Linked Issue";
 	}
 	
 	protected ShowLinkedIssuePageController getController() {
