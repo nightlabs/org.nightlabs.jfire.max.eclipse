@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -34,7 +35,8 @@ extends EntityEditorPageController
 	 */
 	public static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		IssueLink.FETCH_GROUP_LINKED_OBJECT};
+		IssueLink.FETCH_GROUP_LINKED_OBJECT,
+		IssueLink.FETCH_GROUP_ISSUE_LINK_TYPE};
 	
 	/**
 	 * @param editor
@@ -42,6 +44,7 @@ extends EntityEditorPageController
 	public ShowIssueLinkPageController(EntityEditor editor) {
 		super(editor);
 		this.articleContainerID = ((ArticleContainerEditorInput) editor.getEditorInput()).getArticleContainerID();
+		issueLinkTableItems = new HashSet<IssueLinkTableItem>();
 	}
 
 	/**
