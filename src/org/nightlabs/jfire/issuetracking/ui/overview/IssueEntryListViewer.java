@@ -2,25 +2,17 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.Collection;
 
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryCollection;
 import org.nightlabs.jfire.base.ui.overview.Entry;
 import org.nightlabs.jfire.base.ui.overview.search.JDOQuerySearchEntryViewer;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
-import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -52,23 +44,6 @@ public class IssueEntryListViewer
 	@Override
 	protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
 		super.addResultTableListeners(tableComposite);
-		issueTable.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent e) {
-				StructuredSelection s = (StructuredSelection)e.getSelection();
-				if (s.isEmpty())
-					return;
-
-				Issue issue = (Issue)s.getFirstElement();
-
-				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
-				try {
-					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
-				} catch (PartInitException e1) {
-					throw new RuntimeException(e1);
-				}
-			}
-		});
-
 	}
 
 //	private static final String[] FETCH_GROUPS_ISSUES = {

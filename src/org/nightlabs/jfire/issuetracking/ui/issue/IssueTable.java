@@ -7,6 +7,9 @@ import java.util.Comparator;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -15,13 +18,18 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -253,6 +261,23 @@ extends AbstractTableComposite<Issue>
 		layout.addColumnData(new ColumnWeightData(15));
 		
 		table.setLayout(layout);
+		
+		addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				if (s.isEmpty())
+					return;
+
+				Issue issue = (Issue)s.getFirstElement();
+
+				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
+				try {
+					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
+				} catch (PartInitException e1) {
+					throw new RuntimeException(e1);
+				}
+			}
+		});
 	}
 
 	@Override
