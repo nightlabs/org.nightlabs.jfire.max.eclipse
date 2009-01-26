@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
@@ -27,7 +28,7 @@ extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 	public String getLinkedObjectName(IssueLink issueLink, DeliveryNote deliveryNote) {
 		DeliveryNoteID deliveryNoteID = (DeliveryNoteID) issueLink.getLinkedObjectID();
 		return String.format(
-				"Delivery Note  %s",
+				"Delivery Note  %s", //$NON-NLS-1$
 				deliveryNoteID.organisationID + '/' + deliveryNoteID.deliveryNoteIDPrefix + '/' + ObjectIDUtil.longObjectIDFieldToString(deliveryNoteID.deliveryNoteID));
 //				deliveryNote.getPrimaryKey());
 	}
@@ -37,7 +38,7 @@ extends AbstractIssueLinkHandler<DeliveryNoteID, DeliveryNote>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerDeliveryNote.class, 
-				"LinkedObject").createImage();
+				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
 	@Override

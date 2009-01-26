@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.store.ReceptionNote;
 import org.nightlabs.jfire.store.dao.ReceptionNoteDAO;
@@ -47,7 +48,7 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerReceptionNote.class, 
-				"LinkedObject").createImage();
+				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
 	@Override
@@ -55,13 +56,13 @@ extends AbstractIssueLinkHandler<ReceptionNoteID, ReceptionNote>
 //		return String.format(
 //				"Reception Note  %s",
 //				linkedObject.getPrimaryKey());
-		throw new UnsupportedOperationException("NYI");
+		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
 	}
 
 	@Override
 	public void openLinkedObject(IssueLink issueLink, ReceptionNoteID linkedObjectID) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("NYI");
+		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
 	}
 
 }

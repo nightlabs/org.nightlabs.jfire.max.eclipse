@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
 
 /**
@@ -30,7 +31,7 @@ extends ToolBarSectionPart
 	 * @param controller
 	 */
 	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, "Linked Issue");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.title")); //$NON-NLS-1$
 		this.controller = controller;
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

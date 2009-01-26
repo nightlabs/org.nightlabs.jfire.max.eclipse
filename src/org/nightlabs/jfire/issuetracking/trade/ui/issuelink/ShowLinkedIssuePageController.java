@@ -16,8 +16,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
-import org.nightlabs.jfire.issuetracking.ui.issue.IssueTable;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -77,7 +76,7 @@ extends EntityEditorPageController
 	
 	@Override
 	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("Loading issues...", 10);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePageController.monitor.loadIssues.text"), 10); //$NON-NLS-1$
 		
 		ArticleContainer articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);

@@ -30,7 +30,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 	@Override
 	public String getLinkedObjectName(IssueLink issueLink, Order linkedObject) {
 		return String.format(
-				"Order  %s",
+				"Order  %s", //$NON-NLS-1$
 				linkedObject.getPrimaryKey());
 	}
 
@@ -39,7 +39,7 @@ extends AbstractIssueLinkHandler<OrderID, Order>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerOrder.class, 
-				"LinkedObject").createImage();
+				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
 	@Override

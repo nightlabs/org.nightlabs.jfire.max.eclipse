@@ -16,6 +16,7 @@ import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.trade.ui.store.issuelink.IssueLinkHandlerDeliveryNote;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
 import org.nightlabs.jfire.trade.ui.overview.invoice.action.EditInvoiceAction;
@@ -33,7 +34,7 @@ extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 		// TODO Here we should return more information about the invoice - e.g. vendor, customer
 
 		return String.format(
-				"Invoice %s (%s)",
+				"Invoice %s (%s)", //$NON-NLS-1$
 				invoice.getPrimaryKey(),
 				invoice.getFinalizeDT());
 	}
@@ -43,7 +44,7 @@ extends AbstractIssueLinkHandler<InvoiceID, Invoice>
 		return SharedImages.getSharedImageDescriptor(
 				IssueTrackingTradePlugin.getDefault(), 
 				IssueLinkHandlerDeliveryNote.class, 
-				"LinkedObject").createImage();
+				"LinkedObject").createImage(); //$NON-NLS-1$
 	}
 
 	@Override

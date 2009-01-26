@@ -20,7 +20,6 @@ import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkAdder;
 import org.nightlabs.jfire.store.ReceptionNote;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryFactory;
 import org.nightlabs.jfire.trade.ui.overview.receptionnote.ReceptionNoteEntryViewer;
 import org.nightlabs.progress.ProgressMonitor;

@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -36,7 +37,7 @@ extends EntityEditorPageWithProgress
 	 * @param editor
 	 */
 	public ShowLinkedIssuePage(FormEditor editor) {
-		super(editor, ShowLinkedIssuePage.class.getName(), "Linked Issue");
+		super(editor, ShowLinkedIssuePage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.title")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +69,7 @@ extends EntityEditorPageWithProgress
 	
 	@Override
 	protected String getPageFormTitle() {
-		return "Linked Issue";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.pageFormTitle"); //$NON-NLS-1$
 	}
 	
 	protected ShowLinkedIssuePageController getController() {

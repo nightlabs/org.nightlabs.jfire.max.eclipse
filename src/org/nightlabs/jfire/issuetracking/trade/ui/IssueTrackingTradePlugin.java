@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class IssueTrackingTradePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.trade.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.trade.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static IssueTrackingTradePlugin plugin;
