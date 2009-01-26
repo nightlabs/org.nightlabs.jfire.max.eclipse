@@ -22,6 +22,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItemChangeListen
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /** 
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -37,7 +38,7 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 	
 	public IssueLinkListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getSection().setText("Issue Links");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.section.text")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
@@ -94,11 +95,11 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 					SharedImages.getSharedImageDescriptor(
 							IssueTrackingPlugin.getDefault(), 
 							IssueLinkListSection.class, 
-							"Open"
+							"Open" //$NON-NLS-1$
 					)
 			);
-			setToolTipText("Open linked object(s)");
-			setText("Open");
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.OpenLinkedObjectAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.OpenLinkedObjectAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -121,9 +122,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueLinkListSection.class, 
-			"Add"));
-			setToolTipText("Add Link(s)");
-			setText("Add");
+			"Add")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.AddLinkAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.AddLinkAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -140,9 +141,9 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueLinkListSection.class, 
-			"Remove"));
-			setToolTipText("Remove Link(s)");
-			setText("Remove");
+			"Remove")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.RemoveLinkAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.RemoveLinkAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

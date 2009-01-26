@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -30,7 +31,7 @@ implements IssueLinkHandlerFactory
 
 			@Override
 			public String getLinkedObjectName(IssueLink issueLink, Object linkedObject) {
-				return "Unknown Object Class";
+				return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.DefaultIssueLinkHandlerFactory.linkedObjectName.text"); //$NON-NLS-1$
 			}
 			
 			@Override

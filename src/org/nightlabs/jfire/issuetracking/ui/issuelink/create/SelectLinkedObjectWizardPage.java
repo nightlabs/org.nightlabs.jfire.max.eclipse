@@ -21,6 +21,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkDoubleClickListener;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkDoubleClickedEvent;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -37,8 +38,8 @@ public class SelectLinkedObjectWizardPage extends DynamicPathWizardPage
 
 	
 	public SelectLinkedObjectWizardPage() {
-		super(SelectLinkedObjectWizardPage.class.getName(), "Select the linked object");
-		setDescription("Please select the object(s)");
+		super(SelectLinkedObjectWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectLinkedObjectWizardPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectLinkedObjectWizardPage.description")); //$NON-NLS-1$
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class SelectLinkedObjectWizardPage extends DynamicPathWizardPage
 	public void setIssueLinkAdder(final IssueLinkAdder issueLinkAdder) {
 		// In case there currently is some UI in our carrier, we clean it.
 		if (carrier == null)
-			throw new IllegalStateException("setIssueLinkAdder(...) called before createPageContents(...)!");
+			throw new IllegalStateException("setIssueLinkAdder(...) called before createPageContents(...)!"); //$NON-NLS-1$
 
 		for (Control child : carrier.getChildren())
 			child.dispose();

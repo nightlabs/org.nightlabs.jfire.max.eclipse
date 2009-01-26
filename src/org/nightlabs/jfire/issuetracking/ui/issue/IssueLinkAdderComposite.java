@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * A composite that contains UIs for adding {@link IssueLink}.
@@ -65,12 +66,12 @@ extends XComposite
 			linkedButtonComposite.setLayoutData(gridData);
 
 			Button addLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-			addLinkButton.setText("Add");
+			addLinkButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite.button.addLink.text")); //$NON-NLS-1$
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			addLinkButton.setLayoutData(gridData);
 
 			Button removeLinkButton = new Button(linkedButtonComposite, SWT.PUSH);
-			removeLinkButton.setText("Remove");
+			removeLinkButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite.button.removeLink.text")); //$NON-NLS-1$
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			removeLinkButton.setLayoutData(gridData);
 

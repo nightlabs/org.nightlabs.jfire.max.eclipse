@@ -35,6 +35,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -109,7 +110,7 @@ public class IssueFilterCompositeIssueLinkRelated
 		this.setLayout(gridLayout);
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		new Label(this, SWT.NONE).setText("Link Type: ");
+		new Label(this, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeIssueLinkRelated.label.linkType.text")); //$NON-NLS-1$
 		issueLinkTypeCombo = new XComboComposite<IssueLinkType>(this, getBorderStyle());
 		issueLinkTypeCombo.setLabelProvider(labelProvider);
 		issueLinkTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -142,7 +143,7 @@ public class IssueFilterCompositeIssueLinkRelated
 				IssueLinkType issueLinkType = (IssueLinkType) element;
 				return issueLinkType.getName().getText();
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		};
 	};
 
@@ -185,13 +186,13 @@ public class IssueFilterCompositeIssueLinkRelated
 	}
 
 	private static final String[] FETCH_GROUPS_ISSUE_LINK_TYPE = { IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT };
-	private static IssueLinkType ISSUE_LINK_TYPE_ALL = new IssueLinkType(Organisation.DEV_ORGANISATION_ID, "Issue_Link_Type_All");
+	private static IssueLinkType ISSUE_LINK_TYPE_ALL = new IssueLinkType(Organisation.DEV_ORGANISATION_ID, "Issue_Link_Type_All"); //$NON-NLS-1$
 
 	private void prepareProperties(){
-		ISSUE_LINK_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_LINK_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeIssueLinkRelated.issueLinkType.all.text")); //$NON-NLS-1$
 	}
 	private void loadProperties(){
-		Job loadJob = new Job("Loading Issue Link Properties....") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeIssueLinkRelated.job.loadingIssueLinkProperties.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {
@@ -222,7 +223,7 @@ public class IssueFilterCompositeIssueLinkRelated
 
 					return Status.OK_STATUS;
 				} finally {
-					logger.debug("Load Job finished.");
+					logger.debug("Load Job finished."); //$NON-NLS-1$
 				}
 			}
 		};
@@ -243,7 +244,7 @@ public class IssueFilterCompositeIssueLinkRelated
 	/**
 	 * Group ID for storing active states in the query.
 	 */
-	public static final String FILTER_GROUP_ID = "IssueFilterCompositeIssueLinkRelated";
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositeIssueLinkRelated"; //$NON-NLS-1$
 
 	@Override
 	protected String getGroupID()

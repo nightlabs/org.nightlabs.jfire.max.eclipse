@@ -37,6 +37,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -94,8 +95,8 @@ extends WizardHopPage
 
 
 	public CreateIssueDetailWizardPage(Issue issue) {
-		super(CreateIssueDetailWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class));
-		setDescription("Enter subject & description for the issue.");
+		super(CreateIssueDetailWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.title"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.description")); //$NON-NLS-1$
 		this.issue = issue;
 	}
 
@@ -104,7 +105,7 @@ extends WizardHopPage
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
 		mainComposite.getGridLayout().numColumns = 6;
 
-		new Label(mainComposite, SWT.NONE).setText("Project");
+		new Label(mainComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.project.text")); //$NON-NLS-1$
 		projectComboComposite = new ProjectComboComposite(mainComposite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 5;
@@ -120,7 +121,7 @@ extends WizardHopPage
 		
 		//Subject & Description
 		subjectLabel = new Label(mainComposite, SWT.NONE);
-		subjectLabel.setText("Subject: ");
+		subjectLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.subject.text")); //$NON-NLS-1$
 
 		subjectText = new I18nTextEditor(mainComposite);
 		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
@@ -128,8 +129,8 @@ extends WizardHopPage
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				getContainer().updateButtons();
-				if (subjectText.getEditText().equals("")) {
-					setErrorMessage("Subject should not be empty!");
+				if (subjectText.getEditText().equals("")) { //$NON-NLS-1$
+					setErrorMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.errorMessage.subjectNotEmpty.text")); //$NON-NLS-1$
 				}
 			}
 		});
@@ -139,7 +140,7 @@ extends WizardHopPage
 		subjectText.setLayoutData(gridData);
 
 		descriptionLabel = new Label(mainComposite, SWT.NONE);
-		descriptionLabel.setText("Description: ");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.description.text")); //$NON-NLS-1$
 
 		descriptionText = new I18nTextEditorMultiLine(mainComposite, subjectText.getLanguageChooser());
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
@@ -147,8 +148,8 @@ extends WizardHopPage
 			@Override
 			public void modifyText(ModifyEvent arg0) {
 				getContainer().updateButtons();
-				if (descriptionText.getEditText().equals("")) {
-					setErrorMessage("Description should not be empty!");
+				if (descriptionText.getEditText().equals("")) { //$NON-NLS-1$
+					setErrorMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.errorMessage.descriptionNotEmpty.text")); //$NON-NLS-1$
 				}
 			}
 		});
@@ -160,7 +161,7 @@ extends WizardHopPage
 
 		//Properties
 		issueTypeLbl = new Label(mainComposite, SWT.NONE);
-		issueTypeLbl.setText("Issue Type: ");
+		issueTypeLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.issueType.text")); //$NON-NLS-1$
 		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE, issueLabelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -184,7 +185,7 @@ extends WizardHopPage
 		});
 
 		issueSeverityLbl = new Label(mainComposite, SWT.NONE);
-		issueSeverityLbl.setText("Severity: ");
+		issueSeverityLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.severity.text")); //$NON-NLS-1$
 		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE, issueLabelProvider);
 		
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
@@ -195,7 +196,7 @@ extends WizardHopPage
 		});
 
 		issuePriorityLbl = new Label(mainComposite, SWT.NONE);
-		issuePriorityLbl.setText("Priority: ");
+		issuePriorityLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.priority.text")); //$NON-NLS-1$
 		issuePriorityCombo = new XComboComposite<IssuePriority>(mainComposite, SWT.NONE, issueLabelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -237,7 +238,7 @@ extends WizardHopPage
 //		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//Loading Data
-		Job loadJob = new Job("Loading Issue Properties....") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.job.loadingIssueProp.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) throws Exception
 			{
@@ -300,11 +301,11 @@ extends WizardHopPage
 //		if (issue.getProject() == null) {
 //			result = false;
 //		}
-		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) {
+		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
 		
-		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) {
+		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
 		

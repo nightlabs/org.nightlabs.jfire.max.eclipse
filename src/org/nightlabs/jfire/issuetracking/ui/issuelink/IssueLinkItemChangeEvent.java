@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.EventObject;
 
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * 
@@ -32,8 +33,8 @@ public class IssueLinkItemChangeEvent extends EventObject {
 	 */
 	public IssueLinkItemChangeEvent(Object source, ChangeType changeType, Collection<IssueLinkTableItem> issueLinkTableItems) {
 		super(source);
-		assert changeType != null : "changeType != null";
-		assert issueLinkTableItems != null : "issueLinkTableItems != null";
+		assert changeType != null : "changeType != null"; //$NON-NLS-1$
+		assert issueLinkTableItems != null : "issueLinkTableItems != null"; //$NON-NLS-1$
 		this.changeType = changeType;
 		this.issueLinkTableItems = issueLinkTableItems;
 	}

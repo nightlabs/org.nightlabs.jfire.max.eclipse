@@ -5,6 +5,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateProjectAction 
 extends Action 
@@ -15,9 +16,9 @@ extends Action
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				ProjectAdminTreeComposite.class, 
-		"Create"));
-		setToolTipText("Create Project");
-		setText("Create Project");
+		"Create")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction.CreateProjectAction.toolTipText")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction.CreateProjectAction.text")); //$NON-NLS-1$
 	}
 
 	@Override

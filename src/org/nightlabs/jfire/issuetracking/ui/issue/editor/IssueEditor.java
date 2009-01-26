@@ -22,6 +22,7 @@ import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 
@@ -46,7 +47,7 @@ implements ICloseOnLogoutEditorPart
 	{
 		super.init(site, input);
 		issueEditorInput = (IssueEditorInput)input;
-		Job job = new Job("Loading Issue Type.....")
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor.job.loadingIssueType.text")) //$NON-NLS-1$
 		{
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
@@ -60,7 +61,7 @@ implements ICloseOnLogoutEditorPart
 				{
 					public void run()
 					{
-						setPartName("ID: " + issue.getIssueIDAsString());
+						setPartName(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor.editor.partName.text") + issue.getIssueIDAsString()); //$NON-NLS-1$
 						setTitleToolTip(issue.getSubject().getText());
 					}
 				});
@@ -68,7 +69,7 @@ implements ICloseOnLogoutEditorPart
 				editLockHandle = EditLockMan.sharedInstance().acquireEditLock(
 						EditLockTypeIssue.EDIT_LOCK_TYPE_ID, 
 						(ObjectID)JDOHelper.getObjectId(issue), 
-						"TODO",
+						"TODO", //$NON-NLS-1$
 						new EditLockCallback() {
 							@Override
 							public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {

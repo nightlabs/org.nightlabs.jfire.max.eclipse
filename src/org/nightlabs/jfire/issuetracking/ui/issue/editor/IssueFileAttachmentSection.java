@@ -34,6 +34,7 @@ import org.nightlabs.jfire.issue.id.IssueFileAttachmentID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.IssueFileAttachmentCompositeStyle;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -59,10 +60,10 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		super(page, parent, controller);
 		getClient().getGridLayout().numColumns = 2;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
-		getSection().setText("Attachments");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.section.text")); //$NON-NLS-1$
 		
 		Label fileLabel = new Label(getClient(), SWT.NONE);
-		fileLabel.setText("Files: ");
+		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.label.file.text")); //$NON-NLS-1$
 		
 		issueFileAttachmentComposite = 
 			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withoutAddRemoveButton);
@@ -121,9 +122,9 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueFileAttachmentSection.class, 
-			"Download"));
-			setToolTipText("Download File(s)");
-			setText("Download");
+			"Download")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -183,9 +184,9 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueFileAttachmentSection.class, 
-			"Add"));
-			setToolTipText("Add File(s)");
-			setText("Add");
+			"Add")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -220,9 +221,9 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueFileAttachmentSection.class, 
-			"Remove"));
-			setToolTipText("Remove File(s)");
-			setText("Remove");
+			"Remove")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

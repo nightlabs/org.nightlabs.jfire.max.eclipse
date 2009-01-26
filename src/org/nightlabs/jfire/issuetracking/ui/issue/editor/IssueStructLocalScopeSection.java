@@ -11,6 +11,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -33,7 +34,7 @@ public class IssueStructLocalScopeSection extends ToolBarSectionPart {
 	 */
 	public IssueStructLocalScopeSection(IFormPage page, Composite parent, int style)
 	{
-		super(page, parent, style, "Property Scope");
+		super(page, parent, style, Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueStructLocalScopeSection.title")); //$NON-NLS-1$
 		updateToolBarManager();
 		structLocalScopeText = new Text(getContainer(), XComposite.getBorderStyle(getContainer()) | SWT.SINGLE | SWT.READ_ONLY);
 		structLocalScopeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

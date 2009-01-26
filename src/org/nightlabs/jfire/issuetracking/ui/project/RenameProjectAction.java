@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class RenameProjectAction extends Action {
@@ -29,16 +30,16 @@ public class RenameProjectAction extends Action {
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				ProjectAdminTreeComposite.class, 
-		"Rename"));
-		setToolTipText("Rename Project");
-		setText("Rename Project");
+		"Rename")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.RenameProjectAction.RenameProjectAction.toolTipText")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.RenameProjectAction.RenameProjectAction.text")); //$NON-NLS-1$
 	}
 
 	@Override
 	public void run() {
 		TreeSelection selection = (TreeSelection)projectTreeViewer.getSelection();
 		final Project projectToStore = ((ProjectTreeNode)(selection.getFirstElement())).getJdoObject();
-		dialog = new InputDialog(RCPUtil.getActiveShell(), "Rename Project", "Enter project's name", projectToStore.getName().getText(), null) {
+		dialog = new InputDialog(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.RenameProjectAction.dialog.renameProject.title"), Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.RenameProjectAction.dialog.renameProject.description"), projectToStore.getName().getText(), null) { //$NON-NLS-1$ //$NON-NLS-2$
 			@Override
 			protected void okPressed() {
 				try {

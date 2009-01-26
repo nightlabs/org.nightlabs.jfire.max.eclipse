@@ -13,6 +13,7 @@ import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTableItem;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -33,7 +34,7 @@ extends DynamicPathWizard
 	public CreateIssueLinkWizard(IssueLinkTable issueLinkTable, Issue issue) {
 		this.issueLinkTable = issueLinkTable;
 		this.issue = issue;
-		setWindowTitle("Link objects to an issue");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -88,10 +89,10 @@ extends DynamicPathWizard
 		if (duplicatedItems.size() != 0) {
 			StringBuffer errorMsg = new StringBuffer();
 			for (IssueLinkTableItem dItem : duplicatedItems) {
-				errorMsg.append(dItem.getLinkedObjectID().toString() + " with IssueLinkType=" + dItem.getIssueLinkType().getName().getText() + "\n\n");
+				errorMsg.append(dItem.getLinkedObjectID().toString() + " with IssueLinkType=" + dItem.getIssueLinkType().getName().getText() + "\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			MessageDialog.openError(getShell(), "The following IssueLinks are already existed!!", errorMsg.toString());
+			MessageDialog.openError(getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard.dialog.error.linkExisted.text"), errorMsg.toString()); //$NON-NLS-1$
 			return false;
 		}
 

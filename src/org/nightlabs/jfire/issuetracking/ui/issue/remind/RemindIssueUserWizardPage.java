@@ -24,6 +24,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -41,8 +42,8 @@ extends WizardHopPage
 	//Used objects
 
 	public RemindIssueUserWizardPage(Issue issue) {
-		super(RemindIssueUserWizardPage.class.getName(), "Remind Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class));
-		setDescription("Choose users.");
+		super(RemindIssueUserWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.title"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.description")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -52,20 +53,20 @@ extends WizardHopPage
 		mainComposite.getGridLayout().numColumns = 6;
 
 		Label uLabel = new Label(mainComposite, SWT.NONE);
-		uLabel.setText("Users");
+		uLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.label.user.text")); //$NON-NLS-1$
 		uLabel.setAlignment(SWT.CENTER);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		uLabel.setLayoutData(gd);
 		
 		Label tmpLabel = new Label(mainComposite, SWT.NONE);
-		tmpLabel.setText("");
+		tmpLabel.setText(""); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalAlignment = GridData.FILL;
 		tmpLabel.setLayoutData(gd);
 		
 		Label sLabel = new Label(mainComposite, SWT.NONE);
-		sLabel.setText("Selected Users");
+		sLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.label.selectedUser.text")); //$NON-NLS-1$
 		sLabel.setAlignment(SWT.CENTER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -83,7 +84,7 @@ extends WizardHopPage
 			}
 		});
 		
-		Job job = new Job("Loading users...") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.job.loadingUser.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
@@ -181,7 +182,7 @@ extends WizardHopPage
 		
 		if (selectedList.getElements().size() <= 0) {
 			result = false;
-			setErrorMessage("Please add some users");
+			setErrorMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueUserWizardPage.errorMessage.noUserAdded.text")); //$NON-NLS-1$
 		}
 		
 		return result;

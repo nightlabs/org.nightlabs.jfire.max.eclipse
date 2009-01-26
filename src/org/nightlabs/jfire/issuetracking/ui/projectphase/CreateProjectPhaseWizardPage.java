@@ -20,6 +20,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 {
@@ -46,7 +47,7 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		
 		phaseNameLabel = new Label(page, SWT.WRAP);
 		phaseNameLabel.setLayoutData(new GridData());
-		phaseNameLabel.setText("Phase Name:");
+		phaseNameLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.label.phaseName.text")); //$NON-NLS-1$
 		
 		phaseNameText = new I18nTextEditor(page);
 		phaseNameText.setI18nText(newProjectPhase.getName(), EditMode.DIRECT);
@@ -54,7 +55,7 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 
 		descriptionLabel = new Label(page, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText("Description:");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.label.description.text")); //$NON-NLS-1$
 		
 		descriptionText = new I18nTextEditorMultiLine(page, phaseNameText.getLanguageChooser());	
 		descriptionText.setI18nText(newProjectPhase.getDescription(), EditMode.DIRECT);
@@ -64,10 +65,10 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		gridData.minimumHeight = 100;
 		descriptionText.setLayoutData(gridData);
 
-		new Label(page, SWT.NONE).setText("Properties: ");
+		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.label.properties.text")); //$NON-NLS-1$
 		
 		activeButton = new Button(page, SWT.CHECK);
-		activeButton.setText("Active");
+		activeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.button.active.text")); //$NON-NLS-1$
 		activeButton.setSelection(isActive);
 		activeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -88,9 +89,9 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	
 	public CreateProjectPhaseWizardPage(Project project, ProjectPhase newProjectPhase)
 	{
-		super(CreateProjectPhaseWizardPage.class.getName(), "Project Phase Page", 
+		super(CreateProjectPhaseWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.title"),  //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectPhaseWizard.class));
-		this.setDescription("Description");
+		this.setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizardPage.description")); //$NON-NLS-1$
 		this.project = project;
 		this.newProjectPhase = newProjectPhase;
 	}
@@ -111,11 +112,11 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 		boolean result = true;
 		setErrorMessage(null);
 		
-		if (phaseNameText.getEditText().equals("") || phaseNameText.getI18nText().getText() == null) {
+		if (phaseNameText.getEditText().equals("") || phaseNameText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
 		
-		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) {
+		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
 		

@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Transition;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
@@ -48,7 +49,7 @@ extends AbstractIssueEditorGeneralSection
 	public IssueTypeAndStateSection(final FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(page, parent, controller);
 
-		getSection().setText("Type and Status");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.section.text")); //$NON-NLS-1$
 
 		getClient().getGridLayout().numColumns = 3;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
@@ -79,7 +80,7 @@ extends AbstractIssueEditorGeneralSection
 
 		// Status
 		statusLabel = new Label(getClient(), SWT.WRAP);
-		statusLabel.setText("Status: ");
+		statusLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.status.text")); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 1;
 		statusLabel.setLayoutData(gd);
@@ -107,7 +108,7 @@ extends AbstractIssueEditorGeneralSection
 				}
 
 				if (getController().getEntityEditor().isDirty()) {
-					if (!MessageDialog.openQuestion(nextTransitionComposite.getShell(), "Save?", "In order to perform a transition, you need to save all modifications. Do you want to save the editor and perform the transition now?")) {
+					if (!MessageDialog.openQuestion(nextTransitionComposite.getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.dialog.saveModification.title"), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.dialog.saveModification.description"))) { //$NON-NLS-1$ //$NON-NLS-2$
 						nextTransitionComposite.setEnabled(true);
 						return;
 					}
@@ -218,13 +219,13 @@ extends AbstractIssueEditorGeneralSection
 	protected void doSetIssue(Issue issue) {
 		issueTypeLabel.setText(
 				String.format(
-						"Issue type: %s", 
+						Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.issueType.text"),  //$NON-NLS-1$
 						issue.getIssueType().getName().getText())
 		);
 
 		projectLabel.setText(
 				String.format(
-				"Project:")
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueTypeAndStateSection.label.project.text")) //$NON-NLS-1$
 		);
 
 		projectComboComposite.setSelectedProject(issue.getProject());

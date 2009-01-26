@@ -30,6 +30,7 @@ import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -217,47 +218,47 @@ extends AbstractTableComposite<Issue>
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("ID");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Date Submitted");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.date.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(40));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Type");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.type.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Subject");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.subject.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Description");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.description.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(20));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Severity");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Priority");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("State");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(15));
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Status");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(15));
 		
 		table.setLayout(layout);
@@ -306,15 +307,15 @@ extends AbstractTableComposite<Issue>
 					if (issue.getDescription() != null) {
 						String descriptionText = issue.getDescription().getText();
 						if (descriptionText.indexOf('\n') != -1)
-							return descriptionText.substring(0, descriptionText.indexOf('\n')).concat("(...)");
+							return descriptionText.substring(0, descriptionText.indexOf('\n')).concat("(...)"); //$NON-NLS-1$
 						else
 							return descriptionText;
 					}
 				break;
-				case(5): return issue.getIssueSeverityType() == null ? "None" : issue.getIssueSeverityType().getIssueSeverityTypeText().getText();
-				case(6): return issue.getIssuePriority() == null ? "None" : issue.getIssuePriority().getIssuePriorityText().getText();
+				case(5): return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
+				case(6): return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
 				case(7): return getStateName(issue);					
-				case(8): return issue.isStarted()? "Working" : "Stopped";
+				case(8): return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}
 			}
@@ -343,6 +344,6 @@ extends AbstractTableComposite<Issue>
 
 	public void setLoadingStatus()
 	{
-		super.setInput("Loading message");
+		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.table.loading.text")); //$NON-NLS-1$
 	}
 }

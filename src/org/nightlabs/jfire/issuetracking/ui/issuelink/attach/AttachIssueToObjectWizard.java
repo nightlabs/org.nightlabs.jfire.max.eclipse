@@ -20,6 +20,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -39,7 +40,7 @@ extends DynamicPathWizard
 	
 	public AttachIssueToObjectWizard(Object attachedObject) {
 		this.attachedObject = attachedObject;
-		setWindowTitle("Attach Issue(s) to Objects");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -98,7 +99,7 @@ extends DynamicPathWizard
 						IssueLink issueLink = issue.createIssueLink(selectedIssueLinkType, attachedObject);
 						if (issueLink == null) {
 							MessageBox msg = new MessageBox(getShell());
-							msg.setText("The issue has already had this link!!.");
+							msg.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard.messageBox.hasLinkAlready.text")); //$NON-NLS-1$
 							if (msg.open() == 1) {
 								return;
 							}

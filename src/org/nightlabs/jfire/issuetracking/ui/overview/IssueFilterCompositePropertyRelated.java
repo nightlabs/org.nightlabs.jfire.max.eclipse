@@ -43,6 +43,7 @@ import org.nightlabs.jfire.issue.id.IssueSeverityTypeID;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
@@ -120,7 +121,7 @@ public class IssueFilterCompositePropertyRelated
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		issueTypeComposite.getGridLayout().numColumns = 2;
 
-		new Label(issueTypeComposite, SWT.NONE).setText("Issue Type: ");
+		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.issueType.text")); //$NON-NLS-1$
 		issueTypeCombo = new XComboComposite<IssueType>(issueTypeComposite, getBorderStyle());
 		issueTypeCombo.setLabelProvider(labelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -140,7 +141,7 @@ public class IssueFilterCompositePropertyRelated
 			}
 		});
 
-		new Label(issueTypeComposite, SWT.NONE).setText("Severity: ");
+		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.severity.text")); //$NON-NLS-1$
 		issueSeverityCombo = new XComboComposite<IssueSeverityType>(issueTypeComposite, getBorderStyle());
 		issueSeverityCombo.setLabelProvider(labelProvider);
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -160,7 +161,7 @@ public class IssueFilterCompositePropertyRelated
 			}
 		});
 
-		new Label(issueTypeComposite, SWT.NONE).setText("Priority: ");
+		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.priority.text")); //$NON-NLS-1$
 		issuePriorityCombo = new XComboComposite<IssuePriority>(issueTypeComposite, getBorderStyle());
 		issuePriorityCombo.setLabelProvider(labelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -180,7 +181,7 @@ public class IssueFilterCompositePropertyRelated
 			}
 		});
 
-		new Label(issueTypeComposite, SWT.NONE).setText("Resolution: ");
+		new Label(issueTypeComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.label.resolution.text")); //$NON-NLS-1$
 		issueResolutionCombo = new XComboComposite<IssueResolution>(issueTypeComposite, getBorderStyle());
 		issueResolutionCombo.setLabelProvider(labelProvider);
 		issueResolutionCombo.addSelectionChangedListener(new ISelectionChangedListener()
@@ -322,16 +323,16 @@ public class IssueFilterCompositePropertyRelated
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
 
-	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All");
-	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All");
-	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All");
-	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All");
+	private static IssueType ISSUE_TYPE_ALL = new IssueType(Organisation.DEV_ORGANISATION_ID, "Issue_Type_All"); //$NON-NLS-1$
+	private static IssueSeverityType ISSUE_SEVERITY_TYPE_ALL = new IssueSeverityType(Organisation.DEV_ORGANISATION_ID, "Issue_Severity_Type_All"); //$NON-NLS-1$
+	private static IssuePriority ISSUE_PRIORITY_ALL = new IssuePriority(Organisation.DEV_ORGANISATION_ID, "Issue_Priority_All"); //$NON-NLS-1$
+	private static IssueResolution ISSUE_RESOLUTION_ALL = new IssueResolution(Organisation.DEV_ORGANISATION_ID, "Issue_Resolution_All"); //$NON-NLS-1$
 
 	private void prepareIssueProperties(){
-		ISSUE_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_SEVERITY_TYPE_ALL.getIssueSeverityTypeText().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_PRIORITY_ALL.getIssuePriorityText().setText(Locale.ENGLISH.getLanguage(), "All");
-		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
+		ISSUE_TYPE_ALL.getName().setText(Locale.ENGLISH.getLanguage(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.issueType.all.text")); //$NON-NLS-1$
+		ISSUE_SEVERITY_TYPE_ALL.getIssueSeverityTypeText().setText(Locale.ENGLISH.getLanguage(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.severity.all.text")); //$NON-NLS-1$
+		ISSUE_PRIORITY_ALL.getIssuePriorityText().setText(Locale.ENGLISH.getLanguage(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.priority.all.text")); //$NON-NLS-1$
+		ISSUE_RESOLUTION_ALL.getName().setText(Locale.ENGLISH.getLanguage(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.resolution.all.text")); //$NON-NLS-1$
 	}
 
 	private static final String[] FETCH_GROUPS_ISSUE_TYPE = {
@@ -346,12 +347,12 @@ public class IssueFilterCompositePropertyRelated
 	private IssueLabelProvider labelProvider = new IssueLabelProvider();
 
 	private void loadProperties(){
-		Job loadJob = new Job("Loading Issue Properties....") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePropertyRelated.job.loadingProperties.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				synchronized (mutex) {
 //					loadJobRunning = true;
-					logger.debug("Load Job running....");
+					logger.debug("Load Job running...."); //$NON-NLS-1$
 				}
 				try {
 					try {
@@ -447,7 +448,7 @@ public class IssueFilterCompositePropertyRelated
 //						storedIssueQueryRunnable = null;
 //						}
 //						loadJobRunning = false;
-						logger.debug("Load Job finished.");
+						logger.debug("Load Job finished."); //$NON-NLS-1$
 					}
 				}
 			}
@@ -476,7 +477,7 @@ public class IssueFilterCompositePropertyRelated
 	/**
 	 * Group ID for storing active states in the query.
 	 */
-	public static final String FILTER_GROUP_ID = "IssueFilterCompositePropertyRelated";
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositePropertyRelated"; //$NON-NLS-1$
 
 	@Override
 	protected String getGroupID()

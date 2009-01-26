@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -39,19 +40,19 @@ extends AbstractTableComposite<ProjectPhase>
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("ID.");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumn.id.text")); //$NON-NLS-1$
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Phase Name");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumn.phaseName.text")); //$NON-NLS-1$
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Description");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumn.description.text")); //$NON-NLS-1$
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Status");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumn.status.text")); //$NON-NLS-1$
 		
 		table.setLayout(new WeightedTableLayout(new int[] {5, 30, 30, 30}));
 	}
@@ -72,7 +73,7 @@ extends AbstractTableComposite<ProjectPhase>
 				case(2):
 					return projectPhase.getDescription().getText();
 				case(3):
-					return projectPhase.isActive() ? "Active" : "Inactive";
+					return projectPhase.isActive() ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumnText.active.text") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseTable.tableColumnText.inActive.text"); //$NON-NLS-1$ //$NON-NLS-2$
 				default:
 					return ""; //$NON-NLS-1$
 				}

@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectType;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -54,7 +55,7 @@ extends ToolBarSectionPart
 	private Button activeButton;
 	
 	public ProjectSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.section.text")); //$NON-NLS-1$
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
@@ -64,7 +65,7 @@ extends ToolBarSectionPart
 		client.setLayout(gl);
 		
 		projectTypeLabel = new Label(client, SWT.WRAP);
-		projectTypeLabel.setText("Project Type: ");
+		projectTypeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.label.projectType.text")); //$NON-NLS-1$
 		
 		projectTypeCombo = new ProjectTypeComboComposite(client, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -77,21 +78,21 @@ extends ToolBarSectionPart
 		});
 		
 		nameLabel = new Label(client, SWT.WRAP);
-		nameLabel.setText("Name: ");
+		nameLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.label.name.text")); //$NON-NLS-1$
 		
 		nameText = new I18nTextEditor(client);
 		nameText.addModifyListener(modifyListener);
 		
 		descriptionLabel = new Label(client, SWT.WRAP);
-		descriptionLabel.setText("Description: ");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.label.description.text")); //$NON-NLS-1$
 		
 		descriptionText = new I18nTextEditorMultiLine(client, nameText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);
 		
-		new Label(client, SWT.NONE).setText("");
+		new Label(client, SWT.NONE).setText(""); //$NON-NLS-1$
 		
 		activeButton = new Button(client, SWT.CHECK);
-		activeButton.setText("Active");
+		activeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.button.active.text")); //$NON-NLS-1$
 		activeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -101,13 +102,13 @@ extends ToolBarSectionPart
 		});
 		
 		createdTimeLabel = new Label(client, SWT.WRAP);
-		createdTimeLabel.setText("Created Time: ");
+		createdTimeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.label.createdTime.text")); //$NON-NLS-1$
 
 		createdTimeTextLabel = new Label(client, SWT.NONE);
 		createdTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		updatedTimeLabel = new Label(client, SWT.WRAP);
-		updatedTimeLabel.setText("Updated Time: ");
+		updatedTimeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectSection.label.updatedTime.text")); //$NON-NLS-1$
 
 		updatedTimeTextLabel = new Label(client, SWT.NONE);
 		updatedTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -131,7 +132,7 @@ extends ToolBarSectionPart
 				descriptionText.setI18nText(project.getDescription(), EditMode.DIRECT);
 				
 				createdTimeTextLabel.setText(project.getCreateTimestamp().toString());
-				updatedTimeTextLabel.setText(project.getUpdateTimestamp() == null? "-" : project.getUpdateTimestamp().toString());
+				updatedTimeTextLabel.setText(project.getUpdateTimestamp() == null? "-" : project.getUpdateTimestamp().toString()); //$NON-NLS-1$
 				
 				activeButton.setSelection(project.isActive());
 				

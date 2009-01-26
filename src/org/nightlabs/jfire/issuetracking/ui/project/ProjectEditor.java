@@ -14,6 +14,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class ProjectEditor extends EntityEditor
@@ -27,7 +28,7 @@ implements ICloseOnLogoutEditorPart
 	{
 		super.init(site, input);
 		projectEditorInput = (ProjectEditorInput)input;
-		Job job = new Job("Loading Project.....")
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor.job.loadingProject.text")) //$NON-NLS-1$
 		{
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
@@ -42,7 +43,7 @@ implements ICloseOnLogoutEditorPart
 				{
 					public void run()
 					{
-						setPartName("Project: " + project.getName().getText());
+						setPartName(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor.editor.partName.text") + project.getName().getText()); //$NON-NLS-1$
 						setTitleToolTip(project.getDescription().getText());
 					}
 				});

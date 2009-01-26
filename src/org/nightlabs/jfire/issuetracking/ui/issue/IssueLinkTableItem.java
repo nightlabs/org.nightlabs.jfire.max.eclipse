@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.util.Util;
 
 /**
@@ -16,10 +17,10 @@ public class IssueLinkTableItem {
 
 	public IssueLinkTableItem(ObjectID linkedObjectID, IssueLinkType issueLinkType) {
 		if (linkedObjectID == null)
-			throw new IllegalArgumentException("linkedObjectID == null");
+			throw new IllegalArgumentException("linkedObjectID == null"); //$NON-NLS-1$
 
 		if (issueLinkType == null)
-			throw new IllegalArgumentException("issueLinkType == null");
+			throw new IllegalArgumentException("issueLinkType == null"); //$NON-NLS-1$
 
 		this.linkedObjectID = linkedObjectID;
 		this.issueLinkType = issueLinkType;
@@ -41,17 +42,17 @@ public class IssueLinkTableItem {
 
 	public void setIssueLinkType(IssueLinkType issueLinkType) {
 		if (issueLinkType == null)
-			throw new IllegalArgumentException("issueLinkType == null");
+			throw new IllegalArgumentException("issueLinkType == null"); //$NON-NLS-1$
 
 		this.issueLinkType = issueLinkType;
 	}
 
 	public void initIssueLink(IssueLink issueLink) {
 		if (issueLink == null)
-			throw new IllegalArgumentException("issueLink == null");
+			throw new IllegalArgumentException("issueLink == null"); //$NON-NLS-1$
 
 		if (this.issueLink != null && !this.issueLink.equals(issueLink))
-			throw new IllegalStateException("IssueLink already assigned!");
+			throw new IllegalStateException("IssueLink already assigned!"); //$NON-NLS-1$
 
 		this.issueLink = issueLink;
 	}

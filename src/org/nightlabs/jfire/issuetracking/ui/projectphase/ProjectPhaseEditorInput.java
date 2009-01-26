@@ -26,6 +26,7 @@ package org.nightlabs.jfire.issuetracking.ui.projectphase;
 
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.jfire.issue.project.id.ProjectPhaseID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * Editor input for {@link ProjectPhaseEditor}s.
@@ -41,6 +42,6 @@ public class ProjectPhaseEditorInput extends JDOObjectEditorInput<ProjectPhaseID
 	public ProjectPhaseEditorInput(ProjectPhaseID projectPhaseID)
 	{
 		super(projectPhaseID);
-		setName("ProjectPhaseID");
+		setName("ProjectPhaseID"); //$NON-NLS-1$
 	}
 }

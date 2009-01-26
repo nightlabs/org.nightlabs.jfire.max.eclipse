@@ -28,6 +28,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -45,13 +46,13 @@ extends WizardHopPage
 	private Object attachedObject;
 
 	public AttachIssueSelectIssueLinkTypeWizardPage(Object attachedObject) {
-		super(AttachIssueSelectIssueLinkTypeWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), AttachIssueSelectIssueLinkTypeWizardPage.class));
+		super(AttachIssueSelectIssueLinkTypeWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.titleDefault"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), AttachIssueSelectIssueLinkTypeWizardPage.class)); //$NON-NLS-1$
 		this.attachedObject = attachedObject;
 
-		setTitle("Create/Attach issue");
+		setTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.title")); //$NON-NLS-1$
 
 		String objectNameString = attachedObject.getClass().getSimpleName();
-		setDescription("Create/Attach issue to " + objectNameString);
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.description") + objectNameString); //$NON-NLS-1$
 	}
 
 	@Override
@@ -61,7 +62,7 @@ extends WizardHopPage
 
 		Group manageRelationGroup = new Group(mainComposite, SWT.NONE);
 		manageRelationGroup.setLayout(new GridLayout(1, false));
-		manageRelationGroup.setText("Relation");
+		manageRelationGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.group.relation.text")); //$NON-NLS-1$
 		manageRelationGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		XComposite manageComposite = new XComposite(manageRelationGroup, SWT.NONE);
@@ -84,7 +85,7 @@ extends WizardHopPage
 			}
 		});
 
-		Job job = new Job("Loading IssueLinkTypes...") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueSelectIssueLinkTypeWizardPage.job.loadingIssueLinkType.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) throws Exception {
 				Display.getDefault().asyncExec(new Runnable() {

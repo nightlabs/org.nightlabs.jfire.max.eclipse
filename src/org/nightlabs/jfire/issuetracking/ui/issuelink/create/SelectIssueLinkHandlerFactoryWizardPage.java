@@ -27,6 +27,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerCategory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -59,8 +60,8 @@ implements ISelectionProvider
 	}
 
 	public SelectIssueLinkHandlerFactoryWizardPage() {
-		super("Select an Object", "Select an object to link this issue with.");
-		setDescription("Link an object to the issue.");
+		super(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkHandlerFactoryWizardPage.title"), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkHandlerFactoryWizardPage.descriptionDefault")); //$NON-NLS-1$ //$NON-NLS-2$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkHandlerFactoryWizardPage.description")); //$NON-NLS-1$
 	}
 
 	@Override

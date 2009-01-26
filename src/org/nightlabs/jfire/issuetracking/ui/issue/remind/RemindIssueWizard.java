@@ -2,6 +2,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue.remind;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -16,7 +17,7 @@ extends DynamicPathWizard
 	
 	public RemindIssueWizard(Issue selectedIssue)
 	{
-		setWindowTitle("Remind issue");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueWizard.title")); //$NON-NLS-1$
 		this.selectedIssue = selectedIssue;
 	}
 

@@ -31,6 +31,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.ProjectTypeDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectTypeID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
@@ -88,7 +89,7 @@ implements ISelectionProvider
 	{
 		projectTypeCombo.removeAll();
 
-		Job loadJob = new Job("Loading Project Types............") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectTypeComboComposite.job.loadingProjectTypes.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
@@ -174,11 +175,11 @@ implements ISelectionProvider
 	}
 	
 	public void setSelectedProjectType(ProjectType projectType) {
-		setSelectedProjectTypeID(projectType == null ? "" : projectType.getProjectTypeID());
+		setSelectedProjectTypeID(projectType == null ? "" : projectType.getProjectTypeID()); //$NON-NLS-1$
 	}
 
 	public void setSelectedProjectType(ProjectTypeID projectTypeID) {
-		setSelectedProjectTypeID(projectTypeID == null ? "" : projectTypeID.projectTypeID);
+		setSelectedProjectTypeID(projectTypeID == null ? "" : projectTypeID.projectTypeID); //$NON-NLS-1$
 	}
 	
 	private void setSelectedProjectTypeID(String projectTypeID) {

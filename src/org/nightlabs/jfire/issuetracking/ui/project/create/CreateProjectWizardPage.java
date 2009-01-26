@@ -33,6 +33,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTypeComboComposite;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateProjectWizardPage extends DynamicPathWizardPage {
 	private Label projectTypeLabel;
@@ -62,7 +63,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		// page.getGridLayout().horizontalSpacing = 10;
 
 		projectTypeLabel = new Label(page, SWT.NONE);
-		projectTypeLabel.setText("Project Type: ");
+		projectTypeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.label.projectType.text")); //$NON-NLS-1$
 		projectTypeCombo = new ProjectTypeComboComposite(page, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectTypeCombo.setLayoutData(gridData);
@@ -74,7 +75,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		});
 		
 		if (parentProject != null) {
-			new Label(page, SWT.NONE).setText("Parent Project: ");
+			new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.label.parentProject.text")); //$NON-NLS-1$
 			final ProjectAdminTreeComposite projectTree = new ProjectAdminTreeComposite(
 					page, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER, false);
 			projectTree.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -118,7 +119,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		sep.setLayoutData(gridData);
 
 		projectNameLabel = new Label(page, SWT.NONE);
-		projectNameLabel.setText("Project Name: ");
+		projectNameLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.label.projectName.text")); //$NON-NLS-1$
 
 		projectNameText = new I18nTextEditor(page);
 		projectNameText.addModifyListener(modifyListener);
@@ -126,7 +127,7 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		
 		descriptionLabel = new Label(page, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText("Description:");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.label.description.text")); //$NON-NLS-1$
 
 		descriptionText = new I18nTextEditorMultiLine(page, projectNameText
 				.getLanguageChooser());
@@ -135,10 +136,10 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 		gridData = new GridData(GridData.FILL_BOTH);
 		descriptionText.setLayoutData(gridData);
 
-		new Label(page, SWT.NONE).setText("Properties: ");
+		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.label.properties.text")); //$NON-NLS-1$
 
 		activeButton = new Button(page, SWT.CHECK);
-		activeButton.setText("Active");
+		activeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.button.active.text")); //$NON-NLS-1$
 		activeButton.setSelection(isActive);
 		activeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -160,10 +161,10 @@ public class CreateProjectWizardPage extends DynamicPathWizardPage {
 	};
 
 	public CreateProjectWizardPage(Project parentProject, Project newProject) {
-		super(CreateProjectWizardPage.class.getName(), "Project Page",
+		super(CreateProjectWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.title"), //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin
 						.getDefault(), CreateProjectWizard.class));
-		this.setDescription("Description");
+		this.setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizardPage.description")); //$NON-NLS-1$
 		this.parentProject = parentProject;
 		this.newProject = newProject;
 	}

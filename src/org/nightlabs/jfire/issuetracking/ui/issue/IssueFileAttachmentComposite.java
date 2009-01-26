@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueFileAttachment;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -69,7 +70,7 @@ extends XComposite
 			XComposite buttonComposite = new  XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 			Button addButton = new Button(buttonComposite, SWT.PUSH);
-			addButton.setText("Add");
+			addButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.button.addFile.text")); //$NON-NLS-1$
 			addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			addButton.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -97,7 +98,7 @@ extends XComposite
 			});
 
 			Button removeButton = new Button(buttonComposite, SWT.PUSH);
-			removeButton.setText("Remove");
+			removeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.button.removeFile.text")); //$NON-NLS-1$
 			removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			removeButton.addSelectionListener(new SelectionAdapter() {
 				@Override

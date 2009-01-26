@@ -29,6 +29,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory;
 import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -72,20 +73,20 @@ extends WizardHopPage
 				selectExistingIssueRadio.setSelection(true);
 				break;
 			default:
-				throw new IllegalStateException("Unknown actionForIssue: " + actionForIssue);
+				throw new IllegalStateException("Unknown actionForIssue: " + actionForIssue); //$NON-NLS-1$
 		}
 
 		getContainer().updateButtons();
 	}
 
 	public SelectIssueWizardPage(Object attachedObject) {
-		super(SelectIssueWizardPage.class.getName(), "New Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class));
+		super(SelectIssueWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.titleDefault"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class)); //$NON-NLS-1$
 		this.attachedObject = attachedObject;
 		
-		setTitle("Create/Attach issue");
+		setTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.title")); //$NON-NLS-1$
 
 		String objectNameString = attachedObject.getClass().getSimpleName();
-		setDescription("Create/Attach issue to " + objectNameString);
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.description") + objectNameString); //$NON-NLS-1$
 	}
 
 	@Override
@@ -95,7 +96,7 @@ extends WizardHopPage
 
 		//Issue
 		createNewIssueRadio = new Button(mainComposite, SWT.RADIO);		
-		createNewIssueRadio.setText("Create new issue");
+		createNewIssueRadio.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.radio.createNewIssue.text")); //$NON-NLS-1$
 		createNewIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewIssueRadio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -104,7 +105,7 @@ extends WizardHopPage
 		});
 		
 		selectExistingIssueRadio = new Button(mainComposite, SWT.RADIO);
-		selectExistingIssueRadio.setText("Select issue");
+		selectExistingIssueRadio.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.radio.selectExistingIssue.text")); //$NON-NLS-1$
 		selectExistingIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectExistingIssueRadio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -166,7 +167,7 @@ extends WizardHopPage
 				case selectExistingIssue:
 					return selectedIssue != null;
 				default:
-					throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssue);
+					throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssue); //$NON-NLS-1$
 			}
 		
 		else 

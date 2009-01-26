@@ -31,6 +31,7 @@ import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issue.project.id.ProjectPhaseID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -41,7 +42,7 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 	private ProjectPhaseTable projectPhaseTable;
 	
 	public ProjectPhaseSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project Phases");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection.title")); //$NON-NLS-1$
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
@@ -63,8 +64,8 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 
 				if (selectedProjectPhase.getObjectId() == null) {
 					MessageDialog.openError(getSection().getShell(), 
-							"Save Project", 
-							"The selected proect phase doesn't exist in the datastore yet. You need to save it first.");
+							Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection.dialog.saveProject.title"),  //$NON-NLS-1$
+							Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection.dialog.saveProject.description")); //$NON-NLS-1$
 					return;
 				}
 				
@@ -126,9 +127,9 @@ public class ProjectPhaseSection extends ToolBarSectionPart {
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					ProjectPhaseSection.class, 
-					"Add"));
-			setToolTipText("Add Phases");
-			setText("Add Phases");
+					"Add")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection.AddProjectPhaseAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection.AddProjectPhaseAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

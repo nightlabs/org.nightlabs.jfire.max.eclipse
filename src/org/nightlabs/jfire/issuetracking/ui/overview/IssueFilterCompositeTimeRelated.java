@@ -18,6 +18,7 @@ import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.query.IssueQuery;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -83,7 +84,7 @@ public class IssueFilterCompositeTimeRelated
 				this,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
-				"Created after",
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeTimeRelated.dateTimeEdit.createTime.text"), //$NON-NLS-1$
 				true);
 		createdTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -114,7 +115,7 @@ public class IssueFilterCompositeTimeRelated
 				this,
 				DateFormatter.FLAGS_DATE_SHORT_TIME_HMS_WEEKDAY + DateTimeEdit.FLAGS_SHOW_ACTIVE_CHECK_BOX,
 				new Date(),
-				"Updated after",
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeTimeRelated.dateTimeEdit.updatedAfter.text"), //$NON-NLS-1$
 				true);
 		updatedTimeEdit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -195,7 +196,7 @@ public class IssueFilterCompositeTimeRelated
 	/**
 	 * Group ID for storing active states in the query.
 	 */
-	public static final String FILTER_GROUP_ID = "IssueFilterCompositeTimeRelated";
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositeTimeRelated"; //$NON-NLS-1$
 
 	@Override
 	protected String getGroupID()

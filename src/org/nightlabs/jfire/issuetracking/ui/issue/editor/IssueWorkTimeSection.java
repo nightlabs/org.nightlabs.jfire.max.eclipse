@@ -32,6 +32,7 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -63,15 +64,15 @@ extends AbstractIssueEditorGeneralSection
 		super(page, parent, controller);
 		getClient().getGridLayout().numColumns = 3;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
-		getSection().setText("Work Time");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.section.text")); //$NON-NLS-1$
 
-		new Label(getClient(), SWT.NONE).setText("Status: ");
+		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.status.text")); //$NON-NLS-1$
 
 		statusLabel = new Label(getClient(), SWT.NONE);
-		statusLabel.setText(" - ");
+		statusLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.text")); //$NON-NLS-1$
 
 		startStopButton = new Button(getClient(), SWT.NONE);
-		startStopButton.setText("");
+		startStopButton.setText(""); //$NON-NLS-1$
 		startStopButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent se) {
@@ -79,8 +80,8 @@ extends AbstractIssueEditorGeneralSection
 					if (!canStopWorking) {
 						boolean b = MessageDialog.openConfirm(
 								getSection().getShell(), 
-								"Stop Issue", 
-								"Are you sure to stop this issue by the user who is not the owner?");
+								Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.dialog.stopWorking.title"),  //$NON-NLS-1$
+								Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.dialog.stopWorking.description")); //$NON-NLS-1$
 						if (!b)
 							return;
 					}
@@ -108,16 +109,16 @@ extends AbstractIssueEditorGeneralSection
 			}
 		});
 
-		new Label(getClient(), SWT.NONE).setText("Start Time: ");
+		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.startTime.text")); //$NON-NLS-1$
 		startTimeLabel = new Label(getClient(), SWT.NONE);
-		startTimeLabel.setText("");
+		startTimeLabel.setText(""); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.horizontalSpan = 2;
 		startTimeLabel.setLayoutData(gd);
 
-		new Label(getClient(), SWT.NONE).setText("Stop Time: ");
+		new Label(getClient(), SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.stopTime.text")); //$NON-NLS-1$
 		endTimeLabel = new Label(getClient(), SWT.NONE);
-		endTimeLabel.setText("");
+		endTimeLabel.setText(""); //$NON-NLS-1$
 		gd = new GridData();
 		gd.horizontalSpan = 2;
 		endTimeLabel.setLayoutData(gd);
@@ -134,10 +135,10 @@ extends AbstractIssueEditorGeneralSection
 		this.issue = newIssue;
 
 		if (issue.isStarted()) {
-			startStopButton.setText("Stop");
+			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.stop.text")); //$NON-NLS-1$
 
 
-			Job job = new Job("Checking User...") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.job.checkUser.text")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
@@ -166,13 +167,13 @@ extends AbstractIssueEditorGeneralSection
 			job.schedule();
 		}
 		else 
-			startStopButton.setText("Start");
+			startStopButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.startStopButton.start.text")); //$NON-NLS-1$
 
 		IssueWorkTimeRange workTime = issue.getLastestIssueWorkTimeRange();
 		if (workTime != null) {
-			statusLabel.setText(issue.isStarted() ? "Working" : "Stopped");
-			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom()));
-			endTimeLabel.setText(workTime.getTo() == null ? "" : dateTimeFormat.format(workTime.getTo()));
+			statusLabel.setText(issue.isStarted() ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.working.text") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.label.statusText.stopped.text")); //$NON-NLS-1$ //$NON-NLS-2$
+			startTimeLabel.setText(workTime.getFrom() == null ? "" : dateTimeFormat.format(workTime.getFrom())); //$NON-NLS-1$
+			endTimeLabel.setText(workTime.getTo() == null ? "" : dateTimeFormat.format(workTime.getTo())); //$NON-NLS-1$
 
 			statusLabel.pack(true);
 			startStopButton.pack(true);
@@ -192,9 +193,9 @@ extends AbstractIssueEditorGeneralSection
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueWorkTimeSection.class, 
-			"List"));
-			setToolTipText("List all work times");
-			setText("List");
+			"List")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.WorkTimeListAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.WorkTimeListAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -224,7 +225,7 @@ extends AbstractIssueEditorGeneralSection
 				protected void createButtonsForButtonBar(Composite parent) {
 					createButton(parent, 
 							IDialogConstants.CLOSE_ID,
-							"Close", 
+							Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeSection.button.close.text"),  //$NON-NLS-1$
 							false);
 				}
 

@@ -24,6 +24,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkAdder;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -38,13 +39,13 @@ extends DynamicPathWizardPage
 	private IssueLinkType selectedIssueLinkType;
 	
 	public SelectIssueLinkTypeWizardPage() {
-		super(SelectIssueLinkTypeWizardPage.class.getName(), "Select/Create the relation for links.");
-		setDescription("The relation for links");
+		super(SelectIssueLinkTypeWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.title")); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.description")); //$NON-NLS-1$
 	}
 
 	public void setIssueLinkAdder(final IssueLinkAdder issueLinkAdder) {
 		if (issueLinkAdder != null) {
-			Job job = new Job("Loading issue link types") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.job.loadingIssueLinkTypes.text")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					final Collection<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(
@@ -81,7 +82,7 @@ extends DynamicPathWizardPage
 
 		Group manageRelationGroup = new Group(mainComposite, SWT.NONE);
 		manageRelationGroup.setLayout(new GridLayout(1, false));
-		manageRelationGroup.setText("Predefined Relations");
+		manageRelationGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.group.predefinedRelation.text")); //$NON-NLS-1$
 		manageRelationGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		XComposite manageComposite = new XComposite(manageRelationGroup, SWT.NONE);

@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -34,7 +35,7 @@ extends AbstractIssueEditorGeneralSection
 	
 	public IssueCommentListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
-		getSection().setText("Comment");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueCommentListSection.section.text")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		// Sets up the toolkit.
@@ -58,7 +59,7 @@ extends AbstractIssueEditorGeneralSection
 		oldSize = issue.getComments().size();
 		
 		getSection().setText(String.format(
-				"Comment ( %s )", 
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueCommentListSection.section.fillNo.text"),  //$NON-NLS-1$
 				oldSize)
 		);
 		
@@ -88,8 +89,8 @@ extends AbstractIssueEditorGeneralSection
 	public void addComment(IssueComment comment, boolean expand) {
 		ExpandableComposite commentEntry = new ExpandableComposite(commentComposite, SWT.NONE, ExpandableComposite.COMPACT | ExpandableComposite.TREE_NODE | ExpandableComposite.EXPANDED);
 		commentEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD)));
-		commentEntry.setText(String.format("%s - %s", 
+		commentEntry.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.BOLD))); //$NON-NLS-1$
+		commentEntry.setText(String.format("%s - %s",  //$NON-NLS-1$
 				comment.getUser().getName(), 
 				dateTimeFormat.format(comment.getCreateTimestamp())));
 
@@ -99,7 +100,7 @@ extends AbstractIssueEditorGeneralSection
 		Text text = toolkit.createText(commentEntry, comment.getText(), SWT.MULTI | SWT.WRAP);
 		text.setEditable(false);
 		
-		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL)));
+		text.setFont(new Font(getSection().getDisplay(), new FontData("Courier", 10, SWT.NORMAL))); //$NON-NLS-1$
 		commentEntry.setClient(text);
 
 //		/********Using FormText********/

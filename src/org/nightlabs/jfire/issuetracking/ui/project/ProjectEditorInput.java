@@ -26,6 +26,7 @@ package org.nightlabs.jfire.issuetracking.ui.project;
 
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * Editor input for {@link ProjectEditor}s.
@@ -41,6 +42,6 @@ public class ProjectEditorInput extends JDOObjectEditorInput<ProjectID>
 	public ProjectEditorInput(ProjectID projectID)
 	{
 		super(projectID);
-		setName("ProjectID");
+		setName("ProjectID"); //$NON-NLS-1$
 	}
 }

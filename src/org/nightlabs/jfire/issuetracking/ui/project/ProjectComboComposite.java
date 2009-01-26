@@ -31,6 +31,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
@@ -91,7 +92,7 @@ implements ISelectionProvider
 	{
 		projectCombo.removeAll();
 
-		Job loadJob = new Job("Loading Projects............") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite.job.loadingProjects.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
@@ -114,10 +115,10 @@ implements ISelectionProvider
 							projectCombo.removeAll();
 							
 							for (Project pj : projectList) {
-								StringBuffer sb = new StringBuffer("");
+								StringBuffer sb = new StringBuffer(""); //$NON-NLS-1$
 								for (int i = 0; i < pj.getLevel(); i++) 
-									sb.append("»");
-								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage()));
+									sb.append("»"); //$NON-NLS-1$
+								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							}
 							
 							setSelectedProject(Project.PROJECT_ID_DEFAULT);

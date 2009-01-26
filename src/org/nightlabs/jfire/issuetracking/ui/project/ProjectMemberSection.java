@@ -25,6 +25,7 @@ import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.base.ui.security.UserTable;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -37,7 +38,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 	private UserTable userTable;
 	
 	public ProjectMemberSection(FormPage page, Composite parent, final ProjectEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Project Members");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.section.text")); //$NON-NLS-1$
 		
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
@@ -46,7 +47,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 
 		projectManagerNameLabel = new Label(client, SWT.WRAP);
 		projectManagerNameLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		projectManagerNameLabel.setText("Project Manager: ");
+		projectManagerNameLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.label.projectManagerName.text")); //$NON-NLS-1$
 		
 		userTable = new UserTable(client, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -74,8 +75,8 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 						User p = project.getProjectManager();
 						projectManagerNameLabel.setText(
 								String.format(
-										"Project Manager: %s", 
-										p == null? "" : p.getName())
+										Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.label.projectManagerName.fill.text"),  //$NON-NLS-1$
+										p == null? "" : p.getName()) //$NON-NLS-1$
 						);
 						
 						Set<User> members = project.getMembers();
@@ -110,9 +111,9 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					ProjectMemberSection.class, 
-					"Assign"));
-			setToolTipText("Assign Project Manager");
-			setText("Assign");
+					"Assign")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.AssignPMAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.AssignPMAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -137,9 +138,9 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					ProjectMemberSection.class, 
-					"Add"));
-			setToolTipText("Add Members");
-			setText("Add Members");
+					"Add")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.AddMemberAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.ProjectMemberSection.AddMemberAction.text")); //$NON-NLS-1$
 		}
 
 		@Override

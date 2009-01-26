@@ -41,6 +41,7 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandler;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactory;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkHandlerFactoryRegistry;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -82,13 +83,13 @@ extends AbstractTableComposite<IssueLinkTableItem>
 
 				if (columnIndex == 0) {
 					if (issueLink == null)
-						return "Loading data...";
+						return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.table.loading.text"); //$NON-NLS-1$
 
 					return handler.getLinkedObjectName(issueLink, linkedObject);
 				}
 
 				if (issueLink == null)
-					return "";
+					return ""; //$NON-NLS-1$
 
 				if (columnIndex == 1) {
 					return issueLink.getIssueLinkType().getName().getText();
@@ -100,7 +101,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 //					return issueLinkTableItem.getIssueLinkType() == null ? issueLinkType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
 			}
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 	
@@ -143,19 +144,19 @@ extends AbstractTableComposite<IssueLinkTableItem>
 
 	private void setIssue(final IssueID $issueID, final Issue $issue)
 	{
-		Job job = new Job("Loading issue links") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.job.loadingIssueLinks.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						issue = null;
 						issueLink2LinkedObjectMap = null;
-						setLoadingMessage("Loading issue links...");
+						setLoadingMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.job.loadingIssueLinks.loadingMessage.text")); //$NON-NLS-1$
 					}
 				});
 
 				int monitorTicksLeft = 100;
-				monitor.beginTask("Loading issue links", monitorTicksLeft);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.monitor.loadingIssueLinks.text"), monitorTicksLeft); //$NON-NLS-1$
 
 				// (1) load IssueLinks without linkedObjects but with linkedObjectClasses and linkedObjectIDs
 				final Issue _issue;
@@ -245,11 +246,11 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Link object");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.linkObject.text")); //$NON-NLS-1$
 		
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Relation");
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.relation.text")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30});
 		table.setLayout(layout);
@@ -325,10 +326,10 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	public void addIssueLinkTableItems(final Collection<IssueLinkTableItem> items)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("This method must be called on the SWT UI thread!");
+			throw new IllegalStateException("This method must be called on the SWT UI thread!"); //$NON-NLS-1$
 
 		if (issue == null)
-			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!");
+			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!"); //$NON-NLS-1$
 
 		if (items.isEmpty())
 			return;
@@ -336,7 +337,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		// check whether the new items are really new and have no IssueLink assigned yet
 		for (IssueLinkTableItem issueLinkTableItem : items) {
 			if (issueLinkTableItem.getIssueLink() != null)
-				throw new IllegalArgumentException("issueLinkTableItem.getIssueLink() != null !!! The IssueLink instance must not yet exist!");
+				throw new IllegalArgumentException("issueLinkTableItem.getIssueLink() != null !!! The IssueLink instance must not yet exist!"); //$NON-NLS-1$
 		}
 
 		// add them to the table (the LabelProvider will show "Loading data..." as long as there is no IssueLink assigned)
@@ -350,12 +351,12 @@ extends AbstractTableComposite<IssueLinkTableItem>
 			issueLinkTableItem2issueLinkMap.put(issueLinkTableItem, issueLink);
 		}
 
-		Job job = new Job("Loading linked objects") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.job.loadingLinkedObject.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				int monitorTicksLeft = 100;
-				monitor.beginTask("Loading linked objects", monitorTicksLeft);
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.monitor.loadingLinkedObjects.text"), monitorTicksLeft); //$NON-NLS-1$
 
 				// resolve IssueLinkHandlers and group IssueLinks by IssueLinkHandler
 				//     => Map<IssueLinkHandler, Set<IssueLink>>
@@ -412,10 +413,10 @@ extends AbstractTableComposite<IssueLinkTableItem>
 
 	public void removeIssueLinkTableItems(Collection<IssueLinkTableItem> items) {
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("This method must be called on the SWT UI thread!");
+			throw new IllegalStateException("This method must be called on the SWT UI thread!"); //$NON-NLS-1$
 
 		if (issue == null)
-			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!");
+			throw new IllegalStateException("Not yet initialised! Cannot add issue links before this table has loaded its data!"); //$NON-NLS-1$
 
 		Collection<IssueLinkTableItem> removedItems = new HashSet<IssueLinkTableItem>(items.size());
 		for (IssueLinkTableItem issueLinkTableItem : items) {

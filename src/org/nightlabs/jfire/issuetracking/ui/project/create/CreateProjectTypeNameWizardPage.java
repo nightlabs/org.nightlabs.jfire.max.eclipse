@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateProjectTypeNameWizardPage extends DynamicPathWizardPage
 {
@@ -31,7 +32,7 @@ public class CreateProjectTypeNameWizardPage extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent) {
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
-		new Label(page, SWT.NONE).setText("Project Name");
+		new Label(page, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectTypeNameWizardPage.label.projectName.text")); //$NON-NLS-1$
 		projectTypeNameBuffer = new I18nTextBuffer();
 		projectTypeNameEditor = new I18nTextEditorTable(page);
 		projectTypeNameEditor.setI18nText(projectTypeNameBuffer);
@@ -47,9 +48,9 @@ public class CreateProjectTypeNameWizardPage extends DynamicPathWizardPage
 
 	public CreateProjectTypeNameWizardPage(ProjectID projectID)
 	{
-		super(CreateProjectTypeNameWizardPage.class.getName(), "Project Page", 
+		super(CreateProjectTypeNameWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectTypeNameWizardPage.title"),  //$NON-NLS-1$
 				SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateProjectTypeNameWizardPage.class));
-		this.setDescription("Description");
+		this.setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectTypeNameWizardPage.description")); //$NON-NLS-1$
 		this.projectID = projectID;
 	}
 

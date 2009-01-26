@@ -13,6 +13,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -30,8 +31,8 @@ extends WizardHopPage
 	private Issue selectedIssue;
 
 	public RemindIssueDetailWizardPage(Issue issue) {
-		super(RemindIssueDetailWizardPage.class.getName(), "Remind Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class));
-		setDescription("Enter detail");
+		super(RemindIssueDetailWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.title"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), RemindIssueWizard.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.description")); //$NON-NLS-1$
 		this.selectedIssue = issue;
 	}
 
@@ -41,7 +42,7 @@ extends WizardHopPage
 		mainComposite.getGridLayout().numColumns = 2;
 
 		optionLbl = new Label(mainComposite, SWT.NONE);
-		optionLbl.setText("Notify via: ");
+		optionLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.label.option.notifyvia.text")); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.verticalAlignment = SWT.TOP;
 		optionLbl.setLayoutData(gd);
@@ -52,13 +53,13 @@ extends WizardHopPage
 		buttonComposite.getGridData().grabExcessHorizontalSpace = true;
 
 		emailButton = new Button(buttonComposite, SWT.CHECK);
-		emailButton.setText("E-Mail");
+		emailButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.button.email.text")); //$NON-NLS-1$
 
 		messageButton = new Button(buttonComposite, SWT.CHECK);
-		messageButton.setText("Message");
+		messageButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.button.message.text")); //$NON-NLS-1$
 
 		smsButton = new Button(buttonComposite, SWT.CHECK);
-		smsButton.setText("SMS");
+		smsButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.remind.RemindIssueDetailWizardPage.button.sms.text")); //$NON-NLS-1$
 		
 		return mainComposite;
 	}

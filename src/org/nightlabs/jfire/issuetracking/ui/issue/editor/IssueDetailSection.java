@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 
 /**
@@ -50,28 +51,28 @@ extends AbstractIssueEditorGeneralSection
 		this.page = (IssueEditorGeneralPage)page;
 		
 		getClient().getGridLayout().numColumns = 2;
-		getSection().setText("General Details");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.section.text")); //$NON-NLS-1$
 
 		reporterLabel = new Label(getClient(), SWT.WRAP);
-		reporterLabel.setText("Reporter: ");
+		reporterLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.reporter.text")); //$NON-NLS-1$
 
 		reporterTextLabel = new Label(getClient(), SWT.NONE);
 		reporterTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		assigneeLabel = new Label(getClient(), SWT.WRAP);
-		assigneeLabel.setText("Assignee: ");
+		assigneeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.assignee.text")); //$NON-NLS-1$
 
 		assigneeTextLabel = new Label(getClient(), SWT.NONE);
 		assigneeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		createdTimeLabel = new Label(getClient(), SWT.WRAP);
-		createdTimeLabel.setText("Created Time: ");
+		createdTimeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.createdTime.text")); //$NON-NLS-1$
 
 		createdTimeTextLabel = new Label(getClient(), SWT.NONE);
 		createdTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		updatedTimeLabel = new Label(getClient(), SWT.WRAP);
-		updatedTimeLabel.setText("Updated Time: ");
+		updatedTimeLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.updatedTime.text")); //$NON-NLS-1$
 
 		updatedTimeTextLabel = new Label(getClient(), SWT.NONE);
 		updatedTimeTextLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -106,15 +107,15 @@ extends AbstractIssueEditorGeneralSection
 		if (issue.getReporter() != null)
 			reporterTextLabel.setText(issue.getReporter().getName());
 		else
-			reporterTextLabel.setText("");
+			reporterTextLabel.setText(""); //$NON-NLS-1$
 		
 		if (issue.getAssignee() != null)
 			assigneeTextLabel.setText(issue.getAssignee().getName());
 		else
-			assigneeTextLabel.setText("");
+			assigneeTextLabel.setText(""); //$NON-NLS-1$
 
 		createdTimeTextLabel.setText(issue.getCreateTimestamp().toString());
-		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? "-" : issue.getUpdateTimestamp().toString());
+		updatedTimeTextLabel.setText(issue.getUpdateTimestamp() == null? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.label.updatedTimeText.noData.text") : issue.getUpdateTimestamp().toString()); //$NON-NLS-1$
 	}
 
 	public class AssignToMyselfAction extends Action {		
@@ -124,9 +125,9 @@ extends AbstractIssueEditorGeneralSection
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-					"Assign to myself"));
-			setToolTipText("Assign to myself");
-			setText("Assign to myself");
+					"Assign to myself")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToMyselfAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToMyselfAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -141,9 +142,9 @@ extends AbstractIssueEditorGeneralSection
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-					"Assign to reporter"));
-			setToolTipText("Assign to reporter");
-			setText("Assign to reporter");
+					"Assign to reporter")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToReporterAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignToReporterAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -159,9 +160,9 @@ extends AbstractIssueEditorGeneralSection
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-					"Assign"));
-			setToolTipText("Assign");
-			setText("Assign");
+					"Assign")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.AssignAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -192,15 +193,15 @@ extends AbstractIssueEditorGeneralSection
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingPlugin.getDefault(), 
 					IssueDetailSection.class, 
-			"Unassign"));
-			setToolTipText("Unassign");
-			setText("Unassign");
+			"Unassign")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.UnassignAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueDetailSection.UnassignAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
 		public void run() {
 			issue.setAssignee(null);
-			assigneeTextLabel.setText("");
+			assigneeTextLabel.setText(""); //$NON-NLS-1$
 			markDirty();
 		}		
 	}

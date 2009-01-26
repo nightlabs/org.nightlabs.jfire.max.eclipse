@@ -27,6 +27,7 @@ import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -95,7 +96,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA);
 		projectComposite.getGridLayout().numColumns = 2;
 
-		new Label(projectComposite, SWT.NONE).setText("Project: ");
+		new Label(projectComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositeProjectRelated.label.project.text")); //$NON-NLS-1$
 		projectTreeComposite = new ProjectAdminTreeComposite(projectComposite, SWT.CHECK, true);
 		checkboxTreeViewer = new CheckboxTreeViewer(projectTreeComposite.getTree());
 		checkboxTreeViewer.setContentProvider(projectTreeComposite.getTreeViewer().getContentProvider());
@@ -252,7 +253,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	/**
 	 * Group ID for storing active states in the query.
 	 */
-	public static final String FILTER_GROUP_ID = "IssueFilterCompositeProjectRelated";
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositeProjectRelated"; //$NON-NLS-1$
 
 	@Override
 	protected String getGroupID()

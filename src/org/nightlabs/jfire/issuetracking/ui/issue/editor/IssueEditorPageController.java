@@ -41,6 +41,7 @@ import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
@@ -181,11 +182,11 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	@Override
 	protected Issue storeEntity(Issue controllerObject, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Saving issue", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController.monitor.savingIssue.text"), 100); //$NON-NLS-1$
 		try {
 			IssueID issueID = (IssueID) JDOHelper.getObjectId(controllerObject);
 			if (issueID == null)
-				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject); //$NON-NLS-1$
 
 			Issue issue;
 			issue = IssueDAO.sharedInstance().storeIssue(

@@ -24,6 +24,7 @@ import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.base.ui.security.UserSearchDialog;
 import org.nightlabs.jfire.issue.query.IssueQuery;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
 import org.nightlabs.jfire.security.id.UserID;
@@ -83,9 +84,9 @@ public class IssueFilterCompositePeopleRelated
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label rLabel = new Label(this, SWT.NONE);
-		rLabel.setText("Reporter: ");
+		rLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.label.reporter.text")); //$NON-NLS-1$
 		allReporterButton = new Button(this, SWT.CHECK);
-		allReporterButton.setText("All");
+		allReporterButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.button.allreporter.text")); //$NON-NLS-1$
 		allReporterButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)
@@ -113,13 +114,13 @@ public class IssueFilterCompositePeopleRelated
 		reporterText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		reporterButton = new Button(this, SWT.PUSH);
-		reporterButton.setText("...");
+		reporterButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.button.reporter.text")); //$NON-NLS-1$
 
 		reporterButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
+				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), ""); //$NON-NLS-1$
 				if (Window.OK == userSearchDialog.open())
 				{
 					final User selectedUser = userSearchDialog.getSelectedUser();
@@ -135,10 +136,10 @@ public class IssueFilterCompositePeopleRelated
 		reporterText.setEnabled(false);
 
 		Label aLabel = new Label(this, SWT.NONE);
-		aLabel.setText("Assignee: ");
+		aLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.label.assignee.text")); //$NON-NLS-1$
 
 		allAssigneeButton = new Button(this, SWT.CHECK);
-		allAssigneeButton.setText("All");
+		allAssigneeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.button.allassignee.text")); //$NON-NLS-1$
 		allAssigneeButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
@@ -168,12 +169,12 @@ public class IssueFilterCompositePeopleRelated
 		assigneeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		assigneeButton = new Button(this, SWT.PUSH);
-		assigneeButton.setText("...");
+		assigneeButton.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.IssueFilterCompositePeopleRelated.button.assignee.text")); //$NON-NLS-1$
 
 		assigneeButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), "");
+				final UserSearchDialog userSearchDialog = new UserSearchDialog(getShell(), ""); //$NON-NLS-1$
 				if (Window.OK == userSearchDialog.open())
 				{
 					final User selectedAssignee = userSearchDialog.getSelectedUser();
@@ -197,7 +198,7 @@ public class IssueFilterCompositePeopleRelated
 				UserID tmpAssigneeID = (UserID) changedField.getNewValue();
 				if (tmpAssigneeID == null)
 				{
-					assigneeText.setText("");
+					assigneeText.setText(""); //$NON-NLS-1$
 				}
 				else
 				{
@@ -220,7 +221,7 @@ public class IssueFilterCompositePeopleRelated
 				UserID tmpReporterID = (UserID) changedField.getNewValue();
 				if (tmpReporterID == null)
 				{
-					reporterText.setText("");
+					reporterText.setText(""); //$NON-NLS-1$
 				}
 				else
 				{
@@ -263,7 +264,7 @@ public class IssueFilterCompositePeopleRelated
 	/**
 	 * Group ID for storing active states in the query.
 	 */
-	public static final String FILTER_GROUP_ID = "IssueFilterCompositePeopleRelated";
+	public static final String FILTER_GROUP_ID = "IssueFilterCompositePeopleRelated"; //$NON-NLS-1$
 
 	@Override
 	protected String getGroupID()

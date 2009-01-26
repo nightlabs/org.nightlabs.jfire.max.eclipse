@@ -9,6 +9,7 @@ import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateSubProjectAction 
 extends Action 
@@ -21,9 +22,9 @@ extends Action
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				IssueTrackingPlugin.getDefault(), 
 				ProjectAdminTreeComposite.class, 
-		"Create"));
-		setToolTipText("Create Sub Project");
-		setText("Create Sub Project");
+		"Create")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectAction.CreateSubProjectAction.toolTipText")); //$NON-NLS-1$
+		setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectAction.CreateSubProjectAction.text")); //$NON-NLS-1$
 	}
 
 	@Override

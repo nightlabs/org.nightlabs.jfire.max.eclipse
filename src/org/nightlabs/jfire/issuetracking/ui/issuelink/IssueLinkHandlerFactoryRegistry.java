@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.nightlabs.base.ui.extensionpoint.AbstractEPProcessor;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -45,7 +46,7 @@ extends AbstractEPProcessor
 	{
 		IssueLinkHandlerFactory factory = factories.get(linkedObjectClass);
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("No IssueLinkHandlerFactory registered for linkedObjectClass=\""+ linkedObjectClass +"\"");
+			throw new IllegalStateException("No IssueLinkHandlerFactory registered for linkedObjectClass=\""+ linkedObjectClass +"\""); //$NON-NLS-1$ //$NON-NLS-2$
 
 		return factory;
 	}
@@ -98,9 +99,9 @@ extends AbstractEPProcessor
 	public void processElement(IExtension extension, IConfigurationElement element) 
 	throws Exception 
 	{
-		if (element.getName().equals("issueLinkHandlerFactory")) {
+		if (element.getName().equals("issueLinkHandlerFactory")) { //$NON-NLS-1$
 			processIssueLinkHandlerFactory(extension, element);
-		} else if (element.getName().equals("issueLinkHandlerCategory")) {
+		} else if (element.getName().equals("issueLinkHandlerCategory")) { //$NON-NLS-1$
 			processIssueLinkHandlerCategory(extension, element);
 		}
 	}
@@ -108,7 +109,7 @@ extends AbstractEPProcessor
 	protected void processIssueLinkHandlerFactory(IExtension extension, IConfigurationElement element) throws Exception {
 		try {
 			IssueLinkHandlerFactory factory = (IssueLinkHandlerFactory) element.createExecutableExtension("class"); //$NON-NLS-1$
-			String name = element.getAttribute("name");
+			String name = element.getAttribute("name"); //$NON-NLS-1$
 			
 			factory.setName(name);
 			addFactory(factory);
@@ -119,14 +120,14 @@ extends AbstractEPProcessor
 	}
 
 	protected void processIssueLinkHandlerCategory(IExtension extension, IConfigurationElement element) throws Exception {
-		String categoryId = element.getAttribute("id");
-		String name = element.getAttribute("name");
-		String parentCategoryId = element.getAttribute("parentCategoryId");
+		String categoryId = element.getAttribute("id"); //$NON-NLS-1$
+		String name = element.getAttribute("name"); //$NON-NLS-1$
+		String parentCategoryId = element.getAttribute("parentCategoryId"); //$NON-NLS-1$
 
 		IssueLinkHandlerCategory category = new IssueLinkHandlerCategory();
 		category.setCategoryId(categoryId);
 		category.setName(name);
-		if ("".equals(parentCategoryId)) {
+		if ("".equals(parentCategoryId)) { //$NON-NLS-1$
 			parentCategoryId = null;
 		}
 		category.setParentCategoryId(parentCategoryId);

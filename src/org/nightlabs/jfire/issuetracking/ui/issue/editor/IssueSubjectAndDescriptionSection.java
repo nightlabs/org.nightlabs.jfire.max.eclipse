@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -40,18 +41,18 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 		super(page, parent, controller);
 		getClient().getGridLayout().numColumns = 2;
 		getClient().getGridLayout().makeColumnsEqualWidth = false;
-		getSection().setText("Subject and Description");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueSubjectAndDescriptionSection.section.text")); //$NON-NLS-1$
 		
 		subjectLabel = new Label(getClient(), SWT.WRAP);
 		subjectLabel.setLayoutData(new GridData());
-		subjectLabel.setText("Subject:");
+		subjectLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueSubjectAndDescriptionSection.label.subject.text")); //$NON-NLS-1$
 		
 		subjectText = new I18nTextEditor(getClient());
 		subjectText.addModifyListener(modifyListener);
 		
 		descriptionLabel = new Label(getClient(), SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
-		descriptionLabel.setText("Description:");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueSubjectAndDescriptionSection.label.description.text")); //$NON-NLS-1$
 		
 		descriptionText = new I18nTextEditorMultiLine(getClient(), subjectText.getLanguageChooser());		
 		descriptionText.addModifyListener(modifyListener);

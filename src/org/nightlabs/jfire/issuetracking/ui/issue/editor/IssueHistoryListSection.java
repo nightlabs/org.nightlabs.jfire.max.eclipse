@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.history.IssueHistoryDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -33,7 +34,7 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 	public IssueHistoryListSection(FormPage page, Composite parent, IssueEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = controller;
-		getSection().setText("Issue History");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueHistoryListSection.title")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		

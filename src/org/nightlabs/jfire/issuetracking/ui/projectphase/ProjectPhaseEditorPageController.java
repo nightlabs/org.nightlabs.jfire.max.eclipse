@@ -9,6 +9,7 @@ import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageControlle
 import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issue.project.ProjectPhaseDAO;
 import org.nightlabs.jfire.issue.project.id.ProjectPhaseID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -54,11 +55,11 @@ extends ActiveEntityEditorPageController<ProjectPhase>
 	@Override
 	protected ProjectPhase storeEntity(ProjectPhase controllerObject,
 			ProgressMonitor monitor) {
-		monitor.beginTask("Saving projec phase", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditorPageController.monitor.savingProjectPhase.text"), 100); //$NON-NLS-1$
 		try {
 			ProjectPhaseID projectPhaseID = (ProjectPhaseID) JDOHelper.getObjectId(controllerObject);
 			if (projectPhaseID == null)
-				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject);
+				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject); //$NON-NLS-1$
 			
 			projectPhase = ProjectPhaseDAO.sharedInstance().storeProjectPhase(
 						controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),

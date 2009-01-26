@@ -38,6 +38,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * An editor page for issue tracking overview.
@@ -87,7 +88,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public IssueEditorGeneralPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "General");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage.title")); //$NON-NLS-1$
 	}
 
 	private ScrolledComposite sc;
@@ -218,7 +219,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Details";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage.pageFormtitle.text"); //$NON-NLS-1$
 	}
 	
 	protected IssueEditorPageController getController() {

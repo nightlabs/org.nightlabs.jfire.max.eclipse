@@ -27,6 +27,7 @@ import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
@@ -73,7 +74,7 @@ extends AbstractTableComposite<IssueHistory>
 		});
 	}		
 
-	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob("Loading Xyz") {
+	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.lifeCycleListener.loading.text")) { //$NON-NLS-1$
 	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
 	      Issue.class,
 	      true,
@@ -96,15 +97,15 @@ extends AbstractTableComposite<IssueHistory>
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Date");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.date.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Username");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.userName.text")); //$NON-NLS-1$
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Action");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.action.text")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30, 70});
 		table.setLayout(layout);
@@ -149,7 +150,7 @@ extends AbstractTableComposite<IssueHistory>
 
 	public void setLoadingStatus()
 	{
-		super.setInput("Loading message");
+		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumnText.loading.text")); //$NON-NLS-1$
 	}
 
 	private IssueID issueID;

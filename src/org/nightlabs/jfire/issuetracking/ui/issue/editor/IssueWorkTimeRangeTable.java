@@ -16,6 +16,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * This composite lists all {@link IssueWorkTimeRange}s of an issue in a table.
@@ -41,19 +42,19 @@ extends AbstractTableComposite<IssueHistory>
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("User");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumn.user.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("From");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumn.from.text")); //$NON-NLS-1$
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("To");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumn.to.text")); //$NON-NLS-1$
 		
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
-		tc.setText("Duration");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumn.duration.text")); //$NON-NLS-1$
 
 		WeightedTableLayout layout = new WeightedTableLayout(new int[]{60, 30, 30, 30});
 		table.setLayout(layout);
@@ -82,9 +83,9 @@ extends AbstractTableComposite<IssueHistory>
 				case(1):
 					return dateTimeFormat.format(issueWorkTimeRange.getFrom());
 				case(2):
-					return issueWorkTimeRange.getTo() == null ? "(Still working)" : dateTimeFormat.format(issueWorkTimeRange.getTo());
+					return issueWorkTimeRange.getTo() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumnText.workTimeRange.stillWorking.text") : dateTimeFormat.format(issueWorkTimeRange.getTo()); //$NON-NLS-1$
 				case(3):
-					return issueWorkTimeRange.getDuration() == null ? "(Still working)" : DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true);
+					return issueWorkTimeRange.getDuration() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumnText.workTimeRange.stillWorking.text") : DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true); //$NON-NLS-1$
 				default:
 					return ""; //$NON-NLS-1$
 				}
@@ -95,7 +96,7 @@ extends AbstractTableComposite<IssueHistory>
 
 	public void setLoadingStatus()
 	{
-		super.setInput("Loading message");
+		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.table.loadingMessage.text")); //$NON-NLS-1$
 	}
 
 	private IssueID issueID;

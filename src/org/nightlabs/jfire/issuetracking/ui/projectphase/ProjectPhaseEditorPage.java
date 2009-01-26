@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class ProjectPhaseEditorPage 
 extends EntityEditorPageWithProgress 
@@ -45,7 +46,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public ProjectPhaseEditorPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Project Phase");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditorPage.title")); //$NON-NLS-1$
 	}
 
 	private ProjectPhaseEditorPageController controller;
@@ -77,7 +78,7 @@ extends EntityEditorPageWithProgress
 	
 	@Override
 	protected String getPageFormTitle() {
-		return "Project Phase";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditorPage.pageFormTitle.text"); //$NON-NLS-1$
 	}
 	
 	protected ProjectPhaseEditorPageController getController() {

@@ -18,6 +18,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -49,10 +50,10 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		getClient().getGridData().horizontalAlignment = SWT.BEGINNING;
 		getClient().getGridData().verticalAlignment = SWT.BEGINNING;
 		
-		getSection().setText("Properties");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.section.text")); //$NON-NLS-1$
 
 		priorityLabel = new Label(getClient(), SWT.WRAP);
-		priorityLabel.setText("Priority: ");
+		priorityLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.priority.text")); //$NON-NLS-1$
 
 		issuePriorityCombo = new XComboComposite<IssuePriority>(getClient(), SWT.NONE);
 		issuePriorityCombo.setLabelProvider(new IssueLabelProvider());
@@ -66,7 +67,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		});
 		
 		severityLabel = new Label(getClient(), SWT.WRAP);
-		severityLabel.setText("Severity: ");
+		severityLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.severity.text")); //$NON-NLS-1$
 
 		issueSeverityTypeCombo = new XComboComposite<IssueSeverityType>(getClient(), SWT.NONE);
 		issueSeverityTypeCombo.setLabelProvider(new IssueLabelProvider());
@@ -80,7 +81,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		});
 
 		resolutionLabel = new Label(getClient(), SWT.WRAP);
-		resolutionLabel.setText("Resolution: ");
+		resolutionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.resolution.text")); //$NON-NLS-1$
 
 		issueResolutionCombo = new XComboComposite<IssueResolution>(getClient(), SWT.NONE);
 		issueResolutionCombo.setLabelProvider(new IssueLabelProvider());
@@ -110,7 +111,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 	}
 
 	private void loadProperties(final Issue issue){
-		Job loadJob = new Job("Loading Issue Properties....") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.job.loadingIssueProp.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) {
 				try {

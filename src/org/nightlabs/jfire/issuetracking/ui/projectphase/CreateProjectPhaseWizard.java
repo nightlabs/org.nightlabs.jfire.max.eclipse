@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectPhase;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class CreateProjectPhaseWizard
 extends DynamicPathWizard
@@ -35,7 +36,7 @@ extends DynamicPathWizard
 	public boolean performFinish()
 	{
 
-		Job job = new Job("Creating Project Phase") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.projectphase.CreateProjectPhaseWizard.job.creatingProjectPhase.text")) { //$NON-NLS-1$
 			@Override
 			@Implement
 			protected IStatus run(IProgressMonitor monitor)

@@ -7,6 +7,7 @@ import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class DeleteIssueAction 
@@ -56,7 +57,7 @@ extends AbstractIssueAction
 	@Override
 	public void run() {
 		for (IssueID issueID : getSelectedIssueIDs()) {
-			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), "Confirm Delete", "Are you sure to delete issue "+ ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + "?");
+			boolean result = MessageDialog.openConfirm(getActivePart().getSite().getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.title.text"), Messages.getString("org.nightlabs.jfire.issuetracking.ui.overview.action.DeleteIssueAction.dialog.confirmDelete.description.text")+ ObjectIDUtil.longObjectIDFieldToString(issueID.issueID) + "?"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (result == true) {
 				IssueDAO.sharedInstance().deleteIssue(issueID, new NullProgressMonitor());
 			}

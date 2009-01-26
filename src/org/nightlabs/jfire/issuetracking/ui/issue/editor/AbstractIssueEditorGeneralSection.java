@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -33,7 +34,7 @@ public abstract class AbstractIssueEditorGeneralSection extends ToolBarSectionPa
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
-				"Section Title"
+				Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.AbstractIssueEditorGeneralSection.title") //$NON-NLS-1$
 		);
 		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

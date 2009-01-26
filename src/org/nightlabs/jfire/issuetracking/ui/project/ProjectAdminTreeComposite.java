@@ -34,6 +34,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectAction;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -160,7 +161,7 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 		protected Image getJDOObjectImage(Project project, int columnIndex) {
 			if (columnIndex == 0)
 				return SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(),
-						ProjectAdminTreeComposite.class, "project");
+						ProjectAdminTreeComposite.class, "project"); //$NON-NLS-1$
 
 			return super.getJDOObjectImage(project, columnIndex);
 		}

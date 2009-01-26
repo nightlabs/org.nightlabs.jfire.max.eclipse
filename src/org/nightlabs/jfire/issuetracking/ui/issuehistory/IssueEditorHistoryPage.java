@@ -34,6 +34,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueHistoryListSection;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * An editor page for issue tracking overview.
@@ -78,7 +79,7 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	 */
 	public IssueEditorHistoryPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "History");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage.title")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -107,7 +108,7 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue History";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage.pageFormTitle.text"); //$NON-NLS-1$
 	}
 	
 	protected IssueEditorPageController getController() {

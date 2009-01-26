@@ -10,6 +10,7 @@ import javax.jdo.JDOHelper;
 
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -20,7 +21,7 @@ implements IssueLinkHandler<LinkedObjectID, LinkedObject>
 	@Override
 	public Map<IssueLink, LinkedObject> getLinkedObjects(Set<IssueLink> issueLinks, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading objects linked to issues", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler.monitor.loadingObjectsLinked.text"), 100); //$NON-NLS-1$
 
 		Set<LinkedObjectID> linkedObjectIDs = new HashSet<LinkedObjectID>(issueLinks.size());
 		for (IssueLink issueLink : issueLinks)
@@ -47,7 +48,7 @@ implements IssueLinkHandler<LinkedObjectID, LinkedObject>
 			for (IssueLink issueLink : issueLinks) {
 				LinkedObject lo = objectID2objectMap.get(issueLink.getLinkedObjectID());
 				if (lo == null)
-					throw new IllegalStateException("Object missing in result set! " + issueLink.getLinkedObjectID());
+					throw new IllegalStateException("Object missing in result set! " + issueLink.getLinkedObjectID()); //$NON-NLS-1$
 
 				linkedObjectMap.put(issueLink, lo);
 			}

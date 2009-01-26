@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditorSection;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.progress.ProgressMonitor;
@@ -50,7 +51,7 @@ extends EntityEditorPageWithProgress
 	 * @param name
 	 */
 	public IssuePropertySetPage(FormEditor editor) {
-		super(editor, IssuePropertySetPage.class.getName(), "Properties");
+		super(editor, IssuePropertySetPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.title")); //$NON-NLS-1$
 	}
 
 	public BlockBasedEditorSection getBlockBasedEditorSection() {
@@ -65,7 +66,7 @@ extends EntityEditorPageWithProgress
 		structLocalScopeSection = new IssueStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
 		
-		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, "Properties");
+		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.section.properties.text")); //$NON-NLS-1$
 		getManagedForm().addPart(blockBasedEditorSection);
 	}
 
@@ -73,7 +74,7 @@ extends EntityEditorPageWithProgress
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		final IssueEditorPageController controller = (IssueEditorPageController) getPageController();
 		final Issue issue = controller.getIssue();
-		Job job = new Job("Loading....") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.job.loadingData.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
@@ -100,7 +101,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "Properties";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.pageFormTitle.text"); //$NON-NLS-1$
 	}
 
 }

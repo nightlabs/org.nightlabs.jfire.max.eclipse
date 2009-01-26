@@ -15,6 +15,7 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkAdderComposite;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueFileAttachmentComposite.IssueFileAttachmentCompositeStyle;
+import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -44,8 +45,8 @@ extends WizardHopPage
 	private Issue issue;
 
 	public CreateIssueOptionalWizardPage(Issue issue) {
-		super(CreateIssueOptionalWizardPage.class.getName(), "Create Issue", SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class));
-		setDescription("Add Issue Link & File Attachment");
+		super(CreateIssueOptionalWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueOptionalWizardPage.title"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), CreateIssueWizard.class)); //$NON-NLS-1$
+		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueOptionalWizardPage.description")); //$NON-NLS-1$
 		this.issue = issue;
 	}
 
@@ -55,7 +56,7 @@ extends WizardHopPage
 		mainComposite.getGridLayout().numColumns = 2;
 
 		linkedObjectLbl = new Label(mainComposite, SWT.NONE);
-		linkedObjectLbl.setText("Linked object");
+		linkedObjectLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueOptionalWizardPage.label.linkedObject.text")); //$NON-NLS-1$
 		
 		issueLinkAdderComposite = new IssueLinkAdderComposite(mainComposite, SWT.NONE, true, issue);
 //		/**********Reporter**********/
@@ -125,7 +126,7 @@ extends WizardHopPage
 //		});
 
 		fileLabel = new Label(mainComposite, SWT.NONE);
-		fileLabel.setText("Files: ");
+		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueOptionalWizardPage.label.file.text")); //$NON-NLS-1$
 
 		fileComposite = new IssueFileAttachmentComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withAddRemoveButton);
 		fileComposite.setIssue(issue);
