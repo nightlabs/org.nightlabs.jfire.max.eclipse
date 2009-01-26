@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -44,9 +45,9 @@ extends ToolBarSectionPart
 	private DecreaseResolutionAction decreaseResolutionAction;
 	
 	public IssueTypeResolutionSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Section Title"); //$NON-NLS-1$
 		this.controller = controller;
-		getSection().setText("Resolutions");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.section.title")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		
@@ -124,9 +125,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeResolutionSection.class, 
-					"Down"));
-			setToolTipText("Increase");
-			setText("Increase Resolution");
+					"Down")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.IncreaseResolutionAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.IncreaseResolutionAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -151,9 +152,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeResolutionSection.class, 
-					"Up"));
-			setToolTipText("Decrease");
-			setText("Decrease Resolution");
+					"Up")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DecreaseResolutionAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DecreaseResolutionAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -177,9 +178,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeResolutionSection.class, 
-					"Create"));
-			setToolTipText("Create/Choose a new resolution");
-			setText("Create");
+					"Create")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.CreateResolutionAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.CreateResolutionAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -207,14 +208,14 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeResolutionSection.class, 
-					"Delete"));
-			setToolTipText("Delete the selected resolution");
-			setText("Delete");
+					"Delete")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DeleteResolutionAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DeleteResolutionAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
 		public void run() {
-			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Delete this item(s)?");
+			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DeleteResolutionAction.confirmDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.DeleteResolutionAction.confirmDialog.description")); //$NON-NLS-1$ //$NON-NLS-2$
 			if(confirm) {
 				controller.getIssueType().getIssueSeverityTypes().removeAll(issueResolutionTable.getSelectedElements());
 				issueResolutionTable.refresh(true);
@@ -231,9 +232,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeResolutionSection.class, 
-					"Edit"));
-			setToolTipText("Edit the selected resolution");
-			setText("Edit");
+					"Edit")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.EditResolutionAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSection.EditResolutionAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override

@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -26,7 +27,7 @@ extends DynamicPathWizard
 	public IssueTypePrioritySelectCreateWizard(IssueType issueType) {
 		super();		
 		this.issueType = issueType;
-		setWindowTitle("New Issue Priority Wizard");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySelectCreateWizard.windowTitle.text")); //$NON-NLS-1$
 	}
 	
 	@Override

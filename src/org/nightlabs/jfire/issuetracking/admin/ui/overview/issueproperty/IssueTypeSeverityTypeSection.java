@@ -24,6 +24,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -42,7 +43,7 @@ extends ToolBarSectionPart
 	private DecreaseSeverityAction decreaseSeverityAction;
 	
 	public IssueTypeSeverityTypeSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Severity Types");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR, "Severity Types"); //$NON-NLS-1$
 		this.controller = controller;
 //		getSection().setText("Severity Types");
 //		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -121,9 +122,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeSeverityTypeSection.class, 
-					"Down"));
-			setToolTipText("Increase");
-			setText("Increase Severity");
+					"Down")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.IncreaseSeverityAction.toolTipeText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.IncreaseSeverityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -148,9 +149,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeSeverityTypeSection.class, 
-					"Up"));
-			setToolTipText("Decrease");
-			setText("Decrease Severity");
+					"Up")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.DecreaseSeverityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.DecreaseSeverityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -174,9 +175,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeSeverityTypeSection.class, 
-					"Create"));
-			setToolTipText("Create/Choose a new severity type");
-			setText("Create");
+					"Create")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.CreateSeverityTypeAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.CreateSeverityTypeAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -204,14 +205,14 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeSeverityTypeSection.class, 
-					"Delete"));
-			setToolTipText("Delete the selected severity type");
-			setText("Delte");
+					"Delete")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.DeleteSeverityTypeAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.DeleteSeverityTypeAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
 		public void run() {
-			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Delete this item(s)?");
+			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.dialog.confirmDelete.title"), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.dialog.confirmDelete.description")); //$NON-NLS-1$ //$NON-NLS-2$
 			if(confirm) {
 				controller.getIssueType().getIssueSeverityTypes().removeAll(issueSeverityTypeTable.getSelectedElements());
 				issueSeverityTypeTable.refresh(true);
@@ -228,9 +229,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypeSeverityTypeSection.class, 
-					"Edit"));
-			setToolTipText("Edit the selected severity type");
-			setText("Edit");
+					"Edit")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.EditSeverityTypeAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSection.EditSeverityTypeAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override

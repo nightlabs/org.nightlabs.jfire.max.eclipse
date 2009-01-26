@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.dao.IssueSeverityTypeDAO;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -32,7 +33,7 @@ extends DynamicPathWizard
 		this.issueSeverityType = issueSeverityType;
 		this.storeOnServer = storeOnServer || issueSeverityType == null;
 		this.fetchGroups = fetchGroups;
-		setWindowTitle("New Issue Type Severity Type Wizard");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeEditWizard.title")); //$NON-NLS-1$
 	}
 	
 	@Override

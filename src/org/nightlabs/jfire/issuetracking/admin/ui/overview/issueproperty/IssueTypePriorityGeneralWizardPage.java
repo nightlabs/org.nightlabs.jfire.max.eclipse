@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -25,11 +26,11 @@ extends WizardHopPage
 	
 	public IssueTypePriorityGeneralWizardPage(IssuePriority issuePriority) {
 		super(	IssueTypePriorityGeneralWizardPage.class.getName(),
-	    		"Title",
+	    		Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePriorityGeneralWizardPage.title"), //$NON-NLS-1$
 	    		SharedImages.getWizardPageImageDescriptor(IssueTrackingAdminPlugin.getDefault(), IssueTypePriorityGeneralWizardPage.class)
 	    	);
 		this.issuePriority = issuePriority;
-	    setDescription("Description");
+	    setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePriorityGeneralWizardPage.description")); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)

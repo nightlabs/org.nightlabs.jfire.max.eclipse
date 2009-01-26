@@ -14,6 +14,7 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -30,7 +31,7 @@ implements ICloseOnLogoutEditorPart
 	{
 		super.init(site, input);
 		issueTypeEditorInput = (IssueTypeEditorInput)input;
-		Job job = new Job("Loading Issue Type.....")
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditor.job.loadIssueTypes.text")) //$NON-NLS-1$
 		{
 			@Override
 			protected IStatus run(ProgressMonitor monitor)

@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -30,14 +31,14 @@ extends RestorableSectionPart
 	public IssueTypeNameSection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
 		super(parent, page.getEditor().getToolkit(), ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
 		this.controller = controller;
-		getSection().setText("Issue Type");
+		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNameSection.section.text")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 		
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 2; 
 
-		new Label(client, SWT.NONE).setText("Issue Type Name: ");
+		new Label(client, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeNameSection.label.issueTypeName.text")); //$NON-NLS-1$
 		issueTypeName = new I18nTextEditor(client);
 		issueTypeName.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {

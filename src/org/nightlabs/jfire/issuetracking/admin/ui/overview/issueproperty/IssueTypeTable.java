@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -75,7 +76,7 @@ extends AbstractTableComposite<IssueType>
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Name");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeTable.tableColumn.name.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(30));
 		
 		table.setLayout(layout);

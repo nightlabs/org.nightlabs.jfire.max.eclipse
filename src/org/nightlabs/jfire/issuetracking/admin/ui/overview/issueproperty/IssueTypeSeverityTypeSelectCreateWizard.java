@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -26,7 +27,7 @@ extends DynamicPathWizard
 	public IssueTypeSeverityTypeSelectCreateWizard(IssueType issueType) {
 		super();		
 		this.issueType = issueType;
-		setWindowTitle("New Issue Severity Type Wizard");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeSeverityTypeSelectCreateWizard.title")); //$NON-NLS-1$
 	}
 	
 	@Override

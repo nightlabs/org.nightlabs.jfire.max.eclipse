@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -25,11 +26,11 @@ extends WizardHopPage
 	
 	public IssueTypeResolutionGeneralWizardPage(IssueResolution issueResolution) {
 		super(	IssueTypeResolutionGeneralWizardPage.class.getName(),
-	    		"Title",
+	    		Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionGeneralWizardPage.title"), //$NON-NLS-1$
 	    		SharedImages.getWizardPageImageDescriptor(IssueTrackingAdminPlugin.getDefault(), IssueTypeResolutionGeneralWizardPage.class)
 	    	);
 		this.issueResolution = issueResolution;
-	    setDescription("Description");
+	    setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionGeneralWizardPage.description")); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)

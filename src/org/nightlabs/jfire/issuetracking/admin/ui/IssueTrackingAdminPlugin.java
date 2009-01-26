@@ -14,7 +14,7 @@ extends AbstractUIPlugin
 {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.admin.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.issuetracking.admin.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static IssueTrackingAdminPlugin plugin;

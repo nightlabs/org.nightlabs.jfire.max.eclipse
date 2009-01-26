@@ -32,6 +32,7 @@ import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueResolutionDAO;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -53,13 +54,13 @@ extends WizardHopPage
 	
 	public IssueTypeResolutionSelectWizardPage(IssueType issueType) {
 		super(	IssueTypeResolutionSelectWizardPage.class.getName(),
-	    		"Select Issue Resolution",
+	    		Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.title"), //$NON-NLS-1$
 	    		SharedImages.getWizardPageImageDescriptor(IssueTrackingAdminPlugin.getDefault(), IssueTypeResolutionSelectWizardPage.class)
 	    	);
 		new WizardHop(this);
 		this.issueType = issueType;
 		createPage = new IssueTypeResolutionGeneralWizardPage(null);
-	    setDescription("Description");
+	    setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.description")); //$NON-NLS-1$
 	}
 	
 	/* (non-Javadoc)
@@ -71,7 +72,7 @@ extends WizardHopPage
 		XComposite comp = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL);
 		
 		createNewCheckBox = new Button(comp, SWT.RADIO);		
-		createNewCheckBox.setText("Create a new resolution");
+		createNewCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.checkBox.createNew.text")); //$NON-NLS-1$
 		createNewCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewCheckBox.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -80,7 +81,7 @@ extends WizardHopPage
 		});
 		
 		selectFromCheckBox = new Button(comp, SWT.RADIO);
-		selectFromCheckBox.setText("Select from the list");
+		selectFromCheckBox.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionSelectWizardPage.checkBox.selectFrom.text")); //$NON-NLS-1$
 		selectFromCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectFromCheckBox.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -33,7 +34,7 @@ extends AbstractTableComposite<IssuePriority>
 		TableLayout layout = new TableLayout();
 
 		tc = new TableColumn(table, SWT.LEFT);
-		tc.setText("Name");
+		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssuePriorityTable.tableColumn.name.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(30));
 
 		table.setLayout(layout);

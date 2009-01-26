@@ -7,6 +7,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.dao.IssuePriorityDAO;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -32,7 +33,7 @@ extends DynamicPathWizard
 		this.issuePriority = issuePriority;
 		this.storeOnServer = storeOnServer || issuePriority == null;
 		this.fetchGroups = fetchGroups;
-		setWindowTitle("New Issue Type Wizard");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePriorityEditWizard.windowTitle.text")); //$NON-NLS-1$
 	}
 	
 	@Override

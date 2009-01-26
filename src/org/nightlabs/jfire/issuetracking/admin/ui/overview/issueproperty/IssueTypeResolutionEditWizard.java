@@ -5,6 +5,7 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.issue.IssueResolution;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -29,7 +30,7 @@ extends DynamicPathWizard
 		this.issueResolution = issueResolution;
 		this.storeOnServer = storeOnServer || issueResolution == null;
 		this.fetchGroups = fetchGroups;
-		setWindowTitle("New Issue Type Resolution Wizard");
+		setWindowTitle(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeResolutionEditWizard.title")); //$NON-NLS-1$
 	}
 	
 	@Override

@@ -25,6 +25,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issuetracking.admin.ui.IssueTrackingAdminPlugin;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -43,7 +44,7 @@ extends ToolBarSectionPart
 	private EditPriorityAction editAction;
 	
 	public IssueTypePrioritySection(FormPage page, Composite parent, IssueTypeEditorPageController controller) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "Priorities");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.section.text")); //$NON-NLS-1$
 		this.controller = controller;
 		
 		XComposite client = new XComposite(getContainer(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -122,9 +123,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
-					"Down"));
-			setToolTipText("Increase");
-			setText("Increase Priority");
+					"Down")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.IncreasePriorityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.IncreasePriorityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -149,9 +150,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
-					"Up"));
-			setToolTipText("Decrease");
-			setText("Decrease Priority");
+					"Up")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DecreasePriorityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DecreasePriorityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -176,9 +177,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
-					"Create"));
-			setToolTipText("Create a New Issue Priority");
-			setText("New");
+					"Create")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.CreatePriorityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.CreatePriorityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
@@ -207,14 +208,14 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
-					"Delete"));
-			setToolTipText("Delete the Selected Issue Priority");
-			setText("Delete");
+					"Delete")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DeletePriorityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DeletePriorityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override
 		public void run() {
-			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), "Confirm Delete", "Delete this item(s)?");
+			boolean confirm = MessageDialog.openConfirm(getSection().getShell(), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DeletePriorityAction.confirmDialog.title"), Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.DeletePriorityAction.confirmDialog.text")); //$NON-NLS-1$ //$NON-NLS-2$
 			if(confirm) {
 				controller.getIssueType().getIssuePriorities().removeAll(issuePriorityTable.getSelectedElements());
 				issuePriorityTable.refresh(true);
@@ -232,9 +233,9 @@ extends ToolBarSectionPart
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingAdminPlugin.getDefault(), 
 					IssueTypePrioritySection.class, 
-					"Edit"));
-			setToolTipText("Edit the Selected Issue Priority");
-			setText("Edit");
+					"Edit")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.EditPriorityAction.toolTipText")); //$NON-NLS-1$
+			setText(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypePrioritySection.EditPriorityAction.text")); //$NON-NLS-1$
 		}
 		
 		@Override

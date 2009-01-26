@@ -26,6 +26,7 @@ package org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty;
 
 import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * Editor input for {@link IssueTypeEditor}s.
@@ -42,6 +43,6 @@ extends JDOObjectEditorInput<IssueTypeID>
 	public IssueTypeEditorInput(IssueTypeID issueTypeID)
 	{
 		super(issueTypeID);
-		setName("Name");
+		setName(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorInput.name")); //$NON-NLS-1$
 	}
 }

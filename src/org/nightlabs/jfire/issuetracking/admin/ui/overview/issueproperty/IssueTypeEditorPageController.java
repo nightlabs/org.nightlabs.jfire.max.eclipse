@@ -11,6 +11,7 @@ import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -41,7 +42,7 @@ extends EntityEditorPageController
 	}
 	
 	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("Loading Issue Types....", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPageController.monitor.loadIssueTypes.text"), 100); //$NON-NLS-1$
 		
 		IssueTypeEditorInput input = (IssueTypeEditorInput)getEntityEditor().getEditorInput();
 		this.issueTypeID = input.getJDOObjectID();

@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.admin.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
@@ -49,7 +50,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public IssueTypeEditorPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Issue Type");
+		super(editor, ID_PAGE, Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage.page.text")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -99,6 +100,6 @@ extends EntityEditorPageWithProgress
 	
 	@Override
 	protected String getPageFormTitle() {
-		return "Issue Type";
+		return Messages.getString("org.nightlabs.jfire.issuetracking.admin.ui.overview.issueproperty.IssueTypeEditorPage.pageFormTititle.text"); //$NON-NLS-1$
 	}
 }
