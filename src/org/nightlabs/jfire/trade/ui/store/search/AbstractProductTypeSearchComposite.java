@@ -56,6 +56,24 @@ import org.nightlabs.progress.ProgressMonitor;
 public abstract class AbstractProductTypeSearchComposite
 	extends XComposite
 {
+	public static final String[] PRODUCT_TYPE_SEARCH_FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT,
+		ProductType.FETCH_GROUP_THIS_PRODUCT_TYPE,
+		ProductType.FETCH_GROUP_NAME,
+		DeliveryConfiguration.FETCH_GROUP_NAME,
+		LocalAccountantDelegate.FETCH_GROUP_NAME,
+		ProductTypeGroup.FETCH_GROUP_NAME,
+		PriceConfig.FETCH_GROUP_NAME,
+		LegalEntity.FETCH_GROUP_PERSON,
+		// TODO remove the following fetch-group, because most implementations of ProductType don't support nesting
+		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS
+	};
+
+	private AbstractTableComposite<? extends ProductType> productTypeTableComposite;
+	private Text searchText;
+//	private ProductTypeSearchCriteriaComposite searchCriteriaComposite;
+	private Composite searchCriteriaComposite;
+
 	/**
 	 * @param parent
 	 * @param style
@@ -71,17 +89,13 @@ public abstract class AbstractProductTypeSearchComposite
 		createComposite(this);
 	}
 
-	private AbstractTableComposite<? extends ProductType> productTypeTableComposite;
-	private Text searchText;
-	private ProductTypeSearchCriteriaComposite searchCriteriaComposite;
-
 	public AbstractTableComposite<? extends ProductType> getProductTypeTableComposite() {
 		return productTypeTableComposite;
 	}
 
-	public ProductTypeSearchCriteriaComposite getSearchCriteriaComposite() {
-		return searchCriteriaComposite;
-	}
+//	public ProductTypeSearchCriteriaComposite getSearchCriteriaComposite() {
+//		return searchCriteriaComposite;
+//	}
 
 	protected void createComposite(Composite parent)
 	{
@@ -162,25 +176,13 @@ public abstract class AbstractProductTypeSearchComposite
 		}
 	};
 
-	public static final String[] PRODUCT_TYPE_SEARCH_FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		ProductType.FETCH_GROUP_THIS_PRODUCT_TYPE,
-		ProductType.FETCH_GROUP_NAME,
-		DeliveryConfiguration.FETCH_GROUP_NAME,
-		LocalAccountantDelegate.FETCH_GROUP_NAME,
-		ProductTypeGroup.FETCH_GROUP_NAME,
-		PriceConfig.FETCH_GROUP_NAME,
-		LegalEntity.FETCH_GROUP_PERSON,
-		// TODO remove the following fetch-group, because most implementations of ProductType don't support nesting
-		ProductTypeLocal.FETCH_GROUP_NESTED_PRODUCT_TYPE_LOCALS
-	};
-
 	protected String[] getFetchGroups() {
 		return PRODUCT_TYPE_SEARCH_FETCH_GROUPS;
 	}
 
 	protected abstract Class<? extends ProductType> getResultClass();
 	protected abstract Class<? extends AbstractProductTypeQuery> getQueryClass();
+	protected abstract AbstractProductTypeQuery createNewQuery();
 
 	public void searchPressed()
 	{
@@ -200,24 +202,14 @@ public abstract class AbstractProductTypeSearchComposite
 					throw new RuntimeException("queryProvider must NOT be null at this point of time!"); //$NON-NLS-1$
 
 				AbstractProductTypeQuery productTypeQuery = queryProvider.getQueryOfType(getQueryClass());
-				// ignore user input on the saleable flag, everything else doesn't make sense!
-				// TODO: we should tell the UI to NOT display the saleable flag or make it unmodifiable.
-				productTypeQuery.setSaleable(true);
-				productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.saleable, true);
-				if (searchStr != null && searchStr.trim().length() > 0)
-				{
-					productTypeQuery.setFullTextSearch(searchStr);
-					productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.fullTextSearch, true);
-				}
-				// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
-//				productTypeQuery.setVendorID()
-
-//				QueryCollection<AbstractProductTypeQuery> productTypeQueries =
-//					new QueryCollection<AbstractProductTypeQuery>(ProductType.class);
-//
-//				AbstractProductTypeQuery query = createNewQuery();
-//				configureQuery(query, searchStr);
-//				productTypeQueries.add(query);
+//				productTypeQuery.setSaleable(true);
+//				productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.saleable, true);
+//				if (searchStr != null && searchStr.trim().length() > 0)
+//				{
+//					productTypeQuery.setFullTextSearch(searchStr);
+//					productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.fullTextSearch, true);
+//				}
+				configureQuery(productTypeQuery, searchStr);
 
 				Set<ProductTypeID> productTypeIDs;
 				try {
@@ -260,8 +252,6 @@ public abstract class AbstractProductTypeSearchComposite
 		}
 	}
 
-	protected abstract AbstractProductTypeQuery createNewQuery();
-
 	protected Collection<ProductType> retrieveProductTypes(
 		QueryCollection<? extends AbstractProductTypeQuery> queries,
 			ProgressMonitor monitor)
@@ -282,7 +272,8 @@ public abstract class AbstractProductTypeSearchComposite
 
 	private DefaultQueryProvider<AbstractSearchQuery> queryProvider;
 
-	protected ProductTypeSearchCriteriaComposite createSearchCriteriaComposite(Composite parent)
+//	protected ProductTypeSearchCriteriaComposite createSearchCriteriaComposite(Composite parent)
+	protected Composite createSearchCriteriaComposite(Composite parent)
 	{
 		return new ProductTypeSearchCriteriaComposite(parent, SWT.NONE,	queryProvider, getQueryClass());
 	}
@@ -297,6 +288,25 @@ public abstract class AbstractProductTypeSearchComposite
 	public DefaultQueryProvider<AbstractSearchQuery> getQueryProvider()
 	{
 		return queryProvider;
+	}
+
+	protected String getSearchText() {
+		return searchText.getText();
+	}
+
+	protected void configureQuery(AbstractProductTypeQuery productTypeQuery, String searchStr)
+	{
+//		// ignore user input on the saleable flag, everything else doesn't make sense!
+//		// TODO: we should tell the UI to NOT display the saleable flag or make it unmodifiable.
+		productTypeQuery.setSaleable(true);
+		productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.saleable, true);
+		if (searchStr != null && searchStr.trim().length() > 0)
+		{
+			productTypeQuery.setFullTextSearch(searchStr);
+			productTypeQuery.setFieldEnabled(AbstractProductTypeQuery.FieldName.fullTextSearch, true);
+		}
+		// TODO: FIXME: set vendorID so hat only productTypes of the current vendor can be found
+//		productTypeQuery.setVendorID()
 	}
 
 //	protected AbstractProductTypeQuery configureQuery(AbstractProductTypeQuery query, String searchStr)
