@@ -8,8 +8,8 @@
             icon="icons/articlecontainer/action/issue/AttachIssueAction.16x16.png"
             id="org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction"
             menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
-            name="Attach an Issue"
-            tooltip="Attach an Issue">
+            name="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.name"
+            tooltip="%org.nightlabs.jfire.issuetracking.trade.ui.action.IssueAttachAction.tooltip">
       </articleContainerAction>
    </extension>
    <extension
