@@ -22,6 +22,7 @@ import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.CustomerPaymentDeliveryWizard;
@@ -66,6 +67,17 @@ extends CustomerPaymentDeliveryWizard
 			boolean finalized = offer.isFinalized();
 			if (finalized)
 				return false;
+		}
+
+		// check for anonymous legal entity
+		LegalEntity selectedLegalEntity = getPersonSearchWizardPage().getSelectedLegalEntity();
+		if (selectedLegalEntity != null) {
+			LegalEntity anonymousLegalEntity = LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(new NullProgressMonitor());
+			AnchorID selectedID = (AnchorID) JDOHelper.getObjectId(selectedLegalEntity);
+			AnchorID anonymousID = (AnchorID) JDOHelper.getObjectId(anonymousLegalEntity);
+			if (selectedID.equals(anonymousID)) {
+				return false;
+			}
 		}
 
 		return true;
