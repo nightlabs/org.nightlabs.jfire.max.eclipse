@@ -56,8 +56,7 @@ implements IErrorMessageDisplayer
 		reverseProductComposite = new ReverseProductComposite(wrapper, SWT.NONE);
 		reverseProductComposite.getProductIDText().addDelayedModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e)
-			{
+			public void modifyText(ModifyEvent e) {
 				Display.getDefault().asyncExec(new Runnable(){
 					@Override
 					public void run() {
@@ -94,14 +93,14 @@ implements IErrorMessageDisplayer
 		return productID;
 	}
 
-	public boolean isReverseAll() {
-		return reverseProductComposite.isReverseAll();
-	}
-
-	public boolean isReverseArticle() {
-		return reverseProductComposite.isReverseArticle();
-	}
-
+//	public boolean isReverseAll() {
+//		return reverseProductComposite.isReverseAll();
+//	}
+//
+//	public boolean isReverseArticle() {
+//		return reverseProductComposite.isReverseArticle();
+//	}
+//
 //	public boolean isReleaseArticles() {
 //		return reverseProductComposite.isReleaseArticles();
 //	}
@@ -112,6 +111,10 @@ implements IErrorMessageDisplayer
 
 	private ProgressMonitor getProgressMonitor() {
 		return new ProgressMonitorWrapper(progressMonitorPart);
+	}
+
+	public ReverseProductComposite getReverseProductComposite() {
+		return reverseProductComposite;
 	}
 }
 ;

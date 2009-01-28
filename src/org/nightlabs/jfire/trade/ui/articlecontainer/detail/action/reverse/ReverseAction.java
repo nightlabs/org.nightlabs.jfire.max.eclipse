@@ -67,7 +67,6 @@ extends GenericArticleEditAction
 	public void run()
 	{
 		ReverseWizard reverseWizard = new ReverseWizard(getArticles());
-
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(reverseWizard);
 		dialog.open();
 	}

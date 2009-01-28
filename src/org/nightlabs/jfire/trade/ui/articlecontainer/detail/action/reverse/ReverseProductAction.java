@@ -52,6 +52,14 @@ extends Action
 		this.shell = shell;
 	}
 
+//	@Override
+//	public void run()
+//	{
+//		ReverseProductWizard wizard = new ReverseProductWizard();
+//		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(shell, wizard);
+//		dlg.open();
+//	}
+
 	@Override
 	public void run()
 	{
@@ -59,11 +67,16 @@ extends Action
 		int returnCode = dialog.open();
 		if (returnCode == Window.OK) {
 			ProductID productID = dialog.getProductID();
-			createReversingOffer(productID, dialog.isReverseAll());
+			boolean reverseAll = dialog.getReverseProductComposite().isReverseAll();
+//			boolean reversePaymentAndDelivery = dialog.getReverseProductComposite().isReversePaymentAndDelivery();
+//			boolean releaseArticles = dialog.getReverseProductComposite().isReleaseArticles();
+//			createReversingOffer(productID, reverseAll, reversePaymentAndDelivery, releaseArticles);
+			createReversingOffer(productID, reverseAll, false, false);
 		}
 	}
 
-	private void createReversingOffer(final ProductID productID, final boolean completeOffer)
+	private void createReversingOffer(final ProductID productID, final boolean completeOffer,
+			final boolean reversePaymentAndDelivery, final boolean releaseArticles)
 	{
 		Job searchJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.job.name")){ //$NON-NLS-1$
 			@Override
@@ -76,19 +89,7 @@ extends Action
 						showNothingFound();
 					}
 					else {
-						getDisplay().syncExec(new Runnable(){
-							@Override
-							public void run() {
-								try {
-									OfferID offerID = (OfferID) JDOHelper.getObjectId(reversingOffer);
-									RCPUtil.openEditor(
-											new ArticleContainerEditorInput(offerID),
-											ArticleContainerEditor.ID_EDITOR);
-								} catch (PartInitException e) {
-									throw new RuntimeException(e);
-								}
-							}
-						});
+						openReversingOffer(reversingOffer, reversePaymentAndDelivery, releaseArticles);
 					}
 				} catch (Exception e) {
 					if (e instanceof ReverseProductException) {
@@ -96,25 +97,11 @@ extends Action
 						final IReverseProductError error = exception.getReverseProductError();
 						if (error != null) {
 							if (error instanceof AlreadyReversedArticleReverseProductError) {
-								getDisplay().syncExec(new Runnable(){
-									@Override
-									public void run() {
-										AlreadyReversedArticleReverseProductError alreadyReversedError = (AlreadyReversedArticleReverseProductError) error;
-										Dialog dialog = new OpenAlreadyReversedOfferDialog(getShell(), alreadyReversedError);
-										dialog.open();
-									}
-								});
+								showAlreadyReversed((AlreadyReversedArticleReverseProductError) error);
 							}
 						}
 						else {
-							getDisplay().syncExec(new Runnable(){
-								@Override
-								public void run() {
-									MessageDialog.openError(getShell(),
-											Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.dialog.title"),  //$NON-NLS-1$
-											exception.getDescription());
-								}
-							});
+							showError(exception);
 						}
 					}
 					else {
@@ -142,6 +129,44 @@ extends Action
 				MessageDialog.openError(getShell(),
 						Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.nothingFound.dialog.title"),  //$NON-NLS-1$
 						Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.nothingFound.dialog.message")); //$NON-NLS-1$
+			}
+		});
+	}
+
+	private void showAlreadyReversed(final AlreadyReversedArticleReverseProductError error) {
+		getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				AlreadyReversedArticleReverseProductError alreadyReversedError = error;
+				Dialog dialog = new OpenAlreadyReversedOfferDialog(getShell(), alreadyReversedError);
+				dialog.open();
+			}
+		});
+	}
+
+	private void showError(final ReverseProductException exception) {
+		getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				MessageDialog.openError(getShell(),
+						Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse.ReverseProductAction.dialog.title"),  //$NON-NLS-1$
+						exception.getDescription());
+			}
+		});
+	}
+
+	private void openReversingOffer(final Offer reversingOffer, final boolean reversePaymentAndDelivery, final boolean releaseArticles) {
+		getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					OfferID offerID = (OfferID) JDOHelper.getObjectId(reversingOffer);
+					RCPUtil.openEditor(
+							new ArticleContainerEditorInput(offerID),
+							ArticleContainerEditor.ID_EDITOR);
+				} catch (PartInitException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		});
 	}

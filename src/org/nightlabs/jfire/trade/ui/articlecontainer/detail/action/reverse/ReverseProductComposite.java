@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.reverse;
 
 import java.util.Collection;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -33,17 +34,18 @@ extends XComposite
 	private boolean reverseArticle;
 //	private boolean reversePaymentAndDelivery;
 //	private boolean releaseArticles;
-
 	private TimerText productIDText;
 	private String text;
-	private IProductIDParser productIDParser;
+	private ListenerList listeners;
 
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public ReverseProductComposite(Composite parent, int style) {
+	public ReverseProductComposite(Composite parent, int style)
+	{
 		super(parent, style);
+		listeners = new ListenerList();
 
 		XComposite wrapper = new XComposite(parent, SWT.NONE);
 
@@ -70,6 +72,7 @@ extends XComposite
 			public void widgetSelected(SelectionEvent e) {
 				reverseAll = true;
 				reverseArticle = false;
+				fireReverseProductEvent();
 			}
 		});
 
@@ -80,6 +83,7 @@ extends XComposite
 			public void widgetSelected(SelectionEvent e) {
 				reverseAll = false;
 				reverseArticle = true;
+				fireReverseProductEvent();
 			}
 		});
 
@@ -93,6 +97,7 @@ extends XComposite
 //				if (!reversePaymentAndDelivery) {
 //					releaseArticlesButton.setSelection(false);
 //				}
+//				fireReverseProductEvent();
 //			}
 //		});
 //
@@ -102,10 +107,13 @@ extends XComposite
 //			@Override
 //			public void widgetSelected(SelectionEvent e) {
 //				releaseArticles = releaseArticlesButton.getSelection();
+//				fireReverseProductEvent();
 //			}
 //		});
 
 		reverseAllButton.setSelection(true);
+		reverseArticleButton.setSelection(false);
+//		reversePaymentAndDeliveryButton.setSelection(true);
 		reverseAll = reverseAllButton.getSelection();
 		reverseArticle = reverseArticleButton.getSelection();
 //		releaseArticles = releaseArticlesButton.getSelection();
@@ -149,4 +157,21 @@ extends XComposite
 		return productIDText;
 	}
 
+	public void addReverseProductListener(IReverseProductListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeReverseProductListener(IReverseProductListener listener) {
+		listeners.remove(listener);
+	}
+
+	private void fireReverseProductEvent()
+	{
+		ReverseProductEvent event = new ReverseProductEvent(reverseAll, reverseArticle,
+//				reversePaymentAndDelivery, releaseArticles);
+				false, false);
+		for (Object o : listeners.getListeners()) {
+			((IReverseProductListener) o).reverseProductChanged(event);
+		}
+	}
 }
