@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
@@ -140,7 +139,6 @@ extends DynamicPathWizardPage
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeNamePage.loadProductTypeJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			throws Exception
 			{

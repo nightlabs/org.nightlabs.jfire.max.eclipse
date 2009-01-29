@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -30,7 +29,6 @@ public class OrganisationSelectionPage
 	}
 
 	@Override
-	@Implement
 	public Control createPageContents(Composite parent)
 	{
 		organisationList = new OrganisationList(parent, new OrganisationIDDataSource() {

@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor;
 import org.nightlabs.jfire.simpletrade.admin.ui.producttype.ProductTypeTree;
@@ -32,7 +31,6 @@ public class SimpleProductTypeCategory
 	}
 
 	@Override
-	@Implement
 	protected Composite _createComposite(Composite parent)
 	{
 		ProductTypeTree productTypeTree = new ProductTypeTree(parent, SWT.NONE); // , null, SimpletradePlugin.ZONE_ADMIN);

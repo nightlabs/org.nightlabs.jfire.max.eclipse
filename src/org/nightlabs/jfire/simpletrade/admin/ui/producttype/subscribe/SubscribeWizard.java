@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -19,7 +18,6 @@ public class SubscribeWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		String selectedOrganisationID = organisationSelectionPage.getSelectedOrganisationID().organisationID;

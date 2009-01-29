@@ -3,7 +3,6 @@ package org.nightlabs.jfire.simpletrade.admin.ui.gridpriceconfig;
 import java.util.Collection;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigCommand;
@@ -34,7 +33,6 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	}
 
 	@SuppressWarnings("unchecked")
-	@Implement
 	@Override
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
@@ -46,13 +44,11 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 		}
 	}
 
-	@Implement
 	@Override
 	public AbstractChooseGridPriceConfigWizard createChoosePriceConfigWizard(ProductTypeID parentProductTypeID) {
 		return new ChooseSimpleTradePriceConfigWizard(parentProductTypeID);
 	}
 
-	@Implement
 	@Override
 	protected IInnerPriceConfig retrieveInnerPriceConfigForEditing(PriceConfigID priceConfigID)
 	{
