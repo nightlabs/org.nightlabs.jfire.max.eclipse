@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.part.ControllablePart;
 import org.nightlabs.editor2d.ui.AbstractPaletteFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -46,7 +45,7 @@ implements ControllablePart
 		return getScriptResultProvider().getScriptResults() != null;
 	}
 	
-	@Implement
+	@Override
 	public boolean canDisplayPart() {
 		return isScriptResultAvailable();
 	}
@@ -57,7 +56,6 @@ implements ControllablePart
 	}
 	
 	@Override
-	@Implement
 	public void createPartControl(Composite parent)
 	{
 		if (!Login.isLoggedIn())
