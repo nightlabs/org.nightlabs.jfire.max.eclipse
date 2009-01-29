@@ -1,12 +1,8 @@
-/**
- *
- */
 package org.nightlabs.jfire.reporting.ui.config;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage;
 import org.nightlabs.jfire.reporting.config.ReportLayoutAvailEntry;
@@ -36,7 +32,7 @@ public class ReportLayoutConfigController extends
 
 	private static final Set<String> REPORT_LAYOUT_FETCH_GROUPS = new HashSet<String>();
 
-	@Implement
+	@Override
 	public Set<String> getConfigModuleFetchGroups() {
 		if (REPORT_LAYOUT_FETCH_GROUPS.isEmpty()) {
 			REPORT_LAYOUT_FETCH_GROUPS.addAll(getCommonConfigModuleFetchGroups());

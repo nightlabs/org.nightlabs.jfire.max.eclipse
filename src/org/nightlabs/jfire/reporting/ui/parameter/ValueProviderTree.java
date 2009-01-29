@@ -7,7 +7,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
@@ -92,14 +91,12 @@ public class ValueProviderTree extends ActiveJDOObjectTreeComposite<ObjectID, Ob
 	}
 	
 	@Override
-	@Implement
 	public void createTreeColumns(Tree tree)
 	{
 //		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 	}
 
 	@Override
-	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{
 		treeViewer.setContentProvider(new ContentProvider());

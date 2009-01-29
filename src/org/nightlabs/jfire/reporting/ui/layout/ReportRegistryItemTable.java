@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
@@ -42,7 +41,7 @@ import org.nightlabs.progress.ProgressMonitor;
 public class ReportRegistryItemTable extends AbstractTableComposite<ReportRegistryItem> {
 	
 	protected class LabelProvider extends TableLabelProvider {
-		@Implement
+		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof ReportRegistryItem) {
 				return ((ReportRegistryItem) element).getName().getText();
