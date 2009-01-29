@@ -7,7 +7,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeAction;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
@@ -30,7 +29,6 @@ public class DynamicProductTypeCategory
 	}
 
 	@Override
-	@Implement
 	protected Composite _createComposite(Composite parent)
 	{
 		DynamicProductTypeTree dynamicProductTypeTree = new DynamicProductTypeTree(parent);

@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IPriceConfig;
@@ -22,7 +21,7 @@ public class ProductTypeSelectorHiddenImpl
 	private ArrayList<Item> productTypeItemList = new ArrayList<Item>();
 	private Item packageProductTypeItem = null;
 
-	@Implement
+	@Override
 	public ProductTypeSelector.Item getSelectedProductTypeItem(boolean throwExceptionIfNothingSelected)
 	{
 		if (productTypeItemList.isEmpty()) {
@@ -34,7 +33,7 @@ public class ProductTypeSelectorHiddenImpl
 		return productTypeItemList.get(0);
 	}
 
-	@Implement
+	@Override
 	public IFormulaPriceConfig getSelectedProductType_FormulaPriceConfig(boolean throwExceptionIfNotPossible)
 	{
 		Item item = this.getSelectedProductTypeItem(throwExceptionIfNotPossible);
@@ -62,7 +61,7 @@ public class ProductTypeSelectorHiddenImpl
 		return null;
 	}
 
-	@Implement
+	@Override
 	public IResultPriceConfig getSelectedProductType_ResultPriceConfig(boolean throwExceptionIfNotPossible)
 	{
 		Item item = this.getSelectedProductTypeItem(throwExceptionIfNotPossible);
@@ -105,14 +104,14 @@ public class ProductTypeSelectorHiddenImpl
 		return stablePriceConfig;
 	}
 
-	@Implement
 	private ProductType packageProductType;
+	@Override
 	public ProductType getPackageProductType()
 	{
 		return packageProductType;
 	}
 
-	@Implement
+	@Override
 	public void setPackageProductType(ProductType packageProductType)
 	{
 		this.packageProductType = packageProductType;
@@ -151,7 +150,7 @@ public class ProductTypeSelectorHiddenImpl
 		}
 	}
 
-	@Implement
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.add(listener);
@@ -165,7 +164,7 @@ public class ProductTypeSelectorHiddenImpl
 	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
 	 */
-	@Implement
+	@Override
 	public ISelection getSelection()
 	{
 		if (productTypeItemList.isEmpty())
@@ -174,19 +173,19 @@ public class ProductTypeSelectorHiddenImpl
 		return new StructuredSelection(productTypeItemList.get(0));
 	}
 
-	@Implement
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.remove(listener);
 	}
 
-	@Implement
+	@Override
 	public void setSelection(ISelection selection)
 	{
 		// we silently ignore it
 	}
 
-	@Implement
+	@Override
 	public Collection<Item> getProductTypeItems()
 	{
 		return productTypeItemList;

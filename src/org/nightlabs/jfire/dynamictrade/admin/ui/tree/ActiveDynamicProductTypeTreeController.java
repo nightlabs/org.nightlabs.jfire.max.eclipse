@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -22,7 +21,6 @@ public abstract class ActiveDynamicProductTypeTreeController
 extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, DynamicProductTypeTreeNode>
 {
 	@Override
-	@Implement
 	protected DynamicProductTypeTreeNode createNode()
 	{
 		return new DynamicProductTypeTreeNode();
@@ -36,7 +34,6 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	};
 
 	@Override
-	@Implement
 	protected Collection<DynamicProductType> retrieveChildren(ProductTypeID parentID, DynamicProductType parent, IProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getChildDynamicProductTypes(
@@ -46,7 +43,6 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	}
 
 	@Override
-	@Implement
 	protected Collection<DynamicProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
@@ -56,24 +52,20 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	}
 
 	@Override
-	@Implement
 	protected void sortJDOObjects(List<DynamicProductType> objects)
 	{
 		// no need to sort now - later maybe
 	}
 
 	@Override
-	@Implement
 	protected TreeNodeParentResolver createTreeNodeParentResolver()
 	{
 		return new DynamicProductTypeParentResolver();
 	}
 
 	@Override
-	@Implement
 	protected Class<DynamicProductType> getJDOObjectClass()
 	{
 		return DynamicProductType.class;
 	}
-
 }
