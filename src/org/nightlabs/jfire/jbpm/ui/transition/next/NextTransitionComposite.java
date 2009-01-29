@@ -19,7 +19,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -54,7 +53,7 @@ public class NextTransitionComposite
 			}
 		});
 		nextTransitionCombo.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Implement
+			@Override
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				updateUI();
@@ -93,7 +92,6 @@ public class NextTransitionComposite
 	{
 		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				setStatable(_statable, monitor);
@@ -111,7 +109,7 @@ public class NextTransitionComposite
 		final List<Transition> transitions = TransitionDAO.sharedInstance().getTransitions(
 				stateID, Boolean.TRUE, FETCH_GROUPS_TRANSITION, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		Collections.sort(transitions, new Comparator<Transition>() {
-			@Implement
+			@Override
 			public int compare(Transition t1, Transition t2)
 			{
 				return t1.getName().getText().compareTo(t2.getName().getText());
@@ -120,7 +118,7 @@ public class NextTransitionComposite
 
 		Runnable runnable = new Runnable()
 		{
-			@Implement
+			@Override
 			public void run()
 			{
 				if (nextTransitionCombo.isDisposed())

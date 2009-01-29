@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -87,7 +86,6 @@ public class CurrentStateComposite
 	{
 		new Job(Messages.getString("org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				setStatable(_statable, monitor);
@@ -113,7 +111,6 @@ public class CurrentStateComposite
 
 		Runnable runnable = new Runnable()
 		{
-			@Implement
 			public void run()
 			{
 				if (stateDefinitionName.isDisposed())
