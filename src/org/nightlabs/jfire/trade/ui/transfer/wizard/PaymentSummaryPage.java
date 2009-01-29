@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jfire.accounting.pay.Payment;
@@ -30,7 +29,6 @@ extends WizardHopPage
 	}
 
 	@Override
-	@Implement
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE);

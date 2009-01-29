@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.transfer.error;
 
 import java.util.ArrayList;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
@@ -17,7 +16,6 @@ public class DeliveryTreeNode
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -37,7 +35,6 @@ public class DeliveryTreeNode
 	private Object[] children = null;
 
 	@Override
-	@Implement
 	public Object[] getChildren()
 	{
 		if (children == null) {

@@ -31,7 +31,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
@@ -62,14 +61,12 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 	};
 
 	@Override
-	@Implement
 	protected HeaderTreeNode createArticleContainerNode(byte position, ArticleContainer articleContainer)
 	{
 		return new DeliveryNoteTreeNode(this, position, (DeliveryNote) articleContainer);
 	}
 
 	@Override
-	@Implement
 	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
@@ -80,7 +77,6 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 	}
 
 	@Override
-	@Implement
 	protected List<ArticleContainer> doLoadNewArticleContainers(Set<ArticleContainerID> articleContainerIDs, ProgressMonitor monitor)
 	{
 		Set<DeliveryNoteID> deliveryNoteIDs = CollectionUtil.castSet(articleContainerIDs);

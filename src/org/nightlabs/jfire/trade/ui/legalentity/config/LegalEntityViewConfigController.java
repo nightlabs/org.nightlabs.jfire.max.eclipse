@@ -6,7 +6,6 @@ package org.nightlabs.jfire.trade.ui.legalentity.config;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage;
 import org.nightlabs.jfire.config.ConfigModule;
@@ -37,7 +36,7 @@ public class LegalEntityViewConfigController extends
 
 	private static Set<String> LEGAL_ENTITY_VIEW_FETCH_GROUPS = new HashSet<String>();
 	
-	@Implement
+	@Override
 	public Set<String> getConfigModuleFetchGroups() {
 		if (LEGAL_ENTITY_VIEW_FETCH_GROUPS.isEmpty()) {
 			LEGAL_ENTITY_VIEW_FETCH_GROUPS.addAll(getCommonConfigModuleFetchGroups());

@@ -47,7 +47,6 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
@@ -112,7 +111,7 @@ extends HeaderComposite
 		nextTransitionComposite.setStatable(offer);
 		nextTransitionComposite.setLayoutData(new RowData(260, SWT.DEFAULT));
 		nextTransitionComposite.addSignalListener(new SignalListener() {
-			@Implement
+			@Override
 			public void signal(SignalEvent event)
 			{
 				signalNextTransition(event);
@@ -363,7 +362,6 @@ extends HeaderComposite
 	{
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {

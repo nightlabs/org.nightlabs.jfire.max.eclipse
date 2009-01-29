@@ -31,7 +31,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
@@ -63,14 +62,12 @@ public class InvoiceRootTreeNode extends ArticleContainerRootTreeNode
 	};
 
 	@Override
-	@Implement
 	protected HeaderTreeNode createArticleContainerNode(byte position, ArticleContainer articleContainer)
 	{
 		return new InvoiceTreeNode(this, position, (Invoice) articleContainer);
 	}
 
 	@Override
-	@Implement
 	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
@@ -81,7 +78,6 @@ public class InvoiceRootTreeNode extends ArticleContainerRootTreeNode
 	}
 
 	@Override
-	@Implement
 	protected List<ArticleContainer> doLoadNewArticleContainers(Set<ArticleContainerID> articleContainerIDs, ProgressMonitor monitor)
 	{
 		Set<InvoiceID> invoiceIDs = CollectionUtil.castSet(articleContainerIDs);

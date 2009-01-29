@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.progress.ProgressMonitor;
@@ -60,7 +59,6 @@ public class OfferTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -82,14 +80,12 @@ public class OfferTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		return null;
 	}
 
 	@Override
-	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		return null;

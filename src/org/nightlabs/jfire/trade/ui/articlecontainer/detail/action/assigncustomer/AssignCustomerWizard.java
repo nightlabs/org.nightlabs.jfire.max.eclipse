@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assigncustom
 
 import javax.jdo.JDOHelper;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -28,7 +27,6 @@ public class AssignCustomerWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		boolean superResult = super.performFinish();

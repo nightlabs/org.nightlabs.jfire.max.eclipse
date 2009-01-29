@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectDAO;
@@ -31,7 +30,6 @@ public class CustomerGroupDAO
 	}
 
 	@Override
-	@Implement
 	protected Collection<CustomerGroup> retrieveJDOObjects(
 			Set<CustomerGroupID> customerGroupIDs, String[] fetchGroups, int maxFetchDepth,
 			IProgressMonitor monitor)

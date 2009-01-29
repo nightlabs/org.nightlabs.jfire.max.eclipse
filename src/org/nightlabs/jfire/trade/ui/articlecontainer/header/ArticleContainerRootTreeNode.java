@@ -41,7 +41,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -80,7 +79,6 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#loadChildData(IProgressMonitor)
 	 */
 	@Override
-	@Implement
 	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		try {
@@ -110,7 +108,6 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#createChildNodes(java.util.List)
 	 */
 	@Override
-	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		ArrayList<HeaderTreeNode> res = new ArrayList<HeaderTreeNode>();

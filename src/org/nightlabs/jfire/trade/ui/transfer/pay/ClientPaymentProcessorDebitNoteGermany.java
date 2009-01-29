@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.trade.ui.transfer.pay;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentException;
@@ -39,34 +38,33 @@ public class ClientPaymentProcessorDebitNoteGermany extends
 		AbstractClientPaymentProcessor
 {
 
-	@Implement
+	@Override
 	public PaymentData getPaymentData()
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public IWizardHopPage createPaymentWizardPage()
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payBegin() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payDoWork() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payEnd() throws PaymentException
 	{
 		return null;
 	}
-
 }

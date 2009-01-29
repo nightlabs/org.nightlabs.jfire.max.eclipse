@@ -29,7 +29,6 @@ package org.nightlabs.jfire.trade.ui.articlecontainer.header;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
 import org.nightlabs.progress.ProgressMonitor;
@@ -63,7 +62,6 @@ public class InvoiceTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch(columnIndex) {

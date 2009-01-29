@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.store.DeliveryNote;
@@ -133,7 +132,7 @@ public abstract class AbstractArticleEdit implements ArticleEdit
 	 * (non-Javadoc)
 	 * @see org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit#removeArticles(java.util.Collection)
 	 */
-	@Implement
+	@Override
 	public Collection<ArticleCarrier> removeArticles(Collection<ArticleCarrier> articleCarriers) {
 		for (Iterator<ArticleCarrier> it = articleCarriers.iterator(); it.hasNext(); ) {
 			if (this.articleCarriers.remove(it.next()))

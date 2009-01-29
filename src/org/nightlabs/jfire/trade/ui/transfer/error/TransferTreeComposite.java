@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -110,7 +109,6 @@ extends AbstractTreeComposite<TransferTreeNode>
 	}
 
 	@Override
-	@Implement
 	public void createTreeColumns(Tree tree)
 	{
 		tree.setHeaderVisible(true);
@@ -135,7 +133,6 @@ extends AbstractTreeComposite<TransferTreeNode>
 	}
 
 	@Override
-	@Implement
 	public void setTreeProvider(TreeViewer treeViewer)
 	{
 		treeViewer.setContentProvider(new TransferContentProvider());

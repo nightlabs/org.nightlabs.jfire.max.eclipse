@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -135,7 +134,6 @@ public class AccountChooserComposite extends XComposite{
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AccountChooserComposite.job.loading")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
 					AccountSearchFilter accountSearchFilter = new AccountSearchFilter();

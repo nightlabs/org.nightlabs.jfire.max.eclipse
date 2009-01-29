@@ -32,7 +32,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
@@ -75,7 +74,6 @@ extends AbstractClientPaymentProcessor
 	private static Set<ServerPaymentProcessorID> excludedServerPaymentProcessorIDs = null;
 
 	@Override
-	@Implement
 	public Set<ServerPaymentProcessorID> getExcludedServerPaymentProcessorIDs()
 	{
 		if (excludedServerPaymentProcessorIDs == null) {
@@ -91,31 +89,31 @@ extends AbstractClientPaymentProcessor
 		return excludedServerPaymentProcessorIDs;
 	}
 
-	@Implement
+	@Override
 	public IWizardHopPage createPaymentWizardPage()
 	{
 		return new CreditCardPage(this);
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payBegin() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payDoWork() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payEnd() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentData getPaymentData()
 	{
 		if (paymentData == null) {

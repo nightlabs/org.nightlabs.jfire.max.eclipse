@@ -28,7 +28,6 @@ package org.nightlabs.jfire.trade.ui.transfer.pay;
 
 import java.util.Set;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
@@ -54,75 +53,75 @@ implements ClientPaymentProcessor
 //	// the following fields are set AFTER the init() method is called.
 //	InvoiceID invoiceID = null;
 
-	@Implement
+	@Override
 	public void setClientPaymentProcessorFactory(
 			ClientPaymentProcessorFactory clientPaymentProcessorFactory)
 	{
 		this.clientPaymentProcessorFactory = clientPaymentProcessorFactory;
 	}
 
-	@Implement
+	@Override
 	public void setPartnerID(AnchorID customerID)
 	{
 		this.customerID = customerID;
 	}
 
-	@Implement
+	@Override
 	public void setCurrency(Currency currency)
 	{
 		this.currency = currency;
 	}
 
-	@Implement
+	@Override
 	public void setAmount(long amount)
 	{
 		this.amount = amount;
 	}
 
 
-	@Implement
+	@Override
 	public long getAmount()
 	{
 		return amount;
 	}
 
-	@Implement
+	@Override
 	public ClientPaymentProcessorFactory getClientPaymentProcessorFactory()
 	{
 		return clientPaymentProcessorFactory;
 	}
 
-	@Implement
+	@Override
 	public Currency getCurrency()
 	{
 		return currency;
 	}
 
-	@Implement
+	@Override
 	public AnchorID getPartnerID()
 	{
 		return customerID;
 	}
 
-	@Implement
+	@Override
 	public Payment getPayment()
 	{
 		return payment;
 	}
 
-	@Implement
+	@Override
 	public void setPayment(Payment payment)
 	{
 		this.payment = payment;
 	}
 
-	@Implement
+	@Override
 	public void setPaymentEntryPage(IPaymentEntryPage paymentEntryPage)
 	{
 		this.paymentEntryPage = paymentEntryPage;
 	}
 	
-	@Implement
+	@Override
 	public IPaymentEntryPage getPaymentEntryPage()
 	{
 		return paymentEntryPage;
@@ -149,13 +148,13 @@ implements ClientPaymentProcessor
 //		return invoiceID;
 //	}
 
-	@Implement
+	@Override
 	public Set<ServerPaymentProcessorID> getIncludedServerPaymentProcessorIDs()
 	{
 		return null;
 	}
 	
-	@Implement
+	@Override
 	public Set<ServerPaymentProcessorID> getExcludedServerPaymentProcessorIDs()
 	{
 		return null;

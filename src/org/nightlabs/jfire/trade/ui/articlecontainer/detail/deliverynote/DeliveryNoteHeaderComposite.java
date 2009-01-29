@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -84,7 +83,7 @@ extends HeaderComposite
 		nextTransitionComposite = new NextTransitionComposite(this, SWT.NONE);
 		nextTransitionComposite.setStatable(deliveryNote);
 		nextTransitionComposite.addSignalListener(new SignalListener() {
-			@Implement
+			@Override
 			public void signal(SignalEvent event)
 			{
 				signalNextTransition(event);
@@ -132,7 +131,6 @@ extends HeaderComposite
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite.performTransitionJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				try {

@@ -42,7 +42,6 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.jdo.notification.DirtyObjectID;
 import org.nightlabs.jfire.trade.ArticleContainerUtil;
@@ -104,7 +103,6 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	public String getColumnText(int columnIndex)
 	{
 		switch (columnIndex) {
@@ -115,7 +113,6 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	protected List<Object> loadChildData(ProgressMonitor monitor)
 	{
 		try {
@@ -148,7 +145,6 @@ public class OrderTreeNode extends HeaderTreeNode.ArticleContainerNode
 	}
 
 	@Override
-	@Implement
 	protected List<HeaderTreeNode> createChildNodes(List<Object> childData)
 	{
 		ArrayList<HeaderTreeNode> res = new ArrayList<HeaderTreeNode>();

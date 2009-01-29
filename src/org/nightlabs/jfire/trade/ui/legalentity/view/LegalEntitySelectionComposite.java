@@ -23,7 +23,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.form.NightlabsFormsToolkit;
 import org.nightlabs.base.ui.job.Job;
@@ -334,7 +333,6 @@ extends XComposite
 		final AnchorID leID = selectedLegalEntityID;
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.loadLegalEntityJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final LegalEntity entity = LegalEntityDAO.sharedInstance().getLegalEntity(
 						leID,

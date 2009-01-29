@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
@@ -105,7 +104,7 @@ implements SegmentEdit
 	protected List<ArticleEdit> articleEdits;
 	protected List<ArticleEdit> articleEditsReadOnly;
 
-	@Implement
+	@Override
 	public void init(
 			SegmentEditFactory segmentEditFactory,
 			ArticleContainerEdit articleContainerEdit,
@@ -421,7 +420,7 @@ implements SegmentEdit
 
 	private boolean ignoreArticleEditArticleSelectionEvents = false;
 
-	@Implement
+	@Override
 	public void removeArticles(Collection<ArticleCarrier> articleCarriers)
 	{
 //		for (ArticleEdit articleEdit : getArticleEdits()) {
@@ -438,7 +437,7 @@ implements SegmentEdit
 		}
 	}
 
-	@Implement
+	@Override
 	public void addArticles(Collection<ArticleCarrier> _articleCarriers)
 	{
 		if (_articleCarriers == null)
@@ -547,7 +546,7 @@ implements SegmentEdit
 		return articleAdderFactoryForSelectedProductType;
 	}
 
-	@Implement
+	@Override
 	public void onDispose()
 	{
 		SelectionManager.sharedInstance().removeNotificationListener(
