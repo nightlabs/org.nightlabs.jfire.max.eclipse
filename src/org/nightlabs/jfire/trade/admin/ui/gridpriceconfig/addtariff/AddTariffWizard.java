@@ -45,20 +45,17 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue;
  */
 public class AddTariffWizard extends DynamicPathWizard
 {
-	private Dimension dimension;
+	private Dimension<DimensionValue.TariffDimensionValue> dimension;
 	private TariffSelectionPage tariffSelectionPage;
 	private CreateTariffPage createTariffPage;
 	private boolean createNewTariffEnabled = false;
 
-	public AddTariffWizard(Dimension dimension)
+	public AddTariffWizard(Dimension<DimensionValue.TariffDimensionValue> dimension)
 	{
 		this.dimension = dimension;
 		setForcePreviousAndNextButtons(true);
 	}
 
-	/**
-	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
-	 */
 	@Override
 	public IDynamicPathWizardPage createWizardEntryPage()
 	{
@@ -67,9 +64,6 @@ public class AddTariffWizard extends DynamicPathWizard
 		return tariffSelectionPage;
 	}
 
-	/**
-	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
-	 */
 	@Override
 	public boolean performFinish()
 	{

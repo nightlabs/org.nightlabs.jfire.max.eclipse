@@ -96,7 +96,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 		chooseExistingPriceFragmentTypeRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addpricefragmenttype.PriceFragmentTypeSelectionPage.chooseExistingPriceFragmentTypeRadio.text")); //$NON-NLS-1$
 		chooseExistingPriceFragmentTypeRadio.setSelection(true);
 
-		priceFragmentTypeList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
+		priceFragmentTypeList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		priceFragmentTypeList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		priceFragmentTypeList.addSelectionListener(new SelectionAdapter() {
 			@Override

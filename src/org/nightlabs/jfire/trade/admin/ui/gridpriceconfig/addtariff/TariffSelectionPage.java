@@ -72,9 +72,6 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 		super(TariffSelectionPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff.TariffSelectionPage.title")); //$NON-NLS-1$
 	}
 
-	/**
-	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#createPageContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
 	public Control createPageContents(Composite parent)
 	{
@@ -93,7 +90,7 @@ public class TariffSelectionPage extends DynamicPathWizardPage
 		chooseExistingTariffRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff.TariffSelectionPage.chooseExistingTariffRadio.text")); //$NON-NLS-1$
 		chooseExistingTariffRadio.setSelection(true);
 
-		tariffList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
+		tariffList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tariffList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tariffList.addSelectionListener(new SelectionAdapter() {
 			@Override

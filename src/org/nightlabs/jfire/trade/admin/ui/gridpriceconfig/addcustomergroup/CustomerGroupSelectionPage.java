@@ -94,7 +94,7 @@ public class CustomerGroupSelectionPage extends DynamicPathWizardPage
 		chooseExistingCustomerGroupRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcustomergroup.CustomerGroupSelectionPage.chooseExistingCustomerGroupRadio.text")); //$NON-NLS-1$
 		chooseExistingCustomerGroupRadio.setSelection(true);
 
-		customerGroupList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
+		customerGroupList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		customerGroupList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		customerGroupList.addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -72,7 +72,7 @@ public class CurrencySelectionPage extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		currencyList = new org.eclipse.swt.widgets.List(page, SWT.BORDER);
+		currencyList = new org.eclipse.swt.widgets.List(page, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		currencyList.setLayoutData(new GridData(GridData.FILL_BOTH));
 		currencyList.addSelectionListener(new SelectionAdapter() {
 			@Override
