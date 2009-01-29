@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.job.Job;
@@ -75,7 +74,6 @@ extends Dialog
 			private static final long serialVersionUID = 1L; // get rid of the warning
 			private ProductTypeName name;
 			@Override
-			@Implement
 			public ProductTypeName getName()
 			{
 				if (name == null) {
@@ -85,7 +83,6 @@ extends Dialog
 				return name;
 			}
 			@Override
-			@Implement
 			protected void calculatePrices()
 			{
 				throw new UnsupportedOperationException("Not implemented!"); //$NON-NLS-1$

@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -86,7 +85,6 @@ extends AbstractTableComposite
 	}
 
 	@Override
-	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
@@ -108,7 +106,6 @@ extends AbstractTableComposite
 	}
 
 	@Override
-	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		tableViewer.setLabelProvider(new MyLabelProvider());
@@ -140,13 +137,13 @@ extends AbstractTableComposite
 			// there exist neither subclasses of CustomerGroupMapping nor can a CustomerGroupMapping be changed - therefore this is sufficient. We might later add a Change-Listener (implicit) in case the name of a CustomerGroup is changed, but currently, this is not very important
 			private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(CustomerGroupMapping.class, false, new JDOLifecycleState[] { JDOLifecycleState.NEW });
 
-			@Implement
+			@Override
 			public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 			{
 				return filter;
 			}
 
-			@Implement
+			@Override
 			public void notify(JDOLifecycleEvent event)
 			{
 				Set<CustomerGroupMappingID> customerGroupMappingIDs = new HashSet<CustomerGroupMappingID>();
@@ -218,7 +215,6 @@ extends AbstractTableComposite
 
 			org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingTable.loadCustomerGroupMappingsJob.name")) { //$NON-NLS-1$
 				@Override
-				@Implement
 				protected IStatus run(ProgressMonitor monitor)
 				{
 					boolean error2 = true;

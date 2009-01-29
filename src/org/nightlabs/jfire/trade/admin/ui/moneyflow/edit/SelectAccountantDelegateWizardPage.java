@@ -34,7 +34,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
@@ -99,7 +98,6 @@ public class SelectAccountantDelegateWizardPage extends DynamicPathWizardPage {
 		setDescription(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectAccountantDelegateWizardPage.description")); //$NON-NLS-1$
 	}
 
-	@Implement
 	@Override
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);

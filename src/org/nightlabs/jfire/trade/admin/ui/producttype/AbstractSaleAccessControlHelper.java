@@ -27,7 +27,6 @@
 package org.nightlabs.jfire.trade.admin.ui.producttype;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -46,7 +45,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 //		return fetchGroups;
 //	}
 
-	@Implement
+	@Override
 	public void setProductType(ProductType productType)
 	{
 		// access all fields we'll access later so we know already now, whether fetch-groups were missing
@@ -61,7 +60,7 @@ public abstract class AbstractSaleAccessControlHelper implements SaleAccessContr
 		this.productType = productType;
 	}
 
-	@Implement
+	@Override
 	public ProductType getProductType()
 	{
 		return productType;

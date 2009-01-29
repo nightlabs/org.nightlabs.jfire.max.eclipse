@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModuleController;
 import org.nightlabs.jfire.base.ui.config.AbstractConfigModulePreferencePage;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
@@ -40,7 +39,7 @@ public class DeliveryQueueConfigModuleController extends AbstractConfigModuleCon
 		return DeliveryQueueConfigModule.class;
 	}
 
-	@Implement
+	@Override
 	public Set<String> getConfigModuleFetchGroups() {
 		return fetchGroups;
 	}

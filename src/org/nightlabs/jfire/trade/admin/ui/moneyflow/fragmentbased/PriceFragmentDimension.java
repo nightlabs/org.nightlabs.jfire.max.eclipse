@@ -30,7 +30,6 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
@@ -53,32 +52,32 @@ public class PriceFragmentDimension implements MappingDimension {
 		super();
 	}
 
-	@Implement
+	@Override
 	public String getName() {
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased.PriceFragmentDimension.name"); //$NON-NLS-1$
 	}
 
-	@Implement
+	@Override
 	public String getCellEditorPropertyName() {
 		return "priceFragment"; //$NON-NLS-1$
 	}
 
-	@Implement
+	@Override
 	public CellEditor getCellEditor() {
 		return null;
 	}
 
-	@Implement
+	@Override
 	public boolean canModify(MoneyFlowMapping mapping) {
 		return false;
 	}
 
-	@Implement
+	@Override
 	public Object getValue(MoneyFlowMapping mapping) {
 		return null;
 	}
 
-	@Implement
+	@Override
 	public String getValueText(MoneyFlowMapping mapping) {
 		if (!(mapping instanceof PFMoneyFlowMapping))
 			throw new IllegalArgumentException("PriceFragmentDimension needs a PFMoneyFlowMapping as input for getValueText, but received: "+mapping.getClass().getName()); //$NON-NLS-1$
@@ -92,21 +91,21 @@ public class PriceFragmentDimension implements MappingDimension {
 			).getName().getText(NLLocale.getDefault().getLanguage());
 	}
 	
-	@Implement
+	@Override
 	public void modify(Object element, Object value) {
 	}
 
-	@Implement
+	@Override
 	public String getMoneyFlowDimensionID() {
 		return org.nightlabs.jfire.accounting.book.mappingbased.PriceFragmentDimension.MONEY_FLOW_DIMENSION_ID;
 	}
 
-	@Implement
+	@Override
 	public String[] getValues() {
 		return null;
 	}
 
-	@Implement
+	@Override
 	public MappingDimensionWizardPage getCreateMappingWizardPage(IDynamicPathWizard wizard) {
 		return new PriceFragmentDimensionWizardPage();
 	}

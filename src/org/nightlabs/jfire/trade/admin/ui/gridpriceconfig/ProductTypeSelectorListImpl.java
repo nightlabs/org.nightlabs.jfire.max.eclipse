@@ -43,7 +43,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
@@ -85,7 +84,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		});
 	}
 
-	@Implement
+	@Override
 	public ProductTypeSelector.Item getSelectedProductTypeItem(boolean throwExceptionIfNothingSelected)
 	{
 		int productIdx = productTypeGUIList.getSelectionIndex();
@@ -98,7 +97,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		return productTypeItemList.get(productIdx);
 	}
 
-	@Implement
+	@Override
 	public IFormulaPriceConfig getSelectedProductType_FormulaPriceConfig(boolean throwExceptionIfNotPossible)
 	{
 		Item item = this.getSelectedProductTypeItem(throwExceptionIfNotPossible);
@@ -126,7 +125,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		return null;
 	}
 
-	@Implement
+	@Override
 	public IResultPriceConfig getSelectedProductType_ResultPriceConfig(boolean throwExceptionIfNotPossible)
 	{
 		Item item = this.getSelectedProductTypeItem(throwExceptionIfNotPossible);
@@ -176,14 +175,14 @@ public class ProductTypeSelectorListImpl extends XComposite
 //		return packageProductTypeItem;
 //	}
 
-	@Implement
 	private ProductType packageProductType;
+	@Override
 	public ProductType getPackageProductType()
 	{
 		return packageProductType;
 	}
 
-	@Implement
+	@Override
 	public void setPackageProductType(ProductType packageProductType)
 	{
 		this.packageProductType = packageProductType;
@@ -238,7 +237,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 		}
 	}
 
-	@Implement
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.add(listener);
@@ -252,7 +251,7 @@ public class ProductTypeSelectorListImpl extends XComposite
 	 *
 	 * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
 	 */
-	@Implement
+	@Override
 	public ISelection getSelection()
 	{
 		int selIdx = productTypeGUIList.getSelectionIndex();
@@ -262,13 +261,13 @@ public class ProductTypeSelectorListImpl extends XComposite
 		return new StructuredSelection(productTypeItemList.get(selIdx));
 	}
 
-	@Implement
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener)
 	{
 		selectionChangedListeners.remove(listener);
 	}
 
-	@Implement
+	@Override
 	public void setSelection(ISelection selection)
 	{
 		if (selection instanceof StructuredSelection) {
@@ -289,10 +288,9 @@ public class ProductTypeSelectorListImpl extends XComposite
 		}
 	}
 
-	@Implement
+	@Override
 	public Collection<Item> getProductTypeItems()
 	{
 		return productTypeItemList;
 	}
-
 }

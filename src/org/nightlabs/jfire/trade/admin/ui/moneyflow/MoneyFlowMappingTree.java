@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
@@ -333,7 +332,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 			this.tree = tree;
 		}
 
-		@Implement
+		@Override
 		public boolean canModify(Object element, String property) {
 			if (element instanceof Node) {
 				Node node = (Node)element;
@@ -365,7 +364,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				return false;
 		}
 
-		@Implement
+		@Override
 		public Object getValue(Object element, String property) {
 			if (element instanceof Node) {
 				Node node = (Node)element;
@@ -394,7 +393,7 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 				return null;
 		}
 
-		@Implement
+		@Override
 		public void modify(Object element, String property, Object value) {
 			// we assume canModify was correct and
 			// now we can simply delegate to the MappingDimension
