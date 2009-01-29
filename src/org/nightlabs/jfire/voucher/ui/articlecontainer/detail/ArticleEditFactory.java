@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleEditFactory;
@@ -13,8 +12,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 public class ArticleEditFactory
 		extends AbstractArticleEditFactory
 {
-
-	@Implement
+	@Override
 	public Collection<? extends org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleEdit> createArticleEdits(
 			SegmentEdit segmentEdit,
 			ArticleProductTypeClassGroup articleProductTypeClassGroup,
@@ -26,5 +24,4 @@ public class ArticleEditFactory
 		res.add(edit);
 		return res;
 	}
-
 }

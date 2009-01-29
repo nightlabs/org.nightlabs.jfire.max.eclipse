@@ -26,7 +26,6 @@
 
 package org.nightlabs.jfire.voucher.ui.transfer.pay;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.PaymentException;
@@ -43,7 +42,7 @@ extends AbstractClientPaymentProcessor
 {
 	private PaymentDataVoucher paymentDataVoucher;
 
-	@Implement
+	@Override
 	public PaymentData getPaymentData()
 	{
 		if (paymentDataVoucher == null)
@@ -52,28 +51,27 @@ extends AbstractClientPaymentProcessor
 		return paymentDataVoucher;
 	}
 
-	@Implement
+	@Override
 	public IWizardHopPage createPaymentWizardPage()
 	{
 		return new VoucherKeyWizardPage(this);
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payBegin() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payDoWork() throws PaymentException
 	{
 		return null;
 	}
 
-	@Implement
+	@Override
 	public PaymentResult payEnd() throws PaymentException
 	{
 		return null;
 	}
-
 }

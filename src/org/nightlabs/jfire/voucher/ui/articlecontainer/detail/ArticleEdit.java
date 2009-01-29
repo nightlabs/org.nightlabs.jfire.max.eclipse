@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleCarrier;
@@ -16,14 +15,13 @@ public class ArticleEdit extends AbstractArticleEdit
 	private ArticleEditComposite articleEditComposite;
 
 	@Override
-	@Implement
 	protected Composite _createComposite(Composite parent)
 	{
 		articleEditComposite = new ArticleEditComposite(parent, this);
 		return articleEditComposite;
 	}
 
-	@Implement
+	@Override
 	public Set<? extends ArticleCarrier> addArticles(Set<? extends ArticleCarrier> articleCarriers)
 	{
 		Class<? extends ProductType> productTypeClass = getArticleProductTypeClassGroup().getProductTypeClass();
@@ -49,7 +47,7 @@ public class ArticleEdit extends AbstractArticleEdit
 		return articleCarriers; // we could return null here, if it's empty, but there's no advantage...it doesn't matter
 	}
 
-	@Implement
+	@Override
 	public Set<? extends Article> getSelectedArticles()
 	{
 		return articleEditComposite.getSelectedArticles();
@@ -62,7 +60,7 @@ public class ArticleEdit extends AbstractArticleEdit
 //		articleEditComposite.refreshUI();
 //	}
 
-	@Implement
+	@Override
 	public Set<? extends Article> setSelectedArticles(Set<? extends Article> articles)
 	{
 		return articleEditComposite.setSelectedArticles(articles);
