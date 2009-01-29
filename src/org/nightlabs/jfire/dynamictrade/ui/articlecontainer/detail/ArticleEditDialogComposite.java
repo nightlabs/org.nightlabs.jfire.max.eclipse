@@ -3,7 +3,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
@@ -34,7 +33,6 @@ extends ArticleBaseComposite
 	}
 
 	@Override
-	@Implement
 	protected void fireCompositeContentChangeEvent()
 	{
 		// nothing to do

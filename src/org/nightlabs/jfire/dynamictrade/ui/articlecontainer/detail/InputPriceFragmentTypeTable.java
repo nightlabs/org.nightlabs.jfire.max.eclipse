@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -116,7 +115,6 @@ extends AbstractTableComposite<InputPriceFragmentType>
 	}
 
 	@Override
-	@Implement
 	protected void createTableColumns(TableViewer tableViewer, Table table)
 	{
 		TableColumn tc;
@@ -133,7 +131,6 @@ extends AbstractTableComposite<InputPriceFragmentType>
 	}
 
 	@Override
-	@Implement
 	protected void setTableProvider(TableViewer tableViewer)
 	{
 		setEditable(true);
