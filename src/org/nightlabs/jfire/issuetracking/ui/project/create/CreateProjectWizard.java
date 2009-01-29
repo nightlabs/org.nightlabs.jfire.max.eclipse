@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -44,12 +43,10 @@ extends DynamicPathWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard.job.storingProject.text")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{
 

@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -167,13 +166,11 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 		}
 	}
 
-	@Implement
 	@Override
 	public void createTreeColumns(Tree tree)
 	{
 	}
 
-	@Implement
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer)
 	{

@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -30,14 +29,12 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
 	};
 
-	@Implement
 	@Override
 	protected ProjectTreeNode createNode()
 	{
 		return new ProjectTreeNode();
 	}
 
-	@Implement
 	@Override
 	protected Collection<Project> retrieveChildren(ProjectID parentID, Project parent, IProgressMonitor monitor)
 	{
@@ -52,7 +49,6 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 		return projects;
 	}
 
-	@Implement
 	@Override
 	protected Collection<Project> retrieveJDOObjects(Set<ProjectID> objectIDs, IProgressMonitor monitor)
 	{
@@ -61,21 +57,18 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 		return res;
 	}
 
-	@Implement
 	@Override
 	protected void sortJDOObjects(List<Project> objects)
 	{
 		Collections.sort(objects);
 	}
 
-	@Implement
 	@Override
 	protected TreeNodeParentResolver createTreeNodeParentResolver()
 	{
 		return new ProjectParentResolver();
 	}
 
-	@Implement
 	@Override
 	protected Class<Project> getJDOObjectClass()
 	{
