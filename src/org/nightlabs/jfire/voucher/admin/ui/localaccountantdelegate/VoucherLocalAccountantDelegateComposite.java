@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -131,7 +130,6 @@ implements ISelectionProvider
 			}
 
 			@Override
-			@Implement
 			protected Object openDialogBox(Control cellEditorWindow)
 			{
 				Object v = getValue();

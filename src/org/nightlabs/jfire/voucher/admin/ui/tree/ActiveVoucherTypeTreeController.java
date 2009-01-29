@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -26,14 +25,12 @@ extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTre
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 
-	@Implement
 	@Override
 	protected VoucherTypeTreeNode createNode()
 	{
 		return new VoucherTypeTreeNode();
 	}
 
-	@Implement
 	@Override
 	protected Collection<VoucherType> retrieveChildren(ProductTypeID parentID, VoucherType parent, IProgressMonitor monitor)
 	{
@@ -42,7 +39,6 @@ extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTre
 		return res;
 	}
 
-	@Implement
 	@Override
 	protected Collection<VoucherType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
 	{
@@ -51,21 +47,18 @@ extends ActiveJDOObjectTreeController<ProductTypeID, VoucherType, VoucherTypeTre
 		return res;
 	}
 
-	@Implement
 	@Override
 	protected void sortJDOObjects(List<VoucherType> objects)
 	{
 		// no need to sort now - later maybe
 	}
 
-	@Implement
 	@Override
 	protected TreeNodeParentResolver createTreeNodeParentResolver()
 	{
 		return new VoucherTypeParentResolver();
 	}
 
-	@Implement
 	@Override
 	protected Class<VoucherType> getJDOObjectClass()
 	{

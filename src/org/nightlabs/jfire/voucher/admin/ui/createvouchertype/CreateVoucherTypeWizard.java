@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -70,7 +69,6 @@ extends DynamicPathWizard
 	};
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		VoucherType parentVoucherType = VoucherTypeDAO.sharedInstance().getVoucherType(
@@ -106,7 +104,6 @@ extends DynamicPathWizard
 			ownerVendorPage.configureProductType(voucherType);		
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
@@ -173,5 +170,4 @@ extends DynamicPathWizard
 		job.schedule();
 		return true;
 	}
-
 }

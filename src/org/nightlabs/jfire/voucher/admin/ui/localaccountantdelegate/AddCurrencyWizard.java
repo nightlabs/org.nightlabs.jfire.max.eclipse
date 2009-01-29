@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addcurrency.CurrencySelectionPage;
 
@@ -23,11 +22,9 @@ public class AddCurrencyWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		voucherLocalAccountantDelegateComposite.addCurrency(currencySelectionPage.getSelectedCurrency());
 		return true;
 	}
-
 }

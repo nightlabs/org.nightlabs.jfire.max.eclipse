@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -122,7 +121,6 @@ extends WizardHopPage
 	}
 
 	@Override
-	@Implement
 	public Control createPageContents(Composite parent)
 	{
 		final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -208,7 +206,6 @@ extends WizardHopPage
 
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.SelectVoucherPriceConfigPage.loadJob.name")) { //$NON-NLS-1$
 			@Override
-			@Implement
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				final VoucherType parentVoucherType = parentVoucherTypeID == null ? null : VoucherTypeDAO.sharedInstance().getVoucherType(

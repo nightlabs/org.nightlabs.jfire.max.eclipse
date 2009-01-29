@@ -6,7 +6,6 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -38,7 +37,6 @@ public class CreateLocalAccountantDelegatePage
 	}
 
 	@Override
-	@Implement
 	public Control createPageContents(Composite parent)
 	{
 		XComposite page = new XComposite(parent, SWT.NONE);

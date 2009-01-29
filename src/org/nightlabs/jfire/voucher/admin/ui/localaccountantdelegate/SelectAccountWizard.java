@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
@@ -32,7 +31,6 @@ public class SelectAccountWizard
 	}
 
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		switch (selectAccountWizardPage.getMode()) {

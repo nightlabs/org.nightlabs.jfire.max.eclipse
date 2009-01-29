@@ -3,7 +3,6 @@ package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
@@ -43,7 +42,6 @@ extends DynamicPathWizard
 	}
 	
 	@Override
-	@Implement
 	public boolean performFinish()
 	{
 		IPackagePriceConfig packagePriceConfig = null;

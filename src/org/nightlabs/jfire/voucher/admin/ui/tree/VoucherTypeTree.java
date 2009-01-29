@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.DrillDownAdapter;
-import org.nightlabs.annotation.Implement;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeContentProvider;
@@ -143,14 +142,12 @@ extends AbstractTreeComposite<VoucherType>
 		}
 	}
 
-	@Implement
 	@Override
 	public void createTreeColumns(Tree tree)
 	{
 //		TreeColumn column = new TreeColumn(tree, SWT.LEFT);
 	}
 
-	@Implement
 	@Override
 	public void setTreeProvider(TreeViewer treeViewer)
 	{
