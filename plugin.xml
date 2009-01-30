@@ -134,6 +134,24 @@
             attributePattern="org.eclipse.birt.report.designer.ui.ReportRCPPerspective"
             elementPath="perspective"
             extensionPointID="org.eclipse.ui.perspectives"/>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity.internal.ui.preferences.DataToolsMainPage"
+            elementPath="page"
+            extensionPointID="org.eclipse.ui.preferencePages">
+      </removeExtension>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity.internal.ui.preferences.DriverPreferences"
+            elementPath="page"
+            extensionPointID="org.eclipse.ui.preferencePages">
+      </removeExtension>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity.oda.design.internal.ui.preferences.OpenDataAccessPage"
+            elementPath="page"
+            extensionPointID="org.eclipse.ui.preferencePages">
+      </removeExtension>
    </extension>
    
 </plugin>

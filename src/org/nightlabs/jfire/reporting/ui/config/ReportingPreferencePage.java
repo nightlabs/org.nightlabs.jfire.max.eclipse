@@ -26,53 +26,24 @@
 
 package org.nightlabs.jfire.reporting.ui.config;
 
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.nightlabs.base.ui.preference.CategoryPreferencePage;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
-public class ReportingPreferencePage extends PreferencePage implements
-		IWorkbenchPreferencePage {
-
+public class ReportingPreferencePage
+extends CategoryPreferencePage
+{
 	/**
-	 * 
+	 *
 	 */
 	public ReportingPreferencePage() {
+		super();
 	}
 
-	/**
-	 * @param arg0
-	 */
-	public ReportingPreferencePage(String arg0) {
-		super(arg0);
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public ReportingPreferencePage(String arg0, ImageDescriptor arg1) {
-		super(arg0, arg1);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
-	 */
 	@Override
-	protected Control createContents(Composite arg0) {
-		return null;
+	protected String getText() {
+		return "Reporting Settings";
 	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
-	public void init(IWorkbench arg0) {
-	}
-
 }
