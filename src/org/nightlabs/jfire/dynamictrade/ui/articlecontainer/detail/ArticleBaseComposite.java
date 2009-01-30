@@ -28,12 +28,15 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.FadeableComposite;
+import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -488,6 +491,19 @@ extends FadeableComposite
 								if (tariffCombo.isDisposed())
 									return;
 
+								if (tariffs.isEmpty()) {
+									showMessageNoPricesAvailable();
+									return;
+								}
+								if (currency != null) { // should always be true, but we play safe.
+									// check, if the price configuration contains this currency.
+									CurrencyID currencyID = CurrencyID.create(currency.getCurrencyID());
+									if (dynamicTradePriceConfig.getCurrency(currencyID, false) == null) {
+										showMessageNoPricesAvailable();
+										return;
+									}
+								}
+								
 								productTypeNameLabel.setText(
 										dynamicProductType.getName().getText(NLLocale.getDefault().getLanguage()));
 
@@ -540,6 +556,34 @@ extends FadeableComposite
 		};
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.schedule();
+	}
+	
+	private void _relayout()
+	{
+		Composite parent = getParent();
+		while (parent.getParent() != null) {
+			parent = parent.getParent();
+		}
+		parent.layout(true, true);
+	}
+	
+	private void showMessageNoPricesAvailable()
+	{
+		// remove all UI that has been created previously
+		for (Control child : getChildren())
+			child.dispose();
+
+		
+		MessageComposite mc = new MessageComposite(
+				this, SWT.NONE,
+				String.format("The price configuration of the product type \"%s\" contains no prices for the current situation (no tariff, no customer-group, no category or no currency existing/available to you).", dynamicProductType.getName().getText()),
+				MessageType.WARNING
+		);
+		mc.adaptToToolkit();
+		
+//		Text txt = new Text(this, SWT.WRAP);
+//		txt.setText(String.format("The price configuration of the product type \"%s\" contains no tariffs or no currencies; or they are not available to you.", dynamicProductType.getName().getText()));
+		_relayout();
 	}
 
 	private void unitSelected()
