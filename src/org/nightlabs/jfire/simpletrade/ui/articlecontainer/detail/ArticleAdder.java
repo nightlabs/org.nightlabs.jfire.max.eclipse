@@ -176,8 +176,8 @@ public class ArticleAdder extends AbstractArticleAdder
 	@Override
 	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 	{
-		if (tariffPricePairs == null) {
-			String message = String.format("No TariffPricePairs are available for the ProductType %s", getProductType().getName().getText(NLLocale.getDefault()));
+		if (tariffPricePairs == null || tariffPricePairs.isEmpty()) {
+			String message = String.format("The price configuration of product type \"%s\" does not contain prices for the current situation (no tariff, no customer-group or no currency existing/available to you).", getProductType().getName().getText(NLLocale.getDefault()));
 			return new MessageComposite(parent, SWT.NONE, message, MessageType.WARNING);
 		}
 
