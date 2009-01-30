@@ -11,7 +11,7 @@ import org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlHelper;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
@@ -31,11 +31,16 @@ implements IProductTypeSectionPart
 	public AbstractSaleAccessControlSection(IProductTypeDetailPage page, Composite parent, int style, String title) {
 		super(page, parent, style, title);
 		this.detailPage = page;
-		saleAccessControlComposite = new SaleAccessControlComposite(
-				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);
+		saleAccessControlComposite = createSaleAccessControlComposite(getContainer(), createSaleAccessControlHelper());
 		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
+	protected SaleAccessControlComposite createSaleAccessControlComposite(Composite parent, SaleAccessControlHelper saleAccessControlHelper) {
+		return new SaleAccessControlComposite(
+				parent, SWT.NONE, saleAccessControlHelper, false, this
+		);
+	}
+
 	public AbstractSaleAccessControlSection(IProductTypeDetailPage page, Composite parent) {
 		this(page, parent, ExpandableComposite.TITLE_BAR);
 //		super(page, parent, ExpandableComposite.TITLE_BAR,
@@ -45,12 +50,12 @@ implements IProductTypeSectionPart
 //				getContainer(), SWT.NONE, createSaleAccessControlHelper(), false, this);
 //		saleAccessControlComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
 	private SaleAccessControlComposite saleAccessControlComposite = null;
 	public SaleAccessControlComposite getSaleAccessControlComposite() {
 		return saleAccessControlComposite;
 	}
-	
+
 	protected abstract SaleAccessControlHelper createSaleAccessControlHelper();
 
 	public ProductType getProductType() {
@@ -72,21 +77,17 @@ implements IProductTypeSectionPart
 		if (pageController == null || getSection() == null || getSection().isDisposed())
 			return;
 
-		productTypePageController = pageController; 
+		productTypePageController = pageController;
 
 		saleAccessControlComposite.setProductType(pageController.getProductType());
-		
-
 	}
 
 	public AbstractProductTypePageController<ProductType> getProductTypePageController()
 	{
-
 		return productTypePageController;
-
 	}
-	
-	
+
+
 	@Override
 	public void commit(boolean save) {
 		if (isDirty()) {

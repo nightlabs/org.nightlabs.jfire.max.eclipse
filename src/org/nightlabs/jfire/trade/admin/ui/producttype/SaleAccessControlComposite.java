@@ -26,6 +26,10 @@
 
 package org.nightlabs.jfire.trade.admin.ui.producttype;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -35,6 +39,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
@@ -46,6 +51,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManager;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -58,9 +64,16 @@ import org.nightlabs.util.NLLocale;
  */
 public class SaleAccessControlComposite extends XComposite
 {
+	public static final String STATUS_CONTROL_ID_PUBLISHED = "published";
+	public static final String STATUS_CONTROL_ID_CONFIRMED = "confirmed";
+	public static final String STATUS_CONTROL_ID_SALEABLE = "saleable";
+	public static final String STATUS_CONTROL_ID_CLOSED = "closed";
+
 	private Label productTypeLabel;
 
 	private ProductType productType;
+
+	private Map<String, Control> statusControlID2statusControl = new HashMap<String, Control>();
 
 	private Button publishedCheckBox;
 	private Button confirmedCheckBox;
@@ -70,9 +83,9 @@ public class SaleAccessControlComposite extends XComposite
 	private SaleAccessControlHelper saleAccessControlHelper;
 
 	private boolean showProductTypeLabel = true;
-	
+
 	private IDirtyStateManager dirtyStateManager;
-	
+
 	/**
 	 * @param parent SWT parent composite (into which this composite will be added as child).
 	 * @param style SWT style
@@ -84,7 +97,7 @@ public class SaleAccessControlComposite extends XComposite
 	{
 		this(parent, style, saleAccessControlHelper, true, null);
 	}
-	
+
 	/**
 	 * @param parent SWT parent composite (into which this composite will be added as child).
 	 * @param style SWT style
@@ -97,12 +110,12 @@ public class SaleAccessControlComposite extends XComposite
 			SaleAccessControlHelper _saleAccessControlHelper, boolean showProductTypeLabel,
 			IDirtyStateManager dirtyStateManager)
 	{
-//		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		super(parent, style);
+		super(parent, style, LayoutMode.TIGHT_WRAPPER);
+//		super(parent, style);
 
 		this.dirtyStateManager = dirtyStateManager;
 		this.showProductTypeLabel = showProductTypeLabel;
-		
+
 //		Set fetchGroups = _saleAccessControlHelper.getFetchGroupsProductType();
 //		if (fetchGroups.isEmpty())
 //			this.fetchGroupsProductType = FETCH_GROUPS_PRODUCT_TYPE_MIN;
@@ -121,49 +134,15 @@ public class SaleAccessControlComposite extends XComposite
 			productTypeLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 
-		XComposite statusComp = new XComposite(this, SWT.NONE);
-		statusComp.getGridLayout().numColumns = 4;
+		XComposite statusComp = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		statusComp.getGridData().grabExcessVerticalSpace = false;
-
-		publishedCheckBox = new Button(statusComp, SWT.CHECK);
-		publishedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.publishedCheckBox.text")); //$NON-NLS-1$
-		publishedCheckBox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				publishedCheckBoxChanged();
-			}
-		});
-
-		confirmedCheckBox = new Button(statusComp, SWT.CHECK);
-		confirmedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.confirmedCheckBox.text")); //$NON-NLS-1$
-		confirmedCheckBox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				confirmedCheckBoxChanged();
-			}
-		});
-
-		saleableCheckBox = new Button(statusComp, SWT.CHECK);
-		saleableCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.saleableCheckBox.text")); //$NON-NLS-1$
-		saleableCheckBox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				saleableCheckBoxChanged();
-			}
-		});
-
-		closedCheckBox = new Button(statusComp, SWT.CHECK);
-		closedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closedCheckBox.text")); //$NON-NLS-1$
-		closedCheckBox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				closedCheckBoxChanged();
-			}
-		});
+		createStatusControlsForStatusComposite(statusComp, CollectionUtil.array2ArrayList(new String[] {
+				STATUS_CONTROL_ID_PUBLISHED,
+				STATUS_CONTROL_ID_CONFIRMED,
+				STATUS_CONTROL_ID_SALEABLE,
+				STATUS_CONTROL_ID_CLOSED
+		}));
+		statusComp.getGridLayout().numColumns = statusComp.getChildren().length;
 
 //		JDOLifecycleManager.sharedInstance().addNotificationListener(ProductType.class, productTypeChangedListener);
 //		addDisposeListener(new DisposeListener(){
@@ -176,6 +155,79 @@ public class SaleAccessControlComposite extends XComposite
 		setProductType(null);
 	}
 
+	protected void createStatusControlsForStatusComposite(Composite parent, List<String> statusControlIDs)
+	{
+		for (String statusControlID : statusControlIDs) {
+			Control control = createStatusControl(parent, statusControlID);
+			addStatusControl(statusControlID, control);
+		}
+	}
+
+	protected Control getStatusControl(String statusControlID)
+	{
+		return statusControlID2statusControl.get(statusControlID);
+	}
+
+	protected void addStatusControl(String statusControlID, Control control)
+	{
+		if (control != null)
+			statusControlID2statusControl.put(statusControlID, control);
+	}
+
+	protected Control createStatusControl(Composite parent, String statusControlID)
+	{
+		if (STATUS_CONTROL_ID_PUBLISHED.equals(statusControlID)) {
+			publishedCheckBox = new Button(parent, SWT.CHECK);
+			publishedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.publishedCheckBox.text")); //$NON-NLS-1$
+			publishedCheckBox.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					publishedCheckBoxChanged();
+				}
+			});
+			return publishedCheckBox;
+		}
+		else if (STATUS_CONTROL_ID_CONFIRMED.equals(statusControlID)) {
+			confirmedCheckBox = new Button(parent, SWT.CHECK);
+			confirmedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.confirmedCheckBox.text")); //$NON-NLS-1$
+			confirmedCheckBox.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					confirmedCheckBoxChanged();
+				}
+			});
+			return confirmedCheckBox;
+		}
+		else if (STATUS_CONTROL_ID_SALEABLE.equals(statusControlID)) {
+			saleableCheckBox = new Button(parent, SWT.CHECK);
+			saleableCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.saleableCheckBox.text")); //$NON-NLS-1$
+			saleableCheckBox.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					saleableCheckBoxChanged(saleableCheckBox.getSelection());
+				}
+			});
+			return saleableCheckBox;
+		}
+		else if (STATUS_CONTROL_ID_CLOSED.equals(statusControlID)) {
+			closedCheckBox = new Button(parent, SWT.CHECK);
+			closedCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closedCheckBox.text")); //$NON-NLS-1$
+			closedCheckBox.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e)
+				{
+					closedCheckBoxChanged();
+				}
+			});
+			return closedCheckBox;
+		}
+		else
+			return null;
+	}
+
 	protected void updateControlsEnabled()
 	{
 		if (productType == null)
@@ -184,7 +236,7 @@ public class SaleAccessControlComposite extends XComposite
 		saleableCheckBox.setEnabled(confirmedCheckBox.getSelection());
 		closedCheckBox.setEnabled(productType.isConfirmed());
 	}
-	
+
 	protected void publishedCheckBoxChanged()
 	{
 		try {
@@ -216,7 +268,7 @@ public class SaleAccessControlComposite extends XComposite
 		}
 		updateControlsEnabled();
 		calculateChanged();
-		
+
 		if (dirtyStateManager != null) {
 			if (isChanged())
 				dirtyStateManager.markDirty();
@@ -241,7 +293,7 @@ public class SaleAccessControlComposite extends XComposite
 				else {
 					if (!saleableCheckBox.isEnabled()) {
 						saleableCheckBox.setSelection(true);
-						saleableCheckBoxChanged();
+						saleableCheckBoxChanged(saleableCheckBox.getSelection());
 					}
 				}
 			}
@@ -262,17 +314,31 @@ public class SaleAccessControlComposite extends XComposite
 		}
 		updateControlsEnabled();
 		calculateChanged();
-		
+
 		if (dirtyStateManager != null) {
 			if (isChanged())
 				dirtyStateManager.markDirty();
 		}
 	}
 
-	protected void saleableCheckBoxChanged()
+	/**
+	 * Set the saleable state. Call this method from a subclass to set the saleable state.
+	 *
+	 * @param saleable whether or not to make it saleable.
+	 */
+	protected final void setSaleable(boolean saleable)
+	{
+		if (saleable == saleableCheckBox.getSelection())
+			return;
+
+		saleableCheckBox.setSelection(saleable);
+		saleableCheckBoxChanged(saleableCheckBox.getSelection());
+	}
+
+	protected void saleableCheckBoxChanged(boolean checked)
 	{
 		try {
-			if (saleableCheckBox.getSelection()) {
+			if (checked) {
 				boolean flag = saleAccessControlHelper.canSetSaleable(false, saleableCheckBox.getSelection());
 
 				if (!flag)
@@ -287,11 +353,15 @@ public class SaleAccessControlComposite extends XComposite
 		}
 		updateControlsEnabled();
 		calculateChanged();
-		
+
 		if (dirtyStateManager != null) {
 			if (isChanged())
 				dirtyStateManager.markDirty();
 		}
+	}
+
+	protected IDirtyStateManager getDirtyStateManager() {
+		return dirtyStateManager;
 	}
 
 	protected void closedCheckBoxChanged()
@@ -306,10 +376,10 @@ public class SaleAccessControlComposite extends XComposite
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closeDialog.title"), //$NON-NLS-1$
 							Messages.getString("org.nightlabs.jfire.trade.admin.ui.producttype.SaleAccessControlComposite.closeDialog.message"));					 //$NON-NLS-1$
 				}
-				
+
 				if (!flag)
 					closedCheckBox.setSelection(false);
-				
+
 				saleableCheckBox.setSelection(false);
 			}
 			else {
@@ -322,7 +392,7 @@ public class SaleAccessControlComposite extends XComposite
 		}
 		updateControlsEnabled();
 		calculateChanged();
-		
+
 		if (dirtyStateManager != null) {
 			if (isChanged())
 				dirtyStateManager.markDirty();
@@ -333,22 +403,22 @@ public class SaleAccessControlComposite extends XComposite
 	public boolean isPublished() {
 		return published;
 	}
-	
+
 	private boolean confirmed = false;
 	public boolean isConfirmed() {
 		return confirmed;
 	}
-	
+
 	private boolean saleable = false;
 	public boolean isSaleable() {
 		return saleable;
 	}
-	
+
 	private boolean closed = false;
 	public boolean isClosed() {
 		return closed;
 	}
-	
+
 	private void calculateChanged()
 	{
 		changed =
@@ -356,7 +426,7 @@ public class SaleAccessControlComposite extends XComposite
 				(confirmedCheckBox.getSelection() != productType.isConfirmed()) ||
 				(saleableCheckBox.getSelection() != productType.isSaleable()) ||
 				(closedCheckBox.getSelection() != productType.isClosed());
-		
+
 		published = publishedCheckBox.getSelection();
 		confirmed = confirmedCheckBox.getSelection();
 		saleable = saleableCheckBox.getSelection();
@@ -483,7 +553,7 @@ public class SaleAccessControlComposite extends XComposite
 	/**
 	 * @deprecated should not be called any more, but productType should be saved
 	 * somewhere else e.g. by a controller
-	 * 
+	 *
 	 * Submit all the settings to the server.
 	 */
 	@Deprecated
@@ -525,4 +595,8 @@ public class SaleAccessControlComposite extends XComposite
 			throw new RuntimeException(e);
 		}
 	}
+
+//	public Composite getStatusComposite() {
+//		return statusComposite;
+//	}
 }
