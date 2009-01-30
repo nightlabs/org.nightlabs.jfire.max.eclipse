@@ -424,4 +424,25 @@
               indexHint="100">
         </pageFactory>
      </extension>
+     <extension
+           point="org.nightlabs.base.ui.removeExtension">
+        <removeExtension
+              attributeName="id"
+              attributePattern="com.essiembre.eclipse.rbe.ui.preferences.*"
+              elementPath="page"
+              extensionPointID="org.eclipse.ui.preferencePages">
+        </removeExtension>
+        <removeExtension
+              attributeName="id"
+              attributePattern="org.eclipse.birt.chart.reportitem.ui.ChartPreferencePage"
+              elementPath="page"
+              extensionPointID="org.eclipse.ui.preferencePages">
+        </removeExtension>
+        <removeExtension
+              attributeName="id"
+              attributePattern="org.eclipse.birt.report.designer.ui.preferences.*"
+              elementPath="page"
+              extensionPointID="org.eclipse.ui.preferencePages">
+        </removeExtension>
+     </extension>
 </plugin>
