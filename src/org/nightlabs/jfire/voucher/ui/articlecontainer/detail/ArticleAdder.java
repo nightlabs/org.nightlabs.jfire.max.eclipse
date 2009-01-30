@@ -4,8 +4,12 @@ import java.util.Collection;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.base.ui.composite.MessageComposite;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
@@ -18,6 +22,7 @@ import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder;
 import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.ProgressMonitor;
@@ -78,8 +83,36 @@ extends AbstractArticleAdder
 
 		return new String[] {
 				fetchGroupTrade_article,
-				FetchPlan.DEFAULT};
-
+				FetchPlan.DEFAULT,
+				ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
+				VoucherPriceConfig.FETCH_GROUP_CURRENCIES
+		};
 	}
 
+	@Override
+	protected Composite createRequirementsNotFulfilledComposite(Composite parent) {
+		Composite result = super.createRequirementsNotFulfilledComposite(parent);
+		if (result != null)
+			return result;
+		
+		Currency currency;
+		Class<?> articleContainerClass = getSegmentEdit().getArticleContainerClass();
+		if (Order.class.isAssignableFrom(articleContainerClass)) {
+			currency = ((Order)getSegmentEdit().getArticleContainer()).getCurrency();
+		}
+		else if (Offer.class.isAssignableFrom(articleContainerClass)) {
+			currency = ((Offer)getSegmentEdit().getArticleContainer()).getCurrency();
+		}
+		else
+			throw new IllegalStateException("Why is this ArticleAdder in an unknown segment context? articleContainerClass=" + articleContainerClass); //$NON-NLS-1$
+
+		if (!getProductType().getPackagePriceConfig().containsCurrency(currency))
+			return new MessageComposite(
+					parent, SWT.NONE,
+					String.format("The price configuration of the voucher \"%s\" does not contain the currency \"%s\".", getProductType().getName().getText(), currency.getCurrencySymbol(), currency.getCurrencyID()),
+					MessageType.WARNING
+			);
+
+		return null;
+	}
 }
