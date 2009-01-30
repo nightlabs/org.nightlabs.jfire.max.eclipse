@@ -142,7 +142,7 @@
         </perspectiveExtension>
     </extension>
     <extension point="org.eclipse.ui.preferencePages">
-        <page category="Trade Admin"
+        <page category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
             class="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage"
             id="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage" name="%org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage.name"/>
     </extension>
