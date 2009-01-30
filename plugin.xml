@@ -246,33 +246,50 @@
     </extension>
     <extension point="org.eclipse.ui.preferencePages">
         <page
-            class="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
-            id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage" name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
+              category="org.nightlabs.base.ui.preference.UIPreferencePage"
+              class="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
+              id="org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage"
+              name="%org.nightlabs.jfire.trade.ui.tariff.TariffOrderCfModPrefPage.name"/>
         <page
-            class="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
-            id="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage" name="%org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage.name"/>
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.OfferCfModPrefPage.name"/>
         <page
-            class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
+              category="org.nightlabs.base.ui.preference.UIPreferencePage"
+              class="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage"
+              name="%org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.name"/>
         <page
-            class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage" name="%org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.name"/>
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage"
+              name="%org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.name"/>
         <page
-            class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage" 
-            name="%org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage.name"/>
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage"
+              name="%org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentUserCfModPreferencePage.name"/>
         <page
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               class="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
               id="org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage"
               name="%org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentWorkstationCfModPreferencePage.name"/>
         <page
-            class="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage"
-            id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage" 
-            name="%org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage.name"/>
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              class="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage"
+              id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage"
+              name="%org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryUserCfModPreferencePage.name"/>
         <page
+              category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
               class="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage"
               id="org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage"
               name="%org.nightlabs.jfire.trade.ui.modeofdelivery.config.ModeOfDeliveryWorkstationCfModPreferencePage.name"/>
+        <page
+              class="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              id="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+              name="%org.nightlabs.jfire.trade.ui.preference.TradePreferencePage.name">
+        </page>
     </extension>
     <extension point="org.nightlabs.jfire.trade.ui.clientPaymentProcessorFactory">
         <clientPaymentProcessorFactory
