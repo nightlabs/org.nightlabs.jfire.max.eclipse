@@ -70,6 +70,9 @@ public class RemoveAction extends ArticleEditAction
 	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
+		if (articleSelections.isEmpty())
+			return false;
+
 		// The RemoveAction calculates enabled, already:
 		//  * Removal from Offer/Order (=deletion of Article) is NOT possible, if
 		//    - Article is NOT reversing (i.e. "normal") and it is currently allocated/allocationPending;

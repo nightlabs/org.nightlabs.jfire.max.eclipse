@@ -284,22 +284,22 @@ implements IArticleContainerEditActionContributor
 			IXContributionItem contributionItem = actionDescriptor.getContributionItem();
 			if (action != null) {
 				// If there's nothing selected, all actions must be disabled.
-				if (articleSelections.isEmpty())
-					action.setEnabled(false);
-				else
+//				if (articleSelections.isEmpty())
+//					action.setEnabled(false);
+//				else
 					action.setEnabled(action.calculateEnabled(articleSelections));
 			}
 			else if (contributionItem != null) {
-				if (articleSelections.isEmpty())
-					contributionItem.setEnabled(false);
-				else {
+//				if (articleSelections.isEmpty())
+//					contributionItem.setEnabled(false);
+//				else {
 					if (contributionItem instanceof IArticleEditContributionItem) {
 						IArticleEditContributionItem aeci = (IArticleEditContributionItem)contributionItem;
 						aeci.setEnabled(aeci.calculateEnabled(articleSelections));
 					}
 					else
-						contributionItem.setEnabled(true);
-				}
+						contributionItem.setEnabled(!articleSelections.isEmpty());
+//				}
 			}
 			else
 				throw new IllegalStateException("both, action and contribution item are null!"); //$NON-NLS-1$

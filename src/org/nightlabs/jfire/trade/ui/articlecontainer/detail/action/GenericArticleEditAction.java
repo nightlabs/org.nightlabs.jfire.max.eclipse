@@ -31,6 +31,9 @@ public abstract class GenericArticleEditAction
 	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
+		if (articleSelections.isEmpty())
+			return false;
+
 		this.articles = null;
 		Set<Article> articles = new HashSet<Article>();
 		for (Iterator<ArticleSelection> itAS = articleSelections.iterator(); itAS.hasNext(); ) {

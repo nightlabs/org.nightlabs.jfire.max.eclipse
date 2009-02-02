@@ -745,6 +745,14 @@
             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar"
             name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.name"
             toolbarPath="org.nightlabs.jfire.trade.ui.articleEditAction" tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.changetariff.ChangeTariffAction#toolbar.tooltip"/>
+        <articleEditAction
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction.tooltip">
+        </articleEditAction>
     </extension>
     <extension
           name="Suppressed actions for RecurringOrder/RecurringOffer"

@@ -67,6 +67,9 @@ public class ReleaseAction extends ArticleEditAction
 	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
+		if (articleSelections.isEmpty())
+			return false;
+
 		this.articles = null;
 		List<Article> articles = new ArrayList<Article>();
 		for (ArticleSelection articleSelection : articleSelections) {

@@ -43,7 +43,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 public class ArticleEditAction extends Action implements IArticleEditAction
 {
 	private Logger logger = Logger.getLogger(ArticleEditAction.class);
-	
+
 	public ArticleEditAction()
 	{
 //		super("", AS_PUSH_BUTTON); //$NON-NLS-1$
@@ -85,7 +85,7 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 		ArticleContainerEdit edit = getArticleContainerEdit();
 		if (edit == null)
 			return false;
-		
+
 		SegmentEdit activeSegmentEdit = edit.getActiveSegmentEdit();
 		if (activeSegmentEdit == null)
 			return false;
@@ -103,6 +103,9 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 	@Override
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
+		if (articleSelections.isEmpty())
+			return false;
+
 		boolean enabled = true;
 
 		// Iterate all ArticleSelections.
@@ -141,7 +144,7 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 //
 		articleEditActionDelegatesRun(this);
 	}
-	
+
 	/**
 	 * This method is called by {@link ArticleEditAction#run()}. It iterates all
 	 * {@link ArticleSelection}s and calls the method
@@ -150,12 +153,12 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 	 */
 	protected void articleEditActionDelegatesRun(IArticleEditAction action)
 	{
-		ArticleContainerEdit edit = getArticleContainerEdit(); 
+		ArticleContainerEdit edit = getArticleContainerEdit();
 		if (edit == null)
 			throw new IllegalStateException("No activeArticleContainerEdit set!"); //$NON-NLS-1$
 		if (edit.getActiveSegmentEdit() == null)
 			throw new IllegalStateException("No activeSegmentEdit set!"); //$NON-NLS-1$
-		
+
 		for (Iterator<ArticleSelection> it = edit.getActiveSegmentEdit().getArticleSelections().iterator(); it.hasNext(); ) {
 			ArticleSelection selection = it.next();
 			ArticleEdit articleEdit = selection.getArticleEdit();
@@ -177,22 +180,22 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 	}
 
 	/**
-	 * This is a convenience method for: 
+	 * This is a convenience method for:
 	 * <pre>
 	 * getArticleEditActionRegistry().getActiveArticleContainerEdit()
 	 * </pre>
 	 * However you should always use this method.
-	 * 
+	 *
 	 * @return The active {@link ArticleContainerEdit}. Note that this might be <code>null</code>.
 	 */
 	protected ArticleContainerEdit getArticleContainerEdit() {
 		return getArticleEditActionRegistry().getActiveArticleContainerEdit();
 	}
-	
+
 	/**
 	 * This method attempts to get the {@link ArticleContainer} from the active {@link ArticleContainerEdit}.
 	 * The edit might be <code>null</code> and this method will also return <code>null</code> then.
-	 *   
+	 *
 	 * @return The {@link ArticleContainer} of the {@link ArticleContainerEdit} this action associated with or null, if there is currently no edit active.
 	 */
 	protected ArticleContainer getArticleContainer() {
@@ -202,19 +205,19 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 
 		return articleContainerEdit.getArticleContainer();
 	}
-	
+
 	/**
 	 * This method attempts to get the {@link ArticleContainerID} from the active {@link ArticleContainerEdit}.
 	 * The edit might be <code>null</code> and this method will also return <code>null</code> then.
-	 *   
+	 *
 	 * @return The {@link ArticleContainerID} of the {@link ArticleContainerEdit} this action associated with or null, if there is currently no edit active.
 	 */
 	protected ArticleContainerID getArticleContainerID() {
 		ArticleContainerEdit articleContainerEdit = getArticleContainerEdit();
 		if (articleContainerEdit == null)
 			return null;
-		
+
 		return articleContainerEdit.getArticleContainerID();
 	}
-	
+
 }
