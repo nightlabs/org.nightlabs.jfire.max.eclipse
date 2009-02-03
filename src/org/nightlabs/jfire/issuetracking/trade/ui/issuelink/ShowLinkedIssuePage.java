@@ -74,7 +74,7 @@ extends EntityEditorPageWithProgress
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager m) {
-				menuMgr.add(new LinkToIssueAction());
+				menuMgr.add(new LinkToIssueAction(getController().getArticleContainer()));
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(showLinkedIssueSection.getIssueTable());
@@ -104,7 +104,9 @@ extends EntityEditorPageWithProgress
 	}
 
 	private class LinkToIssueAction extends Action {		
-		public LinkToIssueAction() {
+		private Object linkedObject;
+		public LinkToIssueAction(Object linkedObject) {
+			this.linkedObject = linkedObject;
 			setId(LinkToIssueAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
 					IssueTrackingTradePlugin.getDefault(), 
@@ -117,9 +119,7 @@ extends EntityEditorPageWithProgress
 
 		@Override
 		public void run() {
-			ArticleContainerID linkedObjectID = getController().getArticleContainerID();
-
-			AttachIssueToObjectWizard attachIssueToObjectWizard = new AttachIssueToObjectWizard(linkedObjectID);
+			AttachIssueToObjectWizard attachIssueToObjectWizard = new AttachIssueToObjectWizard(linkedObject);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(attachIssueToObjectWizard)
 			{
 				@Override

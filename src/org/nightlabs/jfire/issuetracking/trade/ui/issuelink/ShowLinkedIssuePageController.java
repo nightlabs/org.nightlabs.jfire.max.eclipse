@@ -4,12 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssuePriority;
@@ -78,12 +76,11 @@ extends EntityEditorPageController
 	public void doLoad(ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePageController.monitor.loadIssues.text"), 10); //$NON-NLS-1$
 		
-		ArticleContainer articleContainer =
+		this.articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		
-		ObjectID objectID = (ObjectID)JDOHelper.getObjectId(articleContainer);
 		Collection<IssueLink> issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(articleContainerID.getOrganisationID(), 
-				objectID.toString(), 
+				articleContainerID.toString(), 
 				FETCH_GROUPS, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 				monitor);
@@ -106,5 +103,10 @@ extends EntityEditorPageController
 	
 	public ArticleContainerID getArticleContainerID() {
 		return articleContainerID;
+	}
+	
+	private ArticleContainer articleContainer;
+	public ArticleContainer getArticleContainer() {
+		return articleContainer;
 	}
 }
