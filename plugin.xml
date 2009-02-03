@@ -82,4 +82,11 @@
             indexHint="600">
       </articleContainerEditorPageFactory>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+         <objectContribution
+      		objectClass="java.lang.Object"
+      		id="com.qualityeclipse.favorites.popupMenu">
+  		</objectContribution>
+   </extension>
 </plugin>

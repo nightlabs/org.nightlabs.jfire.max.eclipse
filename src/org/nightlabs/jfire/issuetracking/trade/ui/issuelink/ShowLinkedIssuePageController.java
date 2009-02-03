@@ -103,4 +103,8 @@ extends EntityEditorPageController
 	public Collection<Issue> getLinkedIssues() {
 		return linkedIssues;
 	}
+	
+	public ArticleContainerID getArticleContainerID() {
+		return articleContainerID;
+	}
 }

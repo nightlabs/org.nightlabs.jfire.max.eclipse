@@ -24,7 +24,7 @@ extends ToolBarSectionPart
 {
 	private ShowLinkedIssuePageController controller;
 	private IssueTable issueTable;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -33,7 +33,7 @@ extends ToolBarSectionPart
 	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.title")); //$NON-NLS-1$
 		this.controller = controller;
-		
+
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
 
@@ -45,8 +45,12 @@ extends ToolBarSectionPart
 		issueTable = new IssueTable(client, SWT.NONE);
 		issueTable.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
-	
+
 	public void setLinkedIssues(Collection<Issue> issues) {
 		issueTable.setInput(issues);
+	}
+	
+	public IssueTable getIssueTable() {
+		return issueTable;
 	}
 }
