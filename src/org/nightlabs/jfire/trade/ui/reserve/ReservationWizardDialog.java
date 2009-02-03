@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.trade.ui.resource.Messages;
 
 /**
  * @author daniel[at]nightlabs[dot]de
@@ -41,7 +42,7 @@ extends DynamicPathWizardDialog
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{
-		reservationButton = createButton(parent, RESERVATION_ID, "&Reservation", false);
+		reservationButton = createButton(parent, RESERVATION_ID, Messages.getString("org.nightlabs.jfire.trade.ui.reserve.ReservationWizardDialog.button.reservation.text"), false); //$NON-NLS-1$
 		super.createButtonsForButtonBar(parent);
 	}
 
@@ -52,7 +53,7 @@ extends DynamicPathWizardDialog
 		reservationButton.setEnabled(canReserve);
 		super.updateButtons();
 		if (logger.isDebugEnabled()) {
-			logger.debug("canReserve = "+canReserve);
+			logger.debug("canReserve = "+canReserve); //$NON-NLS-1$
 		}
 	}
 
