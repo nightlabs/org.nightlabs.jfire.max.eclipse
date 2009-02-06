@@ -262,7 +262,7 @@ extends ResizableTitleAreaDialog
 		}
 	}
 
-	private ErrorReport fillErrorReport(ErrorReport errorReport, List<Object> l)
+	private ErrorReport fillErrorReport(ErrorReport errorReport, List<?> l)
 	{
 		for (Object o : l) {
 			if (o instanceof PaymentData) {
@@ -298,6 +298,13 @@ extends ResizableTitleAreaDialog
 				else
 					errorReport.addThrowablePair(paymentResult.getError(), paymentResult.getError());
 			}
+			else if (paymentResult.getErrorStackTrace() != null) {
+				Exception xxx = new Exception(paymentResult.getErrorStackTrace());
+				if (errorReport == null)
+					errorReport = new ErrorReport(xxx, xxx);
+				else
+					errorReport.addThrowablePair(xxx, xxx);
+			}
 		}
 		return errorReport;
 	}
@@ -310,6 +317,13 @@ extends ResizableTitleAreaDialog
 					errorReport = new ErrorReport(deliveryResult.getError(), deliveryResult.getError());
 				else
 					errorReport.addThrowablePair(deliveryResult.getError(), deliveryResult.getError());
+			}
+			else if (deliveryResult.getErrorStackTrace() != null) {
+				Exception xxx = new Exception(deliveryResult.getErrorStackTrace());
+				if (errorReport == null)
+					errorReport = new ErrorReport(xxx, xxx);
+				else
+					errorReport.addThrowablePair(xxx, xxx);
 			}
 		}
 		return errorReport;
@@ -368,10 +382,16 @@ extends ResizableTitleAreaDialog
 			Object[] paymentAndDeliveryDatas = (Object[]) input;
 			for (Object o : paymentAndDeliveryDatas) {
 				if (o instanceof List) {
-					errorReport = fillErrorReport(errorReport, (List)o);
+					errorReport = fillErrorReport(errorReport, (List<?>)o);
 				}
 			}
 		}
+
+		if (errorReport == null) {
+			Exception xxx = new IllegalStateException("transferTreeComposite.getInput() did not return any data from which we could create an error report!");
+			errorReport = new ErrorReport(xxx, xxx);
+		}
+
 		ErrorReportWizardDialog dlg = new ErrorReportWizardDialog(errorReport);
 		okPressed();
 		dlg.open();
