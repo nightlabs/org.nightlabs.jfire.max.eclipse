@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public abstract class AbstractCellReferenceProductTypeSelector implements CellReferenceProductTypeSelector
 {
@@ -65,19 +66,19 @@ public abstract class AbstractCellReferenceProductTypeSelector implements CellRe
 	public void setSelection(ISelection selection)
 	{
 		// Not yet implemented, since the wizard currently only creates new cell references - it doesn't modify existing ones, yet.
-		throw new UnsupportedOperationException("NYI");
+		throw new UnsupportedOperationException("NYI"); //$NON-NLS-1$
 	}
 
 	protected void fireSelectionChangedEvent()
 	{
 		ISelection selection = getSelection();
 		if (selection == null)
-			throw new IllegalStateException("getSelection() must not return null!");
+			throw new IllegalStateException("getSelection() must not return null!"); //$NON-NLS-1$
 
 		// check whether the selection contains a ProductTypeID
 		IStructuredSelection sel = (IStructuredSelection) selection;
 		if (!sel.isEmpty() && !(sel.getFirstElement() instanceof ProductTypeID))
-			throw new IllegalStateException("getSelection() returned an IStructuredSelection which contains an instance of an illegal type! Expected is " + ProductTypeID.class.getName() + " but found " + (sel.getFirstElement() == null ? null : sel.getFirstElement().getClass().getName()));
+			throw new IllegalStateException("getSelection() returned an IStructuredSelection which contains an instance of an illegal type! Expected is " + ProductTypeID.class.getName() + " but found " + (sel.getFirstElement() == null ? null : sel.getFirstElement().getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Object[] listeners = selectionChangedListeners.getListeners();
 		if (listeners.length == 0)

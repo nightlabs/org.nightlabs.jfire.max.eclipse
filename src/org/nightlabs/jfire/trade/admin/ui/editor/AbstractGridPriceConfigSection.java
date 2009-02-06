@@ -112,10 +112,10 @@ extends ToolBarSectionPart
 		
 	protected void inheritPressed() {
 		if (inheritanceAction.isChecked()) {
-			Job job = new Job("Loading extended product type's price config") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.job.loadExtendendProductType.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
-					monitor.beginTask("Loading extended product type's price config", 100);
+					monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.job.loadExtendendProductType.name"), 100); //$NON-NLS-1$
 					try {
 						ProductType pt = packageProductType;
 						if (pt == null)
@@ -161,7 +161,7 @@ extends ToolBarSectionPart
 	public void setPackageProductType(ProductType productType)
 	{
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("This method must be called on the UI thread!");
+			throw new IllegalStateException("This method must be called on the UI thread!"); //$NON-NLS-1$
 
 		if (productType == null) {
 			inheritanceAction.setEnabled(false);

@@ -104,7 +104,7 @@ extends DynamicPathWizardPage
 
 		if (optionalAccount) {
 			doNotSpecifyThisAccountCheckBox = new Button(wrapper, SWT.CHECK);
-			doNotSpecifyThisAccountCheckBox.setText("I do not want to specify this account.");
+			doNotSpecifyThisAccountCheckBox.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectCurrencyAndAccountPage.button.text")); //$NON-NLS-1$
 			doNotSpecifyThisAccountCheckBox.setSelection(true);
 			doNotSpecifyThisAccountCheckBox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			doNotSpecifyThisAccountCheckBox.addSelectionListener(new SelectionAdapter() {
@@ -145,7 +145,7 @@ extends DynamicPathWizardPage
 
 	private void loadAccounts()
 	{
-		Job loadAccountsJob = new Job("Loading Accounts") {
+		Job loadAccountsJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectCurrencyAndAccountPage.job.loadAccounts.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			{
@@ -153,7 +153,7 @@ extends DynamicPathWizardPage
 				{
 					public void run()
 					{
-						accountTable.setInput("Loading accounts...");
+						accountTable.setInput(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.SelectCurrencyAndAccountPage.table.loadingMessage")); //$NON-NLS-1$
 					}
 				});
 

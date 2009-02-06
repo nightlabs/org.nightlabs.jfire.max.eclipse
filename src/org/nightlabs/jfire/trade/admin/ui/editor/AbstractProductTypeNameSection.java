@@ -124,7 +124,7 @@ implements IProductTypeSectionPart
 
 		this.productType = pageController.getProductType();
 		if (logger.isDebugEnabled())
-			logger.debug("setProductTypePageController: PageControllerObject (ProductType) is " + this.productType);
+			logger.debug("setProductTypePageController: PageControllerObject (ProductType) is " + this.productType); //$NON-NLS-1$
 		
 		if (productType == null) {
 			setInheritanceSelection(false);

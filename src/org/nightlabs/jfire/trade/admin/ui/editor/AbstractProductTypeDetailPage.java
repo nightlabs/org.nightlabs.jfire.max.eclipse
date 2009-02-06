@@ -172,8 +172,8 @@ implements IProductTypeDetailPage
 				if (isDisposed())
 					return;
 				if (logger.isDebugEnabled()) {
-					logger.debug("handleControllerObjectModified: Calling setProductTypePageController()");
-					logger.debug("ControllerObject: " + getPageController().getControllerObject());
+					logger.debug("handleControllerObjectModified: Calling setProductTypePageController()"); //$NON-NLS-1$
+					logger.debug("ControllerObject: " + getPageController().getControllerObject()); //$NON-NLS-1$
 				}
 				setProductTypePageController(getPageController());
 				switchToContent();
@@ -194,7 +194,7 @@ implements IProductTypeDetailPage
 	protected void setProductTypePageController(AbstractProductTypePageController<ProductType> pageController)
 	{
 		if (pageController == null) {
-			getManagedForm().getForm().getForm().setMessage("No product type selected.", IMessageProvider.INFORMATION);
+			getManagedForm().getForm().getForm().setMessage(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage.form.message"), IMessageProvider.INFORMATION); //$NON-NLS-1$
 			RCPUtil.setControlEnabledRecursive(getManagedForm().getForm(), false);
 		}
 		else if (pageController.getProductType().isClosed()) {

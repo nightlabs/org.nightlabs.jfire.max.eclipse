@@ -64,10 +64,10 @@ import org.nightlabs.util.NLLocale;
  */
 public class SaleAccessControlComposite extends XComposite
 {
-	public static final String STATUS_CONTROL_ID_PUBLISHED = "published";
-	public static final String STATUS_CONTROL_ID_CONFIRMED = "confirmed";
-	public static final String STATUS_CONTROL_ID_SALEABLE = "saleable";
-	public static final String STATUS_CONTROL_ID_CLOSED = "closed";
+	public static final String STATUS_CONTROL_ID_PUBLISHED = "published"; //$NON-NLS-1$
+	public static final String STATUS_CONTROL_ID_CONFIRMED = "confirmed"; //$NON-NLS-1$
+	public static final String STATUS_CONTROL_ID_SALEABLE = "saleable"; //$NON-NLS-1$
+	public static final String STATUS_CONTROL_ID_CLOSED = "closed"; //$NON-NLS-1$
 
 	private Label productTypeLabel;
 

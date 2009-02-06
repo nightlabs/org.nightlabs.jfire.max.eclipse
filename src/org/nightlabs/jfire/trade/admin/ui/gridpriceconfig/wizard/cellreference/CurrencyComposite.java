@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.currency.CurrencyLabelProvider;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -30,11 +31,11 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 		currencyListComposite.setLabelProvider(new CurrencyLabelProvider());
 		Currency dummy = new Currency(
 				"dummy", //$NON-NLS-1$
-				"Loading data...",
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.CurrencyComposite.name.loadData"), //$NON-NLS-1$
 				0);
 		currencyListComposite.addElement(dummy);
 
-		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job("Loading Currencies") {
+		org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.CurrencyComposite.job.loadCurrencies.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 			throws Exception

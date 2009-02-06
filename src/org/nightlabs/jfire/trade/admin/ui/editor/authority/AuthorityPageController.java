@@ -13,6 +13,7 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -54,7 +55,7 @@ extends AbstractProductTypePageController<ProductType>
 	@Override
 	protected ProductType retrieveEntity(ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading product type and authority", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPageController.job.loadAuthority"), 100); //$NON-NLS-1$
 		try {
 			ProductType productType = loadProductType(new SubProgressMonitor(monitor, 30));
 			setControllerObject(productType);
@@ -101,7 +102,7 @@ extends AbstractProductTypePageController<ProductType>
 
 	@Override
 	protected ProductType storeEntity(ProductType controllerObject, ProgressMonitor monitor) {
-		monitor.beginTask("Storing product type authority", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPageController.job.saveAuthority"), 100); //$NON-NLS-1$
 		authorityPageControllerHelper.store(new SubProgressMonitor(monitor, 70));
 		return getControllerObject();
 	}

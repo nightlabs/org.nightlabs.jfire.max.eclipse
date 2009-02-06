@@ -55,7 +55,7 @@ implements IProductTypeSectionPart
 						String VendorOrgId = vendorEditComposite.getLegalEntity().getOrganisationID();
 						if (!VendorOrgId.equals(SecurityReflector.getUserDescriptor().getOrganisationID()) && (vendorEditComposite.getLegalEntity() instanceof OrganisationLegalEntity) )
 						{
-							MessageDialog.openError(RCPUtil.getActiveShell(),"can't assign a Foreign OrganisationLegalEntity", "you Cannot assign a foreign OrganisationLegalEntity as vendor of a ProductType!");
+							MessageDialog.openError(RCPUtil.getActiveShell(),Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.dialog.error.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.dialog.error.message")); //$NON-NLS-1$ //$NON-NLS-2$
 							//revert to original						
 							vendorEditComposite.setLegalEntity(originalEntity);
 						}
@@ -63,7 +63,7 @@ implements IProductTypeSectionPart
 						{
 							if (productType.isConfirmed())
 							{
-								MessageDialog.openError(RCPUtil.getActiveShell(),"can't assign to a confirmed Product Type", "you Cannot assign a vendor to a confirmed Product Type");
+								MessageDialog.openError(RCPUtil.getActiveShell(),Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.dialog2.error.title"), Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection.dialog2.error.message")); //$NON-NLS-1$ //$NON-NLS-2$
 								//revert to original	
 								vendorEditComposite.setLegalEntity(originalEntity);
 							}

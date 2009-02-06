@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntitySearchCreateWizard;
 
 /**
@@ -35,7 +36,7 @@ extends XComposite
 		legalText = new Text(this, XComposite.getBorderStyle(this) | SWT.SINGLE | SWT.READ_ONLY);
 		legalText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Button legalButton = new Button(this, SWT.FLAT);
-		legalButton.setText("...");
+		legalButton.setText("..."); //$NON-NLS-1$
 		legalButton.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {
 				legalPressed();
@@ -48,7 +49,7 @@ extends XComposite
 
 	protected void legalPressed()
 	{
-		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true);
+		LegalEntitySearchCreateWizard wiz = new LegalEntitySearchCreateWizard("",true); //$NON-NLS-1$
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);
 		if (dlg.open() == Window.OK) {
 			legalEntity = wiz.getLegalEntity();
@@ -58,7 +59,7 @@ extends XComposite
 	}
 
 	protected void updateUI() {
-		legalText.setText(legalEntity == null ? "" : legalEntity.getPerson().getDisplayName());
+		legalText.setText(legalEntity == null ? "" : legalEntity.getPerson().getDisplayName()); //$NON-NLS-1$
 	}
 
 	public LegalEntity getLegalEntity() {

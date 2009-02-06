@@ -97,12 +97,12 @@ implements ICloseOnLogoutEditorPart
 						managedBy = productType.getProductTypeLocal().getManagedBy();
 						if (managedBy != null) {
 							MessageDialog.openInformation(site.getShell(),
-									"Managed product type",
+									Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.dialog.title"), //$NON-NLS-1$
 									String.format(
-											"The productType %s is tagged to be managed by a different system (%s). You won't be able to save changes you make to this product type",
+											Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.dialog.message"), //$NON-NLS-1$
 											partTitle, managedBy)
 									);
-							partTitle += String.format("[Managed By %s]", managedBy);
+							partTitle += String.format(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor.managedBy"), managedBy); //$NON-NLS-1$
 						}
 						setPartName(partTitle);
 						setTitle(partTitle);

@@ -208,7 +208,7 @@ public abstract class PriceConfigComposite extends XComposite
 //		noPriceConfigAssignedComposite = createNoPriceConfigAssignedComposite(stackWrapper);
 //		stackLayout.topControl = priceConfigEditComposite;
 		productTypeNotSetComposite = new XComposite(stackWrapper, SWT.NONE);
-		new Label(productTypeNotSetComposite, SWT.NONE).setText("No product type.");
+		new Label(productTypeNotSetComposite, SWT.NONE).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.text")); //$NON-NLS-1$
 		stackLayout.topControl = productTypeNotSetComposite;
 	}
 
@@ -247,7 +247,7 @@ public abstract class PriceConfigComposite extends XComposite
 			getGridLayout().numColumns = 2;
 
 			Label title = new Label(this, SWT.NONE);
-			title.setText("Assigned:");
+			title.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.title")); //$NON-NLS-1$
 			priceConfigName = new Text(this, getBorderStyle() | SWT.READ_ONLY);
 			priceConfigName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -256,13 +256,13 @@ public abstract class PriceConfigComposite extends XComposite
 			gdInfo.horizontalSpan = 2;
 			info.setLayoutData(gdInfo);
 
-			info.setText("The current product type has the package-nature \"inner\" and therefore the assigned price configuration cannot be edited here. Open a product type packaging the current one and edit the prices there.");
+			info.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.label.info.text")); //$NON-NLS-1$
 		}
 
 		public void setPackageProductType(ProductType packageProductType)
 		{
 			if (packageProductType == null)
-				priceConfigName.setText("");
+				priceConfigName.setText(""); //$NON-NLS-1$
 			else
 				priceConfigName.setText(packageProductType.getInnerPriceConfig().getName().getText());
 		}
@@ -507,7 +507,7 @@ public abstract class PriceConfigComposite extends XComposite
 					}
 
 					if (gridPriceConfig == null)
-						throw new IllegalStateException("packageProductType.getPackagePriceConfig() and priceCalculator.getPackagePriceConfig() both returned null!");
+						throw new IllegalStateException("packageProductType.getPackagePriceConfig() and priceCalculator.getPackagePriceConfig() both returned null!"); //$NON-NLS-1$
 //						gridPriceConfig = (GridPriceConfig) packageProductType.getInnerPriceConfig();
 
 					dimensionValueSelector.setGridPriceConfig(gridPriceConfig);
@@ -663,7 +663,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 	public void assignNewPriceConfig(IInnerPriceConfig innerPC, final boolean inherited, final ProgressMonitor monitor)
 	{
-		monitor.beginTask("Assigning price config", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite.job.assignPriceConfig.name"), 100); //$NON-NLS-1$
 		try {
 			if (innerPC != null) {
 				PriceConfigID innerPCID = (PriceConfigID) JDOHelper.getObjectId(innerPC);

@@ -46,21 +46,17 @@
                 label="%CreateTariffViewAction.label" style="push"
                 toolbarPath="additions" tooltip="%CreateTariffViewAction.tooltip"/>
             <action
-                  class="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate"
-                  icon="icons/tariff/MoveTariffUpwardsAction.16x16.png"
-                  id="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate"
-                  label="Up"
-                  toolbarPath="additions"
-                  tooltip="Moves the selected tariff one position up">
-            </action>
+                class="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate"
+                icon="icons/tariff/MoveTariffUpwardsAction.16x16.png"
+                id="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate"
+                label="%org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate.label"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffUpwardsActionDelegate.tooltip"/>
             <action
-                  class="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate"
-                  icon="icons/tariff/MoveTariffDownwardsAction.16x16.png"
-                  id="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate"
-                  label="Down"
-                  toolbarPath="additions"
-                  tooltip="Moves the selected tariff one position down">
-            </action>
+                class="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate"
+                icon="icons/tariff/MoveTariffDownwardsAction.16x16.png"
+                id="org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate"
+                label="%org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate.label"
+                toolbarPath="additions" tooltip="%org.nightlabs.jfire.trade.admin.ui.tariff.MoveTariffDownwardsActionDelegate.tooltip"/>
         </viewContribution>
         <viewContribution
             id="org.nightlabs.jfire.trade.admin.ui.account.AccountListViewContribution" targetID="org.nightlabs.jfire.trade.admin.ui.account.AccountListView">
@@ -89,22 +85,20 @@
         <viewContribution
             id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingView" targetID="org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingView">
             <action
-                  class="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
-                  icon="icons/tariffmapping/StoreClientOnlyTariffMappingsToServerAction.16x16.png"
-                  id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
-                  label="%org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction.label"
-                  style="push"
-                  toolbarPath="additions"/>
+                class="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
+                icon="icons/tariffmapping/StoreClientOnlyTariffMappingsToServerAction.16x16.png"
+                id="org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction"
+                label="%org.nightlabs.jfire.trade.admin.ui.tariffmapping.StoreClientOnlyTariffMappingsToServerAction.label"
+                style="push" toolbarPath="additions"/>
         </viewContribution>
         <viewContribution
             id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingView" targetID="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingView">
             <action
-                  class="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
-                  icon="icons/customergroupmapping/StoreClientOnlyCustomerGroupMappingsToServerAction.16x16.png"
-                  id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
-                  label="%org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction.label"
-                  style="push"
-                  toolbarPath="additions"/>
+                class="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
+                icon="icons/customergroupmapping/StoreClientOnlyCustomerGroupMappingsToServerAction.16x16.png"
+                id="org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction"
+                label="%org.nightlabs.jfire.trade.admin.ui.customergroupmapping.StoreClientOnlyCustomerGroupMappingsToServerAction.label"
+                style="push" toolbarPath="additions"/>
         </viewContribution>
     </extension>
     <extension point="org.nightlabs.base.ui.entitymanagerview">
@@ -142,30 +136,24 @@
         </perspectiveExtension>
     </extension>
     <extension point="org.eclipse.ui.preferencePages">
-        <page category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+        <page
+            category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
             class="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage"
             id="org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage" name="%org.nightlabs.jfire.trade.admin.ui.deliveryqueue.DeliveryQueueCfModPreferencePage.name"/>
     </extension>
-    <extension
-         point="org.nightlabs.base.ui.editorActionBarContribution">    
-      <editorActionBarContributionRegistry
-            targetEditorID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor">
-         <editorActionBarContribution
-               class="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
-               contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
-               icon="icons/account/action/AddAccountAction.16x16.png"
-               id="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
-               name="Add Account"
-               toolbarPath="org.nightlabs.jfire.trade.ui.overview">
-         </editorActionBarContribution>
-      </editorActionBarContributionRegistry>
+    <extension point="org.nightlabs.base.ui.editorActionBarContribution">
+        <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.account.AccountEntryEditor">
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/account/action/AddAccountAction.16x16.png"
+                id="org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction"
+                name="%org.nightlabs.jfire.trade.admin.ui.account.action.AddAccountAction.name" toolbarPath="org.nightlabs.jfire.trade.ui.overview"/>
+        </editorActionBarContributionRegistry>
     </extension>
-    <extension
-          point="org.nightlabs.base.ui.searchResultProvider">
-       <searchResultActionHandler
-             class="org.nightlabs.jfire.trade.admin.ui.search.GenericProductTypeSearchAdminActionHandler"
-             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
-             searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory">
-       </searchResultActionHandler>
+    <extension point="org.nightlabs.base.ui.searchResultProvider">
+        <searchResultActionHandler
+            class="org.nightlabs.jfire.trade.admin.ui.search.GenericProductTypeSearchAdminActionHandler"
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective" searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"/>
     </extension>
 </plugin>

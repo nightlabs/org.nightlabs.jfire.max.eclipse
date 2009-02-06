@@ -91,30 +91,30 @@ public class AddMoneyFlowMappingWizard extends DynamicPathWizard {
 			dimensionPages.add(dimensionPage);
 		}
 
-		selectCurrencyAndRevenueAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#revenue",
-				"Revenue account",
-				"Select an account as endpoint for this money flow mapping to be used when revenues are booked.",
+		selectCurrencyAndRevenueAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#revenue", //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.revenueAccountPage.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.revenueAccountPage.message"), //$NON-NLS-1$
 				true,
 				false);
 		addPage(selectCurrencyAndRevenueAccountPage);
 
-		selectCurrencyAndExpenseAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#expense",
-				"Expense account",
-				"Select an account as endpoint for this money flow mapping to be used when expenses are booked.",
+		selectCurrencyAndExpenseAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#expense", //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.expenseAccountPage.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.expenseAccountPage.message"), //$NON-NLS-1$
 				false,
 				false);
 		addPage(selectCurrencyAndExpenseAccountPage);
 
-		selectCurrencyAndReverseRevenueAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#reverseRevenue",
-				"Reverse revenue account",
-				"Select a revenue account for reversing entries. This is optional: If you don't specify it, the normal revenue account will be used.",
+		selectCurrencyAndReverseRevenueAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#reverseRevenue", //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.reverseRevenueAccountPage.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.reverseRevenueAccountPage.messae"), //$NON-NLS-1$
 				false,
 				true);
 		addPage(selectCurrencyAndReverseRevenueAccountPage);
 
-		selectCurrencyAndReverseExpenseAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#reverseExpense",
-				"Reverse expense account",
-				"Select an expense account for reversing entries. This is optional: If you don't specify it, the normal expense account will be used.",
+		selectCurrencyAndReverseExpenseAccountPage = new SelectCurrencyAndAccountPage(SelectCurrencyAndAccountPage.class.getName()+"#reverseExpense", //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.reverseExpenseAccountPage.title"), //$NON-NLS-1$
+				Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.edit.AddMoneyFlowMappingWizard.reverseExpenseAccountPage.message"), //$NON-NLS-1$
 				false,
 				true);
 		addPage(selectCurrencyAndReverseExpenseAccountPage);

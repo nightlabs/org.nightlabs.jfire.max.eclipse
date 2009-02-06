@@ -316,7 +316,7 @@ extends AbstractTreeComposite
 		}
 
 		private String getAccountName(Account account) {
-			return account == null ? "" : account.getName().getText();
+			return account == null ? "" : account.getName().getText(); //$NON-NLS-1$
 		}
 		
 		/**
@@ -366,23 +366,23 @@ extends AbstractTreeComposite
 		column.setResizable(true);
 
 		column = new TreeColumn(getTree(), SWT.LEFT);
-		column.setText("Revenue account");
-		column.setToolTipText("Revenue account: Used to book revenues.");
+		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.revenueAccount.name")); //$NON-NLS-1$
+		column.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.revenueAccount.tooltip")); //$NON-NLS-1$
 		column.setResizable(true);
 
 		column = new TreeColumn(getTree(), SWT.LEFT);
-		column.setText("Expense account");
-		column.setToolTipText("Expense account: Used to book expenses.");
+		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.expenseAccount.name")); //$NON-NLS-1$
+		column.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.expenseAccount.tooltip")); //$NON-NLS-1$
 		column.setResizable(true);
 
 		column = new TreeColumn(getTree(), SWT.LEFT);
-		column.setText("Reverse revenue account");
-		column.setToolTipText("Reverse revenue account: Used to book reversing entries for revenues - if not assigned, the normal revenue account is used.");
+		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.reverseRevenueAccount.name")); //$NON-NLS-1$
+		column.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.reverseRevenueAccount.tooltip")); //$NON-NLS-1$
 		column.setResizable(true);
 
 		column = new TreeColumn(getTree(), SWT.LEFT);
-		column.setText("Reverse expense account");
-		column.setToolTipText("Reverse expense account: Used to book reversing entries for expenses - if not assigned, the normal expense account is used.");
+		column.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.reverseExpenseAccount.name")); //$NON-NLS-1$
+		column.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.moneyflow.ResolvedMappingTree.column.reverseExpenseAccount.tooltip")); //$NON-NLS-1$
 		column.setResizable(true);
 
 		column = new TreeColumn(getTree(), SWT.LEFT);

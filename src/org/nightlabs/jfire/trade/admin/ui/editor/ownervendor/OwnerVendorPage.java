@@ -87,8 +87,8 @@ extends DynamicPathWizardPage
 	 */
 	public OwnerVendorPage(ProductTypeID parentProductTypeID)
 	{
-		super(OwnerVendorPage.class.getName(), "Owner && Vendor"); //$NON-NLS-1$
-		this.setDescription("Please Define the Owner and Vendor"); //$NON-NLS-1$
+		super(OwnerVendorPage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.page.title"));  //$NON-NLS-1$
+		this.setDescription(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.page.description")); //$NON-NLS-1$
 		this.parentProductTypeID = parentProductTypeID;
 		inilialize();
 	}
@@ -166,13 +166,12 @@ extends DynamicPathWizardPage
 	public Control createPageContents(Composite parent)
 	{
 		final FadeableComposite page = new FadeableComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		XComposite comp0 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite comp0 = new XComposite(page, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
 		comp0.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comp0.getGridLayout().numColumns = 3;
 
 		Label labelOwner = new Label(comp0, SWT.NONE);
 		labelOwner.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.labelOwner.text"));  //$NON-NLS-1$
-//		labelOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		this.ownerEditComposite = new LegalEntityEditComposite(comp0, SWT.NONE);
 		this.ownerEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -209,17 +208,16 @@ extends DynamicPathWizardPage
 			}
 		});
 
-		new Label(page, SWT.NONE);
+//		new Label(page, SWT.NONE);
 
-		XComposite comp1 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		comp1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comp1.getGridLayout().numColumns = 3;
+//		XComposite comp1 = new XComposite(page, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+//		comp1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		comp1.getGridLayout().numColumns = 3;
 
-		Label labelVendor = new Label(comp1, SWT.NONE);
+		Label labelVendor = new Label(comp0, SWT.NONE);
 		labelVendor.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage.labelVendor.text"));  //$NON-NLS-1$
-//		labelVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		this.vendorEditComposite = new LegalEntityEditComposite(comp1, SWT.NONE);
+		this.vendorEditComposite = new LegalEntityEditComposite(comp0, SWT.NONE);
 		this.vendorEditComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		vendorEditComposite.addLegalEntityValueChangedListener(
 				new ILegalEntityValueChangedListener()
@@ -245,8 +243,7 @@ extends DynamicPathWizardPage
 					}
 				});
 
-		inheritButtonVendor = new InheritanceToggleButton(comp1,null);
-//		inheritButtonVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		inheritButtonVendor = new InheritanceToggleButton(comp0, null);
 		inheritButtonVendor.setSelection(true);
 		inheritButtonVendor.addSelectionListener(new SelectionListener(){
 			public void widgetSelected(SelectionEvent e) {

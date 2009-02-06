@@ -6,6 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.admin.ui.customergroupmapping.CustomerGroupMappingView;
 import org.nightlabs.jfire.trade.admin.ui.overview.TradeAdminView;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.admin.ui.tariff.TariffEditView;
 import org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingView;
 
@@ -24,7 +25,7 @@ implements IPerspectiveFactory
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f,	IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		left.addView(TradeAdminView.VIEW_ID);
 		
-		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7f, IPageLayout.ID_EDITOR_AREA);
+		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7f, IPageLayout.ID_EDITOR_AREA); //$NON-NLS-1$
 		bottom.addView(TariffEditView.ID_VIEW);
 		bottom.addView(TariffMappingView.ID_VIEW);
 		bottom.addView(CustomerGroupMappingView.ID_VIEW);

@@ -35,6 +35,7 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -48,8 +49,8 @@ public class PriceConfigGridCell
 	
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public static final String PROPERTY_FORMULA = "formula";
-	public static final String PROPERTY_FALLBACK_FORMULA = "fallbackFormula";
+	public static final String PROPERTY_FORMULA = "formula"; //$NON-NLS-1$
+	public static final String PROPERTY_FALLBACK_FORMULA = "fallbackFormula"; //$NON-NLS-1$
 
 	/**
 	 * @param formulaPriceConfig Might be null.

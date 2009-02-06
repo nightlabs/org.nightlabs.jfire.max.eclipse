@@ -222,11 +222,11 @@ extends DynamicPathWizardPage
 		accountTypeTable.getGridData().minimumHeight = 80;
 //		accountTypeTable.setInput(new String[] {AccountType.ACCOUNT_TYPE_ID_LOCAL_REVENUE, AccountType.ANCHOR_TYPE_ID_LOCAL_EXPENSE});
 
-		AccountType dummy = new AccountType("dummy.a.b", "dummy", false);
-		dummy.getName().setText(NLLocale.getDefault().getLanguage(), "Loading data...");
+		AccountType dummy = new AccountType("dummy.a.b", "dummy", false); //$NON-NLS-1$ //$NON-NLS-2$
+		dummy.getName().setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.name.loading")); //$NON-NLS-1$
 		accountTypeTable.setInput(Collections.singletonList(dummy));
 
-		Job job = new Job("Loading account types") {
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.jon.loadAccountTypes.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor)
 					throws Exception
@@ -301,7 +301,7 @@ extends DynamicPathWizardPage
 			return;
 		}
 		if (normalAccountRadio.getSelection() && accountTypeTable.getFirstSelectedElement() == null) {
-			updateStatus("Please select the type of normal account to create");
+			updateStatus(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.message.selectAccountType")); //$NON-NLS-1$
 			return;
 		}
 		updateStatus(null);

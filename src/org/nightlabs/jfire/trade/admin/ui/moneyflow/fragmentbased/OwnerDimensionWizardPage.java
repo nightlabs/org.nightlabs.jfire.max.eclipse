@@ -102,7 +102,7 @@ implements MappingDimensionWizardPage
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
-		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, "");
+		searchComposite = new LegalEntitySearchComposite(wrapper, SWT.NONE, ""); //$NON-NLS-1$
 		searchComposite.getResultTable().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				getWizard().performFinish();
