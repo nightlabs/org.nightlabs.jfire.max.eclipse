@@ -162,7 +162,7 @@ extends WizardHopPage
 		//Properties
 		issueTypeLbl = new Label(mainComposite, SWT.NONE);
 		issueTypeLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.issueType.text")); //$NON-NLS-1$
-		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE, issueLabelProvider);
+		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE | SWT.READ_ONLY, issueLabelProvider);
 		issueTypeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueType = issueTypeCombo.getSelectedElement();
@@ -186,7 +186,7 @@ extends WizardHopPage
 
 		issueSeverityLbl = new Label(mainComposite, SWT.NONE);
 		issueSeverityLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.severity.text")); //$NON-NLS-1$
-		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE, issueLabelProvider);
+		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE | SWT.READ_ONLY, issueLabelProvider);
 		
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -197,7 +197,7 @@ extends WizardHopPage
 
 		issuePriorityLbl = new Label(mainComposite, SWT.NONE);
 		issuePriorityLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.priority.text")); //$NON-NLS-1$
-		issuePriorityCombo = new XComboComposite<IssuePriority>(mainComposite, SWT.NONE, issueLabelProvider);
+		issuePriorityCombo = new XComboComposite<IssuePriority>(mainComposite, SWT.NONE | SWT.READ_ONLY, issueLabelProvider);
 		issuePriorityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssuePriority = issuePriorityCombo.getSelectedElement();

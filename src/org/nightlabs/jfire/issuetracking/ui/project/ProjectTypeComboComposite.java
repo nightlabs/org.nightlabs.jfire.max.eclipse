@@ -61,7 +61,7 @@ implements ISelectionProvider
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
-		projectTypeCombo = new XCombo(this, SWT.BORDER);
+		projectTypeCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		projectTypeCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectTypeCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
