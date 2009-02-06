@@ -17,6 +17,7 @@
 	<ignore-requires path="org.eclipse.pde.ui"/>
 	<ignore-requires path="org.eclipse.jdt.launching"/>
 	<ignore-requires path="system.bundle"/>
+	<ignore-requires path="org.eclipse.birt.report.designer.ui.ide"/>
   </project>
 
   <project name="com.essiembre.eclipse.i18n.resourcebundle">
