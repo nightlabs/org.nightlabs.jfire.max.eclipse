@@ -60,13 +60,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IFormulaPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IPriceCoordinate;
 import org.nightlabs.jfire.accounting.gridpriceconfig.IResultPriceConfig;
+import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculationException;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCoordinate;
@@ -643,7 +643,7 @@ public class PriceConfigGrid extends XComposite
 			try {
 				if (priceCalculator != null)
 					priceCalculator.calculatePrices();
-			} catch (ModuleException e) {
+			} catch (PriceCalculationException e) {
 				throw new RuntimeException(e);
 			}
 			updateTableData();
