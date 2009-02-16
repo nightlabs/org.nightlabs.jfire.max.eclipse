@@ -152,6 +152,24 @@
             elementPath="page"
             extensionPointID="org.eclipse.ui.preferencePages">
       </removeExtension>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity.internal.ui.wizards.newconnectionprofile"
+            elementPath="wizard"
+            extensionPointID="org.eclipse.ui.newWizards">
+      </removeExtension>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity.ui.wizard.newrepositorywizard"
+            elementPath="wizard"
+            extensionPointID="org.eclipse.ui.newWizards">
+      </removeExtension>
+      <removeExtension
+            attributeName="id"
+            attributePattern="org.eclipse.datatools.connectivity"
+            elementPath="category"
+            extensionPointID="org.eclipse.ui.newWizards">
+      </removeExtension>
    </extension>
    
 </plugin>
