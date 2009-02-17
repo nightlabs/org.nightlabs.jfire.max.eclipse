@@ -56,5 +56,17 @@
             resolution="300"
             resolutionUnit="org.nightlabs.i18n.unit.resolution.DPIResolutionUnit"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="true"
+            category="org.nightlabs.editor2d.ui"
+            class="org.nightlabs.jfire.voucher.editor2d.ui.NewVoucherFileWizard"
+            hasPages="false"
+            icon="icons/VoucherEditor.16x16.png"
+            id="org.nightlabs.jfire.voucher.editor2d.ui.NewVoucherFileWizard"
+            name="%action.new.text">
+      </wizard>
+   </extension>
 
 </plugin>
