@@ -151,7 +151,7 @@ implements ISelectionProvider
 						ArticleContainer.class, notificationListenerArticleContainerSelected);
 			}
 		});
-		refresh();
+		refresh(false);
 //		getSite().setSelectionProvider(this);
 	}
 
@@ -183,7 +183,7 @@ implements ISelectionProvider
 						for (int i = 0; i < filterSearched.size(); ++i)
 							filterSearched.set(i, Boolean.FALSE);
 
-						refresh();
+						refresh(false);
 					}
 				});
 			}
@@ -292,11 +292,11 @@ implements ISelectionProvider
 			filterSearched.set(tabIndex, new Boolean(searched));
 	}
 
-	public void refresh() {
-		refresh(true);
-	}
+//	public void refresh() {
+//		refresh(true);
+//	}
 
-	public void refresh(boolean force) {
+	public void refresh(final boolean force) {
 		final IProductTypeQuickListFilter filter = getSelectedFilter();
 		if (filter != null) {
 			if ((!didSelectedFilterSearch()) || force) {
@@ -308,11 +308,13 @@ implements ISelectionProvider
 						for (VendorDependentQuery query : queryCollection) {
 							query.setVendorID(vendorID);
 						}
+						if (force) {
+							filter.clearCache();
+						}
 						filter.search(monitor, true);
 						return Status.OK_STATUS;
 					}
 				}.schedule();
-
 				setSelectedFilterSearched(true);
 			}
 		}

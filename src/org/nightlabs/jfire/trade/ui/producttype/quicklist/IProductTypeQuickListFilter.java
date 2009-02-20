@@ -119,6 +119,15 @@ extends ISelectionHandler
 	 */
 	QueryCollection<VendorDependentQuery> getQueryCollection(ProgressMonitor monitor);
 
+	/**
+	 * Sets the {@link QueryCollection}.
+	 * @param queryCollection the QueryCollection to set
+	 */
 	void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection);
 
+	/**
+	 * Clears the cache in case the {@link IProductTypeQuickListFilter}, 
+	 * has a cache mechanism otherwise this method does not have any effect. 
+	 */
+	void clearCache();
 }

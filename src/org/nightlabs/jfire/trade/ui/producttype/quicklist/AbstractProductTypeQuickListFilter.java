@@ -89,9 +89,9 @@ implements IProductTypeQuickListFilter
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private IStructuredSelection selection = StructuredSelection.EMPTY;
 	private QueryCollection<VendorDependentQuery> queryCollection;
-
 	private QueryStore defaultQueryStore;
-
+ 	private QuickListFilterQueryResultKey queryResultKey;
+ 	
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener)
 	{
@@ -362,9 +362,15 @@ implements IProductTypeQuickListFilter
 		Iterator<VendorDependentQuery> it = qc.iterator(); 
 		VendorDependentQuery query = it.hasNext() ? it.next() : null;
 		monitor.done();
-		return new QuickListFilterQueryResultKey(defaultQueryStore, query != null ? query.getVendorID() : null);
+		queryResultKey = new QuickListFilterQueryResultKey(defaultQueryStore, query != null ? query.getVendorID() : null); 
+		return queryResultKey;
 	}
 
+	@Override
+	public void clearCache() {
+		Cache.sharedInstance().removeByObjectID(queryResultKey, false);
+	}	
+	
 	@Override
 	public void setQueryCollection(QueryCollection<VendorDependentQuery> queryCollection) {
 		if (queryCollection == null)
