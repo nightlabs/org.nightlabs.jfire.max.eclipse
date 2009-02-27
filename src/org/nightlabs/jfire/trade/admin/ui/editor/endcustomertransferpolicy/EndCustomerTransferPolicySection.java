@@ -18,6 +18,7 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.endcustomer.EndCustomerTransferPolicy;
 
@@ -149,8 +150,8 @@ public class EndCustomerTransferPolicySection extends ToolBarSectionPart
 			description.setI18nText(null);
 		}
 		else {
-			name.setI18nText(ectPolicy.getName());
-//			description.setI18nText(ectPolicy.getDescription()); // TODO need description!
+			name.setI18nText(ectPolicy.getName(), EditMode.DIRECT);
+			description.setI18nText(ectPolicy.getDescription(), EditMode.DIRECT);
 		}
 	}
 }
