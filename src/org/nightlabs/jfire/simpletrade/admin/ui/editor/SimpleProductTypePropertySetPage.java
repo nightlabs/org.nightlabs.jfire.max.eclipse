@@ -14,6 +14,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditorSection;
+import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.StructLocal;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
@@ -40,11 +41,11 @@ extends EntityEditorPageWithProgress
 			return new SimpleProductTypePropertySetPageController(editor);
 		}
 	}
-	
+
 	private SimpleProductTypeStructLocalScopeSection structLocalScopeSection = null;
 	private BlockBasedEditorSection blockBasedEditorSection = null;
-	
-	
+
+
 	/**
 	 * @param editor
 	 * @param id
@@ -57,19 +58,19 @@ extends EntityEditorPageWithProgress
 	public BlockBasedEditorSection getBlockBasedEditorSection() {
 		return blockBasedEditorSection;
 	}
-	
+
 	private int sectionStyle = ExpandableComposite.TITLE_BAR;
-	
+
 	@Override
 	protected void addSections(Composite parent)
 	{
 		structLocalScopeSection = new SimpleProductTypeStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
-		
+
 		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.blockBasedEditorSection.title"));  //$NON-NLS-1$
 		getManagedForm().addPart(blockBasedEditorSection);
 	}
-	
+
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		final SimpleProductTypePropertySetPageController controller = (SimpleProductTypePropertySetPageController) getPageController();
@@ -77,10 +78,12 @@ extends EntityEditorPageWithProgress
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage.loadStructLocalJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						SimpleProductType.class,
-						simpleProductType.getPropertySet().getStructScope(),
-						simpleProductType.getPropertySet().getStructLocalScope(),
+				final PropertySet propertySet = controller.getPropertySet();
+				final StructLocal structLocal = propertySet == null ? null : StructLocalDAO.sharedInstance().getStructLocal(
+						propertySet.getStructLocalObjectID(),
+//						SimpleProductType.class,
+//						simpleProductType.getPropertySet().getStructScope(),
+//						simpleProductType.getPropertySet().getStructLocalScope(),
 						monitor
 				);
 				Display.getDefault().asyncExec(new Runnable() {
@@ -88,13 +91,13 @@ extends EntityEditorPageWithProgress
 						if (isDisposed())
 							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
-						blockBasedEditorSection.setPropertySet(controller.getPropertySet(), structLocal);
+						blockBasedEditorSection.setPropertySet(propertySet, structLocal);
 						switchToContent();
 					}
 				});
 				return Status.OK_STATUS;
 			}
-			
+
 		};
 		job.schedule();
 	}

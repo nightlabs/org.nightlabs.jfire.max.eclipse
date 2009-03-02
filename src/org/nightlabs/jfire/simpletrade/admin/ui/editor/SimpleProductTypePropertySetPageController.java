@@ -41,7 +41,7 @@ extends AbstractProductTypePageController<SimpleProductType>
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS;
 	}
-	
+
 	@Override
 	protected SimpleProductType retrieveEntity(ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPageController.loadProductTypeMonitor.task.name"), 3); //$NON-NLS-1$
@@ -52,28 +52,31 @@ extends AbstractProductTypePageController<SimpleProductType>
 		monitor.worked(1);
 		return productType;
 	}
-	
-	
+
+
 	@Override
-	
+
 	public SimpleProductType getExtendedProductType(ProgressMonitor monitor , ProductTypeID extendedProductTypeID)
 	{
 		return  SimpleProductTypeDAO.sharedInstance().getSimpleProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
-				monitor);	
-		
+				monitor);
+
 	}
 
-	
+
 	@Override
-	protected SimpleProductType storeEntity(SimpleProductType controllerObject,
-			ProgressMonitor monitor) {
+	protected SimpleProductType storeEntity(SimpleProductType controllerObject, ProgressMonitor monitor) {
 		return SimpleProductTypeDAO.sharedInstance().storeJDOObject(controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 	}
-	
+
 	public PropertySet getPropertySet() {
-		return getControllerObject().getPropertySet();
+		SimpleProductType spt = getControllerObject();
+		if (spt == null) // This check seems not necessary (never had an NPE so far), but at least theoretically, this might be null (until the data is loaded). Marco.
+			return null;
+
+		return spt.getPropertySet();
 	}
 
 }

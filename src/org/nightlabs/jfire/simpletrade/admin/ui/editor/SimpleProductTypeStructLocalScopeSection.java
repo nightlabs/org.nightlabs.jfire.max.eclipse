@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.simpletrade.admin.ui.editor;
 
@@ -25,10 +25,10 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 
 //	private SimpleProductType productType;
 //	private boolean doInheritStructLocalScope;
-	private String structScope;
-	private String structLocalScope;
+//	private String structScope;
+//	private String structLocalScope;
 	private Text structLocalScopeText;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -50,12 +50,15 @@ public class SimpleProductTypeStructLocalScopeSection extends ToolBarSectionPart
 		structLocalScopeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
 	public void setSimpleProductType(SimpleProductType productType) {
-		structScope = productType.getPropertySet().getStructScope();
-		structLocalScope = productType.getPropertySet().getStructLocalScope();
+//		structScope = productType.getPropertySet().getStructScope();
+		String structLocalScope = productType.getPropertySet().getStructLocalScope();
 		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(
-				SimpleProductType.class, structScope, structLocalScope, new NullProgressMonitor());
+				productType.getPropertySet().getStructLocalObjectID(),
+//				SimpleProductType.class, structScope, structLocalScope,
+				new NullProgressMonitor()
+		);
 		if (sl != null && sl.getName() != null) {
 			structLocalScopeText.setText(sl.getName().getText());
 		} else {
