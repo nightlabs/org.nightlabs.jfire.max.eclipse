@@ -31,6 +31,7 @@ public class EndCustomerTransferPolicyControllerHelper
 	private static final String[] FETCH_GROUPS_END_CUSTOMER_TRANSFER_POLICY = {
 		FetchPlan.DEFAULT,
 		EndCustomerTransferPolicy.FETCH_GROUP_NAME,
+		EndCustomerTransferPolicy.FETCH_GROUP_DESCRIPTION,
 		EndCustomerTransferPolicy.FETCH_GROUP_STRUCT_FIELDS,
 		StructField.FETCH_GROUP_NAME
 	};
