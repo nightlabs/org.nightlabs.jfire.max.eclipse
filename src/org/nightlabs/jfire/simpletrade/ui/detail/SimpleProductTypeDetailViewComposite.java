@@ -108,8 +108,7 @@ extends XComposite
 					throw new RuntimeException(e);
 				}
 				final PropertySet props = propertySets.get(productTypeID);
-				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
-						SimpleProductType.class, props.getStructScope(), props.getStructLocalScope(), monitor);
+				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(props.getStructLocalObjectID(), monitor);
 				if (props != null)
 					props.inflate(struct);
 
