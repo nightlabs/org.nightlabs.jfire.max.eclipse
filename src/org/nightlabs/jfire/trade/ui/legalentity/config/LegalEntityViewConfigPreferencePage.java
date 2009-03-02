@@ -47,9 +47,11 @@ import org.nightlabs.jfire.base.ui.config.AbstractUserConfigModulePreferencePage
 import org.nightlabs.jfire.base.ui.config.IConfigModuleController;
 import org.nightlabs.jfire.base.ui.prop.structedit.StructFieldNode;
 import org.nightlabs.jfire.base.ui.prop.structedit.StructTreeComposite;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
+import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -247,8 +249,15 @@ extends AbstractUserConfigModulePreferencePage
 		protected Control createDialogArea(Composite parent) {
 			setTitle(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.config.LegalEntityViewConfigPreferencePage.title"));			 //$NON-NLS-1$
 			treeComposite = new StructTreeComposite(parent, true, null);
-			treeComposite.setInput(StructLocalDAO.sharedInstance().getStructLocal(
-					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor()));
+			treeComposite.setInput(
+					StructLocalDAO.sharedInstance().getStructLocal(
+							StructLocalID.create(
+									Organisation.DEV_ORGANISATION_ID,
+									Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE
+							),
+							new NullProgressMonitor()
+					)
+			);
 			treeComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 				@Override
 				public void selectionChanged(SelectionChangedEvent arg0) {

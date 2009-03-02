@@ -51,11 +51,11 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class LegalEntityEditorWizard extends DynamicPathWizard {
 
 	public static final String WIZARD_EDITOR_DOMAIN = LegalEntityEditorWizard.class.getName();
-	
+
 	private LegalEntity legalEntity;
 	private Person lePerson;
 	private PersonEditorWizardHop editorWizardHop;
-	
+
 	public LegalEntityEditorWizard(LegalEntity legalEntity) {
 		super();
 		setForcePreviousAndNextButtons(true);
@@ -65,7 +65,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		} catch (LoginException e1) {
 			throw new IllegalStateException("Could not get Login"); //$NON-NLS-1$
 		}
-		
+
 		this.legalEntity = legalEntity;
 		if (this.legalEntity == null) {
 			try {
@@ -77,31 +77,40 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 		}
 		else
 			this.lePerson = legalEntity.getPerson();
-		
-		StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
-				Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
-		if (lePerson != null)
+
+		if (lePerson != null) {
+			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
+					lePerson.getStructLocalObjectID(),
+//					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE,
+					new NullProgressMonitor()
+			);
 			lePerson.inflate(struct);
-		
+		}
+
 		editorWizardHop = new PersonEditorWizardHop();
 		editorWizardHop.initialise(lePerson);
 		addPage(editorWizardHop.getEntryPage());
 	}
-	
-	/**
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
+
 	@Override
 	public boolean performFinish() {
 		editorWizardHop.updatePerson();
 		legalEntity = null;
 		try {
 			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+
+//			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
+//					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE,
+//					new NullProgressMonitor()
+//			);
 			StructLocal struct = StructLocalDAO.sharedInstance().getStructLocal(
-					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
+					lePerson.getStructLocalObjectID(),
+					new NullProgressMonitor()
+			);
 			lePerson.deflate();
 			legalEntity = tradeManager.storePersonAsLegalEntity(lePerson, true, LegalEntityPersonEditor.FETCH_GROUPS_FULL_LE_DATA, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			legalEntity.getPerson().inflate(struct);
+			lePerson = legalEntity.getPerson();
+			lePerson.inflate(struct);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
@@ -111,7 +120,7 @@ public class LegalEntityEditorWizard extends DynamicPathWizard {
 	public LegalEntity getLegalEntity() {
 		return legalEntity;
 	}
-	
+
 	public static LegalEntity open(LegalEntity legalEntity) {
 		LegalEntityEditorWizard wiz = new LegalEntityEditorWizard(legalEntity);
 		DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wiz);

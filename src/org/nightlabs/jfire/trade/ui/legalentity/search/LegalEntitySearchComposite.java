@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.legalentity.search;
 
@@ -17,12 +17,14 @@ import org.nightlabs.jfire.base.ui.prop.IPropertySetTableConfig;
 import org.nightlabs.jfire.base.ui.prop.PropertySetSearchComposite;
 import org.nightlabs.jfire.base.ui.prop.PropertySetTable;
 import org.nightlabs.jfire.base.ui.prop.search.PropertySetSearchFilterItemListMutator;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.person.PersonStruct;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructFieldID;
+import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.prop.search.PropSearchFilter;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.LegalEntitySearchFilter;
@@ -44,7 +46,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 		super(parent, style, quickSearchText, false);
 		createSearchButton(getButtonBar());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>
@@ -79,7 +81,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 		};
 		return provider;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * <p>
@@ -100,17 +102,21 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 
 			@Override
 			protected IPropertySetTableConfig getPropertySetTableConfig() {
-				
+
 				return new LegalEntityTableConfig();
 			}
-			
+
 			class LegalEntityTableConfig extends DefaultPropertySetTableConfig {
 				@Override
 				public IStruct getIStruct() {
 					return StructLocalDAO.sharedInstance().getStructLocal(
-							Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
+							StructLocalID.create(
+									Organisation.DEV_ORGANISATION_ID,
+									Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE
+							), new NullProgressMonitor()
+					);
 				}
-				
+
 				@Override
 				public StructFieldID[] getStructFieldIDs() {
 					return new StructFieldID[] {
@@ -122,7 +128,7 @@ public class LegalEntitySearchComposite extends PropertySetSearchComposite<Legal
 		};
 		return resultTable;
 	}
-	
+
 	@Override
 	protected String[] getFetchGroups() {
 		return new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, PropertySet.FETCH_GROUP_FULL_DATA};

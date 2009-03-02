@@ -38,11 +38,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.prop.id.StructFieldID;
+import org.nightlabs.jfire.prop.id.StructLocalID;
 import org.nightlabs.jfire.trade.config.LegalEntityViewConfigModule;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.NLLocale;
@@ -51,14 +53,14 @@ import org.nightlabs.util.NLLocale;
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
-public class LEViewPersonStructFieldTable 
-extends AbstractTableComposite<String> 
+public class LEViewPersonStructFieldTable
+extends AbstractTableComposite<String>
 {
 	private static class ContentProvider implements IStructuredContentProvider {
-		
+
 		private List<String> cfModFields = new ArrayList<String>();
 		private LegalEntityViewConfigModule inputCfMod;
-		
+
 		public Object[] getElements(Object inputElement) {
 			if (! (inputElement instanceof LegalEntityViewConfigModule))
 				return null;
@@ -69,7 +71,7 @@ extends AbstractTableComposite<String>
 					cfModFields.addAll(cfMod.getStructFields());
 					inputCfMod = cfMod;
 				}
-			}  
+			}
 			return cfModFields.toArray();
 		}
 
@@ -79,12 +81,12 @@ extends AbstractTableComposite<String>
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			inputCfMod = null;
 		}
-		
+
 		public void add(String structFieldOID)
 		{
 			cfModFields.add(structFieldOID);
 		}
-		
+
 		public void moveUp(String structFieldOID) {
 			int i = cfModFields.indexOf(structFieldOID);
 			if (i <= 0 )
@@ -93,7 +95,7 @@ extends AbstractTableComposite<String>
 			cfModFields.remove(i);
 			cfModFields.add(newIdx,structFieldOID);
 		}
-		
+
 		public void moveDown(String structFieldOID) {
 			int i = cfModFields.indexOf(structFieldOID);
 			if ((i >= cfModFields.size()-1) || (i < 0))
@@ -102,24 +104,24 @@ extends AbstractTableComposite<String>
 			cfModFields.remove(i);
 			cfModFields.add(newIdx,structFieldOID);
 		}
-		
+
 		public void remove(String structFieldOID) {
 			cfModFields.remove(structFieldOID);
 		}
-		
+
 		public List<String> getCfModFields() {
 			return cfModFields;
 		}
-		
-		public boolean isFirst(String structFieldOID) {			
+
+		public boolean isFirst(String structFieldOID) {
 			return cfModFields.indexOf(structFieldOID) == 0;
 		}
-		
+
 		public boolean isLast(String structFieldOID) {
 			return cfModFields.indexOf(structFieldOID) == cfModFields.size() - 1;
 		}
 	}
-	
+
 	private static class LabelProvider extends org.eclipse.jface.viewers.LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -130,13 +132,18 @@ extends AbstractTableComposite<String>
 			StructFieldID fieldID = null;
 			try {
 				fieldID = new StructFieldID((String)element);
-				
+
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 			IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
-					Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
-			
+					StructLocalID.create(
+							Organisation.DEV_ORGANISATION_ID,
+							Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE
+					),
+					new NullProgressMonitor()
+			);
+
 			StructField field = null;
 			try {
 				field = struct.getStructField(
@@ -151,7 +158,7 @@ extends AbstractTableComposite<String>
 			return field.getName().getText(NLLocale.getDefault().getLanguage());
 		}
 	}
-	
+
 	public LEViewPersonStructFieldTable(Composite parent, int style) {
 		super(parent, style, true);
 	}
@@ -165,46 +172,46 @@ extends AbstractTableComposite<String>
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 	}
-	
+
 	public void moveSelectedUp() {
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
 		((ContentProvider)getTableViewer().getContentProvider()).moveUp((String)selection.getFirstElement());
 	}
-	
+
 	public void moveSelectedDown() {
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
 		((ContentProvider)getTableViewer().getContentProvider()).moveDown((String)selection.getFirstElement());
 	}
-	
+
 	public void removeSelected() {
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return;
 		((ContentProvider)getTableViewer().getContentProvider()).remove((String)selection.getFirstElement());
 	}
-	
+
 	public boolean isSelectedFirst() {
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return false;
 		return ((ContentProvider)getTableViewer().getContentProvider()).isFirst(((String)selection.getFirstElement()));
 	}
-	
+
 	public boolean isSelectedLast() {
 		IStructuredSelection selection = (IStructuredSelection)getTableViewer().getSelection();
 		if ( selection.size() != 1)
 			return false;
 		return ((ContentProvider)getTableViewer().getContentProvider()).isLast(((String)selection.getFirstElement()));
 	}
-	
+
 	public List<String> getStructFields() {
 		return ((ContentProvider)getTableViewer().getContentProvider()).getCfModFields();
 	}
-	
+
 	public void addStructField(String structFieldOID) {
 		((ContentProvider) getTableViewer().getContentProvider()).add(structFieldOID);
 	}

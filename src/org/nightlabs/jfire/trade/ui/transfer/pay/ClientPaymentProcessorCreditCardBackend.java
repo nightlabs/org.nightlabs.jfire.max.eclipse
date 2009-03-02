@@ -135,7 +135,10 @@ extends AbstractClientPaymentProcessor
 					Person person = entity.getPerson();
 					if (person != null) {
 						IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
-								Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE, new NullProgressMonitor());
+								person.getStructLocalObjectID(),
+//								Person.class, Person.STRUCT_SCOPE, Person.STRUCT_LOCAL_SCOPE,
+								new NullProgressMonitor()
+						);
 						person.inflate(struct);
 
 						String nameOnCard = person.getDataField(PersonStruct.CREDITCARD_CREDITCARDHOLDER, II18nTextDataField.class).getI18nText().getText();
