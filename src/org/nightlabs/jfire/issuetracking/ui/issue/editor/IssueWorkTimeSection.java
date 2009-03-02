@@ -21,7 +21,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.resource.SharedImages;
@@ -98,10 +97,10 @@ extends AbstractIssueEditorGeneralSection
 						int returnCode = userSearchDialog.open();
 						if (returnCode == Dialog.OK) {
 							issue.setAssignee(userSearchDialog.getSelectedUser());
+							// does not work without assigned user
+							issue.startWorking(new Date());
 						}
 					}
-
-					issue.startWorking(new Date());
 
 					markDirty();
 					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.
