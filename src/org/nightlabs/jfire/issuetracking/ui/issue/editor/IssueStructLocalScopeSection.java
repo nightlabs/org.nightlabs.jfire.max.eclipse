@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
@@ -25,7 +25,7 @@ public class IssueStructLocalScopeSection extends ToolBarSectionPart {
 	private String structScope;
 	private String structLocalScope;
 	private Text structLocalScopeText;
-	
+
 	/**
 	 * @param page
 	 * @param parent
@@ -40,12 +40,15 @@ public class IssueStructLocalScopeSection extends ToolBarSectionPart {
 		structLocalScopeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
-	
+
 	public void setIssue(Issue issue) {
 		structScope = issue.getPropertySet().getStructScope();
 		structLocalScope = issue.getPropertySet().getStructLocalScope();
 		StructLocal sl = StructLocalDAO.sharedInstance().getStructLocal(
-				Issue.class, structScope, structLocalScope, new NullProgressMonitor());
+				issue.getPropertySet().getStructLocalObjectID(),
+//				Issue.class, structScope, structLocalScope,
+				new NullProgressMonitor()
+		);
 		if (sl != null && sl.getName() != null) {
 			structLocalScopeText.setText(sl.getName().getText());
 		} else {

@@ -40,11 +40,11 @@ extends EntityEditorPageWithProgress
 			return new IssueEditorPageController(editor);
 		}
 	}
-	
+
 	private IssueStructLocalScopeSection structLocalScopeSection = null;
 	private BlockBasedEditorSection blockBasedEditorSection = null;
-	
-	
+
+
 	/**
 	 * @param editor
 	 * @param id
@@ -57,15 +57,15 @@ extends EntityEditorPageWithProgress
 	public BlockBasedEditorSection getBlockBasedEditorSection() {
 		return blockBasedEditorSection;
 	}
-	
+
 	private int sectionStyle = ExpandableComposite.TITLE_BAR;
-	
+
 	@Override
 	protected void addSections(Composite parent)
 	{
 		structLocalScopeSection = new IssueStructLocalScopeSection(this, parent, sectionStyle);
 		getManagedForm().addPart(structLocalScopeSection);
-		
+
 		blockBasedEditorSection = new BlockBasedEditorSection(this, parent, sectionStyle, Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.section.properties.text")); //$NON-NLS-1$
 		getManagedForm().addPart(blockBasedEditorSection);
 	}
@@ -78,9 +78,10 @@ extends EntityEditorPageWithProgress
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						Issue.class,
-						issue.getPropertySet().getStructScope(),
-						issue.getPropertySet().getStructLocalScope(),
+						issue.getPropertySet().getStructLocalObjectID(),
+//						Issue.class,
+//						issue.getPropertySet().getStructScope(),
+//						issue.getPropertySet().getStructLocalScope(),
 						monitor
 				);
 				Display.getDefault().asyncExec(new Runnable() {
@@ -94,7 +95,7 @@ extends EntityEditorPageWithProgress
 				});
 				return Status.OK_STATUS;
 			}
-			
+
 		};
 		job.schedule();
 	}
