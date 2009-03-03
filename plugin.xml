@@ -181,4 +181,18 @@
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
             index="20" name="Project" scope="IssueShelf"/>
     </extension>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.nightlabs.jfire.issuetracking.ui"
+             name="%org.nightlabs.jfire.issuetracking.ui.newWizard.category.name">
+       </category>
+       <wizard
+             category="org.nightlabs.jfire.issuetracking.ui"
+             class="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard"
+             icon="icons/issue/ProjectTreeComposite-Create.16x16.png"
+             id="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard"
+             name="%org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard.name">
+       </wizard>
+    </extension>
 </plugin>

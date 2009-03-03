@@ -7,6 +7,9 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -30,6 +33,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class CreateIssueWizard 
 extends DynamicPathWizard
+implements INewWizard
 {
 	private Issue newIssue;
 //	private ObjectID linkedObjectID;
@@ -86,4 +90,13 @@ extends DynamicPathWizard
 		}
 		return true;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		// do nothing
+	}
+	
 }
