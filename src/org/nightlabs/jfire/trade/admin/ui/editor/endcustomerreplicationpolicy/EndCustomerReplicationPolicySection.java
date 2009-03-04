@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.admin.ui.editor.endcustomertransferpolicy;
+package org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
@@ -20,18 +20,18 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.trade.endcustomer.EndCustomerTransferPolicy;
+import org.nightlabs.jfire.trade.endcustomer.EndCustomerReplicationPolicy;
 
-public class EndCustomerTransferPolicySection extends ToolBarSectionPart
+public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
 {
-	private EndCustomerTransferPolicyControllerHelper endCustomerTransferPolicyControllerHelper;
+	private EndCustomerReplicationPolicyControllerHelper endCustomerReplicationPolicyControllerHelper;
 
 	private I18nTextEditor name;
 	private I18nTextEditor description;
 	private Label nameLabel;
 	private Label descriptionLabel;
 
-	public EndCustomerTransferPolicySection(IFormPage page, Composite parent) {
+	public EndCustomerReplicationPolicySection(IFormPage page, Composite parent) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "End-customer transfer policy");
 		((GridData)getSection().getLayoutData()).grabExcessVerticalSpace = false;
 
@@ -98,8 +98,8 @@ public class EndCustomerTransferPolicySection extends ToolBarSectionPart
 //								monitor
 //						);
 //
-//						if (extPT.getEndCustomerTransferPolicy() == null)
-//							pt.setEndCustomerTransferPolicy(null);
+//						if (extPT.getEndCustomerReplicationPolicy() == null)
+//							pt.setEndCustomerReplicationPolicy(null);
 //						else {
 //
 //						}
@@ -127,20 +127,20 @@ public class EndCustomerTransferPolicySection extends ToolBarSectionPart
 		}
 	};
 
-	public void setEndCustomerTransferPolicyControllerHelper(EndCustomerTransferPolicyControllerHelper endCustomerTransferPolicyControllerHelper) {
+	public void setEndCustomerReplicationPolicyControllerHelper(EndCustomerReplicationPolicyControllerHelper endCustomerReplicationPolicyControllerHelper) {
 		if (Display.getCurrent() == null)
 			throw new IllegalStateException("Must be called on UI thread!");
 
-		this.endCustomerTransferPolicyControllerHelper = endCustomerTransferPolicyControllerHelper;
+		this.endCustomerReplicationPolicyControllerHelper = endCustomerReplicationPolicyControllerHelper;
 		inheritAction.setChecked(false);
 		inheritAction.setEnabled(false);
 
-		EndCustomerTransferPolicy ectPolicy = endCustomerTransferPolicyControllerHelper == null ? null : endCustomerTransferPolicyControllerHelper.getEndCustomerTransferPolicy();
-		ProductType pt = endCustomerTransferPolicyControllerHelper == null ? null : endCustomerTransferPolicyControllerHelper.getProductType();
+		EndCustomerReplicationPolicy ectPolicy = endCustomerReplicationPolicyControllerHelper == null ? null : endCustomerReplicationPolicyControllerHelper.getEndCustomerReplicationPolicy();
+		ProductType pt = endCustomerReplicationPolicyControllerHelper == null ? null : endCustomerReplicationPolicyControllerHelper.getProductType();
 
 		nameLabel.getParent().setEnabled(ectPolicy != null);
 		if (pt != null) {
-			inheritAction.setChecked(pt.getFieldMetaData(ProductType.FieldName.endCustomerTransferPolicy).isValueInherited());
+			inheritAction.setChecked(pt.getFieldMetaData(ProductType.FieldName.endCustomerReplicationPolicy).isValueInherited());
 			if (pt.getExtendedProductTypeID() != null)
 				inheritAction.setEnabled(true);
 		}

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.admin.ui.editor.endcustomertransferpolicy;
+package org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
@@ -8,18 +8,18 @@ import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
-import org.nightlabs.jfire.trade.dao.EndCustomerTransferPolicyDAO;
-import org.nightlabs.jfire.trade.endcustomer.EndCustomerTransferPolicy;
-import org.nightlabs.jfire.trade.endcustomer.id.EndCustomerTransferPolicyID;
+import org.nightlabs.jfire.trade.dao.EndCustomerReplicationPolicyDAO;
+import org.nightlabs.jfire.trade.endcustomer.EndCustomerReplicationPolicy;
+import org.nightlabs.jfire.trade.endcustomer.id.EndCustomerReplicationPolicyID;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
-public class EndCustomerTransferPolicyControllerHelper
+public class EndCustomerReplicationPolicyControllerHelper
 {
 	private ProductTypeID productTypeID;
 	private ProductType productType;
-	private EndCustomerTransferPolicyID endCustomerTransferPolicyID;
-	private EndCustomerTransferPolicy endCustomerTransferPolicy;
+	private EndCustomerReplicationPolicyID endCustomerReplicationPolicyID;
+	private EndCustomerReplicationPolicy endCustomerReplicationPolicy;
 
 	private static final String[] FETCH_GROUPS_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
@@ -30,9 +30,9 @@ public class EndCustomerTransferPolicyControllerHelper
 
 	private static final String[] FETCH_GROUPS_END_CUSTOMER_TRANSFER_POLICY = {
 		FetchPlan.DEFAULT,
-		EndCustomerTransferPolicy.FETCH_GROUP_NAME,
-		EndCustomerTransferPolicy.FETCH_GROUP_DESCRIPTION,
-		EndCustomerTransferPolicy.FETCH_GROUP_STRUCT_FIELDS,
+		EndCustomerReplicationPolicy.FETCH_GROUP_NAME,
+		EndCustomerReplicationPolicy.FETCH_GROUP_DESCRIPTION,
+		EndCustomerReplicationPolicy.FETCH_GROUP_STRUCT_FIELDS,
 		StructField.FETCH_GROUP_NAME
 	};
 
@@ -42,8 +42,8 @@ public class EndCustomerTransferPolicyControllerHelper
 		try {
 			this.productTypeID = productTypeID;
 			productType = null;
-			endCustomerTransferPolicyID = null;
-			endCustomerTransferPolicy = null;
+			endCustomerReplicationPolicyID = null;
+			endCustomerReplicationPolicy = null;
 
 			if (productTypeID == null) {
 				monitor.worked(100);
@@ -57,11 +57,11 @@ public class EndCustomerTransferPolicyControllerHelper
 					new SubProgressMonitor(monitor, 50)
 			);
 
-			if (productType.getEndCustomerTransferPolicy() != null) {
-				endCustomerTransferPolicyID = (EndCustomerTransferPolicyID) JDOHelper.getObjectId(productType.getEndCustomerTransferPolicy());
+			if (productType.getEndCustomerReplicationPolicy() != null) {
+				endCustomerReplicationPolicyID = (EndCustomerReplicationPolicyID) JDOHelper.getObjectId(productType.getEndCustomerReplicationPolicy());
 
-				endCustomerTransferPolicy = EndCustomerTransferPolicyDAO.sharedInstance().getEndCustomerTransferPolicy(
-						endCustomerTransferPolicyID,
+				endCustomerReplicationPolicy = EndCustomerReplicationPolicyDAO.sharedInstance().getEndCustomerReplicationPolicy(
+						endCustomerReplicationPolicyID,
 						FETCH_GROUPS_END_CUSTOMER_TRANSFER_POLICY,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50)
@@ -75,11 +75,15 @@ public class EndCustomerTransferPolicyControllerHelper
 		}
 	}
 
+	public ProductTypeID getProductTypeID() {
+		return productTypeID;
+	}
+
 	public ProductType getProductType() {
 		return productType;
 	}
 
-	public EndCustomerTransferPolicy getEndCustomerTransferPolicy() {
-		return endCustomerTransferPolicy;
+	public EndCustomerReplicationPolicy getEndCustomerReplicationPolicy() {
+		return endCustomerReplicationPolicy;
 	}
 }

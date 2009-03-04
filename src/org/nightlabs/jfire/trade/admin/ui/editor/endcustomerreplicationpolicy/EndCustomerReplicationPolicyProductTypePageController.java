@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.admin.ui.editor.endcustomertransferpolicy;
+package org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.store.ProductType;
@@ -6,16 +6,16 @@ import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.progress.ProgressMonitor;
 
-public class EndCustomerTransferPolicyProductTypePageController
+public class EndCustomerReplicationPolicyProductTypePageController
 extends AbstractProductTypePageController<ProductType>
 {
-	private EndCustomerTransferPolicyControllerHelper endCustomerTransferPolicyControllerHelper = new EndCustomerTransferPolicyControllerHelper();
+	private EndCustomerReplicationPolicyControllerHelper endCustomerReplicationPolicyControllerHelper = new EndCustomerReplicationPolicyControllerHelper();
 
-	public EndCustomerTransferPolicyProductTypePageController(EntityEditor editor) {
+	public EndCustomerReplicationPolicyProductTypePageController(EntityEditor editor) {
 		super(editor);
 	}
 
-	public EndCustomerTransferPolicyProductTypePageController(EntityEditor editor, boolean startBackgroundLoading) {
+	public EndCustomerReplicationPolicyProductTypePageController(EntityEditor editor, boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
 	}
 
@@ -31,7 +31,7 @@ extends AbstractProductTypePageController<ProductType>
 
 	@Override
 	protected ProductType retrieveEntity(ProgressMonitor monitor) {
-		endCustomerTransferPolicyControllerHelper.load(getProductTypeID(), monitor);
+		endCustomerReplicationPolicyControllerHelper.load(getProductTypeID(), monitor);
 		return null;
 	}
 
@@ -40,7 +40,7 @@ extends AbstractProductTypePageController<ProductType>
 		return null;
 	}
 
-	public EndCustomerTransferPolicyControllerHelper getEndCustomerTransferPolicyControllerHelper() {
-		return endCustomerTransferPolicyControllerHelper;
+	public EndCustomerReplicationPolicyControllerHelper getEndCustomerReplicationPolicyControllerHelper() {
+		return endCustomerReplicationPolicyControllerHelper;
 	}
 }
