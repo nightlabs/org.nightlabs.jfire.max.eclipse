@@ -65,7 +65,7 @@ extends ResizableTitleAreaDialog
 		setMessage("Here you can edit the visible script");
 		
 		Composite wrapper = new XComposite(parent, SWT.NONE);
-		jsEditorComposite = new JSEditorComposite(wrapper, null, SWT.BORDER);
+		jsEditorComposite = new JSEditorComposite(wrapper, SWT.BORDER);
 		jsEditorComposite.getDocument().addDocumentListener(new IDocumentListener(){
 			@Override
 			public void documentChanged(DocumentEvent event) {
