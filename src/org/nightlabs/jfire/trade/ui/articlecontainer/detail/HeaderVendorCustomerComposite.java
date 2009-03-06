@@ -76,7 +76,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 	}
 
 	private Hyperlink createLegalEntityHyperlink(String title) {
-		Group legalEntityGroup = new Group(this, SWT.BORDER);
+		Group legalEntityGroup = new Group(this, SWT.NONE);
 		legalEntityGroup.setText(title);
 		legalEntityGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		FillLayout fillLayout = new FillLayout();
