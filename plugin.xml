@@ -194,5 +194,16 @@
              id="org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard"
              name="%org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueWizard.name">
        </wizard>
+       <category
+             id="org.nightlabs.jfire.issuetracking.ui.project"
+             name="Project">
+       </category>
+       <wizard
+             category="org.nightlabs.jfire.issuetracking.ui.project"
+             class="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
+             icon="icons/issue/ProjectTreeComposite-Create.16x16.png"
+             id="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
+             name="Project">
+       </wizard>
     </extension>
 </plugin>

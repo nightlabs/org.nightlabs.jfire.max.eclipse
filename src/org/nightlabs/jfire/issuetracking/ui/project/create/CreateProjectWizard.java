@@ -6,7 +6,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -20,6 +23,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 
 public class CreateProjectWizard
 extends DynamicPathWizard
+implements INewWizard
 {
 	private static String[] FETCH_GROUPS_PROJECT_TYPE = {
 		FetchPlan.DEFAULT
@@ -30,6 +34,10 @@ extends DynamicPathWizard
 	
 	private CreateProjectWizardPage projectPage;
 
+	public CreateProjectWizard() {
+		this(null);
+	}
+	
 	public CreateProjectWizard(Project parentProject) {
 		this.parentProject = parentProject;
 		
@@ -71,5 +79,10 @@ extends DynamicPathWizard
 		job.setPriority(Job.SHORT);
 		job.schedule();
 		return true;
+	}
+
+	@Override
+	public void init(IWorkbench arg0, IStructuredSelection arg1) {
+		// do nothing!!
 	}
 }
