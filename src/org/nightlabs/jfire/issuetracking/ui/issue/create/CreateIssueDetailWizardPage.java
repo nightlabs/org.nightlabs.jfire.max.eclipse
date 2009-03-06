@@ -127,7 +127,7 @@ extends WizardHopPage
 		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
 		subjectText.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent arg0) {
+			public void modifyText(ModifyEvent event) {
 				getContainer().updateButtons();
 				if (subjectText.getEditText().equals("")) { //$NON-NLS-1$
 					setErrorMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.errorMessage.subjectNotEmpty.text")); //$NON-NLS-1$
@@ -146,7 +146,7 @@ extends WizardHopPage
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
 		descriptionText.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent arg0) {
+			public void modifyText(ModifyEvent event) {
 				getContainer().updateButtons();
 				if (descriptionText.getEditText().equals("")) { //$NON-NLS-1$
 					setErrorMessage(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.errorMessage.descriptionNotEmpty.text")); //$NON-NLS-1$
@@ -247,10 +247,18 @@ extends WizardHopPage
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						issueTypeCombo.removeAll();
+						IssueType defaultIssueType = null;
 						for (IssueType issueType : issueTypes) {
-							issueTypeCombo.addElement(issueType);
+							if (issueType.getIssueTypeID().equals(IssueType.DEFAULT_ISSUE_TYPE_ID))
+								defaultIssueType = issueType;
+								issueTypeCombo.addElement(issueType);
 						}
-						issueTypeCombo.selectElementByIndex(0);
+						
+						if (defaultIssueType != null) 
+							issueTypeCombo.selectElement(defaultIssueType);
+						else
+							issueTypeCombo.selectElementByIndex(0);
+						
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						issue.setIssueType(selectedIssueType);
 
