@@ -57,12 +57,14 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 
 	protected static int rangeLength = 3; // TODO This should come from a JDO-ConfigModule
 
-	private boolean purchase;
+	private boolean purchaseMode;
+	private boolean endCustomerMode;
 
-	public ArticleContainerRootTreeNode(HeaderTreeNode parent, String name, Image image, boolean purchase)
+	public ArticleContainerRootTreeNode(HeaderTreeNode parent, String name, Image image, boolean purchaseMode, boolean endCustomerMode)
 	{
 		super(parent, name, image);
-		this.purchase = purchase;
+		this.purchaseMode = purchaseMode;
+		this.endCustomerMode = endCustomerMode;
 	}
 
 	private int nextRangeBeginIdx = 0;
@@ -84,14 +86,14 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 		try {
 			AnchorID vendorID = getHeaderTreeComposite().getMyOrganisationLegalEntityID();
 			AnchorID customerID = getHeaderTreeComposite().getPartnerID();
-			if (purchase) {
+			if (purchaseMode) {
 				AnchorID tmp = vendorID;
 				vendorID = customerID;
 				customerID = tmp;
 			}
 
 			if (vendorID == null || customerID == null) {
-				logger.warn("loadChildData: vendorID or customerID undefined! vendorID=\""+vendorID+"\" customerID=\""+customerID+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				logger.warn("loadChildData: vendorID or customerID) undefined! vendorID=\""+vendorID+"\" customerID=\""+customerID+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return new ArrayList<Object>();
 			}
 
@@ -150,13 +152,17 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 		childNodes.add(moreNode);
 	}
 
-	public boolean isPurchase()
+	public boolean isPurchaseMode()
 	{
-		return purchase;
+		return purchaseMode;
+	}
+
+	public boolean isEndCustomerMode() {
+		return endCustomerMode;
 	}
 
 //	protected abstract Class<? extends ArticleContainerID> getArticleContainerIDClass();
-	
+
 	protected abstract boolean acceptNewArticleContainer(Object newObjectID);
 
 	private Set<ArticleContainerID> articleContainerIDsLoaded = new HashSet<ArticleContainerID>();
@@ -169,7 +175,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 	{
 		if (children != null) {
 			Map<Object, DirtyObjectID> objectID2DirtyObjectIDMap = new HashMap<Object, DirtyObjectID>(dirtyObjectIDs.size());
-	
+
 			Set<ArticleContainerID> articleContainerIDsToLoad = new HashSet<ArticleContainerID>();
 			for (Iterator<DirtyObjectID> itDirtyObjectID = dirtyObjectIDs.iterator(); itDirtyObjectID.hasNext(); ) {
 				DirtyObjectID dirtyObjectID = itDirtyObjectID.next();
@@ -182,20 +188,20 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 					}
 				}
 			}
-	
+
 			if (!articleContainerIDsToLoad.isEmpty()) {
-		
+
 				final List<ArticleContainer> articleContainers = doLoadNewArticleContainers(articleContainerIDsToLoad, monitor);
-		
+
 				for (Iterator<ArticleContainer> it = articleContainers.iterator(); it.hasNext(); ) {
 					ArticleContainer articleContainer = it.next();
-					AnchorID vendorID = purchase ? getHeaderTreeComposite().getPartnerID() : getHeaderTreeComposite().getMyOrganisationLegalEntityID();
+					AnchorID vendorID = purchaseMode ? getHeaderTreeComposite().getPartnerID() : getHeaderTreeComposite().getMyOrganisationLegalEntityID();
 					if (!articleContainer.getVendorID().equals(vendorID)) {
 						it.remove();
 						dirtyObjectIDs.add(objectID2DirtyObjectIDMap.get(JDOHelper.getObjectId(articleContainer)));
 					}
 				}
-		
+
 				// TODO we should sort the ArticleContainers!
 				Display.getDefault().asyncExec(new Runnable()
 				{
@@ -216,7 +222,7 @@ public abstract class ArticleContainerRootTreeNode extends HeaderTreeNode.RootNo
 						}
 					}
 				});
-	
+
 			} // if (!articleContainerIDsToLoad.isEmpty()) {
 		} // if (children != null) {
 		return super.onNewElementsCreated(dirtyObjectIDs, monitor);

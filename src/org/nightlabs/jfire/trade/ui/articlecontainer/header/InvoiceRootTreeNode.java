@@ -48,9 +48,15 @@ import org.nightlabs.util.CollectionUtil;
  */
 public class InvoiceRootTreeNode extends ArticleContainerRootTreeNode
 {
-	public InvoiceRootTreeNode(HeaderTreeNode parent, boolean customerSide)
+	public InvoiceRootTreeNode(HeaderTreeNode parent, boolean purchaseMode, boolean endCustomerMode)
 	{
-		super(parent, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.InvoiceRootTreeNode.name"), parent.getHeaderTreeComposite().imageInvoiceRootTreeNode, customerSide); //$NON-NLS-1$
+		super(
+				parent,
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.InvoiceRootTreeNode.name"), //$NON-NLS-1$
+				parent.getHeaderTreeComposite().imageInvoiceRootTreeNode,
+				purchaseMode,
+				endCustomerMode
+		);
 		init();
 	}
 
@@ -71,8 +77,14 @@ public class InvoiceRootTreeNode extends ArticleContainerRootTreeNode
 	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
+		AnchorID endCustomerID = null;
+		if (isEndCustomerMode()) {
+			endCustomerID = customerID;
+			customerID = null;
+		}
+
 		return CollectionUtil.castList(
-				new InvoiceDAO().getInvoices(vendorID, customerID,
+				new InvoiceDAO().getInvoices(vendorID, customerID, endCustomerID,
 				rangeBeginIdx, rangeEndIdx,
 				FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 	}

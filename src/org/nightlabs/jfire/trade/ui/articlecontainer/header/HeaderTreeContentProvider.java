@@ -52,6 +52,7 @@ implements ITreeContentProvider
 	private static final Logger logger = Logger.getLogger(HeaderTreeContentProvider.class);
 
 	private SaleRootTreeNode saleRootTreeNode;
+	private EndCustomerRootTreeNode endCustomerRootTreeNode;
 	private PurchaseRootTreeNode purchaseRootTreeNode;
 	private RecurringRootTreeNode recurringRootTreeNode;
 	private HeaderTreeNode.RootNode[] rootNodes;
@@ -61,11 +62,13 @@ implements ITreeContentProvider
 	{
 		this.headerTreeComposite = headerTreeComposite;
 		saleRootTreeNode = new SaleRootTreeNode(headerTreeComposite);
+		endCustomerRootTreeNode = new EndCustomerRootTreeNode(headerTreeComposite);
 		purchaseRootTreeNode = new PurchaseRootTreeNode(headerTreeComposite);
 		recurringRootTreeNode = new RecurringRootTreeNode(headerTreeComposite);
 
 		rootNodes = new HeaderTreeNode.RootNode[] {
 			saleRootTreeNode,
+			endCustomerRootTreeNode,
 			purchaseRootTreeNode,
 			recurringRootTreeNode
 		};
@@ -87,11 +90,12 @@ implements ITreeContentProvider
 			private ArticleContainerLifecycleListenerFilter filter = new ArticleContainerLifecycleListenerFilter(
 					new JDOLifecycleState[] { JDOLifecycleState.NEW },
 					headerTreeComposite.getPartnerID());
-
+			@Override
 			public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 			{
 				return filter;
 			}
+			@Override
 			public void notify(JDOLifecycleEvent event)
 			{
 				Collection<DirtyObjectID> dirtyObjectIDs = new ArrayList<DirtyObjectID>(event.getDirtyObjectIDs());
@@ -116,9 +120,7 @@ implements ITreeContentProvider
 		unregisterAndRegisterListeners(true);
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
-	 */
+	@Override
 	public Object[] getChildren(Object parentElement)
 	{
 		if (parentElement instanceof HeaderTreeNode)
@@ -127,9 +129,7 @@ implements ITreeContentProvider
 			return null;
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
-	 */
+	@Override
 	public Object getParent(Object element)
 	{
 		if (element instanceof HeaderTreeNode)
@@ -138,9 +138,7 @@ implements ITreeContentProvider
 			return null;
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
-	 */
+	@Override
 	public boolean hasChildren(Object element)
 	{
 		if (element instanceof HeaderTreeNode)
@@ -149,9 +147,7 @@ implements ITreeContentProvider
 			return false;
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
-	 */
+	@Override
 	public Object[] getElements(Object inputElement)
 	{
 		if (inputElement instanceof HeaderTreeNode)
@@ -160,17 +156,13 @@ implements ITreeContentProvider
 		return rootNodes;
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-	 */
+	@Override
 	public void dispose()
 	{
 		unregisterAndRegisterListeners(false);
 	}
 
-	/**
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-	 */
+	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
 	{
 	}

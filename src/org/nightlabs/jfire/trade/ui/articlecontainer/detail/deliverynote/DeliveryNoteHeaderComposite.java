@@ -52,6 +52,7 @@ import org.nightlabs.jfire.store.jbpm.JbpmConstantsDeliveryNote;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
@@ -71,11 +72,16 @@ extends HeaderComposite
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 
+	private HeaderVendorCustomerComposite headerVendorCustomerComposite;
+
 	public DeliveryNoteHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, DeliveryNote _deliveryNote)
 	{
 		super(articleContainerEditComposite, articleContainerEditComposite, _deliveryNote);
 		this.deliveryNote = _deliveryNote;
 		getGridLayout().numColumns = 2;
+
+		headerVendorCustomerComposite = new HeaderVendorCustomerComposite(this);
+		headerVendorCustomerComposite.getGridData().horizontalSpan = getGridLayout().numColumns;
 
 		currentStateComposite = new CurrentStateComposite(this, SWT.NONE);
 		currentStateComposite.setStatable(deliveryNote);
@@ -145,5 +151,10 @@ extends HeaderComposite
 		job.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		job.setUser(true);
 		job.schedule();
+	}
+
+	@Override
+	public void refresh() {
+		headerVendorCustomerComposite.setArticleContainer(getArticleContainer());
 	}
 }

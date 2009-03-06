@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 
@@ -42,26 +43,35 @@ public class OrderHeaderComposite
 extends HeaderComposite
 {
 	private Order order;
+
+	private HeaderVendorCustomerComposite headerVendorCustomerComposite;
+
 	private Label createdLabel;
 	private Label timestamp;
 	private Label userName;
-	
+
 	public OrderHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Order _order)
 	{
 		super(articleContainerEditComposite, articleContainerEditComposite, _order);
 		this.order = _order;
-		
+
 		setLayout(new GridLayout(4, false));
-		
-		
+
+		headerVendorCustomerComposite = new HeaderVendorCustomerComposite(this);
+		headerVendorCustomerComposite.getGridData().horizontalSpan = getGridLayout().numColumns;
+
 		createdLabel = new Label(this, SWT.NONE);
 		createdLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.order.OrderHeaderComposite.createLabel.text")); //$NON-NLS-1$
 		timestamp = new Label(this, SWT.NONE);
 		timestamp.setText(DateFormatter.formatDateShortTimeHMS(order.getCreateDT(), false));
 		userName = new Label(this, SWT.NONE);
 		userName.setText(order.getCreateUser().getName());
-		
+
 		createArticleContainerContextMenu();
 	}
 
+	@Override
+	public void refresh() {
+		headerVendorCustomerComposite.setArticleContainer(getArticleContainer());
+	}
 }

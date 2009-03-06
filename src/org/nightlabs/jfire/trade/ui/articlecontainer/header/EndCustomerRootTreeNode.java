@@ -6,7 +6,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 
-public class PurchaseRootTreeNode
+public class EndCustomerRootTreeNode
 extends HeaderTreeNode.RootNode
 {
 	private HeaderTreeNode[] _children;
@@ -15,13 +15,13 @@ extends HeaderTreeNode.RootNode
 	private InvoiceRootTreeNode invoiceTreeNode;
 	private DeliveryNoteRootTreeNode deliveryNoteTreeNode;
 
-	public PurchaseRootTreeNode(HeaderTreeComposite headerTreeComposite)
+	public EndCustomerRootTreeNode(HeaderTreeComposite headerTreeComposite)
 	{
-		super(headerTreeComposite, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.PurchaseRootTreeNode.name"), headerTreeComposite.imageCustomerRootTreeNode); //$NON-NLS-1$
+		super(headerTreeComposite, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.EndCustomerRootTreeNode.name"), headerTreeComposite.imageCustomerRootTreeNode); //$NON-NLS-1$
 
-		orderTreeNode = new OrderRootTreeNode(this, true, false);
-		invoiceTreeNode = new InvoiceRootTreeNode(this, true, false);
-		deliveryNoteTreeNode = new DeliveryNoteRootTreeNode(this, true, false);
+		orderTreeNode = new OrderRootTreeNode(this, false, true);
+		invoiceTreeNode = new InvoiceRootTreeNode(this, false, true);
+		deliveryNoteTreeNode = new DeliveryNoteRootTreeNode(this, false, true);
 
 		_children = new HeaderTreeNode[] {
 				orderTreeNode,

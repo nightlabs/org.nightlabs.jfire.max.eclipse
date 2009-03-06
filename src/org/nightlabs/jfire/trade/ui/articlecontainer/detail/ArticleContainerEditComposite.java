@@ -257,7 +257,8 @@ implements ArticleContainerEdit
 					footerComposite = createFooterComposite(ArticleContainerEditComposite.this);
 
 					footerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					footerComposite.refresh();
+//					footerComposite.refresh();
+					updateHeaderAndFooter();
 
 					EditLockTypeID editLockTypeID = getEditLockTypeID();
 

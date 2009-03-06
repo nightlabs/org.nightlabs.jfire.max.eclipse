@@ -53,6 +53,7 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.AbstractCombiTransferWizard;
 import org.nightlabs.jfire.trade.ui.transfer.wizard.CombiTransferArticleContainerWizard;
@@ -72,11 +73,16 @@ extends HeaderComposite
 	private CurrentStateComposite currentStateComposite;
 	private NextTransitionComposite nextTransitionComposite;
 
+	private HeaderVendorCustomerComposite headerVendorCustomerComposite;
+
 	public InvoiceHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Invoice _invoice)
 	{
 		super(articleContainerEditComposite, articleContainerEditComposite, _invoice);
 		this.invoice = _invoice;
 		getGridLayout().numColumns = 2;
+
+		headerVendorCustomerComposite = new HeaderVendorCustomerComposite(this);
+		headerVendorCustomerComposite.getGridData().horizontalSpan = getGridLayout().numColumns;
 
 		currentStateComposite = new CurrentStateComposite(this, SWT.NONE);
 		currentStateComposite.setStatable(invoice);
@@ -152,5 +158,10 @@ extends HeaderComposite
 		job.setPriority(Job.SHORT);
 		job.setUser(true);
 		job.schedule();
+	}
+
+	@Override
+	public void refresh() {
+		headerVendorCustomerComposite.setArticleContainer(getArticleContainer());
 	}
 }

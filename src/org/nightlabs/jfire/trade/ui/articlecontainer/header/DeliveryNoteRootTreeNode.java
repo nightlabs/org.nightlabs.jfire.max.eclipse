@@ -48,9 +48,15 @@ import org.nightlabs.util.CollectionUtil;
  */
 public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 {
-	public DeliveryNoteRootTreeNode(HeaderTreeNode headerTreeNode, boolean customerSide)
+	public DeliveryNoteRootTreeNode(HeaderTreeNode headerTreeNode, boolean purchaseMode, boolean endCustomerMode)
 	{
-		super(headerTreeNode, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.DeliveryNoteRootTreeNode.name"), headerTreeNode.getHeaderTreeComposite().imageDeliveryNoteRootTreeNode, customerSide); //$NON-NLS-1$
+		super(
+				headerTreeNode,
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.DeliveryNoteRootTreeNode.name"), //$NON-NLS-1$
+				headerTreeNode.getHeaderTreeComposite().imageDeliveryNoteRootTreeNode,
+				purchaseMode,
+				endCustomerMode
+		);
 		init();
 	}
 
@@ -70,8 +76,14 @@ public class DeliveryNoteRootTreeNode extends ArticleContainerRootTreeNode
 	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
+		AnchorID endCustomerID = null;
+		if (isEndCustomerMode()) {
+			endCustomerID = customerID;
+			customerID = null;
+		}
+
 		return CollectionUtil.castList(
-				new DeliveryNoteDAO().getDeliveryNotes(vendorID, customerID,
+				new DeliveryNoteDAO().getDeliveryNotes(vendorID, customerID, endCustomerID,
 				rangeBeginIdx, rangeEndIdx,
 				FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor));
 	}

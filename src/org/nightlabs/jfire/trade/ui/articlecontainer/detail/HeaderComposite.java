@@ -47,10 +47,10 @@ public class HeaderComposite extends XComposite
 	{
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 //	    setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
-	    
+
 		this.articleContainerEditComposite = articleContainerEditComposite;
 		this.articleContainer = articleContainer;
-		
+
 //		setBackground(DEFAULT_BG_COLOR);
 //		setFont(DEFAULT_FONT);
 //		label = new Label(this, SWT.NONE);
@@ -61,9 +61,10 @@ public class HeaderComposite extends XComposite
 	public void setBgColor(Color c) {
 		bgColor = c;
 	}
-	
+
 	public static Font DEFAULT_FONT = new Font(null, "Arial", 8, SWT.BOLD); //$NON-NLS-1$ // TODO shouldn't these font infos be read from somewhere (e.g. other composites or a config?)
 	protected Font font = DEFAULT_FONT;
+
 	@Override
 	public void setFont(Font f) {
 		font = f;
@@ -76,7 +77,7 @@ public class HeaderComposite extends XComposite
 //		label.setFont(font);
 //		label.setBackground(bgColor);
 //	}
-	
+
 	/**
 	 * @return Returns the articleContainer.
 	 */
@@ -121,8 +122,12 @@ public class HeaderComposite extends XComposite
 		}
 	}
 
+	/**
+	 * This method is called on the SWT UI <code>Thread</code> whenever the current {@link ArticleContainer} was modified
+	 * and thus this <code>HeaderComposite</code> needs to be updated.
+	 */
 	public void refresh()
 	{
-		
+
 	}
 }

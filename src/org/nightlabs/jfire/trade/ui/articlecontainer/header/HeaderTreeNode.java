@@ -82,9 +82,6 @@ public abstract class HeaderTreeNode
 			this.image = image;
 		}
 
-		/**
-		 * @see org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeNode#getColumnText(int)
-		 */
 		@Override
 		public String getColumnText(int columnIndex)
 		{
@@ -105,13 +102,13 @@ public abstract class HeaderTreeNode
 			}
 		}
 	}
-	
+
 	public static abstract class ArticleContainerNode extends HeaderTreeNode {
 
 		public ArticleContainerNode(HeaderTreeNode parent, byte position) {
 			super(parent, position);
 		}
-		
+
 		public abstract ArticleContainer getArticleContainer();
 	}
 

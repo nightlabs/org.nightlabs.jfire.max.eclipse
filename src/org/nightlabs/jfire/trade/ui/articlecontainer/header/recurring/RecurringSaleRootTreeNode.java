@@ -20,14 +20,14 @@ public class RecurringSaleRootTreeNode extends HeaderTreeNode.RootNode{
 	{
 		super(parent, "Sale", parent.getHeaderTreeComposite().getImageCustomerRootTreeNode());
 
-		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, false);
+		recurringOrderTreeNode = new RecurringOrderRootTreeNode(this, false, false);
 
 		_children = new HeaderTreeNode[] {
 				recurringOrderTreeNode
 		};
-		
-		// This sub-class of HeaderTreeNode does not call init() as this would start 
-		// a job to load the children. 
+
+		// This sub-class of HeaderTreeNode does not call init() as this would start
+		// a job to load the children.
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class RecurringSaleRootTreeNode extends HeaderTreeNode.RootNode{
 			child.clear();
 		}
 	}
-	
+
 	/**
 	 * Delegates to the children.
 	 */

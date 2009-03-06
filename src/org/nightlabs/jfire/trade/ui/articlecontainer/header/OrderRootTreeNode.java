@@ -48,9 +48,15 @@ import org.nightlabs.util.CollectionUtil;
  */
 public class OrderRootTreeNode extends ArticleContainerRootTreeNode
 {
-	public OrderRootTreeNode(HeaderTreeNode parent, boolean customerSide)
+	public OrderRootTreeNode(HeaderTreeNode parent, boolean purchaseMode, boolean endCustomerMode)
 	{
-		super(parent, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.OrderRootTreeNode.name"), parent.getHeaderTreeComposite().imageOrderRootTreeNode, customerSide); //$NON-NLS-1$
+		super(
+				parent,
+				Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.OrderRootTreeNode.name"), //$NON-NLS-1$
+				parent.getHeaderTreeComposite().imageOrderRootTreeNode,
+				purchaseMode,
+				endCustomerMode
+		);
 		init();
 	}
 
@@ -71,11 +77,20 @@ public class OrderRootTreeNode extends ArticleContainerRootTreeNode
 	protected List<Object> doLoadChildElements(AnchorID vendorID, AnchorID customerID, long rangeBeginIdx, long rangeEndIdx, ProgressMonitor monitor)
 			throws Exception
 	{
+		AnchorID endCustomerID = null;
+		if (isEndCustomerMode()) {
+			endCustomerID = customerID;
+			customerID = null;
+		}
+
 		return CollectionUtil.castList(
-				OrderDAO.sharedInstance().getOrders(vendorID, customerID,
-				rangeBeginIdx, rangeEndIdx,
-				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor)
+				OrderDAO.sharedInstance().getOrders(
+						vendorID, customerID,
+						endCustomerID,
+						rangeBeginIdx,
+						rangeEndIdx, FETCH_GROUPS_ORDER,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor
+				)
 		);
 	}
 

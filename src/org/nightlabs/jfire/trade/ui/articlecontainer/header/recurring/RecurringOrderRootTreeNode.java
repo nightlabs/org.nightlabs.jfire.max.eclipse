@@ -23,17 +23,23 @@ import org.nightlabs.util.CollectionUtil;
  * @author Fitas Amine - fitas at nightlabs dot de
  */
 public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
-	
+
 	public static final String[] FETCH_GROUPS_ORDER = new String[] {
 		FetchPlan.DEFAULT,
 		Order.FETCH_GROUP_CURRENCY,
 		Order.FETCH_GROUP_CUSTOMER_ID,
 		Order.FETCH_GROUP_VENDOR_ID
 	};
-	
-	public RecurringOrderRootTreeNode(HeaderTreeNode parent, boolean customerSide)
+
+	public RecurringOrderRootTreeNode(HeaderTreeNode parent, boolean purchaseMode, boolean endCustomerMode)
 	{
-		super(parent, "Orders", parent.getHeaderTreeComposite().getImageOrderRootTreeNode(), customerSide); //$NON-NLS-1$
+		super(
+				parent,
+				"Orders", //$NON-NLS-1$
+				parent.getHeaderTreeComposite().getImageOrderRootTreeNode(),
+				purchaseMode,
+				endCustomerMode
+		);
 		init();
 	}
 
@@ -46,13 +52,22 @@ public class RecurringOrderRootTreeNode extends ArticleContainerRootTreeNode {
 	@Override
 	protected List<Object> doLoadChildElements(AnchorID vendorID,
 			AnchorID customerID, long rangeBeginIdx, long rangeEndIdx,
-			ProgressMonitor monitor) throws Exception {
-		
+			ProgressMonitor monitor
+	) throws Exception
+	{
+		AnchorID endCustomerID = null;
+		if (isEndCustomerMode()) {
+			endCustomerID = customerID;
+			customerID = null;
+		}
+
 		return CollectionUtil.castList(
-				RecurringOrderDAO.sharedInstance().getRecurringOrders(vendorID, customerID,
-				rangeBeginIdx, rangeEndIdx,
-				FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				monitor)
+				RecurringOrderDAO.sharedInstance().getRecurringOrders(
+						vendorID, customerID, endCustomerID,
+						rangeBeginIdx, rangeEndIdx,
+						FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						monitor
+				)
 		);
 	}
 

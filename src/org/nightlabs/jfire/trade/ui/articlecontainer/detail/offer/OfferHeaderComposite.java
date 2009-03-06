@@ -35,6 +35,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
@@ -64,6 +66,7 @@ import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditComposite;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderComposite;
+import org.nightlabs.jfire.trade.ui.articlecontainer.detail.HeaderVendorCustomerComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.notification.NotificationEvent;
@@ -91,9 +94,19 @@ extends HeaderComposite
 	private DateTimeControl expiryTimestampFinalized;
 	private Button expiryTimestampFinalizedAutoManaged;
 
+	private HeaderVendorCustomerComposite headerVendorCustomerComposite;
+
 	protected OfferID getOfferID()
 	{
 		return (OfferID) JDOHelper.getObjectId(offer);
+	}
+
+	private RowData headerVendorCustomerCompositeRowData;
+
+	private int getHeaderVendorCustomerCompositeRowDataWidth()
+	{
+		RowLayout rowLayout = (RowLayout)getLayout();
+		return getClientArea().width - rowLayout.marginLeft - rowLayout.marginRight - rowLayout.marginWidth;
 	}
 
 	public OfferHeaderComposite(ArticleContainerEditComposite articleContainerEditComposite, Offer offer)
@@ -102,6 +115,16 @@ extends HeaderComposite
 		this.offer = offer;
 
 		this.setLayout(new RowLayout());
+
+		headerVendorCustomerComposite = new HeaderVendorCustomerComposite(this);
+		headerVendorCustomerCompositeRowData = new RowData(getHeaderVendorCustomerCompositeRowDataWidth(), headerVendorCustomerComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		headerVendorCustomerComposite.setLayoutData(headerVendorCustomerCompositeRowData);
+		addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				headerVendorCustomerCompositeRowData.width = getHeaderVendorCustomerCompositeRowDataWidth();
+			}
+		});
 
 		currentStateComposite = new CurrentStateComposite(this, SWT.NONE);
 		currentStateComposite.setStatable(offer);
@@ -134,7 +157,7 @@ extends HeaderComposite
 
 			expiryTimestampUnfinalized.setDate(offer.getExpiryTimestampUnfinalized());
 			expiryTimestampUnfinalizedAutoManaged.setSelection(offer.isExpiryTimestampUnfinalizedAutoManaged());
-			
+
 			expiryTimestampUnfinalizedAutoManaged.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -378,4 +401,8 @@ extends HeaderComposite
 		job.schedule();
 	}
 
+	@Override
+	public void refresh() {
+		headerVendorCustomerComposite.setArticleContainer(getArticleContainer());
+	}
 }

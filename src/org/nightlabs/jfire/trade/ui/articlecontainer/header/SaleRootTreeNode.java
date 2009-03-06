@@ -19,9 +19,9 @@ extends HeaderTreeNode.RootNode
 	{
 		super(headerTreeComposite, Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.SaleRootTreeNode.name"), headerTreeComposite.imageVendorRootTreeNode); //$NON-NLS-1$
 
-		orderTreeNode = new OrderRootTreeNode(this, false);
-		invoiceTreeNode = new InvoiceRootTreeNode(this, false);
-		deliveryNoteTreeNode = new DeliveryNoteRootTreeNode(this, false);
+		orderTreeNode = new OrderRootTreeNode(this, false, false);
+		invoiceTreeNode = new InvoiceRootTreeNode(this, false, false);
+		deliveryNoteTreeNode = new DeliveryNoteRootTreeNode(this, false, false);
 
 		_children = new HeaderTreeNode[] {
 				orderTreeNode,
