@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.admin.ui.overview;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -34,6 +36,7 @@ extends AbstractEPProcessor
 	}
 	
 	protected TradeAdminOverviewRegistry() {
+		checkProcessing();
 	}
 
 	@Override
@@ -67,13 +70,17 @@ extends AbstractEPProcessor
 
 	private SortedMap<Integer, TradeAdminCategoryFactory> index2Category = new TreeMap<Integer, TradeAdminCategoryFactory>();
 	
-	public SortedMap<Integer, TradeAdminCategoryFactory> getIndex2Catgeory() {
-		checkProcessing();
-		return index2Category;
-	}
+//	public SortedMap<Integer, TradeAdminCategoryFactory> getIndex2Catgeory() {
+//		checkProcessing();
+//		return index2Category;
+//	}
 	
+	public Collection<TradeAdminCategoryFactory> getCategories()
+	{
+		return Collections.unmodifiableCollection(index2Category.values());
+	}
+
 	public TradeAdminCategoryFactory getCategory(int index) {
-		checkProcessing();
 		return index2Category.get(index);
 	}
 }

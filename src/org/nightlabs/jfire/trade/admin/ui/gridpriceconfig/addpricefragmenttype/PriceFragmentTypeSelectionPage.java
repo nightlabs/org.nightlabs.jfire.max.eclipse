@@ -102,6 +102,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 			@Override
 			public void widgetSelected(SelectionEvent event)
 			{
+				System.out.println("------> WHOA!");
 				int selIdx = priceFragmentTypeList.getSelectionIndex();
 				if (selIdx < 0)
 					selectedPriceFragmentType = null;
