@@ -501,7 +501,7 @@ public abstract class PriceConfigComposite extends XComposite
 					// The PriceFragmentTypes have already been collected from all the packaged PriceConfigs.
 					GridPriceConfig gridPriceConfig = (GridPriceConfig) packageProductType.getPackagePriceConfig();
 					if (gridPriceConfig == null) {
-						// if the package priceConfig is null in the prodcut-type we 
+						// if the package priceConfig is null in the prodcut-type we
 						// take the one created by the PriceCalculator (this might be a non-persistent temporal one)
 						gridPriceConfig = (GridPriceConfig) priceCalculator.getPackagePriceConfig();
 					}
@@ -611,7 +611,7 @@ public abstract class PriceConfigComposite extends XComposite
 
 		// remove null values - maybe not every product type has a price config assigned
 		while (priceConfigs.remove(null));
-		
+
 		priceConfigIDs = NLJDOHelper.getObjectIDSet(priceConfigs);
 		priceConfigIDs = new HashSet<PriceConfigID>(priceConfigIDs);
 
@@ -655,8 +655,17 @@ public abstract class PriceConfigComposite extends XComposite
 		// In case the new price configs have not all data that's necessary now
 		// (e.g. that's the case with DynamicTradePriceConfig, which does not store packagingResultPriceConfigs),
 		// we ensure this now:
-		if (packageProductType.getInnerPriceConfig() != null)
+		if (packageProductType.getInnerPriceConfig() != null) {
 			priceCalculator.preparePriceCalculation();
+			try {
+				// We must actually recalculate as well, because otherwise the TransientStablePriceConfig contains only 0.00
+				// in every cell (which will be shown in the UI as soon as a dimension-value is modified).
+				// See: https://www.jfire.org/modules/bugs/view.php?id=1084
+				priceCalculator.calculatePrices();
+			} catch (PriceCalculationException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
 		return true;
 	}
