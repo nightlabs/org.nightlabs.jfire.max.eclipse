@@ -79,4 +79,24 @@
             searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeSearchResultProviderFactory">
       </searchResultActionHandler>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.nightlabs.jfire.simpletrade.admin.ui"
+            name="Simple Trade">
+      </category>
+      <wizard
+            category="org.nightlabs.jfire.simpletrade.admin.ui"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeNewWizard"
+            id="org.nightlabs.jfire.simpletrade.admin.ui.create"
+            name="New Product Type">
+      </wizard>
+   </extension>
+   
+   <extension 
+   		point="org.nightlabs.base.ui.editor2perspective">
+      <registry
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor" 
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
+    </extension>
 </plugin>

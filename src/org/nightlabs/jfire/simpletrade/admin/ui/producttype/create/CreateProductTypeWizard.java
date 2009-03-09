@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.ModuleException;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
@@ -113,7 +114,6 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 	public CreateProductTypeWizard(ProductTypeID parentProductTypeID)
 	{
-		assert parentProductTypeID != null;
 		this.parentProductTypeID = parentProductTypeID;
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeWizard.windowTitle")); //$NON-NLS-1$
 	}
@@ -121,6 +121,8 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	@Override
 	public void addPages()
 	{
+		assert parentProductTypeID != null;
+		
 		productTypeNamePage = new ProductTypeNamePage(parentProductTypeID);
 		addPage(productTypeNamePage);
 
@@ -136,15 +138,12 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	public ProductTypeNamePage getProductTypeNamePage()
 	{
 		return productTypeNamePage;
-
 	}
 
 
 	@Override
 	public boolean performFinish()
 	{
-
-
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 
@@ -200,7 +199,9 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 							{
 								try {
 									ProductTypeEditorInput editorInput = new ProductTypeEditorInput(newProductTypeId);
-									RCPUtil.openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
+//									RCPUtil.openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
+									
+									Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
 								} catch (Exception e) {
 									throw new RuntimeException(e);
 								}
@@ -233,6 +234,10 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		priceConfigSelectionEnabled = enabled;
 	}
 
+	public void setParentProductTypeID(ProductTypeID parentProductTypeID) {
+		this.parentProductTypeID = parentProductTypeID;
+	}
+	
 //	/**
 //	* @return Returns the selectedNode.
 //	*/
