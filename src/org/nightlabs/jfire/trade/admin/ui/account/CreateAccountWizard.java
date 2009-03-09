@@ -28,7 +28,10 @@ package org.nightlabs.jfire.trade.admin.ui.account;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
@@ -54,13 +57,14 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class CreateAccountWizard
 extends DynamicPathWizard
+implements INewWizard
 {
+	private CreateAccountEntryWizardPage createAccountEntryWizardPage;
+	
 	public CreateAccountWizard() {
 		super();
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.windowTitle")); //$NON-NLS-1$
 	}
-
-	private CreateAccountEntryWizardPage createAccountEntryWizardPage;
 
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizard#createWizardEntryPage()
@@ -70,14 +74,6 @@ extends DynamicPathWizard
 		return new CreateAccountEntryWizardPage();
 	}
 	
-//	protected CreateAccountEntryWizardPage getCreateAccountEntryPage() {
-//		return (CreateAccountEntryWizardPage)getWizardEntryPage();
-//	}
-//
-//	private CreateAccountEntryWizardPage getEntryPage() {
-//		return (CreateAccountEntryWizardPage)getWizardEntryPage();
-//	}
-
 	@Override
 	public void addPages()
 	{
@@ -94,7 +90,8 @@ extends DynamicPathWizard
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
-	public boolean performFinish() {
+	public boolean performFinish() 
+	{
 		Account newAccount = null;
 		// TODO async => Job!
 		try {
@@ -140,6 +137,14 @@ extends DynamicPathWizard
 				new CreateAccountWizard()
 			);
 		return dlg.open() == Window.OK;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		// do nothing
 	}
 	
 }

@@ -156,4 +156,18 @@
             class="org.nightlabs.jfire.trade.admin.ui.search.GenericProductTypeSearchAdminActionHandler"
             perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective" searchResultProviderFactoryID="org.nightlabs.jfire.trade.ui.store.search.GenericProductTypeSearchResultProviderFactory"/>
     </extension>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.nightlabs.jfire.trade.accounting"
+             name="%org.nightlabs.jfire.trade.accounting.newWizard.category.name">
+       </category>
+       <wizard
+             category="org.nightlabs.jfire.trade.accounting"
+             class="org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard"
+             icon="icons/account/CreateAccountViewAction.16x16.png"
+             id="org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard"
+             name="%org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.name">
+       </wizard>
+    </extension>
 </plugin>
