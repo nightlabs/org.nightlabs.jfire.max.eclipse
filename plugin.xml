@@ -59,7 +59,7 @@
                class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
                icon="icons/producttype/subscribe/SubscribeAction.24x24.png"
                id="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
-               label="Subscribe Simple Product Types"
+               label="Subscribe simple product types"
                style="push"
                toolbarPath="additions"
                tooltip="%SubscribeAction.tooltip"/>
