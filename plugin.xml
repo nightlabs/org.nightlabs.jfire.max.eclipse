@@ -1393,4 +1393,11 @@
              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringArticleContainerEdit$RecurringFactory">
        </articleContainerEditFactory>
     </extension>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.nightlabs.jfire.trade.ui"
+             name="Trade">
+       </category>
+    </extension>
 </plugin>
