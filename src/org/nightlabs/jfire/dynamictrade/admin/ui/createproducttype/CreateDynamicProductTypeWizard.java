@@ -44,9 +44,6 @@ extends DynamicPathWizard
 
 	public CreateDynamicProductTypeWizard(ProductTypeID parentProductTypeID)
 	{
-		if (parentProductTypeID == null)
-			throw new IllegalArgumentException("parentProductTypeID must not be null.");
-
 		this.parentProductTypeID = parentProductTypeID;
 	}
 
@@ -55,6 +52,8 @@ extends DynamicPathWizard
 	@Override
 	public void addPages()
 	{
+		assert parentProductTypeID != null;
+		
 		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentProductTypeID);
 		addPage(dynamicProductTypeNamePage);
 
@@ -125,4 +124,7 @@ extends DynamicPathWizard
 		return true;
 	}
 
+	public void setParentProductTypeID(ProductTypeID parentProductTypeID) {
+		this.parentProductTypeID = parentProductTypeID;
+	}
 }

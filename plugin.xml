@@ -48,4 +48,20 @@
       </searchResultActionHandler>
    </extension>
 
+	<extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.nightlabs.jfire.trade.ui"
+            class="org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeNewWizard"
+            id="org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype"
+            name="New Dynamic Product Type">
+      </wizard>
+   </extension>
+   
+   <extension 
+   		point="org.nightlabs.base.ui.editor2perspective">
+      <registry
+            editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor" 
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
+    </extension>
 </plugin>
