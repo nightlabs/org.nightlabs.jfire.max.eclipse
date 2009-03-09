@@ -53,6 +53,7 @@
       <wizard
             category="org.nightlabs.jfire.trade.ui"
             class="org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.CreateDynamicProductTypeNewWizard"
+            icon="icons/tree/DynamicProductTypeTree$DynamicProductTypeTreeLabelProvider-INHERITANCE_NATURE_LEAF.16x16.png"
             id="org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype"
             name="New Dynamic Product Type">
       </wizard>
