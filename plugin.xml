@@ -84,6 +84,7 @@
       <wizard
             category="org.nightlabs.jfire.trade.ui"
             class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeNewWizard"
+            icon="icons/producttype/ProductTypeTree$ProductTypeTreeLabelProvider-INHERITANCE_NATURE_LEAF.16x16.png"
             id="org.nightlabs.jfire.simpletrade.admin.ui.create"
             name="New Simple Product Type">
       </wizard>
