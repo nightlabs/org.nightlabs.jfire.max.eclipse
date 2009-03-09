@@ -70,7 +70,9 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	@Override
 	protected DimensionValueSelector createDimensionValueSelector(Composite parent)
 	{
-		return new DimensionValueSelectorImpl(parent);
+		//return new DimensionValueSelectorImpl(parent);
+		return new DimensionValueSelectorImpl(parent, this);
+		
 //		return super.createDimensionValueSelector(parent);
 	}
 

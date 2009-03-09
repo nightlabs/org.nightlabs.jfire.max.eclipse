@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.CheckboxCellEditorHelper;
 import org.nightlabs.base.ui.table.TableContentProvider;
@@ -22,10 +23,18 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 
+ 
 public class PriceFragmentTypeTable
 extends AbstractTableComposite<InputPriceFragmentType>
 {
-	private ICellModifier cellModifier = new ICellModifier() {
+	private class ICellMod implements ICellModifier {
+		private PriceFragmentTypeTable pftt = null;
+		
+		public ICellMod(PriceFragmentTypeTable pftt)
+		{
+			this.pftt = pftt;
+		}
+		
 		public boolean canModify(Object element, String property)
 		{
 			return PROPERTY_INPUT.equals(property);
@@ -46,13 +55,23 @@ extends AbstractTableComposite<InputPriceFragmentType>
 			InputPriceFragmentType ipft = (InputPriceFragmentType) ((TableItem) element).getData();
 			ipft.setInput((Boolean)value);
 			getTableViewer().refresh(ipft, true);
-
+			
+			IDirtyStateManager dsm = ((DimensionValueSelectorImpl)pftt.getParent()).getPriceConfigComposite().getDirtyStateManager();
+			if (dsm != null) 
+				dsm.markDirty();
+			
+			
 			if (ipft.isInput())
 				dynamicTradePriceConfig.addInputPriceFragmentType(ipft.getPriceFragmentType());
 			else
-				dynamicTradePriceConfig.removeInputPriceFragmentType(ipft.getPriceFragmentType());
+				dynamicTradePriceConfig.removeInputPriceFragmentType(ipft.getPriceFragmentType());			
 		}
-	};
+	}
+	
+	private ICellModifier cellModifier = new ICellMod(this);
+	
+	
+	
 
 	private TableLabelProvider labelProvider = new TableLabelProvider()
 	{

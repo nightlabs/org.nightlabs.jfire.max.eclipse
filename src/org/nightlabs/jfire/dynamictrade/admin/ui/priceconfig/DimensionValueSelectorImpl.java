@@ -21,11 +21,18 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValue.PriceFr
 public class DimensionValueSelectorImpl
 extends DimensionValueSelectorComboImpl
 {
+	private PriceConfigComposite pcComp = null; 	// Kai
 
 	public DimensionValueSelectorImpl(Composite parent)
 	{
 		super(parent, SWT.NONE);
 		getGridData().grabExcessVerticalSpace = true;
+	}
+	
+	public DimensionValueSelectorImpl(Composite parent, PriceConfigComposite pcComp)
+	{
+		this(parent);
+		this.pcComp = pcComp;
 	}
 
 	private PriceFragmentTypeTable priceFragmentTypeTable;
@@ -34,6 +41,7 @@ extends DimensionValueSelectorComboImpl
 	protected void createDimensionUIElements(Label[] dimensionLabels, Combo[] dimensionCombos, int dimensionIdx, Dimension<?> dimension)
 	{
 		if (dimension instanceof Dimension.PriceFragmentTypeDimension) {
+			System.out.printf("\n~~~~~>> this:[%s]  this.parent():[%s]\n\n", this, this.getParent());
 			priceFragmentTypeTable = new PriceFragmentTypeTable(this);
 			priceFragmentTypeTable.addSelectionChangedListener(new ISelectionChangedListener() {
 				public void selectionChanged(SelectionChangedEvent event)
@@ -121,4 +129,8 @@ extends DimensionValueSelectorComboImpl
 			super.setDimensionEnabled(dimensionIdx, enabled);
 	}
 
+	public PriceConfigComposite getPriceConfigComposite()
+	{
+		return this.pcComp;
+	}
 }
