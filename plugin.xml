@@ -199,7 +199,7 @@
              class="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
              icon="icons/issue/ProjectTreeComposite-Create.16x16.png"
              id="org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard"
-             name="Project">
+             name="%org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectWizard.name">
        </wizard>
     </extension>
 </plugin>
