@@ -56,6 +56,7 @@ extends AbstractTableComposite<InputPriceFragmentType>
 			ipft.setInput((Boolean)value);
 			getTableViewer().refresh(ipft, true);
 			
+			// Automatically makes the parent-composite dirty.
 			IDirtyStateManager dsm = ((DimensionValueSelectorImpl)pftt.getParent()).getPriceConfigComposite().getDirtyStateManager();
 			if (dsm != null) 
 				dsm.markDirty();
