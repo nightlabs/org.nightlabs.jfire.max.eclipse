@@ -36,8 +36,6 @@ extends DynamicPathWizard
 	public CreateVoucherTypeWizard(ProductTypeID parentVoucherTypeID)
 	{
 		this.parentVoucherTypeID = parentVoucherTypeID;
-		if (parentVoucherTypeID == null)
-			throw new IllegalArgumentException("parentVoucherTypeID must not be null!"); //$NON-NLS-1$
 	}
 
 	private VoucherTypeNamePage voucherTypeNamePage;
@@ -47,6 +45,8 @@ extends DynamicPathWizard
 	@Override
 	public void addPages()
 	{
+		assert parentVoucherTypeID != null;
+		
 		voucherTypeNamePage = new VoucherTypeNamePage(parentVoucherTypeID);
 		addPage(voucherTypeNamePage);
 
@@ -169,5 +169,9 @@ extends DynamicPathWizard
 		job.setPriority(Job.SHORT);
 		job.schedule();
 		return true;
+	}
+	
+	public void setParentVoucherTypeID(ProductTypeID parentVoucherTypeID) {
+		this.parentVoucherTypeID = parentVoucherTypeID;
 	}
 }

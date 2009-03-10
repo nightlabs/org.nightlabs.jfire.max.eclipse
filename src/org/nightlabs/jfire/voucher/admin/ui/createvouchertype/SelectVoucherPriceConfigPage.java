@@ -274,17 +274,21 @@ extends WizardHopPage
 	@Override
 	public boolean isPageComplete()
 	{
-		switch (mode) {
-		case INHERIT:
-			return true;
-		case CREATE:
-			return true;
-		case SELECT:
-			return getSelectedPriceConfig() != null;
-		case NONE:
-			return true;
-		default:
-			throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
-		}
+		if (mode != null)
+			switch (mode) {
+			case INHERIT:
+				return true;
+			case CREATE:
+				return true;
+			case SELECT:
+				return getSelectedPriceConfig() != null;
+			case NONE:
+				return true;
+			default:
+				throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
+			}
+
+		else
+			return false;
 	}
 }

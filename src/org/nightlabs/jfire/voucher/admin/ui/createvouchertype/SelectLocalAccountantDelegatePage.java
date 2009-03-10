@@ -245,7 +245,8 @@ extends WizardHopPage
 	@Override
 	public boolean isPageComplete()
 	{
-		switch (mode) {
+		if (mode != null) {
+			switch (mode) {
 			case INHERIT:
 				return true;
 			case CREATE:
@@ -254,7 +255,10 @@ extends WizardHopPage
 				return getSelectedLocalAccountantDelegate() != null;
 			default:
 				throw new IllegalStateException("What's this?!"); //$NON-NLS-1$
+			}
 		}
+		else
+			return false;
 	}
 
 	public VoucherLocalAccountantDelegate getInheritedLocalAccountantDelegate()

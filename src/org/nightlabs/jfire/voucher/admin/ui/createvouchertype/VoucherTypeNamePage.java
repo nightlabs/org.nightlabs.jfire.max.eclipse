@@ -150,6 +150,7 @@ public class VoucherTypeNamePage extends DynamicPathWizardPage
 	public boolean isPageComplete()
 	{
 //		return !"".equals(voucherTypeNameEditor.getEditText());
-		return !voucherTypeNameBuffer.isEmpty();
+		
+		return voucherTypeNameBuffer != null && !voucherTypeNameBuffer.isEmpty();
 	}
 }
