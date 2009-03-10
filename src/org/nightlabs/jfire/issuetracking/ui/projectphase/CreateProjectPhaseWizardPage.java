@@ -102,11 +102,6 @@ public class CreateProjectPhaseWizardPage extends DynamicPathWizardPage
 	}
 	
 	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete();
-	}
-	
-	@Override
 	public boolean isPageComplete()
 	{
 		boolean result = true;
