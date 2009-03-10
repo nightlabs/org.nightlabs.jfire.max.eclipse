@@ -244,7 +244,7 @@ extends DynamicPathWizardPage
 	@Override
 	public boolean isPageComplete()
 	{
-		return !productTypeNameBuffer.isEmpty();
+		return productTypeNameBuffer != null && !productTypeNameBuffer.isEmpty();
 	}
 
 	private void setPackageNatureDescription()
