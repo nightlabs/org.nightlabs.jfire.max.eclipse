@@ -10,9 +10,9 @@
 	<classpathentry sourcepath="/WORKSPACE/org.holongate.draw2d/src" kind="var" path="ECLIPSE_HOME/plugins/org.holongate.draw2d_2.3.0/holongate-draw2d.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
-	<classpathentry sourcepath="JPOX_SRC" kind="var" path="JDO2">
+	<classpathentry kind="var" path="JDO2" sourcepath="/JDO2_SRC">
 		<attributes>
-			<attribute value="file:/home/tobias/java/jdo_javadoc/apidocs/" name="javadoc_location"/>
+			<attribute name="javadoc_location" value="http://db.apache.org/jdo/api22/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
