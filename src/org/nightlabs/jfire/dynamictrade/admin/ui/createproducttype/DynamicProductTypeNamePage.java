@@ -149,6 +149,6 @@ public class DynamicProductTypeNamePage extends DynamicPathWizardPage
 	@Override
 	public boolean isPageComplete()
 	{
-		return !dynamicProductTypeNameBuffer.isEmpty();
+		return dynamicProductTypeNameBuffer != null && !dynamicProductTypeNameBuffer.isEmpty();
 	}
 }
