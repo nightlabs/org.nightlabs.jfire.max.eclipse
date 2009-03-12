@@ -25,6 +25,7 @@ import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issue.query.IssueQuery;
+import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectAdminTreeComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
@@ -166,9 +167,10 @@ extends AbstractQueryFilterComposite<IssueQuery>
 
 	private void automateParentCheck(ProjectTreeNode parentNode) {
 		if (parentNode != null) {
-			List<JDOObjectTreeNode> childCheckedNodes = parentNode.getChildNodes();
+			// Kai: Added compliance to the generic definitions in JDOObjectTreeNode.
+			List<JDOObjectTreeNode<ProjectID, Project, ActiveProjectTreeController>> childCheckedNodes = parentNode.getChildNodes();
 			boolean needChecking = false;
-			for (JDOObjectTreeNode childCheckedNode : childCheckedNodes) {
+			for (JDOObjectTreeNode<ProjectID, Project, ActiveProjectTreeController> childCheckedNode : childCheckedNodes) {
 				if (checkboxTreeViewer.getChecked(childCheckedNode)) {
 					needChecking = true;
 					break;
