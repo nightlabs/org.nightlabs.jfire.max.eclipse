@@ -173,10 +173,10 @@ implements ISelectionProvider
 				return simpleProductType.getName().getText(NLLocale.getDefault().getLanguage());
 
 			if (++ci == columnIndex)
-				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : voucher.getVoucherKey().getVoucherKey(); //$NON-NLS-1$
+				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : voucher.getVoucherKey().getVoucherKey(); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (++ci == columnIndex)
-				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : getValidity(voucher.getVoucherKey()); //$NON-NLS-1$
+				return voucher == null ? "" : voucher.getVoucherKey() == null ? "" : getValidity(voucher.getVoucherKey()); //$NON-NLS-1$ //$NON-NLS-2$
 
 			if (++ci == columnIndex) {
 				return ""; // allocationStatus is displayed using images //$NON-NLS-1$
@@ -197,7 +197,7 @@ implements ISelectionProvider
 					return ""; // Long.toString(article.getInvoiceID().invoiceID); //$NON-NLS-1$
 
 				if (++ci == columnIndex)
-					return ""; // invoice's paid status
+					return ""; // invoice's paid status //$NON-NLS-1$
 			}
 
 			if (!isInDeliveryNote()) {
@@ -206,7 +206,7 @@ implements ISelectionProvider
 			}
 
 			if (++ci == columnIndex)
-				return ""; // Article's delivered status
+				return ""; // Article's delivered status //$NON-NLS-1$
 
 			if (++ci == columnIndex) {
 				ArticlePrice price = article.getPrice();
@@ -289,8 +289,8 @@ implements ISelectionProvider
 			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.invoiceTableColumn.text"));			 //$NON-NLS-1$
 
 			col = new TableColumn(table, SWT.LEFT);
-			col.setText("Paid");
-			col.setToolTipText("The invoice of this article has been paid completely.");
+			col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.paidColumn.text")); //$NON-NLS-1$
+			col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.paidColumn.toolTip.text")); //$NON-NLS-1$
 		}
 
 		if (!isInDeliveryNote()) {
@@ -300,8 +300,8 @@ implements ISelectionProvider
 		}
 
 		col = new TableColumn(table, SWT.LEFT);
-		col.setText("Delivered");
-		col.setToolTipText("The article has been delivered.");
+		col.setText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.deliveredColumn.text")); //$NON-NLS-1$
+		col.setToolTipText(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleTable.deliveredColumn.toolTip")); //$NON-NLS-1$
 		//////////// END Order, Offer, Invoice, DeliveryNote //////////
 
 		TableColumn columnPrice = new TableColumn(table, SWT.RIGHT);

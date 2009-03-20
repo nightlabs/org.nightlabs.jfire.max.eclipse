@@ -50,23 +50,22 @@ extends AbstractProductTypeQuickListFilter
 		return Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.displayName"); //$NON-NLS-1$
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void search(ProgressMonitor monitor)
 	{
-		monitor.beginTask("Searching VoucherTypes", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.searchTask.name"), 100); //$NON-NLS-1$
 		final QueryCollection<VendorDependentQuery> queryCollection = getQueryCollection(new SubProgressMonitor(monitor, 50));
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
 			QuickListFilterQueryResult<Collection<ProductType>> cacheResult = (QuickListFilterQueryResult<Collection<ProductType>>) Cache.sharedInstance().get(
-					null, cacheKey, 
+					null, cacheKey,
 					FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			if (cacheResult == null) {
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						if (voucherTypeTable.isDisposed())
 							return;
-						voucherTypeTable.setLoadingMessage("Searching VoucherTypes");
+						voucherTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.table.loadingMessage")); //$NON-NLS-1$
 					}
 				});
 				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
@@ -74,9 +73,9 @@ extends AbstractProductTypeQuickListFilter
 						FETCH_GROUPS_VOUCHER_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
-				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);				
+				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);
 				Cache.sharedInstance().put(
-						null, cacheKey, cacheResult, 
+						null, cacheKey, cacheResult,
 						FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			}
 			final Collection<ProductType> voucherTypes = cacheResult.getResult();

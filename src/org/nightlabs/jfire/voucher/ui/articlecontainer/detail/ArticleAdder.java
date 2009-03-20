@@ -25,6 +25,7 @@ import org.nightlabs.jfire.voucher.VoucherManager;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.jfire.voucher.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class ArticleAdder
@@ -109,7 +110,7 @@ extends AbstractArticleAdder
 		if (!getProductType().getPackagePriceConfig().containsCurrency(currency))
 			return new MessageComposite(
 					parent, SWT.NONE,
-					String.format("The price configuration of the voucher \"%s\" does not contain the currency \"%s\".", getProductType().getName().getText(), currency.getCurrencySymbol(), currency.getCurrencyID()),
+					String.format(Messages.getString("org.nightlabs.jfire.voucher.ui.articlecontainer.detail.ArticleAdder.priceConfigDoesNotContainCurrencyMessage"), getProductType().getName().getText(), currency.getCurrencySymbol(), currency.getCurrencyID()), //$NON-NLS-1$
 					MessageType.WARNING
 			);
 

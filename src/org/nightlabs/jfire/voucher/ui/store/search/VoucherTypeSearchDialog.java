@@ -45,7 +45,7 @@ extends AbstractProductTypeSearchDialog
 	public void create() {
 		super.create();
 		setTitleImage(SharedImages.getSharedImage(
-				VoucherPlugin.getDefault(), VoucherTypeSearchDialog.class, "", 
+				VoucherPlugin.getDefault(), VoucherTypeSearchDialog.class, "",  //$NON-NLS-1$
 				ImageDimension._75x70, ImageFormat.png));
 	}
 	
