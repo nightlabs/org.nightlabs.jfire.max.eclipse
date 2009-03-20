@@ -23,6 +23,7 @@ Export-Package: org.nightlabs.jfire.trade.admin.ui,
  org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.addtariff,
  org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard,
  org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference,
+ org.nightlabs.jfire.trade.admin.ui.layout,
  org.nightlabs.jfire.trade.admin.ui.moneyflow,
  org.nightlabs.jfire.trade.admin.ui.moneyflow.edit,
  org.nightlabs.jfire.trade.admin.ui.moneyflow.fragmentbased,
@@ -40,5 +41,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.editors,
  org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jseditor.ui;visibility:=reexport,
- org.nightlabs.jfire.base.admin.ui;visibility:=reexport
+ org.nightlabs.jfire.base.admin.ui;visibility:=reexport,
+ org.nightlabs.editor2d.ui;bundle-version="1.0.7"
 Eclipse-LazyStart: true
