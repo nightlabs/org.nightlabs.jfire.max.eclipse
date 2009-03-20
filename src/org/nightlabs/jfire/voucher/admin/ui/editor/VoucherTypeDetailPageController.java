@@ -2,7 +2,6 @@ package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import java.io.File;
 
-import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
@@ -26,6 +25,8 @@ public class VoucherTypeDetailPageController
 extends AbstractProductTypeDetailPageController<VoucherType>
 {
 	private static final long serialVersionUID = 1L;
+	
+	private VoucherLayout voucherLayout;
 
 	/**
 	 * @param editor
@@ -102,12 +103,20 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 	@Override
 	protected VoucherType storeProductType(VoucherType voucherType, ProgressMonitor monitor)
 	{
-		// TODO: WORKAROUND: Why is the access to the page here ?!? Alex
-		for (IFormPage page : getPages()) {
-			if (page instanceof VoucherTypeDetailPage) {
-				createVoucherLayout((VoucherTypeDetailPage) page);
-			}
+//		I'm not quite sure what this code here is supposed to do. But since I introduced the new handling of voucher layouts, where they
+//		first have to be uploaded to the server in order to assign them, I think this code here is obsolete now. Tobias.
+//
+//		// TODO: WORKAROUND: Why is the access to the page here ?!? Alex
+//		for (IFormPage page : getPages()) {
+//			if (page instanceof VoucherTypeDetailPage) {
+//				createVoucherLayout((VoucherTypeDetailPage) page);
+//			}
+//		}
+		
+		if (voucherLayout != null) {
+			getVoucherType().setVoucherLayout(voucherLayout);
 		}
+		
 		try {
 			VoucherManager voucherManager = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
 			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -118,5 +127,9 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 	protected VoucherType getVoucherType() {
 		return getProductType();
+	}
+
+	public void setVoucherLayout(VoucherLayout selectedLayout) {
+		this.voucherLayout = selectedLayout;
 	}
 }

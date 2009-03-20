@@ -1,66 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
 <plugin>
-   <extension
-         point="org.nightlabs.base.ui.entityEditor">
-      <pageFactory
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
             class="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage$Factory"
-            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
-            indexHint="100"/>
-      <pageFactory
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" indexHint="100"/>
+        <pageFactory
             class="org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage$Factory"
-            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
-            indexHint="300"/>
-      <pageFactory
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" indexHint="300"/>
+        <pageFactory
             class="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"
-            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
-            indexHint="200">
-      </pageFactory>
-   </extension>            
-    
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" indexHint="200"/>
+        <pageFactory
+            class="org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherLayoutPage$Factory"
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" indexHint="300"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
             class="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
             default="false"
             icon="icons/editor/VoucherTypeEditor.16x16.png"
             id="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
-            matchingStrategy="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditorMatchingStrategy"
-            name="Voucher Type Editor"/>
-   </extension>
-   <extension
-         point="org.nightlabs.jfire.trade.admin.ui.overview">
-      <category
+            matchingStrategy="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditorMatchingStrategy" name="%org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor.name"/>
+    </extension>
+    <extension point="org.nightlabs.jfire.trade.admin.ui.overview">
+        <category
             class="org.nightlabs.jfire.voucher.admin.ui.overview.VoucherTypeCategoryFactory"
             icon="icons/overview/VoucherTypeCategoryFactory.16x16.png"
-            index="700"
-            name="%org.nightlabs.jfire.voucher.admin.ui.overview.VoucherTypeCategoryFactory.name">
-      </category>
-   </extension>
-   <extension
-         point="org.nightlabs.base.ui.searchResultProvider">
-      <searchResultActionHandler
+            index="700" name="%org.nightlabs.jfire.voucher.admin.ui.overview.VoucherTypeCategoryFactory.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.searchResultProvider">
+        <searchResultActionHandler
             class="org.nightlabs.jfire.voucher.admin.ui.store.search.VoucherTypeSearchAdminActionHandler"
-            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
-            searchResultProviderFactoryID="org.nightlabs.jfire.voucher.ui.store.search.VoucherTypeSearchResultProviderFactory">
-      </searchResultActionHandler>
-   </extension>
-
-	<extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            category="org.nightlabs.jfire.trade.ui"
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective" searchResultProviderFactoryID="org.nightlabs.jfire.voucher.ui.store.search.VoucherTypeSearchResultProviderFactory"/>
+    </extension>
+    <extension point="org.eclipse.ui.newWizards">
+        <wizard category="org.nightlabs.jfire.trade.ui"
             class="org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeNewWizard"
             icon="icons/tree/VoucherTypeTree$VoucherTypeTreeLabelProvider-INHERITANCE_NATURE_LEAF.16x16.png"
-            id="org.nightlabs.jfire.voucher.admin.ui.createvouchertype"
-            name="New Voucher Type">
-      </wizard>
-   </extension>
-   
-   <extension 
-   		point="org.nightlabs.base.ui.editor2perspective">
-      <registry
-            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" 
-            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
+            id="org.nightlabs.jfire.voucher.admin.ui.createvouchertype" name="%org.nightlabs.jfire.voucher.admin.ui.createvouchertype.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+            editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor" perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
+    </extension>
+    <extension point="org.eclipse.ui.preferencePages">
+        <page
+            category="org.nightlabs.jfire.trade.ui.preference.TradePreferencePage"
+            class="org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherLayoutPreferencePage"
+            id="org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherLayoutPreferencePage" name="%org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherLayoutPreferencePage.name"/>
     </extension>
 </plugin>

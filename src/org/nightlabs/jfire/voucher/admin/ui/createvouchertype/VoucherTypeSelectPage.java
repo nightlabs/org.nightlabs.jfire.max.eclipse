@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 
@@ -24,8 +25,8 @@ extends DynamicPathWizardPage
 	 */
 	public VoucherTypeSelectPage()
 	{
-		super(VoucherTypeSelectPage.class.getName(), "Title");
-		this.setDescription("Description");
+		super(VoucherTypeSelectPage.class.getName(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeSelectPage.title")); //$NON-NLS-1$
+		this.setDescription(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.VoucherTypeSelectPage.description")); //$NON-NLS-1$
 	}
  
 	/**
