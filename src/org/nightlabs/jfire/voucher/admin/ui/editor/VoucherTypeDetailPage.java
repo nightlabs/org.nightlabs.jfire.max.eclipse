@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -12,9 +11,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPage;
-import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypePageController;
 import org.nightlabs.jfire.trade.admin.ui.editor.IProductTypeSectionPart;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerConfigSection;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.VendorConfigSection;
@@ -72,20 +69,20 @@ extends AbstractProductTypeDetailPage
 				Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPage.title")); //$NON-NLS-1$
 	}
 
-	private VoucherLayoutSection voucherLayoutSection = null;
-	public VoucherLayoutSection getVoucherLayoutSection() {
-		return voucherLayoutSection;
-	}
+//	private VoucherLayoutSection voucherLayoutSection = null;
+//	public VoucherLayoutSection getVoucherLayoutSection() {
+//		return voucherLayoutSection;
+//	}
 
-	@Override
-	protected void addSections(Composite parent)
-	{
-		super.addSections(parent);
-
-		voucherLayoutSection = new VoucherLayoutSection(this, parent);
-		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		getManagedForm().addPart(voucherLayoutSection);
-	}
+//	@Override
+//	protected void addSections(Composite parent)
+//	{
+//		super.addSections(parent);
+//
+//		voucherLayoutSection = new VoucherLayoutSection(this, parent);
+//		voucherLayoutSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		getManagedForm().addPart(voucherLayoutSection);
+//	}
 
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
@@ -93,16 +90,14 @@ extends AbstractProductTypeDetailPage
 		final VoucherType voucherType = controller.getProductType();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				setProductTypePageController((AbstractProductTypePageController) getPageController());
-				if (voucherLayoutSection != null
-						&& !voucherLayoutSection.getSection().isDisposed()) {
-
-					voucherLayoutSection.getVoucherLayoutComposite()
-							.setVoucherType(voucherType);
-					getNameSection().setProductTypePageController((AbstractProductTypePageController<ProductType>)getPageController());
-					getSaleAccessControlSection().setProductTypePageController((AbstractProductTypePageController<ProductType>)getPageController());
-
-				}
+				setProductTypePageController(getPageController());
+//				if (voucherLayoutSection != null
+//						&& !voucherLayoutSection.getSection().isDisposed()) {
+//
+//					voucherLayoutSection.getVoucherLayoutComposite().setVoucherType(voucherType);
+//				}
+				getNameSection().setProductTypePageController(getPageController());
+				getSaleAccessControlSection().setProductTypePageController(getPageController());
 
 				if (voucherType.isClosed()) {
 					getManagedForm().getForm().getForm().setMessage(

@@ -1,13 +1,10 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor;
 
-import java.io.File;
-
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.jfire.voucher.VoucherManager;
@@ -51,29 +48,29 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			}
 	);
 
-	protected void createVoucherLayout(VoucherTypeDetailPage page)
-	{
-		if (page.getVoucherLayoutSection().getVoucherLayoutComposite() == null) // no UI created, yet
-			return;
-
-		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
-		VoucherLayout voucherLayout = getVoucherType().getVoucherLayout();
-		if (voucherLayout == null) {
-			voucherLayout = new VoucherLayout(IDGenerator.getOrganisationID(),
-					IDGenerator.nextID(VoucherLayout.class));
-		}
-		try {
-			if (selectedFile != null) {
-				voucherLayout.loadFile(selectedFile);
-				voucherLayout.saveFile(selectedFile);
-				getVoucherType().setVoucherLayout(voucherLayout);
-				getVoucherType().getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
-				// TODO: inheritance should be controllable by UI. Marco.
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	protected void createVoucherLayout(VoucherTypeDetailPage page)
+//	{
+//		if (page.getVoucherLayoutSection().getVoucherLayoutComposite() == null) // no UI created, yet
+//			return;
+//
+//		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
+//		VoucherLayout voucherLayout = getVoucherType().getVoucherLayout();
+//		if (voucherLayout == null) {
+//			voucherLayout = new VoucherLayout(IDGenerator.getOrganisationID(),
+//					IDGenerator.nextID(VoucherLayout.class));
+//		}
+//		try {
+//			if (selectedFile != null) {
+//				voucherLayout.loadFile(selectedFile);
+//				voucherLayout.saveFile(selectedFile);
+//				getVoucherType().setVoucherLayout(voucherLayout);
+//				getVoucherType().getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
+//				// TODO: inheritance should be controllable by UI. Marco.
+//			}
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 	@Override
 	protected String[] getEntityFetchGroups() {
@@ -114,7 +111,9 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 //		}
 		
 		if (voucherLayout != null) {
-			getVoucherType().setVoucherLayout(voucherLayout);
+			voucherType.setVoucherLayout(voucherLayout);
+			voucherType.getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
+			// TODO Inheritance should be controllable by UI. Tobias
 		}
 		
 		try {

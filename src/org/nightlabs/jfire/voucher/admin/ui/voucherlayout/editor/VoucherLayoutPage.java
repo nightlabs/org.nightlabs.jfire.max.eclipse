@@ -60,13 +60,13 @@ public class VoucherLayoutPage extends EntityEditorPageWithProgress {
 	
 	private VoucherLayout assignedVoucherLayout;
 	
-	protected void assignVoucherLayout(VoucherLayout ticketLayout) {
-		assignedVoucherLayout = ticketLayout;
+	protected void assignVoucherLayout(VoucherLayout voucherLayout) {
+		assignedVoucherLayout = voucherLayout;
 		
-		assignedVoucherLayoutSection.setVoucherLayout(ticketLayout);
-		remoteVoucherLayoutSection.selectVoucherLayout(ticketLayout);
+		assignedVoucherLayoutSection.setVoucherLayout(voucherLayout);
+		remoteVoucherLayoutSection.selectVoucherLayout(voucherLayout);
 		
-		remoteVoucherLayoutSection.markDirty();
+		assignedVoucherLayoutSection.markDirty();
 	}
 	
 	protected VoucherLayout getAssignedVoucherLayout() {
