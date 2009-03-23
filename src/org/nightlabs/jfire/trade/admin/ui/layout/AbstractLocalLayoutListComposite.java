@@ -135,7 +135,6 @@ public abstract class AbstractLocalLayoutListComposite<L extends ILayout> extend
 				for (File tldFile : baseDirectory.listFiles(ticketLayoutFilenameFilter)) {
 					try {
 						ILayout layout = createLayoutFromFile(tldFile);
-						layout.loadFile(tldFile);
 						layouts.add(layout);
 					} catch (IOException e) {
 						logger.info("Loading the ticket layout file '" + tldFile.getPath() + "' failed.", e); //$NON-NLS-1$ //$NON-NLS-2$

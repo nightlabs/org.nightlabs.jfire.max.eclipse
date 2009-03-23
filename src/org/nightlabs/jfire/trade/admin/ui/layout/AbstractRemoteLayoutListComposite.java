@@ -27,6 +27,8 @@ public abstract class AbstractRemoteLayoutListComposite<ID, L extends ILayout> e
 		if (load) {
 			layoutTable.load();
 		}
+		
+		layout(true, true);
 	}
 	
 	public L getSelectedLayout() {
