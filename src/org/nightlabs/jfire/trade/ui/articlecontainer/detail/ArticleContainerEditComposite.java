@@ -373,8 +373,8 @@ implements ArticleContainerEdit
 	 * @param parent The parent to use for the new composite.
 	 * @return A newly created {@link HeaderComposite}.
 	 */
-	protected HeaderComposite createHeaderComposite(Composite parent) {
-
+	protected HeaderComposite createHeaderComposite(Composite parent) 
+	{
 		if (articleContainer instanceof Order)
 			return new OrderHeaderComposite(this, (Order) articleContainer);
 		if(articleContainer instanceof Offer)

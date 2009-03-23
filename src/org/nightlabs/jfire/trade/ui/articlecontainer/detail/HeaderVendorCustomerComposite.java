@@ -9,7 +9,7 @@ import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -21,11 +21,17 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.person.search.PersonEditWizard;
+import org.nightlabs.jfire.person.Person;
+import org.nightlabs.jfire.prop.StructLocal;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
 
 public class HeaderVendorCustomerComposite extends XComposite
@@ -43,6 +49,10 @@ public class HeaderVendorCustomerComposite extends XComposite
 	private AnchorID endCustomerID;
 	private LegalEntity endCustomer;
 
+	private Job activeJob;
+	
+	private static final String[] LEGAL_ENTITY_FETCH_GROUPS = new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON };
+	
 	public HeaderVendorCustomerComposite(Composite parent) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		this.getGridLayout().numColumns = 3;
@@ -86,8 +96,6 @@ public class HeaderVendorCustomerComposite extends XComposite
 		hyperlink.setText("");
 		return hyperlink;
 	}
-
-	private Job activeJob;
 
 	private static void updateLegalEntityHyperlink(Hyperlink hyperlink, LegalEntity legalEntity, boolean loading)
 	{
@@ -156,7 +164,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 
 				final Collection<? extends LegalEntity> legalEntities = LegalEntityDAO.sharedInstance().getLegalEntities(
 						anchorIDs,
-						new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON },
+						LEGAL_ENTITY_FETCH_GROUPS,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						monitor
 				);
@@ -199,6 +207,35 @@ public class HeaderVendorCustomerComposite extends XComposite
 		if (legalEntityID == null)
 			return; // silently ignore
 
-		MessageDialog.openInformation(getShell(), "Test", "Clicked for legal entity: " + legalEntityID);
+//		MessageDialog.openInformation(getShell(), "Test", "Clicked for legal entity: " + legalEntityID);
+		LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, 
+				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, Person.FETCH_GROUP_FULL_DATA}, 
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		if (!legalEntity.isAnonymous() && legalEntity != null) 
+		{
+			Person person = legalEntity.getPerson();
+			StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
+					person.getStructLocalObjectID(), new NullProgressMonitor()
+			);
+			person.inflate(structLocal);			
+			PersonEditWizard wizard = new PersonEditWizard(person);
+			DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wizard);
+			int returnCode = dlg.open();
+			if (returnCode == Window.OK) {
+				if (legalEntityID.equals(customerID)) {
+					customer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				}
+				else if (legalEntityID.equals(vendorID)) {
+					vendor = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				}
+				else if (legalEntityID.equals(endCustomerID)) {
+					endCustomer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				}				
+				updateUI();
+			}
+		}
 	}
 }
