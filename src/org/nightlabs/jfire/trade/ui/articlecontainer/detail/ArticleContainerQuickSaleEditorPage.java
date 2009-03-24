@@ -113,7 +113,9 @@ extends ArticleContainerEditorPage
 	}
 
 	protected void createComposite(Composite parent, ArticleContainerID articleContainerID) {
+//		getArticleContainerEdit().setShowHeader(false);
 		getArticleContainerEdit().createComposite(parent);
+		getArticleContainerEdit().setShowHeader(false);
 		XComposite wrapper = new XComposite(parent, SWT.NONE, LayoutDataMode.GRID_DATA_HORIZONTAL);
 
 		buttonComp = new XComposite(wrapper, SWT.NONE);

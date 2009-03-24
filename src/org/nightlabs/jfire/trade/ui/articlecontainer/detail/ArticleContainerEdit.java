@@ -114,4 +114,6 @@ public interface ArticleContainerEdit
 	
 	void setArticleContainerEditActionContributor(IArticleContainerEditActionContributor actionContributor);
 	IArticleContainerEditActionContributor getArticleContainerEditActionContributor();
+	
+	void setShowHeader(boolean showHeader);
 }

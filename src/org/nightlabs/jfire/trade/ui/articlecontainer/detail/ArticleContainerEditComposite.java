@@ -234,7 +234,9 @@ implements ArticleContainerEdit
 
 					headerComposite = createHeaderComposite(ArticleContainerEditComposite.this);
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+					
+					setShowHeader(showHeader);
+					
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditComposite.this behaviour must be supported
@@ -453,8 +455,11 @@ implements ArticleContainerEdit
 		return articleSegmentGroupSet.getArticleSegmentGroups().size() > 1;
 	}
 
-	protected void updateHeaderAndFooter() {
-		headerComposite.refresh();
+	protected void updateHeaderAndFooter() 
+	{
+		if (headerComposite != null)
+			headerComposite.refresh();
+		
 		footerComposite.refresh();
 		if (logger.isDebugEnabled())
 			logger.debug("updateHeaderAndFooter"); //$NON-NLS-1$
@@ -1092,5 +1097,20 @@ implements ArticleContainerEdit
 	@Override
 	public void init(ArticleContainerID articleContainerID) {
 		// Noop, initialized in constructor.
+	}
+	
+	private boolean showHeader = true;
+	@Override
+	public void setShowHeader(boolean showHeader) 
+	{
+		this.showHeader = showHeader;
+		if (headerComposite != null && !headerComposite.isDisposed()) {
+			Object layoutData = headerComposite.getLayoutData();
+			if (layoutData instanceof GridData) {
+				GridData gd = (GridData) layoutData;
+				gd.exclude = !showHeader;
+				headerComposite.getParent().layout(true, true);
+			}			
+		}
 	}
 }

@@ -154,4 +154,8 @@ public class DefaultArticleContainerEdit implements ArticleContainerEdit {
 		return getComposite().getArticleContainerEditActionContributor();
 	}
 
+	@Override
+	public void setShowHeader(boolean showHeader) {
+		getComposite().setShowHeader(showHeader);
+	}
 }
