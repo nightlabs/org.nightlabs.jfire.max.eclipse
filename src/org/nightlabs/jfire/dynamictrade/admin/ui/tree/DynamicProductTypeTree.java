@@ -155,10 +155,10 @@ extends AbstractTreeComposite<DynamicProductType>
 	@Override
 	protected DynamicProductType getSelectionObject(Object obj)
 	{
-		return ((DynamicProductTypeTreeNode)obj).getJdoObject();
-//		if (obj instanceof DynamicProductTypeTreeNode)
-//			return ((DynamicProductTypeTreeNode)obj).getJdoObject();
-//
-//		return null;
+//		return ((DynamicProductTypeTreeNode)obj).getJdoObject();
+		if (obj instanceof DynamicProductTypeTreeNode)
+			return ((DynamicProductTypeTreeNode)obj).getJdoObject();
+
+		return null;
 	}
 }
