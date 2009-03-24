@@ -117,8 +117,8 @@ public class ArticleAdder extends AbstractArticleAdder
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail.ArticleAdder.loadProductTypeJob.name") + productTypeID, 3); //$NON-NLS-1$
 		ArticleContainerID articleContainerID = getSegmentEdit().getArticleContainerID();
-		CustomerGroup customerGroup;
-		Currency currency;
+		CustomerGroup customerGroup = null;
+		Currency currency = null;
 		if (articleContainerID instanceof OrderID) {
 			this.productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
 					productTypeID,
@@ -129,8 +129,10 @@ public class ArticleAdder extends AbstractArticleAdder
 							new SubProgressMonitor(monitor, 1)
 			);
 			Order order = OrderDAO.sharedInstance().getOrder((OrderID) articleContainerID, FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
-			customerGroup = order.getCustomerGroup();
-			currency = order.getCurrency();
+			if (order != null) {
+				customerGroup = order.getCustomerGroup();
+				currency = order.getCurrency();				
+			}
 		} else if (articleContainerID instanceof OfferID) {
 			this.productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
 					productTypeID,
@@ -142,8 +144,10 @@ public class ArticleAdder extends AbstractArticleAdder
 			);
 			Offer offer = OfferDAO.sharedInstance().getOffer(
 					(OfferID) articleContainerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
-			customerGroup = offer.getOrder().getCustomerGroup();
-			currency = offer.getCurrency();
+			if (offer != null) {
+				customerGroup = offer.getOrder().getCustomerGroup();
+				currency = offer.getCurrency();				
+			}
 		} else
 			throw new IllegalStateException("ArticleContainerID is neither OrderID nor OfferID, but " + (articleContainerID == null ? "null" : articleContainerID.getClass().getName()) + "!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
