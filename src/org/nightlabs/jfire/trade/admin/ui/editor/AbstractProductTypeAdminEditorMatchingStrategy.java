@@ -27,7 +27,9 @@ implements IEditorMatchingStrategy
 			ProductTypeEditorInput productTypeEditorInput = (ProductTypeEditorInput) input;
 			ProductTypeID productTypeID = productTypeEditorInput.getJDOObjectID();
 			Class<?> clazz = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
-			if (clazz != null && clazz.equals(getProductTypeClass())) {
+//			if (clazz != null && clazz.equals(getProductTypeClass())) {
+			// added assignable from check so that matching strategy also works for subclasses
+			if (clazz != null && getProductTypeClass().isAssignableFrom(clazz)) {
 				if (editorRef == null)
 					return true;
 				else
