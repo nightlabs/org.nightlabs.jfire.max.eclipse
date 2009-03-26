@@ -221,7 +221,7 @@ extends ResizableTitleAreaDialog
 	protected void createButtonsForButtonBar(Composite parent)
 	{
 		createButton(parent, AUTOMATIC_SOLVE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.retry.text"), true); //$NON-NLS-1$
-		createButton(parent, SEND_ERROR_REPORT_ID, "", false); //$NON-NLS-1$
+		createButton(parent, SEND_ERROR_REPORT_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.sendErrorReport.text"), false); //$NON-NLS-1$
 //		super.createButtonsForButtonBar(parent);
 		createButton(parent, IGNORE_ID, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.button.ignore.text"), false); //$NON-NLS-1$
 		detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
