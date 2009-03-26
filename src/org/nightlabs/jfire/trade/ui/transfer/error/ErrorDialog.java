@@ -131,7 +131,7 @@ extends ResizableTitleAreaDialog
 	protected void configureShell(Shell newShell)
 	{
 		super.configureShell(newShell);
-		String title = getTitle();
+		String title = getWindowTitle();
 		newShell.setText(title);
 	}
 
@@ -140,8 +140,8 @@ extends ResizableTitleAreaDialog
 	{
 		Composite area = (Composite) super.createDialogArea(parent);
 
-		setMessage(getTitle(), IMessageProvider.ERROR);
-		setTitle(getMessage());
+		setTitle(getDialogTitle());
+		setMessage(getMessage(), IMessageProvider.ERROR);
 
 		Composite sashForm = new XComposite(area, SWT.NONE);
 		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -181,11 +181,26 @@ extends ResizableTitleAreaDialog
 		return area;
 	}
 
-	protected String getMessage() {
+	protected String getWindowTitle() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message"); //$NON-NLS-1$
 	}
 
-	protected String getTitle() {
+	protected String getMessage() 
+	{
+		String message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title"); //$NON-NLS-1$
+		if (paymentDatas != null && deliveryDatas != null) {
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentAndDeliveryFailed");
+		}
+		else if (paymentDatas != null) {
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_paymentFailed");
+		}
+		else {
+			message = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.message_deliveryFailed");
+		}
+		return message; 
+	}
+	
+	protected String getDialogTitle() {
 		String title = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title"); //$NON-NLS-1$
 		if (paymentDatas != null && deliveryDatas != null) {
 			title = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.error.ErrorDialog.title_paymentAndDeliveryFailed"); //$NON-NLS-1$
