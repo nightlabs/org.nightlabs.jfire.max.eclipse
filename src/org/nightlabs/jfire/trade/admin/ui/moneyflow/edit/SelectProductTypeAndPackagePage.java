@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.trade.admin.ui.moneyflow.edit;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -47,7 +48,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
-import org.nightlabs.jfire.trade.ui.store.ProductTypePackageTree;
+import org.nightlabs.jfire.trade.ui.store.ProductTypeTree;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -61,7 +62,8 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 	private Combo comboPackageType;
 	private String[] packageTypes;
 	private String[] packageTypeDescriptions;
-	private ProductTypePackageTree productTypePackageTree;
+//	private ProductTypePackageTree productTypePackageTree;
+	private ProductTypeTree productTypeTree;
 	
 	/**
 	 * @param title Page title
@@ -88,9 +90,9 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		};
 		wrapper.getGridLayout().numColumns = 2;
 		
-		
 		comboPackageType = new Combo(wrapper, SWT.NONE | SWT.READ_ONLY);
-		comboPackageType.setLayoutData(new GridData());
+		GridData comboData = new GridData(SWT.CENTER, SWT.BEGINNING, false, false);
+		comboPackageType.setLayoutData(comboData);
 		
 		labelPackageTypeDescription = new Label(wrapper, SWT.WRAP);
 		labelPackageTypeDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_BEGINNING));
@@ -115,9 +117,9 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		labelPackageTypeDescription.setText(packageTypeDescriptions[0]);
 		comboPackageType.addSelectionListener(selectionListener);
 
-		productTypePackageTree = new ProductTypePackageTree(wrapper);
-		productTypePackageTree.getGridData().horizontalSpan = 2;
-		productTypePackageTree.addSelectionChangedListener(new ISelectionChangedListener() {
+		productTypeTree = new ProductTypeTree(wrapper);
+		productTypeTree.getGridData().horizontalSpan = 2;
+		productTypeTree.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
 				getContainer().updateButtons();
 			}
@@ -130,8 +132,9 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		// in the current environment (everything that can be packaged/traded by the jfire-module which uses this wizard-page) or maybe even
 		// really *all* that exist. Really all is probably too much => either a filter composite should be shown where the user can specify that
 		// he wants to see all, or we simply only show what makes sense here (i.e. pass a Set of root-product-types).
-		productTypePackageTree.setProductTypeID(productTypeID); // TODO use another product-type-composite and pass a set of roots (or first all, before we extend this class to get them from the API-client).
-
+//		productTypeTree.setProductTypeID(productTypeID); // TODO use another product-type-composite and pass a set of roots (or first all, before we extend this class to get them from the API-client).
+//		productTypeTree.selectProductTypeID(productTypeID);
+		
 		return wrapper;
 	}
 	
@@ -145,7 +148,7 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 	
 	@Override
 	public boolean isPageComplete() {
-		return (comboPackageType.getSelectionIndex() >= 0 ) && productTypePackageTree.getFirstSelectedElement() != null;
+		return (comboPackageType.getSelectionIndex() >= 0 ) && productTypeTree.getFirstSelectedElement() != null;
 	}
 	
 	@Override
@@ -154,7 +157,7 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 	}
 	
 	public ProductType getSelectedProductType() {
-		ProductTypeID pTypeID = productTypePackageTree.getSelectedProductTypeID();
+		ProductTypeID pTypeID = (ProductTypeID) JDOHelper.getObjectId(productTypeTree.getFirstSelectedElement());
 		if (pTypeID == null)
 			return null;
 

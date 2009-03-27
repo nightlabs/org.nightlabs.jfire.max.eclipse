@@ -48,13 +48,11 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 public class SelectAccountantDelegateWizardPage extends DynamicPathWizardPage {
 	
 	private XComposite wrapper;
-	
 	private XComposite radioWrapper;
 	private Button chooseSelected;
 	private Button createNew;
 	private LocalAccountantDelegateTypeCombo typeCombo;
 	private LocalAccountantDelegateTree delegateTree;
-	
 	private SelectCreateAccountantDelegateWizard wizard;
 	
 	private SelectionListener radioListener = new SelectionListener(){
