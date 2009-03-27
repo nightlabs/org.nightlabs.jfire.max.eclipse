@@ -19,8 +19,8 @@ public abstract class ProductTypeMoneyFlowConfigPageController<
 	ProductTypeType extends ProductType, JDOObjectDAOType extends IJDOObjectDAO<ProductTypeType>>
 extends AbstractProductTypePageController<ProductTypeType>
 {
-	
 	private static final long serialVersionUID = 1L;
+	private LocalAccountantDelegate localAccountantDelegate;
 	
 	/**
 	 * @param editor
@@ -37,8 +37,6 @@ extends AbstractProductTypePageController<ProductTypeType>
 			boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
 	}
-
-	private LocalAccountantDelegate localAccountantDelegate;
 	
 	protected abstract JDOObjectDAOType getProductTypeDAO();
 	
@@ -67,18 +65,14 @@ extends AbstractProductTypePageController<ProductTypeType>
 		return productType;
 	}
 
-	
 	@Override
-	
 	public ProductTypeType getExtendedProductType(ProgressMonitor monitor, ProductTypeID extendedProductTypeID)
 	{
 		return  (ProductTypeType) ProductTypeDAO.sharedInstance().getProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);	
-		
 	}
-	
 	
 	public LocalAccountantDelegate getLocalAccountantDelegate() {
 		return localAccountantDelegate;

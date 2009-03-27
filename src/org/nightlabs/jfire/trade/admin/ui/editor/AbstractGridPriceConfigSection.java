@@ -36,12 +36,14 @@ public abstract class AbstractGridPriceConfigSection
 extends ToolBarSectionPart
 {
 	private String orgTitle;
-
+	private InheritanceAction inheritanceAction;
+	private PriceConfigComposite priceConfigComposite = null;
+	private volatile Job inheritPressedLoadJob = null;
+	private ProductType packageProductType;
+	
 	public AbstractGridPriceConfigSection(IFormPage page, Composite parent, int style) {
 		this(page, parent, style, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractGridPriceConfigSection.title")); //$NON-NLS-1$
 	}
-
-	private InheritanceAction inheritanceAction;
 
 	/**
 	 * @param page
@@ -103,12 +105,9 @@ extends ToolBarSectionPart
 	
 	protected abstract PriceConfigComposite createPriceConfigComposite(Composite parent);
 	
-	private PriceConfigComposite priceConfigComposite = null;
 	public PriceConfigComposite getPriceConfigComposite() {
 		return priceConfigComposite;
 	}
-
-	private volatile Job inheritPressedLoadJob = null;
 		
 	protected void inheritPressed() {
 		if (inheritanceAction.isChecked()) {
@@ -155,8 +154,6 @@ extends ToolBarSectionPart
 			priceConfigComposite.getDirtyStateManager().markDirty();
 		}
 	}
-
-	private ProductType packageProductType;
 
 	public void setPackageProductType(ProductType productType)
 	{

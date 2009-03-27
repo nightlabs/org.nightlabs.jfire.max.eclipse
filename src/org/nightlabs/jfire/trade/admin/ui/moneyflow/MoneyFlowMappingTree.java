@@ -448,7 +448,9 @@ public class MoneyFlowMappingTree extends AbstractTreeComposite {
 //		ProductType.FETCH_GROUP_FIELD_METADATA_MAP,
 		ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 		ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
-		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE
+		ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
+		// added to speed up inheritance action
+		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID
 	};
 	
 	public static final String[] DEFAULT_DELEGATE_FETCH_GROUPS = new String[] {

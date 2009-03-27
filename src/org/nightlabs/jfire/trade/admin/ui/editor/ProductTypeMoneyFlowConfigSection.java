@@ -1,21 +1,30 @@
 package org.nightlabs.jfire.trade.admin.ui.editor;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.action.SelectionAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
+import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
 import org.nightlabs.jfire.trade.admin.ui.moneyflow.MoneyFlowConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -29,6 +38,7 @@ extends ToolBarSectionPart
 	private AssignAction assignAction;
 	private InheritAction inheritAction;
 	private ProductType productType;
+	private MoneyFlowConfigComposite moneyFlowConfigComposite = null;
 	
 	/**
 	 * @param page
@@ -71,7 +81,6 @@ extends ToolBarSectionPart
 		updateToolBarManager();
 	}
 
-	private MoneyFlowConfigComposite moneyFlowConfigComposite = null;
 	public MoneyFlowConfigComposite getMoneyFlowConfigComposite() {
 		return moneyFlowConfigComposite;
 	}
@@ -181,10 +190,54 @@ extends ToolBarSectionPart
 		public void run() {
 			if (productType == null)
 				return;
-//			boolean newValue = !isSelection();
-//			setSelection(newValue);
-			updateToolBarManager();
-			markDirty();
+			
+			if (isChecked()) {
+				Job job = new Job("Inherit MoneyFlowConfiguration") {
+					@Override
+					protected IStatus run(ProgressMonitor monitor) throws Exception {
+						monitor.beginTask("Inherit MoneyFlowConfiguration", 100);
+						try {
+							if (productType == null)
+								return Status.OK_STATUS;
+							
+							ProductType parentPT = ProductTypeDAO.sharedInstance().getProductType(
+									productType.getExtendedProductTypeID(),
+									new String[] {
+										javax.jdo.FetchPlan.DEFAULT,
+										ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+										ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE
+									},
+									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+									new SubProgressMonitor(monitor, 40)
+							);
+							LocalAccountantDelegate localAccountantDelegate = parentPT.getProductTypeLocal().getLocalAccountantDelegate();
+							productType.getProductTypeLocal().setLocalAccountantDelegate(localAccountantDelegate);
+							productType.getProductTypeLocal().getFieldMetaData(
+									ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(isChecked());
+							Display display = getContainer().getDisplay();
+							if (!display.isDisposed()) {
+								display.asyncExec(new Runnable(){
+									@Override
+									public void run() {
+										updateToolBarManager();
+										markDirty();									
+									}
+								});								
+							}
+							return Status.OK_STATUS;
+						} finally {
+							monitor.done();
+						}
+					}
+				};
+				job.schedule();
+			}
+			else {
+				productType.getProductTypeLocal().getFieldMetaData(
+						ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(isChecked());
+				updateToolBarManager();
+				markDirty();
+			}
 		}
 		
 		public void updateState(ProductType productType) {
