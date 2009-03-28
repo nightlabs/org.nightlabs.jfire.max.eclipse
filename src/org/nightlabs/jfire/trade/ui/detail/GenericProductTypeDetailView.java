@@ -30,6 +30,11 @@ implements IProductTypeDetailView
 		if (genericProductTypeDetailViewComposite != null)
 			genericProductTypeDetailViewComposite.setProductTypeID(productTypeID);
 	}
+
+	public ProductTypeID getProductTypeID() {
+		return productTypeID;
+	}
+
 	@Override
 	public void init(IMemento memento) {
 	}
