@@ -11,9 +11,9 @@ import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.jfire.store.ProductType;
 
 /**
- * A Registry for {@link ProductTypeDetailViewFactory}s which can be 
+ * A Registry for {@link ProductTypeDetailViewFactory}s which can be
  * registered via the extension org.nightlabs.jfire.productTypeDetailView
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  *
  */
@@ -32,11 +32,11 @@ extends AbstractEPProcessor
 		}
 		return sharedInstance;
 	}
-	
+
 	public static final String EXTENSION_POINT_ID = "org.nightlabs.jfire.trade.ui.productTypeDetailView";	 //$NON-NLS-1$
 	public static final String ELEMENT_PRODUCT_TYPE_DETAIL_VIEW = "productTypeDetailView"; //$NON-NLS-1$
 	public static final String ATTRIBUTE_PRODUCT_TYPE_DETAIL_VIEW_FACTORY = "productTypeDetailViewFactory";	 //$NON-NLS-1$
-	
+
 	@Override
 	public String getExtensionPointID() {
 		return EXTENSION_POINT_ID;
@@ -62,13 +62,33 @@ extends AbstractEPProcessor
 
 	private Map<Class<? extends ProductType>, ProductTypeDetailViewFactory> productTypeClass2DetailViewFactory =
 		new HashMap<Class<? extends ProductType>, ProductTypeDetailViewFactory>();
-	
-	public IProductTypeDetailView getProductTypeDetailView(Class<? extends ProductType> productTypeClass)
+
+	private ProductTypeDetailViewFactory getProductTypeDetailViewFactory(Class<?> productTypeClass)
+	{
+		Class<?> clazz = productTypeClass;
+		while (clazz != null) {
+			ProductTypeDetailViewFactory factory = productTypeClass2DetailViewFactory.get(clazz);
+			if (factory != null)
+				return factory;
+
+			for (Class<?> iface : clazz.getInterfaces()) {
+				factory = getProductTypeDetailViewFactory(iface);
+				if (factory != null)
+					return factory;
+			}
+
+			clazz = clazz.getSuperclass();
+		}
+		return null;
+	}
+
+	public IProductTypeDetailView createProductTypeDetailView(Class<? extends ProductType> productTypeClass)
 	{
 		if (!isProcessed())
 			checkProcessing();
-		
-		ProductTypeDetailViewFactory factory = productTypeClass2DetailViewFactory.get(productTypeClass);
+
+//		ProductTypeDetailViewFactory factory = productTypeClass2DetailViewFactory.get(productTypeClass);
+		ProductTypeDetailViewFactory factory = getProductTypeDetailViewFactory(productTypeClass);
 		if (factory != null) {
 			IProductTypeDetailView productTypeDetailView = factory.createProductTypeDetailView();
 			if (productTypeDetailView != null)

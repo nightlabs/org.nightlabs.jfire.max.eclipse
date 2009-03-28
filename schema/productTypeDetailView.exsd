@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.nightlabs.jfire.trade.ui">
+<schema targetNamespace="org.nightlabs.jfire.trade.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
          <meta.schema plugin="org.nightlabs.jfire.trade.ui" id="productTypeDetailView" name="productTypeDetailView"/>
@@ -11,6 +11,11 @@
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="productTypeDetailView" minOccurs="1" maxOccurs="unbounded"/>
@@ -46,17 +51,16 @@
       <annotation>
          <documentation>
             Register a ProductTypeDetailViewFactory which creates an IProductTypeDetailView to display details for a certian kind of ProductType
- 
          </documentation>
       </annotation>
       <complexType>
          <attribute name="productTypeDetailViewFactory" type="string" use="required">
             <annotation>
                <documentation>
-                  ProductTypeDetailViewFactory creates an IProductTypeDetailView to display details for a certian type (inheritant of) ProductType
+                  ProductTypeDetailViewFactory creates an IProductTypeDetailView to display details for a certian type of (inheritant of) ProductType
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewFactory"/>
+                  <meta.attribute kind="java" basedOn=":org.nightlabs.jfire.trade.ui.detail.ProductTypeDetailViewFactory"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -99,13 +103,5 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="copyright"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
 </schema>
