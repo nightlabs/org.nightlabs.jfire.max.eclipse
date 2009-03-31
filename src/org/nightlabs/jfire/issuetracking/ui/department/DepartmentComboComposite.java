@@ -23,6 +23,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -52,10 +53,12 @@ implements ISelectionProvider
 	private XCombo departmentCombo;
 	private Department selectedDepartment;
 
-	public DepartmentComboComposite(Composite parent, int style,String filterOrganisationID, boolean filterOrganisationIDInverse)
+	public DepartmentComboComposite(Composite parent, int style, String filterOrganisationID, boolean filterOrganisationIDInverse)
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
+		new Label(this, SWT.NONE).setText("Department:");
+		
 		departmentCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		departmentCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		departmentCombo.addSelectionListener(new SelectionAdapter() {
