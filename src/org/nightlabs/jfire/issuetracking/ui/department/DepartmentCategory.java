@@ -22,6 +22,8 @@ extends CustomCompositeCategory {
 	@Override
 	public Composite createComposite(Composite composite) {
 		XComposite wrapper = new XComposite(composite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		DepartmentTableComposite departmentTableComposite = new DepartmentTableComposite(wrapper, SWT.None);
+		departmentTableComposite.setHeaderVisible(false);
 		return wrapper;
 	}
 }
