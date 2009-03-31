@@ -26,25 +26,25 @@
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/articlecontainer/detail/deliverynote/GeneralEditorInputDeliveryNote.16x16.png"
+            icon="icons/IssuePerspective.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor" name="%org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor.name"/>
         <editor
             class="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/issue/editor/IssueEdit.16x16.png"
+            icon="icons/IssuePerspective.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor" name="%org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor.name"/>
         <editor
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/project/ProjectTreeComposite-project.16x16.png"
+            icon="icons/project/ProjectAdminTreeComposite-project.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor" name="%org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor.name"/>
         <editor
             class="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor"
             contributorClass="org.nightlabs.base.ui.action.registry.editor.XEditorActionBarContributor"
             default="false"
-            icon="icons/project/ProjectTreeComposite-project.16x16.png"
+            icon="icons/project/ProjectAdminTreeComposite-project.16x16.png"
             id="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor" name="%org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor.name"/>
     </extension>
     <extension point="org.nightlabs.base.ui.entityEditor">
@@ -174,12 +174,16 @@
             categoryEntryID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview"
             class="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListFactory"
-            icon="icons/overview/issue/IssueOverviewPerspective.16x16.png"
+            icon="icons/IssuePerspective.16x16.png"
             index="0" name="Issue List"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
             index="20" name="Project" scope="IssueShelf"/>
+        <categoryFactory
+            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.department"
+            class="org.nightlabs.jfire.issuetracking.ui.department.DepartmentCategoryFactory"
+            index="30" name="Department" scope="IssueShelf"/>
     </extension>
     <extension
           point="org.eclipse.ui.newWizards">

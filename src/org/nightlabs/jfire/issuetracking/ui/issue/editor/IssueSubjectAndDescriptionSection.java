@@ -61,7 +61,7 @@ public class IssueSubjectAndDescriptionSection extends AbstractIssueEditorGenera
 	protected void doSetIssue(Issue issue) {
 		subjectText.setI18nText(issue.getSubject(), EditMode.DIRECT);
 		descriptionText.setI18nText(issue.getDescription(), EditMode.DIRECT);
-		((GridData) descriptionText.getLayoutData()).heightHint = descriptionLabel.getBounds().height * 10;
+//		((GridData) descriptionText.getLayoutData()).heightHint = descriptionLabel.getBounds().height * 10;
 	}
 
 //	@Override
