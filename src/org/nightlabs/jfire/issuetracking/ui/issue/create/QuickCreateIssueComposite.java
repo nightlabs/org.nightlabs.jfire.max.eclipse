@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issuetracking.ui.department.DepartmentComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 /**
  * A composite that contains UIs for adding {@link Issue}.
@@ -37,5 +38,9 @@ extends XComposite
 		ProjectComboComposite projectComboComposite = new ProjectComboComposite(mainComposite, SWT.None);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		projectComboComposite.setLayoutData(gridData);
+		
+		DepartmentComboComposite departmentComboComposite = new DepartmentComboComposite(mainComposite, SWT.None);
+		gridData = new GridData(GridData.FILL_BOTH);
+		departmentComboComposite.setLayoutData(gridData);
 	}
 }
