@@ -7,13 +7,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.department.DepartmentComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
-import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 /**
  * A composite that contains UIs for adding {@link Issue}.
@@ -64,7 +62,7 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
 		
-		new Label(durationComposite, SWT.NONE).setText("Duration");
+		new Label(durationComposite, SWT.NONE).setText("Duration(DD:hh:mm)");
 		Text durationText = new Text(durationComposite, SWT.BORDER);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
