@@ -5,30 +5,33 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-public class QuickCreateIssueAction implements IWorkbenchWindowActionDelegate {
-
+/**
+ * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
+ */
+public class QuickCreateIssueAction 
+implements IWorkbenchWindowActionDelegate 
+{
+	public static final String ID = QuickCreateIssueAction.class.getName();
+	
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+	}
 
+	private IWorkbenchWindow window;
+
+	@Override
+	public void init(IWorkbenchWindow window) {
+		this.window = window;
 	}
 
 	@Override
-	public void init(IWorkbenchWindow arg0) {
-		// TODO Auto-generated method stub
-
+	public void run(IAction action) {
+		CreateIssueQuickDialog createIssueQuickDialog = new CreateIssueQuickDialog(window.getShell());
+		createIssueQuickDialog.open();
 	}
 
 	@Override
-	public void run(IAction arg0) {
-		// TODO Auto-generated method stub
+	public void selectionChanged(IAction action, ISelection selection) {
 
 	}
-
-	@Override
-	public void selectionChanged(IAction arg0, ISelection arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
