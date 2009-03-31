@@ -133,7 +133,11 @@ public class SelectProductTypeAndPackagePage extends DynamicPathWizardPage {
 		// really *all* that exist. Really all is probably too much => either a filter composite should be shown where the user can specify that
 		// he wants to see all, or we simply only show what makes sense here (i.e. pass a Set of root-product-types).
 //		productTypeTree.setProductTypeID(productTypeID); // TODO use another product-type-composite and pass a set of roots (or first all, before we extend this class to get them from the API-client).
-//		productTypeTree.selectProductTypeID(productTypeID);
+		
+		productTypeTree.setSelectedObjectID(productTypeID);
+//		ProductType pt = ProductTypeDAO.sharedInstance().getProductType(productTypeID, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME}, 
+//				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//		productTypeTree.getTreeViewer().expandToLevel(pt, AbstractTreeViewer.ALL_LEVELS);
 		
 		return wrapper;
 	}
