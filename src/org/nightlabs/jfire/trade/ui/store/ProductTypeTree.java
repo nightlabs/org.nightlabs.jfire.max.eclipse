@@ -34,7 +34,6 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
  *
  */
 public class ProductTypeTree 
-//extends AbstractTreeComposite<ProductType> 
 extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTreeNode>
 {
 	protected static class ProductTypeTreeContentProvider
@@ -176,15 +175,5 @@ extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTree
 	{
 		return activeProductTypeTreeController;
 	}
-	
-//	public void selectProductTypeID(ProductTypeID productTypeID) 
-//	{
-//		ProductTypeTreeNode node = activeProductTypeTreeController.getTreeNode(productTypeID);
-//		if (node != null) {
-//			getTreeViewer().expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
-//		}
-//		else {
-//			
-//		}
-//	}
+		
 }
