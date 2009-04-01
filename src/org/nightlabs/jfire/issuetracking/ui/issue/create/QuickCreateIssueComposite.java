@@ -6,12 +6,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.ui.timelength.TimeLengthComposite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -46,7 +46,7 @@ extends XComposite
 	private ProjectComboComposite projectComboComposite;
 	private DepartmentComboComposite departmentComboComposite;
 	private DateTimeControl startTimeControl;
-	private Text durationText;
+	private TimeLengthComposite durationText;
 	private I18nTextEditor subjectText;
 	private I18nTextEditorMultiLine descriptionText;
 	
@@ -61,10 +61,14 @@ extends XComposite
 				LayoutMode.TIGHT_WRAPPER);
 		mainComposite.getGridLayout().numColumns = 4;
 
-		new Label(mainComposite, SWT.NONE).setText("Project");
-		
-		projectComboComposite = new ProjectComboComposite(mainComposite, SWT.None);
+		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		projectComposite.setLayoutData(gridData);
+		
+		new Label(projectComposite, SWT.NONE).setText("Project");
+		
+		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -95,10 +99,8 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
 
-		new Label(durationComposite, SWT.NONE).setText("Duration(DD:hh:mm)");
-		durationText = new Text(durationComposite, SWT.BORDER);
-		durationText.setTextLimit(8);
-		durationText.setText("00:00:00");
+		new Label(durationComposite, SWT.NONE).setText("Duration");
+		durationText = new TimeLengthComposite(durationComposite);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		XComposite subjectDescriptionComposite = new XComposite(mainComposite, SWT.NONE);

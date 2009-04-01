@@ -85,7 +85,7 @@ extends AbstractTableComposite<IssueHistory>
 				case(2):
 					return issueWorkTimeRange.getTo() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumnText.workTimeRange.stillWorking.text") : dateTimeFormat.format(issueWorkTimeRange.getTo()); //$NON-NLS-1$
 				case(3):
-					return issueWorkTimeRange.getDuration() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumnText.workTimeRange.stillWorking.text") : DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration().longValue(), true, true); //$NON-NLS-1$
+					return issueWorkTimeRange.getDuration() == 0? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueWorkTimeRangeTable.tableColumnText.workTimeRange.stillWorking.text") : DurationFormatUtils.formatDurationWords(issueWorkTimeRange.getDuration(), true, true); //$NON-NLS-1$
 				default:
 					return ""; //$NON-NLS-1$
 				}

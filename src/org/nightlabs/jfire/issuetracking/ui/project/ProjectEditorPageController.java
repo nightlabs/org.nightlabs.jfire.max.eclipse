@@ -8,7 +8,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
-import org.nightlabs.jfire.issue.project.ProjectPhase;
 import org.nightlabs.jfire.issue.project.ProjectType;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
@@ -44,10 +43,10 @@ extends ActiveEntityEditorPageController<Project>
 				ProjectType.FETCH_GROUP_NAME,
 				Project.FETCH_GROUP_DESCRIPTION,
 				Project.FETCH_GROUP_PROJECT_MANAGER,
-				Project.FETCH_GROUP_MEMBERS,
-				Project.FETCH_GROUP_PROJECT_PHASES,
-				ProjectPhase.FETCH_GROUP_NAME,
-				ProjectPhase.FETCH_GROUP_DESCRIPTION};
+				Project.FETCH_GROUP_MEMBERS};
+//				Project.FETCH_GROUP_PROJECT_PHASES,
+//				ProjectPhase.FETCH_GROUP_NAME,
+//				ProjectPhase.FETCH_GROUP_DESCRIPTION};
 //				Project.FETCH_GROUP_PARENT_PROJECT,
 //				Project.FETCH_GROUP_SUBPROJECTS
 	}

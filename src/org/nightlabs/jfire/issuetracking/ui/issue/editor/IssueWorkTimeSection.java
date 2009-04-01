@@ -101,6 +101,9 @@ extends AbstractIssueEditorGeneralSection
 							issue.startWorking(new Date());
 						}
 					}
+					else {
+						issue.startWorking(new Date());
+					}
 
 					markDirty();
 					getController().getEntityEditor().doSave(new NullProgressMonitor()); // spawns a job anyway - does nothing expensive on the UI thread.

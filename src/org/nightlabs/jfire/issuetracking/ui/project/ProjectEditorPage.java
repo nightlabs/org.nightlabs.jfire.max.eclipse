@@ -8,14 +8,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseSection;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 public class ProjectEditorPage 
@@ -42,7 +40,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	private ProjectSection projectSection;
-	private ProjectPhaseSection projectPhaseSection;
+//	private ProjectPhaseSection projectPhaseSection;
 	private ProjectMemberSection projectMemberSection;
 	
 	/**
@@ -80,15 +78,15 @@ extends EntityEditorPageWithProgress
 		projectSection = new ProjectSection(this, c, controller);
 		getManagedForm().addPart(projectSection);
 		
-		projectPhaseSection = new ProjectPhaseSection(this, c, controller);
-		getManagedForm().addPart(projectPhaseSection);
+//		projectPhaseSection = new ProjectPhaseSection(this, c, controller);
+//		getManagedForm().addPart(projectPhaseSection);
 		
 		projectMemberSection = new ProjectMemberSection(this, c, controller);
 		getManagedForm().addPart(projectMemberSection);
 		
 		if (controller.isLoaded()) {
 			projectSection.setProject(controller.getProject());
-			projectPhaseSection.setProject(controller.getProject());
+//			projectPhaseSection.setProject(controller.getProject());
 			projectMemberSection.setProject(controller.getProject());
 		}
 	}
@@ -102,9 +100,9 @@ extends EntityEditorPageWithProgress
 					projectSection.setProject(controller.getProject());
 				}
 				
-				if (projectPhaseSection != null && !projectPhaseSection.getSection().isDisposed()) {
-					projectPhaseSection.setProject(controller.getProject());
-				}
+//				if (projectPhaseSection != null && !projectPhaseSection.getSection().isDisposed()) {
+//					projectPhaseSection.setProject(controller.getProject());
+//				}
 				
 				if (projectMemberSection != null && !projectMemberSection.getSection().isDisposed()) {
 					projectMemberSection.setProject(controller.getProject());
