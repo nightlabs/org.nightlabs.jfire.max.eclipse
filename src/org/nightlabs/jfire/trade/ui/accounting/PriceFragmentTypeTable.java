@@ -32,6 +32,7 @@ import java.util.Set;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -131,6 +132,8 @@ extends AbstractTableComposite<PriceFragmentType>
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setInput(tableViewer.getContentProvider());
+		
+		tableViewer.setSorter(new ViewerSorter());
 	}
 
 }
