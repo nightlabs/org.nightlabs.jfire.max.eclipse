@@ -11,6 +11,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.simpletrade.admin.ui.producttype.ProductTypeTree;
+import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.store.ProductType;
 
 public class ProductTypeSelectPage
@@ -24,8 +25,8 @@ extends DynamicPathWizardPage
 	 */
 	public ProductTypeSelectPage()
 	{
-		super(ProductTypeSelectPage.class.getName(), "Title");
-		this.setDescription("Description");
+		super(ProductTypeSelectPage.class.getName(), Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeSelectPage.title")); //$NON-NLS-1$
+		this.setDescription(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.ProductTypeSelectPage.description")); //$NON-NLS-1$
 	}
  
 	/**
