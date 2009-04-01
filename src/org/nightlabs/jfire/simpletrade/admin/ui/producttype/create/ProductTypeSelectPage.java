@@ -55,7 +55,7 @@ extends DynamicPathWizardPage
 	public boolean canFlipToNextPage() {
 		selectedProductType = productTypeTree.getFirstSelectedElement();
 		
-		if (selectedProductType != null) {
+		if (selectedProductType != null && selectedProductType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH) {
 			CreateProductTypeNewWizard newWizard = (CreateProductTypeNewWizard)getWizard();
 			newWizard.setParentProductTypeID(selectedProductType.getObjectId());
 			
