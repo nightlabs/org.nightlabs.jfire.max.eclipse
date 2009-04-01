@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.admin.ui.tree.VoucherTypeTree;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -56,7 +57,7 @@ extends DynamicPathWizardPage
 	public boolean canFlipToNextPage() {
 		selectedVoucherType = voucherTypeTree.getFirstSelectedElement();
 		
-		if (selectedVoucherType != null) {
+		if (selectedVoucherType != null && selectedVoucherType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH ) {
 			CreateVoucherTypeNewWizard newWizard = (CreateVoucherTypeNewWizard)getWizard();
 			newWizard.setParentVoucherTypeID(selectedVoucherType.getObjectId());
 			
