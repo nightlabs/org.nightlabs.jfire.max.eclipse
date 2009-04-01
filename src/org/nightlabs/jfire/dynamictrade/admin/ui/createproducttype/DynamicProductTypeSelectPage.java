@@ -10,6 +10,7 @@ import org.nightlabs.base.ui.composite.FadeableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
+import org.nightlabs.jfire.dynamictrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.dynamictrade.admin.ui.tree.DynamicProductTypeTree;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.ProductType;
@@ -25,8 +26,8 @@ extends DynamicPathWizardPage
 	 */
 	public DynamicProductTypeSelectPage()
 	{
-		super(DynamicProductTypeSelectPage.class.getName(), "Title");
-		this.setDescription("Description");
+		super(DynamicProductTypeSelectPage.class.getName(), Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeSelectPage.title")); //$NON-NLS-1$
+		this.setDescription(Messages.getString("org.nightlabs.jfire.dynamictrade.admin.ui.createproducttype.DynamicProductTypeSelectPage.description")); //$NON-NLS-1$
 	}
  
 	/**
