@@ -55,7 +55,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		priorityLabel = new Label(getClient(), SWT.WRAP);
 		priorityLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.priority.text")); //$NON-NLS-1$
 
-		issuePriorityCombo = new XComboComposite<IssuePriority>(getClient(), SWT.NONE);
+		issuePriorityCombo = new XComboComposite<IssuePriority>(getClient(), SWT.NONE | SWT.READ_ONLY);
 		issuePriorityCombo.setLabelProvider(new IssueLabelProvider());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		issuePriorityCombo.setLayoutData(gd);
@@ -69,7 +69,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		severityLabel = new Label(getClient(), SWT.WRAP);
 		severityLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.severity.text")); //$NON-NLS-1$
 
-		issueSeverityTypeCombo = new XComboComposite<IssueSeverityType>(getClient(), SWT.NONE);
+		issueSeverityTypeCombo = new XComboComposite<IssueSeverityType>(getClient(), SWT.NONE | SWT.READ_ONLY);
 		issueSeverityTypeCombo.setLabelProvider(new IssueLabelProvider());
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		issueSeverityTypeCombo.setLayoutData(gd);
@@ -83,7 +83,7 @@ public class IssuePropertySection extends AbstractIssueEditorGeneralSection {
 		resolutionLabel = new Label(getClient(), SWT.WRAP);
 		resolutionLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySection.label.resolution.text")); //$NON-NLS-1$
 
-		issueResolutionCombo = new XComboComposite<IssueResolution>(getClient(), SWT.NONE);
+		issueResolutionCombo = new XComboComposite<IssueResolution>(getClient(), SWT.NONE | SWT.READ_ONLY);
 		issueResolutionCombo.setLabelProvider(new IssueLabelProvider());
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		issueResolutionCombo.setLayoutData(gd);

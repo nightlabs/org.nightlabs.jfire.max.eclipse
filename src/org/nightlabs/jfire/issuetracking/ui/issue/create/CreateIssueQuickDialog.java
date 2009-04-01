@@ -1,12 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -36,15 +32,16 @@ extends ResizableTitleAreaDialog
 		super(shell, Messages.RESOURCE_BUNDLE);
 	}
 
+	private QuickCreateIssueComposite quickCreateComposite;
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("Create an Issue");
+		setTitle("Create Issue");
 		setMessage("Create an Issue");
 
 		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
-		QuickCreateIssueComposite createComposite = new QuickCreateIssueComposite(wrapper, SWT.NONE);
+		quickCreateComposite = new QuickCreateIssueComposite(wrapper, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		createComposite.setLayoutData(gridData);
+		quickCreateComposite.setLayoutData(gridData);
 		return wrapper;
 	}
 	
@@ -72,21 +69,18 @@ extends ResizableTitleAreaDialog
 	
 	@Override
 	protected void okPressed() {
+		try {
+			Issue issue = IssueDAO.sharedInstance().storeIssue(quickCreateComposite.getCreatingIssue(), true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
+			try {
+				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		
-//		try {
-//			getContainer().run(false, false, new IRunnableWithProgress() {
-//				public void run(IProgressMonitor _monitor) throws InvocationTargetException, InterruptedException {
-//					Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//					IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
-//					try {
-//						Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
-//					} catch (Exception e) {
-//						throw new RuntimeException(e);
-//					}
-//				}
-//			});
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
+		super.okPressed();
 	}
 }

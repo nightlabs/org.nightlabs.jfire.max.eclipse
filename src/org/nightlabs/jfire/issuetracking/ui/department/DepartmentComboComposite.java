@@ -122,7 +122,6 @@ implements ISelectionProvider
 		loadJob.schedule();
 	}
 
-
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private void fireSelectionChangedEvent()
 	{
@@ -163,5 +162,9 @@ implements ISelectionProvider
 
 		IStructuredSelection sel = (IStructuredSelection) selection;
 		Object selObj = sel.getFirstElement();
+	}
+	
+	public Department getSelectedDepartment() {
+		return selectedDepartment;
 	}
 }
