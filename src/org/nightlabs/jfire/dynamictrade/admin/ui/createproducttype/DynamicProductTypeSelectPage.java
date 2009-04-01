@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jfire.dynamictrade.admin.ui.tree.DynamicProductTypeTree;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
+import org.nightlabs.jfire.store.ProductType;
 
 public class DynamicProductTypeSelectPage
 extends DynamicPathWizardPage
@@ -55,7 +56,7 @@ extends DynamicPathWizardPage
 	public boolean canFlipToNextPage() {
 		selectedProductType = dynamicProductTypeTree.getFirstSelectedElement();
 		
-		if (selectedProductType != null) {
+		if (selectedProductType != null && selectedProductType.getInheritanceNature() == ProductType.INHERITANCE_NATURE_BRANCH) {
 			CreateDynamicProductTypeNewWizard newWizard = (CreateDynamicProductTypeNewWizard)getWizard();
 			newWizard.setParentProductTypeID(selectedProductType.getObjectId());
 			
