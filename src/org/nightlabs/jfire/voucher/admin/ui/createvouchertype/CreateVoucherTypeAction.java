@@ -27,8 +27,12 @@ extends Action
 						StructuredSelection selection = (StructuredSelection) event.getSelection();
 						if (selection.isEmpty())
 							selectedNode = null;
-						else
-							selectedNode = (VoucherTypeTreeNode) selection.getFirstElement();
+						else {
+							Object selectedElement = selection.getFirstElement();
+							if (selectedElement instanceof VoucherTypeTreeNode) {
+								selectedNode = (VoucherTypeTreeNode) selectedElement;	
+							}	
+						}
 
 						setEnabled(selectedNode != null && selectedNode.getJdoObject().isInheritanceBranch());
 					}
