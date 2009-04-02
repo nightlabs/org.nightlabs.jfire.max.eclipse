@@ -1,5 +1,9 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -16,6 +20,9 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
+import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.ui.department.DepartmentComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.security.User;
@@ -124,6 +131,27 @@ extends XComposite
 	}
 	
 	public Issue getCreatingIssue() {
+		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+		newIssue.setAssignee(currentUser);
+		newIssue.setReporter(currentUser);
+		newIssue.getSubject().copyFrom(subjectText.getI18nText());
+		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
+
+		Job job = new Job("Setting the default values....") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				String organisationID = Login.sharedInstance().getOrganisationID();
+				final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);				
+				IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
+				newIssue.setIssueType(issueType);
+				
+				return Status.OK_STATUS;
+			}
+		};
+		
+		job.setPriority(Job.SHORT);
+		job.schedule();
+		
 		return newIssue;
 	}
 }

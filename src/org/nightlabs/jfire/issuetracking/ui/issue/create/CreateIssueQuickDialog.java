@@ -71,6 +71,7 @@ extends ResizableTitleAreaDialog
 	protected void okPressed() {
 		try {
 			Issue issue = IssueDAO.sharedInstance().storeIssue(quickCreateComposite.getCreatingIssue(), true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			
 			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
 			try {
 				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
