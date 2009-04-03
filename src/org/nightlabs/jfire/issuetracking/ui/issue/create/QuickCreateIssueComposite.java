@@ -21,6 +21,7 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueType;
+import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.ui.department.DepartmentComboComposite;
@@ -136,21 +137,11 @@ extends XComposite
 		newIssue.setReporter(currentUser);
 		newIssue.getSubject().copyFrom(subjectText.getI18nText());
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
-
-		Job job = new Job("Setting the default values....") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				String organisationID = Login.sharedInstance().getOrganisationID();
-				final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);				
-				IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
-				newIssue.setIssueType(issueType);
-				
-				return Status.OK_STATUS;
-			}
-		};
 		
-		job.setPriority(Job.SHORT);
-		job.schedule();
+		IssueWorkTimeRange workingTime = new IssueWorkTimeRange(newIssue.getOrganisationID(), IDGenerator.nextID(IssueWorkTimeRange.class), currentUser, newIssue);
+		workingTime.setFrom(startTimeControl.getDate());
+		workingTime.setDuration(durationText.getTimeLength());
+		newIssue.addIssueWorkTimeRange(workingTime);
 		
 		return newIssue;
 	}
