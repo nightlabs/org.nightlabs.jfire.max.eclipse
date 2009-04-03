@@ -32,7 +32,8 @@ Export-Package: org.nightlabs.jfire.trade.admin.ui,
  org.nightlabs.jfire.trade.admin.ui.resource,
  org.nightlabs.jfire.trade.admin.ui.search,
  org.nightlabs.jfire.trade.admin.ui.tariff,
- org.nightlabs.jfire.trade.admin.ui.tariffmapping
+ org.nightlabs.jfire.trade.admin.ui.tariffmapping,
+ org.nightlabs.jfire.trade.admin.ui.tariffuserset
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.forms,
@@ -42,5 +43,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jseditor.ui;visibility:=reexport,
  org.nightlabs.jfire.base.admin.ui;visibility:=reexport,
- org.nightlabs.editor2d.ui;bundle-version="1.0.7"
+ org.nightlabs.editor2d.ui;bundle-version="1.0.7",
+ org.nightlabs.jfire.entityuserset.ui;bundle-version="0.9.7";visibility:=reexport
 Eclipse-LazyStart: true

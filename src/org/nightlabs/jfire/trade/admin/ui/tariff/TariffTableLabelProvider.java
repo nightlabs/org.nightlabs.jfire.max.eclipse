@@ -32,7 +32,9 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
+ * @deprecated not used anywhere - Daniel
  */
+@Deprecated
 public class TariffTableLabelProvider
 	extends LabelProvider
 	implements ITableLabelProvider
