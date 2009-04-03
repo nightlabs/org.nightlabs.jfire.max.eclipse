@@ -36,7 +36,6 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
