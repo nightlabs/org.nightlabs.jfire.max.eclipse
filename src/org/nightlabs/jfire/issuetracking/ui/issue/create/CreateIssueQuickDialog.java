@@ -3,20 +3,29 @@ package org.nightlabs.jfire.issuetracking.ui.issue.create;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLocal;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
@@ -69,15 +78,35 @@ extends ResizableTitleAreaDialog
 	
 	@Override
 	protected void okPressed() {
+		final Issue newIssue = quickCreateComposite.getCreatingIssue();
 		try {
-			Issue issue = IssueDAO.sharedInstance().storeIssue(quickCreateComposite.getCreatingIssue(), true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			
-			IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
-			try {
-				Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+			Job job = new Job("Setting the default values....") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					String organisationID = Login.sharedInstance().getOrganisationID();
+					final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);				
+					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
+					newIssue.setIssueType(issueType);
+
+					final Issue issue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							IssueEditorInput editorInput = new IssueEditorInput((IssueID)JDOHelper.getObjectId(issue));
+							try {
+								Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, IssueEditor.EDITOR_ID);
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+					});
+					
+					return Status.OK_STATUS;
+				}
+			};
+
+			job.setPriority(Job.SHORT);
+			job.schedule();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
