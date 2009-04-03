@@ -10,6 +10,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
@@ -156,6 +157,7 @@ extends ActiveJDOObjectTreeComposite<ProductTypeID, ProductType, ProductTypeTree
 	{
 		treeViewer.setContentProvider(new ProductTypeTreeContentProvider());
 		treeViewer.setLabelProvider(new ProductTypeTreeLabelProvider());
+		treeViewer.setSorter(new ViewerSorter());
 	}
 
 	@Override
