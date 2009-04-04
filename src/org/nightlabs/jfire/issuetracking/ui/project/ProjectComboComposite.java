@@ -23,8 +23,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -62,7 +62,7 @@ implements ISelectionProvider
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		
-		projectCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
+		projectCombo = new XCombo(this, SWT.BORDER);
 		projectCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -243,5 +243,9 @@ implements ISelectionProvider
 	public void addProject(Project project, int index) {
 		projectList.add(index, project);
 		projectCombo.add(null, project.getName().getText(), index);
+	}
+	
+	public XCombo getProjectCombo() {
+		return projectCombo;
 	}
 }

@@ -47,7 +47,12 @@ extends ResizableTitleAreaDialog
 		setTitle("Create Issue");
 		setMessage("Create an Issue");
 
-		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER);
+		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER) {
+			@Override
+			public boolean setFocus() {
+				return getButton(OK).forceFocus();
+			}
+		};
 		quickCreateComposite = new QuickCreateIssueComposite(wrapper, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		quickCreateComposite.setLayoutData(gridData);

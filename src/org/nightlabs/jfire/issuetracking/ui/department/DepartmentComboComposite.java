@@ -167,4 +167,8 @@ implements ISelectionProvider
 	public Department getSelectedDepartment() {
 		return selectedDepartment;
 	}
+	
+	public XCombo getDepartmentCombo() {
+		return departmentCombo;
+	}
 }

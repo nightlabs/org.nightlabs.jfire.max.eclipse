@@ -1,33 +1,33 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
-import org.nightlabs.base.ui.composite.DateTimeControl;
+import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
+import org.nightlabs.base.ui.util.DateTimeUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
-import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
-import org.nightlabs.jfire.issue.id.IssueTypeID;
 import org.nightlabs.jfire.issuetracking.ui.department.DepartmentComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.l10n.DateFormatter;
 /**
  * A composite that contains UIs for adding {@link Issue}.
  * 
@@ -47,17 +47,18 @@ extends XComposite
 
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
-		
+
 		createComposite();
 	}
 
 	private ProjectComboComposite projectComboComposite;
 	private DepartmentComboComposite departmentComboComposite;
-	private DateTimeControl startTimeControl;
+	private DateTime startDateControl;
+	private DateTime startTimeControl;
 	private TimeLengthComposite durationText;
 	private I18nTextEditor subjectText;
 	private I18nTextEditorMultiLine descriptionText;
-	
+
 	private Issue newIssue;
 
 	private void createComposite() {
@@ -67,14 +68,19 @@ extends XComposite
 
 		XComposite mainComposite = new XComposite(this, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER);
-		mainComposite.getGridLayout().numColumns = 4;
+		mainComposite.getGridLayout().numColumns = 5;
 
-		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER) {
+			@Override
+			public boolean setFocus() {
+				return projectComboComposite.getProjectCombo().setFocus();
+			}
+		};
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComposite.setLayoutData(gridData);
-		
+
 		new Label(projectComposite, SWT.NONE).setText("Project");
-		
+
 		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
@@ -84,8 +90,14 @@ extends XComposite
 				newIssue.setProject(projectComboComposite.getSelectedProject());
 			}
 		});
+		forceTextFocusOnTab(projectComboComposite);
 
-		departmentComboComposite = new DepartmentComboComposite(mainComposite, SWT.None);
+		departmentComboComposite = new DepartmentComboComposite(mainComposite, SWT.None) {
+			@Override
+			public boolean setFocus() {
+				return departmentComboComposite.getDepartmentCombo().setFocus();
+			}
+		};
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComboComposite.setLayoutData(gridData);
 		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -94,14 +106,30 @@ extends XComposite
 				newIssue.setDepartment(departmentComboComposite.getSelectedDepartment());
 			}
 		});
+		forceTextFocusOnTab(departmentComboComposite);
+
+		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER) {
+			@Override
+			public boolean setFocus() {
+				return startDateControl.setFocus();
+			}
+		};
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		dateComposite.setLayoutData(gridData);
+
+		new Label(dateComposite, SWT.NONE).setText("Start Date");
+		startDateControl = new DateTime(dateComposite, SWT.DATE);
+		startDateControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		forceTextFocusOnTab(startDateControl);
 
 		XComposite timeComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		timeComposite.setLayoutData(gridData);
 
-		new Label(timeComposite, SWT.NONE).setText("Start Time");
-		startTimeControl  = new DateTimeControl(timeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM);
+		new Label(timeComposite, SWT.NONE).setText("Time");
+		startTimeControl = new DateTime(timeComposite, SWT.TIME);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		forceTextFocusOnTab(startTimeControl);
 
 		XComposite durationComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -113,14 +141,19 @@ extends XComposite
 
 		XComposite subjectDescriptionComposite = new XComposite(mainComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 4;
+		gridData.horizontalSpan = 5;
 		subjectDescriptionComposite.setLayoutData(gridData);
 
 		Label subjectLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		subjectLabel.setLayoutData(new GridData());
 		subjectLabel.setText("Subject");
 
-		subjectText = new I18nTextEditor(subjectDescriptionComposite);
+		subjectText = new I18nTextEditor(subjectDescriptionComposite) {
+			@Override
+			public boolean setFocus() {
+				return getText().setFocus();
+			}
+		};
 		subjectText.setI18nText(newIssue.getSubject(), EditMode.DIRECT);
 		
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
@@ -129,20 +162,75 @@ extends XComposite
 
 		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser());
 		descriptionText.setI18nText(newIssue.getDescription(), EditMode.DIRECT);
+//		descriptionText.addKeyListener(new KeyAdapter() {
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				if (e.keyCode == SWT.TAB) {
+//					getParent().forceFocus();
+//				}
+//			}
+//		});
+
+//		controlList.add(projectComposite);
+//		controlList.add(departmentComboComposite);
+//		controlList.add(dateComposite);
+//		controlList.add(timeComposite);
+//		controlList.add(durationComposite);
+//		controlList.add(subjectDescriptionComposite);
+		//		mainComposite.setTabList(controlList);
+
+		//		projectComposite.addFocusListener(new FocusAdapter() {
+		//			@Override
+		//			public void focusGained(FocusEvent e) {
+		//				projectComboComposite.getProjectCombo().setFocus();
+		//			}
+		//			
+		//			@Override
+		//			public void focusLost(FocusEvent e) {
+		//				projectComboComposite.getProjectCombo().setFocus();
+		//			}
+		//		});
+//		mainComposite.addKeyListener(l);
 	}
-	
+
+//	private List<Control> controlList =  new ArrayList<Control>();
+//	private KeyAdapter l = new KeyAdapter() {
+//		int index = 0;
+//		@Override
+//		public void keyPressed(KeyEvent e) {
+//			if (e.keyCode == SWT.TAB) {
+//				int noControl = controlList.size();
+//				index = (index+1) % noControl;
+//				Control c = controlList.get(index);
+//				c.setFocus();
+//			}
+//		}
+//	};
+		private void forceTextFocusOnTab(Composite composite) {
+			List<Text> controlList = new ArrayList<Text>();
+			Control[] controls = composite.getChildren();
+			for (Control control : controls) {
+				if (control instanceof Text) {
+					Text t = (Text)control;
+					controlList.add(t);
+				}
+			}
+			
+			composite.setTabList(controlList.toArray(new Text[0]));
+		}
+
 	public Issue getCreatingIssue() {
 		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
 		newIssue.setAssignee(currentUser);
 		newIssue.setReporter(currentUser);
 		newIssue.getSubject().copyFrom(subjectText.getI18nText());
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
-		
+
 		IssueWorkTimeRange workingTime = new IssueWorkTimeRange(newIssue.getOrganisationID(), IDGenerator.nextID(IssueWorkTimeRange.class), currentUser, newIssue);
-		workingTime.setFrom(startTimeControl.getDate());
+		workingTime.setFrom(DateTimeUtil.getDate(startDateControl));
 		workingTime.setDuration(durationText.getTimeLength());
 		newIssue.addIssueWorkTimeRange(workingTime);
-		
+
 		return newIssue;
 	}
 }
