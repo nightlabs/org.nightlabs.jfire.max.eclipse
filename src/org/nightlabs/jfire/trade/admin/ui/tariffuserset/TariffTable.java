@@ -2,15 +2,13 @@ package org.nightlabs.jfire.trade.admin.ui.tariffuserset;
 
 import java.util.Map;
 
-import org.eclipse.jface.viewers.ColumnLayoutData;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.entityuserset.ui.AbstractEntityTable;
@@ -66,11 +64,12 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 		nameColumn.setText("Tariff Name");
 		nameColumn.setToolTipText("The name of the tariff");
 		
-		TableLayout layout = new TableLayout();
-		ColumnLayoutData checkBoxData = new ColumnPixelData(20, false);
-		layout.addColumnData(checkBoxData);
-		ColumnLayoutData nameData = new ColumnWeightData(1, true);
-		layout.addColumnData(nameData);
+		TableLayout layout = new WeightedTableLayout(new int[] { -1, 100 }, new int[] { 22, -1 });
+//		TableLayout layout = new TableLayout();
+//		ColumnLayoutData checkBoxData = new ColumnPixelData(20, false);
+//		layout.addColumnData(checkBoxData);
+//		ColumnLayoutData nameData = new ColumnWeightData(1, true);
+//		layout.addColumnData(nameData);
 		table.setLayout(layout);		
 	}
 	

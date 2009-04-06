@@ -9,7 +9,6 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.tariffuserset.TariffUserSet;
 import org.nightlabs.jfire.base.jdo.IJDOObjectDAO;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
-import org.nightlabs.jfire.entityuserset.ui.AbstractInheritedEntityUserSetResolver;
 import org.nightlabs.jfire.entityuserset.ui.InheritedEntityUserSetResolver;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
@@ -62,8 +61,7 @@ extends AbstractProductTypePageController<ProductType>
 	@Override
 	protected ProductType retrieveEntity(ProgressMonitor monitor) 
 	{
-		ProductType pt = ProductTypeDAO.sharedInstance().getProductType(getProductTypeID(), getEntityFetchGroups(), 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
+		ProductType pt = loadProductType(monitor);
 		TariffUserSet tariffUserSet = pt.getTariffUserSet();
 		EntityUserSetID entityUserSetID = (EntityUserSetID) JDOHelper.getObjectId(tariffUserSet);
 		getTariffUserSetPageControllerHelper().load(entityUserSetID, null, new SubProgressMonitor(monitor, 50));
@@ -78,9 +76,6 @@ extends AbstractProductTypePageController<ProductType>
 		getTariffUserSetPageControllerHelper().store(new SubProgressMonitor(monitor, 70));
 		ProductTypeType pt = (ProductTypeType) controllerObject;
 		pt.setTariffUserSet((TariffUserSet) getTariffUserSetPageControllerHelper().getEntityUserSet());
-		FieldMetaData metaData = pt.getFieldMetaData(ProductType.FieldName.tariffUserSet, true);
-		metaData.setValueInherited(false);
-//		metaData.setWritable(false);
 		pt = productTypeDAO.storeJDOObject(pt, true, getEntityFetchGroups(), 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 30));
 		return pt;
@@ -95,12 +90,20 @@ extends AbstractProductTypePageController<ProductType>
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 	
+	private ProductType loadProductType(ProgressMonitor monitor) {
+		return ProductTypeDAO.sharedInstance().getProductType(getProductTypeID(),
+				getEntityFetchGroups(),
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+	}	
+	
 	public TariffUserSetPageControllerHelper getTariffUserSetPageControllerHelper() {
 		if (tariffUserSetPageControllerHelper == null) {
 			tariffUserSetPageControllerHelper = new TariffUserSetPageControllerHelper(){
 				@Override
 				protected InheritedEntityUserSetResolver createInheritedEntityUserSetResolver() {
-					return new AbstractInheritedEntityUserSetResolver(){
+					return new InheritedEntityUserSetResolver() 
+					{
 						@Override
 						public EntityUserSetID getInheritedEntityUserSetID(ProgressMonitor monitor) {
 							ProductType extendedProductType = getExtendedProductType(monitor, getProductType().getExtendedProductTypeID());
@@ -109,6 +112,20 @@ extends AbstractProductTypePageController<ProductType>
 							}
 							return null;
 						}
+						
+						@Override
+						public void setEntityUserSetInherited(boolean inherited) {
+							ProductType productType = getProductType();
+							FieldMetaData fieldMetaData = productType.getFieldMetaData(ProductType.FieldName.tariffUserSet, true);
+							fieldMetaData.setValueInherited(inherited);
+						}
+						
+						@Override
+						public boolean isEntityUserSetInherited() {
+							ProductType productType = getProductType();
+							FieldMetaData fieldMetaData = productType.getFieldMetaData(ProductType.FieldName.tariffUserSet, true);
+							return fieldMetaData.isValueInherited();
+						} 
 					};
 				}
 			};
