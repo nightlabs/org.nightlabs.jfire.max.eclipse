@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.admin.ui.tariffuserset;
 
+import java.util.Map;
+
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -9,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.entityuserset.ui.AbstractEntityTable;
 
@@ -34,7 +37,8 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 		public String getColumnText(Object element, int columnIndex) 
 		{
 			if (columnIndex == 1) {
-				Tariff tariff = (Tariff) element;
+//				Tariff tariff = (Tariff) element;
+				Tariff tariff = ((Map.Entry<Tariff, Boolean>) element).getKey();
 				return tariff.getName().getText();
 			}
 			return null;
@@ -44,15 +48,14 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 	/**
 	 * @param parent
 	 * @param style
+	 * @param dirtyStateManager
 	 */
-	public TariffTable(Composite parent, int style) {
-		super(parent, style);
+	public TariffTable(Composite parent, int style, IDirtyStateManager dirtyStateManager) {
+		super(parent, style, dirtyStateManager);
 	}
 
 	@Override
-	protected org.nightlabs.jfire.entityuserset.ui.AbstractEntityTable.AbstractEntityTableLabelProvider createEntityTableLabelProvider(
-			TableViewer tableViewer) 
-	{
+	protected AbstractEntityTableLabelProvider createEntityTableLabelProvider(TableViewer tableViewer) {
 		return new LabelProvider(tableViewer);
 	}
 	
@@ -64,7 +67,7 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 		nameColumn.setToolTipText("The name of the tariff");
 		
 		TableLayout layout = new TableLayout();
-		ColumnLayoutData checkBoxData = new ColumnPixelData(20);
+		ColumnLayoutData checkBoxData = new ColumnPixelData(20, false);
 		layout.addColumnData(checkBoxData);
 		ColumnLayoutData nameData = new ColumnWeightData(1, true);
 		layout.addColumnData(nameData);

@@ -27,7 +27,7 @@ public class TariffSection extends AbstractEntitySection<Tariff>
 	 */
 	@Override
 	protected AbstractEntityTable<Tariff> createTable(Composite parent) {
-		return new TariffTable(parent, SWT.NONE);
+		return new TariffTable(parent, SWT.NONE, this);
 	}
 	
 }
