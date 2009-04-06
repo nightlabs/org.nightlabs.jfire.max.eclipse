@@ -52,7 +52,7 @@ public class CustomerGroupComposite extends AbstractCellReferenceComposite{
 				.append(CellReferenceWizard.DOUBLE_QUOTE).append(selectedCustomerGroup.getCustomerGroupID()).append(CellReferenceWizard.DOUBLE_QUOTE)
 			.append(CellReferenceWizard.R_BRACKET);
 		
-		cellReferencePage.addDimensionScript(this.getClass().getName(), scriptBuffer.toString());
+		cellReferencePage.setDimensionScript(this.getClass().getName(), scriptBuffer.toString());
 	}
 	
 	@Override
@@ -63,6 +63,6 @@ public class CustomerGroupComposite extends AbstractCellReferenceComposite{
 	
 	@Override
 	protected void doDisable() {
-		cellReferencePage.removeDimensionScript(this.getClass().getName());
+		cellReferencePage.clearDimensionScript(this.getClass().getName());
 	}
 }

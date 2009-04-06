@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,31 +15,18 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public class CellReferencePage extends AbstractCellReferencePage{
-	
-	private List<Composite> pageCompositeList = new ArrayList<Composite>();
-	
+
 	private PriceConfigComposite priceConfigComposite = null;
-	
+
 	public CellReferencePage(SourceViewer sourceViewer, PriceConfigComposite priceConfigComposite) {
 		super(sourceViewer, priceConfigComposite);
 		this.priceConfigComposite = priceConfigComposite;
-		
-		scriptBufferOutline
-				.append(CellReferenceWizard.NEWLINE)
-				.append("cell.resolvePriceCellsAmount") //$NON-NLS-1$
-				.append(CellReferenceWizard.L_BRACKET)
-				.append(CellReferenceWizard.NEWLINE)
-				.append(CellReferenceWizard.TAB).append("new Array") //$NON-NLS-1$
-				.append(CellReferenceWizard.L_BRACKET)
-				.append(CellReferenceWizard.NEWLINE)
-				.append(CellReferenceWizard.TAB).append(CellReferenceWizard.TAB)//.append("CurrencyID.create")
-				.append("%s") //$NON-NLS-1$
-				.append(CellReferenceWizard.NEWLINE).append(CellReferenceWizard.TAB).append(CellReferenceWizard.R_BRACKET).append(CellReferenceWizard.NEWLINE)
-				.append(CellReferenceWizard.R_BRACKET);
 	}
 
 	@Override
 	protected List<Composite> createDimensionTabItems(TabFolder tabFolder) {
+		List<Composite> pageCompositeList = new ArrayList<Composite>();
+
 		TabItem customerGroupTabItem = new TabItem(tabFolder, SWT.NONE);
 		customerGroupTabItem.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.cellreference.CellReferencePage.customerGroupTabItem.text")); //$NON-NLS-1$
 		CustomerGroupComposite cgc = new CustomerGroupComposite(this, tabFolder);
@@ -73,42 +61,52 @@ public class CellReferencePage extends AbstractCellReferencePage{
 		PriceFragmentTypeComposite pfc = new PriceFragmentTypeComposite(this, tabFolder);
 		priceFragmentTabItem.setControl(pfc);
 		pageCompositeList.add(pfc);
-		
+
 		return pageCompositeList;
 	}
-	
-	private StringBuffer scriptBufferOutline = new StringBuffer();
+
 	private Map<String, String> scriptMap = new HashMap<String, String>();
 
 	private String generatedScript = null;
-	
-	public void addDimensionScript(String dimensionKey, String dimensionScript){
+
+	public void setDimensionScript(String dimensionKey, String dimensionScript) {
 		scriptMap.put(dimensionKey, dimensionScript);
 		generateScript();
 	}
-	
-	public void removeDimensionScript(String dimensionKey){
-		if(scriptMap.get(dimensionKey) != null){
+
+	public void clearDimensionScript(String dimensionKey){
+		if (scriptMap.containsKey(dimensionKey)) {
 			scriptMap.remove(dimensionKey);
 			generateScript();
 		}//if
 	}
-	
+
 	private void generateScript(){
-		StringBuffer scriptBuffer = new StringBuffer();
-		int i = 0;
-		for(String script : scriptMap.values()){
-			scriptBuffer.append(script);
-			if(i < scriptMap.size() - 1){
-				scriptBuffer.append(",").append(CellReferenceWizard.NEWLINE).append(CellReferenceWizard.TAB).append(CellReferenceWizard.TAB); //$NON-NLS-1$
-			}//if
-			i++;
-		}//for
-		
-		generatedScript = String.format(scriptBufferOutline.toString(), scriptBuffer.toString());
+		StringBuilder scriptBuilder = new StringBuilder();
+
+		scriptBuilder
+			.append(CellReferenceWizard.NEWLINE)
+			.append("cell.resolvePriceCellsAmount") //$NON-NLS-1$
+			.append(CellReferenceWizard.L_BRACKET)
+			.append(CellReferenceWizard.NEWLINE)
+			.append(CellReferenceWizard.TAB);
+
+		for (Iterator<String> itScript = scriptMap.values().iterator(); itScript.hasNext(); ) {
+			String script = itScript.next();
+			scriptBuilder.append(script);
+			if (itScript.hasNext()){
+				scriptBuilder.append(",").append(CellReferenceWizard.NEWLINE).append(CellReferenceWizard.TAB); //$NON-NLS-1$
+			}
+		}
+
+		scriptBuilder
+			.append(CellReferenceWizard.NEWLINE)
+			.append(CellReferenceWizard.R_BRACKET);
+
+		generatedScript = scriptBuilder.toString();
 		getSourcePreviewComposite().getDocument().set(generatedScript);
 	}
-	
+
 	public String getGeneratedScript(){
 		return generatedScript;
 	}

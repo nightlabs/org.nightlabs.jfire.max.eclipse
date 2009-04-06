@@ -77,7 +77,7 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 				.append(CellReferenceWizard.DOUBLE_QUOTE).append(selectedCurrency.getCurrencyID()).append(CellReferenceWizard.DOUBLE_QUOTE)
 			.append(CellReferenceWizard.R_BRACKET);
 		
-		cellReferencePage.addDimensionScript(this.getClass().getName(), scriptBuffer.toString());
+		cellReferencePage.setDimensionScript(this.getClass().getName(), scriptBuffer.toString());
 	}
 	
 	@Override
@@ -88,6 +88,6 @@ public class CurrencyComposite extends AbstractCellReferenceComposite{
 
 	@Override
 	protected void doDisable() {
-		cellReferencePage.removeDimensionScript(this.getClass().getName());
+		cellReferencePage.clearDimensionScript(this.getClass().getName());
 	}
 }
