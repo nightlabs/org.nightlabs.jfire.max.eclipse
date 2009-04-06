@@ -49,7 +49,7 @@
             indexHint="20">
       </pageFactory>
       <pageFactory
-            class="org.nightlabs.jfire.trade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
+            class="org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             indexHint="60">
       </pageFactory>      
