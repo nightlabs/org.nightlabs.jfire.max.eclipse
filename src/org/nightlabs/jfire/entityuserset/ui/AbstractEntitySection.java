@@ -1,13 +1,8 @@
 package org.nightlabs.jfire.entityuserset.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
@@ -33,16 +28,17 @@ extends ToolBarSectionPart
 	public AbstractEntitySection(IFormPage page, Composite parent, String title) {
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED, title);
 		table = createTable(getContainer());
-		table.addCheckStateChangedListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem tableItem = ((TableItem) e.item);
-				boolean checked = tableItem.getChecked();
-				Entity entity = (Entity) tableItem.getData();
-				Map<Entity, Boolean> entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
-				entities.put(entity, checked);
-			}
-		});
+//		table.addCheckStateChangedListener(new SelectionAdapter(){
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				TableItem tableItem = ((TableItem) e.item);
+//				boolean checked = tableItem.getChecked();
+//				Entity entity = (Entity) tableItem.getData();
+//				Map<Entity, Boolean> entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
+//				entities.put(entity, checked);
+//				markDirty();
+//			}
+//		});
 	}
 
 	/**
@@ -58,13 +54,13 @@ extends ToolBarSectionPart
 	
 	private void setEntities(Map<Entity, Boolean> entities) {
 		table.setEntityInput(entities);
-		Collection<Entity> checkedElements = new ArrayList<Entity>();
-		for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
-			if (entry.getValue()) {
-				checkedElements.add(entry.getKey());
-			}
-		}
-		table.setCheckedElements(checkedElements);
+//		Collection<Entity> checkedElements = new ArrayList<Entity>();
+//		for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+//			if (entry.getValue()) {
+//				checkedElements.add(entry.getKey());
+//			}
+//		}
+//		table.setCheckedElements(checkedElements);
 	}
 	
 	public void setAuthorizedObject(AuthorizedObject authorizedObject) 

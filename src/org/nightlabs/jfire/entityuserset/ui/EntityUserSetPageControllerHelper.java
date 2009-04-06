@@ -39,7 +39,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 		EntityUserSet.FETCH_GROUP_NAME,
 		EntityUserSet.FETCH_GROUP_DESCRIPTION,
 		EntityUserSet.FETCH_GROUP_AUTHORIZED_OBJECT_REFS,
-		AuthorizedObjectRef.FETCH_GROUP_ENTITY_REFS
+		AuthorizedObjectRef.FETCH_GROUP_ENTITY_REFS,
 	};
 
 	private static final String[] FETCH_GROUPS_AUTHORIZED_OBJECT = {
@@ -85,16 +85,19 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	 */
 	public static final String PROPERTY_NAME_ENTITY_REMOVED_TO_AUTHORIZED_OBJECT = "entityRemoved"; //$NON-NLS-1$
 	
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);	
+	private PropertyChangeSupport propertyChangeSupport;	
 	private EntityUserSetID entityUserSetID;
 	private EntityUserSet<Entity> entityUserSet;
 	private String[] entityUserSetFetchGroups;
 	private Map<AuthorizedObject, Boolean> authorizedObjects;
 	private Map<AuthorizedObjectID, Map<Entity, Boolean>> authorizedObjectIDToEntities;
-	
 	private boolean loaded = false;
+	private InheritedEntityUserSetResolver<Entity> inheritedEntityUserSetResolver;
 	
-	public EntityUserSetPageControllerHelper() {}
+	public EntityUserSetPageControllerHelper() {
+		super();
+		propertyChangeSupport = new PropertyChangeSupport(this);
+	}
 
 	public EntityUserSet<Entity> getEntityUserSet() {
 		checkLoaded();
@@ -154,6 +157,14 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 		}
 	}
 	
+	public InheritedEntityUserSetResolver<Entity> getInheritedEntityUserSetResolver() 
+	{
+		if (inheritedEntityUserSetResolver == null) {
+			inheritedEntityUserSetResolver = createInheritedEntityUserSetResolver();
+		}
+		return inheritedEntityUserSetResolver;
+	}
+	
 	/**
 	 * Return the fetch groups which should be used for loading the entities.
 	 * This fetch group should be used inside the implementation of {@link #loadEntities(ProgressMonitor)}.
@@ -169,7 +180,25 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	 * @return a {@link Collection} containing all necessary instances of Entity which should be selectable.
 	 */
 	protected abstract Collection<Entity> loadEntities(ProgressMonitor monitor);
-		
+	
+	/**
+	 * Creates an implementation of {@link InheritedEntityUserSetResolver} for thsi controller.
+	 * @return the implementation of {@link InheritedEntityUserSetResolver} for this controller.
+	 */
+	protected abstract InheritedEntityUserSetResolver<Entity> createInheritedEntityUserSetResolver();
+	
+	/**
+	 * Creates a new instance of an {@link EntityUserSet} for the entity type..
+	 * @return a new {@link EntityUserSet} for the entity type.  
+	 */
+	protected abstract EntityUserSet<Entity> createEntityUserSet();
+	
+	/**
+	 * Returns the {@link Class} of the entity.
+	 * @return the class of the entity.
+	 */
+	protected abstract Class<Entity> getEntityClass();
+	
 	/**
 	 * Loads the {@link EntityUserSet} and the fills up the corresponding data. 
 	 * 
@@ -279,7 +308,11 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 			for (AuthorizedObjectRef<Entity> authorizedObjectRef : entityUserSet.getAuthorizedObjectRefs()) {
 				oldEntityUserSetAuthorizedObjectIDs.add(authorizedObjectRef.getAuthorizedObjectIDAsOID());
 			}
-						
+
+			if (entityUserSet.getEntityUserSetController() == null) {
+				entityUserSet.setEntityUserSetController(new EntityUserSetControllerClientImpl());
+			}
+			
 			// add or remove edited authorizedObjects 
 			for (Map.Entry<AuthorizedObject, Boolean> entry : authorizedObjects.entrySet()) {
 				AuthorizedObject authorizedObject = entry.getKey();
@@ -289,7 +322,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 					// if the authorizedObject is not yet included do it.  
 					if (!oldEntityUserSetAuthorizedObjectIDs.contains(authorizedObjectID)) {
 						entityUserSet.addAuthorizedObject(authorizedObjectID); 
-					}					
+					}
 				}
 				else {
 					// if the authorizedObject is still contained, remove it
@@ -313,7 +346,8 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 						Entity e = entityRef.getEntity();
 						if (e.equals(entity)) {
 							if (!value) {
-								it.remove();	
+//								it.remove();
+								authorizedObjectRef.removeEntity(entity);
 							}
 							entityFound = true;
 							break;
@@ -326,10 +360,11 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 			}
 			monitor.worked(10);
 
-			entityUserSet = EntityUserSetDAO.sharedInstance().storeEntityuserSet(entityUserSet, 
+			entityUserSet = EntityUserSetDAO.sharedInstance().storeEntityUserSet(entityUserSet, 
 					true, getEntityUserSetFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 80));
 		} finally {
 			monitor.done();
 		}
 	}
+	
 }

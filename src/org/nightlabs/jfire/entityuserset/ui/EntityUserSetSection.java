@@ -92,9 +92,9 @@ extends ToolBarSectionPart
 			if (entityUserSetPageControllerHelper == null)
 				return;
 
-			final AssignEntityUserSetWizard assignEntityUserSetWizard = new AssignEntityUserSetWizard(
-//					entityUserSetPageControllerHelper.getAuthorityTypeID(),
-//					entityUserSetPageControllerHelper.getInheritedSecuringAuthorityResolver()
+			final AssignEntityUserSetWizard<Entity> assignEntityUserSetWizard = new AssignEntityUserSetWizard<Entity>(
+					entityUserSetPageControllerHelper.getEntityUserSetID(),
+					entityUserSetPageControllerHelper
 			);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), assignEntityUserSetWizard);
 			if (dialog.open() == Dialog.OK) {
@@ -103,7 +103,7 @@ extends ToolBarSectionPart
 					protected IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 						entityUserSetPageControllerHelper.load(
 								assignEntityUserSetWizard.getEntityUserSetID(),
-								null,
+								assignEntityUserSetWizard.getNewEntityUserSet(),
 								monitor);
 
 //						entityUserSetPageControllerHelper.setAssignSecuringAuthority(

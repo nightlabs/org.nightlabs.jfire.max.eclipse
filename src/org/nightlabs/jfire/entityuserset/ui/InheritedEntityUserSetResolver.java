@@ -7,11 +7,13 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
  *
  */
-public interface InheritedEntityUserSetResolver 
+public interface InheritedEntityUserSetResolver<Entity> 
 {
 	EntityUserSetID getInheritedEntityUserSetID(ProgressMonitor monitor);
 	
 	boolean isEntityUserSetInherited();
 	
 	void setEntityUserSetInherited(boolean inherited);
+	
+//	EntityUserSet<Entity> createEntityUserSet();
 }
