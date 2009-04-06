@@ -39,7 +39,7 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 		EntityUserSet.FETCH_GROUP_NAME,
 		EntityUserSet.FETCH_GROUP_DESCRIPTION,
 		EntityUserSet.FETCH_GROUP_AUTHORIZED_OBJECT_REFS,
-		AuthorizedObjectRef.FETCH_GROUP_ENTITY_REFS,
+		AuthorizedObjectRef.FETCH_GROUP_ENTITY_REFS
 	};
 
 	private static final String[] FETCH_GROUPS_AUTHORIZED_OBJECT = {
@@ -92,7 +92,8 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	private Map<AuthorizedObject, Boolean> authorizedObjects;
 	private Map<AuthorizedObjectID, Map<Entity, Boolean>> authorizedObjectIDToEntities;
 	private boolean loaded = false;
-	private InheritedEntityUserSetResolver<Entity> inheritedEntityUserSetResolver;
+	private volatile InheritedEntityUserSetResolver<Entity> inheritedEntityUserSetResolver;
+//	private Inheritable inheritable;
 	
 	public EntityUserSetPageControllerHelper() {
 		super();
@@ -157,10 +158,18 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 		}
 	}
 	
+	/**
+	 * Get the current {@link InheritedEntityUserSetResolver} for this helper.
+	 * Note, that this method might return <code>null</code>, check {@link #isManageInheritance()}
+	 * to see if this helper manages inheritance.
+	 * @return The current instance of {@link InheritedEntityUserSetResolver} or <code>null</code> if {@link #isManageInheritance()} is <code>false</code>.
+	 */	
 	public InheritedEntityUserSetResolver<Entity> getInheritedEntityUserSetResolver() 
 	{
 		if (inheritedEntityUserSetResolver == null) {
-			inheritedEntityUserSetResolver = createInheritedEntityUserSetResolver();
+			synchronized (this) {
+				inheritedEntityUserSetResolver = createInheritedEntityUserSetResolver();
+			}
 		}
 		return inheritedEntityUserSetResolver;
 	}
@@ -259,8 +268,9 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 						}
 					}
 				}
-				propertyChangeSupport.firePropertyChange(PROPERTY_NAME_ENTITY_USER_SET_LOADED, null, entityUserSet);				
 			}
+			inheritedEntityUserSetResolver = null;				
+			propertyChangeSupport.firePropertyChange(PROPERTY_NAME_ENTITY_USER_SET_LOADED, null, entityUserSet);				
 			loaded = true;
 		} finally {
 			monitor.done();
@@ -346,7 +356,6 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 						Entity e = entityRef.getEntity();
 						if (e.equals(entity)) {
 							if (!value) {
-//								it.remove();
 								authorizedObjectRef.removeEntity(entity);
 							}
 							entityFound = true;
@@ -366,5 +375,9 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 			monitor.done();
 		}
 	}
-	
+
+	public boolean isEntityUserSetInitiallyInherited() {
+		return getInheritedEntityUserSetResolver().isEntityUserSetInherited();			
+	}
+
 }

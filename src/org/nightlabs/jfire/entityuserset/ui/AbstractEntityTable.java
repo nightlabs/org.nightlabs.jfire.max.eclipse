@@ -114,7 +114,7 @@ extends AbstractTableComposite<Map.Entry<Entity, Boolean>>
 	protected void createTableColumns(TableViewer tableViewer, Table table) 
 	{
 		TableColumn checkBoxColumn = new TableColumn(table, SWT.NONE);
-		checkBoxColumn.setText("Check");
+		checkBoxColumn.setText("");
 		checkBoxColumn.setToolTipText("Check if the selected object should be included or not");
 		addCheckStateChangedListener(new SelectionAdapter(){
 			@Override

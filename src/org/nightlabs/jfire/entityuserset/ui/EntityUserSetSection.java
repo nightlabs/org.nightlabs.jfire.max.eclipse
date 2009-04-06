@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.job.Job;
@@ -22,6 +23,8 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
+import org.nightlabs.util.Util;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -61,8 +64,8 @@ extends ToolBarSectionPart
 
 		assignEntityUserSetAction.setEnabled(false);
 		getToolBarManager().add(assignEntityUserSetAction);
-//		inheritAction.setEnabled(false);
-//		getToolBarManager().add(inheritAction);
+		inheritAction.setEnabled(false);
+		getToolBarManager().add(inheritAction);
 		updateToolBarManager();
 
 		name.addDisposeListener(new DisposeListener() {
@@ -106,14 +109,9 @@ extends ToolBarSectionPart
 								assignEntityUserSetWizard.getNewEntityUserSet(),
 								monitor);
 
-//						entityUserSetPageControllerHelper.setAssignSecuringAuthority(
-//								assignAuthorityWizard.getAuthorityID(),
-//								assignAuthorityWizard.isAuthorityIDInherited()
-//						);
-
 						getSection().getDisplay().asyncExec(new Runnable() {
 							public void run() {
-//								inheritAction.setChecked(assignAuthorityWizard.isAuthorityIDInherited());
+								inheritAction.setChecked(assignEntityUserSetWizard.isEntityUserSetIDInherited());
 								entityUserSetChanged();
 								markDirty();
 							}
@@ -128,51 +126,49 @@ extends ToolBarSectionPart
 		}
 	};
 
-//	private InheritanceAction inheritAction = new InheritanceAction() {
-//		@Override
-//		public void run() {
-//			final boolean oldEnabled = inheritAction.isEnabled();
-//			inheritAction.setEnabled(false);
-//			Job job = new Job("loadingAuthority") {
-//				@Override
-//				protected org.eclipse.core.runtime.IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
-//					try {
-//						if (!entityUserSetPageControllerHelper.isManageInheritance())
-//							return Status.OK_STATUS;
-//						boolean setInherited = isChecked();
-//						AuthorityID parentAuthorityID = entityUserSetPageControllerHelper.isManageInheritance()
-//							? entityUserSetPageControllerHelper.getInheritedSecuringAuthorityResolver().getInheritedSecuringAuthorityID(monitor)
-//							: null;
-//						entityUserSetPageControllerHelper.setAssignSecuringAuthority(parentAuthorityID, setInherited);
-//						AuthorityID newAuthorityID = setInherited ? parentAuthorityID : entityUserSetPageControllerHelper.getAuthorityID();
-//						if (!Util.equals(newAuthorityID, entityUserSetPageControllerHelper.getAuthorityID())) {
-//							entityUserSetPageControllerHelper.load(
-//									entityUserSetPageControllerHelper.getAuthorityTypeID(), // The type should not change when re-assigning
-//									newAuthorityID,
-//									null, monitor);
-//						}
-//
-//						getSection().getDisplay().asyncExec(new Runnable() {
-//							public void run() {
-//								authorityChanged();
-//								markDirty();
-//							}
-//						});
-//
-//						return Status.OK_STATUS;
-//					} finally {
-//						getSection().getDisplay().asyncExec(new Runnable() {
-//							public void run() {
-//								inheritAction.setEnabled(oldEnabled);
-//							}
-//						});
-//					}
-//				}
-//			};
-//			job.setPriority(Job.SHORT);
-//			job.schedule();
-//		}
-//	};
+	private InheritanceAction inheritAction = new InheritanceAction() {
+		@Override
+		public void run() {
+			final boolean oldEnabled = inheritAction.isEnabled();
+			inheritAction.setEnabled(false);
+			Job job = new Job("Loading EntityUserSet") {
+				@Override
+				protected org.eclipse.core.runtime.IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
+					try {
+						boolean setInherited = isChecked();
+						InheritedEntityUserSetResolver<Entity> resolver = entityUserSetPageControllerHelper.getInheritedEntityUserSetResolver(); 
+						EntityUserSetID parentEntityUserSetID = resolver.getInheritedEntityUserSetID(monitor);
+						resolver.setEntityUserSetInherited(setInherited);
+						EntityUserSetID newEntityUserSetID = setInherited ? parentEntityUserSetID : entityUserSetPageControllerHelper.getEntityUserSetID();
+						if (!Util.equals(newEntityUserSetID, entityUserSetPageControllerHelper.getEntityUserSetID())) {
+							entityUserSetPageControllerHelper.load(
+									newEntityUserSetID, 
+									null, monitor);
+						}
+
+						getSection().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								entityUserSetChanged();
+								markDirty();
+							}
+						});
+
+						return Status.OK_STATUS;
+					} finally {
+						if (!getSection().isDisposed()) {
+							getSection().getDisplay().asyncExec(new Runnable() {
+								public void run() {
+									inheritAction.setEnabled(oldEnabled);
+								}
+							});							
+						}
+					}
+				}
+			};
+			job.setPriority(Job.SHORT);
+			job.schedule();
+		}
+	};
 
 	/**
 	 * Get the object that has been set by {@link #setEntityUserSetPageControllerHelper(EntityUserSetPageControllerHelper)} before or <code>null</code>.
@@ -196,12 +192,12 @@ extends ToolBarSectionPart
 			public void run() {
 				assignEntityUserSetAction.setEnabled(entityUserSetPageControllerHelper != null);
 				entityUserSetChanged();
-//				inheritAction.setEnabled(entityUserSetPageControllerHelper != null);
-//				inheritAction.setChecked(false);
-//				if (entityUserSetPageControllerHelper != null && entityUserSetPageControllerHelper.isManageInheritance()) {
-//					inheritAction.setEnabled(true);
-//					inheritAction.setChecked(entityUserSetPageControllerHelper.isAuthorityInitiallyInherited());
-//				}
+				inheritAction.setEnabled(entityUserSetPageControllerHelper != null);
+				inheritAction.setChecked(false);
+				if (entityUserSetPageControllerHelper != null) {
+					inheritAction.setEnabled(true);
+					inheritAction.setChecked(entityUserSetPageControllerHelper.isEntityUserSetInitiallyInherited());
+				}
 			}
 		});
 	}

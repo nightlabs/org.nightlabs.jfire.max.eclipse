@@ -41,7 +41,7 @@ extends DynamicPathWizard
 		return selectEntityUserSetPage.getNewEntityUserSet();
 	}
 
-	public boolean isAuthorityIDInherited() {
+	public boolean isEntityUserSetIDInherited() {
 		return SelectEntityUserSetPage.Action.inherit == selectEntityUserSetPage.getAction();
 	}
 	
