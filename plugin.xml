@@ -36,12 +36,11 @@
       <pageFactory
             class="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"
             editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor"
-            indexHint="200">
-        <pageFactory
-            class="org.nightlabs.jfire.trade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
-            editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor" 
-            indexHint="500"/>              
-      </pageFactory>
+            indexHint="200"/>
+	  <pageFactory
+	        class="org.nightlabs.jfire.dynamictrade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
+	        editorID="org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor" 
+	        indexHint="500"/>
    </extension>
    <extension
          point="org.nightlabs.base.ui.searchResultProvider">
