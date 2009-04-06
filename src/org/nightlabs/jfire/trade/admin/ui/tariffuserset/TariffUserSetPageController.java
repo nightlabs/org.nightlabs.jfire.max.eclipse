@@ -108,7 +108,9 @@ extends AbstractProductTypePageController<ProductType>
 						public EntityUserSetID getInheritedEntityUserSetID(ProgressMonitor monitor) {
 							ProductType extendedProductType = getExtendedProductType(monitor, getProductType().getExtendedProductTypeID());
 							if (extendedProductType != null) {
-								return (EntityUserSetID) JDOHelper.getObjectId(extendedProductType.getTariffUserSet());	
+								TariffUserSet tariffUserSet = extendedProductType.getTariffUserSet();
+								// TODO: why is this tariffUserSet null, although the editor shows me an assigned tariffUserSet for the extended productType?
+								return (EntityUserSetID) JDOHelper.getObjectId(tariffUserSet);	
 							}
 							return null;
 						}
