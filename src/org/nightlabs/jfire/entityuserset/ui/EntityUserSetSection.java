@@ -22,6 +22,8 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
 import org.nightlabs.util.Util;
@@ -87,7 +89,10 @@ extends ToolBarSectionPart
 	
 	private Action assignEntityUserSetAction = new Action() {
 		{
-			setText("Assign EntityUserSet");
+			setText("Assign");
+			setToolTipText("Assign");
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), 
+					EntityUserSetSection.class, "Assign", ImageFormat.gif));
 		}
 
 		@Override
@@ -101,7 +106,7 @@ extends ToolBarSectionPart
 			);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), assignEntityUserSetWizard);
 			if (dialog.open() == Dialog.OK) {
-				Job job = new Job("Loading EntityUserSet") {
+				Job job = new Job(String.format("Loading %s", entityUserSetPageControllerHelper.getEntityUserSetName())) {
 					@Override
 					protected IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 						entityUserSetPageControllerHelper.load(
@@ -131,7 +136,7 @@ extends ToolBarSectionPart
 		public void run() {
 			final boolean oldEnabled = inheritAction.isEnabled();
 			inheritAction.setEnabled(false);
-			Job job = new Job("Loading EntityUserSet") {
+			Job job = new Job(String.format("Loading %s", entityUserSetPageControllerHelper.getEntityUserSetName())) {
 				@Override
 				protected org.eclipse.core.runtime.IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 					try {
@@ -197,7 +202,11 @@ extends ToolBarSectionPart
 				if (entityUserSetPageControllerHelper != null) {
 					inheritAction.setEnabled(true);
 					inheritAction.setChecked(entityUserSetPageControllerHelper.isEntityUserSetInitiallyInherited());
-				}
+					
+					String name = entityUserSetPageControllerHelper.getEntityUserSetName();
+					assignEntityUserSetAction.setText(String.format("Assign %s", name));
+					assignEntityUserSetAction.setToolTipText(String.format("Assign %s", name));					
+				}				
 			}
 		});
 	}
@@ -209,18 +218,18 @@ extends ToolBarSectionPart
 		if (entityUserSetPageControllerHelper == null || entityUserSetPageControllerHelper.getEntityUserSet() == null) {
 			name.setI18nText(null, EditMode.DIRECT);
 			description.setI18nText(null, EditMode.DIRECT);
-
-			if (entityUserSetPageControllerHelper == null)
-				setMessage("No EntityUserSet Selected");
-			else
-				setMessage("No EntityUserSet Assigned");
-
+			if (entityUserSetPageControllerHelper == null) {
+				setMessage("Nothing selected");	
+			}
+			else {
+				String name = entityUserSetPageControllerHelper.getEntityUserSetName();
+				setMessage(String.format("No %s assigned", name));	
+			}
 			setEnabled(false);
 		}
 		else {
 			name.setI18nText(entityUserSetPageControllerHelper.getEntityUserSet().getName(), EditMode.DIRECT);
 			description.setI18nText(entityUserSetPageControllerHelper.getEntityUserSet().getDescription(), EditMode.DIRECT);
-
 			setMessage(null);
 			setEnabled(true);
 		}

@@ -209,6 +209,12 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	protected abstract Class<Entity> getEntityClass();
 	
 	/**
+	 * Returns the name of the {@link EntityUserSet} which should be used in the UI.
+	 * @return the name of the {@link EntityUserSet} which should be used in the UI.
+	 */
+	public abstract String getEntityUserSetName();
+	
+	/**
 	 * Loads the {@link EntityUserSet} and the fills up the corresponding data. 
 	 * 
 	 * @param entityUserSetID the {@link EntityUserSetID} to load the {@link EntityUserSet} for and populate the controller

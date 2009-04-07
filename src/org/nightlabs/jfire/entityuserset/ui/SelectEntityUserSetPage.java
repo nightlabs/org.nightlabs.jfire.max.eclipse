@@ -35,7 +35,6 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.admin.ui.resource.Messages;
 import org.nightlabs.jfire.entityuserset.EntityUserSet;
 import org.nightlabs.jfire.entityuserset.dao.EntityUserSetDAO;
 import org.nightlabs.jfire.entityuserset.id.EntityUserSetID;
@@ -73,6 +72,7 @@ extends WizardHopPage
 	private EntityUserSetID selectedEntityUserSetID;
 	private EntityUserSet<Entity> newEntityUserSet = null;
 	private boolean initializationFinished = false;
+	private String entityUserSetName;
 	
 	/**
 	 * @param entityUserSetID
@@ -82,7 +82,8 @@ extends WizardHopPage
 			EntityUserSetID entityUserSetID,
 			EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper) 
 	{
-		super(SelectEntityUserSetPage.class.getName(), "Select EntityUserSet");
+		super(SelectEntityUserSetPage.class.getName(), "Select "+entityUserSetPageControllerHelper.getEntityUserSetName());
+		this.entityUserSetName = entityUserSetPageControllerHelper.getEntityUserSetName();
 		this.entityUserSetID = entityUserSetID;
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
 		this.inheritedEntityUserSetResolver = entityUserSetPageControllerHelper.getInheritedEntityUserSetResolver();
@@ -90,7 +91,7 @@ extends WizardHopPage
 
 	private void setInheritedEntityUserSetName(String entityUserSetName)
 	{
-		radioButtonInherit.setText(String.format(("Inherit EntityUserSet (%s)"), entityUserSetName));
+		radioButtonInherit.setText(String.format(("Inherit %s (%s)"), this.entityUserSetName, entityUserSetName));
 	}
 
 	@Override
@@ -112,7 +113,7 @@ extends WizardHopPage
 
 		radioButtonNone = new Button(page, SWT.RADIO);
 		radioButtonNone.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonNone.setText("Do not assign EntityUserSet");
+		radioButtonNone.setText(String.format("Do not assign %s", entityUserSetName));
 		radioButtonNone.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -123,7 +124,7 @@ extends WizardHopPage
 		radioButtonCreate = new Button(page, SWT.RADIO);
 		radioButtonCreate.setEnabled(false); // enabling this when the AuthorityType has been loaded.
 		radioButtonCreate.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonCreate.setText("Create New EntityUserSet");
+		radioButtonCreate.setText(String.format("Create new %s", entityUserSetName));
 		radioButtonCreate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -160,7 +161,7 @@ extends WizardHopPage
 
 		radioButtonSelect = new Button(page, SWT.RADIO);
 		radioButtonSelect.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		radioButtonSelect.setText("Select EntityUserSet");
+		radioButtonSelect.setText(String.format("Select %s", entityUserSetName));
 		radioButtonSelect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -187,11 +188,11 @@ extends WizardHopPage
 		dummy.getName().setText(NLLocale.getDefault().getLanguage(), "Loading");
 		entityUserSetList.addElement(dummy);
 
-		Job loadJob = new Job("Loading EntityUserSets") {
+		Job loadJob = new Job(String.format("Loading %s", entityUserSetName)) {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				monitor.beginTask(Messages.getString("org.nightlabs.jfire.base.admin.ui.editor.authority.SelectAuthorityPage.job.loadingAuthorityTypes"), 100); //$NON-NLS-1$
+				monitor.beginTask(String.format("Loading %s", entityUserSetName), 100);
 
 				if (inheritedEntityUserSetResolver == null) {
 					inheritedEntityUserSet = null;
@@ -221,7 +222,7 @@ extends WizardHopPage
 						new String[] {FetchPlan.DEFAULT, EntityUserSet.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
-				
+
 				Collections.sort(entityUserSets, new Comparator<EntityUserSet>() {
 						@Override
 						public int compare(EntityUserSet o1, EntityUserSet o2) {

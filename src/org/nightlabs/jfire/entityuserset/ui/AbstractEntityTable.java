@@ -165,12 +165,14 @@ extends AbstractTableComposite<Map.Entry<Entity, Boolean>>
 
 	public void setEntityInput(Map<Entity, Boolean> entities) {
 		setInput(entities);
-		Collection<Map.Entry<Entity, Boolean>> checkedElements = new ArrayList<Map.Entry<Entity, Boolean>>();
-		for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
-			if (entry.getValue()) {
-				checkedElements.add(entry);
+		if (entities != null) {
+			Collection<Map.Entry<Entity, Boolean>> checkedElements = new ArrayList<Map.Entry<Entity, Boolean>>();
+			for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+				if (entry.getValue()) {
+					checkedElements.add(entry);
+				}
 			}
+			setCheckedElements(checkedElements);			
 		}
-		setCheckedElements(checkedElements);
 	}
 }

@@ -2,10 +2,12 @@ package org.nightlabs.jfire.entityuserset.ui;
 
 import java.util.Map;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.security.AuthorizedObject;
 
@@ -16,9 +18,47 @@ import org.nightlabs.jfire.security.AuthorizedObject;
 public abstract class AbstractEntitySection<Entity> 
 extends ToolBarSectionPart 
 {
+	class SelectAllAction extends Action 
+	{
+		public SelectAllAction() {
+			super();
+			setText("Select All");
+			setToolTipText("Check all elements");
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), SelectAllAction.class));
+		}
+		
+		@Override
+		public void run() {
+			for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+				entry.setValue(true);
+			}
+			table.setEntityInput(entities);
+			markDirty();
+		}
+	}
+
+	class DeselectAllAction extends Action 
+	{
+		public DeselectAllAction() {
+			super();
+			setText("Deselect All");
+			setToolTipText("Uncheck all elements");
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeselectAllAction.class));
+		}
+		
+		@Override
+		public void run() {
+			for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
+				entry.setValue(false);
+			}
+			table.setEntityInput(entities);
+			markDirty();
+		}
+	}
+	
 	private AbstractEntityTable<Entity> table;
 	private EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper;
-	private AuthorizedObject authorizedObject;
+	private Map<Entity, Boolean> entities;
 	
 	/**
 	 * @param page
@@ -28,17 +68,9 @@ extends ToolBarSectionPart
 	public AbstractEntitySection(IFormPage page, Composite parent, String title) {
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED, title);
 		table = createTable(getContainer());
-//		table.addCheckStateChangedListener(new SelectionAdapter(){
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				TableItem tableItem = ((TableItem) e.item);
-//				boolean checked = tableItem.getChecked();
-//				Entity entity = (Entity) tableItem.getData();
-//				Map<Entity, Boolean> entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
-//				entities.put(entity, checked);
-//				markDirty();
-//			}
-//		});
+		getToolBarManager().add(new SelectAllAction());
+		getToolBarManager().add(new DeselectAllAction());
+		updateToolBarManager();
 	}
 
 	/**
@@ -51,24 +83,12 @@ extends ToolBarSectionPart
 	public void setEntityUserSetPageControllerHelper(EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper) {
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
 	}
-	
-	private void setEntities(Map<Entity, Boolean> entities) {
-		table.setEntityInput(entities);
-//		Collection<Entity> checkedElements = new ArrayList<Entity>();
-//		for (Map.Entry<Entity, Boolean> entry : entities.entrySet()) {
-//			if (entry.getValue()) {
-//				checkedElements.add(entry.getKey());
-//			}
-//		}
-//		table.setCheckedElements(checkedElements);
-	}
-	
+		
 	public void setAuthorizedObject(AuthorizedObject authorizedObject) 
 	{
-		this.authorizedObject = authorizedObject;
 		if (entityUserSetPageControllerHelper != null) {
-			Map<Entity, Boolean> entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
-			setEntities(entities);
+			entities = entityUserSetPageControllerHelper.getEntities(authorizedObject);
+			table.setEntityInput(entities);
 		}
 	}
 }

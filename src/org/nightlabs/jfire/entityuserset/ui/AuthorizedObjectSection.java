@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -26,6 +27,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorizedObjectTableViewer;
 import org.nightlabs.jfire.security.AuthorizedObject;
@@ -39,6 +41,44 @@ public class AuthorizedObjectSection<Entity>
 extends ToolBarSectionPart
 implements ISelectionProvider
 {
+	class SelectAllAction extends Action 
+	{
+		public SelectAllAction() {
+			super();
+			setText("Select All");
+			setToolTipText("Check all elements");
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), SelectAllAction.class));
+		}
+		
+		@Override
+		public void run() {
+			for (Map.Entry<AuthorizedObject, Boolean> entry : authorizedObjects) {
+				entry.setValue(true);
+			}
+			authorizedObjectTable.setInput(authorizedObjects);
+			markDirty();
+		}
+	}
+
+	class DeselectAllAction extends Action 
+	{
+		public DeselectAllAction() {
+			super();
+			setText("Deselect All");
+			setToolTipText("Uncheck all elements");
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(Activator.getDefault(), DeselectAllAction.class));
+		}
+		
+		@Override
+		public void run() {
+			for (Map.Entry<AuthorizedObject, Boolean> entry : authorizedObjects) {
+				entry.setValue(false);
+			}
+			authorizedObjectTable.setInput(authorizedObjects);
+			markDirty();
+		}
+	}
+	
 	private AuthorizedObjectTableViewer authorizedObjectTable;
 	private List<Map.Entry<AuthorizedObject, Boolean>> authorizedObjects = new ArrayList<Map.Entry<AuthorizedObject,Boolean>>();
 	private EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper;
@@ -50,7 +90,8 @@ implements ISelectionProvider
 	 * @param page
 	 * @param parent
 	 */
-	public AuthorizedObjectSection(IFormPage page, Composite parent) {
+	public AuthorizedObjectSection(IFormPage page, Composite parent) 
+	{
 		super(page, parent, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED, 
 				"Authorized Objects");
 		
@@ -72,6 +113,10 @@ implements ISelectionProvider
 				fireSelectionChangedEvent();
 			}
 		});
+		
+		getToolBarManager().add(new SelectAllAction());
+		getToolBarManager().add(new DeselectAllAction());
+		updateToolBarManager();
 	}
 	
 	public EntityUserSetPageControllerHelper<Entity> getEntityUserSetPageControllerHelper() {

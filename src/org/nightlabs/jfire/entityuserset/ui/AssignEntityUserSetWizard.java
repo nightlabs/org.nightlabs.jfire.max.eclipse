@@ -25,6 +25,7 @@ extends DynamicPathWizard
 		super();
 		this.entityUserSetID = entityUserSetID;
 		this.entityUserSetPageControllerHelper = entityUserSetPageControllerHelper;
+		setWindowTitle(String.format("Assign %s", entityUserSetPageControllerHelper.getEntityUserSetName()));
 	}
 
 	@Override
