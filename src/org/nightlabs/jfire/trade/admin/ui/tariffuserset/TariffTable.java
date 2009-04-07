@@ -65,11 +65,6 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 		nameColumn.setToolTipText("The name of the tariff");
 		
 		TableLayout layout = new WeightedTableLayout(new int[] { -1, 100 }, new int[] { 22, -1 });
-//		TableLayout layout = new TableLayout();
-//		ColumnLayoutData checkBoxData = new ColumnPixelData(20, false);
-//		layout.addColumnData(checkBoxData);
-//		ColumnLayoutData nameData = new ColumnWeightData(1, true);
-//		layout.addColumnData(nameData);
 		table.setLayout(layout);		
 	}
 	
