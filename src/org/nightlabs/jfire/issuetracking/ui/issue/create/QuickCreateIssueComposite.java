@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
@@ -70,18 +73,27 @@ extends XComposite
 				LayoutMode.TIGHT_WRAPPER);
 		mainComposite.getGridLayout().numColumns = 5;
 
-		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER) {
-			@Override
-			public boolean setFocus() {
-				return projectComboComposite.getProjectCombo().setFocus();
-			}
-		};
+		/////////////////////////////////////////
+		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComposite.setLayoutData(gridData);
 
 		new Label(projectComposite, SWT.NONE).setText("Project");
 
-		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
+		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None) {
+			@Override
+			protected XCombo createCombo() {
+				XCombo combo = super.createCombo();
+				combo.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+						departmentComboComposite.getDepartmentCombo().setFocus();
+					}
+				});
+				return combo;
+			}
+		};
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -90,12 +102,26 @@ extends XComposite
 				newIssue.setProject(projectComboComposite.getSelectedProject());
 			}
 		});
-		forceTextFocusOnTab(projectComboComposite);
 
-		departmentComboComposite = new DepartmentComboComposite(mainComposite, SWT.None) {
+		////////////////////////////////////////
+		XComposite departmentComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		departmentComposite.setLayoutData(gridData);
+		
+		new Label(departmentComposite, SWT.NONE).setText("Department");
+		
+		departmentComboComposite = new DepartmentComboComposite(departmentComposite, SWT.None){
 			@Override
-			public boolean setFocus() {
-				return departmentComboComposite.getDepartmentCombo().setFocus();
+			protected XCombo createCombo() {
+				XCombo combo = super.createCombo();
+				combo.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+						startDateControl.setFocus();
+					}
+				});
+				return combo;
 			}
 		};
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -106,31 +132,28 @@ extends XComposite
 				newIssue.setDepartment(departmentComboComposite.getSelectedDepartment());
 			}
 		});
-		forceTextFocusOnTab(departmentComboComposite);
 
-		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER) {
-			@Override
-			public boolean setFocus() {
-				return startDateControl.setFocus();
-			}
-		};
+		/////////////////////////////////////////
+		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		dateComposite.setLayoutData(gridData);
 
 		new Label(dateComposite, SWT.NONE).setText("Start Date");
-		startDateControl = new DateTime(dateComposite, SWT.DATE);
+		startDateControl = new DateTime(dateComposite, SWT.BORDER | SWT.DATE);
 		startDateControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startDateControl);
 
+		//////////////////////////////////////////
 		XComposite timeComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		timeComposite.setLayoutData(gridData);
 
 		new Label(timeComposite, SWT.NONE).setText("Time");
-		startTimeControl = new DateTime(timeComposite, SWT.TIME);
+		startTimeControl = new DateTime(timeComposite, SWT.BORDER | SWT.TIME);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startTimeControl);
 
+		///////////////////////////////////////////
 		XComposite durationComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
@@ -139,6 +162,7 @@ extends XComposite
 		durationText = new TimeLengthComposite(durationComposite);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		///////////////////////////////////////////
 		XComposite subjectDescriptionComposite = new XComposite(mainComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 5;
@@ -150,74 +174,48 @@ extends XComposite
 
 		subjectText = new I18nTextEditor(subjectDescriptionComposite) {
 			@Override
-			public boolean setFocus() {
-				return getText().setFocus();
+			protected Text getText() {
+				Text text = super.getText();
+				text.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+					}
+				});
+				return text;
 			}
 		};
-		subjectText.setI18nText(newIssue.getSubject(), EditMode.DIRECT);
-		
+
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description");
 
-		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser());
+		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser()) {
+			@Override
+			protected Text createText(Composite parent) {
+				Text text = super.createText(parent);
+				text.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+					}
+				});
+				return text;
+			}
+		};
 		descriptionText.setI18nText(newIssue.getDescription(), EditMode.DIRECT);
-//		descriptionText.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				if (e.keyCode == SWT.TAB) {
-//					getParent().forceFocus();
-//				}
-//			}
-//		});
-
-//		controlList.add(projectComposite);
-//		controlList.add(departmentComboComposite);
-//		controlList.add(dateComposite);
-//		controlList.add(timeComposite);
-//		controlList.add(durationComposite);
-//		controlList.add(subjectDescriptionComposite);
-		//		mainComposite.setTabList(controlList);
-
-		//		projectComposite.addFocusListener(new FocusAdapter() {
-		//			@Override
-		//			public void focusGained(FocusEvent e) {
-		//				projectComboComposite.getProjectCombo().setFocus();
-		//			}
-		//			
-		//			@Override
-		//			public void focusLost(FocusEvent e) {
-		//				projectComboComposite.getProjectCombo().setFocus();
-		//			}
-		//		});
-//		mainComposite.addKeyListener(l);
 	}
 
-//	private List<Control> controlList =  new ArrayList<Control>();
-//	private KeyAdapter l = new KeyAdapter() {
-//		int index = 0;
-//		@Override
-//		public void keyPressed(KeyEvent e) {
-//			if (e.keyCode == SWT.TAB) {
-//				int noControl = controlList.size();
-//				index = (index+1) % noControl;
-//				Control c = controlList.get(index);
-//				c.setFocus();
-//			}
-//		}
-//	};
-		private void forceTextFocusOnTab(Composite composite) {
-			List<Text> controlList = new ArrayList<Text>();
-			Control[] controls = composite.getChildren();
-			for (Control control : controls) {
-				if (control instanceof Text) {
-					Text t = (Text)control;
-					controlList.add(t);
-				}
+	private void forceTextFocusOnTab(Composite composite) {
+		List<Text> controlList = new ArrayList<Text>();
+		Control[] controls = composite.getChildren();
+		for (Control control : controls) {
+			if (control instanceof Text) {
+				Text t = (Text)control;
+				controlList.add(t);
 			}
-			
-			composite.setTabList(controlList.toArray(new Text[0]));
 		}
+
+		composite.setTabList(controlList.toArray(new Text[0]));
+	}
 
 	public Issue getCreatingIssue() {
 		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
@@ -232,5 +230,10 @@ extends XComposite
 		newIssue.addIssueWorkTimeRange(workingTime);
 
 		return newIssue;
+	}
+
+	@Override
+	public boolean setFocus() {
+		return projectComboComposite.forceFocus();
 	}
 }

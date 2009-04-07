@@ -23,7 +23,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
@@ -61,8 +60,12 @@ implements ISelectionProvider
 	public ProjectComboComposite(Composite parent, int style,String filterOrganisationID, boolean filterOrganisationIDInverse)
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		
-		projectCombo = new XCombo(this, SWT.BORDER);
+		createCombo();
+		loadProjects();
+	}
+	
+	protected XCombo createCombo() {
+		projectCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		projectCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		projectCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -78,7 +81,7 @@ implements ISelectionProvider
 			}
 		});
 		
-		loadProjects();
+		return projectCombo;
 	}
 	
 	private static String[] FETCH_GROUP_PROJECT = new String[] {
@@ -247,5 +250,10 @@ implements ISelectionProvider
 	
 	public XCombo getProjectCombo() {
 		return projectCombo;
+	}
+	
+	@Override
+	public boolean setFocus() {
+		return projectCombo.setFocus();
 	}
 }

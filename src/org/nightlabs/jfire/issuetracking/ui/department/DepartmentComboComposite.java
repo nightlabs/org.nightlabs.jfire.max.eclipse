@@ -23,7 +23,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -56,9 +55,11 @@ implements ISelectionProvider
 	public DepartmentComboComposite(Composite parent, int style, String filterOrganisationID, boolean filterOrganisationIDInverse)
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-
-		new Label(this, SWT.NONE).setText("Department:");
-		
+		createCombo();
+		loadDepartments();
+	}
+	
+	protected XCombo createCombo() {
 		departmentCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		departmentCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		departmentCombo.addSelectionListener(new SelectionAdapter() {
@@ -74,8 +75,7 @@ implements ISelectionProvider
 				fireSelectionChangedEvent();
 			}
 		});
-
-		loadDepartments();
+		return departmentCombo;
 	}
 
 	private static String[] FETCH_GROUP_DEPARTMENT = new String[] {
@@ -170,5 +170,10 @@ implements ISelectionProvider
 	
 	public XCombo getDepartmentCombo() {
 		return departmentCombo;
+	}
+	
+	@Override
+	public boolean setFocus() {
+		return departmentCombo.setFocus();
 	}
 }
