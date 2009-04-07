@@ -54,5 +54,8 @@ extends EntityUserSetPageControllerHelper<Tariff>
 		return Tariff.class;
 	}
 
-	
+	@Override
+	public String getEntityUserSetName() {
+		return "Tariff User Set";
+	}
 }
