@@ -180,10 +180,6 @@
             categoryID="org.nightlabs.jfire.issuetracking.ui.overview.project"
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectCategoryFactory"
             index="20" name="Project" scope="IssueShelf"/>
-        <categoryFactory
-            categoryID="org.nightlabs.jfire.issuetracking.ui.overview.department"
-            class="org.nightlabs.jfire.issuetracking.ui.department.DepartmentCategoryFactory"
-            index="30" name="Department" scope="IssueShelf"/>
     </extension>
     <extension
           point="org.eclipse.ui.newWizards">
