@@ -170,7 +170,7 @@ implements ISelectionProvider
 	private void entityUserSetChanged()
 	{
 		authorizedObjects.clear();
-		if (entityUserSetPageControllerHelper != null && entityUserSetPageControllerHelper.getEntityUserSet() != null) {
+		if (entityUserSetPageControllerHelper != null) {
 			for (Map.Entry<AuthorizedObject, Boolean> entry : entityUserSetPageControllerHelper.getAuthorizedObjects().entrySet()) {	
 				AuthorizedObject authorizedObject = entry.getKey();
 				if (authorizedObject instanceof UserLocal) {
@@ -180,7 +180,7 @@ implements ISelectionProvider
 					}
 				}
 				authorizedObjects.add(entry);				
-			}	
+			}
 		}
 
 		if (!authorizedObjectTable.getTable().isDisposed())

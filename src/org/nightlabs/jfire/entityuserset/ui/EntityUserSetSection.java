@@ -101,8 +101,8 @@ extends ToolBarSectionPart
 				return;
 
 			final AssignEntityUserSetWizard<Entity> assignEntityUserSetWizard = new AssignEntityUserSetWizard<Entity>(
-					entityUserSetPageControllerHelper.getEntityUserSetID(),
-					entityUserSetPageControllerHelper
+				entityUserSetPageControllerHelper.getEntityUserSetID(),
+				entityUserSetPageControllerHelper
 			);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(getSection().getShell(), assignEntityUserSetWizard);
 			if (dialog.open() == Dialog.OK) {
@@ -206,7 +206,7 @@ extends ToolBarSectionPart
 					String name = entityUserSetPageControllerHelper.getEntityUserSetName();
 					assignEntityUserSetAction.setText(String.format("Assign %s", name));
 					assignEntityUserSetAction.setToolTipText(String.format("Assign %s", name));					
-				}				
+				}
 			}
 		});
 	}

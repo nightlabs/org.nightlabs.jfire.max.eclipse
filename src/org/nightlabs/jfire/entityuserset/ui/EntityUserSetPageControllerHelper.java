@@ -229,6 +229,9 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 			authorizedObjects = new HashMap<AuthorizedObject, Boolean>();
 			authorizedObjectIDToEntities = new HashMap<AuthorizedObjectID, Map<Entity,Boolean>>();
 
+			this.entityUserSetID = null;
+			this.entityUserSet = null;
+			
 			if (entityUserSetID != null) {
 				this.entityUserSetID = entityUserSetID;
 				entityUserSet = EntityUserSetDAO.sharedInstance().getEntityUserSet(entityUserSetID, getEntityUserSetFetchGroups(), 
@@ -275,6 +278,10 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 					}
 				}
 			}
+			else {
+				authorizedObjects.clear();
+				authorizedObjectIDToEntities.clear();				
+			}
 			inheritedEntityUserSetResolver = null;				
 			propertyChangeSupport.firePropertyChange(PROPERTY_NAME_ENTITY_USER_SET_LOADED, null, entityUserSet);				
 			loaded = true;
@@ -313,70 +320,72 @@ public abstract class EntityUserSetPageControllerHelper<Entity>
 	public void store(ProgressMonitor monitor) 
 	{
 		checkLoaded();
-		if (entityUserSet == null) {
-			throw new IllegalStateException("entityUserSet is null, this should never happen!");
-		}
+//		if (entityUserSet == null) {
+//			throw new IllegalStateException("entityUserSet is null, this should never happen!");
+//		}
 		
 		monitor.beginTask("Saving EntityUserSet", 100);
 		try {
-			Collection<AuthorizedObjectID> oldEntityUserSetAuthorizedObjectIDs = new HashSet<AuthorizedObjectID>(
-					entityUserSet.getAuthorizedObjectRefs().size());
-			for (AuthorizedObjectRef<Entity> authorizedObjectRef : entityUserSet.getAuthorizedObjectRefs()) {
-				oldEntityUserSetAuthorizedObjectIDs.add(authorizedObjectRef.getAuthorizedObjectIDAsOID());
-			}
+			if (entityUserSet != null) {
+				Collection<AuthorizedObjectID> oldEntityUserSetAuthorizedObjectIDs = new HashSet<AuthorizedObjectID>(
+						entityUserSet.getAuthorizedObjectRefs().size());
+				for (AuthorizedObjectRef<Entity> authorizedObjectRef : entityUserSet.getAuthorizedObjectRefs()) {
+					oldEntityUserSetAuthorizedObjectIDs.add(authorizedObjectRef.getAuthorizedObjectIDAsOID());
+				}
 
-			if (entityUserSet.getEntityUserSetController() == null) {
-				entityUserSet.setEntityUserSetController(new EntityUserSetControllerClientImpl());
-			}
-			
-			// add or remove edited authorizedObjects 
-			for (Map.Entry<AuthorizedObject, Boolean> entry : authorizedObjects.entrySet()) {
-				AuthorizedObject authorizedObject = entry.getKey();
-				Boolean assigned = entry.getValue();
-				AuthorizedObjectID authorizedObjectID = (AuthorizedObjectID) JDOHelper.getObjectId(authorizedObject);
-				if (assigned) {
-					// if the authorizedObject is not yet included do it.  
-					if (!oldEntityUserSetAuthorizedObjectIDs.contains(authorizedObjectID)) {
-						entityUserSet.addAuthorizedObject(authorizedObjectID); 
-					}
+				if (entityUserSet.getEntityUserSetController() == null) {
+					entityUserSet.setEntityUserSetController(new EntityUserSetControllerClientImpl());
 				}
-				else {
-					// if the authorizedObject is still contained, remove it
-					if (oldEntityUserSetAuthorizedObjectIDs.contains(authorizedObjectID)) {
-						entityUserSet.removeAuthorizedObject(authorizedObjectID);
-					}
-				}
-			}
-			monitor.worked(10);
-			
-			// add or remove edited entities per authorizedObject 
-			for (AuthorizedObjectRef<Entity> authorizedObjectRef : entityUserSet.getAuthorizedObjectRefs()) {
-				AuthorizedObjectID authorizedObjectID = authorizedObjectRef.getAuthorizedObjectIDAsOID();
-				Map<Entity, Boolean> entityToAssignment = authorizedObjectIDToEntities.get(authorizedObjectID);
-				for (Map.Entry<Entity, Boolean> entry : entityToAssignment.entrySet()) {
-					Entity entity = entry.getKey();
-					Boolean value = entry.getValue();
-					boolean entityFound = false;
-					for (Iterator<EntityRef<Entity>> it = authorizedObjectRef.getEntityRefs().iterator(); it.hasNext(); ) {
-						EntityRef<Entity> entityRef = it.next();
-						Entity e = entityRef.getEntity();
-						if (e.equals(entity)) {
-							if (!value) {
-								authorizedObjectRef.removeEntity(entity);
-							}
-							entityFound = true;
-							break;
+
+				// add or remove edited authorizedObjects 
+				for (Map.Entry<AuthorizedObject, Boolean> entry : authorizedObjects.entrySet()) {
+					AuthorizedObject authorizedObject = entry.getKey();
+					Boolean assigned = entry.getValue();
+					AuthorizedObjectID authorizedObjectID = (AuthorizedObjectID) JDOHelper.getObjectId(authorizedObject);
+					if (assigned) {
+						// if the authorizedObject is not yet included do it.  
+						if (!oldEntityUserSetAuthorizedObjectIDs.contains(authorizedObjectID)) {
+							entityUserSet.addAuthorizedObject(authorizedObjectID); 
 						}
 					}
-					if (!entityFound && value) {
-						authorizedObjectRef.addEntity(entity);
+					else {
+						// if the authorizedObject is still contained, remove it
+						if (oldEntityUserSetAuthorizedObjectIDs.contains(authorizedObjectID)) {
+							entityUserSet.removeAuthorizedObject(authorizedObjectID);
+						}
 					}
 				}
-			}
-			monitor.worked(10);
+				monitor.worked(10);
 
-			entityUserSet = EntityUserSetDAO.sharedInstance().storeEntityUserSet(entityUserSet, 
-					true, getEntityUserSetFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 80));
+				// add or remove edited entities per authorizedObject 
+				for (AuthorizedObjectRef<Entity> authorizedObjectRef : entityUserSet.getAuthorizedObjectRefs()) {
+					AuthorizedObjectID authorizedObjectID = authorizedObjectRef.getAuthorizedObjectIDAsOID();
+					Map<Entity, Boolean> entityToAssignment = authorizedObjectIDToEntities.get(authorizedObjectID);
+					for (Map.Entry<Entity, Boolean> entry : entityToAssignment.entrySet()) {
+						Entity entity = entry.getKey();
+						Boolean value = entry.getValue();
+						boolean entityFound = false;
+						for (Iterator<EntityRef<Entity>> it = authorizedObjectRef.getEntityRefs().iterator(); it.hasNext(); ) {
+							EntityRef<Entity> entityRef = it.next();
+							Entity e = entityRef.getEntity();
+							if (e.equals(entity)) {
+								if (!value) {
+									authorizedObjectRef.removeEntity(entity);
+								}
+								entityFound = true;
+								break;
+							}
+						}
+						if (!entityFound && value) {
+							authorizedObjectRef.addEntity(entity);
+						}
+					}
+				}
+				monitor.worked(10);
+
+				entityUserSet = EntityUserSetDAO.sharedInstance().storeEntityUserSet(entityUserSet, 
+						true, getEntityUserSetFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 80));
+			}
 		} finally {
 			monitor.done();
 		}

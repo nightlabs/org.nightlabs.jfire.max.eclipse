@@ -14,7 +14,7 @@ extends DynamicPathWizard
 	private EntityUserSetID entityUserSetID;
 	private EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper;
 	private SelectEntityUserSetPage<Entity> selectEntityUserSetPage;
-	
+
 	/**
 	 * @param entityUserSetID
 	 * @param inheritedEntityUserSetResolver
@@ -33,7 +33,7 @@ extends DynamicPathWizard
 		selectEntityUserSetPage = new SelectEntityUserSetPage<Entity>(entityUserSetID, entityUserSetPageControllerHelper);
 		addPage(selectEntityUserSetPage);
 	}
-	
+
 	public EntityUserSetID getEntityUserSetID() {
 		return selectEntityUserSetPage.getEntityUserSetID();
 	}
@@ -45,7 +45,7 @@ extends DynamicPathWizard
 	public boolean isEntityUserSetIDInherited() {
 		return SelectEntityUserSetPage.Action.inherit == selectEntityUserSetPage.getAction();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
