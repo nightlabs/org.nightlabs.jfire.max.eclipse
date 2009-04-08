@@ -31,6 +31,8 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.jfire.base.admin.ui.editor.authority.AuthorizedObjectTableViewer;
 import org.nightlabs.jfire.security.AuthorizedObject;
+import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.UserLocal;
 import org.nightlabs.jfire.security.id.AuthorizedObjectID;
 
 /**
@@ -118,7 +120,7 @@ implements ISelectionProvider
 		getToolBarManager().add(new DeselectAllAction());
 		updateToolBarManager();
 	}
-	
+		
 	public EntityUserSetPageControllerHelper<Entity> getEntityUserSetPageControllerHelper() {
 		return entityUserSetPageControllerHelper;
 	}
@@ -169,8 +171,15 @@ implements ISelectionProvider
 	{
 		authorizedObjects.clear();
 		if (entityUserSetPageControllerHelper != null && entityUserSetPageControllerHelper.getEntityUserSet() != null) {
-			for (Map.Entry<AuthorizedObject, Boolean> entry : entityUserSetPageControllerHelper.getAuthorizedObjects().entrySet()) {
-				authorizedObjects.add(entry);
+			for (Map.Entry<AuthorizedObject, Boolean> entry : entityUserSetPageControllerHelper.getAuthorizedObjects().entrySet()) {	
+				AuthorizedObject authorizedObject = entry.getKey();
+				if (authorizedObject instanceof UserLocal) {
+					UserLocal userLocal = (UserLocal) authorizedObject;
+					if (User.USER_ID_OTHER.equals(userLocal.getUserID()) || User.USER_ID_SYSTEM.equals(userLocal.getUserID())) {
+						continue;
+					}
+				}
+				authorizedObjects.add(entry);				
 			}	
 		}
 
@@ -223,12 +232,10 @@ implements ISelectionProvider
 			selectedAuthorizedObjects = new ArrayList<AuthorizedObject>();
 			selection = null;
 			IStructuredSelection sel = (IStructuredSelection) authorizedObjectTable.getSelection();
-
 			for (Object object : sel.toArray()) {
 				Map.Entry<AuthorizedObject, Boolean> me = (Entry<AuthorizedObject, Boolean>) object;
 				selectedAuthorizedObjects.add(me.getKey());
 			}
-
 			selection = new StructuredSelection(selectedAuthorizedObjects);
 		}
 
