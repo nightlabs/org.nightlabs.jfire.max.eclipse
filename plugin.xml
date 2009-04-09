@@ -60,9 +60,6 @@
         <pageFactory
             class="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPage$Factory"
             editorID="org.nightlabs.jfire.issuetracking.ui.project.ProjectEditor" indexHint="10"/>
-        <pageFactory
-            class="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditorPage$Factory"
-            editorID="org.nightlabs.jfire.issuetracking.ui.projectphase.ProjectPhaseEditor" indexHint="10"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editorActionBarContribution">
         <editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListEditor">

@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
@@ -22,6 +23,7 @@ import org.nightlabs.base.ui.timelength.TimeLengthComposite;
 import org.nightlabs.base.ui.util.DateTimeUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
@@ -51,7 +53,7 @@ extends XComposite
 	}
 
 	private ProjectComboComposite projectComboComposite;
-//	private DepartmentComboComposite departmentComboComposite;
+	private DepartmentComboComposite departmentComboComposite;
 	private DateTime startDateControl;
 	private DateTime startTimeControl;
 	private TimeLengthComposite durationText;
@@ -67,7 +69,7 @@ extends XComposite
 
 		XComposite mainComposite = new XComposite(this, SWT.NONE,
 				LayoutMode.TIGHT_WRAPPER);
-		mainComposite.getGridLayout().numColumns = 4;
+		mainComposite.getGridLayout().numColumns = 5;
 
 		/////////////////////////////////////////
 		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
@@ -105,29 +107,29 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComposite.setLayoutData(gridData);
 		
-//		new Label(departmentComposite, SWT.NONE).setText("Department");
-//		
-//		departmentComboComposite = new DepartmentComboComposite(departmentComposite, SWT.None){
-//			@Override
-//			protected XCombo createCombo() {
-//				XCombo combo = super.createCombo();
-//				combo.addTraverseListener(new TraverseListener() {
-//					@Override
-//					public void keyTraversed(TraverseEvent e) {
-//						startDateControl.setFocus();
-//					}
-//				});
-//				return combo;
-//			}
-//		};
-//		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		departmentComboComposite.setLayoutData(gridData);
-//		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
-//			@Override
-//			public void selectionChanged(SelectionChangedEvent e) {
-//				newIssue.setDepartment(departmentComboComposite.getSelectedDepartment());
-//			}
-//		});
+		new Label(departmentComposite, SWT.NONE).setText("Department");
+		
+		departmentComboComposite = new DepartmentComboComposite(departmentComposite, SWT.None){
+			@Override
+			protected XCombo createCombo() {
+				XCombo combo = super.createCombo();
+				combo.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+						startDateControl.setFocus();
+					}
+				});
+				return combo;
+			}
+		};
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		departmentComboComposite.setLayoutData(gridData);
+		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent e) {
+				newIssue.setDepartment(departmentComboComposite.getSelectedDepartment());
+			}
+		});
 
 		/////////////////////////////////////////
 		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
