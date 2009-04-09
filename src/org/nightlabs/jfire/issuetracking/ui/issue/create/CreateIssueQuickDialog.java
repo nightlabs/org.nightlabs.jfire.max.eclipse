@@ -97,10 +97,9 @@ extends ResizableTitleAreaDialog
 						@Override
 						public void run() {
 							setMessage("New issue has been created. Please press cancel to close the dialog.");
+							quickCreateComposite.initData();
 						}
 					});
-					
-					quickCreateComposite.initData();
 					
 					return Status.OK_STATUS;
 				}

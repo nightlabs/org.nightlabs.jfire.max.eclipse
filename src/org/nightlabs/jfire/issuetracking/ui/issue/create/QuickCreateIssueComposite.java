@@ -46,7 +46,9 @@ extends XComposite
 	public QuickCreateIssueComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
-		initData();
+		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
+		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
+		
 		createComposite();
 	}
 
@@ -237,9 +239,6 @@ extends XComposite
 	}
 	
 	public void initData() {
-		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
-		
 		durationText.setTimeLength(0);
 		subjectText.getI18nText().clear();
 		descriptionText.getI18nText().clear();
