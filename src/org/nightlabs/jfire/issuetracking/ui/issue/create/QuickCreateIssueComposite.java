@@ -148,6 +148,9 @@ extends XComposite
 
 		new Label(timeComposite, SWT.NONE).setText("Time");
 		startTimeControl = new DateTime(timeComposite, SWT.BORDER | SWT.TIME);
+		startTimeControl.setHours(0);
+		startTimeControl.setMinutes(0);
+		startTimeControl.setSeconds(0);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startTimeControl);
 
@@ -233,5 +236,11 @@ extends XComposite
 	@Override
 	public boolean setFocus() {
 		return projectComboComposite.forceFocus();
+	}
+	
+	public void clearData() {
+		durationText.setTimeLength(0);
+		subjectText.getI18nText().clear();
+		descriptionText.getI18nText().clear();
 	}
 }
