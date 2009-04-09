@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nightlybuild PUBLIC "-//NightLabs//DTD NightlyBuild V 0.20//EN" "http://www.nightlabs.de/dtd/nightlybuild_0_20.dtd">
+
+<nightlybuild>
+  <project name="org.nightlabs.jfire.department.ui">
+    <plugin/>
+    <ant path="org.nightlabs.jfire.department.ui" file="build-nightlabs.xml" target="deploy"/>
+    <requires/>
+    <provides/>
+    <javadoc path="org.nightlabs.jfire.department.ui/src"/>
+  </project>
+</nightlybuild>
