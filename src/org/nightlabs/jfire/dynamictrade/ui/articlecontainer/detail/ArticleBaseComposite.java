@@ -301,6 +301,10 @@ extends FadeableComposite
 
 	protected I18nTextBuffer productName = new I18nTextBuffer();
 
+	public I18nTextBuffer getProductName() {
+		return productName;
+	}
+
 	private boolean editable = true;
 
 	protected void setEditable(boolean editable) {
@@ -847,5 +851,11 @@ extends FadeableComposite
 			}
 		});
 	}
+	
+	protected Text getProductNameTextBox() {
+		return productNameText;
+	}
+
+	
 }
 

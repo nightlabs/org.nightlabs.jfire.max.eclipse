@@ -70,7 +70,7 @@ extends ArticleBaseComposite
 		articleAdder.getSegmentEdit().fireCompositeContentChangeEvent();
 	}
 
-	private void addArticle()
+	protected void addArticle()
 	{
 		try {
 			final double qty = NumberFormatter.parseFloat(quantity.getText());

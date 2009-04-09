@@ -7,6 +7,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
+import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.ModuleException;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -38,7 +39,12 @@ public class RecurringArticleAdder extends ArticleAdder {
 //		);
 //		return new MessageComposite(parent, SWT.NONE, message, MessageType.INFO);
 //	}
-
+	@Override
+	protected Composite _createComposite(Composite parent)
+	{
+		return new RecurringArticleAdderComposite(parent, this);
+	}
+	
 	@Override
 	public Article createArticle(
 			SegmentID segmentID,
@@ -55,7 +61,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 		DynamicTradeManager dtm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
 		return dtm.createRecurringArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID,
 				productName, singlePrice, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-
+//
 	}
 
 
