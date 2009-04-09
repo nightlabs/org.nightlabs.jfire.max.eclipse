@@ -100,6 +100,7 @@ extends ResizableTitleAreaDialog
 						}
 					});
 					
+					quickCreateComposite.initData();
 					
 					return Status.OK_STATUS;
 				}
