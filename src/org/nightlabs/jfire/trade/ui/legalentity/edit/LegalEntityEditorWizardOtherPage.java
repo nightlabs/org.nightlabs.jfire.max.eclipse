@@ -49,6 +49,7 @@ public class LegalEntityEditorWizardOtherPage extends
 			LegalEntityEditorWizardOtherPage.class.getName(),
 			Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.edit.LegalEntityEditorWizardOtherPage.title"), //$NON-NLS-1$
 			person,
+			true,
 			null
 		);
 
