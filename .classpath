@@ -14,5 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="var" path="LOG4J" sourcepath="/LOG4J_SRC"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireJbpm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireDepartment"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
