@@ -91,7 +91,7 @@ extends EntityEditorPageWithProgress
 						if (isDisposed())
 							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setSimpleProductType(simpleProductType);
-						blockBasedEditorSection.setPropertySet(propertySet, structLocal);
+						blockBasedEditorSection.setPropertySet(propertySet);
 						switchToContent();
 					}
 				});
