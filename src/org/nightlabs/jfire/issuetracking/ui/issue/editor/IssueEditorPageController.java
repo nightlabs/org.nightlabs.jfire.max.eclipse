@@ -46,10 +46,13 @@ import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
 import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
+import org.nightlabs.jfire.prop.IStruct;
 import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
+import org.nightlabs.util.Util;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
@@ -173,10 +176,22 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS;
 	}
+	
+	private IStruct struct;
 
 	@Override
 	protected Issue retrieveEntity(ProgressMonitor monitor) {
-		return IssueDAO.sharedInstance().getIssue(getIssueID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
+		Issue issue = IssueDAO.sharedInstance().getIssue(getIssueID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), new SubProgressMonitor(monitor, 70));
+		struct = StructLocalDAO.sharedInstance().getStructLocal(issue.getPropertySet().getStructLocalObjectID(), new SubProgressMonitor(monitor, 30));
+		return issue;
+	}
+	
+	@Override
+	protected void setControllerObject(Issue controllerObject) {
+		if (controllerObject != null)
+			controllerObject.getPropertySet().inflate(struct);
+
+		super.setControllerObject(controllerObject);
 	}
 
 	@Override
@@ -184,6 +199,9 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	{
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController.monitor.savingIssue.text"), 100); //$NON-NLS-1$
 		try {
+			controllerObject = Util.cloneSerializable(controllerObject);
+			controllerObject.getPropertySet().deflate();
+
 			IssueID issueID = (IssueID) JDOHelper.getObjectId(controllerObject);
 			if (issueID == null)
 				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject); //$NON-NLS-1$

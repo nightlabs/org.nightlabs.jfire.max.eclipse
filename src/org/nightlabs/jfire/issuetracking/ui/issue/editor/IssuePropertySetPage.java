@@ -16,8 +16,6 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.prop.edit.blockbased.BlockBasedEditorSection;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.jfire.prop.StructLocal;
-import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -77,19 +75,19 @@ extends EntityEditorPageWithProgress
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssuePropertySetPage.job.loadingData.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
-				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
-						issue.getPropertySet().getStructLocalObjectID(),
-//						Issue.class,
-//						issue.getPropertySet().getStructScope(),
-//						issue.getPropertySet().getStructLocalScope(),
-						monitor
-				);
+//				final StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
+//						issue.getPropertySet().getStructLocalObjectID(),
+////						Issue.class,
+////						issue.getPropertySet().getStructScope(),
+////						issue.getPropertySet().getStructLocalScope(),
+//						monitor
+//				);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						if (isDisposed())
 							return; // Do nothing if UI is disposed
 						structLocalScopeSection.setIssue(issue);
-						blockBasedEditorSection.setPropertySet(controller.getIssue().getPropertySet(), structLocal);
+						blockBasedEditorSection.setPropertySet(controller.getIssue().getPropertySet());
 						switchToContent();
 					}
 				});
