@@ -1,26 +1,29 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.create;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
-import org.nightlabs.base.ui.util.DateTimeUtil;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
@@ -29,6 +32,8 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.l10n.DateFormatter;
+
 /**
  * A composite that contains UIs for adding {@link Issue}.
  * 
@@ -46,16 +51,15 @@ extends XComposite
 	public QuickCreateIssueComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
-		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
-		
+		initData();
 		createComposite();
+		initUI();
 	}
 
 	private ProjectComboComposite projectComboComposite;
 	private DepartmentComboComposite departmentComboComposite;
-	private DateTime startDateControl;
-	private DateTime startTimeControl;
+	private DateTimeControl startDateControl;
+	private DateTimeControl startTimeControl;
 	private TimeLengthComposite durationText;
 	private I18nTextEditor subjectText;
 	private I18nTextEditorMultiLine descriptionText;
@@ -71,7 +75,7 @@ extends XComposite
 				LayoutMode.TIGHT_WRAPPER);
 		mainComposite.getGridLayout().numColumns = 5;
 
-		/////////////////////////////////////////
+		//Project
 		XComposite projectComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -79,19 +83,7 @@ extends XComposite
 
 		new Label(projectComposite, SWT.NONE).setText("Project");
 
-		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None) {
-//			@Override
-//			protected XCombo createCombo() {
-//				XCombo combo = super.createCombo();
-//				combo.addTraverseListener(new TraverseListener() {
-//					@Override
-//					public void keyTraversed(TraverseEvent e) {
-//						departmentComboComposite.getDepartmentCombo().setFocus();
-//					}
-//				});
-//				return combo;
-//			}
-		};
+		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -101,7 +93,7 @@ extends XComposite
 			}
 		});
 
-		////////////////////////////////////////
+		//Department
 		XComposite departmentComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -131,30 +123,27 @@ extends XComposite
 			}
 		});
 
-		/////////////////////////////////////////
+		//Date
 		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		dateComposite.setLayoutData(gridData);
 
 		new Label(dateComposite, SWT.NONE).setText("Start Date");
-		startDateControl = new DateTime(dateComposite, SWT.BORDER | SWT.DATE);
+		startDateControl = new DateTimeControl(dateComposite, SWT.DATE, DateFormatter.FLAGS_DATE_SHORT);
 		startDateControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startDateControl);
 
-		//////////////////////////////////////////
+		//Time
 		XComposite timeComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		timeComposite.setLayoutData(gridData);
 
 		new Label(timeComposite, SWT.NONE).setText("Time");
-		startTimeControl = new DateTime(timeComposite, SWT.BORDER | SWT.TIME);
-		startTimeControl.setHours(0);
-		startTimeControl.setMinutes(0);
-		startTimeControl.setSeconds(0);
+		startTimeControl = new DateTimeControl(timeComposite, SWT.TIME, DateFormatter.FLAGS_TIME_HM);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startTimeControl);
 
-		///////////////////////////////////////////
+		//Duration
 		XComposite durationComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
@@ -163,7 +152,7 @@ extends XComposite
 		durationText = new TimeLengthComposite(durationComposite);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		///////////////////////////////////////////
+		//Subject & Description
 		XComposite subjectDescriptionComposite = new XComposite(mainComposite, SWT.NONE);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 5;
@@ -219,31 +208,32 @@ extends XComposite
 	}
 
 	public Issue getCreatingIssue() {
-		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
-		newIssue.setAssignee(currentUser);
-		newIssue.setReporter(currentUser);
 		newIssue.getSubject().copyFrom(subjectText.getI18nText());
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
 
-		IssueWorkTimeRange workingTime = new IssueWorkTimeRange(newIssue.getOrganisationID(), IDGenerator.nextID(IssueWorkTimeRange.class), currentUser, newIssue);
-		workingTime.setFrom(DateTimeUtil.getDate(startDateControl));
+		IssueWorkTimeRange workingTime = new IssueWorkTimeRange(newIssue.getOrganisationID(), IDGenerator.nextID(IssueWorkTimeRange.class), newIssue.getReporter(), newIssue);
+		workingTime.setFrom(startDateControl.getDate());
 		workingTime.setDuration(durationText.getTimeLength());
 		newIssue.addIssueWorkTimeRange(workingTime);
 
 		return newIssue;
 	}
 
-	@Override
-	public boolean setFocus() {
-		return projectComboComposite.forceFocus();
+	
+	public void initUI() {
+		durationText.setTimeLength(0);
+		subjectText.getI18nText().clear();
+		descriptionText.getI18nText().clear();
+		
+		//startDateControl
+		startTimeControl.setTimestamp(-3600000);
 	}
 	
 	public void initData() {
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
-		newIssue.setReporter(Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor()));
 		
-		durationText.setTimeLength(0);
-		subjectText.getI18nText().clear();
-		descriptionText.getI18nText().clear();
+		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+		newIssue.setAssignee(currentUser);
+		newIssue.setReporter(currentUser);
 	}
 }
