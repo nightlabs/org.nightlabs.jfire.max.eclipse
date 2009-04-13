@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.department.Department;
 import org.nightlabs.jfire.department.dao.DepartmentDAO;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -35,30 +34,16 @@ public class DepartmentComboComposite
 extends XComposite
 implements ISelectionProvider
 {
-	public DepartmentComboComposite(Composite parent, int style)
+	public DepartmentComboComposite(Composite parent)
 	{
-		this(parent, style, getLocalOrganisationID(), false);
-	}
-
-	private static String getLocalOrganisationID()
-	{
-		try {
-			return Login.getLogin().getOrganisationID();
-		} catch (Exception x) {
-			throw new RuntimeException(x);
-		}
+		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		createCombo();
+		loadDepartments();
 	}
 
 	private XCombo departmentCombo;
 	private Department selectedDepartment;
 
-	public DepartmentComboComposite(Composite parent, int style, String filterOrganisationID, boolean filterOrganisationIDInverse)
-	{
-		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-		createCombo();
-		loadDepartments();
-	}
-	
 	protected XCombo createCombo() {
 		departmentCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		departmentCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -92,7 +77,7 @@ implements ISelectionProvider
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					final Collection<Department> departments = DepartmentDAO.sharedInstance().getDepartments(FETCH_GROUP_DEPARTMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					final List<Department> departments = DepartmentDAO.sharedInstance().getDepartments(FETCH_GROUP_DEPARTMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run()
@@ -102,12 +87,17 @@ implements ISelectionProvider
 
 							departmentCombo.removeAll();
 
+							int selectionIdx = -1;
+							departmentList = departments;
 							for (Department department : departments) {
+								if (department.equals(selectedDepartment))
+									selectionIdx = departmentCombo.getItemCount();
+									
 								departmentCombo.add(null, department.getName().getText());
 							}
 
 							DepartmentComboComposite.this.getParent().layout(true);
-							departmentCombo.select(0);
+							departmentCombo.select(selectionIdx);
 						}
 					});
 				} catch (Exception x) {
@@ -162,6 +152,16 @@ implements ISelectionProvider
 
 		IStructuredSelection sel = (IStructuredSelection) selection;
 		Object selObj = sel.getFirstElement();
+		if (selObj instanceof Department)
+			setSelectedDepartment((Department) selObj);
+	}
+	
+	public void setSelectedDepartment(Department selectedDepartment) {
+		this.selectedDepartment = selectedDepartment;
+		if (selectedDepartment == null)
+			departmentCombo.select(-1);
+		else
+			departmentCombo.select(departmentList.indexOf(selectedDepartment));
 	}
 	
 	public Department getSelectedDepartment() {

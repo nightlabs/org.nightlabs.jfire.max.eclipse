@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension
+         point="org.nightlabs.jfire.base.ui.propDataFieldEditorFactory">
+      <propDataFieldEditorFactory
+            class="org.nightlabs.jfire.department.ui.prop.DepartmentDataFieldEditorFactory">
+      </propDataFieldEditorFactory>
+   </extension>
+   <extension
+         point="org.nightlabs.jfire.base.ui.propStructField">
+      <propStructField
+            class="org.nightlabs.jfire.department.prop.DepartmentStructField"
+            editorFactoryClass="org.nightlabs.jfire.department.ui.prop.DepartmentStructFieldEditor$DepartmentStructFieldEditorFactory"
+            factoryClass="org.nightlabs.jfire.department.ui.prop.DepartmentStructFieldFactory"
+            name="Department field">
+      </propStructField>
+   </extension>
 </plugin>
