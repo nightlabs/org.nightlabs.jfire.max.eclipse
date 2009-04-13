@@ -77,7 +77,6 @@ extends ResizableTitleAreaDialog
 	};
 	
 	private Issue newIssue;
-	
 	@Override
 	protected void okPressed() {
 		newIssue = quickCreateComposite.getCreatingIssue();
