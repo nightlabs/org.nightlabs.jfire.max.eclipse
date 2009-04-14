@@ -205,20 +205,4 @@
          <actionSet id="org.nightlabs.jfire.issuetracking.ui"/>
       </perspectiveExtension>
    </extension>
-    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.nightlabs.jfire.issuetracking.ui"
-            label="org.nightlabs.jfire.issuetracking.ui"
-            visible="false">
-         <action
-               class="org.nightlabs.jfire.issuetracking.ui.issue.create.QuickCreateIssueAction"
-               icon="icons/project/ProjectAdminTreeComposite-Create.16x16.png"
-               id="org.nightlabs.jfire.issuetracking.ui.issue.create.QuickCreateIssueAction"
-               label="Create Issue Quick Wizard"
-               style="push"
-               toolbarPath="additions"
-               tooltip="Create an Issue"/>
-      </actionSet>
-   </extension>
 </plugin>
