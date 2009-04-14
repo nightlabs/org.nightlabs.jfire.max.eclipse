@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+  <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.nightlabs.jfire.issuetracking.ui"
+            label="org.nightlabs.jfire.issuetracking.ui"
+            visible="false">
+         <action
+               class="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
+               icon="icons/project/ProjectAdminTreeComposite-Create.16x16.png"
+               id="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
+               label="Create Issue Quick Wizard"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Create an Issue"/>
+      </actionSet>
+   </extension>
+
+</plugin>

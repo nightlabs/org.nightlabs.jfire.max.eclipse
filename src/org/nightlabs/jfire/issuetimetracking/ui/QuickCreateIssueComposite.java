@@ -15,14 +15,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.DateTimeControl;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
+import org.nightlabs.jfire.department.prop.DepartmentDataField;
+import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
+import org.nightlabs.jfire.issue.prop.IssueStruct;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
+import org.nightlabs.jfire.prop.IStruct;
+import org.nightlabs.jfire.prop.StructLocal;
+import org.nightlabs.jfire.prop.dao.StructLocalDAO;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -48,13 +55,13 @@ extends XComposite
 	}
 
 	private ProjectComboComposite projectComboComposite;
-//	private DepartmentComboComposite departmentComboComposite;
+	private DepartmentComboComposite departmentComboComposite;
 	private DateTimeControl startDateControl;
 	private DateTimeControl startTimeControl;
 	private TimeLengthComposite durationText;
 	private I18nTextEditor subjectText;
 	private I18nTextEditorMultiLine descriptionText;
-
+//	IssueStruct.getIssueStruct(pm);
 	private Issue newIssue;
 
 	private void createComposite() {
@@ -85,34 +92,44 @@ extends XComposite
 		});
 
 		//Department
-//		XComposite departmentComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-//
-//		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		departmentComposite.setLayoutData(gridData);
-//		
-//		new Label(departmentComposite, SWT.NONE).setText("Department");
+		XComposite departmentComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		departmentComposite.setLayoutData(gridData);
 		
-//		departmentComboComposite = new DepartmentComboComposite(departmentComposite, SWT.None){
-//			@Override
-//			protected XCombo createCombo() {
-//				XCombo combo = super.createCombo();
-//				combo.addTraverseListener(new TraverseListener() {
-//					@Override
-//					public void keyTraversed(TraverseEvent e) {
-//						startDateControl.setFocus();
-//					}
-//				});
-//				return combo;
-//			}
-//		};
-//		gridData = new GridData(GridData.FILL_HORIZONTAL);
-//		departmentComboComposite.setLayoutData(gridData);
-//		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
-//			@Override
-//			public void selectionChanged(SelectionChangedEvent e) {
-//				newIssue.setDepartment(departmentComboComposite.getSelectedDepartment());
-//			}
-//		});
+		new Label(departmentComposite, SWT.NONE).setText("Department");
+		
+		departmentComboComposite = new DepartmentComboComposite(departmentComposite){
+			@Override
+			protected XCombo createCombo() {
+				XCombo combo = super.createCombo();
+				combo.addTraverseListener(new TraverseListener() {
+					@Override
+					public void keyTraversed(TraverseEvent e) {
+						startDateControl.setFocus();
+					}
+				});
+				return combo;
+			}
+		};
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		departmentComboComposite.setLayoutData(gridData);
+		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent e) {
+				try {
+//					IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
+//					        null,
+//					        new String[]{StructLocal.DEFAULT_SCOPE},
+//					        null);
+//					newIssue.getPropertySet().inflate(struct);
+//					DepartmentDataField departmentDataField = (DepartmentDataField)newIssue.getPropertySet().getDataField(IssueStruct.DEPARTMENT);
+//					departmentDataField.setData(departmentComboComposite.getSelectedDepartment());
+				} catch (Exception ex) {
+					throw new RuntimeException(ex); 
+				}
+			}
+		});
 
 		//Date
 		XComposite dateComposite = new XComposite(mainComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);

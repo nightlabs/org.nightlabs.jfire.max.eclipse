@@ -88,9 +88,9 @@ extends ResizableTitleAreaDialog
 					final IssueTypeID issueTypeID = IssueTypeID.create(organisationID, IssueType.DEFAULT_ISSUE_TYPE_ID);				
 					IssueType issueType = IssueTypeDAO.sharedInstance().getIssueType(issueTypeID, new String[] {IssueType.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.nightlabs.progress.NullProgressMonitor());
 					newIssue.setIssueType(issueType);
+					newIssue.getPropertySet().deflate();
 					
 					newIssue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-					
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {

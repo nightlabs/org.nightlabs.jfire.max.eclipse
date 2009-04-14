@@ -8,5 +8,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.issuetracking.ui;bundle-version="0.9.7",
  org.nightlabs.eclipse.ui.dialog;bundle-version="1.1.5",
- org.nightlabs.jfire.base.ui;bundle-version="0.9.7"
+ org.nightlabs.jfire.base.ui;bundle-version="0.9.7",
+ org.nightlabs.jfire.department.ui;bundle-version="0.9.7"
 Eclipse-LazyStart: true
