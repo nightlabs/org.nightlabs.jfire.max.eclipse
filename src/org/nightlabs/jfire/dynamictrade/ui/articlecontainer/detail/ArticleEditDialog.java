@@ -36,7 +36,7 @@ extends ResizableTrayDialog
 	@Override
 	protected void okPressed()
 	{
-		articleEditDialogComposite.submit();
+		if(articleEditDialogComposite.submit())
 		super.okPressed();
 	}
 }
