@@ -255,11 +255,11 @@ extends XComposite
 
 		//Stores previous data
 		Date startTime = startTimeControl.getDate();
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(NLLocale.getDefault());
 		if (startTime == null) {
 			calendar.set(Calendar.HOUR_OF_DAY, 0);
 			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
+			calendar.set(Calendar.SECOND, 0);
 			startTime = calendar.getTime();
 		}
 		else {
