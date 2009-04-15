@@ -5,5 +5,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireIssueTracking"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireDepartment"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
