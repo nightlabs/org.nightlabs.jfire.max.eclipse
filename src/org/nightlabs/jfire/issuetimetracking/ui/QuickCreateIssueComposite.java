@@ -248,27 +248,25 @@ extends XComposite
 		newIssue.getSubject().copyFrom(subjectText.getI18nText());
 		newIssue.getDescription().copyFrom(descriptionText.getI18nText());
 
-		IssueWorkTimeRange workingTime = new IssueWorkTimeRange(newIssue.getOrganisationID(), IDGenerator.nextID(IssueWorkTimeRange.class), newIssue.getReporter(), newIssue);
-		workingTime.setFrom(startDateControl.getDate());
-		workingTime.setDuration(durationText.getTimeLength());
-		newIssue.addIssueWorkTimeRange(workingTime);
-
-		//Stores previous data
+		Calendar startDateTimeCalendar = Calendar.getInstance(NLLocale.getDefault());
+		startDateTimeCalendar.setTime(startDateControl.getDate());
+		
 		Date startTime = startTimeControl.getDate();
-		Calendar calendar = Calendar.getInstance(NLLocale.getDefault());
 		if (startTime == null) {
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND, 0);
-			startTime = calendar.getTime();
+			startDateTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+			startDateTimeCalendar.set(Calendar.MINUTE, 0);
+			startDateTimeCalendar.set(Calendar.SECOND, 0);
 		}
 		else {
-			calendar.setTime(startTime);
+			startDateTimeCalendar.setTime(startTime);
 		}
-		previousStartDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		previousStartDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
 		
-		previousStartDateTime.add(Calendar.MILLISECOND, (int)durationText.getTimeLength());
+		newIssue.startWorking(startDateTimeCalendar.getTime());
+		startDateTimeCalendar.add(Calendar.MILLISECOND, (int)durationText.getTimeLength());
+		newIssue.endWorking(startDateTimeCalendar.getTime());
+
+		//Stores previous data
+		previousStartDateTime = startDateTimeCalendar;
 		return newIssue;
 	}
 
