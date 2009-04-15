@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetimetracking.ui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,6 +25,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
+import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.department.prop.DepartmentDataField;
@@ -248,23 +250,33 @@ extends XComposite
 		workingTime.setDuration(durationText.getTimeLength());
 		newIssue.addIssueWorkTimeRange(workingTime);
 
+		//Stores previous data
+		previousStartDate = startDateControl.getDate();
+		previousStartTimestamp = startTimeControl.getTimestamp();
+		previousDuration = durationText.getTimeLength();
+		
 		return newIssue;
 	}
 
-	private long previousDuration;
+	private Date previousStartDate;
+	private long previousStartTimestamp = -3600000;
+	private long previousDuration = 0;
+	
 	public void initUI() {
-		durationText.setTimeLength(0);
-		subjectText.getI18nText().clear();
-		descriptionText.getI18nText().clear();
+		startDateControl.setDate(previousStartDate == null ? new Date():previousStartDate);
+		startTimeControl.setTimestamp(previousStartTimestamp);
+		durationText.setTimeLength(previousDuration);
 		
-		//startDateControl
-		startTimeControl.setTimestamp(-3600000);
+		subjectText.setI18nText(new I18nTextBuffer());
+		descriptionText.setI18nText(new I18nTextBuffer());
 	}
 	
+	private User currentUser;
 	public void initData() {
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 		
-		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+		if (currentUser == null)
+			currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
 		newIssue.setAssignee(currentUser);
 		newIssue.setReporter(currentUser);
 	}
