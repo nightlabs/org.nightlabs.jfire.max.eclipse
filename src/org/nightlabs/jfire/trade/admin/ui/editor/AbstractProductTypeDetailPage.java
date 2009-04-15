@@ -26,7 +26,6 @@ public abstract class AbstractProductTypeDetailPage
 extends EntityEditorPageWithProgress
 implements IProductTypeDetailPage
 {
-	
 	private static final Logger logger = Logger.getLogger(AbstractProductTypeDetailPage.class);
 	
 	/**
@@ -229,4 +228,5 @@ implements IProductTypeDetailPage
 			return (IProductTypeDetailPageController) getPageController();
 		throw new IllegalStateException("AbstractProductTypeDetailPage should be used with a controller implementing " + IProductTypeDetailPageController.class.getName() + ". The controller is " + getPageController().getClass().getName() + "."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
+		
 }
