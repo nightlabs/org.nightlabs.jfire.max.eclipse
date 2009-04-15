@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.department.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.FetchPlan;
@@ -78,6 +78,8 @@ implements ISelectionProvider
 			{
 				try {
 					final List<Department> departments = DepartmentDAO.sharedInstance().getDepartments(FETCH_GROUP_DEPARTMENT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					Collections.sort(departments);
+					
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run()
@@ -92,7 +94,8 @@ implements ISelectionProvider
 							for (Department department : departments) {
 								if (department.equals(selectedDepartment))
 									selectionIdx = departmentCombo.getItemCount();
-									
+								else 
+									selectionIdx = 0;
 								departmentCombo.add(null, department.getName().getText());
 							}
 
