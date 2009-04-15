@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetimetracking.ui;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,7 @@ import org.nightlabs.jfire.prop.id.StructID;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.NLLocale;
 
 /**
  * A composite that contains UIs for adding {@link Issue}.
@@ -173,7 +175,7 @@ extends XComposite
 		timeComposite.setLayoutData(gridData);
 
 		new Label(timeComposite, SWT.NONE).setText("Time");
-		startTimeControl = new DateTimeControl(timeComposite, SWT.TIME, DateFormatter.FLAGS_TIME_HM);
+		startTimeControl = new DateTimeControl(timeComposite, SWT.TIME, DateFormatter.FLAGS_TIME_HM, null);
 		startTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		forceTextFocusOnTab(startTimeControl);
 
@@ -182,8 +184,9 @@ extends XComposite
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		durationComposite.setLayoutData(gridData);
 
-		new Label(durationComposite, SWT.NONE).setText("Duration");
+		new Label(durationComposite, SWT.NONE).setText("Duration (1h 1m)");
 		durationText = new TimeLengthComposite(durationComposite);
+		durationText.setDisplayZeroValues(false);
 		durationText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		//Subject & Description
@@ -251,21 +254,37 @@ extends XComposite
 		newIssue.addIssueWorkTimeRange(workingTime);
 
 		//Stores previous data
-		previousStartDate = startDateControl.getDate();
-		previousStartTimestamp = startTimeControl.getTimestamp();
-		previousDuration = durationText.getTimeLength();
+		Date startTime = startTimeControl.getDate();
+		Calendar calendar = Calendar.getInstance();
+		if (startTime == null) {
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			startTime = calendar.getTime();
+		}
+		else {
+			calendar.setTime(startTime);
+		}
+		previousStartDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+		previousStartDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
 		
+		previousStartDateTime.add(Calendar.MILLISECOND, (int)durationText.getTimeLength());
 		return newIssue;
 	}
 
-	private Date previousStartDate;
-	private long previousStartTimestamp = -3600000;
-	private long previousDuration = 0;
+	private Calendar previousStartDateTime;
 	
 	public void initUI() {
-		startDateControl.setDate(previousStartDate == null ? new Date():previousStartDate);
-		startTimeControl.setTimestamp(previousStartTimestamp);
-		durationText.setTimeLength(previousDuration);
+		if (previousStartDateTime == null) {
+			previousStartDateTime = Calendar.getInstance(NLLocale.getDefault());
+			previousStartDateTime.set(Calendar.HOUR_OF_DAY, 0);
+			previousStartDateTime.set(Calendar.MINUTE, 0);
+			previousStartDateTime.set(Calendar.SECOND, 0);
+		}
+		
+		startDateControl.setDate(previousStartDateTime.getTime());
+		startTimeControl.clearDate();
+		durationText.setTimeLength(0);
 		
 		subjectText.setI18nText(new I18nTextBuffer());
 		descriptionText.setI18nText(new I18nTextBuffer());
