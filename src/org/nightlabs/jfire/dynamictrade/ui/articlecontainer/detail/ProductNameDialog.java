@@ -15,7 +15,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
-import org.nightlabs.util.ScriptParser;
+import org.nightlabs.script.ScriptParser;
 
 public class ProductNameDialog
 extends ResizableTrayDialog
