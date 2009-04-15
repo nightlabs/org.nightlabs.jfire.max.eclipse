@@ -3,6 +3,10 @@ package org.nightlabs.jfire.issuetimetracking.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -20,17 +24,24 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.department.prop.DepartmentDataField;
 import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
-import org.nightlabs.jfire.issue.prop.IssueStruct;
+import org.nightlabs.jfire.issuetimetracking.IssueTimeTrackingStruct;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
+import org.nightlabs.jfire.organisation.Organisation;
 import org.nightlabs.jfire.prop.IStruct;
-import org.nightlabs.jfire.prop.StructLocal;
-import org.nightlabs.jfire.prop.dao.StructLocalDAO;
+import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.prop.Struct;
+import org.nightlabs.jfire.prop.dao.StructDAO;
+import org.nightlabs.jfire.prop.id.StructID;
+import org.nightlabs.jfire.security.User;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * A composite that contains UIs for adding {@link Issue}.
@@ -40,6 +51,9 @@ import org.nightlabs.l10n.DateFormatter;
 public class QuickCreateIssueComposite 
 extends XComposite
 {
+	private	StructID issueStructID;
+	private IStruct issueStruct;
+	private DepartmentDataField departmentDataField;
 	/**
 	 * Contructs a composite used for adding {@link Issue}.
 	 * 
@@ -49,6 +63,18 @@ extends XComposite
 	public QuickCreateIssueComposite(Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
+		issueStructID = StructID.create(Organisation.DEV_ORGANISATION_ID, Issue.class, Struct.DEFAULT_SCOPE);
+		Job job = new Job("Loading issue struct................"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				issueStruct = StructDAO.sharedInstance().getStruct(issueStructID,
+				        new NullProgressMonitor());
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();
+				
 		initData();
 		createComposite();
 		initUI();
@@ -61,7 +87,6 @@ extends XComposite
 	private TimeLengthComposite durationText;
 	private I18nTextEditor subjectText;
 	private I18nTextEditorMultiLine descriptionText;
-//	IssueStruct.getIssueStruct(pm);
 	private Issue newIssue;
 
 	private void createComposite() {
@@ -114,18 +139,17 @@ extends XComposite
 		};
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		departmentComboComposite.setLayoutData(gridData);
+		
 		departmentComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent e) {
 				try {
-//					IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(
-//					        null,
-//					        new String[]{StructLocal.DEFAULT_SCOPE},
-//					        null);
-//					newIssue.getPropertySet().inflate(struct);
-//					DepartmentDataField departmentDataField = (DepartmentDataField)newIssue.getPropertySet().getDataField(IssueStruct.DEPARTMENT);
-//					departmentDataField.setData(departmentComboComposite.getSelectedDepartment());
-				} catch (Exception ex) {
+					PropertySet propertySet = newIssue.getPropertySet();
+					propertySet.inflate(issueStruct);
+					departmentDataField = propertySet.getDataField(IssueTimeTrackingStruct.DEPARTMENT_FIELD, DepartmentDataField.class);
+					departmentDataField.setData(departmentComboComposite.getSelectedDepartment());
+				}
+				catch (Exception ex) {
 					throw new RuntimeException(ex); 
 				}
 			}
@@ -240,8 +264,8 @@ extends XComposite
 	public void initData() {
 		newIssue = new Issue(IDGenerator.getOrganisationID(), IDGenerator.nextID(Issue.class));
 		
-//		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
-//		newIssue.setAssignee(currentUser);
-//		newIssue.setReporter(currentUser);
+		User currentUser = Login.sharedInstance().getUser(new String[]{User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new org.eclipse.core.runtime.NullProgressMonitor());
+		newIssue.setAssignee(currentUser);
+		newIssue.setReporter(currentUser);
 	}
 }
