@@ -24,6 +24,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.custom.XCombo;
 import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.base.ui.language.LanguageChooser;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.base.ui.timelength.TimeLengthComposite;
 import org.nightlabs.i18n.I18nTextBuffer;
@@ -33,7 +34,6 @@ import org.nightlabs.jfire.department.prop.DepartmentDataField;
 import org.nightlabs.jfire.department.ui.DepartmentComboComposite;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issuetimetracking.IssueTimeTrackingStruct;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.organisation.Organisation;
@@ -111,6 +111,7 @@ extends XComposite
 		new Label(projectComposite, SWT.NONE).setText("Project");
 
 		projectComboComposite = new ProjectComboComposite(projectComposite, SWT.None);
+		
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		projectComboComposite.setLayoutData(gridData);
 		projectComboComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -201,34 +202,22 @@ extends XComposite
 
 		subjectText = new I18nTextEditor(subjectDescriptionComposite) {
 			@Override
-			protected Text getText() {
-				Text text = super.getText();
-				text.addTraverseListener(new TraverseListener() {
-					@Override
-					public void keyTraversed(TraverseEvent e) {
-					}
-				});
-				return text;
+			protected void createContext(Composite parent,
+					LanguageChooser languageChooser, String caption) {
+				super.createContext(parent, languageChooser, caption);
+				setTabList(new Control[]{getText()});
 			}
 		};
-
+		
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
 		descriptionLabel.setText("Description");
 
-		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser()) {
-			@Override
-			protected Text createText(Composite parent) {
-				Text text = super.createText(parent);
-				text.addTraverseListener(new TraverseListener() {
-					@Override
-					public void keyTraversed(TraverseEvent e) {
-					}
-				});
-				return text;
-			}
-		};
+		descriptionText = new I18nTextEditorMultiLine(subjectDescriptionComposite, subjectText.getLanguageChooser());
 		descriptionText.setI18nText(newIssue.getDescription(), EditMode.DIRECT);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.verticalSpan = 3;
+		descriptionText.setLayoutData(gridData);
 	}
 
 	private void forceTextFocusOnTab(Composite composite) {
