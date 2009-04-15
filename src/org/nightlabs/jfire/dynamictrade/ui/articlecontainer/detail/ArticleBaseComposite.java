@@ -126,6 +126,20 @@ extends FadeableComposite
 	private boolean checkForEditable = false;
 
 	/**
+	 * Whether to check for a script syntax in the name of the dynamic product type
+	 */
+	private boolean isScriptable = false;
+	
+	
+	public boolean isScriptable() {
+		return isScriptable;
+	}
+
+	public void setScriptable(boolean isScriptable) {
+		this.isScriptable = isScriptable;
+	}
+
+	/**
 	 * Create a new {@link ArticleBaseComposite} with a {@link DynamicProductType}.
 	 *
 	 * @param parent
@@ -195,6 +209,7 @@ extends FadeableComposite
 				productNameModified = true;
 			}
 		});
+		
 //		productNameText.setData(IToolkit.KEY_DRAW_BORDER, IToolkit.TEXT_BORDER);
 		((GridData)productNameText.getLayoutData()).heightHint = productTypeNameLabel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 3;
 		productNameDialogButton = new Button(comp3, SWT.PUSH);
@@ -204,7 +219,7 @@ extends FadeableComposite
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable).open())) {
+				if ((Window.OK == new ProductNameDialog(getShell(), productName, editable,isScriptable()).open())) {
 					updateProductNameUI();
 					productNameModified = true;
 				}

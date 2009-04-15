@@ -21,7 +21,7 @@ public class RecurringArticleAdderComposite extends ArticleAdderComposite
 
 	
  	public RecurringArticleAdderComposite(Composite parent, ArticleAdder articleAdder) {
-		super(parent, articleAdder);
+		super(parent, articleAdder,true);
 	}
 
 	@Override

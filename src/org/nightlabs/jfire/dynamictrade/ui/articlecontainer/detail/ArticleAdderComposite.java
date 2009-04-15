@@ -42,10 +42,18 @@ extends ArticleBaseComposite
 	{
 		super(parent, articleAdder.getSegmentEdit().getArticleContainer(), (DynamicProductType)articleAdder.getProductType());
 		this.articleAdder = articleAdder;
-
 		createUI();
 	}
 
+	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder,boolean isScriptable)
+	{		
+		super(parent, articleAdder.getSegmentEdit().getArticleContainer(), (DynamicProductType)articleAdder.getProductType());
+		this.articleAdder = articleAdder;
+		setScriptable(isScriptable);
+		createUI();
+	}
+	
+	
 	@Override
 	protected void createUI_additionalElements_comp1(Composite parent)
 	{
