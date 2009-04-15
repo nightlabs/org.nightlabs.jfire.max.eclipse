@@ -11,12 +11,7 @@ extends AbstractProductTypeAdminEditor
 {
 	public static final String ID_EDITOR = SimpleProductTypeEditor.class.getName();
 
-//	/* (non-Javadoc)
-//	 * @see org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeAdminEditor#getProductTypeClass()
-//	 */
-//	@Override
-//	public Class<? extends ProductType> getProductTypeClass() {
-//		return SimpleProductType.class;
-//	}
-	
+	public SimpleProductTypeEditor() {
+		setShowOverviewPage(true);
+	}	
 }
