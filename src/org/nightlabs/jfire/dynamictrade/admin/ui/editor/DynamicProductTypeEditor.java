@@ -10,4 +10,9 @@ public class DynamicProductTypeEditor
 extends AbstractProductTypeAdminEditor
 {
 	public static final String EDITOR_ID = DynamicProductTypeEditor.class.getName();
+	
+	public DynamicProductTypeEditor() {
+		super();
+		setShowOverviewPage(true);
+	}
 }
