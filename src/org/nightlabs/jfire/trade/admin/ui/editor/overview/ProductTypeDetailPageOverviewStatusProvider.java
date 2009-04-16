@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.trade.LegalEntity;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -32,20 +33,20 @@ extends AbstractProductTypeOverviewPageStatusProvider
 	{
 		StringBuilder sb = new StringBuilder();
 		if (productType != null) {
-			String separator = "\n";
-			sb.append("Name: ");
+			String separator = "\n"; //$NON-NLS-1$
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.name.text")); //$NON-NLS-1$
 			sb.append(productType.getName().getText());
 			sb.append(separator);
-			sb.append("Sale Status: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.saleStatus.text")); //$NON-NLS-1$
 			sb.append(getSaleStatusString(productType));
 			sb.append(separator);
-			sb.append("Amount Nested ProductTypes: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.amountNestedProductTyps.text")); //$NON-NLS-1$
 			sb.append(productType.getProductTypeLocal().getNestedProductTypeLocals().size());
 			sb.append(separator);
-			sb.append("Owner: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.owner.text")); //$NON-NLS-1$
 			sb.append(productType.getOwner().getPerson().getDisplayName());
 			sb.append(separator);
-			sb.append("Vendor: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.vendor.text")); //$NON-NLS-1$
 			sb.append(productType.getVendor().getPerson().getDisplayName());
 		}
 		return new Status(IStatus.OK, getStatusPluginId(), sb.toString());
@@ -53,17 +54,17 @@ extends AbstractProductTypeOverviewPageStatusProvider
 
 	protected String getSaleStatusString(ProductType productType) {
 		if (productType.isClosed()) {
-			return "Closed";
+			return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.closed"); //$NON-NLS-1$
 		}
 		else if (productType.isSaleable()) {
-			return "Saleable";
+			return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.saleable"); //$NON-NLS-1$
 		}
 		else if (productType.isPublished()) {
-			return "Published";
+			return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.published"); //$NON-NLS-1$
 		}
 		else if (productType.isConfirmed()) {
-			return "Confirmed";
+			return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProvider.label.confirmed"); //$NON-NLS-1$
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}	
 }

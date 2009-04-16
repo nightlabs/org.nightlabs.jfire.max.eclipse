@@ -14,6 +14,7 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeEditorInput;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
@@ -63,12 +64,12 @@ extends AbstractOverviewPageStatusProvider
 						FETCH_GROUPS_AUTHORITY, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 50));				
 			}
 			StringBuilder sb = new StringBuilder();
-			sb.append("Authority: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.AuthorityOverviewPageStatusProvider.label.authority.name")); //$NON-NLS-1$
 			String authorityName = null;
 			if (authority != null) {
 				authorityName = authority.getName().getText();	
 			}
-			sb.append(authorityName != null ? authorityName : "NONE");
+			sb.append(authorityName != null ? authorityName : Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.AuthorityOverviewPageStatusProvider.label.none.name")); //$NON-NLS-1$
 //			int severity = authorityName != null ? IStatus.OK : IStatus.WARNING;
 			int severity = IStatus.OK;
 			status = new Status(severity, getStatusPluginId(), sb.toString());

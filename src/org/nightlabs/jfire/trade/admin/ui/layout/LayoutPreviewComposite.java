@@ -74,7 +74,7 @@ public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 							@Override
 							public void run() {
 								imageLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.LayoutPreviewComposite.previewErrorMessage")); //$NON-NLS-1$
-								logger.info("Rendering the preview of " + layout.getFileName() + " failed: ", e);
+								logger.info("Rendering the preview of " + layout.getFileName() + " failed: ", e); //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						});
 						return Status.OK_STATUS;
@@ -87,7 +87,7 @@ public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 					@Override
 					public void run() {
 						if (showPreviewJob == thisJob && !imageLabel.isDisposed()) {
-							imageLabel.setText("");
+							imageLabel.setText(""); //$NON-NLS-1$
 							imageLabel.setImage(preview);
 							imageLabel.pack(true);
 						}

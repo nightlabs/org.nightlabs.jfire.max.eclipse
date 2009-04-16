@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -28,8 +29,8 @@ extends AbstractProductTypeOverviewPageStatusProvider
 		if (productType != null) {
 			StringBuilder sb = new StringBuilder();
 			LocalAccountantDelegate localAccountantDelegate = productType.getProductTypeLocal().getLocalAccountantDelegate();
-			sb.append("Local Accountant Delegate: ");
-			String name = "NONE";
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.MoneyflowConfigOverviewPageStatusProvider.label.localAccountantDelegate.text")); //$NON-NLS-1$
+			String name = Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.MoneyflowConfigOverviewPageStatusProvider.label.none.text"); //$NON-NLS-1$
 			if (localAccountantDelegate != null) {
 				name = localAccountantDelegate.getName().getText();
 			}

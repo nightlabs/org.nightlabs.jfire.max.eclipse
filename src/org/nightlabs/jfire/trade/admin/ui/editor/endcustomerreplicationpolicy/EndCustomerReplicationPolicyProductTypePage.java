@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 public class EndCustomerReplicationPolicyProductTypePage
 extends EntityEditorPageWithProgress
@@ -24,7 +25,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	public EndCustomerReplicationPolicyProductTypePage(FormEditor editor) {
-		super(editor, EndCustomerReplicationPolicyProductTypePage.class.getName(), "End-customer transfer policy");
+		super(editor, EndCustomerReplicationPolicyProductTypePage.class.getName(), Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicyProductTypePage.page.name")); //$NON-NLS-1$
 	}
 
 	private Display display;
@@ -42,7 +43,7 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return "End-customer transfer policy";
+		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicyProductTypePage.page.title"); //$NON-NLS-1$
 	}
 
 	@Override

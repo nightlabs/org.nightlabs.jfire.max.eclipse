@@ -20,6 +20,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.endcustomer.EndCustomerReplicationPolicy;
 
 public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
@@ -32,20 +33,20 @@ public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
 	private Label descriptionLabel;
 
 	public EndCustomerReplicationPolicySection(IFormPage page, Composite parent) {
-		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, "End-customer transfer policy");
+		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE, Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.section.name")); //$NON-NLS-1$
 		((GridData)getSection().getLayoutData()).grabExcessVerticalSpace = false;
 
 		Composite wrapper = new XComposite(getContainer(), SWT.NONE);
 		wrapper.setLayout(new GridLayout(2, false));
 
 		nameLabel = new Label(wrapper, SWT.NONE);
-		nameLabel.setText("Name");
+		nameLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.label.name.text")); //$NON-NLS-1$
 		name = new I18nTextEditor(wrapper);
 		name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		name.addModifyListener(markDirtyModifyListener);
 
 		descriptionLabel = new Label(wrapper, SWT.NONE);
-		descriptionLabel.setText("Description");
+		descriptionLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.label.description.text")); //$NON-NLS-1$
 		GridData gd = new GridData();
 		gd.verticalAlignment = GridData.BEGINNING;
 		descriptionLabel.setLayoutData(gd);
@@ -67,8 +68,8 @@ public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
 
 	private Action assignAction = new Action() {
 		{
-			setText("Assign");
-			setToolTipText("Assign an end-customer transfer policy.");
+			setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.action.assign.text")); //$NON-NLS-1$
+			setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.action.assign.tooltip")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -82,7 +83,7 @@ public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
 		public void run() {
 			final boolean oldEnabled = inheritAction.isEnabled();
 			inheritAction.setEnabled(false);
-			Job job = new Job("Loading end-customer transfer policy") {
+			Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicySection.job.loadPolicy.name")) { //$NON-NLS-1$
 				@Override
 				protected org.eclipse.core.runtime.IStatus run(org.nightlabs.progress.ProgressMonitor monitor) throws Exception {
 					try {
@@ -129,7 +130,7 @@ public class EndCustomerReplicationPolicySection extends ToolBarSectionPart
 
 	public void setEndCustomerReplicationPolicyControllerHelper(EndCustomerReplicationPolicyControllerHelper endCustomerReplicationPolicyControllerHelper) {
 		if (Display.getCurrent() == null)
-			throw new IllegalStateException("Must be called on UI thread!");
+			throw new IllegalStateException("Must be called on UI thread!"); //$NON-NLS-1$
 
 		this.endCustomerReplicationPolicyControllerHelper = endCustomerReplicationPolicyControllerHelper;
 		inheritAction.setChecked(false);

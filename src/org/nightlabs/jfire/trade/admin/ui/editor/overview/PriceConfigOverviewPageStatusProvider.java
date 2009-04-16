@@ -8,6 +8,7 @@ import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IPackagePriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -28,12 +29,12 @@ extends AbstractProductTypeOverviewPageStatusProvider
 	protected IStatus createStatus(ProductType productType) 
 	{		
 		if (productType != null) {
-			String separator = "\n";
+			String separator = "\n"; //$NON-NLS-1$
 			StringBuilder sb = new StringBuilder();
 			
 			IInnerPriceConfig innerPriceConfig = productType.getInnerPriceConfig();
-			String innerPriceConfigName = "NONE";
-			sb.append("Inner Price Config: ");			
+			String innerPriceConfigName = Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProvider.label.none.text"); //$NON-NLS-1$
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProvider.label.innerPriceConfig.text"));			 //$NON-NLS-1$
 			if (innerPriceConfig != null) {
 				innerPriceConfigName = innerPriceConfig.getName().getText();
 			}
@@ -42,8 +43,8 @@ extends AbstractProductTypeOverviewPageStatusProvider
 			sb.append(separator);
 			
 			IPackagePriceConfig packagePriceConfig = productType.getPackagePriceConfig();
-			String packagePriceConfigName = "NONE";
-			sb.append("Package Price Config: ");			
+			String packagePriceConfigName = Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProvider.label.none.text"); //$NON-NLS-1$
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProvider.label.packagePriceConfig.text"));			 //$NON-NLS-1$
 			if (packagePriceConfig != null) {
 				packagePriceConfigName = packagePriceConfig.getName().getText();
 			}

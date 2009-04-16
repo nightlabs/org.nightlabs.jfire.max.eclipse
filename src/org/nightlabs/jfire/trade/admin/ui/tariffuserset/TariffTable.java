@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.entityuserset.ui.AbstractEntityTable;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -61,8 +62,8 @@ public class TariffTable extends AbstractEntityTable<Tariff>
 	protected void createAdditionalTableColumns(TableViewer tableViewer, Table table) 
 	{
 		TableColumn nameColumn = new TableColumn(table, SWT.NONE);
-		nameColumn.setText("Tariff Name");
-		nameColumn.setToolTipText("The name of the tariff");
+		nameColumn.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariffuserset.TariffTable.table.column.tariffName.text")); //$NON-NLS-1$
+		nameColumn.setToolTipText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariffuserset.TariffTable.table.column.tariffName.tooltip")); //$NON-NLS-1$
 		
 		TableLayout layout = new WeightedTableLayout(new int[] { -1, 100 }, new int[] { 22, -1 });
 		table.setLayout(layout);		

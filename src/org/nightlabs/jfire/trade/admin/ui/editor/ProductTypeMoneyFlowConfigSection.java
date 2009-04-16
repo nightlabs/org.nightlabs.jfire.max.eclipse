@@ -192,10 +192,10 @@ extends ToolBarSectionPart
 				return;
 			
 			if (isChecked()) {
-				Job job = new Job("Inherit MoneyFlowConfiguration") {
+				Job job = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.job.inherit.name")) { //$NON-NLS-1$
 					@Override
 					protected IStatus run(ProgressMonitor monitor) throws Exception {
-						monitor.beginTask("Inherit MoneyFlowConfiguration", 100);
+						monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeMoneyFlowConfigSection.job.inherit.name"), 100); //$NON-NLS-1$
 						try {
 							if (productType == null)
 								return Status.OK_STATUS;

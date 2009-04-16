@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.nightlabs.jfire.accounting.tariffuserset.TariffUserSet;
 import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
 /**
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
@@ -25,9 +26,9 @@ extends AbstractProductTypeOverviewPageStatusProvider
 	{
 		if (productType != null) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("TariffUserSet: ");
+			sb.append(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.TariffUserSetOverviewPageStatusProvider.label.tariffUserSet.text")); //$NON-NLS-1$
 			TariffUserSet tariffUserSet = productType.getTariffUserSet();
-			String name = "NONE";
+			String name = Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.overview.TariffUserSetOverviewPageStatusProvider.label.none.text"); //$NON-NLS-1$
 			if (tariffUserSet != null) {
 				name = tariffUserSet.getName().getText();
 			}

@@ -12,6 +12,7 @@ import org.nightlabs.jfire.accounting.tariffuserset.TariffUserSet;
 import org.nightlabs.jfire.base.idgenerator.IDGeneratorClient;
 import org.nightlabs.jfire.entityuserset.EntityUserSet;
 import org.nightlabs.jfire.entityuserset.ui.EntityUserSetPageControllerHelper;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -56,6 +57,6 @@ extends EntityUserSetPageControllerHelper<Tariff>
 
 	@Override
 	public String getEntityUserSetName() {
-		return "Tariff User Set";
+		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariffuserset.TariffUserSetPageControllerHelper.entityUserSetName"); //$NON-NLS-1$
 	}
 }

@@ -8,6 +8,7 @@ import org.nightlabs.jfire.prop.StructField;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.dao.EndCustomerReplicationPolicyDAO;
 import org.nightlabs.jfire.trade.endcustomer.EndCustomerReplicationPolicy;
 import org.nightlabs.jfire.trade.endcustomer.id.EndCustomerReplicationPolicyID;
@@ -38,7 +39,7 @@ public class EndCustomerReplicationPolicyControllerHelper
 
 	public void load(ProductTypeID productTypeID, ProgressMonitor monitor)
 	{
-		monitor.beginTask("Loading end-customer transfer policy", 100);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.endcustomerreplicationpolicy.EndCustomerReplicationPolicyControllerHelper.job.name"), 100); //$NON-NLS-1$
 		try {
 			this.productTypeID = productTypeID;
 			productType = null;
