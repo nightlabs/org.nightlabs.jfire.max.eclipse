@@ -8,6 +8,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 
 public class SubscribeWizard
 		extends DynamicPathWizard
@@ -31,7 +32,7 @@ public class SubscribeWizard
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException 
 				{
-					monitor.beginTask("Import Simple ProductTypes for reeselling" , 100);
+					monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeWizard.job.importForReselling.name") , 100); //$NON-NLS-1$
 					try {
 						SimpleTradeManager simpleTradeManager = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
 						simpleTradeManager.importSimpleProductTypesForReselling(selectedOrganisationID);

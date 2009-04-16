@@ -5,6 +5,7 @@ import javax.jdo.FetchPlan;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.nightlabs.jfire.prop.PropertySet;
+import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.editor.overview.AbstractProductTypeOverviewPageStatusProvider;
@@ -29,12 +30,12 @@ extends AbstractProductTypeOverviewPageStatusProvider
 			SimpleProductType simpleProductType = (SimpleProductType) productType;
 			PropertySet propertySet = simpleProductType.getPropertySet();
 			StringBuilder sb = new StringBuilder();
-			sb.append("PropertySet: ");
-			String name = "NONE";
+			sb.append(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.overview.PropertySetOverviewPageStatusProvider.label.propertySet")); //$NON-NLS-1$
+			String name = Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.editor.overview.PropertySetOverviewPageStatusProvider.label.none"); //$NON-NLS-1$
 			if (propertySet != null) {
 				name = propertySet.getDisplayName();
 				if (name == null) {
-					name = "";
+					name = ""; //$NON-NLS-1$
 				}
 			}
 			sb.append(name);

@@ -1,140 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.0"?>
 <plugin>
-   <extension
-         point="org.nightlabs.jfire.trade.admin.ui.overview">
-      <category
+    <extension point="org.nightlabs.jfire.trade.admin.ui.overview">
+        <category
             class="org.nightlabs.jfire.simpletrade.admin.ui.overview.SimpleProductTypeCategoryFactory"
             icon="icons/overview/SimpleProductTypeCategoryFactory.16x16.png"
-            index="600"
-            name="%SimpleProductCategory.name">
-      </category>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
+            index="600" name="%SimpleProductCategory.name"/>
+    </extension>
+    <extension point="org.eclipse.ui.editors">
+        <editor
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
             contributorClass="org.nightlabs.base.ui.entity.editor.action.EntityEditorActionBarContributor"
             icon="icons/editor/SimpleProductTypeEditor.16x16.png"
             id="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            matchingStrategy="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditorMatchingStrategy"
-            name="%SimpleProductTypeEditor.name">
-      </editor>
-   </extension>
-   <extension
-         point="org.nightlabs.base.ui.entityEditor">
-      <pageFactory
+            matchingStrategy="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditorMatchingStrategy" name="%SimpleProductTypeEditor.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.entityEditor">
+        <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory"
-            description="Edit the general properties"
+            description="%org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/General.48x48.png"
-            indexHint="10">
-      </pageFactory>
-      <pageFactory
+            icon48x48="icons/editor/overview/General.48x48.png" indexHint="10"/>
+        <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory"
-            description="Edit the price configuration"
+            description="%org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/Money.48x48.png"
-            indexHint="30">
-      </pageFactory>
-      <pageFactory
+            icon48x48="icons/editor/overview/Money.48x48.png" indexHint="30"/>
+        <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory"
-            description="Edit the money flow configuration"
+            description="%org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/Moneyflow.48x48.png"
-            indexHint="40">
-      </pageFactory>
-      <pageFactory
+            icon48x48="icons/editor/overview/Moneyflow.48x48.png" indexHint="40"/>
+        <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory"
-            description="Edit the properties"
+            description="%org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/Preferences.48x48.png"
-            indexHint="50">
-      </pageFactory>
-      <pageFactory
+            icon48x48="icons/editor/overview/Preferences.48x48.png" indexHint="50"/>
+        <pageFactory
             class="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"
-            description="Edit the rights for each user"
+            description="%org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/Rights.48x48.png"
-            indexHint="20">
-      </pageFactory>
-      <pageFactory
+            icon48x48="icons/editor/overview/Rights.48x48.png" indexHint="20"/>
+        <pageFactory
             class="org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory"
-            description="Edit the tariff user set"
+            description="%org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory.description"
             editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor"
-            icon48x48="icons/editor/overview/Users.48x48.png"
-            indexHint="60">
-      </pageFactory>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory">
-      </overviewPageStatusProvider>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.AuthorityOverviewPageStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory">
-      </overviewPageStatusProvider>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory">
-      </overviewPageStatusProvider>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.MoneyflowConfigOverviewPageStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory">
-      </overviewPageStatusProvider>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.TariffUserSetOverviewPageStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory">
-      </overviewPageStatusProvider>
-      <overviewPageStatusProvider
-            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.overview.PropertySetOverviewPageStatusProviderFactory"
-            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory">
-      </overviewPageStatusProvider>      
-   </extension>
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.nightlabs.jfire.simpletrade.admin.ui"
-            label="org.nightlabs.jfire.simpletrade.admin.ui"
-            visible="false">
-         <action
-               class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
-               icon="icons/producttype/subscribe/SubscribeAction.24x24.png"
-               id="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
-               label="Subscribe simple product types"
-               style="push"
-               toolbarPath="additions"
-               tooltip="%SubscribeAction.tooltip"/>
-      </actionSet>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
-         <actionSet id="org.nightlabs.jfire.simpletrade.admin.ui"/>
-      </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.nightlabs.base.ui.searchResultProvider">
-      <searchResultActionHandler
+            icon48x48="icons/editor/overview/Users.48x48.png" indexHint="60"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.ProductTypeDetailPageOverviewStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeDetailPage$Factory"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.AuthorityOverviewPageStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.trade.admin.ui.editor.authority.AuthorityPage$Factory"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePriceConfigPage$Factory"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.MoneyflowConfigOverviewPageStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeMoneyFlowConfigPageFactory"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.trade.admin.ui.editor.overview.TariffUserSetOverviewPageStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory"/>
+        <overviewPageStatusProvider
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.overview.PropertySetOverviewPageStatusProviderFactory" pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory"/>
+    </extension>
+    <extension point="org.eclipse.ui.actionSets">
+        <actionSet id="org.nightlabs.jfire.simpletrade.admin.ui"
+            label="%org.nightlabs.jfire.simpletrade.admin.ui.label" visible="false">
+            <action
+                class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
+                icon="icons/producttype/subscribe/SubscribeAction.24x24.png"
+                id="org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction"
+                label="%org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeAction.label"
+                style="push" toolbarPath="additions" tooltip="%SubscribeAction.tooltip"/>
+        </actionSet>
+    </extension>
+    <extension point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension targetID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective">
+            <actionSet id="org.nightlabs.jfire.simpletrade.admin.ui"/>
+        </perspectiveExtension>
+    </extension>
+    <extension point="org.nightlabs.base.ui.searchResultProvider">
+        <searchResultActionHandler
             class="org.nightlabs.jfire.simpletrade.admin.ui.store.search.SimpleProductTypeSearchAdminActionHandler"
-            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"
-            searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeSearchResultProviderFactory">
-      </searchResultActionHandler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            category="org.nightlabs.jfire.trade.ui"
+            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective" searchResultProviderFactoryID="org.nightlabs.jfire.simpletrade.ui.store.search.SimpleProductTypeSearchResultProviderFactory"/>
+    </extension>
+    <extension point="org.eclipse.ui.newWizards">
+        <wizard category="org.nightlabs.jfire.trade.ui"
             class="org.nightlabs.jfire.simpletrade.admin.ui.producttype.create.CreateProductTypeNewWizard"
             icon="icons/producttype/ProductTypeTree$ProductTypeTreeLabelProvider-INHERITANCE_NATURE_LEAF.16x16.png"
-            id="org.nightlabs.jfire.simpletrade.admin.ui.create"
-            name="New Simple Product Type">
-      </wizard>
-   </extension>
-   
-   <extension 
-   		point="org.nightlabs.base.ui.editor2perspective">
-      <registry
-            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor" 
-            perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
+            id="org.nightlabs.jfire.simpletrade.admin.ui.create" name="%org.nightlabs.jfire.simpletrade.admin.ui.create.name"/>
+    </extension>
+    <extension point="org.nightlabs.base.ui.editor2perspective">
+        <registry
+            editorID="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor" perspectiveID="org.nightlabs.jfire.trade.admin.ui.TradeAdminPerspective"/>
     </extension>
 </plugin>

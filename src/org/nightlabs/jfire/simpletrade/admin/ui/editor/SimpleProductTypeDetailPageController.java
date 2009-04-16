@@ -9,6 +9,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.JFireEjbFactory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
@@ -76,9 +77,9 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 	{
 		try {
 			if (logger.isDebugEnabled()) {
-				logger.debug("ProductType (" + productType + ") -name before store");
+				logger.debug("ProductType (" + productType + ") -name before store"); //$NON-NLS-1$ //$NON-NLS-2$
 				for (Map.Entry<String, String> entry : productType.getName().getTexts()) {
-					logger.debug("  " + entry.getKey() + " = " + entry.getValue());
+					logger.debug("  " + entry.getKey() + " = " + entry.getValue()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
@@ -86,9 +87,9 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 			// which was set to the GUI elements and which they edit directly
 			SimpleProductType spt = stm.storeProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 			if (logger.isDebugEnabled()) {
-				logger.debug("ProductType (" + spt + ") -name after store");
+				logger.debug("ProductType (" + spt + ") -name after store"); //$NON-NLS-1$ //$NON-NLS-2$
 				for (Map.Entry<String, String> entry : spt.getName().getTexts()) {
-					logger.debug("  " + entry.getKey() + " = " + entry.getValue());
+					logger.debug("  " + entry.getKey() + " = " + entry.getValue()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			return spt;
