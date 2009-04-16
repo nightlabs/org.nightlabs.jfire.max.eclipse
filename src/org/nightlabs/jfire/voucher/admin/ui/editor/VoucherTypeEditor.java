@@ -11,6 +11,9 @@ public class VoucherTypeEditor
 {
 	public static final String EDITOR_ID = VoucherTypeEditor.class.getName();
 	
-	public VoucherTypeEditor() {}
+	public VoucherTypeEditor() {
+		super();
+		setShowOverviewPage(true);
+	}
 
 }
