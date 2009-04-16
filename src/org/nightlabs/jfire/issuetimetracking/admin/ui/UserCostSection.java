@@ -10,19 +10,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.jfire.security.dao.UserDAO;
-import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 import org.nightlabs.progress.NullProgressMonitor;
 
 public class UserCostSection extends ToolBarSectionPart {
@@ -40,14 +36,19 @@ public class UserCostSection extends ToolBarSectionPart {
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
 				"User Cost");
-		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 		
-		client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		client = new XComposite(getSection(), SWT.NONE);
 		client.getGridLayout().numColumns = 1; 
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		client.setLayoutData(gridData);
 		
-		XComposite userComposite = new XComposite(client, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
+		
+		XComposite userComposite = new XComposite(client, SWT.NONE);
 		userComposite.getGridLayout().numColumns = 2;
+		gridData = new GridData(GridData.FILL_BOTH);
+		userComposite.setLayoutData(gridData);
 		
 		final ListComposite<User> userList = new ListComposite<User>(userComposite, SWT.NONE);
 		userList.setLabelProvider(new LabelProvider() {
@@ -92,20 +93,10 @@ public class UserCostSection extends ToolBarSectionPart {
 		job.setPriority(Job.SHORT);
 		job.schedule();
 		
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData = new GridData(GridData.FILL_BOTH);
 		userList.setLayoutData(gridData);
 		
-		XComposite detailComposite = new XComposite(userComposite, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		detailComposite.getGridLayout().numColumns = 2;
-		
-		new Label(detailComposite, SWT.NONE).setText("Currency");
-		CurrencyCombo currencyCombo2 = new CurrencyCombo(detailComposite, SWT.NONE);
-		
-		new Label(detailComposite, SWT.NONE).setText("Monthly Cost");
-		Text costText2 = new Text(detailComposite, SWT.SINGLE);
-
-		new Label(detailComposite, SWT.NONE).setText("Monthly Revenue");
-		Text revenueText2 = new Text(detailComposite, SWT.SINGLE);
+		CostRevenueComposite costRevenueComposite = new CostRevenueComposite(userComposite, SWT.NONE);
 		
 		getSection().setClient(client);
 	}

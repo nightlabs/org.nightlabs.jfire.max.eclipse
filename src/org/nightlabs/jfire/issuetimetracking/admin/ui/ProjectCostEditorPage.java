@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -10,7 +9,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.nightlabs.base.ui.composite.XComposite;
-import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
@@ -55,7 +53,7 @@ extends EntityEditorPageWithProgress
 	}
 
 	private ProjectEditorPageController controller;
-	private ScrolledComposite sc;
+//	private ScrolledComposite sc;
 	
 	//Sections (in order)
 	private ProjectCostSection projectCostSection;
@@ -65,31 +63,32 @@ extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent) {
 		controller = (ProjectEditorPageController)getPageController();
 		
-		sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
-				  SWT.V_SCROLL);
-		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
+//		sc = new ScrolledComposite(parent, SWT.H_SCROLL |   
+//				  SWT.V_SCROLL);
+//		sc.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		final XComposite mainComposite = new XComposite(sc, SWT.NONE);
+//		final XComposite mainComposite = new XComposite(sc, SWT.NONE);
+		final XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		GridLayout layout = (GridLayout)mainComposite.getLayout();
 		layout.makeColumnsEqualWidth = true;
 		
-		sc.setContent(mainComposite);
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
+//		sc.setContent(mainComposite);
+//		sc.setExpandHorizontal(true);
+//		sc.setExpandVertical(true);
 
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 		
 		projectCostSection = new ProjectCostSection(this, mainComposite);
-		GridData gd = (GridData)projectCostSection.getSection().getLayoutData();
-		gd.verticalAlignment = GridData.BEGINNING;
-		projectCostSection.getSection().setLayoutData(gd);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		projectCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(projectCostSection);
 		
 		userCostSection = new UserCostSection(this, mainComposite);
-		gd = (GridData)userCostSection.getSection().getLayoutData();
-		gd.verticalAlignment = GridData.BEGINNING;
-		userCostSection.getSection().setLayoutData(gd);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 2;
+		userCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(userCostSection);
 		
 		if (controller.isLoaded()) {
