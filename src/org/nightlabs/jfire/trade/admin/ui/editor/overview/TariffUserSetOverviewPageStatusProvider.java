@@ -33,9 +33,9 @@ extends AbstractProductTypeOverviewPageStatusProvider
 			}
 			sb.append(name);
 			int severity = IStatus.OK;
-			if (tariffUserSet == null) {
-				severity = IStatus.WARNING;
-			}
+//			if (tariffUserSet == null) {
+//				severity = IStatus.WARNING;
+//			}
 			return new Status(severity, getStatusPluginId(), sb.toString());
 		}
 		return null;

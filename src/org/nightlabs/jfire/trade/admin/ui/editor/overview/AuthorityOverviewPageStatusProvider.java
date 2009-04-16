@@ -2,7 +2,6 @@ package org.nightlabs.jfire.trade.admin.ui.editor.overview;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.internal.runtime.IRuntimeConstants;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorInput;
@@ -70,7 +69,9 @@ extends AbstractOverviewPageStatusProvider
 				authorityName = authority.getName().getText();	
 			}
 			sb.append(authorityName != null ? authorityName : "NONE");
-			status = new Status(authorityName != null ? IStatus.OK : IStatus.WARNING, getStatusPluginId(), sb.toString());
+//			int severity = authorityName != null ? IStatus.OK : IStatus.WARNING;
+			int severity = IStatus.OK;
+			status = new Status(severity, getStatusPluginId(), sb.toString());
 		}
 	}
 
