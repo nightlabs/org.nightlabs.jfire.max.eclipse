@@ -84,6 +84,10 @@
       <overviewPageStatusProvider
             class="org.nightlabs.jfire.trade.admin.ui.editor.overview.TariffUserSetOverviewPageStatusProviderFactory"
             pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.tariffuserset.TariffUserSetPage$Factory">
+      </overviewPageStatusProvider>
+      <overviewPageStatusProvider
+            class="org.nightlabs.jfire.simpletrade.admin.ui.editor.overview.PropertySetOverviewPageStatusProviderFactory"
+            pageFactoryClass="org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypePropertySetPage$Factory">
       </overviewPageStatusProvider>      
    </extension>
    <extension
