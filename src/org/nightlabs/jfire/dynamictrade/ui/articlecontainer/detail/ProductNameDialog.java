@@ -15,7 +15,7 @@ import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
-import org.nightlabs.script.ScriptParser;
+import org.nightlabs.script.JSHTMLExecuter;
 
 public class ProductNameDialog
 extends ResizableTrayDialog
@@ -71,7 +71,7 @@ extends ResizableTrayDialog
 
 	private boolean checkScript()
 	{
-		ScriptParser script = new ScriptParser(productNameEditor.getI18nText());
+		JSHTMLExecuter script = new JSHTMLExecuter(productNameEditor.getI18nText());
 		String err = script.validateContent();
 		if(err !=null)
 		{

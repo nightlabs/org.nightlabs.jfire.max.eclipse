@@ -23,7 +23,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.NumberFormatter;
-import org.nightlabs.script.ScriptParser;
+import org.nightlabs.script.JSHTMLExecuter;
 
 public class ArticleEditDialogComposite
 extends ArticleBaseComposite
@@ -68,7 +68,7 @@ extends ArticleBaseComposite
 			else
 			{
 				dynamicProductInfo = (DynamicProductInfo) this.article;
-				ScriptParser script = new ScriptParser(getProductName());
+				JSHTMLExecuter script = new JSHTMLExecuter(getProductName());
 				String err = script.validateContent();
 				if(err !=null)
 				{

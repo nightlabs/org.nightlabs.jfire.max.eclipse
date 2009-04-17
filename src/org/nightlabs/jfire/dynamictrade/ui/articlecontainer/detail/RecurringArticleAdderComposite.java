@@ -5,8 +5,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.nightlabs.script.ScriptParser;
-
+import org.nightlabs.script.JSHTMLExecuter;
 public class RecurringArticleAdderComposite extends ArticleAdderComposite 
 {
 
@@ -24,7 +23,7 @@ public class RecurringArticleAdderComposite extends ArticleAdderComposite
 	@Override
 	protected void addArticle()
 	{
-		ScriptParser script = new ScriptParser(getProductName());
+		JSHTMLExecuter script = new JSHTMLExecuter(getProductName());
 		String err = script.validateContent();
 		if(err !=null)
 		{
