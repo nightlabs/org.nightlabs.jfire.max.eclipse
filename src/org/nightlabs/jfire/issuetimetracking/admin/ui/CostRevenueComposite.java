@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
+import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 
 /** 
@@ -14,19 +16,23 @@ import org.nightlabs.jfire.trade.ui.currency.CurrencyCombo;
 public class CostRevenueComposite 
 extends XComposite 
 {
+	private CurrencyCombo currencyCombo;
+	private Text costText;
+	private Text revenueText;
+
 	public CostRevenueComposite(Composite parent, int style) {
 		super(parent, style);
 		getGridLayout().numColumns = 2;
-		
+
 		new Label(this, SWT.NONE).setText("Currency");
 		GridData gridData = new GridData();
-		CurrencyCombo currencyCombo = new CurrencyCombo(this, SWT.NONE);
+		currencyCombo = new CurrencyCombo(this, SWT.NONE);
 		currencyCombo.getGridData().horizontalIndent = 0;
 		gridData.grabExcessHorizontalSpace = true;
 		currencyCombo.setLayoutData(gridData);
-		
+
 		new Label(this, SWT.NONE).setText("Monthly Cost");
-		Text costText = new Text(this, SWT.SINGLE);
+		costText = new Text(this, SWT.SINGLE);
 		costText.setTextLimit(20);
 		gridData = new GridData();
 		gridData.verticalIndent = 5;
@@ -34,7 +40,7 @@ extends XComposite
 		costText.setLayoutData(gridData);
 
 		new Label(this, SWT.NONE).setText("Monthly Revenue");
-		Text revenueText = new Text(this, SWT.SINGLE);
+		revenueText = new Text(this, SWT.SINGLE);
 		revenueText.setTextLimit(20);
 		gridData = new GridData();
 		gridData.widthHint = 150;
@@ -42,4 +48,16 @@ extends XComposite
 		revenueText.setLayoutData(gridData);
 	}
 
+	public void setCurrency(Currency currency) {
+		currencyCombo.setSelectedCurrency(currency);
+	}
+
+	public Currency getSelectedCurrency() {
+		return currencyCombo.getSelectedCurrency();
+	}
+	
+	public void setProjectCost(ProjectCost projectCost) {
+		costText.setText(Double.toString(projectCost.getCost().getAmountAsDouble()));
+		revenueText.setText(Double.toString(projectCost.getRevenue().getAmountAsDouble()));
+	}
 }

@@ -7,9 +7,12 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 
 public class ProjectCostSection extends ToolBarSectionPart {
 
+	private CostRevenueComposite costRevenueComposite;
 	/**
 	 * @param page
 	 * @param parent
@@ -25,7 +28,14 @@ public class ProjectCostSection extends ToolBarSectionPart {
 		XComposite costComposite = new XComposite(getContainer(), SWT.NONE);
 		costComposite.setLayout(new GridLayout(2, false));
 		
-		CostRevenueComposite costRevenueComposite = new CostRevenueComposite(costComposite, SWT.NONE);
+		costRevenueComposite = new CostRevenueComposite(costComposite, SWT.NONE);
 	}
 	
+	public void setProjectCost(ProjectCost projectCost) {
+		costRevenueComposite.setProjectCost(projectCost);
+	}
+	
+	public Currency getCurrency() {
+		return costRevenueComposite.getSelectedCurrency();
+	}
 }
