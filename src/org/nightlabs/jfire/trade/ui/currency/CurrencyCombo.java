@@ -120,6 +120,8 @@ implements ISelectionProvider
 							}
 							if (idx >= 0)
 								combo.select(idx);
+							else 
+								combo.select(0);
 
 //							if (selectedCurrency == null && !currencies.isEmpty()) {
 //								selectedCurrency = currencies.get(0);
