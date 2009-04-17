@@ -18,6 +18,7 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -30,6 +31,8 @@ import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.ProgressMonitor;
+
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 public class ArticleAdderComposite
 extends ArticleBaseComposite
@@ -96,7 +99,8 @@ extends ArticleBaseComposite
 
 			final Price singlePriceOrig = resultPriceConfig.getPriceCell(createPriceCoordinate(), true).getPrice();
 			// we must create a new instance (with a new ID), because it would otherwise cause duplicate-key-exceptions when adding multiple articles
-			final Price singlePrice = new Price(resultPriceConfig.getOrganisationID(), resultPriceConfig.getPriceConfigID(), resultPriceConfig.createPriceID(), singlePriceOrig.getCurrency());
+//			final Price singlePrice = new Price(resultPriceConfig.getOrganisationID(), resultPriceConfig.getPriceConfigID(), resultPriceConfig.createPriceID(), singlePriceOrig.getCurrency());
+			final Price singlePrice = new Price(IDGenerator.getOrganisationID(), IDGenerator.nextID(Price.class), singlePriceOrig.getCurrency());
 			singlePrice.sumPrice(singlePriceOrig);
 
 
