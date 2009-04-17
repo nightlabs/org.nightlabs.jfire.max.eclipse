@@ -24,25 +24,33 @@ extends XComposite
 		super(parent, style);
 		getGridLayout().numColumns = 2;
 
-		new Label(this, SWT.NONE).setText("Currency");
+		Label currencyLabel = new Label(this, SWT.NONE);
+		currencyLabel.setText("Currency");
 		GridData gridData = new GridData();
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
+		currencyLabel.setLayoutData(gridData);
+		
 		currencyCombo = new CurrencyCombo(this, SWT.NONE);
-		currencyCombo.getGridData().horizontalIndent = 0;
-		gridData.grabExcessHorizontalSpace = true;
+		gridData = new GridData();
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		currencyCombo.setLayoutData(gridData);
 
-		new Label(this, SWT.NONE).setText("Monthly Cost");
+		Label monthlyCostLabel = new Label(this, SWT.NONE);
+		monthlyCostLabel.setText("Monthly Cost");
 		costText = new Text(this, SWT.SINGLE);
 		costText.setTextLimit(20);
 		gridData = new GridData();
-		gridData.verticalIndent = 5;
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
+		gridData.verticalIndent = 5;
 		costText.setLayoutData(gridData);
 
-		new Label(this, SWT.NONE).setText("Monthly Revenue");
+		Label monthlyRevenueLabel = new Label(this, SWT.NONE);
+		monthlyRevenueLabel.setText("Monthly Revenue");
 		revenueText = new Text(this, SWT.SINGLE);
 		revenueText.setTextLimit(20);
 		gridData = new GridData();
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
 		gridData.verticalIndent = 5;
 		revenueText.setLayoutData(gridData);
@@ -57,7 +65,7 @@ extends XComposite
 	}
 	
 	public void setProjectCost(ProjectCost projectCost) {
-		costText.setText(Double.toString(projectCost.getCost().getAmountAsDouble()));
-		revenueText.setText(Double.toString(projectCost.getRevenue().getAmountAsDouble()));
+//		costText.setText(Double.toString(projectCost.getCost().getAmountAsDouble()));
+//		revenueText.setText(Double.toString(projectCost.getRevenue().getAmountAsDouble()));
 	}
 }

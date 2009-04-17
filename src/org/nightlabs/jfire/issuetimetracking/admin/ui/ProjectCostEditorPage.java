@@ -138,6 +138,8 @@ extends EntityEditorPageWithProgress
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
+			
+			userCostSection.setProject(project);
 		}
 	}
 

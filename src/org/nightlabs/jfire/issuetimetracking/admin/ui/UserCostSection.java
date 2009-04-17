@@ -1,29 +1,24 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.security.dao.UserDAO;
-import org.nightlabs.progress.NullProgressMonitor;
 
 public class UserCostSection extends ToolBarSectionPart {
 
 	private XComposite client;
+	private ListComposite<User> userList;
 	
 	/**
 	 * @param page
@@ -50,7 +45,7 @@ public class UserCostSection extends ToolBarSectionPart {
 		gridData = new GridData(GridData.FILL_BOTH);
 		userComposite.setLayoutData(gridData);
 		
-		final ListComposite<User> userList = new ListComposite<User>(userComposite, SWT.NONE);
+		userList = new ListComposite<User>(userComposite, SWT.NONE);
 		userList.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -62,46 +57,40 @@ public class UserCostSection extends ToolBarSectionPart {
 			}
 		});
 		
-		Job job = new Job("Loading Users................") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					final java.util.List<User> users = UserDAO.sharedInstance().getUsers(
-							Login.getLogin().getOrganisationID(),
-							(String[]) null,
-							new String[] {
-								User.FETCH_GROUP_NAME
-							},
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new NullProgressMonitor()
-					);
-					
-					Display.getDefault().asyncExec(new Runnable()
-					{
-						public void run()
-						{
-							userList.setInput(users);
-						}
-					});
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-				
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(Job.SHORT);
-		job.schedule();
-		
 		gridData = new GridData(GridData.FILL_BOTH);
 		userList.setLayoutData(gridData);
+
+		XComposite c = new XComposite(userComposite, SWT.NONE);
+		c.getGridLayout().numColumns = 2;
 		
-		CostRevenueComposite costRevenueComposite = new CostRevenueComposite(userComposite, SWT.NONE);
+		Label monthlyCostLabel = new Label(c, SWT.NONE);
+		monthlyCostLabel.setText("Monthly Cost");
+		Text costText = new Text(c, SWT.SINGLE);
+		costText.setTextLimit(20);
+		gridData = new GridData();
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
+		gridData.widthHint = 150;
+		gridData.verticalIndent = 5;
+		costText.setLayoutData(gridData);
+
+		Label monthlyRevenueLabel = new Label(c, SWT.NONE);
+		monthlyRevenueLabel.setText("Monthly Revenue");
+		Text revenueText = new Text(c, SWT.SINGLE);
+		revenueText.setTextLimit(20);
+		gridData = new GridData();
+		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
+		gridData.widthHint = 150;
+		gridData.verticalIndent = 5;
+		revenueText.setLayoutData(gridData);
 		
 		getSection().setClient(client);
 	}
 	
 	public XComposite getClient() {
 		return client;
+	}
+	
+	public void setProject(Project project) {
+		userList.setInput(project.getMembers());
 	}
 }
