@@ -32,7 +32,6 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.SegmentEdit;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.ProgressMonitor;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 public class ArticleAdderComposite
 extends ArticleBaseComposite
