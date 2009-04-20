@@ -21,6 +21,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -39,8 +41,6 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
-import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -94,6 +94,8 @@ extends FadeableComposite
 {
 	private static Logger logger = Logger.getLogger(ArticleBaseComposite.class);
 
+	private String nameMessageText;
+	
 	protected ArticleContainer articleContainer;
 	protected ProductTypeID productTypeID;
 
@@ -105,6 +107,8 @@ extends FadeableComposite
 	protected MessageComposite nameMessageLabel;
 	protected Button productNameDialogButton;
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
+
+	
 
 	protected XComposite comp1;
 
@@ -210,8 +214,9 @@ extends FadeableComposite
 		
 		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFO);
 		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-	    nameMessageLabel.setVisible(false);
-	     
+	    GridData data = (GridData)nameMessageLabel.getLayoutData();
+	    data.exclude = true;
+		nameMessageLabel.setVisible(false);
 		productNameText = new Text(compName, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		productNameText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productNameText.addModifyListener(new ModifyListener() {
@@ -305,10 +310,28 @@ extends FadeableComposite
 		});
 
 		createUI_additionalElements_comp1(comp1);
-
 		setEditable(false);
-
 		loadDynamicProductType();
+		if(isScriptable())
+		{
+			showTextNameMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);
+			this.nameMessageText = nameMessageLabel.getMessage();
+			this.productNameText.addFocusListener(  new FocusListener(){
+				/** remove the error message shown once the user clicks 
+				on the text box to enter the name again*/
+				@Override
+				public void focusGained(FocusEvent arg0) {
+					showTextNameMessage(nameMessageText,MessageType.INFO);
+				}				
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+			});
+		}
+		
 	}
 
 	private double lastValidQuantity = 1;
@@ -879,10 +902,25 @@ extends FadeableComposite
 		});
 	}
 	
-	protected Text getProductNameTextBox() {
-		return productNameText;
+
+	/**
+	 * shows the statues Text Message Label above the name text dialog, 
+	 * this method should be called after the GUI has been created.
+	 */
+	public void showTextNameMessage(String message,MessageType msgType)
+	{
+		if(nameMessageLabel != null)
+		{
+			if(!nameMessageLabel.isVisible())
+			{
+				GridData data = (GridData)nameMessageLabel.getLayoutData();
+				data.exclude = false;		
+				nameMessageLabel.setVisible(true);	
+			}
+			nameMessageLabel.setMessage(message, msgType);
+			productNameText.setToolTipText(message);	
+		}
 	}
 
-	
 }
 

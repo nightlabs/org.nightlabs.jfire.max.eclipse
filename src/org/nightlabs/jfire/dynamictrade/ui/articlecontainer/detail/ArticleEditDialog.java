@@ -29,7 +29,6 @@ extends ResizableTrayDialog
 		Composite area = (Composite) super.createDialogArea(parent);
 		articleEditDialogComposite = new ArticleEditDialogComposite(
 				area, articleEdit.getSegmentEdit().getArticleContainer(), article);
-
 		return articleEditDialogComposite;
 	}
 	

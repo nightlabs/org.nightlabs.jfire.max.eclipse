@@ -2,11 +2,8 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import javax.jdo.JDOHelper;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
@@ -23,7 +20,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.NumberFormatter;
-import org.nightlabs.script.JSHTMLExecuter;;
+import org.nightlabs.script.JSHTMLExecuter;
 
 public class ArticleEditDialogComposite
 extends ArticleBaseComposite
@@ -38,7 +35,10 @@ extends ArticleBaseComposite
 			ArticleContainer articleContainer, Article article)
 	{
 		super(parent, articleContainer, article);
-
+		DynamicProduct product = (DynamicProduct) article.getProduct();
+		// if it s a dynamic recurring product then shows the script message
+		if (product == null)
+			setScriptable(true);
 		createUI();
 	}
 
@@ -71,26 +71,8 @@ extends ArticleBaseComposite
 				JSHTMLExecuter script = new JSHTMLExecuter(getProductName());
 				String err = script.validateContent();
 				if(err !=null)
-				{
-					// shows the error message !!!
-					storedText = getProductNameTextBox().getText();
-					getProductNameTextBox().setText(err);
-					getProductNameTextBox().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-					getProductNameTextBox().addFocusListener(  new FocusListener(){
-						@Override
-						public void focusGained(FocusEvent arg0) {
-							getProductNameTextBox().setText(getStoredText());
-							getProductNameTextBox().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-							getProductNameTextBox().removeFocusListener(this);
-
-						}				
-						@Override
-						public void focusLost(FocusEvent arg0) {
-							// TODO Auto-generated method stub
-
-						}
-
-					});
+				{				
+					showTextNameMessage(err,MessageType.ERROR);
 					return false;
 				}
 

@@ -47,9 +47,12 @@ extends ResizableTrayDialog
 		getShell().setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.title")); //$NON-NLS-1$
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(new GridLayout(1,false));
-		this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO);
-		this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-		this.statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
+		if(isScriptable)
+		{
+			this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO);
+			this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+			this.statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
+		}
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
 		this.productNameEditor.setEditable(editable);
 		this.productNameEditor.setI18nText(productName, EditMode.BUFFERED);
