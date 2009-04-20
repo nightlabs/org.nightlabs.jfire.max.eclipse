@@ -32,10 +32,6 @@ public class ProjectCostSection extends ToolBarSectionPart {
 		costRevenueComposite = new CostRevenueComposite(costComposite, SWT.NONE);
 	}
 	
-	public void setProject(Project project) {
-		
-	}
-	
 	public void setProjectCost(ProjectCost projectCost) {
 		costRevenueComposite.setProjectCost(projectCost);
 	}

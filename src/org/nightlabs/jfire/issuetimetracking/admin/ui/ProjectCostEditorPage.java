@@ -101,39 +101,40 @@ extends EntityEditorPageWithProgress
 		if (controller.isLoaded()) {
 			final Project project = controller.getProject();
 
-			Job job = new Job("Creating project costs.............") {
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
-							ProjectID.create(project.getOrganisationID(), project.getProjectID()), 
-							FETCH_GROUPS, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor());
+			projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
+					ProjectID.create(project.getOrganisationID(), project.getProjectID()), 
+					FETCH_GROUPS, 
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					new NullProgressMonitor());
 
-					//If it's already had a project cost, uses it!!!!
-					if (projectCost == null) {
-						projectCost = ProjectCostDAO.sharedInstance().createProjectCost(
-								project, 
-								CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
-								true,
-								FETCH_GROUPS,
-								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-								new NullProgressMonitor());
-					}
-					
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							projectCostSection.setProjectCost(projectCost);
-							userCostSection.setProjectCost(projectCost);
-						}
-					});
-					
-					return Status.OK_STATUS;
+			//If it's already had a project cost, uses it!!!!
+			if (projectCost == null) {
+				projectCost = ProjectCostDAO.sharedInstance().createProjectCost(
+						project, 
+						CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
+						true,
+						FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
+			}
+			
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					projectCostSection.setProjectCost(projectCost);
+					userCostSection.setProjectCost(projectCost);
 				}
-			};
-			job.setPriority(Job.SHORT);
-			job.schedule();
+			});
+//			Job job = new Job("Creating project costs.............") {
+//				@Override
+//				protected IStatus run(IProgressMonitor monitor) {
+//					
+//					
+//					return Status.OK_STATUS;
+//				}
+//			};
+//			job.setPriority(Job.SHORT);
+//			job.schedule();
 		}
 	}
 
@@ -154,16 +155,16 @@ extends EntityEditorPageWithProgress
 			public void run() {
 				Project project = controller.getProject();
 				ProjectCostDAO projectCostDAO = ProjectCostDAO.sharedInstance();
-//				ProjectCost projectCost = 
-//					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				ProjectCost projectCost = 
+					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
-//				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
-//					projectCostSection.setProjectCost(projectCost);
-//				}
-//
-//				if (userCostSection != null && !userCostSection.getSection().isDisposed()) {
-//					userCostSection.setProjectCost(projectCost);
-//				}
+				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
+					projectCostSection.setProjectCost(projectCost);
+				}
+
+				if (userCostSection != null && !userCostSection.getSection().isDisposed()) {
+					userCostSection.setProjectCost(projectCost);
+				}
 			}
 		});
 	}
