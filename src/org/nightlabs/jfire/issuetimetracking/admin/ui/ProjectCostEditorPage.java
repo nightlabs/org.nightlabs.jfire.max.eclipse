@@ -27,6 +27,7 @@ import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
+import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetimetracking.dao.ProjectCostDAO;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -73,6 +74,7 @@ extends EntityEditorPageWithProgress
 	private ProjectCostSection projectCostSection;
 	private UserCostSection userCostSection;
 
+	private ProjectCost projectCost;
 	@Override
 	protected void addSections(Composite parent) {
 		controller = (ProjectEditorPageController)getPageController();
@@ -102,51 +104,46 @@ extends EntityEditorPageWithProgress
 			Job job = new Job("Creating project costs.............") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					final ProjectCost projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
+					projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
 							ProjectID.create(project.getOrganisationID(), project.getProjectID()), 
 							FETCH_GROUPS, 
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 							new NullProgressMonitor());
 
-					if (projectCost != null) {
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								projectCostSection.setProjectCost(projectCost);
-							}
-						});
-					}
-					else {
-						final ProjectCost pc = ProjectCostDAO.sharedInstance().createProjectCost(
+					//If it's already had a project cost, uses it!!!!
+					if (projectCost == null) {
+						projectCost = ProjectCostDAO.sharedInstance().createProjectCost(
 								project, 
 								CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
 								true,
 								FETCH_GROUPS,
 								NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 								new NullProgressMonitor());
-
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								projectCostSection.setProjectCost(pc);
-							}
-						});
-
 					}
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							projectCostSection.setProjectCost(projectCost);
+							userCostSection.setProjectCost(projectCost);
+						}
+					});
+					
 					return Status.OK_STATUS;
 				}
 			};
 			job.setPriority(Job.SHORT);
 			job.schedule();
-			
-			userCostSection.setProject(project);
 		}
 	}
 
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
-		ProjectCost.FETCH_GROUP_COST,
-		ProjectCost.FETCH_GROUP_REVENUE,
+		Project.FETCH_GROUP_MEMBERS,
+		ProjectCost.FETCH_GROUP_PROJECT,
+		ProjectCost.FETCH_GROUP_CURRENCY,
+		ProjectCostValue.FETCH_GROUP_COST,
+		ProjectCostValue.FETCH_GROUP_REVENUE,
 		Price.FETCH_GROUP_CURRENCY
 	};
 
@@ -155,6 +152,18 @@ extends EntityEditorPageWithProgress
 		switchToContent();		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				Project project = controller.getProject();
+				ProjectCostDAO projectCostDAO = ProjectCostDAO.sharedInstance();
+//				ProjectCost projectCost = 
+//					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+//				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
+//					projectCostSection.setProjectCost(projectCost);
+//				}
+//
+//				if (userCostSection != null && !userCostSection.getSection().isDisposed()) {
+//					userCostSection.setProjectCost(projectCost);
+//				}
 			}
 		});
 	}

@@ -8,6 +8,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 
 public class ProjectCostSection extends ToolBarSectionPart {
@@ -29,6 +30,10 @@ public class ProjectCostSection extends ToolBarSectionPart {
 		costComposite.setLayout(new GridLayout(2, false));
 		
 		costRevenueComposite = new CostRevenueComposite(costComposite, SWT.NONE);
+	}
+	
+	public void setProject(Project project) {
+		
 	}
 	
 	public void setProjectCost(ProjectCost projectCost) {
