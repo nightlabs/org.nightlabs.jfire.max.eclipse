@@ -23,7 +23,7 @@ import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.NumberFormatter;
-import org.nightlabs.script.JSHTMLExecuter;
+import org.nightlabs.script.JSHTMLExecuter;;
 
 public class ArticleEditDialogComposite
 extends ArticleBaseComposite

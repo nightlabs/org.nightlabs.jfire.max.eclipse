@@ -7,9 +7,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.nightlabs.base.ui.composite.MessageComposite;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
 import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.eclipse.ui.dialog.ResizableTrayDialog;
@@ -24,7 +24,7 @@ extends ResizableTrayDialog
 	private I18nTextEditorMultiLine productNameEditor;
 	private boolean editable;
 	private boolean isScriptable;
-	private Label errorLabel;
+	private  MessageComposite statusMessageLabel;
 
 
 	public ProductNameDialog(Shell parentShell, I18nText productName, boolean editable)
@@ -47,13 +47,13 @@ extends ResizableTrayDialog
 		getShell().setText(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail.ProductNameDialog.title")); //$NON-NLS-1$
 		Composite area = (Composite) super.createDialogArea(parent);
 		area.setLayout(new GridLayout(1,false));
+		this.statusMessageLabel = new MessageComposite(area, SWT.NONE, "", MessageType.INFO);
+		this.statusMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+		this.statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
 		this.productNameEditor = new I18nTextEditorMultiLine(area);
 		this.productNameEditor.setEditable(editable);
 		this.productNameEditor.setI18nText(productName, EditMode.BUFFERED);
 		this.productNameEditor.setLayoutData(new GridData(GridData.FILL_BOTH));
-		this.errorLabel = new Label(area, SWT.WRAP);
-		this.errorLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-		this.errorLabel.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 		
 		return area;
 	}
@@ -75,11 +75,11 @@ extends ResizableTrayDialog
 		String err = script.validateContent();
 		if(err !=null)
 		{
-			errorLabel.setText(err);
+			statusMessageLabel.setMessage(err,MessageType.ERROR);		
 			productNameEditor.addFocusListener(  new FocusListener(){
 				@Override
 				public void focusGained(FocusEvent arg0) {
-					errorLabel.setText("");	
+					statusMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);		
 					productNameEditor.removeFocusListener(this);
 				}				
 				@Override

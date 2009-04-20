@@ -5,7 +5,9 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.script.JSHTMLExecuter;
+
 public class RecurringArticleAdderComposite extends ArticleAdderComposite 
 {
 
@@ -18,13 +20,17 @@ public class RecurringArticleAdderComposite extends ArticleAdderComposite
 	
  	public RecurringArticleAdderComposite(Composite parent, ArticleAdder articleAdder) {
 		super(parent, articleAdder,true);
+		nameMessageLabel.setVisible(true);
+		nameMessageLabel.setMessage("enter a name or insert a script using the <? ?> or <=> tags",MessageType.INFO);
+		pack();
 	}
 
 	@Override
 	protected void addArticle()
 	{
-		JSHTMLExecuter script = new JSHTMLExecuter(getProductName());
-		String err = script.validateContent();
+		
+		JSHTMLExecuter scripteExec = new JSHTMLExecuter(getProductName());
+		String err = scripteExec.validateContent();
 		if(err !=null)
 		{
 			// shows the error message !!!

@@ -26,6 +26,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,6 +39,8 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.language.I18nTextEditorMultiLine;
+import org.nightlabs.base.ui.language.I18nTextEditor.EditMode;
 import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
@@ -99,6 +102,7 @@ extends FadeableComposite
 	protected XComboComposite<Unit> unitCombo;
 	protected Text quantity;
 	protected Text productNameText;
+	protected MessageComposite nameMessageLabel;
 	protected Button productNameDialogButton;
 	protected InputPriceFragmentTypeTable inputPriceFragmentTypeTable;
 
@@ -200,7 +204,15 @@ extends FadeableComposite
 
 		XComposite comp3 = new XComposite(comp2, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		comp3.getGridLayout().numColumns = 2;
-		productNameText = new Text(comp3, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+	
+		XComposite compName = new XComposite(comp3, SWT.NONE, LayoutMode.TIGHT_WRAPPER);		
+		compName.setLayout(new GridLayout(1,false));
+		
+		nameMessageLabel = new MessageComposite(compName, SWT.NONE, "", MessageType.INFO);
+		nameMessageLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+	    nameMessageLabel.setVisible(false);
+	     
+		productNameText = new Text(compName, getBorderStyle() | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		productNameText.setLayoutData(new GridData(GridData.FILL_BOTH));
 		productNameText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e)
