@@ -17,19 +17,18 @@ import org.nightlabs.progress.SubProgressMonitor;
 public class ProjectEditorPageController 
 extends ActiveEntityEditorPageController<Project>
 {
-	private ProjectID projectID;
 	private Project project;
-	
+
 	public ProjectEditorPageController(EntityEditor editor)
 	{
 		super(editor);
 	}
-	
+
 	protected ProjectID getProjectID() {
 		ProjectEditorInput input = (ProjectEditorInput) getEntityEditor().getEditorInput();
 		return input.getJDOObjectID();
 	}
-	
+
 	public Project getProject() {
 		return getControllerObject();
 	}
@@ -44,11 +43,6 @@ extends ActiveEntityEditorPageController<Project>
 				Project.FETCH_GROUP_DESCRIPTION,
 				Project.FETCH_GROUP_PROJECT_MANAGER,
 				Project.FETCH_GROUP_MEMBERS};
-//				Project.FETCH_GROUP_PROJECT_PHASES,
-//				ProjectPhase.FETCH_GROUP_NAME,
-//				ProjectPhase.FETCH_GROUP_DESCRIPTION};
-//				Project.FETCH_GROUP_PARENT_PROJECT,
-//				Project.FETCH_GROUP_SUBPROJECTS
 	}
 
 	@Override
@@ -56,7 +50,7 @@ extends ActiveEntityEditorPageController<Project>
 		Project project = ProjectDAO.sharedInstance().getProject(getProjectID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 		return project;
 	}
-	
+
 	@Override
 	protected IEditorInput createNewInstanceEditorInput() {
 		return new ProjectEditorInput(getProjectID());
@@ -70,11 +64,11 @@ extends ActiveEntityEditorPageController<Project>
 			ProjectID projectID = (ProjectID) JDOHelper.getObjectId(controllerObject);
 			if (projectID == null)
 				throw new IllegalStateException("JDOHelper.getObjectId(controllerObject) returned null for controllerObject=" + controllerObject); //$NON-NLS-1$
-			
+
 			project = ProjectDAO.sharedInstance().storeProject(
-						controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
-						new SubProgressMonitor(monitor, 50)
-				);
+					controllerObject, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+					new SubProgressMonitor(monitor, 50)
+			);
 
 			return project;
 		} finally {

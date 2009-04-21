@@ -146,6 +146,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 		@Override
 		public void run() {
 			UserSearchDialog userSearchDialog = new UserSearchDialog(getSection().getShell(), null);
+			userSearchDialog.set
 			int returnCode = userSearchDialog.open();
 			if (returnCode == Dialog.OK) {
 				User user = userSearchDialog.getSelectedUser();

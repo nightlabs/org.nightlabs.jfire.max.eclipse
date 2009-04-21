@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetracking.ui.project;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -11,7 +12,14 @@ import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.ui.editlock.EditLockCallback;
+import org.nightlabs.jfire.base.ui.editlock.EditLockCarrier;
+import org.nightlabs.jfire.base.ui.editlock.EditLockHandle;
+import org.nightlabs.jfire.base.ui.editlock.EditLockMan;
+import org.nightlabs.jfire.base.ui.editlock.InactivityAction;
 import org.nightlabs.jfire.base.ui.login.part.ICloseOnLogoutEditorPart;
+import org.nightlabs.jfire.issue.EditLockTypeIssue;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.ProjectDAO;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
@@ -22,7 +30,16 @@ implements ICloseOnLogoutEditorPart
 {
 	public static final String EDITOR_ID = ProjectEditor.class.getName();
 	
+	private static final String[] FETCH_GROUPS = new String[] {
+		FetchPlan.DEFAULT, 
+		Project.FETCH_GROUP_NAME, 
+		Project.FETCH_GROUP_DESCRIPTION
+	};
+	
+	private EditLockHandle editLockHandle;
+	
 	private ProjectEditorInput projectEditorInput;
+	
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException
 	{
@@ -36,7 +53,7 @@ implements ICloseOnLogoutEditorPart
 			{
 				final Project project = ProjectDAO.sharedInstance().getProject(
 						projectEditorInput.getJDOObjectID(),
-						new String[] { FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_DESCRIPTION},
+						FETCH_GROUPS,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			
 				Display.getDefault().asyncExec(new Runnable()
@@ -47,6 +64,17 @@ implements ICloseOnLogoutEditorPart
 						setTitleToolTip(project.getDescription().getText());
 					}
 				});
+				
+				editLockHandle = EditLockMan.sharedInstance().acquireEditLock(
+						EditLockTypeIssue.EDIT_LOCK_TYPE_ID, 
+						(ObjectID)JDOHelper.getObjectId(project), 
+						"TODO", //$NON-NLS-1$
+						new EditLockCallback() {
+							@Override
+							public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
+								return InactivityAction.REFRESH_LOCK;
+							}
+						}, getSite().getShell(), monitor);
 				
 				return Status.OK_STATUS;
 			}
