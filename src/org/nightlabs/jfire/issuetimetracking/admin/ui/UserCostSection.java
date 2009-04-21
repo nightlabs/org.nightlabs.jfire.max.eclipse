@@ -19,8 +19,9 @@ import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.security.User;
 
-public class UserCostSection extends ToolBarSectionPart {
-
+public class UserCostSection 
+extends ToolBarSectionPart 
+{
 	private XComposite client;
 	private ListComposite<User> userList;
 	private Text costText;
@@ -46,6 +47,7 @@ public class UserCostSection extends ToolBarSectionPart {
 		client.setLayoutData(gridData);
 
 
+		//User List
 		XComposite userComposite = new XComposite(client, SWT.NONE);
 		userComposite.getGridLayout().numColumns = 2;
 		gridData = new GridData(GridData.FILL_BOTH);
