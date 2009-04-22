@@ -1,9 +1,13 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -15,9 +19,14 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.PriceFragmentType;
+import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.security.User;
+import org.nightlabs.jfire.security.id.UserID;
+import org.nightlabs.progress.NullProgressMonitor;
 
 public class UserCostSection 
 extends ToolBarSectionPart 
@@ -27,6 +36,7 @@ extends ToolBarSectionPart
 	private Text costText;
 	private Text revenueText;
 
+	private ProjectCostValue currentProjectCostValue;
 	/**
 	 * @param page
 	 * @param parent
@@ -45,7 +55,6 @@ extends ToolBarSectionPart
 		client.getGridLayout().numColumns = 1; 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		client.setLayoutData(gridData);
-
 
 		//User List
 		XComposite userComposite = new XComposite(client, SWT.NONE);
@@ -71,9 +80,9 @@ extends ToolBarSectionPart
 				User selectedUser = userList.getSelectedElement();
 				String userID = selectedUser.getUserID();
 
-				ProjectCostValue projectCostValue = projectCost.getProjectCostValue(userID);
-				costText.setText(Double.toString(projectCostValue.getCost().getAmountAsDouble()));
-				revenueText.setText(Double.toString(projectCostValue.getRevenue().getAmountAsDouble()));
+				currentProjectCostValue = projectCost.getProjectCostValue(userID);
+				costText.setText(Long.toString(currentProjectCostValue.getCost().getAmount()));
+				revenueText.setText(Long.toString(currentProjectCostValue.getRevenue().getAmount()));
 			}
 		});
 
@@ -88,6 +97,7 @@ extends ToolBarSectionPart
 		monthlyCostLabel.setText("Monthly Cost");
 		costText = new Text(c, SWT.SINGLE);
 		costText.setTextLimit(20);
+		costText.addModifyListener(modifyListener);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
@@ -99,6 +109,7 @@ extends ToolBarSectionPart
 		monthlyRevenueLabel.setText("Monthly Revenue");
 		revenueText = new Text(c, SWT.SINGLE);
 		revenueText.setTextLimit(20);
+		revenueText.addModifyListener(modifyListener);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
@@ -112,10 +123,40 @@ extends ToolBarSectionPart
 		return client;
 	}
 
+	private PriceFragmentType priceFragmentType;
+	private ModifyListener modifyListener = new ModifyListener() {
+		public void modifyText(ModifyEvent e) {
+			if (priceFragmentType == null)
+				priceFragmentType =  
+					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+							new String[] { FetchPlan.DEFAULT}, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor());
+
+			if (e.getSource() == costText)
+				currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText()));
+			if (e.getSource() == revenueText)
+				currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText()));
+			
+			markDirty();
+		}
+	};
+	//	private UserID selectedUserID;
+	//	public void setSelectedUserID(UserID userID) {
+	//		this.selectedUserID = userID;
+	//		ProjectCostValue projectCostValue = projectCost.getProjectCostValue(userID.userID);
+	//		costText.setText(Double.toString(projectCostValue.getCost().getAmountAsDouble()));
+	//		revenueText.setText(Double.toString(projectCostValue.getRevenue().getAmountAsDouble()));
+	//	}
+	//	
+	//	public UserID getSelectedUserID() {
+	//		return selectedUserID;
+	//	}
+
 	private ProjectCost projectCost;
 	public void setProjectCost(final ProjectCost projectCost) {
 		this.projectCost = projectCost;
-		
+
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

@@ -65,7 +65,7 @@ extends XComposite
 	}
 	
 	public void setProjectCost(ProjectCost projectCost) {
-		costText.setText(Double.toString(projectCost.getTotalCostDoubleVale()));
-		revenueText.setText(Double.toString(projectCost.getTotalRevenueDoubleVale()));
+		costText.setText(Long.toString(projectCost.getTotalCost()));
+		revenueText.setText(Long.toString(projectCost.getTotalRevenue()));
 	}
 }

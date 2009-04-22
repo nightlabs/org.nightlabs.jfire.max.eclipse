@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.CurrencyConstants;
 import org.nightlabs.jfire.accounting.Price;
+import org.nightlabs.jfire.accounting.PriceFragment;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
@@ -27,6 +28,8 @@ import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetimetracking.dao.ProjectCostDAO;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class ProjectCostEditorPage 
 extends EntityEditorPageWithProgress 
@@ -47,7 +50,16 @@ extends EntityEditorPageWithProgress
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new ProjectEditorPageController(editor);
+			return new ProjectEditorPageController(editor) {
+				@Override
+				protected Project storeEntity(Project controllerObject,
+						ProgressMonitor monitor) {
+					ProjectCostDAO.sharedInstance().storeProjectCost(projectCost, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+							new SubProgressMonitor(monitor, 50)
+					);
+					return super.storeEntity(controllerObject, monitor);
+				}
+			};
 		}
 	}
 
@@ -70,7 +82,7 @@ extends EntityEditorPageWithProgress
 	private ProjectCostSection projectCostSection;
 	private UserCostSection userCostSection;
 
-	private ProjectCost projectCost;
+	private static ProjectCost projectCost;
 	@Override
 	protected void addSections(Composite parent) {
 		controller = (ProjectEditorPageController)getPageController();
@@ -113,7 +125,7 @@ extends EntityEditorPageWithProgress
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor());
 			}
-			
+
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
@@ -121,16 +133,6 @@ extends EntityEditorPageWithProgress
 					userCostSection.setProjectCost(projectCost);
 				}
 			});
-//			Job job = new Job("Creating project costs.............") {
-//				@Override
-//				protected IStatus run(IProgressMonitor monitor) {
-//					
-//					
-//					return Status.OK_STATUS;
-//				}
-//			};
-//			job.setPriority(Job.SHORT);
-//			job.schedule();
 		}
 	}
 
@@ -141,7 +143,9 @@ extends EntityEditorPageWithProgress
 		ProjectCost.FETCH_GROUP_CURRENCY,
 		ProjectCostValue.FETCH_GROUP_COST,
 		ProjectCostValue.FETCH_GROUP_REVENUE,
-		Price.FETCH_GROUP_CURRENCY
+		Price.FETCH_GROUP_CURRENCY,
+		Price.FETCH_GROUP_FRAGMENTS,
+		PriceFragment.FETCH_GROUP_PRICE_FRAGMENT_TYPE
 	};
 
 	@Override
