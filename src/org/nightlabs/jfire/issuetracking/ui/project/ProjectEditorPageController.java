@@ -4,6 +4,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.ui.IEditorInput;
+import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jfire.base.ui.entity.editor.ActiveEntityEditorPageController;
 import org.nightlabs.jfire.issue.project.Project;
@@ -14,6 +15,9 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 
+/** 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ */
 public class ProjectEditorPageController 
 extends ActiveEntityEditorPageController<Project>
 {
@@ -22,11 +26,7 @@ extends ActiveEntityEditorPageController<Project>
 	public ProjectEditorPageController(EntityEditor editor)
 	{
 		super(editor);
-	}
-
-	protected ProjectID getProjectID() {
-		ProjectEditorInput input = (ProjectEditorInput) getEntityEditor().getEditorInput();
-		return input.getJDOObjectID();
+		this.projectID = (ProjectID) ((JDOObjectEditorInput<?>)editor.getEditorInput()).getJDOObjectID();
 	}
 
 	public Project getProject() {
@@ -45,15 +45,17 @@ extends ActiveEntityEditorPageController<Project>
 				Project.FETCH_GROUP_MEMBERS};
 	}
 
+	private ProjectID projectID;
+	
 	@Override
 	protected Project retrieveEntity(ProgressMonitor monitor) {
-		Project project = ProjectDAO.sharedInstance().getProject(getProjectID(), getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
+		Project project = ProjectDAO.sharedInstance().getProject(projectID, getEntityFetchGroups(), getEntityMaxFetchDepth(), monitor);
 		return project;
 	}
 
 	@Override
 	protected IEditorInput createNewInstanceEditorInput() {
-		return new ProjectEditorInput(getProjectID());
+		return new ProjectEditorInput(projectID);
 	}
 
 	@Override

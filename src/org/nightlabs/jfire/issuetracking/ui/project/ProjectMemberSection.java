@@ -124,6 +124,7 @@ public class ProjectMemberSection extends ToolBarSectionPart {
 				projectManager = userSearchDialog.getSelectedUser();
 				if (projectManager != null) {
 					project.setProjectManager(projectManager);
+					project.addMember(projectManager);
 				}
 				setProject(project);
 				markDirty();
