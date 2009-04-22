@@ -12,5 +12,6 @@
 			<attribute name="javadoc_location" value="file:/home/tobias/java/jdo_javadoc/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="var" path="LOG4J" sourcepath="/LOG4J_SRC"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
