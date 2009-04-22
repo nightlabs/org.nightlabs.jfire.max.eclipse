@@ -8,7 +8,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.issue.project.Project;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 
 public class ProjectCostSection extends ToolBarSectionPart {
