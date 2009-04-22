@@ -1,7 +1,7 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -78,8 +78,8 @@ extends XComposite
 		return revenueText.getText() == null || revenueText.getText().isEmpty() ? 0 :Long.parseLong(revenueText.getText());
 	}
 	
-	public void addModifyListener(ModifyListener listener) {
-		costText.addModifyListener(listener);
-		revenueText.addModifyListener(listener);
+	public void addKeyListener(KeyListener listener) {
+		costText.addKeyListener(listener);
+		revenueText.addKeyListener(listener);
 	}
 }

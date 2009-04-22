@@ -3,8 +3,8 @@ package org.nightlabs.jfire.issuetimetracking.admin.ui;
 import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -45,9 +45,9 @@ extends ToolBarSectionPart
 		costComposite.setLayout(new GridLayout(2, false));
 		
 		costRevenueComposite = new CostRevenueComposite(costComposite, SWT.NONE);
-		costRevenueComposite.addModifyListener(new ModifyListener() {
+		costRevenueComposite.addKeyListener(new KeyAdapter() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void keyPressed(KeyEvent e) {
 				if (priceFragmentType == null) {
 					priceFragmentType =  
 						PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
