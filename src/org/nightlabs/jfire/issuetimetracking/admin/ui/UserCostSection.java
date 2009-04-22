@@ -24,10 +24,13 @@ import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
+import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.jfire.security.User;
-import org.nightlabs.jfire.security.id.UserID;
 import org.nightlabs.progress.NullProgressMonitor;
 
+/** 
+ * @author Chairat Kongarayawetchakun - chairat [AT] nightlabs [DOT] de
+ */
 public class UserCostSection 
 extends ToolBarSectionPart 
 {
@@ -37,17 +40,19 @@ extends ToolBarSectionPart
 	private Text revenueText;
 
 	private ProjectCostValue currentProjectCostValue;
+	private ProjectEditorPageController controller;
 	/**
 	 * @param page
 	 * @param parent
 	 * @param style
 	 * @param title
 	 */
-	public UserCostSection(FormPage page, Composite parent) {
+	public UserCostSection(FormPage page, Composite parent, ProjectEditorPageController controller) {
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
 		"User Cost");
+		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getSection().setLayout(new GridLayout());
 
@@ -94,7 +99,7 @@ extends ToolBarSectionPart
 
 		//Cost
 		Label monthlyCostLabel = new Label(c, SWT.NONE);
-		monthlyCostLabel.setText("Monthly Cost");
+		monthlyCostLabel.setText("Hourly Cost");
 		costText = new Text(c, SWT.SINGLE);
 		costText.setTextLimit(20);
 		costText.addModifyListener(modifyListener);
@@ -106,7 +111,7 @@ extends ToolBarSectionPart
 
 		//Revenue
 		Label monthlyRevenueLabel = new Label(c, SWT.NONE);
-		monthlyRevenueLabel.setText("Monthly Revenue");
+		monthlyRevenueLabel.setText("Hourly Revenue");
 		revenueText = new Text(c, SWT.SINGLE);
 		revenueText.setTextLimit(20);
 		revenueText.addModifyListener(modifyListener);

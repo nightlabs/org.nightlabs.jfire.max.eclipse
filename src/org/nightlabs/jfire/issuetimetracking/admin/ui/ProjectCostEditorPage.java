@@ -94,17 +94,38 @@ extends EntityEditorPageWithProgress
 		FormToolkit toolkit = new FormToolkit(parent.getDisplay());
 		toolkit.decorateFormHeading(getManagedForm().getForm().getForm());
 
-		projectCostSection = new ProjectCostSection(this, mainComposite);
+		projectCostSection = new ProjectCostSection(this, mainComposite, controller);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		projectCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(projectCostSection);
 
-		userCostSection = new UserCostSection(this, mainComposite);
+		userCostSection = new UserCostSection(this, mainComposite, controller);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
 		userCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(userCostSection);
+
+//		this.controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
+//			public void controllerObjectModified(final EntityEditorPageControllerModifyEvent modifyEvent)
+//			{
+//				Display.getDefault().asyncExec(new Runnable()
+//				{
+//					@SuppressWarnings("unchecked") //$NON-NLS-1$
+//					public void run()
+//					{
+//						Project project = (Project)modifyEvent.getNewObject();
+//						projectCostSection.setProjectCost(
+//								ProjectCostDAO.sharedInstance().getProjectCost(project.getObjectId(), 
+//										FETCH_GROUPS, 
+//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//										new NullProgressMonitor()
+//								)
+//						);
+//					}
+//				});
+//			}
+//		});
 
 		if (controller.isLoaded()) {
 			final Project project = controller.getProject();
@@ -141,6 +162,8 @@ extends EntityEditorPageWithProgress
 		Project.FETCH_GROUP_MEMBERS,
 		ProjectCost.FETCH_GROUP_PROJECT,
 		ProjectCost.FETCH_GROUP_CURRENCY,
+		ProjectCost.FETCH_GROUP_DEFAULT_COST,
+		ProjectCost.FETCH_GROUP_DEFAULT_REVENUE,
 		ProjectCostValue.FETCH_GROUP_COST,
 		ProjectCostValue.FETCH_GROUP_REVENUE,
 		Price.FETCH_GROUP_CURRENCY,

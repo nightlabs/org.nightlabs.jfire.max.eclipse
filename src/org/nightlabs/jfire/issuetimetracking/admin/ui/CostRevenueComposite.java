@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.issuetimetracking.admin.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -36,7 +37,7 @@ extends XComposite
 		currencyCombo.setLayoutData(gridData);
 
 		Label monthlyCostLabel = new Label(this, SWT.NONE);
-		monthlyCostLabel.setText("Monthly Cost");
+		monthlyCostLabel.setText("Hourly Cost");
 		costText = new Text(this, SWT.SINGLE);
 		costText.setTextLimit(20);
 		gridData = new GridData();
@@ -46,7 +47,7 @@ extends XComposite
 		costText.setLayoutData(gridData);
 
 		Label monthlyRevenueLabel = new Label(this, SWT.NONE);
-		monthlyRevenueLabel.setText("Monthly Revenue");
+		monthlyRevenueLabel.setText("Hourly Revenue");
 		revenueText = new Text(this, SWT.SINGLE);
 		revenueText.setTextLimit(20);
 		gridData = new GridData();
@@ -65,7 +66,20 @@ extends XComposite
 	}
 	
 	public void setProjectCost(ProjectCost projectCost) {
-		costText.setText(Long.toString(projectCost.getTotalCost()));
-		revenueText.setText(Long.toString(projectCost.getTotalRevenue()));
+		costText.setText(Long.toString(projectCost.getDefaultCost().getAmount()));
+		revenueText.setText(Long.toString(projectCost.getDefaultRevenue().getAmount()));
+	}
+	
+	public long getCost() {
+		return costText.getText() == null || costText.getText().isEmpty() ? 0 :Long.parseLong(costText.getText());
+	}
+	
+	public long getRevenue() {
+		return revenueText.getText() == null || revenueText.getText().isEmpty() ? 0 :Long.parseLong(revenueText.getText());
+	}
+	
+	public void addModifyListener(ModifyListener listener) {
+		costText.addModifyListener(listener);
+		revenueText.addModifyListener(listener);
 	}
 }
