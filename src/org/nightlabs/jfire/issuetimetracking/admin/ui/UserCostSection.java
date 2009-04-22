@@ -22,6 +22,7 @@ import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
@@ -86,6 +87,20 @@ extends ToolBarSectionPart
 				String userID = selectedUser.getUserID();
 
 				currentProjectCostValue = projectCost.getProjectCostValue(userID);
+				if (currentProjectCostValue == null)
+					if (currentProjectCostValue == null) {
+						currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
+						
+						if (priceFragmentType == null)
+							priceFragmentType =  
+								PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+										new String[] { FetchPlan.DEFAULT}, 
+										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+										new NullProgressMonitor());
+						currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
+						currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
+						projectCost.addProjectCostValue(userID, currentProjectCostValue);
+					}
 				costText.setText(Long.toString(currentProjectCostValue.getCost().getAmount()));
 				revenueText.setText(Long.toString(currentProjectCostValue.getRevenue().getAmount()));
 			}
