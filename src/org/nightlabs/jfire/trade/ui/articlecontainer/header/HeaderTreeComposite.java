@@ -81,6 +81,7 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringOrderTreeNode;
+import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringRootTreeNode;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.notification.NotificationEvent;
@@ -169,16 +170,16 @@ implements ISelectionProvider
 		// only to trigger the tree initialization
 		headerTreeViewer.setInput(new Object());
 		drillDownAdapter = new DrillDownAdapter(headerTreeViewer);
-
 		headerTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event)
 			{
 				if (((IStructuredSelection)event.getSelection()).isEmpty())
 					selectedNode = null;
 				else
-					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();
-
-				createOrderAction.setEnabled(true);
+					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();				
+				
+				// disable the options when the root is selected.
+				createOrderAction.setEnabled(!(selectedNode instanceof RecurringRootTreeNode));
 				createOfferAction.setEnabled(
 						selectedNode instanceof OrderTreeNode || selectedNode instanceof RecurringOrderTreeNode);
 
@@ -400,6 +401,8 @@ implements ISelectionProvider
 		});
 		Menu menu = menuMgr.createContextMenu(headerTreeViewer.getControl());
 		headerTreeViewer.getControl().setMenu(menu);
+		
+
 		site.registerContextMenu(menuMgr, headerTreeViewer);
 	}
 
