@@ -188,7 +188,7 @@ extends ToolBarSectionPart
 				if (e.getSource() == costText)
 					currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText().isEmpty() ? "0" : costText.getText()));
 				if (e.getSource() == revenueText)
-					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText().isEmpty() ? "0" : costText.getText()));
+					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText().isEmpty() ? "0" : revenueText.getText()));
 			}
 			markDirty();
 		};
