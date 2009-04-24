@@ -4,7 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.accounting.Currency;
@@ -39,6 +41,20 @@ extends XComposite
 		Label monthlyCostLabel = new Label(this, SWT.NONE);
 		monthlyCostLabel.setText("Hourly Cost");
 		costText = new Text(this, SWT.SINGLE);
+		costText.addListener (SWT.Verify, new Listener () {
+			public void handleEvent (Event e) {
+				String string = e.text;
+				char [] chars = new char [string.length ()];
+				string.getChars (0, chars.length, chars, 0);
+				for (int i=0; i<chars.length; i++) {
+					if (!('0' <= chars [i] && chars [i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+
 		costText.setTextLimit(20);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
@@ -49,6 +65,20 @@ extends XComposite
 		Label monthlyRevenueLabel = new Label(this, SWT.NONE);
 		monthlyRevenueLabel.setText("Hourly Revenue");
 		revenueText = new Text(this, SWT.SINGLE);
+		revenueText.addListener (SWT.Verify, new Listener () {
+			public void handleEvent (Event e) {
+				String string = e.text;
+				char [] chars = new char [string.length ()];
+				string.getChars (0, chars.length, chars, 0);
+				for (int i=0; i<chars.length; i++) {
+					if (!('0' <= chars [i] && chars [i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+
 		revenueText.setTextLimit(20);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;

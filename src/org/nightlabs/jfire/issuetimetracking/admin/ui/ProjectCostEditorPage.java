@@ -22,14 +22,11 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.PriceFragment;
 import org.nightlabs.jfire.accounting.dao.CurrencyDAO;
 import org.nightlabs.jfire.issue.project.Project;
-import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
 import org.nightlabs.jfire.issuetimetracking.dao.ProjectCostDAO;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
-import org.nightlabs.progress.ProgressMonitor;
-import org.nightlabs.progress.SubProgressMonitor;
 
 public class ProjectCostEditorPage 
 extends EntityEditorPageWithProgress 
@@ -50,16 +47,7 @@ extends EntityEditorPageWithProgress
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {
-			return new ProjectEditorPageController(editor) {
-				@Override
-				protected Project storeEntity(Project controllerObject,
-						ProgressMonitor monitor) {
-					ProjectCostDAO.sharedInstance().storeProjectCost(projectCost, getEntityFetchGroups(), getEntityMaxFetchDepth(),
-							new SubProgressMonitor(monitor, 50)
-					);
-					return super.storeEntity(controllerObject, monitor);
-				}
-			};
+			return new ProjectCostEditorPageController(editor); 
 		}
 	}
 
@@ -76,16 +64,16 @@ extends EntityEditorPageWithProgress
 		super(editor, ID_PAGE, "Project Cost");
 	}
 
-	private ProjectEditorPageController controller;
+	private ProjectCostEditorPageController controller;
 
 	//Sections (in order)
 	private ProjectCostSection projectCostSection;
 	private UserCostSection userCostSection;
 
-	private static ProjectCost projectCost;
+	private ProjectCost projectCost;
 	@Override
 	protected void addSections(Composite parent) {
-		controller = (ProjectEditorPageController)getPageController();
+		controller = (ProjectCostEditorPageController)getPageController();
 
 		final XComposite mainComposite = new XComposite(parent, SWT.NONE);
 		GridLayout layout = (GridLayout)mainComposite.getLayout();
@@ -106,50 +94,16 @@ extends EntityEditorPageWithProgress
 		userCostSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(userCostSection);
 
-//		this.controller.addModifyListener(new IEntityEditorPageControllerModifyListener() {
-//			public void controllerObjectModified(final EntityEditorPageControllerModifyEvent modifyEvent)
-//			{
-//				Display.getDefault().asyncExec(new Runnable()
-//				{
-//					@SuppressWarnings("unchecked") //$NON-NLS-1$
-//					public void run()
-//					{
-//						Project project = (Project)modifyEvent.getNewObject();
-//						projectCostSection.setProjectCost(
-//								ProjectCostDAO.sharedInstance().getProjectCost(project.getObjectId(), 
-//										FETCH_GROUPS, 
-//										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-//										new NullProgressMonitor()
-//								)
-//						);
-//					}
-//				});
-//			}
-//		});
-
 		if (controller.isLoaded()) {
-			final Project project = controller.getProject();
-
-			projectCost = ProjectCostDAO.sharedInstance().getProjectCost(
-					ProjectID.create(project.getOrganisationID(), project.getProjectID()), 
-					FETCH_GROUPS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-					new NullProgressMonitor());
-
-			//If it's already had a project cost, uses it!!!!
-			if (projectCost == null) {
-				projectCost = ProjectCostDAO.sharedInstance().createProjectCost(
-						project, 
-						CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()),
-						true,
-						FETCH_GROUPS,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor());
-			}
+			projectCost = controller.getControllerObject();
 
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
+					//If it's already had a project cost, uses it!!!!
+					if (projectCost == null) {
+						projectCost = new ProjectCost(controller.getProject(), CurrencyDAO.sharedInstance().getCurrency(CurrencyConstants.EUR, new NullProgressMonitor()));
+					}
 					projectCostSection.setProjectCost(projectCost);
 					userCostSection.setProjectCost(projectCost);
 				}
@@ -176,17 +130,16 @@ extends EntityEditorPageWithProgress
 		switchToContent();		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				Project project = controller.getProject();
-				ProjectCostDAO projectCostDAO = ProjectCostDAO.sharedInstance();
-				ProjectCost projectCost = 
-					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-
+//				Project project = controller.getProject();
+//				ProjectCostDAO projectCostDAO = ProjectCostDAO.sharedInstance();
+//				ProjectCost projectCost = 
+//					projectCostDAO.getProjectCost(project.getObjectId(), FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				if (projectCostSection != null && !projectCostSection.getSection().isDisposed()) {
-					projectCostSection.setProjectCost(projectCost);
+					projectCostSection.setProjectCost(controller.getControllerObject());
 				}
 
 				if (userCostSection != null && !userCostSection.getSection().isDisposed()) {
-					userCostSection.setProjectCost(projectCost);
+					userCostSection.setProjectCost(controller.getControllerObject());
 				}
 			}
 		});

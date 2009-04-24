@@ -6,13 +6,14 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -25,7 +26,6 @@ import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
 import org.nightlabs.jfire.issuetimetracking.ProjectCostValue;
-import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -41,14 +41,14 @@ extends ToolBarSectionPart
 	private Text revenueText;
 
 	private ProjectCostValue currentProjectCostValue;
-	private ProjectEditorPageController controller;
+	private ProjectCostEditorPageController controller;
 	/**
 	 * @param page
 	 * @param parent
 	 * @param style
 	 * @param title
 	 */
-	public UserCostSection(FormPage page, Composite parent, ProjectEditorPageController controller) {
+	public UserCostSection(FormPage page, Composite parent, ProjectCostEditorPageController controller) {
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
@@ -87,20 +87,20 @@ extends ToolBarSectionPart
 				String userID = selectedUser.getUserID();
 
 				currentProjectCostValue = projectCost.getProjectCostValue(userID);
-				if (currentProjectCostValue == null)
-					if (currentProjectCostValue == null) {
-						currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
-						
-						if (priceFragmentType == null)
-							priceFragmentType =  
-								PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
-										new String[] { FetchPlan.DEFAULT}, 
-										NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-										new NullProgressMonitor());
-						currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
-						currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
-						projectCost.addProjectCostValue(userID, currentProjectCostValue);
-					}
+				if (currentProjectCostValue == null) {
+					createProjectCostValue(userID);
+//					currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
+//
+//					if (priceFragmentType == null)
+//						priceFragmentType =  
+//							PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+//									new String[] { FetchPlan.DEFAULT}, 
+//									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+//									new NullProgressMonitor());
+//					currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
+//					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
+//					projectCost.addProjectCostValue(userID, currentProjectCostValue);
+				}
 				costText.setText(Long.toString(currentProjectCostValue.getCost().getAmount()));
 				revenueText.setText(Long.toString(currentProjectCostValue.getRevenue().getAmount()));
 			}
@@ -116,8 +116,23 @@ extends ToolBarSectionPart
 		Label monthlyCostLabel = new Label(c, SWT.NONE);
 		monthlyCostLabel.setText("Hourly Cost");
 		costText = new Text(c, SWT.SINGLE);
+		costText.setEnabled(false);
+		costText.addListener (SWT.Verify, new Listener () {
+			public void handleEvent (Event e) {
+				String string = e.text;
+				char [] chars = new char [string.length ()];
+				string.getChars (0, chars.length, chars, 0);
+				for (int i=0; i<chars.length; i++) {
+					if (!('0' <= chars [i] && chars [i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+
 		costText.setTextLimit(20);
-		costText.addModifyListener(modifyListener);
+		costText.addKeyListener(keyListener);
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
@@ -129,7 +144,22 @@ extends ToolBarSectionPart
 		monthlyRevenueLabel.setText("Hourly Revenue");
 		revenueText = new Text(c, SWT.SINGLE);
 		revenueText.setTextLimit(20);
-		revenueText.addModifyListener(modifyListener);
+		revenueText.setEnabled(false);
+		revenueText.addKeyListener(keyListener);
+		revenueText.addListener (SWT.Verify, new Listener () {
+			public void handleEvent (Event e) {
+				String string = e.text;
+				char [] chars = new char [string.length ()];
+				string.getChars (0, chars.length, chars, 0);
+				for (int i=0; i<chars.length; i++) {
+					if (!('0' <= chars [i] && chars [i] <= '9')) {
+						e.doit = false;
+						return;
+					}
+				}
+			}
+		});
+
 		gridData = new GridData();
 		gridData.verticalAlignment = GridData.VERTICAL_ALIGN_CENTER;
 		gridData.widthHint = 150;
@@ -144,8 +174,9 @@ extends ToolBarSectionPart
 	}
 
 	private PriceFragmentType priceFragmentType;
-	private ModifyListener modifyListener = new ModifyListener() {
-		public void modifyText(ModifyEvent e) {
+
+	private KeyAdapter keyListener = new KeyAdapter() {
+		public void keyPressed(org.eclipse.swt.events.KeyEvent e) {
 			if (priceFragmentType == null)
 				priceFragmentType =  
 					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
@@ -153,14 +184,33 @@ extends ToolBarSectionPart
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 							new NullProgressMonitor());
 
-			if (e.getSource() == costText)
-				currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText()));
-			if (e.getSource() == revenueText)
-				currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText()));
-			
+			if (currentProjectCostValue != null) {
+				if (e.getSource() == costText)
+					currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText().isEmpty() ? "0" : costText.getText()));
+				if (e.getSource() == revenueText)
+					currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText().isEmpty() ? "0" : costText.getText()));
+			}
 			markDirty();
-		}
+		};
 	};
+
+	//	private ModifyListener modifyListener = new ModifyListener() {
+	//		public void modifyText(ModifyEvent e) {
+	//			if (priceFragmentType == null)
+	//				priceFragmentType =  
+	//					PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+	//							new String[] { FetchPlan.DEFAULT}, 
+	//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+	//							new NullProgressMonitor());
+	//
+	//			if (e.getSource() == costText)
+	//				currentProjectCostValue.getCost().setAmount(priceFragmentType, Long.parseLong(costText.getText()));
+	//			if (e.getSource() == revenueText)
+	//				currentProjectCostValue.getRevenue().setAmount(priceFragmentType, Long.parseLong(revenueText.getText()));
+	//			
+	//			markDirty();
+	//		}
+	//	};
 	//	private UserID selectedUserID;
 	//	public void setSelectedUserID(UserID userID) {
 	//		this.selectedUserID = userID;
@@ -181,7 +231,35 @@ extends ToolBarSectionPart
 			@Override
 			public void run() {
 				userList.setInput(projectCost.getProject().getMembers());		
+				if (!projectCost.getProject().getMembers().isEmpty()) {
+					userList.selectElementByIndex(0);
+					User user = userList.getSelectedElement();
+					costText.setEnabled(true);
+					revenueText.setEnabled(true);
+					ProjectCostValue projectCostValue = projectCost.getProjectCostValue(user.getUserID());
+					
+					if (projectCostValue == null)
+						projectCostValue = createProjectCostValue(user.getUserID());
+					costText.setText(Long.toString(projectCostValue.getCost().getAmount()));
+					revenueText.setText(Long.toString(projectCostValue.getRevenue().getAmount()));
+				}
 			}
 		});
+	}
+
+	private ProjectCostValue createProjectCostValue(String userID) {
+		currentProjectCostValue = new ProjectCostValue(projectCost, IDGenerator.nextID(ProjectCostValue.class));
+
+		if (priceFragmentType == null)
+			priceFragmentType =  
+				PriceFragmentTypeDAO.sharedInstance().getPriceFragmentType(PriceFragmentType.PRICE_FRAGMENT_TYPE_ID_TOTAL,
+						new String[] { FetchPlan.DEFAULT}, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor());
+		currentProjectCostValue.getCost().setAmount(priceFragmentType, projectCost.getDefaultCost().getAmount());
+		currentProjectCostValue.getRevenue().setAmount(priceFragmentType, projectCost.getDefaultRevenue().getAmount());
+		projectCost.addProjectCostValue(userID, currentProjectCostValue);
+		
+		return currentProjectCostValue;
 	}
 }

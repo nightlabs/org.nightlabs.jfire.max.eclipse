@@ -16,7 +16,6 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
 import org.nightlabs.jfire.accounting.dao.PriceFragmentTypeDAO;
 import org.nightlabs.jfire.issuetimetracking.ProjectCost;
-import org.nightlabs.jfire.issuetracking.ui.project.ProjectEditorPageController;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /** 
@@ -26,7 +25,7 @@ public class ProjectCostSection
 extends ToolBarSectionPart 
 {
 	private CostRevenueComposite costRevenueComposite;
-	private ProjectEditorPageController controller;
+	private ProjectCostEditorPageController controller;
 	
 	/**
 	 * @param page
@@ -34,7 +33,7 @@ extends ToolBarSectionPart
 	 * @param style
 	 * @param title
 	 */
-	public ProjectCostSection(FormPage page, Composite parent, ProjectEditorPageController controller) {
+	public ProjectCostSection(FormPage page, Composite parent, final ProjectCostEditorPageController controller) {
 		super(
 				page, parent, 
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE,
@@ -56,8 +55,8 @@ extends ToolBarSectionPart
 								new NullProgressMonitor());
 				}
 				
-				projectCost.getDefaultCost().setAmount(priceFragmentType, costRevenueComposite.getCost());
-				projectCost.getDefaultRevenue().setAmount(priceFragmentType, costRevenueComposite.getRevenue());
+				controller.getControllerObject().getDefaultCost().setAmount(priceFragmentType, costRevenueComposite.getCost());
+				controller.getControllerObject().getDefaultRevenue().setAmount(priceFragmentType, costRevenueComposite.getRevenue());
 				
 				markDirty();
 			}
