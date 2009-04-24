@@ -163,10 +163,6 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		return getControllerObject();
 	}
 	
-	public void setIssue(Issue issue) {
-		setControllerObject(issue);
-	}
-	
 	@Override
 	protected IEditorInput createNewInstanceEditorInput() {
 		return new IssueEditorInput(getIssueID(), true);
