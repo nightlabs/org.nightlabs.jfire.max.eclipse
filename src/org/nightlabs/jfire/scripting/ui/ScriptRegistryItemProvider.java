@@ -40,12 +40,12 @@ import javax.jdo.FetchPlan;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.scripting.Script;
-import org.nightlabs.jfire.scripting.ScriptManager;
-import org.nightlabs.jfire.scripting.ScriptManagerUtil;
+import org.nightlabs.jfire.scripting.ScriptManagerRemote;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
 import org.nightlabs.jfire.scripting.ScriptRegistryItemCarrier;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
@@ -206,9 +206,9 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 //		JDOLifecycleManager.sharedInstance().removeNotificationListener(JDOObjectController.class, registryChangeListener);
 
 		// Get the registry structure
-		ScriptManager scriptManager = null;
+		ScriptManagerRemote scriptManager;
 		try {
-			scriptManager = ScriptManagerUtil.getHome(login.getInitialContextProperties()).create();
+			scriptManager = JFireEjb3Factory.getRemoteBean(ScriptManagerRemote.class, login.getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -325,7 +325,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 		if (scriptID == null)
 			throw new IllegalArgumentException("Param scriptID must not be null!"); //$NON-NLS-1$
 
-		ScriptManager scriptManager = ScriptManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		ScriptManagerRemote scriptManager = JFireEjb3Factory.getRemoteBean(ScriptManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		ScriptRegistryItem registryItem = scriptManager.getScriptRegistryItem(
 				scriptID, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		return registryItem;
@@ -339,7 +339,7 @@ extends JDOObjectDAO<ScriptRegistryItemID, ScriptRegistryItem>
 			throw new IllegalArgumentException("Param scriptIDs must not be null!"); //$NON-NLS-1$
 
 		List<ScriptRegistryItemID> ids = new ArrayList<ScriptRegistryItemID>(scriptIDs);
-		ScriptManager scriptManager = ScriptManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+		ScriptManagerRemote scriptManager = JFireEjb3Factory.getRemoteBean(ScriptManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		List<ScriptRegistryItem> registryItems = scriptManager.getScriptRegistryItems(
 				ids, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		return registryItems;

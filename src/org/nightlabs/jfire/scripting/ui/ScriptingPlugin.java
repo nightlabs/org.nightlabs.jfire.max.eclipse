@@ -2,9 +2,6 @@ package org.nightlabs.jfire.scripting.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.scripting.ScriptManager;
-import org.nightlabs.jfire.scripting.ScriptManagerUtil;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -54,19 +51,5 @@ public class ScriptingPlugin extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.scripting.ui", path); //$NON-NLS-1$
-	}
-	
-	
-	/**
-	 * Returns a new ScriptManager bean.
-	 */
-	public static ScriptManager getScriptManager() {
-		try {
-			return ScriptManagerUtil.getHome(
-					Login.getLogin().getInitialContextProperties()
-				).create();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 }
