@@ -47,8 +47,8 @@ import org.nightlabs.util.NLLocale;
  * @author Daniel Mazurek - Daniel.Mazurek [dot] nightlabs [dot] de
  *
  */
-public class SelectEntityUserSetPage<Entity> 
-extends WizardHopPage 
+public class SelectEntityUserSetPage<Entity>
+extends WizardHopPage
 {
 	public static enum Action {
 		inherit,
@@ -67,20 +67,20 @@ extends WizardHopPage
 	private I18nText newEntityUserSetName = new I18nTextBuffer();
 	private I18nTextEditor newEntityUserSetNameEditor;
 	private Button radioButtonSelect;
-	private ListComposite<EntityUserSet> entityUserSetList;
+	private ListComposite<EntityUserSet<Entity>> entityUserSetList;
 	private EntityUserSet<Entity> inheritedEntityUserSet = null;
 	private EntityUserSetID selectedEntityUserSetID;
 	private EntityUserSet<Entity> newEntityUserSet = null;
 	private boolean initializationFinished = false;
 	private String entityUserSetName;
-	
+
 	/**
 	 * @param entityUserSetID
 	 * @param inheritedEntityUserSetResolver
 	 */
 	public SelectEntityUserSetPage(
 			EntityUserSetID entityUserSetID,
-			EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper) 
+			EntityUserSetPageControllerHelper<Entity> entityUserSetPageControllerHelper)
 	{
 		super(SelectEntityUserSetPage.class.getName(), "Select "+entityUserSetPageControllerHelper.getEntityUserSetName());
 		this.entityUserSetName = entityUserSetPageControllerHelper.getEntityUserSetName();
@@ -95,7 +95,7 @@ extends WizardHopPage
 	}
 
 	@Override
-	public Control createPageContents(Composite parent) 
+	public Control createPageContents(Composite parent)
 	{
 		final XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 
@@ -169,10 +169,10 @@ extends WizardHopPage
 			}
 		});
 
-		entityUserSetList = new ListComposite<EntityUserSet>(page, SWT.NONE, (String)null, new LabelProvider() {
+		entityUserSetList = new ListComposite<EntityUserSet<Entity>>(page, SWT.NONE, (String)null, new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((EntityUserSet<Entity>)element).getName().getText();
+				return ((EntityUserSet<?>)element).getName().getText();
 			}
 		});
 
@@ -217,15 +217,15 @@ extends WizardHopPage
 						entityUserSetPageControllerHelper.getEntityClass(),
 						new SubProgressMonitor(monitor, 10));
 
-				final List<EntityUserSet> entityUserSets = EntityUserSetDAO.sharedInstance().getEntityUserSets(
+				final List<EntityUserSet<Entity>> entityUserSets = EntityUserSetDAO.sharedInstance().getEntityUserSets(
 						entityUserSetIDs,
 						new String[] {FetchPlan.DEFAULT, EntityUserSet.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
 
-				Collections.sort(entityUserSets, new Comparator<EntityUserSet>() {
+				Collections.sort(entityUserSets, new Comparator<EntityUserSet<Entity>>() {
 						@Override
-						public int compare(EntityUserSet o1, EntityUserSet o2) {
+						public int compare(EntityUserSet<Entity> o1, EntityUserSet<Entity> o2) {
 							return o1.getName().getText().compareTo(o2.getName().getText());
 						}
 				});
