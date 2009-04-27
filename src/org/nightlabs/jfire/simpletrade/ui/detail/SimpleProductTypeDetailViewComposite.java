@@ -3,7 +3,6 @@ package org.nightlabs.jfire.simpletrade.ui.detail;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -100,13 +99,9 @@ extends XComposite
 						SimpleProductTypeStruct.DESCRIPTION_LONG, SimpleProductTypeStruct.IMAGES_SMALL_IMAGE}
 				));
 				Map<ProductTypeID, PropertySet> propertySets = null;
-				try {
-					propertySets = SimpletradePlugin.getSimpleTradeManager().getSimpleProductTypesPropertySets(
-							ids, fields, new String[] {PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
-						);
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
+				propertySets = SimpletradePlugin.getSimpleTradeManager().getSimpleProductTypesPropertySets(
+						ids, fields, new String[] {PropertySet.FETCH_GROUP_FULL_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT
+					);
 				final PropertySet props = propertySets.get(productTypeID);
 				IStruct struct = StructLocalDAO.sharedInstance().getStructLocal(props.getStructLocalObjectID(), monitor);
 				if (props != null)

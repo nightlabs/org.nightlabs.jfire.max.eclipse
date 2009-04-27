@@ -44,9 +44,9 @@ import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.gridpriceconfig.TariffPricePair;
 import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.dao.TariffPricePairDAO;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
@@ -131,7 +131,7 @@ public class ArticleAdder extends AbstractArticleAdder
 			Order order = OrderDAO.sharedInstance().getOrder((OrderID) articleContainerID, FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			if (order != null) {
 				customerGroup = order.getCustomerGroup();
-				currency = order.getCurrency();				
+				currency = order.getCurrency();
 			}
 		} else if (articleContainerID instanceof OfferID) {
 			this.productType = SimpleProductTypeDAO.sharedInstance().getSimpleProductType(
@@ -146,7 +146,7 @@ public class ArticleAdder extends AbstractArticleAdder
 					(OfferID) articleContainerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 1));
 			if (offer != null) {
 				customerGroup = offer.getOrder().getCustomerGroup();
-				currency = offer.getCurrency();				
+				currency = offer.getCurrency();
 			}
 		} else
 			throw new IllegalStateException("ArticleContainerID is neither OrderID nor OfferID, but " + (articleContainerID == null ? "null" : articleContainerID.getClass().getName()) + "!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -195,8 +195,8 @@ public class ArticleAdder extends AbstractArticleAdder
 	throws org.nightlabs.ModuleException, java.rmi.RemoteException, LoginException, CreateException, NamingException
 	{
 
-		SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
-		return stm.createArticles(
+		SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+		return (Collection<Article>) stm.createArticles(
 				segmentID, offerID, productTypeID, quantity, tariffID, true, false,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}

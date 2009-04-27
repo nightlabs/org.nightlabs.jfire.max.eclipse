@@ -11,9 +11,9 @@ import javax.security.auth.login.LoginException;
 import org.nightlabs.ModuleException;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.id.OfferID;
@@ -21,21 +21,21 @@ import org.nightlabs.jfire.trade.id.SegmentID;
 
 
 public class RecurringArticleAdder extends ArticleAdder {
-	
+
 	@Override
 	public Collection<Article> createArticles(SegmentID segmentID,
 			OfferID offerID, ProductTypeID productTypeID, int quantity,
 			TariffID tariffID)
 			throws ModuleException, RemoteException, LoginException,
 			CreateException, NamingException {
-		
+
 		Collection<ProductTypeID> productTypeIDs = new ArrayList<ProductTypeID>( quantity);
 		for (int i = 0; i <  quantity; i++) {
 			productTypeIDs.add(productTypeID);
 		}
-		
-		SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
-		Collection<Article> articles = stm.createArticles(
+
+		SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+		Collection<Article> articles = (Collection<Article>) stm.createArticles(
 				segmentID, offerID,
 				productTypeIDs, tariffID,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
