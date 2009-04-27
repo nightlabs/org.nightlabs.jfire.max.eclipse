@@ -9,10 +9,10 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCell;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.dynamictrade.DynamicProductInfo;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
+import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProduct;
 import org.nightlabs.jfire.store.Unit;
 import org.nightlabs.jfire.store.id.UnitID;
@@ -53,7 +53,7 @@ extends ArticleBaseComposite
 		if (!isEditable())
 			return true; // If the Composite is not editable we do nothing here.
 
-		try {			
+		try {
 			ArticleID articleID = (ArticleID) JDOHelper.getObjectId(this.article);
 			Long quantity = null;
 			UnitID unitID = null;
@@ -62,7 +62,7 @@ extends ArticleBaseComposite
 			Price singlePrice = null;
 
 			DynamicProduct product = (DynamicProduct) this.article.getProduct();
-			DynamicProductInfo dynamicProductInfo; 
+			DynamicProductInfo dynamicProductInfo;
 			if (product != null)
 				dynamicProductInfo = product;
 			else
@@ -71,7 +71,7 @@ extends ArticleBaseComposite
 				JSHTMLExecuter script = new JSHTMLExecuter(getProductName());
 				String err = script.validateContent();
 				if(err !=null)
-				{				
+				{
 					showTextNameMessage(err,MessageType.ERROR);
 					return false;
 				}
@@ -99,7 +99,7 @@ extends ArticleBaseComposite
 			}
 
 			// TODO use DAO
-			DynamicTradeManager m = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
+			DynamicTradeManagerRemote m = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			m.modifyArticle(articleID, quantity, unitID, tariffID, productName, singlePrice, false, null, 1);
 			return true;
 		} catch (Exception e) {

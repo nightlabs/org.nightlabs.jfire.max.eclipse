@@ -13,9 +13,9 @@ import org.nightlabs.i18n.I18nText;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
+import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.store.id.UnitID;
 import org.nightlabs.jfire.trade.Article;
@@ -29,11 +29,11 @@ import org.nightlabs.jfire.trade.id.SegmentID;
 public class RecurringArticleAdder extends ArticleAdder {
 
 //	@Override
-//	protected Composite createRequirementsNotFulfilledComposite(Composite parent) 
+//	protected Composite createRequirementsNotFulfilledComposite(Composite parent)
 //	{
 //		ArticleContainer ac = getSegmentEdit().getArticleContainer();
 //		String message = String.format(
-//				"Recurring Trade is currently not supported on Dynamic Trade", 
+//				"Recurring Trade is currently not supported on Dynamic Trade",
 //				TradePlugin.getArticleContainerTypeString(ac.getClass(), false), TradePlugin.getArticleContainerTypeString(ac.getClass(), true),
 //				ArticleContainerUtil.getArticleContainerID(ac)
 //		);
@@ -44,7 +44,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 	{
 		return new RecurringArticleAdderComposite(parent, this);
 	}
-	
+
 	@Override
 	public Article createArticle(
 			SegmentID segmentID,
@@ -58,7 +58,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 			boolean allocate,
 			boolean allocateSynchronously) throws RemoteException, LoginException, CreateException, NamingException, ModuleException
 	{
-		DynamicTradeManager dtm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
+		DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		return dtm.createRecurringArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID,
 				productName, singlePrice, getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //
