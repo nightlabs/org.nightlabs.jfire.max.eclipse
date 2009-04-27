@@ -31,11 +31,11 @@ import javax.security.auth.login.LoginException;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.scripting.ScriptCategory;
-import org.nightlabs.jfire.scripting.ScriptManager;
+import org.nightlabs.jfire.scripting.ScriptManagerRemote;
 import org.nightlabs.jfire.scripting.ScriptRegistryItem;
-import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -45,9 +45,9 @@ public class AddScriptCategoryWizard extends DynamicPathWizard {
 
 	private ScriptRegistryItem scriptRegistryItem;
 	private AddScriptRegistryItemWizardPage wizardPage;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public AddScriptCategoryWizard(ScriptRegistryItem scriptRegistryItem) {
 		super();
@@ -63,7 +63,12 @@ public class AddScriptCategoryWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		ScriptManager sm = ScriptingPlugin.getScriptManager();
+		ScriptManagerRemote sm;
+		try {
+			sm = JFireEjb3Factory.getRemoteBean(ScriptManagerRemote.class, Login.getLogin().getInitialContextProperties());
+		} catch (LoginException e1) {
+			throw new RuntimeException(e1);
+		}
 		if ((scriptRegistryItem != null) && (!(scriptRegistryItem instanceof ScriptCategory)))
 			throw new IllegalArgumentException("Can only add a Script to a ScriptCategory instance of ScriptRegistryItem. The given scriptRegistryItem is instanceof "+((scriptRegistryItem == null)?"null":scriptRegistryItem.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
 		String scriptRegistryItemID = wizardPage.getRegistryItemID();
@@ -87,7 +92,7 @@ public class AddScriptCategoryWizard extends DynamicPathWizard {
 		}
 		return true;
 	}
-	
+
 	public static int show(ScriptRegistryItem scriptRegistryItem) {
 		AddScriptCategoryWizard wizard = new AddScriptCategoryWizard(scriptRegistryItem);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

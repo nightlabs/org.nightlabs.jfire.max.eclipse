@@ -1,17 +1,20 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.scripting.admin.ui.parameter.action.add;
 
 import java.util.Collection;
 
+import javax.security.auth.login.LoginException;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.i18n.I18nTextBuffer;
-import org.nightlabs.jfire.scripting.ScriptManager;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.scripting.ScriptManagerRemote;
 import org.nightlabs.jfire.scripting.ScriptParameterSet;
 import org.nightlabs.jfire.scripting.admin.ui.parameter.action.ScriptParameterSetAction;
 import org.nightlabs.jfire.scripting.admin.ui.resource.Messages;
-import org.nightlabs.jfire.scripting.ui.ScriptingPlugin;
 import org.nightlabs.util.NLLocale;
 
 /**
@@ -21,7 +24,7 @@ import org.nightlabs.util.NLLocale;
 public class AddScriptParameterSetAction extends ScriptParameterSetAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public AddScriptParameterSetAction() {
 		super();
@@ -55,7 +58,12 @@ public class AddScriptParameterSetAction extends ScriptParameterSetAction {
 	 */
 	@Override
 	public void run(Collection<ScriptParameterSet> scriptParameterSets) {
-		ScriptManager scriptManager = ScriptingPlugin.getScriptManager();
+		ScriptManagerRemote scriptManager;
+		try {
+			scriptManager = JFireEjb3Factory.getRemoteBean(ScriptManagerRemote.class, Login.getLogin().getInitialContextProperties());
+		} catch (LoginException e1) {
+			throw new RuntimeException(e1);
+		}
 		I18nTextBuffer buffer = new I18nTextBuffer();
 		buffer.setText(NLLocale.getDefault().getLanguage(), Messages.getString("org.nightlabs.jfire.scripting.admin.ui.parameter.action.add.AddScriptParameterSetAction.i18nBuffer.defaultLanguageText"));		 //$NON-NLS-1$
 		try {
