@@ -31,11 +31,10 @@ import java.io.File;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.app.AbstractApplication;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.reporting.ReportManager;
-import org.nightlabs.jfire.reporting.ReportManagerUtil;
-import org.nightlabs.jfire.reporting.parameter.ReportParameterManager;
-import org.nightlabs.jfire.reporting.parameter.ReportParameterManagerUtil;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
+import org.nightlabs.jfire.reporting.parameter.ReportParameterManagerRemote;
 import org.nightlabs.util.CacheDirTag;
 import org.osgi.framework.BundleContext;
 
@@ -46,17 +45,17 @@ public class ReportingPlugin extends AbstractUIPlugin {
 
 	//The shared instance.
 	private static ReportingPlugin plugin;
-	
+
 	public static final String SCOPE_REPORTING = "reporting"; //$NON-NLS-1$
-	
+
 	public static final String ZONE_REPORTING = ReportingPlugin.class.getName()+"#ZONE_REPORTING"; //$NON-NLS-1$
-	
+
 	public static final String DEFAULT_REPORT_USE_CASE_ID = "org.nightlabs.jfire.reporting.ui.defaultReportUseCase"; //$NON-NLS-1$
-	
+
 	//Resource bundle.
 //	private ResourceBundle resourceBundle;
-	
-	
+
+
 	/**
 	 * The constructor.
 	 */
@@ -102,7 +101,7 @@ public class ReportingPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.reporting.ui", path); //$NON-NLS-1$
 	}
-	
+
 //	/**
 //	 * Returns the string from the plugin's resource bundle,
 //	 * or 'key' if not found.
@@ -122,39 +121,41 @@ public class ReportingPlugin extends AbstractUIPlugin {
 //	public ResourceBundle getResourceBundle() {
 //		return resourceBundle;
 //	}
-	
+
 	/**
 	 * Returns a new ReportManager bean.
 	 */
-	public static ReportManager getReportManager() {
+	@Deprecated
+	public static ReportManagerRemote getReportManager() {
 		try {
-			return ReportManagerUtil.getHome(
+			return JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class,
 					Login.getLogin().getInitialContextProperties()
-				).create();
+				);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Returns a new ReportParameterManager bean.
 	 */
-	public static ReportParameterManager getReportParameterManager() {
+	@Deprecated
+	public static ReportParameterManagerRemote getReportParameterManager() {
 		try {
-			return ReportParameterManagerUtil.getHome(
+			return JFireEjb3Factory.getRemoteBean(ReportParameterManagerRemote.class,
 					Login.getLogin().getInitialContextProperties()
-				).create();
+				);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static File createReportTempFolder() {
 		// TODO: need to delete report temp folder on app start or stop
 		File pathFile = new File(AbstractApplication.getRootDir()+File.separator+"report_tmp"); //$NON-NLS-1$
 		if (!pathFile.exists())
 			pathFile.mkdirs();
-		
+
 		try {
 			CacheDirTag cdt = new CacheDirTag(pathFile);
 			cdt.tag("JFire.org - org.nightlabs.jfire.reporting.ui", true, false); //$NON-NLS-1$
@@ -163,5 +164,5 @@ public class ReportingPlugin extends AbstractUIPlugin {
 		}
 		return pathFile;
 	}
-	
+
 }

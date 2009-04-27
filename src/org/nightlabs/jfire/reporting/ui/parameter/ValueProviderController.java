@@ -16,7 +16,7 @@ import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.TreeLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
-import org.nightlabs.jfire.reporting.parameter.ReportParameterManager;
+import org.nightlabs.jfire.reporting.parameter.ReportParameterManagerRemote;
 import org.nightlabs.jfire.reporting.parameter.ValueProvider;
 import org.nightlabs.jfire.reporting.parameter.ValueProviderCategory;
 import org.nightlabs.jfire.reporting.parameter.ValueProviderParentResolver;
@@ -29,7 +29,7 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
  * Active controller for {@link ValueProviderCategory}s and {@link ValueProvider}s.
- * 
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  *
  */
@@ -39,11 +39,11 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 	public static final String[] CATEGORY_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, ValueProviderCategory.FETCH_GROUP_NAME, ValueProviderCategory.FETCH_GROUP_PARENT_ID
 	};
-	
+
 	public static final String[] PROVIDER_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT, ValueProvider.FETCH_GROUP_NAME, ValueProvider.FETCH_GROUP_CATEGORY_ID
 	};
-	
+
 	@Override
 	protected ValueProviderTreeNode createNode() {
 		return new ValueProviderTreeNode();
@@ -67,10 +67,10 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 				new JDOLifecycleState[] { JDOLifecycleState.NEW }
 			);
 	}
-	
-	
+
+
 	private ChangeListener changeListener;
-	
+
 	@Override
 	protected void createRegisterChangeListener() {
 		if (changeListener == null) {
@@ -78,7 +78,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 			JDOLifecycleManager.sharedInstance().addNotificationListener(new Class[] {ValueProviderCategory.class, ValueProvider.class}, changeListener);
 		}
 	}
-	
+
 	@Override
 	protected void unregisterChangeListener() {
 		if (changeListener == null) {
@@ -101,7 +101,7 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 		}
 		if (parentID instanceof ValueProviderCategoryID) {
 			try {
-				ReportParameterManager rpm = ReportingPlugin.getReportParameterManager();
+				ReportParameterManagerRemote rpm = ReportingPlugin.getReportParameterManager();
 				Set<ValueProviderCategoryID> categoryIDs;
 				categoryIDs = rpm.getValueProviderCategoryIDsForParent((ValueProviderCategoryID) parentID);
 				Collection<Object> categories = (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(categoryIDs, CATEGORY_FETCH_GROUPS, monitorWrapper);

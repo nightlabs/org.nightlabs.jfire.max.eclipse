@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
-import org.nightlabs.jfire.reporting.ReportManager;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.Birt.OutputFormat;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
@@ -50,7 +50,7 @@ import org.nightlabs.util.Util;
  * layouts that were already rendered by the server with
  * certain parameter and already stored on the clients
  * disk. The handled reports will be cached.
- * 
+ *
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
  *
  */
@@ -61,23 +61,23 @@ public class RenderedReportLayoutProvider {
 	 * and handled report layouts.
 	 * <p>
 	 * The reference is stored in form of the entry file.
-	 * 
+	 *
 	 * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
 	 *
 	 */
 	public class RenderedReportEntry {
 		private Map<OutputFormat, PreparedRenderedReportLayout> format2PreparedLayouts = new HashMap<OutputFormat, PreparedRenderedReportLayout>();
-		
+
 		public PreparedRenderedReportLayout getEntryFile(OutputFormat format) {
 			return format2PreparedLayouts.get(format);
 		}
-		
+
 		public void setEntryFile(OutputFormat format, PreparedRenderedReportLayout preparedLayout) {
 			format2PreparedLayouts.put(format, preparedLayout);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Key class used to reference handled {@link RenderedReportEntry}s
 	 * in the cache. It holds the report layout id and the
@@ -86,7 +86,7 @@ public class RenderedReportLayoutProvider {
 	public class RenderedReportKey {
 		private ReportRegistryItemID reportRegistryItemID;
 		private Map<String, Object> params;
-		
+
 		private RenderedReportKey(ReportRegistryItemID reportRegistryItemID, Map<String, Object> params) {
 			if (reportRegistryItemID == null)
 				throw new IllegalArgumentException("reportRegistryItemID must not be null!"); //$NON-NLS-1$
@@ -125,9 +125,9 @@ public class RenderedReportLayoutProvider {
 			return reportRegistryItemID;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public RenderedReportLayoutProvider() {
 		super();
@@ -139,8 +139,8 @@ public class RenderedReportLayoutProvider {
 	 * <p>
 	 * If necessary (not already cached) the server will be asked
 	 * to render the report with the given params.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param reportRegistryItemID The report layout id to get the entry for.
 	 * @param params The params to render the report with.
 	 * @param format The format to render the report to.
@@ -171,13 +171,13 @@ public class RenderedReportLayoutProvider {
 		entry.setEntryFile(renderRequest.getOutputFormat(), preparedLayout);
 		return preparedLayout;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Returns the entry file for the given {@link RenderedReportLayout}
 	 * by using the appropriate {@link RenderedReportHandler}.
-	 * 
+	 *
 	 * @param renderedReportLayout The rendered report to get the entry for.
 	 * @param monitor A progress monitor to use.
 	 * @return The prepared rendered report layout.
@@ -193,11 +193,11 @@ public class RenderedReportLayoutProvider {
 		return handler.prepareRenderedReportLayout(monitor, renderedReportLayout);
 	}
 
-	
+
 	/**
 	 * Return the rendered report for the given reportLayoutID and params
 	 * created by a {@link ReportManager} on the server.
-	 * 
+	 *
 	 * @param reportRegistryItemID The reportLayoutID to use.
 	 * @param params The params to apply to the layout.
 	 * @param format The format to render the layout to.
@@ -212,30 +212,30 @@ public class RenderedReportLayoutProvider {
 			ProgressMonitor monitor
 		)
 	{
-		ReportManager rm = ReportingPlugin.getReportManager();
+		ReportManagerRemote rm = ReportingPlugin.getReportManager();
 		try {
 			return rm.renderReportLayout(renderRequest);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Get a cached result for the given key.
-	 * 
+	 *
 	 * @param key The key containing layout id and params.
 	 * @return A cached {@link RenderedReportEntry} or <code>null</code>
 	 */
 	protected RenderedReportEntry getRenderedReportEntry(RenderedReportKey key) {
 		return (RenderedReportEntry)Cache.sharedInstance().get(null, key, (String[])null, 0);
 	}
-	
+
 	protected void setRenderedReportEntry(RenderedReportKey key, RenderedReportEntry entry) {
 		 Cache.sharedInstance().put(null, key, entry, (String[])null, 0);
 	}
-	
+
 	private static RenderedReportLayoutProvider sharedInstance;
-	
+
 	public static RenderedReportLayoutProvider sharedInstance() {
 		if (sharedInstance == null)
 			sharedInstance = new RenderedReportLayoutProvider();
