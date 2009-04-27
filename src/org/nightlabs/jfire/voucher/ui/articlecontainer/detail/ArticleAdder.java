@@ -10,7 +10,7 @@ import org.nightlabs.base.ui.composite.MessageComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -21,7 +21,7 @@ import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.SegmentID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.AbstractArticleAdder;
-import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -62,9 +62,9 @@ extends AbstractArticleAdder
 	public Collection<Article> createArticles(SegmentID segmentID, OfferID offerID, ProductTypeID productTypeID, int qty)
 	throws Exception
 	{
-		VoucherManager vm = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+		VoucherManagerRemote vm = JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
-		return vm.createArticles(
+		return (Collection<Article>) vm.createArticles(
 				segmentID, offerID, productTypeID, qty,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}
@@ -95,7 +95,7 @@ extends AbstractArticleAdder
 		Composite result = super.createRequirementsNotFulfilledComposite(parent);
 		if (result != null)
 			return result;
-		
+
 		Currency currency;
 		Class<?> articleContainerClass = getSegmentEdit().getArticleContainerClass();
 		if (Order.class.isAssignableFrom(articleContainerClass)) {
