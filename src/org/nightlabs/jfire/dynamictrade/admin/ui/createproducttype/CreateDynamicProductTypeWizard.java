@@ -11,9 +11,9 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
+import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditor;
 import org.nightlabs.jfire.dynamictrade.admin.ui.editor.DynamicProductTypeEditorInput;
 import org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig.ChooseDynamicTradePriceConfigPage;
@@ -53,7 +53,7 @@ extends DynamicPathWizard
 	public void addPages()
 	{
 		assert parentProductTypeID != null;
-		
+
 		dynamicProductTypeNamePage = new DynamicProductTypeNamePage(parentProductTypeID);
 		addPage(dynamicProductTypeNamePage);
 
@@ -90,7 +90,7 @@ extends DynamicPathWizard
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
-				DynamicTradeManager vm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
+				DynamicTradeManagerRemote vm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 				DynamicProductType vt = vm.storeDynamicProductType(dynamicProductType, true, new String[] { FetchPlan.DEFAULT }, 1);
 				final ProductTypeID dynamicProductTypeID = (ProductTypeID) JDOHelper.getObjectId(vt);
 

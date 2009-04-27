@@ -10,9 +10,9 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.gridpriceconfig.PriceCalculator;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
+import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.accounting.priceconfig.DynamicTradePriceConfig;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicTradePriceConfigDAO;
 import org.nightlabs.jfire.store.ProductType;
@@ -41,13 +41,13 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	{
 		try {
 			// We clear the packaging result price configs for optimisation reasons (prevent transferring to the server).
-			// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig. 
+			// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig.
 			Collection<P> clonedPCs = Util.cloneSerializable(priceConfigs);
 			for (P priceConfig : clonedPCs) {
 				((DynamicTradePriceConfig) priceConfig).clearPackagingResultPriceConfigs();
 			}
-			DynamicTradeManager stm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
-			return stm.storeDynamicTradePriceConfigs(clonedPCs, true, assignInnerPriceConfigCommand);
+			DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+			return dtm.storeDynamicTradePriceConfigs(clonedPCs, true, assignInnerPriceConfigCommand);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
@@ -72,7 +72,7 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 	{
 		//return new DimensionValueSelectorImpl(parent);
 		return new DimensionValueSelectorImpl(parent, this);
-		
+
 //		return super.createDimensionValueSelector(parent);
 	}
 
@@ -91,7 +91,7 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 			ProductType packageProductType) {
 		return new org.nightlabs.jfire.dynamictrade.accounting.priceconfig.PriceCalculator(packageProductType, createCustomerGroupMapper(), createTariffMapper());
 	}
-	
+
 	@Override
 	public AbstractChooseGridPriceConfigWizard createChoosePriceConfigWizard(ProductTypeID parentProductTypeID)
 	{

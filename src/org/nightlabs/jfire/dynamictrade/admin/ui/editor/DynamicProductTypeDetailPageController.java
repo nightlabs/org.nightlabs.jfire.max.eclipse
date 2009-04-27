@@ -3,9 +3,9 @@ package org.nightlabs.jfire.dynamictrade.admin.ui.editor;
 import javax.jdo.FetchPlan;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.dynamictrade.DynamicTradeManager;
+import org.nightlabs.jfire.dynamictrade.DynamicTradeManagerRemote;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
@@ -53,14 +53,14 @@ extends AbstractProductTypeDetailPageController<DynamicProductType>
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS_DEFAULT;
 	}
-	
+
 	@Override
 	protected DynamicProductType retrieveProductType(ProgressMonitor monitor) {
 		return DynamicProductTypeDAO.sharedInstance().getDynamicProductType(getProductTypeID(),
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
 				monitor);
-	
+
 	}
 
 	@Override
@@ -69,22 +69,22 @@ public  DynamicProductType getExtendedProductType(ProgressMonitor monitor ,Produ
 		return  DynamicProductTypeDAO.sharedInstance().getDynamicProductType(extendedProductTypeID,
 				getEntityFetchGroups(),
 				getEntityMaxFetchDepth(),
-				monitor);	
-		
+				monitor);
+
 	}
-	
-	
-	
-	
+
+
+
+
 	@Override
 	protected DynamicProductType storeProductType(DynamicProductType productType, ProgressMonitor monitor)
 	{
 		try {
-			DynamicTradeManager stm = JFireEjbFactory.getBean(DynamicTradeManager.class, Login.getLogin().getInitialContextProperties());
-			return stm.storeDynamicProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
+			DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+			return dtm.storeDynamicProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
 	}
-	
+
 }
