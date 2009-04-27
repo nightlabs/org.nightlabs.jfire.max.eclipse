@@ -15,13 +15,13 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.base.ui.wizard.IDynamicPathWizardListener;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.dao.OrderDAO;
 import org.nightlabs.jfire.trade.id.OrderID;
@@ -97,9 +97,9 @@ extends CustomerPaymentDeliveryWizard
 
 					if (selectedLegalEntity != null) {
 						AnchorID customerID = (AnchorID) JDOHelper.getObjectId(selectedLegalEntity);
-						TradeManager tm;
+						TradeManagerRemote tm;
 						try {
-							tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+							tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 							tm.createReservation(getOrderID(), customerID);
 						} catch (Exception e) {
 							throw new RuntimeException(e);

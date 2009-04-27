@@ -16,7 +16,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.deliver.Delivery;
@@ -27,7 +27,7 @@ import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -63,7 +63,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 			getArticlesToTransfer().clear();
 			AnchorID customerID = null;
 
-			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			int alreadyDeliveredArticles = 0;
 			Set<DeliveryNoteID> _deliveryNoteIDs = new HashSet<DeliveryNoteID>();
 			for (Iterator<?> it = tradeManager.getArticles(getArticleIDs(), FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT).iterator(); it.hasNext();) {
@@ -77,7 +77,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 				if (isDeliveryEnabled()) {
 					_deliveryNoteIDs.add(article.getDeliveryNoteID());
 				}
-				
+
 				if (customerID == null)
 					customerID = (AnchorID) JDOHelper.getObjectId(article.getOrder().getCustomer());
 				else if (!customerID.equals(JDOHelper.getObjectId(article.getOrder().getCustomer())))
@@ -91,7 +91,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 				String message = String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogMessage"), alreadyDeliveredArticles); //$NON-NLS-1$
 				MessageDialog.openWarning(RCPUtil.getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.DeliveryQueueDeliveryWizard.articlesAlreadyDeliveredDialogTitle"), message); //$NON-NLS-1$
 			}
-			
+
 			setDeliveryNoteIDs(_deliveryNoteIDs);
 
 			// The LegalEntityID of the local organisation
@@ -128,7 +128,7 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 								oldDeliveryMap.put((DeliveryID) JDOHelper.getObjectId(oldDelivery), oldDelivery);
 							}
 							monitor.worked(1);
-	
+
 							// Assign for each new delivery the original deliveries from the delivery queue as precursor
 							for (DeliveryEntryPage page : getDeliveryEntryPages()) {
 								for (Delivery delivery : page.getDeliveryWizardHop().getDeliveryList()) {
@@ -140,14 +140,14 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 								}
 							}
 							monitor.worked(1);
-	
+
 							TransferWizardUtil.deliver(getShell(), DeliveryQueueDeliveryWizard.this);
-							
+
 							// now reload the deliveryQueue object because it may have been altered by the
 							// new delivery (if the target and the source delivery queue are the same)
 							deliveryQueue = DeliveryQueueDAO.sharedInstance().getDeliveryQueue(deliveryQueue.getObjectID(),
 									new String[] { DeliveryQueue.FETCH_GROUP_PENDING_DELIVERY_SET }, -1, new NullProgressMonitor());
-							
+
 							for (DeliveryEntryPage page : getDeliveryEntryPages()) {
 								for (Delivery delivery : page.getDeliveryWizardHop().getDeliveryList()) {
 									// If the delivery has not failed, we mark all original (old) deliveries that contributed to this one as processed
@@ -159,12 +159,12 @@ public class DeliveryQueueDeliveryWizard extends CombiTransferArticlesWizard {
 							}
 							monitor.worked(2);
 							DeliveryQueueDAO.sharedInstance().storeDeliveryQueue(deliveryQueue, false, null, -1, new NullProgressMonitor());
-	
+
 							monitor.worked(1);
 						} finally {
 							monitor.done();
 						}
-							
+
 					} catch (RuntimeException x) {
 						throw x;
 					} catch (Exception x) {

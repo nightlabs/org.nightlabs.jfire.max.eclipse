@@ -41,17 +41,16 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Order;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerRemote;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.articlecontainer.header.recurring.RecurringSaleRootTreeNode;
@@ -95,11 +94,11 @@ public class CreateOrderAction extends Action
 
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(headerTreeComposite.getPartner());
 
-					HeaderTreeNode selectedNode  = (HeaderTreeNode)headerTreeComposite.getSelectedNode();
+					HeaderTreeNode selectedNode  = headerTreeComposite.getSelectedNode();
 					if (selectedNode == null)
 						return Status.OK_STATUS;
 					if (
-							selectedNode.getParent() == null &&                      // is root node 
+							selectedNode.getParent() == null &&                      // is root node
 							(
 								!(selectedNode instanceof SaleRootTreeNode) &&       // but no normal sale
 								!(selectedNode instanceof PurchaseRootTreeNode)      // nor normal purchase node
@@ -108,8 +107,8 @@ public class CreateOrderAction extends Action
 						// can't determinde sale/purchase mode, do nothing
 						return Status.OK_STATUS;
 					}
-					
-					// define a sale order 
+
+					// define a sale order
 					boolean saleOrder = false;
 					boolean recurring = false;
 					HeaderTreeNode checkNode = selectedNode;
@@ -118,22 +117,22 @@ public class CreateOrderAction extends Action
 						saleOrder = saleOrder || checkNode instanceof RecurringSaleRootTreeNode || checkNode instanceof SaleRootTreeNode;
 						checkNode = checkNode.getParent();
 					}
-					
-					TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+
+					TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					Order order = null;
-					
+
 //					FIXME IDPREFIX should be asked from user if necessary!
 					if(recurring)
 					{
 						if (saleOrder) {
-							RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+							RecurringTradeManagerRemote rtm = JFireEjb3Factory.getRemoteBean(RecurringTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 							order = rtm.createSaleRecurringOrder(customerID, null,
-									tradeConfigModule.getCurrencyID(), new SegmentTypeID[] { null }, 
-									new String[] { RecurringOrder.FETCH_GROUP_THIS_ORDER }, 
+									tradeConfigModule.getCurrencyID(), new SegmentTypeID[] { null },
+									new String[] { RecurringOrder.FETCH_GROUP_THIS_ORDER },
 									NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-						} 
+						}
 						// purchaseOrders not yet supported for recurring trade
 					}
 					else
@@ -149,7 +148,7 @@ public class CreateOrderAction extends Action
 									new SegmentTypeID[] {null}, // null here is a shortcut for default segment type
 									OrderRootTreeNode.FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 					}
-					
+
 					monitor.worked(70);
 
 //					OrderID orderID = (OrderID) JDOHelper.getObjectId(order);

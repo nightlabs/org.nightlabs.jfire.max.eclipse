@@ -62,10 +62,10 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -109,7 +109,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 			}
 		});
 
-		deliveryNoteTable = new AbstractTableComposite<DeliveryNote>(page, 
+		deliveryNoteTable = new AbstractTableComposite<DeliveryNote>(page,
 				SWT.NONE, true, page.getBorderStyle() | SWT.FULL_SELECTION | SWT.SINGLE) {
 			@Override
 			protected void createTableColumns(TableViewer tableViewer, Table table)
@@ -188,7 +188,7 @@ public class SelectDeliveryNotePage extends DynamicPathWizardPage
 	private void loadDataInJob()
 	{
 		try {
-			StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			StoreManagerRemote storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			final List<DeliveryNote> l = storeManager.getNonFinalizedDeliveryNotes(
 					getAddToDeliveryNoteWizard().getVendorID(),
 					getAddToDeliveryNoteWizard().getCustomerID(),

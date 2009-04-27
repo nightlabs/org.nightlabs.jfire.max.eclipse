@@ -70,7 +70,7 @@ import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.pay.CheckRequirementsEnvironment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPayment;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
@@ -81,7 +81,7 @@ import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.accounting.pay.ServerPaymentProcessor;
 import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.accounting.pay.id.ServerPaymentProcessorID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -173,13 +173,13 @@ implements IPaymentEntryPage
 		new PaymentWizardHop(this, payment); // self-registering
 	}
 
-	private AccountingManager accountingManager = null;
+	private AccountingManagerRemote accountingManager = null;
 
-	protected AccountingManager getAccountingManager()
+	protected AccountingManagerRemote getAccountingManager()
 		throws RemoteException, LoginException, CreateException, NamingException
 	{
 		if (accountingManager == null)
-			accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 		return accountingManager;
 	}
@@ -436,22 +436,22 @@ implements IPaymentEntryPage
 
 				modeOfPaymentFlavourList.clear();
 				modeOfPaymentFlavourList.addAll(c);
-				
-//				// filter the list by the entries in the config-module, 
+
+//				// filter the list by the entries in the config-module,
 //				// filtering is now done on server
 //				ModeOfPaymentConfigModule mopCfMod = ConfigUtil.getUserCfMod(
-//						ModeOfPaymentConfigModule.class, 
-//						new String[] {FetchPlan.DEFAULT, ModeOfPaymentConfigModule.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOURIDS}, 
+//						ModeOfPaymentConfigModule.class,
+//						new String[] {FetchPlan.DEFAULT, ModeOfPaymentConfigModule.FETCH_GROUP_MODE_OF_PAYMENT_FLAVOURIDS},
 //						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-//				
+//
 //				for (Iterator<ModeOfPaymentFlavour> it = modeOfPaymentFlavourList.iterator(); it.hasNext(); ) {
 //					ModeOfPaymentFlavourID flavourID = (ModeOfPaymentFlavourID) JDOHelper.getObjectId(it.next());
 //					if (mopCfMod.getModeOfPaymentFlavourIDs().contains(flavourID)) {
 //						it.remove();
 //					}
 //				}
-				
-				
+
+
 //				Collections.sort(modeOfPaymentFlavourList, new Comparator<ModeOfPaymentFlavour>() {
 //					public int compare(ModeOfPaymentFlavour mopf0, ModeOfPaymentFlavour mopf1)
 //					{

@@ -22,7 +22,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.MessageComposite.MessageType;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
@@ -30,7 +30,7 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.timer.Task;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
@@ -73,11 +73,11 @@ extends HeaderComposite{
 		this.setLayoutData(new GridData(GridData.FILL_HORIZONTAL|GridData.HORIZONTAL_ALIGN_CENTER));
 		this.getGridLayout().numColumns = 1;
 
-		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);		
+		infoStatuesContainerComp = new XComposite(this, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.NONE);
 		RowLayout rowLayout = new RowLayout();
 		rowLayout.wrap = true;
 		rowLayout.pack = false;
-		rowLayout.marginLeft = 0;	
+		rowLayout.marginLeft = 0;
 		infoStatuesContainerComp.setLayout(rowLayout);
 
 		currentStateComposite = new CurrentStateComposite(infoStatuesContainerComp , SWT.WRAP |SWT.NONE);
@@ -151,7 +151,7 @@ extends HeaderComposite{
 
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_NONE))
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),true);
-		else				
+		else
 		{
 			setWidgetExcluded((GridData) statusMsg.getLayoutData(),false);
 
@@ -176,29 +176,29 @@ extends HeaderComposite{
 
 		date  = recurringOffer.getRecurringOfferConfiguration().getCreatorTask().getNextExecDT();
 		if(date != null)
-		{	
+		{
 			nextTaskDateLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.nextTask") + DateFormatter.formatDate(date, DateFormatter.FLAGS_DATE_SHORT_TIME_HM)); //$NON-NLS-1$
 			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),false);
 
 		}
-		else		
+		else
 			setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);
 
 		if(recurringOffer.getStatusKey().equals(RecurringOffer.STATUS_KEY_SUSPENDED))
-		setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);	
-				
+		setWidgetExcluded((RowData) nextTaskDateLabel.getLayoutData(),true);
+
 		recurredOfferCount.setText(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.label.text.recurredOffers") + String.valueOf(recurringOffer.getRecurredOfferCount())); //$NON-NLS-1$
 
 	}
 
 	private void setWidgetExcluded(RowData data , boolean exclude)
 	{
-		data.exclude = exclude;	
+		data.exclude = exclude;
 	}
 
 	private void setWidgetExcluded(GridData data , boolean exclude)
 	{
-		data.exclude = exclude;	
+		data.exclude = exclude;
 	}
 
 	private void onOfferModified(final RecurringOffer recurringOffer, ProgressMonitor monitor)
@@ -218,7 +218,7 @@ extends HeaderComposite{
 			});
 		} finally {
 			monitor.done();
-		}	
+		}
 
 	}
 
@@ -249,7 +249,7 @@ extends HeaderComposite{
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+					TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					if (JbpmConstantsRecurringOffer.Vendor.TRANSITION_NAME_START_RECURRENCE.equals(event.getTransition().getJbpmTransitionName()))
 					{
@@ -260,7 +260,7 @@ extends HeaderComposite{
 							nextTransitionComposite.getDisplay().asyncExec(new Runnable() {
 								public void run() {
 									MessageDialog.openError(getDisplay().getActiveShell(), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.dialog.title"), Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.recurring.RecurringOfferHeaderComposite.dialog.message")); //$NON-NLS-1$ //$NON-NLS-2$
-									nextTransitionComposite.setEnabled(true);				
+									nextTransitionComposite.setEnabled(true);
 								}
 							});
 						}

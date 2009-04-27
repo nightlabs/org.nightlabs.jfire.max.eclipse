@@ -35,12 +35,12 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -256,7 +256,7 @@ extends ArticleContainerEditorPage
 
 	public static ArticleContainerEditorInput createEditorInput()
 	{
-		TradeManager tm;
+		TradeManagerRemote tm;
 		try {
 			try {
 				Login.getLogin();
@@ -270,7 +270,7 @@ extends ArticleContainerEditorPage
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()); // TODO async!
 
-				tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					// by default get the customerID of the anonymous customer
 					AnchorID customerID = (AnchorID) JDOHelper.getObjectId(
 						LegalEntityDAO.sharedInstance().getAnonymousLegalEntity(
@@ -329,7 +329,7 @@ extends ArticleContainerEditorPage
 
 	protected void assignToCustomer(LegalEntity legalEntity)
 	{
-		TradeManager tm = TradePlugin.getDefault().getTradeManager();
+		TradeManagerRemote tm = TradePlugin.getDefault().getTradeManager();
 		AnchorID customerID = (AnchorID) JDOHelper.getObjectId(legalEntity);
 		OrderID orderID = (OrderID) getArticleContainerEdit().getArticleContainerID();
 		try {

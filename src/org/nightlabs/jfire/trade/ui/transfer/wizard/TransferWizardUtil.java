@@ -52,11 +52,11 @@ import org.nightlabs.ModuleException;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.datastructure.Pair;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
@@ -66,7 +66,7 @@ import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryData;
 import org.nightlabs.jfire.store.deliver.ModeOfDeliveryFlavour;
@@ -98,10 +98,10 @@ public class TransferWizardUtil
 //
 //	private static StoreManager storeManager = null;
 
-	public static AccountingManager getAccountingManager()
+	public static AccountingManagerRemote getAccountingManager()
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
-		return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+		return JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //
 //		if (accountingManager == null)
 //			accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
@@ -109,10 +109,10 @@ public class TransferWizardUtil
 //		return accountingManager;
 	}
 
-	public static StoreManager getStoreManager()
+	public static StoreManagerRemote getStoreManager()
 	throws RemoteException, LoginException, CreateException, NamingException
 	{
-		return JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+		return JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //
 //		if (storeManager == null)
 //			storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
@@ -292,13 +292,13 @@ public class TransferWizardUtil
 				transferResult = payAndDeliver(shell, null, deliveryTuples, deliveryWizard);
 			} else {
 				// TODO: FIXME: This case is not really clearly implemented
-				// The wizard used by payAndDeliver is only for the error-handler, 
-				// but if payment end delivery wizards are set it is not defined which one to use 
+				// The wizard used by payAndDeliver is only for the error-handler,
+				// but if payment end delivery wizards are set it is not defined which one to use
 				TransferWizard wiz = null;
 				if (paymentWizard != null)
 					wiz = paymentWizard;
 				else
-					wiz = deliveryWizard;				
+					wiz = deliveryWizard;
 				transferResult = payAndDeliver(shell, paymentTuples, deliveryTuples, wiz);
 			}
 		}
@@ -333,7 +333,7 @@ public class TransferWizardUtil
 				for (Pair<DeliveryData, ClientDeliveryProcessor> deliveryPair : deliveryTuples) {
 					DeliveryData deliveryData = deliveryPair.getFirst();
 
-					StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, SecurityReflector.getInitialContextProperties());
+					StoreManagerRemote storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, SecurityReflector.getInitialContextProperties());
 					if (deliveryData.getDelivery().isSuccessfulAndComplete()) {
 						DeliveryID deliveryID = DeliveryID.create(deliveryData.getDelivery().getOrganisationID(), deliveryData.getDelivery().getDeliveryID());
 						Delivery delivery = storeManager.getDelivery(deliveryID, new String[] { Delivery.FETCH_GROUP_DELIVERY_NOTE_IDS }, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);

@@ -66,11 +66,11 @@ import org.nightlabs.base.ui.wizard.IWizardHopPage;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.config.Config;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.CheckRequirementsEnvironment;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.deliver.DeliveryConfiguration;
@@ -244,13 +244,13 @@ implements IDeliveryEntryPage
 
 	protected static String sessionLastSelectedMOPFPK = null;
 
-	private StoreManager storeManager = null;
+	private StoreManagerRemote storeManager = null;
 
-	protected StoreManager getStoreManager()
+	protected StoreManagerRemote getStoreManager()
 		throws RemoteException, LoginException, CreateException, NamingException
 	{
 		if (storeManager == null)
-			storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 		return storeManager;
 	}
@@ -534,9 +534,10 @@ implements IDeliveryEntryPage
 				DeliveryWizard deliveryWizard = (DeliveryWizard) getWizard();
 				final List<ModeOfDeliveryFlavour> modeOfDeliveryFlavours = new ArrayList<ModeOfDeliveryFlavour>();
 
+				Set<ProductTypeID> ptids = NLJDOHelper.getObjectIDSet(productTypes);
 				ModeOfDeliveryFlavourProductTypeGroupCarrier carrier = getStoreManager().getModeOfDeliveryFlavourProductTypeGroupCarrier(
 //						deliveryWizard.getProductTypeIDs(), // this is wrong, since it loads the ModeOfDeliveryFlavours for all productTypes of the whole wizard!
-						NLJDOHelper.getObjectIDSet(productTypes), // only the productTypeIDs for this one page! not for all!
+						ptids, // only the productTypeIDs for this one page! not for all!
 						deliveryWizard.getCustomerGroupIDs(),
 						ModeOfDeliveryFlavour.MERGE_MODE_SUBTRACTIVE,
 						true,

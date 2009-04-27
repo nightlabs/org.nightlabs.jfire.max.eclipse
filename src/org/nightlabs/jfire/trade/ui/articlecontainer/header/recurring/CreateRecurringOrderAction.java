@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.config.TradeConfigModule;
@@ -20,8 +21,7 @@ import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.id.SegmentTypeID;
 import org.nightlabs.jfire.trade.recurring.RecurringOffer;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerRemote;
 import org.nightlabs.jfire.trade.recurring.dao.RecurringOfferDAO;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
@@ -48,14 +48,14 @@ public class CreateRecurringOrderAction extends Action {
 
 	@Override
 	public void run()
-	{ 
+	{
 		Job createOrderJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction.job.creatingOrder")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.CreateOrderAction.task.creatingOrder"), 100); //$NON-NLS-1$
 				try {
 
-					RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					RecurringTradeManagerRemote rtm = JFireEjb3Factory.getRemoteBean(RecurringTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					TradeConfigModule tradeConfigModule = ConfigUtil.getUserCfMod(
 							TradeConfigModule.class,
@@ -71,15 +71,15 @@ public class CreateRecurringOrderAction extends Action {
 
 
 					RecurringOrder recurringOrder = rtm.createSaleRecurringOrder(customerID, null,
-							tradeConfigModule.getCurrencyID(), new SegmentTypeID[] { null }, 
-							new String[] { RecurringOrder.FETCH_GROUP_THIS_ORDER }, 
+							tradeConfigModule.getCurrencyID(), new SegmentTypeID[] { null },
+							new String[] { RecurringOrder.FETCH_GROUP_THIS_ORDER },
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 					OrderID orderID = (OrderID) JDOHelper.getObjectId(recurringOrder);
 
 					final RecurringOffer recurringOffer = rtm.createRecurringOffer(
-							orderID, null, 
-							new String[] {FetchPlan.DEFAULT, RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION}, 
+							orderID, null,
+							new String[] {FetchPlan.DEFAULT, RecurringOffer.FETCH_GROUP_RECURRING_OFFER_CONFIGURATION},
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 
 					recurringOffer.getRecurringOfferConfiguration().setCreateInvoice(true);
@@ -89,7 +89,7 @@ public class CreateRecurringOrderAction extends Action {
 
 					monitor.worked(85);
 					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {			
+						public void run() {
 							HeaderTreeComposite.openEditor(new ArticleContainerEditorInput((OfferID)JDOHelper.getObjectId(recurringOffer)));
 						}
 					});

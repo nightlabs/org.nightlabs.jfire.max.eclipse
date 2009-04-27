@@ -40,24 +40,24 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.Delivery;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -117,8 +117,8 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 			long amountToPay = 0;
 
-			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
-			for (Article article : (Collection<Article>) tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
+			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+			for (Article article : tradeManager.getArticles(articleIDs, FETCH_GROUPS_ARTICLES, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT)) {
 				if (isPaymentEnabled()) {
 					if (invoiceIDs == null)
 						invoiceIDs = new HashSet<InvoiceID>();
@@ -188,7 +188,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	{
 		return invoiceIDs;
 	}
-	
+
 	/**
 	 * This should be set if a subclass overrides {@link #loadData()}.
 	 * @param deliveryNoteIDs The invoice ids to set.
@@ -205,7 +205,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 	{
 		return deliveryNoteIDs;
 	}
-	
+
 	/**
 	 * This should be set if a subclass overrides {@link #loadData()}.
 	 * @param deliveryNoteIDs The delivery note ids to set.
@@ -249,7 +249,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 						monitor.worked(1);
 						if (articlesToCreateInvoiceFor != null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
-								AccountingManager accountingManager = TransferWizardUtil.getAccountingManager();
+								AccountingManagerRemote accountingManager = TransferWizardUtil.getAccountingManager();
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
 								Invoice invoice = accountingManager.createInvoice(articlesToCreateInvoiceFor, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								InvoiceID invoiceID = (InvoiceID) JDOHelper.getObjectId(invoice);
@@ -261,7 +261,7 @@ public class CombiTransferArticlesWizard extends AbstractCombiTransferWizard
 
 						if (articlesToCreateDeliveryNoteFor != null) {
 							if ((getTransferMode() & TRANSFER_MODE_DELIVERY) != 0) {
-								StoreManager storeManager = TransferWizardUtil.getStoreManager();
+								StoreManagerRemote storeManager = TransferWizardUtil.getStoreManager();
 //						 FIXME IDPREFIX (next line) should be asked from user if necessary!
 								DeliveryNote deliveryNote = storeManager.createDeliveryNote(articlesToCreateDeliveryNoteFor, null, true, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								DeliveryNoteID deliveryNoteID = (DeliveryNoteID) JDOHelper.getObjectId(deliveryNote);

@@ -40,16 +40,14 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.recurring.RecurringOrder;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManager;
-import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerUtil;
+import org.nightlabs.jfire.trade.recurring.RecurringTradeManagerRemote;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -78,15 +76,15 @@ public class CreateOfferAction extends Action
 					OrderID orderID = (OrderID) JDOHelper.getObjectId(orderTreeNode.getArticleContainer());
 					Offer offer = null;
 //					FIXME IDPREFIX (null-parameter for create*Offer() methods) should be asked from user if necessary!
-					final boolean recurring = orderTreeNode.getArticleContainer() instanceof RecurringOrder; 
+					final boolean recurring = orderTreeNode.getArticleContainer() instanceof RecurringOrder;
 					if (recurring) {
-						RecurringTradeManager rtm = RecurringTradeManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+						RecurringTradeManagerRemote rtm = JFireEjb3Factory.getRemoteBean(RecurringTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 						offer = rtm.createRecurringOffer(orderID, null, null, 1);
 					} else {
-						TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+						TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 						offer = tradeManager.createOffer(orderID, null, null, 1);
 					}
-					
+
 					if (offer != null) {
 						final OfferID offerID = (OfferID) JDOHelper.getObjectId(offer);
 						Display.getDefault().asyncExec(new Runnable() {
@@ -98,12 +96,12 @@ public class CreateOfferAction extends Action
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
-				
+
 				return Status.OK_STATUS;
 			}
 		};
 		createOrderJob.schedule();
-		
+
 	}
 
 	public static class CreateOfferViewActionDelegate implements IViewActionDelegate

@@ -37,7 +37,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.jbpm.ui.state.CurrentStateComposite;
@@ -45,7 +45,7 @@ import org.nightlabs.jfire.jbpm.ui.transition.next.NextTransitionComposite;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalEvent;
 import org.nightlabs.jfire.jbpm.ui.transition.next.SignalListener;
 import org.nightlabs.jfire.store.DeliveryNote;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.jbpm.JbpmConstantsDeliveryNote;
@@ -140,7 +140,7 @@ extends HeaderComposite
 			protected IStatus run(ProgressMonitor monitor)
 			{
 				try {
-					StoreManager sm = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+					StoreManagerRemote sm = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					sm.signalDeliveryNote((DeliveryNoteID)JDOHelper.getObjectId(deliveryNote), event.getTransition().getJbpmTransitionName());
 				} catch (Exception x) {
 					throw new RuntimeException(x);

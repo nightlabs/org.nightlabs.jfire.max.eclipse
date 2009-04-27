@@ -26,8 +26,8 @@
 
 package org.nightlabs.jfire.trade.ui.accounting;
 
-import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 
 /**
@@ -39,9 +39,10 @@ public class AccountingUtil {
 	/**
 	 * Returns an AccountingManager instance (usually a shared one).
 	 */
-	public static AccountingManager getAccountingManager() {
+	@Deprecated
+	public static AccountingManagerRemote getAccountingManager() {
 		try {
-			return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

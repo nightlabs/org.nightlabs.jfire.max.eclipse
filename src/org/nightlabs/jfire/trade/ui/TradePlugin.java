@@ -29,13 +29,13 @@ package org.nightlabs.jfire.trade.ui;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Invoice;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
@@ -229,10 +229,10 @@ extends AbstractUIPlugin
 	/**
 	 * Returns a localized string that represents the type of {@link ArticleContainer} passed.
 	 * The type strings are taken from the resource-bundle in this plug-ins resource package,
-	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with 
+	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with
 	 * $prefix$ = <code>jfire.trade.ui.TradePlugin.articleContainer.l10n</code> and
-	 * $suffix$ = <code>typeString</code>.  
-	 * 
+	 * $suffix$ = <code>typeString</code>.
+	 *
 	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
 	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
 	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
@@ -251,18 +251,18 @@ extends AbstractUIPlugin
 			acTypeString = articleContainerClass.getSimpleName();
 		}
 		if (capitalize && acTypeString.length() > 0) {
-			acTypeString = acTypeString.substring(0, 1).toUpperCase() + acTypeString.substring(1); 
+			acTypeString = acTypeString.substring(0, 1).toUpperCase() + acTypeString.substring(1);
 		}
 		return acTypeString;
 	}
-	
+
 	/**
 	 * Returns an image descriptor for the type of {@link ArticleContainer} passed.
 	 * The paths to the icons are taken from the resource-bundle in this plug-ins resource package,
-	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with 
+	 * the name pattern is $prefix$.ArticleContainerClass.$suffix$ with
 	 * $prefix$ = <code>jfire.trade.ui.TradePlugin.articleContainer.l10n</code> and
-	 * $suffix$ = <code>icon</code>.  
-	 * 
+	 * $suffix$ = <code>icon</code>.
+	 *
 	 * @param articleContainerClass The class of {@link ArticleContainer} to get the type string for.
 	 * @param capitalize If <code>true</code> the first letter of the type string will be upper case.
 	 * @return A localized string that represents the type of {@link ArticleContainer} passed.
@@ -278,37 +278,40 @@ extends AbstractUIPlugin
 		}
 		return AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, iconPath);
 	}
-	
+
 	private static String getMessageKey(String key) {
 		if (Messages.RESOURCE_BUNDLE.containsKey(key))
 			return Messages.RESOURCE_BUNDLE.getString(key);
 		return null;
 	}
-	
-	public TradeManager getTradeManager()
+
+	@Deprecated
+	public TradeManagerRemote getTradeManager()
 	{
 		try {
-			return JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public StoreManager getStoreManager()
+	@Deprecated
+	public StoreManagerRemote getStoreManager()
 	{
 		try {
-			return JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public AccountingManager getAccountingManager()
+	@Deprecated
+	public AccountingManagerRemote getAccountingManager()
 	{
 		try {
-			return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

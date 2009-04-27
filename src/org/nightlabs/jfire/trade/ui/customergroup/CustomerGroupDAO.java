@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.jdo.cache.Cache;
 import org.nightlabs.jfire.base.ui.jdo.JDOObjectDAO;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.CustomerGroup;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 
 public class CustomerGroupDAO
@@ -35,14 +35,14 @@ public class CustomerGroupDAO
 			IProgressMonitor monitor)
 			throws Exception
 	{
-		TradeManager tm = tradeManager;
+		TradeManagerRemote tm = tradeManager;
 		if (tm == null)
-			tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 		return tm.getCustomerGroups(customerGroupIDs, fetchGroups, maxFetchDepth);
 	}
 
-	private TradeManager tradeManager;
+	private TradeManagerRemote tradeManager;
 
 	public List<CustomerGroup> getCustomerGroups(String[] fetchGroups, int maxFetchDepth, IProgressMonitor monitor)
 	{
@@ -61,7 +61,7 @@ public class CustomerGroupDAO
 	public synchronized List<CustomerGroup> getCustomerGroups(String organisationID, boolean inverse, String[] fetchGroups, int maxFetchDepth, IProgressMonitor monitor)
 	{
 		try {
-			tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			try {
 				Set<CustomerGroupID> customerGroupIDs = tradeManager.getCustomerGroupIDs(organisationID, inverse);
 				return getJDOObjects(null, customerGroupIDs, fetchGroups, maxFetchDepth, monitor);
@@ -81,7 +81,7 @@ public class CustomerGroupDAO
 	public CustomerGroup storeCustomerGroup(CustomerGroup customerGroup, boolean get, String[] fetchGroups, int maxFetchDepth, IProgressMonitor monitor)
 	{
 		try {
-			TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			CustomerGroup cg = tm.storeCustomerGroup(customerGroup, get, fetchGroups, maxFetchDepth);
 			if (cg != null)

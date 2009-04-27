@@ -41,18 +41,18 @@ import javax.jdo.JDOHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.Invoice;
 import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.dao.InvoiceDAO;
 import org.nightlabs.jfire.accounting.id.InvoiceID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.DeliveryNote;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.store.id.ProductTypeID;
@@ -61,7 +61,7 @@ import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OfferID;
@@ -305,7 +305,7 @@ extends AbstractCombiTransferWizard
 			articlesToTransfer.clear();
 
 			if (offerID != null) {
-				TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 				offer = tradeManager.getOffer(offerID, FETCH_GROUPS_OFFER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				articleContainer = offer;
 
@@ -328,7 +328,7 @@ extends AbstractCombiTransferWizard
 				}
 			}
 			else if (orderID != null) {
-				TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 				order = tradeManager.getOrder(orderID, FETCH_GROUPS_ORDER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				articleContainer = order;
 
@@ -442,7 +442,7 @@ extends AbstractCombiTransferWizard
 						monitor.worked(1);
 						if (invoiceIDs == null) {
 							if ((getTransferMode() & TRANSFER_MODE_PAYMENT) != 0) {
-								AccountingManager accountingManager = TransferWizardUtil.getAccountingManager();
+								AccountingManagerRemote accountingManager = TransferWizardUtil.getAccountingManager();
 								invoiceIDs = new ArrayList<InvoiceID>(1);
 								if (invoiceID != null)
 									invoiceIDs.add(invoiceID);
@@ -473,7 +473,7 @@ extends AbstractCombiTransferWizard
 							}
 
 							if (articlesWithoutDeliveryNote != null) {
-								StoreManager storeManager = TransferWizardUtil.getStoreManager();
+								StoreManagerRemote storeManager = TransferWizardUtil.getStoreManager();
 //							 FIXME IDPREFIX (next line) should be asked from user if necessary!
 								DeliveryNote createdNote = storeManager.createDeliveryNote(articleContainerID, null, true, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 								deliveryNoteIDs.add((DeliveryNoteID) JDOHelper.getObjectId(createdNote));

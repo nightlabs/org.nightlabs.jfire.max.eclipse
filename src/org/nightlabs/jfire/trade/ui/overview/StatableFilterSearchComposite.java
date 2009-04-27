@@ -40,10 +40,10 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
 import org.nightlabs.jdo.query.AbstractSearchQuery.FieldChangeCarrier;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.base.ui.search.AbstractQueryFilterComposite;
-import org.nightlabs.jfire.jbpm.JbpmManager;
-import org.nightlabs.jfire.jbpm.JbpmManagerUtil;
+import org.nightlabs.jfire.jbpm.JbpmManagerRemote;
 import org.nightlabs.jfire.jbpm.dao.ProcessDefinitionDAO;
 import org.nightlabs.jfire.jbpm.dao.StateDefinitionDAO;
 import org.nightlabs.jfire.jbpm.graph.def.ProcessDefinition;
@@ -52,8 +52,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.jbpm.graph.def.id.ProcessDefinitionID;
 import org.nightlabs.jfire.jbpm.graph.def.id.StateDefinitionID;
 import org.nightlabs.jfire.jbpm.query.StatableQuery;
-import org.nightlabs.jfire.trade.TradeManager;
-import org.nightlabs.jfire.trade.ui.TradePlugin;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.l10n.DateFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -334,8 +333,8 @@ public class StatableFilterSearchComposite
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				try {
-					TradeManager tradeManager =	TradePlugin.getDefault().getTradeManager();
-					JbpmManager jbpmManager = JbpmManagerUtil.getHome(Login.getLogin().getInitialContextProperties()).create();
+					TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+					JbpmManagerRemote jbpmManager = JFireEjb3Factory.getRemoteBean(JbpmManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					// TODO: add workflow selection so that only the processdefiniton for the given workflow
 					Set<ProcessDefinitionID> processDefinitionIDs = tradeManager.getProcessDefinitionIDs(statableClassName);

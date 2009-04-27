@@ -1,6 +1,5 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -212,29 +211,26 @@ public abstract class AbstractProductTypeSearchComposite
 				configureQuery(productTypeQuery, searchStr);
 
 				Set<ProductTypeID> productTypeIDs;
-				try {
-					productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(
-							queryProvider.getManagedQueries());
-					final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
-							productTypeIDs,
-							getFetchGroups(),
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-							new ProgressMonitorWrapper(monitor));
+				QueryCollection<?> q1 = queryProvider.getManagedQueries();
+				QueryCollection<? extends AbstractProductTypeQuery> q = (QueryCollection<? extends AbstractProductTypeQuery>) q1;
+				productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(q);
+				final Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
+						productTypeIDs,
+						getFetchGroups(),
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new ProgressMonitorWrapper(monitor));
 
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							if (productTypeTableComposite != null && !productTypeTableComposite.isDisposed()) {
-								productTypeTableComposite.setInput(productTypes);
-								if (productTypeTableComposite.getItemCount() == 1) {
-									productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
-									productTypeTableComposite.setFocus();
-								}
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (productTypeTableComposite != null && !productTypeTableComposite.isDisposed()) {
+							productTypeTableComposite.setInput(productTypes);
+							if (productTypeTableComposite.getItemCount() == 1) {
+								productTypeTableComposite.setSelection(new StructuredSelection(productTypes));
+								productTypeTableComposite.setFocus();
 							}
 						}
-					});
-				} catch (RemoteException e) {
-					throw new RuntimeException(e);
-				}
+					}
+				});
 				return Status.OK_STATUS;
 			}
 		};
@@ -257,17 +253,13 @@ public abstract class AbstractProductTypeSearchComposite
 			ProgressMonitor monitor)
 	{
 		Set<ProductTypeID> productTypeIDs;
-		try {
-			productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(queries);
-			Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
-					productTypeIDs,
-					getFetchGroups(),
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-					monitor);
-			return productTypes;
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		}
+		productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(queries);
+		Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
+				productTypeIDs,
+				getFetchGroups(),
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				monitor);
+		return productTypes;
 	}
 
 	private DefaultQueryProvider<AbstractSearchQuery> queryProvider;

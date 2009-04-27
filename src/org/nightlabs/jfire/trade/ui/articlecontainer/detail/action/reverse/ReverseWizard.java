@@ -33,11 +33,11 @@ import java.util.Iterator;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
@@ -73,12 +73,12 @@ public class ReverseWizard extends DynamicPathWizard
 		addPage(selectOfferPage);
 	}
 
-	private TradeManager tradeManager = null;
-	protected TradeManager getTradeManager()
+	private TradeManagerRemote tradeManager = null;
+	protected TradeManagerRemote getTradeManager()
 	{
 		if (tradeManager == null) {
 			try {
-				tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			} catch (Exception x) {
 				throw new RuntimeException(x);
 			}

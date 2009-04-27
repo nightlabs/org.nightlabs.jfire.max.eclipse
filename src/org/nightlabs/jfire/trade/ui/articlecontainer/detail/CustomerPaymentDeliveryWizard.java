@@ -4,12 +4,12 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.person.Person;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.id.CustomerGroupID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.legalentity.search.ExtendedPersonSearchWizardPage;
@@ -65,7 +65,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 		// Assign the customer ID
 		setCustomerID((AnchorID) JDOHelper.getObjectId(selectedLegalEntity));
 		try {
-			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			tradeManager.assignCustomer(orderID, getCustomerID(), false, null, -1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -75,7 +75,7 @@ public class CustomerPaymentDeliveryWizard extends CombiTransferArticleContainer
 
 	protected LegalEntity createLegalEntityForPerson(Person person) {
 		try {
-			TradeManager tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManagerRemote tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			String[] fetchGroups = new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_DEFAULT_CUSTOMER_GROUP,	PropertySet.FETCH_GROUP_FULL_DATA };
 			return tradeManager.storePersonAsLegalEntity(person, true, fetchGroups, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Exception e) {

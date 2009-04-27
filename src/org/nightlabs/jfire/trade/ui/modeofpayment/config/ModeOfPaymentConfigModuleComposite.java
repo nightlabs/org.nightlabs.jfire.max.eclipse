@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.modeofpayment.config;
 
@@ -28,11 +28,11 @@ import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.pay.ModeOfPaymentFlavour;
 import org.nightlabs.jfire.accounting.pay.config.ModeOfPaymentConfigModule;
 import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.ui.modeofpayment.ModeOfPaymentFlavourTable;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
@@ -42,7 +42,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * Composite that shows the list of {@link ModeOfPaymentFlavour}s in an {@link ModeOfPaymentConfigModule}.
  * It also allows for the addition and removing of entries.
- * 
+ *
  * @author Alexander Bieber
  * @version $Revision$, $Date$
  */
@@ -52,23 +52,23 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 	 * Used internally when adding entries.
 	 */
 	private class AddDialog extends ResizableTitleAreaDialog {
-		
+
 		private ModeOfPaymentFlavourTable table;
 		private Collection<ModeOfPaymentFlavourID> selectedIDs;
 		private Collection<ModeOfPaymentFlavourID> newIDs;
-		
+
 		public AddDialog(Shell shell, final Collection<ModeOfPaymentFlavourID> selectedIDs) {
 			super(shell, null);
 			this.selectedIDs = selectedIDs;
 		}
-		
+
 		@Override
 		protected Control createDialogArea(Composite parent) {
 			table = new ModeOfPaymentFlavourTable(parent, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
 			Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.0")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
-					AccountingManager am = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+					AccountingManagerRemote am = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					final Set<ModeOfPaymentFlavourID> allIDs = am.getAllModeOfPaymentFlavourIDs();
 					allIDs.removeAll(selectedIDs);
 					table.getDisplay().asyncExec(new Runnable() {
@@ -79,7 +79,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 								public void selectionChanged(SelectionChangedEvent event) {
 									newIDs = NLJDOHelper.getObjectIDSet(table.getSelectedElements());
 								}
-								
+
 							});
 						}
 					});
@@ -97,25 +97,25 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 			});
 			return table;
 		}
-		
+
 		@Override
 		protected void configureShell(Shell newShell) {
 			super.configureShell(newShell);
 			newShell.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.window.title")); //$NON-NLS-1$
 		}
-		
+
 		public Collection<ModeOfPaymentFlavourID> getNewIDs() {
 			return newIDs;
 		}
-		
+
 	}
-	
+
 	private ModeOfPaymentFlavourTable modeOfPaymentFlavourTable;
 	private IDirtyStateManager dirtyStateManager;
-	
+
 	/**
 	 * Construct a new {@link ModeOfPaymentConfigModuleComposite}.
-	 * 
+	 *
 	 * @param parent The parent {@link Composite} to use.
 	 * @param style The style to apply to the composite;
 	 * @param dirtyStateManager The manager to report changes to.
@@ -125,12 +125,12 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		this.dirtyStateManager = dirtyStateManager;
 		getGridLayout().numColumns = 2;
 		getGridLayout().makeColumnsEqualWidth = false;
-		
+
 		modeOfPaymentFlavourTable = new ModeOfPaymentFlavourTable(this, SWT.NONE, AbstractTableComposite.DEFAULT_STYLE_MULTI_BORDER);
-		
+
 		XComposite buttonWrapper = new XComposite(this, SWT.NONE);
 		buttonWrapper.getGridData().grabExcessHorizontalSpace = false;
-		
+
 		Button addButton = new Button(buttonWrapper, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.button.add.text")); //$NON-NLS-1$
@@ -150,7 +150,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 				}
 			}
 		});
-		
+
 		Button removeButton = new Button(buttonWrapper, SWT.PUSH);
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.button.remove.text")); //$NON-NLS-1$
@@ -169,7 +169,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 			}
 		});
 	}
-	
+
 	/**
 	 * Update the given {@link ModeOfPaymentConfigModule} to reflect what is currently shown to the user.
 	 * @param configModule The config module to udpate.
@@ -181,7 +181,7 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 
 	/**
 	 * Update this composite to show the entries of the given {@link ModeOfPaymentConfigModule}.
-	 * @param configModule The config module to represent. 
+	 * @param configModule The config module to represent.
 	 */
 	protected void updateComposite(final ModeOfPaymentConfigModule configModule) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.modeofpayment.config.ModeOfPaymentConfigModuleComposite.job.loadModesOfDelivery")) { //$NON-NLS-1$
@@ -194,5 +194,5 @@ public class ModeOfPaymentConfigModuleComposite extends XComposite {
 		};
 		loadJob.schedule();
 	}
-	
+
 }

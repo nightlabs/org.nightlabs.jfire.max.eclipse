@@ -35,13 +35,13 @@ import javax.jdo.JDOHelper;
 import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.dao.ArticleDAO;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.jfire.transfer.id.AnchorID;
@@ -203,12 +203,12 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 		Article.FETCH_GROUP_CUSTOMER_ID
 	};
 
-	private TradeManager tradeManager = null;
-	protected TradeManager getTradeManager()
+	private TradeManagerRemote tradeManager = null;
+	protected TradeManagerRemote getTradeManager()
 	{
 		try {
 			if (tradeManager == null)
-				tradeManager = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+				tradeManager = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			return tradeManager;
 		} catch (Exception e) {
@@ -216,12 +216,12 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 		}
 	}
 
-	private AccountingManager accountingManager = null;
-	protected AccountingManager getAccountingManager()
+	private AccountingManagerRemote accountingManager = null;
+	protected AccountingManagerRemote getAccountingManager()
 	{
 		try {
 			if (accountingManager == null)
-				accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+				accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			return accountingManager;
 		} catch (Exception e) {
@@ -229,12 +229,12 @@ public abstract class AddToArticleContainerWizard extends DynamicPathWizard
 		}
 	}
 
-	private StoreManager storeManager = null;
-	protected StoreManager getStoreManager()
+	private StoreManagerRemote storeManager = null;
+	protected StoreManagerRemote getStoreManager()
 	{
 		try {
 			if (storeManager == null)
-				storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+				storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			return storeManager;
 		} catch (Exception e) {
