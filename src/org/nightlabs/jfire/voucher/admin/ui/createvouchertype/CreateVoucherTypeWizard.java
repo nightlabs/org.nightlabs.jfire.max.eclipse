@@ -96,6 +96,8 @@ extends DynamicPathWizard
 			voucherType.setPackagePriceConfig(selectVoucherPriceConfigPage.getSelectedPriceConfig());
 			voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).setValueInherited(false);
 			break;
+		case NONE:
+			break;		
 		default:
 			throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
