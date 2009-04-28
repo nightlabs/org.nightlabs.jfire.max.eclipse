@@ -1,11 +1,11 @@
 package org.nightlabs.jfire.reporting.admin.parameter.ui;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
+import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.birt.report.model.api.ModuleHandle;
@@ -67,6 +67,8 @@ import org.nightlabs.base.ui.composite.XComboComposite;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.action.AutoLayoutAction;
 import org.nightlabs.jfire.reporting.admin.parameter.ui.action.AutoLayoutPagesAction;
@@ -78,11 +80,11 @@ import org.nightlabs.jfire.reporting.dao.ReportRegistryItemDAO;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.parameter.ReportParameterManagerRemote;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.config.ReportParameterAcquisitionUseCase;
 import org.nightlabs.jfire.reporting.parameter.config.ValueAcquisitionSetup;
 import org.nightlabs.jfire.reporting.parameter.dao.ReportParameterAcquisitionSetupDAO;
-import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.Util;
 
@@ -94,7 +96,7 @@ public abstract class ReportParameterEditor
 extends GraphicalEditorWithFlyoutPalette
 {
 	private static final Logger logger = Logger.getLogger(ReportParameterEditor.class);
-	
+
 /******************************* Inner class OutlinePage BEGIN *********************************/
 	class OutlinePage
 	extends ContentOutlinePage
@@ -263,12 +265,12 @@ extends GraphicalEditorWithFlyoutPalette
 	}
 
 /******************************* Inner class OutlinePage END *********************************/
-	
+
 	@Override
 	public Object getAdapter(Class type)
 	{
 //		logger.info("type = "+type);
-		
+
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new OutlinePage(new TreeViewer());
 			return outlinePage;
@@ -282,13 +284,13 @@ extends GraphicalEditorWithFlyoutPalette
 			page.setRootEntry(new UndoablePropertySheetEntry(getCommandStack()));
 			return page;
 		}
-		
+
 //		if (type == AttributeView.class) {
 //
 //		}
 		return super.getAdapter(type);
 	}
-	
+
 	private OutlinePage outlinePage;
 
 	protected FigureCanvas getFigureCanvas(){
@@ -309,7 +311,7 @@ extends GraphicalEditorWithFlyoutPalette
 		}
 		return sharedKeyHandler;
 	}
-	
+
 	public ReportParameterEditor() {
 		super();
 	}
@@ -338,16 +340,16 @@ extends GraphicalEditorWithFlyoutPalette
 	{
 		if (setupProvider == null)
 			setupProvider = new ValueAcquisitionSetupProvider(getValueAcquisitionSetup());
-		
+
 		return setupProvider;
 	}
-	
+
 	private ValueAcquisitionSetup currentSetup;
 	public ValueAcquisitionSetup getValueAcquisitionSetup()
 	{
 		if (currentSetup != null)
 			return currentSetup;
-		
+
 		if (reportParameterAcquisitionSetup != null) {
 			if (reportParameterAcquisitionSetup.getDefaultSetup() != null) {
 				currentSetup = reportParameterAcquisitionSetup.getDefaultSetup();
@@ -399,7 +401,7 @@ extends GraphicalEditorWithFlyoutPalette
 			currentSetup = valueAcquisitionSetup;
 //			return currentSetup;
 		}
-		
+
 		getSetupProvider().setValueAcquisitionSetup(currentSetup);
 		return currentSetup;
 	}
@@ -412,7 +414,7 @@ extends GraphicalEditorWithFlyoutPalette
 				reportParameterAcquisitionSetup,
 				useCase);
 	}
-	
+
 	@Override
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
@@ -434,7 +436,10 @@ extends GraphicalEditorWithFlyoutPalette
 	public void doSave(IProgressMonitor monitor)
 	{
 		try {
-			reportParameterAcquisitionSetup = ReportingPlugin.getReportParameterManager().storeReportParameterAcquisitionSetup(
+			ReportParameterManagerRemote rpm = JFireEjb3Factory.getRemoteBean(ReportParameterManagerRemote.class,
+					Login.getLogin().getInitialContextProperties()
+				);
+			reportParameterAcquisitionSetup = rpm.storeReportParameterAcquisitionSetup(
 					reportParameterAcquisitionSetup,
 					true,
 					ReportParameterAcquisitionSetupDAO.DEFAULT_FETCH_GROUPS,
@@ -442,7 +447,7 @@ extends GraphicalEditorWithFlyoutPalette
 			getCommandStack().markSaveLocation();
 			currentSetup = null;
 			getGraphicalViewer().setContents(getValueAcquisitionSetup());
-		} catch (RemoteException e) {
+		} catch (LoginException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -469,13 +474,13 @@ extends GraphicalEditorWithFlyoutPalette
 		getRootEditPart().getZoomManager().setZoomLevelContributions(zoomLevels);
 		viewer.setRootEditPart(getRootEditPart());
 		viewer.setEditPartFactory(getEditPartFactory());
-		
+
 		// configure the context menu provider
 		ContextMenuProvider cmProvider =
 				new ReportParameterContextMenuProvider(viewer, getActionRegistry());
 		viewer.setContextMenu(cmProvider);
 		getSite().registerContextMenu(cmProvider, viewer);
-		
+
 //		doAutoLayout();
 	}
 
@@ -523,15 +528,15 @@ extends GraphicalEditorWithFlyoutPalette
 		super.createActions();
 		ActionRegistry registry = getActionRegistry();
 		IAction action;
-		
+
 		action = new AutoLayoutAction(this);
 		registry.registerAction(action);
 		getPropertyActions().add(action.getId());
-		
+
 		action = new AutoLayoutPagesAction(this);
 		registry.registerAction(action);
 		getPropertyActions().add(action.getId());
-		
+
 //		action = new UndoAction(this);
 //		registry.registerAction(action);
 //		getStackActions().add(action.getId());
@@ -554,9 +559,9 @@ extends GraphicalEditorWithFlyoutPalette
 //		action = new PrintAction(this);
 //		registry.registerAction(action);
 	}
-	
+
 	public abstract ModuleHandle getReportHandle();
-	
+
 	public void doAutoLayout() {
 //		getActionRegistry().getAction(AutoLayoutAction.ID).run();
 	}
@@ -570,13 +575,13 @@ extends GraphicalEditorWithFlyoutPalette
 	private Button editUseCaseButton = null;
 	private Button showXMLInitializationCode = null;
 	private Composite parent = null;
-		
+
 	@Override
 	public void createPartControl(Composite parent)
 	{
 		this.parent = parent;
 		wrapper = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		
+
 		topWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		topWrapper.setLayout(new GridLayout(5, false));
 		topWrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -595,7 +600,7 @@ extends GraphicalEditorWithFlyoutPalette
 		newUseCaseButton = new Button(topWrapper, SWT.NONE);
 		newUseCaseButton.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor.newUseCaseButton.text")); //$NON-NLS-1$
 		newUseCaseButton.addSelectionListener(newUseCaseButtonListener);
-		
+
 		showXMLInitializationCode = new Button(topWrapper, SWT.PUSH);
 		showXMLInitializationCode.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -607,19 +612,19 @@ extends GraphicalEditorWithFlyoutPalette
 		});
 		showXMLInitializationCode.setText(Messages.getString("org.nightlabs.jfire.reporting.admin.parameter.ui.ReportParameterEditor.showXMLInitializationCodeButton.text")); //$NON-NLS-1$
 		showXMLInitializationCode.setLayoutData(new GridData());
-		
+
 		for (Map.Entry<ReportParameterAcquisitionUseCase, ValueAcquisitionSetup> entry : reportParameterAcquisitionSetup.getValueAcquisitionSetups().entrySet()) {
 			if (entry.getValue().equals(reportParameterAcquisitionSetup.getDefaultSetup())) {
 				useCaseCombo.selectElement(entry.getKey());
 			}
 		}
 		defaultUseCaseButton.setSelection(true);
-		
+
 		contentWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		contentWrapper.setLayout(new FillLayout());
 		super.createPartControl(contentWrapper);
 	}
-		
+
 	private ILabelProvider useCaseLabelProvider = new LabelProvider() {
 		@Override
 		public String getText(Object element)
@@ -631,7 +636,7 @@ extends GraphicalEditorWithFlyoutPalette
 			return super.getText(element);
 		}
 	};
-	
+
 	private ISelectionChangedListener useCaseComboListener = new ISelectionChangedListener(){
 		public void selectionChanged(SelectionChangedEvent event) {
 			ReportParameterAcquisitionUseCase useCase = useCaseCombo.getSelectedElement();
@@ -642,12 +647,12 @@ extends GraphicalEditorWithFlyoutPalette
 					defaultUseCaseButton.setSelection(true);
 				else
 					defaultUseCaseButton.setSelection(false);
-				
+
 				setCurrentValueAcquisitionSetup(setup);
 			}
 		}
 	};
-	
+
 	private SelectionListener defaultUseCaseButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			reportParameterAcquisitionSetup.setDefaultSetup(currentSetup);
@@ -656,7 +661,7 @@ extends GraphicalEditorWithFlyoutPalette
 			widgetSelected(e);
 		}
 	};
-	
+
 	private SelectionListener editUseCaseButtonListener = new SelectionListener(){
 		public void widgetSelected(SelectionEvent e) {
 			UseCaseDialog dialog = new UseCaseDialog(getSite().getShell(),
@@ -691,12 +696,12 @@ extends GraphicalEditorWithFlyoutPalette
 			widgetSelected(e);
 		}
 	};
-	
+
 	protected void setCurrentValueAcquisitionSetup(ValueAcquisitionSetup setup)
 	{
 		this.currentSetup = setup;
 		getSetupProvider().setValueAcquisitionSetup(currentSetup);
-		
+
 		JFireRemoteReportEditorInput oldInput = (JFireRemoteReportEditorInput) getEditorInput();
 		IEditorInput input = new JFireRemoteReportEditorInput(oldInput.getReportRegistryItemID());
 		try {
@@ -706,19 +711,19 @@ extends GraphicalEditorWithFlyoutPalette
 			getGraphicalViewer().getControl().dispose();
 			contentWrapper.dispose();
 			dispose();
-			
+
 			init((IEditorSite)getSite(), input);
 
 //			if (getSite().getWorkbenchWindow().getSelectionService() instanceof AbstractSelectionService) {
 //				AbstractSelectionService service = (AbstractSelectionService) getSite().getWorkbenchWindow().getSelectionService();
 //				service.setActivePart(getEditorSite().getPart());
 //			}
-			
+
 			contentWrapper = new XComposite(wrapper, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			contentWrapper.setLayout(new FillLayout());
 			super.createPartControl(contentWrapper);
 			parent.layout(true, true);
-			
+
 //			DefaultEditDomain domain = (DefaultEditDomain) getEditDomain();
 			getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		} catch (PartInitException e) {
