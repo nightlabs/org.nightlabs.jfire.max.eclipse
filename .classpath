@@ -5,16 +5,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireTrade"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireSimpleTrade"/>
-	<classpathentry kind="var" path="JDO2" sourcepath="/JDO2_SRC">
-		<attributes>
-			<attribute name="javadoc_location" value="http://db.apache.org/jdo/api22/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsBase"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseBean"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseDAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
