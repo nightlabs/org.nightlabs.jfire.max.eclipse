@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.dynamictrade.admin.ui.priceconfig;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +23,7 @@ import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.DimensionValueSelector
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.ProductTypeSelector;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.Util;
 
 public class PriceConfigComposite
@@ -35,7 +37,6 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 		super(parent, dirtyStateManager);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
@@ -43,11 +44,15 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 			// We clear the packaging result price configs for optimisation reasons (prevent transferring to the server).
 			// They are cleared in any case during pre-attach and pre-store of DynamicTradePriceConfig.
 			Collection<P> clonedPCs = Util.cloneSerializable(priceConfigs);
+			Collection<DynamicTradePriceConfig> dynamicTradePriceConfigs = new ArrayList<DynamicTradePriceConfig>(clonedPCs.size());
 			for (P priceConfig : clonedPCs) {
-				((DynamicTradePriceConfig) priceConfig).clearPackagingResultPriceConfigs();
+				DynamicTradePriceConfig dtpc = (DynamicTradePriceConfig) priceConfig;
+				dtpc.clearPackagingResultPriceConfigs();
+				dynamicTradePriceConfigs.add(dtpc);
 			}
 			DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			return dtm.storeDynamicTradePriceConfigs(clonedPCs, true, assignInnerPriceConfigCommand);
+			dynamicTradePriceConfigs = dtm.storeDynamicTradePriceConfigs(dynamicTradePriceConfigs, true, assignInnerPriceConfigCommand);
+			return CollectionUtil.castCollection(dynamicTradePriceConfigs);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
