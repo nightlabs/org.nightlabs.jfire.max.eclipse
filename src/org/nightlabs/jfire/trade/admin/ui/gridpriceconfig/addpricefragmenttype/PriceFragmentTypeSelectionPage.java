@@ -50,9 +50,9 @@ import org.nightlabs.base.ui.exceptionhandler.ExceptionHandlerRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardPage;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.PriceFragmentType;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 
@@ -118,7 +118,7 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					AccountingManager accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+					AccountingManagerRemote accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					priceFragmentTypes.clear();
 					// TODO not ALL!
 					// TODO use DAO
@@ -138,12 +138,12 @@ public class PriceFragmentTypeSelectionPage extends DynamicPathWizardPage
 				});
 				return Status.OK_STATUS;
 			}
-			
+
 		};
 		loadJob.schedule();
 		return page;
 	}
-	
+
 	/**
 	 * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
 	 */

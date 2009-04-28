@@ -21,10 +21,10 @@ import org.nightlabs.base.ui.composite.AbstractListComposite;
 import org.nightlabs.base.ui.composite.ListComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.priceconfig.AffectedProductType;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeName;
@@ -95,7 +95,7 @@ extends Dialog
 			protected IStatus run(ProgressMonitor monitor) throws Exception
 			{
 				try {
-					AccountingManager m = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+					AccountingManagerRemote m = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					Map<PriceConfigID, List<AffectedProductType>> affectedProductTypes = m.getAffectedProductTypes(priceConfigIDs, productTypeID, innerPriceConfigID);
 					Set<ProductTypeID> productTypeIDs = new HashSet<ProductTypeID>();
 					for (List<AffectedProductType> aptList : affectedProductTypes.values()) {

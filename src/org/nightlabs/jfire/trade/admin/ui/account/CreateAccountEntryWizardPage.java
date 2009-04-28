@@ -74,10 +74,10 @@ import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.AccountType;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.admin.ui.TradeAdminPlugin;
@@ -103,7 +103,7 @@ extends DynamicPathWizardPage
 	private Button shadowAccountRadio;
 	private List<Currency> currencies;
 	private AbstractTableComposite<AccountType> accountTypeTable;
-	
+
 	public CreateAccountEntryWizardPage() {
 		this(null);
 	}
@@ -117,7 +117,7 @@ extends DynamicPathWizardPage
 				SharedImages.getWizardPageImageDescriptor(TradeAdminPlugin.getDefault(), CreateAccountEntryWizardPage.class)
 			);
 	}
-	
+
 	private void updateIDText() {
 		if ( "".equals(accountNameEditor.getEditText()) ) //$NON-NLS-1$
 				anchorIDText.setText(""); //$NON-NLS-1$
@@ -131,19 +131,19 @@ extends DynamicPathWizardPage
 	@Override
 	public Control createPageContents(Composite parent) {
 		wrapper = new XComposite(parent, SWT.NONE);
-		
+
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		wrapper.setLayout(layout);
 		getContainer().getShell().setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.windowTitle")); //$NON-NLS-1$
-		
+
 		anchorIDText = new Text(wrapper, wrapper.getBorderStyle());
 		anchorIDText.setText(""); //$NON-NLS-1$
 		anchorIDText.setEnabled(false);
 		GridData anchorIDTextLData = new GridData(GridData.FILL_HORIZONTAL);
 		anchorIDTextLData.horizontalSpan = 3;
 		anchorIDText.setLayoutData(anchorIDTextLData);
-		
+
 		accountNameEditor = new I18nTextEditor(wrapper);
 		GridData accountNameEditorGD = new GridData(GridData.FILL_HORIZONTAL);
 		accountNameEditorGD.horizontalSpan = 2;
@@ -158,14 +158,14 @@ extends DynamicPathWizardPage
 
 		comboOwner = new XComboComposite<String>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
 			Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.ownerCombo.caption")); //$NON-NLS-1$
-		
+
 		comboOwner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboOwner.setEnabled(false);
-		
+
 		comboCurrency = new XComboComposite<Currency>(wrapper, AbstractListComposite.getDefaultWidgetStyle(wrapper),
 				Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.currencyCombo.caption"), new CurrencyLabelProvider()); //$NON-NLS-1$
 		comboCurrency.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		try {
 			Collection<Currency> tmpCurrenies = getAccountingManager().getCurrencies(new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			currencies = new ArrayList<Currency>(tmpCurrenies.size());
@@ -177,7 +177,7 @@ extends DynamicPathWizardPage
 		if (! currencies.isEmpty())
 			comboCurrency.selectElementByIndex(0);
 //		getCombo().add(currency.getCurrencyID()+" ("+currency.getCurrencySymbol()+")"); //$NON-NLS-1$ //$NON-NLS-2$
-		
+
 		accountTypeGroup = new Group(wrapper, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
@@ -186,7 +186,7 @@ extends DynamicPathWizardPage
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 1;
 		accountTypeGroup.setLayout(gl);
-		
+
 		normalAccountRadio = new Button(accountTypeGroup, SWT.RADIO | SWT.WRAP);
 		normalAccountRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		normalAccountRadio.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.radioNormalAccount.text")); //$NON-NLS-1$
@@ -286,7 +286,7 @@ extends DynamicPathWizardPage
 		updatePage();
 		return wrapper;
 	}
-	
+
 	/**
 	 * Checks page status
 	 */
@@ -306,17 +306,17 @@ extends DynamicPathWizardPage
 		}
 		updateStatus(null);
 	}
-	
+
 	/**
 	 * Returns true. Can be last page, when user just creates
 	 * an account, and does not perform any configuration.
-	 * 
+	 *
 	 */
 	@Override
 	public boolean canBeLastPage() {
 		return true;
 	}
-	
+
 	/**
 	 * @see org.nightlabs.base.ui.wizard.DynamicPathWizardPage#getDefaultPageMessage()
 	 */
@@ -324,7 +324,7 @@ extends DynamicPathWizardPage
 	protected String getDefaultPageMessage() {
 		return Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountEntryWizardPage.defaultPageMessage"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	public IWizardPage getNextPage() {
 		if (!isPageComplete())
@@ -333,25 +333,25 @@ extends DynamicPathWizardPage
 			return null;
 		}
 	}
-	
+
 	public boolean isCreateSummaryAccount() {
 		return shadowAccountRadio.getSelection();
 	}
-	
+
 	public String getAnchorID() {
 		return anchorIDText.getText();
 	}
-	
+
 	public Currency getCurrency() {
 		if (comboCurrency.getSelectionIndex() < 0)
 			throw new IllegalStateException("No currency selected. Can't return one."); //$NON-NLS-1$
 		return currencies.get(comboCurrency.getSelectionIndex());
 	}
-	
+
 	public I18nTextEditor getAccountNameEditor() {
 		return accountNameEditor;
 	}
-	
+
 //	public String getAnchorTypeID() {
 //		return accountTypeTable.getFirstSelectedElement();
 //	}
@@ -363,12 +363,12 @@ extends DynamicPathWizardPage
 	/**
 	 * @return A new {@link AccountingManager}.
 	 */
-	private AccountingManager getAccountingManager() {
+	private AccountingManagerRemote getAccountingManager() {
 		try {
-			return JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }

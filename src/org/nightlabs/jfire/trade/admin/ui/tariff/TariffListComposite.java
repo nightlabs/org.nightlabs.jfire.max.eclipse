@@ -51,10 +51,10 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.AccountingManager;
+import org.nightlabs.jfire.accounting.AccountingManagerRemote;
 import org.nightlabs.jfire.accounting.Tariff;
 import org.nightlabs.jfire.accounting.dao.TariffDAO;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.JFireBasePlugin;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -198,14 +198,14 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 
 	public void submit() throws ModuleException {
 		try {
-			AccountingManager accountingManager = null;
+			AccountingManagerRemote accountingManager = null;
 			try {
 
 				int tariffIndex = 0;
 				for (TariffCarrier tc : tariffCarriers) {
 					//				if (csc.isDirty()) { TODO
 					if (accountingManager == null)
-						accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+						accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 					Tariff tariff = tc.getTariff();
 					tariff.setTariffIndex(tariffIndex++);
@@ -218,7 +218,8 @@ public class TariffListComposite extends AbstractTableComposite<TariffCarrier> {
 			} finally {
 				if (accountingManager != null)
 					try {
-						accountingManager.remove();
+						// TODO Method does not exists !!! Daniel
+//						accountingManager.remove();
 					} catch (Exception x) {
 						logger.error("removing bean failed!", x);} //$NON-NLS-1$
 			}

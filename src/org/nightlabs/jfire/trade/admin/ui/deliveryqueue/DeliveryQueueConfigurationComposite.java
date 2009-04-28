@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.security.SecurityReflector;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.deliver.DeliveryQueue;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueConfigModule;
 import org.nightlabs.jfire.store.deliver.DeliveryQueueDAO;
@@ -135,7 +135,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					StoreManager storeManager = getStoreManager();
+					StoreManagerRemote storeManager = getStoreManager();
 					Collection<DeliveryQueueID> deliveryQueueIds = storeManager.getAvailableDeliveryQueueIDs(false);
 					deliveryQueues = DeliveryQueueDAO.sharedInstance().getDeliveryQueues(deliveryQueueIds, new String[] {DeliveryQueue.FETCH_GROUP_NAME, DeliveryQueue.FETCH_GROUP_HAS_PENDING_DELIVERIES}, 1, new NullProgressMonitor());
 				} catch (Exception e) {
@@ -278,7 +278,7 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 
 	void storeChanges(DeliveryQueueConfigModule configModule) {
 		try {
-			StoreManager storeManager = getStoreManager();
+			StoreManagerRemote storeManager = getStoreManager();
 
 			// cleanup the list of delivery queues that have to be persisted manually
 			List<DeliveryQueue> visibleDeliveryQueues = pqTableComposite.getCheckedElements();
@@ -296,14 +296,14 @@ public class DeliveryQueueConfigurationComposite extends XComposite {
 		}
 	}
 
-	private StoreManager storeManager;
+	private StoreManagerRemote storeManager;
 
-	private StoreManager getStoreManager() {
+	private StoreManagerRemote getStoreManager() {
 		if (storeManager != null)
 			return storeManager;
 
 		try {
-			storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return storeManager;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

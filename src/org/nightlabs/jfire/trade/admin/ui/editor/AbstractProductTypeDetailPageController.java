@@ -7,12 +7,12 @@ import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.gridpriceconfig.FormulaPriceConfig;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.NestedProductTypeLocal;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
@@ -25,7 +25,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  * {@link #retrieveProductType(ProgressMonitor)} and {@link #storeProductType(ProductType, ProgressMonitor)}.
  * Additionally it manages the retrieval and storage of the sale-access-control properties
  * of the given ProductType directly with the {@link StoreManager}.
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
@@ -86,7 +86,7 @@ implements IProductTypeDetailPageController<ProductTypeType>
 		monitor.done();
 		return productType;
 	}
-	
+
 	@Override
 	protected ProductTypeType storeEntity(ProductTypeType productType, ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController.storeProductTypeDetailMonitor.task.name"), 5); //$NON-NLS-1$
@@ -102,7 +102,7 @@ implements IProductTypeDetailPageController<ProductTypeType>
 		monitor.done();
 		return newProductType;
 	}
-	
+
 	/**
 	 * Stores the given saleStatus properties to the actual ProductType using the {@link StoreManager}.
 	 * @param saleStatus The status to apply.
@@ -119,8 +119,8 @@ implements IProductTypeDetailPageController<ProductTypeType>
 			boolean make_saleable_true = saleStatus.isSaleable() && !productType.isSaleable();
 			boolean make_saleable_false = !saleStatus.isSaleable() && productType.isSaleable();;
 			boolean make_closed = saleStatus.isClosed() && !productType.isClosed();
-			
-			StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+
+			StoreManagerRemote storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			if (make_published)
 				storeManager.setProductTypeStatus_published(productTypeID, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -143,20 +143,20 @@ implements IProductTypeDetailPageController<ProductTypeType>
 	{
 		storeSaleAccessControlProperties(saleAccessStatus);
 	}
-	
+
 	private ProductTypeSaleAccessStatus saleAccessStatus;
-	
+
 	public ProductTypeSaleAccessStatus getProductTypeSaleAccessStatus() {
 		if (saleAccessStatus == null && getProductType() != null) {
 			return new ProductTypeSaleAccessStatus(getProductType());
 		}
 		return saleAccessStatus;
 	}
-	
+
 	public void setProductTypeSaleAccessStatus(ProductTypeSaleAccessStatus saleAccessStatus) {
 		this.saleAccessStatus = saleAccessStatus;
 	}
-	
+
 	/**
 	 * Retrieve the ProductType using the appropriate DAO for the actual ProductType-type.
 	 * @param monitor The monitor to use

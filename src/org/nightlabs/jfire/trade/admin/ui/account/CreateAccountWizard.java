@@ -43,10 +43,10 @@ import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.SummaryAccount;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
 import org.nightlabs.jfire.accounting.dao.AccountTypeDAO;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
-import org.nightlabs.jfire.trade.TradeManager;
+import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -60,7 +60,7 @@ extends DynamicPathWizard
 implements INewWizard
 {
 	private CreateAccountEntryWizardPage createAccountEntryWizardPage;
-	
+
 	public CreateAccountWizard() {
 		super();
 		setWindowTitle(Messages.getString("org.nightlabs.jfire.trade.admin.ui.account.CreateAccountWizard.windowTitle")); //$NON-NLS-1$
@@ -73,7 +73,7 @@ implements INewWizard
 	public IDynamicPathWizardPage createWizardEntryPage() {
 		return new CreateAccountEntryWizardPage();
 	}
-	
+
 	@Override
 	public void addPages()
 	{
@@ -90,12 +90,12 @@ implements INewWizard
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
-	public boolean performFinish() 
+	public boolean performFinish()
 	{
 		Account newAccount = null;
 		// TODO async => Job!
 		try {
-			TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+			TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			OrganisationLegalEntity owner = tm.getOrganisationLegalEntity(Login.getLogin().getOrganisationID(), true, new String[] { FetchPlan.DEFAULT }, 1); // TODO make this nicer - e.g. by using a DAO and maybe restructuring this whole wizard
 
 			if (getCreateAccountEntryWizardPage().isCreateSummaryAccount()) {
@@ -104,7 +104,7 @@ implements INewWizard
 						new String[] { FetchPlan.DEFAULT },
 						1, new NullProgressMonitor()
 				);
-				
+
 				newAccount = new SummaryAccount(
 						Login.getLogin().getOrganisationID(),
 						getCreateAccountEntryWizardPage().getAnchorID(),
@@ -146,5 +146,5 @@ implements INewWizard
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// do nothing
 	}
-	
+
 }

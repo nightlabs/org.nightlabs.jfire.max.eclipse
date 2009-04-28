@@ -45,10 +45,10 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.notification.IDirtyStateManager;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 import org.nightlabs.util.CollectionUtil;
@@ -577,7 +577,7 @@ public class SaleAccessControlComposite extends XComposite
 
 //			setEnabled(false);
 
-			StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+			StoreManagerRemote storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 
 			if (make_published)
 				storeManager.setProductTypeStatus_published(productTypeID, false, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
