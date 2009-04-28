@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.voucher.print.ui.transfer.deliver;
 
 import java.io.File;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.scripting.id.ScriptRegistryItemID;
 import org.nightlabs.jfire.scripting.print.ui.transfer.delivery.AbstractClientDeliveryProcessorPrint;
@@ -21,7 +20,7 @@ import org.nightlabs.jfire.store.id.ProductID;
 import org.nightlabs.jfire.trade.ILayout;
 import org.nightlabs.jfire.trade.LayoutMapForArticleIDSet;
 import org.nightlabs.jfire.trade.id.ArticleID;
-import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.scripting.id.VoucherLayoutID;
 import org.nightlabs.util.CollectionUtil;
@@ -36,7 +35,7 @@ public class VoucherDataProviderThread
 extends AbstractScriptDataProviderThread
 {
 	private static final Logger logger = Logger.getLogger(VoucherDataProviderThread.class);
-	
+
 	public VoucherDataProviderThread(AbstractClientDeliveryProcessorPrint clientDeliveryProcessor) {
 		super(clientDeliveryProcessor);
 	}
@@ -58,10 +57,10 @@ extends AbstractScriptDataProviderThread
 //		return getVoucherLayoutFile(voucherLayoutID);
 //	}
 
-	private VoucherManager getVoucherManager()
+	private VoucherManagerRemote getVoucherManager()
 	{
 		try {
-			return JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -73,18 +72,14 @@ extends AbstractScriptDataProviderThread
 		long start = 0;
 		if (logger.isDebugEnabled())
 			start = System.currentTimeMillis();
-		VoucherManager voucherManager = getVoucherManager();
-		try {
-			LayoutMapForArticleIDSet result = voucherManager.getVoucherLayoutMapForArticleIDSet(
-				articleIDs,
-				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_1,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			if (logger.isDebugEnabled())
-				logger.debug("Getting LayoutMapForArticleIDSet for " + articleIDs.size() + " articles took " + (System.currentTimeMillis() - start) + " ms.");
-			return result;
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		}
+		VoucherManagerRemote voucherManager = getVoucherManager();
+		LayoutMapForArticleIDSet result = voucherManager.getVoucherLayoutMapForArticleIDSet(
+			articleIDs,
+			FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_1,
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+		if (logger.isDebugEnabled())
+			logger.debug("Getting LayoutMapForArticleIDSet for " + articleIDs.size() + " articles took " + (System.currentTimeMillis() - start) + " ms.");
+		return result;
 	}
 
 	@Override
@@ -93,19 +88,15 @@ extends AbstractScriptDataProviderThread
 		long start = 0;
 		if (logger.isDebugEnabled())
 			start = System.currentTimeMillis();
-		VoucherManager voucherManager = getVoucherManager();
+		VoucherManagerRemote voucherManager = getVoucherManager();
 		Set<VoucherLayoutID> voucherLayoutIDs = CollectionUtil.castSet(layoutIDs);
-		try {
-			List<ILayout> result = voucherManager.getVoucherLayouts(
-				voucherLayoutIDs,
-				FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_2,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			if (logger.isDebugEnabled())
-				logger.debug("Getting " + (result != null ? result.size() : "null") + " voucher layouts took " + (System.currentTimeMillis() - start) + " ms.");
-			return result;
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		}
+		List<VoucherLayout> result = voucherManager.getVoucherLayouts(
+			voucherLayoutIDs,
+			FETCH_GROUPS_VOUCHER_LAYOUT_STAGE_2,
+			NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+		if (logger.isDebugEnabled())
+			logger.debug("Getting " + (result != null ? result.size() : "null") + " voucher layouts took " + (System.currentTimeMillis() - start) + " ms.");
+		return CollectionUtil.castList(result);
 	}
 
 	@Override
@@ -114,7 +105,7 @@ extends AbstractScriptDataProviderThread
 		long start = 0;
 		if (logger.isDebugEnabled())
 			start = System.currentTimeMillis();
-		VoucherManager voucherManager = getVoucherManager();
+		VoucherManagerRemote voucherManager = getVoucherManager();
 		try {
 			Map<ProductID, Map<ScriptRegistryItemID, Object>> result = voucherManager.getVoucherScriptingResults(productIDs, false);
 			if (logger.isDebugEnabled())
@@ -147,6 +138,6 @@ extends AbstractScriptDataProviderThread
 				+ File.separatorChar
 				+ ObjectIDUtil.longObjectIDFieldToString(voucherLayoutID.voucherLayoutID)
 		);
-		
+
 	}
 }
