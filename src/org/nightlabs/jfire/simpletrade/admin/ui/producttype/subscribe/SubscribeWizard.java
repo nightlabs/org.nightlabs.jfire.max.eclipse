@@ -5,9 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 
 public class SubscribeWizard
@@ -30,11 +30,11 @@ public class SubscribeWizard
 			getContainer().run(true, false, new IRunnableWithProgress(){
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
-						InterruptedException 
+						InterruptedException
 				{
 					monitor.beginTask(Messages.getString("org.nightlabs.jfire.simpletrade.admin.ui.producttype.subscribe.SubscribeWizard.job.importForReselling.name") , 100); //$NON-NLS-1$
 					try {
-						SimpleTradeManager simpleTradeManager = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+						SimpleTradeManagerRemote simpleTradeManager = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 						simpleTradeManager.importSimpleProductTypesForReselling(selectedOrganisationID);
 					} catch (Exception e) {
 						throw new RuntimeException(e);

@@ -41,16 +41,16 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
 import org.nightlabs.jfire.accounting.gridpriceconfig.StablePriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.admin.ui.editor.SimpleProductTypeEditor;
 import org.nightlabs.jfire.simpletrade.admin.ui.gridpriceconfig.ChooseSimpleTradePriceConfigPage;
 import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
-import org.nightlabs.jfire.store.StoreManager;
+import org.nightlabs.jfire.store.StoreManagerRemote;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ProductTypeEditorInput;
@@ -72,7 +72,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 
 	private AbstractChooseGridPriceConfigPage selectPriceConfigPage;
 
-	private StoreManager _storeManager = null;
+	private StoreManagerRemote _storeManager = null;
 
 	public static final String[] FETCH_GROUPS_PARENT_PRODUCT_TYPE = {
 		FetchPlan.DEFAULT,
@@ -82,12 +82,12 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION
 	};
 
-	protected StoreManager getStoreManager()
+	protected StoreManagerRemote getStoreManager()
 	throws ModuleException
 	{
 		try {
 			if (_storeManager == null)
-				_storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+				_storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return _storeManager;
 		} catch (RuntimeException e) {
 			throw e;
@@ -96,13 +96,13 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 		}
 	}
 
-	private SimpleTradeManager _simpleTradeManager = null;
-	protected SimpleTradeManager getSimpleTradeManager()
+	private SimpleTradeManagerRemote _simpleTradeManager = null;
+	protected SimpleTradeManagerRemote getSimpleTradeManager()
 	throws ModuleException
 	{
 		try {
 			if (_simpleTradeManager == null)
-				_simpleTradeManager = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+				_simpleTradeManager = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return _simpleTradeManager;
 		} catch (RuntimeException e) {
 			throw e;
@@ -121,7 +121,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	public void addPages()
 	{
 		assert parentProductTypeID != null;
-		
+
 		productTypeNamePage = new ProductTypeNamePage(parentProductTypeID);
 		addPage(productTypeNamePage);
 
@@ -199,7 +199,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 								try {
 									ProductTypeEditorInput editorInput = new ProductTypeEditorInput(newProductTypeId);
 //									RCPUtil.openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
-									
+
 									Editor2PerspectiveRegistry.sharedInstance().openEditor(editorInput, SimpleProductTypeEditor.ID_EDITOR);
 								} catch (Exception e) {
 									throw new RuntimeException(e);
@@ -236,7 +236,7 @@ public class CreateProductTypeWizard extends DynamicPathWizard
 	public void setParentProductTypeID(ProductTypeID parentProductTypeID) {
 		this.parentProductTypeID = parentProductTypeID;
 	}
-	
+
 //	/**
 //	* @return Returns the selectedNode.
 //	*/

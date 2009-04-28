@@ -6,10 +6,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
-import org.nightlabs.jfire.simpletrade.admin.ui.resource.Messages;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.store.SimpleProductType;
 import org.nightlabs.jfire.store.ProductType;
@@ -27,16 +26,16 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 {
 	private static final Logger logger = Logger.getLogger(SimpleProductTypeDetailPageController.class);
 	private static final String[] FETCH_GROUPS;
-	
+
 	static {
 		List<String> fetchGroups = new LinkedList<String>();
 		for (String fetchGroup : FETCH_GROUPS_DEFAULT)
 			fetchGroups.add(fetchGroup);
-		
+
 		fetchGroups.add(ProductType.FETCH_GROUP_DELIVERY_CONFIGURATION);
 		FETCH_GROUPS = fetchGroups.toArray(new String[fetchGroups.size()]);
 	}
-	
+
 	/**
 	 * @param editor
 	 */
@@ -52,7 +51,7 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 			boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
 	}
-	
+
 	@Override
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS;
@@ -82,7 +81,7 @@ extends AbstractProductTypeDetailPageController<SimpleProductType>
 					logger.debug("  " + entry.getKey() + " = " + entry.getValue()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
-			SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
+			SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			// take the simple product type from the controller, as this is the same instance
 			// which was set to the GUI elements and which they edit directly
 			SimpleProductType spt = stm.storeProductType(productType, true, getEntityFetchGroups(), getEntityMaxFetchDepth());

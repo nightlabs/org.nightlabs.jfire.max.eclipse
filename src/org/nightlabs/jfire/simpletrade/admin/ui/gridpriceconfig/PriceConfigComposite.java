@@ -9,14 +9,15 @@ import org.nightlabs.jfire.accounting.gridpriceconfig.AssignInnerPriceConfigComm
 import org.nightlabs.jfire.accounting.gridpriceconfig.GridPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.IInnerPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.id.PriceConfigID;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.simpletrade.SimpleTradeManager;
+import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.dao.FormulaPriceConfigDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.CellReferenceProductTypeSelector;
 import org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.wizard.AbstractChooseGridPriceConfigWizard;
 import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.util.CollectionUtil;
 
 /**
  * @author Marco Schulze - Marco at NightLabs dot de
@@ -32,13 +33,14 @@ extends org.nightlabs.jfire.trade.admin.ui.gridpriceconfig.PriceConfigComposite
 		super(parent, dirtyStateManager);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected <P extends GridPriceConfig> Collection<P> storePriceConfigs(Collection<P> priceConfigs, AssignInnerPriceConfigCommand assignInnerPriceConfigCommand)
 	{
 		try {
-			SimpleTradeManager stm = JFireEjbFactory.getBean(SimpleTradeManager.class, Login.getLogin().getInitialContextProperties());
-			return stm.storePriceConfigs(priceConfigs, true, assignInnerPriceConfigCommand);
+			SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
+			Collection<GridPriceConfig> gpcs = CollectionUtil.castCollection(priceConfigs);
+			gpcs = stm.storePriceConfigs(gpcs, true, assignInnerPriceConfigCommand);
+			return CollectionUtil.castCollection(gpcs);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
