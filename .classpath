@@ -4,17 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScripting"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsBase"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireScriptingEditor2D"/>
-	<classpathentry sourcepath="/WORKSPACE/org.holongate.gef/src" kind="var" path="ECLIPSE_HOME/plugins/org.holongate.gef_2.3.0/holongate-gef.jar"/>
-	<classpathentry sourcepath="/WORKSPACE/org.holongate.draw2d/src" kind="var" path="ECLIPSE_HOME/plugins/org.holongate.draw2d_2.3.0/holongate-draw2d.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NightLabsJDO"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/JFireBase"/>
-	<classpathentry kind="var" path="JDO2" sourcepath="/JDO2_SRC">
-		<attributes>
-			<attribute name="javadoc_location" value="http://db.apache.org/jdo/api22/apidocs/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.holongate.gef_2.3.0/holongate-gef.jar" sourcepath="/WORKSPACE/org.holongate.gef/src"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.holongate.draw2d_2.3.0/holongate-draw2d.jar" sourcepath="/WORKSPACE/org.holongate.draw2d/src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JFireBaseClientLib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jdo"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nightlabs.jfire.base"/>
+	<classpathentry kind="con" path="org.nightlabs.eclipse.sdk.jdo.JDO_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
