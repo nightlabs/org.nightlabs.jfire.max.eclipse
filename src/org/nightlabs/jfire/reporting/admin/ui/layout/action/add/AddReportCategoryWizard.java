@@ -31,9 +31,9 @@ import javax.security.auth.login.LoginException;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.reporting.ReportManager;
-import org.nightlabs.jfire.reporting.admin.ui.ReportingAdminPlugin;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 
@@ -45,9 +45,9 @@ public class AddReportCategoryWizard extends DynamicPathWizard {
 
 	private ReportRegistryItem reportRegistryItem;
 	private AddReportCategoryWizardPage wizardPage;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public AddReportCategoryWizard(ReportRegistryItem reportRegistryItem) {
 		super();
@@ -61,7 +61,7 @@ public class AddReportCategoryWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		ReportManager rm = ReportingAdminPlugin.getReportManager();
+
 		if ((reportRegistryItem != null) && (!(reportRegistryItem instanceof ReportCategory)))
 			throw new IllegalArgumentException("Can only add a ReportCategory to a ReportCategory instance of ReportRegistryItem. The given reportRegistryItem is instanceof "+((reportRegistryItem == null)?"null":reportRegistryItem.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$
 		String reportRegistryItemType = ""; //$NON-NLS-1$
@@ -69,7 +69,9 @@ public class AddReportCategoryWizard extends DynamicPathWizard {
 			reportRegistryItemType = reportRegistryItem.getReportRegistryItemType();
 		ReportCategory category;
 		String organisationID;
+		ReportManagerRemote rm;
 		try {
+			rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			organisationID = Login.getLogin().getOrganisationID();
 		} catch (LoginException e) {
 			throw new RuntimeException(e);
@@ -87,7 +89,7 @@ public class AddReportCategoryWizard extends DynamicPathWizard {
 		}
 		return true;
 	}
-	
+
 	public static int show(ReportRegistryItem reportRegistryItem) {
 		AddReportCategoryWizard wizard = new AddReportCategoryWizard(reportRegistryItem);
 		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(wizard);

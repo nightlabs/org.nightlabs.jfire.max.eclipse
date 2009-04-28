@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.admin.ui.oda.jfs.client.ui.property;
 
@@ -25,21 +25,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.jfire.reporting.ReportManager;
-import org.nightlabs.jfire.reporting.ReportManagerUtil;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.oda.jfs.IJFSQueryPropertySetMetaData;
 import org.nightlabs.jfire.reporting.oda.jfs.JFSQueryPropertySet;
 import org.nightlabs.jfire.reporting.oda.jfs.IJFSQueryPropertySetMetaData.IEntry;
-import org.nightlabs.jfire.security.SecurityReflector;
 
 /**
  * A table Composite that shows and is able to manipulate the properties of a {@link JFSQueryPropertySet}.
  * It manages the properties as elements of type {@link JFSQueryPropertySetTableEntry}.
  * The table allows the editing of all property values. The property names can be edited as well
  * given that the property is not references in the meta-data of the current {@link JFSQueryPropertySet}.
- * The table also provides methods to add and remove elements, 
- * however it only removes properties that don't come from the meta-data. 
- * 
+ * The table also provides methods to add and remove elements,
+ * however it only removes properties that don't come from the meta-data.
+ *
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPropertySetTableEntry> {
@@ -47,7 +47,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 	private static final Logger logger = Logger.getLogger(JFSQueryPropertySetTable.class);
 	/**
 	 * Create a new {@link JFSQueryPropertySetTable}.
-	 * 
+	 *
 	 * @param parent The parent to use.
 	 * @param style The style to apply.
 	 */
@@ -57,7 +57,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 
 	/**
 	 * Create a new {@link JFSQueryPropertySetTable}.
-	 * 
+	 *
 	 * @param parent The parent to use.
 	 * @param style The style to apply.
 	 * @param initTable Whether to initialize the table (i.e. set label/content-provider etc.).
@@ -81,7 +81,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 				cell.setText(entry.getName());
 			}
 		});
-		
+
 		TableViewerColumn valueColumn = new TableViewerColumn(tableViewer, SWT.LEFT);
 		valueColumn.getColumn().setText("Value");
 		valueColumn.setLabelProvider(new CellLabelProvider() {
@@ -98,18 +98,18 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 		nameColumn.setEditingSupport(createNameEditingSupport());
 		table.setLayout(new WeightedTableLayout(new int[] {1, 1}));
 	}
-	
+
 	/**
 	 * Creates the {@link EditingSupport} for the value column.
 	 * It manages the value property within the {@link JFSQueryPropertySetTableEntry}
 	 * elements of this table.
-	 *  
+	 *
 	 * @return The {@link EditingSupport} for the value column.
 	 */
 	protected EditingSupport createValueEditingSupport() {
 		return new EditingSupport(getTableViewer()) {
 			private TextCellEditor cellEditor;
-			
+
 			@Override
 			protected boolean canEdit(Object element) {
 				return element instanceof JFSQueryPropertySetTableEntry;
@@ -138,23 +138,23 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 			}
 		};
 	}
-	
+
 	/**
 	 * Creates the {@link EditingSupport} for the name column.
 	 * It manages the name property within the {@link JFSQueryPropertySetTableEntry}
 	 * elements of this table. Only the names of properties that
 	 * don't come from the meta-data of the Script referecned by the
 	 * {@link JFSQueryPropertySet}.
-	 *  
+	 *
 	 * @return The {@link EditingSupport} for the value column.
 	 */
 	protected EditingSupport createNameEditingSupport() {
 		return new EditingSupport(getTableViewer()) {
 			private TextCellEditor cellEditor;
-			
+
 			@Override
 			protected boolean canEdit(Object element) {
-				return 
+				return
 					(element instanceof JFSQueryPropertySetTableEntry) &&
 					!((JFSQueryPropertySetTableEntry) element).isFromMetaData();
 			}
@@ -180,8 +180,8 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 				String name = (String) value;
 				if (name == null || "".equals(name)) {
 					MessageDialog.openInformation(
-							getShell(), 
-							"Empty property name.", 
+							getShell(),
+							"Empty property name.",
 							"An empty property name is not allowed, " +
 							"the value will not be changed!");
 					return;
@@ -190,8 +190,8 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 				for (JFSQueryPropertySetTableEntry checkEntry : entries) {
 					if (entry != checkEntry && name.equals(checkEntry.getName())) {
 						MessageDialog.openInformation(
-								getShell(), 
-								"Duplicate property name.", 
+								getShell(),
+								"Duplicate property name.",
 								"A duplicate property name is not allowed, " +
 								"the value will not be changed!");
 						return;
@@ -202,7 +202,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 			}
 		};
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
 	 */
@@ -216,18 +216,18 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 //			}
 //		});
 	}
-	
+
 	/**
 	 * Query the {@link IJFSQueryPropertySetMetaData} of the Script referenced by the given
 	 * {@link JFSQueryPropertySet}. This currently accesses the {@link ReportManager} bean
 	 * directly.
-	 * 
+	 *
 	 * @param queryPropertySet The {@link JFSQueryPropertySet} to get the meta-data for.
 	 * @return The {@link IJFSQueryPropertySetMetaData} for the Script referenced by the given {@link JFSQueryPropertySet}.
 	 */
 	protected IJFSQueryPropertySetMetaData getJFSQueryPropertySetMetaData(JFSQueryPropertySet queryPropertySet) {
 		try {
-			ReportManager rm = ReportManagerUtil.getHome(SecurityReflector.getInitialContextProperties()).create();
+			ReportManagerRemote rm = JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return rm.getJFSQueryPropertySetMetaData(queryPropertySet.getScriptRegistryItemID());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -236,14 +236,14 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 
 	/**
 	 * Initialize this table with the properties of the given queryPropertySet.
-	 * 
+	 *
 	 * @param queryPropertySet The {@link JFSQueryPropertySet} to initialize the table with.
 	 */
 	public void setJFSQueryPropertySet(JFSQueryPropertySet queryPropertySet) {
 		Set<String> definedProps = new HashSet<String>(queryPropertySet.getProperties().keySet());
 		IJFSQueryPropertySetMetaData metaData = getJFSQueryPropertySetMetaData(queryPropertySet);
 		List<JFSQueryPropertySetTableEntry> entries = new LinkedList<JFSQueryPropertySetTableEntry>();
-		
+
 		// All entries from the meta-data first
 		for (IEntry metaDataEntry : metaData.getEntries()) {
 			if (definedProps.contains(metaDataEntry.getName())) {
@@ -262,7 +262,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 						true,
 						metaDataEntry.isRequired(),
 						metaDataEntry.getName());
-				entries.add(entry);				
+				entries.add(entry);
 			}
 		}
 		// then all other defined properties
@@ -273,14 +273,14 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 					false,
 					definedPropName);
 			entry.setValue(value);
-			entries.add(entry);				
+			entries.add(entry);
 		}
-		
+
 		setInput(entries);
 	}
-	
+
 	private List<JFSQueryPropertySetTableEntry> entries = null;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setInput(Object input) {
@@ -295,7 +295,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 	/**
 	 * Removes the first selected entry from this table.
 	 * Note, that this will have no effect if the first
-	 * selected element is a property referenced in 
+	 * selected element is a property referenced in
 	 * the meta-data of the curren {@link JFSQueryPropertySet}.
 	 */
 	public void removeFirstSelectedEntry() {
@@ -305,13 +305,13 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 		entries.remove(entry);
 		refresh(true);
 	}
-	
+
 	/**
 	 * Checks if the given name can be used as property name
 	 * in the given set of properties.
-	 * 
+	 *
 	 * @param name The name to check.
-	 * @return Whether the given name can be used as property name in the current set. 
+	 * @return Whether the given name can be used as property name in the current set.
 	 */
 	private boolean checkNewPropertyName(String name) {
 		for (JFSQueryPropertySetTableEntry entry : entries) {
@@ -320,7 +320,7 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Adds a new entry to the list of properties of this table
 	 * and will select its name column for editing.
@@ -339,15 +339,15 @@ public class JFSQueryPropertySetTable extends AbstractTableComposite<JFSQueryPro
 		getTableViewer().editElement(entry, 0);
 		return entry;
 	}
-	
+
 	/**
 	 * Collect the properties from the table as they should be set
 	 * to a {@link JFSQueryPropertySet}.
-	 * 
+	 *
 	 * @return The properties collected from the table.
 	 */
 	public Map<String, String> getProperties() {
-		Map<String, String> result = new HashMap<String, String>();		
+		Map<String, String> result = new HashMap<String, String>();
 		if (entries != null) {
 			for (JFSQueryPropertySetTableEntry entry : entries) {
 				result.put(entry.getName(), entry.getValue());

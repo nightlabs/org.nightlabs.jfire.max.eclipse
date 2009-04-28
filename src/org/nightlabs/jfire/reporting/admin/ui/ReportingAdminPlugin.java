@@ -31,9 +31,9 @@ import org.eclipse.birt.report.designer.ui.extensions.ExceptionHandlerRegistry;
 import org.eclipse.birt.report.designer.ui.extensions.IDesignerExceptionHandler;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.reporting.ReportManager;
-import org.nightlabs.jfire.reporting.ReportManagerUtil;
+import org.nightlabs.jfire.reporting.ReportManagerRemote;
 import org.nightlabs.jfire.reporting.admin.ui.platform.ClientResourceLocator;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.osgi.framework.BundleContext;
@@ -45,13 +45,13 @@ public class ReportingAdminPlugin extends AbstractUIPlugin {
 
 	//The shared instance.
 	private static ReportingAdminPlugin plugin;
-	
+
 	public static final String SCOPE_REPORTING_ADMIN = "reporting.admin"; //$NON-NLS-1$
-	
+
 	public static final String ZONE_REPORTING_ADMIN = ReportingPlugin.class.getName()+"#ZONE_REPORTING_ADMIN"; //$NON-NLS-1$
-	
+
 	public static final String REPORT_USECASE_PREVIEW = "org.nightlabs.jfire.reporting.admin.ui.previewReportUseCase";  //$NON-NLS-1$
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -100,18 +100,20 @@ public class ReportingAdminPlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("org.nightlabs.jfire.reporting.admin.ui", path); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Returns a new ReportManager bean.
+	 * @deprecated
 	 */
-	public static ReportManager getReportManager() {
+	@Deprecated
+	public static ReportManagerRemote getReportManager() {
 		try {
-			return ReportManagerUtil.getHome(
+			return JFireEjb3Factory.getRemoteBean(ReportManagerRemote.class,
 					Login.getLogin().getInitialContextProperties()
-				).create();
+				);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 }
