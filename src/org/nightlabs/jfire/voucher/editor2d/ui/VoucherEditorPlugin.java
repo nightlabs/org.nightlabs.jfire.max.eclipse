@@ -1,9 +1,9 @@
 package org.nightlabs.jfire.voucher.editor2d.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -16,7 +16,7 @@ public class VoucherEditorPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static VoucherEditorPlugin plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -52,10 +52,11 @@ public class VoucherEditorPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public VoucherManager getVoucherManager()
+	@Deprecated
+	public VoucherManagerRemote getVoucherManager()
 	{
 		try {
-			return JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+			return JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
