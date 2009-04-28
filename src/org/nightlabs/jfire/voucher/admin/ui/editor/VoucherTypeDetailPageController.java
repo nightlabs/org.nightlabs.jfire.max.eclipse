@@ -3,11 +3,11 @@ package org.nightlabs.jfire.voucher.admin.ui.editor;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
-import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -22,7 +22,7 @@ public class VoucherTypeDetailPageController
 extends AbstractProductTypeDetailPageController<VoucherType>
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private VoucherLayout voucherLayout;
 
 	/**
@@ -109,15 +109,15 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 //				createVoucherLayout((VoucherTypeDetailPage) page);
 //			}
 //		}
-		
+
 		if (voucherLayout != null) {
 			voucherType.setVoucherLayout(voucherLayout);
 			voucherType.getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
 			// TODO Inheritance should be controllable by UI. Tobias
 		}
-		
+
 		try {
-			VoucherManager voucherManager = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+			VoucherManagerRemote voucherManager = JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);

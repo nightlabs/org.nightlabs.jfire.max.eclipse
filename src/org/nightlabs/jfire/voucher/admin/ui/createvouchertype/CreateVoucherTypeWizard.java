@@ -12,14 +12,14 @@ import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectIDUtil;
-import org.nightlabs.jfire.base.JFireEjbFactory;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.ownervendor.OwnerVendorPage;
-import org.nightlabs.jfire.voucher.VoucherManager;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor;
 import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditorInput;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
@@ -46,7 +46,7 @@ extends DynamicPathWizard
 	public void addPages()
 	{
 		assert parentVoucherTypeID != null;
-		
+
 		voucherTypeNamePage = new VoucherTypeNamePage(parentVoucherTypeID);
 		addPage(voucherTypeNamePage);
 
@@ -57,7 +57,7 @@ extends DynamicPathWizard
 		addPage(selectLocalAccountantDelegatePage);
 
 		ownerVendorPage = new OwnerVendorPage(parentVoucherTypeID);
-		addPage(ownerVendorPage);	
+		addPage(ownerVendorPage);
 	}
 
 	private static String[] FETCH_GROUPS_PARENT_VOUCHER_TYPE = {
@@ -103,13 +103,13 @@ extends DynamicPathWizard
 		}
 
 		if(ownerVendorPage.isPageComplete())
-			ownerVendorPage.configureProductType(voucherType);		
+			ownerVendorPage.configureProductType(voucherType);
 		Job job = new Job(Messages.getString("org.nightlabs.jfire.voucher.admin.ui.createvouchertype.CreateVoucherTypeWizard.createVoucherTypeJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor)
 			{
 				try {
-					VoucherManager vm = JFireEjbFactory.getBean(VoucherManager.class, Login.getLogin().getInitialContextProperties());
+					VoucherManagerRemote vm = JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 					VoucherType vt = vm.storeVoucherType(
 							voucherType, true,
 							new String[] {
@@ -172,7 +172,7 @@ extends DynamicPathWizard
 		job.schedule();
 		return true;
 	}
-	
+
 	public void setParentVoucherTypeID(ProductTypeID parentVoucherTypeID) {
 		this.parentVoucherTypeID = parentVoucherTypeID;
 	}
