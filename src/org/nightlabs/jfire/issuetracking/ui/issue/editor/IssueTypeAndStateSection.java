@@ -165,7 +165,7 @@ extends AbstractIssueEditorGeneralSection
 //	monitor.beginTask("Performing transition of issue", 100);
 //	try {
 //	IssueID issueID = (IssueID)JDOHelper.getObjectId(getIssue());
-//	IssueManager im = JFireEjbFactory.getBean(IssueManager.class, Login.getLogin().getInitialContextProperties());
+//	IssueManagerRemote = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties());
 ////	Issue issue = im.signalIssue((IssueID)JDOHelper.getObjectId(getIssue()), event.getTransition().getJbpmTransitionName(), 
 ////	true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //	im.signalIssue(issueID, event.getTransition().getJbpmTransitionName(), false, null, 1);
@@ -196,7 +196,7 @@ extends AbstractIssueEditorGeneralSection
 //	protected IStatus run(IProgressMonitor monitor)
 //	{
 //	try {
-//	IssueManager im = JFireEjbFactory.getBean(IssueManager.class, Login.getLogin().getInitialContextProperties());
+//	IssueManagerRemote = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //	Issue issue = im.storeIssue(getController().getIssue(), true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //	issue = im.signalIssue((IssueID)JDOHelper.getObjectId(issue), JbpmConstants.TRANSITION_NAME_ASSIGN, 
 //	true, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
