@@ -259,13 +259,13 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 	 * @return All those ArticleCarriers that have been newly created for the given articles - i.e. Articles that have been existing before
 	 *		(due to double calls because of double notifications) will be ignored.
 	 */
-	public Collection<ArticleCarrier> addArticles(Collection<Article> articles)
+	public Collection<ArticleCarrier> addArticles(Collection<? extends Article> articles)
 	{
 		return addArticles(articles, true);
 	}
 
 	@Override
-	public synchronized Collection<ArticleCarrier> addArticles(Collection<Article> articles, boolean filterExisting)
+	public synchronized Collection<ArticleCarrier> addArticles(Collection<? extends Article> articles, boolean filterExisting)
 	{
 		if (logger.isDebugEnabled())
 			logger.debug("JDOLifecycleAdapterJob.addArticles: adding " + articles.size() + " articles."); //$NON-NLS-1$ //$NON-NLS-2$

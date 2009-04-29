@@ -138,7 +138,7 @@ implements ISelectionProvider
 		imageVendorRootTreeNode = AbstractUIPlugin.imageDescriptorFromPlugin(TradePlugin.ID_PLUGIN, "icons/articlecontainer/header/SaleRootTreeNode.16x16.png").createImage(); //$NON-NLS-1$
 
 //		try {
-//		TradeManager tm = JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+//		TradeManagerRemote = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //		myOrganisationLegalEntity = tm.getOrganisationLegalEntity(
 //		Login.getLogin().getOrganisationID(), true,
 //		new String[]{FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -290,7 +290,7 @@ implements ISelectionProvider
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.header.HeaderTreeComposite.monitor.taskName.loadingBusinessPartner"), 100); //$NON-NLS-1$
 		setPartnerIDInvocationID = partnerID;
 		try {
-//			TradeManager tm = partnerID == null ? null : JFireEjbFactory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
+//			TradeManager tm = partnerID == null ? null : JFireEjb3Factory.getBean(TradeManager.class, Login.getLogin().getInitialContextProperties());
 			monitor.worked(10);
 			final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(partnerID, null, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new SubProgressMonitor(monitor, 40));
 
@@ -504,7 +504,7 @@ implements ISelectionProvider
 //	{
 //	try {
 //	InvoiceRootTreeNode invoiceRootTreeNode = getHeaderTreeContentProvider().getVendorInvoiceRootTreeNode();
-//	AccountingManager accountingManager = JFireEjbFactory.getBean(AccountingManager.class, Login.getLogin().getInitialContextProperties());
+//	AccountingManagerRemote = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //	Invoice invoice = accountingManager.getInvoice(invoiceID, InvoiceRootTreeNode.FETCH_GROUPS_INVOICE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //	InvoiceTreeNode invoiceTreeNode = new InvoiceTreeNode(invoiceRootTreeNode, InvoiceTreeNode.POSITION_FIRST_CHILD, invoice);
 //	invoiceTreeNode.select();
@@ -517,7 +517,7 @@ implements ISelectionProvider
 //	{
 //	try {
 //	DeliveryNoteRootTreeNode deliveryNoteRootTreeNode = getHeaderTreeContentProvider().getVendorDeliveryNoteRootTreeNode();
-//	StoreManager storeManager = JFireEjbFactory.getBean(StoreManager.class, Login.getLogin().getInitialContextProperties());
+//	StoreManagerRemote = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //	DeliveryNote deliveryNote = storeManager.getDeliveryNote(deliveryNoteID, DeliveryNoteRootTreeNode.FETCH_GROUPS_DELIVERY_NOTE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 //	DeliveryNoteTreeNode deliveryNoteTreeNode = new DeliveryNoteTreeNode(deliveryNoteRootTreeNode, DeliveryNoteTreeNode.POSITION_FIRST_CHILD, deliveryNote);
 //	deliveryNoteTreeNode.select();

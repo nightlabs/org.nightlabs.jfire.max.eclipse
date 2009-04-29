@@ -11,11 +11,11 @@ extends EventObject
 {
 	private static final long serialVersionUID = 1L;
 
-	private Collection<Article> articles;
+	private Collection<? extends Article> articles;
 	private Collection<ArticleCarrier> articleCarriers;
 //	private JDOLifecycleEvent jdoLifecycleEvent;
 
-	public ArticleCreateEvent(Object source, Collection<Article> articles, Collection<ArticleCarrier> articleCarriers)
+	public ArticleCreateEvent(Object source, Collection<? extends Article> articles, Collection<ArticleCarrier> articleCarriers)
 	{
 		super(source);
 		this.articles = articles;
@@ -23,7 +23,7 @@ extends EventObject
 //		this.jdoLifecycleEvent = jdoLifecycleEvent;
 	}
 
-	public Collection<Article> getArticles()
+	public Collection<? extends Article> getArticles()
 	{
 		return articles;
 	}
