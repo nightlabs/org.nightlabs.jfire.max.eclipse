@@ -156,8 +156,7 @@ public class ArticleAdderComposite extends FadeableComposite
 				ProductType productType = articleAdder.getProductType();
 				ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
 
-				Collection<Article> articles = articleAdder.createArticles(segmentID, offerID, productTypeID, qty, tariffID);
-
+				Collection<? extends Article> articles = articleAdder.createArticles(segmentID, offerID, productTypeID, qty, tariffID);
 
 				segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
 				return Status.OK_STATUS;

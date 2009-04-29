@@ -50,6 +50,7 @@ import org.nightlabs.jfire.simpletrade.SimpleTradeManagerRemote;
 import org.nightlabs.jfire.simpletrade.dao.SimpleProductTypeDAO;
 import org.nightlabs.jfire.simpletrade.dao.TariffPricePairDAO;
 import org.nightlabs.jfire.simpletrade.ui.resource.Messages;
+import org.nightlabs.jfire.store.NotAvailableException;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.Article;
@@ -188,15 +189,15 @@ public class ArticleAdder extends AbstractArticleAdder
 		return super.createRequirementsNotFulfilledComposite(parent);
 	}
 
-	public Collection<Article> createArticles(
+	public Collection<? extends Article> createArticles(
 			SegmentID segmentID, OfferID offerID,
 			ProductTypeID productTypeID, int quantity,
 			TariffID tariffID)
-	throws org.nightlabs.ModuleException, java.rmi.RemoteException, LoginException, CreateException, NamingException
+	throws NotAvailableException, java.rmi.RemoteException, LoginException, CreateException, NamingException
 	{
 
 		SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
-		return (Collection<Article>) stm.createArticles(
+		return stm.createArticles(
 				segmentID, offerID, productTypeID, quantity, tariffID, true, false,
 				getFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 	}
