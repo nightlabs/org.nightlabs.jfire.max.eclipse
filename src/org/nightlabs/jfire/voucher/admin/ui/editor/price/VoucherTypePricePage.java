@@ -53,7 +53,8 @@ extends EntityEditorPageWithProgress
 
 
 	private VoucherPriceConfigSection voucherPriceConfigSection = null;
-
+	private VoucherAccountConfigSection voucherAccountConfigSection = null;
+	
 	public VoucherPriceConfigSection getVoucherLayoutSection() {
 		return voucherPriceConfigSection;
 	}
@@ -65,9 +66,12 @@ extends EntityEditorPageWithProgress
 
 
 		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
-//		default is FILL_BOTH
+		voucherAccountConfigSection = new VoucherAccountConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
+
+		//		default is FILL_BOTH
 //		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getManagedForm().addPart(voucherPriceConfigSection);
+		getManagedForm().addPart(voucherAccountConfigSection);
 	}
 
 	@Override
