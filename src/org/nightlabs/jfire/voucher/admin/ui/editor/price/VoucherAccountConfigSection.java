@@ -1,7 +1,9 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
@@ -22,14 +24,14 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Account Configuration");
 
-		AddAccountConfigAction addCurrencyConfigAction = new AddAccountConfigAction();
-		getToolBarManager().add(addCurrencyConfigAction);
+		AddAccountConfigAction addAccountConfigAction = new AddAccountConfigAction();
+		getToolBarManager().add(addAccountConfigAction);
 
-		RemoveAccountConfigAction removeCurrencyConfigAction = new RemoveAccountConfigAction();
-		getToolBarManager().add(removeCurrencyConfigAction);
+		RemoveAccountConfigAction removeAccountConfigAction = new RemoveAccountConfigAction();
+		getToolBarManager().add(removeAccountConfigAction);
 
-		AssignAccountConfigAction assignPriceConfigAction = new AssignAccountConfigAction();
-		getToolBarManager().add(assignPriceConfigAction);
+		AssignAccountConfigAction assignAccountConfigAction = new AssignAccountConfigAction();
+		getToolBarManager().add(assignAccountConfigAction);
 
 		inheritanceAction = new InheritanceAction(){
 			@Override
@@ -40,6 +42,15 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		inheritanceAction.setEnabled(false);
 
 		
+//		MenuManager menuManager = new MenuManager();
+//		menuManager.add(addAccountConfigAction);
+//		menuManager.add(removeAccountConfigAction);
+//		getContainer().setMenu(menu);
+		updateToolBarManager();
+	
+	
+	
+	
 	}
 	
 	protected void inheritPressed() {
