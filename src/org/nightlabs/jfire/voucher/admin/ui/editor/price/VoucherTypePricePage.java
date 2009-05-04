@@ -24,7 +24,7 @@ extends EntityEditorPageWithProgress
 {
 	public VoucherTypePricePage(FormEditor editor, String id, String name) {
 
-		super(editor, VoucherTypePricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.TitlePage")); //$NON-NLS-1$
+		super(editor, VoucherTypePricePage.class.getName(),"Price & Account Config"); //$NON-NLS-1$
 
 		// TODO Auto-generated constructor stub
 	}
