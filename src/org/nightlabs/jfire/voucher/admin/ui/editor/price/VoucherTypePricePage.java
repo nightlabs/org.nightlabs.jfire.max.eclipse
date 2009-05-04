@@ -83,8 +83,10 @@ extends EntityEditorPageWithProgress
 			public void run() {
 
 				if ( voucherPriceConfigSection != null && !voucherPriceConfigSection.getSection().isDisposed())
+				{
 					voucherPriceConfigSection.setVoucherType(voucherType);
-
+					voucherAccountConfigSection.setVoucherType(voucherType);
+				}
 				switchToContent();
 			}
 		});
