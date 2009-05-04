@@ -69,6 +69,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			}
 		};
 		inheritanceAction.setEnabled(false);
+		getToolBarManager().add(inheritanceAction);
 		
 		XComposite comp = new XComposite(getContainer(), SWT.NONE);
 		StackLayout stackLayout = new StackLayout();
