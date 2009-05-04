@@ -44,7 +44,7 @@ import org.nightlabs.progress.ProgressMonitor;
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
-public class CreateIssueDetailWizardPage 
+public class CreateIssueDetailWizardPage
 extends WizardHopPage
 {
 	//GUI
@@ -65,11 +65,11 @@ extends WizardHopPage
 //	private Button setFromDateTimeButton;
 //	private Label fromDateTimeLabel;
 //	private DateTimeControl fromDateTimeControl;
-//	
+//
 //	private Button setToDateTimeButton;
 //	private Label toDateTimeLabel;
 //	private DateTimeControl toDateTimeControl;
-	
+
 	private IssueLabelProvider issueLabelProvider = new IssueLabelProvider();
 
 	//Used objects
@@ -80,7 +80,7 @@ extends WizardHopPage
 	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 	private Project selectedProject;
-	
+
 	private Issue issue;
 
 	private static final String[] ISSUE_TYPE_FETCH_GROUPS = {
@@ -118,7 +118,7 @@ extends WizardHopPage
 				getContainer().updateButtons();
 			}
 		});
-		
+
 		//Subject & Description
 		subjectLabel = new Label(mainComposite, SWT.NONE);
 		subjectLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.subject.text")); //$NON-NLS-1$
@@ -134,7 +134,7 @@ extends WizardHopPage
 				}
 			}
 		});
-		
+
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 5;
 		subjectText.setLayoutData(gridData);
@@ -187,7 +187,7 @@ extends WizardHopPage
 		issueSeverityLbl = new Label(mainComposite, SWT.NONE);
 		issueSeverityLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.severity.text")); //$NON-NLS-1$
 		issueSeverityCombo = new XComboComposite<IssueSeverityType>(mainComposite, SWT.NONE | SWT.READ_ONLY, issueLabelProvider);
-		
+
 		issueSeverityCombo.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
@@ -204,7 +204,7 @@ extends WizardHopPage
 				issue.setIssuePriority(selectedIssuePriority);
 			}
 		});
-		
+
 		XComposite dateTimeComposite = new XComposite(mainComposite, SWT.NONE);
 		dateTimeComposite.getGridLayout().numColumns = 3;
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -236,7 +236,7 @@ extends WizardHopPage
 //		toDateTimeLabel.setText("To Date");
 //		toDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
 //		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		//Loading Data
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.job.loadingIssueProp.text")) { //$NON-NLS-1$
 			@Override
@@ -253,35 +253,39 @@ extends WizardHopPage
 								defaultIssueType = issueType;
 								issueTypeCombo.addElement(issueType);
 						}
-						
-						if (defaultIssueType != null) 
+
+						if (defaultIssueType != null)
 							issueTypeCombo.selectElement(defaultIssueType);
 						else
 							issueTypeCombo.selectElementByIndex(0);
-						
+
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						issue.setIssueType(selectedIssueType);
 
 						issueSeverityCombo.removeAll();
-						for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-							issueSeverityCombo.addElement(is);
+						if (selectedIssueType != null) {
+							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+								issueSeverityCombo.addElement(is);
+							}
+							issueSeverityCombo.selectElementByIndex(0);
 						}
-						issueSeverityCombo.selectElementByIndex(0);
 						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 						issue.setIssueSeverityType(selectedIssueSeverityType);
 
 						issuePriorityCombo.removeAll();
-						for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-							issuePriorityCombo.addElement(ip);
+						if (selectedIssueType != null) {
+							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+								issuePriorityCombo.addElement(ip);
+							}
+							issuePriorityCombo.selectElementByIndex(0);
 						}
-						issuePriorityCombo.selectElementByIndex(0);
 						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						issue.setIssuePriority(selectedIssuePriority);
 					}
 				});
 
 				return Status.OK_STATUS;
-			} 
+			}
 		};
 		loadJob.setPriority(org.eclipse.core.runtime.jobs.Job.SHORT);
 		loadJob.schedule();
@@ -293,39 +297,39 @@ extends WizardHopPage
 	public void onShow() {
 		subjectText.forceFocus();
 	}
-	
+
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
 	}
-	
-	private WizardHopPage optionalPage; 
-	
+
+	private WizardHopPage optionalPage;
+
 	@Override
 	public boolean isPageComplete() {
 		boolean result = true;
 		setErrorMessage(null);
-		
+
 //		if (issue.getProject() == null) {
 //			result = false;
 //		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
-		
+
 		if (descriptionText.getEditText().equals("") || descriptionText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
-		
+
 		if (result == true && optionalPage == null) {
 			new WizardHop(this);
 			optionalPage = new CreateIssueOptionalWizardPage(issue);
 			getWizardHop().addHopPage(optionalPage);
 		}
-		
+
 		return result;
 	}
-	
+
 	public I18nTextEditorMultiLine getDescriptionText() {
 		return descriptionText;
 	}
@@ -362,18 +366,18 @@ extends WizardHopPage
 	public IssueType getSelectedIssueType(){
 		return selectedIssueType;
 	}
-	
+
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 	}
-	
+
 	public Project getSelectedProject() {
 		return selectedProject;
 	}
 //	public Date getFromDateTime() {
 //		return fromDateTimeControl.getDate();
 //	}
-//	
+//
 //	public Date getToDateTime() {
 //		return toDateTimeControl.getDate();
 //	}

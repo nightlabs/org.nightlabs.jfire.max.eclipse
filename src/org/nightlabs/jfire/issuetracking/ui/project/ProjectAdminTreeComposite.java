@@ -33,14 +33,13 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.ActiveProjectTreeController;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateProjectAction;
 import org.nightlabs.jfire.issuetracking.ui.project.create.CreateSubProjectAction;
-import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  *
  */
-public class ProjectAdminTreeComposite 
-extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode> 
+public class ProjectAdminTreeComposite
+extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 {
 	private static String[] FETCH_GROUPS = new String[]{
 		FetchPlan.DEFAULT, Project.FETCH_GROUP_NAME, Project.FETCH_GROUP_SUBPROJECTS, Project.FETCH_GROUP_PARENT_PROJECT
@@ -86,7 +85,7 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 			addContextMenuContribution(new RenameProjectAction(getTreeViewer()));
 			addContextMenuContribution(new DeleteProjectAction(getTreeViewer()));
 		}
-		
+
 		drillDownAdapter = new DrillDownAdapter(getTreeViewer());
 		hookContextMenu();
 	}
@@ -152,8 +151,12 @@ extends ActiveJDOObjectTreeComposite<ProjectID, Project, ProjectTreeNode>
 	protected static class ProjectTreeLabelProvider extends JDOObjectTreeLabelProvider<ProjectID, Project, ProjectTreeNode>
 	{
 		@Override
-		protected String getJDOObjectText(Project jdoObject, int columnIndex) {
-			return jdoObject.getName().getText();
+		protected String getJDOObjectText(Project jdoObject, int columnIndex)
+		{
+			if (jdoObject != null)
+				return jdoObject.getName().getText();
+
+			return "";
 		}
 
 		@Override

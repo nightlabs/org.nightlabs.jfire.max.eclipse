@@ -36,7 +36,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.util.CollectionUtil;
 import org.nightlabs.util.NLLocale;
 
-public class ProjectComboComposite 
+public class ProjectComboComposite
 extends XComposite
 implements ISelectionProvider
 {
@@ -53,17 +53,17 @@ implements ISelectionProvider
 			throw new RuntimeException(x);
 		}
 	}
-	
+
 	private XCombo projectCombo;
 	private Project selectedProject;
-	
+
 	public ProjectComboComposite(Composite parent, int style,String filterOrganisationID, boolean filterOrganisationIDInverse)
 	{
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
 		createCombo();
 		loadProjects();
 	}
-	
+
 	protected XCombo createCombo() {
 		projectCombo = new XCombo(this, SWT.BORDER | SWT.READ_ONLY);
 		projectCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -80,17 +80,17 @@ implements ISelectionProvider
 				fireSelectionChangedEvent();
 			}
 		});
-		
+
 		return projectCombo;
 	}
-	
+
 	private static String[] FETCH_GROUP_PROJECT = new String[] {
-		FetchPlan.DEFAULT, 
-		Project.FETCH_GROUP_NAME, 
-		Project.FETCH_GROUP_PARENT_PROJECT, 
-		Project.FETCH_GROUP_SUBPROJECTS, 
+		FetchPlan.DEFAULT,
+		Project.FETCH_GROUP_NAME,
+		Project.FETCH_GROUP_PARENT_PROJECT,
+		Project.FETCH_GROUP_SUBPROJECTS,
 		Project.FETCH_GROUP_DESCRIPTION};
-	
+
 	private List<Project> projectList = new ArrayList<Project>();
 	public void loadProjects()
 	{
@@ -108,7 +108,7 @@ implements ISelectionProvider
 					for (Project project : tempProjectList) {
 						generateSub(project);
 					}
-					
+
 					Display.getDefault().asyncExec(new Runnable()
 					{
 						public void run()
@@ -117,14 +117,14 @@ implements ISelectionProvider
 								return;
 
 							projectCombo.removeAll();
-							
+
 							for (Project pj : projectList) {
 								StringBuffer sb = new StringBuffer(""); //$NON-NLS-1$
-								for (int i = 0; i < pj.getLevel(); i++) 
+								for (int i = 0; i < pj.getLevel(); i++)
 									sb.append("»"); //$NON-NLS-1$
 								projectCombo.add(null, (sb.toString().equals("")?"": sb.append(" ")) +  pj.getName().getText(NLLocale.getDefault().getLanguage())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 							}
-							
+
 							setSelectedProject(Project.PROJECT_ID_DEFAULT);
 							ProjectComboComposite.this.getParent().layout(true);
 						}
@@ -136,31 +136,34 @@ implements ISelectionProvider
 				return Status.OK_STATUS;
 			}
 		};
-		
+
 		loadJob.setPriority(Job.SHORT);
 		loadJob.schedule();
 	}
-	
+
 	private int level = 0;
-	private void generateSub(Project project) {
-		projectList.add(project);
-		
-		Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getObjectId(), FETCH_GROUP_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-		
-		List<Project> tempProjectList = new ArrayList<Project>();
-		CollectionUtil.addAllToCollection(sp.toArray(new Project[0]), tempProjectList);
-		Collections.sort(tempProjectList);
-		
-		if (sp.size() > 0) {
-			level++;
-			for (Project p : tempProjectList) {
-				p.setLevel(level);
-				generateSub(p);
+	private void generateSub(Project project)
+	{
+		if (project != null) {
+			projectList.add(project);
+
+			Collection<Project> sp = ProjectDAO.sharedInstance().getProjectsByParentProjectID(project.getObjectId(), FETCH_GROUP_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+			List<Project> tempProjectList = new ArrayList<Project>();
+			CollectionUtil.addAllToCollection(sp.toArray(new Project[0]), tempProjectList);
+			Collections.sort(tempProjectList);
+
+			if (sp.size() > 0) {
+				level++;
+				for (Project p : tempProjectList) {
+					p.setLevel(level);
+					generateSub(p);
+				}
+				level--;
 			}
-			level--;
 		}
 	}
-	
+
 	private ListenerList selectionChangedListeners = new ListenerList();
 	private void fireSelectionChangedEvent()
 	{
@@ -209,7 +212,7 @@ implements ISelectionProvider
 		else
 			throw new IllegalArgumentException("selection.getFirstElement() is neither null, nor an instanceof " + Project.class.getName()+ " or " + ProjectID.class.getName()+ "! It is an instance of " + (selObj == null ? null : selObj.getClass().getName())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
-	
+
 	public void setSelectedProject(Project project) {
 		setSelectedProjectID(project == null ? -1 : project.getProjectID());
 	}
@@ -217,7 +220,7 @@ implements ISelectionProvider
 	public void setSelectedProject(ProjectID projectID) {
 		setSelectedProjectID(projectID == null ? -1 : projectID.projectID);
 	}
-	
+
 	private void setSelectedProjectID(long projectID) {
 		int idx = -1;
 		int i = 0;
@@ -238,20 +241,20 @@ implements ISelectionProvider
 			selectedProject = projectList.get(idx);
 		}
 	}
-	
+
 	public Project getSelectedProject() {
 		return selectedProject;
 	}
-	
+
 	public void addProject(Project project, int index) {
 		projectList.add(index, project);
 		projectCombo.add(null, project.getName().getText(), index);
 	}
-	
+
 	public XCombo getProjectCombo() {
 		return projectCombo;
 	}
-	
+
 	@Override
 	public boolean setFocus() {
 		return projectCombo.setFocus();
