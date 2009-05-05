@@ -7,9 +7,9 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.nightlabs.jdo.query.ui.search.SearchFilterProvider;
+import org.nightlabs.jdo.query.ui.search.SearchResultFetcher;
 import org.nightlabs.jdo.search.SearchFilter;
-import org.nightlabs.jdo.ui.search.SearchFilterProvider;
-import org.nightlabs.jdo.ui.search.SearchResultFetcher;
 import org.nightlabs.jfire.base.ui.person.search.DynamicPersonSearchFilterProvider;
 import org.nightlabs.jfire.base.ui.person.search.StaticPersonSearchFilterProvider;
 import org.nightlabs.jfire.base.ui.prop.DefaultPropertySetTableConfig;
