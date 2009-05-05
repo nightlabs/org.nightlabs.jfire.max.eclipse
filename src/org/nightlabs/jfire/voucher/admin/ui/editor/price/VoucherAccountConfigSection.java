@@ -124,7 +124,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	{
 		this.voucherType  = VoucherTypeDAO.sharedInstance().getVoucherType(
 				voucherType.getObjectId(),
-				new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS, VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME},
+				new String[] { FetchPlan.DEFAULT, ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID, ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL, ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS, VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
 		voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
