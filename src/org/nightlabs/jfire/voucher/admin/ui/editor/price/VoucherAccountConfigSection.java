@@ -10,9 +10,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.editor.IFormPage;
@@ -25,7 +23,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.accounting.priceconfig.PriceConfig;
 import org.nightlabs.jfire.store.ProductType;
@@ -33,7 +30,6 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
-import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
 import org.nightlabs.progress.NullProgressMonitor;
@@ -131,7 +127,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		voucherType.getFieldMetaData(
 				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited( 
 				!voucherType.getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
-
+		updateAccounts();
 		markDirty();
 	}
 
@@ -140,12 +136,12 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 	protected void assignAccountConfigClicked()
 	{
-		AccountVoucherTypeWizard priceVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID());
+		AccountVoucherTypeWizard priceVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID(),this.voucherType);
 		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
 		if( wizardDialog.open() == Window.OK)
 		{
-//			inheritanceAction.setChecked(voucherType.getFieldMetaData(ProductType.FieldName.packagePriceConfig).isValueInherited());
-//			updatePricesTable();
+			inheritanceAction.setChecked(voucherType.getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
+			updateAccounts();
 			markDirty();
 		}
 	}
