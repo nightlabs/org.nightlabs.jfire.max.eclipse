@@ -45,12 +45,13 @@ public class AccountVoucherTypeWizard extends DynamicPathWizard{
 				break;
 			case SELECT:
 				voucherLocalAccountantDelegate = selectLocalAccountantDelegatePage.getSelectedLocalAccountantDelegate();
+				break;
 			default:
 				throw new IllegalStateException("What's that?!"); //$NON-NLS-1$
 		}
 		
 		voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
-		voucherType.getFieldMetaData(
+		voucherType.getProductTypeLocal().getFieldMetaData(
 				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(inherit);
 		
 		return true;	
