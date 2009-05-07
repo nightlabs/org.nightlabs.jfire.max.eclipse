@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.price;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,21 +137,21 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		);
 		inheritanceAction.setEnabled(voucherType.getExtendedProductTypeID() != null);
 		
-		updateAccounts();
+		updateContents();
 	}
 
 
-	protected void updateAccounts()
+	protected void updateContents()
 	{
 		accountsDelegateMap =  new HashMap<Currency, Account>();
+		HashMap<Currency, Account> copyMap =  new HashMap<Currency, Account>();
 		VoucherLocalAccountantDelegate localAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
 
 		for (Map.Entry<String, Account> me : localAccountantDelegate.getAccounts().entrySet()) {		
 			accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
-
 		}		
-
-		accountantDelegateComposite.setMap(accountsDelegateMap);
+		copyMap.putAll(accountsDelegateMap);
+		accountantDelegateComposite.setMap(copyMap);
 	}
 
 
@@ -171,7 +172,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		voucherType.getProductTypeLocal().getFieldMetaData(
 				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited( 
 						!voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
-		updateAccounts();
+		updateContents();
 		markDirty();
 	}
 
@@ -185,7 +186,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		{
 			
 			inheritanceAction.setChecked(voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
-			updateAccounts();
+			updateContents();
 			markDirty();
 		}
 	}

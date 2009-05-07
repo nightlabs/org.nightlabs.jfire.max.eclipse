@@ -127,6 +127,7 @@ implements ISelectionProvider
 				Object v = getValue();
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)v;
 				getDefaultLabel().setText(((ITableLabelProvider)tableViewer.getLabelProvider()).getColumnText(me, 1));
+				fireSelectionChangedEvent();
 			}
 
 			@Override
@@ -141,6 +142,7 @@ implements ISelectionProvider
 					return null;
 
 				me.setValue(selectAccountWizard.getSelectedAccount());
+//				map.put(me.getKey(), selectAccountWizard.getSelectedAccount());
 				return me;
 			}
 		};
@@ -228,6 +230,7 @@ implements ISelectionProvider
 
 		map.put(currency, null);
 		setMap(map);
+		fireSelectionChangedEvent();
 	}
 
 	/**
@@ -251,7 +254,9 @@ implements ISelectionProvider
 			return;
 
 		map.remove(currency);
+
 		setMap(map);
+		fireSelectionChangedEvent();
 	}
 
 	public void setMap(Map<Currency, Account> map)
@@ -271,6 +276,7 @@ implements ISelectionProvider
 			});
 			tableViewer.setInput(l);
 		}
+
 	}
 
 	public Map<Currency, Account> getMap()
