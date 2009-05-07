@@ -1228,7 +1228,7 @@
     <extension point="org.nightlabs.jfire.base.ui.overview">
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview"
-            class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+            class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
             index="0" name="%org.nightlabs.jfire.trade.ui.overview.name" scope="TradeShelf"/>
         <entryFactory
             categoryEntryID="org.nightlabs.jfire.trade.ui.overview.deliveryNote"
@@ -1262,7 +1262,7 @@
             index="4" name="%org.nightlabs.jfire.trade.ui.overview.receptionnote.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview.accounting"
-            class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+            class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
             index="1"
             name="%org.nightlabs.jfire.trade.ui.overview.accounting.name" scope="TradeShelf"/>
         <entryFactory
@@ -1273,7 +1273,7 @@
             index="0" name="%org.nightlabs.jfire.trade.ui.overview.account.AccountEntryFactory.name"/>
         <categoryFactory
             categoryID="org.nightlabs.jfire.trade.ui.overview.store"
-            class="org.nightlabs.jfire.base.ui.overview.QueryStoreCapableCategoryFactory"
+            class="org.nightlabs.jfire.querystore.ui.overview.QueryStoreCapableCategoryFactory"
             index="2"
             name="%org.nightlabs.jfire.trade.ui.overview.store.name" scope="TradeShelf"/>
         <entryFactory

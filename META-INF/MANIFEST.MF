@@ -85,7 +85,8 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.base.ui;visibility:=reexport,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.reporting.ui;visibility:=reexport,
- org.nightlabs.jfire.jbpm.ui;visibility:=reexport
+ org.nightlabs.jfire.jbpm.ui;visibility:=reexport,
+ org.nightlabs.jfire.querystore.ui;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
 Eclipse-RegisterBuddy: org.nightlabs.base.ui
