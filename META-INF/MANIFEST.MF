@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.voucher.ui;visibility:=reexport,
  org.nightlabs.jfire.trade.admin.ui;visibility:=reexport,
- org.nightlabs.editor2d.viewer.ui;bundle-version="1.0.7"
+ org.nightlabs.editor2d.viewer.ui;bundle-version="1.0.7",
+ org.nightlabs.jfire.trade.editor2d.ui;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.admin.ui,
  org.nightlabs.jfire.voucher.admin.ui.createvouchertype,
