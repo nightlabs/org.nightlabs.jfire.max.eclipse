@@ -45,10 +45,7 @@ implements ICloseOnLogoutEditorPart
 	private final EditLockCallback editLockCallback = new EditLockCallback() {
 		@Override
 		public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
-			if (!isDirty())
-				return InactivityAction.DIALOG_ABOUT_TO_EXPIRE;
-			else
-				return InactivityAction.DIALOG_BLOCKING_DUE_TO_INACTIVITY;
+			return !isDirty() ? InactivityAction.DIALOG_ABOUT_TO_EXPIRE : InactivityAction.DIALOG_BLOCKING_DUE_TO_INACTIVITY;
 		}
 
 		@Override
