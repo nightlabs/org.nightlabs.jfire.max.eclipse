@@ -6,18 +6,20 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
 import org.nightlabs.jfire.trade.editor2d.ILayout;
+import org.nightlabs.jfire.trade.editor2d.ui.resource.Messages;
 
 public class RemoteLayoutTable<ID, L extends ILayout> extends ActiveJDOObjectTableComposite<ID, L> {
 
-//	private static final String LOADING_MESSAGE = Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.RemoteLayoutTable.loadingMessage"); //$NON-NLS-1$
-	private static final String LOADING_MESSAGE = ""; //$NON-NLS-1$
+	private static final String LOADING_MESSAGE = Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.RemoteLayoutTable.loadingMessage"); //$NON-NLS-1$
 
 	private ActiveJDOObjectController<ID, L> controller;
 
@@ -36,8 +38,8 @@ public class RemoteLayoutTable<ID, L extends ILayout> extends ActiveJDOObjectTab
 	{
 		getDisplay().asyncExec(new Runnable() {
 			public void run() {
-//				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.RemoteLayoutTable.fileNameColumnText")); //$NON-NLS-1$
-//				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.RemoteLayoutTable.timeStampColumnText")); //$NON-NLS-1$
+				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.RemoteLayoutTable.fileNameColumnText")); //$NON-NLS-1$
+				new TableColumn(table, SWT.LEFT).setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.RemoteLayoutTable.timeStampColumnText")); //$NON-NLS-1$
 
 				TableLayout tl = new TableLayout();
 				tl.addColumnData(new ColumnWeightData(1, true));

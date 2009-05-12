@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.editor2d.ILayout;
+import org.nightlabs.jfire.trade.editor2d.ui.resource.Messages;
 
 public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 
@@ -32,12 +33,11 @@ public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 	public LayoutPreviewComposite(Composite parent, ILayoutPreviewRenderer<L> renderer, int maxWidth, int maxHeight) {
 		super(parent, SWT.BORDER, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.NONE);
 		Label previewLabel = new Label(this, SWT.NONE);
-//		previewLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.LayoutPreviewComposite.group.preview.text")); //$NON-NLS-1$
+		previewLabel.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.LayoutPreviewComposite.group.preview.text")); //$NON-NLS-1$
 
 		this.maxWidth = maxWidth;
 		this.maxHeight = maxHeight;
 
-//		imageLabel = new Label(group, SWT.NONE);
 		imageLabel = new Label(this, SWT.NONE);
 		final GridData layoutData = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		layoutData.widthHint = maxWidth;
@@ -55,10 +55,9 @@ public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 		if (layout == null)
 			return;
 
-//		imageLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.LayoutPreviewComposite.label.text")); //$NON-NLS-1$
+		imageLabel.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.LayoutPreviewComposite.label.text")); //$NON-NLS-1$
 
-//		showPreviewJob = new Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.LayoutPreviewComposite.job.loadPreview.name")) { //$NON-NLS-1$
-		showPreviewJob = new Job("") { //$NON-NLS-1$
+		showPreviewJob = new Job(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.LayoutPreviewComposite.job.loadPreview.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				Image prev = generatedPreviews.get(layout.getFileName());
@@ -71,7 +70,7 @@ public class LayoutPreviewComposite<L extends ILayout> extends XComposite {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-//								imageLabel.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.LayoutPreviewComposite.previewErrorMessage")); //$NON-NLS-1$
+								imageLabel.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.LayoutPreviewComposite.previewErrorMessage")); //$NON-NLS-1$
 								logger.info("Rendering the preview of " + layout.getFileName() + " failed: ", e); //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						});

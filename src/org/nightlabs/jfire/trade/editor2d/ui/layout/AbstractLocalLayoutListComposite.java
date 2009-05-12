@@ -25,6 +25,7 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.trade.editor2d.ILayout;
+import org.nightlabs.jfire.trade.editor2d.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 public abstract class AbstractLocalLayoutListComposite<L extends ILayout> extends XComposite {
@@ -46,11 +47,11 @@ public abstract class AbstractLocalLayoutListComposite<L extends ILayout> extend
 		super(parent, style);
 
 		Label label = new Label(this, SWT.NONE);
-//		label.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.AbstractLocalLayoutListComposite.label.availableLayouts")); //$NON-NLS-1$
+		label.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractLocalLayoutListComposite.label.availableLayouts")); //$NON-NLS-1$
 
 		XComposite threeColWrapper = new XComposite(this, SWT.NONE, LayoutMode.TIGHT_WRAPPER, LayoutDataMode.GRID_DATA_HORIZONTAL, 3);
 		label = new Label(threeColWrapper, SWT.NONE);
-//		label.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.AbstractLocalLayoutListComposite.label.baseFolder")); //$NON-NLS-1$
+		label.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractLocalLayoutListComposite.label.baseFolder")); //$NON-NLS-1$
 
 		baseFolderText = new Text(threeColWrapper, getBorderStyle());
 		baseFolderText.setEditable(false);
@@ -109,8 +110,7 @@ public abstract class AbstractLocalLayoutListComposite<L extends ILayout> extend
 	private Job loadLayoutsJob;
 
 	public void loadLayouts(final File baseDirectory) {
-//		String name = Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.AbstractLocalLayoutListComposite.job.loadLayouts.name"); //$NON-NLS-1$
-		String name = "";
+		String name = Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractLocalLayoutListComposite.job.loadLayouts.name "); //$NON-NLS-1$
 		loadLayoutsJob = new Job(name) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {

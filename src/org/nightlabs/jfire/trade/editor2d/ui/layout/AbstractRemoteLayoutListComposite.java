@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
 import org.nightlabs.jfire.trade.editor2d.ILayout;
+import org.nightlabs.jfire.trade.editor2d.ui.resource.Messages;
 
 public abstract class AbstractRemoteLayoutListComposite<ID, L extends ILayout> extends XComposite {
 
@@ -19,7 +20,7 @@ public abstract class AbstractRemoteLayoutListComposite<ID, L extends ILayout> e
 		super(parent, style);
 
 		Label label = new Label(this, SWT.NONE);
-//		label.setText(Messages.getString("org.nightlabs.jfire.trade.admin.ui.layout.AbstractRemoteLayoutListComposite.label")); //$NON-NLS-1$
+		label.setText(Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractRemoteLayoutListComposite.label")); //$NON-NLS-1$
 
 		layoutTable = new RemoteLayoutTable<ID, L>(this, SWT.NONE, createActiveJDOObjectController());
 
