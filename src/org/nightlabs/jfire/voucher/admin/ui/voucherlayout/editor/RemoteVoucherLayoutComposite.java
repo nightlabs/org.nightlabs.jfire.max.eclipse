@@ -9,7 +9,7 @@ import javax.jdo.FetchPlan;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectController;
-import org.nightlabs.jfire.trade.editor2d.layout.AbstractRemoteLayoutListComposite;
+import org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractRemoteLayoutListComposite;
 import org.nightlabs.jfire.voucher.dao.VoucherLayoutDAO;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.scripting.id.VoucherLayoutID;

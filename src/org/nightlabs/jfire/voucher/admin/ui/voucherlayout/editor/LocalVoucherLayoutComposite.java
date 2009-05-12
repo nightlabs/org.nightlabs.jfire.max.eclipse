@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
-import org.nightlabs.jfire.trade.editor2d.layout.AbstractLocalLayoutListComposite;
-import org.nightlabs.jfire.trade.editor2d.layout.ILayoutPreviewRenderer;
-import org.nightlabs.jfire.trade.editor2d.layout.XStreamPreviewRenderer;
+import org.nightlabs.jfire.trade.editor2d.ui.layout.AbstractLocalLayoutListComposite;
+import org.nightlabs.jfire.trade.editor2d.ui.layout.ILayoutPreviewRenderer;
+import org.nightlabs.jfire.trade.editor2d.ui.layout.XStreamPreviewRenderer;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.editor2d.iofilter.VoucherXStreamFilter;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
