@@ -43,7 +43,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench.texteditor,
  org.nightlabs.jseditor.ui;visibility:=reexport,
  org.nightlabs.jfire.base.admin.ui;visibility:=reexport,
- org.nightlabs.editor2d.ui;bundle-version="1.0.7",
- org.nightlabs.jfire.entityuserset.ui;bundle-version="0.9.7";visibility:=reexport,
- org.nightlabs.jfire.trade.editor2d.ui;bundle-version="1.0.0"
+ org.nightlabs.jfire.entityuserset.ui;bundle-version="0.9.7";visibility:=reexport
 Eclipse-LazyStart: true
