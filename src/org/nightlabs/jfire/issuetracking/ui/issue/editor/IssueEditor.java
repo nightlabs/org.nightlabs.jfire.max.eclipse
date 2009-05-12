@@ -36,7 +36,7 @@ implements ICloseOnLogoutEditorPart
 	private final EditLockCallback editLockCallback = new EditLockCallback() {
 		@Override
 		public InactivityAction getEditLockAction(EditLockCarrier editLockCarrier) {
-			return !isDirty() ? InactivityAction.DIALOG_ABOUT_TO_EXPIRE : InactivityAction.DIALOG_BLOCKING_DUE_TO_INACTIVITY;
+			return InactivityAction.REFRESH_LOCK;
 		}
 
 		@Override
@@ -65,6 +65,7 @@ implements ICloseOnLogoutEditorPart
                          );
 	}
 
+	// :: --- [ ~~ ActiveEntiyEditor ] -------------------------------------------------------------------------->>---|
 	@Override
 	protected String getEditorTitleFromEntity(Object entity) {
 		return entity instanceof Issue ? ((Issue)entity).getSubject().getText() : null;	// <-- Use the 'subject' of the Issue as the Editor's title?
@@ -76,6 +77,8 @@ implements ICloseOnLogoutEditorPart
 		assert issueID != null;
 		return IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
+	// :: --- [ ~~ ActiveEntiyEditor ] --------------------------------------------------------------------------<<---|
+
 
 //	@Override
 //	public void init(IEditorSite site, IEditorInput input) throws PartInitException
