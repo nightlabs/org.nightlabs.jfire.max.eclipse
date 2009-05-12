@@ -2,6 +2,7 @@ package org.nightlabs.jfire.trade.editor2d.ui.layout;
 
 import java.text.DateFormat;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -17,8 +18,10 @@ import org.nightlabs.jfire.base.ui.jdo.ActiveJDOObjectTableComposite;
 import org.nightlabs.jfire.trade.editor2d.ILayout;
 import org.nightlabs.jfire.trade.editor2d.ui.resource.Messages;
 
-public class RemoteLayoutTable<ID, L extends ILayout> extends ActiveJDOObjectTableComposite<ID, L> {
-
+public class RemoteLayoutTable<ID, L extends ILayout>
+extends ActiveJDOObjectTableComposite<ID, L>
+{
+	private static final Logger logger = Logger.getLogger(RemoteLayoutTable.class);
 	private static final String LOADING_MESSAGE = Messages.getString("org.nightlabs.jfire.trade.editor2d.ui.layout.RemoteLayoutTable.loadingMessage"); //$NON-NLS-1$
 
 	private ActiveJDOObjectController<ID, L> controller;
@@ -61,13 +64,22 @@ public class RemoteLayoutTable<ID, L extends ILayout> extends ActiveJDOObjectTab
 				return ""; //$NON-NLS-1$
 			}
 
-			ILayout layout = (ILayout) obj;
-			if (col == 0)
-				return layout.getFileName();
-			else if (col == 1)
-				return DateFormat.getDateTimeInstance().format(layout.getFileTimestamp());
-			else
-				return ""; //$NON-NLS-1$
+			if (obj instanceof ILayout) {
+				ILayout layout = (ILayout) obj;
+				if (col == 0)
+					return layout.getFileName();
+				else if (col == 1)
+					return DateFormat.getDateTimeInstance().format(layout.getFileTimestamp());
+			}
+			else {
+				if (logger.isDebugEnabled()) {
+					logger.debug("obj.getClass().getClassLoader() = "+obj.getClass().getClassLoader());
+					logger.debug("ILayout.class.getClassLoader() = "+ILayout.class.getClassLoader());
+					logger.debug("obj instanceof ILayout = "+(obj instanceof ILayout));
+					logger.debug("ILayout.class.isAssignableFrom(obj.getClass()) = "+ILayout.class.isAssignableFrom(obj.getClass()));
+				}
+			}
+			return ""; //$NON-NLS-1$
 		}
 	};
 
