@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.editor2d.layout;
+package org.nightlabs.jfire.trade.editor2d.ui.layout;
 
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jfire.trade.editor2d.ILayout;

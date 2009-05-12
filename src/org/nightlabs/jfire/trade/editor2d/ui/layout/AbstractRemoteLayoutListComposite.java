@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.editor2d.layout;
+package org.nightlabs.jfire.trade.editor2d.ui.layout;
 
 import java.util.Collections;
 import java.util.LinkedList;
