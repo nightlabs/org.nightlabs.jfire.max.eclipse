@@ -2,12 +2,16 @@ package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
+import org.nightlabs.jfire.store.ProductType;
+import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.store.id.ProductTypeID;
 import org.nightlabs.jfire.trade.admin.ui.editor.AbstractProductTypeDetailPageController;
 import org.nightlabs.jfire.voucher.VoucherManagerRemote;
+import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.scripting.VoucherLayout;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -24,6 +28,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 	private static final long serialVersionUID = 1L;
 
 	private VoucherLayout voucherLayout;
+	private LocalAccountantDelegate localAccountantDelegate = null;
 
 	/**
 	 * @param editor
@@ -44,33 +49,36 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			FETCH_GROUPS_DEFAULT,
 			new String[] {
 					FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
+					ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
+					ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
+					ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
+					VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
 					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
 			}
 	);
-
-//	protected void createVoucherLayout(VoucherTypeDetailPage page)
-//	{
-//		if (page.getVoucherLayoutSection().getVoucherLayoutComposite() == null) // no UI created, yet
-//			return;
-//
-//		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
-//		VoucherLayout voucherLayout = getVoucherType().getVoucherLayout();
-//		if (voucherLayout == null) {
-//			voucherLayout = new VoucherLayout(IDGenerator.getOrganisationID(),
-//					IDGenerator.nextID(VoucherLayout.class));
-//		}
-//		try {
-//			if (selectedFile != null) {
-//				voucherLayout.loadFile(selectedFile);
-//				voucherLayout.saveFile(selectedFile);
-//				getVoucherType().setVoucherLayout(voucherLayout);
-//				getVoucherType().getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
-//				// TODO: inheritance should be controllable by UI. Marco.
-//			}
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
+	//	protected void createVoucherLayout(VoucherTypeDetailPage page)
+	//	{
+	//		if (page.getVoucherLayoutSection().getVoucherLayoutComposite() == null) // no UI created, yet
+	//			return;
+	//
+	//		File selectedFile = page.getVoucherLayoutSection().getVoucherLayoutComposite().getSelectedFile();
+	//		VoucherLayout voucherLayout = getVoucherType().getVoucherLayout();
+	//		if (voucherLayout == null) {
+	//			voucherLayout = new VoucherLayout(IDGenerator.getOrganisationID(),
+	//					IDGenerator.nextID(VoucherLayout.class));
+	//		}
+	//		try {
+	//			if (selectedFile != null) {
+	//				voucherLayout.loadFile(selectedFile);
+	//				voucherLayout.saveFile(selectedFile);
+	//				getVoucherType().setVoucherLayout(voucherLayout);
+	//				getVoucherType().getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
+	//				// TODO: inheritance should be controllable by UI. Marco.
+	//			}
+	//		} catch (Exception e) {
+	//			throw new RuntimeException(e);
+	//		}
+	//	}
 
 	@Override
 	protected String[] getEntityFetchGroups() {
@@ -100,20 +108,27 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 	@Override
 	protected VoucherType storeProductType(VoucherType voucherType, ProgressMonitor monitor)
 	{
-//		I'm not quite sure what this code here is supposed to do. But since I introduced the new handling of voucher layouts, where they
-//		first have to be uploaded to the server in order to assign them, I think this code here is obsolete now. Tobias.
-//
-//		// TODO: WORKAROUND: Why is the access to the page here ?!? Alex
-//		for (IFormPage page : getPages()) {
-//			if (page instanceof VoucherTypeDetailPage) {
-//				createVoucherLayout((VoucherTypeDetailPage) page);
-//			}
-//		}
+		//		I'm not quite sure what this code here is supposed to do. But since I introduced the new handling of voucher layouts, where they
+		//		first have to be uploaded to the server in order to assign them, I think this code here is obsolete now. Tobias.
+		//
+		//		// TODO: WORKAROUND: Why is the access to the page here ?!? Alex
+		//		for (IFormPage page : getPages()) {
+		//			if (page instanceof VoucherTypeDetailPage) {
+		//				createVoucherLayout((VoucherTypeDetailPage) page);
+		//			}
+		//		}
 
 		if (voucherLayout != null) {
 			voucherType.setVoucherLayout(voucherLayout);
 			voucherType.getFieldMetaData(VoucherType.FieldName.voucherLayout).setValueInherited(false);
 			// TODO Inheritance should be controllable by UI. Tobias
+		}
+
+		if (localAccountantDelegate != null)
+		{
+			voucherType.getProductTypeLocal().setLocalAccountantDelegate(localAccountantDelegate);
+			voucherType.getProductTypeLocal().getFieldMetaData(
+					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
 		}
 
 		try {
@@ -128,6 +143,11 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 		return getProductType();
 	}
 
+	public void setLocalAccountantDelegate(LocalAccountantDelegate selectedLocalAccountantDelegate)
+	{
+		this.localAccountantDelegate = selectedLocalAccountantDelegate;
+
+	}
 	public void setVoucherLayout(VoucherLayout selectedLayout) {
 		this.voucherLayout = selectedLayout;
 	}

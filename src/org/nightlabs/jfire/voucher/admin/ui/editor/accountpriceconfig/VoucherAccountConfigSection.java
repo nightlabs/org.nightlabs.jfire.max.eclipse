@@ -23,11 +23,16 @@ import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
+import org.nightlabs.jfire.base.JFireEjb3Factory;
+import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
+import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
+import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
+import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPageController;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
@@ -48,8 +53,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	private VoucherLocalAccountantDelegate voucherLocalAccountantDelegate;
 	private HashMap<Currency, Account> accountsDelegateMap;
 	private VoucherLocalAccountantDelegateComposite accountantDelegateComposite;
+	private VoucherTypeAccountPricePage accountPricePage;
 
-	
+
 	public static final String[] FETCH_GROUPS_VOUCHER_ACCOUNT = {
 		FetchPlan.DEFAULT, 
 		ProductType.FETCH_GROUP_EXTENDED_PRODUCT_TYPE_ID, 
@@ -61,10 +67,10 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	};
 
 
-	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
+	public VoucherAccountConfigSection(VoucherTypeAccountPricePage page, Composite parent, int style) {
 		super(page, parent, style, "Account Configuration");
 
-
+		this.accountPricePage = page;
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -100,24 +106,29 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	@Override
 	public void commit(boolean onSave) {
 		super.commit(onSave);
-		if (this.voucherType != null)
-		{		
-			VoucherLocalAccountantDelegate delegate = new VoucherLocalAccountantDelegate(
-					IDGenerator.getOrganisationID(),
-					Base36Coder.sharedInstance(false).encode(IDGenerator.nextID(LocalAccountantDelegate.class), 1));
-			delegate.getName().copyFrom(this.voucherType.getProductTypeLocal().getLocalAccountantDelegate().getName());
+		VoucherLocalAccountantDelegate delegate = getVoucherLocalAccountantDelegate();
+		if (delegate!= null)
+		{				
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
-				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue());
-			}
-			
-			this.voucherType.getProductTypeLocal().setLocalAccountantDelegate(delegate);
+				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
+			}	
+			((VoucherTypeDetailPageController)accountPricePage.getPageController()).setLocalAccountantDelegate(delegate);
 		}
 	}
-	
 
-	
-	
-	
+
+	VoucherLocalAccountantDelegate getVoucherLocalAccountantDelegate()	
+	{
+		if (this.voucherType.getProductTypeLocal().getLocalAccountantDelegate() == null)
+			return null;
+
+		if(this.voucherType.getProductTypeLocal().getLocalAccountantDelegate() instanceof VoucherLocalAccountantDelegate)
+			return (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
+		else
+			throw new IllegalStateException("LocalAccountantDelegate is not an instance of VoucherLocalAccountantDelegate"); //$NON-NLS-1$
+	}
+
+
 	public void setVoucherType(VoucherType voucherType)
 	{
 		this.voucherType  = VoucherTypeDAO.sharedInstance().getVoucherType(
@@ -131,7 +142,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 				).isValueInherited()
 		);
 		inheritanceAction.setEnabled(voucherType.getExtendedProductTypeID() != null);
-		
+
 		updateContents();
 	}
 
@@ -144,7 +155,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		for (Map.Entry<String, Account> me : localAccountantDelegate.getAccounts().entrySet()) {		
 			accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
 		}		
-		
+
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
 		// puts the accounts inside the widget
 		copyMap.putAll(accountsDelegateMap);

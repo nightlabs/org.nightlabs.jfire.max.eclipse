@@ -63,8 +63,8 @@ extends ToolBarSectionPart
 	 * @param style
 	 */
 	public VoucherPriceConfigSection(IFormPage page, Composite parent, int style) {
-		super(page, parent, style, Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherPriceConfigSection.Title")); //$NON-NLS-1$
-
+		super(page, parent, style, "Price Configuration"); //$NON-NLS-1$
+		
 		AddCurrencyConfigAction addCurrencyConfigAction = new AddCurrencyConfigAction();
 		getToolBarManager().add(addCurrencyConfigAction);
 
@@ -119,7 +119,6 @@ extends ToolBarSectionPart
 		});
 
 		stackLayout.topControl = currencyAmountTableWrapper;
-
 		MenuManager menuManager = new MenuManager();
 		menuManager.add(addCurrencyConfigAction);
 		menuManager.add(removeCurrencyConfigAction);
@@ -218,7 +217,7 @@ extends ToolBarSectionPart
 
 		Map<Currency, Long> map = new HashMap<Currency, Long>(getVoucherPriceConfig().getPrices());
 		currencyAmountTableWrapper.setMap(map);
-		getSection().setText(getVoucherPriceConfig().getName().getText());
+		//getSection().setText(getVoucherPriceConfig().getName().getText());
 	}
 
 	protected void addCurrencyPressed()

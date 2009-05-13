@@ -64,14 +64,14 @@ extends EntityEditorPageWithProgress
 	protected void addSections(Composite parent)
 	{
 
-
-		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
 		voucherAccountConfigSection = new VoucherAccountConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
-
+		voucherPriceConfigSection = new VoucherPriceConfigSection(this, parent, ExpandableComposite.TITLE_BAR);
+	
 		//		default is FILL_BOTH
 //		voucherPriceConfigSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
-		getManagedForm().addPart(voucherPriceConfigSection);
 		getManagedForm().addPart(voucherAccountConfigSection);
+		getManagedForm().addPart(voucherPriceConfigSection);
+
 	}
 
 	@Override
@@ -83,10 +83,9 @@ extends EntityEditorPageWithProgress
 			public void run() {
 
 				if ( voucherPriceConfigSection != null && !voucherPriceConfigSection.getSection().isDisposed())
-				{
 					voucherPriceConfigSection.setVoucherType(voucherType);
-					voucherAccountConfigSection.setVoucherType(voucherType);
-				}
+				if ( voucherAccountConfigSection != null && !voucherAccountConfigSection.getSection().isDisposed())
+					voucherAccountConfigSection.setVoucherType(voucherType);	
 				switchToContent();
 			}
 		});
@@ -94,7 +93,8 @@ extends EntityEditorPageWithProgress
 
 	@Override
 	protected String getPageFormTitle() {
-		return Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.PageFormTitle"); //$NON-NLS-1$
+		//return Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.PageFormTitle"); //$NON-NLS-1$
+		return "Edit Account / Price";
 	}
 
 }
