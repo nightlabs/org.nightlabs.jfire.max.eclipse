@@ -99,9 +99,9 @@ extends AbstractProductTypeQuickListFilter
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
 			QuickListFilterQueryResult<Collection<ProductType>> cacheResult = (QuickListFilterQueryResult<Collection<ProductType>>) Cache.sharedInstance().get(
-					null, cacheKey, 
+					null, cacheKey,
 					FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-			
+
 			if (cacheResult == null) {
 
 				Display.getDefault().syncExec(new Runnable() {
@@ -109,14 +109,14 @@ extends AbstractProductTypeQuickListFilter
 						resultTable.setLoadingMessage("Searching Simple ProductTypes");
 					}
 				});
-				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
+				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().queryProductTypes(
 						productTypeQueries,
 						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
 				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);
 				Cache.sharedInstance().put(
-						null, cacheKey, cacheResult, 
+						null, cacheKey, cacheResult,
 						FETCH_GROUPS_SIMPLE_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			}
 			final Collection<ProductType> productTypes = cacheResult.getResult();
