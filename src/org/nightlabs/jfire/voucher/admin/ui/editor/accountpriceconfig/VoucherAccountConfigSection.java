@@ -5,10 +5,8 @@ import java.util.Map;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -17,26 +15,15 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
-import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
-import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
-import org.nightlabs.jfire.voucher.VoucherManagerRemote;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
-import org.nightlabs.jfire.voucher.accounting.VoucherPriceConfig;
-import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
-import org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeDetailPageController;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
-import org.nightlabs.math.Base36Coder;
 import org.nightlabs.progress.NullProgressMonitor;
 
 
@@ -46,15 +33,11 @@ import org.nightlabs.progress.NullProgressMonitor;
  */
 public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
-
 	private InheritanceAction inheritanceAction;
 	private VoucherType voucherType;
-	private VoucherType parentVoucherType;
 	private VoucherLocalAccountantDelegate voucherLocalAccountantDelegate;
 	private HashMap<Currency, Account> accountsDelegateMap;
 	private VoucherLocalAccountantDelegateComposite accountantDelegateComposite;
-	private VoucherTypeAccountPricePage accountPricePage;
-
 
 	public static final String[] FETCH_GROUPS_VOUCHER_ACCOUNT = {
 		FetchPlan.DEFAULT, 
@@ -67,10 +50,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	};
 
 
-	public VoucherAccountConfigSection(VoucherTypeAccountPricePage page, Composite parent, int style) {
+	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Account Configuration");
 
-		this.accountPricePage = page;
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -130,7 +112,6 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 	public void setVoucherType(VoucherType voucherType)
 	{
-
 		this.voucherType = voucherType; 
 		voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
 		inheritanceAction.setChecked(
@@ -164,7 +145,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	protected void inheritPressed() {
 		if( inheritanceAction.isChecked() )
 		{
-			parentVoucherType =  VoucherTypeDAO.sharedInstance().getVoucherType(
+			VoucherType parentVoucherType =  VoucherTypeDAO.sharedInstance().getVoucherType(
 					voucherType.getExtendedProductTypeID(),
 					FETCH_GROUPS_VOUCHER_ACCOUNT,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
@@ -175,8 +156,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
 
 		voucherType.getProductTypeLocal().getFieldMetaData(
-				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited( 
-						!voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());		
+				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(
+						inheritanceAction.isChecked());		
+
 		updateContents();
 		markDirty();
 	}
