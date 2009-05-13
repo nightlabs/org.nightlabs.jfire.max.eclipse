@@ -29,6 +29,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 	private VoucherLayout voucherLayout;
 	private LocalAccountantDelegate localAccountantDelegate = null;
+	private Boolean localAccountantDelegateIheritance;
 
 	/**
 	 * @param editor
@@ -128,7 +129,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 		{
 			voucherType.getProductTypeLocal().setLocalAccountantDelegate(localAccountantDelegate);
 			voucherType.getProductTypeLocal().getFieldMetaData(
-					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(false);
+					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(localAccountantDelegateIheritance);
 		}
 
 		try {
@@ -143,9 +144,10 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 		return getProductType();
 	}
 
-	public void setLocalAccountantDelegate(LocalAccountantDelegate selectedLocalAccountantDelegate)
+	public void setLocalAccountantDelegate(LocalAccountantDelegate selectedLocalAccountantDelegate, Boolean iheritance)
 	{
 		this.localAccountantDelegate = selectedLocalAccountantDelegate;
+		this.localAccountantDelegateIheritance = iheritance;
 
 	}
 	public void setVoucherLayout(VoucherLayout selectedLayout) {

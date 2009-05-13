@@ -112,7 +112,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
 				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
 			}	
-			((VoucherTypeDetailPageController)accountPricePage.getPageController()).setLocalAccountantDelegate(delegate);
+			((VoucherTypeDetailPageController)accountPricePage.getPageController()).setLocalAccountantDelegate(delegate,inheritanceAction.isChecked());
 		}
 	}
 
@@ -179,7 +179,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 		voucherType.getProductTypeLocal().getFieldMetaData(
 				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited( 
-						!voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
+						!voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());		
 		updateContents();
 		markDirty();
 	}

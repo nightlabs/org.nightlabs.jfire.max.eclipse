@@ -24,7 +24,7 @@ extends EntityEditorPageWithProgress
 {
 	public VoucherTypeAccountPricePage(FormEditor editor, String id, String name) {
 
-		super(editor, VoucherTypeAccountPricePage.class.getName(),"Price & Account Config"); //$NON-NLS-1$
+		super(editor, VoucherTypeAccountPricePage.class.getName(),"Account & Price Config"); //$NON-NLS-1$
 
 		// TODO Auto-generated constructor stub
 	}
