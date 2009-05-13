@@ -112,7 +112,6 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
 				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
 			}	
-			((VoucherTypeDetailPageController)accountPricePage.getPageController()).setLocalAccountantDelegate(delegate,inheritanceAction.isChecked());
 		}
 	}
 
@@ -131,10 +130,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 
 	public void setVoucherType(VoucherType voucherType)
 	{
-		this.voucherType  = VoucherTypeDAO.sharedInstance().getVoucherType(
-				voucherType.getObjectId(),FETCH_GROUPS_VOUCHER_ACCOUNT,
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
+		this.voucherType = voucherType; 
 		voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
 		inheritanceAction.setChecked(
 				voucherType.getProductTypeLocal().getFieldMetaData(

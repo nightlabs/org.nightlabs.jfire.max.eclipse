@@ -2,7 +2,7 @@ package org.nightlabs.jfire.voucher.admin.ui.editor;
 
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
+import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.priceconfig.FetchGroupsPriceConfig;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -26,10 +26,7 @@ public class VoucherTypeDetailPageController
 extends AbstractProductTypeDetailPageController<VoucherType>
 {
 	private static final long serialVersionUID = 1L;
-
 	private VoucherLayout voucherLayout;
-	private LocalAccountantDelegate localAccountantDelegate = null;
-	private Boolean localAccountantDelegateIheritance;
 
 	/**
 	 * @param editor
@@ -51,9 +48,10 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			new String[] {
 					FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
 					ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
-					ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
 					ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
+					ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
 					VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
+					VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,Account.FETCH_GROUP_NAME,
 					VoucherType.FETCH_GROUP_VOUCHER_LAYOUT
 			}
 	);
@@ -125,13 +123,6 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			// TODO Inheritance should be controllable by UI. Tobias
 		}
 
-		if (localAccountantDelegate != null)
-		{
-			voucherType.getProductTypeLocal().setLocalAccountantDelegate(localAccountantDelegate);
-			voucherType.getProductTypeLocal().getFieldMetaData(
-					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(localAccountantDelegateIheritance);
-		}
-
 		try {
 			VoucherManagerRemote voucherManager = JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
 			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
@@ -144,12 +135,6 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 		return getProductType();
 	}
 
-	public void setLocalAccountantDelegate(LocalAccountantDelegate selectedLocalAccountantDelegate, Boolean iheritance)
-	{
-		this.localAccountantDelegate = selectedLocalAccountantDelegate;
-		this.localAccountantDelegateIheritance = iheritance;
-
-	}
 	public void setVoucherLayout(VoucherLayout selectedLayout) {
 		this.voucherLayout = selectedLayout;
 	}
