@@ -1,7 +1,6 @@
 package org.nightlabs.jfire.trade.ui.store.search;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -210,7 +209,7 @@ public abstract class AbstractProductTypeSearchComposite
 //				}
 				configureQuery(productTypeQuery, searchStr);
 
-				Set<ProductTypeID> productTypeIDs;
+				Collection<ProductTypeID> productTypeIDs;
 				QueryCollection<?> q1 = queryProvider.getManagedQueries();
 				QueryCollection<? extends AbstractProductTypeQuery> q = (QueryCollection<? extends AbstractProductTypeQuery>) q1;
 				productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(q);
@@ -252,7 +251,7 @@ public abstract class AbstractProductTypeSearchComposite
 		QueryCollection<? extends AbstractProductTypeQuery> queries,
 			ProgressMonitor monitor)
 	{
-		Set<ProductTypeID> productTypeIDs;
+		Collection<ProductTypeID> productTypeIDs;
 		productTypeIDs = TradePlugin.getDefault().getStoreManager().getProductTypeIDs(queries);
 		Collection<ProductType> productTypes = ProductTypeDAO.sharedInstance().getProductTypes(
 				productTypeIDs,

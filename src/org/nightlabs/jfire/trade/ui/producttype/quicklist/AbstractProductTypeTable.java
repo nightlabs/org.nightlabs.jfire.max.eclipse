@@ -39,18 +39,18 @@ import org.nightlabs.util.NLLocale;
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  */
 public abstract class AbstractProductTypeTable<P extends ProductType>
-extends AbstractTableComposite<P> 
+extends AbstractTableComposite<P>
 implements ISelectionHandler
 {
-	public class ContentProvider 
-	implements IStructuredContentProvider 
+	public class ContentProvider
+	implements IStructuredContentProvider
 	{
-		private Map<ProductTypeID, ProductType> productTypeID2ProductType = 
+		private Map<ProductTypeID, ProductType> productTypeID2ProductType =
 			new HashMap<ProductTypeID, ProductType>();
-		
-		public Object[] getElements(Object inputElement) 
+
+		public Object[] getElements(Object inputElement)
 		{
-			if (inputElement instanceof Collection) 
+			if (inputElement instanceof Collection)
 			{
 				Collection<P> collection = (Collection<P>) inputElement;
 				for (Iterator<P> it = collection.iterator(); it.hasNext(); ) {
@@ -64,21 +64,22 @@ implements ISelectionHandler
 		}
 
 		public void dispose() {
-			
+
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 			productTypeID2ProductType.clear();
 		}
-		
+
 		public Map<ProductTypeID, ProductType> getProductTypeID2ProductType() {
 			return productTypeID2ProductType;
-		}		
+		}
 	}
-	
+
 	public class LabelProvider
 	extends TableLabelProvider
 	{
+		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			return null;
 		}
@@ -86,10 +87,10 @@ implements ISelectionHandler
 		public String getColumnText(Object element, int columnIndex) {
 			return ((ProductType)element).getName().getText(NLLocale.getDefault().getLanguage());
 		}
-	}	
+	}
 
 	private ContentProvider contentProvider;
-	
+
 	/**
 	 * @param parent
 	 */
@@ -104,7 +105,7 @@ implements ISelectionHandler
 	public AbstractProductTypeTable(Composite parent, int style) {
 		super(parent, style);
 	}
-	
+
 	/**
 	 * By default creates only one {@link TableColumn} which displays the productType name
 	 */
@@ -127,7 +128,7 @@ implements ISelectionHandler
 
 		tableViewer.setComparator(new ViewerSorter(Collator.getInstance(NLLocale.getDefault())));
 	}
-	
+
 	@Override
 	public void setSelection(ISelection selection) {
 		Set<ProductTypeID> typeIDs = SelectionUtil.getProductTypesIDs(selection);
@@ -135,12 +136,12 @@ implements ISelectionHandler
 			super.setSelection(selection);
 		}
 		else {
-			final Set<ProductTypeID> productTypeIDs = typeIDs;		
+			final Set<ProductTypeID> productTypeIDs = typeIDs;
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					List<P> productTypes = (List<P>) ProductTypeDAO.sharedInstance().
-					getProductTypes(productTypeIDs, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME}, 
+					getProductTypes(productTypeIDs, new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 					superSetSelection(productTypes);
 				}
@@ -152,7 +153,7 @@ implements ISelectionHandler
 		super.setSelection(elements, true);
 	}
 
-	public boolean canHandleSelection(ISelection selection) 
+	public boolean canHandleSelection(ISelection selection)
 	{
 		Set<ProductTypeID> typeIDs = SelectionUtil.getProductTypesIDs(selection);
 		if (!typeIDs.isEmpty()) {
@@ -167,5 +168,5 @@ implements ISelectionHandler
 		}
 		return false;
 	}
-	
+
 }
