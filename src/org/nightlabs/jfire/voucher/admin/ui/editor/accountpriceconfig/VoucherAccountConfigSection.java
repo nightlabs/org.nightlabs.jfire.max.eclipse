@@ -1,6 +1,5 @@
-package org.nightlabs.jfire.voucher.admin.ui.editor.price;
+package org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +79,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		comp.setLayout(stackLayout);
 		comp.setLayoutData(new GridData(GridData.FILL_BOTH));
 		accountantDelegateComposite = new VoucherLocalAccountantDelegateComposite(comp, true);
-		//accountantDelegateComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		accountantDelegateComposite.setMap(new HashMap<Currency, Account>());
 		accountantDelegateComposite.addSelectionChangedListener(
 				new ISelectionChangedListener() {
 					@Override
@@ -92,8 +91,6 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 						}		
 					}
 				});
-
-
 
 		stackLayout.topControl = accountantDelegateComposite;
 		updateToolBarManager();
@@ -128,8 +125,6 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 
 		voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
-		
-		
 		inheritanceAction.setChecked(
 				voucherType.getProductTypeLocal().getFieldMetaData(
 						ProductTypeLocal.FieldName.localAccountantDelegate
@@ -144,12 +139,14 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	protected void updateContents()
 	{
 		accountsDelegateMap =  new HashMap<Currency, Account>();
-		HashMap<Currency, Account> copyMap =  new HashMap<Currency, Account>();
 		VoucherLocalAccountantDelegate localAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
 
 		for (Map.Entry<String, Account> me : localAccountantDelegate.getAccounts().entrySet()) {		
 			accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
 		}		
+		
+		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
+		// puts the accounts inside the widget
 		copyMap.putAll(accountsDelegateMap);
 		accountantDelegateComposite.setMap(copyMap);
 	}
@@ -175,44 +172,5 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		updateContents();
 		markDirty();
 	}
-
-
-
-	protected void assignAccountConfigClicked()
-	{
-		AccountVoucherTypeWizard priceVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID(),this.voucherType);
-		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
-		if( wizardDialog.open() == Window.OK)
-		{
-			
-			inheritanceAction.setChecked(voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
-			updateContents();
-			markDirty();
-		}
-	}
-
-
-	class AssignAccountConfigAction
-	extends Action
-	{
-		public AssignAccountConfigAction() {
-			super();
-			setId(AssignAccountConfigAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					VoucherAdminPlugin.getDefault(),
-					VoucherPriceConfigSection.class,
-			"AssignPriceConfig")); //$NON-NLS-1$
-			setToolTipText("assigns a new account configuration"); 
-			setText("assigns a new account configuration");
-		}
-
-		@Override
-		public void run() {
-			assignAccountConfigClicked();
-		}
-	}
-
-
-
 
 }

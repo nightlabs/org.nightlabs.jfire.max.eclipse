@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.admin.ui.editor.price;
+package org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -18,13 +18,13 @@ import org.nightlabs.jfire.voucher.store.VoucherType;
  * @author fitas [at] NightLabs [dot] de
  *
  */
-public class VoucherTypePricePage
+public class VoucherTypeAccountPricePage
 extends EntityEditorPageWithProgress
 
 {
-	public VoucherTypePricePage(FormEditor editor, String id, String name) {
+	public VoucherTypeAccountPricePage(FormEditor editor, String id, String name) {
 
-		super(editor, VoucherTypePricePage.class.getName(),"Price & Account Config"); //$NON-NLS-1$
+		super(editor, VoucherTypeAccountPricePage.class.getName(),"Price & Account Config"); //$NON-NLS-1$
 
 		// TODO Auto-generated constructor stub
 	}
@@ -35,7 +35,7 @@ extends EntityEditorPageWithProgress
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 		public IFormPage createPage(FormEditor formEditor) {
-			return new VoucherTypePricePage(formEditor,VoucherTypePricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.TitleSection"));  //$NON-NLS-1$
+			return new VoucherTypeAccountPricePage(formEditor,VoucherTypeAccountPricePage.class.getName(),Messages.getString("org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage.TitleSection"));  //$NON-NLS-1$
 		}
 
 		public IEntityEditorPageController createPageController(EntityEditor editor) {

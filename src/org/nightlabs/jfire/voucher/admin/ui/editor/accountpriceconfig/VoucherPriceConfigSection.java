@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.voucher.admin.ui.editor.price;
+package org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig;
 
 import java.util.HashMap;
 import java.util.Map;

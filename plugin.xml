@@ -8,7 +8,7 @@
               icon48x48="icons/editor/overview/General.48x48.png"
               indexHint="100"/>
         <pageFactory
-              class="org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage$Factory"
+              class="org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherTypeAccountPricePage$Factory"
               description="%org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage$Factory.description"
               editorID="org.nightlabs.jfire.voucher.admin.ui.editor.VoucherTypeEditor"
               icon48x48="icons/editor/overview/Money.48x48.png"
@@ -31,7 +31,7 @@
         </overviewPageStatusProvider>
         <overviewPageStatusProvider
               class="org.nightlabs.jfire.trade.admin.ui.editor.overview.PriceConfigOverviewPageStatusProviderFactory"
-              pageFactoryClass="org.nightlabs.jfire.voucher.admin.ui.editor.price.VoucherTypePricePage$Factory">
+              pageFactoryClass="org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig.VoucherTypeAccountPricePage$Factory">
         </overviewPageStatusProvider>
         <overviewPageStatusProvider
               class="org.nightlabs.jfire.trade.admin.ui.editor.overview.AuthorityOverviewPageStatusProviderFactory"
