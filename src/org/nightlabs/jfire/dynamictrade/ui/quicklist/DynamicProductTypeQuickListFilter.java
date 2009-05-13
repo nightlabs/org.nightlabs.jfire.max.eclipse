@@ -67,7 +67,7 @@ extends AbstractProductTypeQuickListFilter
 		try {
 			QuickListFilterQueryResultKey cacheKey = createQueryResultCacheKey(new SubProgressMonitor(monitor, 10));
 			QuickListFilterQueryResult<Collection<ProductType>> cacheResult = (QuickListFilterQueryResult<Collection<ProductType>>) Cache.sharedInstance().get(
-					null, cacheKey, 
+					null, cacheKey,
 					FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			if (cacheResult == null) {
 
@@ -76,17 +76,17 @@ extends AbstractProductTypeQuickListFilter
 						dynamicProductTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.dynamictrade.ui.quicklist.DynamicProductTypeQuickListFilter.search.monitor.task.name")); //$NON-NLS-1$
 					}
 				});
-				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
+				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().queryProductTypes(
 						productTypeQueries,
 						FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 50));
 				cacheResult = new QuickListFilterQueryResult<Collection<ProductType>>(cacheKey, queryResult);
 				Cache.sharedInstance().put(
-						null, cacheKey, cacheResult, 
+						null, cacheKey, cacheResult,
 						FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 			}
-			final Collection<ProductType> productTypes = cacheResult.getResult(); 
+			final Collection<ProductType> productTypes = cacheResult.getResult();
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					if (dynamicProductTypeTable.isDisposed())
