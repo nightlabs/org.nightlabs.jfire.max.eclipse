@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -15,15 +17,21 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
+import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.math.Base36Coder;
 import org.nightlabs.progress.NullProgressMonitor;
 
 
@@ -53,6 +61,10 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	public VoucherAccountConfigSection(IFormPage page, Composite parent, int style) {
 		super(page, parent, style, "Account Configuration");
 
+		
+		AssignAccountConfigAction assignAccountConfigAction = new AssignAccountConfigAction();
+		getToolBarManager().add(assignAccountConfigAction);
+		
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -88,12 +100,30 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	@Override
 	public void commit(boolean onSave) {
 		super.commit(onSave);
-		VoucherLocalAccountantDelegate delegate = getVoucherLocalAccountantDelegate();
-		if (delegate!= null)
+		
+		VoucherLocalAccountantDelegate delegate1 = getVoucherLocalAccountantDelegate();
+		
+		if (delegate1!= null)
 		{				
+		
+			VoucherLocalAccountantDelegate delegate = new VoucherLocalAccountantDelegate(
+					IDGenerator.getOrganisationID(),
+					Base36Coder.sharedInstance(false).encode(IDGenerator.nextID(LocalAccountantDelegate.class), 1));
+			delegate.getName().copyFrom(getVoucherLocalAccountantDelegate().getName());
+			
+
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
 				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
 			}	
+			
+		
+			voucherType.getProductTypeLocal().setLocalAccountantDelegate(delegate);
+		
+			voucherType.getProductTypeLocal().getFieldMetaData(
+					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(
+							false);		
+		
+		
 		}
 	}
 
@@ -163,4 +193,42 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		markDirty();
 	}
 
+	
+	
+	protected void assignAccountConfigClicked()
+	{
+		AccountVoucherTypeWizard priceVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID(),this.voucherType);
+		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
+		if( wizardDialog.open() == Window.OK)
+		{
+			
+			inheritanceAction.setChecked(voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
+			updateContents();
+			markDirty();
+		}
+	}
+
+
+	class AssignAccountConfigAction
+	extends Action
+	{
+		public AssignAccountConfigAction() {
+			super();
+			setId(AssignAccountConfigAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					VoucherAdminPlugin.getDefault(),
+					VoucherPriceConfigSection.class,
+			"AssignAccountConfig")); //$NON-NLS-1$
+			setToolTipText("assigns a new account configuration"); 
+			setText("assigns a new account configuration");
+		}
+
+		@Override
+		public void run() {
+			assignAccountConfigClicked();
+		}
+	}
+
+	
+	
 }
