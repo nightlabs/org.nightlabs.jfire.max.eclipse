@@ -68,7 +68,7 @@ extends AbstractProductTypeQuickListFilter
 						voucherTypeTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter.table.loadingMessage")); //$NON-NLS-1$
 					}
 				});
-				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().getProductTypes(
+				Collection<ProductType> queryResult = ProductTypeDAO.sharedInstance().queryProductTypes(
 						queryCollection,
 						FETCH_GROUPS_VOUCHER_TYPE,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
