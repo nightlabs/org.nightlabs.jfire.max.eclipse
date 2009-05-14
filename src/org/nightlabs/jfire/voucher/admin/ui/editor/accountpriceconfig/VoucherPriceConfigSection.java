@@ -157,7 +157,10 @@ extends ToolBarSectionPart
 		{
 			parentVoucherType =  VoucherTypeDAO.sharedInstance().getVoucherType(
 					voucherType.getExtendedProductTypeID(),
-					new String[] { FetchPlan.DEFAULT,  ProductType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,FetchGroupsPriceConfig.FETCH_GROUP_EDIT, PriceConfig.FETCH_GROUP_NAME},
+					new String[] { FetchPlan.DEFAULT, 
+						VoucherType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
+						FetchGroupsPriceConfig.FETCH_GROUP_EDIT, 
+						PriceConfig.FETCH_GROUP_NAME},
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 			voucherType.setPackagePriceConfig(parentVoucherType.getPackagePriceConfig());
 		}

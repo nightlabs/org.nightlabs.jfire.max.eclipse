@@ -48,6 +48,7 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 			new String[] {
 					FetchGroupsPriceConfig.FETCH_GROUP_EDIT,
 					VoucherType.FETCH_GROUP_PACKAGE_PRICE_CONFIG,
+					VoucherType.FETCH_GROUP_INNER_PRICE_CONFIG,
 					ProductType.FETCH_GROUP_PRODUCT_TYPE_LOCAL,
 					ProductTypeLocal.FETCH_GROUP_LOCAL_ACCOUNTANT_DELEGATE,
 					ProductTypeLocal.FETCH_GROUP_FIELD_METADATA_MAP,
