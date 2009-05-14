@@ -27,6 +27,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.WizardHop;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
@@ -173,7 +174,10 @@ extends WizardHopPage
 	}
 
 	public static final String[] FETCH_GROUPS_LOCAL_ACCOUNTANT_DELEGATE = {
-		FetchPlan.DEFAULT, LocalAccountantDelegate.FETCH_GROUP_NAME
+		FetchPlan.DEFAULT, LocalAccountantDelegate.FETCH_GROUP_NAME,
+		VoucherLocalAccountantDelegate.FETCH_GROUP_VOUCHER_LOCAL_ACCOUNTS,
+		VoucherLocalAccountantDelegate.FETCH_GROUP_NAME,
+		Account.FETCH_GROUP_NAME
 	};
 
 	private void setInheritedLocalAccountantDelegateName(String name)
