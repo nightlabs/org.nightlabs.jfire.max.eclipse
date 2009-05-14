@@ -22,8 +22,6 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.accounting.book.LocalAccountantDelegate;
-import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
@@ -31,7 +29,6 @@ import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
-import org.nightlabs.math.Base36Coder;
 import org.nightlabs.progress.NullProgressMonitor;
 
 
@@ -44,7 +41,9 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	private InheritanceAction inheritanceAction;
 	private VoucherType voucherType;
 	private VoucherLocalAccountantDelegate voucherLocalAccountantDelegate;
+	private VoucherLocalAccountantDelegate orginalVoucherLocalAccountantDelegate;
 	private HashMap<Currency, Account> accountsDelegateMap;
+	private Boolean localAccountinheritance = false;
 	private VoucherLocalAccountantDelegateComposite accountantDelegateComposite;
 
 	public static final String[] FETCH_GROUPS_VOUCHER_ACCOUNT = {
@@ -101,29 +100,18 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 		
-		VoucherLocalAccountantDelegate delegate1 = getVoucherLocalAccountantDelegate();
-		
-		if (delegate1!= null)
+		if (voucherLocalAccountantDelegate!= null)
 		{				
-		
-			VoucherLocalAccountantDelegate delegate = new VoucherLocalAccountantDelegate(
-					IDGenerator.getOrganisationID(),
-					Base36Coder.sharedInstance(false).encode(IDGenerator.nextID(LocalAccountantDelegate.class), 1));
-			delegate.getName().copyFrom(getVoucherLocalAccountantDelegate().getName());
-			
-
+			// copy the values from the local account widget
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
-				delegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
+				voucherLocalAccountantDelegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
 			}	
 			
-		
-			voucherType.getProductTypeLocal().setLocalAccountantDelegate(delegate);
-		
 			voucherType.getProductTypeLocal().getFieldMetaData(
 					ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(
-							false);		
-		
-		
+							localAccountinheritance);		
+			voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
+				
 		}
 	}
 
@@ -143,7 +131,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	public void setVoucherType(VoucherType voucherType)
 	{
 		this.voucherType = voucherType; 
-		voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
+		voucherLocalAccountantDelegate = getVoucherLocalAccountantDelegate();
+		orginalVoucherLocalAccountantDelegate = voucherLocalAccountantDelegate;
 		inheritanceAction.setChecked(
 				voucherType.getProductTypeLocal().getFieldMetaData(
 						ProductTypeLocal.FieldName.localAccountantDelegate
@@ -158,12 +147,11 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	protected void updateContents()
 	{
 		accountsDelegateMap =  new HashMap<Currency, Account>();
-		VoucherLocalAccountantDelegate localAccountantDelegate = (VoucherLocalAccountantDelegate) this.voucherType.getProductTypeLocal().getLocalAccountantDelegate();
 
-		for (Map.Entry<String, Account> me : localAccountantDelegate.getAccounts().entrySet()) {		
+		for (Map.Entry<String, Account> me : voucherLocalAccountantDelegate.getAccounts().entrySet()) {		
 			accountsDelegateMap.put(new Currency(me.getKey(),me.getKey(),2), me.getValue());
 		}		
-
+		localAccountinheritance = inheritanceAction.isChecked();
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
 		// puts the accounts inside the widget
 		copyMap.putAll(accountsDelegateMap);
@@ -179,16 +167,12 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 					voucherType.getExtendedProductTypeID(),
 					FETCH_GROUPS_VOUCHER_ACCOUNT,
 					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-			voucherType.getProductTypeLocal().setLocalAccountantDelegate(
-					parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate());
+			
+					voucherLocalAccountantDelegate = (VoucherLocalAccountantDelegate) parentVoucherType.getProductTypeLocal().getLocalAccountantDelegate();
 		}
 		else
-			voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
-
-		voucherType.getProductTypeLocal().getFieldMetaData(
-				ProductTypeLocal.FieldName.localAccountantDelegate).setValueInherited(
-						inheritanceAction.isChecked());		
-
+			voucherLocalAccountantDelegate = orginalVoucherLocalAccountantDelegate;
+		
 		updateContents();
 		markDirty();
 	}
@@ -197,12 +181,12 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	
 	protected void assignAccountConfigClicked()
 	{
-		AccountVoucherTypeWizard priceVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID(),this.voucherType);
-		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(priceVoucherTypeWizard);
+		AccountVoucherTypeWizard accountVoucherTypeWizard = new AccountVoucherTypeWizard(voucherType.getExtendedProductTypeID());
+		DynamicPathWizardDialog wizardDialog = new DynamicPathWizardDialog(accountVoucherTypeWizard);
 		if( wizardDialog.open() == Window.OK)
 		{
-			
-			inheritanceAction.setChecked(voucherType.getProductTypeLocal().getFieldMetaData(ProductTypeLocal.FieldName.localAccountantDelegate).isValueInherited());
+			voucherLocalAccountantDelegate = accountVoucherTypeWizard.selectedVoucherLocalAccountantDelegate();
+			inheritanceAction.setChecked(accountVoucherTypeWizard.isInherited());
 			updateContents();
 			markDirty();
 		}
