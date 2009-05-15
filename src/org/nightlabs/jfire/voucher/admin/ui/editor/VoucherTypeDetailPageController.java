@@ -127,7 +127,8 @@ extends AbstractProductTypeDetailPageController<VoucherType>
 
 		try {
 			VoucherManagerRemote voucherManager = JFireEjb3Factory.getRemoteBean(VoucherManagerRemote.class, Login.getLogin().getInitialContextProperties());
-			return voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			VoucherType newVoucherType = voucherManager.storeVoucherType(voucherType, true, getEntityFetchGroups(), NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+			return newVoucherType;
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
