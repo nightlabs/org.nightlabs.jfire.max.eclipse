@@ -41,6 +41,7 @@ import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -101,7 +102,10 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssueComment.FETCH_GROUP_USER,
 		IssueLinkType.FETCH_GROUP_NAME,
 		IssueHistory.FETCH_GROUP_USER,
-		IssueWorkTimeRange.FETCH_GROUP_USER
+		IssueWorkTimeRange.FETCH_GROUP_USER,
+		Issue.FETCH_GROUP_ISSUE_MARKERS, // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_NAME,         // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_DESCRIPTION,  // <-- Since 14.05.2009. TODO Icons.
 /*		Issue.FETCH_GROUP_THIS_ISSUE,
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 //		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,
@@ -130,12 +134,12 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 //		Issue.FETCH_GROUP_ISSUE_LOCAL,
 //		Issue.FETCH_GROUP_ISSUE_LINKS,
 //		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT_NAMES,
-		
-		
-//		FetchPlan.DEFAULT, 
+
+
+//		FetchPlan.DEFAULT,
 //		Issue.FETCH_GROUP_THIS_ISSUE,
 //		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION, 
+////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
 ////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
 //		IssueFileAttachment.FETCH_GROUP_THIS_FILEATTACHMENT,
 //		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
@@ -162,7 +166,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	public Issue getIssue() {
 		return getControllerObject();
 	}
-	
+
 	@Override
 	protected IEditorInput createNewInstanceEditorInput() {
 		return new IssueEditorInput(getIssueID(), true);
@@ -172,7 +176,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	protected String[] getEntityFetchGroups() {
 		return FETCH_GROUPS;
 	}
-	
+
 	private IStruct struct;
 
 	@Override
@@ -181,7 +185,7 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		struct = StructLocalDAO.sharedInstance().getStructLocal(issue.getPropertySet().getStructLocalObjectID(), new SubProgressMonitor(monitor, 30));
 		return issue;
 	}
-	
+
 	@Override
 	protected void setControllerObject(Issue controllerObject) {
 		if (controllerObject != null)

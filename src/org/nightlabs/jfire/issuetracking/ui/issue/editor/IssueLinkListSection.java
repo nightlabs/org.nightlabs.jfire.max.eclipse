@@ -24,27 +24,27 @@ import org.nightlabs.jfire.issuetracking.ui.issuelink.IssueLinkItemChangeEvent;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.create.CreateIssueLinkWizard;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
-/** 
+/**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
-	private Issue issue;
-	
+	private Issue issue;	// <-- There is already an Issue in the super class. Do we need this duplicate? Kai
+
 	private OpenLinkedObjectAction openLinkedObjectAction;
 	private AddLinkAction addLinkAction;
 	private RemoveLinkAction removeLinkAction;
-	
+
 	public IssueLinkListSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
 		getSection().setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.section.text")); //$NON-NLS-1$
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
-		
+
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		client.getGridLayout().numColumns = 1; 
-		
+		client.getGridLayout().numColumns = 1;
+
 		issueLinkAdderComposite = new IssueLinkAdderComposite(
 				client, SWT.NONE, false, controller.getIssue());
 		issueLinkAdderComposite.getGridData().grabExcessHorizontalSpace = true;
@@ -63,38 +63,38 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 				openLinkedObjectAction.run();
 			}
 		});
-		
+
 		getSection().setClient(client);
-		
+
 		openLinkedObjectAction = new OpenLinkedObjectAction();
 		addLinkAction = new AddLinkAction();
 		removeLinkAction = new RemoveLinkAction();
-		
+
 		getToolBarManager().add(openLinkedObjectAction);
 		getToolBarManager().add(addLinkAction);
 		getToolBarManager().add(removeLinkAction);
-		
+
 		updateToolBarManager();
 	}
-	
+
 	@Override
 	protected void doSetIssue(Issue issue) {
 		this.issue = issue;
 		issueLinkAdderComposite.getIssueLinkTable().setIssue(issue);
 	}
-	
+
 	@Override
 	public Issue getIssue() {
 		return issue;
 	}
 
-	public class OpenLinkedObjectAction extends Action {		
+	public class OpenLinkedObjectAction extends Action {
 		public OpenLinkedObjectAction() {
 			setId(OpenLinkedObjectAction.class.getName());
 			setImageDescriptor(
 					SharedImages.getSharedImageDescriptor(
-							IssueTrackingPlugin.getDefault(), 
-							IssueLinkListSection.class, 
+							IssueTrackingPlugin.getDefault(),
+							IssueLinkListSection.class,
 							"Open" //$NON-NLS-1$
 					)
 			);
@@ -113,15 +113,15 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 					}
 				}
 			}
-		}		
+		}
 	}
-	
-	public class AddLinkAction extends Action {		
+
+	public class AddLinkAction extends Action {
 		public AddLinkAction() {
 			setId(AddLinkAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueLinkListSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueLinkListSection.class,
 			"Add")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.AddLinkAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.AddLinkAction.text")); //$NON-NLS-1$
@@ -132,15 +132,15 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 			IssueLinkTable table = issueLinkAdderComposite.getIssueLinkTable();
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new CreateIssueLinkWizard(table, issue));
 			dialog.open();
-		}		
+		}
 	}
-	
-	public class RemoveLinkAction extends Action {		
+
+	public class RemoveLinkAction extends Action {
 		public RemoveLinkAction() {
 			setId(RemoveLinkAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(), 
-					IssueLinkListSection.class, 
+					IssueTrackingPlugin.getDefault(),
+					IssueLinkListSection.class,
 			"Remove")); //$NON-NLS-1$
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.RemoveLinkAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection.RemoveLinkAction.text")); //$NON-NLS-1$
@@ -149,6 +149,6 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 		@Override
 		public void run() {
 			issueLinkAdderComposite.getIssueLinkTable().removeIssueLinkTableItems(issueLinkAdderComposite.getIssueLinkTable().getSelectedElements());
-		}		
+		}
 	}
 }
