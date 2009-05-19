@@ -69,7 +69,7 @@
                 name="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.name"
                 toolbarPath="org.nightlabs.jfire.issuetracking.ui.overview" tooltip="%org.nightlabs.jfire.base.ui.overview.search.ApplySearchAction.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/action/IssueQuerySaveAction.16x16.png"
                 id="org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction"
                 name="%org.nightlabs.jfire.issuetracking.ui.overview.action.IssueQuerySaveAction.name"
