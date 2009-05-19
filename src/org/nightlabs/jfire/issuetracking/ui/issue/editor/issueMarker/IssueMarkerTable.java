@@ -8,9 +8,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 
 //      ,-_|\
 //     /     \  ]Egoiste in
@@ -76,25 +80,18 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 	private class IssMrkrLabelProvider extends TableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (element != null && element instanceof IssueMarker) {
+			if (element != null && element instanceof IssueMarker && columnIndex == 0) {
 				System.out.println("---------------- Aha! MOST convenient! It's asking for the image @colunmIndex: " + columnIndex);
 
-//				IssueMarker issueMarker = (IssueMarker)element;
-//				return issueMarker.getIcon16x16Data().;
+				// FIXME Ensure this works for the general case!!
+				IssueMarker issueMarker = (IssueMarker)element;
+				String suffix = "Email";
+				if (issueMarker.getName().getText().contains("Telephone")) suffix = "Telephone";
+				if (issueMarker.getName().getText().contains("Suspended")) suffix = "Suspended";
+
+				return SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
 			}
-//			if (columnIndex == 0) {
-//				if (element instanceof IssueLinkTableItem) {
-//					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
-//					IssueLinkHandler<ObjectID, Object> handler = getIssueLinkHandler(issueLinkTableItem.getLinkedObjectID());
-//					IssueLink issueLink = issueLinkTableItem.getIssueLink();
-//					if (issueLink == null)
-//						return null; // TODO we should return an image symbolising that currently data is loaded. issueLinkTableItem.getIssueLink() is only null, if there is currently a Jab running in the background loading data for a newly created IssueLink.
-//
-//					Object linkedObject = issueLink2LinkedObjectMap.get(issueLink);
-//
-//					return handler.getLinkedObjectImage(issueLink, linkedObject);
-//				}
-//			}
+
 			return null;
 		}
 
