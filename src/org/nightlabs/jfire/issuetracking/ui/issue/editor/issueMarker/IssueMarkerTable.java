@@ -59,7 +59,7 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 		tableColumn.setMoveable(true);
 		tableColumn.setText("Description");
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 70});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{20, 70});
 		table.setLayout(layout);
 	}
 
@@ -81,14 +81,13 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element != null && element instanceof IssueMarker && columnIndex == 0) {
-				System.out.println("---------------- Aha! MOST convenient! It's asking for the image @colunmIndex: " + columnIndex);
-
 				// FIXME Ensure this works for the general case!!
 				IssueMarker issueMarker = (IssueMarker)element;
-				String suffix = "Email";
-				if (issueMarker.getName().getText().contains("Telephone")) suffix = "Telephone";
-				if (issueMarker.getName().getText().contains("Suspended")) suffix = "Suspended";
-
+				String refText = issueMarker.getName().getText();
+//				String suffix = "Suspended";
+//				if (refText.equals("Email follow-up")) suffix = "Email";
+//				else if (refText.equals("Phone follow-up")) suffix = "Telephone";
+				String suffix = refText.contains("Email") ? "Email" : (refText.contains("Phone") ? "Telephone" : "Suspended");
 				return SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
 			}
 

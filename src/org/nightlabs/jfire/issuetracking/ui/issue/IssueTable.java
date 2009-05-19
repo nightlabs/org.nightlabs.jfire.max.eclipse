@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.ui.issue;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
@@ -15,10 +16,16 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
+import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -28,8 +35,11 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerSection;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -38,7 +48,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 
 /**
  * The table used for listing {@link Issue} elements.
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueTable
@@ -63,12 +73,14 @@ extends AbstractTableComposite<Issue>
 		IssueType.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
-		StateDefinition.FETCH_GROUP_NAME
+		StateDefinition.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_MARKERS, // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_NAME,         // <-- Since 14.05.2009
 	};
 
 	/**
 	 * Constructs the issue table.
-	 * 
+	 *
 	 * @param parent - the parent composite for holding this table
 	 * @param style - SWT style constant
 	 */
@@ -189,7 +201,7 @@ extends AbstractTableComposite<Issue>
 //	private void loadIssues(ProgressMonitor monitor)
 //	{
 //	Display.getDefault().syncExec(new Runnable() {
-//	public void run() {					
+//	public void run() {
 //	setInput("Loading data...");
 //	}
 //	});
@@ -219,50 +231,50 @@ extends AbstractTableComposite<Issue>
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(15));
+		layout.addColumnData(new ColumnWeightData(5)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.date.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(40));
+		layout.addColumnData(new ColumnWeightData(20)); // Previously: 40
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.type.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.subject.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(35)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.description.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(20));
+		layout.addColumnData(new ColumnWeightData(40)); // Previously: 20
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(15));
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(15));
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(15));
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(15));
-		
+		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
+
 		table.setLayout(layout);
-		
+
 		addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
@@ -289,11 +301,11 @@ extends AbstractTableComposite<Issue>
 	}
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-	
+
 	class IssueTableLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
 			if (element instanceof Issue) {
 				Issue issue = (Issue) element;
@@ -314,16 +326,51 @@ extends AbstractTableComposite<Issue>
 				break;
 				case(5): return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
 				case(6): return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
-				case(7): return getStateName(issue);					
+				case(7): return getStateName(issue);
 				case(8): return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}
 			}
 			return null;
-		}		
+		}
+
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+			// --- 8< --- KaiExperiments: since 19.05.2009 ------------------
+			// May need to amend this to accomodate for more than one Image
+			if (element != null && element instanceof Issue && columnIndex == 3) {
+				// Testing with multiple images.
+				Set<IssueMarker> issueMarkers = ((Issue)element).getIssueMarkers();
+				if (issueMarkers != null && !issueMarkers.isEmpty()) {
+					int n = issueMarkers.size();
+					int i=0;
+
+					Image[] imgIcons = new Image[n];
+					for (IssueMarker issueMarker : issueMarkers) {
+						String refText = issueMarker.getName().getText();
+						String suffix = refText.contains("Email") ? "Email" : (refText.contains("Phone") ? "Telephone" : "Suspended");
+						imgIcons[i++] = SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
+					}
+
+					Image combinedIcons = new Image(Display.getDefault(), 16*n + n-1, 16);
+					GC gc = new GC(combinedIcons);
+					try {
+						for(i=0; i<n; i++)
+							gc.drawImage(imgIcons[i], 16*i + i, 0);
+					} finally {
+						gc.dispose();
+					}
+
+					return combinedIcons;
+				}
+			}
+			// ------ KaiExperiments ----- >8 -------------------------------
+
+			return null;
+		}
 	}
 
-	protected String getStateName(Statable statable) 
+	protected String getStateName(Statable statable)
 	{
 		// I think we need to look for the newest State in both, statableLocal and statable! Marco.
 		StatableLocal statableLocal = statable.getStatableLocal();
@@ -340,7 +387,7 @@ extends AbstractTableComposite<Issue>
 			return state.getStateDefinition().getName().getText();
 
 		return ""; //$NON-NLS-1$
-	}	
+	}
 
 	public void setLoadingStatus()
 	{
