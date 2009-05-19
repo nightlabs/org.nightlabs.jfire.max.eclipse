@@ -30,7 +30,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 
 	private IssueLinkAdderComposite issueLinkAdderComposite;
-	private Issue issue;	// <-- There is already an Issue in the super class. Do we need this duplicate? Kai
+	private Issue issue;	// <-- FIXME There is already an Issue in the super class. Do we need this duplicate? Kai
 
 	private OpenLinkedObjectAction openLinkedObjectAction;
 	private AddLinkAction addLinkAction;

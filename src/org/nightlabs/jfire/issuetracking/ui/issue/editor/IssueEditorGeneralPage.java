@@ -38,6 +38,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerSection;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
@@ -58,7 +59,6 @@ extends EntityEditorPageWithProgress
 	 * new instances of {@link IssueEditorGeneralPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
-
 		public IFormPage createPage(FormEditor formEditor) {
 			return new IssueEditorGeneralPage(formEditor);
 		}
