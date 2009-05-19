@@ -886,9 +886,9 @@
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -922,9 +922,9 @@
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -958,9 +958,9 @@
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -994,9 +994,9 @@
                 name="%overview.action.edit.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -1009,9 +1009,9 @@
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.search.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -1038,9 +1038,9 @@
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%org.nightlabs.jfire.trade.ui.overview.account.action.ManualMoneyTransferAction.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
@@ -1060,9 +1060,9 @@
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.edit.tooltip"/>
             <groupMarker name="org.nightlabs.jfire.trade.ui.overview"/>
             <editorActionBarContribution
-                class="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                class="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 icon="icons/overview/Overview-Save.16x16.png"
-                id="org.nightlabs.jfire.base.ui.querystore.SaveQueryCollectionAction"
+                id="org.nightlabs.jfire.querystore.ui.SaveQueryCollectionAction"
                 name="%overview.action.saveQuery.name"
                 toolbarPath="org.nightlabs.jfire.trade.ui.overview" tooltip="%overview.action.saveQuery.tooltip"/>
         </editorActionBarContributionRegistry>
