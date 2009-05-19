@@ -1,11 +1,14 @@
 package org.nightlabs.jfire.voucher.admin.ui.editor.accountpriceconfig;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
@@ -18,8 +21,10 @@ import org.nightlabs.base.ui.action.InheritanceAction;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.editor.ToolBarSectionPart;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.store.ProductType;
@@ -27,8 +32,10 @@ import org.nightlabs.jfire.store.ProductTypeLocal;
 import org.nightlabs.jfire.voucher.accounting.VoucherLocalAccountantDelegate;
 import org.nightlabs.jfire.voucher.admin.ui.VoucherAdminPlugin;
 import org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.VoucherLocalAccountantDelegateComposite;
+import org.nightlabs.jfire.voucher.admin.ui.voucherlayout.editor.VoucherTypeTableDialog;
 import org.nightlabs.jfire.voucher.dao.VoucherTypeDAO;
 import org.nightlabs.jfire.voucher.store.VoucherType;
+import org.nightlabs.jfire.voucher.ui.quicklist.VoucherTypeQuickListFilter;
 import org.nightlabs.progress.NullProgressMonitor;
 
 
@@ -100,8 +107,31 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 	public void commit(boolean onSave) {
 		super.commit(onSave);
 		
-		if (voucherLocalAccountantDelegate!= null)
-		{				
+		
+		if (voucherLocalAccountantDelegate== null)
+			return;
+			
+		Collection<VoucherType> vouchers = VoucherTypeDAO.sharedInstance().getVoucherTypesByLocalAccountantDelegateId((ObjectID) JDOHelper.getObjectId(voucherLocalAccountantDelegate),
+				VoucherTypeQuickListFilter.FETCH_GROUPS_VOUCHER_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				
+		if (!vouchers.isEmpty()) 
+		{
+			String title = "Affected voucher types";
+			String message1 = "Storing the account configurations to the server will change the account configuration of the following voucher types.";
+			String message2 = "Do you really want to proceed?";
+			VoucherTypeTableDialog dlg = new VoucherTypeTableDialog(RCPUtil.getActiveShell(), vouchers, title, message1, message2) {
+				@Override
+				protected void createButtonsForButtonBar(Composite parent) {
+					createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
+					createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
+				}
+				
+			};
+			
+			if(dlg.open() == Window.CANCEL)
+				return;
+		}
+		
 			// copy the values from the local account widget
 			for (Map.Entry<Currency, Account> me : accountantDelegateComposite.getMap().entrySet()) {
 				voucherLocalAccountantDelegate.setAccount(me.getKey().getCurrencyID(), me.getValue()); 		
@@ -112,7 +142,7 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 							localAccountinheritance);		
 			voucherType.getProductTypeLocal().setLocalAccountantDelegate(voucherLocalAccountantDelegate);
 				
-		}
+		
 	}
 
 

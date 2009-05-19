@@ -75,6 +75,7 @@ public class VoucherTypeTableDialog extends ResizableTrayDialog {
 		return area;
 	}
 	
+	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);

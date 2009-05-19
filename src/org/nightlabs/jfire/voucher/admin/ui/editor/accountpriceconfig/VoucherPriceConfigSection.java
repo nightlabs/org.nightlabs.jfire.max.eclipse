@@ -74,6 +74,7 @@ extends ToolBarSectionPart
 		AssignPriceConfigAction assignPriceConfigAction = new AssignPriceConfigAction();
 		getToolBarManager().add(assignPriceConfigAction);
 
+
 		inheritanceAction = new InheritanceAction(){
 			@Override
 			public void run() {
@@ -110,13 +111,14 @@ extends ToolBarSectionPart
 		currencyAmountTableWrapper.addPriceConfigValueChangedListener(new IPriceConfigValueChangedListener() {
 			public void priceValueChanged()
 			{
-				// if value has changed
+				// if value has changed then fire change event.
 				if(!orgPriceMap.equals(currencyAmountTableWrapper.getMap()))
 				{
 					markDirty();
 				}
 			}
 		});
+		
 
 		stackLayout.topControl = currencyAmountTableWrapper;
 		MenuManager menuManager = new MenuManager();
@@ -197,6 +199,7 @@ extends ToolBarSectionPart
 		else
 			orgPriceMap = originalVoucherConfig.getPrices();
 
+		
 		switchtoEditPriceConfigPage();
 		updatePricesTable();
 
@@ -210,17 +213,18 @@ extends ToolBarSectionPart
 
 	protected void updatePricesTable()
 	{
-		if(getVoucherPriceConfig()== null)
+		VoucherPriceConfig voucherPriceConfig = getVoucherPriceConfig();
+		if(voucherPriceConfig != null)
+			switchtoEditPriceConfigPage();
+		else
 		{
 			switchtoNewAssignPriceConfigPage();
 			return;
 		}
-		else
-			switchtoEditPriceConfigPage();
-
-		Map<Currency, Long> map = new HashMap<Currency, Long>(getVoucherPriceConfig().getPrices());
+		// "Price Configuration / "
+		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherPriceConfig.getPrices());
 		currencyAmountTableWrapper.setMap(map);
-		//getSection().setText(getVoucherPriceConfig().getName().getText());
+		getSection().setText(voucherPriceConfig.getName().getText());
 	}
 
 	protected void addCurrencyPressed()
