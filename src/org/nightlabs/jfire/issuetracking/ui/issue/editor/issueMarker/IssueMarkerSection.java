@@ -2,6 +2,9 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
 import java.util.Set;
 
+import javax.jdo.JDOHelper;
+
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,11 +12,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
+import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.AbstractIssueEditorGeneralSection;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection;
 
 //      ,-_|\
 //     /     \  ]Egoiste in
@@ -50,6 +57,8 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		addIssueMarkerAction = new AddIssueMarkerAction();
 		getToolBarManager().add(addIssueMarkerAction);
 
+		getToolBarManager().add(new RemoveLinkAction());	// TODO Complete this properly to remove selected IssueMarker.
+
 		updateToolBarManager();
 	}
 
@@ -58,6 +67,8 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 */
 	@Override
 	protected void doSetIssue(Issue issue) {
+		addIssueMarkerAction.setIssueID( (IssueID)JDOHelper.getObjectId(getIssue()) );
+
 		Set<IssueMarker> iMs = issue.getIssueMarkers();
 		boolean isMarkersExist = iMs != null && !iMs.isEmpty();
 		if (isMarkersExist) {
@@ -97,5 +108,22 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		}
 
 		public IssueMarkerTable getIssueMarkerTable() { return issueMarkerTable; }
+	}
+
+	public class RemoveLinkAction extends Action {
+		public RemoveLinkAction() {
+			setId(AddIssueMarkerAction.class.getName());
+			setImageDescriptor(SharedImages.getSharedImageDescriptor(
+					IssueTrackingPlugin.getDefault(),
+					IssueLinkListSection.class,
+					"Remove")); //$NON-NLS-1$
+			setToolTipText("Remove issue marker");
+			setText("Remove issue marker");
+		}
+
+		@Override
+		public void run() {
+			// TODO Complete this part.
+		}
 	}
 }

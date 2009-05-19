@@ -2,6 +2,8 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
 import org.eclipse.jface.action.Action;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection;
 
@@ -17,6 +19,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection;
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class AddIssueMarkerAction extends Action {
+	private IssueID issueID;
 	/**
 	 * Creates a new instance of the AddIssueMarkerAction.
 	 */
@@ -30,8 +33,14 @@ public class AddIssueMarkerAction extends Action {
 		setText("Add issue marker(s)");
 	}
 
+	public void setIssueID(IssueID issueID) {
+		this.issueID = issueID;
+	}
+
 	@Override
 	public void run() {
-		// TODO Provide interface through a dialog to get user to add a new IssueMarker)
+		System.out.println("\n ------------------ BOO! -----------------\n");
+		DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(new AddIssueMarkerWizard(issueID));
+		dialog.open();
 	}
 }
