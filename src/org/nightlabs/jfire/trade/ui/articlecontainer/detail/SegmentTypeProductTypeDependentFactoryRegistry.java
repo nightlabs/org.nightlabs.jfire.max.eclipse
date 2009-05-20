@@ -87,11 +87,16 @@ extends AbstractEPProcessor
 			articleContainerC = articleContainerC.getSuperclass();
 		}
 		if (throwExceptionIfNotFound && factory == null)
-			throw new IllegalStateException("Nothing registered for articleContainerClass=\""+articleContainerClass+"\", segmentTypeClass=\""+segmentTypeClass.getName()+"\" (or a super-class)!"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			throw new IllegalStateException(
+					"Nothing registered for articleContainerClass=\"" //$NON-NLS-1$
+					+ articleContainerClass.getName() + "\", segmentTypeClass=\"" //$NON-NLS-1$
+					+ segmentTypeClass.getName() + "\" " //$NON-NLS-1$
+					+ " productTypeClass=\"" + productTypeClass.getName() + "\" (or a super-class)!" //$NON-NLS-1$  //$NON-NLS-2$
+			);
 		return factory;
-		
+
 	}
-	
+
 	private SegmentTypeProductTypeDependentFactory getFactory(
 			String articleContainerClass, Class<? extends SegmentType> segmentTypeClass,
 			Class<? extends ProductType> productTypeClass, boolean throwExceptionIfNotFound)
