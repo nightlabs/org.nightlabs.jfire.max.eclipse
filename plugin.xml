@@ -1380,6 +1380,13 @@
              articleContainerClass="org.nightlabs.jfire.trade.recurring.RecurringOffer"
              editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
              indexHint="1">
+       </articleContainerEditorPageFactory>
+       <articleContainerEditorPageFactory
+             articleContainerClass="org.nightlabs.jfire.trade.ArticleContainer"
+             class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage$Factory"
+             editorID="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditor"
+             id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerPropertySetPage"
+             indexHint="50">
        </articleContainerEditorPageFactory>       
     </extension>
     <extension
