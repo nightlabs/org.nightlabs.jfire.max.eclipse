@@ -119,6 +119,11 @@
         <issueLinkHandlerFactory
             categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory"
             class="org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkHandlerAdderFactoryIssue" name="Issue"/>
+        <issueLinkHandlerCategory
+            id="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person" name="Person"/>
+        <issueLinkHandlerFactory
+            categoryId="org.nightlabs.jfire.issuetracking.ui.issueLinkHandlerCategory.person"
+            class="org.nightlabs.jfire.issuetracking.ui.issuelink.person.IssueLinkHandlerAdderFactoryPerson" name="Person"/>
     </extension>
     <extension point="org.nightlabs.base.ui.editor2perspective">
         <registry
