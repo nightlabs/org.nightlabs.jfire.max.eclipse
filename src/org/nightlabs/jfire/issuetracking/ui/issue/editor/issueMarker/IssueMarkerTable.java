@@ -53,7 +53,7 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
-		tableColumn.setText("Name");
+		tableColumn.setText("Marker name");
 
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
@@ -74,10 +74,11 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 
 
 
+	// ------------------------------------------------------------------------------------------------------
 	/**
 	 * Provides the contents for the IssueMarkerTable.
 	 */
-	private class IssMrkrLabelProvider extends TableLabelProvider {
+	private static class IssMrkrLabelProvider extends TableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element != null && element instanceof IssueMarker && columnIndex == 0) {
@@ -94,6 +95,7 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 			return null;
 		}
 
+		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			// Note: @colunmIndex 0 -- Name of the IssueMarker, and its related icon.
 			//       @colunmIndex 1 -- Description of the IssueMarker.

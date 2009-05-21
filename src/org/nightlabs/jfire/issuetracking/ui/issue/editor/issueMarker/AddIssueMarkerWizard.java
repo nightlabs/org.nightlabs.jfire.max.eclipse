@@ -35,7 +35,8 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 	 */
 	public AddIssueMarkerWizard(IssueID issueID) {
 		this.issueID = issueID;
-		this.setWindowTitle("Add new issue marker");
+		setWindowTitle("Add new issue marker");
+		setForcePreviousAndNextButtons(false);
 	}
 
 	@Override
@@ -67,11 +68,13 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 		private I18nTextBuffer issueMarkerDescBuffer;
 		private II18nTextEditor issueMarkerDescEditor;
 
+		private IssueMarkerNameCombo issueMarkerNameCombo;
+
 		/**
 		 * Creates a new instance of an AddIssueMarkerWizardPage.
 		 */
 		public AddIssueMarkerWizardPage() {
-			super(AddIssueMarkerWizardPage.class.getName(), "Create a new issue marker");
+			super(AddIssueMarkerWizardPage.class.getName(), "Add issue marker");
 			setDescription("Select an issue marker name and provide a description to mark this issue.");
 		}
 
@@ -84,6 +87,10 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 			XComposite page = new XComposite(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 			page.setLayoutData(new GridData(GridData.FILL_BOTH));
 			page.getGridLayout().numColumns = 1;
+
+			new Label(page, SWT.NONE).setText("Marker name :");
+			issueMarkerNameCombo = new IssueMarkerNameCombo(page);
+
 
 			new Label(page, SWT.NONE).setText("Description :");
 			issueMarkerDescBuffer = new I18nTextBuffer();
