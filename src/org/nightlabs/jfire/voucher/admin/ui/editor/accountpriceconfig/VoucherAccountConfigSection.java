@@ -184,6 +184,8 @@ public class VoucherAccountConfigSection extends ToolBarSectionPart{
 		localAccountinheritance = inheritanceAction.isChecked();
 		Map<Currency, Account> copyMap = accountantDelegateComposite.getMap();
 		// puts the accounts inside the widget
+		String str = String.format("%s - %s","Account Configuration",voucherLocalAccountantDelegate.getName().getText());				
+		getSection().setText(str);
 		copyMap.putAll(accountsDelegateMap);
 		accountantDelegateComposite.setMap(copyMap);
 	}

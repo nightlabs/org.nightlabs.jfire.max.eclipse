@@ -224,7 +224,8 @@ extends ToolBarSectionPart
 		// "Price Configuration / "
 		Map<Currency, Long> map = new HashMap<Currency, Long>(voucherPriceConfig.getPrices());
 		currencyAmountTableWrapper.setMap(map);
-		getSection().setText(voucherPriceConfig.getName().getText());
+		String str = String.format("%s - %s","Price Configuration",voucherPriceConfig.getName().getText());				
+		getSection().setText(str);
 	}
 
 	protected void addCurrencyPressed()
