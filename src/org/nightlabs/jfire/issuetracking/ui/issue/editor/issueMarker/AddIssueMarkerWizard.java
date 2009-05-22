@@ -1,20 +1,22 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
+import java.util.Locale;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
-import org.nightlabs.base.ui.language.I18nTextEditorTable;
 import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.i18n.I18nTextBuffer;
-import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.idgenerator.IDGenerator;
+import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarkerName;
 
 //      ,-_|\
 //     /     \  ]Egoiste in
@@ -27,33 +29,74 @@ import org.nightlabs.jfire.issue.id.IssueID;
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class AddIssueMarkerWizard extends DynamicPathWizard {
-	private IssueID issueID;
+	private Issue issue;
 	private AddIssueMarkerWizardPage page;
 
 	/**
 	 * Creates a new instance of an AddIssueMarkerWizard.
 	 */
-	public AddIssueMarkerWizard(IssueID issueID) {
-		this.issueID = issueID;
+	public AddIssueMarkerWizard(Issue issue) {
+		this.issue = issue;
 		setWindowTitle("Add new issue marker");
 		setForcePreviousAndNextButtons(false);
 	}
 
 	@Override
 	public void addPages() {
-		assert issueID != null;
 		page = new AddIssueMarkerWizardPage();
 		addPage(page);
 	}
 
+
+
+//	private static final String[] FETCH_GROUPS_ISSUE = new String[] {
+//		FetchPlan.DEFAULT,
+//		Issue.FETCH_GROUP_ISSUE_MARKERS,
+//	};
+//
+//	private static final String[] FETCH_GROUPS_ISSUE_MARKER = new String[] {
+//		FetchPlan.DEFAULT,
+//		IssueMarker.FETCH_GROUP_NAME,
+//		IssueMarker.FETCH_GROUP_DESCRIPTION,	// Icon is still missing!
+//	};
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
-		return false;
+		// Test
+		IssueMarkerName issueMarkerName = page.getIssueMarkerName();
+//		I18nTextBuffer issueMarkerDesc = page.getIssueMarkerDescBuffer();
+
+//		// Get the latest reference the related Issue.
+//		final Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+
+		// Create and persist new IssueMarker.
+		IssueMarker issueMarker = new IssueMarker(IDGenerator.getOrganisationID(), IDGenerator.nextID(IssueMarker.class));
+		issueMarker.getName().copyFrom( issueMarkerName );
+		issueMarker.getDescription().setText(Locale.ENGLISH.getLanguage(), "Some test description.");  //.copyFrom( issueMarkerDesc );
+		issue.addIssueMarker(issueMarker);
+
+//		// Store the contents.
+//		Job storeJob = new Job("Storing new IssueMarker ...") {
+//			@Override
+//			protected IStatus run(ProgressMonitor monitor) throws Exception {
+//				IssueManagerRemote imr = null;
+//				try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
+//				catch (Exception e) { throw new RuntimeException(e); }
+//
+//				issueMarker_det = imr.storeIssueMarker(issueMarker, true, FETCH_GROUPS_ISSUE_MARKER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//
+////				issue_det = imr.storeIssue(issue, true, FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//
+//		storeJob.setUser(true);
+//		storeJob.setPriority(Job.SHORT);
+//		storeJob.schedule();
+		return true;
 	}
 
 
@@ -93,12 +136,12 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 
 
 			new Label(page, SWT.NONE).setText("Description :");
-			issueMarkerDescBuffer = new I18nTextBuffer();
-			issueMarkerDescEditor = new I18nTextEditorTable(page);
-			issueMarkerDescEditor.setI18nText(issueMarkerDescBuffer);
-			issueMarkerDescEditor.addModifyListener(new ModifyListener() {
-				public void modifyText(ModifyEvent arg0)	{ getWizard().getContainer().updateButtons(); }
-			});
+//			issueMarkerDescBuffer = new I18nTextBuffer();
+//			issueMarkerDescEditor = new I18nTextEditorTable(page);
+//			issueMarkerDescEditor.setI18nText(issueMarkerDescBuffer);
+//			issueMarkerDescEditor.addModifyListener(new ModifyListener() {
+//				public void modifyText(ModifyEvent arg0)	{ getWizard().getContainer().updateButtons(); }
+//			});
 
 			return page;
 		}
@@ -113,9 +156,14 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 		 */
 		public I18nTextBuffer getIssueMarkerDescBuffer()    { return issueMarkerDescBuffer; }
 
+		/**
+		 * @return the selected IssueMarkerName from the drop-down combo.
+		 */
+		public IssueMarkerName getIssueMarkerName()         { return issueMarkerNameCombo.getSelectedElement().getName(); }
+
 		@Override
 		public boolean isPageComplete() {
-			return true; //return cashBoxTrayNameBuffer != null && !cashBoxTrayNameBuffer.isEmpty();
+			return true; //issueMarkerDescBuffer != null && !issueMarkerDescBuffer.isEmpty();
 		}
 	}
 

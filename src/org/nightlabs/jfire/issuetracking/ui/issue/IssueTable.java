@@ -1,11 +1,20 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
+import java.awt.Point;
+import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -16,16 +25,14 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PartInitException;
-import org.nightlabs.base.ui.resource.SharedImages;
-import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
-import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -35,11 +42,9 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
-import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerSection;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -50,6 +55,7 @@ import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
  * The table used for listing {@link Issue} elements.
  *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueTable
 extends AbstractTableComposite<Issue>
@@ -76,6 +82,7 @@ extends AbstractTableComposite<Issue>
 		StateDefinition.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_MARKERS, // <-- Since 14.05.2009
 		IssueMarker.FETCH_GROUP_NAME,         // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA
 	};
 
 	/**
@@ -111,116 +118,94 @@ extends AbstractTableComposite<Issue>
 				});
 			}
 		});
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) {
+				disposeAllImages();
+			}
+		});
 	}
 
-//	private JDOLifecycleListener newIssueListener = new JDOLifecycleAdapterJob("Loading Issue") {
-//	private SimpleLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(Issue.class,
-//	true, JDOLifecycleState.NEW);
+	private void disposeAllImages()
+	{
+		// dispose all images
+		for (Image image : imageKey2Image.values()) {
+			image.dispose();
+		}
+		imageKey2Image.clear();
+	}
 
-//	public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
-//	{
-//	return filter;
-//	}
+	private String generateCombiIssueMarkerImageKey(Issue issue)
+	{
+		List<IssueMarker> issueMarkers = new ArrayList<IssueMarker>(issue.getIssueMarkers());
+		Collections.sort(issueMarkers, new Comparator<IssueMarker>() {
+			@Override
+			public int compare(IssueMarker o1, IssueMarker o2) {
+				int c = o1.getOrganisationID().compareTo(o2.getOrganisationID());
+				if (c != 0)
+					return c;
 
-//	public void notify(JDOLifecycleEvent event)
-//	{
-//	Set<IssueID> issueIDs = new HashSet<IssueID>();
-//	for (DirtyObjectID dirtyObjectID : event.getDirtyObjectIDs())
-//	issueIDs.add((IssueID) dirtyObjectID.getObjectID());
+				return o1.getIssueMarkerID() < o2.getIssueMarkerID() ? -1 : 1;
+			}
+		});
+		StringBuilder sb = new StringBuilder();
+		for (IssueMarker issueMarker : issueMarkers) {
+			if (sb.length() > 0)
+				sb.append("::");
 
-//	// we should filter the new issueIDs against the conditions defined by the UI (i.e. the QueryMap that is managed by IssueEntryListViewer).
-//	// TODO or even better we embed the JDOQueryMap in our IJDOLifecycleListenerFilter (which needs to be updated whenever we press the search button),
-//	// since this would be more efficient than first sending all new issueIDs to the client and then again run the queries on the server (the filter
-//	// is already on the server and could run the queries with 1 less round-trip to the client).
-//	// We'll do this filtering thing for JFire 1.2 ;-) or later. It's fine for the beginning, if all new issues pop up.
+			sb.append(issueMarker.getOrganisationID());
+			sb.append('/');
+			sb.append(issueMarker.getIssueMarkerID());
+		}
+		return sb.toString();
+	}
 
-//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(issueIDs, IssueTable.FETCH_GROUPS_ISSUE,
-//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//	getProgressMontitorWrapper());
+	private Map<String, Image> imageKey2Image = new HashMap<String, Image>();
+	private static Point ISSUE_MARKER_IMAGE_DIMENSION = new Point(16, 16);
 
-//	Display.getDefault().asyncExec(new Runnable() {
-//	public void run() {
-//	for (Issue issue : issues) {
-//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-//	}
-//	refresh();
-//	}
-//	});
-//	}
-//	};
+	protected Image getCombiIssueMarkerImage(Issue issue)
+	{
+		if (maxIssueMarkerCountPerIssue < 0)
+			throw new IllegalStateException("maxIssueMarkerCountPerIssue < 0");
 
-//	private NotificationListener changedIssueListener = new NotificationAdapterJob() {
-//	public void notify(org.nightlabs.notification.NotificationEvent notificationEvent) {
-//	ProgressMonitor monitor = getProgressMonitorWrapper();
-//	Set<IssueID> dirtyIssueIDs = new HashSet<IssueID>();
-//	for (Iterator<?> it = notificationEvent.getSubjects().iterator(); it.hasNext(); ) {
-//	DirtyObjectID dirtyObjectID = (DirtyObjectID) it.next();
-//	switch (dirtyObjectID.getLifecycleState()) {
-//	case DIRTY:
-//	dirtyIssueIDs.add((IssueID) dirtyObjectID.getObjectID());
-//	break;
-//	case DELETED:
-//	// TODO remove the object from the UI
-//	break;
-//	default:
-//	break;
-//	}
-//	}
+		String imageKey = generateCombiIssueMarkerImageKey(issue);
+		Image combiImage = imageKey2Image.get(imageKey);
+		if (combiImage == null) {
+			combiImage = new Image(
+					getDisplay(),
+					ISSUE_MARKER_IMAGE_DIMENSION.x * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					ISSUE_MARKER_IMAGE_DIMENSION.y
+			);
+			GC gc = new GC(combiImage);
+			try {
+				Iterator<IssueMarker> itIssueMarkers = issue.getIssueMarkers().iterator();
+				for(int i=0; i<maxIssueMarkerCountPerIssue; i++) {
+					if (!itIssueMarkers.hasNext())
+						break;
 
-//	if (!dirtyIssueIDs.isEmpty()) {
-//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(
-//	dirtyIssueIDs,
-//	IssueTable.FETCH_GROUPS_ISSUE,
-//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//	monitor);
+					IssueMarker issueMarker = itIssueMarkers.next();
+					String issueMarkerIDString = JDOHelper.getObjectId(issueMarker).toString();
+					Image icon = imageKey2Image.get(issueMarkerIDString);
+					if (icon == null) {
+						if (issueMarker.getIcon16x16Data() != null) {
+							ByteArrayInputStream in = new ByteArrayInputStream(issueMarker.getIcon16x16Data());
+							icon = new Image(getDisplay(), in);
+//							in.close(); // not necessary, because it is a ByteArrayInputStream working solely in RAM - unfortunately it is declared with a throws clause - thus commenting it out. Marco.
+							imageKey2Image.put(issueMarkerIDString, icon);
+						}
+					}
 
-//	Display.getDefault().asyncExec(new Runnable() {
-//	public void run() {
-//	for (Issue issue : issues)
-//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
+					if (icon != null)
+						gc.drawImage(icon, ISSUE_MARKER_IMAGE_DIMENSION.x * i + i, 0);
+				}
+			} finally {
+				gc.dispose();
+			}
 
-//	refresh();
-//	}
-//	});
-//	}
-//	}
-//	};
-
-//	private void loadIssues()
-//	{
-//	Job job = new Job("Loading issues") {
-//	@Override
-//	protected IStatus run(ProgressMonitor monitor) throws Exception {
-//	loadIssues(monitor);
-//	return Status.OK_STATUS;
-//	}
-//	};
-//	job.schedule();
-//	}
-
-//	private void loadIssues(ProgressMonitor monitor)
-//	{
-//	Display.getDefault().syncExec(new Runnable() {
-//	public void run() {
-//	setInput("Loading data...");
-//	}
-//	});
-
-//	final Collection<Issue> issues = IssueDAO.sharedInstance().getIssues(IssueTable.FETCH_GROUPS_ISSUE,
-//	NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//	monitor);
-
-//	Display.getDefault().asyncExec(new Runnable() {
-//	public void run() {
-//	issueID2issue.clear();
-//	for (Issue issue : issues) {
-//	issueID2issue.put((IssueID) JDOHelper.getObjectId(issue), issue);
-//	}
-
-//	setInput(issueID2issue.values());
-//	}
-//	});
-//	}
+			imageKey2Image.put(imageKey, combiImage);
+		}
+		return combiImage;
+	}
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table)
@@ -228,47 +213,54 @@ extends AbstractTableComposite<Issue>
 		TableColumn tc;
 		TableLayout layout = new TableLayout();
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 0
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.id.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(5)); // Previously: 15
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 1
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.date.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(20)); // Previously: 40
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 2
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.type.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 20
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 3
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.subject.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(35)); // Previously: 20
+		layout.addColumnData(new ColumnWeightData(22)); // Previously: 20
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 4
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.description.text")); //$NON-NLS-1$
-		layout.addColumnData(new ColumnWeightData(40)); // Previously: 20
+		layout.addColumnData(new ColumnWeightData(30)); // Previously: 20
 
-		tc = new TableColumn(table, SWT.LEFT);
+		// ---->> Added to display IssueMarker icons, whenever they are avaible in an Issue ------------------------------------|
+		tc = new TableColumn(table, SWT.LEFT); // @column 5
+		tc.setMoveable(true);
+		tc.setText("Markers");
+		layout.addColumnData(new ColumnWeightData(10));
+		// <<-------------------------------------------------------------------------------------------------------------------|
+
+		tc = new TableColumn(table, SWT.LEFT); // @column 6
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.severity.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 7
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.priority.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 8
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.state.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
 
-		tc = new TableColumn(table, SWT.LEFT);
+		tc = new TableColumn(table, SWT.LEFT); // @column 9
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumn.status.text")); //$NON-NLS-1$
 		layout.addColumnData(new ColumnWeightData(10)); // Previously: 15
@@ -310,11 +302,11 @@ extends AbstractTableComposite<Issue>
 			if (element instanceof Issue) {
 				Issue issue = (Issue) element;
 				switch (columnIndex) {
-				case(0): return issue.getIssueIDAsString();
-				case(1): return dateTimeFormat.format(issue.getCreateTimestamp());
-				case(2): return issue.getIssueType().getName().getText();
-				case(3): return issue.getSubject().getText();
-				case(4):
+				case 0: return issue.getIssueIDAsString();
+				case 1: return dateTimeFormat.format(issue.getCreateTimestamp());
+				case 2: return issue.getIssueType().getName().getText();
+				case 3: return issue.getSubject().getText();
+				case 4:
 					//TODO: We should find another ways for displaying the description text if it's longer than the column width!!!!
 					if (issue.getDescription() != null) {
 						String descriptionText = issue.getDescription().getText();
@@ -324,10 +316,11 @@ extends AbstractTableComposite<Issue>
 							return descriptionText;
 					}
 				break;
-				case(5): return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
-				case(6): return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
-				case(7): return getStateName(issue);
-				case(8): return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
+				// case 5 <-- Reserved for displaying IssueMarker icons only.
+				case 6: return issue.getIssueSeverityType() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.severity.noData") : issue.getIssueSeverityType().getIssueSeverityTypeText().getText(); //$NON-NLS-1$
+				case 7: return issue.getIssuePriority() == null ? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.priority.noData") : issue.getIssuePriority().getIssuePriorityText().getText(); //$NON-NLS-1$
+				case 8: return getStateName(issue);
+				case 9: return issue.isStarted()? Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.working") : Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.tableColumnText.stopped"); //$NON-NLS-1$ //$NON-NLS-2$
 				default: return ""; //$NON-NLS-1$
 				}
 			}
@@ -337,32 +330,36 @@ extends AbstractTableComposite<Issue>
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			// --- 8< --- KaiExperiments: since 19.05.2009 ------------------
-			// May need to amend this to accomodate for more than one Image
-			if (element != null && element instanceof Issue && columnIndex == 3) {
+			// This accomodates for more than one Image icon. But we have a problem if not all fields have the same
+			// number of icons.
+			// FIXME Standardise the icons.
+			// TODO Generalise this with the registry.
+			if (element != null && element instanceof Issue && columnIndex == 5) {
 				// Testing with multiple images.
-				Set<IssueMarker> issueMarkers = ((Issue)element).getIssueMarkers();
-				if (issueMarkers != null && !issueMarkers.isEmpty()) {
-					int n = issueMarkers.size();
-					int i=0;
-
-					Image[] imgIcons = new Image[n];
-					for (IssueMarker issueMarker : issueMarkers) {
-						String refText = issueMarker.getName().getText();
-						String suffix = refText.contains("Email") ? "Email" : (refText.contains("Phone") ? "Telephone" : "Suspended");
-						imgIcons[i++] = SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
-					}
-
-					Image combinedIcons = new Image(Display.getDefault(), 16*n + n-1, 16);
-					GC gc = new GC(combinedIcons);
-					try {
-						for(i=0; i<n; i++)
-							gc.drawImage(imgIcons[i], 16*i + i, 0);
-					} finally {
-						gc.dispose();
-					}
-
-					return combinedIcons;
-				}
+//				Set<IssueMarker> issueMarkers = ((Issue)element).getIssueMarkers();
+//				if (issueMarkers != null && !issueMarkers.isEmpty()) {
+//					int n = issueMarkers.size();
+//					int i=0;
+//
+//					Image[] imgIcons = new Image[n];
+//					for (IssueMarker issueMarker : issueMarkers) {
+//						String refText = issueMarker.getName().getText();
+//						String suffix = refText.contains("Email") ? "Email" : (refText.contains("Phone") ? "Telephone" : "Suspended");
+//						imgIcons[i++] = SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
+//					}
+//
+////					Image combinedIcons = new Image(Display.getDefault(), 16*n + n-1, 16);
+////					GC gc = new GC(combinedIcons);
+////					try {
+////						for(i=0; i<n; i++)
+////							gc.drawImage(imgIcons[i], 16*i + i, 0);
+////					} finally {
+////						gc.dispose();
+////					}
+//
+//					return combinedIcons;
+//				}
+				return getCombiIssueMarkerImage((Issue) element);
 			}
 			// ------ KaiExperiments ----- >8 -------------------------------
 
@@ -389,8 +386,27 @@ extends AbstractTableComposite<Issue>
 		return ""; //$NON-NLS-1$
 	}
 
-	public void setLoadingStatus()
-	{
-		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.table.loading.text")); //$NON-NLS-1$
+//	public void setLoadingStatus()
+//	{
+//		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueTable.table.loading.text")); //$NON-NLS-1$
+//	}
+
+	private int maxIssueMarkerCountPerIssue = -1;
+
+	@Override
+	public void setInput(Object input) {
+		// determine the maximum number of IssueMarkers per Issue
+		// TODO we need to refactor this (ask the server) when refactoring this whole search stuff to SWT.VIRTUAL
+		disposeAllImages();
+		maxIssueMarkerCountPerIssue = -1;
+		if (input instanceof Collection) {
+			for (Object o : ((Collection<?>)input)) {
+				if (o instanceof Issue) {
+					maxIssueMarkerCountPerIssue = Math.max(maxIssueMarkerCountPerIssue, ((Issue)o).getIssueMarkers().size());
+				}
+			}
+		}
+
+		super.setInput(input);
 	}
 }

@@ -1,10 +1,10 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
+import java.util.Collection;
 import java.util.Set;
 
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -13,14 +13,12 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
-import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.AbstractIssueEditorGeneralSection;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueLinkListSection;
 
 //      ,-_|\
 //     /     \  ]Egoiste in
@@ -67,8 +65,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 */
 	@Override
 	protected void doSetIssue(Issue issue) {
-		addIssueMarkerAction.setIssueID( (IssueID)JDOHelper.getObjectId(getIssue()) );
-
 		Set<IssueMarker> iMs = issue.getIssueMarkers();
 		boolean isMarkersExist = iMs != null && !iMs.isEmpty();
 		if (isMarkersExist) {
@@ -84,7 +80,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 
 
-	// --------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------|
 	/**
 	 *  Setup more control for the TableComposite in this Section.
 	 *  This seems enough, and we dont have to have anything more elaborate.
@@ -110,20 +106,80 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		public IssueMarkerTable getIssueMarkerTable() { return issueMarkerTable; }
 	}
 
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
 	public class RemoveLinkAction extends Action {
+		private Issue issue;
 		public RemoveLinkAction() {
-			setId(AddIssueMarkerAction.class.getName());
-			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingPlugin.getDefault(),
-					IssueLinkListSection.class,
-					"Remove")); //$NON-NLS-1$
-			setToolTipText("Remove issue marker");
-			setText("Remove issue marker");
+			setId(RemoveLinkAction.class.getName());
+			setImageDescriptor(SharedImages.DELETE_16x16);
+			setToolTipText("Delete currently selected issue marker");
+			setText("Delete issue marker");
 		}
 
 		@Override
 		public void run() {
-			// TODO Complete this part.
+			issue = getIssue();
+			Collection<IssueMarker> items = issueMarkerTable.getSelectedElements();
+			for(IssueMarker issueMarker : items) {
+				issueMarkerTable.removeElement(issueMarker);
+				issue.removeIssueMarker(issueMarker);
+			}
+
+//			// Update the Issue in the database.
+//			Job updateDeleteJob = new Job("Updating Issue...") {
+//				@Override
+//				protected IStatus run(ProgressMonitor monitor) throws Exception {
+//					IssueManagerRemote imr = null;
+//					try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
+//					catch (Exception e) { throw new RuntimeException(e); }
+//
+//					imr.storeIssue(issue, false, new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_MARKERS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
+//					return Status.OK_STATUS;
+//				}
+//
+//			};
+//
+//			updateDeleteJob.setUser(true);
+//			updateDeleteJob.setPriority(Job.SHORT);
+//			updateDeleteJob.schedule();
+
+			// TODO Need to update the History as well. Do I simply mark dirty?
+			markDirty();	// <-- This seems to update the related issue!
 		}
 	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	public class AddIssueMarkerAction extends Action {
+		private Issue issue;
+		public AddIssueMarkerAction() {
+			setId(AddIssueMarkerAction.class.getName());
+			setImageDescriptor(SharedImages.ADD_16x16);
+			setToolTipText("Mark issue");
+			setText("Mark issue");
+		}
+
+		@Override
+		public void run() {
+			System.out.println("\n ------------------ BOO! -----------------\n");
+			issue = getIssue();
+			AddIssueMarkerWizard wiz = new AddIssueMarkerWizard(issue);
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog( wiz );
+			dialog.open();
+
+			if (dialog.getReturnCode() != Window.CANCEL) {
+				markDirty();
+			}
+
+//			// Should let the framework handle the automatic refresh!
+//			if (dialog.getReturnCode() != Window.CANCEL) {
+//				issueMarkerTable.addElement( wiz.getDetachedIssueMarker() ); // <-- This throws a null-pointer exception.
+//				//setIssue( wiz.getDetachedIssue() );
+//			}
+		}
+	}
+
+
+
 }

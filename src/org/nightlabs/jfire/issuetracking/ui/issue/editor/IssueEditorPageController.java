@@ -41,7 +41,7 @@ import org.nightlabs.jfire.issue.IssueWorkTimeRange;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistory;
 import org.nightlabs.jfire.issue.id.IssueID;
-import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;

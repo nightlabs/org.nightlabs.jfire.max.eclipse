@@ -13,7 +13,7 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.resource.SharedImages.ImageDimension;
 import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.issueMarker.IssueMarker;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 
 //      ,-_|\
