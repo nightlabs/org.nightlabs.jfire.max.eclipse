@@ -82,6 +82,7 @@ Export-Package: org.nightlabs.jfire.trade.ui,
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.forms,
+ org.nightlabs.config,
  org.nightlabs.base.ui;visibility:=reexport,
  org.nightlabs.jfire.base.ui;visibility:=reexport,
  org.nightlabs.jfire.reporting.ui;visibility:=reexport,
@@ -89,4 +90,4 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.jfire.querystore.ui;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
-Eclipse-RegisterBuddy: org.nightlabs.base.ui
+Eclipse-RegisterBuddy: org.nightlabs.config
