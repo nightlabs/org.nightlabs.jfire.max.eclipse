@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -67,11 +66,8 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	protected void doSetIssue(Issue issue) {
 		Set<IssueMarker> iMs = issue.getIssueMarkers();
 		boolean isMarkersExist = iMs != null && !iMs.isEmpty();
-		if (isMarkersExist) {
-			// Revise this later for the general purpose?
-			// Currently, this is set to work only on first load.
+		if (isMarkersExist)
 			issueMarkerTable.setInput(iMs);
-		}
 
 		getSection().setExpanded(isMarkersExist);
 	}
@@ -99,7 +95,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			GridData gridData = new GridData(GridData.FILL_BOTH);
 			gridData.heightHint = 100;
 
-			issueMarkerTable = new IssueMarkerTable(this, SWT.NONE);
+			issueMarkerTable = new IssueMarkerTable(this);
 			issueMarkerTable.setLayoutData(gridData);
 		}
 
@@ -126,24 +122,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 				issue.removeIssueMarker(issueMarker);
 			}
 
-//			// Update the Issue in the database.
-//			Job updateDeleteJob = new Job("Updating Issue...") {
-//				@Override
-//				protected IStatus run(ProgressMonitor monitor) throws Exception {
-//					IssueManagerRemote imr = null;
-//					try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
-//					catch (Exception e) { throw new RuntimeException(e); }
-//
-//					imr.storeIssue(issue, false, new String[] {FetchPlan.DEFAULT, Issue.FETCH_GROUP_ISSUE_MARKERS}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//					return Status.OK_STATUS;
-//				}
-//
-//			};
-//
-//			updateDeleteJob.setUser(true);
-//			updateDeleteJob.setPriority(Job.SHORT);
-//			updateDeleteJob.schedule();
-
 			// TODO Need to update the History as well. Do I simply mark dirty?
 			markDirty();	// <-- This seems to update the related issue!
 		}
@@ -162,15 +140,20 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 		@Override
 		public void run() {
-			System.out.println("\n ------------------ BOO! -----------------\n");
+			// Need to put a filter here and only display IssueMarkers that are not already in the table's contents.
+
+			// But first, see if I can retireve ALL the possible IssueMarkers.
+
+
+
 			issue = getIssue();
-			AddIssueMarkerWizard wiz = new AddIssueMarkerWizard(issue);
+			AddIssueMarkerWizard wiz = new AddIssueMarkerWizard(issue, issueMarkerTable.getElements());
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog( wiz );
 			dialog.open();
-
-			if (dialog.getReturnCode() != Window.CANCEL) {
-				markDirty();
-			}
+//
+//			if (dialog.getReturnCode() != Window.CANCEL) {
+//				markDirty();
+//			}
 
 //			// Should let the framework handle the automatic refresh!
 //			if (dialog.getReturnCode() != Window.CANCEL) {

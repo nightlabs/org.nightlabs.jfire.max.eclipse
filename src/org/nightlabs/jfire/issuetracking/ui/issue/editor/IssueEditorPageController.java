@@ -103,9 +103,10 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 		IssueLinkType.FETCH_GROUP_NAME,
 		IssueHistory.FETCH_GROUP_USER,
 		IssueWorkTimeRange.FETCH_GROUP_USER,
-		Issue.FETCH_GROUP_ISSUE_MARKERS, // <-- Since 14.05.2009
-		IssueMarker.FETCH_GROUP_NAME,         // <-- Since 14.05.2009
-		IssueMarker.FETCH_GROUP_DESCRIPTION,  // <-- Since 14.05.2009. TODO Icons.
+		Issue.FETCH_GROUP_ISSUE_MARKERS,         // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_NAME,            // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_DESCRIPTION,     // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA, // <-- Since 14.05.2009
 /*		Issue.FETCH_GROUP_THIS_ISSUE,
 		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
 //		IssueType.FETCH_GROUP_ISSUE_RESOLUTIONS,

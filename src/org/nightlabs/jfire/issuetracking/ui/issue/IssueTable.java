@@ -148,6 +148,7 @@ extends AbstractTableComposite<Issue>
 				return o1.getIssueMarkerID() < o2.getIssueMarkerID() ? -1 : 1;
 			}
 		});
+
 		StringBuilder sb = new StringBuilder();
 		for (IssueMarker issueMarker : issueMarkers) {
 			if (sb.length() > 0)

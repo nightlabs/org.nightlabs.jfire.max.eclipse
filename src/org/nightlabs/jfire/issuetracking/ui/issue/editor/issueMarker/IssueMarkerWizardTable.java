@@ -1,10 +1,8 @@
 package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.jdo.JDOHelper;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -26,20 +24,24 @@ import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 //  ======= v =====================================================================================
 //  "Science without religion is lame, religion without science is blind." -- A. E. (1879 - 1955).
 /**
- * A table to deal with IssueMarkerTableItems.
+ * A table, filtered, showing only contents that are available to be used as an IssueMarker.
  *
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
-public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //<IssueMarkerTableItem> {
+public class IssueMarkerWizardTable extends AbstractTableComposite<IssueMarker> {
+	private Collection<IssueMarker> currentContentsOnSectionTable;
 	/**
-	 * Creates a new instance of an IssueMarkerTable.
+	 * Creates a new instance of an IssueMarkerWizardTable.
 	 */
-	public IssueMarkerTable(Composite parent) { this(parent, SWT.NONE, DEFAULT_STYLE_SINGLE_BORDER); }
+	public IssueMarkerWizardTable(Composite parent, Collection<IssueMarker> currentContentsOnSectionTable) {
+		this(parent, SWT.NONE, DEFAULT_STYLE_SINGLE_BORDER);
+		this.currentContentsOnSectionTable = currentContentsOnSectionTable;
+	}
 
 	/**
-	 * Creates a new instance of an IssueMarkerTable.
+	 * Creates a new instance of an IssueMarkerWizardTable.
 	 */
-	public IssueMarkerTable(Composite parent, int style, int viewerStyle) {
+	public IssueMarkerWizardTable(Composite parent, int style, int viewerStyle) {
 		super(parent, style, true, viewerStyle);
 		setHeaderVisible(false);
 
@@ -47,6 +49,23 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 			@Override
 			public void widgetDisposed(DisposeEvent event) { disposeAllImages(); }
 		});
+	}
+
+	@Override
+	public void setInput(Object input) {
+		Collection<?> issueMarkers = (Collection<?>)input;
+
+		Collection<IssueMarker> filteredInputs = new ArrayList<IssueMarker>();
+		for (Object issueMarker : issueMarkers)
+			if ( !currentContentsOnSectionTable.contains(issueMarker) ) {
+				filteredInputs.add( (IssueMarker)issueMarker );
+			}
+
+
+		super.setInput(filteredInputs);
+
+		if (!filteredInputs.isEmpty())
+			select(0);
 	}
 
 
@@ -72,49 +91,38 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 	 */
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setLabelProvider(new IssMrkrLabelProvider());
+		tableViewer.setLabelProvider(new IssMrkrWizLabelProvider());
 		tableViewer.setContentProvider(new ArrayContentProvider());
 	}
-
 
 
 	// ------------------------------------------------------------------------------------------------------
 	// Cleanly control the images, so that we dont have to keep creating new ones, even after it was
 	// removed from the table entry, and the re-added again later.
-	private Map<String, Image> imageKey2Image = new HashMap<String, Image>();
+	private Collection<Image> iconImages = new ArrayList<Image>();
 
 	/**
 	 * Disposes all images.
 	 */
 	private void disposeAllImages() {
-		for (Image image : imageKey2Image.values())
+		for (Image image : iconImages)
 			image.dispose();
 
-		imageKey2Image.clear();
+		iconImages.clear();
 	}
-
 
 	// ------------------------------------------------------------------------------------------------------
 	/**
-	 * Provides the contents for the IssueMarkerTable.
+	 * Provides the contents for the IssueMarkerWizardTable.
 	 */
-	private class IssMrkrLabelProvider extends TableLabelProvider {
+	private class IssMrkrWizLabelProvider extends TableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
 			if (element != null && element instanceof IssueMarker && columnIndex == 0) {
 				IssueMarker issueMarker = (IssueMarker)element;
-				String imageKey = JDOHelper.getObjectId(issueMarker).toString();
-
-				Image icon = imageKey2Image.get(imageKey);
-				if (icon == null) {
-					byte[] iconByte = issueMarker.getIcon16x16Data();
-					if (iconByte != null) {
-						ByteArrayInputStream in = new ByteArrayInputStream( iconByte );
-						icon = new Image(getDisplay(), in);
-
-						imageKey2Image.put(imageKey, icon);
-					}
-				}
+				ByteArrayInputStream in = new ByteArrayInputStream( issueMarker.getIcon16x16Data() );
+				Image icon = new Image(getDisplay(), in);
+				iconImages.add(icon);
 
 				return icon;
 			}
@@ -136,5 +144,4 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 			return "";
 		}
 	}
-
 }
