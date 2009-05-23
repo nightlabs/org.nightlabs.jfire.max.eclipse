@@ -25,6 +25,7 @@ Export-Package: org.nightlabs.jfire.reporting.ui,
  org.nightlabs.jfire.reporting.ui.viewer.editor.action
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.nightlabs.config,
  org.nightlabs.base.ui,
  org.nightlabs.jfire.base.ui,
  org.nightlabs.jfire.base.j2ee,
@@ -33,4 +34,4 @@ Require-Bundle: org.eclipse.ui,
  org.nightlabs.eclipse.ui.pdfviewer.extension
 Eclipse-LazyStart: true
 Eclipse-BuddyPolicy: registered
-Eclipse-RegisterBuddy: org.nightlabs.base.ui, org.nightlabs.jfire.base.j2ee
+Eclipse-RegisterBuddy: org.nightlabs.config, org.nightlabs.jfire.base.j2ee
