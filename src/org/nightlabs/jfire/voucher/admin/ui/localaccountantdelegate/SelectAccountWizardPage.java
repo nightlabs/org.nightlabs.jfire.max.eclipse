@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
+import org.nightlabs.jfire.trade.admin.ui.localaccountantdelegate.CreateProductAccountWizardPage;
 import org.nightlabs.jfire.transfer.id.AnchorID;
 import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
