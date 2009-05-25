@@ -37,6 +37,8 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
+import org.nightlabs.jfire.trade.admin.ui.localaccountantdelegate.SelectAccountWizard;
+import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 
 public class VoucherLocalAccountantDelegateComposite
@@ -136,7 +138,7 @@ implements ISelectionProvider
 				Object v = getValue();
 				Map.Entry<Currency, Account> me = (Map.Entry<Currency, Account>)v;
 
-				SelectAccountWizard selectAccountWizard = new SelectAccountWizard(me.getKey(), me.getValue());
+				SelectAccountWizard selectAccountWizard = new SelectAccountWizard(me.getKey(), me.getValue(),JFireVoucherEAR.ACCOUNT_TYPE_ID_VOUCHER);
 				DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(selectAccountWizard);
 				if (dialog.open() != Window.OK)
 					return null;

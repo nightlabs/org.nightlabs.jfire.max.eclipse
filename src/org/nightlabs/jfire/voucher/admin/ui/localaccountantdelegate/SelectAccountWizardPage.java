@@ -28,6 +28,7 @@ import org.nightlabs.jfire.accounting.AccountSearchFilter;
 import org.nightlabs.jfire.accounting.AccountType;
 import org.nightlabs.jfire.accounting.Currency;
 import org.nightlabs.jfire.accounting.dao.AccountDAO;
+import org.nightlabs.jfire.accounting.id.AccountTypeID;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.OrganisationLegalEntity;
@@ -47,16 +48,15 @@ extends WizardHopPage
 
 	private Currency currency;
 	private Account preselectedAccount;
-
+ 
 	private Button createAccount;
 	private Button selectAccount;
 	private ListComposite<Account> accountList;
-
 	private Mode mode;
 
 	public SelectAccountWizardPage(Currency currency, Account preselectedAccount)
 	{
-		super(SelectAccountWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.SelectAccountWizardPage.title")); //$NON-NLS-1$
+		super(SelectAccountWizardPage.class.getName(), "Account configuration"); //$NON-NLS-1$
 		this.currency = currency;
 		this.preselectedAccount = preselectedAccount;
 		this.selectedAccount = preselectedAccount;
@@ -161,13 +161,14 @@ extends WizardHopPage
 		FetchPlan.DEFAULT, Account.FETCH_GROUP_NAME
 	};
 
-	private CreateAccountWizardPage createAccountWizardPage = null;
+	private CreateProductAccountWizardPage createAccountWizardPage = null;
 
 	private void addCreateAccountWizardPage()
 	{
 		if (createAccountWizardPage == null)
-			createAccountWizardPage = new CreateAccountWizardPage(currency);
-
+			createAccountWizardPage = new CreateProductAccountWizardPage(currency,
+					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.title"),
+					Messages.getString("org.nightlabs.jfire.voucher.admin.ui.localaccountantdelegate.CreateAccountWizardPage.accountNameEditor.caption"));
 		if (!getWizardHop().getHopPages().contains(createAccountWizardPage))
 			getWizardHop().addHopPage(createAccountWizardPage);
 	}
@@ -215,11 +216,11 @@ extends WizardHopPage
 		return mode;
 	}
 
-	public Account createAccount()
+	public Account createAccount(AccountTypeID selectedAccountTypeID)
 	{
 		if (mode != Mode.CREATE)
 			throw new IllegalStateException("Cannot create Account in mode " + mode); //$NON-NLS-1$
 
-		return createAccountWizardPage.createAccount();
+		return createAccountWizardPage.createAccount(selectedAccountTypeID);
 	}
 }
