@@ -107,9 +107,7 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 			issueMarkerWizardTable = new IssueMarkerWizardTable(page, issue.getIssueMarkers());
 			issueMarkerWizardTable.addDoubleClickListener( new IDoubleClickListener() {
 				@Override
-				public void doubleClick(DoubleClickEvent event) {
-					performFinish();
-				}
+				public void doubleClick(DoubleClickEvent event) { finish(); }
 			});
 
 

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -27,6 +29,7 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarker
  */
 public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	private AddIssueMarkerAction addIssueMarkerAction;
+	private RemoveIssueMarkerAction removeIssueMarkerAction;
 	private IssueMarkerTable issueMarkerTable;
 
 	public IssueMarkerSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
@@ -38,19 +41,26 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		XComposite client = new XComposite(getSection(), SWT.NONE, LayoutMode.TIGHT_WRAPPER);
 		client.getGridLayout().numColumns = 1;
 
-		// The table displaying the IssueMarkers.
-		IssueMarkerTableComposite imtComposite = new IssueMarkerTableComposite(client, SWT.NONE);
-		issueMarkerTable = imtComposite.getIssueMarkerTable();	// <-- TODO Add ItemChangeListener, and maybe DoubleClickListener.
 
-
-		getSection().setClient(client);
-
-		// Top set of control buttons. For now: Just a '+' to add a new IssueMarker.
+		// Top set of control buttons: To add and remove IssueMarkers.
 		addIssueMarkerAction = new AddIssueMarkerAction();
 		getToolBarManager().add(addIssueMarkerAction);
 
-		getToolBarManager().add(new RemoveLinkAction());	// TODO Complete this properly to remove selected IssueMarker.
+		removeIssueMarkerAction = new RemoveIssueMarkerAction();
+		getToolBarManager().add(removeIssueMarkerAction);
 
+
+
+		// The table displaying the IssueMarkers.
+		IssueMarkerTableComposite imtComposite = new IssueMarkerTableComposite(client, SWT.NONE);
+		issueMarkerTable = imtComposite.getIssueMarkerTable();	// <-- FOR LATER: Consider handling RIGHT-CLICK here; with a popup menu enabling Add and Remove actions.
+		issueMarkerTable.addSelectionChangedListener(new ISelectionChangedListener(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) { handleRemoveActionButton(); }
+		});
+
+
+		getSection().setClient(client);
 		updateToolBarManager();
 	}
 
@@ -65,6 +75,15 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			issueMarkerTable.setInput(iMs);
 
 		getSection().setExpanded(isMarkersExist);
+		handleRemoveActionButton();
+	}
+
+	/**
+	 * Disables the Remove button if nothing on the table is selected.
+	 */
+	protected void handleRemoveActionButton() {
+		assert removeIssueMarkerAction != null;
+		removeIssueMarkerAction.setEnabled( issueMarkerTable.getSelectionIndex() >= 0 );
 	}
 
 
@@ -116,6 +135,12 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 			// React only when something was chosen from the Wizard.
 			if (dialog.getReturnCode() != Window.CANCEL) {
+				// Handles the case that the Table was previously empty.
+				if (issueMarkerTable.getItemCount() == 0) {
+					issueMarkerTable.setInput(issue.getIssueMarkers());
+					getSection().setExpanded(true);
+				}
+
 				issueMarkerTable.refresh(true);
 				markDirty();
 			}
@@ -124,10 +149,13 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
-	private class RemoveLinkAction extends Action {
+	/**
+	 * Handles the action to remove the selected IssueMarker(s).
+	 */
+	private class RemoveIssueMarkerAction extends Action {
 		private Issue issue;
-		public RemoveLinkAction() {
-			setId(RemoveLinkAction.class.getName());
+		public RemoveIssueMarkerAction() {
+			setId(RemoveIssueMarkerAction.class.getName());
 			setImageDescriptor(SharedImages.DELETE_16x16);
 			setToolTipText("Delete currently selected issue marker");
 			setText("Delete issue marker");
@@ -135,16 +163,17 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 		@Override
 		public void run() {
-			// FIXME Refer to discussions with Marco.
-			issue = getIssue();
 			Collection<IssueMarker> items = issueMarkerTable.getSelectedElements();
+			if (items.isEmpty()) return;
+
+			issue = getIssue();
 			for(IssueMarker issueMarker : items) {
 				issueMarkerTable.removeElement(issueMarker);
 				issue.removeIssueMarker(issueMarker);
 			}
 
-			// TODO Need to update the History as well. Do I simply mark dirty?
-			markDirty();	// <-- This seems to update the related issue!
+			// Done!
+			markDirty();
 		}
 	}
 
