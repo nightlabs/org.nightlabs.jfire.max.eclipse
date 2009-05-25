@@ -1,9 +1,10 @@
-package org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker;
+package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 
 import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,15 +16,9 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.AbstractIssueEditorGeneralSection;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorGeneralPage;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorPageController;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.AddIssueMarkerWizard;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerTable;
 
-//      ,-_|\
-//     /     \  ]Egoiste in
-//     @_,-._/       ]N[ightLabs
-//  ======= v =====================================================================================
-//  "Science without religion is lame, religion without science is blind." -- A. E. (1879 - 1955).
 /**
  * A section for the {@link IssueEditorGeneralPage} to handle the interface mechanisms for the
  * {@link IssueMarker}.
@@ -73,9 +68,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	}
 
 
-
-
-
 	// -----------------------------------------------------------------------------------------------------------------------------------|
 	/**
 	 *  Setup more control for the TableComposite in this Section.
@@ -104,7 +96,35 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
-	public class RemoveLinkAction extends Action {
+	/**
+	 * Handles the action to add a new IssueMarker.
+	 */
+	private class AddIssueMarkerAction extends Action {
+		private Issue issue;
+		public AddIssueMarkerAction() {
+			setId(AddIssueMarkerAction.class.getName());
+			setImageDescriptor(SharedImages.ADD_16x16);
+			setToolTipText("Mark issue");
+			setText("Mark issue");
+		}
+
+		@Override
+		public void run() {
+			issue = getIssue();
+			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog( new AddIssueMarkerWizard(issue) );
+			dialog.open();
+
+			// React only when something was chosen from the Wizard.
+			if (dialog.getReturnCode() != Window.CANCEL) {
+				issueMarkerTable.refresh(true);
+				markDirty();
+			}
+		}
+	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------|
+	private class RemoveLinkAction extends Action {
 		private Issue issue;
 		public RemoveLinkAction() {
 			setId(RemoveLinkAction.class.getName());
@@ -115,6 +135,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 		@Override
 		public void run() {
+			// FIXME Refer to discussions with Marco.
 			issue = getIssue();
 			Collection<IssueMarker> items = issueMarkerTable.getSelectedElements();
 			for(IssueMarker issueMarker : items) {
@@ -126,43 +147,5 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			markDirty();	// <-- This seems to update the related issue!
 		}
 	}
-
-
-	// -----------------------------------------------------------------------------------------------------------------------------------|
-	public class AddIssueMarkerAction extends Action {
-		private Issue issue;
-		public AddIssueMarkerAction() {
-			setId(AddIssueMarkerAction.class.getName());
-			setImageDescriptor(SharedImages.ADD_16x16);
-			setToolTipText("Mark issue");
-			setText("Mark issue");
-		}
-
-		@Override
-		public void run() {
-			// Need to put a filter here and only display IssueMarkers that are not already in the table's contents.
-
-			// But first, see if I can retireve ALL the possible IssueMarkers.
-
-
-
-			issue = getIssue();
-			AddIssueMarkerWizard wiz = new AddIssueMarkerWizard(issue, issueMarkerTable.getElements());
-			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog( wiz );
-			dialog.open();
-//
-//			if (dialog.getReturnCode() != Window.CANCEL) {
-//				markDirty();
-//			}
-
-//			// Should let the framework handle the automatic refresh!
-//			if (dialog.getReturnCode() != Window.CANCEL) {
-//				issueMarkerTable.addElement( wiz.getDetachedIssueMarker() ); // <-- This throws a null-pointer exception.
-//				//setIssue( wiz.getDetachedIssue() );
-//			}
-		}
-	}
-
-
 
 }

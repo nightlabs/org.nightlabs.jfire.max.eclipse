@@ -38,7 +38,6 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
-import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarkerSection;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**

@@ -7,6 +7,8 @@ import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -16,10 +18,8 @@ import org.eclipse.swt.widgets.Label;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
-import org.nightlabs.base.ui.language.II18nTextEditor;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.base.ui.wizard.WizardHopPage;
-import org.nightlabs.i18n.I18nTextBuffer;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -29,11 +29,6 @@ import org.nightlabs.jfire.issue.id.IssueMarkerID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.progress.ProgressMonitor;
 
-//      ,-_|\
-//     /     \  ]Egoiste in
-//     @_,-._/       ]N[ightLabs
-//  ======= v =====================================================================================
-//  "Science without religion is lame, religion without science is blind." -- A. E. (1879 - 1955).
 /**
  * A simple wizard to interface with the user in helping to create a new IssueMarker for a related Issue.
  *
@@ -42,22 +37,19 @@ import org.nightlabs.progress.ProgressMonitor;
 public class AddIssueMarkerWizard extends DynamicPathWizard {
 	private Issue issue;
 	private AddIssueMarkerWizardPage page;
-	private Collection<IssueMarker> currentContentsOnSectionTable;
 
 	/**
 	 * Creates a new instance of an AddIssueMarkerWizard.
 	 */
-	public AddIssueMarkerWizard(Issue issue, Collection<IssueMarker> currentContentsOnSectionTable) {
+	public AddIssueMarkerWizard(Issue issue) {
 		this.issue = issue;
-		this.currentContentsOnSectionTable = currentContentsOnSectionTable;
-
 		setWindowTitle("Add new issue marker");
 		setForcePreviousAndNextButtons(false);
 	}
 
 	@Override
 	public void addPages() {
-		page = new AddIssueMarkerWizardPage(currentContentsOnSectionTable);
+		page = new AddIssueMarkerWizardPage();
 		addPage(page);
 	}
 
@@ -66,37 +58,19 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		// Test
-//		IssueMarkerName issueMarkerName = page.getIssueMarkerName();
-//		I18nTextBuffer issueMarkerDesc = page.getIssueMarkerDescBuffer();
+		// Retrieve what was selected from the wizard page, and add it to the referenced Issue.
+		for(IssueMarker issueMarker : page.getSelectedIssueMarkers())
+			issue.addIssueMarker(issueMarker);
 
-//		// Get the latest reference the related Issue.
-//		final Issue issue = IssueDAO.sharedInstance().getIssue(issueID, FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+		// QUESTION:
+		//    1. Do I perform the save here?
+		//    2. Or simply tell the calling class to mark itself dirty?
+		//
+		// ANSWER: None of the above.
+		//    Instead, perform a refresh() on the corresponding table, and then mark
+		//    the IssueMarkerSection dirty.
 
-//		// Create and persist new IssueMarker.
-//		IssueMarker issueMarker = new IssueMarker(IDGenerator.getOrganisationID(), IDGenerator.nextID(IssueMarker.class));
-//		issueMarker.getName().copyFrom( issueMarkerName );
-//		issueMarker.getDescription().setText(Locale.ENGLISH.getLanguage(), "Some test description.");  //.copyFrom( issueMarkerDesc );
-//		issue.addIssueMarker(issueMarker);
-
-//		// Store the contents.
-//		Job storeJob = new Job("Storing new IssueMarker ...") {
-//			@Override
-//			protected IStatus run(ProgressMonitor monitor) throws Exception {
-//				IssueManagerRemote imr = null;
-//				try                 { imr = JFireEjb3Factory.getRemoteBean(IssueManagerRemote.class, Login.getLogin().getInitialContextProperties()); }
-//				catch (Exception e) { throw new RuntimeException(e); }
-//
-//				issueMarker_det = imr.storeIssueMarker(issueMarker, true, FETCH_GROUPS_ISSUE_MARKER, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//
-////				issue_det = imr.storeIssue(issue, true, FETCH_GROUPS_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
-//				return Status.OK_STATUS;
-//			}
-//		};
-//
-//		storeJob.setUser(true);
-//		storeJob.setPriority(Job.SHORT);
-//		storeJob.schedule();
+		// That's it! We're done!
 		return true;
 	}
 
@@ -109,22 +83,14 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 	 */
 	protected class AddIssueMarkerWizardPage extends WizardHopPage {
 		// Convenient references.
-		private I18nTextBuffer issueMarkerDescBuffer;
-		private II18nTextEditor issueMarkerDescEditor;
-
-//		private IssueMarkerNameCombo issueMarkerNameCombo;
 		private IssueMarkerWizardTable issueMarkerWizardTable;
-
-		private Collection<IssueMarker> currentContentsOnSectionTable;
 
 		/**
 		 * Creates a new instance of an AddIssueMarkerWizardPage.
 		 */
-		public AddIssueMarkerWizardPage(Collection<IssueMarker> currentContentsOnSectionTable) {
+		public AddIssueMarkerWizardPage() {
 			super(AddIssueMarkerWizardPage.class.getName(), "Add issue marker");
 			setDescription("Select an issue marker name to mark this issue.");
-
-			this.currentContentsOnSectionTable = currentContentsOnSectionTable;
 		}
 
 
@@ -138,11 +104,16 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 			page.getGridLayout().numColumns = 1;
 
 			new Label(page, SWT.NONE).setText("Marker name :");
-//			issueMarkerNameCombo = new IssueMarkerNameCombo(page);
-			issueMarkerWizardTable = new IssueMarkerWizardTable(page, currentContentsOnSectionTable);
+			issueMarkerWizardTable = new IssueMarkerWizardTable(page, issue.getIssueMarkers());
+			issueMarkerWizardTable.addDoubleClickListener( new IDoubleClickListener() {
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					performFinish();
+				}
+			});
 
 
-			// Load the reference IssueMarkers.
+			// Load the IssueMarkers references.
 			Job job = new Job("Loading...") {
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
@@ -160,7 +131,10 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
-						public void run() { issueMarkerWizardTable.setInput(issueMarkers); }
+						public void run() {
+							issueMarkerWizardTable.setInput(issueMarkers);
+							setPageComplete( issueMarkerWizardTable.getItemCount() > 0);
+						}
 					});
 
 					return Status.OK_STATUS;
@@ -174,23 +148,10 @@ public class AddIssueMarkerWizard extends DynamicPathWizard {
 		}
 
 		/**
-		 * @return the issueMarkerDescEditor.
+		 * @return the selected IssueMarkers from the table. Do we enable multiple selection??
 		 */
-		public II18nTextEditor getIssueMarkerDescEditor()   { return issueMarkerDescEditor; }
-
-		/**
-		 * @return the issueMarkerDescBuffer.
-		 */
-		public I18nTextBuffer getIssueMarkerDescBuffer()    { return issueMarkerDescBuffer; }
-
-		/**
-		 * @return the selected IssueMarkerName from the drop-down combo.
-		 */
-//		public IssueMarkerName getIssueMarkerName()         { return issueMarkerNameCombo.getSelectedElement().getName(); }
-
-		@Override
-		public boolean isPageComplete() {
-			return true; //issueMarkerDescBuffer != null && !issueMarkerDescBuffer.isEmpty();
+		public Collection<IssueMarker> getSelectedIssueMarkers() {
+			return issueMarkerWizardTable.getSelectedElements();
 		}
 	}
 

@@ -18,11 +18,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 
-//      ,-_|\
-//     /     \  ]Egoiste in
-//     @_,-._/       ]N[ightLabs
-//  ======= v =====================================================================================
-//  "Science without religion is lame, religion without science is blind." -- A. E. (1879 - 1955).
 /**
  * A table, filtered, showing only contents that are available to be used as an IssueMarker.
  *
@@ -30,6 +25,7 @@ import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
  */
 public class IssueMarkerWizardTable extends AbstractTableComposite<IssueMarker> {
 	private Collection<IssueMarker> currentContentsOnSectionTable;
+
 	/**
 	 * Creates a new instance of an IssueMarkerWizardTable.
 	 */
@@ -53,8 +49,9 @@ public class IssueMarkerWizardTable extends AbstractTableComposite<IssueMarker> 
 
 	@Override
 	public void setInput(Object input) {
+		// Performs the filter. Very naively.
+		// --> I think I remember Marco mentioning another way to do this, but not really sure where to look for it. Kai
 		Collection<?> issueMarkers = (Collection<?>)input;
-
 		Collection<IssueMarker> filteredInputs = new ArrayList<IssueMarker>();
 		for (Object issueMarker : issueMarkers)
 			if ( !currentContentsOnSectionTable.contains(issueMarker) ) {
@@ -64,10 +61,8 @@ public class IssueMarkerWizardTable extends AbstractTableComposite<IssueMarker> 
 
 		super.setInput(filteredInputs);
 
-		if (!filteredInputs.isEmpty())
-			select(0);
+		if ( !filteredInputs.isEmpty() ) select(0);
 	}
-
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(org.eclipse.jface.viewers.TableViewer, org.eclipse.swt.widgets.Table)
@@ -136,7 +131,6 @@ public class IssueMarkerWizardTable extends AbstractTableComposite<IssueMarker> 
 			//       @colunmIndex 1 -- Description of the IssueMarker.
 			if (element != null && element instanceof IssueMarker) {
 				IssueMarker issueMarker = (IssueMarker)element;
-
 				if (columnIndex == 0) return issueMarker.getName().getText();
 				if (columnIndex == 1) return issueMarker.getDescription().getText();
 			}

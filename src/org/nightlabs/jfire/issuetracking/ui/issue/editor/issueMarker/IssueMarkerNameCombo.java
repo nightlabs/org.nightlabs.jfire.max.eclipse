@@ -15,6 +15,7 @@ import org.nightlabs.base.ui.resource.SharedImages.ImageFormat;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueMarkerSection;
 
 //      ,-_|\
 //     /     \  ]Egoiste in
