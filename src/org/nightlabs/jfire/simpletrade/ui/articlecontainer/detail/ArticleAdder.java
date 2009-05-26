@@ -28,7 +28,6 @@ package org.nightlabs.jfire.simpletrade.ui.articlecontainer.detail;
 
 import java.util.Collection;
 
-import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
@@ -193,7 +192,7 @@ public class ArticleAdder extends AbstractArticleAdder
 			SegmentID segmentID, OfferID offerID,
 			ProductTypeID productTypeID, int quantity,
 			TariffID tariffID)
-	throws NotAvailableException, java.rmi.RemoteException, LoginException, CreateException, NamingException
+	throws NotAvailableException, java.rmi.RemoteException, LoginException, NamingException
 	{
 
 		SimpleTradeManagerRemote stm = JFireEjb3Factory.getRemoteBean(SimpleTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());

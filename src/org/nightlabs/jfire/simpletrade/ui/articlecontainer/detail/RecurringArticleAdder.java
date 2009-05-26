@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
@@ -26,8 +25,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 	public Collection<? extends Article> createArticles(SegmentID segmentID,
 			OfferID offerID, ProductTypeID productTypeID, int quantity,
 			TariffID tariffID)
-			throws NotAvailableException, RemoteException, LoginException,
-			CreateException, NamingException {
+			throws NotAvailableException, RemoteException, LoginException, NamingException {
 
 		Collection<ProductTypeID> productTypeIDs = new ArrayList<ProductTypeID>( quantity);
 		for (int i = 0; i <  quantity; i++) {
