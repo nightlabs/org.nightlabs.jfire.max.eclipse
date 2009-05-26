@@ -5,9 +5,12 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.nightlabs.base.ui.resource.SharedImages;
+import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.base.ui.person.search.PersonEditWizard;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.AbstractIssueLinkHandler;
@@ -48,6 +51,8 @@ extends AbstractIssueLinkHandler<PropertySetID, Person>
 
 	@Override
 	public void openLinkedObject(IssueLink issueLink, PropertySetID linkedObjectID) {
+		PersonEditWizard wizard = new PersonEditWizard((Person)issueLink.getLinkedObject());
+		new DynamicPathWizardDialog(wizard).open();
 	}
 
 	@Override
