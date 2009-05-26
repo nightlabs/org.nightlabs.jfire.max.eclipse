@@ -48,7 +48,7 @@ public class DepartmentPropertiesPage extends EntityEditorPageWithProgress {
 	 */
 	public DepartmentPropertiesPage(FormEditor editor)
 	{
-		super(editor, ID_PAGE, "Page Title ");
+		super(editor, ID_PAGE, "Properties");
 	}
 	
 	private DepartmentPropertiesSection dSection;
@@ -84,6 +84,6 @@ public class DepartmentPropertiesPage extends EntityEditorPageWithProgress {
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Page Form Title ";
+		return "Department";
 	}
 }
