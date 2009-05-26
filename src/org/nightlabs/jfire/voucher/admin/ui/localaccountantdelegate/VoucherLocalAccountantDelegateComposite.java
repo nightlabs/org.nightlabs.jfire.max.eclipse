@@ -37,7 +37,6 @@ import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.Currency;
-import org.nightlabs.jfire.trade.admin.ui.localaccountantdelegate.SelectAccountWizard;
 import org.nightlabs.jfire.voucher.JFireVoucherEAR;
 import org.nightlabs.jfire.voucher.admin.ui.resource.Messages;
 
