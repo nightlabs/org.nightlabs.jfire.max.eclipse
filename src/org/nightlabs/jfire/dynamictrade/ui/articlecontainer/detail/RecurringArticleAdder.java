@@ -3,7 +3,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
@@ -56,7 +55,7 @@ public class RecurringArticleAdder extends ArticleAdder {
 			I18nText productName,
 			Price singlePrice,
 			boolean allocate,
-			boolean allocateSynchronously) throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+			boolean allocateSynchronously) throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		DynamicTradeManagerRemote dtm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
 		return dtm.createRecurringArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID,

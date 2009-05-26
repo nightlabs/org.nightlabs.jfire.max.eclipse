@@ -2,7 +2,6 @@ package org.nightlabs.jfire.dynamictrade.ui.articlecontainer.detail;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
@@ -91,7 +90,7 @@ extends AbstractArticleAdder
 			I18nText productName,
 			Price singlePrice,
 			boolean allocate,
-			boolean allocateSynchronously) throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+			boolean allocateSynchronously) throws RemoteException, LoginException, NamingException, ModuleException
 	{
 
 		DynamicTradeManagerRemote dm = JFireEjb3Factory.getRemoteBean(DynamicTradeManagerRemote.class, Login.getLogin().getInitialContextProperties());
