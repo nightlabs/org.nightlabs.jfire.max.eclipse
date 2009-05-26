@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
@@ -99,7 +98,7 @@ public class TransferWizardUtil
 //	private static StoreManager storeManager = null;
 
 	public static AccountingManagerRemote getAccountingManager()
-	throws RemoteException, LoginException, CreateException, NamingException
+	throws RemoteException, LoginException, NamingException
 	{
 		return JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //
@@ -110,7 +109,7 @@ public class TransferWizardUtil
 	}
 
 	public static StoreManagerRemote getStoreManager()
-	throws RemoteException, LoginException, CreateException, NamingException
+	throws RemoteException, LoginException, NamingException
 	{
 		return JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());
 //
@@ -128,7 +127,7 @@ public class TransferWizardUtil
 	 * @param shell TODO
 	 */
 	public static boolean pay(Shell shell, PaymentWizard paymentWizard)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+	throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		return payAndDeliver(shell, (CombiTransferWizard)null, paymentWizard, (DeliveryWizard)null);
 //				bookInvoiceMode);
@@ -142,7 +141,7 @@ public class TransferWizardUtil
 	 * @param shell TODO
 	 */
 	public static boolean deliver(Shell shell, DeliveryWizard deliveryWizard)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+	throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		return payAndDeliver(shell, (CombiTransferWizard)null, (PaymentWizard)null, deliveryWizard);
 	}
@@ -177,14 +176,14 @@ public class TransferWizardUtil
 //	public static boolean payAndDeliver(
 //			PaymentWizard paymentWizard, DeliveryWizard deliveryWizard,
 //			byte bookInvoiceMode)
-//	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+//	throws RemoteException, LoginException, NamingException, ModuleException
 //	{
 //		return payAndDeliver((CombiTransferWizard)null, paymentWizard, deliveryWizard, bookInvoiceMode);
 //	}
 //
 	public static boolean payAndDeliver(Shell shell, CombiTransferWizard transferWizard)
 //			byte bookInvoiceMode)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+	throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		return payAndDeliver(shell, transferWizard, (PaymentWizard)null, (DeliveryWizard)null); //, bookInvoiceMode);
 	}
@@ -205,7 +204,7 @@ public class TransferWizardUtil
 	 * @see #deliver(Shell, DeliveryWizard)
 	 */
 	public static boolean payAndDeliver(Shell shell, CombiTransferWizard transferWizard, PaymentWizard paymentWizard, DeliveryWizard deliveryWizard)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException {
+	throws RemoteException, LoginException, NamingException, ModuleException {
 		if (transferWizard != null) {
 			paymentWizard = transferWizard;
 			deliveryWizard = transferWizard;
@@ -361,7 +360,7 @@ public class TransferWizardUtil
 			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
 			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples,
 			TransferWizard transferWizard)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+	throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		TransferCoordinator transferCoordinator = new TransferCoordinator();
 		boolean successful = transferCoordinator.payAndDeliver(paymentTuples, deliveryTuples);
@@ -542,7 +541,7 @@ public class TransferWizardUtil
 //	}
 
 	public static List<DeliveryEntryPage> createDeliveryEntryPages(DeliveryWizard deliveryWizard)
-	throws RemoteException, LoginException, ModuleException, CreateException, NamingException
+	throws RemoteException, LoginException, ModuleException, NamingException
 	{
 		List<DeliveryEntryPage> res = new LinkedList<DeliveryEntryPage>();
 

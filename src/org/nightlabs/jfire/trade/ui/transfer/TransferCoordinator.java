@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import javax.security.auth.login.LoginException;
 
@@ -33,7 +32,7 @@ public class TransferCoordinator {
 	public boolean payAndDeliver(
 			List<Pair<PaymentData, ClientPaymentProcessor>> paymentTuples,
 			List<Pair<DeliveryData, ClientDeliveryProcessor>> deliveryTuples)
-	throws RemoteException, LoginException, CreateException, NamingException, ModuleException
+	throws RemoteException, LoginException, NamingException, ModuleException
 	{
 		PaymentController paymentController = null;
 		DeliveryController deliveryController = null;

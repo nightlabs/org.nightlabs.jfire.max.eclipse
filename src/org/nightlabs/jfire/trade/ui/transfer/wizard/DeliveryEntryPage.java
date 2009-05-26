@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
@@ -247,7 +246,7 @@ implements IDeliveryEntryPage
 	private StoreManagerRemote storeManager = null;
 
 	protected StoreManagerRemote getStoreManager()
-		throws RemoteException, LoginException, CreateException, NamingException
+		throws RemoteException, LoginException, NamingException
 	{
 		if (storeManager == null)
 			storeManager = JFireEjb3Factory.getRemoteBean(StoreManagerRemote.class, Login.getLogin().getInitialContextProperties());

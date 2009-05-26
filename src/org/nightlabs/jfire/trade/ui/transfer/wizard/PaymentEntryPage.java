@@ -36,7 +36,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.CreateException;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 import javax.naming.NamingException;
@@ -176,7 +175,7 @@ implements IPaymentEntryPage
 	private AccountingManagerRemote accountingManager = null;
 
 	protected AccountingManagerRemote getAccountingManager()
-		throws RemoteException, LoginException, CreateException, NamingException
+		throws RemoteException, LoginException, NamingException
 	{
 		if (accountingManager == null)
 			accountingManager = JFireEjb3Factory.getRemoteBean(AccountingManagerRemote.class, Login.getLogin().getInitialContextProperties());
