@@ -14,7 +14,7 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.IssueWorkTimeRange;
-import org.nightlabs.jfire.issue.history.IssueHistory;
+import org.nightlabs.jfire.issue.history.IssueHistoryItem;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
@@ -23,7 +23,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueWorkTimeRangeTable
-extends AbstractTableComposite<IssueHistory>
+extends AbstractTableComposite<IssueHistoryItem>
 {
 	/**
 	 * The fetch groups of issue work time range data.

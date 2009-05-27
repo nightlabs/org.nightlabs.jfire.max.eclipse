@@ -25,7 +25,7 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.history.IssueHistory;
+import org.nightlabs.jfire.issue.history.IssueHistoryItem;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
@@ -33,12 +33,12 @@ import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
 import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
 
 /**
- * This composite lists all {@link IssueHistory}s of an issue in a table.
+ * This composite lists all {@link IssueHistoryItem}s of an issue in a table.
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
-public class IssueHistoryTable
-extends AbstractTableComposite<IssueHistory>
-{
+public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> {
 	/**
 	 * The fetch groups of issue history data.
 	 */
@@ -47,13 +47,13 @@ extends AbstractTableComposite<IssueHistory>
 	public IssueHistoryTable(Composite parent, int style)
 	{
 		super(parent, style);
-		
+
 		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
-				
+
 			}
 		});
-		
+
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
 	    addDisposeListener(new DisposeListener() {
 	      public void widgetDisposed(DisposeEvent event)
@@ -61,18 +61,18 @@ extends AbstractTableComposite<IssueHistory>
 	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
 	      }
 	    });
-	    
+
 	    getTableViewer().setComparator(new ViewerComparator() {
 			@Override
 			public void sort(Viewer viewer, Object[] elements) {
 				Arrays.sort(elements, new Comparator<Object>() {
 					public int compare(Object object1, Object object2) {
-						return -((IssueHistory)object1).getCreateTimestamp().compareTo(((IssueHistory)object2).getCreateTimestamp());
+						return -((IssueHistoryItem)object1).getCreateTimestamp().compareTo(((IssueHistoryItem)object2).getCreateTimestamp());
 					}
 				});
 			}
 		});
-	}		
+	}
 
 	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.lifeCycleListener.loading.text")) { //$NON-NLS-1$
 	    private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(
@@ -102,7 +102,7 @@ extends AbstractTableComposite<IssueHistory>
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.userName.text")); //$NON-NLS-1$
-		
+
 		tc = new TableColumn(table, SWT.LEFT);
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.action.text")); //$NON-NLS-1$
@@ -119,15 +119,15 @@ extends AbstractTableComposite<IssueHistory>
 	}
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-	
+
 	class IssueHistoryListLabelProvider
 	extends TableLabelProvider
 	{
-		public String getColumnText(Object element, int columnIndex) 
+		public String getColumnText(Object element, int columnIndex)
 		{
-			if (element instanceof IssueHistory) {
-				IssueHistory issueHistory = (IssueHistory) element;
-				switch (columnIndex) 
+			if (element instanceof IssueHistoryItem) {
+				IssueHistoryItem issueHistory = (IssueHistoryItem) element;
+				switch (columnIndex)
 				{
 				case(0):
 					return dateTimeFormat.format(issueHistory.getCreateTimestamp());
@@ -145,7 +145,7 @@ extends AbstractTableComposite<IssueHistory>
 				}
 			}
 			return null;
-		}		
+		}
 	}
 
 	public void setLoadingStatus()
@@ -154,7 +154,7 @@ extends AbstractTableComposite<IssueHistory>
 	}
 
 	private IssueID issueID;
-	public void setIssueHistories(IssueID issueID, Collection<IssueHistory> issueHistories)
+	public void setIssueHistories(IssueID issueID, Collection<IssueHistoryItem> issueHistories)
 	{
 		if (issueID == null)
 			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
@@ -162,7 +162,7 @@ extends AbstractTableComposite<IssueHistory>
 		this.issueID = issueID;
 		super.setInput(issueHistories);
 	}
-	
+
 	@Override
 	public void setInput(Object input)
 	{

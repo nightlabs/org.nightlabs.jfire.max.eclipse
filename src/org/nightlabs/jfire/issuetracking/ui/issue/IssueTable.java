@@ -1,6 +1,6 @@
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
-import java.awt.Point;
+import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ extends AbstractTableComposite<Issue>
 	}
 
 	private Map<String, Image> imageKey2Image = new HashMap<String, Image>();
-	private static Point ISSUE_MARKER_IMAGE_DIMENSION = new Point(16, 16);
+	private static Dimension ISSUE_MARKER_IMAGE_DIMENSION = new Dimension(16, 16);
 
 	protected Image getCombiIssueMarkerImage(Issue issue)
 	{
@@ -174,8 +174,8 @@ extends AbstractTableComposite<Issue>
 		if (combiImage == null) {
 			combiImage = new Image(
 					getDisplay(),
-					ISSUE_MARKER_IMAGE_DIMENSION.x * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
-					ISSUE_MARKER_IMAGE_DIMENSION.y
+					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					ISSUE_MARKER_IMAGE_DIMENSION.height
 			);
 			GC gc = new GC(combiImage);
 			try {
@@ -197,7 +197,7 @@ extends AbstractTableComposite<Issue>
 					}
 
 					if (icon != null)
-						gc.drawImage(icon, ISSUE_MARKER_IMAGE_DIMENSION.x * i + i, 0);
+						gc.drawImage(icon, ISSUE_MARKER_IMAGE_DIMENSION.width * i + i, 0);
 				}
 			} finally {
 				gc.dispose();
