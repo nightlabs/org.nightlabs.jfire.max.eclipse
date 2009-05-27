@@ -37,4 +37,152 @@
             indexHint="500">
       </articleContainerEditorPageFactory>
    </extension>
+   
+	<extension point="org.nightlabs.base.ui.editorActionBarContribution">
+		<editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.invoice.InvoiceEntryEditor">
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.PrintInvoiceAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.PrintInvoiceAction"
+                name="%overview.action.print.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.print.tooltip"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.ShowInvoiceAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.ShowInvoiceAction"
+                name="%overview.action.show.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.show.tooltip"/>                
+		</editorActionBarContributionRegistry>
+		<editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.deliverynote.DeliveryNoteEntryEditor">
+			<editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.PrintDeliveryNoteAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.PrintDeliveryNoteAction"
+                name="%overview.action.print.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.print.tooltip"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.ShowDeliveryNoteAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.ShowDeliveryNoteAction"
+                name="%overview.action.show.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.show.tooltip"/>
+		</editorActionBarContributionRegistry>
+		<editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.order.OrderEntryEditor">
+			<editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.order.PrintOrderAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.order.PrintOrderAction"
+                name="%overview.action.print.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.print.tooltip"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.order.ShowOrderAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.order.ShowOrderAction"
+                name="%overview.action.show.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.show.tooltip"/>
+		</editorActionBarContributionRegistry>
+		<editorActionBarContributionRegistry targetEditorID="org.nightlabs.jfire.trade.ui.overview.offer.OfferEntryEditor">
+			<editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.offer.PrintOfferAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractPrintArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.offer.PrintOfferAction"
+                name="%overview.action.print.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.print.tooltip"/>
+            <editorActionBarContribution
+                class="org.nightlabs.jfire.reporting.trade.ui.overview.action.offer.ShowOfferAction"
+                contextmenuPath="org.nightlabs.jfire.trade.ui.overview"
+                icon="icons/overview/action/AbstractShowArticleContainerAction.16x16.png"
+                id="org.nightlabs.jfire.reporting.trade.ui.overview.action.offer.ShowOfferAction"
+                name="%overview.action.show.name"
+                toolbarPath="org.nightlabs.jfire.trade.ui.overview" 
+                tooltip="%overview.action.show.tooltip"/>		
+		</editorActionBarContributionRegistry>
+	</extension>
+	   
+    <extension point="org.nightlabs.jfire.trade.ui.articleContainerAction">
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintToAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            icon="icons/articlecontainer/detail/action/print/PrintToAction.16x16.png"
+            id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintActionTo"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            name="%articleContainerAction.printTo.label" 
+            tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.print.PrintActionTo.tooltip"/>
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            icon="icons/articlecontainer/detail/action/print/PrintAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            name="%articleContainerAction.print.label" 
+            tooltip="%articleContainerAction.print.tooltip"/>
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
+            contextmenuPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            icon="icons/articlecontainer/detail/action/print/PrintPreviewAction.16x16.png"
+            id="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
+            menubarPath="org.nightlabs.jfire.trade.ui.articleContainerAction"
+            name="%articleContainerAction.printPreview.label" 
+            tooltip="%articleContainerAction.printPreview.tooltip"/>
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintToAction"
+            icon="icons/articlecontainer/detail/action/print/PrintToAction.24x24.png"
+            id="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintToAction#toolbar"
+            name="%articleContainerAction.printTo.label"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction" 
+            tooltip="%org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintToAction#toolbar.tooltip"/>
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction"
+            icon="icons/articlecontainer/detail/action/print/PrintAction.24x24.png"
+            id="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction#toolbar"
+            name="%articleContainerAction.print.label"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction" 
+            tooltip="%articleContainerAction.print.tooltip"/>
+        <articleContainerAction
+            class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction"
+            icon="icons/articlecontainer/detail/action/print/PrintPreviewAction.24x24.png"
+            id="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintPreviewAction#toolbar"
+            name="%articleContainerAction.printPreview.label"
+            toolbarPath="org.nightlabs.jfire.trade.ui.articleContainerAction" 
+            tooltip="%articleContainerAction.printPreview.tooltip"/>
+	</extension>
+    <extension
+          point="org.nightlabs.jfire.trade.ui.articleContainerPrinterFactory">
+       <articleContainerPrinterFactory
+             class="org.nightlabs.jfire.reporting.trade.ui.articlecontainer.print.ArticleContainerPrinterFactory">
+       </articleContainerPrinterFactory>
+    </extension>
+    <extension point="org.nightlabs.jfire.reporting.ui.reportUseCase">
+        <reportUseCase description="%reportUseCase.invoice.description"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.invoice"
+            name="%reportUseCase.invoice.name" 
+            reportLayoutType="JFireReportingTrade-Reporting-Invoice"/>
+        <reportUseCase description="%reportUseCase.offer.description"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.offer"
+            name="%reportUseCase.offer.name" 
+            reportLayoutType="JFireReportingTrade-Reporting-Offer"/>
+        <reportUseCase description="%reportUseCase.order.description"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.order"
+            name="%reportUseCase.order.name" 
+            reportLayoutType="JFireReportingTrade-Reporting-Order"/>
+        <reportUseCase
+            description="%reportUseCase.deliveryNote.description"
+            id="org.nightlabs.jfire.trade.ui.reportUseCase.deliveryNote"
+            name="%reportUseCase.deliveryNote.name" 
+            reportLayoutType="JFireReportingTrade-Reporting-DeliveryNote"/>
+    </extension>            	   
 </plugin>

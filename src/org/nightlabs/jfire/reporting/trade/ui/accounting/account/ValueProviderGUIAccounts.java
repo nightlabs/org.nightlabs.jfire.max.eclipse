@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.trade.ui.accounting.account;
 
@@ -38,7 +38,7 @@ public class ValueProviderGUIAccounts
 extends AbstractValueProviderGUI<Collection<AnchorID>>
 {
 	public static class Factory implements IValueProviderGUIFactory {
-		
+
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
@@ -60,9 +60,9 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 				Object arg2) throws CoreException {
 		}
 	}
-	
+
 	private AccountEntryViewer accountEntryViewer;
-	
+
 	public ValueProviderGUIAccounts(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
@@ -75,7 +75,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		group.setLayout(new GridLayout());
 		group.setText(getValueProviderConfig().getMessage().getText());
-		
+
 		accountEntryViewer = new AccountEntryViewer(new AccountEntryFactory().createEntry());
 		Composite composite = accountEntryViewer.createComposite(group);
 		accountEntryViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
@@ -85,14 +85,13 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 			}
 		});
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		return group;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
 		Collection<Account> anchors = accountEntryViewer.getListComposite().getSelectedElements();
 		if (anchors != null && anchors.size() > 0) {

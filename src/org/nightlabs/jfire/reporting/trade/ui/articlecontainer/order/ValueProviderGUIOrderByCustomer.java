@@ -50,7 +50,7 @@ extends AbstractValueProviderGUI<OrderID>
 		StateDefinition.FETCH_GROUP_NAME,
 		LegalEntity.FETCH_GROUP_PERSON
 	};
-	
+
 	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<OrderID> createValueProviderGUI(ValueProviderConfig valueProviderConfig, boolean isScheduledReportParameterConfig) {
@@ -66,9 +66,9 @@ extends AbstractValueProviderGUI<OrderID>
 		}
 
 	}
-	
+
 	private OrderListComposite orderListComposite = null;
-	
+
 	/**
 	 * @param valueProviderConfig
 	 */
@@ -98,7 +98,6 @@ extends AbstractValueProviderGUI<OrderID>
 
 	public void setInputParameterValue(String parameterID, final Object value) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.order.report.ValueProviderGUIOrderByCustomer.loadOrdersJob.name")) { //$NON-NLS-1$
-			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				OrderQuery query = new OrderQuery();
@@ -108,11 +107,11 @@ extends AbstractValueProviderGUI<OrderID>
 				qs.add(query);
 
 				final Collection<Order> orders = OrderDAO.sharedInstance().getOrdersByQueries(
-					qs, 
-					FETCH_GROUPS_ORDERS, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					qs,
+					FETCH_GROUPS_ORDERS,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						orderListComposite.setInput(orders);

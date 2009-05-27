@@ -54,7 +54,7 @@ extends AbstractValueProviderGUI<InvoiceID>
 	};
 
 	public static class Factory implements IValueProviderGUIFactory {
-		
+
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
@@ -76,9 +76,9 @@ extends AbstractValueProviderGUI<InvoiceID>
 				Object arg2) throws CoreException {
 		}
 	}
-	
+
 	private InvoiceListComposite invoiceListComposite;
-	
+
 	public ValueProviderGUIInvoiceByCustomer(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
@@ -117,20 +117,19 @@ extends AbstractValueProviderGUI<InvoiceID>
 	 */
 	public void setInputParameterValue(String parameterID, final Object value) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.invoice.report.ValueProviderGUIInvoiceByCustomer.loadInvoicesJob.name")) { //$NON-NLS-1$
-			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				InvoiceQuery query = new InvoiceQuery();
 				query.setCustomerID((AnchorID) value);
 				QueryCollection<InvoiceQuery> qs = new QueryCollection<InvoiceQuery>(Invoice.class);
 				qs.add(query);
-				
+
 				final Collection<Invoice> invoices = InvoiceDAO.sharedInstance().getInvoices(
-					qs, 
-					FETCH_GROUPS_INVOICES, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					qs,
+					FETCH_GROUPS_INVOICES,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						invoiceListComposite.setInput(invoices);

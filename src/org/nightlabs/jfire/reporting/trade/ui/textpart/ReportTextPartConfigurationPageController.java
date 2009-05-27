@@ -23,9 +23,9 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
 import org.nightlabs.jfire.reporting.textpart.dao.ReportTextPartConfigurationDAO;
+import org.nightlabs.jfire.reporting.trade.ui.util.ReportTradeUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
-import org.nightlabs.jfire.trade.ui.report.ReportTradeUtil;
 import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.progress.SubProgressMonitor;
 

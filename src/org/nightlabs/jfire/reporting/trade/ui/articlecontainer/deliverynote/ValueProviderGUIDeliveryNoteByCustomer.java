@@ -52,7 +52,7 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 		LegalEntity.FETCH_GROUP_PERSON,
 		DeliveryNoteLocal.FETCH_GROUP_THIS_DELIVERY_NOTE_LOCAL
 	};
-	
+
 	public static class Factory implements IValueProviderGUIFactory
 	{
 		public IValueProviderGUI<DeliveryNoteID> createValueProviderGUI(
@@ -71,13 +71,13 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 		}
 
 	}
-	
+
 	private DeliveryNoteListComposite deliveryNoteListComposite = null;
-	
+
 	public ValueProviderGUIDeliveryNoteByCustomer(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
-	
+
 	public Control createGUI(Composite wrapper) {
 		deliveryNoteListComposite = new DeliveryNoteListComposite(wrapper, SWT.NONE);
 		deliveryNoteListComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -100,14 +100,13 @@ extends AbstractValueProviderGUI<DeliveryNoteID>
 
 	public void setInputParameterValue(String parameterID, final Object value) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.deliverynote.report.ValueProviderGUIDeliveryNoteByCustomer.loadDeliveryNotesJob.name")) { //$NON-NLS-1$
-			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				DeliveryNoteQuery query = new DeliveryNoteQuery();
 				query.setCustomerID((AnchorID) value);
 				QueryCollection<DeliveryNoteQuery> qs =
 					new QueryCollection<DeliveryNoteQuery>(DeliveryNote.class);
-				
+
 				qs.add(query);
 				final Collection<DeliveryNote> deliveryNotes = DeliveryNoteDAO.sharedInstance()
 					.getDeliveryNotesByQueries(

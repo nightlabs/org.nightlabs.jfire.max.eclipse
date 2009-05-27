@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.trade.ui.store.repository;
 
@@ -38,7 +38,7 @@ public class ValueProviderGUIRepositories
 extends AbstractValueProviderGUI<Collection<AnchorID>>
 {
 	public static class Factory implements IValueProviderGUIFactory {
-		
+
 		/* (non-Javadoc)
 		 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory#createValueProviderGUI()
 		 */
@@ -60,9 +60,9 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 				Object arg2) throws CoreException {
 		}
 	}
-	
+
 	private RepositoryEntryViewer repositoryEntryViewer;
-	
+
 	public ValueProviderGUIRepositories(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
@@ -75,7 +75,7 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 		group.setLayoutData(new GridData(GridData.FILL_BOTH));
 		group.setLayout(new GridLayout());
 		group.setText(getValueProviderConfig().getMessage().getText());
-		
+
 		repositoryEntryViewer = new RepositoryEntryViewer(new RepositoryEntryFactory().createEntry());
 		repositoryEntryViewer.createComposite(group);
 		repositoryEntryViewer.getListComposite().addSelectionChangedListener(new ISelectionChangedListener() {
@@ -84,14 +84,13 @@ extends AbstractValueProviderGUI<Collection<AnchorID>>
 				notifyOutputChanged();
 			}
 		});
-		
+
 		return group;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI#getOutputValue()
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<AnchorID> getOutputValue() {
 		Collection<Repository> anchors = repositoryEntryViewer.getListComposite().getSelectedElements();
 		if (anchors != null && anchors.size() > 0) {

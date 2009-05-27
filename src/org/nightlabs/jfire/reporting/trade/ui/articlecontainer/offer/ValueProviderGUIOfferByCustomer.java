@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.offer;
 
@@ -69,13 +69,13 @@ extends AbstractValueProviderGUI<OfferID>
 		}
 
 	}
-	
+
 	private OfferListComposite offerListComposite = null;
-	
+
 	public ValueProviderGUIOfferByCustomer(ValueProviderConfig valueProviderConfig) {
 		super(valueProviderConfig);
 	}
-	
+
 	public Control createGUI(Composite wrapper) {
 		offerListComposite = new OfferListComposite(wrapper, SWT.NONE);
 		offerListComposite.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -98,7 +98,6 @@ extends AbstractValueProviderGUI<OfferID>
 
 	public void setInputParameterValue(String parameterID, final Object value) {
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.trade.ui.overview.offer.report.ValueProviderGUIOfferByCustomer.loadOffersJob.name")) { //$NON-NLS-1$
-			@SuppressWarnings("unchecked")
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
 				OfferQuery query = new OfferQuery();
@@ -106,11 +105,11 @@ extends AbstractValueProviderGUI<OfferID>
 				query.setCustomerID((AnchorID) value);
 				QueryCollection<OfferQuery> qs = new QueryCollection<OfferQuery>(Offer.class);
 				qs.add(query);
-				
+
 				final Collection<Offer> offers = OfferDAO.sharedInstance().getOffersByQuery(
-					qs, 
-					OfferListComposite.FETCH_GROUPS_OFFER, 
-					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+					qs,
+					OfferListComposite.FETCH_GROUPS_OFFER,
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 					monitor);
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
