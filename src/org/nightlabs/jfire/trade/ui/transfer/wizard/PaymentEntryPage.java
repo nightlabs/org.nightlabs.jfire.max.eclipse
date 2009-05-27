@@ -91,6 +91,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRegistry;
+import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
 import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.l10n.NumberFormatter;
@@ -348,48 +349,11 @@ implements IPaymentEntryPage
 //				}
 //			});
 
-			automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.group.invoicePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.invoice"), null); //$NON-NLS-1$ //$NON-NLS-2$
-
-//			Group printGroup = new Group(page, SWT.BORDER);
-//			printGroup.setText("Invoice printing options");
-//			printGroup.setLayout(new GridLayout(3, false));
-//			GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-//			gridData.verticalIndent = 10;
-//			printGroup.setLayoutData(gridData);
-//			XComposite wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-//
-//			printInvoiceCheckbox = new Button(wrapper, SWT.CHECK);
-//			printInvoiceCheckbox.setText("Print invoice");
-//			wrapper = new XComposite(printGroup, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
-//			Label label = new Label(wrapper, SWT.NONE);
-//			gridData = new GridData(GridData.FILL_HORIZONTAL);
-//			gridData.horizontalIndent = 20;
-//			label.setLayoutData(gridData);
-//			label.setText("Copies ");
-//
-//			printInvoiceCountSpinner = new Spinner(wrapper, SWT.BORDER);
-//			printInvoiceCountSpinner.setMinimum(0);
-//			printInvoiceCountSpinner.setMaximum(-1);
-//			printInvoiceCountSpinner.setDigits(0);
-//			printInvoiceCountSpinner.setIncrement(1);
-//			printingInfoLabel = new Label(printGroup, SWT.RIGHT);
-//			printingInfoLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-////			GridData gridData = new GridData(SWT.LEFTData(GridData.FILL_HORIZONTAL), SWT.CENTER, true, false, 2, 1);
-////			printingInfoLabel.setLayoutData(gridData);
-//
-//			printInvoiceCheckbox.addSelectionListener(new SelectionAdapter() {
-//				@Override
-//				public void widgetSelected(SelectionEvent e) {
-//					updateInvoicesToBePrinted();
-//				}
-//			});
-//			printInvoiceCountSpinner.addSelectionListener(new SelectionAdapter() {
-//				@Override
-//				public void widgetSelected(SelectionEvent e) {
-//					printInvoiceCheckbox.setSelection(printInvoiceCountSpinner.getSelection() != 0);
-//					updateInvoicesToBePrinted();
-//				}
-//			});
+			if (!ArticleContainerPrinterRegistry.sharedInstance().getFactories().isEmpty()) {
+				automaticPrintingGroup = new AutomaticPrintingOptionsGroup(page,
+						Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.group.invoicePrintingOptions"), //$NON-NLS-1$
+						Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.PaymentEntryPage.invoice"), null); //$NON-NLS-1$
+			}
 
 			loadModeOfPayments();
 
@@ -1040,8 +1004,12 @@ implements IPaymentEntryPage
 				selectedServerPaymentProcessor.getRequirementCheckResult() == null;
 	}
 
-	public int getInvoicesToPrintCount() {
-		return automaticPrintingGroup.getActualPrintCount();
+	public int getInvoicesToPrintCount()
+	{
+		if (automaticPrintingGroup != null) {
+			return automaticPrintingGroup.getActualPrintCount();
+		}
+		return 0;
 	}
 
 //	/**
