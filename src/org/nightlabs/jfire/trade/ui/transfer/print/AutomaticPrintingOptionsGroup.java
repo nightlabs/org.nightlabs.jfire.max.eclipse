@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.ui.transfer.wizard;
+package org.nightlabs.jfire.trade.ui.transfer.print;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 
-class AutomaticPrintingOptionsGroup extends XComposite {
+public class AutomaticPrintingOptionsGroup extends XComposite {
 
 	Group group;
 	Button doPrintCheckbox;
@@ -47,7 +47,7 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 		XComposite wrapper = new XComposite(group, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
 
 		doPrintCheckbox = new Button(wrapper, SWT.CHECK);
-		doPrintCheckbox.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.button.print.text"), entityName)); //$NON-NLS-1$
+		doPrintCheckbox.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup.button.print.text"), entityName)); //$NON-NLS-1$
 		wrapper = new XComposite(group, SWT.NONE, LayoutMode.LEFT_RIGHT_WRAPPER, LayoutDataMode.NONE, 2);
 		Label label = new Label(wrapper, SWT.NONE);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -88,10 +88,10 @@ class AutomaticPrintingOptionsGroup extends XComposite {
 
 	protected void updateInfoLabel() {
 		if (getActualPrintCount() == 0)
-			infoLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.infoLabel.text")); //$NON-NLS-1$
+			infoLabel.setText(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup.infoLabel.text")); //$NON-NLS-1$
 		else {
-			String copyText = printCount == 1 ? Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.copy") : Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.copies"); //$NON-NLS-1$ //$NON-NLS-2$
-			infoLabel.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.AutomaticPrintingOptionsGroup.willBePrinted"), printCount, copyText)); //$NON-NLS-1$
+			String copyText = printCount == 1 ? Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup.copy") : Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup.copies"); //$NON-NLS-1$ //$NON-NLS-2$
+			infoLabel.setText(String.format(Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup.willBePrinted"), printCount, copyText)); //$NON-NLS-1$
 		}
 	}
 

@@ -47,8 +47,6 @@ import org.nightlabs.jfire.trade.dao.OfferDAO;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
 import org.nightlabs.jfire.trade.ui.overview.offer.action.EditOfferAction;
-import org.nightlabs.jfire.trade.ui.overview.offer.action.PrintOfferAction;
-import org.nightlabs.jfire.trade.ui.overview.offer.action.ShowOfferAction;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
@@ -158,8 +156,9 @@ extends XComposite
 		final List<IAction> actions = new ArrayList<IAction>();
 		editAction = new EditOfferAction();
 		actions.add(editAction);
-		actions.add(new PrintOfferAction());
-		actions.add(new ShowOfferAction());
+		// TODO XXX FIXME have been refactored to org.nightlabs.jfire.reporting.trade.ui use extension point here
+//		actions.add(new PrintOfferAction());
+//		actions.add(new ShowOfferAction());
 		actions.add(new PayAndDeliverReservationAction());
 		actions.add(new RejectReservationAction());
 		return actions;

@@ -56,13 +56,8 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.accounting.pay.Payment;
 import org.nightlabs.jfire.accounting.pay.PaymentData;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
-import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
-import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
-import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
-import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
-import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.security.SecurityReflector;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.StoreManagerRemote;
@@ -82,7 +77,9 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.TransferCoordinator;
 import org.nightlabs.jfire.trade.ui.transfer.deliver.ClientDeliveryProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.jfire.trade.ui.transfer.print.ArticleContainerPrinterRegistry;
+import org.nightlabs.jfire.trade.ui.transfer.print.IArticleContainerPrinter;
+import org.nightlabs.jfire.trade.ui.transfer.print.IArticleContainerPrinterFactory;
 
 /**
  * @author Marco Schulze - marco at nightlabs dot de
@@ -370,52 +367,37 @@ public class TransferWizardUtil
 		return successful;
 	}
 
-	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
-		String reportRegistryItemType = null;
-
-		if (articleContainerId instanceof InvoiceID)
-			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;
-		else if (articleContainerId instanceof DeliveryNoteID)
-			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_DELIVERY_NOTE;
-
-		ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
-		ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
-		if (defLayoutID == null)
-			throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
-		PrintReportLayoutUtil.printReportLayout(
-				defLayoutID,
-				params,
-				new NullProgressMonitor()
-		);
+	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException
+	{
+		List<IArticleContainerPrinterFactory> factories = ArticleContainerPrinterRegistry.sharedInstance().getFactories();
+		if (factories != null && !factories.isEmpty()) {
+			IArticleContainerPrinterFactory factory = factories.iterator().next();
+			IArticleContainerPrinter printer = factory.createArticleContainerPrinter();
+			printer.printArticleContainer(articleContainerId);
+		}
 	}
 
-//	/**
-//	 * This method is meant to be used in an implementation of {@link DeliveryWizard#getProductIDs(Set)}.
-//	 *
-//	 * @param articlesToTransfer Instances of {@link Article}. They will be filtered with
-//	 *		the given <code>productTypeIDs</code>.
-//	 * @param productTypeIDs Instances of
-//	 *		{@link org.nightlabs.jfire.store.id.ProductTypeID}.
-//	 *
-//	 * @return Returns all {@link org.nightlabs.jfire.store.id.ProductID}s that match
-//	 *		one of the given {@link org.nightlabs.jfire.store.id.ProductTypeID}s
-//	 *		exactly (no inheritance).
-//	 */
-//	public static Collection getProductIDs(Collection articlesToTransfer, Set productTypeIDs)
-//	{
-//		// we return all products of the offer matching the given productTypeIDs
-//		Collection res = new ArrayList();
-//		for (Iterator it = articlesToTransfer.iterator(); it.hasNext(); ) {
-//			Article article = (Article) it.next();
-//			ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(
-//					article.getProductType());
+//	private static void printArticleContainer(ArticleContainerID articleContainerId) throws PrinterException {
+//		Map<String, Object> params = new HashMap<String, Object>();
+//		params.put("articleContainerID", articleContainerId); //$NON-NLS-1$
+//		String reportRegistryItemType = null;
 //
-//			if (productTypeIDs.contains(productTypeID))
-//				res.add(JDOHelper.getObjectId(article.getProduct()));
-//		}
-//		return res;
+//		if (articleContainerId instanceof InvoiceID)
+//			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE;
+//		else if (articleContainerId instanceof DeliveryNoteID)
+//			reportRegistryItemType = ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_DELIVERY_NOTE;
+//
+//		ReportLayoutConfigModule cfMod = ConfigUtil.getUserCfMod(ReportLayoutConfigModule.class, new String[] {FetchPlan.ALL}, 3, new NullProgressMonitor());
+//		ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(reportRegistryItemType);
+//		if (defLayoutID == null)
+//			throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+//
+//		// TODO FIXME XXX must be done by extension-point to avoid dependency on org.nightlabs.jfire.reporting.ui
+//		PrintReportLayoutUtil.printReportLayout(
+//				defLayoutID,
+//				params,
+//				new NullProgressMonitor()
+//		);
 //	}
 
 	public static Set<ArticleID> getArticleIDsFromArticles(Collection<Article> articles)

@@ -1,4 +1,4 @@
-package org.nightlabs.jfire.trade.ui.transfer.wizard;
+package org.nightlabs.jfire.trade.ui.transfer.print;
 
 import java.util.Set;
 
@@ -33,10 +33,10 @@ public class TradePrintingConfigPreferencePage extends AbstractWorkstationConfig
 
 	@Override
 	protected void createPreferencePage(Composite parent) {
-		String desc = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.description.invoicePrintingOptions"); //$NON-NLS-1$
-		invoiceGroup = new AutomaticPrintingOptionsGroup(parent, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.group.invoicePrintingOptions.title"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.invoice"), desc); //$NON-NLS-1$ //$NON-NLS-2$
-		desc = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.description.deliveryNotePrintingOptions"); //$NON-NLS-1$
-		deliveryNoteGroup = new AutomaticPrintingOptionsGroup(parent, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.wizard.TradePrintingConfigPreferencePage.deliveryNote"), desc); //$NON-NLS-1$ //$NON-NLS-2$
+		String desc = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.description.invoicePrintingOptions"); //$NON-NLS-1$
+		invoiceGroup = new AutomaticPrintingOptionsGroup(parent, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.group.invoicePrintingOptions.title"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.invoice"), desc); //$NON-NLS-1$ //$NON-NLS-2$
+		desc = Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.description.deliveryNotePrintingOptions"); //$NON-NLS-1$
+		deliveryNoteGroup = new AutomaticPrintingOptionsGroup(parent, Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.group.deliveryNotePrintingOptions"), Messages.getString("org.nightlabs.jfire.trade.ui.transfer.print.TradePrintingConfigPreferencePage.deliveryNote"), desc); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

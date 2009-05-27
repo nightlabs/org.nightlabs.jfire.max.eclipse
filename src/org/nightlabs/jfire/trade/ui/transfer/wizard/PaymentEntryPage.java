@@ -91,6 +91,7 @@ import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessor;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactory;
 import org.nightlabs.jfire.trade.ui.transfer.pay.ClientPaymentProcessorFactoryRegistry;
+import org.nightlabs.jfire.trade.ui.transfer.print.AutomaticPrintingOptionsGroup;
 import org.nightlabs.jfire.transfer.RequirementCheckResult;
 import org.nightlabs.l10n.NumberFormatter;
 import org.nightlabs.progress.NullProgressMonitor;
