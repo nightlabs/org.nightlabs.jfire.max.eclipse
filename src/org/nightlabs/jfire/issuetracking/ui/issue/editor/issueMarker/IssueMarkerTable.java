@@ -20,11 +20,6 @@ import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 
-//      ,-_|\
-//     /     \  ]Egoiste in
-//     @_,-._/       ]N[ightLabs
-//  ======= v =====================================================================================
-//  "Science without religion is lame, religion without science is blind." -- A. E. (1879 - 1955).
 /**
  * A table to deal with IssueMarkerTableItems.
  *

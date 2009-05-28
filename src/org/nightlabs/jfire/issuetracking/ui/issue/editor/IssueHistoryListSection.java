@@ -14,12 +14,12 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.nightlabs.base.ui.editor.RestorableSectionPart;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
-import org.nightlabs.jfire.issue.history.IssueHistoryItemDAO;
+import org.nightlabs.jfire.issue.history.FetchGroupsIssueHistoryItem;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
+import org.nightlabs.jfire.issue.history.IssueHistoryItemDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
 /**
@@ -48,8 +48,10 @@ public class IssueHistoryListSection extends RestorableSectionPart{
 		IssueID issueID = (IssueID)JDOHelper.getObjectId(issue);
 		Collection<IssueHistoryItem> issueHistoryItems = IssueHistoryItemDAO.sharedInstance().getIssueHistoryItems(
 				issueID,
-				new String[]{FetchPlan.DEFAULT, IssueHistoryItem.FETCH_GROUP_USER, User.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+				new String[]{FetchPlan.DEFAULT, FetchGroupsIssueHistoryItem.FETCH_GROUP_LIST},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+				new NullProgressMonitor());
 
-		issueHistoryTable.setIssueHistories(issueID, issueHistoryItems);
+		issueHistoryTable.setIssueHistoryItems(issueID, issueHistoryItems);
 	}
 }

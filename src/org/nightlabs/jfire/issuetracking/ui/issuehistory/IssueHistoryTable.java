@@ -1,10 +1,16 @@
 package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 
+import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.jdo.JDOHelper;
+
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableViewer;
@@ -13,12 +19,12 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.layout.WeightedTableLayout;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleEvent;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleListener;
@@ -39,13 +45,15 @@ import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> {
-	/**
-	 * The fetch groups of issue history data.
-	 */
-	public static final String[] FETCH_GROUPS = new String[] {};
+//	/**
+//	 * The fetch groups of issue history data.
+//	 */
+//	public static final String[] FETCH_GROUPS = new String[] {};
 
-	public IssueHistoryTable(Composite parent, int style)
-	{
+	/**
+	 * Creates a new instance of an IssueHistoryTable.
+	 */
+	public IssueHistoryTable(Composite parent, int style) {
 		super(parent, style);
 
 		getTableViewer().addDoubleClickListener(new IDoubleClickListener() {
@@ -56,8 +64,7 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 
 		JDOLifecycleManager.sharedInstance().addLifecycleListener(myLifecycleListener);
 	    addDisposeListener(new DisposeListener() {
-	      public void widgetDisposed(DisposeEvent event)
-	      {
+	      public void widgetDisposed(DisposeEvent event) {
 	        JDOLifecycleManager.sharedInstance().removeLifecycleListener(myLifecycleListener);
 	      }
 	    });
@@ -72,6 +79,11 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 				});
 			}
 		});
+
+	    addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) { disposeAllImages(); }
+	    });
 	}
 
 	private JDOLifecycleListener myLifecycleListener = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.lifeCycleListener.loading.text")) { //$NON-NLS-1$
@@ -80,19 +92,18 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 	      true,
 	      JDOLifecycleState.NEW);
 
-	    public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
-	    {
+	    public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter() {
 	      return filter;
 	    }
 
-	    public void notify(JDOLifecycleEvent event)
-	    {
-	    }
+	    public void notify(JDOLifecycleEvent event) {}
 	};
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(org.eclipse.jface.viewers.TableViewer, org.eclipse.swt.widgets.Table)
+	 */
 	@Override
-	protected void createTableColumns(TableViewer tableViewer, Table table)
-	{
+	protected void createTableColumns(TableViewer tableViewer, Table table) {
 		TableColumn tc;
 
 		tc = new TableColumn(table, SWT.LEFT);
@@ -111,61 +122,94 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		table.setLayout(layout);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
+	 */
 	@Override
-	protected void setTableProvider(TableViewer tableViewer)
-	{
-		tableViewer.setContentProvider(new TableContentProvider());
+	protected void setTableProvider(TableViewer tableViewer) {
+		tableViewer.setContentProvider(new ArrayContentProvider()); //(new TableContentProvider());
 		tableViewer.setLabelProvider(new IssueHistoryListLabelProvider());
 	}
 
 	private static DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
-	class IssueHistoryListLabelProvider
-	extends TableLabelProvider
-	{
-		public String getColumnText(Object element, int columnIndex)
-		{
+
+
+
+	// ------------------------------------------------------------------------------------------------------
+	// Cleanly control the images, so that we dont have to keep creating new ones, even after it was
+	// removed from the table entry, and the re-added again later.
+	private Map<String, Image> imageKey2Image = new HashMap<String, Image>();
+
+	/**
+	 * Disposes all images.
+	 */
+	private void disposeAllImages() {
+		for (Image image : imageKey2Image.values())
+			image.dispose();
+
+		imageKey2Image.clear();
+	}
+
+
+	// -------------------------------------------------------------------------------------------------------------------------|
+	class IssueHistoryListLabelProvider extends TableLabelProvider {
+		@Override
+		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof IssueHistoryItem) {
-				IssueHistoryItem issueHistory = (IssueHistoryItem) element;
-				switch (columnIndex)
-				{
-				case(0):
-					return dateTimeFormat.format(issueHistory.getCreateTimestamp());
-				case(1):
-					return issueHistory.getUser().getName();
-				case(2):
-					return issueHistory.getChange();
-				case(3):
-				break;
-				case(4):
-				case(5):
-				case(6):
-				default:
-					return ""; //$NON-NLS-1$
+				IssueHistoryItem issueHistoryItem = (IssueHistoryItem) element;
+				switch (columnIndex) {
+					case(0): return dateTimeFormat.format(issueHistoryItem.getCreateTimestamp());
+					case(1): return issueHistoryItem.getUser().getName();
+					case(2): return issueHistoryItem.getDescription(); //.getChange();
 				}
 			}
-			return null;
+			return "";
+		}
+
+		@Override
+		public Image getColumnImage(Object element, int columnIndex) {
+			if (element != null && element instanceof IssueHistoryItem && columnIndex == 2) {
+				IssueHistoryItem issueHistoryItem = (IssueHistoryItem)element;
+				String imageKey = JDOHelper.getObjectId(issueHistoryItem).toString();
+
+				Image icon = imageKey2Image.get(imageKey);
+				if (icon == null) {
+					byte[] iconByte = issueHistoryItem.getIcon16x16Data();
+					if (iconByte != null) {
+						ByteArrayInputStream in = new ByteArrayInputStream( iconByte );
+						icon = new Image(getDisplay(), in);
+
+						imageKey2Image.put(imageKey, icon);
+					}
+				}
+
+				return icon;
+			}
+
+			return super.getColumnImage(element, columnIndex);
 		}
 	}
 
-	public void setLoadingStatus()
-	{
+
+
+
+	// -------------------------------------------------------------------------------------------------------------------------|
+	public void setLoadingStatus() {
 		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumnText.loading.text")); //$NON-NLS-1$
 	}
 
 	private IssueID issueID;
-	public void setIssueHistories(IssueID issueID, Collection<IssueHistoryItem> issueHistories)
-	{
+	public void setIssueHistoryItems(IssueID issueID, Collection<IssueHistoryItem> issueHistoryItems) {
 		if (issueID == null)
 			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
 
 		this.issueID = issueID;
-		super.setInput(issueHistories);
+		super.setInput(issueHistoryItems);
 	}
 
 	@Override
-	public void setInput(Object input)
-	{
+	public void setInput(Object input) {
 		throw new UnsupportedOperationException("Use setIssueHistories(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
 	}
 }
