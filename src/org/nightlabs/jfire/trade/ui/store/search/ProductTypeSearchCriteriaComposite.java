@@ -208,4 +208,10 @@ public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQue
 		return queryClass;
 	}
 
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -40,5 +40,11 @@ public class ReceptionNoteFilterComposite
 	public Class<ReceptionNoteQuery> getQueryClass() {
 		return ReceptionNoteQuery.class;
 	}
+
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

@@ -453,4 +453,10 @@ public class AccountFilterComposite
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
 
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

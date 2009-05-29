@@ -40,6 +40,12 @@ public class OfferFilterComposite
 		return OfferQuery.class;
 	}
 
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
 //	@Override
 //	protected ArticleContainerQuery createArticleContainerQuery()
 //	{

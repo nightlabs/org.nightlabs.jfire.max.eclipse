@@ -548,4 +548,10 @@ public class StatableFilterSearchComposite
 		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
 
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

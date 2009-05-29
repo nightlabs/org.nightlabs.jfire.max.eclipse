@@ -32,6 +32,12 @@ public class InvoiceFilterComposite
 	public Class<InvoiceQuery> getQueryClass() {
 		return InvoiceQuery.class;
 	}
+
+	@Override
+	public void resetData() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 //	private Combo booked;
 //	private DateTimeEdit bookDTMin;
