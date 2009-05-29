@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -261,6 +262,11 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	protected String getGroupID()
 	{
 		return FILTER_GROUP_ID;
+	}
+
+	@Override
+	public void resetData() {
+		checkboxTreeViewer.setAllChecked(false);
 	}
 
 }

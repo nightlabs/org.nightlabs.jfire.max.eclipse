@@ -251,4 +251,9 @@ public class IssueFilterCompositeIssueLinkRelated
 	{
 		return FILTER_GROUP_ID;
 	}
+
+	@Override
+	public void resetData() {
+		
+	}
 }

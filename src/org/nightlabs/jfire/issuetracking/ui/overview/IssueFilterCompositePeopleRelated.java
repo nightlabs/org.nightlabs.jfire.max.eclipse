@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -272,4 +273,17 @@ public class IssueFilterCompositePeopleRelated
 		return FILTER_GROUP_ID;
 	}
 
+	@Override
+	public void resetData() {
+		allAssigneeButton.setSelection(true);
+		allReporterButton.setSelection(true);
+		
+		Event e = new Event();
+		e.widget = allAssigneeButton;
+		e.type = SWT.Selection;
+		allAssigneeButton.notifyListeners(SWT.Selection, e); 
+		
+		e.widget = allReporterButton;
+		allReporterButton.notifyListeners(SWT.Selection, e);
+	}
 }

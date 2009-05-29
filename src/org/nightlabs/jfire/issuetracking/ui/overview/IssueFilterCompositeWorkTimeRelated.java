@@ -204,4 +204,7 @@ public class IssueFilterCompositeWorkTimeRelated
 		return FILTER_GROUP_ID;
 	}
 
+	@Override
+	public void resetData() {
+	}
 }
