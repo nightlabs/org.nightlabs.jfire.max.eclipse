@@ -205,6 +205,6 @@ public class IssueFilterCompositeWorkTimeRelated
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 	}
 }

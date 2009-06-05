@@ -265,8 +265,9 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 		checkboxTreeViewer.setAllChecked(false);
+		setSearchSectionActive(false);
 	}
 
 }

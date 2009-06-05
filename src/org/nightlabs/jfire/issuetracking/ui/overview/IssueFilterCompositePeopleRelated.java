@@ -274,7 +274,7 @@ public class IssueFilterCompositePeopleRelated
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 		allAssigneeButton.setSelection(true);
 		allReporterButton.setSelection(true);
 		

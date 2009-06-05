@@ -253,7 +253,7 @@ public class IssueFilterCompositeIssueLinkRelated
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 		
 	}
 }

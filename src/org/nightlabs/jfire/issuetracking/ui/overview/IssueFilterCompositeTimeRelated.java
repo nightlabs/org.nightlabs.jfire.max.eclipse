@@ -205,6 +205,9 @@ public class IssueFilterCompositeTimeRelated
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
+		createdTimeEdit.setActive(false);
+		updatedTimeEdit.setActive(false);
+		setSearchSectionActive(false);
 	}
 }
