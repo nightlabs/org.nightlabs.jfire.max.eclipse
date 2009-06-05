@@ -310,7 +310,7 @@ public class RepositoryFilterComposite
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -209,7 +209,7 @@ public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQue
 	}
 
 	@Override
-	public void resetData() {
+	public void resetUI() {
 		// TODO Auto-generated method stub
 		
 	}
