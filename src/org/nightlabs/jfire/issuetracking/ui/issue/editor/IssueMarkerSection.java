@@ -50,10 +50,11 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		getToolBarManager().add(removeIssueMarkerAction);
 
 
-
 		// The table displaying the IssueMarkers.
-		IssueMarkerTableComposite imtComposite = new IssueMarkerTableComposite(client, SWT.NONE);
-		issueMarkerTable = imtComposite.getIssueMarkerTable();	// <-- FOR LATER: Consider handling RIGHT-CLICK here; with a popup menu enabling Add and Remove actions.
+		issueMarkerTable = new IssueMarkerTable(client);
+		new IssueMarkerTableComposite(client, SWT.NONE);
+
+		// Attach funcitonal listener(s) to the CompositeTable.
 		issueMarkerTable.addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleRemoveActionButton(); }
@@ -93,8 +94,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 *  This seems enough, and we dont have to have anything more elaborate.
 	 */
 	private class IssueMarkerTableComposite extends XComposite {
-		private IssueMarkerTable issueMarkerTable;
-
 		public IssueMarkerTableComposite(Composite parent, int style) {
 			super(parent, style, LayoutMode.TIGHT_WRAPPER);
 
@@ -106,11 +105,9 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			GridData gridData = new GridData(GridData.FILL_BOTH);
 			gridData.heightHint = 100;
 
-			issueMarkerTable = new IssueMarkerTable(this);
+			assert issueMarkerTable != null;
 			issueMarkerTable.setLayoutData(gridData);
 		}
-
-		public IssueMarkerTable getIssueMarkerTable() { return issueMarkerTable; }
 	}
 
 
@@ -119,7 +116,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 * Handles the action to add a new IssueMarker.
 	 */
 	private class AddIssueMarkerAction extends Action {
-		private Issue issue;
 		public AddIssueMarkerAction() {
 			setId(AddIssueMarkerAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
@@ -129,7 +125,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 		@Override
 		public void run() {
-			issue = getIssue();
+			Issue issue = getIssue();
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog( new AddIssueMarkerWizard(issue) );
 			dialog.open();
 
@@ -137,7 +133,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			if (dialog.getReturnCode() != Window.CANCEL) {
 				// Handles the case that the Table was previously empty.
 				if (issueMarkerTable.getItemCount() == 0) {
-					issueMarkerTable.setInput(issue.getIssueMarkers());
+					issueMarkerTable.setInput(issue.getIssueMarkers());	// <-- Only on first populate.
 					getSection().setExpanded(true);
 				}
 
@@ -153,7 +149,6 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 	 * Handles the action to remove the selected IssueMarker(s).
 	 */
 	private class RemoveIssueMarkerAction extends Action {
-		private Issue issue;
 		public RemoveIssueMarkerAction() {
 			setId(RemoveIssueMarkerAction.class.getName());
 			setImageDescriptor(SharedImages.DELETE_16x16);
@@ -166,7 +161,7 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 			Collection<IssueMarker> items = issueMarkerTable.getSelectedElements();
 			if (items.isEmpty()) return;
 
-			issue = getIssue();
+			Issue issue = getIssue();
 			for(IssueMarker issueMarker : items) {
 				issueMarkerTable.removeElement(issueMarker);
 				issue.removeIssueMarker(issueMarker);

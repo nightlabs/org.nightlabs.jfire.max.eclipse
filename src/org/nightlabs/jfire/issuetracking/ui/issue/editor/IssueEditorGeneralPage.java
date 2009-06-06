@@ -216,10 +216,6 @@ extends EntityEditorPageWithProgress
 					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
 				if (issuePropertySection != null && !issuePropertySection.getSection().isDisposed())
 					issuePropertySection.setIssue(getController().getIssue());
-				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed()) {
-					issueFileAttachmentSection.setIssue(getController().getIssue());
-					issueFileAttachmentSection.getSection().setExpanded(getController().getIssue().getIssueFileAttachments().size() != 0);
-				}
 				if (issueCommentListSection != null && !issueCommentListSection.getSection().isDisposed()) {
 					issueCommentListSection.setIssue(getController().getIssue());
 					issueCommentListSection.getSection().setExpanded(getController().getIssue().getComments().size() != 0);
@@ -233,6 +229,11 @@ extends EntityEditorPageWithProgress
 				// --- 8< --- KaiExperiments: since 15.05.2009 ------------------
 				if (issueMarkerSection != null && !issueMarkerSection.getSection().isDisposed()) {
 					issueMarkerSection.setIssue(getController().getIssue());
+				}
+
+				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed()) {
+					issueFileAttachmentSection.setIssue(getController().getIssue());
+//					issueFileAttachmentSection.getSection().setExpanded(getController().getIssue().getIssueFileAttachments().size() != 0);
 				}
 				// ------ KaiExperiments ----- >8 -------------------------------
 

@@ -21,7 +21,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 
 /**
- * A table to deal with IssueMarkerTableItems.
+ * An {@link AbstractTableComposite} to deal with displaying {@link IssueMarker}s.
  *
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
@@ -89,7 +89,7 @@ public class IssueMarkerTable extends AbstractTableComposite<IssueMarker> {   //
 	}
 
 
-	// ------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------|
 	/**
 	 * Provides the contents for the IssueMarkerTable.
 	 */

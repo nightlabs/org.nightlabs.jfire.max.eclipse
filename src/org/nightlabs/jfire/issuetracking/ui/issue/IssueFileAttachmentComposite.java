@@ -24,8 +24,8 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class IssueFileAttachmentComposite 
-extends XComposite 
+public class IssueFileAttachmentComposite
+extends XComposite
 {
 	private ListComposite<IssueFileAttachment> issueFileAttachmentListComposite;
 	private Issue issue;
@@ -38,7 +38,7 @@ extends XComposite
 	private IssueFileAttachmentCompositeStyle style;
 
 	/**
-	 * 
+	 *
 	 * @param parent
 	 * @param compositeStyle
 	 * @param layoutMode
@@ -59,7 +59,13 @@ extends XComposite
 		issueFileAttachmentListComposite.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((IssueFileAttachment)element).getFileName();
+				if (element instanceof IssueFileAttachment) {
+					IssueFileAttachment issueFileAttachment = (IssueFileAttachment)element;
+					return String.format("%s (%s)", issueFileAttachment.getFileName(), issueFileAttachment.getFileSize() + " bytes");
+					// return ((IssueFileAttachment)element).getFileName();
+				}
+
+				return null;
 			}
 		});
 
@@ -116,16 +122,16 @@ extends XComposite
 	}
 
 	/**
-	 * 
+	 *
 	 * @param issue
 	 */
 	public void setIssue(Issue issue) {
 		this.issue = issue;
 		issueFileAttachmentListComposite.setInput(issue.getIssueFileAttachments());
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public IssueFileAttachment getSelectedIssueFileAttachment() {
@@ -133,11 +139,11 @@ extends XComposite
 	}
 
 	/**
-	 * 
+	 *
 	 * @param issueFileAttachment
 	 */
 	public void addIssueFileAttachment(IssueFileAttachment issueFileAttachment) {
 		issueFileAttachmentListComposite.addElement(issueFileAttachment);
-		issue.addIssueFileAttachment(issueFileAttachment);		
+		issue.addIssueFileAttachment(issueFileAttachment);
 	}
 }
