@@ -52,9 +52,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	private AddFileToolbarAction addFileToolbarAction;
 	private RemoveFileToolbarAction removeFileToolbarAction;
 
-//	private Issue issue;	// <-- This is a duplicate? There already exists an Issue reference in the super class. Kai
-//	private int nFile;
-
 	/**
 	 * @param section
 	 * @param managedForm
@@ -68,33 +65,31 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		Label fileLabel = new Label(getClient(), SWT.NONE);
 		fileLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.label.file.text")); //$NON-NLS-1$
 
-//		issueFileAttachmentComposite =
-//			new IssueFileAttachmentComposite(getClient(), SWT.NONE, LayoutMode.TIGHT_WRAPPER, IssueFileAttachmentCompositeStyle.withoutAddRemoveButton);
+
+		// Top set of Action buttons.
+		downloadFileToolbarAction = new DownloadFileToolbarAction();
+		getToolBarManager().add(downloadFileToolbarAction);
+
+		addFileToolbarAction = new AddFileToolbarAction();
+		getToolBarManager().add(addFileToolbarAction);
+
+		removeFileToolbarAction = new RemoveFileToolbarAction();
+		getToolBarManager().add(removeFileToolbarAction);
+
+
 
 		// Create the TableComposite. Since 05.06.2009.
 		issueFileAttachmentTable = new IssueFileAttachmentTable(getClient());
 		new IssueFileAttachmentTableComposite(getClient(), SWT.NONE);
 
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 100;
-		issueFileAttachmentTable.setLayoutData(gridData);
-
-		downloadFileToolbarAction = new DownloadFileToolbarAction();
-		addFileToolbarAction = new AddFileToolbarAction();
-		removeFileToolbarAction = new RemoveFileToolbarAction();
-
-		getToolBarManager().add(downloadFileToolbarAction);
-		getToolBarManager().add(addFileToolbarAction);
-		getToolBarManager().add(removeFileToolbarAction);
-
-
-
-		hookContextMenu();	// <-- This is not functioning. Kai
-		issueFileAttachmentTable.addSelectionChangedListener(new ISelectionChangedListener(){
+		// Attach funcitonal listener(s) to the CompositeTable.
+		issueFileAttachmentTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleSectionButtons(); }
 		});
 
+
+		hookContextMenu();	// <-- FIXME This is not functioning. Kai
 		updateToolBarManager();
 	}
 
@@ -111,14 +106,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 		getSection().setExpanded( isFileAttachmentExists );
 		handleSectionButtons();
-
-//		issueFileAttachmentComposite.setIssue(newIssue);
-//		if (issue != null && newIssue.getIssueFileAttachments().size() == nFile) {
-//			return;
-//		}
-//
-//		issue = newIssue;	// <-- This is already performed in the super class's setIssue() method, before invoking doSetIssue(). Kai.
-//		nFile = issue.getIssueFileAttachments().size();
 	}
 
 	/**
@@ -185,7 +172,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		//   (1) From ListComposite<IssueFileAttachment> to AbstractTableComposite<IssueFileAttachment>
 		//       -- So that we can have multiple columns (at least 2 to display the fileName and the fileSize).
 		//
-		//   (2) Once the UI is set up, we only need to return the reference to the TableComposite.
+		//   (2) Once the UI is set up, we only need to use the reference to the TableComposite for displaying contents.
 		//       -- All 'actions' should be relegated to the corresponding 'Action' classes instead.
 		public IssueFileAttachmentTableComposite(Composite parent, int style) {
 			super(parent, style, LayoutMode.TIGHT_WRAPPER);
@@ -212,15 +199,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.SAVE_16x16);
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.text")); //$NON-NLS-1$
-
-//			super();
-//			setId(DownloadFileToolbarAction.class.getName());
-//			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-//					IssueTrackingPlugin.getDefault(),
-//					IssueFileAttachmentSection.class,
-//			"Download")); //$NON-NLS-1$
-//			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.toolTipText")); //$NON-NLS-1$
-//			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.DownloadFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -310,15 +288,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.ADD_16x16);
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.text")); //$NON-NLS-1$
-
-//			super();
-//			setId(AddFileToolbarAction.class.getName());
-//			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-//					IssueTrackingPlugin.getDefault(),
-//					IssueFileAttachmentSection.class,
-//			"Add")); //$NON-NLS-1$
-//			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.toolTipText")); //$NON-NLS-1$
-//			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.AddFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -349,9 +318,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 							getSection().setExpanded(true);
 						}
 
-						// Hmm...
-//						issueFileAttachmentComposite.addIssueFileAttachment(issueFileAttachment);
-
 						// Update the UI.
 						issueFileAttachmentTable.refresh(true);
 						markDirty();
@@ -359,7 +325,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 				});
 			}
 
-//			markDirty();
 		}
 	}
 
@@ -374,15 +339,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 			setImageDescriptor(SharedImages.DELETE_16x16);
 			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.toolTipText")); //$NON-NLS-1$
 			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.text")); //$NON-NLS-1$
-
-//			super();
-//			setId(RemoveFileToolbarAction.class.getName());
-//			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-//					IssueTrackingPlugin.getDefault(),
-//					IssueFileAttachmentSection.class,
-//			"Remove")); //$NON-NLS-1$
-//			setToolTipText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.toolTipText")); //$NON-NLS-1$
-//			setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueFileAttachmentSection.RemoveFileToolbarAction.text")); //$NON-NLS-1$
 		}
 
 		@Override
@@ -398,23 +354,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 			// Done!
 			markDirty();
-
-
-//			List<IssueFileAttachment> fileList = issue.getIssueFileAttachments();
-//			fileComposite.removeFiles(fileComposite.getFileListWidget().getSelection());
-//			for (int i = 0; i < fileComposite.getFileListWidget().getSelection().length; i++) {
-//				String fileName = fileComposite.getFileListWidget().getSelection()[i];
-//				for (IssueFileAttachment ia : fileList) {
-//					if (ia.getFileName().equals(fileName)) {
-//						fileList.remove(ia);
-//					}
-//				}
-//			}
-
-//			issue.getIssueFileAttachments().clear();
-//			issue.getIssueFileAttachments().addAll(fileList);
-
-//			markDirty();
 		}
 	}
 }
