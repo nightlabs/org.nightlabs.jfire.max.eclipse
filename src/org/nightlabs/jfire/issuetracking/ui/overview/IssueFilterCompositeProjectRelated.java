@@ -12,7 +12,6 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -40,7 +39,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 {
 	private static final Logger logger = Logger.getLogger(IssueFilterCompositeProjectRelated.class);
 
-//	private ProjectComboComposite projectCombo;
 	private ProjectAdminTreeComposite projectTreeComposite;
 	private CheckboxTreeViewer checkboxTreeViewer;
 	
@@ -80,7 +78,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			QueryProvider<? super IssueQuery> queryProvider)
 	{
 		super(parent, style, queryProvider);
-//		prepareIssueProperties();
 		createComposite();
 	}
 
@@ -146,24 +143,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				getQuery().setFieldEnabled(IssueQuery.FieldName.projectIDs, enable);
 			}
 		});
-//		projectCombo = new ProjectComboComposite(projectComposite, SWT.NONE);
-//		projectCombo.addSelectionChangedListener(new ISelectionChangedListener()
-//		{
-//		public void selectionChanged(SelectionChangedEvent e)
-//		{
-//		final Project selectedProject = projectCombo.getSelectedProject();
-
-//		boolean selectAll = selectedProject.equals(PROJECT_ALL);
-//		if (selectAll)
-//		getQuery().setProjectID(null);
-//		else
-//		getQuery().setProjectID(selectedProject.getObjectId());
-
-//		getQuery().setFieldEnabled(IssueQuery.FieldName.projectID, ! selectAll);
-//		}
-//		});
-		
-//		prepareIssueProperties();
 	}
 
 	private void automateParentCheck(ProjectTreeNode parentNode) {
@@ -188,6 +167,7 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
+		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
 			if (IssueQuery.FieldName.projectIDs.equals(changedField.getPropertyName()))
@@ -195,25 +175,19 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				Set<ProjectID> tmpProjectIDs = (Set<ProjectID>) changedField.getNewValue();
 				if (tmpProjectIDs == null)
 				{
-//					projectCombo.setSelection(new StructuredSelection(PROJECT_ALL));
 				}
 				else
 				{
-					for (ProjectID projectID : tmpProjectIDs) {
+					/*for (ProjectID projectID : tmpProjectIDs) {
 						TreeItem[] treeItems = checkboxTreeViewer.getTree().getItems();
 						for (TreeItem treeItem : treeItems) {
-							Object o = treeItem.getData();
+							Project project = (Project)treeItem.getData();
+							if (project.getProjectID() == projectID.projectID) {
+								treeItem.setChecked(true);
+							}
 						}
-					}
-//					checkboxTreeViewer.setChecked(element, state)
-//					final Project newProject = ProjectDAO.sharedInstance().getProject(
-//							tmpProjectID, new String[] { Project.FETCH_GROUP_NAME },
-//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor()
-//					);
-//					projectCombo.setSelectedProject(newProject);
-//					if (! newProject.equals(projectCombo.getSelectedProject()))
-//					selectedProject = newProject;
-
+					}*/
+					sectionActive |= true;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.projectIDs).equals(
@@ -221,24 +195,15 @@ extends AbstractQueryFilterComposite<IssueQuery>
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
+				if (!active) {
+					checkboxTreeViewer.setAllChecked(false);
+					getQuery().getProjectIDs().clear();
+				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 
 
 	}
-
-//	private static Project PROJECT_ALL = new Project(Organisation.DEV_ORGANISATION_ID, -1);
-
-//	private void prepareIssueProperties(){
-//		PROJECT_ALL.getName().setText(Locale.ENGLISH.getLanguage(), "All");
-//		projectCombo.addProject(PROJECT_ALL, 0);
-
-//		if (selectedProject == null)
-//		selectedProject = PROJECT_ALL;
-
-//		projectCombo.setSelectedProject(selectedProject);
-
-//	}
 
 	private static final Set<String> fieldNames;
 	static

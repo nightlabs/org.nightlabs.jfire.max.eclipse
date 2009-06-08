@@ -15,7 +15,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -216,6 +215,10 @@ public class IssueFilterCompositePeopleRelated
 				assigneeButton.setEnabled(active);
 				assigneeText.setEnabled(active);
 				setSearchSectionActive(allAssigneeButton, ! active);
+				if (!active) {
+					assigneeText.setText("");
+					getQuery().setAssigneeID(null);
+				}
 			}
 			else if (IssueQuery.FieldName.reporterID.equals(changedField.getPropertyName()))
 			{
@@ -239,6 +242,11 @@ public class IssueFilterCompositePeopleRelated
 				reporterText.setEnabled(active);
 				reporterButton.setEnabled(active);
 				allReporterButton.setSelection(! active);
+
+				if (!active) {
+					reporterText.setText("");
+					getQuery().setReporterID(null);
+				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 //		boolean sectionActive = selectedAssignee != null || selectedReporter != null;

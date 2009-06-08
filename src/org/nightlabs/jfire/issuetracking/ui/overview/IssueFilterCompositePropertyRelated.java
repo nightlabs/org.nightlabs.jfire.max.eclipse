@@ -2,7 +2,6 @@ package org.nightlabs.jfire.issuetracking.ui.overview;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -203,7 +202,6 @@ public class IssueFilterCompositePropertyRelated
 		loadProperties();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
@@ -235,6 +233,10 @@ public class IssueFilterCompositePropertyRelated
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setIssuePriorityID(null);
+					issuePriorityCombo.setSelection(ISSUE_PRIORITY_ALL);
+				}
 			}
 			else if (IssueQuery.FieldName.issueResolutionID.equals(changedField.getPropertyName()))
 			{
@@ -263,6 +265,10 @@ public class IssueFilterCompositePropertyRelated
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setIssueResolutionID(null);
+					issueResolutionCombo.setSelection(ISSUE_RESOLUTION_ALL);
+				}
 			}
 			else if (IssueQuery.FieldName.issueSeverityTypeID.equals(changedField.getPropertyName()))
 			{
@@ -291,6 +297,10 @@ public class IssueFilterCompositePropertyRelated
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setIssueSeverityTypeID(null);
+					issueSeverityCombo.setSelection(ISSUE_SEVERITY_TYPE_ALL);
+				}
 			}
 			else if (IssueQuery.FieldName.issueTypeID.equals(changedField.getPropertyName()))
 			{
@@ -319,6 +329,10 @@ public class IssueFilterCompositePropertyRelated
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
 				setSearchSectionActive(active);
+				if (!active) {
+					getQuery().setIssueTypeID(null);
+					issueTypeCombo.setSelection(ISSUE_TYPE_ALL);
+				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}

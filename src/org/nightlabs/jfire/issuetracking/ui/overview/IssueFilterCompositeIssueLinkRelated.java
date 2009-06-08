@@ -147,7 +147,6 @@ public class IssueFilterCompositeIssueLinkRelated
 		};
 	};
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
@@ -181,6 +180,11 @@ public class IssueFilterCompositeIssueLinkRelated
 				Boolean active = (Boolean) changedField.getNewValue();
 				issueLinkTypeCombo.setEnabled(active);
 				setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID));
+				
+				if (!active) {
+					issueLinkTypeCombo.setSelection(ISSUE_LINK_TYPE_ALL);
+					getQuery().setIssueLinkTypeID(null);
+				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
 	}
