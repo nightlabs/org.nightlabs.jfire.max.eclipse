@@ -207,11 +207,4 @@ public class ProductTypeSearchCriteriaComposite<Q extends AbstractProductTypeQue
 	public Class<Q> getQueryClass() {
 		return queryClass;
 	}
-
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

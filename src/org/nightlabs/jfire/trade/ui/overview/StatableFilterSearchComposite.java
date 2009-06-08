@@ -547,11 +547,4 @@ public class StatableFilterSearchComposite
 
 		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
-
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -33,12 +33,6 @@ public class InvoiceFilterComposite
 		return InvoiceQuery.class;
 	}
 
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-	
 //	private Combo booked;
 //	private DateTimeEdit bookDTMin;
 //	private DateTimeEdit bookDTMax;

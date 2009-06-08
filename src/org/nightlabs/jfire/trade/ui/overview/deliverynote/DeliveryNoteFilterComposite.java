@@ -43,11 +43,4 @@ public class DeliveryNoteFilterComposite
 	public Class<DeliveryNoteQuery> getQueryClass() {
 		return DeliveryNoteQuery.class;
 	}
-
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-			
 }

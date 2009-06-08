@@ -39,13 +39,6 @@ public class OfferFilterComposite
 	public Class<OfferQuery> getQueryClass() {
 		return OfferQuery.class;
 	}
-
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-
 //	@Override
 //	protected ArticleContainerQuery createArticleContainerQuery()
 //	{

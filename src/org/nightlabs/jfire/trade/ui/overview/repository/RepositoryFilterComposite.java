@@ -308,11 +308,4 @@ public class RepositoryFilterComposite
 			}
 		} // for (FieldChangeCarrier fieldChange : event.getChangedFields().values())
 	}
-
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

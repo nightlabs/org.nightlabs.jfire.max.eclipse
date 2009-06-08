@@ -42,12 +42,6 @@ public class OrderFilterComposite
 		return OrderQuery.class;
 	}
 
-	@Override
-	public void resetUI() {
-		// TODO Auto-generated method stub
-		
-	}
-
 //	@Override
 //	protected void createContents(Composite parent) {
 //		createArticleContainerComposite(parent);
