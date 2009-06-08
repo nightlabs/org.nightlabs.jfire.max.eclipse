@@ -38,7 +38,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * An editor page for issue tracking overview.
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  */
 public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
@@ -50,7 +50,7 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 
 	/**
 	 * The Factory is registered to the extension-point and creates
-	 * new instances of {@link IssueEditorHistoryPage}. 
+	 * new instances of {@link IssueEditorHistoryPage}.
 	 */
 	public static class Factory implements IEntityEditorPageFactory {
 
@@ -66,16 +66,16 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	}
 
 	// TODO: Somehow have a LanguageChooser for the whole page, not for every I18nEditor.
-	
+
 	private IssueHistoryListSection issueHistorySection;
-	
+
 	/**
 	 * <p>
 	 * This constructor is used by the entity editor
 	 * page extension system.
-	 * 
+	 *
 	 * @param editor The editor for which to create this
-	 * 		form page. 
+	 * 		form page.
 	 */
 	public IssueEditorHistoryPage(FormEditor editor)
 	{
@@ -85,10 +85,10 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	@Override
 	protected void addSections(Composite parent) {
 		final IssueEditorPageController controller = (IssueEditorPageController)getPageController();
-		
-		issueHistorySection = new IssueHistoryListSection(this, parent, controller);
+
+		issueHistorySection = new IssueHistoryListSection(this, parent); //, controller);
 		getManagedForm().addPart(issueHistorySection);
-		
+
 		if (controller.isLoaded()) {
 			issueHistorySection.setIssue(controller.getIssue());
 		}
@@ -110,7 +110,7 @@ public class IssueEditorHistoryPage extends EntityEditorPageWithProgress
 	protected String getPageFormTitle() {
 		return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueEditorHistoryPage.pageFormTitle.text"); //$NON-NLS-1$
 	}
-	
+
 	protected IssueEditorPageController getController() {
 		return (IssueEditorPageController)getPageController();
 	}

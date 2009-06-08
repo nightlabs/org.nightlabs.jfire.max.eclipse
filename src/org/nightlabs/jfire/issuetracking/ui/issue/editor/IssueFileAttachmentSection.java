@@ -45,7 +45,6 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSection {
-//	private IssueFileAttachmentComposite issueFileAttachmentComposite; // <-- Marked for removal.
 	private IssueFileAttachmentTable issueFileAttachmentTable;
 
 	private DownloadFileToolbarAction downloadFileToolbarAction;
@@ -53,8 +52,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 	private RemoveFileToolbarAction removeFileToolbarAction;
 
 	/**
-	 * @param section
-	 * @param managedForm
+	 * Creates a new instance of an IssueFileAttachmentSection.
 	 */
 	public IssueFileAttachmentSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
@@ -77,19 +75,18 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		getToolBarManager().add(removeFileToolbarAction);
 
 
-
 		// Create the TableComposite. Since 05.06.2009.
 		issueFileAttachmentTable = new IssueFileAttachmentTable(getClient());
-		new IssueFileAttachmentTableComposite(getClient(), SWT.NONE);
-
-		// Attach funcitonal listener(s) to the CompositeTable.
 		issueFileAttachmentTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleSectionButtons(); }
 		});
 
+		// Place the TableComposite in this Section, ah, nicely?
+		new IssueFileAttachmentTableComposite(getClient(), SWT.NONE, issueFileAttachmentTable);
 
-		hookContextMenu();	// <-- FIXME This is not functioning. Kai
+
+		hookContextMenu();	// <-- FIXME This is not functioning? Kai
 		updateToolBarManager();
 	}
 
@@ -174,7 +171,7 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 		//
 		//   (2) Once the UI is set up, we only need to use the reference to the TableComposite for displaying contents.
 		//       -- All 'actions' should be relegated to the corresponding 'Action' classes instead.
-		public IssueFileAttachmentTableComposite(Composite parent, int style) {
+		public IssueFileAttachmentTableComposite(Composite parent, int style, IssueFileAttachmentTable issueFileAttachmentTable) {
 			super(parent, style, LayoutMode.TIGHT_WRAPPER);
 			getGridLayout().numColumns = 2;
 			getGridLayout().makeColumnsEqualWidth = false;
@@ -203,7 +200,9 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 
 		@Override
 		public void run() {
-			// Note: We should suggest the same filename as is listed in the CompositeTable for the download filename.
+			// Note 1: We should suggest the same filename as is listed in the CompositeTable for the download filename.
+			// Note 2: There were several commented-out original codes in this method, prior to these newly written ones.
+			//         One can check out Revision #14707 from the SVN if one is interested. Kai
 			Collection<IssueFileAttachment> items = issueFileAttachmentTable.getSelectedElements();
 			if (items == null || items.isEmpty()) return;
 
@@ -235,43 +234,6 @@ public class IssueFileAttachmentSection extends AbstractIssueEditorGeneralSectio
 				}
 			});
 
-
-//			final IssueFileAttachment issueFileAttachment = issueFileAttachmentComposite.getSelectedIssueFileAttachment();
-//			if (issueFileAttachment == null)
-//				return; // Do nothing if nothing selected.
-//			Display.getDefault().asyncExec(new Runnable() {
-//				@Override
-//				public void run() {
-//					IssueFileAttachment ia = IssueFileAttachmentDAO.sharedInstance().getIssueFileAttachment((IssueFileAttachmentID)JDOHelper.getObjectId(issueFileAttachment), new String[]{FetchPlan.DEFAULT, IssueFileAttachment.FETCH_GROUP_DATA}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-//					InputStream is = ia.createFileAttachmentInputStream();
-//					if (is != null) {
-//						try {
-//							FileDialog fileDialog = new FileDialog(RCPUtil.getActiveWorkbenchShell(), SWT.SAVE);
-//							String selectedFile = fileDialog.open();
-//							if (selectedFile != null) {
-//								saveFile(is, selectedFile);
-//							}
-//						} catch (Exception ex) {
-//							throw new RuntimeException(ex);
-//						}
-//					}
-//				}
-//			});
-
-//			if (fileComposite.getFileListWidget().getSelectionIndex() != -1) {
-//				InputStream is = fileComposite.getInputStreamMap().get(fileComposite.getFileListWidget().getItem(fileComposite.getFileListWidget().getSelectionIndex()));
-//				if (is != null) {
-//					try {
-//						FileDialog fileDialog = new FileDialog(RCPUtil.getActiveShell(), SWT.SAVE);
-//						String selectedFile = fileDialog.open();
-//						if (selectedFile != null) {
-//							fileComposite.saveFile(is, selectedFile);
-//						}
-//					} catch (Exception ex) {
-//						throw new RuntimeException(ex);
-//					}
-//				}
-//			}
 		}
 	}
 

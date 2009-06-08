@@ -13,6 +13,9 @@ import org.nightlabs.jfire.issue.IssueFileAttachment;
 
 /**
  * An {@link AbstractTableComposite} to deal with displaying {@link IssueFileAttachment}s.
+ * The table currently displays two main information about the attached file:
+ *   [At column 0] -- the filename; and
+ *   [At column 1] -- the filesize in bytes.
  *
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */

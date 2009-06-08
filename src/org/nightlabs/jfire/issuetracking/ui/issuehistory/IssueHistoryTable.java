@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.ui.issuehistory;
 import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.notification.JDOLifecycleAdapterJob;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
-import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jdo.notification.IJDOLifecycleListenerFilter;
 import org.nightlabs.jfire.jdo.notification.JDOLifecycleState;
@@ -45,11 +43,6 @@ import org.nightlabs.jfire.jdo.notification.SimpleLifecycleListenerFilter;
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> {
-//	/**
-//	 * The fetch groups of issue history data.
-//	 */
-//	public static final String[] FETCH_GROUPS = new String[] {};
-
 	/**
 	 * Creates a new instance of an IssueHistoryTable.
 	 */
@@ -80,6 +73,8 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 			}
 		});
 
+
+	    // Since 29 May 2009.
 	    addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) { disposeAllImages(); }
@@ -118,7 +113,7 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		tc.setMoveable(true);
 		tc.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumn.action.text")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30, 70});
+		WeightedTableLayout layout = new WeightedTableLayout(new int[]{20, 30, 90});
 		table.setLayout(layout);
 	}
 
@@ -199,18 +194,23 @@ public class IssueHistoryTable extends AbstractTableComposite<IssueHistoryItem> 
 		super.setInput(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuehistory.IssueHistoryTable.tableColumnText.loading.text")); //$NON-NLS-1$
 	}
 
-	private IssueID issueID;
-	public void setIssueHistoryItems(IssueID issueID, Collection<IssueHistoryItem> issueHistoryItems) {
-		if (issueID == null)
-			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
 
-		this.issueID = issueID;
-		super.setInput(issueHistoryItems);
-	}
 
-	@Override
-	public void setInput(Object input) {
-		throw new UnsupportedOperationException("Use setIssueHistories(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
-	}
+	//    TO CHECK: Do we really need these? Kai
+	// --> CHECKED: No we dont. Kai.
+//	private IssueID issueID;
+//	public void setIssueHistoryItems(IssueID issueID, Collection<IssueHistoryItem> issueHistoryItems) {
+//		if (issueID == null)
+//			throw new IllegalArgumentException("issueID == null"); //$NON-NLS-1$
+//
+//		this.issueID = issueID;
+//		super.setInput(issueHistoryItems);
+//	}
+//
+//	@Override
+//	public void setInput(Object input) {
+//		throw new UnsupportedOperationException("Use setIssueHistories(...) or setLoadingStatus(...) instead!"); //$NON-NLS-1$
+//	}
+
 }
 

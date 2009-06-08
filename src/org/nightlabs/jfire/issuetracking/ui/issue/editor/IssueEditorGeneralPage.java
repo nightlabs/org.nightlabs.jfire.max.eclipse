@@ -38,6 +38,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
@@ -77,11 +78,9 @@ extends EntityEditorPageWithProgress
 	private IssueFileAttachmentSection issueFileAttachmentSection;
 	private IssueWorkTimeSection issueWorkTimeSection;
 
-	// --- 8< --- KaiExperiments: since 14.05.2009 ------------------
 	// --[ In preparation for an IssueMarker ]--
 	private IssueMarkerSection issueMarkerSection;
 	// --[ In preparation for an IssueMarker ]--
-	// ------ KaiExperiments ----- >8 -------------------------------
 
 	/**
 	 * <p>
@@ -137,13 +136,13 @@ extends EntityEditorPageWithProgress
 		issueSubjectAndDescriptionSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueSubjectAndDescriptionSection);
 
-		// --- 8< --- KaiExperiments: since 14.05.2009 ------------------
+		// --[ In preparation for an IssueMarker ]--
 		issueMarkerSection = new IssueMarkerSection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		issueMarkerSection.getSection().setLayoutData(gridData);
 		getManagedForm().addPart(issueMarkerSection);
-		// ------ KaiExperiments ----- >8 -------------------------------
+		// --[ In preparation for an IssueMarker ]--
 
 		issuePropertySection = new IssuePropertySection(this, c, controller);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -184,57 +183,66 @@ extends EntityEditorPageWithProgress
 		getManagedForm().addPart(issueWorkTimeSection);
 
 		if (controller.isLoaded()) {
-			issueLinkListSection.setIssue(controller.getIssue());
-			issueDetailSection.setIssue(controller.getIssue());
-			issueTypeAndStateSection.setIssue(controller.getIssue());
-			issueSubjectAndDescriptionSection.setIssue(controller.getIssue());
-			issuePropertySection.setIssue(controller.getIssue());
-			issueFileAttachmentSection.setIssue(controller.getIssue());
-			issueCommentListSection.setIssue(controller.getIssue());
-			issueCommentCreateSection.setIssue(controller.getIssue());
-			issueWorkTimeSection.setIssue(controller.getIssue());
+			Issue issue = controller.getIssue();
 
-			// TODO .setIssue for IssueMarkerSection (?)
+			issueLinkListSection.setIssue(issue);
+			issueDetailSection.setIssue(issue);
+			issueTypeAndStateSection.setIssue(issue);
+			issueSubjectAndDescriptionSection.setIssue(issue);
+			issuePropertySection.setIssue(issue);
+			issueFileAttachmentSection.setIssue(issue);
+			issueCommentListSection.setIssue(issue);
+			issueCommentCreateSection.setIssue(issue);
+			issueWorkTimeSection.setIssue(issue);
+
+			// --[ In preparation for an IssueMarker ]--
+			issueMarkerSection.setIssue(issue);
+			// --[ In preparation for an IssueMarker ]--
 		}
 	}
 
 	@Override
-	protected void handleControllerObjectModified(
-			EntityEditorPageControllerModifyEvent modifyEvent) {
+	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		switchToContent(); // multiple calls don't hurt
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
+				Issue issue = getController().getIssue();
+
 				if (issueLinkListSection != null && !issueLinkListSection.getSection().isDisposed()) {
-					issueLinkListSection.setIssue(getController().getIssue());
-					issueLinkListSection.getSection().setExpanded(getController().getIssue().getIssueLinks().size() != 0);
+					issueLinkListSection.setIssue(issue);
+					issueLinkListSection.getSection().setExpanded(issue.getIssueLinks().size() != 0);
 				}
+
 				if (issueDetailSection != null && !issueDetailSection.getSection().isDisposed())
-					issueDetailSection.setIssue(getController().getIssue());
+					issueDetailSection.setIssue(issue);
+
 				if (issueTypeAndStateSection != null && !issueTypeAndStateSection.getSection().isDisposed())
-					issueTypeAndStateSection.setIssue(getController().getIssue());
+					issueTypeAndStateSection.setIssue(issue);
+
 				if (issueSubjectAndDescriptionSection != null && !issueSubjectAndDescriptionSection.getSection().isDisposed())
-					issueSubjectAndDescriptionSection.setIssue(getController().getIssue());
+					issueSubjectAndDescriptionSection.setIssue(issue);
+
 				if (issuePropertySection != null && !issuePropertySection.getSection().isDisposed())
-					issuePropertySection.setIssue(getController().getIssue());
+					issuePropertySection.setIssue(issue);
+
 				if (issueCommentListSection != null && !issueCommentListSection.getSection().isDisposed()) {
-					issueCommentListSection.setIssue(getController().getIssue());
-					issueCommentListSection.getSection().setExpanded(getController().getIssue().getComments().size() != 0);
+					issueCommentListSection.setIssue(issue);
+					issueCommentListSection.getSection().setExpanded(issue.getComments().size() != 0);
 				}
+
 				if (issueCommentCreateSection != null && !issueCommentCreateSection.getSection().isDisposed())
-					issueCommentCreateSection.setIssue(getController().getIssue());
+					issueCommentCreateSection.setIssue(issue);
+
 				if (issueWorkTimeSection != null && !issueWorkTimeSection.getSection().isDisposed())
-					issueWorkTimeSection.setIssue(getController().getIssue());
+					issueWorkTimeSection.setIssue(issue);
 
 
 				// --- 8< --- KaiExperiments: since 15.05.2009 ------------------
-				if (issueMarkerSection != null && !issueMarkerSection.getSection().isDisposed()) {
-					issueMarkerSection.setIssue(getController().getIssue());
-				}
+				if (issueMarkerSection != null && !issueMarkerSection.getSection().isDisposed())
+					issueMarkerSection.setIssue(issue);
 
-				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed()) {
-					issueFileAttachmentSection.setIssue(getController().getIssue());
-//					issueFileAttachmentSection.getSection().setExpanded(getController().getIssue().getIssueFileAttachments().size() != 0);
-				}
+				if (issueFileAttachmentSection != null && !issueFileAttachmentSection.getSection().isDisposed())
+					issueFileAttachmentSection.setIssue(issue);
 				// ------ KaiExperiments ----- >8 -------------------------------
 
 			}

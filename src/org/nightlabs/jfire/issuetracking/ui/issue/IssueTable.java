@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -34,7 +35,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.PartInitException;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issue.Issue;
@@ -289,7 +289,7 @@ extends AbstractTableComposite<Issue>
 	@Override
 	protected void setTableProvider(TableViewer tableViewer)
 	{
-		tableViewer.setContentProvider(new TableContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider()); //(new TableContentProvider());
 		tableViewer.setLabelProvider(new IssueTableLabelProvider());
 	}
 
@@ -333,33 +333,7 @@ extends AbstractTableComposite<Issue>
 			// --- 8< --- KaiExperiments: since 19.05.2009 ------------------
 			// This accomodates for more than one Image icon. But we have a problem if not all fields have the same
 			// number of icons.
-			// FIXME Standardise the icons.
-			// TODO Generalise this with the registry.
 			if (element != null && element instanceof Issue && columnIndex == 5) {
-				// Testing with multiple images.
-//				Set<IssueMarker> issueMarkers = ((Issue)element).getIssueMarkers();
-//				if (issueMarkers != null && !issueMarkers.isEmpty()) {
-//					int n = issueMarkers.size();
-//					int i=0;
-//
-//					Image[] imgIcons = new Image[n];
-//					for (IssueMarker issueMarker : issueMarkers) {
-//						String refText = issueMarker.getName().getText();
-//						String suffix = refText.contains("Email") ? "Email" : (refText.contains("Phone") ? "Telephone" : "Suspended");
-//						imgIcons[i++] = SharedImages.getSharedImage(IssueTrackingPlugin.getDefault(), IssueMarkerSection.class, suffix, ImageDimension._16x16, ImageFormat.gif);
-//					}
-//
-////					Image combinedIcons = new Image(Display.getDefault(), 16*n + n-1, 16);
-////					GC gc = new GC(combinedIcons);
-////					try {
-////						for(i=0; i<n; i++)
-////							gc.drawImage(imgIcons[i], 16*i + i, 0);
-////					} finally {
-////						gc.dispose();
-////					}
-//
-//					return combinedIcons;
-//				}
 				return getCombiIssueMarkerImage((Issue) element);
 			}
 			// ------ KaiExperiments ----- >8 -------------------------------

@@ -28,10 +28,14 @@ import org.nightlabs.jfire.issuetracking.ui.issue.editor.issueMarker.IssueMarker
  * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
-	private AddIssueMarkerAction addIssueMarkerAction;
-	private RemoveIssueMarkerAction removeIssueMarkerAction;
 	private IssueMarkerTable issueMarkerTable;
 
+	private AddIssueMarkerAction addIssueMarkerAction;
+	private RemoveIssueMarkerAction removeIssueMarkerAction;
+
+	/**
+	 * Creates a new instance of the IssueMarkerSection.
+	 */
 	public IssueMarkerSection(FormPage page, Composite parent, final IssueEditorPageController controller) {
 		super(page, parent, controller);
 		getSection().setText("Issue Markers");
@@ -50,16 +54,15 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 		getToolBarManager().add(removeIssueMarkerAction);
 
 
-		// The table displaying the IssueMarkers.
+		// The TableComposite displaying the IssueMarkers.
 		issueMarkerTable = new IssueMarkerTable(client);
-		new IssueMarkerTableComposite(client, SWT.NONE);
-
-		// Attach funcitonal listener(s) to the CompositeTable.
 		issueMarkerTable.addSelectionChangedListener(new ISelectionChangedListener(){
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) { handleRemoveActionButton(); }
 		});
 
+		// Place the TableComposite in this Section, ah, nicely.
+		new IssueMarkerTableComposite(client, SWT.NONE, issueMarkerTable);
 
 		getSection().setClient(client);
 		updateToolBarManager();
@@ -90,14 +93,11 @@ public class IssueMarkerSection extends AbstractIssueEditorGeneralSection {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------|
 	/**
-	 *  Setup more control for the TableComposite in this Section.
-	 *  This seems enough, and we dont have to have anything more elaborate.
+	 *  Controls the placement of the IssueMarkerTable.
 	 */
 	private class IssueMarkerTableComposite extends XComposite {
-		public IssueMarkerTableComposite(Composite parent, int style) {
+		public IssueMarkerTableComposite(Composite parent, int style, IssueMarkerTable issueMarkerTable) {
 			super(parent, style, LayoutMode.TIGHT_WRAPPER);
-
-			// Prepare the wrapper, and sew in the Table.
 			getGridLayout().numColumns = 2;
 			getGridLayout().makeColumnsEqualWidth = false;
 			getGridData().grabExcessHorizontalSpace = true;

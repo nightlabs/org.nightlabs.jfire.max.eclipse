@@ -22,8 +22,8 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
- *
  */
+@Deprecated
 public class IssueFileAttachmentComposite
 extends XComposite
 {
