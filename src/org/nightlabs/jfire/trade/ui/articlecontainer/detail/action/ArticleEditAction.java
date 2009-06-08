@@ -94,8 +94,10 @@ public class ArticleEditAction extends Action implements IArticleEditAction
 		boolean visible = false;
 		for (Iterator<ArticleEdit> itAE = activeSegmentEdit.getArticleEdits().iterator(); itAE.hasNext(); ) {
 			ArticleEdit articleEdit = itAE.next();
-			if (articleEdit.getArticleEditFactory().getArticleEditActionDelegate(this.getId()) != null)
+			if (articleEdit.getArticleEditFactory().getArticleEditActionDelegate(this.getId()) != null) {
 				visible = true;
+				break;
+			}
 		}
 		return visible;
 	}

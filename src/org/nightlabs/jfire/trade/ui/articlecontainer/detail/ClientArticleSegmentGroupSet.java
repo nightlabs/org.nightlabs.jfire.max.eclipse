@@ -149,22 +149,26 @@ public class ClientArticleSegmentGroupSet extends ArticleSegmentGroupSet
 
 	public static final String[] FETCH_GROUPS_ARTICLE_IN_OFFER_EDITOR = new String[] {
 		FetchPlan.DEFAULT,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR
 	};
 
 	public static final String[] FETCH_GROUPS_ARTICLE_IN_ORDER_EDITOR = new String[] {
 		FetchPlan.DEFAULT,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR
 	};
 
 	public static final String[] FETCH_GROUPS_ARTICLE_IN_INVOICE_EDITOR = new String[] {
 		FetchPlan.DEFAULT,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR
 	};
 
 	public static final String[] FETCH_GROUPS_ARTICLE_IN_DELIVERY_NOTE_EDITOR = new String[] {
 		FetchPlan.DEFAULT,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR
 	};
 
 	private JDOLifecycleListener lifecycleListenerNewArticles = new JDOLifecycleAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.ClientArticleSegmentGroupSet.job.loadingNewArticles")) { //$NON-NLS-1$

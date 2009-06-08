@@ -234,9 +234,9 @@ implements ArticleContainerEdit
 
 					headerComposite = createHeaderComposite(ArticleContainerEditComposite.this);
 					headerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-					
+
 					setShowHeader(showHeader);
-					
+
 					new Label(ArticleContainerEditComposite.this, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					// TODO: segments can be potentially added on the fly, therefore ArticleContainerEditComposite.this behaviour must be supported
@@ -375,7 +375,7 @@ implements ArticleContainerEdit
 	 * @param parent The parent to use for the new composite.
 	 * @return A newly created {@link HeaderComposite}.
 	 */
-	protected HeaderComposite createHeaderComposite(Composite parent) 
+	protected HeaderComposite createHeaderComposite(Composite parent)
 	{
 		if (articleContainer instanceof Order)
 			return new OrderHeaderComposite(this, (Order) articleContainer);
@@ -455,11 +455,11 @@ implements ArticleContainerEdit
 		return articleSegmentGroupSet.getArticleSegmentGroups().size() > 1;
 	}
 
-	protected void updateHeaderAndFooter() 
+	protected void updateHeaderAndFooter()
 	{
 		if (headerComposite != null)
 			headerComposite.refresh();
-		
+
 		footerComposite.refresh();
 		if (logger.isDebugEnabled())
 			logger.debug("updateHeaderAndFooter"); //$NON-NLS-1$
@@ -877,7 +877,10 @@ implements ArticleContainerEdit
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
 		Order.FETCH_GROUP_THIS_ORDER, Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ORDER_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR,
+		FetchPlan.DEFAULT
+	};
 
 	public static final String[] FETCH_GROUPS_OFFER_WITH_ARTICLES = {
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
@@ -886,7 +889,10 @@ implements ArticleContainerEdit
 		StatableLocal.FETCH_GROUP_STATE, Order.FETCH_GROUP_CUSTOMER_GROUP,
 		Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_OFFER_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR,
+		FetchPlan.DEFAULT
+	};
 
 	public static final String[] FETCH_GROUPS_INVOICE_WITH_ARTICLES = {
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
@@ -894,7 +900,10 @@ implements ArticleContainerEdit
 		InvoiceLocal.FETCH_GROUP_THIS_INVOICE_LOCAL,
 		StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
-		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR, FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_INVOICE_EDITOR,
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR,
+		FetchPlan.DEFAULT
+	};
 
 	public static final String[] FETCH_GROUPS_DELIVERY_NOTE_WITH_ARTICLES = {
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_CONTAINER_IN_EDITOR,
@@ -903,7 +912,9 @@ implements ArticleContainerEdit
 		StatableLocal.FETCH_GROUP_STATE, Segment.FETCH_GROUP_THIS_SEGMENT,
 		SegmentType.FETCH_GROUP_THIS_SEGMENT_TYPE,
 		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_DELIVERY_NOTE_EDITOR,
-		FetchPlan.DEFAULT };
+		FetchGroupsTrade.FETCH_GROUP_ARTICLE_IN_ARTICLE_CONTAINER_EDITOR,
+		FetchPlan.DEFAULT
+	};
 
 	/**
 	 * Initialise this instance of <code>ArticleContainerEditComposite</code> or reload the {@link ArticleContainer} referenced
@@ -1098,10 +1109,10 @@ implements ArticleContainerEdit
 	public void init(ArticleContainerID articleContainerID) {
 		// Noop, initialized in constructor.
 	}
-	
+
 	private boolean showHeader = true;
 	@Override
-	public void setShowHeader(boolean showHeader) 
+	public void setShowHeader(boolean showHeader)
 	{
 		this.showHeader = showHeader;
 		if (headerComposite != null && !headerComposite.isDisposed()) {
@@ -1110,7 +1121,7 @@ implements ArticleContainerEdit
 				GridData gd = (GridData) layoutData;
 				gd.exclude = !showHeader;
 				headerComposite.getParent().layout(true, true);
-			}			
+			}
 		}
 	}
 }
