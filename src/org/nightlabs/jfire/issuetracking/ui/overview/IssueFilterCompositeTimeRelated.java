@@ -203,11 +203,4 @@ public class IssueFilterCompositeTimeRelated
 	{
 		return FILTER_GROUP_ID;
 	}
-
-	@Override
-	public void resetUI() {
-		createdTimeEdit.setActive(false);
-		updatedTimeEdit.setActive(false);
-		setSearchSectionActive(false);
-	}
 }

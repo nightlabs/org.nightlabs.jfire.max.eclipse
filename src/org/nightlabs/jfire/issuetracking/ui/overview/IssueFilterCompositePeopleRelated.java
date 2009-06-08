@@ -272,18 +272,4 @@ public class IssueFilterCompositePeopleRelated
 	{
 		return FILTER_GROUP_ID;
 	}
-
-	@Override
-	public void resetUI() {
-		allAssigneeButton.setSelection(true);
-		allReporterButton.setSelection(true);
-		
-		Event e = new Event();
-		e.widget = allAssigneeButton;
-		e.type = SWT.Selection;
-		allAssigneeButton.notifyListeners(SWT.Selection, e); 
-		
-		e.widget = allReporterButton;
-		allReporterButton.notifyListeners(SWT.Selection, e);
-	}
 }

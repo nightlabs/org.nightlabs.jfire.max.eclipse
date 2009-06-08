@@ -263,11 +263,4 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	{
 		return FILTER_GROUP_ID;
 	}
-
-	@Override
-	public void resetUI() {
-		checkboxTreeViewer.setAllChecked(false);
-		setSearchSectionActive(false);
-	}
-
 }
