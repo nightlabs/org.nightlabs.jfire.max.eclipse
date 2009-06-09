@@ -3,6 +3,8 @@ package org.nightlabs.jfire.issuetracking.ui.issue.editor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -63,12 +65,24 @@ public class IssueLinkListSection extends AbstractIssueEditorGeneralSection{
 				openLinkedObjectAction.run();
 			}
 		});
+		
+		issueLinkAdderComposite.getIssueLinkTable().addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent e) {
+				if (e.getSelection() != null) {
+					openLinkedObjectAction.setEnabled(true);
+					removeLinkAction.setEnabled(true);
+				}
+			}
+		});
 
 		getSection().setClient(client);
 
 		openLinkedObjectAction = new OpenLinkedObjectAction();
+		openLinkedObjectAction.setEnabled(false);
 		addLinkAction = new AddLinkAction();
 		removeLinkAction = new RemoveLinkAction();
+		removeLinkAction.setEnabled(false);
 
 		getToolBarManager().add(openLinkedObjectAction);
 		getToolBarManager().add(addLinkAction);

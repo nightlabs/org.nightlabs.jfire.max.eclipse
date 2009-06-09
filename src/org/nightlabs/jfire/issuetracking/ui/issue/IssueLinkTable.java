@@ -226,6 +226,9 @@ extends AbstractTableComposite<IssueLinkTableItem>
 						}
 						
 						setInput(issueLinkTableItems);
+						if (issueLinkTableItems.size() > 0) {
+							select(0);
+						}
 					}
 				});
 				
