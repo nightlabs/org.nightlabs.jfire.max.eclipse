@@ -30,6 +30,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
@@ -38,7 +39,6 @@ import org.nightlabs.jfire.issuetracking.ui.IssueTrackingPlugin;
 import org.nightlabs.jfire.issuetracking.ui.issue.IssueLabelProvider;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectComboComposite;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -62,14 +62,6 @@ extends WizardHopPage
 	private XComboComposite<IssuePriority> issuePriorityCombo;
 
 	private ProjectComboComposite projectComboComposite;
-//	private Button setFromDateTimeButton;
-//	private Label fromDateTimeLabel;
-//	private DateTimeControl fromDateTimeControl;
-//
-//	private Button setToDateTimeButton;
-//	private Label toDateTimeLabel;
-//	private DateTimeControl toDateTimeControl;
-
 	private IssueLabelProvider issueLabelProvider = new IssueLabelProvider();
 
 	//Used objects
@@ -77,7 +69,6 @@ extends WizardHopPage
 
 	private IssueType selectedIssueType;
 	private IssueSeverityType selectedIssueSeverityType;
-	private StateDefinition selectedState;
 	private IssuePriority selectedIssuePriority;
 	private Project selectedProject;
 
@@ -99,6 +90,11 @@ extends WizardHopPage
 		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.description")); //$NON-NLS-1$
 		this.issue = issue;
 	}
+
+	private static final String DEFAULT_ISSUE_PRIORITY_ID = IssuePriority.ISSUE_PRIORITY_NORMAL;
+	private static final String DEFAULT_ISSUE_SEVERITY_ID = IssueSeverityType.ISSUE_SEVERITY_TYPE_FEATURE;
+	private static final String DEFAULT_ISSUE_RESOLUTION_ID = IssueResolution.ISSUE_RESOLUTION_OPEN;
+	private static final String DEFAULT_ISSUE_TYPE_ID = IssueType.DEFAULT_ISSUE_TYPE_ID;
 
 	@Override
 	public Control createPageContents(Composite parent) {
@@ -211,32 +207,6 @@ extends WizardHopPage
 		gridData.horizontalSpan = 6;
 		dateTimeComposite.setLayoutData(gridData);
 
-//		setFromDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
-//		setFromDateTimeButton.setSelection(true);
-//		setFromDateTimeButton.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				fromDateTimeControl.setEnabled(setFromDateTimeButton.getSelection());
-//			}
-//		});
-//		fromDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
-//		fromDateTimeLabel.setText("From Date");
-//		fromDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
-//		fromDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-//
-//		setToDateTimeButton = new Button(dateTimeComposite, SWT.CHECK);
-//		setToDateTimeButton.setSelection(true);
-//		setToDateTimeButton.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				toDateTimeControl.setEnabled(setToDateTimeButton.getSelection());
-//			}
-//		});
-//		toDateTimeLabel = new Label(dateTimeComposite, SWT.NONE);
-//		toDateTimeLabel.setText("To Date");
-//		toDateTimeControl = new DateTimeControl(dateTimeComposite, SWT.NONE, DateFormatter.FLAGS_DATE_SHORT_TIME_HM_WEEKDAY);
-//		toDateTimeControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
 		//Loading Data
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.job.loadingIssueProp.text")) { //$NON-NLS-1$
 			@Override
@@ -246,12 +216,13 @@ extends WizardHopPage
 
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
+						//IssueType
 						issueTypeCombo.removeAll();
 						IssueType defaultIssueType = null;
 						for (IssueType issueType : issueTypes) {
-							if (issueType.getIssueTypeID().equals(IssueType.DEFAULT_ISSUE_TYPE_ID))
+							if (issueType.getIssueTypeID().equals(DEFAULT_ISSUE_TYPE_ID))
 								defaultIssueType = issueType;
-								issueTypeCombo.addElement(issueType);
+							issueTypeCombo.addElement(issueType);
 						}
 
 						if (defaultIssueType != null)
@@ -262,25 +233,48 @@ extends WizardHopPage
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						issue.setIssueType(selectedIssueType);
 
+						//IssueSeverity
 						issueSeverityCombo.removeAll();
+						IssueSeverityType defaultIssueSeverityType = null;
 						if (selectedIssueType != null) {
 							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+								if (is.getIssueSeverityTypeID().equals(DEFAULT_ISSUE_SEVERITY_ID))
+									defaultIssueSeverityType = is;
 								issueSeverityCombo.addElement(is);
 							}
-							issueSeverityCombo.selectElementByIndex(0);
+
+							if (defaultIssueSeverityType != null)
+								issueSeverityCombo.selectElement(defaultIssueSeverityType);
+							else
+								issueSeverityCombo.selectElementByIndex(0);
 						}
 						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 						issue.setIssueSeverityType(selectedIssueSeverityType);
 
+						//IssuePriority
 						issuePriorityCombo.removeAll();
+						IssuePriority defaultIssuePriority = null;
 						if (selectedIssueType != null) {
 							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+								if (ip.getIssuePriorityID().equals(DEFAULT_ISSUE_PRIORITY_ID))
+									defaultIssuePriority = ip;
 								issuePriorityCombo.addElement(ip);
 							}
-							issuePriorityCombo.selectElementByIndex(0);
+
+							if (defaultIssueSeverityType != null)
+								issuePriorityCombo.selectElement(defaultIssuePriority);
+							else
+								issuePriorityCombo.selectElementByIndex(0);
 						}
 						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						issue.setIssuePriority(selectedIssuePriority);
+						
+						
+						//IssueResolution
+						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+							if (ir.getIssueResolutionID().equals(DEFAULT_ISSUE_RESOLUTION_ID))
+								issue.setIssueResolution(ir);
+						}
 					}
 				});
 
@@ -310,9 +304,6 @@ extends WizardHopPage
 		boolean result = true;
 		setErrorMessage(null);
 
-//		if (issue.getProject() == null) {
-//			result = false;
-//		}
 		if (subjectText.getEditText().equals("") || subjectText.getI18nText().getText() == null) { //$NON-NLS-1$
 			result = false;
 		}
@@ -337,48 +328,4 @@ extends WizardHopPage
 	public I18nTextEditor getSubjectText() {
 		return subjectText;
 	}
-
-	public IssueSeverityType getSelectedIssueSeverityType() {
-		return selectedIssueSeverityType;
-	}
-
-	public void setSelectedIssueSeverityType(
-			IssueSeverityType selectedIssueSeverityType) {
-		this.selectedIssueSeverityType = selectedIssueSeverityType;
-	}
-
-	public StateDefinition getSelectedState() {
-		return selectedState;
-	}
-
-	public void setSelectedState(StateDefinition selectedState) {
-		this.selectedState = selectedState;
-	}
-
-	public IssuePriority getSelectedIssuePriority() {
-		return selectedIssuePriority;
-	}
-
-	public void setSelectedIssuePriority(IssuePriority selectedIssuePriority) {
-		this.selectedIssuePriority = selectedIssuePriority;
-	}
-
-	public IssueType getSelectedIssueType(){
-		return selectedIssueType;
-	}
-
-	public void setSelectedProject(Project selectedProject) {
-		this.selectedProject = selectedProject;
-	}
-
-	public Project getSelectedProject() {
-		return selectedProject;
-	}
-//	public Date getFromDateTime() {
-//		return fromDateTimeControl.getDate();
-//	}
-//
-//	public Date getToDateTime() {
-//		return toDateTimeControl.getDate();
-//	}
 }
