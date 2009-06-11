@@ -29,11 +29,6 @@ public class IssueEntryListViewer
 
 	private IssueTable issueTable;
 
-//	@Override
-//	public AbstractQueryFilterComposite createFilterComposite(Composite parent) {
-//		return new IssueFilterCompositeIssueRelated(parent, SWT.NONE);
-//	}
-
 	@Override
 	public AbstractTableComposite<Issue> createListComposite(Composite parent) {
 //		TODO we should pass the QueryMap obtained via this.getQueryMap() to the IssueTable so that it can filter new Issues agains it.
@@ -45,30 +40,6 @@ public class IssueEntryListViewer
 	protected void addResultTableListeners(AbstractTableComposite<Issue> tableComposite) {
 		super.addResultTableListeners(tableComposite);
 	}
-
-//	private static final String[] FETCH_GROUPS_ISSUES = {
-//		Issue.FETCH_GROUP_THIS_ISSUE,
-//		IssueType.FETCH_GROUP_THIS_ISSUE_TYPE,
-//		IssueSeverityType.FETCH_GROUP_THIS_ISSUE_SEVERITY_TYPE,
-////		IssuePriority.FETCH_GROUP_THIS_ISSUE_PRIORITY,
-////		IssueDescription.FETCH_GROUP_THIS_DESCRIPTION,
-////		IssueSubject.FETCH_GROUP_THIS_ISSUE_SUBJECT,
-//		FetchPlan.DEFAULT
-//		};
-
-//	@Override
-//	protected Object getQueryResult(Collection<? extends AbstractJDOQuery> queries,
-//			ProgressMonitor monitor) {
-//		try {
-//			return IssueDAO.sharedInstance().getIssuesForQueries(
-//					queries,
-//					FETCH_GROUPS_ISSUES,
-//					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//					monitor);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
 
 	public IssueTable getIssueTable() {
 		return issueTable;
