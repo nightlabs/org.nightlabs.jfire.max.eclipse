@@ -217,9 +217,8 @@ extends XComposite
 		subjectText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if (!(subjectText.getI18nText().getText() != null && subjectText.getI18nText().getText().equals(""))) {
-					createIssueQuickDialog.setOKButtonEnabled(true);
-				}
+				boolean hasSubjectText = !(subjectText.getI18nText().getText() != null && subjectText.getI18nText().getText().equals(""));
+				createIssueQuickDialog.setOKButtonEnabled(hasSubjectText);
 			}
 		});
 		
