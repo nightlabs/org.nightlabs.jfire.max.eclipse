@@ -9,7 +9,7 @@
             visible="false">
          <action
                class="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
-               icon="icons/project/ProjectAdminTreeComposite-Create.16x16.png"
+               icon="icons/QuickCreateIssueAction-Create.16x16.png"
                id="org.nightlabs.jfire.issuetimetracking.ui.QuickCreateIssueAction"
                label="Create Issue Quick Wizard"
                style="push"

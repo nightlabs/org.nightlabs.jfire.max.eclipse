@@ -1,5 +1,8 @@
 package org.nightlabs.jfire.issuetimetracking.ui;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -8,8 +11,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.nightlabs.base.ui.composite.XComposite;
@@ -35,11 +40,13 @@ extends ResizableTitleAreaDialog
 		super(shell, null);
 	}
 
+	private static final String DEFAULT_MESSAGE = "Create a new Issue";
+	
 	private QuickCreateIssueComposite quickCreateComposite;
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle("Create Issue");
-		setMessage("Create an Issue");
+		setMessage(DEFAULT_MESSAGE);
 
 		Composite wrapper = new XComposite(parent, SWT.NONE, LayoutMode.ORDINARY_WRAPPER) {
 			@Override
@@ -47,7 +54,7 @@ extends ResizableTitleAreaDialog
 				return getButton(OK).forceFocus();
 			}
 		};
-		quickCreateComposite = new QuickCreateIssueComposite(wrapper, SWT.NONE);
+		quickCreateComposite = new QuickCreateIssueComposite(this, wrapper, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		quickCreateComposite.setLayoutData(gridData);
 		return wrapper;
@@ -79,6 +86,7 @@ extends ResizableTitleAreaDialog
 	@Override
 	protected void okPressed() {
 		newIssue = quickCreateComposite.getCreatingIssue();
+		getButton(OK).setEnabled(false);
 		try {
 			Job job = new Job("Setting the default values....") {
 				@Override
@@ -91,11 +99,27 @@ extends ResizableTitleAreaDialog
 					newIssue.getPropertySet().deflate();
 					
 					newIssue = IssueDAO.sharedInstance().storeIssue(newIssue, true, FETCH_GROUP_ISSUE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+					quickCreateComposite.initData();
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							setMessage("New issue has been created. Please press cancel to close the dialog.");
-							quickCreateComposite.initData();
+							if (newIssue != null)
+								setMessage("New issue has been created. Please press cancel to close the dialog.");
+							
+							Timer timer = new Timer();
+							TimerTask timerTask = new TimerTask(){
+								@Override
+								public void run() {
+									Display.getDefault().asyncExec(new Runnable() {
+										@Override
+										public void run() {
+											setMessage(DEFAULT_MESSAGE);
+										}
+									});
+								}
+							};
+							timer.schedule(timerTask, 1000 * 2);
+							
 							quickCreateComposite.initUI();
 						}
 					});
@@ -109,5 +133,19 @@ extends ResizableTitleAreaDialog
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+
+	@Override
+	protected Button createButton(Composite parent, int id, String label,
+			boolean defaultButton) {
+		Button button = super.createButton(parent, id, label, defaultButton);
+		if (id == OK) 
+			button.setEnabled(false);
+		return button;
+	}
+	
+	public void setOKButtonEnabled(boolean enabled) {
+		getButton(OK).setEnabled(enabled);
 	}
 }

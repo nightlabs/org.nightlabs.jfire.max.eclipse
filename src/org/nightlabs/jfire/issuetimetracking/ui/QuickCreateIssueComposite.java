@@ -12,6 +12,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
@@ -58,15 +60,18 @@ extends XComposite
 	private	StructID issueStructID;
 	private IStruct issueStruct;
 	private DepartmentDataField departmentDataField;
+	
+	private CreateIssueQuickDialog createIssueQuickDialog;
 	/**
 	 * Contructs a composite used for adding {@link Issue}.
 	 * 
 	 * @param parent -the parent composite
 	 * @param style - the SWT style flag 
 	 */
-	public QuickCreateIssueComposite(Composite parent, int style) {
+	public QuickCreateIssueComposite(CreateIssueQuickDialog createIssueQuickDialog, Composite parent, int style) {
 		super(parent, style, LayoutMode.TIGHT_WRAPPER);
-
+		this.createIssueQuickDialog = createIssueQuickDialog;
+		
 		issueStructID = StructID.create(Organisation.DEV_ORGANISATION_ID, Issue.class, Struct.DEFAULT_SCOPE);
 		Job job = new Job("Loading issue struct................"){
 			@Override
@@ -208,6 +213,15 @@ extends XComposite
 				setTabList(new Control[]{getText()});
 			}
 		};
+		
+		subjectText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (!(subjectText.getI18nText().getText() != null && subjectText.getI18nText().getText().equals(""))) {
+					createIssueQuickDialog.setOKButtonEnabled(true);
+				}
+			}
+		});
 		
 		Label descriptionLabel = new Label(subjectDescriptionComposite, SWT.WRAP);
 		descriptionLabel.setLayoutData(new GridData());
