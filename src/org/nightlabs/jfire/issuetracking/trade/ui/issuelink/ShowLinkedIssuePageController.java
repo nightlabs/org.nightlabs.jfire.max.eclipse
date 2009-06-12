@@ -29,12 +29,12 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class ShowLinkedIssuePageController 
-extends EntityEditorPageController 
+public class ShowLinkedIssuePageController
+extends EntityEditorPageController
 {
 	private ArticleContainerID articleContainerID;
 	private Collection<Issue> linkedIssues;
-	
+
 	/**
 	 * The fetch groups of linked issue data.
 	 */
@@ -54,7 +54,7 @@ extends EntityEditorPageController
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
 		StateDefinition.FETCH_GROUP_NAME};
-	
+
 	/**
 	 * @param editor
 	 */
@@ -71,24 +71,25 @@ extends EntityEditorPageController
 	public ShowLinkedIssuePageController(EntityEditor editor, boolean startBackgroundLoading) {
 		super(editor, startBackgroundLoading);
 	}
-	
+
 	@Override
 	public void doLoad(ProgressMonitor monitor) {
 		monitor.beginTask(Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePageController.monitor.loadIssues.text"), 10); //$NON-NLS-1$
-		
+
 		this.articleContainer =
 			ArticleContainerDAO.sharedInstance().getArticleContainer(articleContainerID, FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		
-		Collection<IssueLink> issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(articleContainerID.getOrganisationID(), 
-				articleContainerID.toString(), 
-				FETCH_GROUPS, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+
+		Collection<IssueLink> issueLinks = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(
+				null, // This must be the local organisationID! The backend now chooses this automatically, when passing null. Marco.
+				articleContainerID,
+				FETCH_GROUPS,
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				monitor);
-		
+
 		for (IssueLink issueLink : issueLinks) {
-			linkedIssues.add(issueLink.getIssue()); 
+			linkedIssues.add(issueLink.getIssue());
 		}
-		
+
 		fireModifyEvent(null, null);
 	}
 
@@ -96,15 +97,15 @@ extends EntityEditorPageController
 	public boolean doSave(ProgressMonitor monitor) {
 		return false;
 	}
-	
+
 	public Collection<Issue> getLinkedIssues() {
 		return linkedIssues;
 	}
-	
+
 	public ArticleContainerID getArticleContainerID() {
 		return articleContainerID;
 	}
-	
+
 	private ArticleContainer articleContainer;
 	public ArticleContainer getArticleContainer() {
 		return articleContainer;
