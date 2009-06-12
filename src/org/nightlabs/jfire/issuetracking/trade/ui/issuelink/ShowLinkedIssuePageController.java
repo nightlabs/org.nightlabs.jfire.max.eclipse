@@ -14,6 +14,7 @@ import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -53,7 +54,11 @@ extends EntityEditorPageController
 		IssueType.FETCH_GROUP_NAME,
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
-		StateDefinition.FETCH_GROUP_NAME};
+		StateDefinition.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_MARKERS,          // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_NAME,             // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,  // <-- Since 14.05.2009
+	};
 
 	/**
 	 * @param editor
