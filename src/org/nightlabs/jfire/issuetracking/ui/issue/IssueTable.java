@@ -80,9 +80,9 @@ extends AbstractTableComposite<Issue>
 		IssueSeverityType.FETCH_GROUP_NAME,
 		IssuePriority.FETCH_GROUP_NAME,
 		StateDefinition.FETCH_GROUP_NAME,
-		Issue.FETCH_GROUP_ISSUE_MARKERS, // <-- Since 14.05.2009
-		IssueMarker.FETCH_GROUP_NAME,         // <-- Since 14.05.2009
-		IssueMarker.FETCH_GROUP_ICON_16X16_DATA
+		Issue.FETCH_GROUP_ISSUE_MARKERS,          // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_NAME,             // <-- Since 14.05.2009
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,  // <-- Since 14.05.2009
 	};
 
 	/**
@@ -171,7 +171,7 @@ extends AbstractTableComposite<Issue>
 
 		String imageKey = generateCombiIssueMarkerImageKey(issue);
 		Image combiImage = imageKey2Image.get(imageKey);
-		if (combiImage == null) {
+		if (combiImage == null && maxIssueMarkerCountPerIssue > 0) { // It is possible that none of the Issues has a single IssueMarker; in which case, we dont need to display any icons.
 			combiImage = new Image(
 					getDisplay(),
 					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
@@ -287,8 +287,7 @@ extends AbstractTableComposite<Issue>
 	}
 
 	@Override
-	protected void setTableProvider(TableViewer tableViewer)
-	{
+	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setContentProvider(new ArrayContentProvider()); //(new TableContentProvider());
 		tableViewer.setLabelProvider(new IssueTableLabelProvider());
 	}
@@ -370,16 +369,14 @@ extends AbstractTableComposite<Issue>
 
 	@Override
 	public void setInput(Object input) {
-		// determine the maximum number of IssueMarkers per Issue
-		// TODO we need to refactor this (ask the server) when refactoring this whole search stuff to SWT.VIRTUAL
+		// For placement settings: Determine the maximum number of IssueMarkers per Issue
+		// OR do we need to refactor this (ask the server) when refactoring this whole search stuff to SWT.VIRTUAL?
 		disposeAllImages();
 		maxIssueMarkerCountPerIssue = -1;
 		if (input instanceof Collection) {
-			for (Object o : ((Collection<?>)input)) {
-				if (o instanceof Issue) {
+			for (Object o : ((Collection<?>)input))
+				if (o instanceof Issue)
 					maxIssueMarkerCountPerIssue = Math.max(maxIssueMarkerCountPerIssue, ((Issue)o).getIssueMarkers().size());
-				}
-			}
 		}
 
 		super.setInput(input);

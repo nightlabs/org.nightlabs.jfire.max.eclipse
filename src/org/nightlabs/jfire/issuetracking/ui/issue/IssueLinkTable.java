@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
@@ -50,7 +50,7 @@ import org.nightlabs.progress.SubProgressMonitor;
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
  *
  */
-public class IssueLinkTable 
+public class IssueLinkTable
 extends AbstractTableComposite<IssueLinkTableItem>
 {
 	private static final Logger logger = Logger.getLogger(IssueLinkTable.class);
@@ -73,7 +73,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 			}
 			return null;
 		}
-		
+
 		public String getColumnText(Object element, int columnIndex) {
 			if (element instanceof IssueLinkTableItem) {
 				IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
@@ -94,17 +94,17 @@ extends AbstractTableComposite<IssueLinkTableItem>
 				if (columnIndex == 1) {
 					return issueLink.getIssueLinkType().getName().getText();
 
-//					IssueLinkType issueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class, 
+//					IssueLinkType issueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class,
 //							new String[]{IssueLinkType.FETCH_GROUP_THIS_ISSUE_LINK_TYPE, FetchPlan.DEFAULT},
 //							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-//							new NullProgressMonitor()).get(0); 
+//							new NullProgressMonitor()).get(0);
 //					return issueLinkTableItem.getIssueLinkType() == null ? issueLinkType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
 			}
 			return ""; //$NON-NLS-1$
 		}
 	}
-	
+
 	public IssueLinkTable(Composite parent, int style) {
 		super(parent, style);
 	}
@@ -169,13 +169,13 @@ extends AbstractTableComposite<IssueLinkTableItem>
 				}
 				else {
 					_issue = IssueDAO.sharedInstance().getIssue(
-						$issueID, 
+						$issueID,
 						new String[] {
 								FetchPlan.DEFAULT,
 								Issue.FETCH_GROUP_ISSUE_LINKS,
 								IssueLinkType.FETCH_GROUP_NAME,
 								IssueLink.FETCH_GROUP_LINKED_OBJECT_CLASS
-						}, 
+						},
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new SubProgressMonitor(monitor, 40));
 				}
@@ -224,14 +224,14 @@ extends AbstractTableComposite<IssueLinkTableItem>
 							linkItem.initIssueLink(issueLink);
 							issueLinkTableItems.add(linkItem);
 						}
-						
+
 						setInput(issueLinkTableItems);
 						if (issueLinkTableItems.size() > 0) {
 							select(0);
 						}
 					}
 				});
-				
+
 				return Status.OK_STATUS;
 			}
 		};
@@ -250,12 +250,12 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
 		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.linkObject.text")); //$NON-NLS-1$
-		
+
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
 		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.relation.text")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout(new int[]{30, 30});
+		WeightedTableLayout layout = new WeightedTableLayout( new int[]{70, 30} );
 		table.setLayout(layout);
 	}
 
@@ -264,18 +264,18 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setContentProvider(new TableContentProvider());
 	}
-	
+
 	public IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(String idStr) {
 		return getIssueLinkHandler(ObjectIDUtil.createObjectID(idStr));
 	}
-	
+
 	public IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(ObjectID objectID) {
 		Class<?> pcClass = JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(objectID);
 		return getIssueLinkHandler(pcClass);
 	}
-	
-	private Map<Class<?>, IssueLinkHandler<ObjectID, Object>> class2IssueLinkHandler = new HashMap<Class<?>, IssueLinkHandler<ObjectID, Object>>();	
-	
+
+	private Map<Class<?>, IssueLinkHandler<ObjectID, Object>> class2IssueLinkHandler = new HashMap<Class<?>, IssueLinkHandler<ObjectID, Object>>();
+
 	public synchronized IssueLinkHandler<ObjectID, Object> getIssueLinkHandler(Class<?> linkedObjectClass) {
 		IssueLinkHandler<ObjectID, Object> handler = class2IssueLinkHandler.get(linkedObjectClass);
 		if (handler == null) {
@@ -313,13 +313,13 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	}
 
 	public void addIssueLinkTableItem(Issue issue, IssueLinkTableItem item) {
-		this.issue = issue; 
-		
+		this.issue = issue;
+
 		Set<IssueLinkTableItem> items = new HashSet<IssueLinkTableItem>();
 		items.add(item);
 		addIssueLinkTableItems(items);
 	}
-	
+
 	/**
 	 * Add new instances of {@link IssueLinkTableItem} representing new {@link IssueLink}s that must be created.
 	 * Therefore, the {@link IssueLinkTableItem#getIssueLink()} property is not yet assigned (i.e. still returning <code>null</code>).
@@ -350,7 +350,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		// create IssueLink instances - since the Issue is not thread-safe, we call this method on the UI thread before spawning a job.
 		final Map<IssueLinkTableItem, IssueLink> issueLinkTableItem2issueLinkMap = new HashMap<IssueLinkTableItem, IssueLink>();
 		for (IssueLinkTableItem issueLinkTableItem : items) {
-			IssueLink issueLink = issue.createIssueLink(issueLinkTableItem.getIssueLinkType(), (ObjectID)issueLinkTableItem.getLinkedObjectID(), JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(issueLinkTableItem.getLinkedObjectID()));
+			IssueLink issueLink = issue.createIssueLink(issueLinkTableItem.getIssueLinkType(), issueLinkTableItem.getLinkedObjectID(), JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(issueLinkTableItem.getLinkedObjectID()));
 			issueLinkTableItem2issueLinkMap.put(issueLinkTableItem, issueLink);
 		}
 
@@ -436,7 +436,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 		this.refresh();
 		notifyIssueLinkTableItemChangeListeners(IssueLinkItemChangeEvent.ChangeType.remove, removedItems);
 	}
-	
+
 	public Set<IssueLinkTableItem> getIssueLinkTableItems() {
 		return issueLinkTableItems;
 	}
