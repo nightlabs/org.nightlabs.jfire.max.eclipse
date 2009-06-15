@@ -75,7 +75,7 @@
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
             class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView"
             icon="icons/editor/SysAdminEntityTreeView.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView" name="Linked Issues"/>
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView" name="Linked issues"/>
     </extension>
 	<extension point="org.eclipse.ui.perspectiveExtensions">
 		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">   
