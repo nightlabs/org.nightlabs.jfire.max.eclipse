@@ -28,8 +28,12 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -172,11 +176,20 @@ extends AbstractTableComposite<Issue>
 		String imageKey = generateCombiIssueMarkerImageKey(issue);
 		Image combiImage = imageKey2Image.get(imageKey);
 		if (combiImage == null && maxIssueMarkerCountPerIssue > 0) { // It is possible that none of the Issues has a single IssueMarker; in which case, we dont need to display any icons.
-			combiImage = new Image(
-					getDisplay(),
-					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
-					ISSUE_MARKER_IMAGE_DIMENSION.height
-			);
+//			combiImage = new Image(
+//					getDisplay(),
+//					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+//					ISSUE_MARKER_IMAGE_DIMENSION.height
+//			);
+			//Create a transparent image, Chairat.
+		    Color white = getDisplay().getSystemColor(SWT.COLOR_WHITE);
+		    Color black = getDisplay().getSystemColor(SWT.COLOR_BLACK);
+		    PaletteData palette = new PaletteData(new RGB[] { white.getRGB(), black.getRGB() });
+			ImageData imageData = new ImageData(ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					ISSUE_MARKER_IMAGE_DIMENSION.height, 1, palette);
+			imageData.transparentPixel = 0;
+			combiImage = new Image(getDisplay(), imageData);
+			
 			GC gc = new GC(combiImage);
 			try {
 				Iterator<IssueMarker> itIssueMarkers = issue.getIssueMarkers().iterator();
@@ -191,6 +204,7 @@ extends AbstractTableComposite<Issue>
 						if (issueMarker.getIcon16x16Data() != null) {
 							ByteArrayInputStream in = new ByteArrayInputStream(issueMarker.getIcon16x16Data());
 							icon = new Image(getDisplay(), in);
+
 //							in.close(); // not necessary, because it is a ByteArrayInputStream working solely in RAM - unfortunately it is declared with a throws clause - thus commenting it out. Marco.
 							imageKey2Image.put(issueMarkerIDString, icon);
 						}
