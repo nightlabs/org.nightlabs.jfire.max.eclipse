@@ -178,7 +178,6 @@ public class IssueFilterCompositeIssueLinkRelated
 					changedField.getPropertyName()))
 			{
 				Boolean active = (Boolean) changedField.getNewValue();
-				issueLinkTypeCombo.setEnabled(active);
 				setSearchSectionActive(getQuery().isFieldEnabled(IssueQuery.FieldName.issueLinkTypeID));
 				
 				if (!active) {
