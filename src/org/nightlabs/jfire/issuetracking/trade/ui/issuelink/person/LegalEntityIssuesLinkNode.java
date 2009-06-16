@@ -1,7 +1,8 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import org.eclipse.swt.graphics.Image;
 import org.nightlabs.jdo.ObjectID;
 
 
@@ -12,22 +13,13 @@ import org.nightlabs.jdo.ObjectID;
 public class LegalEntityIssuesLinkNode{
 		
 	protected String name;
+	protected Image icon; 
 	protected LegalEntityIssuesLinkNode parent;
-	protected List<LegalEntityIssuesLinkNode> nodes;
 	private String organisationID;
 	private ObjectID personID;
 	
 	public String getName() {
 		return name;
-	}
-
-	public List<LegalEntityIssuesLinkNode> getChildNodes() {
-		return nodes;
-	}
-
-	public void addChildNode(LegalEntityIssuesLinkNode child) {		
-		nodes.add(child);
-	    child.parent = this;
 	}
 
 	public String getOrganisationID() {
@@ -45,21 +37,41 @@ public class LegalEntityIssuesLinkNode{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public Image getIcon() {
+		return icon;
+	}
+
+	public void setIcon(Image icon) {
+		this.icon = icon;
+	}
 	
 	public LegalEntityIssuesLinkNode(
 			String organisationID,
 			ObjectID personID,
 			String name) 
 	{
+		this(organisationID,personID,name,null);
+	}
+
+	public LegalEntityIssuesLinkNode(
+			String organisationID,
+			ObjectID personID,
+			String name,
+			Image icon) 
+	{
 		super();
 		this.organisationID = organisationID;
 		this.personID = personID;
-		this.nodes = new ArrayList<LegalEntityIssuesLinkNode>();
 		this.name = name;
+		this.icon = icon;
+	}	
+	
+	
+	
+	public Object[] getChildNodes() {
+		return new ArrayList<LegalEntityIssuesLinkNode>().toArray();	
 	}
-	
-	
 	
 	
 }

@@ -3,7 +3,6 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;

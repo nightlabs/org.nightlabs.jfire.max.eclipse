@@ -3,11 +3,15 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -18,16 +22,11 @@ import org.nightlabs.base.ui.tree.TreeContentProvider;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueComment;
+import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueSeverityType;
-import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
-import org.nightlabs.jfire.jbpm.graph.def.Statable;
-import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
-import org.nightlabs.jfire.jbpm.graph.def.State;
-import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.prop.PropertySet;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
@@ -48,19 +47,13 @@ extends AbstractTreeComposite
 		Issue.FETCH_GROUP_ISSUE_TYPE,
 		Issue.FETCH_GROUP_SUBJECT,
 		Issue.FETCH_GROUP_DESCRIPTION,
-		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
-		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		Statable.FETCH_GROUP_STATE,
-		Issue.FETCH_GROUP_ISSUE_LOCAL,
-		StatableLocal.FETCH_GROUP_STATE,
-		State.FETCH_GROUP_STATE_DEFINITION,
-		IssueType.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_COMMENTS,
 		Issue.FETCH_GROUP_ISSUE_MARKERS,
+		Issue.FETCH_GROUP_DESCRIPTION,
 		IssueMarker.FETCH_GROUP_NAME,
-		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,	
-		IssueSeverityType.FETCH_GROUP_NAME,
-		IssuePriority.FETCH_GROUP_NAME,
-		StateDefinition.FETCH_GROUP_NAME};
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
+		IssueComment.FETCH_GROUP_TEXT,
+		IssueComment.FETCH_GROUP_TIMESTAMP};
 
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private Collection<Image> iconImages = new ArrayList<Image>();
@@ -82,26 +75,44 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof LegalEntityIssuesLinkNode)
-			{
-				LegalEntityIssuesLinkNode legalEntityIssueLinkNode = (LegalEntityIssuesLinkNode)parentElement;			
-				if(legalEntityIssueLinkNode.getChildNodes().size()>0)
-					return legalEntityIssueLinkNode.getChildNodes().toArray();
-				else
-					return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(legalEntityIssueLinkNode.getOrganisationID(), 
-							legalEntityIssueLinkNode.getPersonID(), 
-							FETCH_GROUPS, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-							new NullProgressMonitor()).toArray();
-			}	
-
+			if (parentElement instanceof LegalEntityIssuesLinkNode)			
+				return ((LegalEntityIssuesLinkNode)parentElement).getChildNodes();
 			if (parentElement instanceof IssueLink)
-				return ((IssueLink)parentElement).getIssue().getIssueMarkers().toArray();
+			{
 
+				List<IssueComment> commentsList = ((IssueLink)parentElement).getIssue().getComments();
+				Collections.sort(commentsList, new Comparator<IssueComment>() {
+					public int compare(IssueComment o1, IssueComment o2) {
+						// reverse chronological Order
+						return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
+					}
+				});
+
+				final List<IssueComment> testcommentsList = commentsList;
+				final LegalEntityIssuesLinkNode subjectlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(null,
+						null,"Comment"){
+					@Override
+					public Object[]  getChildNodes() {
+						return testcommentsList.toArray();
+
+					}	
+				};	
+
+				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};	
+				return concat(arrayDesc, 
+						new Object[] {subjectlegalEntityIssuesLinkNode});
+			}
 			return EMPTY_DATA;
 		}
 
-		
+		protected Object[] concat(Object[] object, Object[] more) {
+			Object[] both = new Object[object.length + more.length];
+			System.arraycopy(object, 0, both, 0, object.length);
+			System.arraycopy(more, 0, both, object.length, more.length);
+			return both;
+		}
+
+
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
@@ -109,13 +120,11 @@ extends AbstractTreeComposite
 		public boolean hasChildren(Object element) {	
 			if (element instanceof IssueLink)
 				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;			
-				if (element instanceof IssueMarker)
+				if (element instanceof IssueComment||element instanceof IssueDescription)
 					return false;
 				else
 					return true;
 		}
-		
-
 
 		@Override
 		public void dispose() {
@@ -131,18 +140,46 @@ extends AbstractTreeComposite
 			return getText(element);
 		}
 
-
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (element instanceof IssueMarker)
-			{
-				ByteArrayInputStream in = new ByteArrayInputStream(((IssueMarker)element).getIcon16x16Data());
-				Image icon = new Image(getDisplay(), in);
-				iconImages.add(icon);
-				return icon;	
-			}		
+			if (element instanceof LegalEntityIssuesLinkNode)
+				return ((LegalEntityIssuesLinkNode)element).getIcon();
+			if (element instanceof IssueLink)
+				return getCombiIssueMarkerImage(((IssueLink)element).getIssue());
 			return null;
 		}
+
+
+		protected Image getCombiIssueMarkerImage(Issue issue)
+		{
+			int maxIssueMarkerCountPerIssue;		
+			if (issue.getIssueMarkers().size() > 0)
+				maxIssueMarkerCountPerIssue = issue.getIssueMarkers().size();
+			else
+				return null;
+			Image combinedIcon = new Image(getDisplay(),
+					IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.height);
+			GC gc = new GC(combinedIcon);
+			Image icon = null;
+			int i = 0;
+			try {
+				for(IssueMarker issueMarker:issue.getIssueMarkers()) {
+					if (issueMarker.getIcon16x16Data() != null) {
+						ByteArrayInputStream in = new ByteArrayInputStream(issueMarker.getIcon16x16Data());
+						icon = new Image(getDisplay(), in);
+						gc.drawImage(icon, IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.width * i + i, 0);
+						iconImages.add(icon);
+					}
+					i++;
+				}
+			} finally {
+				gc.dispose();
+			}			
+			iconImages.add(combinedIcon);
+			return combinedIcon;
+		}
+
 
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
@@ -152,9 +189,12 @@ extends AbstractTreeComposite
 			if (element instanceof LegalEntityIssuesLinkNode)
 				return ((LegalEntityIssuesLinkNode)element).getName();
 			if (element instanceof IssueLink)
-				return ((IssueLink)element).getIssue().getSubject().getText();
-			if (element instanceof IssueMarker)
-				return ((IssueMarker)element).getName().getText();		
+				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(), 
+						((IssueLink)element).getIssue().getSubject().getText());		
+			if (element instanceof IssueComment)
+				return ((IssueComment)element).getText();		
+			if (element instanceof IssueDescription)
+				return ((IssueDescription)element).getText();
 			return ""; //$NON-NLS-1$
 		}
 	}
@@ -163,10 +203,10 @@ extends AbstractTreeComposite
 	{
 		if (partnerID == null)
 			return;
-		
+
 		if (Display.getCurrent() != null)
 			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
-		
+
 		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
 				partnerID, 
 				new String[] {
@@ -176,11 +216,29 @@ extends AbstractTreeComposite
 				}, 
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 				new NullProgressMonitor());
-		ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
+
+
+		final ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
+		final LegalEntityIssuesLinkNode sublegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
+				propertySetID,"Issue List"){
+			@Override
+			public Object[]  getChildNodes() {
+				return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(getOrganisationID(), 
+						getPersonID(), 
+						FETCH_GROUPS, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+						new NullProgressMonitor()).toArray();
+			}	
+		};	
+
 		rootlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
-				propertySetID,"Issue List");
-		rootlegalEntityIssuesLinkNode.addChildNode(new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
-				propertySetID,"Issue List"));
+				propertySetID,"Issue List"){
+			@Override
+			public Object[]  getChildNodes() {
+				return new Object[] {sublegalEntityIssuesLinkNode};				
+			}	
+		};
+
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
