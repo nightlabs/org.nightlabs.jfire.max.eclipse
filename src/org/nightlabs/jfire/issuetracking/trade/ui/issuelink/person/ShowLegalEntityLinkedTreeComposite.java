@@ -41,7 +41,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ShowLegalEntityLinkedTreeComposite 
 extends AbstractTreeComposite
 {
-	private LegalEntityIssuesLinkNode legalEntityIssuesLinkNode;
+	private LegalEntityIssuesLinkNode rootlegalEntityIssuesLinkNode;
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_ISSUE,
@@ -84,13 +84,15 @@ extends AbstractTreeComposite
 		public Object[] getChildren(Object parentElement) {
 			if (parentElement instanceof LegalEntityIssuesLinkNode)
 			{
-				LegalEntityIssuesLinkNode legalEntityIssueLinkNode = (LegalEntityIssuesLinkNode)parentElement;
-				return
-				IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(legalEntityIssueLinkNode.getOrganisationID(), 
-						legalEntityIssueLinkNode.getPersonID(), 
-						FETCH_GROUPS, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new NullProgressMonitor()).toArray();
+				LegalEntityIssuesLinkNode legalEntityIssueLinkNode = (LegalEntityIssuesLinkNode)parentElement;			
+				if(legalEntityIssueLinkNode.getChildNodes().size()>0)
+					return legalEntityIssueLinkNode.getChildNodes().toArray();
+				else
+					return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(legalEntityIssueLinkNode.getOrganisationID(), 
+							legalEntityIssueLinkNode.getPersonID(), 
+							FETCH_GROUPS, 
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							new NullProgressMonitor()).toArray();
 			}	
 
 			if (parentElement instanceof IssueLink)
@@ -99,6 +101,7 @@ extends AbstractTreeComposite
 			return EMPTY_DATA;
 		}
 
+		
 		/**
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
@@ -111,6 +114,8 @@ extends AbstractTreeComposite
 				else
 					return true;
 		}
+		
+
 
 		@Override
 		public void dispose() {
@@ -139,15 +144,13 @@ extends AbstractTreeComposite
 			return null;
 		}
 
-
 		/**
 		 * @see org.nightlabs.base.ui.table.TableLabelProvider#getText(java.lang.Object)
 		 */
 		@Override
 		public String getText(Object element) {
-
 			if (element instanceof LegalEntityIssuesLinkNode)
-				return "Issue List" ;
+				return ((LegalEntityIssuesLinkNode)element).getName();
 			if (element instanceof IssueLink)
 				return ((IssueLink)element).getIssue().getSubject().getText();
 			if (element instanceof IssueMarker)
@@ -156,17 +159,14 @@ extends AbstractTreeComposite
 		}
 	}
 
-
-
-
 	public void setPersonID(AnchorID partnerID)
 	{
 		if (partnerID == null)
 			return;
-
+		
 		if (Display.getCurrent() != null)
 			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
-
+		
 		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
 				partnerID, 
 				new String[] {
@@ -177,10 +177,13 @@ extends AbstractTreeComposite
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 				new NullProgressMonitor());
 		ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
-		legalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),propertySetID);
+		rootlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
+				propertySetID,"Issue List");
+		rootlegalEntityIssuesLinkNode.addChildNode(new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
+				propertySetID,"Issue List"));
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				getTreeViewer().setInput(legalEntityIssuesLinkNode);
+				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
 			}
 		});
 	}
@@ -191,8 +194,8 @@ extends AbstractTreeComposite
 	public void setTreeProvider(TreeViewer treeViewer) {
 		treeViewer.setContentProvider(new ContentProvider());
 		treeViewer.setLabelProvider(new LabelProvider());
-		if (legalEntityIssuesLinkNode != null) {
-			treeViewer.setInput(legalEntityIssuesLinkNode);
+		if (rootlegalEntityIssuesLinkNode != null) {
+			treeViewer.setInput(rootlegalEntityIssuesLinkNode);
 		}
 	}
 
