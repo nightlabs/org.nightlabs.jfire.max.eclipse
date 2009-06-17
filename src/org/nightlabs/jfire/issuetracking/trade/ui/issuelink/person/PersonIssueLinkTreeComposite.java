@@ -192,9 +192,9 @@ extends AbstractTreeComposite
 	{
 		if (rootNode == null)
 			return;	
-		if (Display.getCurrent() != null)
-			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
-		
+//		if (Display.getCurrent() != null)
+//			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
+//		
 		this.rootlegalEntityIssuesLinkNode = rootNode;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {

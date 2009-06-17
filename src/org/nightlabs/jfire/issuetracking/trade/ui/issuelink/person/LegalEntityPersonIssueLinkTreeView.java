@@ -8,6 +8,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
@@ -50,13 +51,23 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
 		IssueComment.FETCH_GROUP_TEXT,
 		IssueComment.FETCH_GROUP_TIMESTAMP};
-	
-	
+	private IssueLinkTreeNode mainIssuesListLinkNode;	
 	@Override
 	public void createPartContents(Composite parent) {
 		showLegalEntityLinkedTreeComposite = new PersonIssueLinkTreeComposite(parent, SWT.NONE);
 		showLegalEntityLinkedTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		// sets the Empty root node
+		IssueLinkTreeNode rootlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Root",null,true){
+			@Override
+			public Object[]  getChildNodes() {
+				setHasChildNodes(true);
+				return new Object[] {mainIssuesListLinkNode};				
+			}	
+		};
+		
+		this.mainIssuesListLinkNode = new IssueLinkTreeNode("Issue List",null,false);
+		showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);
+		
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
 				LegalEntity.class, notificationListenerPersonSelected
@@ -97,7 +108,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				new NullProgressMonitor());
 
 		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
-		final IssueLinkTreeNode sublegalEntityIssuesLinkNode= new IssueLinkTreeNode("Issue List",null,true){
+		this.mainIssuesListLinkNode= new IssueLinkTreeNode("Issue List",null,true){
 			@Override
 			public Object[] getChildNodes() {	
 				Object[] links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(), 
@@ -108,17 +119,13 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				setHasChildNodes(links.length>0);
 				return links;
 			}	
-		};	
-
-		IssueLinkTreeNode rootlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Root",null,true){
-			@Override
-			public Object[]  getChildNodes() {
-				setHasChildNodes(true);
-				return new Object[] {sublegalEntityIssuesLinkNode};				
-			}	
-		};
-
-		showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);	
+		};		
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+		showLegalEntityLinkedTreeComposite.refresh();
+			}
+		});
+		//showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);	
 	}
 		
 	
