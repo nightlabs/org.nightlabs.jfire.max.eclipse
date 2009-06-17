@@ -210,4 +210,11 @@
          <actionSet id="org.nightlabs.jfire.issuetracking.ui"/>
       </perspectiveExtension>
    </extension>
+      <extension
+            point="org.nightlabs.base.ui.editor2perspective">
+         <registry
+               editorID="org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor"
+               perspectiveID="org.nightlabs.jfire.issuetracking.ui.issue.IssuePerspective">
+         </registry>
+      </extension>
 </plugin>

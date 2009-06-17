@@ -37,10 +37,9 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.PartInitException;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.base.ui.util.RCPUtil;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
 import org.nightlabs.jfire.issue.IssueSeverityType;
@@ -189,7 +188,7 @@ extends AbstractTableComposite<Issue>
 					ISSUE_MARKER_IMAGE_DIMENSION.height, 1, palette);
 			imageData.transparentPixel = 0;
 			combiImage = new Image(getDisplay(), imageData);
-			
+
 			GC gc = new GC(combiImage);
 			try {
 				Iterator<IssueMarker> itIssueMarkers = issue.getIssueMarkers().iterator();
@@ -292,8 +291,9 @@ extends AbstractTableComposite<Issue>
 
 				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
 				try {
-					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
-				} catch (PartInitException e1) {
+//					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
+					Editor2PerspectiveRegistry.sharedInstance().openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
+				} catch (Exception e1) {
 					throw new RuntimeException(e1);
 				}
 			}

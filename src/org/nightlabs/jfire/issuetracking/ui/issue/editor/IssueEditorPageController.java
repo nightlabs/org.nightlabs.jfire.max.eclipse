@@ -240,4 +240,9 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 	public void setJbpmTransitionName(String transitionName) {
 		this.jbpmTransitionName = transitionName;
 	}
+
+//	@Override
+//	protected boolean checkForSelfCausedChange(DirtyObjectID dirtyObjectID) {
+//		return false;
+//	}
 }
