@@ -11,11 +11,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
-import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
@@ -82,7 +80,6 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				LegalEntity.class, notificationListenerPersonSelected
 		);
 
-		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);				
 		showLegalEntityLinkedTreeComposite.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
@@ -90,21 +87,11 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 						TradePlugin.ZONE_SALE,
 						LegalEntity.class, notificationListenerPersonSelected
 				);				
-				JDOLifecycleManager.sharedInstance().removeNotificationListener(
-						Issue.class, issueChangeListener);
 			}
 		});
 
 
 	}
-
-	private NotificationListener issueChangeListener = new NotificationAdapterSWTThreadSync() {
-		public void notify(NotificationEvent evt) {
-			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
-			showLegalEntityLinkedTreeComposite.refresh(true);
-		}
-	};
-
 
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {

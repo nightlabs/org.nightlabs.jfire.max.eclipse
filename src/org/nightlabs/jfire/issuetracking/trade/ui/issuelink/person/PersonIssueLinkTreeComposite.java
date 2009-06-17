@@ -8,20 +8,27 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
+import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
 
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
@@ -30,16 +37,38 @@ import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 public class PersonIssueLinkTreeComposite
 extends AbstractTreeComposite
 {
+	
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
 	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode;
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
+	
+	
 	public PersonIssueLinkTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		init();
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);				
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) {
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(
+						Issue.class, issueChangeListener);
+			}
+		});
 	}
-
+	
+	private NotificationListener issueChangeListener = new NotificationAdapterSWTThreadSync() {
+		public void notify(NotificationEvent evt) {
+			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
+			refresh(true);
+		}
+	};
+	
 	private class ContentProvider extends TreeContentProvider {
 
 		public Object[] getElements(Object inputElement) {
