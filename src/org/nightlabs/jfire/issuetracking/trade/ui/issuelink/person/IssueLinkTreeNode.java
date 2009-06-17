@@ -9,14 +9,13 @@ import org.eclipse.swt.graphics.Image;
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
-public class IssueTreeNode{
+public class IssueLinkTreeNode{
 		
 	protected String name;
 	protected Image icon; 
 	protected Boolean hasChildNodes; 
-	protected IssueTreeNode parent;
 
-	public IssueTreeNode(String name,Image icon, Boolean hasChildren) 
+	public IssueLinkTreeNode(String name,Image icon, Boolean hasChildren) 
 	{
 		super();
 		this.name = name;
@@ -36,10 +35,6 @@ public class IssueTreeNode{
 		return name;
 	}
 
-
-	public IssueTreeNode getParent() {
-		return parent;
-	}
 	
 	public void setName(String name) {
 		this.name = name;
@@ -54,7 +49,7 @@ public class IssueTreeNode{
 	}
 	
 	public Object[] getChildNodes() {
-		return new ArrayList<IssueTreeNode>().toArray();	
+		return new ArrayList<IssueLinkTreeNode>().toArray();	
 	}
 	
 	

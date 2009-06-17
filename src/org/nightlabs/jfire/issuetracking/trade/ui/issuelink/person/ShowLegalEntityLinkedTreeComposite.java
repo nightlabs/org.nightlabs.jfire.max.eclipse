@@ -41,7 +41,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ShowLegalEntityLinkedTreeComposite
 extends AbstractTreeComposite
 {
-	private IssueTreeNode rootlegalEntityIssuesLinkNode;
+	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode;
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_ISSUE,
@@ -76,8 +76,8 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof IssueTreeNode)			
-				return ((IssueTreeNode)parentElement).getChildNodes();
+			if (parentElement instanceof IssueLinkTreeNode)			
+				return ((IssueLinkTreeNode)parentElement).getChildNodes();
 			if (parentElement instanceof IssueLink)
 			{
 				final List<IssueComment> commentsList = ((IssueLink)parentElement).getIssue().getComments();
@@ -87,7 +87,7 @@ extends AbstractTreeComposite
 						return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
 					}
 				});
-				final IssueTreeNode subjectlegalEntityIssuesLinkNode= new IssueTreeNode("Comments",null,true){
+				final IssueLinkTreeNode subjectlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Comments",null,true){
 					@Override
 					public Object[]  getChildNodes() {
 						setHasChildNodes(commentsList.size()>0);
@@ -117,8 +117,8 @@ extends AbstractTreeComposite
 		@Override
 		public boolean hasChildren(Object element) {	
 
-			if (element instanceof IssueTreeNode)
-				return ((IssueTreeNode)element).getHasChildNodes();
+			if (element instanceof IssueLinkTreeNode)
+				return ((IssueLinkTreeNode)element).getHasChildNodes();
 			if (element instanceof IssueLink)
 				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;
 				if (element instanceof IssueComment||element instanceof IssueDescription)
@@ -145,8 +145,8 @@ extends AbstractTreeComposite
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (element instanceof IssueTreeNode)
-				return ((IssueTreeNode)element).getIcon();
+			if (element instanceof IssueLinkTreeNode)
+				return ((IssueLinkTreeNode)element).getIcon();
 			if (element instanceof IssueLink)
 				return getCombiIssueMarkerImage(((IssueLink)element).getIssue());
 			return null;
@@ -188,8 +188,8 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public String getText(Object element) {
-			if (element instanceof IssueTreeNode)
-				return ((IssueTreeNode)element).getName();
+			if (element instanceof IssueLinkTreeNode)
+				return ((IssueLinkTreeNode)element).getName();
 			if (element instanceof IssueLink)
 				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(),
 						((IssueLink)element).getIssue().getSubject().getText());
@@ -221,7 +221,7 @@ extends AbstractTreeComposite
 				new NullProgressMonitor());
 
 		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
-		final IssueTreeNode sublegalEntityIssuesLinkNode= new IssueTreeNode("Issue List",null,true){
+		final IssueLinkTreeNode sublegalEntityIssuesLinkNode= new IssueLinkTreeNode("Issue List",null,true){
 			@Override
 			public Object[] getChildNodes() {	
 				Object[] links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(), 
@@ -234,7 +234,7 @@ extends AbstractTreeComposite
 			}	
 		};	
 
-		rootlegalEntityIssuesLinkNode= new IssueTreeNode("Root",null,true){
+		rootlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Root",null,true){
 			@Override
 			public Object[]  getChildNodes() {
 				setHasChildNodes(true);
