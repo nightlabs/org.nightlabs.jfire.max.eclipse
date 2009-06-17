@@ -30,7 +30,6 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
-import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
@@ -91,10 +90,11 @@ extends WizardHopPage
 		this.issue = issue;
 	}
 
-	private static final String DEFAULT_ISSUE_PRIORITY_ID = IssuePriority.ISSUE_PRIORITY_NORMAL;
-	private static final String DEFAULT_ISSUE_SEVERITY_ID = IssueSeverityType.ISSUE_SEVERITY_TYPE_FEATURE;
-	private static final String DEFAULT_ISSUE_RESOLUTION_ID = IssueResolution.ISSUE_RESOLUTION_OPEN;
-	private static final String DEFAULT_ISSUE_TYPE_ID = IssueType.DEFAULT_ISSUE_TYPE_ID;
+	// --> See notes below about ensuring the integrity of an Issue before storing it. Kai.
+//	private static final String DEFAULT_ISSUE_PRIORITY_ID = IssuePriority.ISSUE_PRIORITY_NORMAL;
+//	private static final String DEFAULT_ISSUE_SEVERITY_ID = IssueSeverityType.ISSUE_SEVERITY_TYPE_FEATURE;
+//	private static final String DEFAULT_ISSUE_RESOLUTION_ID = IssueResolution.ISSUE_RESOLUTION_OPEN;
+//	private static final String DEFAULT_ISSUE_TYPE_ID = IssueType.DEFAULT_ISSUE_TYPE_ID;
 
 	@Override
 	public Control createPageContents(Composite parent) {
@@ -215,14 +215,16 @@ extends WizardHopPage
 				issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(ISSUE_TYPE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 				Display.getDefault().asyncExec(new Runnable() {
+					// Note: The old codes for run() have been restored, in favour of performing integrity-checking of the Issue
+					//       in the main Issue class. See the method 'Issue.ensureIntegrity()', which is called from the IssueManagerBean's
+					//       'storeIssue()' method, in the event that a new Issue has been created. Kai.
 					public void run() {
-						//IssueType
 						issueTypeCombo.removeAll();
 						IssueType defaultIssueType = null;
 						for (IssueType issueType : issueTypes) {
-							if (issueType.getIssueTypeID().equals(DEFAULT_ISSUE_TYPE_ID))
+							if (issueType.getIssueTypeID().equals(IssueType.DEFAULT_ISSUE_TYPE_ID))
 								defaultIssueType = issueType;
-							issueTypeCombo.addElement(issueType);
+								issueTypeCombo.addElement(issueType);
 						}
 
 						if (defaultIssueType != null)
@@ -233,49 +235,88 @@ extends WizardHopPage
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						issue.setIssueType(selectedIssueType);
 
-						//IssueSeverity
 						issueSeverityCombo.removeAll();
-						IssueSeverityType defaultIssueSeverityType = null;
 						if (selectedIssueType != null) {
 							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-								if (is.getIssueSeverityTypeID().equals(DEFAULT_ISSUE_SEVERITY_ID))
-									defaultIssueSeverityType = is;
 								issueSeverityCombo.addElement(is);
 							}
-
-							if (defaultIssueSeverityType != null)
-								issueSeverityCombo.selectElement(defaultIssueSeverityType);
-							else
-								issueSeverityCombo.selectElementByIndex(0);
+							issueSeverityCombo.selectElementByIndex(0);
 						}
 						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 						issue.setIssueSeverityType(selectedIssueSeverityType);
 
-						//IssuePriority
 						issuePriorityCombo.removeAll();
-						IssuePriority defaultIssuePriority = null;
 						if (selectedIssueType != null) {
 							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-								if (ip.getIssuePriorityID().equals(DEFAULT_ISSUE_PRIORITY_ID))
-									defaultIssuePriority = ip;
 								issuePriorityCombo.addElement(ip);
 							}
-
-							if (defaultIssueSeverityType != null)
-								issuePriorityCombo.selectElement(defaultIssuePriority);
-							else
-								issuePriorityCombo.selectElementByIndex(0);
+							issuePriorityCombo.selectElementByIndex(0);
 						}
 						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						issue.setIssuePriority(selectedIssuePriority);
-						
-						
-						//IssueResolution
-						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
-							if (ir.getIssueResolutionID().equals(DEFAULT_ISSUE_RESOLUTION_ID))
-								issue.setIssueResolution(ir);
-						}
 					}
+
+//					public void run() {
+//						//IssueType
+//						issueTypeCombo.removeAll();
+//						IssueType defaultIssueType = null;
+//						for (IssueType issueType : issueTypes) {
+//							if (issueType.getIssueTypeID().equals(DEFAULT_ISSUE_TYPE_ID))
+//								defaultIssueType = issueType;
+//							issueTypeCombo.addElement(issueType);
+//						}
+//
+//						if (defaultIssueType != null)
+//							issueTypeCombo.selectElement(defaultIssueType);
+//						else
+//							issueTypeCombo.selectElementByIndex(0);
+//
+//						selectedIssueType = issueTypeCombo.getSelectedElement();
+//						issue.setIssueType(selectedIssueType);
+//
+//						//IssueSeverity
+//						issueSeverityCombo.removeAll();
+//						IssueSeverityType defaultIssueSeverityType = null;
+//						if (selectedIssueType != null) {
+//							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+//								if (is.getIssueSeverityTypeID().equals(DEFAULT_ISSUE_SEVERITY_ID))
+//									defaultIssueSeverityType = is;
+//								issueSeverityCombo.addElement(is);
+//							}
+//
+//							if (defaultIssueSeverityType != null)
+//								issueSeverityCombo.selectElement(defaultIssueSeverityType);
+//							else
+//								issueSeverityCombo.selectElementByIndex(0);
+//						}
+//						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
+//						issue.setIssueSeverityType(selectedIssueSeverityType);
+//
+//						//IssuePriority
+//						issuePriorityCombo.removeAll();
+//						IssuePriority defaultIssuePriority = null;
+//						if (selectedIssueType != null) {
+//							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+//								if (ip.getIssuePriorityID().equals(DEFAULT_ISSUE_PRIORITY_ID))
+//									defaultIssuePriority = ip;
+//								issuePriorityCombo.addElement(ip);
+//							}
+//
+//							if (defaultIssueSeverityType != null)
+//								issuePriorityCombo.selectElement(defaultIssuePriority);
+//							else
+//								issuePriorityCombo.selectElementByIndex(0);
+//						}
+//						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
+//						issue.setIssuePriority(selectedIssuePriority);
+//
+//
+//						//IssueResolution
+//						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+//							if (ir.getIssueResolutionID().equals(DEFAULT_ISSUE_RESOLUTION_ID))
+//								issue.setIssueResolution(ir);
+//						}
+//					}
 				});
 
 				return Status.OK_STATUS;
