@@ -91,6 +91,7 @@ extends WizardHopPage
 	}
 
 	// --> See notes below about ensuring the integrity of an Issue before storing it. Kai.
+	// @Kai: Please see my notes below. Marco.
 //	private static final String DEFAULT_ISSUE_PRIORITY_ID = IssuePriority.ISSUE_PRIORITY_NORMAL;
 //	private static final String DEFAULT_ISSUE_SEVERITY_ID = IssueSeverityType.ISSUE_SEVERITY_TYPE_FEATURE;
 //	private static final String DEFAULT_ISSUE_RESOLUTION_ID = IssueResolution.ISSUE_RESOLUTION_OPEN;
@@ -218,6 +219,16 @@ extends WizardHopPage
 					// Note: The old codes for run() have been restored, in favour of performing integrity-checking of the Issue
 					//       in the main Issue class. See the method 'Issue.ensureIntegrity()', which is called from the IssueManagerBean's
 					//       'storeIssue()' method, in the event that a new Issue has been created. Kai.
+					// @Kai: What do you mean by "restored"? You mean "commented out"?
+					// Well, I'm not so sure that this change is correct, because the ensureIntegrity is IMHO called in the server only when this
+					// wizard has already finished (nearly). But these defaults here are used to show the user already while in the wizard
+					// what the new default values would be. Why should you select always the first element? And are you sure this data
+					// isn't then saved in the issue - thus overriding the data defined in Issue.DEFAULT_XYZ? Issue.ensureIntegrity() only sets
+					// data if it is not set before and this wizard will very likely (didn't look in the code though) set the data from this UI.
+					// And even if it wouldn't; shouldn't the UI (i.e. this wizard-page) already show the user the default values correctly before
+					// the backend magically initializes them?
+					// IMHO your change should be reverted and the original code should simply use the constants Issue.DEFAULT_XYZ instead of the old
+					// constants that were declared above. Marco.
 					public void run() {
 						issueTypeCombo.removeAll();
 						IssueType defaultIssueType = null;
