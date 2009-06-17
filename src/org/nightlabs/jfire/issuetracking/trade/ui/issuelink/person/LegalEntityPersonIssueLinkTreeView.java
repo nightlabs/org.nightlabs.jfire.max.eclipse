@@ -3,6 +3,7 @@ package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -10,9 +11,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
+import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
@@ -33,12 +36,18 @@ import org.nightlabs.progress.NullProgressMonitor;
  *
  */
 public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
-
+	
+	
+	/**
+	 * LOG4J logger used by this class
+	 */
+	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
+	
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
 
 	public static final String ID_VIEW = LegalEntityPersonIssueLinkTreeView.class.getName();
 
-	private static final String[] FETCH_GROUPS = new String[] {
+	private static final String[] FETCH_GROUPS_ISSUESLINK = new String[] {
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_ISSUE,
 		Issue.FETCH_GROUP_ISSUE_TYPE,
@@ -64,26 +73,38 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				return new Object[] {mainIssuesListLinkNode};				
 			}	
 		};
-		
+
 		this.mainIssuesListLinkNode = new IssueLinkTreeNode("Issue List",null,false);
 		showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);
-		
+
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
 				LegalEntity.class, notificationListenerPersonSelected
 		);
-		// We *must* remove this listener again when the view is closed.
-		// Whenever the view is closed, our composite will be disposed. Hence we register a dispose-listener. Marco.
+
+		JDOLifecycleManager.sharedInstance().addNotificationListener(Issue.class, issueChangeListener);				
 		showLegalEntityLinkedTreeComposite.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent event) {
 				SelectionManager.sharedInstance().removeNotificationListener(
 						TradePlugin.ZONE_SALE,
 						LegalEntity.class, notificationListenerPersonSelected
-				);
+				);				
+				JDOLifecycleManager.sharedInstance().removeNotificationListener(
+						Issue.class, issueChangeListener);
 			}
 		});
+
+
 	}
+
+	private NotificationListener issueChangeListener = new NotificationAdapterSWTThreadSync() {
+		public void notify(NotificationEvent evt) {
+			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
+			showLegalEntityLinkedTreeComposite.refresh(true);
+		}
+	};
+
 
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
@@ -94,7 +115,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		}
 	};
 
-	
+
 	private void LegalEntityChanged(AnchorID partnerID)
 	{
 		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
@@ -113,7 +134,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			public Object[] getChildNodes() {	
 				Object[] links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(), 
 						personID, 
-						FETCH_GROUPS, 
+						FETCH_GROUPS_ISSUESLINK, 
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new NullProgressMonitor()).toArray();
 				setHasChildNodes(links.length>0);
@@ -122,18 +143,17 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		};		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-		showLegalEntityLinkedTreeComposite.refresh();
+				showLegalEntityLinkedTreeComposite.refresh();
 			}
 		});
-		//showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);	
 	}
-		
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 }

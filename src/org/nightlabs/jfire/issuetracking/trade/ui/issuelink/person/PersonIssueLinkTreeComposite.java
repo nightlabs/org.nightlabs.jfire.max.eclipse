@@ -8,9 +8,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -20,19 +17,11 @@ import org.eclipse.swt.widgets.Tree;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
 import org.nightlabs.base.ui.tree.TreeContentProvider;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
-import org.nightlabs.jfire.issue.dao.IssueLinkDAO;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
-import org.nightlabs.jfire.prop.PropertySet;
-import org.nightlabs.jfire.trade.LegalEntity;
-import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
-import org.nightlabs.jfire.transfer.id.AnchorID;
-import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Fitas Amine - fitas at nightlabs dot de
@@ -191,10 +180,7 @@ extends AbstractTreeComposite
 	public void setRootNode(IssueLinkTreeNode rootNode)
 	{
 		if (rootNode == null)
-			return;	
-//		if (Display.getCurrent() != null)
-//			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
-//		
+			return;		
 		this.rootlegalEntityIssuesLinkNode = rootNode;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
