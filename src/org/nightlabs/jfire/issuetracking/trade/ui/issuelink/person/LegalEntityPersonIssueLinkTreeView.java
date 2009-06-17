@@ -56,8 +56,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		Issue.FETCH_GROUP_DESCRIPTION,
 		IssueMarker.FETCH_GROUP_NAME,
 		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
-		IssueComment.FETCH_GROUP_TEXT,
-		IssueComment.FETCH_GROUP_TIMESTAMP};
+		IssueComment.FETCH_GROUP_TEXT};
 	private IssueLinkTreeNode mainIssuesListLinkNode;	
 	@Override
 	public void createPartContents(Composite parent) {

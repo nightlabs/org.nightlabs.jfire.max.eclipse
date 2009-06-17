@@ -99,7 +99,10 @@ extends AbstractTreeComposite
 
 					}
 				};
-
+				// for empty string description no need to add the desc node
+				if(((IssueLink)parentElement).getIssue().getDescription().getText().isEmpty())
+				return	new Object[] {subjectlegalEntityIssuesLinkNode};	
+				// concatnate the Comments nodes with the Desc 
 				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};
 				return concat(arrayDesc,
 						new Object[] {subjectlegalEntityIssuesLinkNode});
