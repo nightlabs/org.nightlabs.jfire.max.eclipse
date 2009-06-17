@@ -1,5 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
+import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +38,7 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
-public class ShowLegalEntityLinkedTreeComposite 
+public class ShowLegalEntityLinkedTreeComposite
 extends AbstractTreeComposite
 {
 	private LegalEntityIssuesLinkNode rootlegalEntityIssuesLinkNode;
@@ -75,7 +76,7 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof LegalEntityIssuesLinkNode)			
+			if (parentElement instanceof LegalEntityIssuesLinkNode)
 				return ((LegalEntityIssuesLinkNode)parentElement).getChildNodes();
 			if (parentElement instanceof IssueLink)
 			{
@@ -95,11 +96,11 @@ extends AbstractTreeComposite
 					public Object[]  getChildNodes() {
 						return testcommentsList.toArray();
 
-					}	
-				};	
+					}
+				};
 
-				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};	
-				return concat(arrayDesc, 
+				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};
+				return concat(arrayDesc,
 						new Object[] {subjectlegalEntityIssuesLinkNode});
 			}
 			return EMPTY_DATA;
@@ -117,9 +118,9 @@ extends AbstractTreeComposite
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
 		@Override
-		public boolean hasChildren(Object element) {	
+		public boolean hasChildren(Object element) {
 			if (element instanceof IssueLink)
-				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;			
+				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;
 				if (element instanceof IssueComment||element instanceof IssueDescription)
 					return false;
 				else
@@ -135,6 +136,8 @@ extends AbstractTreeComposite
 
 	}
 
+	private static Dimension ISSUE_MARKER_IMAGE_DIMENSION = new Dimension(16, 16);
+
 	private class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 			return getText(element);
@@ -149,17 +152,16 @@ extends AbstractTreeComposite
 			return null;
 		}
 
-
 		protected Image getCombiIssueMarkerImage(Issue issue)
 		{
-			int maxIssueMarkerCountPerIssue;		
+			int maxIssueMarkerCountPerIssue;
 			if (issue.getIssueMarkers().size() > 0)
 				maxIssueMarkerCountPerIssue = issue.getIssueMarkers().size();
 			else
 				return null;
 			Image combinedIcon = new Image(getDisplay(),
-					IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
-					IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.height);
+					ISSUE_MARKER_IMAGE_DIMENSION.width * maxIssueMarkerCountPerIssue + maxIssueMarkerCountPerIssue - 1,
+					ISSUE_MARKER_IMAGE_DIMENSION.height);
 			GC gc = new GC(combinedIcon);
 			Image icon = null;
 			int i = 0;
@@ -168,14 +170,14 @@ extends AbstractTreeComposite
 					if (issueMarker.getIcon16x16Data() != null) {
 						ByteArrayInputStream in = new ByteArrayInputStream(issueMarker.getIcon16x16Data());
 						icon = new Image(getDisplay(), in);
-						gc.drawImage(icon, IssueMarker.ISSUE_MARKER_IMAGE_DIMENSION.width * i + i, 0);
+						gc.drawImage(icon, ISSUE_MARKER_IMAGE_DIMENSION.width * i + i, 0);
 						iconImages.add(icon);
 					}
 					i++;
 				}
 			} finally {
 				gc.dispose();
-			}			
+			}
 			iconImages.add(combinedIcon);
 			return combinedIcon;
 		}
@@ -189,10 +191,10 @@ extends AbstractTreeComposite
 			if (element instanceof LegalEntityIssuesLinkNode)
 				return ((LegalEntityIssuesLinkNode)element).getName();
 			if (element instanceof IssueLink)
-				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(), 
-						((IssueLink)element).getIssue().getSubject().getText());		
+				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(),
+						((IssueLink)element).getIssue().getSubject().getText());
 			if (element instanceof IssueComment)
-				return ((IssueComment)element).getText();		
+				return ((IssueComment)element).getText();
 			if (element instanceof IssueDescription)
 				return ((IssueDescription)element).getText();
 			return ""; //$NON-NLS-1$
@@ -208,35 +210,35 @@ extends AbstractTreeComposite
 			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
 
 		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
-				partnerID, 
+				partnerID,
 				new String[] {
 						FetchPlan.DEFAULT,
 						LegalEntity.FETCH_GROUP_PERSON,
 						PropertySet.FETCH_GROUP_FULL_DATA
-				}, 
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				},
+				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor());
 
 
-		final ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
+		final ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
 		final LegalEntityIssuesLinkNode sublegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
 				propertySetID,"Issue List"){
 			@Override
 			public Object[]  getChildNodes() {
-				return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(getOrganisationID(), 
-						getPersonID(), 
-						FETCH_GROUPS, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+				return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(getOrganisationID(),
+						getPersonID(),
+						FETCH_GROUPS,
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 						new NullProgressMonitor()).toArray();
-			}	
-		};	
+			}
+		};
 
 		rootlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
 				propertySetID,"Issue List"){
 			@Override
 			public Object[]  getChildNodes() {
-				return new Object[] {sublegalEntityIssuesLinkNode};				
-			}	
+				return new Object[] {sublegalEntityIssuesLinkNode};
+			}
 		};
 
 		Display.getDefault().asyncExec(new Runnable() {
