@@ -41,7 +41,7 @@ import org.nightlabs.progress.NullProgressMonitor;
 public class ShowLegalEntityLinkedTreeComposite
 extends AbstractTreeComposite
 {
-	private LegalEntityIssuesLinkNode rootlegalEntityIssuesLinkNode;
+	private IssueTreeNode rootlegalEntityIssuesLinkNode;
 	private static final String[] FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		IssueLink.FETCH_GROUP_ISSUE,
@@ -76,25 +76,22 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof LegalEntityIssuesLinkNode)
-				return ((LegalEntityIssuesLinkNode)parentElement).getChildNodes();
+			if (parentElement instanceof IssueTreeNode)			
+				return ((IssueTreeNode)parentElement).getChildNodes();
 			if (parentElement instanceof IssueLink)
 			{
-
-				List<IssueComment> commentsList = ((IssueLink)parentElement).getIssue().getComments();
+				final List<IssueComment> commentsList = ((IssueLink)parentElement).getIssue().getComments();
 				Collections.sort(commentsList, new Comparator<IssueComment>() {
 					public int compare(IssueComment o1, IssueComment o2) {
 						// reverse chronological Order
 						return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
 					}
 				});
-
-				final List<IssueComment> testcommentsList = commentsList;
-				final LegalEntityIssuesLinkNode subjectlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(null,
-						null,"Comment"){
+				final IssueTreeNode subjectlegalEntityIssuesLinkNode= new IssueTreeNode("Comments",null,true){
 					@Override
 					public Object[]  getChildNodes() {
-						return testcommentsList.toArray();
+						setHasChildNodes(commentsList.size()>0);
+						return commentsList.toArray();
 
 					}
 				};
@@ -118,7 +115,10 @@ extends AbstractTreeComposite
 		 * @see org.nightlabs.base.ui.tree.TreeContentProvider#hasChildren(java.lang.Object)
 		 */
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(Object element) {	
+
+			if (element instanceof IssueTreeNode)
+				return ((IssueTreeNode)element).getHasChildNodes();
 			if (element instanceof IssueLink)
 				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;
 				if (element instanceof IssueComment||element instanceof IssueDescription)
@@ -145,8 +145,8 @@ extends AbstractTreeComposite
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (element instanceof LegalEntityIssuesLinkNode)
-				return ((LegalEntityIssuesLinkNode)element).getIcon();
+			if (element instanceof IssueTreeNode)
+				return ((IssueTreeNode)element).getIcon();
 			if (element instanceof IssueLink)
 				return getCombiIssueMarkerImage(((IssueLink)element).getIssue());
 			return null;
@@ -188,8 +188,8 @@ extends AbstractTreeComposite
 		 */
 		@Override
 		public String getText(Object element) {
-			if (element instanceof LegalEntityIssuesLinkNode)
-				return ((LegalEntityIssuesLinkNode)element).getName();
+			if (element instanceof IssueTreeNode)
+				return ((IssueTreeNode)element).getName();
 			if (element instanceof IssueLink)
 				return String.format("%s/%s",((IssueLink)element).getIssue().getIssueIDAsString(),
 						((IssueLink)element).getIssue().getSubject().getText());
@@ -200,7 +200,8 @@ extends AbstractTreeComposite
 			return ""; //$NON-NLS-1$
 		}
 	}
-
+	
+	
 	public void setPersonID(AnchorID partnerID)
 	{
 		if (partnerID == null)
@@ -219,26 +220,26 @@ extends AbstractTreeComposite
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor());
 
-
-		final ObjectID propertySetID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());
-		final LegalEntityIssuesLinkNode sublegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
-				propertySetID,"Issue List"){
+		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
+		final IssueTreeNode sublegalEntityIssuesLinkNode= new IssueTreeNode("Issue List",null,true){
 			@Override
-			public Object[]  getChildNodes() {
-				return IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(getOrganisationID(),
-						getPersonID(),
-						FETCH_GROUPS,
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+			public Object[] getChildNodes() {	
+				Object[] links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(), 
+						personID, 
+						FETCH_GROUPS, 
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
 						new NullProgressMonitor()).toArray();
-			}
-		};
+				setHasChildNodes(links.length>0);
+				return links;
+			}	
+		};	
 
-		rootlegalEntityIssuesLinkNode= new LegalEntityIssuesLinkNode(partner.getOrganisationID(),
-				propertySetID,"Issue List"){
+		rootlegalEntityIssuesLinkNode= new IssueTreeNode("Root",null,true){
 			@Override
 			public Object[]  getChildNodes() {
-				return new Object[] {sublegalEntityIssuesLinkNode};
-			}
+				setHasChildNodes(true);
+				return new Object[] {sublegalEntityIssuesLinkNode};				
+			}	
 		};
 
 		Display.getDefault().asyncExec(new Runnable() {

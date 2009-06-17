@@ -1,8 +1,6 @@
 package org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
@@ -21,31 +19,27 @@ import org.nightlabs.notification.NotificationListener;
 public class ShowLegalEntityLinkedView  extends LSDViewPart{
 
 	private ShowLegalEntityLinkedTreeComposite showLegalEntityLinkedTreeComposite;
-
+	
 	public static final String ID_VIEW = ShowLegalEntityLinkedView.class.getName();
-
+	
+	@Override
+	public void createPartControl(Composite parent)
+	{
+		super.createPartControl(parent);
+	}
+	
+	
 	@Override
 	public void createPartContents(Composite parent) {
 		showLegalEntityLinkedTreeComposite = new ShowLegalEntityLinkedTreeComposite(parent, SWT.NONE);
-		showLegalEntityLinkedTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		showLegalEntityLinkedTreeComposite.setLayoutData(new GridData(GridData.FILL_BOTH));		
+		
 		SelectionManager.sharedInstance().addNotificationListener(
 				TradePlugin.ZONE_SALE,
-				LegalEntity.class, notificationListenerPersonSelected
-		);
-		// We *must* remove this listener again when the view is closed.
-		// Whenever the view is closed, our composite will be disposed. Hence we register a dispose-listener. Marco.
-		showLegalEntityLinkedTreeComposite.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent event) {
-				SelectionManager.sharedInstance().removeNotificationListener(
-						TradePlugin.ZONE_SALE,
-						LegalEntity.class, notificationListenerPersonSelected
-				);
-			}
-		});
+				LegalEntity.class, notificationListenerPersonSelected);
+	
 	}
-
+	
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 
@@ -55,5 +49,14 @@ public class ShowLegalEntityLinkedView  extends LSDViewPart{
 				showLegalEntityLinkedTreeComposite.setPersonID((AnchorID)event.getFirstSubject());
 		}
 	};
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
