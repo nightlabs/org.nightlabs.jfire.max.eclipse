@@ -38,28 +38,14 @@ import org.nightlabs.progress.NullProgressMonitor;
  * @author Fitas Amine - fitas at nightlabs dot de
  *
  */
-public class ShowLegalEntityLinkedTreeComposite
+public class PersonIssueLinkTreeComposite
 extends AbstractTreeComposite
 {
 	private IssueLinkTreeNode rootlegalEntityIssuesLinkNode;
-	private static final String[] FETCH_GROUPS = new String[] {
-		FetchPlan.DEFAULT,
-		IssueLink.FETCH_GROUP_ISSUE,
-		Issue.FETCH_GROUP_ISSUE_TYPE,
-		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_DESCRIPTION,
-		Issue.FETCH_GROUP_ISSUE_COMMENTS,
-		Issue.FETCH_GROUP_ISSUE_MARKERS,
-		Issue.FETCH_GROUP_DESCRIPTION,
-		IssueMarker.FETCH_GROUP_NAME,
-		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
-		IssueComment.FETCH_GROUP_TEXT,
-		IssueComment.FETCH_GROUP_TIMESTAMP};
-
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
-	public ShowLegalEntityLinkedTreeComposite(Composite parent, int style)
+	public PersonIssueLinkTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		init();
@@ -202,52 +188,21 @@ extends AbstractTreeComposite
 	}
 	
 	
-	public void setPersonID(AnchorID partnerID)
+	public void setRootNode(IssueLinkTreeNode rootNode)
 	{
-		if (partnerID == null)
-			return;
-
+		if (rootNode == null)
+			return;	
 		if (Display.getCurrent() != null)
 			throw new IllegalStateException("This method must *not* be called on the SWT UI thread! Use a Job!"); //$NON-NLS-1$
-
-		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
-				partnerID,
-				new String[] {
-						FetchPlan.DEFAULT,
-						LegalEntity.FETCH_GROUP_PERSON,
-						PropertySet.FETCH_GROUP_FULL_DATA
-				},
-				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new NullProgressMonitor());
-
-		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
-		final IssueLinkTreeNode sublegalEntityIssuesLinkNode= new IssueLinkTreeNode("Issue List",null,true){
-			@Override
-			public Object[] getChildNodes() {	
-				Object[] links = IssueLinkDAO.sharedInstance().getIssueLinksByOrganisationIDAndLinkedObjectID(partner.getOrganisationID(), 
-						personID, 
-						FETCH_GROUPS, 
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
-						new NullProgressMonitor()).toArray();
-				setHasChildNodes(links.length>0);
-				return links;
-			}	
-		};	
-
-		rootlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Root",null,true){
-			@Override
-			public Object[]  getChildNodes() {
-				setHasChildNodes(true);
-				return new Object[] {sublegalEntityIssuesLinkNode};				
-			}	
-		};
-
+		
+		this.rootlegalEntityIssuesLinkNode = rootNode;
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				getTreeViewer().setInput(rootlegalEntityIssuesLinkNode);
 			}
 		});
 	}
+	
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */

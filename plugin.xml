@@ -73,13 +73,13 @@
    </extension-->
      <extension point="org.eclipse.ui.views">
         <view category="org.nightlabs.jfire.trade.ui.TradeCategory"
-            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView"
+            class="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
             icon="icons/editor/SysAdminEntityTreeView.16x16.png"
-            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView" name="Linked issues"/>
+            id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView" name="Linked issues"/>
     </extension>
 	<extension point="org.eclipse.ui.perspectiveExtensions">
 		<perspectiveExtension targetID="org.nightlabs.jfire.trade.ui.TradePerspective">   
-			<view id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.ShowLegalEntityLinkedView"
+			<view id="org.nightlabs.jfire.issuetracking.trade.ui.issuelink.person.LegalEntityPersonIssueLinkTreeView"
 			relative="org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntityEditorView"
 			relationship="stack"/>
 		</perspectiveExtension>
