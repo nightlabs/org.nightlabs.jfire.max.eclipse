@@ -758,6 +758,14 @@
               name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction.name"
               tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.selectproducttype.SelectProductTypeAction.tooltip">
         </articleEditAction>
+        <articleEditAction
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              icon="icons/articlecontainer/detail/action/deliverydate/EditDeliveryDateAction.16x16.png"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction.name"
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction.tooltip"/>        
     </extension>
     <extension
           name="Suppressed actions for RecurringOrder/RecurringOffer"
