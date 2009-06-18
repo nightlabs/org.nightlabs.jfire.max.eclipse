@@ -205,7 +205,6 @@ public class IssueFilterCompositePropertyRelated
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
 			if (IssueQuery.FieldName.issuePriorityID.equals(changedField.getPropertyName()))
@@ -224,8 +223,7 @@ public class IssueFilterCompositePropertyRelated
 					issuePriorityCombo.setSelection(newIssuePriority);
 					if (! newIssuePriority.equals(issuePriorityCombo.getSelectedElement()))
 						selectedIssuePriority = newIssuePriority;
-
-					sectionActive |= true;
+					
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issuePriorityID).equals(
@@ -256,8 +254,7 @@ public class IssueFilterCompositePropertyRelated
 					issueResolutionCombo.setSelection(newIssueResolution);
 					if (! newIssueResolution.equals(issueResolutionCombo.getSelectedElement()))
 						selectedIssueResolution = newIssueResolution;
-
-					sectionActive |= true;
+					
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueResolutionID).equals(
@@ -288,8 +285,6 @@ public class IssueFilterCompositePropertyRelated
 					issueSeverityCombo.setSelection(newIssueSeverityType);
 					if (! newIssueSeverityType.equals(issueSeverityCombo.getSelectedElement()))
 						selectedIssueSeverityType = newIssueSeverityType;
-
-					sectionActive |= true;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueSeverityTypeID).equals(
@@ -320,8 +315,6 @@ public class IssueFilterCompositePropertyRelated
 					issueTypeCombo.setSelection(newIssueType);
 					if (! newIssueType.equals(issueTypeCombo.getSelectedElement()))
 						selectedIssueType = newIssueType;
-
-					sectionActive |= true;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.issueTypeID).equals(

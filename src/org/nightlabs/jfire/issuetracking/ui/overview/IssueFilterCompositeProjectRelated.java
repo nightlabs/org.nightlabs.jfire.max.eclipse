@@ -13,7 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TreeItem;
 import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.jdo.query.QueryEvent;
 import org.nightlabs.jdo.query.QueryProvider;
@@ -167,7 +166,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
-		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : event.getChangedFields())
 		{
 			if (IssueQuery.FieldName.projectIDs.equals(changedField.getPropertyName()))
@@ -187,7 +185,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 							}
 						}
 					}*/
-					sectionActive |= true;
 				}
 			}
 			else if (getEnableFieldName(IssueQuery.FieldName.projectIDs).equals(
@@ -201,8 +198,6 @@ extends AbstractQueryFilterComposite<IssueQuery>
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
-
-
 	}
 
 	private static final Set<String> fieldNames;
