@@ -97,7 +97,6 @@ extends AbstractTableComposite<Issue>
 	public IssueTable(Composite parent, int style)
 	{
 		super(parent, style);
-
 //		loadIssues();
 
 //		JDOLifecycleManager.sharedInstance().addLifecycleListener(newIssueListener);
@@ -287,8 +286,17 @@ extends AbstractTableComposite<Issue>
 				if (s.isEmpty())
 					return;
 
-				Issue issue = (Issue)s.getFirstElement();
 
+				// --> [Observation] 18.06.2009
+				// This table is used in several scenarios, and for all of them it makes perfect sense to open up an editor
+				// to display the selected Issue on a double-click event.
+				// All except for one: When the table is used in a Wizard. In which case, double-clicking the Issue should instead
+				// trigger one of the (default?) action(/command)-buttons, rather than opening up the selected Issue in the background
+				// application when the Wizard has got focus.
+				if (isTableInWizard)
+					return;
+
+				Issue issue = (Issue)s.getFirstElement();
 				IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
 				try {
 //					RCPUtil.openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
@@ -299,6 +307,10 @@ extends AbstractTableComposite<Issue>
 			}
 		});
 	}
+
+	private boolean isTableInWizard = false;
+	public void setIsTableInWizard(boolean isTableInWizard) { this.isTableInWizard = isTableInWizard; }
+
 
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {

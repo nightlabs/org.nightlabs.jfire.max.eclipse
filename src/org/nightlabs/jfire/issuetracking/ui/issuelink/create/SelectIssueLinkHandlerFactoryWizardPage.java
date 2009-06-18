@@ -33,7 +33,7 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class SelectIssueLinkHandlerFactoryWizardPage 
+public class SelectIssueLinkHandlerFactoryWizardPage
 extends DynamicPathWizardPage
 implements ISelectionProvider
 {
@@ -41,7 +41,7 @@ implements ISelectionProvider
 
 	/**
 	 * The currently selected category or <code>null</code>. If a category is selected, the {@link #issueLinkHandlerFactory} is <code>null</code>,
-	 * if a factory is selected, this field is <code>null</code>. If nothing is selected, both fields are <code>null</code>. 
+	 * if a factory is selected, this field is <code>null</code>. If nothing is selected, both fields are <code>null</code>.
 	 */
 	private IssueLinkHandlerCategory issueLinkHandlerCategory;
 
@@ -78,11 +78,11 @@ implements ISelectionProvider
 				Object firstElement = ((TreeSelection)e.getSelection()).getFirstElement();
 				if (firstElement instanceof IssueLinkHandlerFactory)
 					getContainer().showPage(getNextPage());
-				else 
+				else
 					treeViewer.expandToLevel(firstElement, 1);
 			}
 		});
-		
+
 		List<IssueLinkHandlerCategory> categoryItems = null;
 		try {
 			IssueLinkHandlerFactoryRegistry registry = IssueLinkHandlerFactoryRegistry.sharedInstance();
@@ -90,7 +90,7 @@ implements ISelectionProvider
 		} catch (EPProcessorException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		treeViewer.setInput(categoryItems);
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -118,23 +118,24 @@ implements ISelectionProvider
 			}
 		});
 
+		treeViewer.expandAll();	// Since, so far, we dont have that many items for linking; and they can all be comforably displayed in the tree. Kai.
 		return mainComposite;
 	}
-	
+
 //	private void setLinkClass(Object factory) {
 //		getWizardHop().removeAllHopPages();
 //		if(factory instanceof IssueLinkHandlerFactory) {
 //			IssueLinkHandlerFactory iFactory = (IssueLinkHandlerFactory)factory;
 //
 //			IssueLinkAdder adder = iFactory.createIssueLinkAdder();
-//			
+//
 //			WizardHopPage page = createAdderWizardPage(adder);
 //			page.setTitle(iFactory.getLinkedObjectClass().getSimpleName());
 //			page.setDescription("Select the " + iFactory.getLinkedObjectClass().getSimpleName() + "(s) to link to the issue.");
 //			createIssueLinkWizard.setLinkedClass(iFactory.getLinkedObjectClass());
 //			getWizardHop().addHopPage(page);
 //		}
-//		
+//
 //		getContainer().updateButtons();
 //	}
 
@@ -143,14 +144,15 @@ implements ISelectionProvider
 //		selectLinkedObjectPage = new SelectLinkedObjectPage(createIssueLinkWizard, issueLinkAdder);
 //		return selectLinkedObjectPage;
 //	}
-	
+
 	@Override
 	public boolean isPageComplete() {
 		return issueLinkHandlerFactory != null;
 //		return getWizardHop().getHopPages() != null && getWizardHop().getHopPages().size() != 0;
 	}
-	
+
 	class IssueLinkCategoryContentProvider extends TreeContentProvider {
+		@Override
 		public Object getParent(Object childElement) {
 			// this method is not used since we don't use a DrillDownAdapter
 //			if(childElement instanceof IssueLinkHandlerCategory) {
@@ -164,6 +166,7 @@ implements ISelectionProvider
 			return null;
 		}
 
+		@Override
 		public boolean hasChildren(Object element) {
 			if(element instanceof IssueLinkHandlerCategory) {
 				IssueLinkHandlerCategory issueLinkHandlerCategory = (IssueLinkHandlerCategory)element;
@@ -180,12 +183,12 @@ implements ISelectionProvider
 
 			return new Object[] { inputElement };
 		}
-		
+
 		@Override
 		public Object[] getChildren(Object parentElement) {
 			if(parentElement instanceof IssueLinkHandlerCategory) {
 				IssueLinkHandlerCategory issueLinkHandlerCategory = (IssueLinkHandlerCategory)parentElement;
-				return (Object[])issueLinkHandlerCategory.getChildObjects().toArray(new Object[0]);
+				return issueLinkHandlerCategory.getChildObjects().toArray(new Object[0]);
 			}
 			return null;
 		}
@@ -203,7 +206,7 @@ implements ISelectionProvider
 				IssueLinkHandlerCategory issueLinkHandlerCategory = (IssueLinkHandlerCategory)element;
 				return issueLinkHandlerCategory.getName();
 			}
-			
+
 			if(element instanceof IssueLinkHandlerFactory) {
 				IssueLinkHandlerFactory issueLinkHandlerFactory = (IssueLinkHandlerFactory)element;
 				return issueLinkHandlerFactory.getName();
@@ -219,7 +222,7 @@ implements ISelectionProvider
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.add(listener);
 	}
-	
+
 	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		selectionChangedListeners.remove(listener);

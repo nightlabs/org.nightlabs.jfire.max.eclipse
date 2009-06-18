@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issue;
 
@@ -26,16 +26,16 @@ import org.nightlabs.jfire.issuetracking.ui.overview.IssueEntryListViewer;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class IssueLinkAdderIssue 
-extends AbstractIssueLinkAdder 
+public class IssueLinkAdderIssue
+extends AbstractIssueLinkAdder
 {
 	private IssueEntryListViewer iViewer;
 	private Issue issue;
-	
+
 	/**
 	 * Constructs an issue-issue link adder.
 	 * @param issue - the {@link Issue} used in adding process
@@ -43,7 +43,7 @@ extends AbstractIssueLinkAdder
 	public IssueLinkAdderIssue(Issue issue) {
 		this.issue = issue;
 	}
-	
+
 	@Override
 	protected Composite doCreateComposite(Composite parent) {
 		iViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
@@ -55,7 +55,7 @@ extends AbstractIssueLinkAdder
 						notifyIssueLinkDoubleClickListeners();
 					}
 				});
-				
+
 				tableComposite.addSelectionChangedListener(new ISelectionChangedListener() {
 					public void selectionChanged(SelectionChangedEvent e) {
 						fireSelectionChangedEvent();
@@ -65,13 +65,16 @@ extends AbstractIssueLinkAdder
 		};
 
 		iViewer.createComposite(parent);
-		
+		iViewer.getIssueTable().setIsTableInWizard(true);
+
 		iViewer.getIssueTable().getTableViewer().addFilter(new ViewerFilter() {
+			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				return !element.equals(issue);
 			}
 		});
-		
+
+
 		return iViewer.getComposite();
 	}
 
@@ -79,9 +82,9 @@ extends AbstractIssueLinkAdder
 	protected void doSearch() {
 		iViewer.search();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public Set<ObjectID> getLinkedObjectIDs() {
 		Collection<Issue> elements = iViewer.getListComposite().getSelectedElements();
@@ -89,7 +92,7 @@ extends AbstractIssueLinkAdder
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isComplete() {
