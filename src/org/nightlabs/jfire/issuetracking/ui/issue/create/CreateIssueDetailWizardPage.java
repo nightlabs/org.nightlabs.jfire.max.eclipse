@@ -30,6 +30,7 @@ import org.nightlabs.base.ui.wizard.WizardHopPage;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueResolution;
 import org.nightlabs.jfire.issue.IssueSeverityType;
 import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueTypeDAO;
@@ -41,7 +42,11 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
+ * Displays the user-interface page to assist in creating a new {@link Issue}.
+ * Default options for important fields should always be made available on this page.
+ *
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
+ * @author Khaireel Mohamed - khaireel at nightlabs dot de
  */
 public class CreateIssueDetailWizardPage
 extends WizardHopPage
@@ -90,13 +95,6 @@ extends WizardHopPage
 		this.issue = issue;
 	}
 
-	// --> See notes below about ensuring the integrity of an Issue before storing it. Kai.
-	// @Kai: Please see my notes below. Marco.
-//	private static final String DEFAULT_ISSUE_PRIORITY_ID = IssuePriority.ISSUE_PRIORITY_NORMAL;
-//	private static final String DEFAULT_ISSUE_SEVERITY_ID = IssueSeverityType.ISSUE_SEVERITY_TYPE_FEATURE;
-//	private static final String DEFAULT_ISSUE_RESOLUTION_ID = IssueResolution.ISSUE_RESOLUTION_OPEN;
-//	private static final String DEFAULT_ISSUE_TYPE_ID = IssueType.DEFAULT_ISSUE_TYPE_ID;
-
 	@Override
 	public Control createPageContents(Composite parent) {
 		XComposite mainComposite = new XComposite(parent, SWT.NONE, LayoutMode.TOP_BOTTOM_WRAPPER, LayoutDataMode.GRID_DATA);
@@ -116,7 +114,7 @@ extends WizardHopPage
 			}
 		});
 
-		//Subject & Description
+		// Subject & Description
 		subjectLabel = new Label(mainComposite, SWT.NONE);
 		subjectLabel.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.subject.text")); //$NON-NLS-1$
 
@@ -156,7 +154,7 @@ extends WizardHopPage
 		gridData.horizontalSpan = 6;
 		descriptionText.setLayoutData(gridData);
 
-		//Properties
+		// Properties
 		issueTypeLbl = new Label(mainComposite, SWT.NONE);
 		issueTypeLbl.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.label.issueType.text")); //$NON-NLS-1$
 		issueTypeCombo = new XComboComposite<IssueType>(mainComposite, SWT.NONE | SWT.READ_ONLY, issueLabelProvider);
@@ -208,7 +206,7 @@ extends WizardHopPage
 		gridData.horizontalSpan = 6;
 		dateTimeComposite.setLayoutData(gridData);
 
-		//Loading Data
+		// ---> Loading Data
 		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.create.CreateIssueDetailWizardPage.job.loadingIssueProp.text")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(final ProgressMonitor monitor) throws Exception
@@ -216,26 +214,14 @@ extends WizardHopPage
 				issueTypes = IssueTypeDAO.sharedInstance().getAllIssueTypes(ISSUE_TYPE_FETCH_GROUPS, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 
 				Display.getDefault().asyncExec(new Runnable() {
-					// Note: The old codes for run() have been restored, in favour of performing integrity-checking of the Issue
-					//       in the main Issue class. See the method 'Issue.ensureIntegrity()', which is called from the IssueManagerBean's
-					//       'storeIssue()' method, in the event that a new Issue has been created. Kai.
-					// @Kai: What do you mean by "restored"? You mean "commented out"?
-					// Well, I'm not so sure that this change is correct, because the ensureIntegrity is IMHO called in the server only when this
-					// wizard has already finished (nearly). But these defaults here are used to show the user already while in the wizard
-					// what the new default values would be. Why should you select always the first element? And are you sure this data
-					// isn't then saved in the issue - thus overriding the data defined in Issue.DEFAULT_XYZ? Issue.ensureIntegrity() only sets
-					// data if it is not set before and this wizard will very likely (didn't look in the code though) set the data from this UI.
-					// And even if it wouldn't; shouldn't the UI (i.e. this wizard-page) already show the user the default values correctly before
-					// the backend magically initializes them?
-					// IMHO your change should be reverted and the original code should simply use the constants Issue.DEFAULT_XYZ instead of the old
-					// constants that were declared above. Marco.
 					public void run() {
+						// IssueType
 						issueTypeCombo.removeAll();
 						IssueType defaultIssueType = null;
 						for (IssueType issueType : issueTypes) {
 							if (issueType.getIssueTypeID().equals(IssueType.DEFAULT_ISSUE_TYPE_ID))
 								defaultIssueType = issueType;
-								issueTypeCombo.addElement(issueType);
+							issueTypeCombo.addElement(issueType);
 						}
 
 						if (defaultIssueType != null)
@@ -246,88 +232,49 @@ extends WizardHopPage
 						selectedIssueType = issueTypeCombo.getSelectedElement();
 						issue.setIssueType(selectedIssueType);
 
+						// IssueSeverity
 						issueSeverityCombo.removeAll();
+						IssueSeverityType defaultIssueSeverityType = null;
 						if (selectedIssueType != null) {
 							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
+								if (is.getIssueSeverityTypeID().equals(Issue.DEFAULT_ISSUE_SEVERITY_TYPE_ID))
+									defaultIssueSeverityType = is;
 								issueSeverityCombo.addElement(is);
 							}
-							issueSeverityCombo.selectElementByIndex(0);
+
+							if (defaultIssueSeverityType != null)
+								issueSeverityCombo.selectElement(defaultIssueSeverityType);
+							else
+								issueSeverityCombo.selectElementByIndex(0);
 						}
 						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
 						issue.setIssueSeverityType(selectedIssueSeverityType);
 
+						// IssuePriority
 						issuePriorityCombo.removeAll();
+						IssuePriority defaultIssuePriority = null;
 						if (selectedIssueType != null) {
 							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
+								if (ip.getIssuePriorityID().equals(Issue.DEFAULT_ISSUE_PRIORITY_ID))
+									defaultIssuePriority = ip;
 								issuePriorityCombo.addElement(ip);
 							}
-							issuePriorityCombo.selectElementByIndex(0);
+
+							if (defaultIssueSeverityType != null)
+								issuePriorityCombo.selectElement(defaultIssuePriority);
+							else
+								issuePriorityCombo.selectElementByIndex(0);
 						}
 						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
 						issue.setIssuePriority(selectedIssuePriority);
-					}
 
-//					public void run() {
-//						//IssueType
-//						issueTypeCombo.removeAll();
-//						IssueType defaultIssueType = null;
-//						for (IssueType issueType : issueTypes) {
-//							if (issueType.getIssueTypeID().equals(DEFAULT_ISSUE_TYPE_ID))
-//								defaultIssueType = issueType;
-//							issueTypeCombo.addElement(issueType);
-//						}
-//
-//						if (defaultIssueType != null)
-//							issueTypeCombo.selectElement(defaultIssueType);
-//						else
-//							issueTypeCombo.selectElementByIndex(0);
-//
-//						selectedIssueType = issueTypeCombo.getSelectedElement();
-//						issue.setIssueType(selectedIssueType);
-//
-//						//IssueSeverity
-//						issueSeverityCombo.removeAll();
-//						IssueSeverityType defaultIssueSeverityType = null;
-//						if (selectedIssueType != null) {
-//							for (IssueSeverityType is : selectedIssueType.getIssueSeverityTypes()) {
-//								if (is.getIssueSeverityTypeID().equals(DEFAULT_ISSUE_SEVERITY_ID))
-//									defaultIssueSeverityType = is;
-//								issueSeverityCombo.addElement(is);
-//							}
-//
-//							if (defaultIssueSeverityType != null)
-//								issueSeverityCombo.selectElement(defaultIssueSeverityType);
-//							else
-//								issueSeverityCombo.selectElementByIndex(0);
-//						}
-//						selectedIssueSeverityType = issueSeverityCombo.getSelectedElement();
-//						issue.setIssueSeverityType(selectedIssueSeverityType);
-//
-//						//IssuePriority
-//						issuePriorityCombo.removeAll();
-//						IssuePriority defaultIssuePriority = null;
-//						if (selectedIssueType != null) {
-//							for (IssuePriority ip : selectedIssueType.getIssuePriorities()) {
-//								if (ip.getIssuePriorityID().equals(DEFAULT_ISSUE_PRIORITY_ID))
-//									defaultIssuePriority = ip;
-//								issuePriorityCombo.addElement(ip);
-//							}
-//
-//							if (defaultIssueSeverityType != null)
-//								issuePriorityCombo.selectElement(defaultIssuePriority);
-//							else
-//								issuePriorityCombo.selectElementByIndex(0);
-//						}
-//						selectedIssuePriority = issuePriorityCombo.getSelectedElement();
-//						issue.setIssuePriority(selectedIssuePriority);
-//
-//
-//						//IssueResolution
-//						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
-//							if (ir.getIssueResolutionID().equals(DEFAULT_ISSUE_RESOLUTION_ID))
-//								issue.setIssueResolution(ir);
-//						}
-//					}
+
+						//IssueResolution
+						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+							if (ir.getIssueResolutionID().equals(Issue.DEFAULT_ISSUE_RESOLUTION_ID))
+								issue.setIssueResolution(ir);
+						}
+					}
 				});
 
 				return Status.OK_STATUS;
