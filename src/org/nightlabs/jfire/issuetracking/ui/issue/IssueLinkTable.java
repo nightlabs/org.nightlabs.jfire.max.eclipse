@@ -58,7 +58,7 @@ extends AbstractTableComposite<IssueLinkTableItem>
 	private class LabelProvider extends TableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (columnIndex == 0) {
+			if (columnIndex == 1) {
 				if (element instanceof IssueLinkTableItem) {
 					IssueLinkTableItem issueLinkTableItem = (IssueLinkTableItem) element;
 					IssueLinkHandler<ObjectID, Object> handler = getIssueLinkHandler(issueLinkTableItem.getLinkedObjectID());
@@ -85,13 +85,6 @@ extends AbstractTableComposite<IssueLinkTableItem>
 					if (issueLink == null)
 						return Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.table.loading.text"); //$NON-NLS-1$
 
-					return handler.getLinkedObjectName(issueLink, linkedObject);
-				}
-
-				if (issueLink == null)
-					return ""; //$NON-NLS-1$
-
-				if (columnIndex == 1) {
 					return issueLink.getIssueLinkType().getName().getText();
 
 //					IssueLinkType issueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypesByLinkClass(Object.class,
@@ -100,6 +93,14 @@ extends AbstractTableComposite<IssueLinkTableItem>
 //							new NullProgressMonitor()).get(0);
 //					return issueLinkTableItem.getIssueLinkType() == null ? issueLinkType.getName().getText() : issueLinkTableItem.getIssueLinkType().getName().getText();
 				}
+
+				if (issueLink == null)
+					return ""; //$NON-NLS-1$
+
+				if (columnIndex == 1) {
+					return handler.getLinkedObjectName(issueLink, linkedObject);
+				}
+
 			}
 			return ""; //$NON-NLS-1$
 		}
@@ -247,15 +248,17 @@ extends AbstractTableComposite<IssueLinkTableItem>
 
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		TableColumn tableColumn = new TableColumn(table, SWT.NONE);
-		tableColumn.setMoveable(true);
-		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.linkObject.text")); //$NON-NLS-1$
+		TableColumn tableColumn;
 
 		tableColumn = new TableColumn(table, SWT.NONE);
 		tableColumn.setMoveable(true);
 		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.relation.text")); //$NON-NLS-1$
 
-		WeightedTableLayout layout = new WeightedTableLayout( new int[]{70, 30} );
+		tableColumn = new TableColumn(table, SWT.NONE);
+		tableColumn.setMoveable(true);
+		tableColumn.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issue.IssueLinkTable.tableColumn.linkObject.text")); //$NON-NLS-1$
+
+		WeightedTableLayout layout = new WeightedTableLayout( new int[]{30, 70} );
 		table.setLayout(layout);
 	}
 

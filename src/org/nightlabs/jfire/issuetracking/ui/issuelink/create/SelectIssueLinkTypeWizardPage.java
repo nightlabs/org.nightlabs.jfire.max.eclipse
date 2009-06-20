@@ -31,13 +31,13 @@ import org.nightlabs.progress.ProgressMonitor;
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
  *
  */
-public class SelectIssueLinkTypeWizardPage 
+public class SelectIssueLinkTypeWizardPage
 extends DynamicPathWizardPage
 {
 	private ListComposite<IssueLinkType> issueLinkTypeList;
-	
+
 	private IssueLinkType selectedIssueLinkType;
-	
+
 	public SelectIssueLinkTypeWizardPage() {
 		super(SelectIssueLinkTypeWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.title")); //$NON-NLS-1$
 		setDescription(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.description")); //$NON-NLS-1$
@@ -49,21 +49,23 @@ extends DynamicPathWizardPage
 				@Override
 				protected IStatus run(ProgressMonitor monitor) throws Exception {
 					final Collection<IssueLinkType> issueLinkTypes = IssueLinkTypeDAO.sharedInstance().getIssueLinkTypes(
-							issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass(), 
-							new String[] {IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT}, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, 
+							issueLinkAdder.getIssueLinkHandlerFactory().getLinkedObjectClass(),
+							new String[] {IssueLinkType.FETCH_GROUP_NAME, FetchPlan.DEFAULT},
+							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 							monitor);
 
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
+							selectedIssueLinkType = null;
 							issueLinkTypeList.removeAll();
 							issueLinkTypeList.addElements(issueLinkTypes);
-							if (!issueLinkTypes.isEmpty()) {
+//							if (!issueLinkTypes.isEmpty()) {
+							if (issueLinkTypes.size() == 1) { // Only auto-select, if there's exactly one - otherwise the user must choose.
 								issueLinkTypeList.selectElementByIndex(0);
 								selectedIssueLinkType = issueLinkTypeList.getSelectedElement();
-								getContainer().updateButtons();
 							}
+							getContainer().updateButtons();
 						}
 					});
 
@@ -84,11 +86,11 @@ extends DynamicPathWizardPage
 		manageRelationGroup.setLayout(new GridLayout(1, false));
 		manageRelationGroup.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.create.SelectIssueLinkTypeWizardPage.group.predefinedRelation.text")); //$NON-NLS-1$
 		manageRelationGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		XComposite manageComposite = new XComposite(manageRelationGroup, SWT.NONE);
 		manageComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		manageComposite.getGridLayout().numColumns = 1;
-		
+
 		issueLinkTypeList = new ListComposite<IssueLinkType>(manageComposite, SWT.SINGLE);
 		issueLinkTypeList.setLabelProvider(new LabelProvider() {
 			@Override

@@ -270,9 +270,11 @@ extends WizardHopPage
 
 
 						//IssueResolution
-						for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
-							if (ir.getIssueResolutionID().equals(Issue.DEFAULT_ISSUE_RESOLUTION_ID))
-								issue.setIssueResolution(ir);
+						if (selectedIssueType != null) {
+							for (IssueResolution ir : selectedIssueType.getIssueResolutions()) {
+								if (ir.getIssueResolutionID().equals(Issue.DEFAULT_ISSUE_RESOLUTION_ID))
+									issue.setIssueResolution(ir);
+							}
 						}
 					}
 				});
