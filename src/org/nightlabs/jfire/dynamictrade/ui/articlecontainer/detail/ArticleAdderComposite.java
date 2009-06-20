@@ -18,6 +18,7 @@ import org.nightlabs.jfire.accounting.Price;
 import org.nightlabs.jfire.accounting.id.TariffID;
 import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.dynamictrade.ui.resource.Messages;
+import org.nightlabs.jfire.dynamictrade.ui.template.SelectDynamicProductTemplateDialog;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.Unit;
@@ -48,14 +49,14 @@ extends ArticleBaseComposite
 	}
 
 	public ArticleAdderComposite(Composite parent, ArticleAdder articleAdder,boolean isScriptable)
-	{		
+	{
 		super(parent, articleAdder.getSegmentEdit().getArticleContainer(), (DynamicProductType)articleAdder.getProductType());
 		this.articleAdder = articleAdder;
 		setScriptable(isScriptable);
 		createUI();
 	}
-	
-	
+
+
 	@Override
 	protected void createUI_additionalElements_comp1(Composite parent)
 	{
@@ -72,6 +73,25 @@ extends ArticleBaseComposite
 				addArticle();
 			}
 		});
+
+
+
+
+
+		// TODO BEGIN TEST - MOVE TO ArticleBaseComposite!
+		++comp1.getGridLayout().numColumns;
+		Button templateButton = new Button(comp1, SWT.PUSH);
+		templateButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		templateButton.setText("T");
+		templateButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				SelectDynamicProductTemplateDialog dialog = new SelectDynamicProductTemplateDialog(getShell());
+				dialog.open();
+			}
+		});
+		// TODO END TEST
 	}
 
 	@Override
@@ -116,7 +136,7 @@ extends ArticleBaseComposite
 					SegmentID segmentID = (SegmentID) JDOHelper.getObjectId(segment);
 					ProductType productType = articleAdder.getProductType();
 					ProductTypeID productTypeID = (ProductTypeID) JDOHelper.getObjectId(productType);
-					
+
 					Article article = articleAdder.createArticle(segmentID, offerID, productTypeID, quantity, unitID, tariffID, productName, singlePrice, true, false);
 					List<Article> articles = new ArrayList<Article>(1); articles.add(article);
 					segmentEdit.getClientArticleSegmentGroupSet().addArticles(articles);
