@@ -33,7 +33,7 @@ import org.nightlabs.jfire.trade.ui.TradePlugin;
  * @author Fitas Amine - fitas [dot] nightlabs [dot] de
  *
  */
-public class ProductTypeLazyTree 
+public class ProductTypeLazyTree
 extends AbstractTreeComposite<ProductType>
 {
 	protected static class ProductTypeTreeContentProvider
@@ -132,17 +132,24 @@ extends AbstractTreeComposite<ProductType>
 	protected static class ProductTypeTreeLabelProvider extends JDOObjectLazyTreeLabelProvider<ProductTypeID, ProductType, ProductTypeLazyTreeNode>
 	{
 		@Override
-		protected String getJDOObjectText(ProductType jdoObject, int columnIndex) {
+		protected String getJDOObjectText(ProductTypeID jdoObjectID, ProductType jdoObject, int columnIndex) {
+			if (jdoObject == null)
+				return jdoObjectID == null ? null : jdoObjectID.getPrimaryKey();
+
 			return jdoObject.getName().getText();
 		}
 
 		@Override
-		protected Image getJDOObjectImage(ProductType productType, int columnIndex) {
-			if (columnIndex == 0)
+		protected Image getJDOObjectImage(ProductTypeID jdoObjectID, ProductType productType, int columnIndex) {
+			if (columnIndex == 0) {
+				if (productType == null)
+					return null;
+
 				return SharedImages.getSharedImage(TradePlugin.getDefault(),
 						ProductTypeTreeLabelProvider.class, productType.getInheritanceNatureString());
+			}
 
-			return super.getJDOObjectImage(productType, columnIndex);
+			return super.getJDOObjectImage(jdoObjectID, productType, columnIndex);
 		}
 	}
 
