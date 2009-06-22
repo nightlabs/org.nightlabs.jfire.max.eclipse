@@ -21,14 +21,13 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
-import org.nightlabs.jfire.trade.id.ArticleContainerID;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  *
  */
-public class ShowLinkedIssuePage 
-extends EntityEditorPageWithProgress 
+public class ShowLinkedIssuePage
+extends EntityEditorPageWithProgress
 {
 	public static class Factory implements IEntityEditorPageFactory {
 		@Override
@@ -62,7 +61,7 @@ extends EntityEditorPageWithProgress
 		showLinkedIssueSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 		getManagedForm().addPart(showLinkedIssueSection);
 		createContextMenu();
-		
+
 		if (controller.isLoaded()) {
 			showLinkedIssueSection.setLinkedIssues(controller.getLinkedIssues());
 		}
@@ -103,14 +102,14 @@ extends EntityEditorPageWithProgress
 		return (ShowLinkedIssuePageController)getPageController();
 	}
 
-	private class LinkToIssueAction extends Action {		
+	private class LinkToIssueAction extends Action {
 		private Object linkedObject;
 		public LinkToIssueAction(Object linkedObject) {
 			this.linkedObject = linkedObject;
 			setId(LinkToIssueAction.class.getName());
 			setImageDescriptor(SharedImages.getSharedImageDescriptor(
-					IssueTrackingTradePlugin.getDefault(), 
-					ShowLinkedIssueSection.class, 
+					IssueTrackingTradePlugin.getDefault(),
+					ShowLinkedIssueSection.class,
 			"Link")); //$NON-NLS-1$
 
 			setToolTipText("Link to another issue");
@@ -129,6 +128,7 @@ extends EntityEditorPageWithProgress
 				}
 			};
 			dialog.open();
-		}		
+
+		}
 	}
 }
