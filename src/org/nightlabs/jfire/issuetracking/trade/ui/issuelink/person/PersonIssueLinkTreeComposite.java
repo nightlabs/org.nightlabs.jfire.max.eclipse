@@ -9,7 +9,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.GC;
@@ -17,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
@@ -37,7 +41,7 @@ import org.nightlabs.notification.NotificationListener;
 public class PersonIssueLinkTreeComposite
 extends AbstractTreeComposite
 {
-	
+
 	/**
 	 * LOG4J logger used by this class
 	 */
@@ -46,8 +50,7 @@ extends AbstractTreeComposite
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
-	
-	
+
 	public PersonIssueLinkTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
@@ -60,15 +63,19 @@ extends AbstractTreeComposite
 						Issue.class, issueChangeListener);
 			}
 		});
+
+		getTree().setHeaderVisible(false);
+		getTree().getColumn(0).setResizable(false);
 	}
-	
+
+
 	private NotificationListener issueChangeListener = new NotificationAdapterSWTThreadSync() {
 		public void notify(NotificationEvent evt) {
 			logger.info("changeListener got notified with event "+evt); //$NON-NLS-1$
 			refresh(true);
 		}
 	};
-	
+
 	private class ContentProvider extends TreeContentProvider {
 
 		public Object[] getElements(Object inputElement) {
@@ -101,7 +108,7 @@ extends AbstractTreeComposite
 				};
 				// for empty string description no need to add the desc node
 				if(((IssueLink)parentElement).getIssue().getDescription().getText().isEmpty())
-				return	new Object[] {subjectlegalEntityIssuesLinkNode};	
+					return	new Object[] {subjectlegalEntityIssuesLinkNode};	
 				// concatnate the Comments nodes with the Desc 
 				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};
 				return concat(arrayDesc,
@@ -147,14 +154,18 @@ extends AbstractTreeComposite
 
 	private class LabelProvider extends TableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
-			return getText(element);
+
+			if(columnIndex==0)		
+				return getText(element);
+			else
+				return "";
 		}
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			if (element instanceof IssueLinkTreeNode)
+			if (element instanceof IssueLinkTreeNode&&columnIndex==0)
 				return ((IssueLinkTreeNode)element).getIcon();
-			if (element instanceof IssueLink)
+			if (element instanceof IssueLink&&columnIndex==1)
 				return getCombiIssueMarkerImage(((IssueLink)element).getIssue());
 			return null;
 		}
@@ -204,11 +215,12 @@ extends AbstractTreeComposite
 				return ((IssueComment)element).getText();
 			if (element instanceof IssueDescription)
 				return ((IssueDescription)element).getText();
+
 			return ""; //$NON-NLS-1$
 		}
 	}
-	
-	
+
+
 	public void setRootNode(IssueLinkTreeNode rootNode)
 	{
 		if (rootNode == null)
@@ -220,7 +232,7 @@ extends AbstractTreeComposite
 			}
 		});
 	}
-	
+
 	/**
 	 * @see org.nightlabs.base.ui.tree.AbstractTreeComposite#setTreeProvider(org.eclipse.jface.viewers.TreeViewer)
 	 */
@@ -235,7 +247,13 @@ extends AbstractTreeComposite
 
 	@Override
 	public void createTreeColumns(Tree tree) {
-		// TODO Auto-generated method stub
+		TreeColumn column = new TreeColumn(tree, SWT.RIGHT);
+		column.setAlignment(SWT.RIGHT);
+		column.setResizable(false);
+		TableLayout l = new TableLayout();
+		l.addColumnData(new ColumnWeightData(3));
+		l.addColumnData(new ColumnWeightData(1));
+		tree.setLayout(l);
 
 	}
 
