@@ -33,15 +33,14 @@ import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 
 /**
  * @author Chairat Kongarayawetchakun <!-- chairat [AT] nightlabs [DOT] de -->
- *
  */
-public class SelectIssueWizardPage 
+public class SelectIssueWizardPage
 extends WizardHopPage
 {
 	//Issue
 	private Button createNewIssueRadio;
 	private Button selectExistingIssueRadio;
-	
+
 	private Composite issueEntryListViewerComposite;
 	private IssueEntryListViewer issueEntryListViewer;
 
@@ -82,7 +81,7 @@ extends WizardHopPage
 	public SelectIssueWizardPage(Object attachedObject) {
 		super(SelectIssueWizardPage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.titleDefault"), SharedImages.getWizardPageImageDescriptor(IssueTrackingPlugin.getDefault(), SelectIssueWizardPage.class)); //$NON-NLS-1$
 		this.attachedObject = attachedObject;
-		
+
 		setTitle(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.title")); //$NON-NLS-1$
 
 		String objectNameString = attachedObject.getClass().getSimpleName();
@@ -95,24 +94,26 @@ extends WizardHopPage
 		mainComposite.getGridLayout().numColumns = 1;
 
 		//Issue
-		createNewIssueRadio = new Button(mainComposite, SWT.RADIO);		
+		createNewIssueRadio = new Button(mainComposite, SWT.RADIO);
 		createNewIssueRadio.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.radio.createNewIssue.text")); //$NON-NLS-1$
 		createNewIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		createNewIssueRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setIssueAction(ActionForIssue.createNewIssue);
 			}
 		});
-		
+
 		selectExistingIssueRadio = new Button(mainComposite, SWT.RADIO);
 		selectExistingIssueRadio.setText(Messages.getString("org.nightlabs.jfire.issuetracking.ui.issuelink.attach.SelectIssueWizardPage.radio.selectExistingIssue.text")); //$NON-NLS-1$
 		selectExistingIssueRadio.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectExistingIssueRadio.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setIssueAction(ActionForIssue.selectExistingIssue);
 			}
 		});
-		
+
 		issueEntryListViewer = new IssueEntryListViewer(new IssueEntryListFactory().createEntry()) {
 			@Override
 			protected void addResultTableListeners(AbstractTableComposite tableComposite) {
@@ -131,7 +132,7 @@ extends WizardHopPage
 					}
 				});
 			}
-		};	
+		};
 
 		issueEntryListViewerComposite = issueEntryListViewer.createComposite(mainComposite);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -144,7 +145,9 @@ extends WizardHopPage
 				setIssueAction(ActionForIssue.selectExistingIssue);
 			}
 		});
-		
+
+		issueEntryListViewer.getIssueTable().setIsTableInWizard(true);
+
 		return mainComposite;
 	}
 
@@ -169,8 +172,8 @@ extends WizardHopPage
 				default:
 					throw new IllegalStateException("Unknown actionForIssueLinkType: " + actionForIssue); //$NON-NLS-1$
 			}
-		
-		else 
+
+		else
 			return false;
 	}
 
@@ -178,19 +181,19 @@ extends WizardHopPage
 //	public void onFinish() {
 //		selectedIssue.createIssueLink(issueLinkType, linkedObject)
 //	}
-	
+
 	private Issue newIssue;
 	private CreateIssueDetailWizardPage createIssueGeneralWizardPage;
 	@Override
 	public boolean canFlipToNextPage() {
 		return actionForIssue == ActionForIssue.createNewIssue;
 	}
-	
+
 	@Override
 	public boolean canBeLastPage() {
 		return super.canBeLastPage();
 	}
-	
+
 	public Issue getIssue() {
 		switch (actionForIssue) {
 		case createNewIssue:
@@ -198,10 +201,10 @@ extends WizardHopPage
 		case selectExistingIssue:
 			return selectedIssue;
 		}
-		
+
 		return null;
 	}
-	
+
 	private IssueLinkType issueLinkType;
 	public void setIssueLinkType(IssueLinkType issueLinkType) {
 		this.issueLinkType = issueLinkType;

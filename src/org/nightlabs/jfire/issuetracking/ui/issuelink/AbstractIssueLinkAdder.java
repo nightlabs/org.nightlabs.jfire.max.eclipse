@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.issuetracking.ui.issuelink;
 
@@ -14,40 +14,40 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * This class should be subclassed to create a composite that can contain the UI 
+ * This class should be subclassed to create a composite that can contain the UI
  * for selecting the object to be linked to an issue.
  * <p>
- * Normally, The UI created in the adder composite is an instance of <link>SearchEntryViewer</link> 
- * that has the seach button to do searching.  
+ * Normally, The UI created in the adder composite is an instance of <link>SearchEntryViewer</link>
+ * that has the seach button to do searching.
  * </p>
- * 
+ *
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
  */
-public abstract class AbstractIssueLinkAdder 
-implements IssueLinkAdder 
+public abstract class AbstractIssueLinkAdder
+implements IssueLinkAdder
 {
 	private IssueLinkHandlerFactory issueLinkHandlerFactory;
 	private ListenerList selectionDoubleClickListeners = new ListenerList();
-	
+
 	/**
-	 * 
+	 *
 	 */
-	public void init(IssueLinkHandlerFactory issueLinkHandlerFactory) 
+	public void init(IssueLinkHandlerFactory issueLinkHandlerFactory)
 	{
 		this.issueLinkHandlerFactory = issueLinkHandlerFactory;
 	}
-	
+
 	/**
 	 * Gets the {@link IssueLinkHandlerFactory}.
 	 * @return  the {@link IssueLinkHandlerFactory}
 	 */
-	public IssueLinkHandlerFactory getIssueLinkHandlerFactory() 
+	public IssueLinkHandlerFactory getIssueLinkHandlerFactory()
 	{
 		return issueLinkHandlerFactory;
 	}
-	
+
 	private Composite composite = null;
-	
+
 	/**
 	 * Creates the composite and then calls the search function to show elements for choosing.
 	 */
@@ -57,7 +57,7 @@ implements IssueLinkAdder
 
 		composite = doCreateComposite(parent);
 		doSearch();
-		
+
 		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e)
 			{
@@ -70,7 +70,7 @@ implements IssueLinkAdder
 	}
 
 	/**
-	 * This method is called by {@link #createComposite(Composite)}. 
+	 * This method is called by {@link #createComposite(Composite)}.
 	 * Implement it and return a new instance
 	 * of <tt>Composite</tt>.
 	 *
@@ -78,7 +78,7 @@ implements IssueLinkAdder
 	 * @return The newly created <tt>Composite</tt>.
 	 */
 	protected abstract Composite doCreateComposite(Composite parent);
-	
+
 	/**
 	 * This method does searching thing to choose the object to be linked.
 	 * Implement it and do searching thing in its.
@@ -99,7 +99,7 @@ implements IssueLinkAdder
 		return composite;
 	}
 
-	public void onDispose() 
+	public void onDispose()
 	{
 		composite = null;
 	}
@@ -129,20 +129,21 @@ implements IssueLinkAdder
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void addIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
 		selectionDoubleClickListeners.add(listener);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void removeIssueLinkDoubleClickListener(IssueLinkDoubleClickListener listener) {
 		selectionDoubleClickListeners.remove(listener);
 	}
-	
-	protected void notifyIssueLinkDoubleClickListeners() {
+
+
+	public void notifyIssueLinkDoubleClickListeners() {
 		Object[] listeners = selectionDoubleClickListeners.getListeners();
 		IssueLinkDoubleClickedEvent evt = new IssueLinkDoubleClickedEvent(this);
 		for (Object l : listeners) {
