@@ -27,6 +27,7 @@
 package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.jdo.FetchPlan;
@@ -37,6 +38,7 @@ import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
@@ -75,9 +77,16 @@ public class PrintAction extends ArticleContainerReportAction
 					ReportRegistryItemID defLayoutID = cfMod.getDefaultAvailEntry(getReportRegistryItemType());
 					if (defLayoutID == null)
 						throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
+					
+					RenderReportRequest renderReportRequest = new RenderReportRequest(defLayoutID, params);
+					
+					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(articleContainerID, defLayoutID, params);
+					if (locale == null)
+						locale = Locale.getDefault();
+					renderReportRequest.setLocale(locale);
+					
 					PrintReportLayoutUtil.printReportLayout(
-							defLayoutID,
-							params,
+							renderReportRequest,
 							monitor
 						);
 				} catch (Exception e) {

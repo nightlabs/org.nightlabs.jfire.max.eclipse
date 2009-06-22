@@ -2,12 +2,14 @@ package org.nightlabs.jfire.reporting.trade.ui.overview.action;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.trade.ui.JFireReportingTradePlugin;
+import org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.ArticleContainerReportActionHelper;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
 import org.nightlabs.jfire.trade.ArticleContainer;
@@ -38,9 +40,8 @@ extends AbstractArticleContainerAction
 
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
 		@Override
-		protected String getReportUseCaseID() {
-			// Use null to force lookup by reportLayoutType
-			return null;
+		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
+			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params);
 		}
 	};
 

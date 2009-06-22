@@ -28,6 +28,7 @@ package org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.pr
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,9 +59,9 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
 		@Override
-		protected String getReportUseCaseID() {
-			// Use null to force lookup by reportLayoutType
-			return null;
+		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID,
+				Map<String, Object> params) {
+			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params);
 		}
 	};
 	

@@ -10,6 +10,7 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.base.ui.config.ConfigUtil;
 import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
@@ -48,8 +49,10 @@ public class ArticleContainerPrinter implements IArticleContainerPrinter {
 			throw new IllegalStateException("No default ReportLayout was set for the category type "+ReportingTradeConstants.REPORT_REGISTRY_ITEM_TYPE_INVOICE); //$NON-NLS-1$
 		try {
 			PrintReportLayoutUtil.printReportLayout(
-					defLayoutID,
-					params,
+					new RenderReportRequest(
+							defLayoutID,
+							params
+					),
 					new NullProgressMonitor()
 			);
 		} catch (PrinterException e) {
