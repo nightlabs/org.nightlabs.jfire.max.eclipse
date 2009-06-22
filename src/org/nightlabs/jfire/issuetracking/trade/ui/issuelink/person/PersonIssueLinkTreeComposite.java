@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -21,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadSync;
 import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.base.ui.tree.AbstractTreeComposite;
@@ -30,7 +34,10 @@ import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueComment;
 import org.nightlabs.jfire.issue.IssueDescription;
 import org.nightlabs.jfire.issue.IssueLink;
+import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
+import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.notification.NotificationEvent;
 import org.nightlabs.notification.NotificationListener;
 
@@ -50,7 +57,6 @@ extends AbstractTreeComposite
 	private static final Object[] EMPTY_DATA = new Object[]{};
 	private Collection<Image> iconImages = new ArrayList<Image>();
 
-
 	public PersonIssueLinkTreeComposite(Composite parent, int style)
 	{
 		super(parent, style);
@@ -64,8 +70,31 @@ extends AbstractTreeComposite
 			}
 		});
 
-		getTree().setHeaderVisible(false);
-		getTree().getColumn(0).setResizable(false);
+
+		// open up the Issue in the Issue Editor.
+		getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent e) {
+				StructuredSelection s = (StructuredSelection)e.getSelection();
+				
+				if (s.isEmpty())
+					return;
+				
+				Object o = s.getFirstElement();
+				if (o instanceof IssueLink)
+				{	
+					Issue issue = ((IssueLink)o).getIssue();
+					IssueEditorInput issueEditorInput = new IssueEditorInput(IssueID.create(issue.getOrganisationID(), issue.getIssueID()));
+					try {
+						Editor2PerspectiveRegistry.sharedInstance().openEditor(issueEditorInput, IssueEditor.EDITOR_ID);
+					} catch (Exception e1) {
+						throw new RuntimeException(e1);
+					}
+				}				
+			}
+
+		}
+		);
+
 	}
 
 
@@ -254,7 +283,8 @@ extends AbstractTreeComposite
 		l.addColumnData(new ColumnWeightData(3));
 		l.addColumnData(new ColumnWeightData(1));
 		tree.setLayout(l);
-
+		getTree().setHeaderVisible(false);
+		getTree().getColumn(0).setResizable(false);
 	}
 
 }
