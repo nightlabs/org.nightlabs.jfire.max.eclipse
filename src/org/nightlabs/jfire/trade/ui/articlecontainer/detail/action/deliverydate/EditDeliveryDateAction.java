@@ -13,6 +13,7 @@ import org.nightlabs.jfire.store.dao.DeliveryNoteDAO;
 import org.nightlabs.jfire.store.id.DeliveryNoteID;
 import org.nightlabs.jfire.trade.Article;
 import org.nightlabs.jfire.trade.ArticleContainer;
+import org.nightlabs.jfire.trade.ArticleDeliveryDateSet;
 import org.nightlabs.jfire.trade.DeliveryDateMode;
 import org.nightlabs.jfire.trade.Offer;
 import org.nightlabs.jfire.trade.dao.OfferDAO;
@@ -32,7 +33,7 @@ extends GenericArticleEditAction
 	public boolean calculateEnabled(Set<ArticleSelection> articleSelections)
 	{
 		ArticleContainer ac = getArticleContainer();
-		// check if ArticleContainer is Offer
+		// check if ArticleContainer is Offer or Order
 		if (ac instanceof Offer) {
 			// should be enabled only, if there's no finalized offer involved!
 			Set<OfferID> offerIDs = new HashSet<OfferID>();
@@ -103,7 +104,9 @@ extends GenericArticleEditAction
 	public void run()
 	{
 		Shell shell = getArticleContainerEdit().getComposite().getShell();
-		EditDeliveryDateDialog dialog = new EditDeliveryDateDialog(shell, getArticles(), getMode());
+		ArticleDeliveryDateSet articleDeliveryDateSet = new ArticleDeliveryDateSet(getMode());
+		articleDeliveryDateSet.setArticles(getArticles());
+		EditDeliveryDateDialog dialog = new EditDeliveryDateDialog(shell, articleDeliveryDateSet);
 		dialog.open();
 	}
 

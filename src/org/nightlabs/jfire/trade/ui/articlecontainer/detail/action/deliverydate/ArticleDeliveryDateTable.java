@@ -1,5 +1,10 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate;
 
+import java.util.Date;
+import java.util.Map;
+
+import javax.jdo.FetchPlan;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -11,9 +16,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableLabelProvider;
+import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.DeliveryDateMode;
+import org.nightlabs.jfire.trade.ArticleDeliveryDateSet;
+import org.nightlabs.jfire.trade.dao.ArticleDAO;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.DateFormatter;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
@@ -22,27 +32,25 @@ import org.nightlabs.l10n.DateFormatter;
 public class ArticleDeliveryDateTable
 extends AbstractTableComposite<Article>
 {
-	class LabelProvider extends TableLabelProvider
-	{
+	class LabelProvider extends TableLabelProvider {
 		/* (non-Javadoc)
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 		 */
 		@Override
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof Article) {
-				Article article = (Article) element;
+			if (element instanceof Map.Entry) {
+				Map.Entry<ArticleID, Date> entry = (Map.Entry<ArticleID, Date>) element;
+				Article article = ArticleDAO.sharedInstance().getArticle(entry.getKey(),
+						new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_PRODUCT_TYPE, ProductType.FETCH_GROUP_NAME},
+						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
+						new NullProgressMonitor());
+				Date deliveryDate = entry.getValue();
 				switch (columnIndex) {
 				case 0:
 					return article.getProductType().getName().getText();
 				case 1:
-					switch (mode) {
-					case OFFER:
-						if (article.getDeliveryDateOffer() != null)
-							return DateFormatter.sharedInstance().formatDateShort(article.getDeliveryDateOffer(), true);
-					case DELIVERY_NOTE:
-						if (article.getDeliveryDateDeliveryNote() != null)
-							return DateFormatter.sharedInstance().formatDateShort(article.getDeliveryDateDeliveryNote(), true);
-					}
+					if (deliveryDate != null)
+						return DateFormatter.formatDateShort(deliveryDate, true);
 				}
 				return "";
 			}
@@ -50,11 +58,22 @@ extends AbstractTableComposite<Article>
 		}
 	}
 
-	private DeliveryDateMode mode;
+	class ContentProvider extends ArrayContentProvider {
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ArrayContentProvider#getElements(java.lang.Object)
+		 */
+		@Override
+		public Object[] getElements(Object inputElement)
+		{
+			ArticleDeliveryDateSet articleDeliveryDateSet = (ArticleDeliveryDateSet) inputElement;
+			if (articleDeliveryDateSet != null && articleDeliveryDateSet.getArticleID2DeliveryDate() != null)
+				return articleDeliveryDateSet.getArticleID2DeliveryDate().entrySet().toArray();
+			return new Object[] {};
+		}
+	}
 
-	public ArticleDeliveryDateTable(Composite parent, int style, DeliveryDateMode mode) {
+	public ArticleDeliveryDateTable(Composite parent, int style) {
 		super(parent, style, false);
-		this.mode = mode;
 		initTable();
 	}
 
@@ -69,7 +88,7 @@ extends AbstractTableComposite<Article>
 		deliveryDateColumn.setText("Estimated Delivery Date");
 
 		TableViewerColumn deliveryDateViewerColumn = new TableViewerColumn(getTableViewer(), deliveryDateColumn);
-		deliveryDateViewerColumn.setEditingSupport(new ArticleDeliveryDateEditingSupport(getTableViewer(), mode));
+		deliveryDateViewerColumn.setEditingSupport(new ArticleDeliveryDateEditingSupport(getTableViewer()));
 
 		TableLayout tl = new TableLayout();
 		tl.addColumnData(new ColumnWeightData(1, true));
@@ -83,7 +102,10 @@ extends AbstractTableComposite<Article>
 	@Override
 	protected void setTableProvider(TableViewer tableViewer) {
 		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setContentProvider(new ContentProvider());
 	}
 
+	public void setArticleDeliveryDateSet(ArticleDeliveryDateSet articleDeliveryDateSet) {
+		setInput(articleDeliveryDateSet);
+	}
 }

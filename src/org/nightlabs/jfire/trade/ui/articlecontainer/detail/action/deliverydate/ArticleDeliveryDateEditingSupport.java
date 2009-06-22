@@ -1,14 +1,14 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.celleditor.DateTimeCellEditor;
-import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.DeliveryDateMode;
+import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.DateFormatter;
 
 /**
@@ -17,14 +17,11 @@ import org.nightlabs.l10n.DateFormatter;
  */
 public class ArticleDeliveryDateEditingSupport extends EditingSupport
 {
-	private DeliveryDateMode mode;
-
 	/**
 	 * @param viewer
 	 */
-	public ArticleDeliveryDateEditingSupport(ColumnViewer viewer, DeliveryDateMode mode) {
+	public ArticleDeliveryDateEditingSupport(ColumnViewer viewer) {
 		super(viewer);
-		this.mode = mode;
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +30,7 @@ public class ArticleDeliveryDateEditingSupport extends EditingSupport
 	@Override
 	protected boolean canEdit(Object element)
 	{
-		if (element instanceof Article && mode != null) {
+		if (element instanceof Map.Entry<?, ?>) {
 			return true;
 		}
 		return false;
@@ -45,7 +42,7 @@ public class ArticleDeliveryDateEditingSupport extends EditingSupport
 	@Override
 	protected CellEditor getCellEditor(Object element)
 	{
-		if (element instanceof Article){
+		if (element instanceof Map.Entry<?, ?>){
 			return new DateTimeCellEditor((Composite)getViewer().getControl(), DateFormatter.FLAGS_DATE_SHORT, false);
 		}
 		return null;
@@ -57,14 +54,9 @@ public class ArticleDeliveryDateEditingSupport extends EditingSupport
 	@Override
 	protected Object getValue(Object element)
 	{
-		if (element instanceof Article) {
-			Article article = (Article) element;
-			switch (mode){
-				case OFFER:
-					return article.getDeliveryDateOffer();
-				case DELIVERY_NOTE:
-					return article.getDeliveryDateDeliveryNote();
-			}
+		if (element instanceof Map.Entry<?, ?>) {
+			Map.Entry<ArticleID, Date> entry = (Map.Entry<ArticleID, Date>) element;
+			return entry.getValue();
 		}
 		return null;
 	}
@@ -75,8 +67,8 @@ public class ArticleDeliveryDateEditingSupport extends EditingSupport
 	@Override
 	protected void setValue(Object element, Object value)
 	{
-		if (element instanceof Article) {
-			Article article = (Article) element;
+		if (element instanceof Map.Entry<?, ?>) {
+			Map.Entry<ArticleID, Date> entry = (Map.Entry<ArticleID, Date>) element;
 			Date deliveryDate = null;
 			if (value instanceof Date) {
 				deliveryDate = (Date) value;
@@ -85,16 +77,9 @@ public class ArticleDeliveryDateEditingSupport extends EditingSupport
 				deliveryDate = null;
 			}
 			else {
-				throw new IllegalArgumentException("Param value in neither a Date nor null!");
+				throw new IllegalArgumentException("Param value is neither a Date nor null!");
 			}
-			switch (mode){
-				case OFFER:
-					article.setDeliveryDateOffer(deliveryDate);
-					break;
-				case DELIVERY_NOTE:
-					article.setDeliveryDateDeliveryNote(deliveryDate);
-					break;
-			}
+			entry.setValue(deliveryDate);
 		}
 		getViewer().refresh(true);
 	}
