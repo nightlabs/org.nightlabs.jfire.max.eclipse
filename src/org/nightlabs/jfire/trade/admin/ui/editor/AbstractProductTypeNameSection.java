@@ -33,11 +33,11 @@ public abstract class AbstractProductTypeNameSection
 extends ToolBarSectionPart
 implements IProductTypeSectionPart
 {
-	// TODO should be named FETCH_GROUPS_NAME (plural since it is an array) 
+	// TODO should be named FETCH_GROUPS_NAME (plural since it is an array)
 	public String[] FETCH_GROUP_NAME = new String[] {FetchPlan.DEFAULT, ProductType.FETCH_GROUP_NAME};
 
 	private static final Logger logger = Logger.getLogger(AbstractProductTypeNameSection.class);
-	
+
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent) {
 		this(page, parent, ExpandableComposite.TITLE_BAR);
 	}
@@ -48,7 +48,7 @@ implements IProductTypeSectionPart
 
 	public AbstractProductTypeNameSection(IFormPage page, Composite parent, int style, String title) {
 		super(page, parent, style, title);
-		productTypeName = new I18nTextEditorTable(getContainer());
+		productTypeName = createI18nTextEditor(getContainer());
 		productTypeName.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				if (!ignoreProductTypeNameModify) {
@@ -79,6 +79,10 @@ implements IProductTypeSectionPart
 //		}
 //		});
 //		getSection().setTextClient(inheritProductTypeName);
+	}
+
+	protected II18nTextEditor createI18nTextEditor(Composite parent) {
+		return new I18nTextEditorTable(parent);
 	}
 
 	private static class ProductTypeHolder {
@@ -120,12 +124,12 @@ implements IProductTypeSectionPart
 		if (pageController == null || getSection() == null || getSection().isDisposed())
 			return;
 
-		productTypePageController = pageController; 
+		productTypePageController = pageController;
 
 		this.productType = pageController.getProductType();
 		if (logger.isDebugEnabled())
 			logger.debug("setProductTypePageController: PageControllerObject (ProductType) is " + this.productType); //$NON-NLS-1$
-		
+
 		if (productType == null) {
 			setInheritanceSelection(false);
 			productTypeName.setI18nText(null);

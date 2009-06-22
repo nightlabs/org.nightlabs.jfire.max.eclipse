@@ -19,7 +19,7 @@ import org.nightlabs.jfire.trade.admin.ui.resource.Messages;
 /**
  * Abstract Base class which implements the {@link IProductTypeDetailPage} and
  * should be used for all detail pages for {@link ProductType}s.
- * 
+ *
  * @author Daniel.Mazurek [at] NightLabs [dot] de
  */
 public abstract class AbstractProductTypeDetailPage
@@ -27,7 +27,7 @@ extends EntityEditorPageWithProgress
 implements IProductTypeDetailPage
 {
 	private static final Logger logger = Logger.getLogger(AbstractProductTypeDetailPage.class);
-	
+
 	/**
 	 * @param editor the FormEditor the page belongs to
 	 * @param id the ID of the page
@@ -56,9 +56,9 @@ implements IProductTypeDetailPage
 	private IProductTypeSectionPart nameSection = null;
 	/**
 	 * Returns the {@link IProductTypeSectionPart} which is responsible for displaying the name
-	 * of the {@link ProductType}. 
-	 * Returns the {@link IProductTypeSectionPart} created by {@link #createNameSection(Composite)}.  
-	 * 
+	 * of the {@link ProductType}.
+	 * Returns the {@link IProductTypeSectionPart} created by {@link #createNameSection(Composite)}.
+	 *
 	 * @return the IProductTypeSectionPart which is responsible for displaying the name
 	 * of the {@link ProductType}.
 	 */
@@ -67,10 +67,10 @@ implements IProductTypeDetailPage
 	}
 	/**
 	 * Creates the {@link IProductTypeSectionPart} which is responsible for displaying the name
-	 * of the {@link ProductType}. 
+	 * of the {@link ProductType}.
 	 * @param parent the parent composite
 	 * @return the {@link IProductTypeSectionPart} which is responsible for displaying the name
-	 * of the {@link ProductType}. 
+	 * of the {@link ProductType}.
 	 */
 	protected abstract IProductTypeSectionPart createNameSection(Composite parent);
 
@@ -79,12 +79,12 @@ implements IProductTypeDetailPage
 		return vendorSection;
 	}
 	/**
-	 * Returns the {@link IProductTypeSectionPart} which is responsible for 
-	 * displaying and editing the vendor of the {@link ProductType}. 
-	 * 
+	 * Returns the {@link IProductTypeSectionPart} which is responsible for
+	 * displaying and editing the vendor of the {@link ProductType}.
+	 *
 	 * @param parent the parent composite
-	 * @return the {@link IProductTypeSectionPart} which is responsible for 
-	 * displaying and editing the vendor of the {@link ProductType}. 
+	 * @return the {@link IProductTypeSectionPart} which is responsible for
+	 * displaying and editing the vendor of the {@link ProductType}.
 	 */
 	protected abstract IProductTypeSectionPart createVendorSection(Composite parent);
 
@@ -93,10 +93,10 @@ implements IProductTypeDetailPage
 		return ownerSection;
 	}
 	/**
-	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for 
+	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for
 	 * displaying and editing the owner of the {@link ProductType}.
 	 * @param parent the parent composite
-	 * @return the {@link IProductTypeSectionPart} which is responsible for 
+	 * @return the {@link IProductTypeSectionPart} which is responsible for
 	 * displaying and editing the owner of the {@link ProductType}.
 	 */
 	protected abstract IProductTypeSectionPart createOwnerSection(Composite parent);
@@ -112,17 +112,17 @@ implements IProductTypeDetailPage
 		return saleAccessControlSection;
 	}
 	/**
-	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for 
+	 * Creates and returns the {@link IProductTypeSectionPart} which is responsible for
 	 * displaying and editing sale access states of the product type.
 	 * @param parent the parent composite
-	 * @return the {@link IProductTypeSectionPart} which is responsible for 
+	 * @return the {@link IProductTypeSectionPart} which is responsible for
 	 * displaying and editing sale access states of the product type.
-	 */	
+	 */
 	protected abstract IProductTypeSectionPart createSaleAccessControlSection(Composite parent);
 
 	@Override
 	protected void addSections(Composite parent)
-	{				
+	{
 		nameSection = createNameSection(parent);
 		if (nameSection != null) {
 			nameSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -138,18 +138,21 @@ implements IProductTypeDetailPage
 		Composite wrapper = new XComposite(parent, SWT.NONE);
 		wrapper.setLayout(new GridLayout(2, true));
 		wrapper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		ownerSection = createOwnerSection(wrapper);
 		if (ownerSection != null) {
-			ownerSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));	
+			ownerSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 			getManagedForm().addPart(ownerSection);
 		}
 
 		vendorSection = createVendorSection(wrapper);
 		if (vendorSection != null) {
-			vendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));	
+			vendorSection.getSection().setLayoutData(new GridData(GridData.FILL_BOTH));
 			getManagedForm().addPart(vendorSection);
-		}		
+		}
+
+		if (ownerSection == null && vendorSection == null)
+			wrapper.dispose();
 
 		saleAccessControlSection = createSaleAccessControlSection(parent);
 		if (saleAccessControlSection != null) {
@@ -158,10 +161,11 @@ implements IProductTypeDetailPage
 		}
 	}
 
+	@Override
 	public AbstractProductTypePageController getPageController() {
 		return (AbstractProductTypePageController) super.getPageController();
 	}
-	
+
 	@Override
 	protected void handleControllerObjectModified(EntityEditorPageControllerModifyEvent modifyEvent) {
 		//final AbstractProductTypePageController controller = (AbstractProductTypePageController) getPageController();
@@ -214,7 +218,7 @@ implements IProductTypeDetailPage
 		if (saleAccessControlSection != null)
 			saleAccessControlSection.setProductTypePageController(pageController);
 		if (ownerSection != null)
-			ownerSection.setProductTypePageController(pageController);									
+			ownerSection.setProductTypePageController(pageController);
 		if (vendorSection != null)
 			vendorSection.setProductTypePageController(pageController);
 	}
@@ -228,5 +232,5 @@ implements IProductTypeDetailPage
 			return (IProductTypeDetailPageController) getPageController();
 		throw new IllegalStateException("AbstractProductTypeDetailPage should be used with a controller implementing " + IProductTypeDetailPageController.class.getName() + ". The controller is " + getPageController().getClass().getName() + "."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
-		
+
 }
