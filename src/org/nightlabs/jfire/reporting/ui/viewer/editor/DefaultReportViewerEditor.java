@@ -80,11 +80,9 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	 * @see org.nightlabs.jfire.reporting.ui.viewer.editor.ReportViewerEditor#showReport(org.nightlabs.jfire.reporting.ui.Birt.OutputFormat)
 	 */
 	public void showReport(final Birt.OutputFormat format) {
-		RenderReportRequest request = new RenderReportRequest(
-				getViewerInput().getReportRegistryItemID(),
-				getViewerInput().getReportParams(),
-				format
-		);
+		RenderReportRequest request = getViewerInput().getRenderReportRequest().clone();
+		request.setOutputFormat(format);
+		getViewerInput().setRenderReportRequest(request);
 		defaultReportViewerComposite.showReport(request);
 		updateEditorTitle();
 	}
@@ -102,8 +100,9 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 		Job nameJob = new Job("Fetch report name") {
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
+				final ReportRegistryItemID reportID = getViewerInput().getRenderReportRequest().getReportRegistryItemID(); 
 				final ReportRegistryItem report = ReportRegistryItemDAO.sharedInstance().getReportRegistryItem(
-						getReportRegistryItemID(), new String[] {FetchPlan.DEFAULT, ReportRegistryItem.FETCH_GROUP_NAME}, monitor);
+						reportID, new String[] {FetchPlan.DEFAULT, ReportRegistryItem.FETCH_GROUP_NAME}, monitor);
 				defaultReportViewerComposite.getDisplay().asyncExec(new Runnable() {
 					public void run() {
 						setPartName(report.getName().getText());
@@ -121,7 +120,7 @@ public class DefaultReportViewerEditor extends AbstractReportViewerEditor {
 	 * @see org.nightlabs.jfire.reporting.ui.viewer.editor.ReportViewerEditor#getReportRegistryItemID()
 	 */
 	public ReportRegistryItemID getReportRegistryItemID() {
-		return getViewerInput().getReportRegistryItemID();
+		return getViewerInput().getRenderReportRequest().getReportRegistryItemID();
 	}
 
 	/**

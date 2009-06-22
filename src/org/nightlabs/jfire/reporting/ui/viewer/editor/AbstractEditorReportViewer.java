@@ -99,7 +99,7 @@ public abstract class AbstractEditorReportViewer implements ReportViewer {
 			RenderReportRequest renderRequest
 		)
 	{
-		final ReportViewerEditorInput input = new ReportViewerEditorInput(renderRequest.getReportRegistryItemID(), renderRequest.getParameters());
+		final ReportViewerEditorInput input = new ReportViewerEditorInput(renderRequest);
 		final String editorID = getReportViewerEditorID();
 		
 		if (editorID == null)
@@ -133,7 +133,8 @@ public abstract class AbstractEditorReportViewer implements ReportViewer {
 	 */
 	public void showReport(RenderedReportLayout renderedReportLayout)
 	{
-		final ReportViewerEditorInput input = new ReportViewerEditorInput(renderedReportLayout.getHeader().getReportRegistryItemID(), null);
+		final ReportViewerEditorInput input = new ReportViewerEditorInput(
+				new RenderReportRequest(renderedReportLayout.getHeader().getReportRegistryItemID(), null));
 		final String editorID = getReportViewerEditorID();
 		
 		if (editorID == null)

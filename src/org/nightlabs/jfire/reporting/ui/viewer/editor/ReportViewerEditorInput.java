@@ -26,13 +26,12 @@
 
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
+import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 
 /**
@@ -41,16 +40,14 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
  */
 public class ReportViewerEditorInput implements IEditorInput {
 
-	private ReportRegistryItemID reportRegistryItemID;
-	private Map<String, Object> reportParams;
+	private RenderReportRequest renderReportRequest;
 	
 	/**
 	 * 
 	 */
-	public ReportViewerEditorInput(ReportRegistryItemID reportRegistryItemID, Map<String, Object> reportParams) {
+	public ReportViewerEditorInput(RenderReportRequest renderReportRequest) {
 		super();
-		this.reportRegistryItemID = reportRegistryItemID;
-		this.reportParams = reportParams;
+		this.renderReportRequest = renderReportRequest;
 	}
 
 	/* (non-Javadoc)
@@ -95,13 +92,13 @@ public class ReportViewerEditorInput implements IEditorInput {
 	public Object getAdapter(Class adapter) {
 		return null;
 	}
-	
-	public ReportRegistryItemID getReportRegistryItemID() {
-		return reportRegistryItemID;
+
+	public RenderReportRequest getRenderReportRequest() {
+		return renderReportRequest;
 	}
 	
-	public Map<String, Object> getReportParams() {
-		return reportParams;
+	public void setRenderReportRequest(RenderReportRequest renderReportRequest) {
+		this.renderReportRequest = renderReportRequest;
 	}
 	
 	@Override
@@ -109,16 +106,17 @@ public class ReportViewerEditorInput implements IEditorInput {
 		if (obj instanceof ReportViewerEditorInput) {
 			ReportViewerEditorInput other = (ReportViewerEditorInput)obj;
 			boolean regItemEqual = false;
-			if (other.getReportRegistryItemID() != null && other.getReportRegistryItemID().equals(getReportRegistryItemID()))
+			if (other.getRenderReportRequest().getReportRegistryItemID() != null && 
+					other.getRenderReportRequest().getReportRegistryItemID().equals(getRenderReportRequest().getReportRegistryItemID()))
 				regItemEqual = true;
 			boolean paramsEqual =
-				(other.getReportParams() != null && getReportParams() != null) ||
-				(other.getReportParams() == null && getReportParams() == null) ;
+				(other.getRenderReportRequest().getParameters() != null && getRenderReportRequest().getParameters() != null) ||
+				(other.getRenderReportRequest().getParameters() == null && getRenderReportRequest().getParameters() == null) ;
 			
-			if (other.getReportParams() != null) {
-				if (getReportParams() != null) {
-					for (Entry<String, Object> oEntry : other.getReportParams().entrySet()) {
-						Object thisEntry = getReportParams().get(oEntry.getKey());
+			if (other.getRenderReportRequest().getParameters() != null) {
+				if (getRenderReportRequest().getParameters() != null) {
+					for (Entry<String, Object> oEntry : other.getRenderReportRequest().getParameters().entrySet()) {
+						Object thisEntry = getRenderReportRequest().getParameters().get(oEntry.getKey());
 						if (thisEntry == null)
 							paramsEqual = false;
 						else

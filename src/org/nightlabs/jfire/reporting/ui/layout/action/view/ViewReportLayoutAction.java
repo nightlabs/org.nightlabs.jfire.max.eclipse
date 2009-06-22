@@ -40,14 +40,6 @@ extends AbstractViewReportLayoutAction
 {
 	public static final String ID = ViewReportLayoutAction.class.getName();
 	
-	/**
-	 * Returns null to force lookup of ReportUseCase by reportLayoutID
-	 */
-	@Override
-	protected String getReportUseCaseID() {
-		return null;
-	}
-	
 	@Override
 	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
 		return extractReportLayouts(registryItems).size() > 0;

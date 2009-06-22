@@ -66,14 +66,6 @@ extends AbstractPrintReportLayoutAction
 		super(text, style);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction#getReportUseCaseID()
-	 */
-	@Override
-	protected String getReportUseCaseID() {
-		return null;
-	}
-	
 	@Override
 	public boolean calculateEnabled(Collection<ReportRegistryItem> registryItems) {
 		return extractReportLayouts(registryItems).size() > 0;

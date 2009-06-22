@@ -28,7 +28,6 @@ package org.nightlabs.jfire.reporting.ui.layout.action.print;
 
 import java.awt.print.PrinterException;
 import java.io.File;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -70,15 +69,15 @@ public class PrintReportLayoutUtil {
 	 * @throws PrinterException
 	 */
 	public static void printReportLayout(
-			ReportRegistryItemID reportRegistryItemID,
-			Map<String, Object> params,
+			RenderReportRequest renderReportRequest,
 			ProgressMonitor monitor
 		)
 	throws PrinterException
 	{
-		ReportUseCase reportUseCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(reportRegistryItemID.reportRegistryItemType);
+		ReportUseCase reportUseCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(
+				renderReportRequest.getReportRegistryItemID().reportRegistryItemType);
 		if (reportUseCase == null)
-			throw new IllegalStateException("Could not lookup reportUseCase by the reportRegistryItemType: "+reportRegistryItemID.reportRegistryItemType); //$NON-NLS-1$
+			throw new IllegalStateException("Could not lookup reportUseCase by the reportRegistryItemType: "+renderReportRequest.getReportRegistryItemID().reportRegistryItemType); //$NON-NLS-1$
 		ReportViewPrintConfigModule cfMod = ReportViewPrintConfigModule.sharedInstance();
 		UseCaseConfig useCaseConfig = cfMod.getReportUseCaseConfigs().get(reportUseCase.getId());
 		if (useCaseConfig == null)
@@ -92,12 +91,9 @@ public class PrintReportLayoutUtil {
 		
 		if (!canPrint(format))
 			return;
+		renderReportRequest.setOutputFormat(format);
 		
-		RenderReportRequest renderRequest = new RenderReportRequest();
-		renderRequest.setReportRegistryItemID(reportRegistryItemID);
-		renderRequest.setParameters(params);
-		renderRequest.setOutputFormat(format);
-		printReportLayout(renderRequest, reportUseCase.getId(), monitor);
+		printReportLayout(renderReportRequest, reportUseCase.getId(), monitor);
 	}
 
 	/**

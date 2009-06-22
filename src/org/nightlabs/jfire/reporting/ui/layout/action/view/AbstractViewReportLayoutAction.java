@@ -28,6 +28,7 @@ package org.nightlabs.jfire.reporting.ui.layout.action.view;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.jdo.JDOHelper;
@@ -39,6 +40,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.reporting.Birt;
+import org.nightlabs.jfire.reporting.layout.ReportCategory;
 import org.nightlabs.jfire.reporting.layout.ReportLayout;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
@@ -57,41 +59,57 @@ import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
 
 /**
+ * Abstract Action that can be used as basis for actions that show reports in a {@link ReportViewer}.
+ * The parameter acquisition and printing is implemented completely, subclasses
+ * may override the {@link ReportUseCase} and {@link Locale} used for the printing.
+ * 
  * @author Alexander Bieber <alex [AT] nightlabs [DOT] de>
- *
  */
 public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemAction {
 
 	/**
-	 * 
+	 * Create a new {@link AbstractViewReportLayoutAction}.
 	 */
 	public AbstractViewReportLayoutAction() {
 		super();
 	}
 
 	/**
-	 * @param text
+	 * Create a new {@link AbstractViewReportLayoutAction}.
+	 * 
+	 * @param text The actions text.
 	 */
 	public AbstractViewReportLayoutAction(String text) {
 		super(text);
 	}
 
 	/**
-	 * @param text
-	 * @param image
+	 * Create a new {@link AbstractViewReportLayoutAction}.
+	 * 
+	 * @param text The actions text.
+	 * @param image The actions image.
 	 */
 	public AbstractViewReportLayoutAction(String text, ImageDescriptor image) {
 		super(text, image);
 	}
 
 	/**
-	 * @param text
-	 * @param style
+	 * Create a new {@link AbstractViewReportLayoutAction}. 
+	 * 
+	 * @param text The actions text.
+	 * @param style The actions style.
 	 */
 	public AbstractViewReportLayoutAction(String text, int style) {
 		super(text, style);
 	}
 
+	/**
+	 * Extracts all {@link ReportRegistryItemID} of the given {@link ReportRegistryItem}s
+	 * given that they are a {@link ReportLayout} and no {@link ReportCategory}.
+	 * 
+	 * @param reportRegistryItems The {@link ReportRegistryItem}s to filter.
+	 * @return A collection with only {@link ReportRegistryItem}s of {@link ReportLayout}s.
+	 */
 	protected Collection<ReportRegistryItemID> extractReportLayouts(Collection<ReportRegistryItem> reportRegistryItems) {
 		Collection<ReportRegistryItemID> itemIDs = new ArrayList<ReportRegistryItemID>();
 		for (ReportRegistryItem item : reportRegistryItems) {
@@ -103,7 +121,22 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 		return itemIDs;
 	}
 	
-	protected abstract String getReportUseCaseID();
+	/**
+	 * This method can be overridden in order to define a special {@link ReportUseCase}
+	 * id that should be used to print the given report. The default implementation
+	 * returns <code>null</code> to indicate that the {@link ReportUseCase} should be 
+	 * looked up in the configuration or queried from the user.
+	 * @param reportID TODO
+	 * @param params TODO
+	 * @param reportID The id of the report to print.
+	 * @param params The parameter the report should be printed with.
+	 *  
+	 * @return The id of the {@link ReportUseCase} to use, or <code>null</code> to indicate that 
+	 * 		the {@link ReportUseCase} appropriate for the given report.
+	 */
+	protected String getReportUseCaseID(ReportRegistryItemID reportID, Map<String, Object> params) {
+		return null;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.nightlabs.jfire.reporting.ui.layout.action.ReportRegistryItemAction#run(java.util.Collection)
@@ -120,7 +153,6 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				String useCaseID = getReportUseCaseID();
 				Map<String, Object> params = null;
 				boolean paramsSet = false;
 				if (nextRunParams != null) {
@@ -138,6 +170,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 						params = dialogResult.getParameters();
 						paramsSet = true;
 					}
+					String useCaseID = getReportUseCaseID(itemID, params);
 					if (useCaseID == null) {
 						// Try to lookup the UseCase by the reportLayoutType
 						ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(itemID.reportRegistryItemType);
@@ -178,7 +211,14 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 					}
 
 					ReportViewer viewer = viewerFactory.createReportViewer();
-					viewer.showReport(new RenderReportRequest(itemID, params, outFormat));
+					RenderReportRequest renderRequest = new RenderReportRequest(itemID, params, outFormat);
+					Locale requestLocale = getRenderRequestLocale(itemID, params);
+					if (requestLocale != null) {
+						renderRequest.setLocale(requestLocale);
+					} else {
+						renderRequest.setLocale(Locale.getDefault());
+					}
+					viewer.showReport(renderRequest);
 				}
 				if (!"".equals(errorMessages)) //$NON-NLS-1$
 					// TODO: Maybe throw typed exception wrapped in RuntimeException
@@ -197,6 +237,28 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 		return errorMessages;
 	}
 	
+	/**
+	 * This method is consulted to get the locale the report should be rendered for. 
+	 * It's default implementation returns the vm's default locale. 
+	 * Subclasses may override this method and return an individual locale for each report.
+	 * 
+	 * @param reportID The id of the report to render.
+	 * @param params The parameters of the report.
+	 * @return The locale the given report should be rendered for, or <code>null</code> to indicate 
+	 * 		that the default locale should be used.
+	 */
+	protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
+		return Locale.getDefault();
+	}
+	
+	/**
+	 * Sets the parameters that should be used by this action in its next run.
+	 * After the next run the reference to this parameters will be reseted so
+	 * that on the next call the {@link ReportParameterWizard} will be shown
+	 * if no other parameters were set. 
+	 *  
+	 * @param nextRunParams The parameters to use for the next run of this action. 
+	 */
 	public void setNextRunParams(Map<String, Object> nextRunParams) {
 		this.nextRunParams = nextRunParams;
 	}
