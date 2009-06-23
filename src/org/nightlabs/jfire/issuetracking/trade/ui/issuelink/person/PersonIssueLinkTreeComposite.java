@@ -163,7 +163,8 @@ extends AbstractTreeComposite
 			if (element instanceof IssueLinkTreeNode)
 				return ((IssueLinkTreeNode)element).getHasChildNodes();
 			if (element instanceof IssueLink)
-				return ((IssueLink)element).getIssue().getIssueMarkers().size() > 0;
+				return ((IssueLink)element).getIssue().getComments().size() > 0||
+				!((IssueLink)element).getIssue().getDescription().getText().isEmpty();
 				if (element instanceof IssueComment||element instanceof IssueDescription)
 					return false;
 				else
