@@ -37,12 +37,16 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.nightlabs.base.ui.composite.XComposite.LayoutMode;
 import org.nightlabs.base.ui.job.Job;
+import org.nightlabs.base.ui.notification.NotificationAdapterSWTThreadAsync;
+import org.nightlabs.base.ui.notification.SelectionManager;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.login.part.LSDViewPart;
 import org.nightlabs.jfire.trade.LegalEntity;
 import org.nightlabs.jfire.trade.dao.LegalEntityDAO;
 import org.nightlabs.jfire.trade.ui.resource.Messages;
 import org.nightlabs.jfire.transfer.id.AnchorID;
+import org.nightlabs.notification.NotificationEvent;
+import org.nightlabs.notification.NotificationListener;
 import org.nightlabs.progress.ProgressMonitor;
 
 /**
@@ -74,8 +78,25 @@ extends LSDViewPart
 		});
 		contributeToActionBars();
 		selectionComposite.setSearchAction(searchLegalEntityAction);
+
+		SelectionManager.sharedInstance().addNotificationListener(LegalEntity.class, selectionListener);
+		selectionComposite.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent event) {
+				SelectionManager.sharedInstance().removeNotificationListener(LegalEntity.class, selectionListener);
+			}
+		});
+
 		setSelectedLegalEntityID(null);
 	}
+
+	private NotificationListener selectionListener = new NotificationAdapterSWTThreadAsync() {
+		@Override
+		public void notify(NotificationEvent notificationEvent) {
+			AnchorID legalEntityID = (AnchorID) notificationEvent.getFirstSubject();
+			setSelectedLegalEntityID(legalEntityID);
+		}
+	};
 
 	public String getQuickSearchText() {
 		return selectionComposite.getQuickSearchText();

@@ -38,7 +38,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 {
 	private Hyperlink vendorLink;
 	private Hyperlink customerLink;
-	private Hyperlink endCustomerLink;
+//	private Hyperlink endCustomerLink;
 
 	private AnchorID vendorID;
 	private LegalEntity vendor;
@@ -46,16 +46,16 @@ public class HeaderVendorCustomerComposite extends XComposite
 	private AnchorID customerID;
 	private LegalEntity customer;
 
-	private AnchorID endCustomerID;
-	private LegalEntity endCustomer;
+//	private AnchorID endCustomerID;
+//	private LegalEntity endCustomer;
 
 	private Job activeJob;
-	
+
 	private static final String[] LEGAL_ENTITY_FETCH_GROUPS = new String[] { FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON };
-	
+
 	public HeaderVendorCustomerComposite(Composite parent) {
 		super(parent, SWT.NONE, LayoutMode.TIGHT_WRAPPER);
-		this.getGridLayout().numColumns = 3;
+		this.getGridLayout().numColumns = 2;
 		this.getGridLayout().makeColumnsEqualWidth = true;
 		this.getGridData().grabExcessHorizontalSpace = true;
 		this.getGridData().grabExcessVerticalSpace = false;
@@ -76,13 +76,13 @@ public class HeaderVendorCustomerComposite extends XComposite
 			}
 		});
 
-		endCustomerLink = createLegalEntityHyperlink("End customer");
-		endCustomerLink.addHyperlinkListener(new HyperlinkAdapter() {
-			@Override
-			public void linkActivated(HyperlinkEvent e) {
-				legalEntityLinkClicked(endCustomerID);
-			}
-		});
+//		endCustomerLink = createLegalEntityHyperlink("End customer");
+//		endCustomerLink.addHyperlinkListener(new HyperlinkAdapter() {
+//			@Override
+//			public void linkActivated(HyperlinkEvent e) {
+//				legalEntityLinkClicked(endCustomerID);
+//			}
+//		});
 	}
 
 	private Hyperlink createLegalEntityHyperlink(String title) {
@@ -118,7 +118,7 @@ public class HeaderVendorCustomerComposite extends XComposite
 
 		updateLegalEntityHyperlink(vendorLink, vendor, loading);
 		updateLegalEntityHyperlink(customerLink, customer, loading);
-		updateLegalEntityHyperlink(endCustomerLink, endCustomer, loading);
+//		updateLegalEntityHyperlink(endCustomerLink, endCustomer, loading);
 	}
 
 	public void setArticleContainer(ArticleContainer articleContainer)
@@ -134,8 +134,8 @@ public class HeaderVendorCustomerComposite extends XComposite
 		customerID = articleContainer == null ? null : articleContainer.getCustomerID();
 		customer = null;
 
-		endCustomerID = articleContainer == null ? null : articleContainer.getEndCustomerID();
-		endCustomer = null;
+//		endCustomerID = articleContainer == null ? null : articleContainer.getEndCustomerID();
+//		endCustomer = null;
 
 		final Set<AnchorID> anchorIDs = new HashSet<AnchorID>(3);
 		if (vendorID != null)
@@ -144,8 +144,8 @@ public class HeaderVendorCustomerComposite extends XComposite
 		if (customerID != null)
 			anchorIDs.add(customerID);
 
-		if (endCustomerID != null)
-			anchorIDs.add(endCustomerID);
+//		if (endCustomerID != null)
+//			anchorIDs.add(endCustomerID);
 
 
 		if (anchorIDs.isEmpty()) {
@@ -183,8 +183,8 @@ public class HeaderVendorCustomerComposite extends XComposite
 								vendor = legalEntity;
 							else if (anchorID.equals(customerID))
 								customer = legalEntity;
-							else if (anchorID.equals(endCustomerID))
-								endCustomer = legalEntity;
+//							else if (anchorID.equals(endCustomerID))
+//								endCustomer = legalEntity;
 						}
 
 						activeJob = null;
@@ -208,32 +208,32 @@ public class HeaderVendorCustomerComposite extends XComposite
 			return; // silently ignore
 
 //		MessageDialog.openInformation(getShell(), "Test", "Clicked for legal entity: " + legalEntityID);
-		LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, 
-				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, Person.FETCH_GROUP_FULL_DATA}, 
+		LegalEntity legalEntity = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID,
+				new String[] {FetchPlan.DEFAULT, LegalEntity.FETCH_GROUP_PERSON, Person.FETCH_GROUP_FULL_DATA},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-		if (!legalEntity.isAnonymous() && legalEntity != null) 
+		if (!legalEntity.isAnonymous() && legalEntity != null)
 		{
 			Person person = legalEntity.getPerson();
 			StructLocal structLocal = StructLocalDAO.sharedInstance().getStructLocal(
 					person.getStructLocalObjectID(), new NullProgressMonitor()
 			);
-			person.inflate(structLocal);			
+			person.inflate(structLocal);
 			PersonEditWizard wizard = new PersonEditWizard(person);
 			DynamicPathWizardDialog dlg = new DynamicPathWizardDialog(wizard);
 			int returnCode = dlg.open();
 			if (returnCode == Window.OK) {
 				if (legalEntityID.equals(customerID)) {
-					customer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
+					customer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				}
 				else if (legalEntityID.equals(vendorID)) {
-					vendor = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
+					vendor = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS,
 							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
 				}
-				else if (legalEntityID.equals(endCustomerID)) {
-					endCustomer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS, 
-							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
-				}				
+//				else if (legalEntityID.equals(endCustomerID)) {
+//					endCustomer = LegalEntityDAO.sharedInstance().getLegalEntity(legalEntityID, LEGAL_ENTITY_FETCH_GROUPS,
+//							NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+//				}
 				updateUI();
 			}
 		}

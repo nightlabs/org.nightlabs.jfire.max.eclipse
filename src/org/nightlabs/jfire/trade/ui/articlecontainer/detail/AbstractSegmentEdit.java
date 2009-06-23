@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
@@ -57,8 +58,6 @@ import org.nightlabs.jfire.trade.ArticleCarrier;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ArticleProductTypeClassGroup;
 import org.nightlabs.jfire.trade.ArticleSegmentGroup;
-import org.nightlabs.jfire.trade.Offer;
-import org.nightlabs.jfire.trade.Order;
 import org.nightlabs.jfire.trade.SegmentType;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.TradePlugin;
@@ -69,13 +68,13 @@ import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * This is the base implementation of {@link SegmentEdit} it should be sub-classed to create new ones.
- * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEdit, Class, ArticleSegmentGroup)}, 
+ * Besides things like the management of members passed by the API in {@link #init(SegmentEditFactory, ArticleContainerEdit, Class, ArticleSegmentGroup)},
  * the management/creation of {@link ArticleSelection}s it does two important things:
  * <p>
  * It listens to the selection of a {@link ProductTypeID} in the {@link TradePlugin#ZONE_SALE} and
  * queries the appropriate {@link ArticleAdder} from the {@link ArticleAdderFactoryRegistry}.
  * It will create the {@link ArticleAdder} but note that it will delegate the creation of its
- * {@link Composite} to {@link #createArticleAdderComposite(ArticleAdder)}. 
+ * {@link Composite} to {@link #createArticleAdderComposite(ArticleAdder)}.
  * </p>
  * <p>
  * Additionally it implements the {@link #addArticles(Collection)} and {@link #removeArticles(Collection)}
@@ -85,15 +84,17 @@ import org.nightlabs.progress.ProgressMonitor;
  * adding articles to {@link ArticleEdit} by creating as much of them are necessary so that
  * all articles were accepted by one. Note that here as well, {@link AbstractSegmentEdit} will
  * create the {@link ArticleEdit} instance but not its ui, this will be delegated
- * to {@link #createArticleEditComposite(ArticleEdit)}. 
+ * to {@link #createArticleEditComposite(ArticleEdit)}.
  * </p>
- *  
+ *
  * @author Marco Schulze - marco at nightlabs dot de
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
  */
 public abstract class AbstractSegmentEdit
 implements SegmentEdit
 {
+	private static final Logger logger = Logger.getLogger(AbstractSegmentEdit.class);
+
 	private SegmentEditFactory segmentEditFactory;
 	private ArticleContainerEdit articleContainerEdit;
 	private Class<?> articleContainerClass;
@@ -275,35 +276,48 @@ implements SegmentEdit
 			}
 			else {
 				this.selectedProductTypeID = productTypeID;
-				this.selectedProductTypeClass = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
 
-				// Only Order and Offer support ArticleAdders => manage ArticleAdders only for them
-				if (Order.class.isAssignableFrom(articleContainerClass) ||
-						Offer.class.isAssignableFrom(articleContainerClass))
-				{
-					ArticleAdderFactory factory = ArticleAdderFactoryRegistry.sharedInstance().getArticleAdderFactory(
-							articleContainerClass, articleSegmentGroup.getSegment().getSegmentType().getClass(),
-							selectedProductTypeClass, true);
-	
+				@SuppressWarnings("unchecked")
+				Class<? extends ProductType> ptc = (Class<? extends ProductType>) JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(productTypeID);
+				this.selectedProductTypeClass = ptc;
+
+//				// Only Order and Offer support ArticleAdders => manage ArticleAdders only for them
+//				if (Order.class.isAssignableFrom(articleContainerClass) ||
+//						Offer.class.isAssignableFrom(articleContainerClass))
+//				{
+				Class<? extends SegmentType> segmentTypeClass = articleSegmentGroup.getSegment().getSegmentType().getClass();
+				ArticleAdderFactory factory = ArticleAdderFactoryRegistry.sharedInstance().getArticleAdderFactory(
+						articleContainerClass, segmentTypeClass,
+						selectedProductTypeClass, false);
+
+				if (factory == null) {
+					if (logger.isInfoEnabled())
+						logger.info("There is no ArticleAdderFactory registered for articleContainerClass=" + articleContainerClass.getName() + " segmentTypeClass=" + segmentTypeClass.getName() + " selectedProductTypeClass=" + selectedProductTypeClass.getName());
+				}
+
 					final ArticleAdder articleAdderToDispose = articleAdderForSelectedProductType;
-					final ArticleAdder articleAdder = factory.createArticleAdder(this);
+					final ArticleAdder articleAdder = factory == null ? null : factory.createArticleAdder(this);
 					articleAdderFactoryForSelectedProductType = factory;
 					articleAdderForSelectedProductType = articleAdder;
-	
-					articleAdder.setProductTypeID(selectedProductTypeID, monitor);
+
+					if (articleAdder != null)
+						articleAdder.setProductTypeID(selectedProductTypeID, monitor);
+
 					Display.getDefault().syncExec(new Runnable() {
 						public void run() {
 							if (composite == null)
 								return;
 
-							if (articleAdderToDispose != null) {
+							if (articleAdderToDispose != null)
 								articleAdderToDispose.dispose();
-							}
-							createArticleAdderComposite(articleAdder);
+
+							if (articleAdder != null)
+								createArticleAdderComposite(articleAdder);
+
 							fireCompositeContentChangeEvent();
 						}
 					});
-				} // articleContainerClass is Order or Offer
+//				} // articleContainerClass is Order or Offer
 			} // if (productTypeID != null) {
 		} catch (Exception x) {
 			throw new RuntimeException(x);
@@ -314,11 +328,11 @@ implements SegmentEdit
 	 * This method is called snychronously on the SWT GUI thread by
 	 * {@link #productTypeSelected(ProductTypeID)} after the appropriate {@link ArticleAdder} was created.
 	 * Implementations should use the {@link ArticleAdder#createComposite(Composite)} method
-	 * to create its ui inside the ui of this {@link AbstractSegmentEdit}. 
+	 * to create its ui inside the ui of this {@link AbstractSegmentEdit}.
 	 * This is not done directly in order to enable sub-classes
 	 * to react on the creation of these composites, so now sub-classes have
 	 * to do it themselves.
-	 *  
+	 *
 	 * @param articleAdder The {@link ArticleAdder} the ui should be added.
 	 */
 	protected abstract void createArticleAdderComposite(ArticleAdder articleAdder);
@@ -555,14 +569,14 @@ implements SegmentEdit
 	}
 
 	/**
-	 * This method is called synchronously on the SWT ui thread after 
-	 * the given {@link ArticleEdit} is created. Implementations 
+	 * This method is called synchronously on the SWT ui thread after
+	 * the given {@link ArticleEdit} is created. Implementations
 	 * should use the {@link ArticleEdit#createComposite(Composite)} method
-	 * to create its ui inside the ui of this {@link AbstractSegmentEdit}. 
+	 * to create its ui inside the ui of this {@link AbstractSegmentEdit}.
 	 * This is not done directly in order to enable sub-classes
 	 * to react on the creation of these composites, so now sub-classes have
 	 * to do it themselves.
-	 *  
+	 *
 	 * @param articleEdit The {@link ArticleEdit} the ui should be added.
 	 */
 	protected abstract void createArticleEditComposite(ArticleEdit articleEdit);

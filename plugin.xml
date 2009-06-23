@@ -765,7 +765,14 @@
               id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction"
               menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
               name="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction.name"
-              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction.tooltip"/>        
+              tooltip="%org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate.EditDeliveryDateAction.tooltip"/>
+        <articleEditAction
+              class="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assignendcustomer.AssignEndCustomerAction"
+              contextmenuPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              id="org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.assignendcustomer.AssignEndCustomerAction"
+              menubarPath="org.nightlabs.jfire.trade.ui.articleEditAction"
+              name="Assign end customer...">
+        </articleEditAction>        
     </extension>
     <extension
           name="Suppressed actions for RecurringOrder/RecurringOffer"

@@ -43,41 +43,40 @@ import org.nightlabs.jfire.transfer.id.AnchorID;
  */
 public class EditLegalEntityViewAction extends Action {
 
-	public EditLegalEntityViewAction() {
-		super();
-	}
+	public EditLegalEntityViewAction() { }
 
 	private LegalEntityEditorView view;
-	
-	/**
-	 * @see org.eclipse.ui.IViewActionDelegate#init(org.eclipse.ui.IViewPart)
-	 */
+
 	public void init(LegalEntityEditorView view) {
 		this.view = view;
 	}
 
-	/**
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-	 */
+	@Override
 	public void run() {
 		LegalEntity legalEntity = LegalEntityEditorWizard.open(view.getSelectedLegalEntity());
 		if (legalEntity != null) {
 			view.setSelectedLegalEntityID((AnchorID) JDOHelper.getObjectId(legalEntity));
 		}
 	}
-	
+
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 		return SharedImages.getSharedImageDescriptor(TradePlugin.getDefault(), this.getClass());
 	}
-	
+
 	@Override
 	public String getText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction.text"); //$NON-NLS-1$
 	}
-	
+
 	@Override
 	public String getToolTipText() {
 		return Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.EditLegalEntityViewAction.tooltip"); //$NON-NLS-1$
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		// TODO Auto-generated method stub
+		super.setEnabled(enabled);
 	}
 }

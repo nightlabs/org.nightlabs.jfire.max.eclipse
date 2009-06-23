@@ -52,22 +52,22 @@ import org.nightlabs.util.Util;
 public class LegalEntitySelectionComposite
 extends XComposite
 {
-	
+
 	private static String[] FETCH_GROUPS_LEGALENTITY = new String[] {
 		LegalEntity.FETCH_GROUP_PERSON,
 		PropertySet.FETCH_GROUP_FULL_DATA,
 		FetchPlan.DEFAULT
 		};
-	
+
 	private LegalEntityPersonEditor leEditor;
 	private Control leEditorControl;
-	
+
 	private AnonymousLegalEntityComposite anonymousLegalEntityComposite;
 
 	private AnchorID selectedLegalEntityID = null;
 	private LegalEntity selectedLegalEntity = null;
-	
-	private IAction searchAction; 
+
+	private IAction searchAction;
 	private SelectionListener searchListener = new SelectionListener() {
 		public void widgetSelected(SelectionEvent e) {
 			if (searchAction != null) {
@@ -84,7 +84,7 @@ extends XComposite
 		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	};
-	
+
 	private Form form;
 	private Text quickSearchText;
 	private Button quickSearchButton;
@@ -145,7 +145,7 @@ extends XComposite
 		super(parent, style, layoutMode, layoutDataMode, cols);
 		initGUI();
 	}
-	
+
 	private void initGUI() {
 		FormToolkit toolkit = new FormToolkit(Display.getDefault());
 		setToolkit(new NightlabsFormsToolkit(toolkit.getColors()));
@@ -159,12 +159,12 @@ extends XComposite
 		formLayout.marginWidth = 10;
 		formLayout.marginHeight = 10;
 		form.getBody().setLayout(formLayout);
-		
+
 		Section searchSection = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR);
 		searchSection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.searchSection.text")); //$NON-NLS-1$
 		searchSection.setLayout(new GridLayout());
-		
+
 //		quickSearchGroup = new Composite(wrapper, SWT.BORDER);
 		XComposite quickSearchGroup = new XComposite(searchSection, SWT.NONE);
 //		quickSearchGroup.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchGroup.text")); //$NON-NLS-1$
@@ -173,7 +173,7 @@ extends XComposite
 		gl.numColumns = 2;
 		gl.makeColumnsEqualWidth = false;
 		quickSearchGroup.setLayout(gl);
-		
+
 		quickSearchText = new Text(quickSearchGroup, getBorderStyle());
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.grabExcessHorizontalSpace = true;
@@ -184,19 +184,19 @@ extends XComposite
 				searchListener.widgetSelected(e);
 			}
 		});
-		
+
 		quickSearchButton = new Button(quickSearchGroup, SWT.PUSH);
 		quickSearchButton.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.quickSearchButton.text")); //$NON-NLS-1$
 		quickSearchButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END));
 		quickSearchButton.addSelectionListener(searchListener);
 
 		searchSection.setClient(quickSearchGroup);
-		
+
 		editorSection = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR);
 		editorSection.setLayoutData(new GridData(GridData.FILL_BOTH));
 		editorSection.setText(Messages.getString("org.nightlabs.jfire.trade.ui.legalentity.view.LegalEntitySelectionComposite.editorSection.text")); //$NON-NLS-1$
 		editorSection.setLayout(new GridLayout());
-		
+
 		// don't register this listener later! otherwise we'll miss the event sent by the AbstractEditArticleContainerAction
 		// this method triggers the given listener immediately
 		SelectionManager.sharedInstance().addNotificationListener(TradePlugin.ZONE_SALE,
@@ -209,7 +209,7 @@ extends XComposite
 						LegalEntity.class, notificationListenerCustomerSelected);
 			}
 		});
-		
+
 		// Because the SelectionManager triggers the last notification immediately on registration of a new listener, this will only be null,
 		// if there was no event. In this case, we select the anonymous customer.
 		if (selectedLegalEntityID == null)
@@ -223,15 +223,15 @@ extends XComposite
 			}
 		});
 	}
-	
+
 	protected LegalEntity getSelectedLegalEntity() {
 		return selectedLegalEntity;
 	}
-	
+
 	public void setSearchAction(IAction searchAction) {
 		this.searchAction = searchAction;
 	}
-	
+
 	protected void setAnonymousVisualisation()
 	{
 		if (leEditorControl != null) {
@@ -247,7 +247,7 @@ extends XComposite
 //		form.layout(true, true);
 		redraw();
 	}
-	
+
 	protected void setLegalEntityVisualisation(LegalEntity legalEntity)
 	{
 		if (anonymousLegalEntityComposite != null) {
@@ -309,17 +309,13 @@ extends XComposite
 		}
 
 		AnchorID anchorID = (AnchorID) (selectedLegalEntity == null ? null : JDOHelper.getObjectId(selectedLegalEntity));
-		NotificationEvent event = new NotificationEvent(
-				this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class);
+		NotificationEvent event = new NotificationEvent(this, TradePlugin.ZONE_SALE, anchorID, LegalEntity.class);
 		SelectionManager.sharedInstance().notify(event);
 	}
 
 	public void setSelectedLegalEntityID(AnchorID selectedLegalEntityID) {
 		if (editorSection == null || editorSection.isDisposed())
 			return;
-		
-		this.selectedLegalEntity = null;
-		this.selectedLegalEntityID = null;
 
 		if (selectedLegalEntityID == null) {
 			selectedLegalEntityID = AnchorID.create(
@@ -327,6 +323,12 @@ extends XComposite
 					LegalEntity.ANCHOR_TYPE_ID_LEGAL_ENTITY,
 					LegalEntity.ANCHOR_ID_ANONYMOUS);
 		}
+
+		if (Util.equals(selectedLegalEntityID, this.selectedLegalEntityID))
+			return;
+
+		this.selectedLegalEntity = null;
+		this.selectedLegalEntityID = null;
 
 		this.selectedLegalEntityID = selectedLegalEntityID;
 
@@ -375,11 +377,11 @@ extends XComposite
 				setSelectedLegalEntityID((AnchorID) event.getFirstSubject());
 		}
 	};
-	
+
 	protected void openSearchWizard() {
-		
+
 	}
-	
+
 	public String getQuickSearchText() {
 //		return quickSearchText.getTextControl().getText();
 		return quickSearchText.getText();
