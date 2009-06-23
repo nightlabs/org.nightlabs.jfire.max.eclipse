@@ -15,10 +15,17 @@ import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issue.IssueLink;
 import org.nightlabs.jfire.issue.IssueLinkType;
+import org.nightlabs.jfire.issue.IssuePriority;
+import org.nightlabs.jfire.issue.IssueSeverityType;
+import org.nightlabs.jfire.issue.IssueType;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
+import org.nightlabs.jfire.jbpm.graph.def.Statable;
+import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
 import org.nightlabs.jfire.jbpm.graph.def.State;
+import org.nightlabs.jfire.jbpm.graph.def.StateDefinition;
 import org.nightlabs.jfire.security.User;
 import org.nightlabs.progress.NullProgressMonitor;
 
@@ -51,19 +58,29 @@ extends DynamicPathWizard
 
 	private static String[] FETCH_GROUP = new String[]{
 		FetchPlan.DEFAULT,
+		Issue.FETCH_GROUP_ISSUE_TYPE,
+		Issue.FETCH_GROUP_SUBJECT,
+		Issue.FETCH_GROUP_DESCRIPTION,
+		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
+		Issue.FETCH_GROUP_ISSUE_PRIORITY,
+		Statable.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_ISSUE_LOCAL,
+		StatableLocal.FETCH_GROUP_STATE,
+		State.FETCH_GROUP_STATE_DEFINITION,
+		IssueType.FETCH_GROUP_NAME,
+		IssueSeverityType.FETCH_GROUP_NAME,
+		IssuePriority.FETCH_GROUP_NAME,
+		StateDefinition.FETCH_GROUP_NAME,
+		Issue.FETCH_GROUP_ISSUE_MARKERS,
+		IssueMarker.FETCH_GROUP_NAME,
+		IssueMarker.FETCH_GROUP_ICON_16X16_DATA,
 		Issue.FETCH_GROUP_ISSUE_LINKS,
 		IssueLinkType.FETCH_GROUP_NAME,
 		Issue.FETCH_GROUP_ISSUE_ASSIGNEE,
 		Issue.FETCH_GROUP_ISSUE_REPORTER,
-		Issue.FETCH_GROUP_ISSUE_PRIORITY,
-		Issue.FETCH_GROUP_ISSUE_SEVERITY_TYPE,
 		Issue.FETCH_GROUP_ISSUE_RESOLUTION,
-		Issue.FETCH_GROUP_SUBJECT,
-		Issue.FETCH_GROUP_DESCRIPTION,
 		Issue.FETCH_GROUP_ISSUE_COMMENTS,
 		Issue.FETCH_GROUP_ISSUE_FILELIST,
-		Issue.FETCH_GROUP_ISSUE_TYPE,
-		State.FETCH_GROUP_STATE_DEFINITION,
 		Issue.FETCH_GROUP_STATE,
 		Issue.FETCH_GROUP_STATES,
 	};
@@ -128,7 +145,7 @@ extends DynamicPathWizard
 					// --> Of course, not withstanding any (possible) complication(s), the newly linked Issue in the IssueTable shall immediately
 					//     be highlighted/given focus/etc.
 					//
-
+					setSelectedIssue(createdIssue);
 
 				}
 			});
