@@ -98,12 +98,14 @@ extends AbstractIssueEditorGeneralSection
 				{
 					((IssueEditorGeneralPage)page).getIssueDetailSection().getAssignAction().run();
 					nextTransitionComposite.setEnabled(true);
+					getController().setJbpmTransitionName(event.getTransition().getJbpmTransitionName());
 					return;
 				}
 
 				if (JbpmConstants.TRANSITION_NAME_UNASSIGN.equals(event.getTransition().getJbpmTransitionName())) {
 					((IssueEditorGeneralPage)page).getIssueDetailSection().getUnassignAction().run();
 					nextTransitionComposite.setEnabled(true);
+					getController().setJbpmTransitionName(event.getTransition().getJbpmTransitionName());
 					return;
 				}
 

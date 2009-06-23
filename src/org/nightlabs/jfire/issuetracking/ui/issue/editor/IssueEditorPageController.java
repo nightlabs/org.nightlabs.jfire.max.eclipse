@@ -42,6 +42,7 @@ import org.nightlabs.jfire.issue.dao.IssueDAO;
 import org.nightlabs.jfire.issue.history.IssueHistoryItem;
 import org.nightlabs.jfire.issue.id.IssueID;
 import org.nightlabs.jfire.issue.issuemarker.IssueMarker;
+import org.nightlabs.jfire.issue.jbpm.JbpmConstants;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
 import org.nightlabs.jfire.jbpm.graph.def.Statable;
 import org.nightlabs.jfire.jbpm.graph.def.StatableLocal;
@@ -209,13 +210,16 @@ public class IssueEditorPageController extends ActiveEntityEditorPageController<
 
 			Issue issue;
 			issue = IssueDAO.sharedInstance().storeIssue(
-					controllerObject, jbpmTransitionName == null, getEntityFetchGroups(), getEntityMaxFetchDepth(),
+					controllerObject, true/*jbpmTransitionName == null*/, getEntityFetchGroups(), getEntityMaxFetchDepth(),
 					new SubProgressMonitor(monitor, 50)
 			);
 
-			if (jbpmTransitionName == null)
-				monitor.worked(50);
-			else {
+//			if (jbpmTransitionName == null)
+//				monitor.worked(50);
+//			else {
+			if (jbpmTransitionName != null && 
+					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_ASSIGN) && 
+					!jbpmTransitionName.equals(JbpmConstants.TRANSITION_NAME_UNASSIGN)) {
 				issue = IssueDAO.sharedInstance().signalIssue(
 						issueID, jbpmTransitionName, true, getEntityFetchGroups(), getEntityMaxFetchDepth(),
 						new SubProgressMonitor(monitor, 50)
