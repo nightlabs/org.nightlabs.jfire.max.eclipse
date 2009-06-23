@@ -4,6 +4,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -21,6 +22,7 @@ import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
+import org.nightlabs.progress.NullProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat at nightlabs dot de
@@ -129,6 +131,13 @@ extends EntityEditorPageWithProgress
 			};
 			dialog.open();
 
+
+			// Update the table in the Section. Maybe find out the latest entry and highlight it. Kai
+			if (dialog.getReturnCode() != Window.CANCEL) {
+				// TODO Switch to the page displaying the section too, if possible.
+//				getEditor().setActivePage("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage"); // Figure out.
+				getPageController().doLoad(new NullProgressMonitor());
+			}
 		}
 	}
 }
