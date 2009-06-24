@@ -19,6 +19,7 @@ import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
 import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.base.ui.wizard.DynamicPathWizardDialog;
+import org.nightlabs.jfire.issue.Issue;
 import org.nightlabs.jfire.issuetracking.trade.ui.IssueTrackingTradePlugin;
 import org.nightlabs.jfire.issuetracking.trade.ui.resource.Messages;
 import org.nightlabs.jfire.issuetracking.ui.issuelink.attach.AttachIssueToObjectWizard;
@@ -45,11 +46,13 @@ extends EntityEditorPageWithProgress
 
 	private ShowLinkedIssueSection showLinkedIssueSection;
 
+	public static final String PAGE_ID = ShowLinkedIssuePage.class.getName();
+
 	/**
 	 * @param editor
 	 */
 	public ShowLinkedIssuePage(FormEditor editor) {
-		super(editor, ShowLinkedIssuePage.class.getName(), Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.title")); //$NON-NLS-1$
+		super(editor, PAGE_ID, Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssuePage.title")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -104,6 +107,14 @@ extends EntityEditorPageWithProgress
 		return (ShowLinkedIssuePageController)getPageController();
 	}
 
+	private Issue highlightIssue;
+	public void highlightIssueEntry(Issue issue) {
+		highlightIssue = issue;
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() { showLinkedIssueSection.highlightIssueEntry(highlightIssue); }
+		});
+	}
+
 	private class LinkToIssueAction extends Action {
 		private Object linkedObject;
 		public LinkToIssueAction(Object linkedObject) {
@@ -132,11 +143,12 @@ extends EntityEditorPageWithProgress
 			dialog.open();
 
 
-			// Update the table in the Section. Maybe find out the latest entry and highlight it. Kai
-			if (dialog.getReturnCode() != Window.CANCEL) {
-				// TODO Switch to the page displaying the section too, if possible.
-//				getEditor().setActivePage("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowIssueLinkPage"); // Figure out.
+			// Update the table in the Section.
+			// TODO Use proper listeners for refreshing the table.
+			//      And then maybe find out the latest entry and highlight it. Kai
+			if (dialog.getReturnCode() == Window.OK) { // != Window.CANCEL) {
 				getPageController().doLoad(new NullProgressMonitor());
+				highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
 			}
 		}
 	}
