@@ -75,10 +75,10 @@ extends AbstractTreeComposite
 		getTreeViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
 				StructuredSelection s = (StructuredSelection)e.getSelection();
-				
+
 				if (s.isEmpty())
 					return;
-				
+
 				Object o = s.getFirstElement();
 				if (o instanceof IssueLink)
 				{	
@@ -123,25 +123,17 @@ extends AbstractTreeComposite
 				final List<IssueComment> commentsList = ((IssueLink)parentElement).getIssue().getComments();
 				Collections.sort(commentsList, new Comparator<IssueComment>() {
 					public int compare(IssueComment o1, IssueComment o2) {
-						// reverse chronological Order
-						return o2.getCreateTimestamp().compareTo(o1.getCreateTimestamp());
+						// chronological Order
+						return o1.getCreateTimestamp().compareTo(o2.getCreateTimestamp());
 					}
 				});
-				final IssueLinkTreeNode subjectlegalEntityIssuesLinkNode= new IssueLinkTreeNode("Comments",null,true){
-					@Override
-					public Object[]  getChildNodes() {
-						setHasChildNodes(commentsList.size()>0);
-						return commentsList.toArray();
 
-					}
-				};
 				// for empty string description no need to add the desc node
 				if(((IssueLink)parentElement).getIssue().getDescription().getText().isEmpty())
-					return	new Object[] {subjectlegalEntityIssuesLinkNode};	
+					return	commentsList.toArray();	
 				// concatnate the Comments nodes with the Desc 
 				Object[] arrayDesc = new Object[] {((IssueLink)parentElement).getIssue().getDescription()};
-				return concat(arrayDesc,
-						new Object[] {subjectlegalEntityIssuesLinkNode});
+				return concat(arrayDesc,commentsList.toArray());
 			}
 			return EMPTY_DATA;
 		}
