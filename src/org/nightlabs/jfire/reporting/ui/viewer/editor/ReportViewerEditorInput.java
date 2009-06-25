@@ -26,13 +26,12 @@
 
 package org.nightlabs.jfire.reporting.ui.viewer.editor;
 
-import java.util.Map.Entry;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.util.Util;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[DOT]de>
@@ -105,28 +104,7 @@ public class ReportViewerEditorInput implements IEditorInput {
 	public boolean equals(Object obj) {
 		if (obj instanceof ReportViewerEditorInput) {
 			ReportViewerEditorInput other = (ReportViewerEditorInput)obj;
-			boolean regItemEqual = false;
-			if (other.getRenderReportRequest().getReportRegistryItemID() != null && 
-					other.getRenderReportRequest().getReportRegistryItemID().equals(getRenderReportRequest().getReportRegistryItemID()))
-				regItemEqual = true;
-			boolean paramsEqual =
-				(other.getRenderReportRequest().getParameters() != null && getRenderReportRequest().getParameters() != null) ||
-				(other.getRenderReportRequest().getParameters() == null && getRenderReportRequest().getParameters() == null) ;
-			
-			if (other.getRenderReportRequest().getParameters() != null) {
-				if (getRenderReportRequest().getParameters() != null) {
-					for (Entry<String, Object> oEntry : other.getRenderReportRequest().getParameters().entrySet()) {
-						Object thisEntry = getRenderReportRequest().getParameters().get(oEntry.getKey());
-						if (thisEntry == null)
-							paramsEqual = false;
-						else
-							paramsEqual = thisEntry.equals(oEntry.getValue());
-						if (!paramsEqual)
-							break;
-					}
-				}
-			}
-			return regItemEqual && paramsEqual;
+			return Util.equals(this.getRenderReportRequest(), other.getRenderReportRequest());
 		}
 		else
 			return false;

@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.reporting.Birt;
 import org.nightlabs.jfire.reporting.layout.ReportCategory;
@@ -57,6 +58,8 @@ import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewer;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerFactory;
 import org.nightlabs.jfire.reporting.ui.viewer.ReportViewerRegistry;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * Abstract Action that can be used as basis for actions that show reports in a {@link ReportViewer}.
@@ -127,14 +130,14 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 * returns <code>null</code> to indicate that the {@link ReportUseCase} should be 
 	 * looked up in the configuration or queried from the user.
 	 * @param reportID TODO
-	 * @param params TODO
 	 * @param reportID The id of the report to print.
+	 * @param params TODO
 	 * @param params The parameter the report should be printed with.
-	 *  
+	 * @param monitor TODO
 	 * @return The id of the {@link ReportUseCase} to use, or <code>null</code> to indicate that 
 	 * 		the {@link ReportUseCase} appropriate for the given report.
 	 */
-	protected String getReportUseCaseID(ReportRegistryItemID reportID, Map<String, Object> params) {
+	protected String getReportUseCaseID(ReportRegistryItemID reportID, Map<String, Object> params, ProgressMonitor monitor) {
 		return null;
 	}
 
@@ -153,6 +156,8 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				ProgressMonitor pMonitor = new ProgressMonitorWrapper(monitor);
+				pMonitor.beginTask("Searching configuration to print preview of trade document", 6);
 				Map<String, Object> params = null;
 				boolean paramsSet = false;
 				if (nextRunParams != null) {
@@ -170,7 +175,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 						params = dialogResult.getParameters();
 						paramsSet = true;
 					}
-					String useCaseID = getReportUseCaseID(itemID, params);
+					String useCaseID = getReportUseCaseID(itemID, params, new SubProgressMonitor(pMonitor, 3));
 					if (useCaseID == null) {
 						// Try to lookup the UseCase by the reportLayoutType
 						ReportUseCase useCase = ReportUseCaseRegistry.sharedInstance().getReportUseCaseByLayoutType(itemID.reportRegistryItemType);
@@ -212,7 +217,7 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 
 					ReportViewer viewer = viewerFactory.createReportViewer();
 					RenderReportRequest renderRequest = new RenderReportRequest(itemID, params, outFormat);
-					Locale requestLocale = getRenderRequestLocale(itemID, params);
+					Locale requestLocale = getRenderRequestLocale(itemID, params, new SubProgressMonitor(pMonitor, 3));
 					if (requestLocale != null) {
 						renderRequest.setLocale(requestLocale);
 					} else {
@@ -244,10 +249,11 @@ public abstract class AbstractViewReportLayoutAction extends ReportRegistryItemA
 	 * 
 	 * @param reportID The id of the report to render.
 	 * @param params The parameters of the report.
+	 * @param monitor TODO
 	 * @return The locale the given report should be rendered for, or <code>null</code> to indicate 
 	 * 		that the default locale should be used.
 	 */
-	protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
+	protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params, ProgressMonitor monitor) {
 		return Locale.getDefault();
 	}
 	

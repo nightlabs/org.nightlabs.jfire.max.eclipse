@@ -53,6 +53,7 @@ import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard;
 import org.nightlabs.jfire.reporting.ui.parameter.ReportParameterWizard.WizardResult;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * Abstract Action that can be used as basis for actions that print reports.
@@ -198,6 +199,7 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 	public void printWithParams(ReportRegistryItemID registryItemID, Map<String, Object> params, ProgressMonitor monitor)
 	throws PrinterException
 	{
+		monitor.beginTask("Printing report layout", 6);
 		String useCaseID = getReportUseCaseID(registryItemID, params);
 		if (useCaseID == null) {
 			// Try to lookup the UseCase by the reportLayoutType
@@ -217,13 +219,14 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 		RenderReportRequest renderRequest = new RenderReportRequest();
 		renderRequest.setReportRegistryItemID(registryItemID);
 		renderRequest.setParameters(params);
-		Locale requestLocale = getRenderRequestLocale(registryItemID, params);
+		Locale requestLocale = getRenderRequestLocale(registryItemID, params, new SubProgressMonitor(monitor, 1));
 		if (requestLocale != null) {
 			renderRequest.setLocale(requestLocale);
 		} else {
 			renderRequest.setLocale(Locale.getDefault());
 		}
-		PrintReportLayoutUtil.printReportLayoutWithDefaultFormat(renderRequest, useCaseID, monitor);
+		PrintReportLayoutUtil.printReportLayoutWithDefaultFormat(renderRequest, useCaseID, new SubProgressMonitor(monitor, 5));
+		monitor.done();
 	}
 
 	/**
@@ -233,10 +236,11 @@ public abstract class AbstractPrintReportLayoutAction extends ReportRegistryItem
 	 * 
 	 * @param reportID The id of the report to render.
 	 * @param params The parameters of the report.
+	 * @param monitor TODO
 	 * @return The locale the given report should be rendered for, or <code>null</code> to indicate 
 	 * 		that the default locale should be used.
 	 */
-	protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
+	protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params, ProgressMonitor monitor) {
 		return Locale.getDefault();
 	}
 	
