@@ -10,7 +10,8 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.nightlabs.jfire.trade.ui;visibility:=reexport,
- org.nightlabs.keyreader.ui
+ org.nightlabs.keyreader.ui,
+ org.nightlabs.tableprovider.ui;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Export-Package: org.nightlabs.jfire.voucher.ui,
  org.nightlabs.jfire.voucher.ui.articlecontainer.detail,
