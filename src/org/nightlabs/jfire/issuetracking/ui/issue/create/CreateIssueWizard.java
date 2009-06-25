@@ -70,10 +70,11 @@ implements INewWizard
 		IssueLocal.FETCH_GROUP_STATE,
 		IssueLocal.FETCH_GROUP_STATES,
 		Statable.FETCH_GROUP_STATE,
+		Issue.FETCH_GROUP_ISSUE_LINKS,
 		StatableLocal.FETCH_GROUP_STATE,
 		State.FETCH_GROUP_STATE_DEFINITION,
 	};
-
+	
 	@Override
 	public boolean performFinish() {
 		try {
@@ -96,7 +97,7 @@ implements INewWizard
 	}
 
 	
-	public void setLinkedObject(ObjectID linkedObjectID,IssueLinkTypeID issueLinkTypeID)
+	public void addLinkedObject(ObjectID linkedObjectID,IssueLinkTypeID issueLinkTypeID)
 	{			
 		// link the object supplied otherwise do nothing.
 		if(linkedObjectID != null)
