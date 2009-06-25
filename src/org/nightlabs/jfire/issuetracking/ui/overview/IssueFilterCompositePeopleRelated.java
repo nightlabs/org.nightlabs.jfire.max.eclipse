@@ -147,19 +147,6 @@ public class IssueFilterCompositePeopleRelated
 			{
 				final boolean selectAll = ((Button) e.getSource()).getSelection();
 				getQuery().setFieldEnabled(IssueQuery.FieldName.assigneeID, ! selectAll);
-//				assigneeText.setEnabled(!selectAll);
-//				assigneeButton.setEnabled(!selectAll);
-//
-//				if (selectAll) {
-//					setValueIntentionally(true);
-//					assigneeText.setText("");
-//					selectedAssignee = null;
-//					getQuery().setAssigneeID(null);
-//					setValueIntentionally(false);
-//				}
-//				else {
-//					getQuery().setAssigneeID(selectedAssigneeID);
-//				}
 			}
 		});
 		allAssigneeButton.setSelection(true);
@@ -191,6 +178,7 @@ public class IssueFilterCompositePeopleRelated
 	@Override
 	protected void updateUI(QueryEvent event, List<FieldChangeCarrier> changedFields)
 	{
+		boolean sectionActive = false;
 		for (FieldChangeCarrier changedField : changedFields)
 		{
 			if (IssueQuery.FieldName.assigneeID.equals(changedField.getPropertyName()))
@@ -214,7 +202,8 @@ public class IssueFilterCompositePeopleRelated
 				final boolean active = (Boolean) changedField.getNewValue();
 				assigneeButton.setEnabled(active);
 				assigneeText.setEnabled(active);
-				setSearchSectionActive(allAssigneeButton, ! active);
+				allAssigneeButton.setSelection(!active);
+				sectionActive = active;
 				if (!active) {
 					assigneeText.setText("");
 					getQuery().setAssigneeID(null);
@@ -241,18 +230,15 @@ public class IssueFilterCompositePeopleRelated
 				final boolean active = (Boolean) changedField.getNewValue();
 				reporterText.setEnabled(active);
 				reporterButton.setEnabled(active);
-				allReporterButton.setSelection(! active);
-
+				allReporterButton.setSelection(!active);
+				sectionActive = active;
 				if (!active) {
 					reporterText.setText("");
 					getQuery().setReporterID(null);
 				}
 			}
 		} // for (FieldChangeCarrier changedField : event.getChangedFields())
-//		boolean sectionActive = selectedAssignee != null || selectedReporter != null;
-		boolean sectionActive = getQuery().isFieldEnabled(IssueQuery.FieldName.assigneeID) ||
-														getQuery().isFieldEnabled(IssueQuery.FieldName.reporterID);
-
+		
 		setSearchSectionActive(sectionActive);
 	}
 
