@@ -4,6 +4,7 @@ import javax.jdo.FetchPlan;
 import javax.jdo.JDOHelper;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -40,8 +41,10 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 	 * LOG4J logger used by this class
 	 */
 	private static final Logger logger = Logger.getLogger(LegalEntityPersonIssueLinkTreeView .class);
-
 	private PersonIssueLinkTreeComposite showLegalEntityLinkedTreeComposite;
+	private CreateNewIssueViewAction createNewIssueViewAction = new CreateNewIssueViewAction();  	
+	private LegalEntity partner = null;
+	
 
 	public static final String ID_VIEW = LegalEntityPersonIssueLinkTreeView.class.getName();
 
@@ -74,8 +77,17 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 						TradePlugin.ZONE_SALE,
 						LegalEntity.class, notificationListenerPersonSelected
 				);				
+				
+				IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+				toolBarManager.removeAll();		
 			}
 		});
+			
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		createNewIssueViewAction.init(this);
+		toolBarManager.add(createNewIssueViewAction);
+		createNewIssueViewAction.setEnabled(false);
+		
 	}
 
 	private NotificationListener notificationListenerPersonSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
@@ -90,7 +102,7 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 
 	private void LegalEntityChanged(AnchorID partnerID)
 	{
-		final LegalEntity partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
+		this.partner = partnerID == null ? null : LegalEntityDAO.sharedInstance().getLegalEntity(
 				partnerID,
 				new String[] {
 						FetchPlan.DEFAULT,
@@ -99,7 +111,8 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 				},
 				NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
 				new NullProgressMonitor());
-
+				
+		
 		final ObjectID personID = (ObjectID) JDOHelper.getObjectId(partner.getPerson());			
 		final IssueLinkTreeNode rootlegalEntityIssuesLinkNode = new IssueLinkTreeNode("Issue List",null,true){
 			@Override
@@ -117,7 +130,16 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 			public void run() {
 				showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);
 				showLegalEntityLinkedTreeComposite.refresh();
+				createNewIssueViewAction.setEnabled(true);
+
 			}
 		});
 	}
+
+	public LegalEntity getPartner() {
+		return partner;
+	}
+	
 }
+
+
