@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -156,7 +155,7 @@ extends AbstractTableComposite
 
 				final List<CustomerGroupMapping> _customerGroupMappings = CustomerGroupMappingDAO.sharedInstance().getCustomerGroupMappings(
 						customerGroupMappingIDs, FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new ProgressMonitorWrapper(getProgressMonitor()));
+						getProgressMonitor());
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()

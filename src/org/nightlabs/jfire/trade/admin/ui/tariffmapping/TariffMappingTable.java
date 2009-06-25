@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.base.ui.table.AbstractTableComposite;
 import org.nightlabs.base.ui.table.TableContentProvider;
 import org.nightlabs.base.ui.table.TableLabelProvider;
@@ -136,7 +135,7 @@ extends AbstractTableComposite<TariffMapping>
 		jdoLifecycleListener = new JDOLifecycleAdapterJob() {
 			// there exist neither subclasses of TariffMapping nor can a TariffMapping be changed - therefore this is sufficient. We might later add a Change-Listener (implicit) in case the name of a Tariff is changed, but currently, this is not very important
 			private IJDOLifecycleListenerFilter filter = new SimpleLifecycleListenerFilter(TariffMapping.class, false, new JDOLifecycleState[] { JDOLifecycleState.NEW });
-			
+
 			@Override
 			public IJDOLifecycleListenerFilter getJDOLifecycleListenerFilter()
 			{
@@ -156,7 +155,7 @@ extends AbstractTableComposite<TariffMapping>
 
 				final List<TariffMapping> _tariffMappings = TariffMappingDAO.sharedInstance().getTariffMappings(
 						tariffMappingIDs, FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new ProgressMonitorWrapper(getProgressMonitor()));
+						getProgressMonitor());
 				Display.getDefault().asyncExec(new Runnable()
 				{
 					public void run()
@@ -212,17 +211,17 @@ extends AbstractTableComposite<TariffMapping>
 		try {
 			tariffMappings = null;
 			setInput(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingTable.inputPseudoEntry_loading")); //$NON-NLS-1$
-	
+
 			org.nightlabs.base.ui.job.Job job = new org.nightlabs.base.ui.job.Job(Messages.getString("org.nightlabs.jfire.trade.admin.ui.tariffmapping.TariffMappingTable.loadTariffMappingsJob.name")) { //$NON-NLS-1$
 				@Override
 				protected IStatus run(ProgressMonitor monitor)
 				{
 					boolean error2 = true;
 					try {
-	
+
 						final List<TariffMapping> _tariffMappings = TariffMappingDAO.sharedInstance().getTariffMappings(
 								FETCH_GROUPS_TARIFF_MAPPING, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
-		
+
 						Display.getDefault().asyncExec(new Runnable()
 						{
 							public void run()
@@ -239,7 +238,7 @@ extends AbstractTableComposite<TariffMapping>
 								}
 							}
 						});
-		
+
 						error2 = false;
 						return Status.OK_STATUS;
 					} finally {
