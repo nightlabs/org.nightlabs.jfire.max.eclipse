@@ -34,8 +34,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
@@ -46,6 +44,7 @@ import org.nightlabs.jfire.reporting.layout.ReportRegistryItemParentResolver;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.security.id.RoleID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -55,7 +54,7 @@ public abstract class ActiveReportRegistryItemTreeController
 extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, ReportRegistryItemNode>
 {
 	private RoleID filterRoleID;
-	
+
 	public static final String[] DEFAULT_FETCH_GROUPS = new String[] {
 		FetchPlan.DEFAULT,
 		ReportRegistryItem.FETCH_GROUP_NAME,
@@ -64,7 +63,7 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	public ActiveReportRegistryItemTreeController(RoleID filterRoleID) {
 		this.filterRoleID = filterRoleID;
@@ -86,13 +85,13 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 	}
 
 	@Override
-	protected Collection<ReportRegistryItem> retrieveChildren(ReportRegistryItemID parentID, ReportRegistryItem parent, IProgressMonitor monitor) {
+	protected Collection<ReportRegistryItem> retrieveChildren(ReportRegistryItemID parentID, ReportRegistryItem parent, ProgressMonitor monitor) {
 		Collection<ReportRegistryItemID> itemIDs = null;
 		if (parentID == null) {
 			try {
 				if (filterRoleID == null)
 					itemIDs = ReportingPlugin.getReportManager().getTopLevelReportRegistryItemIDs();
-				else 
+				else
 					itemIDs = ReportingPlugin.getReportManager().getTopLevelReportRegistryItemIDs(filterRoleID);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -116,13 +115,13 @@ extends ActiveJDOObjectTreeController<ReportRegistryItemID, ReportRegistryItem, 
 		return ReportRegistryItemDAO.sharedInstance().getReportRegistryItems(
 				new HashSet<ReportRegistryItemID>(itemIDs),
 				DEFAULT_FETCH_GROUPS,
-				new ProgressMonitorWrapper(monitor)
+				monitor
 			);
 	}
 
 	@Override
-	protected Collection<ReportRegistryItem> retrieveJDOObjects(Set<ReportRegistryItemID> objectIDs, IProgressMonitor monitor) {
-		return ReportRegistryItemDAO.sharedInstance().getReportRegistryItems(objectIDs, DEFAULT_FETCH_GROUPS, new ProgressMonitorWrapper(monitor));
+	protected Collection<ReportRegistryItem> retrieveJDOObjects(Set<ReportRegistryItemID> objectIDs, ProgressMonitor monitor) {
+		return ReportRegistryItemDAO.sharedInstance().getReportRegistryItems(objectIDs, DEFAULT_FETCH_GROUPS, monitor);
 	}
 
 	@Override

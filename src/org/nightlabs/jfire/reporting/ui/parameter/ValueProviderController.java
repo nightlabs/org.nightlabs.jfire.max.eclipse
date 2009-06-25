@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.ObjectID;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
@@ -26,6 +24,8 @@ import org.nightlabs.jfire.reporting.parameter.id.ValueProviderCategoryID;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.ui.ReportingPlugin;
 import org.nightlabs.jfire.reporting.ui.resource.Messages;
+import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 /**
  * Active controller for {@link ValueProviderCategory}s and {@link ValueProvider}s.
@@ -89,28 +89,30 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, IProgressMonitor monitor) {
-		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);
+	protected Collection<Object> retrieveChildren(ObjectID parentID, Object parent, ProgressMonitor monitor) {
 		if (parentID == null) {
 			try {
 				Set<ValueProviderCategoryID> topCategories = ReportingPlugin.getReportParameterManager().getValueProviderCategoryIDsForParent(null);
-				return (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(topCategories, CATEGORY_FETCH_GROUPS, monitorWrapper);
+				return (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(topCategories, CATEGORY_FETCH_GROUPS, monitor);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
 		if (parentID instanceof ValueProviderCategoryID) {
+			monitor.beginTask("Loading value providers", 100);
 			try {
 				ReportParameterManagerRemote rpm = ReportingPlugin.getReportParameterManager();
 				Set<ValueProviderCategoryID> categoryIDs;
 				categoryIDs = rpm.getValueProviderCategoryIDsForParent((ValueProviderCategoryID) parentID);
-				Collection<Object> categories = (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(categoryIDs, CATEGORY_FETCH_GROUPS, monitorWrapper);
+				Collection<Object> categories = (Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(categoryIDs, CATEGORY_FETCH_GROUPS, new SubProgressMonitor(monitor, 50));
 				Set<ValueProviderID> providerIDs = rpm.getValueProviderIDsForParent((ValueProviderCategoryID) parentID);
-				Collection<Object> providers = (Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, monitorWrapper);
+				Collection<Object> providers = (Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, new SubProgressMonitor(monitor, 50));
 				categories.addAll(providers);
 				return categories;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
+			} finally {
+				monitor.done();
 			}
 		}
 		else
@@ -119,17 +121,16 @@ extends ActiveJDOObjectTreeController<ObjectID, Object, ValueProviderTreeNode>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, IProgressMonitor monitor) {
-		ProgressMonitorWrapper monitorWrapper = new ProgressMonitorWrapper(monitor);
+	protected Collection<Object> retrieveJDOObjects(Set<ObjectID> objectIDs, ProgressMonitor monitor) {
 		if (objectIDs.size() <= 0)
 			return Collections.emptySet();
 		if (objectIDs.iterator().next() instanceof ValueProviderCategoryID) {
 			Set<ValueProviderCategoryID> catIDs = ((Set)objectIDs);
-			return ((Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(catIDs, CATEGORY_FETCH_GROUPS, monitorWrapper));
+			return ((Collection)ValueProviderCategoryDAO.sharedInstance().getValueProviderCategories(catIDs, CATEGORY_FETCH_GROUPS, monitor));
 		}
 		else {
 			Set<ValueProviderID> providerIDs = ((Set)objectIDs);
-			return ((Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, monitorWrapper));
+			return ((Collection)ValueProviderDAO.sharedInstance().getValueProviders(providerIDs, PROVIDER_FETCH_GROUPS, monitor));
 		}
 	}
 
