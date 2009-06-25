@@ -1437,4 +1437,23 @@
              name="%TradeCategory.name">
        </category>
     </extension>
+<!--    
+    <extension
+          point="org.nightlabs.tableprovider.ui">
+       <tableprovider
+             elementClass="org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier"
+             scopeClass="org.nightlabs.jfire.trade.ProductType"
+             factoryClass="org.nightlabs.jfire.trade.ui.articlecontainer.ArticleDeliveryDateCarrierTableProviderFactory">
+       </tableprovider>
+    </extension>
+-->
+    <extension
+          point="org.nightlabs.tableprovider.ui">
+       <tableprovider
+             elementClass="org.nightlabs.jfire.trade.Article"
+             scopeClass="org.nightlabs.jfire.trade.ProductType"
+             factoryClass="org.nightlabs.jfire.trade.ui.articlecontainer.ArticleTableProviderFactory">
+       </tableprovider>
+    </extension>
+    
 </plugin>

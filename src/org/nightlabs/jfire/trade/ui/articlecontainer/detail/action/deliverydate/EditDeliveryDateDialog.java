@@ -1,5 +1,7 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate;
 
+import java.util.Collection;
+
 import javax.jdo.FetchPlan;
 
 import org.eclipse.core.runtime.IStatus;
@@ -13,7 +15,9 @@ import org.nightlabs.eclipse.ui.dialog.ResizableTitleAreaDialog;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.JFireEjb3Factory;
 import org.nightlabs.jfire.base.ui.login.Login;
-import org.nightlabs.jfire.trade.ArticleDeliveryDateSet;
+import org.nightlabs.jfire.trade.Article;
+import org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier;
+import org.nightlabs.jfire.trade.DeliveryDateMode;
 import org.nightlabs.jfire.trade.TradeManagerRemote;
 import org.nightlabs.progress.ProgressMonitor;
 
@@ -25,11 +29,13 @@ public class EditDeliveryDateDialog
 extends ResizableTitleAreaDialog
 {
 	private EditDeliveryDateComposite deliveryDateComposite;
-	private ArticleDeliveryDateSet articleDeliveryDateSet;
+	private Collection<Article> articles;
+	private DeliveryDateMode mode;
 
-	public EditDeliveryDateDialog(Shell shell, ArticleDeliveryDateSet articleDeliveryDateSet) {
+	public EditDeliveryDateDialog(Shell shell, Collection<Article> articles, DeliveryDateMode mode) {
 		super(shell, null);
-		this.articleDeliveryDateSet = articleDeliveryDateSet;
+		this.articles = articles;
+		this.mode = mode;
 	}
 
 	@Override
@@ -39,8 +45,8 @@ extends ResizableTitleAreaDialog
 		setTitle("Edit Delivery Date");
 		setMessage("Edit the delivery date of the articles. Either set the date for all articles,\nor click into the column to edit the delivery date for each article individually");
 
-		deliveryDateComposite = new EditDeliveryDateComposite(parent, SWT.NONE);
-		deliveryDateComposite.setArticleDeliveryDateSet(articleDeliveryDateSet);
+		deliveryDateComposite = new EditDeliveryDateComposite(parent, SWT.NONE, mode);
+		deliveryDateComposite.setArticles(articles, mode);
 		return deliveryDateComposite;
 	}
 
@@ -57,7 +63,9 @@ extends ResizableTitleAreaDialog
 				monitor.beginTask("Assign Delivery Dates", 200);
 				TradeManagerRemote tm = JFireEjb3Factory.getRemoteBean(TradeManagerRemote.class,
 						Login.getLogin().getInitialContextProperties());
-				tm.assignDeliveryDate(articleDeliveryDateSet,
+				Collection<ArticleDeliveryDateCarrier> articleDeliveryDateCarriers =
+					deliveryDateComposite.getArticleDeliveryDateCarriers();
+				tm.assignDeliveryDate(articleDeliveryDateCarriers,
 						false, new String[] {FetchPlan.DEFAULT}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT);
 				monitor.done();
 				return Status.OK_STATUS;

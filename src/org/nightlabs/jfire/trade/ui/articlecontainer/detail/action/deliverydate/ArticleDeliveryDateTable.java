@@ -1,11 +1,11 @@
 package org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.deliverydate;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
-import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -14,98 +14,92 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.nightlabs.base.ui.table.AbstractTableComposite;
-import org.nightlabs.base.ui.table.TableLabelProvider;
-import org.nightlabs.jdo.NLJDOHelper;
-import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.trade.Article;
-import org.nightlabs.jfire.trade.ArticleDeliveryDateSet;
-import org.nightlabs.jfire.trade.dao.ArticleDAO;
+import org.nightlabs.jfire.trade.ArticleDeliveryDateCarrier;
+import org.nightlabs.jfire.trade.DeliveryDateMode;
 import org.nightlabs.jfire.trade.id.ArticleID;
 import org.nightlabs.l10n.DateFormatter;
-import org.nightlabs.progress.NullProgressMonitor;
+import org.nightlabs.tableprovider.ui.TableProviderTable;
 
 /**
  * @author Daniel Mazurek - daniel [at] nightlabs [dot] de
  *
  */
 public class ArticleDeliveryDateTable
-extends AbstractTableComposite<Article>
+extends TableProviderTable<Article>
 {
-	class LabelProvider extends TableLabelProvider {
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
-		 */
-		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof Map.Entry) {
-				Map.Entry<ArticleID, Date> entry = (Map.Entry<ArticleID, Date>) element;
-				Article article = ArticleDAO.sharedInstance().getArticle(entry.getKey(),
-						new String[] {FetchPlan.DEFAULT, Article.FETCH_GROUP_PRODUCT_TYPE, ProductType.FETCH_GROUP_NAME},
-						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new NullProgressMonitor());
-				Date deliveryDate = entry.getValue();
-				switch (columnIndex) {
-				case 0:
-					return article.getProductType().getName().getText();
-				case 1:
-					if (deliveryDate != null)
-						return DateFormatter.formatDateShort(deliveryDate, true);
-				}
-				return "";
+	private Collection<ArticleDeliveryDateCarrier> articleDeliveryDateCarriers;
+	private ArticleDeliveryDateCarrierEditingSupport articleDeliveryDateCarrierEditingSupport;
+	private DeliveryDateMode mode;
+
+	/**
+	 * @param parent
+	 * @param style
+	 * @param elementClass
+	 * @param scope
+	 */
+	public ArticleDeliveryDateTable(Composite parent, int style,
+			String elementClass, String scope, DeliveryDateMode mode) {
+		super(parent, style, elementClass, scope);
+		this.mode = mode;
+	}
+
+	public void setArticleDeliveryDateCarriers(Collection<ArticleDeliveryDateCarrier> articleDeliveryDateCarriers) {
+		this.articleDeliveryDateCarriers = articleDeliveryDateCarriers;
+		articleDeliveryDateCarrierEditingSupport.setArticleDeliveryDateCarriers(articleDeliveryDateCarriers);
+	}
+
+	protected ArticleDeliveryDateCarrier getArticleDeliveryDateCarrier(Article article) {
+		ArticleID articleID = (ArticleID) JDOHelper.getObjectId(article);
+		for (ArticleDeliveryDateCarrier articleDeliveryDateCarrier : articleDeliveryDateCarriers) {
+			if (articleDeliveryDateCarrier.getArticleID().equals(articleID)) {
+				return articleDeliveryDateCarrier;
 			}
-			return "";
 		}
-	}
-
-	class ContentProvider extends ArrayContentProvider {
-		/* (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.ArrayContentProvider#getElements(java.lang.Object)
-		 */
-		@Override
-		public Object[] getElements(Object inputElement)
-		{
-			ArticleDeliveryDateSet articleDeliveryDateSet = (ArticleDeliveryDateSet) inputElement;
-			if (articleDeliveryDateSet != null && articleDeliveryDateSet.getArticleID2DeliveryDate() != null)
-				return articleDeliveryDateSet.getArticleID2DeliveryDate().entrySet().toArray();
-			return new Object[] {};
-		}
-	}
-
-	public ArticleDeliveryDateTable(Composite parent, int style) {
-		super(parent, style, false);
-		initTable();
+		return null;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#createTableColumns(org.eclipse.jface.viewers.TableViewer, org.eclipse.swt.widgets.Table)
+	 * @see org.nightlabs.tableprovider.ui.TableProviderTable#createTableColumns(org.eclipse.jface.viewers.TableViewer, org.eclipse.swt.widgets.Table)
 	 */
 	@Override
 	protected void createTableColumns(TableViewer tableViewer, Table table) {
-		TableColumn nameColumn = new TableColumn(table, SWT.NONE);
-		nameColumn.setText("Article");
+		super.createTableColumns(tableViewer, table);
 		TableColumn deliveryDateColumn = new TableColumn(table, SWT.NONE);
-		deliveryDateColumn.setText("Estimated Delivery Date");
+		deliveryDateColumn.setText("Delivery Date");
 
-		TableViewerColumn deliveryDateViewerColumn = new TableViewerColumn(getTableViewer(), deliveryDateColumn);
-		deliveryDateViewerColumn.setEditingSupport(new ArticleDeliveryDateEditingSupport(getTableViewer()));
+		articleDeliveryDateCarrierEditingSupport = new ArticleDeliveryDateCarrierEditingSupport(tableViewer);
+		TableViewerColumn tvc = new TableViewerColumn(tableViewer, deliveryDateColumn);
+		tvc.setEditingSupport(articleDeliveryDateCarrierEditingSupport);
+		tvc.setLabelProvider(new ColumnLabelProvider() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
+			 */
+			@Override
+			public String getText(Object element)
+			{
+				if (element instanceof Article) {
+					Article article = (Article) element;
+					Date deliverDate = null;
+					ArticleDeliveryDateCarrier carrier = getArticleDeliveryDateCarrier(article);
+					deliverDate = carrier.getDeliveryDate();
 
-		TableLayout tl = new TableLayout();
-		tl.addColumnData(new ColumnWeightData(1, true));
-		tl.addColumnData(new ColumnWeightData(1, true));
-		table.setLayout(tl);
+					if (deliverDate != null) {
+						return DateFormatter.formatDateShort(deliverDate, false);
+					}
+				}
+				return "";
+			}
+		});
 	}
 
 	/* (non-Javadoc)
-	 * @see org.nightlabs.base.ui.table.AbstractTableComposite#setTableProvider(org.eclipse.jface.viewers.TableViewer)
+	 * @see org.nightlabs.tableprovider.ui.TableProviderTable#configureTableLayout(org.eclipse.swt.widgets.Table)
 	 */
 	@Override
-	protected void setTableProvider(TableViewer tableViewer) {
-		tableViewer.setLabelProvider(new LabelProvider());
-		tableViewer.setContentProvider(new ContentProvider());
+	protected void configureTableLayout(Table table, TableLayout tableLayout) {
+		super.configureTableLayout(table, tableLayout);
+		tableLayout.addColumnData(new ColumnWeightData(1));
 	}
 
-	public void setArticleDeliveryDateSet(ArticleDeliveryDateSet articleDeliveryDateSet) {
-		setInput(articleDeliveryDateSet);
-	}
 }
