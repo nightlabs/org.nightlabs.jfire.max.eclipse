@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.base.ui.login.Login;
@@ -18,6 +16,7 @@ import org.nightlabs.jfire.issue.project.ProjectParentResolver;
 import org.nightlabs.jfire.issue.project.id.ProjectID;
 import org.nightlabs.jfire.issuetracking.ui.project.ProjectTreeNode;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Chairat Kongarayawetchakun - chairat[at]nightlabs[dot]de
@@ -36,24 +35,24 @@ public class ActiveProjectTreeController extends ActiveJDOObjectTreeController<P
 	}
 
 	@Override
-	protected Collection<Project> retrieveChildren(ProjectID parentID, Project parent, IProgressMonitor monitor)
+	protected Collection<Project> retrieveChildren(ProjectID parentID, Project parent, ProgressMonitor monitor)
 	{
 		if (parentID != null) {
 			Project project = ProjectDAO.sharedInstance().getProject(
-					parentID, FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+					parentID, FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 			Collection<Project> res = project.getSubProjects();
 			return res;
 		}
-		
-		Collection<Project> projects = ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID(), FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+
+		Collection<Project> projects = ProjectDAO.sharedInstance().getRootProjects(Login.sharedInstance().getOrganisationID(), FETCH_GROUPS_PROJECT, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		return projects;
 	}
 
 	@Override
-	protected Collection<Project> retrieveJDOObjects(Set<ProjectID> objectIDs, IProgressMonitor monitor)
+	protected Collection<Project> retrieveJDOObjects(Set<ProjectID> objectIDs, ProgressMonitor monitor)
 	{
 		Collection<Project> res = ProjectDAO.sharedInstance().getProjects(
-				objectIDs, new String[]{Project.FETCH_GROUP_PARENT_PROJECT, Project.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+				objectIDs, new String[]{Project.FETCH_GROUP_PARENT_PROJECT, Project.FETCH_GROUP_NAME}, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 		return res;
 	}
 
