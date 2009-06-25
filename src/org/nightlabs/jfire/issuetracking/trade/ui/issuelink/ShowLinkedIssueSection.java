@@ -31,6 +31,7 @@ public class ShowLinkedIssueSection
 extends ToolBarSectionPart
 {
 	private ShowLinkedIssuePageController controller;
+	private IFormPage page;
 	private IssueTable issueTable;
 
 	private AddIssueLinkAction addIssueLinkAction;
@@ -43,6 +44,7 @@ extends ToolBarSectionPart
 	public ShowLinkedIssueSection(IFormPage page, Composite parent, final ShowLinkedIssuePageController controller) {
 		super(page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR, Messages.getString("org.nightlabs.jfire.issuetracking.trade.ui.issuelink.ShowLinkedIssueSection.title")); //$NON-NLS-1$
 		this.controller = controller;
+		this.page = page;
 
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		getSection().setLayout(new GridLayout());
@@ -51,7 +53,7 @@ extends ToolBarSectionPart
 		client.getGridLayout().numColumns = 1;
 
 
-		addIssueLinkAction = new AddIssueLinkAction((ShowLinkedIssuePage)page);
+		addIssueLinkAction = new AddIssueLinkAction();
 		getToolBarManager().add(addIssueLinkAction);
 
 		getSection().setClient(client);
@@ -71,18 +73,24 @@ extends ToolBarSectionPart
 
 	/**
 	 * Highlights the entry in the {@link IssueTable} matching the given {@link Issue}.
-	 * Does nothing if no matching subject is found.
+	 * Table will contain no highlight if no match is found.
 	 */
 	public void highlightIssueEntry(Issue issue) {
-		int index = 0;
-		for(Issue issueElem : issueTable.getElements()) {
+		int index = -1;
+		issueTable.getTableViewer().getTable().setSelection(index);
+
+//		Collection<Issue> issues = CollectionUtil.castCollection( issueTable.getTableViewer().getInput() );	// <-- TODO Revise this when the related page is active.
+//		                                                                                                    //     i.e. Use instead issueTable.getElements().
+
+		Collection<Issue> issues = issueTable.getElements(); // TODO Something's not right. Cache elements dont seem updated!
+		for(Issue issueElem : issues) {
+			index++;
 			if ( issueElem.equals(issue) ) {
-				issueTable.select(index);
+				issueTable.getTableViewer().getTable().setSelection(index);
 				break;
 			}
-
-			index++;
 		}
+
 	}
 
 
@@ -92,9 +100,7 @@ extends ToolBarSectionPart
 	 * Handles the action to add a new {@link IssueLink} to an {@link Issue}.
 	 */
 	private class AddIssueLinkAction extends Action {
-		private ShowLinkedIssuePage showLinkedIssuePage;
-		public AddIssueLinkAction(ShowLinkedIssuePage showLinkedIssuePage) {
-			this.showLinkedIssuePage = showLinkedIssuePage;
+		public AddIssueLinkAction() {
 			setId(AddIssueLinkAction.class.getName());
 			setImageDescriptor(SharedImages.ADD_16x16);
 			setToolTipText("Add a link to an Issue");
@@ -120,9 +126,10 @@ extends ToolBarSectionPart
 			// TODO Use proper listeners for refreshing the table.
 			//      And then maybe find out the latest entry and highlight it. Kai
 			if (dialog.getReturnCode() == Window.OK) { // != Window.CANCEL) {
+				((ShowLinkedIssuePage)page).highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
 				controller.doLoad(new NullProgressMonitor());
-				showLinkedIssuePage.highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
 			}
+
 		}
 	}
 

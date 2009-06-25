@@ -17,8 +17,7 @@ import org.nightlabs.jfire.trade.ui.articlecontainer.detail.action.ArticleContai
 import org.nightlabs.progress.NullProgressMonitor;
 
 
-public class IssueAttachAction extends ArticleContainerAction
-{
+public class IssueAttachAction extends ArticleContainerAction {
 	public boolean calculateVisible()
 	{
 		return true;
@@ -31,8 +30,7 @@ public class IssueAttachAction extends ArticleContainerAction
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		ArticleContainer articleContainer = this.getArticleContainer();
 		ObjectID objectID = (ObjectID)JDOHelper.getObjectId(articleContainer);
 
@@ -57,11 +55,12 @@ public class IssueAttachAction extends ArticleContainerAction
 
 				if (getArticleContainer().equals(articleContainerEditor.getArticleContainerEdit().getArticleContainer())) {
 					IFormPage page = articleContainerEditor.setActivePage(ShowLinkedIssuePage.PAGE_ID);
-					((ShowLinkedIssuePage)page).getPageController().doLoad(new NullProgressMonitor());
 					((ShowLinkedIssuePage)page).highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
+					((ShowLinkedIssuePage)page).getPageController().doLoad(new NullProgressMonitor());
 				}
 			}
 		}
+
 	}
 
 }

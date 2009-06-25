@@ -92,8 +92,15 @@ extends EntityEditorPageWithProgress
 		switchToContent();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed())
+				if (showLinkedIssueSection != null && !showLinkedIssueSection.getSection().isDisposed()) {
 					showLinkedIssueSection.setLinkedIssues(getController().getLinkedIssues());
+
+					if (selectedIssue != null) {
+						showLinkedIssueSection.getIssueTable().refresh(true);
+						showLinkedIssueSection.highlightIssueEntry(selectedIssue);
+						selectedIssue = null;
+					}
+				}
 			}
 		});
 	}
@@ -107,16 +114,13 @@ extends EntityEditorPageWithProgress
 		return (ShowLinkedIssuePageController)getPageController();
 	}
 
-	private Issue highlightIssue;
-	public void highlightIssueEntry(Issue issue) {
-		highlightIssue = issue;
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() { showLinkedIssueSection.highlightIssueEntry(highlightIssue); }
-		});
-	}
+	private Issue selectedIssue = null;
+	public void highlightIssueEntry(Issue issue) { selectedIssue = issue; }
+
 
 	private class LinkToIssueAction extends Action {
 		private Object linkedObject;
+
 		public LinkToIssueAction(Object linkedObject) {
 			this.linkedObject = linkedObject;
 			setId(LinkToIssueAction.class.getName());
@@ -146,9 +150,10 @@ extends EntityEditorPageWithProgress
 			// Update the table in the Section.
 			// TODO Use proper listeners for refreshing the table.
 			//      And then maybe find out the latest entry and highlight it. Kai
+			// --> See also: ShowLinkedIssueSection.AddIssueLinkAction, and IssueAttachAction. --> These should all somehow be unified, since ALL of their behaviours are the same. Kai.
 			if (dialog.getReturnCode() == Window.OK) { // != Window.CANCEL) {
-				getPageController().doLoad(new NullProgressMonitor());
 				highlightIssueEntry( attachIssueToObjectWizard.getSelectedIssue() );
+				getPageController().doLoad(new NullProgressMonitor());
 			}
 		}
 	}
