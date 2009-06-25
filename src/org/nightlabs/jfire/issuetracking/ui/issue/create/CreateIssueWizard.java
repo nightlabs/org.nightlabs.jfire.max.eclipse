@@ -13,12 +13,17 @@ import org.eclipse.ui.IWorkbench;
 import org.nightlabs.base.ui.editor.Editor2PerspectiveRegistry;
 import org.nightlabs.base.ui.wizard.DynamicPathWizard;
 import org.nightlabs.jdo.NLJDOHelper;
+import org.nightlabs.jdo.ObjectID;
+import org.nightlabs.jfire.base.jdo.JDOObjectID2PCClassMap;
 import org.nightlabs.jfire.base.ui.login.Login;
 import org.nightlabs.jfire.idgenerator.IDGenerator;
 import org.nightlabs.jfire.issue.Issue;
+import org.nightlabs.jfire.issue.IssueLinkType;
 import org.nightlabs.jfire.issue.IssueLocal;
 import org.nightlabs.jfire.issue.dao.IssueDAO;
+import org.nightlabs.jfire.issue.dao.IssueLinkTypeDAO;
 import org.nightlabs.jfire.issue.id.IssueID;
+import org.nightlabs.jfire.issue.id.IssueLinkTypeID;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditor;
 import org.nightlabs.jfire.issuetracking.ui.issue.editor.IssueEditorInput;
 import org.nightlabs.jfire.issuetracking.ui.resource.Messages;
@@ -36,8 +41,7 @@ extends DynamicPathWizard
 implements INewWizard
 {
 	private Issue newIssue;
-//	private ObjectID linkedObjectID;
-
+//	private ObjectID linkedObjectID = null;
 	private CreateIssueDetailWizardPage issueCreateGeneralWizardPage;
 //	private CreateIssueOptionalWizardPage issueCreateDetailWizardPage;
 
@@ -91,6 +95,21 @@ implements INewWizard
 		return true;
 	}
 
+	
+	public void setLinkedObject(ObjectID linkedObjectID,IssueLinkTypeID issueLinkTypeID)
+	{			
+		// link the object supplied otherwise do nothing.
+		if(linkedObjectID != null)
+		{
+
+			IssueLinkType issueLinkType = IssueLinkTypeDAO.sharedInstance().getIssueLinkType(
+					issueLinkTypeID, new String[] { IssueLinkType.FETCH_GROUP_NAME },
+					NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new NullProgressMonitor());
+			newIssue.createIssueLink(issueLinkType, linkedObjectID, 
+					JDOObjectID2PCClassMap.sharedInstance().getPersistenceCapableClass(linkedObjectID));
+
+		}
+	}
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
 	 */
