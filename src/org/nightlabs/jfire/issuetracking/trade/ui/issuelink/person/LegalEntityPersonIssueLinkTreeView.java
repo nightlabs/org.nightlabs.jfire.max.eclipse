@@ -129,9 +129,9 @@ public class LegalEntityPersonIssueLinkTreeView  extends LSDViewPart{
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				showLegalEntityLinkedTreeComposite.setRootNode(rootlegalEntityIssuesLinkNode);
+				showLegalEntityLinkedTreeComposite.getTreeViewer().expandToLevel(0);
 				showLegalEntityLinkedTreeComposite.refresh();
 				createNewIssueViewAction.setEnabled(true);
-
 			}
 		});
 	}

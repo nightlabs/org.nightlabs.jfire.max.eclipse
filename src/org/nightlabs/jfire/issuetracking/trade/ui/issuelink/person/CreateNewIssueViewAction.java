@@ -35,7 +35,7 @@ public class CreateNewIssueViewAction extends Action{
 		if(view.getPartner() != null)
 		{		
 			CreateIssueWizard createIssueWizard = new CreateIssueWizard();
-			createIssueWizard.setLinkedObject((ObjectID)JDOHelper.getObjectId(view.getPartner().getPerson()),
+			createIssueWizard.addLinkedObject((ObjectID)JDOHelper.getObjectId(view.getPartner().getPerson()),
 					IssueLinkType.ISSUE_LINK_TYPE_ID_RELATED);
 			DynamicPathWizardDialog dialog = new DynamicPathWizardDialog(createIssueWizard);
 			dialog.open();
