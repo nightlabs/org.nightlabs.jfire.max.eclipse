@@ -26,6 +26,7 @@ import org.nightlabs.base.ui.table.TableLabelProvider;
 import org.nightlabs.jfire.reporting.layout.ReportRegistryItem;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.textpart.IReportTextPartConfigurationChangedListener;
 import org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationChangedEvent;
 import org.nightlabs.jfire.reporting.ui.textpart.ReportTextPartConfigurationEditComposite;
@@ -52,7 +53,7 @@ public class ReportTextPartConfigurationSection extends ToolBarSectionPart {
 	public ReportTextPartConfigurationSection(FormPage page, Composite parent, final ReportTextPartConfigurationPageController controller) {
 		super(
 			page, parent, ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR,
-			"Text part configuration"
+			Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationSection.title") //$NON-NLS-1$
 		);
 		this.controller = controller;
 		getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -71,7 +72,7 @@ public class ReportTextPartConfigurationSection extends ToolBarSectionPart {
 		
 		reportItemCombo = new XComboComposite<ReportRegistryItem>(
 				header, SWT.READ_ONLY,
-				"Report layout",
+				Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationSection.reportItemCombo.caption"), //$NON-NLS-1$
 				new TableLabelProvider() {
 			@Override
 			public String getColumnText(Object element, int columnIndex) {
@@ -126,7 +127,7 @@ public class ReportTextPartConfigurationSection extends ToolBarSectionPart {
 	
 	protected void loadReportTextPartConfiguration(final ReportRegistryItem reportRegistryItem) {
 		configurationEditComposite.setEnabled(false);
-		Job loadJob = new Job("Loading ReportTextPartConfiguration") {
+		Job loadJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationSection.loadJob.name")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				ReportRegistryItemID reportRegistryItemID = (ReportRegistryItemID) JDOHelper.getObjectId(reportRegistryItem);

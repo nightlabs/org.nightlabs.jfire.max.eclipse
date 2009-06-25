@@ -11,12 +11,14 @@ import org.nightlabs.jfire.accounting.id.InvoiceID;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.trade.ui.JFireReportingTradePlugin;
 import org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.ArticleContainerReportActionHelper;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.AbstractPrintReportLayoutAction;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.id.OfferID;
 import org.nightlabs.jfire.trade.id.OrderID;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerAction;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * Abstract action that prints an '{@link ArticleContainer}-report' of a certain category,
@@ -43,15 +45,15 @@ extends AbstractArticleContainerAction
 
 	protected void init() {
 		setId(ID);
-		setText("Print");
+		setText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.AbstractPrintArticleContainerAction.text")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(
 				JFireReportingTradePlugin.getDefault(), AbstractPrintArticleContainerAction.class));
 	}
 
 	protected AbstractPrintReportLayoutAction printReportAction = new AbstractPrintReportLayoutAction() {
 		@Override
-		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
-			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params);
+		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params, ProgressMonitor monitor) {
+			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params, monitor);
 		}
 	};
 

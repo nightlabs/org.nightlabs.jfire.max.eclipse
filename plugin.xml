@@ -184,5 +184,14 @@
             id="org.nightlabs.jfire.trade.ui.reportUseCase.deliveryNote"
             name="%reportUseCase.deliveryNote.name" 
             reportLayoutType="JFireReportingTrade-Reporting-DeliveryNote"/>
-    </extension>            	   
+    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.nightlabs.jfire.reporting.ui.config.ReportingPreferencePage"
+            class="org.nightlabs.jfire.reporting.trade.ui.config.TradeDocumenstLocalePreferencePage"
+            id="org.nightlabs.jfire.reporting.trade.ui.config.TradeDocumenstLocalePreferencePage"
+            name="%preferencePage.tradeDocumentsLocale"/>
+   </extension>    
+                	   
 </plugin>

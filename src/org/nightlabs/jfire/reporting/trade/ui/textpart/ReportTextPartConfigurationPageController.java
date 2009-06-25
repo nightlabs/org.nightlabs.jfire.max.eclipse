@@ -23,6 +23,7 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPart;
 import org.nightlabs.jfire.reporting.textpart.ReportTextPartConfiguration;
 import org.nightlabs.jfire.reporting.textpart.dao.ReportTextPartConfigurationDAO;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.trade.ui.util.ReportTradeUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.jfire.trade.ui.articlecontainer.detail.ArticleContainerEditorInput;
@@ -69,7 +70,7 @@ public class ReportTextPartConfigurationPageController extends EntityEditorPageC
 	 */
 	@Override
 	public void doLoad(ProgressMonitor monitor) {
-		monitor.beginTask("Loading text part prerequisites", 10);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPageController.loadPrerequisitesTaskName"), 10); //$NON-NLS-1$
 		ReportLayoutConfigModule cfMod = (ReportLayoutConfigModule)ConfigUtil.getUserCfMod(
 				ReportLayoutConfigModule.class,
 				new String[] {FetchPlan.DEFAULT, ReportLayoutConfigModule.FETCH_GROUP_AVAILABLE_LAYOUTS, ReportLayoutAvailEntry.FETCH_GROUP_AVAILABLE_REPORT_LAYOUT_KEYS},
@@ -95,7 +96,7 @@ public class ReportTextPartConfigurationPageController extends EntityEditorPageC
 	 */
 	@Override
 	public boolean doSave(ProgressMonitor monitor) {
-		monitor.beginTask("Store ReporTextPartConfiguration", dirtyConfigurations.size() * 5 + 1);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPageController.saveTaskName"), dirtyConfigurations.size() * 5 + 1); //$NON-NLS-1$
 		monitor.worked(1);
 		try {
 			for (Map.Entry<ReportRegistryItemID, ReportTextPartConfiguration> configs : configurations.entrySet()) {
@@ -114,7 +115,7 @@ public class ReportTextPartConfigurationPageController extends EntityEditorPageC
 	}
 
 	public ReportTextPartConfiguration getReportTextPartConfiguration(ReportRegistryItemID reportRegistryItemID, ProgressMonitor monitor) {
-		monitor.beginTask("Loading ReporTextPartConfiguration", 10);
+		monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPageController.loadTaskName"), 10); //$NON-NLS-1$
 		try {
 			if (configurations.containsKey(reportRegistryItemID))
 				return configurations.get(reportRegistryItemID);

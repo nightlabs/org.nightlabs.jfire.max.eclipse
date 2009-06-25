@@ -2,6 +2,7 @@ package org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote;
 
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.trade.ui.overview.action.AbstractPrintArticleContainerAction;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -18,8 +19,8 @@ extends AbstractPrintArticleContainerAction
 	public PrintDeliveryNoteAction() {
 		super();
 		setId(ID);
-		setText("Print DeliveryNote");
-		setToolTipText("Print DeliveryNote");
+		setText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.PrintDeliveryNoteAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.deliverynote.PrintDeliveryNoteAction.tooltipText")); //$NON-NLS-1$
 	}
 
 	@Override

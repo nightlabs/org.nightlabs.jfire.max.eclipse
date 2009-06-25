@@ -1,6 +1,7 @@
 package org.nightlabs.jfire.reporting.trade.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.framework.BundleContext;
 public class JFireReportingTradePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.nightlabs.jfire.reporting.trade.ui";
+	public static final String PLUGIN_ID = "org.nightlabs.jfire.reporting.trade.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static JFireReportingTradePlugin plugin;

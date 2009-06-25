@@ -32,6 +32,7 @@ import org.nightlabs.jfire.accounting.pay.id.ModeOfPaymentFlavourID;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
@@ -93,8 +94,8 @@ extends AbstractValueProviderGUI<Collection<ModeOfPaymentFlavourID>>
 			}
 		});
 		
-		modeOfPaymentTable.setLoadingMessage("Loading...");
-		Job job = new Job("Loading modes of payment") {
+		modeOfPaymentTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavoursByModeOfPayment.loadingMessage")); //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.accounting.modeofpayment.ValueProviderGUIModeOfPaymentFlavoursByModeOfPayment.jobName")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final List<ModeOfPayment> mops = ModeOfPaymentDAO.sharedInstance().getModeOfPayments(

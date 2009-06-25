@@ -2,6 +2,7 @@ package org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice;
 
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
 import org.nightlabs.jfire.reporting.trade.ui.overview.action.AbstractShowArticleContainerAction;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -15,8 +16,8 @@ extends AbstractShowArticleContainerAction
 	public ShowInvoiceAction() {
 		super();
 		setId(ID);
-		setText("Show Invoice");
-		setToolTipText("Show Invoice");
+		setText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.ShowInvoiceAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.invoice.ShowInvoiceAction.tooltipText")); //$NON-NLS-1$
 	}
 
 	@Override

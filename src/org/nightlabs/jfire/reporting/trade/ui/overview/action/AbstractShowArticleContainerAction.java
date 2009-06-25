@@ -10,10 +10,12 @@ import org.nightlabs.base.ui.resource.SharedImages;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.trade.ui.JFireReportingTradePlugin;
 import org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.ArticleContainerReportActionHelper;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
 import org.nightlabs.jfire.trade.ArticleContainer;
 import org.nightlabs.jfire.trade.ui.overview.action.AbstractArticleContainerAction;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Daniel.Mazurek [at] NightLabs [dot] de
@@ -32,16 +34,16 @@ extends AbstractArticleContainerAction
 
 	protected void init() {
 		setId(ID);
-		setText("Show");
-		setToolTipText("Show");
+		setText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.AbstractShowArticleContainerAction.text")); //$NON-NLS-1$
+		setToolTipText(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.overview.action.AbstractShowArticleContainerAction.tooltipText")); //$NON-NLS-1$
 		setImageDescriptor(SharedImages.getSharedImageDescriptor(JFireReportingTradePlugin.getDefault(),
 				AbstractShowArticleContainerAction.class));
 	}
 
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
 		@Override
-		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params) {
-			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params);
+		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID, Map<String, Object> params, ProgressMonitor monitor) {
+			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params, monitor);
 		}
 	};
 

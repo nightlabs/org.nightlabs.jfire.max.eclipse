@@ -12,6 +12,7 @@ import org.nightlabs.base.ui.entity.editor.EntityEditorPageControllerModifyEvent
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageWithProgress;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageController;
 import org.nightlabs.base.ui.entity.editor.IEntityEditorPageFactory;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 
 /**
  * @author Alexander Bieber <!-- alex [AT] nightlabs [DOT] de -->
@@ -39,7 +40,7 @@ public class ReportTextPartConfigurationPage extends EntityEditorPageWithProgres
 	 * @param editor
 	 */
 	public ReportTextPartConfigurationPage(FormEditor editor) {
-		super(editor, ReportTextPartConfigurationPage.class.getName(), "Report text parts");
+		super(editor, ReportTextPartConfigurationPage.class.getName(), Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPage.name")); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -73,7 +74,7 @@ public class ReportTextPartConfigurationPage extends EntityEditorPageWithProgres
 	 */
 	@Override
 	protected String getPageFormTitle() {
-		return "Report text parts";
+		return Messages.getString("org.nightlabs.jfire.reporting.trade.ui.textpart.ReportTextPartConfigurationPage.pageFormTitle"); //$NON-NLS-1$
 	}
 
 }

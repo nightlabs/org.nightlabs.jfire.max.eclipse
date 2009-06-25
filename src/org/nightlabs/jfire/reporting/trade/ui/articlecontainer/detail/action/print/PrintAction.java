@@ -40,10 +40,12 @@ import org.nightlabs.jfire.reporting.config.ReportLayoutConfigModule;
 import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.layout.render.RenderReportRequest;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.layout.action.print.PrintReportLayoutUtil;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
 import org.nightlabs.progress.NullProgressMonitor;
 import org.nightlabs.progress.ProgressMonitor;
+import org.nightlabs.progress.SubProgressMonitor;
 
 public class PrintAction extends ArticleContainerReportAction
 {
@@ -62,12 +64,12 @@ public class PrintAction extends ArticleContainerReportAction
 	@Override
 	public void run()
 	{
-		Job printJob = new Job("Print") {
+		Job printJob = new Job(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction.jobName")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) {
+				monitor.beginTask(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.articlecontainer.detail.action.print.PrintAction.taskName"), 6); //$NON-NLS-1$
 				try {
 					ArticleContainerID articleContainerID = getArticleContainerID();
-
 //					InvoiceID invoiceID = (InvoiceID)articleContainerID;
 
 					Map<String, Object> params = new HashMap<String, Object>();
@@ -80,17 +82,22 @@ public class PrintAction extends ArticleContainerReportAction
 					
 					RenderReportRequest renderReportRequest = new RenderReportRequest(defLayoutID, params);
 					
-					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(articleContainerID, defLayoutID, params);
+					Locale locale = ArticleContainerReportActionHelper.getArticleContainerReportLocale(
+							articleContainerID, defLayoutID, params,
+							new SubProgressMonitor(monitor, 2));
+					
 					if (locale == null)
 						locale = Locale.getDefault();
 					renderReportRequest.setLocale(locale);
 					
 					PrintReportLayoutUtil.printReportLayout(
 							renderReportRequest,
-							monitor
+							new SubProgressMonitor(monitor, 4)
 						);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
+				} finally {
+					monitor.done();
 				}
 				return Status.OK_STATUS;
 			}

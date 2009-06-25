@@ -30,6 +30,7 @@ import org.nightlabs.jfire.accounting.id.CurrencyID;
 import org.nightlabs.jfire.reporting.parameter.config.ValueProviderConfig;
 import org.nightlabs.jfire.reporting.parameter.id.ValueProviderID;
 import org.nightlabs.jfire.reporting.trade.ReportingTradeConstants;
+import org.nightlabs.jfire.reporting.trade.ui.resource.Messages;
 import org.nightlabs.jfire.reporting.ui.parameter.AbstractValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUI;
 import org.nightlabs.jfire.reporting.ui.parameter.IValueProviderGUIFactory;
@@ -90,8 +91,8 @@ extends AbstractValueProviderGUI<Collection<CurrencyID>>
 			}
 		});
 		
-		currencyTable.setLoadingMessage("Loading...");
-		Job job = new Job("Loading currencies") {
+		currencyTable.setLoadingMessage(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.accounting.currency.ValueProviderGUICurrencies.loadingMessage")); //$NON-NLS-1$
+		Job job = new Job(Messages.getString("org.nightlabs.jfire.reporting.trade.ui.accounting.currency.ValueProviderGUICurrencies.jobName")) { //$NON-NLS-1$
 			@Override
 			protected IStatus run(ProgressMonitor monitor) throws Exception {
 				final List<Currency> currencies = CurrencyDAO.sharedInstance().getCurrencies(monitor);

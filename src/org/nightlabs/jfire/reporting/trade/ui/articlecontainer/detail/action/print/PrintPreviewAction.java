@@ -36,6 +36,7 @@ import org.nightlabs.jfire.reporting.layout.id.ReportRegistryItemID;
 import org.nightlabs.jfire.reporting.ui.config.ReportConfigUtil;
 import org.nightlabs.jfire.reporting.ui.layout.action.view.AbstractViewReportLayoutAction;
 import org.nightlabs.jfire.trade.id.ArticleContainerID;
+import org.nightlabs.progress.ProgressMonitor;
 
 /**
  * @author Alexander Bieber <alex[AT]nightlabs[ÐOT]de>
@@ -60,8 +61,8 @@ public class PrintPreviewAction extends ArticleContainerReportAction
 	protected AbstractViewReportLayoutAction showReportAction = new AbstractViewReportLayoutAction() {
 		@Override
 		protected Locale getRenderRequestLocale(ReportRegistryItemID reportID,
-				Map<String, Object> params) {
-			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params);
+				Map<String, Object> params, ProgressMonitor monitor) {
+			return ArticleContainerReportActionHelper.getArticleContainerReportLocale(getArticleContainerID(), reportID, params, monitor);
 		}
 	};
 	
