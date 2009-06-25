@@ -340,9 +340,9 @@ implements SegmentEdit
 	private NotificationListener notificationListenerProductTypeSelected = new NotificationAdapterJob() {
 		public void notify(NotificationEvent event) {
 			if (event.getSubjects().isEmpty())
-			productTypeSelected(null, getProgressMonitorWrapper());
+			productTypeSelected(null, getProgressMonitor());
 		else
-			productTypeSelected((ProductTypeID)event.getFirstSubject(), getProgressMonitorWrapper());
+			productTypeSelected((ProductTypeID)event.getFirstSubject(), getProgressMonitor());
 		}
 	};
 

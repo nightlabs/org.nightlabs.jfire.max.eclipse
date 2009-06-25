@@ -114,7 +114,7 @@ extends HeaderComposite
 	private NotificationListener invoiceChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite.loadInvoicesJob.name")) { //$NON-NLS-1$
 		public void notify(NotificationEvent notificationEvent)
 		{
-			ProgressMonitor monitor = getProgressMonitorWrapper();
+			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.invoice.InvoiceHeaderComposite.loadInvoicesMonitor.task.name"), 3); //$NON-NLS-1$
 			invoice = InvoiceDAO.sharedInstance().getInvoice(
 					(InvoiceID) JDOHelper.getObjectId(invoice),

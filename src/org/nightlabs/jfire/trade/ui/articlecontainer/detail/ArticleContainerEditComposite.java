@@ -61,7 +61,6 @@ import org.nightlabs.base.ui.composite.XComposite;
 import org.nightlabs.base.ui.extensionpoint.EPProcessorException;
 import org.nightlabs.base.ui.job.Job;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.EditLockTypeInvoice;
 import org.nightlabs.jfire.accounting.Invoice;
@@ -343,7 +342,7 @@ implements ArticleContainerEdit
 			}
 
 			// reload the new ArticleContainer from the server
-			initArticleContainer(articleContainerID, new ProgressMonitorWrapper(getProgressMonitor()));
+			initArticleContainer(articleContainerID, getProgressMonitor());
 
 			// update header+footer on the UI thread
 			Display.getDefault().asyncExec(new Runnable()

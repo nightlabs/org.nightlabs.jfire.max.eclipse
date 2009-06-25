@@ -5,7 +5,6 @@ import javax.jdo.FetchPlan;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.jdo.notification.JDOLifecycleManager;
 import org.nightlabs.jfire.store.Repository;
@@ -38,7 +37,7 @@ extends EntityEditorPageController
 	private NotificationListener repositoryChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.repository.editor.RepositoryGeneralPageController.loadingChangedRepositoryJob.name")) //$NON-NLS-1$
 	{
 		public void notify(NotificationEvent notificationEvent) {
-			doLoad(new ProgressMonitorWrapper(getProgressMonitor()));
+			doLoad(getProgressMonitor());
 		}
 	};
 

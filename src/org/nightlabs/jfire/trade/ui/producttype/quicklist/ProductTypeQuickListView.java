@@ -157,18 +157,18 @@ implements ISelectionProvider
 
 	private NotificationListener notificationListenerArticleContainerSelected = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.job.selectingVendor")) { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
-			getProgressMonitorWrapper().beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.job.selectingVendor"), 100); //$NON-NLS-1$
+			getProgressMonitor().beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.producttype.quicklist.ProductTypeQuickListView.job.selectingVendor"), 100); //$NON-NLS-1$
 
 			ArticleContainer articleContainer = null;
 
 			if (event.getSubjects().isEmpty())
-				getProgressMonitorWrapper().worked(100);
+				getProgressMonitor().worked(100);
 			else
 				articleContainer = ArticleContainerDAO.sharedInstance().getArticleContainer(
 						(ArticleContainerID)event.getFirstSubject(),
 						AbstractProductTypeQuickListFilter.FETCH_GROUPS_ARTICLE_CONTAINER_VENDOR,
 						NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-						new SubProgressMonitor(getProgressMonitorWrapper(), 100));
+						new SubProgressMonitor(getProgressMonitor(), 100));
 
 			AnchorID newVendorID = articleContainer == null ? null : articleContainer.getVendorID();
 			if (!Util.equals(vendorID, newVendorID)) {
@@ -187,7 +187,7 @@ implements ISelectionProvider
 					}
 				});
 			}
-			getProgressMonitorWrapper().done();
+			getProgressMonitor().done();
 		}
 	};
 

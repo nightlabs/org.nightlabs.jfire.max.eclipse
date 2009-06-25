@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.nightlabs.jfire.trade.ui.account.editor;
 
@@ -10,7 +10,6 @@ import org.nightlabs.base.ui.editor.JDOObjectEditorInput;
 import org.nightlabs.base.ui.entity.editor.EntityEditor;
 import org.nightlabs.base.ui.entity.editor.EntityEditorPageController;
 import org.nightlabs.base.ui.notification.NotificationAdapterJob;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.accounting.Account;
 import org.nightlabs.jfire.accounting.AccountType;
@@ -29,7 +28,7 @@ import org.nightlabs.util.Util;
 
 /**
  * Abstract base class for creating account based Page Controllers
- * 
+ *
  * @author Daniel Mazurek - daniel <at> nightlabs <dot> de
  */
 public abstract class AbstractAccountPageController
@@ -43,7 +42,7 @@ extends EntityEditorPageController
 		LegalEntity.FETCH_GROUP_PERSON,
 		PropertySet.FETCH_GROUP_FULL_DATA
 	};
-	
+
 	private static final long serialVersionUID = -1651161683093714801L;
 
 	/**
@@ -84,14 +83,14 @@ extends EntityEditorPageController
 		JDOLifecycleManager.sharedInstance().removeNotificationListener(Account.class, accountChangedListener);
 		super.dispose();
 	}
-	
+
 	private NotificationListener accountChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.account.editor.AbstractAccountPageController.loadingChangedAccountJob.name")) //$NON-NLS-1$
 	{
 		public void notify(NotificationEvent notificationEvent) {
-			doLoad(new ProgressMonitorWrapper(getProgressMonitor()));
+			doLoad(getProgressMonitor());
 		}
 	};
-	
+
 	/**
 	 * Get the editor.
 	 * @return the editor
@@ -142,7 +141,7 @@ extends EntityEditorPageController
 			monitor.done();
 		}
 	}
-	
+
 	/**
 	 * may be overriden if other fetchGroups are needed than the default ones
 	 * @return the fetchGroups to use, for obtaining the account

@@ -176,8 +176,8 @@ implements ISelectionProvider
 				if (((IStructuredSelection)event.getSelection()).isEmpty())
 					selectedNode = null;
 				else
-					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();				
-				
+					selectedNode = (HeaderTreeNode) ((IStructuredSelection)event.getSelection()).getFirstElement();
+
 				// disable the options when the root is selected.
 				createOrderAction.setEnabled(!(selectedNode instanceof RecurringRootTreeNode));
 				createOfferAction.setEnabled(
@@ -274,9 +274,9 @@ implements ISelectionProvider
 	private NotificationListener notificationListenerCustomerSelected = new NotificationAdapterJob("") { //$NON-NLS-1$
 		public void notify(NotificationEvent event) {
 			if (event.getSubjects().isEmpty())
-				setPartnerID(null, true, getProgressMonitorWrapper());
+				setPartnerID(null, true, getProgressMonitor());
 			else
-				setPartnerID((AnchorID)event.getFirstSubject(), true, getProgressMonitorWrapper());
+				setPartnerID((AnchorID)event.getFirstSubject(), true, getProgressMonitor());
 		}
 	};
 
@@ -401,7 +401,7 @@ implements ISelectionProvider
 		});
 		Menu menu = menuMgr.createContextMenu(headerTreeViewer.getControl());
 		headerTreeViewer.getControl().setMenu(menu);
-		
+
 
 		site.registerContextMenu(menuMgr, headerTreeViewer);
 	}

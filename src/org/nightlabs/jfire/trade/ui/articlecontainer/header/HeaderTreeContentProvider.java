@@ -100,7 +100,7 @@ implements ITreeContentProvider
 			{
 				Collection<DirtyObjectID> dirtyObjectIDs = new ArrayList<DirtyObjectID>(event.getDirtyObjectIDs());
 				for (HeaderTreeNode node : rootNodes) {
-					dirtyObjectIDs = node.onNewElementsCreated(dirtyObjectIDs, getProgressMontitorWrapper());
+					dirtyObjectIDs = node.onNewElementsCreated(dirtyObjectIDs, getProgressMonitor());
 					if (dirtyObjectIDs == null || dirtyObjectIDs.isEmpty())
 						break;
 				}

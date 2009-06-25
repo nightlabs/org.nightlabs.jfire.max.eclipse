@@ -108,7 +108,7 @@ extends HeaderComposite
 	private NotificationListener deliveryNoteChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite.loadDeliveryNoteJob.name")) { //$NON-NLS-1$
 		public void notify(NotificationEvent notificationEvent)
 		{
-			ProgressMonitor monitor = getProgressMonitorWrapper();
+			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.deliverynote.DeliveryNoteHeaderComposite.loadDeliveryNoteMonitor.task.name"), 3); //$NON-NLS-1$
 			deliveryNote = DeliveryNoteDAO.sharedInstance().getDeliveryNote(
 					(DeliveryNoteID) JDOHelper.getObjectId(deliveryNote),

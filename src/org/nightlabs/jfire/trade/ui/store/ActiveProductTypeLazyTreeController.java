@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.lazy.ActiveJDOObjectLazyTreeController;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
@@ -15,6 +13,7 @@ import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.ProductTypeParentResolver;
 import org.nightlabs.jfire.store.dao.ProductTypeDAO;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 
 
@@ -47,22 +46,22 @@ public class ActiveProductTypeLazyTreeController extends ActiveJDOObjectLazyTree
 	}
 
 	@Override
-	protected Collection<ProductTypeID> retrieveChildObjectIDs(ProductTypeID parentID, IProgressMonitor monitor)
+	protected Collection<ProductTypeID> retrieveChildObjectIDs(ProductTypeID parentID, ProgressMonitor monitor)
 	{
-		return ProductTypeDAO.sharedInstance().getChildProductTypesIDs(parentID, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return ProductTypeDAO.sharedInstance().getChildProductTypesIDs(parentID, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
 	@Override
-	protected Collection<ProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
+	protected Collection<ProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, ProgressMonitor monitor)
 	{
-		return ProductTypeDAO.sharedInstance().getProductTypes(objectIDs, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor));
+		return ProductTypeDAO.sharedInstance().getProductTypes(objectIDs, FETCH_GROUPS_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor);
 	}
 
 
 	@Override
 	protected Map<ProductTypeID, Long> retrieveChildCount(
-			Set<ProductTypeID> parentIDs, IProgressMonitor monitor) {
-		return ProductTypeDAO.sharedInstance().getChildProductTypeCounts(parentIDs, new ProgressMonitorWrapper(monitor));
+			Set<ProductTypeID> parentIDs, ProgressMonitor monitor) {
+		return ProductTypeDAO.sharedInstance().getChildProductTypeCounts(parentIDs, monitor);
 	}
 
 }

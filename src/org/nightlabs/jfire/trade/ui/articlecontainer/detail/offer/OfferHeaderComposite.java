@@ -363,7 +363,7 @@ extends HeaderComposite
 	private NotificationListener offerChangedListener = new NotificationAdapterJob(Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferJob.name")) { //$NON-NLS-1$
 		public void notify(NotificationEvent notificationEvent)
 		{
-			ProgressMonitor monitor = getProgressMonitorWrapper();
+			ProgressMonitor monitor = getProgressMonitor();
 			monitor.beginTask(
 					Messages.getString("org.nightlabs.jfire.trade.ui.articlecontainer.detail.offer.OfferHeaderComposite.loadOfferMonitor.task.name"), //$NON-NLS-1$
 					3
