@@ -8,8 +8,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.base.ui.jdo.tree.JDOObjectTreeNode;
@@ -18,6 +16,7 @@ import org.nightlabs.jfire.dynamictrade.template.DynamicProductTemplate;
 import org.nightlabs.jfire.dynamictrade.template.DynamicProductTemplateParentResolver;
 import org.nightlabs.jfire.dynamictrade.template.id.DynamicProductTemplateID;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
+import org.nightlabs.progress.ProgressMonitor;
 import org.nightlabs.util.NLLocale;
 
 public class DynamicProductTemplateTreeController
@@ -49,16 +48,16 @@ extends ActiveJDOObjectTreeController<
 	}
 
 	@Override
-	protected Collection<DynamicProductTemplate> retrieveChildren(DynamicProductTemplateID parentCategoryID, DynamicProductTemplate parent, IProgressMonitor monitor) {
+	protected Collection<DynamicProductTemplate> retrieveChildren(DynamicProductTemplateID parentCategoryID, DynamicProductTemplate parent, ProgressMonitor monitor) {
 		return DynamicProductTemplateDAO.sharedInstance().getChildDynamicProductTemplates(
-				parentCategoryID, FETCH_GROUPS_DYNAMIC_PRODUCT_TEMPLATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor)
+				parentCategoryID, FETCH_GROUPS_DYNAMIC_PRODUCT_TEMPLATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor
 		);
 	}
 
 	@Override
-	protected Collection<DynamicProductTemplate> retrieveJDOObjects(Set<DynamicProductTemplateID> objectIDs, IProgressMonitor monitor) {
+	protected Collection<DynamicProductTemplate> retrieveJDOObjects(Set<DynamicProductTemplateID> objectIDs, ProgressMonitor monitor) {
 		return DynamicProductTemplateDAO.sharedInstance().getDynamicProductTemplates(
-				objectIDs, FETCH_GROUPS_DYNAMIC_PRODUCT_TEMPLATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, new ProgressMonitorWrapper(monitor)
+				objectIDs, FETCH_GROUPS_DYNAMIC_PRODUCT_TEMPLATE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT, monitor
 		);
 	}
 
