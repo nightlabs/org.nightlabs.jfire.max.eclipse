@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.jdo.FetchPlan;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.nightlabs.base.ui.progress.ProgressMonitorWrapper;
 import org.nightlabs.jdo.NLJDOHelper;
 import org.nightlabs.jfire.base.ui.jdo.tree.ActiveJDOObjectTreeController;
 import org.nightlabs.jfire.dynamictrade.dao.DynamicProductTypeDAO;
@@ -16,6 +14,7 @@ import org.nightlabs.jfire.dynamictrade.store.DynamicProductType;
 import org.nightlabs.jfire.jdo.notification.TreeNodeParentResolver;
 import org.nightlabs.jfire.store.ProductType;
 import org.nightlabs.jfire.store.id.ProductTypeID;
+import org.nightlabs.progress.ProgressMonitor;
 
 public abstract class ActiveDynamicProductTypeTreeController
 extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, DynamicProductTypeTreeNode>
@@ -34,20 +33,20 @@ extends ActiveJDOObjectTreeController<ProductTypeID, DynamicProductType, Dynamic
 	};
 
 	@Override
-	protected Collection<DynamicProductType> retrieveChildren(ProductTypeID parentID, DynamicProductType parent, IProgressMonitor monitor)
+	protected Collection<DynamicProductType> retrieveChildren(ProductTypeID parentID, DynamicProductType parent, ProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getChildDynamicProductTypes(
 				parentID, FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new ProgressMonitorWrapper(monitor));
+				monitor);
 		return res;
 	}
 
 	@Override
-	protected Collection<DynamicProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, IProgressMonitor monitor)
+	protected Collection<DynamicProductType> retrieveJDOObjects(Set<ProductTypeID> objectIDs, ProgressMonitor monitor)
 	{
 		Collection<DynamicProductType> res = DynamicProductTypeDAO.sharedInstance().getDynamicProductTypes(
 				objectIDs, FETCH_GROUPS_DYNAMIC_PRODUCT_TYPE, NLJDOHelper.MAX_FETCH_DEPTH_NO_LIMIT,
-				new ProgressMonitorWrapper(monitor));
+				monitor);
 		return res;
 	}
 
